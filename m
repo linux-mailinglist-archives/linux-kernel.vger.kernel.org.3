@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE264FDD5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDC94FDD5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354335AbiDLLIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S1354670AbiDLLIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245267AbiDLLCg (ORCPT
+        with ESMTP id S1353482AbiDLLEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:02:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B0CB875;
-        Tue, 12 Apr 2022 02:53:59 -0700 (PDT)
-Received: from zn.tnic (p200300ea97156149329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:6149:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3135C1EC04EC;
-        Tue, 12 Apr 2022 11:53:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649757234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=juw7VzB56UKaB4KslRsPqKcKyA9IXYjsuIL6qC0OH24=;
-        b=IudAycwHR56V9u9XIIOAyDIMIL7rNI2FMyxnlVozrhoGkeqneIef3NdEUTbhXv6NK0xjP9
-        7CKVVuL+XcOPs8bZ6fV2nDhOY8dIZmvoOSpGmDN/xP+79eC2a01UgC2Ekv182YyGX1r+VW
-        U+fOdZ9IYB+WeMkhUgTqBjwyw6NQT2I=
-Date:   Tue, 12 Apr 2022 11:53:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v7 1/6] x86/mm: fix comment
-Message-ID: <YlVMMmTbaTqipwM9@zn.tnic>
-References: <20220405194747.2386619-1-jane.chu@oracle.com>
- <20220405194747.2386619-2-jane.chu@oracle.com>
+        Tue, 12 Apr 2022 07:04:55 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39CE5FF2A;
+        Tue, 12 Apr 2022 02:55:21 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1neDEx-0005Ez-CY; Tue, 12 Apr 2022 11:55:15 +0200
+Message-ID: <7aa0bbd0-5498-ba74-ad6d-6dacbade8a3d@leemhuis.info>
+Date:   Tue, 12 Apr 2022 11:55:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220405194747.2386619-2-jane.chu@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>, Philippe Schenker <dev@pschenker.ch>
+Cc:     linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        "David S. Miller" <davem@davemloft.net>,
+        Deren Wu <deren.wu@mediatek.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220412090415.17541-1-dev@pschenker.ch>
+ <87y20aod5d.fsf@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+In-Reply-To: <87y20aod5d.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649757321;4339350e;
+X-HE-SMSGID: 1neDEx-0005Ez-CY
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:47:42PM -0600, Jane Chu wrote:
-> There is no _set_memory_prot internal helper, while coming across
-> the code, might as well fix the comment.
+On 12.04.22 11:37, Kalle Valo wrote:
+> Philippe Schenker <dev@pschenker.ch> writes:
 > 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  arch/x86/mm/pat/set_memory.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+>>
+>> This commit introduces a regression on some systems where the kernel is
+>> crashing in different locations after a reboot was issued.
+>>
+>> This issue was bisected on a Thinkpad P14s Gen2 (AMD) with latest firmware.
+>>
+>> Link: https://lore.kernel.org/linux-wireless/5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/
+>> Signed-off-by: Philippe Schenker <dev@pschenker.ch>
 > 
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index abf5ed76e4b7..38af155aaba9 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1816,7 +1816,7 @@ static inline int cpa_clear_pages_array(struct page **pages, int numpages,
->  }
->  
->  /*
-> - * _set_memory_prot is an internal helper for callers that have been passed
-> + * __set_memory_prot is an internal helper for callers that have been passed
->   * a pgprot_t value from upper layers and a reservation has already been taken.
->   * If you want to set the pgprot to a specific page protocol, use the
->   * set_memory_xx() functions.
-> -- 
+> Can I take this to wireless tree? Felix, ack?
+> 
+> I'll also add:
+> 
+> Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
 
-This is such a trivial change so that having it as a separate patch is
-probably not needed - might as well merge it with patch 3...
+Sorry, stupid questions from the regression tracker: wouldn't this cause
+a regression for users of kernel versions post-bf3747ae2e25, as the
+power consumption is likely to increase for them? Without having dug
+into the backstory much: would disabling ASPM for this particular
+machine using a quirk be the better approach? Or are we assuming a lot
+of machines are affected?
 
-Thx.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
--- 
-Regards/Gruss,
-    Boris.
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
 
-https://people.kernel.org/tglx/notes-about-netiquette

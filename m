@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA21F4FDF97
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578E24FDFE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352190AbiDLMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
+        id S1356335AbiDLMaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353258AbiDLM16 (ORCPT
+        with ESMTP id S1353460AbiDLM2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:27:58 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E073182;
-        Tue, 12 Apr 2022 04:37:43 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id o2so10035784lfu.13;
-        Tue, 12 Apr 2022 04:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5aneK7Rl07kK1qGmCVmUb7811DnxlqneA9Z72R6PRJc=;
-        b=HxQcMx486YxA3qXMLBqpak4qkZIVxLl/ycmPCLsPG+cpIO8n/09K/HAcK5/LPYhkxZ
-         oq8z7qo/cw9fpuSHQikyXY7xnWM4u84DnBmJGaOOR7KYFNWv8vfHGrbYpMikl5RswyaF
-         FnB+0zQGyFpE2J1RuTAE/CqtzQa5937jjDUwRhsSMwnrZl5EKqjUI5XrfoE+YqriPfr7
-         jVHKnK5k0q2pRgZXwIZBCTZYPizAB0a7OzPn1fLDety23eDV2k95zPfdJhgKn/WCdV+4
-         h7Y/xkdQLhKCwxLttf1slKfwUEnES7YAA5d3ogJH1/OIqgYCW/0Y+hHrg3v1MlpVN12l
-         Gnbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5aneK7Rl07kK1qGmCVmUb7811DnxlqneA9Z72R6PRJc=;
-        b=3JQ/rbJVZRVfBXDjqXKDZJzNb/ayFNkulKuEXznxKbbFwgJhjr0PERQcxIy/PrB18L
-         w5pRc6rqvsi2Bvg0lCBkDfRr0fZDsMdGm4W0uBg+VKsKdeCwLHAVRHA4BBUe3KgtZiKM
-         7U0TEyTjdWe+qhFQcO9PeNip+pnbBTyafeEoQbd7bFhrmaEy5HDCFIqGaH2C5TSrcRCu
-         0amn3vviPOTqnsqq8j70jC/ss+UkDP3lKRfdDeSiNp2T2fRSUecn/BODJ0PP0Mk+gVt1
-         +henfqIGdoMyQMvDURG06MSh4QEeq3NE35Ntsb70sTpYvMzqacF515HOHUlUWLq6gAgC
-         6w5A==
-X-Gm-Message-State: AOAM5303864SCDCXUX+IzWJxiiv2mAb3qtNRubX30msJ1It4xiROltT/
-        1pgMLxToyNdhq5AmhyHEBtg=
-X-Google-Smtp-Source: ABdhPJxAmdxPltsou8uUUjeWnJuCK2JK93YfESll7d9K7ZQG+0dZuU+DhMEF1dNWNnaVHcgqlzdCPg==
-X-Received: by 2002:a05:6512:c18:b0:44a:9992:28bc with SMTP id z24-20020a0565120c1800b0044a999228bcmr25269448lfu.641.1649763461666;
-        Tue, 12 Apr 2022 04:37:41 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id bq8-20020a056512150800b00448ab58bd53sm3618431lfb.40.2022.04.12.04.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 04:37:41 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 14:37:39 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <brad@pensando.io>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, olof@lixom.net, dac2@pensando.io,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba
- SoC
-Message-ID: <20220412113739.xczqscungojcitrm@mobilestation>
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-5-brad@pensando.io>
+        Tue, 12 Apr 2022 08:28:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3052C1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649763504; x=1681299504;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N4WSKTydTrMHsksFWCFFkVf1bcccCKP0eWt9cxX6l5w=;
+  b=aApql1SANmAk9GBqzMFPTK6a3aJzc7prOrXAvMXTElvFSOTdHy4JWSpF
+   /prsx1DQCcwDVSOTYBlnJp1roc1lBKagxn3rM/MzxOetSjp3ppDxHttWv
+   TsmWcS8O/adAYT42FU+T9PKL2yCAUZmyjWfd8LU49oi6+xRWrt0rtV5G8
+   m1k1t8WMxRSOBY4PbA1hM6VSIu4y/vEl8EqRN7miQ412yiGjFOiLoVe01
+   xI2Jr1Npbbdf+IHJzccDdce9EPYhX/wDUYdWr6XLGvGuKY94bMmgKleVv
+   adsOK5KNiYHg8OCyd9ORsWAeCEFExKxqVUZd+ltaLajE23BQdAENwr4hu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="259951075"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="259951075"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:38:24 -0700
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="572723776"
+Received: from spr.sh.intel.com ([10.239.53.23])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:38:21 -0700
+From:   Chao Gao <chao.gao@intel.com>
+To:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Cc:     robin.murphy@arm.com, m.szyprowski@samsung.com, hch@lst.de,
+        Chao Gao <chao.gao@intel.com>,
+        Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
+        Gao Liang <liang.gao@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Subject: [PATCH] dma-direct: avoid redundant memory sync for swiotlb
+Date:   Tue, 12 Apr 2022 19:38:05 +0800
+Message-Id: <20220412113805.3210-1-chao.gao@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406233648.21644-5-brad@pensando.io>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba SoC
+When we looked into FIO performance with swiotlb enabled in VM, we found
+swiotlb_bounce() is always called one more time than expected for each DMA
+read request.
 
-I think you need to be more specific in the patch title to what bindings
-you are adding the new compatible string. Something like this
-"dt-bindings: spi: cdns: ..."
-The same concerns the patch "[PATCH 03/11] dt-bindings: mmc: Add Pensando
-Elba SoC binding".
-Otherwise it isn't clear to what schema you are adding the Elba SoC
-support to.
+It turns out that the bounce buffer is copied to original DMA buffer twice
+after the completion of a DMA request (one is done by in
+dma_direct_sync_single_for_cpu(), the other by swiotlb_tbl_unmap_single()).
+But the content in bounce buffer actually doesn't change between the two
+rounds of copy. So, one round of copy is redundant.
 
--Sergey
+Pass DMA_ATTR_SKIP_CPU_SYNC flag to swiotlb_tbl_unmap_single() to
+skip the memory copy in it.
 
-On Wed, Apr 06, 2022 at 04:36:41PM -0700, Brad Larson wrote:
-> Document the cadence qspi controller compatible for Pensando Elba SoC
-> boards.  The Elba qspi fifo size is 1024.
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index 0a537fa3a641..bc298e413842 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -30,6 +30,7 @@ properties:
->                - intel,lgm-qspi
->                - xlnx,versal-ospi-1.0
->                - intel,socfpga-qspi
-> +              - pensando,elba-qspi
->            - const: cdns,qspi-nor
->        - const: cdns,qspi-nor
->  
-> @@ -48,7 +49,7 @@ properties:
->      description:
->        Size of the data FIFO in words.
->      $ref: "/schemas/types.yaml#/definitions/uint32"
-> -    enum: [ 128, 256 ]
-> +    enum: [ 128, 256, 1024 ]
->      default: 128
->  
->    cdns,fifo-width:
-> -- 
-> 2.17.1
-> 
+This fix increases FIO 64KB sequential read throughput in a guest with
+swiotlb=force by 5.6%.
+
+Reported-by: Wang Zhaoyang1 <zhaoyang1.wang@intel.com>
+Reported-by: Gao Liang <liang.gao@intel.com>
+Signed-off-by: Chao Gao <chao.gao@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+---
+ kernel/dma/direct.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/dma/direct.h b/kernel/dma/direct.h
+index 4632b0f4f72e..8a6cd53dbe8c 100644
+--- a/kernel/dma/direct.h
++++ b/kernel/dma/direct.h
+@@ -114,6 +114,7 @@ static inline void dma_direct_unmap_page(struct device *dev, dma_addr_t addr,
+ 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
+ 
+ 	if (unlikely(is_swiotlb_buffer(dev, phys)))
+-		swiotlb_tbl_unmap_single(dev, phys, size, dir, attrs);
++		swiotlb_tbl_unmap_single(dev, phys, size, dir,
++					 attrs | DMA_ATTR_SKIP_CPU_SYNC);
+ }
+ #endif /* _KERNEL_DMA_DIRECT_H */
+-- 
+2.25.1
+

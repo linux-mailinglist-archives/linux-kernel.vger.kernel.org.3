@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079AC4FD484
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51E14FD77B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353780AbiDLHQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1359234AbiDLJU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351474AbiDLHD3 (ORCPT
+        with ESMTP id S1357025AbiDLHjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:03:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3DF4476E;
-        Mon, 11 Apr 2022 23:47:10 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A136F52E62;
+        Tue, 12 Apr 2022 00:10:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CAD6B81B35;
-        Tue, 12 Apr 2022 06:47:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429A8C385A1;
-        Tue, 12 Apr 2022 06:47:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60AFFB81B55;
+        Tue, 12 Apr 2022 07:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB389C385A8;
+        Tue, 12 Apr 2022 07:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746027;
-        bh=FxnJlWvCMiH6AOU1ai6/50N28XVk8ZHLjBB2BHX3AgY=;
+        s=korg; t=1649747449;
+        bh=SNxsj0Sda60OXMqwWwNqNF+nUGirEVBwy2IM3bUSL9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cN7CXKfGfRvE7RrE/RXez/bXAqtWJJpdyhubsG0yMvFoEsRalXt+vi9J97mM4oThP
-         yWUv0BTf9g5AbbmFnOeuGK/n/9gmdSdhlA/cC0tSAxyOup76K8VrBso1yDbGVoiH1g
-         HbSo0kyW2XY7upEkaxwCapMJ4no0EWOWdSVbc3rA=
+        b=kuFYlrz5F9dp1iwyyvqL2Tc2m16NDKjGIQKZFCo0hQde9I3WdQLMdK8GRLjwkauiy
+         uxrvxvGiTchspbHxelbsrHM84sI9Ou9t4IOlQH9e1i6sdTFNgY5UJlqLIY3ABxFgFG
+         uQR0YDtvmOYFMze//yCpsYyO9k7lxP1leRh7njRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 097/277] net: sfp: add 2500base-X quirk for Lantech SFP module
-Date:   Tue, 12 Apr 2022 08:28:20 +0200
-Message-Id: <20220412062944.850415606@linuxfoundation.org>
+Subject: [PATCH 5.17 083/343] net/mlx5e: Disable TX queues before registering the netdev
+Date:   Tue, 12 Apr 2022 08:28:21 +0200
+Message-Id: <20220412062953.496711938@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 00eec9fe4f3b9588b4bfa8ef9dd0aae96407d5d7 ]
+[ Upstream commit d08c6e2a4d0308a7922d7ef3b1b3af45d4096aad ]
 
-The Lantech 8330-262D-E module is 2500base-X capable, but it reports the
-nominal bitrate as 2500MBd instead of 3125MBd. Add a quirk for the
-module.
+Normally, the queues are disabled when the channels are deactivated, and
+enabled when the channels are activated. However, on register, the
+channels are not active, but the queues are enabled by default. This
+change fixes it, preventing mlx5e_xmit from running when the channels
+are deactivated in the beginning.
 
-The following in an EEPROM dump of such a SFP with the serial number
-redacted:
-
-00: 03 04 07 00 00 00 01 20 40 0c 05 01 19 00 00 00    ???...? @????...
-10: 1e 0f 00 00 4c 61 6e 74 65 63 68 20 20 20 20 20    ??..Lantech
-20: 20 20 20 20 00 00 00 00 38 33 33 30 2d 32 36 32        ....8330-262
-30: 44 2d 45 20 20 20 20 20 56 31 2e 30 03 52 00 cb    D-E     V1.0?R.?
-40: 00 1a 00 00 46 43 XX XX XX XX XX XX XX XX XX XX    .?..FCXXXXXXXXXX
-50: 20 20 20 20 32 32 30 32 31 34 20 20 68 b0 01 98        220214  h???
-60: 45 58 54 52 45 4d 45 4c 59 20 43 4f 4d 50 41 54    EXTREMELY COMPAT
-70: 49 42 4c 45 20 20 20 20 20 20 20 20 20 20 20 20    IBLE
-
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220312205014.4154907-1-michael@walle.cc
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/sfp-bus.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/phy/sfp-bus.c b/drivers/net/phy/sfp-bus.c
-index ef2c6a09eb0f..4369d6249e7b 100644
---- a/drivers/net/phy/sfp-bus.c
-+++ b/drivers/net/phy/sfp-bus.c
-@@ -74,6 +74,12 @@ static const struct sfp_quirk sfp_quirks[] = {
- 		.vendor = "HUAWEI",
- 		.part = "MA5671A",
- 		.modes = sfp_quirk_2500basex,
-+	}, {
-+		// Lantech 8330-262D-E can operate at 2500base-X, but
-+		// incorrectly report 2500MBd NRZ in their EEPROM
-+		.vendor = "Lantech",
-+		.part = "8330-262D-E",
-+		.modes = sfp_quirk_2500basex,
- 	}, {
- 		.vendor = "UBNT",
- 		.part = "UF-INSTANT",
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 3667f5ef5990..169e3524bb1c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -5345,6 +5345,7 @@ mlx5e_create_netdev(struct mlx5_core_dev *mdev, const struct mlx5e_profile *prof
+ 	}
+ 
+ 	netif_carrier_off(netdev);
++	netif_tx_disable(netdev);
+ 	dev_net_set(netdev, mlx5_core_net(mdev));
+ 
+ 	return netdev;
 -- 
 2.35.1
 

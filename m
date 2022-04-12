@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33D24FDA7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97CC4FD4E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354220AbiDLH0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S1353342AbiDLJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351615AbiDLHMq (ORCPT
+        with ESMTP id S1357686AbiDLHki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC1911A31;
-        Mon, 11 Apr 2022 23:50:36 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40E61005;
+        Tue, 12 Apr 2022 00:16:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC8D614B0;
-        Tue, 12 Apr 2022 06:50:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35ABBC385A6;
-        Tue, 12 Apr 2022 06:50:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60F1261708;
+        Tue, 12 Apr 2022 07:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76605C385A1;
+        Tue, 12 Apr 2022 07:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746235;
-        bh=OTYaN9cEFJk3+s8Bk6TF+yOQ9yew98O3/jc7PDaRvlI=;
+        s=korg; t=1649747802;
+        bh=uyftIm97GOa/nPfrZIJfhPY3oen1ZSdn3fuNNPh3DfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iqw50bkHSTjfVn9ixxyhk6wzpZ2ZsCMTsDpvCOxcUon8LY20rIRWm3zapv2mxpjij
-         kO2fzcY4NPsoEZq+Zd6o54PyEy9YpRQIzvtM96hHJd1TLizkU+FU4rN2DprV83bJZB
-         MHnwxYlmFCk15P3IKRVdAIn7O0464gTjsQ+Uwj7Q=
+        b=TnByObOy6iCWsCIdDckhld9DEvUZMKKgi9MpkbrOCxV8OkCBxoEFfdWknOzmwULkD
+         86RggxdyLik7XaUMeQJm0vrm8zTJbO6DZEKkZtwcSMNerC1B/B8Xhl/N1FEZ4y6E6K
+         8GewlxTtftJOlrkb/44L6TjznT5myvv+9SEpcIHk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 209/277] Revert "mmc: sdhci-xenon: fix annoying 1.8V regulator warning"
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 194/343] Drivers: hv: vmbus: Fix initialization of device object in vmbus_device_register()
 Date:   Tue, 12 Apr 2022 08:30:12 +0200
-Message-Id: <20220412062948.089189503@linuxfoundation.org>
+Message-Id: <20220412062956.958068021@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 
-commit 7e2646ed47542123168d43916b84b954532e5386 upstream.
+[ Upstream commit 3a5469582c241abca22500f36a9cb8e9331969cf ]
 
-This reverts commit bb32e1987bc55ce1db400faf47d85891da3c9b9f.
+Initialize the device's dma_{mask,parms} pointers and the device's
+dma_mask value before invoking device_register().  Address the
+following trace with 5.17-rc7:
 
-Commit 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
-contains proper fix for the issue described in commit bb32e1987bc5 ("mmc:
-sdhci-xenon: fix annoying 1.8V regulator warning").
+[   49.646839] WARNING: CPU: 0 PID: 189 at include/linux/dma-mapping.h:543
+	netvsc_probe+0x37a/0x3a0 [hv_netvsc]
+[   49.646928] Call Trace:
+[   49.646930]  <TASK>
+[   49.646935]  vmbus_probe+0x40/0x60 [hv_vmbus]
+[   49.646942]  really_probe+0x1ce/0x3b0
+[   49.646948]  __driver_probe_device+0x109/0x180
+[   49.646952]  driver_probe_device+0x23/0xa0
+[   49.646955]  __device_attach_driver+0x76/0xe0
+[   49.646958]  ? driver_allows_async_probing+0x50/0x50
+[   49.646961]  bus_for_each_drv+0x84/0xd0
+[   49.646964]  __device_attach+0xed/0x170
+[   49.646967]  device_initial_probe+0x13/0x20
+[   49.646970]  bus_probe_device+0x8f/0xa0
+[   49.646973]  device_add+0x41a/0x8e0
+[   49.646975]  ? hrtimer_init+0x28/0x80
+[   49.646981]  device_register+0x1b/0x20
+[   49.646983]  vmbus_device_register+0x5e/0xf0 [hv_vmbus]
+[   49.646991]  vmbus_add_channel_work+0x12d/0x190 [hv_vmbus]
+[   49.646999]  process_one_work+0x21d/0x3f0
+[   49.647002]  worker_thread+0x4a/0x3b0
+[   49.647005]  ? process_one_work+0x3f0/0x3f0
+[   49.647007]  kthread+0xff/0x130
+[   49.647011]  ? kthread_complete_and_exit+0x20/0x20
+[   49.647015]  ret_from_fork+0x22/0x30
+[   49.647020]  </TASK>
+[   49.647021] ---[ end trace 0000000000000000 ]---
 
-Fixes: 8d876bf472db ("mmc: sdhci-xenon: wait 5ms after set 1.8V signal enable")
-Cc: stable@vger.kernel.org # 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Marcin Wojtas <mw@semihalf.com>
-Link: https://lore.kernel.org/r/20220318141441.32329-1-pali@kernel.org
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 743b237c3a7b0 ("scsi: storvsc: Add Isolation VM support for storvsc driver")
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20220315141053.3223-1-parri.andrea@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-xenon.c |   10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/hv/vmbus_drv.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/mmc/host/sdhci-xenon.c
-+++ b/drivers/mmc/host/sdhci-xenon.c
-@@ -241,16 +241,6 @@ static void xenon_voltage_switch(struct
- {
- 	/* Wait for 5ms after set 1.8V signal enable bit */
- 	usleep_range(5000, 5500);
--
--	/*
--	 * For some reason the controller's Host Control2 register reports
--	 * the bit representing 1.8V signaling as 0 when read after it was
--	 * written as 1. Subsequent read reports 1.
--	 *
--	 * Since this may cause some issues, do an empty read of the Host
--	 * Control2 register here to circumvent this.
--	 */
--	sdhci_readw(host, SDHCI_HOST_CONTROL2);
- }
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 12a2b37e87f3..0a05e10ab36c 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2097,6 +2097,10 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+ 	child_device_obj->device.parent = &hv_acpi_dev->dev;
+ 	child_device_obj->device.release = vmbus_device_release;
  
- static unsigned int xenon_get_max_clock(struct sdhci_host *host)
++	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
++	child_device_obj->device.dma_mask = &child_device_obj->dma_mask;
++	dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
++
+ 	/*
+ 	 * Register with the LDM. This will kick off the driver/device
+ 	 * binding...which will eventually call vmbus_match() and vmbus_probe()
+@@ -2122,9 +2126,6 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+ 	}
+ 	hv_debug_add_dev_dir(child_device_obj);
+ 
+-	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+-	child_device_obj->device.dma_mask = &child_device_obj->dma_mask;
+-	dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
+ 	return 0;
+ 
+ err_kset_unregister:
+-- 
+2.35.1
+
 
 

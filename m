@@ -2,159 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFE74FCD72
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696334FCD73
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbiDLEGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S242242AbiDLEJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiDLEGl (ORCPT
+        with ESMTP id S229772AbiDLEI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:06:41 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20320F7E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id z19so18300972qtw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J+x3SPFdGypefdXDIqiyFTr8SFo5yaCISlCMQJFopck=;
-        b=x/IyGL9sWWNEgc+7aqpoOSGvBo3BrA/8tfHhrVWZlHv5Zqb6+sNfP+t1XNvlgELoyC
-         tL68P2ifPMWhTeUceZ//SyqhR6E0r1uOq0OBFPpwizKLpsUzafMr4ALbioXVlzzOhFgZ
-         CChwBJ24GWepEFfC1OvFF/RJE1oygWYYAUHIi4csnS3wtvBa5roOQcTi9gqU996Tn+Qx
-         OyJfWaHwHDnclIB0jaE34V4WIEJsPOLrjFSeXYFnm5lp7YB9CCE8N3+kxljOG9n7hjIE
-         35v78d2T8xqDg1VE1aDcRI+tlV11qeupdXuZ0L3cww33z8q0Vz+vU7C6JyY1RvDK6WOH
-         4s8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J+x3SPFdGypefdXDIqiyFTr8SFo5yaCISlCMQJFopck=;
-        b=TdCqstdUSafmsaTTK8OkVUUlai6Q7MEBChOFND54dKKGr5X8Q+/09YM3o6LGnL2t2g
-         txLWBqJHh0JrprCXVib67up3taWtpVUvW3uxTvMRsmKez2iYh/0CuQnp6o1AaNEGkJK0
-         ZaufDuZjST9xLIQeLsjIqw/v8e0jJ8WN1nmsDjIhLMhbyhF8QgFB0cN4/FUyyw0bCqqA
-         atNNumoZ9KNiWv0mGUsxPr0OzYflD2lgwQXWFvE08OkwGXNWTNVql17OCzvWXk7SIrJs
-         CkN023D1rp6fIAaeF4CEBMX/IY/MGw0gxorfCVC0+xO/OSde286uwL0vW7etis59KQx7
-         T1cQ==
-X-Gm-Message-State: AOAM532I+7d4VTvsPyZcabrqfXU8lcEZ2sNYLrRMiABXFw+RfJTGB5fZ
-        ta0ehwOvF3l4gFuURY7h5jChfQ==
-X-Google-Smtp-Source: ABdhPJwA2WVOHW3EXR6l/HiIz94aEB/WpqZC/ssR0ezUv3tSP+2pzRH/BbFwctn+X60WSZ9mNg2pag==
-X-Received: by 2002:a05:622a:138a:b0:2e1:ea16:4fd9 with SMTP id o10-20020a05622a138a00b002e1ea164fd9mr1927029qtk.527.1649736263011;
-        Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
-Received: from [192.168.0.189] (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id e15-20020a05622a110f00b002e1ed105652sm26677261qty.2.2022.04.11.21.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 21:04:22 -0700 (PDT)
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
- interconnect fields
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220407172145.31903-1-jonathan@marek.ca>
- <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
- <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
- <f1fb2d71-4adf-bcc7-76b3-c7102ab9f2e9@marek.ca>
- <YlTg7QPkWMBP4HAb@builder.lan>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <20db508c-0ccf-e4a6-87a4-17c41871703c@marek.ca>
-Date:   Tue, 12 Apr 2022 00:04:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 12 Apr 2022 00:08:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8502FFCE
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649736400; x=1681272400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mf9C6qT7/NO4kJZZHLDFOhQc2xAA3V03tnKvzVhd48s=;
+  b=iTahV5uZm7DDy8XDrYlwR4aq2ZPm4UAY55irtou/cE3v8neasgG1vDQx
+   NipMuC5K94mfMtHpwpD85iPQnXD1VDrtCefNivacq0SoefoN2oTSbSx8p
+   XJU1p16a70384X84oS7QNKSPMjCyW0SKurecFih2KoFsZ5+npEQ4nozxZ
+   z0L25kw7WSHGpK1KWNzN/KWWsYqLyIF+siLJzd3iY4biIeZW3Eo8EiKzL
+   zMZdKKOhAyH6Yje1u8kl0kl+QA6ETSKA1K/fxQt3tyWG+j/Y4qEJL9YDu
+   dXdkauq/g0rElu7++6yjYlbi/pEElUOGhviEJTDniSZFsM8ej6oGqiQi2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261118831"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="261118831"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 21:06:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="507379666"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 21:06:37 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne7nZ-0002VQ-4w;
+        Tue, 12 Apr 2022 04:06:37 +0000
+Date:   Tue, 12 Apr 2022 12:06:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Riley <davidriley@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        Zach Reizner <zachr@chromium.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>
+Subject: [jsarha:topic/cros-sof-v4.19 4273/6555]
+ drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous
+ prototype for function 'virtio_gpu_dma_buf_to_handle'
+Message-ID: <202204121116.G1ASG8mq-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YlTg7QPkWMBP4HAb@builder.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 10:16 PM, Bjorn Andersson wrote:
-> On Thu 07 Apr 17:38 CDT 2022, Jonathan Marek wrote:
-> 
->> On 4/7/22 5:16 PM, Krzysztof Kozlowski wrote:
->>> On 07/04/2022 21:40, Vladimir Zapolskiy wrote:
->>>> On 4/7/22 20:21, Jonathan Marek wrote:
->>>>> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
->>>>> Ignored and undocumented with upstream UFS driver so delete for now.
->>>
->>> This is the upstream and they are documented here, although as pointed
->>> by Vladimir this was rather a reverse-documentation. The documentation
->>> might be incorrect, but then the bindings should be corrected instead of
->>> only modifying the DTS.
->>>
->>>>
->>>> Basically the description was added by a commit 462c5c0aa798 ("dt-bindings: ufs:
->>>> qcom,ufs: convert to dtschema").
->>>>
->>>> It's questionable, if an example in the new yaml file is totally correct
->>>> in connection to the discussed issue.
->>>
->>> To be honest - the example probably is not correct, because it was based
->>> on existing DTS without your patch. :)
->>>
->>> Another question is whether the interconnect properties are here correct
->>> at all. I assumed that DTS is correct because it should describe the
->>> hardware, even if driver does not use it. However maybe that was a false
->>> assumption...
->>>
->>
->> writing-bindings.rst says it is OK to document even if it isn't used by the
->> driver (seems wrong to me, at least for interconnects which are a firmware
->> abstraction and not hardware).
->>
-> 
-> The devicetree, and hence the binding, should describe the hardware, so
-> that an implementation can make use of the hardware. So there's no
-> problem expressing the interconnect in the binding/dts even though the
-> driver isn't using it.
-> 
-> I'm not sure if I'm misunderstanding you, the interconnect paths
-> described here are a description of the hardware requirements for this
-> device. (I.e. it need the buses between ufs and ddr, and cpu and ufs to
-> operate).
-> 
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
+head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
+commit: cea7ac75b0485305ef7d58b47c67d4ab82e620a3 [4273/6555] CHROMIUM: drm/virtio: Add interfaces to share dma bufs via virtwl.
+config: x86_64-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121116.G1ASG8mq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/cea7ac75b0485305ef7d58b47c67d4ab82e620a3
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.19
+        git checkout cea7ac75b0485305ef7d58b47c67d4ab82e620a3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/virtio/
 
-This is pedantic but what if my kernel lives in imem and not ddr. Or it 
-runs on adsp and not cpu? "ufs-ddr" and "cpu-ufs" are not necessarily 
-hardware requirements.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-(I was thinking of something else when I wrote that comment, but it 
-doesn't actually matter if its firmware/hardware if a driver can 
-implement the same functionality either way)
+All warnings (new ones prefixed by >>):
 
->> 462c5c0aa798 wasn't in my 5.17+ tree pulled after dts changes were merged (I
->> guess doc changes come later), so my commit message is incorrect, but I
->> think it makes more sense to have the documentation reflect the driver. Its
->> also not an important issue, so I'll let others sort it out.
->>
-> 
-> I believe that the correctness of the interconnect property will ensure
-> that the interconnect provider doesn't hit sync_state until the ufs
-> driver has probed - regardless of the driver actually implementing the
-> interconnect voting. But perhaps I've misunderstood the magic involved?
-> 
+>> drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous prototype for function 'virtio_gpu_dma_buf_to_handle' [-Wmissing-prototypes]
+   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
+       ^
+   drivers/gpu/drm/virtio/virtgpu_object.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
+   ^
+   static 
+   1 warning generated.
 
-AFAICT, if its not used by the driver it will be ignored completely, 
-unless you use OPP (which has some interconnect magic).
 
-> Regards,
-> Bjorn
-> 
+vim +/virtio_gpu_dma_buf_to_handle +176 drivers/gpu/drm/virtio/virtgpu_object.c
+
+   175	
+ > 176	int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

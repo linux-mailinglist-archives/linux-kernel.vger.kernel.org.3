@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10AD4FD5DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CBA4FD752
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352710AbiDLICc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S1355634AbiDLH1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353637AbiDLHZv (ORCPT
+        with ESMTP id S1351756AbiDLHMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA9043AFF;
-        Tue, 12 Apr 2022 00:02:40 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B962E7E;
+        Mon, 11 Apr 2022 23:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C18F60B2B;
-        Tue, 12 Apr 2022 07:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F64AC385A6;
-        Tue, 12 Apr 2022 07:02:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15F51B81B35;
+        Tue, 12 Apr 2022 06:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5337BC385A1;
+        Tue, 12 Apr 2022 06:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746959;
-        bh=vr7Wo20zHLHWbtiSd/Y1L2t36ZxOiBHBQ+ROACpAYAE=;
+        s=korg; t=1649746336;
+        bh=sXMl2ZYE8rt5NfFeBPGIcHAYJuUylPNTH8SOiNKZ7n8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjW87X29xvCqlhXmL8z4SKyVVI0G6SdbTYF6tOrzboi6TyEU0ezh9WaGKX7FqKfvz
-         tsQPdntymVShhDTROanvHWdr1i1hhJXa+2E/gTjL6XAjpu9l0PusPBe7RW7mjXEn6K
-         IfUsDd0JJiQjn/lCgfzYrmcps4Xk12548Xw3t/F8=
+        b=k1YRz/10U/v+kTdtnD8Z6F8W7S6sBDSePnzWreeJbPn3oV4yRdqED7qG/ApQc80sY
+         Nd9YjVLtnzTjPYR6mEj3DPThe6IRmdLa7oizw5GnnNDEheqfN4eBZZDR10EgRrWwrK
+         lRpbQqyKqcoASjqIuPsw/vzaieiIub/4T087GX3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilya Maximets <i.maximets@ovn.org>,
-        Aaron Conole <aconole@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 191/285] net: openvswitch: dont send internal clone attribute to the userspace.
-Date:   Tue, 12 Apr 2022 08:30:48 +0200
-Message-Id: <20220412062949.174513537@linuxfoundation.org>
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 5.15 246/277] drm/amdkfd: Create file descriptor after client is added to smi_clients list
+Date:   Tue, 12 Apr 2022 08:30:49 +0200
+Message-Id: <20220412062949.161563012@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,78 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilya Maximets <i.maximets@ovn.org>
+From: Lee Jones <lee.jones@linaro.org>
 
-[ Upstream commit 3f2a3050b4a3e7f32fc0ea3c9b0183090ae00522 ]
+commit e79a2398e1b2d47060474dca291542368183bc0f upstream.
 
-'OVS_CLONE_ATTR_EXEC' is an internal attribute that is used for
-performance optimization inside the kernel.  It's added by the kernel
-while parsing user-provided actions and should not be sent during the
-flow dump as it's not part of the uAPI.
+This ensures userspace cannot prematurely clean-up the client before
+it is fully initialised which has been proven to cause issues in the
+past.
 
-The issue doesn't cause any significant problems to the ovs-vswitchd
-process, because reported actions are not really used in the
-application lifecycle and only supposed to be shown to a human via
-ovs-dpctl flow dump.  However, the action list is still incorrect
-and causes the following error if the user wants to look at the
-datapath flows:
-
-  # ovs-dpctl add-dp system@ovs-system
-  # ovs-dpctl add-flow "<flow match>" "clone(ct(commit),0)"
-  # ovs-dpctl dump-flows
-  <flow match>, packets:0, bytes:0, used:never,
-    actions:clone(bad length 4, expected -1 for: action0(01 00 00 00),
-                  ct(commit),0)
-
-With the fix:
-
-  # ovs-dpctl dump-flows
-  <flow match>, packets:0, bytes:0, used:never,
-    actions:clone(ct(commit),0)
-
-Additionally fixed an incorrect attribute name in the comment.
-
-Fixes: b233504033db ("openvswitch: kernel datapath clone action")
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-Acked-by: Aaron Conole <aconole@redhat.com>
-Link: https://lore.kernel.org/r/20220404104150.2865736-1-i.maximets@ovn.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Felix Kuehling <Felix.Kuehling@amd.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/openvswitch/actions.c      | 2 +-
- net/openvswitch/flow_netlink.c | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 780d9e2246f3..8955f31fa47e 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -1051,7 +1051,7 @@ static int clone(struct datapath *dp, struct sk_buff *skb,
- 	int rem = nla_len(attr);
- 	bool dont_clone_flow_key;
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+@@ -270,15 +270,6 @@ int kfd_smi_event_open(struct kfd_dev *d
+ 		return ret;
+ 	}
  
--	/* The first action is always 'OVS_CLONE_ATTR_ARG'. */
-+	/* The first action is always 'OVS_CLONE_ATTR_EXEC'. */
- 	clone_arg = nla_data(attr);
- 	dont_clone_flow_key = nla_get_u32(clone_arg);
- 	actions = nla_next(clone_arg, &rem);
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 0d677c9c2c80..2679007f8aeb 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -3429,7 +3429,9 @@ static int clone_action_to_attr(const struct nlattr *attr,
- 	if (!start)
- 		return -EMSGSIZE;
+-	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
+-			       O_RDWR);
+-	if (ret < 0) {
+-		kfifo_free(&client->fifo);
+-		kfree(client);
+-		return ret;
+-	}
+-	*fd = ret;
+-
+ 	init_waitqueue_head(&client->wait_queue);
+ 	spin_lock_init(&client->lock);
+ 	client->events = 0;
+@@ -288,5 +279,20 @@ int kfd_smi_event_open(struct kfd_dev *d
+ 	list_add_rcu(&client->list, &dev->smi_clients);
+ 	spin_unlock(&dev->smi_lock);
  
--	err = ovs_nla_put_actions(nla_data(attr), rem, skb);
-+	/* Skipping the OVS_CLONE_ATTR_EXEC that is always the first attribute. */
-+	attr = nla_next(nla_data(attr), &rem);
-+	err = ovs_nla_put_actions(attr, rem, skb);
- 
- 	if (err)
- 		nla_nest_cancel(skb, start);
--- 
-2.35.1
-
++	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
++			       O_RDWR);
++	if (ret < 0) {
++		spin_lock(&dev->smi_lock);
++		list_del_rcu(&client->list);
++		spin_unlock(&dev->smi_lock);
++
++		synchronize_rcu();
++
++		kfifo_free(&client->fifo);
++		kfree(client);
++		return ret;
++	}
++	*fd = ret;
++
+ 	return 0;
+ }
 
 

@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476764FCF77
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB9A4FCF72
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348479AbiDLG3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S244288AbiDLG1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiDLG3a (ORCPT
+        with ESMTP id S239706AbiDLG1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:29:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1255B15828;
-        Mon, 11 Apr 2022 23:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649744834; x=1681280834;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8QDzp55a7WCEth8wc6ftiMU8vQrEl5riiXtIWJPQCQI=;
-  b=dttSRCsSl7JR+cEp+rVUuY9ab8d22vfGPkDiZIWClY9RdjJlPw26XOq4
-   GqKXicf6+IuIawqkRhbgDKPjwV0SMI67kfhq9ze5pxLHohE6frQ7TctzT
-   WgBbiq1pDoYnlZ2dSFLZmKPLyT9JTQlqK06v2//Ii8xnAUSQGV4BYPlDp
-   HgzlzzY2JMoM+eXNswbfxOMx+w8ycGsukD+eNAJ/wCpTFxlXW4sDtSW/U
-   AvKI8Saz3FJ2yAXRJQn4s9SGJyxJqyF7yAXlMK3rfK6BRk3GMvSr4VwVc
-   K6HlNb5KSnVZwRhCRP8ox/GkEjedOvLmQKn5Zyywx1C7TNn5j0ZfRgv76
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244171726"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="244171726"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 23:27:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="724306816"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by orsmga005.jf.intel.com with ESMTP; 11 Apr 2022 23:27:11 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v2] uio: dfl: add HSSI feature id
-Date:   Tue, 12 Apr 2022 02:23:53 -0400
-Message-Id: <20220412062353.53984-1-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
+        Tue, 12 Apr 2022 02:27:03 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6543584B;
+        Mon, 11 Apr 2022 23:24:42 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KcwZH70KyzBsBC;
+        Tue, 12 Apr 2022 14:20:23 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 14:24:40 +0800
+Received: from [10.174.177.234] (10.174.177.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 14:24:40 +0800
+Subject: Re: [PATCH 5.10 092/599] drivers: hamradio: 6pack: fix UAF bug caused
+ by mod_timer()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, Duoming Zhou <duoming@zju.edu.cn>,
+        Lin Ma <linma@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220405070258.802373272@linuxfoundation.org>
+ <20220405070301.566657774@linuxfoundation.org>
+From:   "xujia (Q)" <xujia39@huawei.com>
+Message-ID: <9f2fc2c5-0380-f1e0-e6d6-8702b039b45d@huawei.com>
+Date:   Tue, 12 Apr 2022 14:24:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20220405070301.566657774@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Originating-IP: [10.174.177.234]
+X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,44 +58,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Hi.
 
-Add the feature id of the OFS HSSI (High Speed Serial Interface)
-subsystem to table of ids supported by the uio_dfl driver. HSSI
-subsystem consists of harden/soft Ethernet MAC to support various
-ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
+Maybe there are some errors  in LTS.  The follow test is UAF in 5.10.
 
-We leverage the uio_dfl driver to access the HSSI subsystem on user space,
-because the HSSI subsystem was designed for specific purposes and does
-not fit into the standard MAC and net kernel subsystems.
+https://lore.kernel.org/all/20151217213400.GA15130@linux-mips.org/T/
 
-The Feature ID table of DFL can be found:
-https://github.com/OPAE/dfl-feature-id
+These two patches which showed up in v5.16-rc1 can solve this problem.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
----
-v2: add HSSI introduction and the git repo of Feature ID table.
----
- drivers/uio/uio_dfl.c | 2 ++
- 1 file changed, 2 insertions(+)
+The first is 0b9111922b1f ("hamradio: defer 6pack kfree after 
+unregister_netdev").
+The second is 81b1d548d00b ("hamradio: remove needs_free_netdev to avoid 
+UAF").
 
-diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-index 89c0fc7b0cbc..660e1d0bf6b9 100644
---- a/drivers/uio/uio_dfl.c
-+++ b/drivers/uio/uio_dfl.c
-@@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
- }
- 
- #define FME_FEATURE_ID_ETH_GROUP	0x10
-+#define FME_FEATURE_ID_OFS_HSSI		0x15
- 
- static const struct dfl_device_id uio_dfl_ids[] = {
- 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-+	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
- 	{ }
- };
- MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
--- 
-2.26.2
+These patches make unregister_netdev() not call free_netdev() and then 
+call it after
+free all 6pack frame buffers.
 
+I'll send these patches soon to fix 5.10 for reference.
+
+在 2022/4/5 15:26, Greg Kroah-Hartman 写道:
+> From: Duoming Zhou <duoming@zju.edu.cn>
+>
+> commit efe4186e6a1b54bf38b9e05450d43b0da1fd7739 upstream.
+>
+> When a 6pack device is detaching, the sixpack_close() will act to cleanup
+> necessary resources. Although del_timer_sync() in sixpack_close()
+> won't return if there is an active timer, one could use mod_timer() in
+> sp_xmit_on_air() to wake up timer again by calling userspace syscall such
+> as ax25_sendmsg(), ax25_connect() and ax25_ioctl().
+>
+> This unexpected waked handler, sp_xmit_on_air(), realizes nothing about
+> the undergoing cleanup and may still call pty_write() to use driver layer
+> resources that have already been released.
+>
+> One of the possible race conditions is shown below:
+>
+>        (USE)                      |      (FREE)
+> ax25_sendmsg()                   |
+>   ax25_queue_xmit()               |
+>    ...                            |
+>    sp_xmit()                      |
+>     sp_encaps()                   | sixpack_close()
+>      sp_xmit_on_air()             |  del_timer_sync(&sp->tx_t)
+>       mod_timer(&sp->tx_t,...)    |  ...
+>                                   |  unregister_netdev()
+>                                   |  ...
+>       (wait a while)              | tty_release()
+>                                   |  tty_release_struct()
+>                                   |   release_tty()
+>      sp_xmit_on_air()             |    tty_kref_put(tty_struct) //FREE
+>       pty_write(tty_struct) //USE |    ...
+>
+> The corresponding fail log is shown below:
+> ===============================================================
+> BUG: KASAN: use-after-free in __run_timers.part.0+0x170/0x470
+> Write of size 8 at addr ffff88800a652ab8 by task swapper/2/0
+> ...
+> Call Trace:
+>    ...
+>    queue_work_on+0x3f/0x50
+>    pty_write+0xcd/0xe0pty_write+0xcd/0xe0
+>    sp_xmit_on_air+0xb2/0x1f0
+>    call_timer_fn+0x28/0x150
+>    __run_timers.part.0+0x3c2/0x470
+>    run_timer_softirq+0x3b/0x80
+>    __do_softirq+0xf1/0x380
+>    ...
+>
+> This patch reorders the del_timer_sync() after the unregister_netdev()
+> to avoid UAF bugs. Because the unregister_netdev() is well synchronized,
+> it flushs out any pending queues, waits the refcount of net_device
+> decreases to zero and removes net_device from kernel. There is not any
+> running routines after executing unregister_netdev(). Therefore, we could
+> not arouse timer from userspace again.
+>
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> Reviewed-by: Lin Ma <linma@zju.edu.cn>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   drivers/net/hamradio/6pack.c |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> --- a/drivers/net/hamradio/6pack.c
+> +++ b/drivers/net/hamradio/6pack.c
+> @@ -674,14 +674,14 @@ static void sixpack_close(struct tty_str
+>   	 */
+>   	netif_stop_queue(sp->dev);
+>   
+> +	unregister_netdev(sp->dev);
+> +
+>   	del_timer_sync(&sp->tx_t);
+>   	del_timer_sync(&sp->resync_t);
+>   
+>   	/* Free all 6pack frame buffers. */
+>   	kfree(sp->rbuff);
+>   	kfree(sp->xbuff);
+> -
+> -	unregister_netdev(sp->dev);
+>   }
+>   
+>   /* Perform I/O control on an active 6pack channel. */
+>
+>
+> .

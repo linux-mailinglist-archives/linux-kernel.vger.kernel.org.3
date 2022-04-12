@@ -2,141 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998694FE50B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930154FE509
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357181AbiDLPqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S1352046AbiDLPqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357175AbiDLPqc (ORCPT
+        with ESMTP id S1349533AbiDLPqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:46:32 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B44B853
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:44:11 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id f17so2896413ybj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:44:11 -0700 (PDT)
+        Tue, 12 Apr 2022 11:46:24 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858E410E1;
+        Tue, 12 Apr 2022 08:44:05 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b15so22873599edn.4;
+        Tue, 12 Apr 2022 08:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tr9PBKtwF8uwxpVk+FAIjyu0P4+AAl4OjgCwV9dPuUk=;
-        b=FBpU8iZrkesdxN5hege1QVCKw2GwQWoJeqo7hta2MSJUHT2hX/jY4/T2uTIN91Ci2f
-         yJYPP5se3CJcfHE7rZndjKAD9xDCiCMveeeg1bmiRexKgxQ5aeEdPBqeTrXGIIOIApep
-         1Gc2EQUyynrjTlEYC8DRlMwGfwSiq2mE82KBA9kJ0ShAVa58yxE2vcldInV28pJXQAyV
-         DjyEVtey6YGKZBqiSjquLuWMm6sYergrT9hEkKmhf1AtCgt8AKIXrwlx3ep9pRIu/xFC
-         DXVRc2eEE4A8PGgT+6VvpngUsKIKbdLkgRagzaLB9RYyJTJ80U40OtUjoCIS0yNiYrjJ
-         Vk7Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NXTt21pP00Yb2qQhiXa+16lsp7D3w+nhEqL+5vsS12M=;
+        b=Rqp9TqHC8gBsLVoMXbStnEGzZMTPX95+kpVbKAi0Y2GDZEQWzTKb4lFaep0wk3ED5O
+         X3gRWYeovPEl/3OD48ulzalDPTBMKZh+JjsqJPfsXrs/cZLDyHyzwog7nYUL2TgfM2bj
+         /xi34FyJFLnN4p1QymAmHZfWHtE9NitUul2m55zZbccOFASOc1D0IAFtjleeROWqC91F
+         ejm9ivKThag8DFzEBXEbEaMGFaLI/9dGKZkkjr+igq515gt8HqhZos7gH1e8KjBK5Xqt
+         H5e5E2dhPs5g4HlkTYENoldIJgZzQQcF1cusoi0tdRX41ol7llIzTotKnMiMIAxLncm9
+         zTbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tr9PBKtwF8uwxpVk+FAIjyu0P4+AAl4OjgCwV9dPuUk=;
-        b=i4xSZV4hErvbi1IaPCBwKB8sNyHpzPFa3dJyW0FYuTJVwbkBRBchj3tJmGYCpl+fOx
-         euMZS+kiZ+5rB4bOIj1WaJjni8s3GJsFTLm+MuNB4IutJwoQN2ClCFX3IXpOMb3PQM3F
-         HmzhxR+Dvtqd3hlF4sUdBXgzv6Xxxanx/yLDitVqNsSeuW0XS+DMb5T9e/rQNPsvLi2P
-         4jwW3y58Sqeiz2oON1OLOxJD1MiRmbWji4fv1AGxfuWrYLVB6WySmbfn1EbfK989Gp9R
-         WAUnlvvhj2cW3wWKvWx+PCFP4LMoENBrv0q98MmOWyxkM8tBD3CyUBlArfTerHfGx648
-         t9+Q==
-X-Gm-Message-State: AOAM533H3RMAfpsKHP8gtygsFEsc8UDaYzrPbnttGpvMZOpUTaAQuusd
-        vGNDEx6560N9qVbXGJy+3DE1Pxk3TZkNyIuwFI6KHQ==
-X-Google-Smtp-Source: ABdhPJwwQOZn8bktk+JMI7gRj6EbmLkfkWywdQIVdWcSjUAaN/fZLvVFnq2dQrWz2x1R4BWR7pO/68AY6/0C3pCpoH0=
-X-Received: by 2002:a25:df53:0:b0:641:1f31:1d3d with SMTP id
- w80-20020a25df53000000b006411f311d3dmr12954621ybg.603.1649778250882; Tue, 12
- Apr 2022 08:44:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NXTt21pP00Yb2qQhiXa+16lsp7D3w+nhEqL+5vsS12M=;
+        b=20fkcKUur4EHaP2rjUBPQEp595Cn+oxmQ0KCqJI5/KcipcYIBbdDlEjOMD9dHCehvp
+         YAwXcSxQ72gPn68IHajF3vtWGzG4Zd9EiELqDOzXJySXgrFD+MjYG2YhVurXprZasrKr
+         qUCeJimyG3+w6PyGjoi0TcjaCa2sFtDkc2eyRnkyiLIxHkn57bIU0ufMUU/cq0ptFEjO
+         7CWnJqoBJ59waU/zA4JJJvyxQZS5L3j1J4zHG4oEHvJVMDchQh6JuWaQFNFOrvwHmI6W
+         0dvYsj40/N8iC3gkf0jzruoqyzcGx4vYuFfxxFBA9FR5DRSEa2as8MilnPdGxkjGRL+E
+         i80w==
+X-Gm-Message-State: AOAM533oc7h89jbM3o2yIU3oD2RyqYIMOpP7u+A3ztzbe1vCbQXqIF+A
+        2aSgvpaFDuzLl9inhcTgcmA=
+X-Google-Smtp-Source: ABdhPJzaldN29rZURT2NOIMe+NKGjjWzDphXskZr9BXgnSyVxiiayAAXHEV/jpKDrNPsg6k3bxXghw==
+X-Received: by 2002:a50:871e:0:b0:41d:77c0:6927 with SMTP id i30-20020a50871e000000b0041d77c06927mr13569863edb.354.1649778243710;
+        Tue, 12 Apr 2022 08:44:03 -0700 (PDT)
+Received: from krava ([83.240.62.142])
+        by smtp.gmail.com with ESMTPSA id z21-20020a1709063a1500b006da6436819dsm13252584eje.173.2022.04.12.08.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 08:44:03 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 17:44:00 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+Message-ID: <YlWeQIUaqGnbg4K0@krava>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+ <20220407125224.310255-5-jolsa@kernel.org>
+ <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220412062942.022903016@linuxfoundation.org> <CA+G9fYseyeNoxQwEWtiiU8dLs_1coNa+sdV-1nqoif6tER_46Q@mail.gmail.com>
- <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
-In-Reply-To: <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 12 Apr 2022 21:13:59 +0530
-Message-ID: <CA+G9fYuJKsYMR2vW+7d=xjDj9zoBtTF5=pSmcQRaiQitAjXCcw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
-To:     Marco Elver <elver@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco
+On Mon, Apr 11, 2022 at 03:15:40PM -0700, Andrii Nakryiko wrote:
 
-On Tue, 12 Apr 2022 at 20:32, Marco Elver <elver@google.com> wrote:
->
-> On Tue, 12 Apr 2022 at 16:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > On Tue, 12 Apr 2022 at 12:11, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.15.34 release.
-> > > There are 277 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> >
-> > On linux stable-rc 5.15 x86 and i386 builds failed due to below error [1]
-> > with config [2].
-> >
-> > The finding is when kunit config is enabled the builds pass.
-> > CONFIG_KUNIT=y
-> >
-> > But with CONFIG_KUNIT not set the builds failed.
-> >
-> > x86_64-linux-gnu-ld: mm/kfence/core.o: in function `__kfence_alloc':
-> > core.c:(.text+0x901): undefined reference to `filter_irq_stacks'
-> > make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > I see these three commits, I will bisect and get back to you
-> >
-> > 2f222c87ceb4 kfence: limit currently covered allocations when pool nearly full
-> > e25487912879 kfence: move saving stack trace of allocations into
-> > __kfence_alloc()
-> > d99355395380 kfence: count unexpectedly skipped allocations
->
-> My guess is that this commit is missing:
+SNIP
 
-This patch is missing Fixes: tag.
+> > +static int get_syms(char ***symsp, size_t *cntp)
+> > +{
+> > +       size_t cap = 0, cnt = 0, i;
+> > +       char *name, **syms = NULL;
+> > +       struct hashmap *map;
+> > +       char buf[256];
+> > +       FILE *f;
+> > +       int err;
+> > +
+> > +       /*
+> > +        * The available_filter_functions contains many duplicates,
+> > +        * but other than that all symbols are usable in kprobe multi
+> > +        * interface.
+> > +        * Filtering out duplicates by using hashmap__add, which won't
+> > +        * add existing entry.
+> > +        */
+> > +       f = fopen(DEBUGFS "available_filter_functions", "r");
+> 
+> I'm really curious how did you manage to attach to everything in
+> available_filter_functions because when I'm trying to do that I fail.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f39f21b3ddc7fc0f87eb6dc75ddc81b5bbfb7672
+the new code makes the differece ;-) so the main problem I could not
+use available_filter_functions functions before were cases like:
 
-For your information, I have reverted the below commit and build pass.
+  # cat available_filter_functions | grep sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
+  sys_ni_syscall
 
-kfence: limit currently covered allocations when pool nearly full
+which when you try to resolve you'll find just one address:
 
-[ Upstream commit 08f6b10630f284755087f58aa393402e15b92977 ]
+  # cat /proc/kallsyms | egrep 'T sys_ni_syscall'
+  ffffffff81170020 T sys_ni_syscall
 
-- Naresh
+this is caused by entries like:
+    __SYSCALL(156, sys_ni_syscall)
 
-> Thanks,
-> -- Marco
+when generating syscalls for given arch
+
+this is handled by the new code by removing duplicates when
+reading available_filter_functions
+
+
+
+another case is the other way round, like with:
+
+  # cat /proc/kallsyms | grep 't t_next'
+  ffffffff8125c3f0 t t_next
+  ffffffff8126a320 t t_next
+  ffffffff81275de0 t t_next
+  ffffffff8127efd0 t t_next
+  ffffffff814d6660 t t_next
+
+that has just one 'ftrace-able' instance:
+
+  # cat available_filter_functions | grep '^t_next$'
+  t_next
+
+and this is handled by calling ftrace_location on address when
+resolving symbols, to ensure each reasolved symbol lives in ftrace 
+
+> available_filter_functions has a bunch of functions that should not be
+> attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
+> 
+>   void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
+> 
+> So first, curious what I am doing wrong or rather why it succeeds in
+> your case ;)
+> 
+> But second, just wanted to plea to "fix" available_filter_functions to
+> not list stuff that should not be attachable. Can you please take a
+> look and checks what's going on there and why do we have notrace
+> functions (and what else should *NOT* be there)?
+
+yes, seems like a bug ;-) it's in available_filter_functions
+but it does not have 'call __fentry__' at the entry..
+
+I was going to check on that, because you brought that up before,
+but did not get to it yet
+
+> 
+> 
+> > +       if (!f)
+> > +               return -EINVAL;
+> > +
+> > +       map = hashmap__new(symbol_hash, symbol_equal, NULL);
+> > +       err = libbpf_get_error(map);
+> > +       if (err)
+> > +               goto error;
+> > +
+> 
+> [...]
+> 
+> > +
+> > +       attach_delta_ns = (attach_end_ns - attach_start_ns) / 1000000000.0;
+> > +       detach_delta_ns = (detach_end_ns - detach_start_ns) / 1000000000.0;
+> > +
+> > +       fprintf(stderr, "%s: found %lu functions\n", __func__, cnt);
+> > +       fprintf(stderr, "%s: attached in %7.3lfs\n", __func__, attach_delta_ns);
+> > +       fprintf(stderr, "%s: detached in %7.3lfs\n", __func__, detach_delta_ns);
+> > +
+> > +       if (attach_delta_ns > 2.0)
+> > +               PRINT_FAIL("attach time above 2 seconds\n");
+> > +       if (detach_delta_ns > 2.0)
+> > +               PRINT_FAIL("detach time above 2 seconds\n");
+> 
+> see my reply on the cover letter, any such "2 second" assumption are
+> guaranteed to bite us. We've dealt with a lot of timing issues due to
+> CI being slower and more unpredictable in terms of performance, I'd
+> like to avoid dealing with one more case like that.
+
+right, I'll remove the check
+
+thanks,
+jirka

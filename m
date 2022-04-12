@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B169C4FE285
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F2A4FE26D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356161AbiDLNZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S1356219AbiDLNZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355928AbiDLNYt (ORCPT
+        with ESMTP id S1355956AbiDLNYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:24:49 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7043E2BB0D;
-        Tue, 12 Apr 2022 06:15:23 -0700 (PDT)
+        Tue, 12 Apr 2022 09:24:50 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F82C13F;
+        Tue, 12 Apr 2022 06:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649769323; x=1681305323;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=e5rDwNyZ+Uqm84iaVDuX3yfceIEnyCM9hoJwRrjKywM=;
-  b=MncWFDEBLQ7+tHDuWUnQz32krfMdx453qVkpxrW8ucklM8v5fTvFjSTn
-   9c5YHAllNHKAn7DODLBiFKsYCs+dC+fwGUUMJU+tPL7PWMya9Dx++mN0F
-   xv7FUNB//8cKIfdocHx0ElcUqGgUD19DrmtvaUDqAEDNN0ypNii96t58Q
-   U=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 12 Apr 2022 06:15:23 -0700
+  t=1649769324; x=1681305324;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=KRwOq5mfpCz05TtDePHTpU6eHexJLhKjTnWDKxqmvWA=;
+  b=ZwvfVpmNoS7N+M4yr7xa2S9Hcr1Hthq4qztogW2lTR3fMhL1+RxPXs5b
+   6rlWfPIAZxc83IRoZnXyAG3EDrV8s0Eh48R+/krN2LAX/K4N0v9rJBz8J
+   Jl4lcFK7hrupbFFioflVdTImNZKq3qgCXiqHWyEkxNVe9HvXRPXFHItoH
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Apr 2022 06:15:24 -0700
 X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:15:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:15:23 -0700
+Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.986.22; Tue, 12 Apr 2022 06:15:22 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 06:15:17 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v8 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin controller node
-Date:   Tue, 12 Apr 2022 18:44:41 +0530
-Message-ID: <1649769281-12458-3-git-send-email-quic_srivasam@quicinc.com>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_vgarodia@quicinc.com>
+Subject: [PATCH v2 0/2] Venus fixes 
+Date:   Tue, 12 Apr 2022 18:45:09 +0530
+Message-ID: <1649769311-22622-1-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649769281-12458-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1649769281-12458-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,230 +55,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LPASS LPI pinctrl node required for Audio functionality on sc7280
-based platforms.
+Changes in this version since v1 includes:
+* addressed comments from Stanimir.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84 ++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 +++++++++++++++++++++++++++++++
- 2 files changed, 191 insertions(+)
+Vikash Garodia (2):
+  media: venus: do not queue internal buffers from previous sequence
+  media: venus: vdec: ensure venus is powered on during stream off
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 1fc94b5..53e5c91 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -238,6 +238,90 @@
- 	modem-init;
- };
- 
-+&dmic01 {
-+	clk {
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&dmic01_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		pull-down;
-+	};
-+};
-+
-+&dmic23 {
-+	clk {
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&dmic23_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		pull-down;
-+	};
-+};
-+
-+&rx_swr {
-+	clk {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-bus-hold;
-+	};
-+};
-+
-+&rx_swr_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	data {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+};
-+
-+&tx_swr {
-+	clk {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		slew-rate = <1>;
-+		bias-bus-hold;
-+	};
-+};
-+
-+&tx_swr_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	data {
-+		bias-bus-hold;
-+	};
-+};
-+
- &pcie1 {
- 	status = "okay";
- 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 6e6cfeda..91f78bb 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1987,6 +1987,113 @@
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-+		lpass_tlmm: pinctrl@33c0000 {
-+			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
-+			reg = <0 0x033c0000 0x0 0x20000>,
-+				<0 0x03550000 0x0 0x10000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&lpass_tlmm 0 0 15>;
-+
-+			#clock-cells = <1>;
-+
-+			dmic01: dmic01 {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+				};
-+			};
-+
-+			dmic01_sleep: dmic01-sleep {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+				};
-+			};
-+
-+			dmic23: dmic23 {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+				};
-+			};
-+
-+			dmic23_sleep: dmic23-sleep {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+				};
-+			};
-+
-+			rx_swr: rx-swr {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+				};
-+			};
-+
-+			rx_swr_sleep: rx-swr-sleep {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+				};
-+			};
-+
-+			tx_swr: tx-swr {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+				};
-+			};
-+
-+			tx_swr_sleep: tx-swr-sleep {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+				};
-+			};
-+		};
-+
- 		gpu: gpu@3d00000 {
- 			compatible = "qcom,adreno-635.0", "qcom,adreno";
- 			reg = <0 0x03d00000 0 0x40000>,
+ drivers/media/platform/qcom/venus/helpers.c | 34 +++++++++++++++++++++--------
+ drivers/media/platform/qcom/venus/vdec.c    |  2 ++
+ 2 files changed, 27 insertions(+), 9 deletions(-)
+
 -- 
-2.7.4
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

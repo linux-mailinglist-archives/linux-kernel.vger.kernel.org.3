@@ -2,130 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C3B4FE9F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 23:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AE84FE9FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 23:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiDLVcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 17:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S230195AbiDLVcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 17:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiDLVcL (ORCPT
+        with ESMTP id S229602AbiDLVce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 17:32:11 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BABEE2F74
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:10:44 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id g11so13714065qke.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gBhTpRFFi4S1YoI6Y47NqVUBm/Z+66ScwXGZSk0rfic=;
-        b=T7Sy6FLDrgLsr08CJMXwUmg3ph+n2SbtlANeDVJRGcYPLZPNFdqkGA3rd9EyBtlS3H
-         kTjnzK8J7gmq/Ix5hk869IWHjRfyAZapgFeo9WcQo6acOPkngS7ZgD606xHdWRwdkcf4
-         uCNDsXroeiGCJ2dnoQVzb34/K2VNl7m6HbgnUp42Td7ihjuVDiePRgyor7tcwAF0jphx
-         dTPNgA/R3nPsTcwHOh8eDEn9xpE1Mq90riz3Mr6D8Z7h12iUd2IXjDQeAooIdIWVePAB
-         qgC8WMTKShtEFXeXyQDjMUSArChIukeGYjH3EdJ1+FacKEyrgQ1FlRi6Ir+VmO/dOMBJ
-         H7gg==
+        Tue, 12 Apr 2022 17:32:34 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A60195300;
+        Tue, 12 Apr 2022 14:11:10 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-dacc470e03so53892fac.5;
+        Tue, 12 Apr 2022 14:11:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gBhTpRFFi4S1YoI6Y47NqVUBm/Z+66ScwXGZSk0rfic=;
-        b=NwWj9Gid0SRAoPmDY0cNrjJFTP29sf90bV9qHYl5su7+rD605Be7JfV+fYjz11j9TO
-         WY5sfAwc+lsya4OBtUCaWoeXeZoMy3Yi7mPsyOD4GXGlJqNieom6STlhmreent1AiXyx
-         C+RXp20a9nX7qsbkZE4jSPNUqDQ0RIGS5HQjehkZ0aP5n5pghZNBlbKB7E8SXbQME+Ha
-         RAMZ5Xu2aM4byO3iul8MmgM0I79jMstzw13pNTCynBkdyAW5Nk8P3XKbyYbFTaEZlMh3
-         pGYS3iTrgw/Flsks/MX5RU+Qt5c+h5bV5zSKoInwJ7PP8Z2VzAjLXcSNFvPvUcx1ROLA
-         afDA==
-X-Gm-Message-State: AOAM531x6UFvI4L6SbZNS0qehyVtMGQlPpL01+D3VyTh15OtmIZkjanx
-        MJ3itLp70tABULo1zP4H1lXuZUCeukdk9DwArPk=
-X-Google-Smtp-Source: ABdhPJxG82CB33uGk+QRkThCYGAsp4gaOqXjPDvytyFIgAT/f1JvMa50XJo0MGciBKEXLs71MyqZMA==
-X-Received: by 2002:a05:620a:4310:b0:67e:8460:5a10 with SMTP id u16-20020a05620a431000b0067e84605a10mr4475122qko.636.1649797633718;
-        Tue, 12 Apr 2022 14:07:13 -0700 (PDT)
-Received: from [192.168.0.189] (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id t10-20020a05620a034a00b0069c06c95bf7sm6104251qkm.14.2022.04.12.14.07.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 14:07:13 -0700 (PDT)
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
- interconnect fields
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cJkmHfdBxf221GLO6Rp2mXWctk7aSf4CdfI04IRAEBI=;
+        b=6U/sVTT7gZL4hR4AZy8BvzKuik3sdGMReHESQH0rDQ3DwlSCuHryyT6Ii0x95rZ6YF
+         25dPv43Wt/tUkPtW/IIVgzfQuMOOfmOhZlVwyUD2UCA63RGYyr/q2XAGTgCdgNj8DoSR
+         c5Ri9fA2SQrcppbEADVHj/QN1lKWe5Az8E5X2BO3fbubEJpO+aiEa8zlQiRlESBPXpm8
+         BRUltZybWfYyb/1YXI7ZYC17tWTATodSwr4Hh39csrqnU0wg7C2QRwEn/TsXlUYBiyon
+         zQ0gCTTZ2sKiKjyH07pZju1ujwnsN660c0AmNyWjtGbZCI9mSPstfVP/5M1eqxSyHinw
+         N6AQ==
+X-Gm-Message-State: AOAM5311hNhnTMemh4aReCIR/BUFhLhTNyIZG2/yuaibrmQwU7oyh26r
+        WFonfvBzLIOQcDHYvThpTw==
+X-Google-Smtp-Source: ABdhPJxzHVBv05OKxWV0sTv8Hm3nF460ieQSkUefeU8+7dcceq2HdX1Y1OEyRNmYiktpO+V5nGy4WA==
+X-Received: by 2002:a05:6870:4290:b0:e2:b4c9:ea5a with SMTP id y16-20020a056870429000b000e2b4c9ea5amr2900806oah.173.1649797740517;
+        Tue, 12 Apr 2022 14:09:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d1-20020a056830138100b005cf2f29d89csm13533691otq.77.2022.04.12.14.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 14:09:00 -0700 (PDT)
+Received: (nullmailer pid 946357 invoked by uid 1000);
+        Tue, 12 Apr 2022 21:08:59 -0000
+Date:   Tue, 12 Apr 2022 16:08:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220407172145.31903-1-jonathan@marek.ca>
- <YlXmTbKwYtvLSjgp@builder.lan>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <b70f4ecf-93c6-49df-0d8d-a5899075ca63@marek.ca>
-Date:   Tue, 12 Apr 2022 17:07:13 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 02/14] dt-bindings: display: Add D1 display engine
+ compatibles
+Message-ID: <YlXqa5YH7ckHCf1m@robh.at.kernel.org>
+References: <20220412042807.47519-1-samuel@sholland.org>
+ <20220412042807.47519-3-samuel@sholland.org>
 MIME-Version: 1.0
-In-Reply-To: <YlXmTbKwYtvLSjgp@builder.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412042807.47519-3-samuel@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 11:27:54PM -0500, Samuel Holland wrote:
+> Allwinner D1 contains a display engine 2.0. It features two mixers, a
+> TCON TOP (with DSI and HDMI), one TCON LCD, and one TCON TV.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> (no changes since v1)
+> 
+>  .../allwinner,sun4i-a10-display-engine.yaml   |  1 +
+>  .../display/allwinner,sun4i-a10-tcon.yaml     |  2 ++
+>  .../allwinner,sun8i-a83t-de2-mixer.yaml       |  2 ++
+>  .../display/allwinner,sun8i-r40-tcon-top.yaml | 34 +++++++++++++++++++
+>  4 files changed, 39 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+> index d4412aea7b73..c388ae5da1e4 100644
+> --- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+> +++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml
+> @@ -62,6 +62,7 @@ properties:
+>        - allwinner,sun8i-r40-display-engine
+>        - allwinner,sun8i-v3s-display-engine
+>        - allwinner,sun9i-a80-display-engine
+> +      - allwinner,sun20i-d1-display-engine
+>        - allwinner,sun50i-a64-display-engine
+>        - allwinner,sun50i-h6-display-engine
+>  
+> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> index 3a7d5d731712..4a92a4c7dcd7 100644
+> --- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> +++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> @@ -33,6 +33,8 @@ properties:
+>        - const: allwinner,sun8i-v3s-tcon
+>        - const: allwinner,sun9i-a80-tcon-lcd
+>        - const: allwinner,sun9i-a80-tcon-tv
+> +      - const: allwinner,sun20i-d1-tcon-lcd
+> +      - const: allwinner,sun20i-d1-tcon-tv
+>  
+>        - items:
+>            - enum:
+> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun8i-a83t-de2-mixer.yaml b/Documentation/devicetree/bindings/display/allwinner,sun8i-a83t-de2-mixer.yaml
+> index 4f91eec26de9..cb243bc58ef7 100644
+> --- a/Documentation/devicetree/bindings/display/allwinner,sun8i-a83t-de2-mixer.yaml
+> +++ b/Documentation/devicetree/bindings/display/allwinner,sun8i-a83t-de2-mixer.yaml
+> @@ -19,6 +19,8 @@ properties:
+>        - allwinner,sun8i-r40-de2-mixer-0
+>        - allwinner,sun8i-r40-de2-mixer-1
+>        - allwinner,sun8i-v3s-de2-mixer
+> +      - allwinner,sun20i-d1-de2-mixer-0
+> +      - allwinner,sun20i-d1-de2-mixer-1
+>        - allwinner,sun50i-a64-de2-mixer-0
+>        - allwinner,sun50i-a64-de2-mixer-1
+>        - allwinner,sun50i-h6-de3-mixer-0
+> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun8i-r40-tcon-top.yaml b/Documentation/devicetree/bindings/display/allwinner,sun8i-r40-tcon-top.yaml
+> index 784b267635fb..cc32e2faed91 100644
+> --- a/Documentation/devicetree/bindings/display/allwinner,sun8i-r40-tcon-top.yaml
+> +++ b/Documentation/devicetree/bindings/display/allwinner,sun8i-r40-tcon-top.yaml
+> @@ -41,6 +41,7 @@ properties:
+>    compatible:
+>      enum:
+>        - allwinner,sun8i-r40-tcon-top
+> +      - allwinner,sun20i-d1-tcon-top
+>        - allwinner,sun50i-h6-tcon-top
+>  
+>    reg:
+> @@ -154,6 +155,39 @@ allOf:
+>              - port@2
+>              - port@3
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: allwinner,sun20i-d1-tcon-top
+> +
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +          maxItems: 4
 
-On 4/12/22 4:51 PM, Bjorn Andersson wrote:
-> On Thu 07 Apr 12:21 CDT 2022, Jonathan Marek wrote:
-> 
->> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
->> Ignored and undocumented with upstream UFS driver so delete for now.
->>
-> 
-> Just to clarify, the binding do document interconnects and the property
-> should be there in the end. v1 (why isn't this marked v2?) was correct.
-> 
-> What I asked for was a statement on why it should be picked up for
-> v5.18-rc (as Dmitry requested).
-> 
+You shouldn't need minItems and maxItems here and the next 2 cases.
 
-This isn't a v2, I sent this without seeing there was already patch for 
-the same "problem".
-
-A reason for picking it up is that if you have a patch adding the 
-interconnect support to the UFS driver in your tree, the incorrect dts 
-will prevent it from probing  (so the 5.18-rc1 dts could fail with newer 
-kernel eventually, not sure if upstream cares about that?)
-
-> Regards,
-> Bjorn
+> +          items:
+> +            - description: The TCON TOP interface clock
+> +            - description: The TCON TOP TV0 clock
+> +            - description: The TCON TOP TVE0 clock
+> +            - description: The TCON TOP MIPI DSI clock
+> +
+> +        clock-names:
+> +          minItems: 4
+> +          maxItems: 4
+> +          items:
+> +            - const: bus
+> +            - const: tcon-tv0
+> +            - const: tve0
+> +            - const: dsi
+> +
+> +        clock-output-names:
+> +          minItems: 2
+> +          maxItems: 2
+> +          items:
+> +            - description: TCON TV0 output clock name
+> +            - description: DSI output clock name
+> +
+>    - if:
+>        properties:
+>          compatible:
+> -- 
+> 2.35.1
 > 
->> Fixes: aa2d0bf04a3c ("arm64: dts: qcom: sm8450: add interconnect nodes")
->> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 3 ---
->>   1 file changed, 3 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 2c18e1ef9e82d..90cdbec3cac99 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -1663,9 +1663,6 @@ ufs_mem_hc: ufshc@1d84000 {
->>   
->>   			iommus = <&apps_smmu 0xe0 0x0>;
->>   
->> -			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
->> -					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
->> -			interconnect-names = "ufs-ddr", "cpu-ufs";
->>   			clock-names =
->>   				"core_clk",
->>   				"bus_aggr_clk",
->> -- 
->> 2.26.1
->>
+> 

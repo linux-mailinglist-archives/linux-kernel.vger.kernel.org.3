@@ -2,262 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4334FE992
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039FB4FE9B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiDLUnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S231727AbiDLU6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiDLUml (ORCPT
+        with ESMTP id S231665AbiDLU5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:42:41 -0400
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7AAFABF5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:37:43 -0700 (PDT)
-Received: by mail-yb1-f202.google.com with SMTP id h16-20020a056902009000b00628a70584b2so61023ybs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=WxuM56vp7eyey8vt1AZa+KldYkNrgkjPuC+4UbMDXgc=;
-        b=rIM9EOW8GOu9cyGO8TXJ6h03VJygSCKXO8crDJqnskQH89h0ZkNfJ9QcigR3yBGwJg
-         qIZIakU+ukGgbzbtBtrcJRatlgtr2WsuT1uhRYMkDZoB5wk0eninAo43ymkRPOkirNrq
-         /816AqwD33qIzqfBV4wacqsGUAdSBGLoiJdn++k8j9aJAvNiMRne7dHD0R17EQukclon
-         jCkxn4wbNTcNTRMRaVaA+0YjqUxB72PaFAAjiPWKXOSO3MiH1+AQx3jMXyfiGcttDc6b
-         hy8JW5fCyciu4xUl/9HYYP0ybCeWnGKSjYBNlj56ErlhIeelassl5VxG2u3/aJIXAJ0J
-         q/Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=WxuM56vp7eyey8vt1AZa+KldYkNrgkjPuC+4UbMDXgc=;
-        b=nQBK1BXkgAPBApJdbHeStpUnPgNOphiia9l1qKc+LQOZbUIVwKdt+SFn/bKEjowuTa
-         eGjpcQBDY7OIXUHStGkT2X2j8pjYOaMuGclDYzsmPkcU3hOVxvLlVuyGpfbe62z9MV5s
-         iZzq4sWH/miZVBZdRflLNu1A8Y0i0U9Tix41P4DpAWUkLFKG/L5rxNF3S8cYccKeELh3
-         jhPTCkpnLcS/Hn8gppCUJa5d0cP8+5dHY/mko9o7fR81adcXT53ALwJrMy6NWeJ61oYr
-         dR8/4Rp1NgfLfg6OXjomzB36Pc4Iy+ImxhPTdTARSOwUJPvZmnP7o17abQMWGzCJLoW6
-         Rd1Q==
-X-Gm-Message-State: AOAM532BumGrJExq7nRIB/Z8EtM89NTzE7LQHjkZZjgu/gPYmr26xjXL
-        Ptdqw6q1lCjv7rJjDkxDTktppOHV+A4fYVZiotLc
-X-Google-Smtp-Source: ABdhPJwN1rKyVp/tc0fMg/HjGUO+kQyygAHoYo6COvoV6GzliqlsiWADXi0U2ptDq7ByWupmrnrJxjn86JmOaUcWFqlS
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8927:f9ed:8b14:ddae])
- (user=axelrasmussen job=sendgmr) by 2002:a25:9391:0:b0:641:3842:c5c4 with
- SMTP id a17-20020a259391000000b006413842c5c4mr11278242ybm.323.1649795388862;
- Tue, 12 Apr 2022 13:29:48 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 13:29:41 -0700
-Message-Id: <20220412202942.386981-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH 1/2] userfaultfd: add /dev/userfaultfd for fine grained access control
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 16:57:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9252414FFE9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:53:39 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649795661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9PaeO1yoTw7dvGZZ0PRc0hGx0cBmvj6WVa7+40BVJ4E=;
+        b=XlUVorIwjmIFMIc+DkdX5cA6QBXTWo/HOZTZegAyPCsN4FoHEzNXFRgqyzFz4nmuuhAveg
+        jBdiBiTvHh4SNEySyFonWBCS20QMIgOaFr9SSleFaguouFXjTzSuU2Kh2GGKF2pmX2AG1o
+        HqgQrb8JuPW2/JHcEV2il0q7ZalIY4YFBT35ROA/hl6ZGJxJSbMd3OJ7MITqH4R56HiwA3
+        MeOp/2K1Ak8OmAPlH9k1Ne9eqCKcNwj2VqbN12SqvSMc8v3h2cQnuz2W1voxL6V4IfYy+j
+        Hd+82VUzQb3sRakCTT/55y6FCCLmQZL5DnmmVyO1f6pVuimwKx++38efDe11mw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649795661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9PaeO1yoTw7dvGZZ0PRc0hGx0cBmvj6WVa7+40BVJ4E=;
+        b=5rToMQK6B0RWVR9lVSmCh/M6NtlPCg382vXe6QDeihkgUjU1hmslw5DRZ3yrFPNS36L/+h
+        og2C/vIlWKT6UDBQ==
+To:     Daniel Vacek <neelx@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/apic: Clarify i82489DX bit overlap in APIC_LVT0
+In-Reply-To: <CACjP9X_A7aLmvypyOz1UrXM571gx_X5q7=w-1j+G+MSbCteiEw@mail.gmail.com>
+References: <20220202140244.1681140-1-neelx@redhat.com>
+ <874k361liu.ffs@tglx>
+ <CACjP9X_A7aLmvypyOz1UrXM571gx_X5q7=w-1j+G+MSbCteiEw@mail.gmail.com>
+Date:   Tue, 12 Apr 2022 22:34:21 +0200
+Message-ID: <87ee22f3ci.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Historically, it has been shown that intercepting kernel faults with
-userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
-of time) can be exploited, or at least can make some kinds of exploits
-easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
-changed things so, in order for kernel faults to be handled by
-userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
-must be configured so that any unprivileged user can do it.
+Daniel stumbled over the undocumented bit overlap of the i82498DX external
+APIC and the TSC deadline timer configuration bit in modern APICs.
 
-In a typical implementation of a hypervisor with live migration (take
-QEMU/KVM as one such example), we do indeed need to be able to handle
-kernel faults. But, both options above are less than ideal:
+Remove the i82489DX macro maze, use a i82489DX specific define in the apic
+code and document the overlap in a comment.
 
-- Toggling the sysctl increases attack surface by allowing any
-  unprivileged user to do it.
-
-- Granting the live migration process CAP_SYS_PTRACE gives it this
-  ability, but *also* the ability to "observe and control the
-  execution of another process [...], and examine and change [its]
-  memory and registers" (from ptrace(2)). This isn't something we need
-  or want to be able to do, so granting this permission violates the
-  "principle of least privilege".
-
-This is all a long winded way to say: we want a more fine-grained way to
-grant access to userfaultfd, without granting other additional
-permissions at the same time.
-
-To achieve this, add a /dev/userfaultfd misc device. This device
-provides an alternative to the userfaultfd(2) syscall for the creation
-of new userfaultfds. The idea is, any userfaultfds created this way will
-be able to handle kernel faults, without the caller having any special
-capabilities. Access to this mechanism is instead restricted using e.g.
-standard filesystem permissions.
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Reported-by: Daniel Vacek <neelx@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- fs/userfaultfd.c                 | 79 ++++++++++++++++++++++++++------
- include/uapi/linux/userfaultfd.h |  4 ++
- 2 files changed, 69 insertions(+), 14 deletions(-)
+ arch/x86/include/asm/apicdef.h |    6 ------
+ arch/x86/kernel/apic/apic.c    |   11 ++++++++++-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index aa0c47cb0d16..16d7573ab41a 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -29,6 +29,7 @@
- #include <linux/ioctl.h>
- #include <linux/security.h>
- #include <linux/hugetlb.h>
-+#include <linux/miscdevice.h>
+--- a/arch/x86/include/asm/apicdef.h
++++ b/arch/x86/include/asm/apicdef.h
+@@ -95,12 +95,6 @@
+ #define	APIC_LVTTHMR	0x330
+ #define	APIC_LVTPC	0x340
+ #define	APIC_LVT0	0x350
+-#define		APIC_LVT_TIMER_BASE_MASK	(0x3 << 18)
+-#define		GET_APIC_TIMER_BASE(x)		(((x) >> 18) & 0x3)
+-#define		SET_APIC_TIMER_BASE(x)		(((x) << 18))
+-#define		APIC_TIMER_BASE_CLKIN		0x0
+-#define		APIC_TIMER_BASE_TMBASE		0x1
+-#define		APIC_TIMER_BASE_DIV		0x2
+ #define		APIC_LVT_TIMER_ONESHOT		(0 << 17)
+ #define		APIC_LVT_TIMER_PERIODIC		(1 << 17)
+ #define		APIC_LVT_TIMER_TSCDEADLINE	(2 << 17)
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -320,6 +320,9 @@ int lapic_get_maxlvt(void)
+ #define APIC_DIVISOR 16
+ #define TSC_DIVISOR  8
  
- int sysctl_unprivileged_userfaultfd __read_mostly;
- 
-@@ -65,6 +66,8 @@ struct userfaultfd_ctx {
- 	unsigned int flags;
- 	/* features requested from the userspace */
- 	unsigned int features;
-+	/* whether or not to handle kernel faults */
-+	bool handle_kernel_faults;
- 	/* released */
- 	bool released;
- 	/* memory mappings are changing because of non-cooperative event */
-@@ -410,13 +413,8 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
- 
- 	if (ctx->features & UFFD_FEATURE_SIGBUS)
- 		goto out;
--	if ((vmf->flags & FAULT_FLAG_USER) == 0 &&
--	    ctx->flags & UFFD_USER_MODE_ONLY) {
--		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
--			"sysctl knob to 1 if kernel faults must be handled "
--			"without obtaining CAP_SYS_PTRACE capability\n");
-+	if (!(vmf->flags & FAULT_FLAG_USER) && !ctx->handle_kernel_faults)
- 		goto out;
--	}
- 
- 	/*
- 	 * If it's already released don't get it. This avoids to loop
-@@ -2064,19 +2062,33 @@ static void init_once_userfaultfd_ctx(void *mem)
- 	seqcount_spinlock_init(&ctx->refile_seq, &ctx->fault_pending_wqh.lock);
- }
- 
--SYSCALL_DEFINE1(userfaultfd, int, flags)
-+static inline bool userfaultfd_allowed(bool is_syscall, int flags)
-+{
-+	bool kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
-+	bool allow_unprivileged = sysctl_unprivileged_userfaultfd;
-+
-+	/* userfaultfd(2) access is controlled by sysctl + capability. */
-+	if (is_syscall && kernel_faults) {
-+		if (!allow_unprivileged && !capable(CAP_SYS_PTRACE))
-+			return false;
-+	}
-+
-+	/*
-+	 * For /dev/userfaultfd, access is to be controlled using e.g.
-+	 * permissions on the device node. We assume this is correctly
-+	 * configured by userspace, so we simply allow access here.
-+	 */
-+
-+	return true;
-+}
-+
-+static int new_userfaultfd(bool is_syscall, int flags)
- {
- 	struct userfaultfd_ctx *ctx;
- 	int fd;
- 
--	if (!sysctl_unprivileged_userfaultfd &&
--	    (flags & UFFD_USER_MODE_ONLY) == 0 &&
--	    !capable(CAP_SYS_PTRACE)) {
--		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
--			"sysctl knob to 1 if kernel faults must be handled "
--			"without obtaining CAP_SYS_PTRACE capability\n");
-+	if (!userfaultfd_allowed(is_syscall, flags))
- 		return -EPERM;
--	}
- 
- 	BUG_ON(!current->mm);
- 
-@@ -2095,6 +2107,11 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
- 	refcount_set(&ctx->refcount, 1);
- 	ctx->flags = flags;
- 	ctx->features = 0;
-+	/*
-+	 * If UFFD_USER_MODE_ONLY is not set, then userfaultfd_allowed() above
-+	 * decided that kernel faults were allowed and should be handled.
-+	 */
-+	ctx->handle_kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
- 	ctx->released = false;
- 	atomic_set(&ctx->mmap_changing, 0);
- 	ctx->mm = current->mm;
-@@ -2110,8 +2127,42 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
- 	return fd;
- }
- 
-+SYSCALL_DEFINE1(userfaultfd, int, flags)
-+{
-+	return new_userfaultfd(true, flags);
-+}
-+
-+static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-+{
-+	return 0;
-+}
-+
-+static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-+{
-+	if (cmd != USERFAULTFD_IOC_NEW)
-+		return -EINVAL;
-+
-+	return new_userfaultfd(false, flags);
-+}
-+
-+static const struct file_operations userfaultfd_dev_fops = {
-+	.open = userfaultfd_dev_open,
-+	.unlocked_ioctl = userfaultfd_dev_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
-+	.owner = THIS_MODULE,
-+	.llseek = noop_llseek,
-+};
-+
-+static struct miscdevice userfaultfd_misc = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = "userfaultfd",
-+	.fops = &userfaultfd_dev_fops
-+};
-+
- static int __init userfaultfd_init(void)
- {
-+	WARN_ON(misc_register(&userfaultfd_misc));
-+
- 	userfaultfd_ctx_cachep = kmem_cache_create("userfaultfd_ctx_cache",
- 						sizeof(struct userfaultfd_ctx),
- 						0,
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index ef739054cb1c..032a35b3bbd2 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -12,6 +12,10 @@
- 
- #include <linux/types.h>
- 
-+/* ioctls for /dev/userfaultfd */
-+#define USERFAULTFD_IOC 0xAA
-+#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
++/* i82489DX specific */
++#define		I82489DX_BASE_DIVIDER		(((0x2) << 18))
 +
  /*
-  * If the UFFDIO_API is upgraded someday, the UFFDIO_UNREGISTER and
-  * UFFDIO_WAKE ioctls should be defined as _IOW and not as _IOR.  In
--- 
-2.35.1.1178.g4f1659d476-goog
-
+  * This function sets up the local APIC timer, with a timeout of
+  * 'clocks' APIC bus clock. During calibration we actually call
+@@ -340,8 +343,14 @@ static void __setup_APIC_LVTT(unsigned i
+ 	else if (boot_cpu_has(X86_FEATURE_TSC_DEADLINE_TIMER))
+ 		lvtt_value |= APIC_LVT_TIMER_TSCDEADLINE;
+ 
++	/*
++	 * The i82489DX APIC uses bit 18 and 19 for the base divider.  This
++	 * overlaps with bit 18 on integrated APICs, but is not documented
++	 * in the SDM. No problem though. i82489DX equipped systems do not
++	 * have TSC deadline timer.
++	 */
+ 	if (!lapic_is_integrated())
+-		lvtt_value |= SET_APIC_TIMER_BASE(APIC_TIMER_BASE_DIV);
++		lvtt_value |= I82489DX_BASE_DIVIDER;
+ 
+ 	if (!irqen)
+ 		lvtt_value |= APIC_LVT_MASKED;

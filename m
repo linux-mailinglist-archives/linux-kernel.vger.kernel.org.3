@@ -2,191 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3434FD479
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547F84FD70D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376406AbiDLHoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S1359235AbiDLIdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354204AbiDLHRO (ORCPT
+        with ESMTP id S1353477AbiDLHZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:17:14 -0400
-Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 725064B852
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:58:31 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
- s=smtp; t=1649746711; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=xpRZFsxytzgneOlsluEhnk6HH0jkgAUHzKO26/lNTYc=; b=Hf8fbU6shRw/5GzEsg4siGkpvS5qED3RnAsyTq+SMio33TKrDfogCJRbgXRsm4IzotFdGMJe
- ZFytFAFwncMwl4C0EMk/iFqu1swVQTRyGZMOzeP6nxbYRRR2f8Vk3igOHbUQnKHcauuiThtX
- gFNkSizsr/UrisgZWox2kwGAQHYTGr1XDWmpDzE8b//Gp/ejtHXrT2NfSE47piFBMwWX7nk6
- PBFonWd75EQqvyB+x+G8SQKjB2AmddyLXqAXcQIJHoht6kQBI99C092MMuIzpcvGZiamln17
- HI7K5K5TJ8yra5ta0gJH/LKbaytdsn6wH2UnYqVUNxeZo66s9ysmbQ==
-X-Mailgun-Sending-Ip: 159.135.228.62
-X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
-Received: from AN5Bruno (186-250-90-1.mhnet.com.br [186.250.90.1]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 625523167a6ca2b683fc51ef (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Tue, 12 Apr 2022 06:58:29 GMT
-Sender: codeagain@codeagain.dev
-Date:   Tue, 12 Apr 2022 03:58:25 -0300
-From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Cc:     Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: [PATCH v2 3/3] staging: vme: "drivers/staging/vme" tree cleanup
-Message-ID: <142698e3761c1e7ba8b17cdd9dc077472ef81668.1649721450.git.codeagain@codeagain.dev>
-References: <cover.1649721450.git.codeagain@codeagain.dev>
+        Tue, 12 Apr 2022 03:25:43 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6008D434A2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649746838; x=1681282838;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7ylCwKVWNSXBLS3JnfvV528nX7gUEq87FZmfPhU2/a8=;
+  b=B1Ttb5BJmUHedTDMGhvV6Q3qB/5xixOaHErOaLolk+OheSnxX4aeDpoe
+   UNkKZN4o2VL0dJF6aw/XpJwtlOkW8+RlDBJ3hzyP9pMQLFZQthHWo5YO+
+   D/2iI6xyfcIH487W1sHT5duKAmIOHu/GlxMkvvxFk/dKTHTVPZ+SS66Y5
+   4l13K4I5zA05g9y8zdup4gUqGP0zwZ+8NGwo0rNsdg47uCqRJ3H4U4o6D
+   fA1LIis0SLE0b+uGnL3xLyQ6crMS/goEmk/keFctSl7cLBcxNQx+IzK6Y
+   pP9cqVrAfrtRzXOJOgynRWIm/Ak4VFjvnWB438+Ob5XFOcPJLxLsGUkOm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242880124"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="242880124"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:00:36 -0700
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="572619329"
+Received: from joliu-mobl2.ccr.corp.intel.com ([10.254.214.243])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:00:25 -0700
+Message-ID: <c4e871721f43af56eba3addb510a98c7d9560e2f.camel@intel.com>
+Subject: Re: [PATCH 0/4] A few cleanup and fixup patches for migration
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     mike.kravetz@oracle.com, shy828301@gmail.com, willy@infradead.org,
+        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
+        dave.hansen@linux.intel.com, o451686892@gmail.com,
+        jhubbard@nvidia.com, peterx@redhat.com, naoya.horiguchi@nec.com,
+        mhocko@suse.com, riel@redhat.com, osalvador@suse.de,
+        david@redhat.com, sfr@canb.auug.org.au, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Date:   Tue, 12 Apr 2022 15:00:22 +0800
+In-Reply-To: <880376f0-f480-979b-261f-72cf9475474c@huawei.com>
+References: <20220409073846.22286-1-linmiaohe@huawei.com>
+         <e268117b314817ecd4c07ac48b0a6dcaf680ed69.camel@intel.com>
+         <880376f0-f480-979b-261f-72cf9475474c@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="iejrtspvkosvtjkp"
-Content-Disposition: inline
-In-Reply-To: <cover.1649721450.git.codeagain@codeagain.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-04-12 at 11:29 +0800, Miaohe Lin wrote:
+> On 2022/4/12 10:25, ying.huang@intel.com wrote:
+> > On Sat, 2022-04-09 at 15:38 +0800, Miaohe Lin wrote:
+> > > Hi everyone,
+> > > This series contains a few patches to remove unneeded lock page and
+> > > PageMovable check, reduce the rcu lock duration. Also we fix potential
+> > > pte_unmap on an not mapped pte. More details can be found in the
+> > > respective changelogs. Thanks!
+> > 
+> > It appears that you ignored my comments for the previous version.  Can
+> > you check it?
+> 
+> I do remember [1] and I tried to make isolate_huge_page consistent with isolate_lru_page.
+> But their return value conventions are different. isolate_huge_page return 0 when
+> success while isolate_huge_page returns true in this case. So make them consistent
+> would lead to many code change. I should have added this in my changelog.
 
---iejrtspvkosvtjkp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I found that there are only 7 callers of isolate_huge_page().  It sounds
+like something that is still doable.
 
-In <db3b9e990e75> ("Staging: VME: move VME drivers out of staging") the
-vme code, board and bridge drivers were moved out of the staging tree,
-remaining only the VME user device driver.
+Best Regards,
+Huang, Ying
 
-Since this driver is the only one remaining in staging, such multi-level
-struct confuses more than helps. The current structure is as follows:
-
-- drivers/staging/vme/
-                      +Makefile
-                      +devices/
-                               +Kconfig
-                               +Makefile
-                               +vme_user.c
-                               +vme_user.h
-
-The root Makefile has the only function of calling the other Makefile
-into the devices/ subdirectory. This latter only compiles the vme_user
-driver, since there is no other.
-
-This patch allows a more straightforward understanding of this driver's
-contents by removing the unnecessary Makefile from the 'vme/' subdir,
-moving the contents of 'vme/devices' straight into 'vme/', and renaming
-'vme/' to 'vme_user' (the driver name). It also adjusts the Kconfig and
-the Makefile from drivers/staging to properly reflect the new structure.
-
-CHANGELOG
-v2:
-- Added this patch to the patchset
-
-Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
----
- MAINTAINERS                                          | 2 +-
- drivers/staging/Kconfig                              | 2 +-
- drivers/staging/Makefile                             | 2 +-
- drivers/staging/vme/Makefile                         | 2 --
- drivers/staging/{vme/devices =3D> vme_user}/Kconfig    | 0
- drivers/staging/{vme/devices =3D> vme_user}/Makefile   | 0
- drivers/staging/{vme/devices =3D> vme_user}/vme_user.c | 0
- drivers/staging/{vme/devices =3D> vme_user}/vme_user.h | 0
- 8 files changed, 3 insertions(+), 5 deletions(-)
- delete mode 100644 drivers/staging/vme/Makefile
- rename drivers/staging/{vme/devices =3D> vme_user}/Kconfig (100%)
- rename drivers/staging/{vme/devices =3D> vme_user}/Makefile (100%)
- rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.c (100%)
- rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.h (100%)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..88423218e5e6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21014,7 +21014,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
- F:	Documentation/driver-api/vme.rst
--F:	drivers/staging/vme/
-+F:	drivers/staging/vme_user/
- F:	drivers/vme/
- F:	include/linux/vme*
-=20
-diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
-index 0545850eb2ff..9f11592336f8 100644
---- a/drivers/staging/Kconfig
-+++ b/drivers/staging/Kconfig
-@@ -88,6 +88,6 @@ source "drivers/staging/qlge/Kconfig"
-=20
- source "drivers/staging/wfx/Kconfig"
-=20
--source "drivers/staging/vme/devices/Kconfig"
-+source "drivers/staging/vme_user/Kconfig"
-=20
- endif # STAGING
-diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
-index 3ffb35ccfae2..1dffa02121ee 100644
---- a/drivers/staging/Makefile
-+++ b/drivers/staging/Makefile
-@@ -14,7 +14,7 @@ obj-$(CONFIG_OCTEON_ETHERNET)	+=3D octeon/
- obj-$(CONFIG_OCTEON_USB)	+=3D octeon-usb/
- obj-$(CONFIG_VT6655)		+=3D vt6655/
- obj-$(CONFIG_VT6656)		+=3D vt6656/
--obj-$(CONFIG_VME_BUS)		+=3D vme/
-+obj-$(CONFIG_VME_BUS)		+=3D vme_user/
- obj-$(CONFIG_IIO)		+=3D iio/
- obj-$(CONFIG_FB_SM750)		+=3D sm750fb/
- obj-$(CONFIG_USB_EMXX)		+=3D emxx_udc/
-diff --git a/drivers/staging/vme/Makefile b/drivers/staging/vme/Makefile
-deleted file mode 100644
-index cf2f686ccffe..000000000000
---- a/drivers/staging/vme/Makefile
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--obj-y				+=3D devices/
-diff --git a/drivers/staging/vme/devices/Kconfig b/drivers/staging/vme_user=
-/Kconfig
-similarity index 100%
-rename from drivers/staging/vme/devices/Kconfig
-rename to drivers/staging/vme_user/Kconfig
-diff --git a/drivers/staging/vme/devices/Makefile b/drivers/staging/vme_use=
-r/Makefile
-similarity index 100%
-rename from drivers/staging/vme/devices/Makefile
-rename to drivers/staging/vme_user/Makefile
-diff --git a/drivers/staging/vme/devices/vme_user.c b/drivers/staging/vme_u=
-ser/vme_user.c
-similarity index 100%
-rename from drivers/staging/vme/devices/vme_user.c
-rename to drivers/staging/vme_user/vme_user.c
-diff --git a/drivers/staging/vme/devices/vme_user.h b/drivers/staging/vme_u=
-ser/vme_user.h
-similarity index 100%
-rename from drivers/staging/vme/devices/vme_user.h
-rename to drivers/staging/vme_user/vme_user.h
---=20
-2.35.1
+> Thanks.
+> 
+> [1] https://lore.kernel.org/linux-mm/8735jsgctq.fsf@yhuang6-desk2.ccr.corp.intel.com/
+> 
+> 
+> > 
+> > Best Regards,
+> > Huang, Ying
+> > 
+> > > ---
+> > > v1:
+> > >   rebase [1] on mainline.
+> > > 
+> > > [1] https://lore.kernel.org/lkml/20220304093409.25829-2-linmiaohe@huawei.com/T/
+> > > ---
+> > > Miaohe Lin (4):
+> > >   mm/migration: reduce the rcu lock duration
+> > >   mm/migration: remove unneeded lock page and PageMovable check
+> > >   mm/migration: return errno when isolate_huge_page failed
+> > >   mm/migration: fix potential pte_unmap on an not mapped pte
+> > > 
+> > >  include/linux/migrate.h |  2 +-
+> > >  include/linux/swapops.h |  4 ++--
+> > >  mm/filemap.c            | 10 +++++-----
+> > >  mm/hugetlb.c            |  2 +-
+> > >  mm/migrate.c            | 31 +++++++++++++------------------
+> > >  5 files changed, 22 insertions(+), 27 deletions(-)
+> > > 
+> > 
+> > 
+> > 
+> > .
+> > 
+> 
 
 
---iejrtspvkosvtjkp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYlUjEQAKCRAZtd3tyEY2
-kl8eAP4snnu7VXp+5WvEdegb9U/Z3NohM0xIqXwMgaQE2l2o+AEA6FZFKAx2mukA
-Rl951E2lmtYRuXPD2OZSk6mgMUWzGQg=
-=sCQP
------END PGP SIGNATURE-----
-
---iejrtspvkosvtjkp--

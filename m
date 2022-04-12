@@ -2,178 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4E94FD834
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9629C4FD992
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359595AbiDLJ1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S1391278AbiDLJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356532AbiDLIKh (ORCPT
+        with ESMTP id S1357401AbiDLITC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:10:37 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E753D6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:42:07 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so1891042pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9p/MmKuuxvIv4B30UAt79Rd7Dhf0WljkYqYqqKzZidw=;
-        b=Mwww8UeE3bRZDqRGxTl0tpXi7zSB8wG+cPSjJsKwX72aR2VUttTenmlhDSj0HVpIKr
-         mvsMwcJFNkqdGZbYaHPM5uzeZoeFpecwrcIK8OEYAnVaW5o5TeYyRLpTeXRfqCv69bf5
-         n6J1cRU66cR2BMH3H9aqYDV3lLKZB9Rw6np4bbofSkci3SRy9+KcFeuP7hYHjbffHk63
-         yEyNWZv2HadoZOXZ5aqoTEwgNrSz1Kemr7BHJzOsiYlJnLQ3ZpbAfZ4OtzbnR9J3CYB0
-         iunlNqCohohbg9zA4n+Q+FQUs1tScceI9uXcgFtChyUw7kqDfNck1YPB1bJ83RbsAI/6
-         vKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9p/MmKuuxvIv4B30UAt79Rd7Dhf0WljkYqYqqKzZidw=;
-        b=k50j/R4BwKvtwAxhXyiLc8Ul5vvWyx4ljPyQaBDDy09tn5h6AskxLSwEpc4X5acRJV
-         RelT5FVwJfr9wDpMy1XBc2R2Rw98Tg8COCeOy4WUFERA+9V/fAWmhvYrF0wvXXejpQgi
-         bGSjWnMGX10xDb+3nV0Ylmb67nkUAkDXLSlM3So/YFXXKwBaUh95nCsiQOqgLdGOyUds
-         v7eWMYkCVytyNWPVn6QrXQmM6ZwTY/w8LP9dDzmh6QfJMqVlPGbp7QyhygozY8yf51S3
-         1xkwuOjfJjtXi4cAMoV4ITEvH4isOb0lYigwT3fWLUp97dPc5JupPsL7rCG6Wu7XoQoK
-         18vg==
-X-Gm-Message-State: AOAM530hWq+RYyOuS2wJdZe0re/8W8/NJb66xsWRbNQZoqU44IHMlf7E
-        FaE2omiVK08movHAx64W2d2FYxhxShVu/p3z1h8=
-X-Google-Smtp-Source: ABdhPJzlcXA1KUAmGSh2MiKL0M75Av4U3+iAaRIGSYomSHDnFzsTSnDmh+ZVyjBGda/uRe8WPUECiQ==
-X-Received: by 2002:a17:90a:6402:b0:1c9:9377:dd0e with SMTP id g2-20020a17090a640200b001c99377dd0emr3433787pjj.211.1649749327100;
-        Tue, 12 Apr 2022 00:42:07 -0700 (PDT)
-Received: from [192.168.1.101] ([159.226.95.33])
-        by smtp.gmail.com with ESMTPSA id j6-20020a63b606000000b003808b0ea96fsm1814254pgf.66.2022.04.12.00.42.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:42:06 -0700 (PDT)
-Message-ID: <61783400-4df2-47af-78a7-7acb715c3a71@gmail.com>
-Date:   Tue, 12 Apr 2022 15:42:02 +0800
+        Tue, 12 Apr 2022 04:19:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA33C222B8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:43:41 -0700 (PDT)
+X-UUID: cadb30c01bd247c69b4ac5647a7994d9-20220412
+X-UUID: cadb30c01bd247c69b4ac5647a7994d9-20220412
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 254130138; Tue, 12 Apr 2022 15:43:35 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Apr 2022 15:43:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Apr 2022 15:43:34 +0800
+Message-ID: <3c9140fbba123550b5532f9917dae4ef10ed5611.camel@mediatek.com>
+Subject: Re: [PATCH v4, 3/4] drm/mediatek: keep dsi as LP00 before dcs cmds
+ transfer
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jitao.shi@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 12 Apr 2022 15:43:34 +0800
+In-Reply-To: <7a4e5afb-6947-ed7f-8555-c7402aaa3a29@collabora.com>
+References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
+         <1649644308-8455-4-git-send-email-xinlei.lee@mediatek.com>
+         <7a4e5afb-6947-ed7f-8555-c7402aaa3a29@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] mtd: rawnand: Fix return value check of
- wait_for_completion_timeout
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bastian Hecht <hechtb@googlemail.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202204121253.NcZifMQi-lkp@intel.com>
- <20220412063703.8537-1-linmq006@gmail.com> <20220412090649.33bb3f8b@xps13>
-From:   Miaoqian Lin <linmq006@gmail.com>
-In-Reply-To: <20220412090649.33bb3f8b@xps13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-04-11 at 11:07 +0200, AngeloGioacchino Del Regno wrote:
+> Il 11/04/22 04:31, xinlei.lee@mediatek.com ha scritto:
+> > From: Jitao Shi <jitao.shi@mediatek.com>
+> > 
+> > To comply with the panel sequence, hold the mipi signal to LP00
+> > before the dcs cmds transmission,
+> > and pull the mipi signal high from LP00 to LP11 until the start of
+> > the dcs cmds transmission.
+> > The normal panel timing is :
+> > (1) pp1800 DC pull up
+> > (2) avdd & avee AC pull high
+> > (3) lcm_reset pull high -> pull low -> pull high
+> > (4) Pull MIPI signal high (LP11) -> initial code -> send video
+> > data(HS mode)
+> > The power-off sequence is reversed.
+> > If dsi is not in cmd mode, then dsi will pull the mipi signal high
+> > in the mtk_output_dsi_enable function.
+> > 
+> > Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the
+> > drm_panel_bridge API")
+> > 
+> > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > ---
+> >   drivers/gpu/drm/mediatek/mtk_dsi.c | 28 +++++++++++++++++++++--
+> > -----
+> >   1 file changed, 21 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > index cf76c53a1af6..9ad6f08c8bfe 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > @@ -203,6 +203,7 @@ struct mtk_dsi {
+> >   	struct mtk_phy_timing phy_timing;
+> >   	int refcount;
+> >   	bool enabled;
+> > +	bool lanes_ready;
+> >   	u32 irq_data;
+> >   	wait_queue_head_t irq_wait_queue;
+> >   	const struct mtk_dsi_driver_data *driver_data;
+> > @@ -654,13 +655,6 @@ static int mtk_dsi_poweron(struct mtk_dsi
+> > *dsi)
+> >   	mtk_dsi_config_vdo_timing(dsi);
+> >   	mtk_dsi_set_interrupt_enable(dsi);
+> >   
+> > -	mtk_dsi_rxtx_control(dsi);
+> > -	usleep_range(30, 100);
+> > -	mtk_dsi_reset_dphy(dsi);
+> > -	mtk_dsi_clk_ulp_mode_leave(dsi);
+> > -	mtk_dsi_lane0_ulp_mode_leave(dsi);
+> > -	mtk_dsi_clk_hs_mode(dsi, 0);
+> > -
+> >   	return 0;
+> >   err_disable_engine_clk:
+> >   	clk_disable_unprepare(dsi->engine_clk);
+> > @@ -689,6 +683,23 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> > *dsi)
+> >   	clk_disable_unprepare(dsi->digital_clk);
+> >   
+> >   	phy_power_off(dsi->phy);
+> > +
+> > +	dsi->lanes_ready = false;
+> > +}
+> > +
+> > +static void mtk_dsi_lane_ready(struct mtk_dsi *dsi)
+> > +{
+> > +	if (!dsi->lanes_ready) {
+> > +		dsi->lanes_ready = true;
+> > +		mtk_dsi_rxtx_control(dsi);
+> > +		usleep_range(30, 100);
+> > +		mtk_dsi_reset_dphy(dsi);
+> > +		mtk_dsi_clk_ulp_mode_leave(dsi);
+> > +		mtk_dsi_lane0_ulp_mode_leave(dsi);
+> > +		mtk_dsi_clk_hs_mode(dsi, 0);
+> > +		msleep(20);
+> 
+> This is a very long sleep, which wasn't present before this change.
+> Please document the reasons why we need this 20ms sleep with a
+> comment
+> in the code.
+> 
+> Regards,
+> Angelo
+> 
+> 
 
-Hi Miquel,
+Hello Xinlei,
 
-Thanks for your reply.
+As Angelo mentioned.
+I think you should add this in commit message and driver comments.
+(Your reply in v3.)
+"The 20ms delay in mtk_dsi_lane_ready() is because dsi needs to give
+dsi_rx(panel) a reaction time after pulling up the mipi signal."
 
-On 2022/4/12 15:06, Miquel Raynal wrote:
-> Hi Miaoqian,
->
-> linmq006@gmail.com wrote on Tue, 12 Apr 2022 06:36:52 +0000:
->
->> wait_for_completion_timeout() returns unsigned long not int.
->> It returns 0 if timed out, and positive if completed.
->> The check for <= 0 is ambiguous and should be == 0 here
->> indicating timeout which is the only error case.
->>
->> Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
->> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->> ---
->> change in v2:
->> - initialize ret to 1.
->> ---
->>  drivers/mtd/nand/raw/sh_flctl.c | 8 +++++---
->>  1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/sh_flctl.c b/drivers/mtd/nand/raw/sh_flctl.c
->> index b85b9c6fcc42..2373251f585b 100644
->> --- a/drivers/mtd/nand/raw/sh_flctl.c
->> +++ b/drivers/mtd/nand/raw/sh_flctl.c
->> @@ -384,7 +384,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
->>  	dma_addr_t dma_addr;
->>  	dma_cookie_t cookie;
->>  	uint32_t reg;
->> -	int ret;
->> +	int ret = 1;
-> Does not look right. I know this function returns > 0 on positive
-> outcomes but this does not make any sense in the first place.
+BRs,
+Rex
 
-Yes, I made a mistake, Now I realize that in v2, it will return 1 in error path
-
-when DMA submit failed.
-
-And for patch v1, it will return 0  if calls wait_for_completion_timeout succeeds.
-
-> This function is static and only called twice, please turn it into
-> something like:
->
-> if (dma_fifo_transfer())
-> 	error
-> else
-> 	ok
-
-So I want to keep ret>0 means success.
-
-Or could I set ret > 0 after in wait_for_completion_timeout() success path?
-
-like:
-
-    if(time_left == 0)
-
-            ret = -ETIMEDOUT;
-
-    else
-
-            ret = 1;
-
-What do you think?
-
-
-Thanks,
-
->> +	unsigned long time_left;
->>  
->>  	if (dir == DMA_FROM_DEVICE) {
->>  		chan = flctl->chan_fifo0_rx;
->> @@ -425,13 +426,14 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
->>  		goto out;
->>  	}
->>  
->> -	ret =
->> +	time_left =
->>  	wait_for_completion_timeout(&flctl->dma_complete,
->>  				msecs_to_jiffies(3000));
->>  
->> -	if (ret <= 0) {
->> +	if (time_left == 0) {
->>  		dmaengine_terminate_all(chan);
->>  		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
->> +		ret = -ETIMEDOUT;
->>  	}
->>  
->>  out:
->
-> Thanks,
-> Miquèl

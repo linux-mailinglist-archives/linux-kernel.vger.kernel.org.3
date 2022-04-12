@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD37D4FD3FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC4B4FD3D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377204AbiDLHsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S1384375AbiDLIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353075AbiDLHOs (ORCPT
+        with ESMTP id S1357230AbiDLHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:48 -0400
+        Tue, 12 Apr 2022 03:39:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C887255AF;
-        Mon, 11 Apr 2022 23:56:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23413B78;
+        Tue, 12 Apr 2022 00:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAD4460EEB;
-        Tue, 12 Apr 2022 06:56:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C4EC385A6;
-        Tue, 12 Apr 2022 06:56:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B38FE6171D;
+        Tue, 12 Apr 2022 07:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69F9C385A1;
+        Tue, 12 Apr 2022 07:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746579;
-        bh=CBy5DzSt/DDqfNIg2zikiyymZmnWiRhZbtSG9wmBV8s=;
+        s=korg; t=1649747647;
+        bh=Sx8uKUQ+GqGVj+GrmxGPRwn4kz+73o+QY6P6TKiQsuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Crs6Ls1fhcCoaKKGRQLIu+5LeD8c1WTM3rx3jIBS2v0ybjtKXkUvMroWbLvm5rxc1
-         6j2nuPpDA/kulbS2w6Q/qcUkVClvcC+F+e/fZ1hBGMCLUjAuBGnqTw2uUwFU+3Smfk
-         c45pfjk5Etbiiy2qGGv9xkwKxFtX16VSD9dva/aw=
+        b=r9VqVWpOyk8FR1kPcnJyNOA1QR4QrKE/aymzRv/bTNmRvtLgVTXbbBRJMe4wid5ob
+         lYtLS/b5+jmrB9rayjl2ox7ZqIAfNYv829yFtUhrJ3g+J3XrL/rBC7gX7gisr8o45q
+         dHwzGPTOikNVebeNXsTdAsENFfIorF7GY0CdY4/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 056/285] power: supply: axp288-charger: Set Vhold to 4.4V
-Date:   Tue, 12 Apr 2022 08:28:33 +0200
-Message-Id: <20220412062945.287639987@linuxfoundation.org>
+Subject: [PATCH 5.17 105/343] scsi: pm8001: Fix tag leaks on error
+Date:   Tue, 12 Apr 2022 08:28:43 +0200
+Message-Id: <20220412062954.127666081@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +56,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 5ac121b81b4051e7fc83d5b3456a5e499d5bd147 ]
+[ Upstream commit 4c8f04b1905cd4b776d0b720463c091545478ef7 ]
 
-The AXP288's recommended and factory default Vhold value (minimum
-input voltage below which the input current draw will be reduced)
-is 4.4V. This lines up with other charger IC's such as the TI
-bq2419x/bq2429x series which use 4.36V or 4.44V.
+In pm8001_chip_set_dev_state_req(), pm8001_chip_fw_flash_update_req(),
+pm80xx_chip_phy_ctl_req() and pm8001_chip_reg_dev_req() add missing calls
+to pm8001_tag_free() to free the allocated tag when pm8001_mpi_build_cmd()
+fails.
 
-For some reason some BIOS-es initialize Vhold to 4.6V or even 4.7V
-which combined with the typical voltage drop over typically low
-wire gauge micro-USB cables leads to the input-current getting
-capped below 1A (with a 2A capable dedicated charger) based on Vhold.
+Similarly, in pm8001_exec_internal_task_abort(), if the chip ->task_abort
+method fails, the tag allocated for the abort request task must be
+freed. Add the missing call to pm8001_tag_free().
 
-This leads to slow charging, or even to the device slowly discharging
-if the device is in heavy use.
-
-As the Linux AXP288 drivers use the builtin BC1.2 charger detection
-and send the input-current-limit according to the detected charger
-there really is no reason not to use the recommended 4.4V Vhold.
-
-Set Vhold to 4.4V to fix the slow charging issue on various devices.
-
-There is one exception, the special-case of the HP X2 2-in-1s which
-combine this BC1.2 capable PMIC with a Type-C port and a 5V/3A factory
-provided charger with a Type-C plug which does not do BC1.2. These
-have their input-current-limit hardcoded to 3A (like under Windows)
-and use a higher Vhold on purpose to limit the current when used
-with other chargers. To avoid touching Vhold on these HP X2 laptops
-the code setting Vhold is added to an else branch of the if checking
-for these models.
-
-Note this also fixes the sofar unused VBUS_ISPOUT_VHOLD_SET_MASK
-define, which was wrong.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-22-damien.lemoal@opensource.wdc.com
+Reviewed-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_charger.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 9 +++++++++
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c | 9 +++++++--
+ 3 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index ec41f6cd3f93..c498e62ab4e2 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -42,11 +42,11 @@
- #define VBUS_ISPOUT_CUR_LIM_1500MA	0x1	/* 1500mA */
- #define VBUS_ISPOUT_CUR_LIM_2000MA	0x2	/* 2000mA */
- #define VBUS_ISPOUT_CUR_NO_LIM		0x3	/* 2500mA */
--#define VBUS_ISPOUT_VHOLD_SET_MASK	0x31
-+#define VBUS_ISPOUT_VHOLD_SET_MASK	0x38
- #define VBUS_ISPOUT_VHOLD_SET_BIT_POS	0x3
- #define VBUS_ISPOUT_VHOLD_SET_OFFSET	4000	/* 4000mV */
- #define VBUS_ISPOUT_VHOLD_SET_LSB_RES	100	/* 100mV */
--#define VBUS_ISPOUT_VHOLD_SET_4300MV	0x3	/* 4300mV */
-+#define VBUS_ISPOUT_VHOLD_SET_4400MV	0x4	/* 4400mV */
- #define VBUS_ISPOUT_VBUS_PATH_DIS	BIT(7)
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 5ec429cf1e20..ccc7f53ddbd6 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4465,6 +4465,9 @@ static int pm8001_chip_reg_dev_req(struct pm8001_hba_info *pm8001_ha,
+ 		SAS_ADDR_SIZE);
+ 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+ 			sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
+ 	return rc;
+ }
  
- #define CHRG_CCCV_CC_MASK		0xf		/* 4 bits */
-@@ -769,6 +769,16 @@ static int charger_init_hw_regs(struct axp288_chrg_info *info)
- 		ret = axp288_charger_vbus_path_select(info, true);
- 		if (ret < 0)
- 			return ret;
-+	} else {
-+		/* Set Vhold to the factory default / recommended 4.4V */
-+		val = VBUS_ISPOUT_VHOLD_SET_4400MV << VBUS_ISPOUT_VHOLD_SET_BIT_POS;
-+		ret = regmap_update_bits(info->regmap, AXP20X_VBUS_IPSOUT_MGMT,
-+					 VBUS_ISPOUT_VHOLD_SET_MASK, val);
-+		if (ret < 0) {
-+			dev_err(&info->pdev->dev, "register(%x) write error(%d)\n",
-+				AXP20X_VBUS_IPSOUT_MGMT, ret);
-+			return ret;
-+		}
- 	}
+@@ -4877,6 +4880,9 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->ccb_tag = tag;
+ 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
+ 		tag);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
+ 	return rc;
+ }
  
- 	/* Read current charge voltage and current limit */
+@@ -4981,6 +4987,9 @@ pm8001_chip_set_dev_state_req(struct pm8001_hba_info *pm8001_ha,
+ 	payload.nds = cpu_to_le32(state);
+ 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+ 			sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
+ 	return rc;
+ 
+ }
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index c1f871561b32..b68c8400ca15 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -847,10 +847,10 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
+ 
+ 		res = PM8001_CHIP_DISP->task_abort(pm8001_ha,
+ 			pm8001_dev, flag, task_tag, ccb_tag);
+-
+ 		if (res) {
+ 			del_timer(&task->slow_task->timer);
+ 			pm8001_dbg(pm8001_ha, FAIL, "Executing internal task failed\n");
++			pm8001_tag_free(pm8001_ha, ccb_tag);
+ 			goto ex_err;
+ 		}
+ 		wait_for_completion(&task->slow_task->completion);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 728190b26924..55163469030d 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4920,8 +4920,13 @@ static int pm80xx_chip_phy_ctl_req(struct pm8001_hba_info *pm8001_ha,
+ 	payload.tag = cpu_to_le32(tag);
+ 	payload.phyop_phyid =
+ 		cpu_to_le32(((phy_op & 0xFF) << 8) | (phyId & 0xFF));
+-	return pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+-			sizeof(payload), 0);
++
++	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
++				  sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
++	return rc;
+ }
+ 
+ static u32 pm80xx_chip_is_our_interrupt(struct pm8001_hba_info *pm8001_ha)
 -- 
 2.35.1
 

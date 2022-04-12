@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D714FCD31
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BE54FCD2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344604AbiDLDii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 23:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S1343685AbiDLDiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 23:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiDLDid (ORCPT
+        with ESMTP id S229550AbiDLDiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 23:38:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46126192B6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649734577; x=1681270577;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PDH0mt+Wqdm6dYVbs5wN7qz2R59tY+BMW0fuL505Fbw=;
-  b=eOUXCyOE3H1ihzpHWj3WZJ8yIR4SI++bNQXnCtQW6MPdhpDCppFn0tPJ
-   k+0zmosg94bOECODufYzT4Q7YeyTSySDo+5IItS99km7ot1fTMNLVHX74
-   cT8mCgy2W8ldQbof8bGlCDHw/OIpBjqUV7QyKZEufovTDxwedSzSRFP5g
-   jC2ZYgYof9kl9ochiHPI74QMqFx8ewE7M5WKN+G/OJcLVOTKjS3/MVkBA
-   ISpWB5RkTVUJAhaN8oIIJ1o3xb9M4XIHxfaOyqMro1f1sfQx6OWxlYq3Q
-   q5u/medbxMvmOP+j/k5ps4nbTsFD5As9OWpuoHLTtONlb9FgG06ndTi+6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322713033"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="322713033"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 20:36:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="507373044"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 20:36:15 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne7KA-0002UB-Mw;
-        Tue, 12 Apr 2022 03:36:14 +0000
-Date:   Tue, 12 Apr 2022 11:35:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Koba Ko <koba.ko@canonical.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18:
- error: invalid use of undefined type 'struct cpuinfo_x86'
-Message-ID: <202204121135.4Halgnsh-lkp@intel.com>
+        Mon, 11 Apr 2022 23:38:14 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0589186D2;
+        Mon, 11 Apr 2022 20:35:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0V9sqOTP_1649734551;
+Received: from 30.225.24.141(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V9sqOTP_1649734551)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 12 Apr 2022 11:35:53 +0800
+Message-ID: <a20ca50f-1d1a-d09e-75da-f6ced65f6c93@linux.alibaba.com>
+Date:   Tue, 12 Apr 2022 11:35:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v8 04/20] cachefiles: notify user daemon when withdrawing
+ cookie
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        tianzichen@kuaishou.com, fannaihao@baidu.com
+References: <542f749c-b0f1-1de6-cb41-26e296afb2df@linux.alibaba.com>
+ <20220406075612.60298-5-jefflexu@linux.alibaba.com>
+ <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <1091405.1649680508@warthog.procyon.org.uk>
+ <1094493.1649684554@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <1094493.1649684554@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Koba,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-commit: b3dc549986eb7b38eba4a144e979dc93f386751f drm/amdgpu: Disable PCIE_DPM on Intel RKL Platform
-date:   7 months ago
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204121135.4Halgnsh-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3dc549986eb7b38eba4a144e979dc93f386751f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b3dc549986eb7b38eba4a144e979dc93f386751f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/um/asm/processor.h:41,
-                    from include/linux/spinlock_up.h:8,
-                    from include/linux/spinlock.h:92,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/slab.h:15,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/inc/pp_debug.h:35,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:23:
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c: In function 'intel_core_rkl_chk':
-   arch/um/include/asm/processor-generic.h:104:19: error: called object is not a function or function pointer
-     104 | #define cpu_data (&boot_cpu_data)
-         |                  ~^~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1742:34: note: in expansion of macro 'cpu_data'
-    1742 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                  ^~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                  ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:33: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                                 ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1748:1: error: control reaches end of non-void function [-Werror=return-type]
-    1748 | }
-         | ^
-   cc1: some warnings being treated as errors
 
 
-vim +1744 drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c
+On 4/11/22 9:42 PM, David Howells wrote:
+> JeffleXu <jefflexu@linux.alibaba.com> wrote:
+> 
+>>>
+>>>> +	if (fd == 0)
+>>>> +		return -ENOENT;
+>>>
+>>> 0 is a valid fd.
+>>
+>> Yeah, but IMHO fd 0 is always for stdin? I think the allocated anon_fd
+>> won't install at fd 0. Please correct me if I'm wrong.
+> 
+> If someone has closed 0, then you'll get 0 next, I'm pretty sure.  Try it and
+> see.
 
-  1738	
-  1739	static bool intel_core_rkl_chk(void)
-  1740	{
-  1741	#if IS_ENABLED(CONFIG_X86_64)
-  1742		struct cpuinfo_x86 *c = &cpu_data(0);
-  1743	
-> 1744		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-  1745	#else
-  1746		return false;
-  1747	#endif
-  1748	}
-  1749	
+Good catch.
+
+> 
+>> In fact I wanna use "fd == 0" as the initial state as struct
+>> cachefiles_object is allocated with kmem_cache_zalloc().
+> 
+> I would suggest presetting it to something like -2 to avoid confusion.
+
+Okay, as described in the previous email, I'm going to replace @fd to
+@object_id. I will define some symbols to make it more readable,
+something like
+
+```
+struct cachefiles_object {
+	...
+#ifdef CONFIG_CACHEFILES_ONDEMAND
+#define CACHEFILES_OBJECT_ID_DEFAULT -2
+#define CACHEFILES_OBJECT_ID_DEAD    -1
+	int object_id;
+#endif
+	...
+}
+```
+
+Thanks for your time.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Jeffle

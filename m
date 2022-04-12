@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A764FDA13
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEB04FD993
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346770AbiDLHTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S1359148AbiDLHmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352071AbiDLHEj (ORCPT
+        with ESMTP id S1353826AbiDLHQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:39 -0400
+        Tue, 12 Apr 2022 03:16:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537CE457B2;
-        Mon, 11 Apr 2022 23:47:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A6F4198A;
+        Mon, 11 Apr 2022 23:57:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D7A260A21;
-        Tue, 12 Apr 2022 06:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969ABC385A1;
-        Tue, 12 Apr 2022 06:47:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B5F36106D;
+        Tue, 12 Apr 2022 06:57:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC58C385A1;
+        Tue, 12 Apr 2022 06:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746058;
-        bh=WDud53N3J5fauLU1Y/1OS8o+0T5+mV0aB97fdLwlVME=;
+        s=korg; t=1649746655;
+        bh=1GkKwk1Smn0Ic42DW/lQRAsZetroUsxjDHj4KIJeJ40=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O/pEazK1hj9dPxy78Fsng7o08+K31tv62V5lVswyVaruNbyjbazjQhn3ojxdvIP9L
-         sDJaJfM0r1PtD8l6z7C4g/Ff7cG9t3UqWzZm02C8zSwCQsFYRLjTKCodxJYWCIaFAP
-         k2adpSRwAt95cnXBYmXCJdDZmkrXrmpqFz+v3zUY=
+        b=a5mCEQCIcs4m3WSKjf0yUqWvAJDHt2kkDoYvDTw1zeQaB1sMiQdISbA6jtJtPnfe1
+         /dLL9vxKpbvv4jZuPuyQIBn0/kNMedyfN6jd+CiVu+zgVKEZ5V58euiWoSxkqMEoB+
+         spE4moOKQMEs80pxktnBJztBbeKDLWDyfEzptacQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Harold Huang <baymaxhuang@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 138/277] NFS: nfsiod should not block forever in mempool_alloc()
+Subject: [PATCH 5.16 084/285] tuntap: add sanity checks about msg_controllen in sendmsg
 Date:   Tue, 12 Apr 2022 08:29:01 +0200
-Message-Id: <20220412062946.028817523@linuxfoundation.org>
+Message-Id: <20220412062946.089179753@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,133 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Harold Huang <baymaxhuang@gmail.com>
 
-[ Upstream commit 515dcdcd48736576c6f5c197814da6f81c60a21e ]
+[ Upstream commit 74a335a07a17d131b9263bfdbdcb5e40673ca9ca ]
 
-The concern is that since nfsiod is sometimes required to kick off a
-commit, it can get locked up waiting forever in mempool_alloc() instead
-of failing gracefully and leaving the commit until later.
+In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
+tun_sendmsg. Although we donot use msg_controllen in this path, we should
+check msg_controllen to make sure the caller pass a valid msg_ctl.
 
-Try to allocate from the slab first, with GFP_KERNEL | __GFP_NORETRY,
-then fall back to a non-blocking attempt to allocate from the memory
-pool.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Suggested-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Link: https://lore.kernel.org/r/20220303022441.383865-1-baymaxhuang@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/internal.h      |  7 +++++++
- fs/nfs/pnfs_nfs.c      |  8 ++++++--
- fs/nfs/write.c         | 24 +++++++++---------------
- include/linux/nfs_fs.h |  2 +-
- 4 files changed, 23 insertions(+), 18 deletions(-)
+ drivers/net/tap.c   | 3 ++-
+ drivers/net/tun.c   | 3 ++-
+ drivers/vhost/net.c | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
-index 66fc936834f2..7239118d98a3 100644
---- a/fs/nfs/internal.h
-+++ b/fs/nfs/internal.h
-@@ -580,6 +580,13 @@ nfs_write_match_verf(const struct nfs_writeverf *verf,
- 		!nfs_write_verifier_cmp(&req->wb_verf, &verf->verifier);
- }
+diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+index 8e3a28ba6b28..ba2ef5437e16 100644
+--- a/drivers/net/tap.c
++++ b/drivers/net/tap.c
+@@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
+ 	struct xdp_buff *xdp;
+ 	int i;
  
-+static inline gfp_t nfs_io_gfp_mask(void)
-+{
-+	if (current->flags & PF_WQ_WORKER)
-+		return GFP_KERNEL | __GFP_NORETRY | __GFP_NOWARN;
-+	return GFP_KERNEL;
-+}
-+
- /* unlink.c */
- extern struct rpc_task *
- nfs_async_rename(struct inode *old_dir, struct inode *new_dir,
-diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
-index 316f68f96e57..657c242a18ff 100644
---- a/fs/nfs/pnfs_nfs.c
-+++ b/fs/nfs/pnfs_nfs.c
-@@ -419,7 +419,7 @@ static struct nfs_commit_data *
- pnfs_bucket_fetch_commitdata(struct pnfs_commit_bucket *bucket,
- 			     struct nfs_commit_info *cinfo)
- {
--	struct nfs_commit_data *data = nfs_commitdata_alloc(false);
-+	struct nfs_commit_data *data = nfs_commitdata_alloc();
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		for (i = 0; i < ctl->num; i++) {
+ 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
+ 			tap_get_user_xdp(q, xdp);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 45a67e72a02c..02de8d998bfa 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -2489,7 +2489,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 	if (!tun)
+ 		return -EBADFD;
  
- 	if (!data)
- 		return NULL;
-@@ -515,7 +515,11 @@ pnfs_generic_commit_pagelist(struct inode *inode, struct list_head *mds_pages,
- 	unsigned int nreq = 0;
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		struct tun_page tpage;
+ 		int n = ctl->num;
+ 		int flush = 0;
+diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+index 28ef323882fb..792ab5f23647 100644
+--- a/drivers/vhost/net.c
++++ b/drivers/vhost/net.c
+@@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
+ 		goto signal_used;
  
- 	if (!list_empty(mds_pages)) {
--		data = nfs_commitdata_alloc(true);
-+		data = nfs_commitdata_alloc();
-+		if (!data) {
-+			nfs_retry_commit(mds_pages, NULL, cinfo, -1);
-+			return -ENOMEM;
-+		}
- 		data->ds_commit_index = -1;
- 		list_splice_init(mds_pages, &data->pages);
- 		list_add_tail(&data->list, &list);
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 0691b0b02147..a296e504e4aa 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -70,27 +70,17 @@ static mempool_t *nfs_wdata_mempool;
- static struct kmem_cache *nfs_cdata_cachep;
- static mempool_t *nfs_commit_mempool;
- 
--struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail)
-+struct nfs_commit_data *nfs_commitdata_alloc(void)
- {
- 	struct nfs_commit_data *p;
- 
--	if (never_fail)
--		p = mempool_alloc(nfs_commit_mempool, GFP_NOIO);
--	else {
--		/* It is OK to do some reclaim, not no safe to wait
--		 * for anything to be returned to the pool.
--		 * mempool_alloc() cannot handle that particular combination,
--		 * so we need two separate attempts.
--		 */
-+	p = kmem_cache_zalloc(nfs_cdata_cachep, nfs_io_gfp_mask());
-+	if (!p) {
- 		p = mempool_alloc(nfs_commit_mempool, GFP_NOWAIT);
--		if (!p)
--			p = kmem_cache_alloc(nfs_cdata_cachep, GFP_NOIO |
--					     __GFP_NOWARN | __GFP_NORETRY);
- 		if (!p)
- 			return NULL;
-+		memset(p, 0, sizeof(*p));
- 	}
--
--	memset(p, 0, sizeof(*p));
- 	INIT_LIST_HEAD(&p->pages);
- 	return p;
- }
-@@ -1809,7 +1799,11 @@ nfs_commit_list(struct inode *inode, struct list_head *head, int how,
- 	if (list_empty(head))
- 		return 0;
- 
--	data = nfs_commitdata_alloc(true);
-+	data = nfs_commitdata_alloc();
-+	if (!data) {
-+		nfs_retry_commit(head, NULL, cinfo, -1);
-+		return -ENOMEM;
-+	}
- 
- 	/* Set up the argument struct */
- 	nfs_init_commit(data, head, NULL, cinfo);
-diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
-index 41102e03512f..5ffcde9ac413 100644
---- a/include/linux/nfs_fs.h
-+++ b/include/linux/nfs_fs.h
-@@ -567,7 +567,7 @@ extern int nfs_wb_all(struct inode *inode);
- extern int nfs_wb_page(struct inode *inode, struct page *page);
- extern int nfs_wb_page_cancel(struct inode *inode, struct page* page);
- extern int  nfs_commit_inode(struct inode *, int);
--extern struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail);
-+extern struct nfs_commit_data *nfs_commitdata_alloc(void);
- extern void nfs_commit_free(struct nfs_commit_data *data);
- bool nfs_commit_end(struct nfs_mds_commit_info *cinfo);
- 
+ 	msghdr->msg_control = &ctl;
++	msghdr->msg_controllen = sizeof(ctl);
+ 	err = sock->ops->sendmsg(sock, msghdr, 0);
+ 	if (unlikely(err < 0)) {
+ 		vq_err(&nvq->vq, "Fail to batch sending packets\n");
 -- 
 2.35.1
 

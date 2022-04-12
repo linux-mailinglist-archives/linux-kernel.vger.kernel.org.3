@@ -2,182 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50214FEBAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E24F4FEBA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiDLXui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S230377AbiDLXvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiDLXug (ORCPT
+        with ESMTP id S230469AbiDLXvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:50:36 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34121A9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649807296; x=1681343296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IJvGmPJK6JXJ0NGpzqoa95ppXfXhePjXaC/5FHzKSF8=;
-  b=fKqXBRlutpPleAaeqQZ6AEYVz9k1oV2H9HNDvqGC3P+SflJJOPyd32g6
-   0doYL+dl554ezP6j9SShY84icmEAOJ+dkXL4rYipNf1wxb9Lv5hH9y2lT
-   /517D77XS06rqwUDGH0ZmA+u5Thjn5g1zdeQGl0M7gaOgVCTD9xVh14Bi
-   4fuzy2b/5rz6FTKIMnviR3QYJ2l7j+H3Q8gM+ktDMq9gIsa8xS5bOtvbN
-   hCg7laCRCfDopqValgeRx4eFK94RvIwkevY8itF9cilWGwkEy0lGct5Ko
-   wAMDlLmeBdiDkPnEa47/ttSZeXtMLbztc+ZTP0Ow6IL7Kk2NYJQ3XE7e8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325439588"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="325439588"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 16:48:10 -0700
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="507764200"
-Received: from aalaniz-mobl.amr.corp.intel.com (HELO localhost) ([10.209.160.104])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 16:48:09 -0700
-Date:   Tue, 12 Apr 2022 16:48:08 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: simplify control flow
-Message-ID: <YlYPuIMr8mq66Lea@iweiny-desk3>
-References: <20220403224207.GA397480@euclid>
+        Tue, 12 Apr 2022 19:51:05 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7011FB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:48:44 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id t1so291189wra.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lkI41JF3glGgO0AK4EpfNmpVmEtcA068KzSynd/K3x4=;
+        b=oYAIU3qZkT4Pqst1lJguZvTH6N4db91UNv7MKU3GzUFF64j1mV7XJt1y205deV2B30
+         I2Fw4+Nt5awZRI3KM1HxBEH2bzsn0ZEGupKWZ88CYy7Ke2/LqzvQFna0YrHaH9EMCEat
+         zRRlPrwoOJ7iOJvJfjgGG2tJYsBWlRNxlfux/fzEkelP+xLlQm3tZDV/QMQZ7/+VuTSb
+         PrafhvVzIHVxRSo0thUbZSxYrgNocxjo2ddpgiNZE5LCCGhesdQvj8MDKWkm0Ggqn/P9
+         3/hHke6hq+wvGuODOvToHjSbtlCEvGY5OCneLT2m3CconB9zolhd65BPJp56WjAFOD4h
+         Ympw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lkI41JF3glGgO0AK4EpfNmpVmEtcA068KzSynd/K3x4=;
+        b=QYQvn2IgNZFjdQ1X44wdLZDynAadeOJxtFzNjWsisZfIdban47Vu+pBnUlIc+axiRN
+         CiEU/FlEfLkQmvYCw059ozaUokA6gTI4C/+cD6qIiH1L0gDrEoYzdS+JxZXp8bw5Ztp0
+         9pYufQSI+10PmS6lES2nflYyFk09iEqaw3J+WTxWG0cYFMbGqzAs2WCxxSFnLCI1YLXw
+         dPTWOWDDSQfaOTbJrxSX/HMykNcQ3ru7SXhsft7L/jTVMGnCJ5txQF8iqNxKrPTUNiTg
+         Btd9CiuKAnnNmw4UudXDSIDfLWVgReDthGppDA9RzQ2wHwd1z24dlzUNJplfdIWaqyvZ
+         zkLw==
+X-Gm-Message-State: AOAM531aIpwzYZthOtegGRhFh4Vgtlo/HMGVBwlS/uILgtbE1JTwqyS1
+        tLyigLaXuBSilOF1I4lF5wZ4uc79XIdi2kMuEZCgeg==
+X-Google-Smtp-Source: ABdhPJzQEF6ln2cBWbRlqVbdVROYbIRp/hFzVIu8iG19W/gHz9aR6E8sJurCEHQLQxIb1Fye1sh4H66XW89c4fQUbuI=
+X-Received: by 2002:a5d:6241:0:b0:207:ac0e:3549 with SMTP id
+ m1-20020a5d6241000000b00207ac0e3549mr6211995wrv.343.1649807322726; Tue, 12
+ Apr 2022 16:48:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220403224207.GA397480@euclid>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220412154817.2728324-1-irogers@google.com> <YlX5U+Qelf/rBdau@google.com>
+In-Reply-To: <YlX5U+Qelf/rBdau@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 12 Apr 2022 16:48:28 -0700
+Message-ID: <CAP-5=fUDQGtNn39xDSxagwVzN95dohNrfiU_a3pU8zkiv2-6tw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Tidy up symbol end fixup
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        William Cohen <wcohen@redhat.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Denis Nikitin <denik@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022 at 06:42:07PM -0400, Sevinj Aghayeva wrote:
-> Checkpatch issues "WARNING: else is not generally useful after a break
-> or return" for the following code:
-> 
-> while (1) {
-> 	do_join_r = rtw_do_join(padapter);
-> 	if (do_join_r == _SUCCESS) {
-> 		break;
-> 	} else {
-> 		rtw_dec_to_roam(padapter);
-> 
-> 		if (rtw_to_roam(padapter) > 0) {
-> 			continue;
-> 		} else {
-> 			rtw_indicate_disconnect(padapter);
-> 			break;
-> 		}
-> 	}
-> }
-> 
-> We simplify this code in multiple steps. First, we remove do_join_r
+On Tue, Apr 12, 2022 at 3:12 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Ian,
+>
+> On Tue, Apr 12, 2022 at 08:48:13AM -0700, Ian Rogers wrote:
+> > Fixing up more symbol ends as introduced in:
+> > https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
+> > caused perf annotate to run into memory limits - every symbol holds
+> > all the disassembled code in the annotation, and so making symbols
+> > ends further away dramatically increased memory usage (40MB to
+> >  >1GB). Modify the symbol end logic so that special kernel cases aren't
+> > applied in the common case.
+> >
+> > v2. Drops a merged patch. Fixes a build issue with libbfd enabled.
+>
+> How about just like this?  We can get rid of arch functions as they
+> mostly do the same thing (kernel vs module boundary check).
+>
+> Not tested. ;-)
+>
+> Thanks,
+> Namhyung
+>
+> --------------8<-------------
+>
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index dea0fc495185..df41d7266d91 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -35,6 +35,7 @@
+>  #include "path.h"
+>  #include <linux/ctype.h>
+>  #include <linux/zalloc.h>
+> +#include <internal/lib.h>  // page_size
+>
+>  #include <elf.h>
+>  #include <limits.h>
+> @@ -231,8 +226,16 @@ void symbols__fixup_end(struct rb_root_cached *symbols)
+>                 prev = curr;
+>                 curr = rb_entry(nd, struct symbol, rb_node);
+>
+> -               if (prev->end == prev->start || prev->end != curr->start)
+> -                       arch__symbols__fixup_end(prev, curr);
+> +               if (prev->end == prev->start) {
+> +                       /* Last kernel symbol mapped to end of page */
 
-I can't say how Greg would like to see a change like this but my gut says that
-each of these steps should be a patch in a series...
+I like the simpler logic but don't like applying this in symbol-elf
+given the comment says it is kernel specific - so we could keep the
+is_kernel change.
 
-> variable because it is only used right after it is assigned. Second,
-> we remove the unnecessary else statement right after break:
-> 
-> while (1) {
-> 	if (rtw_do_join(padapter) == _SUCCESS)
-> 		break;
-> 	rtw_dec_to_roam(padapter);
-> 
-> 	if (rtw_to_roam(padapter) > 0) {
-> 		continue;
-> 	} else {
-> 		rtw_indicate_disconnect(padapter);
-> 		break;
-> 	}
-> }
-> 
-> Next, we move the call to rtw_do_join into the while test because the
-> while will loop only until the call is successful:
-> 
-> while (rtw_do_join(padapter) != _SUCCESS) {
-> 	rtw_dec_to_roam(padapter);
-> 	if (rtw_to_roam(padapter) > 0) {
-> 		continue;
-> 	} else {
-> 		rtw_indicate_disconnect(padapter);
-> 		break;
-> 	}
-> }
-> 
-> Finally, looking at the code above, it is clear that the code will
-> break out of the loop if rtw_to_roam call is <= 0. Hence:
-> 
-> while (rtw_do_join(padapter) != _SUCCESS) {
-> 	rtw_dec_to_roam(padapter);
-> 	if (rtw_to_roam(padapter) <= 0) {
-> 		rtw_indicate_disconnect(padapter);
-> 		break;
-> 	}
-> }
+> +                       if (!strchr(prev->name, '[') != !strchr(curr->name, '['))
 
-...  that said, this commit message made reviewing the change much easier,
-thanks.
+I find this condition not to be intention revealing. On ARM there is
+also an || for the condition reversed. When this is in an is_kernel
+block then I think it is clear this is kernel hack, so I think it is
+good to comment on what the condition is for.
 
-Did you submit a patch for the r8188eu driver too?  I just noticed it has a
-similar loop in _rtw_roaming().
+> +                               prev->end = roundup(prev->end + 1, page_size);
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Currently the roundup varies per architecture, but it is not clear to
+me that it matters.
 
-> 
-> Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/core/rtw_mlme.c | 18 ++++--------------
->  1 file changed, 4 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-> index 3eacf8f9d236..a45df775d535 100644
-> --- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
-> +++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-> @@ -2594,30 +2594,20 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
->  {
->  	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
->  	struct wlan_network *cur_network = &pmlmepriv->cur_network;
-> -	int do_join_r;
->  
->  	if (rtw_to_roam(padapter) > 0) {
->  		memcpy(&pmlmepriv->assoc_ssid, &cur_network->network.ssid, sizeof(struct ndis_802_11_ssid));
->  
->  		pmlmepriv->assoc_by_bssid = false;
->  
-> -		while (1) {
-> -			do_join_r = rtw_do_join(padapter);
-> -			if (do_join_r == _SUCCESS) {
-> +		while (rtw_do_join(padapter) != _SUCCESS) {
-> +			rtw_dec_to_roam(padapter);
-> +			if (rtw_to_roam(padapter) <= 0) {
-> +				rtw_indicate_disconnect(padapter);
->  				break;
-> -			} else {
-> -				rtw_dec_to_roam(padapter);
-> -
-> -				if (rtw_to_roam(padapter) > 0) {
-> -					continue;
-> -				} else {
-> -					rtw_indicate_disconnect(padapter);
-> -					break;
-> -				}
->  			}
->  		}
->  	}
-> -
->  }
->  
->  signed int rtw_linked_check(struct adapter *padapter)
-> -- 
-> 2.25.1
-> 
+> +                       else
+
+I think we should comment here that we're extending zero sized symbols
+to the start of the next symbol.
+
+> +                               prev->end = curr->start;
+> +
+> +                       pr_debug4("%s sym:%s end:%#" PRIx64 "\n",
+> +                                 __func__, prev->name, prev->end);
+> +               }
+
+Thanks,
+Ian
+
+>         }
+>
+>         /* Last entry */

@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D2B4FE40B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6B14FE412
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356700AbiDLOpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S1356717AbiDLOq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiDLOpa (ORCPT
+        with ESMTP id S1356710AbiDLOqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:45:30 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01A911155;
-        Tue, 12 Apr 2022 07:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649774593; x=1681310593;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VU3GYKC59IivdJ9+i6NONjh2iSY8jUOMPiFKqTo6hzU=;
-  b=Rzvmeg95ykqg6JI5xHE6gsxCdYTwxAfi3BGBBugpEwAR7IQja0Vbi9+k
-   o8X7w6FJ93i15Z/5Rr3RAiBnqdpYI1869DSsD+sBKOHCcFHnPeWrvOXml
-   B0Y5fA2kjjxvaL36i2ch6LQnBK8g4mKQYgKbJxZkMQaA4Eo6NOQ8+rX/0
-   w=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 12 Apr 2022 07:43:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:43:12 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 07:43:11 -0700
-Received: from [10.216.28.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Apr
- 2022 07:43:08 -0700
-Message-ID: <50953847-3c7f-ce2e-3447-87ba1893a976@quicinc.com>
-Date:   Tue, 12 Apr 2022 20:13:04 +0530
+        Tue, 12 Apr 2022 10:46:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1FF1A385;
+        Tue, 12 Apr 2022 07:44:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B15A16121A;
+        Tue, 12 Apr 2022 14:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EF7C385A5;
+        Tue, 12 Apr 2022 14:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649774669;
+        bh=YyPkSFZiPX3tnEpDjqAxgRTFOfvX9ykB7Fn4cGX0UF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H4CjaZCdZr2FGW4dvCzKA6B5OoP0Bw0Y49pdxU6rDrWXooOAZTh7Lz8u1zvbVNLqt
+         1GNtieW8swxtB2nS57K5wxHfV9NeIicW9+3Qa5235UU5q2+ZPyoR8xlG9C3E5EyMDm
+         3VXFOAZx6xsgHOmlFpVknJrs1S7Y2WTPLywPcRGI7hy1LfryAmpPyuO79kf8qMW5Kx
+         skrKovaCSHTRUzHFDH8iqcHYmKo8ujtHhW3JQPeFoKGkrbR86QKTshtwOmlSR9RQ1w
+         uW7uXN92Nw4pjKmLrG3nRuIrZy6yDtREn36uycaAlQKYlZbAkcRsis2stKoMlG10R3
+         xGRIEukoJO1Fw==
+Date:   Tue, 12 Apr 2022 15:44:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Rhodes <drhodes@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 15/16] ASoC: cs35l41: Document CS35l41 External Boost
+Message-ID: <YlWQR2HGvNpyJ27o@sirena.org.uk>
+References: <20220409091315.1663410-1-tanureal@opensource.cirrus.com>
+ <20220409091315.1663410-16-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v8 1/2] arm64: dts: qcom: sc7280: Add pinmux for I2S
- speaker and Headset
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <robh+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1649769281-12458-1-git-send-email-quic_srivasam@quicinc.com>
- <1649769281-12458-2-git-send-email-quic_srivasam@quicinc.com>
- <YlWNt7f5EUk7I4by@builder.lan>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YlWNt7f5EUk7I4by@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YyI4QGHGKlhb6Lxr"
+Content-Disposition: inline
+In-Reply-To: <20220409091315.1663410-16-tanureal@opensource.cirrus.com>
+X-Cookie: Approved for veterans.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,129 +66,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/12/2022 8:03 PM, Bjorn Andersson wrote:
-Thanks for your time Bjorn!!!
-> On Tue 12 Apr 08:14 CDT 2022, Srinivasa Rao Mandadapu wrote:
->
->> Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 14 +++++++++++
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 40 ++++++++++++++++++++++++++++++++
->>   2 files changed, 54 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index ecbf2b8..1fc94b5 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -359,6 +359,20 @@
->>   	bias-disable;
->>   };
->>   
->> +&mi2s1_data0 {
->> +	drive-strength = <6>;
->> +	bias-disable;
->> +};
->> +
->> +&mi2s1_sclk {
->> +	drive-strength = <6>;
->> +	bias-disable;
->> +};
->> +
->> +&mi2s1_ws {
->> +	drive-strength = <6>;
->> +};
->> +
->>   &pm7325_gpios {
->>   	key_vol_up_default: key-vol-up-default {
->>   		pins = "gpio6";
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index f0b64be..6e6cfeda 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -3522,6 +3522,46 @@
->>   				function = "edp_hot";
->>   			};
->>   
->> +			mi2s0_data0: mi2s0-data0 {
-> Are these ever going to be selected individually, or could this be:
->
-> mi2s0_state: mi2s0-state {
-> 	data0 {
-> 		...;
-> 	};
->
-> 	data1 {
-> 		...;
-> 	};
->
-> 	mclk {
-> 		...;
-> 	};
->
-> 	etc
-> };
->
-> mi2s1-state {
-> 	...;
-> };
->
-> And then a single pinctrl-0 = <&mi2c0_state>;
->
-> Regards,
-> Bjorn
+--YyI4QGHGKlhb6Lxr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We are not selecting individually. Actually we were following the same, 
-but Doug Anderson suggested this way of handling in 1st version of patches.
+On Sat, Apr 09, 2022 at 10:13:14AM +0100, Lucas Tanure wrote:
+> From: David Rhodes <drhodes@opensource.cirrus.com>
+>=20
+> Document internal and external boost feature for ASoC CS35L41.
+> For internal boost the following properties are required:
+> - cirrus,boost-peak-milliamp
+> - cirrus,boost-ind-nanohenry
+> - cirrus,boost-cap-microfarad
 
-So changed accordingly.
+Acked-by: Mark Brown <broonie@kernel.org>
 
->
->> +				pins = "gpio98";
->> +				function = "mi2s0_data0";
->> +			};
->> +
->> +			mi2s0_data1: mi2s0-data1 {
->> +				pins = "gpio99";
->> +				function = "mi2s0_data1";
->> +			};
->> +
->> +			mi2s0_mclk: mi2s0-mclk {
->> +				pins = "gpio96";
->> +				function = "pri_mi2s";
->> +			};
->> +
->> +			mi2s0_sclk: mi2s0-sclk {
->> +				pins = "gpio97";
->> +				function = "mi2s0_sck";
->> +			};
->> +
->> +			mi2s0_ws: mi2s0-ws {
->> +				pins = "gpio100";
->> +				function = "mi2s0_ws";
->> +			};
->> +
->> +			mi2s1_data0: mi2s1-data0 {
->> +				pins = "gpio107";
->> +				function = "mi2s1_data0";
->> +			};
->> +
->> +			mi2s1_sclk: mi2s1-sclk {
->> +				pins = "gpio106";
->> +				function = "mi2s1_sck";
->> +			};
->> +
->> +			mi2s1_ws: mi2s1-ws {
->> +				pins = "gpio108";
->> +				function = "mi2s1_ws";
->> +			};
->> +
->>   			pcie1_clkreq_n: pcie1-clkreq-n {
->>   				pins = "gpio79";
->>   				function = "pcie1_clkreqn";
->> -- 
->> 2.7.4
->>
+--YyI4QGHGKlhb6Lxr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJVkEYACgkQJNaLcl1U
+h9APmAf+Oc6df07jMKCq7Uy9X5T/UpeuFAbNlxlJrhBs3qmc3imCjQ7IbNif7acx
+1hVgpkLKcIacnvfi8enP8nOBZN37BBrSVFjl7V4NGwXRs9lSPEC78WGI8PjWkkQK
+OI2TCSLtf7FaecYvZHeyyUiG4+XQewym6W5NcFExVYle96xLHSoUEz1MeMd068ge
+fN9dHp0FtZeWvbFlkjEEBYO0X5o8yuGjk+D+ObxUgxW2S/IyaybfI4PgFhBWs3c2
+1HVA8Ns7vb5j4D+VuRo2uK7RDX133lcJ/9kx1p1rwWS6HDMSXK2HIC76R5Zii5i2
+PGWXmB57juLdVqOJgdISZ9tejXtB5w==
+=3njN
+-----END PGP SIGNATURE-----
+
+--YyI4QGHGKlhb6Lxr--

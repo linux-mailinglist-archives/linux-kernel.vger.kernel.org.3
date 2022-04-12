@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0FC4FD954
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D27E4FD885
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380578AbiDLIW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S1380642AbiDLIWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353796AbiDLHZz (ORCPT
+        with ESMTP id S1353806AbiDLHZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:25:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A991565AF;
-        Tue, 12 Apr 2022 00:04:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C0F9FD8;
+        Tue, 12 Apr 2022 00:04:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 466AF60B2B;
-        Tue, 12 Apr 2022 07:04:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5334EC385A6;
-        Tue, 12 Apr 2022 07:04:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1766C60B65;
+        Tue, 12 Apr 2022 07:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209CEC385A1;
+        Tue, 12 Apr 2022 07:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747077;
-        bh=SzBItMyTsxEN8wbEy8s1evcdeOWaK+YL9Vm2ua8qJns=;
+        s=korg; t=1649747080;
+        bh=3URoS/TUJZ3MsAy6YxJ1sR6pRPkgsVOwX30cNz/8tWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j1lqx/8oacK8kPfemJ2/MvuXoe/TOb0a4ikoPR0puZyGDoLkOx9wWgtsFS37euSMl
-         YScmOGXZbwbTNX6bcByIS8XUohtJv2vYcbbbwZx8rmB2Jc9LxSkHr//Q3D6HKukqrG
-         0dd4zd+qxYxKpqXav2yC38is18b4YPE+HRb5Es4o=
+        b=Xe8Z/L13oCYhAToa/YttnnlDsRG8ATbUnKdmgLv5Evrr92DZnbN2uXDwiN/3q3JAs
+         cNl6Wn0ybSYMLp1LhpId1WYn8OWyhZbBs2famfp4nHZQlgO/3c79WICUg5kgWsAKP5
+         6jvdGOVOzjYjqoiAWU38MwYYPh+njb0/sx78MBtc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 234/285] btrfs: avoid defragging extents whose next extents are not targets
-Date:   Tue, 12 Apr 2022 08:31:31 +0200
-Message-Id: <20220412062950.415220912@linuxfoundation.org>
+        stable@vger.kernel.org, Robbie Ko <robbieko@synology.com>,
+        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        Kaiwen Hu <kevinhu@synology.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 235/285] btrfs: prevent subvol with swapfile from being deleted
+Date:   Tue, 12 Apr 2022 08:31:32 +0200
+Message-Id: <20220412062950.444603043@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -54,107 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Kaiwen Hu <kevinhu@synology.com>
 
-commit 75a36a7d3ea904cef2e5b56af0c58cc60dcf947a upstream.
+commit 60021bd754c6ca0addc6817994f20290a321d8d6 upstream.
 
-[BUG]
-There is a report that autodefrag is defragging single sector, which
-is completely waste of IO, and no help for defragging:
+A subvolume with an active swapfile must not be deleted otherwise it
+would not be possible to deactivate it.
 
-   btrfs-cleaner-808 defrag_one_locked_range: root=256 ino=651122 start=0 len=4096
+After the subvolume is deleted, we cannot swapoff the swapfile in this
+deleted subvolume because the path is unreachable.  The swapfile is
+still active and holding references, the filesystem cannot be unmounted.
 
-[CAUSE]
-In defrag_collect_targets(), we check if the current range (A) can be merged
-with next one (B).
+The test looks like this:
 
-If mergeable, we will add range A into target for defrag.
+  mkfs.btrfs -f $dev > /dev/null
+  mount $dev $mnt
 
-However there is a catch for autodefrag, when checking mergeability
-against range B, we intentionally pass 0 as @newer_than, hoping to get a
-higher chance to merge with the next extent.
+  btrfs sub create $mnt/subvol
+  touch $mnt/subvol/swapfile
+  chmod 600 $mnt/subvol/swapfile
+  chattr +C $mnt/subvol/swapfile
+  dd if=/dev/zero of=$mnt/subvol/swapfile bs=1K count=4096
+  mkswap $mnt/subvol/swapfile
+  swapon $mnt/subvol/swapfile
 
-But in the next iteration, range B will looked up by defrag_lookup_extent(),
-with non-zero @newer_than.
+  btrfs sub delete $mnt/subvol
+  swapoff $mnt/subvol/swapfile  # failed: No such file or directory
+  swapoff --all
 
-And if range B is not really newer, it will rejected directly, causing
-only range A being defragged, while we expect to defrag both range A and
-B.
+  unmount $mnt                  # target is busy.
 
-[FIX]
-Since the root cause is the difference in check condition of
-defrag_check_next_extent() and defrag_collect_targets(), we fix it by:
+To prevent above issue, we simply check that whether the subvolume
+contains any active swapfile, and stop the deleting process.  This
+behavior is like snapshot ioctl dealing with a swapfile.
 
-1. Pass @newer_than to defrag_check_next_extent()
-2. Pass @extent_thresh to defrag_check_next_extent()
-
-This makes the check between defrag_collect_targets() and
-defrag_check_next_extent() more consistent.
-
-While there is still some minor difference, the remaining checks are
-focus on runtime flags like writeback/delalloc, which are mostly
-transient and safe to be checked only in defrag_collect_targets().
-
-Link: https://github.com/btrfs/linux/issues/423#issuecomment-1066981856
-CC: stable@vger.kernel.org # 5.16+
+CC: stable@vger.kernel.org # 5.4+
+Reviewed-by: Robbie Ko <robbieko@synology.com>
+Reviewed-by: Qu Wenruo <wqu@suse.com>
 Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Kaiwen Hu <kevinhu@synology.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/ioctl.c |   20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ fs/btrfs/inode.c |   24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -1189,7 +1189,7 @@ static u32 get_extent_max_capacity(const
- }
- 
- static bool defrag_check_next_extent(struct inode *inode, struct extent_map *em,
--				     bool locked)
-+				     u32 extent_thresh, u64 newer_than, bool locked)
- {
- 	struct extent_map *next;
- 	bool ret = false;
-@@ -1199,11 +1199,12 @@ static bool defrag_check_next_extent(str
- 		return false;
- 
- 	/*
--	 * We want to check if the next extent can be merged with the current
--	 * one, which can be an extent created in a past generation, so we pass
--	 * a minimum generation of 0 to defrag_lookup_extent().
-+	 * Here we need to pass @newer_then when checking the next extent, or
-+	 * we will hit a case we mark current extent for defrag, but the next
-+	 * one will not be a target.
-+	 * This will just cause extra IO without really reducing the fragments.
- 	 */
--	next = defrag_lookup_extent(inode, em->start + em->len, 0, locked);
-+	next = defrag_lookup_extent(inode, em->start + em->len, newer_than, locked);
- 	/* No more em or hole */
- 	if (!next || next->block_start >= EXTENT_MAP_LAST_BYTE)
- 		goto out;
-@@ -1215,6 +1216,13 @@ static bool defrag_check_next_extent(str
- 	 */
- 	if (next->len >= get_extent_max_capacity(em))
- 		goto out;
-+	/* Skip older extent */
-+	if (next->generation < newer_than)
-+		goto out;
-+	/* Also check extent size */
-+	if (next->len >= extent_thresh)
-+		goto out;
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -4462,6 +4462,13 @@ int btrfs_delete_subvolume(struct inode
+ 			   dest->root_key.objectid);
+ 		return -EPERM;
+ 	}
++	if (atomic_read(&dest->nr_swapfiles)) {
++		spin_unlock(&dest->root_item_lock);
++		btrfs_warn(fs_info,
++			   "attempt to delete subvolume %llu with active swapfile",
++			   root->root_key.objectid);
++		return -EPERM;
++	}
+ 	root_flags = btrfs_root_flags(&dest->root_item);
+ 	btrfs_set_root_flags(&dest->root_item,
+ 			     root_flags | BTRFS_ROOT_SUBVOL_DEAD);
+@@ -10764,8 +10771,23 @@ static int btrfs_swap_activate(struct sw
+ 	 * set. We use this counter to prevent snapshots. We must increment it
+ 	 * before walking the extents because we don't want a concurrent
+ 	 * snapshot to run after we've already checked the extents.
+-	 */
++	 *
++	 * It is possible that subvolume is marked for deletion but still not
++	 * removed yet. To prevent this race, we check the root status before
++	 * activating the swapfile.
++	 */
++	spin_lock(&root->root_item_lock);
++	if (btrfs_root_dead(root)) {
++		spin_unlock(&root->root_item_lock);
 +
- 	ret = true;
- out:
- 	free_extent_map(next);
-@@ -1420,7 +1428,7 @@ static int defrag_collect_targets(struct
- 			goto next;
++		btrfs_exclop_finish(fs_info);
++		btrfs_warn(fs_info,
++		"cannot activate swapfile because subvolume %llu is being deleted",
++			root->root_key.objectid);
++		return -EPERM;
++	}
+ 	atomic_inc(&root->nr_swapfiles);
++	spin_unlock(&root->root_item_lock);
  
- 		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
--							  locked);
-+						extent_thresh, newer_than, locked);
- 		if (!next_mergeable) {
- 			struct defrag_target_range *last;
+ 	isize = ALIGN_DOWN(inode->i_size, fs_info->sectorsize);
  
 
 

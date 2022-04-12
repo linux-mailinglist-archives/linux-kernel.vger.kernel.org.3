@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDB24FEB62
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5B04FEB18
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiDLX24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S230305AbiDLXcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiDLX0r (ORCPT
+        with ESMTP id S230426AbiDLXb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:26:47 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6418EE5E17;
-        Tue, 12 Apr 2022 15:36:41 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b584e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:584e:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 774D31EC0559;
-        Tue, 12 Apr 2022 23:20:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649798400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=GlHl/2jxkBEfPRxyBRwwLrraiX+W/kin918whTHPlOY=;
-        b=GDw+J8xtvQ5oIO+Jja/gzzTP10OTdC0r8F11tzXJjpGP5kt7wQAxvd3icFSuskkl2EOI9Y
-        fTNBgkLgCsa/GgnSm87cKXkoQicQ/nBnr7/0Bvi5LOm6MXXy9hJbs6lQbPV4Gqb4tYkgIg
-        W7vZg8SkFqoPQADWiQcFOBs58wrHb3E=
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-edac <linux-edac@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] EDAC: Use kcalloc()
-Date:   Tue, 12 Apr 2022 23:19:57 +0200
-Message-Id: <20220412211957.28899-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Tue, 12 Apr 2022 19:31:58 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E436490FE3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:17:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CLKoth058896;
+        Tue, 12 Apr 2022 16:20:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649798450;
+        bh=eI1T/bFGS1LickmovZ0igeFAK0lvOxui0sWfaIzxQeY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=uO+WB20qXWzIHqPsbw2xPhAIXv1aam7N7nd5s0AcdedCLgqEK+52tIjzb5MSRP4r5
+         /w2Vee7SgMLitia9QJpUlPFmqkHHzbfIUa7NOUBDYbU98YXa1p4sp6VwkF+0xq3EN8
+         07pTtieb3kZfpKRdjdtit+/v1rDeP2YaI7z4zY9o=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CLKoXU093452
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 16:20:50 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 16:20:49 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 16:20:49 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CLKn6Y077073;
+        Tue, 12 Apr 2022 16:20:49 -0500
+Date:   Tue, 12 Apr 2022 16:20:49 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        <tony@atomide.com>
+CC:     Devarsh Thakkar <devarsht@ti.com>, <linux-kernel@vger.kernel.org>,
+        <jyri.sarha@iki.fi>, <tomba@kernel.org>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
+        <a-bhatia1@ti.com>, <r-ravikumar@ti.com>, <nikhil.nd@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] drm/tidss: Soft Reset DISPC on startup
+Message-ID: <20220412212049.gjnel7aubol56azk@earache>
+References: <20220314113739.18000-1-devarsht@ti.com>
+ <86a07099-1074-e8d1-6d0e-1ce68414b627@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <86a07099-1074-e8d1-6d0e-1ce68414b627@ideasonboard.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On 17:24-20220412, Tomi Valkeinen wrote:
+> Hi,
+> 
+> On 14/03/2022 13:37, Devarsh Thakkar wrote:
+> > Soft reset the display subsystem controller on startup and wait for
+> > the reset to complete. This helps the scenario where display was
+> > already in use by some other core before the linux was booted.
+> 
+> The reason the omapdrm doesn't do a reset is that the PM features on some of
+> the DSS registers were set and controlled outside dss driver, so the dss
+> driver could not do a reset just like that. That design was carried to the
+> tidss driver, although I'm not sure if the reason is valid on AM6 and J7
+> platforms.
+> 
+> If that reasoning is not valid, this patch is ok and:
+> 
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> 
 
-It is syntactic sugar anyway:
+Tony - sysc control for older omap devices still control this directly?
 
-  # drivers/edac/edac_mc.o:
-
-   text    data     bss     dec     hex filename
-  13378     324       8   13710    358e edac_mc.o.before
-  13378     324       8   13710    358e edac_mc.o.after
-
-md5:
-   70a53ee3ac7f867730e35c2be9110748  edac_mc.o.before.asm
-   70a53ee3ac7f867730e35c2be9110748  edac_mc.o.after.asm
-
-  # drivers/edac/edac_device.o:
-
-   text    data     bss     dec     hex filename
-   5684     120       4    5808    16b0 edac_device.o.before
-   5684     120       4    5808    16b0 edac_device.o.after
-
-md5:
-   811325c80acb5a1d6df7b290df3e1636  edac_device.o.before.asm
-   811325c80acb5a1d6df7b290df3e1636  edac_device.o.after.asm
-
-No functional changes.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- drivers/edac/edac_device.c | 9 +++------
- drivers/edac/edac_mc.c     | 2 +-
- 2 files changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index b737349184e3..3d5a4944735f 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -70,9 +70,7 @@ edac_device_alloc_ctl_info(unsigned pvt_sz, char *dev_name, unsigned nr_instance
- 	if (!dev_ctl)
- 		return NULL;
- 
--	dev_inst = kmalloc_array(nr_instances,
--				 sizeof(struct edac_device_instance),
--				 GFP_KERNEL | __GFP_ZERO);
-+	dev_inst = kcalloc(nr_instances, sizeof(struct edac_device_instance), GFP_KERNEL);
- 	if (!dev_inst)
- 		goto free;
- 
-@@ -87,9 +85,8 @@ edac_device_alloc_ctl_info(unsigned pvt_sz, char *dev_name, unsigned nr_instance
- 	dev_ctl->blocks = dev_blk;
- 
- 	if (nr_attrib) {
--		dev_attrib = kmalloc_array(nr_attrib,
--					   sizeof(struct edac_dev_sysfs_block_attribute),
--					   GFP_KERNEL | __GFP_ZERO);
-+		dev_attrib = kcalloc(nr_attrib, sizeof(struct edac_dev_sysfs_block_attribute),
-+				     GFP_KERNEL);
- 		if (!dev_attrib)
- 			goto free;
- 
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 387b6851c975..eb58644bb019 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -366,7 +366,7 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
- 	if (!mci)
- 		return NULL;
- 
--	mci->layers = kmalloc_array(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL | __GFP_ZERO);
-+	mci->layers = kcalloc(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL);
- 	if (!mci->layers)
- 		goto error;
- 
 -- 
-2.35.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

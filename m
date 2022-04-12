@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676A84FD40F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30074FD3BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353249AbiDLIDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S1388516AbiDLJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353633AbiDLHZv (ORCPT
+        with ESMTP id S1358219AbiDLHlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7F443AF9;
-        Tue, 12 Apr 2022 00:02:35 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2034B42A17;
+        Tue, 12 Apr 2022 00:17:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1560615B4;
-        Tue, 12 Apr 2022 07:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3625C385A6;
-        Tue, 12 Apr 2022 07:02:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFECA61045;
+        Tue, 12 Apr 2022 07:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0E0C385A1;
+        Tue, 12 Apr 2022 07:17:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746954;
-        bh=Cmo89yAXoJxFmGVPhilXjPQI930qLUDic7RefpgLBM4=;
+        s=korg; t=1649747855;
+        bh=HLy3qY+J5ROTEF4rwyotysIW1sSO8dDgG1rHbzkhJac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RAXpcxHtaOTW8zqZ8S7Xpqdj3RnrR0ImYAeVe4FuotWuJlHNrnLd70fEsRn/8u8MB
-         food1SIAohoxP0W2Y+dCSWnSuZsO508RmI0bQeoyFZ4dw6kxAFl5sUyJG9G6AUjvHn
-         WHkM0Kq6erIL089gu656kMY9Y0aeFQM3r+7s9yjY=
+        b=IM5zbrN3BMuJCxUpezxflmU+o+ZkGW5kB0fUPCdavQw6uze7p0LDLOvUacXxv1fCk
+         AZy2i0SV17idNneDAxZyaq7yrWgPPbvt7jygbZ+K+R/1OP+mGIzFRFf2A+Xn3IvITd
+         gRQrTxFci13ODH0j0/JAInFEmVim0+nAGxnQCFO4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 189/285] ice: xsk: fix VSI state check in ice_xsk_wakeup()
-Date:   Tue, 12 Apr 2022 08:30:46 +0200
-Message-Id: <20220412062949.117259792@linuxfoundation.org>
+Subject: [PATCH 5.17 229/343] cifs: fix potential race with cifsd thread
+Date:   Tue, 12 Apr 2022 08:30:47 +0200
+Message-Id: <20220412062957.947491639@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Paulo Alcantara <pc@cjr.nz>
 
-[ Upstream commit 72b915a2b444e9247c9d424a840e94263db07c27 ]
+[ Upstream commit 687127c81ad32c8900a3fedbc7ed8f686ca95855 ]
 
-ICE_DOWN is dedicated for pf->state. Check for ICE_VSI_DOWN being set on
-vsi->state in ice_xsk_wakeup().
+To avoid racing with demultiplex thread while it is handling data on
+socket, use cifs_signal_cifsd_for_reconnect() helper for marking
+current server to reconnect and let the demultiplex thread handle the
+rest.
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: dca65818c80c ("cifs: use a different reconnect helper for non-cifsd threads")
+Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/cifs/connect.c | 2 +-
+ fs/cifs/netmisc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index dfef1e75469d..28c4f90ad07f 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -765,7 +765,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
- 	struct ice_vsi *vsi = np->vsi;
- 	struct ice_tx_ring *ring;
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index d6f8ccc7bfe2..0270b412f801 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -4465,7 +4465,7 @@ static int tree_connect_dfs_target(const unsigned int xid, struct cifs_tcon *tco
+ 	 */
+ 	if (rc && server->current_fullpath != server->origin_fullpath) {
+ 		server->current_fullpath = server->origin_fullpath;
+-		cifs_reconnect(tcon->ses->server, true);
++		cifs_signal_cifsd_for_reconnect(server, true);
+ 	}
  
--	if (test_bit(ICE_DOWN, vsi->state))
-+	if (test_bit(ICE_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
+ 	dfs_cache_free_tgts(tl);
+diff --git a/fs/cifs/netmisc.c b/fs/cifs/netmisc.c
+index ebe236b9d9f5..235aa1b395eb 100644
+--- a/fs/cifs/netmisc.c
++++ b/fs/cifs/netmisc.c
+@@ -896,7 +896,7 @@ map_and_check_smb_error(struct mid_q_entry *mid, bool logErr)
+ 		if (class == ERRSRV && code == ERRbaduid) {
+ 			cifs_dbg(FYI, "Server returned 0x%x, reconnecting session...\n",
+ 				code);
+-			cifs_reconnect(mid->server, false);
++			cifs_signal_cifsd_for_reconnect(mid->server, false);
+ 		}
+ 	}
  
- 	if (!ice_is_xdp_ena_vsi(vsi))
 -- 
 2.35.1
 

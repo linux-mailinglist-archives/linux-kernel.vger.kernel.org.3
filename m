@@ -2,203 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE894FCE14
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62774FCE32
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiDLEiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S234586AbiDLEmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346235AbiDLEht (ORCPT
+        with ESMTP id S1346571AbiDLEmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:37:49 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F204229808
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:35:32 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id D4ADD3201DB9;
-        Tue, 12 Apr 2022 00:35:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 12 Apr 2022 00:35:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1649738131; x=1649824531; bh=j2
-        yW0eTYN39FoRNg3xRIIdalcdn+niCGjVHB1KPQkdI=; b=Z3K48eDbEhvHKX44+l
-        Nj5wW+1tWiDJLGMbIf9etwqJAK6VruqMnLwRXi3a1+KJnZeX/tVB86Gxtaz4grod
-        ZLoZkAd8n2agfwuN3EwqjPNZu4jTobrRRTMclEvpI7bdJJyJIO/pcZqZFIZVASmJ
-        GW2PFvODvK/m4QS/le+eKrqtzZy7fZeJMU9Rm8XD3QahHCYbOwLy+U50QG8GLWlO
-        +XpoMvtTibn2SUMr6tU5NocdTldsRM7hIY7QT3KxplVr1pmYiRAHgf7QE9lWIK23
-        dJf6f5WwhPgkNBhvWklh3wwcKMdpAMS2AGa1RKmemjYa4r8HhOv/52H2yjVdTbOV
-        KyPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1649738131; x=1649824531; bh=j2yW0eTYN39FoRNg3xRIIdalcdn+niCGjVH
-        B1KPQkdI=; b=hmbWur0HkklfHy7n4+zIKMf954bdryark5G9WcOn+bfws5oBVIB
-        k1yHHGoKn4AZuLKYuu67a6KqhVDr6rl4riF01QJ9z3+cG3/mfUcpoa6iR60DvSUR
-        5Z+6IQ/pz7W/uZ0GRY23ZOqDdi7WnPKotyAsoc1A3ALwSKjg4K+UxrkAWKXPTKY5
-        QtQuaYL43ihBNl51VNM9xaZpPzK7E3vQ7djWGMUYFglWzrDYgQCdosNh2Ueu14hi
-        o8OxZd0nt3roXongHX4iw81jn/+rEfwm/U6icya/xW66pWLbxBqlrM3E++zB7+Je
-        gRAHkEANi69WOtaW60nrH5h1DXiso4oV41g==
-X-ME-Sender: <xms:kwFVYmea1_dG5v8dwLUWr_RtQxLHU8ImgnE28UyvEPt5m52NICN9eQ>
-    <xme:kwFVYgNkbyyABc5qJuENTpyx3Pjz-IxFdYMZyotKjWHlElFgJCplzp6UYWj2-PDbw
-    B0C1EwLl4I8Dhsb5w>
-X-ME-Received: <xmr:kwFVYnifbMP4pV_OqgSAY-QKdKJVtC42b-ZLOgxNxlvsoNfOGrtfyYub3DaplNoiuqEuOz9WC3riXibuIqiiG2kNyp5F6xgvPIIVO2EARECC5qORxMbO6wmuGRplWnHWQXTrww>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekjedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:kwFVYj8iCSS1DTUt1ftpmnps0v71IqckcAAzzbLPKtlMKRnRapD7Rg>
-    <xmx:kwFVYivz__xnPVQnhJiUjTEE8bIkoy_f3jhkITHG_6WfqGGtPMK58g>
-    <xmx:kwFVYqHH_aOjS6Hr5CYoKf5eqCiUOrqk337VOXaO8I_qUp38UAEINQ>
-    <xmx:kwFVYsJQN3ot4tiWJQcWkRBUgoH9ijtFTDzS1f_bDEfblbPMo7u5dg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 Apr 2022 00:35:30 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 6/6] drm/sun4i: sun8i-hdmi-phy: Group PHY ops functions by generation
-Date:   Mon, 11 Apr 2022 23:35:11 -0500
-Message-Id: <20220412043512.49364-7-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412043512.49364-1-samuel@sholland.org>
-References: <20220412043512.49364-1-samuel@sholland.org>
+        Tue, 12 Apr 2022 00:42:09 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537DE31;
+        Mon, 11 Apr 2022 21:39:47 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BLtKjb031973;
+        Tue, 12 Apr 2022 04:39:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=RpMZW/U3P5tVksdvNelEblhiKLUKeauIp6aIxmelim4=;
+ b=eyD6lWkKmsWpksKcTlMbYSYGFTn+0o8//+ZavJVRI2rYyNLIYI5DMUpnQrgJ6BGZZPR0
+ eMxk9SPRcHYbQUWlTO4LYt/4KqD3vqd3XUQ2nK+4/gdRt1wctOHNC1w7ns+CAniaMN1e
+ /4bjuC40DSqManRJ3Y9d5ZUko9qQHP5vM1YFC5ovXBK4G39n8QXH4pfFpoKrX2/IDUyJ
+ 9uW5Zjca6JwH1eQw9paxCAkR/C15T0Kzq3+9sOgAZbCwZP+ItebzU0isnMcku0uDlKqG
+ eaP8YDDCWN7tenYL6xrtpXmb+FHB8BwhKufhMn+Ayi+DCaPllvtmF9nmg6up+U80oQYw RQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd5ekb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 04:39:25 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23C4aCrY035802;
+        Tue, 12 Apr 2022 04:39:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9gy4nc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 04:39:24 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 23C4dOZX040689;
+        Tue, 12 Apr 2022 04:39:24 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9gy4k0-1;
+        Tue, 12 Apr 2022 04:39:24 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
+        Steve French <sfrench@samba.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cifs: potential buffer overflow in handling symlinks
+Date:   Mon, 11 Apr 2022 21:38:22 -0700
+Message-Id: <20220412043823.57037-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Proofpoint-ORIG-GUID: xqL3uRre6-QmHJhJSpdr_eNJvtynp2K3
+X-Proofpoint-GUID: xqL3uRre6-QmHJhJSpdr_eNJvtynp2K3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the PHY ops are separated, sort them topologically, with the
-common sun8i_hdmi_phy_set_polarity helper at the top. No function
-contents are changed in this commit.
+Smatch printed a warning:
+	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
+	__memcpy() 'dctx->buf' too small (16 vs u32max)
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+It's caused because Smatch marks 'link_len' as untrusted since it comes
+from sscanf(). Add a check to ensure that 'link_len' is not larger than
+the size of the 'link_str' buffer.
+
+Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 ---
+ fs/cifs/link.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c | 67 ++++++++++++--------------
- 1 file changed, 32 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-index 5be5c360ca7d..cc239106ba49 100644
---- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-@@ -124,7 +124,19 @@ static const struct dw_hdmi_phy_config sun50i_h6_phy_config[] = {
- };
+diff --git a/fs/cifs/link.c b/fs/cifs/link.c
+index 852e54e..ebfedae 100644
+--- a/fs/cifs/link.c
++++ b/fs/cifs/link.c
+@@ -85,6 +85,9 @@
+ 	if (rc != 1)
+ 		return -EINVAL;
  
- static void sun8i_hdmi_phy_set_polarity(struct sun8i_hdmi_phy *phy,
--					const struct drm_display_mode *mode);
-+					const struct drm_display_mode *mode)
-+{
-+	u32 val = 0;
++	if (link_len > buf_len - CIFS_MF_SYMLINK_LINK_OFFSET)
++		return -EINVAL;
 +
-+	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
-+		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NHSYNC;
-+
-+	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
-+		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NVSYNC;
-+
-+	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_DBG_CTRL_REG,
-+			   SUN8I_HDMI_PHY_DBG_CTRL_POL_MASK, val);
-+};
- 
- static int sun8i_a83t_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 				      const struct drm_display_info *display,
-@@ -193,6 +205,25 @@ static int sun8i_a83t_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 	return 0;
- }
- 
-+static void sun8i_a83t_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
-+{
-+	struct sun8i_hdmi_phy *phy = data;
-+
-+	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
-+	dw_hdmi_phy_gen2_pddq(hdmi, 1);
-+
-+	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_REXT_CTRL_REG,
-+			   SUN8I_HDMI_PHY_REXT_CTRL_REXT_EN, 0);
-+}
-+
-+static const struct dw_hdmi_phy_ops sun8i_a83t_hdmi_phy_ops = {
-+	.init		= sun8i_a83t_hdmi_phy_config,
-+	.disable	= sun8i_a83t_hdmi_phy_disable,
-+	.read_hpd	= dw_hdmi_phy_read_hpd,
-+	.update_hpd	= dw_hdmi_phy_update_hpd,
-+	.setup_hpd	= dw_hdmi_phy_setup_hpd,
-+};
-+
- static int sun8i_h3_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 				    const struct drm_display_info *display,
- 				    const struct drm_display_mode *mode)
-@@ -348,32 +379,6 @@ static int sun8i_h3_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 	return 0;
- }
- 
--static void sun8i_hdmi_phy_set_polarity(struct sun8i_hdmi_phy *phy,
--					const struct drm_display_mode *mode)
--{
--	u32 val = 0;
--
--	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
--		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NHSYNC;
--
--	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
--		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NVSYNC;
--
--	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_DBG_CTRL_REG,
--			   SUN8I_HDMI_PHY_DBG_CTRL_POL_MASK, val);
--};
--
--static void sun8i_a83t_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
--{
--	struct sun8i_hdmi_phy *phy = data;
--
--	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
--	dw_hdmi_phy_gen2_pddq(hdmi, 1);
--
--	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_REXT_CTRL_REG,
--			   SUN8I_HDMI_PHY_REXT_CTRL_REXT_EN, 0);
--}
--
- static void sun8i_h3_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
- {
- 	struct sun8i_hdmi_phy *phy = data;
-@@ -385,14 +390,6 @@ static void sun8i_h3_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
- 	regmap_write(phy->regs, SUN8I_HDMI_PHY_PLL_CFG1_REG, 0);
- }
- 
--static const struct dw_hdmi_phy_ops sun8i_a83t_hdmi_phy_ops = {
--	.init		= sun8i_a83t_hdmi_phy_config,
--	.disable	= sun8i_a83t_hdmi_phy_disable,
--	.read_hpd	= dw_hdmi_phy_read_hpd,
--	.update_hpd	= dw_hdmi_phy_update_hpd,
--	.setup_hpd	= dw_hdmi_phy_setup_hpd,
--};
--
- static const struct dw_hdmi_phy_ops sun8i_h3_hdmi_phy_ops = {
- 	.init		= sun8i_h3_hdmi_phy_config,
- 	.disable	= sun8i_h3_hdmi_phy_disable,
+ 	rc = symlink_hash(link_len, link_str, md5_hash);
+ 	if (rc) {
+ 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
 -- 
-2.35.1
+1.8.3.1
 

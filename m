@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7594F4FD924
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A30C4FD87C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379536AbiDLIUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S1385948AbiDLIxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354168AbiDLH0G (ORCPT
+        with ESMTP id S1359254AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B050F45040;
-        Tue, 12 Apr 2022 00:06:03 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F106529CA8;
+        Tue, 12 Apr 2022 00:21:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E131B81B54;
-        Tue, 12 Apr 2022 07:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A627C36AEA;
-        Tue, 12 Apr 2022 07:06:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4D36153F;
+        Tue, 12 Apr 2022 07:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F26C385A1;
+        Tue, 12 Apr 2022 07:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747160;
-        bh=FN38w32qtUhnF2Zn1lD4Y4Ebgl+F/Fwi4fAlFKGu6+k=;
+        s=korg; t=1649748061;
+        bh=sW6g/q1XVSJnxHMPRxwCpYDjZPxGu1a7vykgCB/r26Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OOvf/m88OnymkuFe/ClB6wGkrZtB90K6e4FOEyOfQrdSOXikMs3wBbjVgvhfOX4E+
-         grgw2BTCyVzB1tJrwBTrSzxgQ4sUa4HQMHyMxxjcRVs+oOvM/0cDJPHzjeptucvf9y
-         tG9VQI3afe2V2O6NNyyXyIpqbA7IkAbV9DXNXEoY=
+        b=aSlBhsb8nocprRD/d+iYdvm82cmGVxsZ2roqu5PX6aaPndOTciRd88rv2b/HT+TjK
+         yUWvG6R5Q4ZaELARC8acdlTRHiCiD3+PyF/0Ud4RG0oyIBQvdFwqOllfIsiLrzvAjv
+         iUZLqExn9if76LvsT82mLryRFp6AfrLoaD/klcYk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH 5.16 265/285] selftests/bpf: Fix u8 narrow load checks for bpf_sk_lookup remote_port
-Date:   Tue, 12 Apr 2022 08:32:02 +0200
-Message-Id: <20220412062951.307801901@linuxfoundation.org>
+        stable@vger.kernel.org,
+        CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.17 305/343] drm/amd/display: Fix by adding FPU protection for dcn30_internal_validate_bw
+Date:   Tue, 12 Apr 2022 08:32:03 +0200
+Message-Id: <20220412063000.127605016@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>
 
-commit 3c69611b8926f8e74fcf76bd97ae0e5dafbeb26a upstream.
+commit ca1198849ab0e7af5efb392ef6baf1138f6fc086 upstream.
 
-In commit 9a69e2b385f4 ("bpf: Make remote_port field in struct
-bpf_sk_lookup 16-bit wide") ->remote_port field changed from __u32 to
-__be16.
+[Why]
+Below general protection fault observed when WebGL Aquarium is run for
+longer duration. If drm debug logs are enabled and set to 0x1f then the
+issue is observed within 10 minutes of run.
 
-However, narrow load tests which exercise 1-byte sized loads from
-offsetof(struct bpf_sk_lookup, remote_port) were not adopted to reflect the
-change.
+[  100.717056] general protection fault, probably for non-canonical address 0x2d33302d32323032: 0000 [#1] PREEMPT SMP NOPTI
+[  100.727921] CPU: 3 PID: 1906 Comm: DrmThread Tainted: G        W         5.15.30 #12 d726c6a2d6ebe5cf9223931cbca6892f916fe18b
+[  100.754419] RIP: 0010:CalculateSwathWidth+0x1f7/0x44f
+[  100.767109] Code: 00 00 00 f2 42 0f 11 04 f0 48 8b 85 88 00 00 00 f2 42 0f 10 04 f0 48 8b 85 98 00 00 00 f2 42 0f 11 04 f0 48 8b 45 10 0f 57 c0 <f3> 42 0f 2a 04 b0 0f 57 c9 f3 43 0f 2a 0c b4 e8 8c e2 f3 ff 48 8b
+[  100.781269] RSP: 0018:ffffa9230079eeb0 EFLAGS: 00010246
+[  100.812528] RAX: 2d33302d32323032 RBX: 0000000000000500 RCX: 0000000000000000
+[  100.819656] RDX: 0000000000000001 RSI: ffff99deb712c49c RDI: 0000000000000000
+[  100.826781] RBP: ffffa9230079ef50 R08: ffff99deb712460c R09: ffff99deb712462c
+[  100.833907] R10: ffff99deb7124940 R11: ffff99deb7124d70 R12: ffff99deb712ae44
+[  100.841033] R13: 0000000000000001 R14: 0000000000000000 R15: ffffa9230079f0a0
+[  100.848159] FS:  00007af121212640(0000) GS:ffff99deba780000(0000) knlGS:0000000000000000
+[  100.856240] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  100.861980] CR2: 0000209000fe1000 CR3: 000000011b18c000 CR4: 0000000000350ee0
+[  100.869106] Call Trace:
+[  100.871555]  <TASK>
+[  100.873655]  ? asm_sysvec_reschedule_ipi+0x12/0x20
+[  100.878449]  CalculateSwathAndDETConfiguration+0x1a3/0x6dd
+[  100.883937]  dml31_ModeSupportAndSystemConfigurationFull+0x2ce4/0x76da
+[  100.890467]  ? kallsyms_lookup_buildid+0xc8/0x163
+[  100.895173]  ? kallsyms_lookup_buildid+0xc8/0x163
+[  100.899874]  ? __sprint_symbol+0x80/0x135
+[  100.903883]  ? dm_update_plane_state+0x3f9/0x4d2
+[  100.908500]  ? symbol_string+0xb7/0xde
+[  100.912250]  ? number+0x145/0x29b
+[  100.915566]  ? vsnprintf+0x341/0x5ff
+[  100.919141]  ? desc_read_finalized_seq+0x39/0x87
+[  100.923755]  ? update_load_avg+0x1b9/0x607
+[  100.927849]  ? compute_mst_dsc_configs_for_state+0x7d/0xd5b
+[  100.933416]  ? fetch_pipe_params+0xa4d/0xd0c
+[  100.937686]  ? dc_fpu_end+0x3d/0xa8
+[  100.941175]  dml_get_voltage_level+0x16b/0x180
+[  100.945619]  dcn30_internal_validate_bw+0x10e/0x89b
+[  100.950495]  ? dcn31_validate_bandwidth+0x68/0x1fc
+[  100.955285]  ? resource_build_scaling_params+0x98b/0xb8c
+[  100.960595]  ? dcn31_validate_bandwidth+0x68/0x1fc
+[  100.965384]  dcn31_validate_bandwidth+0x9a/0x1fc
+[  100.970001]  dc_validate_global_state+0x238/0x295
+[  100.974703]  amdgpu_dm_atomic_check+0x9c1/0xbce
+[  100.979235]  ? _printk+0x59/0x73
+[  100.982467]  drm_atomic_check_only+0x403/0x78b
+[  100.986912]  drm_mode_atomic_ioctl+0x49b/0x546
+[  100.991358]  ? drm_ioctl+0x1c1/0x3b3
+[  100.994936]  ? drm_atomic_set_property+0x92a/0x92a
+[  100.999725]  drm_ioctl_kernel+0xdc/0x149
+[  101.003648]  drm_ioctl+0x27f/0x3b3
+[  101.007051]  ? drm_atomic_set_property+0x92a/0x92a
+[  101.011842]  amdgpu_drm_ioctl+0x49/0x7d
+[  101.015679]  __se_sys_ioctl+0x7c/0xb8
+[  101.015685]  do_syscall_64+0x5f/0xb8
+[  101.015690]  ? __irq_exit_rcu+0x34/0x96
 
-As a result, on little-endian we continue testing loads from addresses:
+[How]
+It calles populate_dml_pipes which uses doubles to initialize.
+Adding FPU protection avoids context switch and probable loss of vba context
+as there is potential contention while drm debug logs are enabled.
 
- - (__u8 *)&ctx->remote_port + 3
- - (__u8 *)&ctx->remote_port + 4
-
-which map to the zero padding following the remote_port field, and don't
-break the tests because there is no observable change.
-
-While on big-endian, we observe breakage because tests expect to see zeros
-for values loaded from:
-
- - (__u8 *)&ctx->remote_port - 1
- - (__u8 *)&ctx->remote_port - 2
-
-Above addresses map to ->remote_ip6 field, which precedes ->remote_port,
-and are populated during the bpf_sk_lookup IPv6 tests.
-
-Unsurprisingly, on s390x we observe:
-
-  #136/38 sk_lookup/narrow access to ctx v4:OK
-  #136/39 sk_lookup/narrow access to ctx v6:FAIL
-
-Fix it by removing the checks for 1-byte loads from offsets outside of the
-->remote_port field.
-
-Fixes: 9a69e2b385f4 ("bpf: Make remote_port field in struct bpf_sk_lookup 16-bit wide")
-Suggested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20220319183356.233666-3-jakub@cloudflare.com
+Signed-off-by: CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/progs/test_sk_lookup.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-@@ -404,8 +404,7 @@ int ctx_narrow_access(struct bpf_sk_look
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -2025,7 +2025,9 @@ bool dcn31_validate_bandwidth(struct dc
  
- 	/* Narrow loads from remote_port field. Expect SRC_PORT. */
- 	if (LSB(ctx->remote_port, 0) != ((SRC_PORT >> 0) & 0xff) ||
--	    LSB(ctx->remote_port, 1) != ((SRC_PORT >> 8) & 0xff) ||
--	    LSB(ctx->remote_port, 2) != 0 || LSB(ctx->remote_port, 3) != 0)
-+	    LSB(ctx->remote_port, 1) != ((SRC_PORT >> 8) & 0xff))
- 		return SK_DROP;
- 	if (LSW(ctx->remote_port, 0) != SRC_PORT)
- 		return SK_DROP;
+ 	BW_VAL_TRACE_COUNT();
+ 
++	DC_FP_START();
+ 	out = dcn30_internal_validate_bw(dc, context, pipes, &pipe_cnt, &vlevel, fast_validate);
++	DC_FP_END();
+ 
+ 	// Disable fast_validate to set min dcfclk in alculate_wm_and_dlg
+ 	if (pipe_cnt == 0)
 
 

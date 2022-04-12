@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0DA4FDB1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596854FD692
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355317AbiDLIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S1386064AbiDLIyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354958AbiDLH1B (ORCPT
+        with ESMTP id S1359388AbiDLHnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:01 -0400
+        Tue, 12 Apr 2022 03:43:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A672381B3;
-        Tue, 12 Apr 2022 00:06:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A042CC9C;
+        Tue, 12 Apr 2022 00:22:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF2C5B81B4E;
-        Tue, 12 Apr 2022 07:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBBFC385A6;
-        Tue, 12 Apr 2022 07:06:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 331E5B81B58;
+        Tue, 12 Apr 2022 07:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C85FC385A1;
+        Tue, 12 Apr 2022 07:22:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747214;
-        bh=9mAMX+W24OCA95cx699ZaYW3YeLYJ/bq7p8AxFlJT7E=;
+        s=korg; t=1649748121;
+        bh=PkpEYYaFN+mCmc24zaHnpXLxoDbtM4+leHpEARJnT48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hw4nl2HfAlBGKM3i1Ly0xGOEFTT/OIKs/Fn7RJivbruS6rw7v8k5Nx2IlqV53LP+w
-         SP8arTEZumjuGPxfYkkKIV2Dx0hJvmpLXPfWMipH+t+3450oz4jZlX5GOzuQoJVNsm
-         v4u49kFyX1EqsxURDwPUOtgRYWRjOerCK53xKZC0=
+        b=MnohntWgJjGw6GQWdMXRUXj6mdMz840X2pqv+HtRWNbkmM6GlQ83SqDT4ZYKgfJ+Q
+         wTfrGnms2/zACNZZpFYyyk249pl92OCm+V2kPau/NJNmlM34nrOJXkjfv4nmdY5wEw
+         icxBw37e8m/IP8teemGtub6zNWykJbDq4w6lj4Ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.16 247/285] perf/core: Inherit event_caps
-Date:   Tue, 12 Apr 2022 08:31:44 +0200
-Message-Id: <20220412062950.787962308@linuxfoundation.org>
+        stable@vger.kernel.org, Robbie Ko <robbieko@synology.com>,
+        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        Kaiwen Hu <kevinhu@synology.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.17 287/343] btrfs: prevent subvol with swapfile from being deleted
+Date:   Tue, 12 Apr 2022 08:31:45 +0200
+Message-Id: <20220412062959.611109442@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namhyung Kim <namhyung@kernel.org>
+From: Kaiwen Hu <kevinhu@synology.com>
 
-commit e3265a4386428d3d157d9565bb520aabff8b4bf0 upstream.
+commit 60021bd754c6ca0addc6817994f20290a321d8d6 upstream.
 
-It was reported that some perf event setup can make fork failed on
-ARM64.  It was the case of a group of mixed hw and sw events and it
-failed in perf_event_init_task() due to armpmu_event_init().
+A subvolume with an active swapfile must not be deleted otherwise it
+would not be possible to deactivate it.
 
-The ARM PMU code checks if all the events in a group belong to the
-same PMU except for software events.  But it didn't set the event_caps
-of inherited events and no longer identify them as software events.
-Therefore the test failed in a child process.
+After the subvolume is deleted, we cannot swapoff the swapfile in this
+deleted subvolume because the path is unreachable.  The swapfile is
+still active and holding references, the filesystem cannot be unmounted.
 
-A simple reproducer is:
+The test looks like this:
 
-  $ perf stat -e '{cycles,cs,instructions}' perf bench sched messaging
-  # Running 'sched/messaging' benchmark:
-  perf: fork(): Invalid argument
+  mkfs.btrfs -f $dev > /dev/null
+  mount $dev $mnt
 
-The perf stat was fine but the perf bench failed in fork().  Let's
-inherit the event caps from the parent.
+  btrfs sub create $mnt/subvol
+  touch $mnt/subvol/swapfile
+  chmod 600 $mnt/subvol/swapfile
+  chattr +C $mnt/subvol/swapfile
+  dd if=/dev/zero of=$mnt/subvol/swapfile bs=1K count=4096
+  mkswap $mnt/subvol/swapfile
+  swapon $mnt/subvol/swapfile
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lkml.kernel.org/r/20220328200112.457740-1-namhyung@kernel.org
+  btrfs sub delete $mnt/subvol
+  swapoff $mnt/subvol/swapfile  # failed: No such file or directory
+  swapoff --all
+
+  unmount $mnt                  # target is busy.
+
+To prevent above issue, we simply check that whether the subvolume
+contains any active swapfile, and stop the deleting process.  This
+behavior is like snapshot ioctl dealing with a swapfile.
+
+CC: stable@vger.kernel.org # 5.4+
+Reviewed-by: Robbie Ko <robbieko@synology.com>
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Kaiwen Hu <kevinhu@synology.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/events/core.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/btrfs/inode.c |   24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -11626,6 +11626,9 @@ perf_event_alloc(struct perf_event_attr
- 
- 	event->state		= PERF_EVENT_STATE_INACTIVE;
- 
-+	if (parent_event)
-+		event->event_caps = parent_event->event_caps;
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -4466,6 +4466,13 @@ int btrfs_delete_subvolume(struct inode
+ 			   dest->root_key.objectid);
+ 		return -EPERM;
+ 	}
++	if (atomic_read(&dest->nr_swapfiles)) {
++		spin_unlock(&dest->root_item_lock);
++		btrfs_warn(fs_info,
++			   "attempt to delete subvolume %llu with active swapfile",
++			   root->root_key.objectid);
++		return -EPERM;
++	}
+ 	root_flags = btrfs_root_flags(&dest->root_item);
+ 	btrfs_set_root_flags(&dest->root_item,
+ 			     root_flags | BTRFS_ROOT_SUBVOL_DEAD);
+@@ -10424,8 +10431,23 @@ static int btrfs_swap_activate(struct sw
+ 	 * set. We use this counter to prevent snapshots. We must increment it
+ 	 * before walking the extents because we don't want a concurrent
+ 	 * snapshot to run after we've already checked the extents.
+-	 */
++	 *
++	 * It is possible that subvolume is marked for deletion but still not
++	 * removed yet. To prevent this race, we check the root status before
++	 * activating the swapfile.
++	 */
++	spin_lock(&root->root_item_lock);
++	if (btrfs_root_dead(root)) {
++		spin_unlock(&root->root_item_lock);
 +
- 	if (event->attr.sigtrap)
- 		atomic_set(&event->event_limit, 1);
++		btrfs_exclop_finish(fs_info);
++		btrfs_warn(fs_info,
++		"cannot activate swapfile because subvolume %llu is being deleted",
++			root->root_key.objectid);
++		return -EPERM;
++	}
+ 	atomic_inc(&root->nr_swapfiles);
++	spin_unlock(&root->root_item_lock);
+ 
+ 	isize = ALIGN_DOWN(inode->i_size, fs_info->sectorsize);
  
 
 

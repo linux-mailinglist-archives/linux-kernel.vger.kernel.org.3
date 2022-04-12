@@ -2,103 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDF34FEB72
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3964FEA61
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiDLXgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S230343AbiDLXaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiDLXdD (ORCPT
+        with ESMTP id S230104AbiDLX2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:33:03 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416AD8CDA5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:21:46 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d3so14496792ilr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZRBtQePDBALOI3aSwVMe04POvI2ku+o19e5nkskODvs=;
-        b=Jsp0Ea1H/tE20jjj7llhVIUkbSSUR0BBBeRsAFijDgtANB6tZvR5PmuJ5aiLavgG3F
-         6t2Wqe2qXL/1qX+GeRVA0kuXW6fE0IuEHVOj98N7lUA97VA/qmbdSzgY22KI0tphzXAl
-         CjffKcWyFE71iyx3Uy1D5l0k6cGwxxL+982gY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZRBtQePDBALOI3aSwVMe04POvI2ku+o19e5nkskODvs=;
-        b=sN3qdhgq54JcqCA4H+9IMdryipt+0rw2IdagGM0zxyaDeZO6ya3TUBOhCwj3CZAXgP
-         cxLIZtU+KPmiwbTupScTBJSxm5iJ7zwxe84bDu7QemGvUj5K1CesoOU8DHTqUSSlbQSg
-         kvcpe0TIlKUcZUA9/bKB8GRY23LF50GAlmxuKiZWcaQLVdhhYC8DwpBWog/CsJnO48KJ
-         qE4LC4juH8jS94lUd/A/yf0mVap2WF9n4YhfxQXLf9xb56c/IuwRoT1V+JGUWy0EZV9S
-         Awm+vQTCl6kxBNDJZ8Sum8Vrva2MrFd7X81TuiE3Ye++8cBHlolYYntWPhXESt3VqhY7
-         qPiA==
-X-Gm-Message-State: AOAM531F8G7wv5VbelZsHyrj5JXvuxLkoStFie4G8zsGEjaEeAaAWvWT
-        MRj6U8qAMGaHtsmy1rrMGsAvUApO367PQg==
-X-Google-Smtp-Source: ABdhPJxlFhFLstyxpytdgKpIepjihEBeRCmxutRGwywd/OZN1dmyv3Jhu8QTSCAD96prda8v2+Gl9Q==
-X-Received: by 2002:a05:6e02:170c:b0:2ca:7da4:e69a with SMTP id u12-20020a056e02170c00b002ca7da4e69amr11351287ill.228.1649802105616;
-        Tue, 12 Apr 2022 15:21:45 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g14-20020a056602150e00b0064d30c94155sm8641432iow.37.2022.04.12.15.21.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 15:21:45 -0700 (PDT)
-Subject: Re: [PATCH 5.10 000/170] 5.10.111-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220412173819.234884577@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f10e754b-21f1-f50e-12ba-a951c80e73dd@linuxfoundation.org>
-Date:   Tue, 12 Apr 2022 16:21:44 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220412173819.234884577@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Tue, 12 Apr 2022 19:28:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE1ADE0A0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:31:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9864161CAC
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB42C385A1;
+        Tue, 12 Apr 2022 22:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649802663;
+        bh=2jF5yQBTQuAeU0sIAjlvtCV8brbLDPSWeE65/+EM/fA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WeWso9pR2D03KngfPz3S0DnZHAR7yIHe09D7nHgudcPt4MuOZq6WM8+F1JY1Y0eOr
+         mV2TLJmJx6kaJaHLj2NcOdKvty9a6YGtHp+yjXznFavaaRCBx9FuUdg7m+0K84+dsh
+         9H63yXZjICmkAaTzKjYoHLCJjhoT7U6vwEneEqco=
+Date:   Tue, 12 Apr 2022 15:31:01 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     <seanga2@gmail.com>, <sfr@canb.auug.org.au>,
+        <linux-kernel@vger.kernel.org>,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
+        Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        Yinan Zhang <zhangyinan2019@email.szu.edu.cn>,
+        Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>,
+        Yuhong Feng <yuhongf@szu.edu.cn>,
+        Yongqiang Liu <liuyongqiang13@huawei.com>
+Subject: Re: [PATCH] tools/vm/page_owner: support debug log to avoid huge
+ log print
+Message-Id: <20220412153101.1c05e00ed994982555d2fd9e@linux-foundation.org>
+In-Reply-To: <1649672446-5685-1-git-send-email-baihaowen@meizu.com>
+References: <1649672446-5685-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/22 11:46 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.111 release.
-> There are 170 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Apr 2022 17:37:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.111-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, 11 Apr 2022 18:20:46 +0800 Haowen Bai <baihaowen@meizu.com> wrote:
+
+> As normal usage, tool will print huge parser log and spend a lot of
+> time printing, so it would be preferable add "-d" debug control to avoid
+> this problem.
 > 
 
-Compiled and booted on my test system. No dmesg regressions.
+Seems sensible.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Documentation/vm/page_owner.rst is getting out of date.  Sometime could
+someone please go through it and check that everything is correct and
+current?

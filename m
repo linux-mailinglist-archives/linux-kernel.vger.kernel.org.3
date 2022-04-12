@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BC94FE472
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D904FE484
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356911AbiDLPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S1356917AbiDLPVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351015AbiDLPSc (ORCPT
+        with ESMTP id S230387AbiDLPVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:18:32 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB545E753
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:16:14 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so21032512fac.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Go9IvpDXSR7Gejk41sTME4/PVZMxW5LbmIPwH42ez3c=;
-        b=oB8XLCKEtXmigDeFjQNL0sJlBLv5iwNx5epuN9ygeoE616XfYi7Kw9lPPA7oNqzegL
-         Tc9QtYGbbMOktFi30wj2BH+QltPtIO8XxT/7iWGR/yZzeAwzP9ENRzoPxegYkw5ZQoyK
-         KQmeEYzcooeQmyv8TwVqqfr6DZaya0NOCz8o7ICwh1GK7NPKPSTpk5bJBBDwJeIEFt7x
-         YW+o9o5VENEHkc06/TlfvBGbYjIuFaWsHL0434BCsFbHj03V/oYorKQKXrh0LZInyWTk
-         a9PLafjcUEdXVVbnK7ufRzlEke41wAMRr4U1B83CL7tiMg9dDHbsLJJh3GqB3yqse+HL
-         +MPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Go9IvpDXSR7Gejk41sTME4/PVZMxW5LbmIPwH42ez3c=;
-        b=SCeNFWmz+Ial3zWmhP6FBGK48MqmAR38OPpA2qV24SYsQj99SGHB8lbgh1LeRmxVq9
-         jDUqD+R3GqfkT9HTxbrza3eBPiEDko2GAHAjEYHIJVna0BaW/FactDgBD717AmzHLHh3
-         UTovl61jVihAx6DnOFKh496pdb4lbHVwx+BzzsHOyIF5FbnwoTAuorG/Ik1mJeuYQ1nl
-         pdOHdKmrOLW+V5HK725lzppVLxm9cKnJDjonpqyiBKtYqmJeCgvZK5P1LzUCeGjIUzHr
-         fMkPvvctXY/g7Unv5a8bq95atmWvmorP3kUbhTCIIcTrK1agealEbIP4J41ST0mh7I39
-         lXUw==
-X-Gm-Message-State: AOAM531U5EzavNwOD9hZFGMCXqdXRlmQb8tsELO3ahDyyAL+/aZaLJ0p
-        9r/+7e+yoWoBmDul29AqazmcIGqnkrIXTQiq
-X-Google-Smtp-Source: ABdhPJxEP7GnS1O5iaSgUztxZ1RQViAVxjyIijKeQzEMMM0+b5vJiMuOKmwEAEZ01Bj66KpDFQmesg==
-X-Received: by 2002:a05:6870:232a:b0:db:360c:7f5a with SMTP id w42-20020a056870232a00b000db360c7f5amr2215026oao.230.1649776573359;
-        Tue, 12 Apr 2022 08:16:13 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id g8-20020a9d2d88000000b005b238f7551csm13319217otb.53.2022.04.12.08.16.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:16:12 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 10:16:10 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND 2/2] soc: qcom: rpmhpd: add sc8280xp rpmh power-domains
-Message-ID: <YlWXuiHZQXHBXz6F@builder.lan>
-References: <20220225054345.2479565-1-bjorn.andersson@linaro.org>
- <20220225054345.2479565-2-bjorn.andersson@linaro.org>
- <YlQtfu5K9IeJLPcS@hovoldconsulting.com>
+        Tue, 12 Apr 2022 11:21:18 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1205E74D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:19:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id D6C311F42774
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649776739;
+        bh=4lkEaK+tGV/Iygaw6i15VKgZAMgQnTCuG7b9sgm7nuo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SIv4jq5sma57fREVY6NVRAljFw0ogXLXWOnpTPxLb/yxPZiHLe+ij6Icv1nlYS4bS
+         ruSzWICs+MDWfW7cwkZQ/7ZqRlXI4iWJvl2rsrcQ1beebcUoPAPMp4xCu6Smzh177q
+         Shp7l58FOJiB0w+f38CRAU9Bk4aYoJyid2F6peJ0rTwELnNz0QDzoiW0mFpx0SDVdd
+         TAKUbRI1giZsX+kjQKz4cI2yjwl1UNpLsT6vyVWoqxIeXgSxJZIIYIXYKD9Cp8v+l/
+         6nABXwHyoLtLYQ2aeLOecYexI1c3BmQJmtpqamPv1KrdTaKV0dsaeQGN/sSC514kZK
+         sx6HGszOnUv9g==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Robert Beckett <bob.beckett@collabora.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/5] drm/i915: instantiate ttm ranger manager for stolen memory
+Date:   Tue, 12 Apr 2022 15:18:34 +0000
+Message-Id: <20220412151838.1298956-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412151838.1298956-1-bob.beckett@collabora.com>
+References: <20220412151838.1298956-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlQtfu5K9IeJLPcS@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,92 +58,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 11 Apr 08:30 CDT 2022, Johan Hovold wrote:
+prepare for ttm based stolen region by using ttm range manager
+as the resource manager for stolen region.
 
-> On Thu, Feb 24, 2022 at 09:43:45PM -0800, Bjorn Andersson wrote:
-> > The Qualcomm sc8280xp platform has 8 power-domains. Add these, and their
-> > relevant active-only variants, to the RPMh power-domain driver.
-> 
-> As we discussed off-list, the sc8280xp apparently has 13 domains. Guess
-> the commit message should be updated even if you don't expose all of
-> these to Linux.
-> 
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c |  6 ++--
+ drivers/gpu/drm/i915/intel_region_ttm.c      | 31 +++++++++++++++-----
+ 2 files changed, 27 insertions(+), 10 deletions(-)
 
-Thanks for spotting that, I will update the patch and rewrite the commit
-message accordingly.
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+index a10716f4e717..358f8a1a30ce 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+@@ -58,11 +58,13 @@ i915_ttm_region(struct ttm_device *bdev, int ttm_mem_type)
+ 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
+ 
+ 	/* There's some room for optimization here... */
+-	GEM_BUG_ON(ttm_mem_type != I915_PL_SYSTEM &&
+-		   ttm_mem_type < I915_PL_LMEM0);
++	GEM_BUG_ON(ttm_mem_type == I915_PL_GGTT);
++
+ 	if (ttm_mem_type == I915_PL_SYSTEM)
+ 		return intel_memory_region_lookup(i915, INTEL_MEMORY_SYSTEM,
+ 						  0);
++	if (ttm_mem_type == I915_PL_STOLEN)
++		return i915->mm.stolen_region;
+ 
+ 	return intel_memory_region_lookup(i915, INTEL_MEMORY_LOCAL,
+ 					  ttm_mem_type - I915_PL_LMEM0);
+diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
+index 62ff77445b01..7d49ea72e33f 100644
+--- a/drivers/gpu/drm/i915/intel_region_ttm.c
++++ b/drivers/gpu/drm/i915/intel_region_ttm.c
+@@ -49,7 +49,7 @@ void intel_region_ttm_device_fini(struct drm_i915_private *dev_priv)
+ 
+ /*
+  * Map the i915 memory regions to TTM memory types. We use the
+- * driver-private types for now, reserving TTM_PL_VRAM for stolen
++ * driver-private types for now, reserving I915_PL_STOLEN for stolen
+  * memory and TTM_PL_TT for GGTT use if decided to implement this.
+  */
+ int intel_region_to_ttm_type(const struct intel_memory_region *mem)
+@@ -58,11 +58,17 @@ int intel_region_to_ttm_type(const struct intel_memory_region *mem)
+ 
+ 	GEM_BUG_ON(mem->type != INTEL_MEMORY_LOCAL &&
+ 		   mem->type != INTEL_MEMORY_MOCK &&
+-		   mem->type != INTEL_MEMORY_SYSTEM);
++		   mem->type != INTEL_MEMORY_SYSTEM &&
++		   mem->type != INTEL_MEMORY_STOLEN_SYSTEM &&
++		   mem->type != INTEL_MEMORY_STOLEN_LOCAL);
+ 
+ 	if (mem->type == INTEL_MEMORY_SYSTEM)
+ 		return TTM_PL_SYSTEM;
+ 
++	if (mem->type == INTEL_MEMORY_STOLEN_SYSTEM ||
++	    mem->type == INTEL_MEMORY_STOLEN_LOCAL)
++		return I915_PL_STOLEN;
++
+ 	type = mem->instance + TTM_PL_PRIV;
+ 	GEM_BUG_ON(type >= TTM_NUM_MEM_TYPES);
+ 
+@@ -86,10 +92,16 @@ int intel_region_ttm_init(struct intel_memory_region *mem)
+ 	int mem_type = intel_region_to_ttm_type(mem);
+ 	int ret;
+ 
+-	ret = i915_ttm_buddy_man_init(bdev, mem_type, false,
+-				      resource_size(&mem->region),
+-				      mem->io_size,
+-				      mem->min_page_size, PAGE_SIZE);
++	if (mem_type == I915_PL_STOLEN) {
++		ret = ttm_range_man_init(bdev, mem_type, false,
++					 resource_size(&mem->region) >> PAGE_SHIFT);
++		mem->is_range_manager = true;
++	} else {
++		ret = i915_ttm_buddy_man_init(bdev, mem_type, false,
++					      resource_size(&mem->region),
++					      mem->io_size,
++					      mem->min_page_size, PAGE_SIZE);
++	}
+ 	if (ret)
+ 		return ret;
+ 
+@@ -109,6 +121,7 @@ int intel_region_ttm_init(struct intel_memory_region *mem)
+ int intel_region_ttm_fini(struct intel_memory_region *mem)
+ {
+ 	struct ttm_resource_manager *man = mem->region_private;
++	int mem_type = intel_region_to_ttm_type(mem);
+ 	int ret = -EBUSY;
+ 	int count;
+ 
+@@ -139,8 +152,10 @@ int intel_region_ttm_fini(struct intel_memory_region *mem)
+ 	if (ret || !man)
+ 		return ret;
+ 
+-	ret = i915_ttm_buddy_man_fini(&mem->i915->bdev,
+-				      intel_region_to_ttm_type(mem));
++	if (mem_type == I915_PL_STOLEN)
++		ret = ttm_range_man_fini(&mem->i915->bdev, mem_type);
++	else
++		ret = i915_ttm_buddy_man_fini(&mem->i915->bdev, mem_type);
+ 	GEM_WARN_ON(ret);
+ 	mem->region_private = NULL;
+ 
+-- 
+2.25.1
 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  drivers/soc/qcom/rpmhpd.c | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> > 
-> > diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> > index 58f1dc9b9cb7..71602eb824f7 100644
-> > --- a/drivers/soc/qcom/rpmhpd.c
-> > +++ b/drivers/soc/qcom/rpmhpd.c
-> > @@ -180,6 +180,11 @@ static struct rpmhpd mxc_ao = {
-> >  	.res_name = "mxc.lvl",
-> >  };
-> >  
-> > +static struct rpmhpd nsp = {
-> > +	.pd = { .name = "nsp", },
-> > +	.res_name = "nsp.lvl",
-> > +};
-> > +
-> >  /* SDM845 RPMH powerdomains */
-> >  static struct rpmhpd *sdm845_rpmhpds[] = {
-> >  	[SDM845_CX] = &cx_w_mx_parent,
-> > @@ -363,10 +368,31 @@ static const struct rpmhpd_desc sc8180x_desc = {
-> >  	.num_pds = ARRAY_SIZE(sc8180x_rpmhpds),
-> >  };
-> >  
-> > +/* SC8280xp RPMH powerdomains */
-> > +static struct rpmhpd *sc8280xp_rpmhpds[] = {
-> > +	[SC8280XP_CX] = &cx,
-> > +	[SC8280XP_CX_AO] = &cx_ao,
-> > +	[SC8280XP_MX] = &mx,
-> > +	[SC8280XP_MX_AO] = &mx_ao,
-> > +	[SC8280XP_EBI] = &ebi,
-> > +	[SC8280XP_LCX] = &lcx,
-> > +	[SC8280XP_LMX] = &lmx,
-> > +	[SC8280XP_GFX] = &gfx,
-> > +	[SC8280XP_MMCX] = &mmcx,
-> > +	[SC8280XP_MMCX_AO] = &mmcx_ao,
-> > +	[SC8280XP_NSP] = &nsp,
-> > +};
-> 
-> Commit 90c74c1c2574 ("soc: qcom: rpmhpd: Sort power-domain definitions
-> and lists") recently sorted the other arrays. Sorting by address like
-> you've implicitly done here makes it easy to compare with the firmware
-> interface, but perhaps you want to sort alphabetically for consistency.
-> 
-
-I like consistency.
-
-> Since there apparently are no users for active-only domains in the tree,
-> perhaps they can also be added later.
-> 
-
-I'll take an extra look at this as well. Seems we do cx, mx and mmcx ao
-on the other platforms, but question is if that's only because we do it
-on previous platforms...
-
-Thanks for the review,
-Bjorn
-
-> > +
-> > +static const struct rpmhpd_desc sc8280xp_desc = {
-> > +	.rpmhpds = sc8280xp_rpmhpds,
-> > +	.num_pds = ARRAY_SIZE(sc8280xp_rpmhpds),
-> > +};
-> > +
-> >  static const struct of_device_id rpmhpd_match_table[] = {
-> >  	{ .compatible = "qcom,sc7180-rpmhpd", .data = &sc7180_desc },
-> >  	{ .compatible = "qcom,sc7280-rpmhpd", .data = &sc7280_desc },
-> >  	{ .compatible = "qcom,sc8180x-rpmhpd", .data = &sc8180x_desc },
-> > +	{ .compatible = "qcom,sc8280xp-rpmhpd", .data = &sc8280xp_desc },
-> >  	{ .compatible = "qcom,sdm845-rpmhpd", .data = &sdm845_desc },
-> >  	{ .compatible = "qcom,sdx55-rpmhpd", .data = &sdx55_desc},
-> >  	{ .compatible = "qcom,sm6350-rpmhpd", .data = &sm6350_desc },
-> 
-> Johan

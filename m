@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD2F4FDB3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2FF4FD4E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356337AbiDLHfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S1383138AbiDLIfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352068AbiDLHN0 (ORCPT
+        with ESMTP id S1356388AbiDLHfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:26 -0400
+        Tue, 12 Apr 2022 03:35:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DCE0ED;
-        Mon, 11 Apr 2022 23:54:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B927D5131D;
+        Tue, 12 Apr 2022 00:09:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F17A9B81B35;
-        Tue, 12 Apr 2022 06:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413BCC385A6;
-        Tue, 12 Apr 2022 06:54:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04DBEB81B5D;
+        Tue, 12 Apr 2022 07:09:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576B8C385A5;
+        Tue, 12 Apr 2022 07:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746455;
-        bh=Jc8pgUnbZ/NjC/Hkh90e39VVKCwDKbAPR4E0Lwf2MiE=;
+        s=korg; t=1649747363;
+        bh=VVkldtKKzVFjq87XcXUHMuOaGul0Zrdrv27o1u0BB7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYM5maUp7JGF1N98P1N7nuX/bLvb6Sfl3aDejGk3L7O/unxZqJsq8Komzgz0PKEj5
-         ZjhXLAqqBOFzXg/5zqvabf20lCnRUQEPYGNf1EjuqepqbsxAeAgMnhX/E0ym7fnrRb
-         eZpWn/RyetMXjGAnSTJm9QNt05QmeINRs5mVAuc4=
+        b=xqU7WWCp1b4g3PADaizDXE24t7gHrut7xQY7GkEfNOWiMwstr81+HhpZfCiYCkMUm
+         sRtZNc9JZ9silF0iepHOpB+/J88dngCzlNGmil7xBtrWVBNrj3/Pr28Ps/PATLIMIb
+         /de5V5EFqj+zHEyLFBS5crWFKBj8E3Ug4NqkIw0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <philipp.zabel@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 012/285] drm/edid: remove non_desktop quirk for HPN-3515 and LEN-B800.
+Subject: [PATCH 5.17 051/343] cfg80211: dont add non transmitted BSS to 6GHz scanned channels
 Date:   Tue, 12 Apr 2022 08:27:49 +0200
-Message-Id: <20220412062944.031549172@linuxfoundation.org>
+Message-Id: <20220412062952.579111880@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <philipp.zabel@gmail.com>
+From: Avraham Stern <avraham.stern@intel.com>
 
-[ Upstream commit 50dc95d561a2552b0d76a9f91b38005195bf2974 ]
+[ Upstream commit 5666ee154f4696c011dfa8544aaf5591b6b87515 ]
 
-Now that there is support for the Microsoft VSDB for HMDs, remove the
-non-desktop quirk for two devices that are verified to contain it in
-their EDID: HPN-3515 and LEN-B800.
-Presumably most of the other Windows Mixed Reality headsets contain it
-as well, but there are ACR-7FCE and SEC-5194 devices without it.
+When adding 6GHz channels to scan request based on reported
+co-located APs, don't add channels that have only APs with
+"non-transmitted" BSSes if they only match the wildcard SSID since
+they will be found by probing the "transmitted" BSS.
 
-Tested with LEN-B800.
-
-Signed-off-by: Philipp Zabel <philipp.zabel@gmail.com>
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220123101653.147333-2-philipp.zabel@gmail.com
+Signed-off-by: Avraham Stern <avraham.stern@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220202104617.f6ddf099f934.I231e55885d3644f292d00dfe0f42653269f2559e@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 2 --
- 1 file changed, 2 deletions(-)
+ net/wireless/scan.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index b8f5419e514a..a71b82668a98 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -212,9 +212,7 @@ static const struct edid_quirk {
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index b888522f133b..b2fdac96bab0 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -700,8 +700,12 @@ static bool cfg80211_find_ssid_match(struct cfg80211_colocated_ap *ap,
  
- 	/* Windows Mixed Reality Headsets */
- 	EDID_QUIRK('A', 'C', 'R', 0x7fce, EDID_QUIRK_NON_DESKTOP),
--	EDID_QUIRK('H', 'P', 'N', 0x3515, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('L', 'E', 'N', 0x0408, EDID_QUIRK_NON_DESKTOP),
--	EDID_QUIRK('L', 'E', 'N', 0xb800, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('F', 'U', 'J', 0x1970, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('D', 'E', 'L', 0x7fce, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('S', 'E', 'C', 0x144a, EDID_QUIRK_NON_DESKTOP),
+ 	for (i = 0; i < request->n_ssids; i++) {
+ 		/* wildcard ssid in the scan request */
+-		if (!request->ssids[i].ssid_len)
++		if (!request->ssids[i].ssid_len) {
++			if (ap->multi_bss && !ap->transmitted_bssid)
++				continue;
++
+ 			return true;
++		}
+ 
+ 		if (ap->ssid_len &&
+ 		    ap->ssid_len == request->ssids[i].ssid_len) {
+@@ -827,6 +831,9 @@ static int cfg80211_scan_6ghz(struct cfg80211_registered_device *rdev)
+ 		    !cfg80211_find_ssid_match(ap, request))
+ 			continue;
+ 
++		if (!request->n_ssids && ap->multi_bss && !ap->transmitted_bssid)
++			continue;
++
+ 		cfg80211_scan_req_add_chan(request, chan, true);
+ 		memcpy(scan_6ghz_params->bssid, ap->bssid, ETH_ALEN);
+ 		scan_6ghz_params->short_ssid = ap->short_ssid;
 -- 
 2.35.1
 

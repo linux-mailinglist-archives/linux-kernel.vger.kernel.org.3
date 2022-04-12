@@ -2,126 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5592E4FD77C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A924FDA87
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245387AbiDLJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S242028AbiDLJjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389191AbiDLJX2 (ORCPT
+        with ESMTP id S1389288AbiDLJXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:23:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAFD532E3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:30:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w4so26516624wrg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2zpl0hwMGWEj8iscWufFMYxFWQQ4xMDR4HXav9sORTE=;
-        b=o59LQ7Jij0zJWqE6zB/VIgcLMCkkonLhW64GQBq5wbep+0k2t1ZeNLR1uahoMHDAPo
-         y6M9qsaimN6wml7rw7k1Lzsp5NRuJt4rgKVABbnGFFBSu3hLrxLRxWCGnmqcL3D3H5nO
-         Cm//2HbDGOuNVCuBE82hSH8oSRadIsubVSwGro4ZHWMV71lHc+BFtodqSobt/sj6emJ/
-         orB/tYiDE8702v/5e2WwOhd2an65Y6HLBYSENmib0NlCxUXbEC53nHYd/1zFcXr3wjpd
-         beDF4S03cr5bXNmsuzHv2h3Kbsr4PM8X2wzQMzFpb52ZhUp0KfK4IPEQ19jCDxLJr7CW
-         M0Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2zpl0hwMGWEj8iscWufFMYxFWQQ4xMDR4HXav9sORTE=;
-        b=QDM1kUjFh+229iTAd1fz6ThDEvg/ecu6bQdPlXqK5cPIzKB7TnKNTvrPTgjiRHm85I
-         zI50n3q/efr5U3+ao3wFNpfnLiUpCcoQjwW+59JZy6c2QQ3cy2cwModWKSRRZeeU1fIe
-         fwtbk4JkwJAB39wdG7sYWO1o9sYs5A/Xu+cfN/cHbcrVZW0diIgbu4RVvJTvPEBWPfcv
-         0oONX13RmAr/VEmdLnxRfpOIh4+AWG198wOFgXVDFcVcs14HX0jrUhxulTZhguhXTZPP
-         4JZjWhNfOTOVmRD+eI3e/t5KltIar9yW2QL7SGeISgaBoEDKtg4a+UHznWyqG68F7PI2
-         kI+A==
-X-Gm-Message-State: AOAM531dWxhGpIdKc40yOBWR0E0FCS2d6D5YPQkF1H/7synUj9U/Sxwz
-        Vch6jhUQ9kVvAcdTsmE6Cyoptt/x6CTe0r2fAGhYdQ==
-X-Google-Smtp-Source: ABdhPJxp7bqY5lQnD8NOcSvVk9/VYysZ+n/SYHKIGxtdvY95XsVL02z/7wGmBWqR7o2ga2M99jkzxWkNGfllJY+iSJ0=
-X-Received: by 2002:adf:e5d2:0:b0:207:9be3:c080 with SMTP id
- a18-20020adfe5d2000000b002079be3c080mr12995747wrn.519.1649752235431; Tue, 12
- Apr 2022 01:30:35 -0700 (PDT)
+        Tue, 12 Apr 2022 05:23:35 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B80653E27
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:32:01 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KczPB3CKHzBsHk
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:27:42 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 16:31:59 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 12 Apr
+ 2022 16:31:59 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <chenlifu@huawei.com>
+Subject: [PATCH v2 -next] scripts: add compare-config utility
+Date:   Tue, 12 Apr 2022 16:30:57 +0800
+Message-ID: <20220412083057.4101246-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-3-james.clark@arm.com>
-In-Reply-To: <20220304171913.2292458-3-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 12 Apr 2022 09:30:23 +0100
-Message-ID: <CAJ9a7VjwRDF+J7K-TmWYLVEE72EqW+_YRgfuVz5N5wi8KQbodA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/15] coresight: etm4x: Cleanup TRCIDR2 register accesses
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
->
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
->  drivers/hwtracing/coresight/coresight-etm4x.h      | 4 ++++
->  2 files changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 9120390a7613..fd44231e9d8a 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -1116,11 +1116,11 @@ static void etm4_init_arch_data(void *info)
->         /* maximum size of resources */
->         etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
->         /* CIDSIZE, bits[9:5] Indicates the Context ID size */
-> -       drvdata->ctxid_size = BMVAL(etmidr2, 5, 9);
-> +       drvdata->ctxid_size = FIELD_GET(TRCIDR2_CIDSIZE_MASK, etmidr2);
->         /* VMIDSIZE, bits[14:10] Indicates the VMID size */
-> -       drvdata->vmid_size = BMVAL(etmidr2, 10, 14);
-> +       drvdata->vmid_size = FIELD_GET(TRCIDR2_VMIDSIZE_MASK, etmidr2);
->         /* CCSIZE, bits[28:25] size of the cycle counter in bits minus 12 */
-> -       drvdata->ccsize = BMVAL(etmidr2, 25, 28);
-> +       drvdata->ccsize = FIELD_GET(TRCIDR2_CCSIZE_MASK, etmidr2);
->
->         etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
->         /* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 300741fbc0de..cfdf966016b7 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -143,6 +143,10 @@
->  #define TRCIDR0_QSUPP_MASK                     GENMASK(16, 15)
->  #define TRCIDR0_TSSIZE_MASK                    GENMASK(28, 24)
->
-> +#define TRCIDR2_CIDSIZE_MASK                   GENMASK(9, 5)
-> +#define TRCIDR2_VMIDSIZE_MASK                  GENMASK(14, 10)
-> +#define TRCIDR2_CCSIZE_MASK                    GENMASK(28, 25)
-> +
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> --
-> 2.28.0
->
+This is an alternative utility to compare two .config files. Unlike
+existing utilities "diffconfig" in the kernel tree, it prints detailed
+results in table style, and support config name prefix so that it can be
+used elsewhere. It is useful sometimes, for example, to analyze .config files
+through tables, or to compare Buildroot .config.
 
+With grep and awk, it can print similar results like "diffconfg" as well.
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+Changes in v2:
+- Add config name prefix support
+
+ scripts/compare-config | 201 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 201 insertions(+)
+ create mode 100755 scripts/compare-config
+
+diff --git a/scripts/compare-config b/scripts/compare-config
+new file mode 100755
+index 000000000000..419843a11eda
+--- /dev/null
++++ b/scripts/compare-config
+@@ -0,0 +1,201 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++#
++# An utility to compare two .config files and print the results in table style.
++#
++
++import sys
++import argparse
++import traceback
++
++def args_parser():
++    comment = ("An utility to compare two .config files and "
++               "print the results in table style.")
++    parser = argparse.ArgumentParser(description = comment,
++                                     formatter_class =
++                                         argparse.RawTextHelpFormatter)
++    parser.add_argument(dest = "old_file", nargs = "?",
++                        metavar = "old-file",
++                        default = ".config.old",
++                        help = "specify old .config file "
++                               "(default: .config.old)")
++    parser.add_argument(dest = "new_file", nargs = "?",
++                        metavar = "new-file",
++                        default = ".config",
++                        help = "specify new .config file "
++                               "(default: .config)")
++    parser.add_argument("-S", dest = "S", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "and are equal")
++    parser.add_argument("-C", dest = "C", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "but are not equal")
++    parser.add_argument("-O", dest = "O", action = "store_true",
++                        help = "print configs that only exist in old-file")
++    parser.add_argument("-N", dest = "N", action = "store_true",
++                        help = "print configs that only exist in new-file")
++    parser.add_argument("-y", dest = "y", action = "store_true",
++                        help = "print configs that are y")
++    parser.add_argument("-n", dest = "n", action = "store_true",
++                        help = "print configs that are n (not set)")
++    parser.add_argument("-m", dest = "m", action = "store_true",
++                        help = "print configs that are m")
++    parser.add_argument("-v", dest = "v", action = "store_true",
++                        help = "print configs that are "
++                               "string/hex/int value")
++    parser.add_argument("--old", dest = "old", action = "store_true",
++                        help = "filter configs base on old-file")
++    parser.add_argument("--new", dest = "new", action = "store_true",
++                        help = "filter configs base on new-file")
++    parser.add_argument("-p", "--prefix", dest = "prefix",
++                        action = "store", default = "CONFIG_",
++                        help = "config name prefix (default: CONFIG_)")
++    return parser
++
++def usage():
++    args_parser().parse_args(["-h"])
++
++def parse_args():
++    args = args_parser().parse_args()
++    setattr(args, "doptions", diff_options(args))
++    setattr(args, "voptions", value_options(args))
++    old = args.old or not args.new
++    new = args.new or not args.old
++    args.old = old
++    args.new = new
++    return args
++
++def diff_options(args):
++    doptions = []
++    if args.S: doptions.append("S")
++    if args.C: doptions.append("C")
++    if args.O: doptions.append("O")
++    if args.N: doptions.append("N")
++    if len(doptions) == 0:
++        doptions = ["S", "C", "O", "N"]
++    return doptions
++
++def value_options(args):
++    voptions = set()
++    if args.y: voptions.add("y")
++    if args.n: voptions.add("n")
++    if args.m: voptions.add("m")
++    if args.v: voptions.add("v")
++    if len(voptions) == 0:
++        voptions = {"y", "n", "m", "v"}
++    return voptions
++
++def test_value(val, voptions):
++    if val is None: return False
++    if val in voptions: return True
++    return (not val in {"y", "n", "m"}) and ("v" in voptions)
++
++def format_exception():
++    es = ""
++    exc_type, exc_value, exc_traceback = sys.exc_info()
++    exc_str = traceback.format_exception(exc_type, exc_value, exc_traceback)
++    for s in exc_str:
++        es += s
++    return es
++
++def read_line(line, prefix):
++    line = line.strip()
++    if line.endswith(" is not set"):
++        beg = line.find(prefix)
++        if beg == -1: return None, None
++        name, val = line[beg:-10].rsplit(" ", 1)
++        return name.strip(), "n"
++    if line.startswith(prefix):
++        if line.find("=") == -1: return None, None
++        name, val = line.split("=", 1)
++        return name.strip(), val.strip()
++    return None, None
++
++def read_file(filename, prefix):
++    configs = {}
++    with open(filename, "r", encoding = "utf-8") as f:
++        for line in f:
++            name, val = read_line(line, prefix)
++            if not name is None: configs[name] = val
++    return configs
++
++def compare_config(args):
++    result = {"S": {}, "C": {}, "O": {}, "N": {}}
++    try:
++        old_configs = read_file(args.old_file, args.prefix)
++        new_configs = read_file(args.new_file, args.prefix)
++        while len(old_configs) > 0:
++            name, old_val = old_configs.popitem()
++            new_val = new_configs.pop(name, None)
++            if new_val is None:
++                result["O"][name] = (old_val, None)
++            elif old_val == new_val:
++                result["S"][name] = (old_val, new_val)
++            else:
++                result["C"][name] = (old_val, new_val)
++        while len(new_configs) > 0:
++            name, new_val = new_configs.popitem()
++            result["N"][name] = (None, new_val)
++    except:
++        print(format_exception())
++        usage()
++    return result
++
++def filter_output(result, args):
++    output = {"S": {}, "C": {}, "O": {}, "N": {}}
++    for opt in args.doptions:
++        for name, val in result[opt].items():
++            if (args.old and test_value(val[0], args.voptions) or
++                args.new and test_value(val[1], args.voptions)):
++                old_val = "-" if val[0] is None else val[0]
++                new_val = "-" if val[1] is None else val[1]
++                output[opt][name] = (old_val, new_val)
++    return output
++
++def print_table(output, args):
++    name_max_len = 8
++    old_max_len  = 8
++    new_max_len  = 8
++    name_list = sum([list(output[opt].keys()) for opt in args.doptions], [])
++    if len(name_list) > 0:
++        name_max_len = len(max(name_list, key = len))
++    val_list = sum([list(output[opt].values()) for opt in args.doptions], [])
++    if len(val_list) > 0:
++        old_max_len = len(max([val[0] for val in val_list], key = len))
++        new_max_len = len(max([val[1] for val in val_list], key = len))
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    header = ["NAME", "DIFF", "OLD", "NEW"]
++    # table row format
++    row = ("{{:{}}}\t{{:{}}}\t{{:{}}}\t{{:{}}}"
++           .format(min(max(name_max_len, len(header[0])), 40),
++                   min(max(diff_max_len, len(header[1])), 40),
++                   min(max(old_max_len,  len(header[2])), 40),
++                   min(max(new_max_len,  len(header[3])), 40)))
++    print(row.format(header[0], header[1], header[2], header[3]))
++    for opt in args.doptions:
++        for name, val in sorted(output[opt].items()):
++            print(row.format(name, diff_types[opt], val[0], val[1]))
++
++def print_summary(output, args):
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    # summary line format
++    line = "{{:{}}}: {{}}".format(max(diff_max_len, 8))
++    print("\nSummary:")
++    print(line.format("Old-file", args.old_file))
++    print(line.format("New-file", args.new_file))
++    total = 0
++    for opt in args.doptions:
++        count = len(output[opt])
++        print(line.format(diff_types[opt], count))
++        total += count
++    print(line.format("Total", total))
++
++def print_result(result, args):
++    output = filter_output(result, args)
++    print_table(output, args)
++    print_summary(output, args)
++
++diff_types = {"S": "Same", "C": "Changed", "O": "Old-only", "N": "New-only"}
++args = parse_args()
++result = compare_config(args)
++print_result(result, args)
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.35.1
+

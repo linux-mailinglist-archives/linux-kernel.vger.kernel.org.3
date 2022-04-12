@@ -2,129 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876254FE596
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F20F4FE5EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351943AbiDLQOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S1357679AbiDLQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238419AbiDLQOo (ORCPT
+        with ESMTP id S1357690AbiDLQe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:14:44 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D551496BB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:12:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id CB0DC3201F88;
-        Tue, 12 Apr 2022 12:12:23 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 12 Apr 2022 12:12:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1649779943; x=1649866343; bh=Swq3vULHL4
-        0tNAUp4uZ9yWQwrv+6ZS9Mb46odzoBxs8=; b=qgq3EzQjxZkLFJXAe23DqDX97j
-        cApfWLkJ86GFRu78qiRsRbjgxOelPJhgKhGAIy5P6mxSOHAn1/O2kMlL2VX9LiVt
-        rObPSE/lJTIZYA2Un61Y+unRKlVNVDLz31yrlYgEor1XIBRfldYVPSlAPdU7xC+D
-        fV+w6sRB7xQYOqmPvp+JZMBMVKrWvEme0tpcZaH1904sNI+VT5ldjo/L4m81etuU
-        fg7BTK8thDBaY3zXMRp2FprVgNij7Gq2qYZY6xPnH+pJCwQmCKcQuz2xU/xeCO7b
-        1GvYpsczwQY6TH4IQ8R5QIijk2Mh1FivF/K98bUa5oxsqP7LKkHDYGNoUNPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm3; t=1649779943; x=1649866343; bh=S
-        wq3vULHL40tNAUp4uZ9yWQwrv+6ZS9Mb46odzoBxs8=; b=dxcKP8ujyaC/lmnE3
-        lu+0Ry0SNoQZVh/3J6BG+wNWs7GfHZ9DI5Z5DaBv/rpGtUsuqX91G6i+VAyIa0wd
-        OQA+qogNGOEijg/H6A0sPBrytY3KYCeLt+2anujiOtDKSImuZet+HuEP+lpK4Ikt
-        ZLNAZ0koeAw+el63OmlYmxWlkoNt5oXXwGfuRJfzN1aSXXR/CKOd/8WnLbg8KicM
-        KWwsn67eEW4plgv2zTSLBGDb7iRZinCUKg4xrGq1M8sAdOJS7AXbBKhpPissdXMZ
-        r7eN5gZwF7GhvmLBK4BXJn+gTcTtNY+JzQ4ymIEt1w2ijufm+Xvc9sxbuakzvlS0
-        oIFlA==
-X-ME-Sender: <xms:5qRVYoardRClJUGUy5AsiTQb2NVf1IZp6yX0o8tvyC3mZAc6-IMYEg>
-    <xme:5qRVYjaIslUcQC4gpg46CgxFW7ihnkm9EljGvP0rvrKMsIHalsSzlIuP1yiUcH-T4
-    cf0-Bo9mX2siwFbcwA>
-X-ME-Received: <xmr:5qRVYi_bjEDCpUxc_-JQH8C3OwS_n65P1TNPSEHWvAdUPCkZyOyGMvnpU-umUZdc2Q00bqwdQsRVjvu-yaYwLex9C_2KP1JD7zTtuBGIgWqJPBHVtY3dwWwUW0hIfC4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekkedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epuefgleekvddtjefffeejheevleefveekgfduudfhgefhfeegtdehveejfefffffgnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
-    hsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:56RVYir5HB9bkQuyYpfFIhNe6VhEpaTwXzU_MeNinHNQc1oG1oIajQ>
-    <xmx:56RVYjqXLaLsLCCGFnZ67s6GZ97_cnHnvLuwD76nMScAkJzd71ZClA>
-    <xmx:56RVYgQcpjlwMG9qbQODZkz8JtNyLptYRR_frIWWEj9IKtW77P1POw>
-    <xmx:56RVYkf-XL0KmkSd8_0GuvHyaqnat9VFq_dNoarc0Wj73pf4JXUiMw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 Apr 2022 12:12:21 -0400 (EDT)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: merge DART into ARM/APPLE MACHINE
-Date:   Tue, 12 Apr 2022 18:12:11 +0200
-Message-Id: <20220412161211.23162-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Tue, 12 Apr 2022 12:34:58 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473D65E745;
+        Tue, 12 Apr 2022 09:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649781159; x=1681317159;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P66e4gojOVMBKxSt1qupuHDJXLtN+UPi+7Xzg41aZrw=;
+  b=CDHh+bR0+TfrJk1nXTdQtUJpiWPKCr2pxz1CBykVKv2uMp78VQknDt12
+   vPXXDS70v6vM/0RVDGrso8VsOisSEPZ9MoMVbtvAIkxBXjTLbKxZGEoeS
+   W/DOxdDgoQxBr/h9jOWGmm9xQmgdSg/Kwc33APd+TTi6UOvmeKr9XJ/2x
+   w6nMqKIq3/DmDYJ4xzNSPEgI7mXd/ZCdDe+VIpYBtCrf+4lyhUetnsm87
+   9JFYspVInUhEVP7rkPsJoJgmSZu4lm5bP6JRP06B5gaYvjsrTmnn8qOB0
+   n79Vq90JPkknO9RPOa4tc5KOeZqDv6HsZnvPhP/fjVjr9K74NbkbR5BAH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242368545"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="242368545"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 09:17:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="559390278"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Apr 2022 09:17:20 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neJCh-0002z1-4l;
+        Tue, 12 Apr 2022 16:17:19 +0000
+Date:   Wed, 13 Apr 2022 00:16:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
+ and partners
+Message-ID: <202204130028.O6wRGxzY-lkp@intel.com>
+References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's the same people anyway.
+Hi Heikki,
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- MAINTAINERS | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..5af879de869c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1375,14 +1375,6 @@ L:	linux-input@vger.kernel.org
- S:	Odd fixes
- F:	drivers/input/mouse/bcm5974.c
- 
--APPLE DART IOMMU DRIVER
--M:	Sven Peter <sven@svenpeter.dev>
--R:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
--L:	iommu@lists.linux-foundation.org
--S:	Maintained
--F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
--F:	drivers/iommu/apple-dart.c
--
- APPLE PCIE CONTROLLER DRIVER
- M:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
- M:	Marc Zyngier <maz@kernel.org>
-@@ -1836,6 +1828,7 @@ F:	Documentation/devicetree/bindings/arm/apple/*
- F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
- F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
-+F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
- F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
-@@ -1845,6 +1838,7 @@ F:	arch/arm64/boot/dts/apple/
- F:	drivers/clk/clk-apple-nco.c
- F:	drivers/i2c/busses/i2c-pasemi-core.c
- F:	drivers/i2c/busses/i2c-pasemi-platform.c
-+F:	drivers/iommu/apple-dart.c
- F:	drivers/irqchip/irq-apple-aic.c
- F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
+[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: hexagon-buildonly-randconfig-r005-20220412 (https://download.01.org/0day-ci/archive/20220413/202204130028.O6wRGxzY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
+        git checkout 98fece77872792e49f1005617761a533089f319d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
+   static const char * const cap_name[] = {
+                             ^
+   1 warning generated.
+
+
+vim +/cap_name +30 drivers/usb/typec/class.c
+
+    29	
+  > 30	static const char * const cap_name[] = {
+    31		[TYPEC_SINK]		= "sink-capabilities",
+    32		[TYPEC_SOURCE]		= "source-capabilities",
+    33	};
+    34	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC464FCE3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EC64FCE46
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346390AbiDLEuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S1346654AbiDLEwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiDLEuH (ORCPT
+        with ESMTP id S233516AbiDLEwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:50:07 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5B2E9C6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:47:50 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id r8so17907576oib.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:47:50 -0700 (PDT)
+        Tue, 12 Apr 2022 00:52:51 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1015A11;
+        Mon, 11 Apr 2022 21:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=YYQEo5j2Ii2p8H5ZS23pXYIYx499iXk6axIZJFS2N9g=;
-        b=XMxVGa8AckEYdPLkkCRkFLuRVmw86/dj5NmmRDa1LrlJAmpn2bPhnrXLqyi9ChrDlB
-         UdUuyxhKHjNRmPSZFzJtTxTH5ep14tjJzZIpkJfcht7E9C70t3K1j3ACnHmF5GyXIfr4
-         IaxkhWdpJTFKYmTTuZyfyIl78+vPVYyDqBSeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=YYQEo5j2Ii2p8H5ZS23pXYIYx499iXk6axIZJFS2N9g=;
-        b=FB+7Aytind6qrsAKJaqcueFWVuLlrWLOpWPmnU99NufYxk6BesIA3Nbet/t9QM/Gtv
-         a66uzCnSGjwrimy9kx2H7aAbjFQ9U8nIgUxT31H1rLURWxvm82VMT19D4PqtktnpOvM4
-         AnocAtUGVFkXMKzlHQ6mA59jjURZ3XmiWTWIvcjWNYXZP880/FTZ+TWyb3fERjlyCoSR
-         844vHVYbwUXRZxXrasIOuArHnLNN0gNbdh8FyIUeUL11C0NwBxtEqAbQujxJvdox5p4e
-         gT7brevOnnYf83o/YDnQiPM2uMuiN61sX6RTsMuO5lo8OSRKytkZctJe/e8MZts3QhtB
-         Iuow==
-X-Gm-Message-State: AOAM533f0KrWIFBAXklNtjfHs1A8DE9/YI+ySasncdEi1VoJ6QfN8QeO
-        CT/s+6YPrcQBehK6tDnWus5mh1vnjvfvCjtkkItQcQ==
-X-Google-Smtp-Source: ABdhPJy3ENRm1IsCajLk61o+xCdj4yulCsVNsBguR1dqMjmKhpW3tu/Z+AUrgZ0reqgxkhlEO75blvagp+uFa41xz3I=
-X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
- s191-20020acaa9c8000000b002da45b6b796mr946369oie.193.1649738869745; Mon, 11
- Apr 2022 21:47:49 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 12 Apr 2022 00:47:49 -0400
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649739034; x=1681275034;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=cvvlGJHIgqc3+fbL7qQdlg2PazmrkEqWAevnY47vQx4=;
+  b=nkUp0sevtXktbqjwyDC/3hjZ4DggT4Jqj53vSULScSu7IapGDGV5pfga
+   xk6hhGcWYhDEOpuoFG+PpZHcR52DhMI5syot+AOQAROjoFowihvDwQ4se
+   ySM+EF1Cl8g+OTTp4sFPPWwBfeMo8jAYslmWS9+2DJiu+vL4uJRrbK565
+   4=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Apr 2022 21:50:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 21:50:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 21:50:33 -0700
+Received: from [10.216.54.112] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
+ 2022 21:50:27 -0700
+Subject: Re: [PATCH v13 5/6] usb: dwc3: qcom: Keep power domain on to retain
+ controller status
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
+References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1649704614-31518-6-git-send-email-quic_c_sanm@quicinc.com>
+ <YlSZ8uk8MjygY7uf@google.com>
+From:   "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
+Message-ID: <8ab040bb-0328-1f7a-cf1b-7497fe4b69a0@quicinc.com>
+Date:   Tue, 12 Apr 2022 10:20:24 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.1
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n51ho9Aia5eUjsvkG3e7rjxjdVMD7CS4XEhYKNUKbQam+w@mail.gmail.com>
-References: <20211125174751.25317-1-djakov@kernel.org> <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
- <a96a010d-9bd7-f760-3c03-d842feef41aa@linaro.org> <CAE-0n51-hpG_5O11FbGrHaMr_mN0ZAky8CVzZNmDj29aK8wGog@mail.gmail.com>
- <CAE-0n51ho9Aia5eUjsvkG3e7rjxjdVMD7CS4XEhYKNUKbQam+w@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 12 Apr 2022 00:47:49 -0400
-Message-ID: <CAE-0n51eRP0tsAR9qm_OSZAjv=EceOaG3OaA1UQYLk=7nbSrqg@mail.gmail.com>
-Subject: Re: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list
- in pre_aggregate
-To:     Alex Elder <elder@linaro.org>, djakov@kernel.org,
-        quic_mdtipton@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <YlSZ8uk8MjygY7uf@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,88 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Stephen Boyd (2022-04-11 13:20:27)
+Hi,
+
+On 4/12/2022 2:43 AM, Matthias Kaehlcke wrote:
+> On Tue, Apr 12, 2022 at 12:46:53AM +0530, Sandeep Maheswaram wrote:
+>> Keep the power domain always on during runtime suspend or if the
+>> controller supports wakeup in order to retain controller status
+>> and to support wakeup from devices.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index 9804a19..9747be6 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -17,6 +17,7 @@
+>>   #include <linux/of_platform.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/phy/phy.h>
+>> +#include <linux/pm_domain.h>
+>>   #include <linux/usb/of.h>
+>>   #include <linux/reset.h>
+>>   #include <linux/iopoll.h>
+>> @@ -724,6 +725,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	struct resource		*res, *parent_res = NULL;
+>>   	int			ret, i;
+>>   	bool			ignore_pipe_clk;
+>> +	struct generic_pm_domain *genpd;
+> nit: I'm not really a fan of gazillions of whitespaces between the type
+> and the variable name, but if they are kept all variable names above
+> should move a tab to the right. In any case the style in this file isn't
+> consistent, so an alternative would be to just get rid of the alignment
+> completely.
+Okay. Will do it in next version.
 >
-> I think it's some IPA unclocked access because it's an SError async
-> abort. I looked some at the IPA clk implementation and it is a little
-> concerning. I see two problems. The first problem is that clk-rpmh is
-> only voting on the active state for the IPA clk. Maybe RPMh will move
-> the sleep/wake state over from the active state automatically as long as
-> we never make a request in either of those states? I don't know, but it
-> looks concerning and either needs to be fixed or a big comment
-> indicating that the copy happens. This patch makes it set a frequency in
-> each state bucket.
+>>   	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+>>   	if (!qcom)
+>> @@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	platform_set_drvdata(pdev, qcom);
+>>   	qcom->dev = &pdev->dev;
+>>   
+>> +	genpd = pd_to_genpd(qcom->dev->pm_domain);
+>> +
+>>   	if (has_acpi_companion(dev)) {
+>>   		qcom->acpi_pdata = acpi_device_get_match_data(dev);
+>>   		if (!qcom->acpi_pdata) {
+>> @@ -839,7 +843,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	if (ret)
+>>   		goto interconnect_exit;
+>>   
+>> -	device_init_wakeup(&pdev->dev, 1);
+>> +	genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
+>> +
+>> +	if (device_may_wakeup(&qcom->dwc3->dev))
+>> +		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+> In v12 only GENPD_FLAG_ALWAYS_ON was set, not GENPD_FLAG_RPM_ALWAYS_ON.
+> I asked a few times for a change log, in this instance it would be
+> useful to explain why GENPD_FLAG_RPM_ALWAYS_ON is now set.
+Okay. Will add it in next version.
 >
-
-This patch doesn't seem to matter. I think that's because RPMh copies
-over active state settings to sleep and wake state automatically if
-those states are never changed by that processor. Someone at qcom needs
-to confirm this theory. I'll send the patch and see if that spurs
-someone at qcom to respond.
-
+>> +
+>> +	device_init_wakeup(&pdev->dev, device_may_wakeup(&qcom->dwc3->dev));
+> device_may_wakeup() isn't an expensive operation, but it's still not nice to
+> call it twice in three lines of code. Instead you could do this:
 >
-> The second problem I see is that the IPA clk resource is "IP0" but it is
-> still defined in the interconnect/qcom/sc7180.c file.
->
-> $ git grep \"IP0\" -- drivers/{interconnect,clk}/
-> drivers/clk/qcom/clk-rpmh.c:DEFINE_CLK_RPMH_BCM(sdm845, ipa, "IP0");
-> drivers/clk/qcom/clk-rpmh.c:DEFINE_CLK_RPMH_BCM(sdx55, ipa, "IP0");
-> drivers/interconnect/qcom/sc7180.c:DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
-> drivers/interconnect/qcom/sc8180x.c:DEFINE_QBCM(bcm_ip0, "IP0", false, &slv_ipa_core_slave);
-> drivers/interconnect/qcom/sdx55.c:DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
-> drivers/interconnect/qcom/sm8150.c:DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
-> drivers/interconnect/qcom/sm8250.c:DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
->
-> That sounds pretty bad because it means both interconnect and clk frameworks
-> are trying to control the same RPMh resource, trampling over each other.
-> Combine that with unused clks and sync_state support and I don't know
-> what the state of the IP0 resource really is anymore.
-
-Alright, some more debugging has confirmed this. I put a print in the
-rpmh driver to figure out when the IP0 resource, according to cmd-db, is
-being modified. Luckily, the interconnect driver uses the rpmh batch API
-while the clk driver uses the direct write API. I put a dump_stack()
-when the batch API is called on the IP0 address and that sometimes gets
-zeroed out (i.e. IPA clk is turned off) after the rpmh clk driver turned
-it ON. The rpmh driver in the kernel doesn't do any aggregation between
-kernel clients, so the problem is this sequence:
-
-	IPA driver probes
-	runtime PM get()
-	IPA clk enabled -> IP0 resource is ON
-	interconnect zeroes out the IP0 resource -> IP0 resource is off
-	IPA driver tries to access a register and blows up
-	
-The interconnect framework is zeroing it out now because there's a
-sync_state callback once all drivers have probed. This is why I saw it
-more easily when the IPA driver is builtin vs. a module. The IPA driver
-is much more likely to have turned on the resource before sync_state is
-called, but the use of autosuspend made it variable. If the IPA driver
-autosuspend callback is delayed just enough, then IPA will turn on the
-IP0 resource via the clk API, sync state will turn it off from the
-interconnect framework, and then the pm_runtime_get_sync() in the IPA
-driver will skip powering the clk on again because it never turned it
-off. The runtime PM state of the device is correct, but the clk is off.
-Oops!
-
-I think changing the IPA_AUTOSUSPEND_DELAY define to be multiple seconds
-makes it even more likely, because then the IPA device definitely won't
-be suspended by the time interconnect sync state happens. Anyway, this
-also explains why the IPA runtime PM patch made things better. Sometimes
-the IPA device will be runtime suspended, and thus it will power on the
-IP0 resource on runtime resume even after interconnect sync state
-happened. This is the situation on v5.10.y, where runtime PM isn't
-happening at all, but sync state is once commit b95b668eaaa2
-("interconnect: qcom: icc-rpmh: Add BCMs to commit list in
-pre_aggregate") is included. The IP0 resource is guaranteed to be turned
-off after sync state drops the request.
-
-So the fix is simple, completely remove IP0 from the interconnect driver
-so that sync state doesn't turn it off. Then the IPA driver without
-runtime PM will work because the clk resource is turned on and kept on
-until system suspend. When the runtime PM patch in IPA is applied, it
-will also work because runtime PM will power things on correctly, or
-keep them powered on because autosuspend is delayed.
-
-I'll send this patch to the list shortly. And split it up for the other
-drivers too.
+> 	if (device_may_wakeup(&qcom->dwc3->dev)) {
+> 		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+> 		device_init_wakeup(&pdev->dev, true);
+> 	}
+Okay. Will do it in next version.

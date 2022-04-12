@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872D54FD480
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436084FD6F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384327AbiDLIlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S1376928AbiDLHon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357218AbiDLHjx (ORCPT
+        with ESMTP id S1354327AbiDLHRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E33015724;
-        Tue, 12 Apr 2022 00:13:51 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ABD4BFC9;
+        Mon, 11 Apr 2022 23:58:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2868D61701;
-        Tue, 12 Apr 2022 07:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A2CC385A5;
-        Tue, 12 Apr 2022 07:13:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 617EDB81B4E;
+        Tue, 12 Apr 2022 06:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8501C385A6;
+        Tue, 12 Apr 2022 06:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747630;
-        bh=dZarbFzJ2SmFz2NpPCeU+jku5aUbzpxIrwl8F+N21Ik=;
+        s=korg; t=1649746731;
+        bh=omJPdwzim7+gF+epFl1+yrl30omXgQ1LDk469zs4QD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lDbNBKLqPqgNe2TKsG0Q1p5wi83fAvfFfr5QKlmmOVRgevvYnfr5/9KoFjx3971Hu
-         vpnUPcuAIa91MLvQP5scDVyBH1EFoewz2Z0VkWsKxr2yX1G41eq22ut+H2ELofYL/D
-         z5ymB0UP4F/cp0fvXDI2e1jPrgbwg7uAa3YQ4YeM=
+        b=C9XUCGv/CPGmFVu/9jz2L9kF8T2Kdzyi3IpZf/zc9kNIdvCgbj72t0VFMEQIUD3tB
+         50H2uQnrlBu2TJmsfG4n4nOW8GJ9y2ixYhpWHf9s/0a6/695e4kTkNVpLwzKF9IV3D
+         gMEXYUKjIdkiiyhj44qhRziI9tG7azp/K5atTbpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 147/343] MIPS: ingenic: correct unit node address
-Date:   Tue, 12 Apr 2022 08:29:25 +0200
-Message-Id: <20220412062955.624518273@linuxfoundation.org>
+Subject: [PATCH 5.16 109/285] ceph: fix inode reference leakage in ceph_get_snapdir()
+Date:   Tue, 12 Apr 2022 08:29:26 +0200
+Message-Id: <20220412062946.810956396@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Xiubo Li <xiubli@redhat.com>
 
-[ Upstream commit 8931ddd8d6a55fcefb20f44a38ba42bb746f0b62 ]
+[ Upstream commit 322794d3355c33adcc4feace0045d85a8e4ed813 ]
 
-Unit node addresses should not have leading 0x:
+The ceph_get_inode() will search for or insert a new inode into the
+hash for the given vino, and return a reference to it. If new is
+non-NULL, its reference is consumed.
 
-  Warning (unit_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have leading "0x"
+We should release the reference when in error handing cases.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ceph/inode.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index 3f9ea47a10cd..b998301f179c 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -510,7 +510,7 @@
- 			#address-cells = <1>;
- 			#size-cells = <1>;
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index e3322fcb2e8d..6d87991cf67e 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -87,13 +87,13 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+ 	if (!S_ISDIR(parent->i_mode)) {
+ 		pr_warn_once("bad snapdir parent type (mode=0%o)\n",
+ 			     parent->i_mode);
+-		return ERR_PTR(-ENOTDIR);
++		goto err;
+ 	}
  
--			eth0_addr: eth-mac-addr@0x22 {
-+			eth0_addr: eth-mac-addr@22 {
- 				reg = <0x22 0x6>;
- 			};
- 		};
+ 	if (!(inode->i_state & I_NEW) && !S_ISDIR(inode->i_mode)) {
+ 		pr_warn_once("bad snapdir inode type (mode=0%o)\n",
+ 			     inode->i_mode);
+-		return ERR_PTR(-ENOTDIR);
++		goto err;
+ 	}
+ 
+ 	inode->i_mode = parent->i_mode;
+@@ -113,6 +113,12 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+ 	}
+ 
+ 	return inode;
++err:
++	if ((inode->i_state & I_NEW))
++		discard_new_inode(inode);
++	else
++		iput(inode);
++	return ERR_PTR(-ENOTDIR);
+ }
+ 
+ const struct inode_operations ceph_file_iops = {
 -- 
 2.35.1
 

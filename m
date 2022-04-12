@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54294FD922
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EDE4FD4AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbiDLJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S1355689AbiDLH3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358342AbiDLHl0 (ORCPT
+        with ESMTP id S1351773AbiDLHMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:41:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB271EC48;
-        Tue, 12 Apr 2022 00:17:50 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831E0BEA;
+        Mon, 11 Apr 2022 23:52:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9651F6153F;
-        Tue, 12 Apr 2022 07:17:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AF6C385C4;
-        Tue, 12 Apr 2022 07:17:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4442AB81B4D;
+        Tue, 12 Apr 2022 06:52:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A891FC385AA;
+        Tue, 12 Apr 2022 06:52:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747869;
-        bh=HROHGGsBFbO4vq3IAw5etvco6016oKrSMD4SXiABxIc=;
+        s=korg; t=1649746345;
+        bh=NfeNvJW7Ua+DZevPzPJ9NzsiwccHYeffGmFmilqXX3c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SVS2fAVx69/TqZEzGnhu1FgOBCYOaAIsaTn4GWSIdLG6ckpw2ho56MdoxYznXaVwy
-         0IsdIxFyF/nIOXh61EkLqeFeIzXZwTzYSDHVakIIfyKf3ZICisex0xbEfunXbJYdHS
-         +osTBlI8kJ0WFl1CisO7sXMRePpsKfEQPUAqfUPY=
+        b=u+SUpXzlXeQt4rgjp81NpP9fDrKyGOUkSjV8eaIrezXIWWlI/dnZpEmTkI4MulUg7
+         34dtCjHCmmIpZhICjVx/xNqVtFeDVSk6Af5tD6NHCaeCEzu/2tKVndcDpStUkWIcVy
+         UY7gqTRs8ptodZvUPQggMDMQIl8/VeD/tgbOlo5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Alice Michael <alice.michael@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 233/343] ice: Set txq_teid to ICE_INVAL_TEID on ring creation
-Date:   Tue, 12 Apr 2022 08:30:51 +0200
-Message-Id: <20220412062958.061361475@linuxfoundation.org>
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 249/277] net/smc: send directly on setting TCP_NODELAY
+Date:   Tue, 12 Apr 2022 08:30:52 +0200
+Message-Id: <20220412062949.248838414@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,71 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+From: Dust Li <dust.li@linux.alibaba.com>
 
-[ Upstream commit ccfee1822042b87e5135d33cad8ea353e64612d2 ]
+commit b70a5cc045197aad9c159042621baf3c015f6cc7 upstream.
 
-When VF is freshly created, but not brought up, ring->txq_teid
-value is by default set to 0.
-But 0 is a valid TEID. On some platforms the Root Node of
-Tx scheduler has a TEID = 0. This can cause issues as shown below.
+In commit ea785a1a573b("net/smc: Send directly when
+TCP_CORK is cleared"), we don't use delayed work
+to implement cork.
 
-The proper way is to set ring->txq_teid to ICE_INVAL_TEID (0xFFFFFFFF).
+This patch use the same algorithm, removes the
+delayed work when setting TCP_NODELAY and send
+directly in setsockopt(). This also makes the
+TCP_NODELAY the same as TCP.
 
-Testing Hints:
-echo 1 > /sys/class/net/ens785f0/device/sriov_numvfs
-ip link set dev ens785f0v0 up
-ip link set dev ens785f0v0 down
-
-If we have freshly created VF and quickly turn it on and off, so there
-would be no time to reach VIRTCHNL_OP_CONFIG_VSI_QUEUES stage, then
-VIRTCHNL_OP_DISABLE_QUEUES stage will fail with error:
-[  639.531454] disable queue 89 failed 14
-[  639.532233] Failed to disable LAN Tx queues, error: ICE_ERR_AQ_ERROR
-[  639.533107] ice 0000:02:00.0: Failed to stop Tx ring 0 on VSI 5
-
-The reason for the fail is that we are trying to send AQ command to
-delete queue 89, which has never been created and receive an "invalid
-argument" error from firmware.
-
-As this queue has never been created, it's teid and ring->txq_teid
-have default value 0.
-ice_dis_vsi_txq has a check against non-existent queues:
-
-node = ice_sched_find_node_by_teid(pi->root, q_teids[i]);
-if (!node)
-	continue;
-
-But on some platforms the Root Node of Tx scheduler has a teid = 0.
-Hence, ice_sched_find_node_by_teid finds a node with teid = 0 (it is
-pi->root), and we go further to submit an erroneous request to firmware.
-
-Fixes: 37bb83901286 ("ice: Move common functions out of ice_main.c part 7/7")
-Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Alice Michael <alice.michael@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/smc/af_smc.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 20d755822d43..5fd2bbeab2d1 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -1452,6 +1452,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 		ring->tx_tstamps = &pf->ptp.port.tx;
- 		ring->dev = dev;
- 		ring->count = vsi->num_tx_desc;
-+		ring->txq_teid = ICE_INVAL_TEID;
- 		WRITE_ONCE(vsi->tx_rings[i], ring);
- 	}
- 
--- 
-2.35.1
-
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2419,8 +2419,8 @@ static int smc_setsockopt(struct socket
+ 		    sk->sk_state != SMC_CLOSED) {
+ 			if (val) {
+ 				SMC_STAT_INC(smc, ndly_cnt);
+-				mod_delayed_work(smc->conn.lgr->tx_wq,
+-						 &smc->conn.tx_work, 0);
++				smc_tx_pending(&smc->conn);
++				cancel_delayed_work(&smc->conn.tx_work);
+ 			}
+ 		}
+ 		break;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B434FD6F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0552C4FD66B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352057AbiDLHXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S1384361AbiDLIlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351230AbiDLHCp (ORCPT
+        with ESMTP id S1357231AbiDLHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:02:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160242656C;
-        Mon, 11 Apr 2022 23:46:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5E5B01;
+        Tue, 12 Apr 2022 00:14:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA79FB81B35;
-        Tue, 12 Apr 2022 06:46:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB98C385A1;
-        Tue, 12 Apr 2022 06:46:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142A061708;
+        Tue, 12 Apr 2022 07:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23150C385A5;
+        Tue, 12 Apr 2022 07:14:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746016;
-        bh=cujhILB3y4EmBcmQA2MsmHaHwN6l2MKCzazXJMiUZUs=;
+        s=korg; t=1649747644;
+        bh=AC/lpISE/nCmGE6hGsO4RLyENvs+xPM1kkPjSbokyfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mwfYcPWWG4DX6M6AXA5sl73dcRi0ElNolR+mcq/cN86gqURuJfS5n/8OfNApkQWHD
-         XdNzNGbc9cWtsHoB6vmKT00TOR306Supelcms75ii8YN5/L5VY5/IiQgprn4huoRll
-         cGWl8gpL/JKQwP1auSU5oA+wggoQXH99DLg/9xOg=
+        b=VsfM2dqMOO4SRo64Uc8Ew7UblAr8/qdRhCDDF7Buw8qtGv3MgUDP7+hDUYg79yGA9
+         ke0LSz1ua4al1hR40LJyyj/R0eunh8BneleQd8jKKoDH92AdDcX8Cxb+eLcxCY47be
+         4/ieCHlYZL0RjxX60QtSk4YSZEEQrJFzT286w4Rg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/277] SUNRPC: remove scheduling boost for "SWAPPER" tasks.
+Subject: [PATCH 5.17 114/343] scsi: hisi_sas: Free irq vectors in order for v3 HW
 Date:   Tue, 12 Apr 2022 08:28:52 +0200
-Message-Id: <20220412062945.771752748@linuxfoundation.org>
+Message-Id: <20220412062954.681531539@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,77 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Qi Liu <liuqi115@huawei.com>
 
-[ Upstream commit a80a8461868905823609be97f91776a26befe839 ]
+[ Upstream commit 554fb72ee34f4732c7f694f56c3c6e67790352a0 ]
 
-Currently, tasks marked as "swapper" tasks get put to the front of
-non-priority rpc_queues, and are sorted earlier than non-swapper tasks on
-the transport's ->xmit_queue.
+If the driver probe fails to request the channel IRQ or fatal IRQ, the
+driver will free the IRQ vectors before freeing the IRQs in free_irq(),
+and this will cause a kernel BUG like this:
 
-This is pointless as currently *all* tasks for a mount that has swap
-enabled on *any* file are marked as "swapper" tasks.  So the net result
-is that the non-priority rpc_queues are reverse-ordered (LIFO).
+------------[ cut here ]------------
+kernel BUG at drivers/pci/msi.c:369!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Call trace:
+   free_msi_irqs+0x118/0x13c
+   pci_disable_msi+0xfc/0x120
+   pci_free_irq_vectors+0x24/0x3c
+   hisi_sas_v3_probe+0x360/0x9d0 [hisi_sas_v3_hw]
+   local_pci_probe+0x44/0xb0
+   work_for_cpu_fn+0x20/0x34
+   process_one_work+0x1d0/0x340
+   worker_thread+0x2e0/0x460
+   kthread+0x180/0x190
+   ret_from_fork+0x10/0x20
+---[ end trace b88990335b610c11 ]---
 
-This scheduling boost is not necessary to avoid deadlocks, and hurts
-fairness, so remove it.  If there were a need to expedite some requests,
-the tk_priority mechanism is a more appropriate tool.
+So we use devm_add_action() to control the order in which we free the
+vectors.
 
-Signed-off-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Link: https://lore.kernel.org/r/1645703489-87194-4-git-send-email-john.garry@huawei.com
+Signed-off-by: Qi Liu <liuqi115@huawei.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/sched.c |  7 -------
- net/sunrpc/xprt.c  | 11 -----------
- 2 files changed, 18 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
-index 6e4d476c6324..f0f55fbd1375 100644
---- a/net/sunrpc/sched.c
-+++ b/net/sunrpc/sched.c
-@@ -186,11 +186,6 @@ static void __rpc_add_wait_queue_priority(struct rpc_wait_queue *queue,
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 70173389f6eb..104ef772b512 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2398,17 +2398,25 @@ static irqreturn_t cq_interrupt_v3_hw(int irq_no, void *p)
+ 	return IRQ_WAKE_THREAD;
+ }
  
- /*
-  * Add new request to wait queue.
-- *
-- * Swapper tasks always get inserted at the head of the queue.
-- * This should avoid many nasty memory deadlocks and hopefully
-- * improve overall performance.
-- * Everyone else gets appended to the queue to ensure proper FIFO behavior.
-  */
- static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
- 		struct rpc_task *task,
-@@ -199,8 +194,6 @@ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
- 	INIT_LIST_HEAD(&task->u.tk_wait.timer_list);
- 	if (RPC_IS_PRIORITY(queue))
- 		__rpc_add_wait_queue_priority(queue, task, queue_priority);
--	else if (RPC_IS_SWAPPER(task))
--		list_add(&task->u.tk_wait.list, &queue->tasks[0]);
- 	else
- 		list_add_tail(&task->u.tk_wait.list, &queue->tasks[0]);
- 	task->tk_waitqueue = queue;
-diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
-index 61603c2664a6..f5dff09154da 100644
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1353,17 +1353,6 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
- 				INIT_LIST_HEAD(&req->rq_xmit2);
- 				goto out;
- 			}
--		} else if (RPC_IS_SWAPPER(task)) {
--			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
--				if (pos->rq_cong || pos->rq_bytes_sent)
--					continue;
--				if (RPC_IS_SWAPPER(pos->rq_task))
--					continue;
--				/* Note: req is added _before_ pos */
--				list_add_tail(&req->rq_xmit, &pos->rq_xmit);
--				INIT_LIST_HEAD(&req->rq_xmit2);
--				goto out;
--			}
- 		} else if (!req->rq_seqno) {
- 			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
- 				if (pos->rq_task->tk_owner != task->tk_owner)
++static void hisi_sas_v3_free_vectors(void *data)
++{
++	struct pci_dev *pdev = data;
++
++	pci_free_irq_vectors(pdev);
++}
++
+ static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
+ {
+ 	int vectors;
+ 	int max_msi = HISI_SAS_MSI_COUNT_V3_HW, min_msi;
+ 	struct Scsi_Host *shost = hisi_hba->shost;
++	struct pci_dev *pdev = hisi_hba->pci_dev;
+ 	struct irq_affinity desc = {
+ 		.pre_vectors = BASE_VECTORS_V3_HW,
+ 	};
+ 
+ 	min_msi = MIN_AFFINE_VECTORS_V3_HW;
+-	vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
++	vectors = pci_alloc_irq_vectors_affinity(pdev,
+ 						 min_msi, max_msi,
+ 						 PCI_IRQ_MSI |
+ 						 PCI_IRQ_AFFINITY,
+@@ -2420,6 +2428,7 @@ static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
+ 	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
+ 	shost->nr_hw_queues = hisi_hba->cq_nvecs;
+ 
++	devm_add_action(&pdev->dev, hisi_sas_v3_free_vectors, pdev);
+ 	return 0;
+ }
+ 
+@@ -4769,7 +4778,7 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 
+ 	rc = scsi_add_host(shost, dev);
+ 	if (rc)
+-		goto err_out_free_irq_vectors;
++		goto err_out_debugfs;
+ 
+ 	rc = sas_register_ha(sha);
+ 	if (rc)
+@@ -4800,8 +4809,6 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	sas_unregister_ha(sha);
+ err_out_register_ha:
+ 	scsi_remove_host(shost);
+-err_out_free_irq_vectors:
+-	pci_free_irq_vectors(pdev);
+ err_out_debugfs:
+ 	debugfs_exit_v3_hw(hisi_hba);
+ err_out_ha:
+@@ -4825,7 +4832,6 @@ hisi_sas_v3_destroy_irqs(struct pci_dev *pdev, struct hisi_hba *hisi_hba)
+ 
+ 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, nr), cq);
+ 	}
+-	pci_free_irq_vectors(pdev);
+ }
+ 
+ static void hisi_sas_v3_remove(struct pci_dev *pdev)
 -- 
 2.35.1
 

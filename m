@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CE84FD68F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEF24FDA1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385648AbiDLIwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S1354633AbiDLIFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358979AbiDLHmY (ORCPT
+        with ESMTP id S1353821AbiDLHZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEBF54BD4;
-        Tue, 12 Apr 2022 00:19:48 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DE8B849;
+        Tue, 12 Apr 2022 00:04:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A058A6153F;
-        Tue, 12 Apr 2022 07:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE01C385A1;
-        Tue, 12 Apr 2022 07:19:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F570B81B4D;
+        Tue, 12 Apr 2022 07:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94365C385A6;
+        Tue, 12 Apr 2022 07:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747987;
-        bh=wYgE6jyFK7WGv03kxPI2/kG/+lpmU4aK7Xwji4y+v0Q=;
+        s=korg; t=1649747085;
+        bh=sC+yelsbh94fJQss7tqpXVH0tAA6PB+cx7LgaWENbnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c+oiCuwVC6aTR7K7E4LagEWbOS7+PLQoaJkE+b8h1bdP3kYw4bD9zVQTrOzV0o2mW
-         irC6cuLEmbWuCFI5NNJZHMLDfIgdgSBzxdcOwIzupyGCJsinVPqMJugG7tc4vEYJk1
-         2vleNNwyObOfk0EAuEvQruZNwjupnhaf8NTVkPPU=
+        b=byXVzf7f1/wBmsuBv42TRV+X7fV/3IwH6B8rd5iQiL9KIxPIi4xogz6+sCiN+QYLr
+         5YUp9tsSn3R96npsBl6dmZJX0G7qWkBG/ZSSHRSVfibCh6V1HveuETCbbfUzJYc5d8
+         eewUkppLnF3PqFZovhmDGCcRZNSH/xcGqK/WpWhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 276/343] io_uring: dont check req->file in io_fsync_prep()
+        stable@vger.kernel.org, Tim Gardner <tim.gardner@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Alok Prasad <palok@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>
+Subject: [PATCH 5.16 237/285] qed: fix ethtool register dump
 Date:   Tue, 12 Apr 2022 08:31:34 +0200
-Message-Id: <20220412062959.289235162@linuxfoundation.org>
+Message-Id: <20220412062950.503604405@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Manish Chopra <manishc@marvell.com>
 
-commit ec858afda857e361182ceafc3d2ba2b164b8e889 upstream.
+commit 20921c0c86092b4082c91bd7c88305da74e5520b upstream.
 
-This is a leftover from the really old days where we weren't able to
-track and error early if we need a file and it wasn't assigned. Kill
-the check.
+To fix a coverity complain, commit d5ac07dfbd2b
+("qed: Initialize debug string array") removed "sw-platform"
+(one of the common global parameters) from the dump as this
+was used in the dump with an uninitialized string, however
+it did not reduce the number of common global parameters
+which caused the incorrect (unable to parse) register dump
 
-Cc: stable@vger.kernel.org # v5.15+
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+this patch fixes it with reducing NUM_COMMON_GLOBAL_PARAMS
+bye one.
+
+Cc: stable@vger.kernel.org
+Cc: Tim Gardner <tim.gardner@canonical.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Fixes: d5ac07dfbd2b ("qed: Initialize debug string array")
+Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
+Signed-off-by: Alok Prasad <palok@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Signed-off-by: Manish Chopra <manishc@marvell.com>
+Reviewed-by: Tim Gardner <tim.gardner@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed_debug.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4245,9 +4245,6 @@ static int io_fsync_prep(struct io_kiocb
- {
- 	struct io_ring_ctx *ctx = req->ctx;
+--- a/drivers/net/ethernet/qlogic/qed/qed_debug.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_debug.c
+@@ -489,7 +489,7 @@ struct split_type_defs {
  
--	if (!req->file)
--		return -EBADF;
--
- 	if (unlikely(ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
- 	if (unlikely(sqe->addr || sqe->ioprio || sqe->buf_index ||
+ #define STATIC_DEBUG_LINE_DWORDS	9
+ 
+-#define NUM_COMMON_GLOBAL_PARAMS	11
++#define NUM_COMMON_GLOBAL_PARAMS	10
+ 
+ #define MAX_RECURSION_DEPTH		10
+ 
 
 

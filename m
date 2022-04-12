@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911654FEAE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723784FEADA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiDLXVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S229644AbiDLXVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiDLXUv (ORCPT
+        with ESMTP id S229667AbiDLXUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:20:51 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B1FBC84F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:59:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id p65so649381ybp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:59:30 -0700 (PDT)
+        Tue, 12 Apr 2022 19:20:55 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16C556C38;
+        Tue, 12 Apr 2022 15:59:52 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id k17so72990vsq.0;
+        Tue, 12 Apr 2022 15:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=67uj+ODJKAoJfsGq0mgokodnfsfzexhVZc4yfZMP5Vs=;
-        b=DTX7npfLpY1BrJWiBCCqdFbeD0T+a+0TC8CBYj5GRcgXhHG+cylx7+9ln8680oh++G
-         YRVt2bJ9Qijviugbq6DuYFrZ4t2beqmfbvhW+kfrETtfLH3aaTcFSJvrgYWXX6SqRTDQ
-         VNNkHYWZ6NBjUNRSoxJbZ1gSlb7tEFaNnhD0YBIjtRhZa2RU2/3bzfqMVBaxPcBLlp4q
-         gYh9k4YdvFwWTHX1I8ZNdHkeRiGhgbfO541bjtwNVus961Yw11Ll62cNkZuc1ban6Q5N
-         eIkuz8dbBg4WSz4613JSdmX6AWpOcglf82YmMCGKSy85JHaT4+uo897j4dYsagZhos+2
-         WMPg==
+        bh=j41Q8gnuZ03bJTEMpu4jn4cCVopOc2s+2i/707b4xTA=;
+        b=Rv/8CMzr1P1EuG+M7mkPs4fpgcPv2fpBY85DFxDLMO8vUKweKEasvf7CsFXlB05s3a
+         XyvGifsDwvj+C1NDmY8lV7cAmyPOpSLM29ZcbfJdKnAJDwjTdt8YW33csnClNdABeTor
+         8b/IDcvuVYz4Xx7/96F2019V3ULYTrKXV47qYOdJuSyX5vSQrUJN4C6HX4iWED9A5cz/
+         lRBxqUmukE4YsU28r/G7ESsfAhdylKADg5DYOrx4bHBPn8a8HMJueT/tinBVKgTUvhfQ
+         ix4NITMLh00pCqpdKOcYu8vDajr8CGE4WXP9FRZoVk7IIaLNwkPsXmimAYkdJ1xCoM+d
+         nsmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=67uj+ODJKAoJfsGq0mgokodnfsfzexhVZc4yfZMP5Vs=;
-        b=cARaL7vK87GNR8Abv/EUvhG52KGgGytTLiZQkfXCOImjt8G6nYWzpXuXtZNuG2Qf8Z
-         sDLVI8R1Sl3PDlYpjjgq1xhParPRsIK4MRw+nNEl27IxCb5dgHoBEUOJpFes9H/x3kNc
-         39B6zqePgAEtNI2F7t7aQOlBBRhWi1/0N7Q2KodEWmDEA5wXJPAY2L7DreBAP6gFiGB9
-         u5aRwydxvjfGtwFBDVObWXjTg6ID8UMvWLX8bNGBGdf9PIzi28a8z6qOFyPWFoGBDZM9
-         Q+NRPHGtGw3eFH/8sYAmnbmEJMbK/wG5dKNrFNqcp1TgFkt2bSi1JJR/mC9KUOga9FrT
-         EjTQ==
-X-Gm-Message-State: AOAM530UsoVfTLRT7z8QUK2+ChfeNw1KhbE4mt65dT07KVXqtivkMXXw
-        BegQ0V4S2u6kH9/aaNgp/L1eIPS/EJwWmLKaago=
-X-Google-Smtp-Source: ABdhPJxA3TnyYl5vFu8RdrtHkJRQMKjG5mMTUlovdrThCqA4a3Mhh048V8dAtXy5cq7W9qaIvtdd+JKskmCRu3d7AV0=
-X-Received: by 2002:a25:ccc9:0:b0:641:2b90:4765 with SMTP id
- l192-20020a25ccc9000000b006412b904765mr11645877ybf.44.1649804369431; Tue, 12
- Apr 2022 15:59:29 -0700 (PDT)
+        bh=j41Q8gnuZ03bJTEMpu4jn4cCVopOc2s+2i/707b4xTA=;
+        b=VKkH2/r2wcV8tuQVdAcbkJHCzs14glfdQIjGMzC4Yc287MuDxGW7K8T+SVp6Rud6qh
+         M5bgCeePguWLLAaH4X2JvBXZeglWyrC5W52vs6NDiTmCbn1sJ8s/DA0KDGfiYW8FQ03C
+         xctvsOFj/cxsGJVzus9ZCIACtjFepI6GUHXdco7CUJSUMxdZ9w6BmIc9yrpG/9A4rnFv
+         xXnGWWcqkA8xCgefri5sqpkD0v8T9PwErX62Jo+kUd5I7THadealt09b5whzpG9me4Lb
+         L09itQyNn6BtO7e1iy152+sMBPfehniV9VxWpUbdwQKj31d1ixBGUxCS8ifGxk8Bqao1
+         ivQw==
+X-Gm-Message-State: AOAM531Jfc7uc5xLx26/htcWwRhcva2GQBZ0dD1fJd7dxn5QK9HRnA7C
+        Z8EpWhGRxTia7In5NVc/8CDxBBOKP/FYv2QJ0D6syRKglRY=
+X-Google-Smtp-Source: ABdhPJxjzMzXULY3Z78JcJbteSGbO3b9q5odNlhdDJK2spnl/3+0aKaJvj2PJcUS7V7lv+XaCw3GLXkSyix8n763OXo=
+X-Received: by 2002:a67:f80b:0:b0:32a:17d6:7fb2 with SMTP id
+ l11-20020a67f80b000000b0032a17d67fb2mr167251vso.40.1649804391900; Tue, 12 Apr
+ 2022 15:59:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
- <064d8958-a288-64e1-b2a4-c2302a456d5b@amd.com> <a04733af-5ff1-a1b4-527d-68b28a037231@collabora.com>
- <f6de2b9a-005f-d1f5-9818-cfbee2bdddc5@amd.com>
-In-Reply-To: <f6de2b9a-005f-d1f5-9818-cfbee2bdddc5@amd.com>
-From:   Erico Nunes <nunes.erico@gmail.com>
-Date:   Wed, 13 Apr 2022 00:59:17 +0200
-Message-ID: <CAK4VdL3VOtVGi36SY0TEL4P2jW33dM4TOmFXYmewE7cGNhY4Zw@mail.gmail.com>
-Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Qiang Yu <yuq825@gmail.com>
+References: <20220407125224.310255-1-jolsa@kernel.org> <20220407125224.310255-5-jolsa@kernel.org>
+ <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com> <YlWeQIUaqGnbg4K0@krava>
+In-Reply-To: <YlWeQIUaqGnbg4K0@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Apr 2022 15:59:41 -0700
+Message-ID: <CAEf4BzYL0-ykV34jTnFcVUVf7bWfB6_V9mzeO=593oAO7YT1Yw@mail.gmail.com>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -78,53 +75,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 9:41 PM Andrey Grodzovsky
-<andrey.grodzovsky@amd.com> wrote:
+On Tue, Apr 12, 2022 at 8:44 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Mon, Apr 11, 2022 at 03:15:40PM -0700, Andrii Nakryiko wrote:
+>
+> SNIP
+>
+> > > +static int get_syms(char ***symsp, size_t *cntp)
+> > > +{
+> > > +       size_t cap = 0, cnt = 0, i;
+> > > +       char *name, **syms = NULL;
+> > > +       struct hashmap *map;
+> > > +       char buf[256];
+> > > +       FILE *f;
+> > > +       int err;
+> > > +
+> > > +       /*
+> > > +        * The available_filter_functions contains many duplicates,
+> > > +        * but other than that all symbols are usable in kprobe multi
+> > > +        * interface.
+> > > +        * Filtering out duplicates by using hashmap__add, which won't
+> > > +        * add existing entry.
+> > > +        */
+> > > +       f = fopen(DEBUGFS "available_filter_functions", "r");
+> >
+> > I'm really curious how did you manage to attach to everything in
+> > available_filter_functions because when I'm trying to do that I fail.
+>
+> the new code makes the differece ;-) so the main problem I could not
+> use available_filter_functions functions before were cases like:
+>
+>   # cat available_filter_functions | grep sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>   sys_ni_syscall
+>
+> which when you try to resolve you'll find just one address:
+>
+>   # cat /proc/kallsyms | egrep 'T sys_ni_syscall'
+>   ffffffff81170020 T sys_ni_syscall
+>
+> this is caused by entries like:
+>     __SYSCALL(156, sys_ni_syscall)
+>
+> when generating syscalls for given arch
+>
+> this is handled by the new code by removing duplicates when
+> reading available_filter_functions
 >
 >
-> On 2022-04-12 14:20, Dmitry Osipenko wrote:
-> > On 4/12/22 19:51, Andrey Grodzovsky wrote:
-> >> On 2022-04-11 18:15, Dmitry Osipenko wrote:
-> >>> Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
-> >>> mutex when job is released, and thus, that code can sleep. This results
-> >>> into "BUG: scheduling while atomic" if locks are contented while job is
-> >>> freed. There is no good reason for releasing scheduler's jobs in IRQ
-> >>> context, hence use normal context to fix the trouble.
-> >>
-> >> I am not sure this is the beast Idea to leave job's sw fence signalling
-> >> to be
-> >> executed in system_wq context which is prone to delays of executing
-> >> various work items from around the system. Seems better to me to leave the
-> >> fence signaling within the IRQ context and offload only the job freeing or,
-> >> maybe handle rescheduling to thread context within drivers implemention
-> >> of .free_job cb. Not really sure which is the better.
-> > We're talking here about killing jobs when driver destroys context,
-> > which doesn't feel like it needs to be a fast path. I could move the
-> > signalling into drm_sched_entity_kill_jobs_cb() and use unbound wq, but
-> > do we really need this for a slow path?
 >
+> another case is the other way round, like with:
 >
-> You can't move the signaling back to drm_sched_entity_kill_jobs_cb
-> since this will bring back the lockdep splat that 'drm/sched: Avoid
-> lockdep spalt on killing a processes'
-> was fixing.
+>   # cat /proc/kallsyms | grep 't t_next'
+>   ffffffff8125c3f0 t t_next
+>   ffffffff8126a320 t t_next
+>   ffffffff81275de0 t t_next
+>   ffffffff8127efd0 t t_next
+>   ffffffff814d6660 t t_next
 >
-> I see your point and i guess we can go this way too. Another way would
-> be to add to
-> panfrost and msm job a  work_item and reschedule to thread context from
-> within their
-> .free_job callbacks but that probably to cumbersome to be justified here.
+> that has just one 'ftrace-able' instance:
+>
+>   # cat available_filter_functions | grep '^t_next$'
+>   t_next
+>
+> and this is handled by calling ftrace_location on address when
+> resolving symbols, to ensure each reasolved symbol lives in ftrace
+>
+> > available_filter_functions has a bunch of functions that should not be
+> > attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
+> >
+> >   void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
+> >
+> > So first, curious what I am doing wrong or rather why it succeeds in
+> > your case ;)
+> >
+> > But second, just wanted to plea to "fix" available_filter_functions to
+> > not list stuff that should not be attachable. Can you please take a
+> > look and checks what's going on there and why do we have notrace
+> > functions (and what else should *NOT* be there)?
+>
+> yes, seems like a bug ;-) it's in available_filter_functions
+> but it does not have 'call __fentry__' at the entry..
+>
+> I was going to check on that, because you brought that up before,
+> but did not get to it yet
 
-FWIW since this mentioned individual drivers, commit 'drm/sched: Avoid
-lockdep spalt on killing a processes' also introduced problems for
-lima.
-There were some occurrences in our CI
-https://gitlab.freedesktop.org/mesa/mesa/-/jobs/20980982/raw .
-Later I found it also reproducible on normal usage when just closing
-applications, so it may be affecting users too.
+yeah, see also my reply to Masami. __bpf_tramp_exit and
+__bpf_tramp_enter are two specific examples. Both are marked notrace,
+but one is in available_filter_functions and another is not. Neither
+should be attachable, but doing this local change you can see that one
+of them (__bpf_tramp_exit) is:
 
-I tested this patch and looks like it fixes things for lima.
+$ git diff
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index b9876b55fc0c..77cff034d427 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -165,8 +165,8 @@ static void test_attach_api_pattern(void)
+ {
+        LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
 
-Thanks
+-       test_attach_api("bpf_fentry_test*", &opts);
+-       test_attach_api("bpf_fentry_test?", NULL);
++       test_attach_api("__bpf_tramp_enter", &opts);
++       test_attach_api("__bpf_tramp_exit", NULL);
+ }
 
-Erico
+
+$ sudo ./test_progs -t kprobe_multi/attach_api_pattern -v
+bpf_testmod.ko is already unloaded.
+Loading bpf_testmod.ko...
+Successfully loaded bpf_testmod.ko.
+test_kprobe_multi_test:PASS:load_kallsyms 0 nsec
+test_attach_api:PASS:fentry_raw_skel_load 0 nsec
+libbpf: prog 'test_kprobe': failed to attach: Invalid argument
+test_attach_api:FAIL:bpf_program__attach_kprobe_multi_opts unexpected error: -22
+test_attach_api:PASS:fentry_raw_skel_load 0 nsec
+test_attach_api:PASS:bpf_program__attach_kprobe_multi_opts 0 nsec
+
+Quite weird.
+
+
+
+>
+> >
+> >
+> > > +       if (!f)
+> > > +               return -EINVAL;
+> > > +
+> > > +       map = hashmap__new(symbol_hash, symbol_equal, NULL);
+> > > +       err = libbpf_get_error(map);
+> > > +       if (err)
+> > > +               goto error;
+> > > +
+> >
+> > [...]
+> >
+> > > +
+> > > +       attach_delta_ns = (attach_end_ns - attach_start_ns) / 1000000000.0;
+> > > +       detach_delta_ns = (detach_end_ns - detach_start_ns) / 1000000000.0;
+> > > +
+> > > +       fprintf(stderr, "%s: found %lu functions\n", __func__, cnt);
+> > > +       fprintf(stderr, "%s: attached in %7.3lfs\n", __func__, attach_delta_ns);
+> > > +       fprintf(stderr, "%s: detached in %7.3lfs\n", __func__, detach_delta_ns);
+> > > +
+> > > +       if (attach_delta_ns > 2.0)
+> > > +               PRINT_FAIL("attach time above 2 seconds\n");
+> > > +       if (detach_delta_ns > 2.0)
+> > > +               PRINT_FAIL("detach time above 2 seconds\n");
+> >
+> > see my reply on the cover letter, any such "2 second" assumption are
+> > guaranteed to bite us. We've dealt with a lot of timing issues due to
+> > CI being slower and more unpredictable in terms of performance, I'd
+> > like to avoid dealing with one more case like that.
+>
+> right, I'll remove the check
+>
+> thanks,
+> jirka

@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2C4FD5CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A60B4FD56C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiDLI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1352837AbiDLHOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357086AbiDLHjq (ORCPT
+        with ESMTP id S1352601AbiDLG4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE7B766A;
-        Tue, 12 Apr 2022 00:11:36 -0700 (PDT)
+        Tue, 12 Apr 2022 02:56:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8AE24962;
+        Mon, 11 Apr 2022 23:46:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00F55B81B55;
-        Tue, 12 Apr 2022 07:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD82C385A5;
-        Tue, 12 Apr 2022 07:11:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AF0A9CE1ACD;
+        Tue, 12 Apr 2022 06:46:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5969C385A6;
+        Tue, 12 Apr 2022 06:46:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747493;
-        bh=cOJMjEz2leFlw3+iOtU0SQJpbPFauZMyUI2oO2RpbFY=;
+        s=korg; t=1649745970;
+        bh=XfMjc/mEojywwv+HmJCaUPY9r9cNx70P9ORURw+i7N0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6vs034tVjJRLMRcNkjMIZT+Hi9XUk/aCgCU85yDKlG+uTNmORxgyzpvzanZzW/eq
-         lnxS89ivCVJM7t6fXho8b5HOR7+Q8Yh4Yr/QsJM5yqsWFeS/aD21j4TFXwHPHglIkM
-         HLAVXfutqx0G2UY/tqCQ3wGBL8FD9tWWoggf58jQ=
+        b=yAsykAbFe95gNNgf0VNAuUuNY6abjGxpoKkdDZGevB00kYKAfIeeQIbbovll2R7iw
+         RF1LGMVeqcCYRh7HnGcv8J4M8K5GtpkWRfSMz4UjOgadpmNxqDu8hnsqBqwOHkcwH0
+         7VBB6T2gax+oir10hmtvya1xFAeiW4PUmiNvhGLY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 098/343] dm: requeue IO if mapping table not yet available
+        stable@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 113/277] phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
 Date:   Tue, 12 Apr 2022 08:28:36 +0200
-Message-Id: <20220412062953.930612409@linuxfoundation.org>
+Message-Id: <20220412062945.309655569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-[ Upstream commit fa247089de9936a46e290d4724cb5f0b845600f5 ]
+[ Upstream commit 2f87727130ce17ffefecd0895eeebf22d5a36f6f ]
 
-Update both bio-based and request-based DM to requeue IO if the
-mapping table not available.
+Use reset_control_rearm() call if an error occurs in case
+phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
+phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
+and the reset line may be triggered again by other devices.
 
-This race of IO being submitted before the DM device ready is so
-narrow, yet possible for initial table load given that the DM device's
-request_queue is created prior, that it best to requeue IO to handle
-this unlikely case.
+reset_control_rearm() keeps use of triggered_count sane in the reset
+framework. Therefore, use of reset_control_reset() on shared reset line
+should be balanced with reset_control_rearm().
 
-Reported-by: Zhang Yi <yi.zhang@huawei.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220111095255.176141-2-aouledameur@baylibre.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-rq.c |  7 ++++++-
- drivers/md/dm.c    | 11 +++--------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-index 579ab6183d4d..dffeb47a9efb 100644
---- a/drivers/md/dm-rq.c
-+++ b/drivers/md/dm-rq.c
-@@ -499,8 +499,13 @@ static blk_status_t dm_mq_queue_rq(struct blk_mq_hw_ctx *hctx,
+diff --git a/drivers/phy/amlogic/phy-meson-gxl-usb2.c b/drivers/phy/amlogic/phy-meson-gxl-usb2.c
+index 2b3c0d730f20..db17c3448bfe 100644
+--- a/drivers/phy/amlogic/phy-meson-gxl-usb2.c
++++ b/drivers/phy/amlogic/phy-meson-gxl-usb2.c
+@@ -114,8 +114,10 @@ static int phy_meson_gxl_usb2_init(struct phy *phy)
+ 		return ret;
  
- 	if (unlikely(!ti)) {
- 		int srcu_idx;
--		struct dm_table *map = dm_get_live_table(md, &srcu_idx);
-+		struct dm_table *map;
+ 	ret = clk_prepare_enable(priv->clk);
+-	if (ret)
++	if (ret) {
++		reset_control_rearm(priv->reset);
+ 		return ret;
++	}
  
-+		map = dm_get_live_table(md, &srcu_idx);
-+		if (unlikely(!map)) {
-+			dm_put_live_table(md, srcu_idx);
-+			return BLK_STS_RESOURCE;
-+		}
- 		ti = dm_table_find_target(map, 0);
- 		dm_put_live_table(md, srcu_idx);
- 	}
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 394778d8bf54..dcb8d8fc7877 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1519,15 +1519,10 @@ static void dm_submit_bio(struct bio *bio)
- 	struct dm_table *map;
+ 	return 0;
+ }
+@@ -125,6 +127,7 @@ static int phy_meson_gxl_usb2_exit(struct phy *phy)
+ 	struct phy_meson_gxl_usb2_priv *priv = phy_get_drvdata(phy);
  
- 	map = dm_get_live_table(md, &srcu_idx);
--	if (unlikely(!map)) {
--		DMERR_LIMIT("%s: mapping table unavailable, erroring io",
--			    dm_device_name(md));
--		bio_io_error(bio);
--		goto out;
--	}
+ 	clk_disable_unprepare(priv->clk);
++	reset_control_rearm(priv->reset);
  
--	/* If suspended, queue this IO for later */
--	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags))) {
-+	/* If suspended, or map not yet available, queue this IO for later */
-+	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags)) ||
-+	    unlikely(!map)) {
- 		if (bio->bi_opf & REQ_NOWAIT)
- 			bio_wouldblock_error(bio);
- 		else if (bio->bi_opf & REQ_RAHEAD)
+ 	return 0;
+ }
 -- 
 2.35.1
 

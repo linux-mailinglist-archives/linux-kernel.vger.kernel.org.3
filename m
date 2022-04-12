@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03334FD843
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BF64FDA66
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiDLHc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S1387902AbiDLJNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351857AbiDLHNB (ORCPT
+        with ESMTP id S1358647AbiDLHmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BECDC8;
-        Mon, 11 Apr 2022 23:53:45 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91C453A4A;
+        Tue, 12 Apr 2022 00:18:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0037DB81B35;
-        Tue, 12 Apr 2022 06:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D054C385A1;
-        Tue, 12 Apr 2022 06:53:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 257CE61708;
+        Tue, 12 Apr 2022 07:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D71C385A5;
+        Tue, 12 Apr 2022 07:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746422;
-        bh=x51UV5VOPeaHL0AME3MQUuSQK78drrrzIIMbVhno/eE=;
+        s=korg; t=1649747918;
+        bh=6xwYJlK+nsxFLkpLA0QodmOLGRUu6popvkIzHN2JRYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rsw/qHZnBLF/eyXikQ2almWTvHomLPW9zeCdb/pqF1wjHPnT/IQVuMQtn90aOVI8x
-         H1AFOVLnB8fsYQRRBKphPwps5b21H7xmYyYloQ6iw5PnhFDVQui5w4Q0RSqyFTKRyz
-         p8ZRnrAO9S/CYinKW3Okf/i7zjqyxxfbsZ02/Y8o=
+        b=0aIN1pNbKGN63D3YZ/+DJyklV2B+eLjFJACRnT3NYJbmXMCbDTtxHBxmQz6GJUyWT
+         i0ELdvX61/MjJirGZeaNhQ8evs31ojRpvor/ZEHks7D3+3oWl3uGfFmXiVewrv4bjE
+         uQEM1aYXynr2fb/J44XSFtwPHhbDnpEZjh0xZVDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: [PATCH 5.15 268/277] Drivers: hv: vmbus: Replace smp_store_mb() with virt_store_mb()
-Date:   Tue, 12 Apr 2022 08:31:11 +0200
-Message-Id: <20220412062949.799111130@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 254/343] io_uring: dont touch scm_fp_list after queueing skb
+Date:   Tue, 12 Apr 2022 08:31:12 +0200
+Message-Id: <20220412062958.660802076@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-commit eaa03d34535872d29004cb5cf77dc9dec1ba9a25 upstream.
+[ Upstream commit a07211e3001435fe8591b992464cd8d5e3c98c5a ]
 
-Following the recommendation in Documentation/memory-barriers.txt for
-virtual machine guests.
+It's safer to not touch scm_fp_list after we queued an skb to which it
+was assigned, there might be races lurking if we screw subtle sync
+guarantees on the io_uring side.
 
-Fixes: 8b6a877c060ed ("Drivers: hv: vmbus: Replace the per-CPU channel lists with a global array of channels")
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/20220328154457.100872-1-parri.andrea@gmail.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6b06314c47e14 ("io_uring: add file set registration")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/channel_mgmt.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/io_uring.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -380,7 +380,7 @@ void vmbus_channel_map_relid(struct vmbu
- 	 * execute:
- 	 *
- 	 *  (a) In the "normal (i.e., not resuming from hibernation)" path,
--	 *      the full barrier in smp_store_mb() guarantees that the store
-+	 *      the full barrier in virt_store_mb() guarantees that the store
- 	 *      is propagated to all CPUs before the add_channel_work work
- 	 *      is queued.  In turn, add_channel_work is queued before the
- 	 *      channel's ring buffer is allocated/initialized and the
-@@ -392,14 +392,14 @@ void vmbus_channel_map_relid(struct vmbu
- 	 *      recv_int_page before retrieving the channel pointer from the
- 	 *      array of channels.
- 	 *
--	 *  (b) In the "resuming from hibernation" path, the smp_store_mb()
-+	 *  (b) In the "resuming from hibernation" path, the virt_store_mb()
- 	 *      guarantees that the store is propagated to all CPUs before
- 	 *      the VMBus connection is marked as ready for the resume event
- 	 *      (cf. check_ready_for_resume_event()).  The interrupt handler
- 	 *      of the VMBus driver and vmbus_chan_sched() can not run before
- 	 *      vmbus_bus_resume() has completed execution (cf. resume_noirq).
- 	 */
--	smp_store_mb(
-+	virt_store_mb(
- 		vmbus_connection.channels[channel->offermsg.child_relid],
- 		channel);
- }
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a3e82aececd9..0ee1d8903ffe 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8237,8 +8237,12 @@ static int __io_sqe_files_scm(struct io_ring_ctx *ctx, int nr, int offset)
+ 		refcount_add(skb->truesize, &sk->sk_wmem_alloc);
+ 		skb_queue_head(&sk->sk_receive_queue, skb);
+ 
+-		for (i = 0; i < nr_files; i++)
+-			fput(fpl->fp[i]);
++		for (i = 0; i < nr; i++) {
++			struct file *file = io_file_from_index(ctx, i + offset);
++
++			if (file)
++				fput(file);
++		}
+ 	} else {
+ 		kfree_skb(skb);
+ 		free_uid(fpl->user);
+-- 
+2.35.1
+
 
 

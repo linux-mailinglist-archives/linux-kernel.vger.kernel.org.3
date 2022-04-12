@@ -2,206 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895C4FDED5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C174FDEC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346691AbiDLMAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S1346752AbiDLMAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349823AbiDLL5v (ORCPT
+        with ESMTP id S1352422AbiDLL62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:57:51 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C1D61A37
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649760431; x=1681296431;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FITyXe8MFzXWfnxQq+a0yZeb4zzQpQ1NJfmontvv7vY=;
-  b=kwrVKOoZo6+cmn+oZQD5w1mCyaeX4d9JF0/A5si6jSS+RoYWalP27B6/
-   6J8bbJRad4k7yyru4mH5Jlfu2h0IeNAV/MiHbuYYAGscKWW/KFVAEoAig
-   NvUHog6N3FjHjgDBSE2clxxzQCaPLPhtRAkqTMTQhBnmdlTo4rRpoLCGt
-   R05fv6Y45iu00osfnq0gOgJoBF/edE+eUQDJEGbFllgMJNfxPK2R+ceus
-   NvIlV3iuUVh25+CGg+YfxXJ9erF/f8+H/sv7e23ubq/M74XkZngW2u3AI
-   ZrmOOBV3tq20l/gsfnGbP1YvnsuCvye+x+/qWoJq5dGsHSw/EHtNEArQs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322789591"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="322789591"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:47:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="660439703"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2022 03:47:09 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neE3B-0002mN-1t;
-        Tue, 12 Apr 2022 10:47:09 +0000
-Date:   Tue, 12 Apr 2022 18:47:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.04.10a] BUILD SUCCESS
- 6503dafd28b7bea4cf83261b053b76f151f2eee1
-Message-ID: <625558a6.wmYjSNcxBl78lyfO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
+        Tue, 12 Apr 2022 07:58:28 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00053.outbound.protection.outlook.com [40.107.0.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40864BEF;
+        Tue, 12 Apr 2022 03:48:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l5GOnDS+tFX8I2SgpfXvM5YQuDV5GgmdD4axJv3OZlOmS9ttL1+42qwNcncrYGx16Om+yRtLJbm0oMmACpAv8DQ+6F3xJAfbCCrbLYXT3rxsVuOBhkqKlruVG5QAoQYQZKd8G2S8ujH2he+UEOEXWOAAYIwdeAtp9eviJRiIm7rpuXSrXEMEM84ShxxXZzXrzdHDyb146akrUZC2r9BNmXZcIFxb47UWK1h52ryO8BpYpmygP3qL/X9S75roeSmLvd+6eLGEDQgb90wxuuSY68OAElftz0rwCZ5YiPYGx6pR+E0vCkg/fUaQAQLX4uJGOh+wBhncxLs9UX74x3xMnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t+gbW5uDb44kNuk9zOee43YxgdK9QXOzmkeLJbinXGU=;
+ b=MFWwGRAc/GiAutByuMrVJgiXkEOcgSSSeUV6WpcV8dWdvJAmh1dp2AZcc7YgVf8AMKTO6rLrOMLe++d5KQ159SPC1NimwkSeg4UTLfYr59mpVqMhkD90oFz0pTnbb5e5+GZe2uwCobxolna2ZjKB5tWRPCoxQ1O+d2g/i1zj0iQG0mOPX3q6Px+FC+HxXaaO3Gdjvvqe2JYzI+RM0VIlf0StDdcNOmdx2TBykYO9ye8hy1Lcl4M0cVdYv6I0iUivMW1vXM+t0lRI/HVDJUh8eiWey8VGmqoSlUThbpRo7/5Qrlaop3yA2/lMIGvb7Jvw/K/A5pQ72ip2q9f8odK1EA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t+gbW5uDb44kNuk9zOee43YxgdK9QXOzmkeLJbinXGU=;
+ b=RqWp5SRkDfS4zkTCIvC+H+REYdw2++j4wLup09OXiGe8Dh9M+71FvbFGjZExvlrst/4R3teJXYRFNipClUtvcVflixBt0+/3sOCtMNddjgNo3zzRQmGJzi7LBn0He7Xz8uXLnl6+3RO7fQ3n2sZGBaxRJRXP+GHhFZt1HoWenBs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by AM5PR04MB3059.eurprd04.prod.outlook.com (2603:10a6:206:b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.25; Tue, 12 Apr
+ 2022 10:48:46 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::a9d1:199:574b:502f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::a9d1:199:574b:502f%6]) with mapi id 15.20.5144.029; Tue, 12 Apr 2022
+ 10:48:46 +0000
+Date:   Tue, 12 Apr 2022 13:48:44 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2 1/2] clk: imx: add mcore_booted module paratemter
+Message-ID: <YlVZDGhbY0rCWHnk@abelvesa>
+References: <20220228124112.3974242-1-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220228124112.3974242-1-peng.fan@oss.nxp.com>
+X-ClientProxiedBy: VI1PR0502CA0030.eurprd05.prod.outlook.com
+ (2603:10a6:803:1::43) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6956374f-acf0-4be4-7bcd-08da1c7204e5
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3059:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR04MB30597234F59992A626538BE4F6ED9@AM5PR04MB3059.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SfeDhV4No1umq8d8vEld71CSlME4VM5nspsLe8NUAbdFkSdtLynvv4YMEfpzp7OKzur7pfmOmB/aSfiaKIVJYgj6F3AEBZk6TD5FTF+ox8T9ncvKCoRx631nFFx40VwII4cqolJ49QHgWwgj9DCQXs4rq59V/m+Ozd96qXkwxcWjoZ9npGZ18GMmUmA1YFaWT5YAD0dMOe+fv9qz4bSgjJjz4xrXmd5AAxQ2du9LoF8f+/YXvUb8Sv/ISjEdyOwLXclt6Nt5mlT5UzVQQg95xNBtXGPsLDNy9N6TD+AI+Gh366uvWOQwLT8rqYb+lvv9cp78bHjLld6urS7SCD0YpA/B4+iZA92LbmSr3rDcPNk7sEoggrtHsdidboWdgSPDcmmDo4mgnRsfITse74vAhAhS0ZqVQ90KIxdsukMIkDyaB1ZZ6ufWN/9EhE+ZGpt0sem/YK3fN+RAmVqfc6eh8wdyLCmgEYWB7M4odNGDSgnjQq6psCUFGt4bPmC8Wj/mP3FREPfWiuYnQhqso4ZvZWPt+id9D+Ju/XlCHsHDwGNPjafY/X0vDFRJPGM3IpThdH1Z74JTo9iBvP9kBTLoGt6Cu9Rqi1r3kOp4wvubENlC7IFfkDZK1NBSWXkhCFTAlmPYTWeeBna+/nYfoyc2vZBqdqGrVYACNe0I/CGyehlkB7wFnSDx0fuiGoi3UQ72hjwvgOz4ObtThhbGNldSxQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(52116002)(9686003)(53546011)(316002)(38350700002)(6486002)(38100700002)(83380400001)(86362001)(44832011)(2906002)(8936002)(5660300002)(508600001)(33716001)(6512007)(66476007)(4326008)(66946007)(186003)(66556008)(6506007)(8676002)(26005)(6862004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TMNqbii/ZeV2uE5IElDhMIPcr0mrIqeExdd+o7esZwdFHHXOk7Ez2dt0EzZX?=
+ =?us-ascii?Q?KDH3B4KGdOwbmdVbywOdeiJvO8FR9KKVbQdt823sfhU823vzUifNsicij5M3?=
+ =?us-ascii?Q?8TsT/xmWh75U3853Vbx/sHsCDzuDHrFgZ6ZySzjLopWNNGVek56Ta4/sSzAC?=
+ =?us-ascii?Q?/1X0p5C8dRhdOPbhTL8SPWvDKhaZlFVtXjRYJ6M439KtNk4LeKsVgB1h+3mg?=
+ =?us-ascii?Q?MhYub3VW2rC6VM9HjpUvDpiOH916jWmyllt9nStilWHAjJv7KoGuUhrq+Pd5?=
+ =?us-ascii?Q?5Xfbgt62wXYHKv2Qge69ZbwCGVAqqsrBHb34aJtaDvuHWHkOCVDTNDvwl+E5?=
+ =?us-ascii?Q?Ly6+KxcY6JBM2ll9EhukxPB8X0rNbCb7ZtHvh70dyAhwjZ1wDjf/R3z7egFS?=
+ =?us-ascii?Q?yu89/+kXVemkW88Sg0T/cfiRGSLuoA+q21RV8tJx4vqxtzRxVKLGnTmG06M9?=
+ =?us-ascii?Q?a+I+tjbvBYeOZW7MoP2gfkZn/pXD6rXIz9uUCRdOD3MuOgL5rxAnoGD6iII1?=
+ =?us-ascii?Q?fDebjDtk4r9lY/ridpIoAQBAYp+sKtOccutX1vHFmbfiFWvq6ekwNHp0LEkG?=
+ =?us-ascii?Q?+BKs2d/GQ4ohwcIIMQ7nW7tDvOY8dTc/TXYS4yzxL8Bthu9RlQIXAmrQN+FS?=
+ =?us-ascii?Q?yfr+bNyFeToctE1o0qlyZCMsB89UL8i5YD6ztcdbBgpCCc9z+6drfN78Dz+k?=
+ =?us-ascii?Q?CZVK6FU0+LtSPCwN0VtL6ieQHlcrLeNmGE1XN1+TqI2t4s7aFVd8BYBi9Exk?=
+ =?us-ascii?Q?DmM0H7q+pe1ZIuQMbd35255upI11FHcMldpwwKQrFZZqSEJtGS9E+q/Azrys?=
+ =?us-ascii?Q?QgR3INQ86BIrgU8eFrTuVGUeZvDCq/xIzM+ZIswzsRXBYtC6SHgvHmt+rMMY?=
+ =?us-ascii?Q?dJ872a0H5hMZD+qn+3x8TYnwCV5eaTOpdPW/4y+tN1R1cxTQAfrQp4jQtLt3?=
+ =?us-ascii?Q?zm0Qx9A0q4Yka9GjuwxB4OCdfqxUUomLyeQ7HNRRbXP+yLIbEwb6oj/pnHnK?=
+ =?us-ascii?Q?P/zM1m0umB9s5f1ukYYTuBpbRxX6ECMOBnmtvSEXmrQKH7fYWXMDWmsoQlKK?=
+ =?us-ascii?Q?9lR2D+VBB+c9i8MqtJxH6vPKWMV9WTBn9Q64MT5VdpSu+5AXHwj1tfQdPwB9?=
+ =?us-ascii?Q?m0orFHXO6mJrx1NKP3mf7rvaP5zkFqwT50frxlVjHDjf/V1npCOL1AvT5v1Z?=
+ =?us-ascii?Q?7Uj88xhJRKty5sYcnL2zMQWwVKDbtbtD+NzjfAxIuscVu4O2WMBCXVtvo3Sq?=
+ =?us-ascii?Q?LEjfjuJHvP9dmuZLrVvpJBpNSFXqS6I5zhr1J7atDrN5vVIzuteCHjtkrZf6?=
+ =?us-ascii?Q?fGXXD+dFuoG0xjOrPm6iMf3OZ+WgMSVADlUpfQA/6OzpJLc8htf3p2Cu4OU4?=
+ =?us-ascii?Q?g9E4RiitSncHBIoGtZKKZd8iFZ8D9/wdiB7Aj7OFe1VECGng90hVqrda1yyX?=
+ =?us-ascii?Q?eokmk6oABqbmh1SwHk2/4QcFHaOM7sMR08h5F93tPutKRj5Vsw6h27ULJuFE?=
+ =?us-ascii?Q?jwGToJ1XuUVbYbxCIZjc2Wo7WvgjIBiPuXvaI/H27HmCbwCyXZ4Z8uSeOW26?=
+ =?us-ascii?Q?h4Y4zffLZE6pwX2xilyqLs36ZsyongcCJzuTo29LaQPaQt3aHlSoLsDnGs/J?=
+ =?us-ascii?Q?UUlwy+oCDRR5tqWyp4Szw+VCQNraUeCzyGTiPpPUEzGbAzbONbMdx3l0qqYD?=
+ =?us-ascii?Q?Nk4rxnH+RwaMKIkm4yR364A1AYAYEBB6Ui1LVEepQJRvmuCuNz2/toiJN7/k?=
+ =?us-ascii?Q?6T7lQ9C28A=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6956374f-acf0-4be4-7bcd-08da1c7204e5
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 10:48:46.3000
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oHVjT+baEN0KB3+D71fI22O07qWBqSXDIAZZ/izJWKt7hbVsVrhr/8ghfBKc4OdokOEoGGgelvBOGO5Adjvu3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3059
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.10a
-branch HEAD: 6503dafd28b7bea4cf83261b053b76f151f2eee1  rcu-tasks: Handle sparse cpu_possible_mask in rcu_tasks_invoke_cbs()
+On 22-02-28 20:41:11, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Add mcore_booted boot parameter which could simplify AMP clock
+> management. To i.MX8M, there is CCM(clock control Module) to generate
+> clock root clock, anatop(analog PLL module) to generate PLL, and CCGR
+> (clock gating) to gate clocks to peripherals. As below:
+>   anatop->ccm->ccgr->peripheral
+>
+> Linux handles the clock management and the auxiliary core is under
+> control of Linux. Although there is per hardware domain control for CCGR
+> and CCM, auxiliary core normally only use CCGR hardware domain control
+> to avoid linux gate off the clk to peripherals and leave CCM ana anatop
+> to Linux.
+>
+> Per NXP hardware design, because CCGR already support gate to
+> peripherals, and clk root gate power leakage is negligible. So
+> when in AMP case, we could not register the clk root gate.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-elapsed time: 771m
+Applied both, thanks.
 
-configs tested: 121
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20220411
-powerpc                      mgcoge_defconfig
-mips                  decstation_64_defconfig
-arm                     eseries_pxa_defconfig
-arm                       imx_v6_v7_defconfig
-arm                          pxa3xx_defconfig
-m68k                       m5475evb_defconfig
-sh                 kfr2r09-romimage_defconfig
-xtensa                          iss_defconfig
-parisc64                         alldefconfig
-powerpc                     ep8248e_defconfig
-arm                        realview_defconfig
-sh                          sdk7780_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                      bamboo_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                     mpc83xx_defconfig
-ia64                      gensparse_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                               j2_defconfig
-m68k                       m5249evb_defconfig
-riscv                               defconfig
-arm                  randconfig-c002-20220411
-x86_64               randconfig-c001-20220411
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a016-20220411
-x86_64               randconfig-a012-20220411
-x86_64               randconfig-a013-20220411
-x86_64               randconfig-a014-20220411
-x86_64               randconfig-a015-20220411
-x86_64               randconfig-a011-20220411
-i386                 randconfig-a015-20220411
-i386                 randconfig-a011-20220411
-i386                 randconfig-a016-20220411
-i386                 randconfig-a012-20220411
-i386                 randconfig-a013-20220411
-i386                 randconfig-a014-20220411
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220411
-s390                 randconfig-r044-20220411
-riscv                randconfig-r042-20220411
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-powerpc              randconfig-c003-20220411
-arm                  randconfig-c002-20220411
-riscv                randconfig-c006-20220411
-x86_64               randconfig-c007-20220411
-mips                 randconfig-c004-20220411
-i386                 randconfig-c001-20220411
-mips                       lemote2f_defconfig
-powerpc                    mvme5100_defconfig
-arm                        multi_v5_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                     mpc512x_defconfig
-powerpc                     ppa8548_defconfig
-x86_64                           allyesconfig
-arm                           sama7_defconfig
-arm                          pxa168_defconfig
-x86_64               randconfig-a003-20220411
-x86_64               randconfig-a001-20220411
-x86_64               randconfig-a002-20220411
-x86_64               randconfig-a005-20220411
-x86_64               randconfig-a004-20220411
-x86_64               randconfig-a006-20220411
-i386                 randconfig-a004-20220411
-i386                 randconfig-a001-20220411
-i386                 randconfig-a003-20220411
-i386                 randconfig-a005-20220411
-i386                 randconfig-a006-20220411
-i386                 randconfig-a002-20220411
-hexagon              randconfig-r041-20220411
-hexagon              randconfig-r045-20220411
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>
+> V2:
+>  Switch to use module parameter, tested on i.MX8MP-EVK
+>
+>  drivers/clk/imx/clk-imx8mm.c | 2 ++
+>  drivers/clk/imx/clk-imx8mn.c | 2 ++
+>  drivers/clk/imx/clk-imx8mp.c | 2 ++
+>  drivers/clk/imx/clk-imx8mq.c | 2 ++
+>  drivers/clk/imx/clk.c        | 3 +++
+>  drivers/clk/imx/clk.h        | 1 +
+>  6 files changed, 12 insertions(+)
+>
+> diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+> index e8cbe181ec06..a452fd1bb891 100644
+> --- a/drivers/clk/imx/clk-imx8mm.c
+> +++ b/drivers/clk/imx/clk-imx8mm.c
+> @@ -639,6 +639,8 @@ static struct platform_driver imx8mm_clk_driver = {
+>  	},
+>  };
+>  module_platform_driver(imx8mm_clk_driver);
+> +module_param(mcore_booted, bool, S_IRUGO);
+> +MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
+>
+>  MODULE_AUTHOR("Bai Ping <ping.bai@nxp.com>");
+>  MODULE_DESCRIPTION("NXP i.MX8MM clock driver");
+> diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
+> index 92fcbab4f5be..dc69b7464b3d 100644
+> --- a/drivers/clk/imx/clk-imx8mn.c
+> +++ b/drivers/clk/imx/clk-imx8mn.c
+> @@ -594,6 +594,8 @@ static struct platform_driver imx8mn_clk_driver = {
+>  	},
+>  };
+>  module_platform_driver(imx8mn_clk_driver);
+> +module_param(mcore_booted, bool, S_IRUGO);
+> +MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
+>
+>  MODULE_AUTHOR("Anson Huang <Anson.Huang@nxp.com>");
+>  MODULE_DESCRIPTION("NXP i.MX8MN clock driver");
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index 18f5b7c3ca9d..250e45d9f844 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -721,6 +721,8 @@ static struct platform_driver imx8mp_clk_driver = {
+>  	},
+>  };
+>  module_platform_driver(imx8mp_clk_driver);
+> +module_param(mcore_booted, bool, S_IRUGO);
+> +MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
+>
+>  MODULE_AUTHOR("Anson Huang <Anson.Huang@nxp.com>");
+>  MODULE_DESCRIPTION("NXP i.MX8MP clock driver");
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index 83cc2b1c3294..33897b56130d 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -632,6 +632,8 @@ static struct platform_driver imx8mq_clk_driver = {
+>  	},
+>  };
+>  module_platform_driver(imx8mq_clk_driver);
+> +module_param(mcore_booted, bool, S_IRUGO);
+> +MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
+>
+>  MODULE_AUTHOR("Abel Vesa <abel.vesa@nxp.com>");
+>  MODULE_DESCRIPTION("NXP i.MX8MQ clock driver");
+> diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
+> index 7cc669934253..4bd6ad060eea 100644
+> --- a/drivers/clk/imx/clk.c
+> +++ b/drivers/clk/imx/clk.c
+> @@ -17,6 +17,9 @@
+>  DEFINE_SPINLOCK(imx_ccm_lock);
+>  EXPORT_SYMBOL_GPL(imx_ccm_lock);
+>
+> +bool mcore_booted;
+> +EXPORT_SYMBOL_GPL(mcore_booted);
+> +
+>  void imx_unregister_clocks(struct clk *clks[], unsigned int count)
+>  {
+>  	unsigned int i;
+> diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
+> index a7cbbcd1a3f4..5061a06468df 100644
+> --- a/drivers/clk/imx/clk.h
+> +++ b/drivers/clk/imx/clk.h
+> @@ -7,6 +7,7 @@
+>  #include <linux/clk-provider.h>
+>
+>  extern spinlock_t imx_ccm_lock;
+> +extern bool mcore_booted;
+>
+>  void imx_check_clocks(struct clk *clks[], unsigned int count);
+>  void imx_check_clk_hws(struct clk_hw *clks[], unsigned int count);
+> --
+> 2.25.1
+>

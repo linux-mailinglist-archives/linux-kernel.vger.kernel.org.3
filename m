@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7259B4FD782
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AEF4FD80F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355669AbiDLIIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S1383527AbiDLIhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355521AbiDLH1k (ORCPT
+        with ESMTP id S1356750AbiDLHjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:40 -0400
+        Tue, 12 Apr 2022 03:39:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E88F4EA2E;
-        Tue, 12 Apr 2022 00:07:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D352B12;
+        Tue, 12 Apr 2022 00:10:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADAFB616B3;
-        Tue, 12 Apr 2022 07:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC52FC385A1;
-        Tue, 12 Apr 2022 07:07:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73991616B2;
+        Tue, 12 Apr 2022 07:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DFBC385A5;
+        Tue, 12 Apr 2022 07:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747264;
-        bh=Jc8pgUnbZ/NjC/Hkh90e39VVKCwDKbAPR4E0Lwf2MiE=;
+        s=korg; t=1649747407;
+        bh=smfjITSV1YHK4/bfAMDR+H6NLc2WvBO/3LmrqMnJXJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QGDel+mcFdBDfdXD7/lMwjuQ0dGVzKub17cMKKzRxO4BZnci57tu/BdN7ri83yx0p
-         6asPeIEUgHxTrh+aoR2KA6GAw9LZbFqZi9X55OSafs2oYbjSSLVtiYn52EDMwQGI1E
-         V6iWcgmOhxIjPT9o2MmAHmVvHraA6VAyAAtGIMDU=
+        b=bbSTray6srJJXYmltFOYyt55lObJ/qypjDtiR2R5nLxIrbtKz6uGE9ElSkXdNEp2Z
+         9G46+ZKdrypFxf3VlEDWeIjKQuW32/U5phcUw0EpwUKft96aqlex3ZXWSmrFI4PLYK
+         Fz1LvSFZDC6ys4y4TIx5kl2e7zuT6K2ypVgsKP9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Philipp Zabel <philipp.zabel@gmail.com>,
         Jani Nikula <jani.nikula@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 017/343] drm/edid: remove non_desktop quirk for HPN-3515 and LEN-B800.
-Date:   Tue, 12 Apr 2022 08:27:15 +0200
-Message-Id: <20220412062951.602588791@linuxfoundation.org>
+Subject: [PATCH 5.17 018/343] drm/edid: improve non-desktop quirk logging
+Date:   Tue, 12 Apr 2022 08:27:16 +0200
+Message-Id: <20220412062951.631036259@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -55,41 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <philipp.zabel@gmail.com>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit 50dc95d561a2552b0d76a9f91b38005195bf2974 ]
+[ Upstream commit ce99534e978d4a36787dbe5e5c57749d12e6bf4a ]
 
-Now that there is support for the Microsoft VSDB for HMDs, remove the
-non-desktop quirk for two devices that are verified to contain it in
-their EDID: HPN-3515 and LEN-B800.
-Presumably most of the other Windows Mixed Reality headsets contain it
-as well, but there are ACR-7FCE and SEC-5194 devices without it.
+Improve non-desktop quirk logging if the EDID indicates non-desktop. If
+both are set, note about redundant quirk. If there's no quirk but the
+EDID indicates non-desktop, don't log non-desktop is set to 0.
 
-Tested with LEN-B800.
-
-Signed-off-by: Philipp Zabel <philipp.zabel@gmail.com>
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Cc: Philipp Zabel <philipp.zabel@gmail.com>
 Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220123101653.147333-2-philipp.zabel@gmail.com
+Reviewed-by: Philipp Zabel <philipp.zabel@gmail.com>
+Tested-by: Philipp Zabel <philipp.zabel@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211228101051.317989-1-jani.nikula@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/gpu/drm/drm_edid.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index b8f5419e514a..a71b82668a98 100644
+index a71b82668a98..83e5c115e754 100644
 --- a/drivers/gpu/drm/drm_edid.c
 +++ b/drivers/gpu/drm/drm_edid.c
-@@ -212,9 +212,7 @@ static const struct edid_quirk {
+@@ -5325,17 +5325,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 	info->width_mm = edid->width_cm * 10;
+ 	info->height_mm = edid->height_cm * 10;
  
- 	/* Windows Mixed Reality Headsets */
- 	EDID_QUIRK('A', 'C', 'R', 0x7fce, EDID_QUIRK_NON_DESKTOP),
--	EDID_QUIRK('H', 'P', 'N', 0x3515, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('L', 'E', 'N', 0x0408, EDID_QUIRK_NON_DESKTOP),
--	EDID_QUIRK('L', 'E', 'N', 0xb800, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('F', 'U', 'J', 0x1970, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('D', 'E', 'L', 0x7fce, EDID_QUIRK_NON_DESKTOP),
- 	EDID_QUIRK('S', 'E', 'C', 0x144a, EDID_QUIRK_NON_DESKTOP),
+-	info->non_desktop = !!(quirks & EDID_QUIRK_NON_DESKTOP);
+-
+ 	drm_get_monitor_range(connector, edid);
+ 
+-	DRM_DEBUG_KMS("non_desktop set to %d\n", info->non_desktop);
+-
+ 	if (edid->revision < 3)
+-		return quirks;
++		goto out;
+ 
+ 	if (!(edid->input & DRM_EDID_INPUT_DIGITAL))
+-		return quirks;
++		goto out;
+ 
+ 	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
+ 	drm_parse_cea_ext(connector, edid);
+@@ -5356,7 +5352,7 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 
+ 	/* Only defined for 1.4 with digital displays */
+ 	if (edid->revision < 4)
+-		return quirks;
++		goto out;
+ 
+ 	switch (edid->input & DRM_EDID_DIGITAL_DEPTH_MASK) {
+ 	case DRM_EDID_DIGITAL_DEPTH_6:
+@@ -5393,6 +5389,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 
+ 	drm_update_mso(connector, edid);
+ 
++out:
++	if (quirks & EDID_QUIRK_NON_DESKTOP) {
++		drm_dbg_kms(connector->dev, "Non-desktop display%s\n",
++			    info->non_desktop ? " (redundant quirk)" : "");
++		info->non_desktop = true;
++	}
++
+ 	return quirks;
+ }
+ 
 -- 
 2.35.1
 

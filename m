@@ -2,224 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7140C4FE6D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F834FE6E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358118AbiDLR30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1358208AbiDLRcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358093AbiDLR3W (ORCPT
+        with ESMTP id S229464AbiDLRbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:29:22 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F360F532FF;
-        Tue, 12 Apr 2022 10:27:03 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C13AC20A6939;
-        Tue, 12 Apr 2022 10:27:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C13AC20A6939
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649784423;
-        bh=tNQTQgW7F7YhR7TPnyCz6wHTQsZZS/7RFpIuroZcbUU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FQt4oPQbZs2YbA6H6finjiYQYzIj+0jes6+Wh0g0RJu3KgJC1pCjeZl0lWVVATdbb
-         czIhP09ulIXheKhT1mqsswthBaukYUbnoGb/6NEIe6P7d4+FyQUMShhUQttOhUc1P+
-         uiu2kxaZ/ZtMTx6tYxLEXhboIDvBimsaGwYoWrfA=
-Message-ID: <b17e452a-e998-ac69-a129-5a184cd19c29@linux.microsoft.com>
-Date:   Tue, 12 Apr 2022 12:27:01 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Content-Language: en-US
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     mark.rutland@arm.com, broonie@kernel.org, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        Tue, 12 Apr 2022 13:31:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C02100E;
+        Tue, 12 Apr 2022 10:29:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42748619D7;
+        Tue, 12 Apr 2022 17:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2DAC385A5;
+        Tue, 12 Apr 2022 17:29:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZbW8euRP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649784544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4VTpQMB6FPkc9MfFhDmCuhLparbR0CcHVnNxwSqiAkQ=;
+        b=ZbW8euRPWSiaKBuJacJ8+ZTX0gthq1mBuxj+4d079R3slGuBehd1GNvnixSfFTw+9RRV8/
+        Lf8UmDxB2StOfSrsXmpDuV5zTO+YGC1PywJ+SHTMEnuJSZMy6SLJiTOfO/heSCdbnRWlO+
+        zgjakwT8Hd8n3HcHvqKdq54xw1mF2wg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c1694ffd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 12 Apr 2022 17:29:03 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
- <20220408002147.pk7clzruj6sawj7z@treble>
- <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
- <844b3ede-eddb-cbe6-80e0-3529e2da2eb6@huawei.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <844b3ede-eddb-cbe6-80e0-3529e2da2eb6@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH v3 00/10] archs/random: fallback to best raw ktime when no cycle counter
+Date:   Tue, 12 Apr 2022 19:27:44 +0200
+Message-Id: <20220412172754.149498-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi folks,
 
+The RNG uses a function called random_get_entropy() basically anytime
+that it needs to timestamp an event. For example, an interrupt comes in,
+and we mix a random_get_entropy() into the entropy pool somehow.
+Somebody mashes their keyboard or moves their mouse around? We mix a
+random_get_entropy() into the entropy pool. It's one of the main
+varieties of input.
 
-On 4/12/22 02:30, Chen Zhongjin wrote:
-> Hi Madhaven,
-> 
-> On 2022/4/12 1:18, Madhavan T. Venkataraman wrote:
->>
->> This is a valid point. So far, I find that gcc generates reliable DWARF information.
->> But there are two bugs in what Clang generates. I have added workarounds in my
->> parser to compensate.
->>
->> So, I think a DWARF verifier is an option that architectures can use. At this point,
->> I don't want to mandate a verifier on every architecture. But that is a discussion
->> that we can have once I have a verifier ready.
-> I'm concerning that depending on compilers to generate correct information can become
-> a trouble because we linux kernel side can rarely fix what compilers make. That's also why
-> the gcc plugin idea was objected in the objtool migration.
-> 
-> If your parser can solve this it sounds more doable.
-> 
+Unfortunately, it's always 0 on a few platforms. The RNG has accumulated
+various hacks to deal with this, but in general it's not great. Surely
+we can do better than 0. In fact, *anything* that's not the same exact
+value all the time would be better than 0. Even a counter that
+increments once per hour would be better than 0! I think you get the
+idea.
 
-So far, I find that gcc generates reliable DWARF information. Clang did have two bugs for
-which the parser compensates.
+On most platforms, random_get_entropy() is aliased to get_cycles(),
+which makes sense for platforms where get_cycles() is defined. RDTSC,
+for example, has all the characteristics we care about for this
+function: it's fast to acquire (i.e. acceptable in an irq handler),
+pretty high precision, available, forms a 2-monotone distribution, etc.
+But for platforms without that, what is the next best thing?
 
-So, what is needed is a DWARF verifier which can find buggy DWARF information. I am working on
-it.
+Sometimes the next best thing is architecture-defined. For example,
+really old MIPS has the CP0 random register, which isn't a cycle
+counter, but is at least something. However, some platforms don't even
+have an architecture-defined fallback.
 
-Having said that,  I think the DWARF information for the stack and frame pointer is a *lot*
-simpler than the other debug stuff. So, there may be a couple of existing bugs that need to be
-discovered and fixed. But I think the likelihood of bugs appearing in this area in the future is
-low but it can happen. I agree that there needs to be a way to discover and flag the bugs
-when they do appear.
+Fortunately, the timekeeping subsystem has already solved this problem
+of trying to determine what the least bad clock is on constrained
+systems, falling back to jiffies in the worst case. By exporting the raw
+clock, we can get a decent fallback function for when there's no cycle
+counter or architecture-specific function.
 
-But compiler bugs can also affect objtool and cause problems in it. If I am not mistaken,
-they ran into this multiple times on the X86 side and had to get fixes done. Josh knows better.
-Compiler bugs and optimizations have always been problematic from this perspective and they
-will potentially continue to be.
+This series makes the RNG more useful on: m68k, RISC-V, MIPS, ARM32,
+NIOS II, SPARC32, Xtensa, and Usermode Linux. Previously these platforms
+would, in certain circumstances, but out of luck with regards to having
+any type of event timestamping source in the RNG.
 
->>
->> Yes. That is my thinking as well. When the unwinder checks the actual FP with the
->> computed FP, any mismatch will be treated as unreliable code for unwind. So,
->> apart from some retries during the livepatch process, this is most probably not
->> a problem.
->>
->> Now,  I set a flag for an unwind hint so that the unwinder knows that it is
->> processing an unwind hint. I could generate a warning if an unwind hint does not
->> result in a reliable unwind of the frame. This would bring the broken hint
->> to people's attention.
->>
->>
->> Also, inline asm can sometimes do stack hacks like
->> "push;do_something;pop" which isn't visible to the toolchain.  But
->> again, hopefully the frame pointer checking would fail and mark it
->> unreliable.
->>
-> I'm wondering how much functions will give a unreliable result because any unreliable
-> function shows in stack trace will cause livepatch fail/retry. IIUC all unmarked assembly
-> functions will considered unreliable and cause problem. It can be a burden to mark all
-> of them.
+Finally, note that this series isn't about "jitter entropy" or other
+ways of initializing the RNG. That's a different topic for a different
+thread. Please don't let this discussion veer off into that. Here, I'm
+just trying to find a good fallback counter/timer for platforms without
+get_cycles(), a question with limited scope.
 
-It is not a burden to mark all of them. For instance, I have submitted a patch where I mark
-all the SYM_CODE*() functions by overriding the SYM_CODE_START()/END() macros in arm64. So,
-the changes are very small and self-contained.
+If this (or a future revision) looks good to you all and receives the
+requisite acks, my plan was to take these through the random.git tree
+for 5.19, so that I can then build on top of it. Alternatively, maybe
+Thomas wants to take it through his timekeeping tree? Or something else.
+If anybody has strong preferences, please pipe up.
 
-A good part of the assembly functions are defined with SYM_CODE_*(). These, by definition,
-are low-level functions that do not follow ABI rules. IIRC, Objtool does not perform static
-analysis on these today. These need to be recognized by the unwinder in the kernel and handled.
-Josh, please correct me if I am wrong. So, this is a problem even if we had static analysis
-in Objtool for arm64.
+Thanks,
+Jason
 
-As for functions defined with SYM_FUNC_*(), they are supposed to have proper frame setup and
-teardown. But most of them do not appear to have a proper frame pointer prolog and epilog today
-in arm64. Some of these will probably never have an FP prolog or epilog because they are high
-performance functions or specialized functions and the extra overhead may be unacceptable. Some of
-the SYM_FUNC*() functions are leaf functions that don't need an FP prolog or epilog.
+Changes v2->v3:
+- Name the fallback function random_get_entropy_fallback(), so that it
+  can be changed out as needed.
+- Include header with prototype in timekeeping.c to avoid compiler
+  warning.
+- Export fallback function symbol.
 
-With static analysis, Objtool will flag all such functions. Either a proper FP prolog and epilog
-have to be introduced in the code or the functions need to be flagged as unreliable from an unwind
-perspective. If any of these functions occurs frequently in stack traces, then, either a proper
-FP prolog and epilog have to be introduced in the function code. Or, unwind hints have to be placed
-at strategic points. In either case, there is a maintenance burden although developers may prefer
-one over the other on a case-by-case basis.
+Changes v1->v2:
+- Use ktime_read_raw_clock() instead of sched_clock(), per Thomas'
+  suggestion.
+- Drop arm64 change.
+- Cleanup header inclusion ordering problem.
 
-The DWARF situation is the same. For the frequently occurring assembly functions, unwind hints
-need to be defined. Currently, I have undertaken to study the SYM_FUNC*() functions in arm64
-to see if I can determine which ones belong to this category. Also, I am going to be doing targeted
-livepatch testing to see if any of these functions will cause many retries during the livepatch
-process. If they don't, then this is not a problem.
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+Cc: x86@kernel.org
+Cc: linux-xtensa@linux-xtensa.org
 
+Jason A. Donenfeld (10):
+  timekeeping: add raw clock fallback for random_get_entropy()
+  m68k: use fallback for random_get_entropy() instead of zero
+  riscv: use fallback for random_get_entropy() instead of zero
+  mips: use fallback for random_get_entropy() instead of zero
+  arm: use fallback for random_get_entropy() instead of zero
+  nios2: use fallback for random_get_entropy() instead of zero
+  x86: use fallback for random_get_entropy() instead of zero
+  um: use fallback for random_get_entropy() instead of zero
+  sparc: use fallback for random_get_entropy() instead of zero
+  xtensa: use fallback for random_get_entropy() instead of zero
 
->> - No software is bug free. So, even if static analysis is implemented for an architecture,
->>   it would be good to have another method of verifying the unwind rules generated from
->>   the static analysis. DWARF can provide that additional verification.
-> To me verifying ORC with DWARF a little odd, cuz they are running with different unwind
-> mechanism. For normal scenario which calling convention is obeyed, ORC can give a
-> promised reliable stack trace, while when it easily involve bug in assembly codes,
-> DWARF also can't work.
-> 
+ arch/arm/include/asm/timex.h      |  1 +
+ arch/m68k/include/asm/timex.h     |  2 +-
+ arch/mips/include/asm/timex.h     |  2 +-
+ arch/nios2/include/asm/timex.h    |  2 ++
+ arch/riscv/include/asm/timex.h    |  2 +-
+ arch/sparc/include/asm/timex_32.h |  4 +---
+ arch/um/include/asm/timex.h       |  9 ++-------
+ arch/x86/include/asm/tsc.h        | 10 ++++++++++
+ arch/xtensa/include/asm/timex.h   |  6 ++----
+ include/linux/timex.h             |  8 ++++++++
+ kernel/time/timekeeping.c         | 10 ++++++++++
+ 11 files changed, 39 insertions(+), 17 deletions(-)
 
-I am not sure I follow. With both DWARF and ORC, stack pointer and frame pointer offsets are recorded
-for every instruction address. These offsets have to be the same regardless of which one you use.
+-- 
+2.35.1
 
-The only difference is that for an assembly function that has a proper FP prolog and epilog, Objtool
-static analysis is able to generate those offsets. With DWARF, the compiler does not generate any
-offsets for assembly functions. I have to rely on unwind hints. BTW, I only need to do this for functions
-that occur frequently in stack traces.
-
-
-> My support for FP with validation is that it provides a guarantee for FP unwinder. FP and ORC
-> use absolute and relative for stack unwind to unwind stack respectively, however FP has been
-> considered unreliable. Is there any feature depends on FP? If so it can be more persuasive.
-> 
-
-Yes. Static analysis makes sure that functions are following ABI rules. So, it provides a static
-guarantee. And that is great.
-
-However, with DWARF, even if some functions don't follow ABI rules, a reliable unwinder can still
-be provided as long as the DWARF information generated by the compiler is correct. For instance,
-let us say that the compiler generates code for a function with a call to another function before
-the FP has been setup properly. If the DWARF information is correctly generated, the unwinder can
-see that a stack trace involving the called function is unreliable.
-
-Also, hypothetically, if a buggy kernel function corrupts the frame pointer or the stack
-pointer, dynamic validation can catch it.
-
-> 
-> Also this patch is much more completed than migration for objtool. It would be
-> nice if this could be put into use quickly. The objtool-arm64 is less than half done, but I'm going
-> to relies as much as possible on current objtool components, so no more feasibility validation
-> is required.
-> 
-
-The approach in your patch series is certainly feasible. I don't deny that at all. And, believe me,
-I would like the community to take interest in it and review it. If I get a chance, I will also
-participate in that review.
-
-As I mentioned in a previous email, my attempt is to come up with a largely architecture independent
-solution to the FP validation problem with a quicker time to market. That is all.
-
-> By the way, I was thinking about a corner case, because arm64 CALL instruction won't push LR
-> onto stack atomically as x86. Before push LR, FP to save frame there still can be some instructions
-> such as bti, paciasp. If an irq happens here, the stack frame is not constructed
-> so the FP unwinder will omit this function and provides a wrong stack trace to livepatch.
-> 
-> 
-
-With DWARF, the unwinder will see that there are no DWARF rules associated with those PCs that occur
-before the FP is completely setup. It will mark the stack trace as unreliable. So, these cases are
-already handled as I have explained in my cover letter.
-
-> It's just a guess and I have not built the test case. But I think it's a defect on arm64 that FP
-> unwinder can't work properly on prologue and epilogue. Do you have any idea about this?
-> 
-
-There is no defect. The frame pointer prolog can have multiple instructions before the frame is set up.
-Any interrupt or exception happening on those instructions will have an unreliable stack trace by
-definition. A reliable unwinder must be able to recognize that case and mark the stack trace as unreliable.
-That is all.
-
-Thanks for your comments.
-
-Madhavan

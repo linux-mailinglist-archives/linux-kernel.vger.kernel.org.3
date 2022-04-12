@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E604FD4FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7554FD675
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiDLJOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S1351642AbiDLH2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358208AbiDLHlK (ORCPT
+        with ESMTP id S1351752AbiDLHMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:41:10 -0400
+        Tue, 12 Apr 2022 03:12:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991CD427EB;
-        Tue, 12 Apr 2022 00:17:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E639217A8A;
+        Mon, 11 Apr 2022 23:52:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CCD0B81B6B;
-        Tue, 12 Apr 2022 07:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3513C385A1;
-        Tue, 12 Apr 2022 07:17:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3F5DB81B35;
+        Tue, 12 Apr 2022 06:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92E2C385A1;
+        Tue, 12 Apr 2022 06:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747852;
-        bh=aYjbmozvRP0Y6GF6WshL6ZK6wocwCPdx4W6SMiYjpFk=;
+        s=korg; t=1649746331;
+        bh=HYUEX2kYwW/fwRXKxRfNw0x/SATn9LUwe4xOoGFsWFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LyCOaXJ9BTjFJxhRF4/eWT4KjcNOmDPreN/X9+/bSmkGmMkNiPQtp9AiBOGEHt0T1
-         cmNcTXiMecvZdDyi/aCmzL4whl6+Ab3FGZr8vEFcQa3DmS3QKTwlRkyvwaV98ZD7O6
-         GDJjnquSJ3AqsEBK1YSGU3fb6axbjxYQqJGt3MAM=
+        b=MyDKZUn1nmqWJdJaxpEz82z2o3efnB4MDDHGiOyidbqLXL45/9m6uhLFEOJJ0KOHz
+         3qPNLZCRlHRO9EeIoD/PAaEoRQo707OEte+ST0eh9zEyelj5hWaO7wuFTBC08xz6YF
+         EKSiejii8WtMTHo9Rj8kavPmVOw/r5stSvv8pzK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 228/343] IB/cm: Cancel mad on the DREQ event when the state is MRA_REP_RCVD
-Date:   Tue, 12 Apr 2022 08:30:46 +0200
-Message-Id: <20220412062957.918468994@linuxfoundation.org>
+        stable@vger.kernel.org, Emily Deng <Emily.Deng@amd.com>,
+        James Zhu <James.Zhu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 244/277] drm/amdgpu/vcn: Fix the register setting for vcn1
+Date:   Tue, 12 Apr 2022 08:30:47 +0200
+Message-Id: <20220412062949.104005239@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Zhang <markzhang@nvidia.com>
+From: Emily Deng <Emily.Deng@amd.com>
 
-[ Upstream commit 107dd7beba403a363adfeb3ffe3734fe38a05cce ]
+commit 02fc996d5098f4c3f65bdf6cdb6b28e3f29ba789 upstream.
 
-On the passive side when the disconnectReq event comes, if the current
-state is MRA_REP_RCVD, it needs to cancel the MAD before entering the
-DREQ_RCVD and TIMEWAIT states, otherwise the destroy_id may block until
-this mad will reach timeout.
+Correct the code error for setting register UVD_GFX10_ADDR_CONFIG.
+Need to use inst_idx, or it only will set VCN0.
 
-Fixes: a977049dacde ("[PATCH] IB: Add the kernel CM implementation")
-Link: https://lore.kernel.org/r/75261c00c1d82128b1d981af9ff46e994186e621.1649062436.git.leonro@nvidia.com
-Signed-off-by: Mark Zhang <markzhang@nvidia.com>
-Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Emily Deng <Emily.Deng@amd.com>
+Reviewed-by: James Zhu <James.Zhu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/core/cm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/core/cm.c b/drivers/infiniband/core/cm.c
-index 35f0d5e7533d..1c107d6d03b9 100644
---- a/drivers/infiniband/core/cm.c
-+++ b/drivers/infiniband/core/cm.c
-@@ -2824,6 +2824,7 @@ static int cm_dreq_handler(struct cm_work *work)
- 	switch (cm_id_priv->id.state) {
- 	case IB_CM_REP_SENT:
- 	case IB_CM_DREQ_SENT:
-+	case IB_CM_MRA_REP_RCVD:
- 		ib_cancel_mad(cm_id_priv->msg);
- 		break;
- 	case IB_CM_ESTABLISHED:
-@@ -2831,8 +2832,6 @@ static int cm_dreq_handler(struct cm_work *work)
- 		    cm_id_priv->id.lap_state == IB_CM_MRA_LAP_RCVD)
- 			ib_cancel_mad(cm_id_priv->msg);
- 		break;
--	case IB_CM_MRA_REP_RCVD:
--		break;
- 	case IB_CM_TIMEWAIT:
- 		atomic_long_inc(&work->port->counters[CM_RECV_DUPLICATES]
- 						     [CM_DREQ_COUNTER]);
--- 
-2.35.1
-
+--- a/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
+@@ -601,8 +601,8 @@ static void vcn_v3_0_mc_resume_dpg_mode(
+ 			AMDGPU_GPU_PAGE_ALIGN(sizeof(struct amdgpu_fw_shared)), 0, indirect);
+ 
+ 	/* VCN global tiling registers */
+-	WREG32_SOC15_DPG_MODE(0, SOC15_DPG_MODE_OFFSET(
+-		UVD, 0, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
++	WREG32_SOC15_DPG_MODE(inst_idx, SOC15_DPG_MODE_OFFSET(
++		UVD, inst_idx, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
+ }
+ 
+ static void vcn_v3_0_disable_static_power_gating(struct amdgpu_device *adev, int inst)
 
 

@@ -2,42 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142B64FD3CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A36D4FD40A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379253AbiDLIUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
+        id S1355090AbiDLIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355096AbiDLH1I (ORCPT
+        with ESMTP id S1354316AbiDLH0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA448305;
-        Tue, 12 Apr 2022 00:07:06 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11E54504F;
+        Tue, 12 Apr 2022 00:06:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B96F616B2;
-        Tue, 12 Apr 2022 07:07:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23786C385A8;
-        Tue, 12 Apr 2022 07:07:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A6F7B81B54;
+        Tue, 12 Apr 2022 07:06:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683FBC385A1;
+        Tue, 12 Apr 2022 07:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747225;
-        bh=Jh0HxlaHDCPkrzXaR6A0TjXlWJhTiro1dmjnLAkCRbA=;
+        s=korg; t=1649747166;
+        bh=SoCb/hdLcNc5aCFlOmgnS1sQDkhgqCLKwaaJREOg48A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y5ZfqjvSXX2/VDfmP6lEupoM/U5CwsXlV7cbFtwDn/Q7EtpdlKrbntFmVerIzOy2R
-         LI/Plp/pp4g7CnVIx5HHdzj7QDsEddSElRQ7rlSmnJpOQ2wmOMRKmcZvclqrOHOk8E
-         HS/aEAKkT01hVudY6sMwOaR3QVfmZ78r/20PzwSs=
+        b=YgOMewrIPpGZVEMcOV5xYgH4uT/SmtI05wAyLgq3JJW4kN1yPBvKtvBDiGcpOEWoQ
+         kxkzEhD9hhV3jOS3gbxo8Rt/qBzsc3u9XGjnnfCCysH4uTVnDseEI/qjibUILSod3J
+         f6PY+X4xynZA8gb6JEeFfRfO40zHW0azhJb6sytE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.16 248/285] irqchip/gic-v3: Fix GICR_CTLR.RWP polling
-Date:   Tue, 12 Apr 2022 08:31:45 +0200
-Message-Id: <20220412062950.816356188@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.16 267/285] perf build: Dont use -ffat-lto-objects in the python feature test when building with clang-13
+Date:   Tue, 12 Apr 2022 08:32:04 +0200
+Message-Id: <20220412062951.364025365@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -55,61 +63,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 0df6664531a12cdd8fc873f0cac0dcb40243d3e9 upstream.
+commit 3a8a0475861a443f02e3a9b57d044fe2a0a99291 upstream.
 
-It turns out that our polling of RWP is totally wrong when checking
-for it in the redistributors, as we test the *distributor* bit index,
-whereas it is a different bit number in the RDs... Oopsie boo.
+Using -ffat-lto-objects in the python feature test when building with
+clang-13 results in:
 
-This is embarassing. Not only because it is wrong, but also because
-it took *8 years* to notice the blunder...
+  clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+  error: command '/usr/sbin/clang' failed with exit code 1
+  cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
+  make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
 
-Just fix the damn thing.
+Noticed when building on a docker.io/library/archlinux:base container.
 
-Fixes: 021f653791ad ("irqchip: gic-v3: Initial support for GICv3")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: stable@vger.kernel.org
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Link: https://lore.kernel.org/r/20220315165034.794482-2-maz@kernel.org
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Keeping <john@metanate.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/Makefile.config |    3 +++
+ tools/perf/util/setup.py   |    2 ++
+ 2 files changed, 5 insertions(+)
 
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -206,11 +206,11 @@ static inline void __iomem *gic_dist_bas
- 	}
- }
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -270,6 +270,9 @@ ifdef PYTHON_CONFIG
+   PYTHON_EMBED_LIBADD := $(call grep-libs,$(PYTHON_EMBED_LDOPTS)) -lutil
+   PYTHON_EMBED_CCOPTS := $(shell $(PYTHON_CONFIG_SQ) --includes 2>/dev/null)
+   FLAGS_PYTHON_EMBED := $(PYTHON_EMBED_CCOPTS) $(PYTHON_EMBED_LDOPTS)
++  ifeq ($(CC_NO_CLANG), 0)
++    PYTHON_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PYTHON_EMBED_CCOPTS))
++  endif
+ endif
  
--static void gic_do_wait_for_rwp(void __iomem *base)
-+static void gic_do_wait_for_rwp(void __iomem *base, u32 bit)
- {
- 	u32 count = 1000000;	/* 1s! */
+ FEATURE_CHECK_CFLAGS-libpython := $(PYTHON_EMBED_CCOPTS)
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -23,6 +23,8 @@ if cc_is_clang:
+             vars[var] = sub("-fstack-protector-strong", "", vars[var])
+         if not clang_has_option("-fno-semantic-interposition"):
+             vars[var] = sub("-fno-semantic-interposition", "", vars[var])
++        if not clang_has_option("-ffat-lto-objects"):
++            vars[var] = sub("-ffat-lto-objects", "", vars[var])
  
--	while (readl_relaxed(base + GICD_CTLR) & GICD_CTLR_RWP) {
-+	while (readl_relaxed(base + GICD_CTLR) & bit) {
- 		count--;
- 		if (!count) {
- 			pr_err_ratelimited("RWP timeout, gone fishing\n");
-@@ -224,13 +224,13 @@ static void gic_do_wait_for_rwp(void __i
- /* Wait for completion of a distributor change */
- static void gic_dist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data.dist_base);
-+	gic_do_wait_for_rwp(gic_data.dist_base, GICD_CTLR_RWP);
- }
+ from distutils.core import setup, Extension
  
- /* Wait for completion of a redistributor change */
- static void gic_redist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data_rdist_rd_base());
-+	gic_do_wait_for_rwp(gic_data_rdist_rd_base(), GICR_CTLR_RWP);
- }
- 
- #ifdef CONFIG_ARM64
 
 

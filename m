@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E380A4FD8FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01884FD670
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386299AbiDLIzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S1386205AbiDLIyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359399AbiDLHnA (ORCPT
+        with ESMTP id S1359404AbiDLHnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:43:00 -0400
+        Tue, 12 Apr 2022 03:43:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9530E2CE06;
-        Tue, 12 Apr 2022 00:22:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AA42CE0C;
+        Tue, 12 Apr 2022 00:22:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22F4B6171C;
-        Tue, 12 Apr 2022 07:22:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0721DC385A5;
-        Tue, 12 Apr 2022 07:22:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 812FA6153F;
+        Tue, 12 Apr 2022 07:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88393C385A1;
+        Tue, 12 Apr 2022 07:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748152;
-        bh=y8yjEqbAFvDl4CSGCScpRoyA+J58gkAQTk9OjEmdyqE=;
+        s=korg; t=1649748160;
+        bh=kdGn1ftJHGVxeTLH7mFW4Oz3PjRaZe085GNp5mTVpXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qgpZxGDMEIZyNcjZQzFEzeeDJZXqpKevxMocz2J1IZdRO0WCFdgDxcdmkUOfoPmdA
-         Kt9w2XNOcNBMVPdYvn2i/yh6Vz938p50j9N+OuCEFskLqM2AY5LMEXciTU+cpws/CQ
-         XHuYNK/94JP6eOcx0k4huM8fQCdFUwQX3Wj3eZP4=
+        b=1pNPmALh01m8N7B/hfXWhYmxGCxDfadT8XhwNa+8DkiAEw7DkUocFumAgrl8C5fSJ
+         0c3SNfd2o5X36nmo+vtDa+OAHtH/eZvBZO/SBpg9q0z0+IpVHM3lJao2tuaQePXX97
+         GRQPCtT1Yw5+9V8b1AZJCgwCmXVM6hBu4AQmGpyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [PATCH 5.17 339/343] static_call: Dont make __static_call_return0 static
-Date:   Tue, 12 Apr 2022 08:32:37 +0200
-Message-Id: <20220412063001.101274174@linuxfoundation.org>
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 341/343] io_uring: propagate issue_flags state down to file assignment
+Date:   Tue, 12 Apr 2022 08:32:39 +0200
+Message-Id: <20220412063001.158157154@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -56,1167 +53,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit 8fd4ddda2f49a66bf5dd3d0c01966c4b1971308b upstream.
+commit 5106dd6e74ab6c94daac1c357094f11e6934b36f upstream.
 
-System.map shows that vmlinux contains several instances of
-__static_call_return0():
+We'll need this in a future patch, when we could be assigning the file
+after the prep stage. While at it, get rid of the io_file_get() helper,
+it just makes the code harder to read.
 
-	c0004fc0 t __static_call_return0
-	c0011518 t __static_call_return0
-	c00d8160 t __static_call_return0
-
-arch_static_call_transform() uses the middle one to check whether we are
-setting a call to __static_call_return0 or not:
-
-	c0011520 <arch_static_call_transform>:
-	c0011520:       3d 20 c0 01     lis     r9,-16383	<== r9 =  0xc001 << 16
-	c0011524:       39 29 15 18     addi    r9,r9,5400	<== r9 += 0x1518
-	c0011528:       7c 05 48 00     cmpw    r5,r9		<== r9 has value 0xc0011518 here
-
-So if static_call_update() is called with one of the other instances of
-__static_call_return0(), arch_static_call_transform() won't recognise it.
-
-In order to work properly, global single instance of __static_call_return0() is required.
-
-Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lkml.kernel.org/r/30821468a0e7d28251954b578e5051dc09300d04.1647258493.git.christophe.leroy@csgroup.eu
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/static_call.h |    5 
- kernel/Makefile             |    3 
- kernel/static_call.c        |  542 -------------------------------------------
- kernel/static_call_inline.c |  543 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 547 insertions(+), 546 deletions(-)
- create mode 100644 kernel/static_call_inline.c
+ fs/io_uring.c |   82 +++++++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 47 insertions(+), 35 deletions(-)
 
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -248,10 +248,7 @@ static inline int static_call_text_reser
- 	return 0;
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1128,8 +1128,9 @@ static int __io_register_rsrc_update(str
+ 				     struct io_uring_rsrc_update2 *up,
+ 				     unsigned nr_args);
+ static void io_clean_op(struct io_kiocb *req);
+-static struct file *io_file_get(struct io_ring_ctx *ctx,
+-				struct io_kiocb *req, int fd, bool fixed);
++static inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
++					     unsigned issue_flags);
++static inline struct file *io_file_get_normal(struct io_kiocb *req, int fd);
+ static void __io_queue_sqe(struct io_kiocb *req);
+ static void io_rsrc_put_work(struct work_struct *work);
+ 
+@@ -1258,13 +1259,20 @@ static void io_rsrc_refs_refill(struct i
  }
  
--static inline long __static_call_return0(void)
--{
--	return 0;
--}
-+extern long __static_call_return0(void);
- 
- #define EXPORT_STATIC_CALL(name)					\
- 	EXPORT_SYMBOL(STATIC_CALL_KEY(name));				\
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -113,7 +113,8 @@ obj-$(CONFIG_CPU_PM) += cpu_pm.o
- obj-$(CONFIG_BPF) += bpf/
- obj-$(CONFIG_KCSAN) += kcsan/
- obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
--obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call.o
-+obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
-+obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
- obj-$(CONFIG_CFI_CLANG) += cfi.o
- 
- obj-$(CONFIG_PERF_EVENTS) += events/
---- a/kernel/static_call.c
-+++ b/kernel/static_call.c
-@@ -1,548 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <linux/init.h>
- #include <linux/static_call.h>
--#include <linux/bug.h>
--#include <linux/smp.h>
--#include <linux/sort.h>
--#include <linux/slab.h>
--#include <linux/module.h>
--#include <linux/cpu.h>
--#include <linux/processor.h>
--#include <asm/sections.h>
--
--extern struct static_call_site __start_static_call_sites[],
--			       __stop_static_call_sites[];
--extern struct static_call_tramp_key __start_static_call_tramp_key[],
--				    __stop_static_call_tramp_key[];
--
--static bool static_call_initialized;
--
--/* mutex to protect key modules/sites */
--static DEFINE_MUTEX(static_call_mutex);
--
--static void static_call_lock(void)
--{
--	mutex_lock(&static_call_mutex);
--}
--
--static void static_call_unlock(void)
--{
--	mutex_unlock(&static_call_mutex);
--}
--
--static inline void *static_call_addr(struct static_call_site *site)
--{
--	return (void *)((long)site->addr + (long)&site->addr);
--}
--
--static inline unsigned long __static_call_key(const struct static_call_site *site)
--{
--	return (long)site->key + (long)&site->key;
--}
--
--static inline struct static_call_key *static_call_key(const struct static_call_site *site)
--{
--	return (void *)(__static_call_key(site) & ~STATIC_CALL_SITE_FLAGS);
--}
--
--/* These assume the key is word-aligned. */
--static inline bool static_call_is_init(struct static_call_site *site)
--{
--	return __static_call_key(site) & STATIC_CALL_SITE_INIT;
--}
--
--static inline bool static_call_is_tail(struct static_call_site *site)
--{
--	return __static_call_key(site) & STATIC_CALL_SITE_TAIL;
--}
--
--static inline void static_call_set_init(struct static_call_site *site)
--{
--	site->key = (__static_call_key(site) | STATIC_CALL_SITE_INIT) -
--		    (long)&site->key;
--}
--
--static int static_call_site_cmp(const void *_a, const void *_b)
--{
--	const struct static_call_site *a = _a;
--	const struct static_call_site *b = _b;
--	const struct static_call_key *key_a = static_call_key(a);
--	const struct static_call_key *key_b = static_call_key(b);
--
--	if (key_a < key_b)
--		return -1;
--
--	if (key_a > key_b)
--		return 1;
--
--	return 0;
--}
--
--static void static_call_site_swap(void *_a, void *_b, int size)
--{
--	long delta = (unsigned long)_a - (unsigned long)_b;
--	struct static_call_site *a = _a;
--	struct static_call_site *b = _b;
--	struct static_call_site tmp = *a;
--
--	a->addr = b->addr  - delta;
--	a->key  = b->key   - delta;
--
--	b->addr = tmp.addr + delta;
--	b->key  = tmp.key  + delta;
--}
--
--static inline void static_call_sort_entries(struct static_call_site *start,
--					    struct static_call_site *stop)
--{
--	sort(start, stop - start, sizeof(struct static_call_site),
--	     static_call_site_cmp, static_call_site_swap);
--}
--
--static inline bool static_call_key_has_mods(struct static_call_key *key)
--{
--	return !(key->type & 1);
--}
--
--static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
--{
--	if (!static_call_key_has_mods(key))
--		return NULL;
--
--	return key->mods;
--}
--
--static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
--{
--	if (static_call_key_has_mods(key))
--		return NULL;
--
--	return (struct static_call_site *)(key->type & ~1);
--}
--
--void __static_call_update(struct static_call_key *key, void *tramp, void *func)
--{
--	struct static_call_site *site, *stop;
--	struct static_call_mod *site_mod, first;
--
--	cpus_read_lock();
--	static_call_lock();
--
--	if (key->func == func)
--		goto done;
--
--	key->func = func;
--
--	arch_static_call_transform(NULL, tramp, func, false);
--
--	/*
--	 * If uninitialized, we'll not update the callsites, but they still
--	 * point to the trampoline and we just patched that.
--	 */
--	if (WARN_ON_ONCE(!static_call_initialized))
--		goto done;
--
--	first = (struct static_call_mod){
--		.next = static_call_key_next(key),
--		.mod = NULL,
--		.sites = static_call_key_sites(key),
--	};
--
--	for (site_mod = &first; site_mod; site_mod = site_mod->next) {
--		bool init = system_state < SYSTEM_RUNNING;
--		struct module *mod = site_mod->mod;
--
--		if (!site_mod->sites) {
--			/*
--			 * This can happen if the static call key is defined in
--			 * a module which doesn't use it.
--			 *
--			 * It also happens in the has_mods case, where the
--			 * 'first' entry has no sites associated with it.
--			 */
--			continue;
--		}
--
--		stop = __stop_static_call_sites;
--
--		if (mod) {
--#ifdef CONFIG_MODULES
--			stop = mod->static_call_sites +
--			       mod->num_static_call_sites;
--			init = mod->state == MODULE_STATE_COMING;
--#endif
--		}
--
--		for (site = site_mod->sites;
--		     site < stop && static_call_key(site) == key; site++) {
--			void *site_addr = static_call_addr(site);
--
--			if (!init && static_call_is_init(site))
--				continue;
--
--			if (!kernel_text_address((unsigned long)site_addr)) {
--				/*
--				 * This skips patching built-in __exit, which
--				 * is part of init_section_contains() but is
--				 * not part of kernel_text_address().
--				 *
--				 * Skipping built-in __exit is fine since it
--				 * will never be executed.
--				 */
--				WARN_ONCE(!static_call_is_init(site),
--					  "can't patch static call site at %pS",
--					  site_addr);
--				continue;
--			}
--
--			arch_static_call_transform(site_addr, NULL, func,
--						   static_call_is_tail(site));
--		}
--	}
--
--done:
--	static_call_unlock();
--	cpus_read_unlock();
--}
--EXPORT_SYMBOL_GPL(__static_call_update);
--
--static int __static_call_init(struct module *mod,
--			      struct static_call_site *start,
--			      struct static_call_site *stop)
--{
--	struct static_call_site *site;
--	struct static_call_key *key, *prev_key = NULL;
--	struct static_call_mod *site_mod;
--
--	if (start == stop)
--		return 0;
--
--	static_call_sort_entries(start, stop);
--
--	for (site = start; site < stop; site++) {
--		void *site_addr = static_call_addr(site);
--
--		if ((mod && within_module_init((unsigned long)site_addr, mod)) ||
--		    (!mod && init_section_contains(site_addr, 1)))
--			static_call_set_init(site);
--
--		key = static_call_key(site);
--		if (key != prev_key) {
--			prev_key = key;
--
--			/*
--			 * For vmlinux (!mod) avoid the allocation by storing
--			 * the sites pointer in the key itself. Also see
--			 * __static_call_update()'s @first.
--			 *
--			 * This allows architectures (eg. x86) to call
--			 * static_call_init() before memory allocation works.
--			 */
--			if (!mod) {
--				key->sites = site;
--				key->type |= 1;
--				goto do_transform;
--			}
--
--			site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
--			if (!site_mod)
--				return -ENOMEM;
--
--			/*
--			 * When the key has a direct sites pointer, extract
--			 * that into an explicit struct static_call_mod, so we
--			 * can have a list of modules.
--			 */
--			if (static_call_key_sites(key)) {
--				site_mod->mod = NULL;
--				site_mod->next = NULL;
--				site_mod->sites = static_call_key_sites(key);
--
--				key->mods = site_mod;
--
--				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
--				if (!site_mod)
--					return -ENOMEM;
--			}
--
--			site_mod->mod = mod;
--			site_mod->sites = site;
--			site_mod->next = static_call_key_next(key);
--			key->mods = site_mod;
--		}
--
--do_transform:
--		arch_static_call_transform(site_addr, NULL, key->func,
--				static_call_is_tail(site));
--	}
--
--	return 0;
--}
--
--static int addr_conflict(struct static_call_site *site, void *start, void *end)
--{
--	unsigned long addr = (unsigned long)static_call_addr(site);
--
--	if (addr <= (unsigned long)end &&
--	    addr + CALL_INSN_SIZE > (unsigned long)start)
--		return 1;
--
--	return 0;
--}
--
--static int __static_call_text_reserved(struct static_call_site *iter_start,
--				       struct static_call_site *iter_stop,
--				       void *start, void *end, bool init)
--{
--	struct static_call_site *iter = iter_start;
--
--	while (iter < iter_stop) {
--		if (init || !static_call_is_init(iter)) {
--			if (addr_conflict(iter, start, end))
--				return 1;
--		}
--		iter++;
--	}
--
--	return 0;
--}
--
--#ifdef CONFIG_MODULES
--
--static int __static_call_mod_text_reserved(void *start, void *end)
--{
--	struct module *mod;
--	int ret;
--
--	preempt_disable();
--	mod = __module_text_address((unsigned long)start);
--	WARN_ON_ONCE(__module_text_address((unsigned long)end) != mod);
--	if (!try_module_get(mod))
--		mod = NULL;
--	preempt_enable();
--
--	if (!mod)
--		return 0;
--
--	ret = __static_call_text_reserved(mod->static_call_sites,
--			mod->static_call_sites + mod->num_static_call_sites,
--			start, end, mod->state == MODULE_STATE_COMING);
--
--	module_put(mod);
--
--	return ret;
--}
--
--static unsigned long tramp_key_lookup(unsigned long addr)
--{
--	struct static_call_tramp_key *start = __start_static_call_tramp_key;
--	struct static_call_tramp_key *stop = __stop_static_call_tramp_key;
--	struct static_call_tramp_key *tramp_key;
--
--	for (tramp_key = start; tramp_key != stop; tramp_key++) {
--		unsigned long tramp;
--
--		tramp = (long)tramp_key->tramp + (long)&tramp_key->tramp;
--		if (tramp == addr)
--			return (long)tramp_key->key + (long)&tramp_key->key;
--	}
--
--	return 0;
--}
--
--static int static_call_add_module(struct module *mod)
--{
--	struct static_call_site *start = mod->static_call_sites;
--	struct static_call_site *stop = start + mod->num_static_call_sites;
--	struct static_call_site *site;
--
--	for (site = start; site != stop; site++) {
--		unsigned long s_key = __static_call_key(site);
--		unsigned long addr = s_key & ~STATIC_CALL_SITE_FLAGS;
--		unsigned long key;
--
--		/*
--		 * Is the key is exported, 'addr' points to the key, which
--		 * means modules are allowed to call static_call_update() on
--		 * it.
--		 *
--		 * Otherwise, the key isn't exported, and 'addr' points to the
--		 * trampoline so we need to lookup the key.
--		 *
--		 * We go through this dance to prevent crazy modules from
--		 * abusing sensitive static calls.
--		 */
--		if (!kernel_text_address(addr))
--			continue;
--
--		key = tramp_key_lookup(addr);
--		if (!key) {
--			pr_warn("Failed to fixup __raw_static_call() usage at: %ps\n",
--				static_call_addr(site));
--			return -EINVAL;
--		}
--
--		key |= s_key & STATIC_CALL_SITE_FLAGS;
--		site->key = key - (long)&site->key;
--	}
--
--	return __static_call_init(mod, start, stop);
--}
--
--static void static_call_del_module(struct module *mod)
--{
--	struct static_call_site *start = mod->static_call_sites;
--	struct static_call_site *stop = mod->static_call_sites +
--					mod->num_static_call_sites;
--	struct static_call_key *key, *prev_key = NULL;
--	struct static_call_mod *site_mod, **prev;
--	struct static_call_site *site;
--
--	for (site = start; site < stop; site++) {
--		key = static_call_key(site);
--		if (key == prev_key)
--			continue;
--
--		prev_key = key;
--
--		for (prev = &key->mods, site_mod = key->mods;
--		     site_mod && site_mod->mod != mod;
--		     prev = &site_mod->next, site_mod = site_mod->next)
--			;
--
--		if (!site_mod)
--			continue;
--
--		*prev = site_mod->next;
--		kfree(site_mod);
--	}
--}
--
--static int static_call_module_notify(struct notifier_block *nb,
--				     unsigned long val, void *data)
--{
--	struct module *mod = data;
--	int ret = 0;
--
--	cpus_read_lock();
--	static_call_lock();
--
--	switch (val) {
--	case MODULE_STATE_COMING:
--		ret = static_call_add_module(mod);
--		if (ret) {
--			WARN(1, "Failed to allocate memory for static calls");
--			static_call_del_module(mod);
--		}
--		break;
--	case MODULE_STATE_GOING:
--		static_call_del_module(mod);
--		break;
--	}
--
--	static_call_unlock();
--	cpus_read_unlock();
--
--	return notifier_from_errno(ret);
--}
--
--static struct notifier_block static_call_module_nb = {
--	.notifier_call = static_call_module_notify,
--};
--
--#else
--
--static inline int __static_call_mod_text_reserved(void *start, void *end)
--{
--	return 0;
--}
--
--#endif /* CONFIG_MODULES */
--
--int static_call_text_reserved(void *start, void *end)
--{
--	bool init = system_state < SYSTEM_RUNNING;
--	int ret = __static_call_text_reserved(__start_static_call_sites,
--			__stop_static_call_sites, start, end, init);
--
--	if (ret)
--		return ret;
--
--	return __static_call_mod_text_reserved(start, end);
--}
--
--int __init static_call_init(void)
--{
--	int ret;
--
--	if (static_call_initialized)
--		return 0;
--
--	cpus_read_lock();
--	static_call_lock();
--	ret = __static_call_init(NULL, __start_static_call_sites,
--				 __stop_static_call_sites);
--	static_call_unlock();
--	cpus_read_unlock();
--
--	if (ret) {
--		pr_err("Failed to allocate memory for static_call!\n");
--		BUG();
--	}
--
--	static_call_initialized = true;
--
--#ifdef CONFIG_MODULES
--	register_module_notifier(&static_call_module_nb);
--#endif
--	return 0;
--}
--early_initcall(static_call_init);
- 
- long __static_call_return0(void)
+ static inline void io_req_set_rsrc_node(struct io_kiocb *req,
+-					struct io_ring_ctx *ctx)
++					struct io_ring_ctx *ctx,
++					unsigned int issue_flags)
  {
+ 	if (!req->fixed_rsrc_refs) {
+ 		req->fixed_rsrc_refs = &ctx->rsrc_node->refs;
+-		ctx->rsrc_cached_refs--;
+-		if (unlikely(ctx->rsrc_cached_refs < 0))
+-			io_rsrc_refs_refill(ctx);
++
++		if (!(issue_flags & IO_URING_F_UNLOCKED)) {
++			lockdep_assert_held(&ctx->uring_lock);
++			ctx->rsrc_cached_refs--;
++			if (unlikely(ctx->rsrc_cached_refs < 0))
++				io_rsrc_refs_refill(ctx);
++		} else {
++			percpu_ref_get(req->fixed_rsrc_refs);
++		}
+ 	}
+ }
+ 
+@@ -3122,7 +3130,8 @@ static int __io_import_fixed(struct io_k
  	return 0;
  }
--
--#ifdef CONFIG_STATIC_CALL_SELFTEST
--
--static int func_a(int x)
+ 
+-static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter)
++static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter,
++			   unsigned int issue_flags)
+ {
+ 	struct io_mapped_ubuf *imu = req->imu;
+ 	u16 index, buf_index = req->buf_index;
+@@ -3132,7 +3141,7 @@ static int io_import_fixed(struct io_kio
+ 
+ 		if (unlikely(buf_index >= ctx->nr_user_bufs))
+ 			return -EFAULT;
+-		io_req_set_rsrc_node(req, ctx);
++		io_req_set_rsrc_node(req, ctx, issue_flags);
+ 		index = array_index_nospec(buf_index, ctx->nr_user_bufs);
+ 		imu = READ_ONCE(ctx->user_bufs[index]);
+ 		req->imu = imu;
+@@ -3288,7 +3297,7 @@ static struct iovec *__io_import_iovec(i
+ 	ssize_t ret;
+ 
+ 	if (opcode == IORING_OP_READ_FIXED || opcode == IORING_OP_WRITE_FIXED) {
+-		ret = io_import_fixed(req, rw, iter);
++		ret = io_import_fixed(req, rw, iter, issue_flags);
+ 		if (ret)
+ 			return ERR_PTR(ret);
+ 		return NULL;
+@@ -4167,8 +4176,10 @@ static int io_tee(struct io_kiocb *req,
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		return -EAGAIN;
+ 
+-	in = io_file_get(req->ctx, req, sp->splice_fd_in,
+-				  (sp->flags & SPLICE_F_FD_IN_FIXED));
++	if (sp->flags & SPLICE_F_FD_IN_FIXED)
++		in = io_file_get_fixed(req, sp->splice_fd_in, IO_URING_F_UNLOCKED);
++	else
++		in = io_file_get_normal(req, sp->splice_fd_in);
+ 	if (!in) {
+ 		ret = -EBADF;
+ 		goto done;
+@@ -4207,8 +4218,10 @@ static int io_splice(struct io_kiocb *re
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		return -EAGAIN;
+ 
+-	in = io_file_get(req->ctx, req, sp->splice_fd_in,
+-				  (sp->flags & SPLICE_F_FD_IN_FIXED));
++	if (sp->flags & SPLICE_F_FD_IN_FIXED)
++		in = io_file_get_fixed(req, sp->splice_fd_in, IO_URING_F_UNLOCKED);
++	else
++		in = io_file_get_normal(req, sp->splice_fd_in);
+ 	if (!in) {
+ 		ret = -EBADF;
+ 		goto done;
+@@ -5513,7 +5526,7 @@ static void io_poll_remove_entries(struc
+  * either spurious wakeup or multishot CQE is served. 0 when it's done with
+  * the request, then the mask is stored in req->result.
+  */
+-static int io_poll_check_events(struct io_kiocb *req)
++static int io_poll_check_events(struct io_kiocb *req, bool locked)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_poll_iocb *poll = io_poll_get_single(req);
+@@ -5569,7 +5582,7 @@ static void io_poll_task_func(struct io_
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	int ret;
+ 
+-	ret = io_poll_check_events(req);
++	ret = io_poll_check_events(req, *locked);
+ 	if (ret > 0)
+ 		return;
+ 
+@@ -5594,7 +5607,7 @@ static void io_apoll_task_func(struct io
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	int ret;
+ 
+-	ret = io_poll_check_events(req);
++	ret = io_poll_check_events(req, *locked);
+ 	if (ret > 0)
+ 		return;
+ 
+@@ -6962,30 +6975,36 @@ static void io_fixed_file_set(struct io_
+ 	file_slot->file_ptr = file_ptr;
+ }
+ 
+-static inline struct file *io_file_get_fixed(struct io_ring_ctx *ctx,
+-					     struct io_kiocb *req, int fd)
++static inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
++					     unsigned int issue_flags)
+ {
+-	struct file *file;
++	struct io_ring_ctx *ctx = req->ctx;
++	struct file *file = NULL;
+ 	unsigned long file_ptr;
+ 
++	if (issue_flags & IO_URING_F_UNLOCKED)
++		mutex_lock(&ctx->uring_lock);
++
+ 	if (unlikely((unsigned int)fd >= ctx->nr_user_files))
+-		return NULL;
++		goto out;
+ 	fd = array_index_nospec(fd, ctx->nr_user_files);
+ 	file_ptr = io_fixed_file_slot(&ctx->file_table, fd)->file_ptr;
+ 	file = (struct file *) (file_ptr & FFS_MASK);
+ 	file_ptr &= ~FFS_MASK;
+ 	/* mask in overlapping REQ_F and FFS bits */
+ 	req->flags |= (file_ptr << REQ_F_SUPPORT_NOWAIT_BIT);
+-	io_req_set_rsrc_node(req, ctx);
++	io_req_set_rsrc_node(req, ctx, 0);
++out:
++	if (issue_flags & IO_URING_F_UNLOCKED)
++		mutex_unlock(&ctx->uring_lock);
+ 	return file;
+ }
+ 
+-static struct file *io_file_get_normal(struct io_ring_ctx *ctx,
+-				       struct io_kiocb *req, int fd)
++static struct file *io_file_get_normal(struct io_kiocb *req, int fd)
+ {
+ 	struct file *file = fget(fd);
+ 
+-	trace_io_uring_file_get(ctx, fd);
++	trace_io_uring_file_get(req->ctx, fd);
+ 
+ 	/* we don't allow fixed io_uring files */
+ 	if (file && unlikely(file->f_op == &io_uring_fops))
+@@ -6993,15 +7012,6 @@ static struct file *io_file_get_normal(s
+ 	return file;
+ }
+ 
+-static inline struct file *io_file_get(struct io_ring_ctx *ctx,
+-				       struct io_kiocb *req, int fd, bool fixed)
 -{
--	return x+1;
+-	if (fixed)
+-		return io_file_get_fixed(ctx, req, fd);
+-	else
+-		return io_file_get_normal(ctx, req, fd);
 -}
 -
--static int func_b(int x)
--{
--	return x+2;
--}
--
--DEFINE_STATIC_CALL(sc_selftest, func_a);
--
--static struct static_call_data {
--      int (*func)(int);
--      int val;
--      int expect;
--} static_call_data [] __initdata = {
--      { NULL,   2, 3 },
--      { func_b, 2, 4 },
--      { func_a, 2, 3 }
--};
--
--static int __init test_static_call_init(void)
--{
--      int i;
--
--      for (i = 0; i < ARRAY_SIZE(static_call_data); i++ ) {
--	      struct static_call_data *scd = &static_call_data[i];
--
--              if (scd->func)
--                      static_call_update(sc_selftest, scd->func);
--
--              WARN_ON(static_call(sc_selftest)(scd->val) != scd->expect);
--      }
--
--      return 0;
--}
--early_initcall(test_static_call_init);
--
--#endif /* CONFIG_STATIC_CALL_SELFTEST */
-+EXPORT_SYMBOL_GPL(__static_call_return0);
---- /dev/null
-+++ b/kernel/static_call_inline.c
-@@ -0,0 +1,543 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/init.h>
-+#include <linux/static_call.h>
-+#include <linux/bug.h>
-+#include <linux/smp.h>
-+#include <linux/sort.h>
-+#include <linux/slab.h>
-+#include <linux/module.h>
-+#include <linux/cpu.h>
-+#include <linux/processor.h>
-+#include <asm/sections.h>
-+
-+extern struct static_call_site __start_static_call_sites[],
-+			       __stop_static_call_sites[];
-+extern struct static_call_tramp_key __start_static_call_tramp_key[],
-+				    __stop_static_call_tramp_key[];
-+
-+static bool static_call_initialized;
-+
-+/* mutex to protect key modules/sites */
-+static DEFINE_MUTEX(static_call_mutex);
-+
-+static void static_call_lock(void)
-+{
-+	mutex_lock(&static_call_mutex);
-+}
-+
-+static void static_call_unlock(void)
-+{
-+	mutex_unlock(&static_call_mutex);
-+}
-+
-+static inline void *static_call_addr(struct static_call_site *site)
-+{
-+	return (void *)((long)site->addr + (long)&site->addr);
-+}
-+
-+static inline unsigned long __static_call_key(const struct static_call_site *site)
-+{
-+	return (long)site->key + (long)&site->key;
-+}
-+
-+static inline struct static_call_key *static_call_key(const struct static_call_site *site)
-+{
-+	return (void *)(__static_call_key(site) & ~STATIC_CALL_SITE_FLAGS);
-+}
-+
-+/* These assume the key is word-aligned. */
-+static inline bool static_call_is_init(struct static_call_site *site)
-+{
-+	return __static_call_key(site) & STATIC_CALL_SITE_INIT;
-+}
-+
-+static inline bool static_call_is_tail(struct static_call_site *site)
-+{
-+	return __static_call_key(site) & STATIC_CALL_SITE_TAIL;
-+}
-+
-+static inline void static_call_set_init(struct static_call_site *site)
-+{
-+	site->key = (__static_call_key(site) | STATIC_CALL_SITE_INIT) -
-+		    (long)&site->key;
-+}
-+
-+static int static_call_site_cmp(const void *_a, const void *_b)
-+{
-+	const struct static_call_site *a = _a;
-+	const struct static_call_site *b = _b;
-+	const struct static_call_key *key_a = static_call_key(a);
-+	const struct static_call_key *key_b = static_call_key(b);
-+
-+	if (key_a < key_b)
-+		return -1;
-+
-+	if (key_a > key_b)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void static_call_site_swap(void *_a, void *_b, int size)
-+{
-+	long delta = (unsigned long)_a - (unsigned long)_b;
-+	struct static_call_site *a = _a;
-+	struct static_call_site *b = _b;
-+	struct static_call_site tmp = *a;
-+
-+	a->addr = b->addr  - delta;
-+	a->key  = b->key   - delta;
-+
-+	b->addr = tmp.addr + delta;
-+	b->key  = tmp.key  + delta;
-+}
-+
-+static inline void static_call_sort_entries(struct static_call_site *start,
-+					    struct static_call_site *stop)
-+{
-+	sort(start, stop - start, sizeof(struct static_call_site),
-+	     static_call_site_cmp, static_call_site_swap);
-+}
-+
-+static inline bool static_call_key_has_mods(struct static_call_key *key)
-+{
-+	return !(key->type & 1);
-+}
-+
-+static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
-+{
-+	if (!static_call_key_has_mods(key))
-+		return NULL;
-+
-+	return key->mods;
-+}
-+
-+static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
-+{
-+	if (static_call_key_has_mods(key))
-+		return NULL;
-+
-+	return (struct static_call_site *)(key->type & ~1);
-+}
-+
-+void __static_call_update(struct static_call_key *key, void *tramp, void *func)
-+{
-+	struct static_call_site *site, *stop;
-+	struct static_call_mod *site_mod, first;
-+
-+	cpus_read_lock();
-+	static_call_lock();
-+
-+	if (key->func == func)
-+		goto done;
-+
-+	key->func = func;
-+
-+	arch_static_call_transform(NULL, tramp, func, false);
-+
-+	/*
-+	 * If uninitialized, we'll not update the callsites, but they still
-+	 * point to the trampoline and we just patched that.
-+	 */
-+	if (WARN_ON_ONCE(!static_call_initialized))
-+		goto done;
-+
-+	first = (struct static_call_mod){
-+		.next = static_call_key_next(key),
-+		.mod = NULL,
-+		.sites = static_call_key_sites(key),
-+	};
-+
-+	for (site_mod = &first; site_mod; site_mod = site_mod->next) {
-+		bool init = system_state < SYSTEM_RUNNING;
-+		struct module *mod = site_mod->mod;
-+
-+		if (!site_mod->sites) {
-+			/*
-+			 * This can happen if the static call key is defined in
-+			 * a module which doesn't use it.
-+			 *
-+			 * It also happens in the has_mods case, where the
-+			 * 'first' entry has no sites associated with it.
-+			 */
-+			continue;
-+		}
-+
-+		stop = __stop_static_call_sites;
-+
-+		if (mod) {
-+#ifdef CONFIG_MODULES
-+			stop = mod->static_call_sites +
-+			       mod->num_static_call_sites;
-+			init = mod->state == MODULE_STATE_COMING;
-+#endif
-+		}
-+
-+		for (site = site_mod->sites;
-+		     site < stop && static_call_key(site) == key; site++) {
-+			void *site_addr = static_call_addr(site);
-+
-+			if (!init && static_call_is_init(site))
-+				continue;
-+
-+			if (!kernel_text_address((unsigned long)site_addr)) {
-+				/*
-+				 * This skips patching built-in __exit, which
-+				 * is part of init_section_contains() but is
-+				 * not part of kernel_text_address().
-+				 *
-+				 * Skipping built-in __exit is fine since it
-+				 * will never be executed.
-+				 */
-+				WARN_ONCE(!static_call_is_init(site),
-+					  "can't patch static call site at %pS",
-+					  site_addr);
-+				continue;
-+			}
-+
-+			arch_static_call_transform(site_addr, NULL, func,
-+						   static_call_is_tail(site));
-+		}
-+	}
-+
-+done:
-+	static_call_unlock();
-+	cpus_read_unlock();
-+}
-+EXPORT_SYMBOL_GPL(__static_call_update);
-+
-+static int __static_call_init(struct module *mod,
-+			      struct static_call_site *start,
-+			      struct static_call_site *stop)
-+{
-+	struct static_call_site *site;
-+	struct static_call_key *key, *prev_key = NULL;
-+	struct static_call_mod *site_mod;
-+
-+	if (start == stop)
-+		return 0;
-+
-+	static_call_sort_entries(start, stop);
-+
-+	for (site = start; site < stop; site++) {
-+		void *site_addr = static_call_addr(site);
-+
-+		if ((mod && within_module_init((unsigned long)site_addr, mod)) ||
-+		    (!mod && init_section_contains(site_addr, 1)))
-+			static_call_set_init(site);
-+
-+		key = static_call_key(site);
-+		if (key != prev_key) {
-+			prev_key = key;
-+
-+			/*
-+			 * For vmlinux (!mod) avoid the allocation by storing
-+			 * the sites pointer in the key itself. Also see
-+			 * __static_call_update()'s @first.
-+			 *
-+			 * This allows architectures (eg. x86) to call
-+			 * static_call_init() before memory allocation works.
-+			 */
-+			if (!mod) {
-+				key->sites = site;
-+				key->type |= 1;
-+				goto do_transform;
-+			}
-+
-+			site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
-+			if (!site_mod)
-+				return -ENOMEM;
-+
-+			/*
-+			 * When the key has a direct sites pointer, extract
-+			 * that into an explicit struct static_call_mod, so we
-+			 * can have a list of modules.
-+			 */
-+			if (static_call_key_sites(key)) {
-+				site_mod->mod = NULL;
-+				site_mod->next = NULL;
-+				site_mod->sites = static_call_key_sites(key);
-+
-+				key->mods = site_mod;
-+
-+				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
-+				if (!site_mod)
-+					return -ENOMEM;
-+			}
-+
-+			site_mod->mod = mod;
-+			site_mod->sites = site;
-+			site_mod->next = static_call_key_next(key);
-+			key->mods = site_mod;
-+		}
-+
-+do_transform:
-+		arch_static_call_transform(site_addr, NULL, key->func,
-+				static_call_is_tail(site));
-+	}
-+
-+	return 0;
-+}
-+
-+static int addr_conflict(struct static_call_site *site, void *start, void *end)
-+{
-+	unsigned long addr = (unsigned long)static_call_addr(site);
-+
-+	if (addr <= (unsigned long)end &&
-+	    addr + CALL_INSN_SIZE > (unsigned long)start)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int __static_call_text_reserved(struct static_call_site *iter_start,
-+				       struct static_call_site *iter_stop,
-+				       void *start, void *end, bool init)
-+{
-+	struct static_call_site *iter = iter_start;
-+
-+	while (iter < iter_stop) {
-+		if (init || !static_call_is_init(iter)) {
-+			if (addr_conflict(iter, start, end))
-+				return 1;
-+		}
-+		iter++;
-+	}
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_MODULES
-+
-+static int __static_call_mod_text_reserved(void *start, void *end)
-+{
-+	struct module *mod;
-+	int ret;
-+
-+	preempt_disable();
-+	mod = __module_text_address((unsigned long)start);
-+	WARN_ON_ONCE(__module_text_address((unsigned long)end) != mod);
-+	if (!try_module_get(mod))
-+		mod = NULL;
-+	preempt_enable();
-+
-+	if (!mod)
-+		return 0;
-+
-+	ret = __static_call_text_reserved(mod->static_call_sites,
-+			mod->static_call_sites + mod->num_static_call_sites,
-+			start, end, mod->state == MODULE_STATE_COMING);
-+
-+	module_put(mod);
-+
-+	return ret;
-+}
-+
-+static unsigned long tramp_key_lookup(unsigned long addr)
-+{
-+	struct static_call_tramp_key *start = __start_static_call_tramp_key;
-+	struct static_call_tramp_key *stop = __stop_static_call_tramp_key;
-+	struct static_call_tramp_key *tramp_key;
-+
-+	for (tramp_key = start; tramp_key != stop; tramp_key++) {
-+		unsigned long tramp;
-+
-+		tramp = (long)tramp_key->tramp + (long)&tramp_key->tramp;
-+		if (tramp == addr)
-+			return (long)tramp_key->key + (long)&tramp_key->key;
-+	}
-+
-+	return 0;
-+}
-+
-+static int static_call_add_module(struct module *mod)
-+{
-+	struct static_call_site *start = mod->static_call_sites;
-+	struct static_call_site *stop = start + mod->num_static_call_sites;
-+	struct static_call_site *site;
-+
-+	for (site = start; site != stop; site++) {
-+		unsigned long s_key = __static_call_key(site);
-+		unsigned long addr = s_key & ~STATIC_CALL_SITE_FLAGS;
-+		unsigned long key;
-+
-+		/*
-+		 * Is the key is exported, 'addr' points to the key, which
-+		 * means modules are allowed to call static_call_update() on
-+		 * it.
-+		 *
-+		 * Otherwise, the key isn't exported, and 'addr' points to the
-+		 * trampoline so we need to lookup the key.
-+		 *
-+		 * We go through this dance to prevent crazy modules from
-+		 * abusing sensitive static calls.
-+		 */
-+		if (!kernel_text_address(addr))
-+			continue;
-+
-+		key = tramp_key_lookup(addr);
-+		if (!key) {
-+			pr_warn("Failed to fixup __raw_static_call() usage at: %ps\n",
-+				static_call_addr(site));
-+			return -EINVAL;
-+		}
-+
-+		key |= s_key & STATIC_CALL_SITE_FLAGS;
-+		site->key = key - (long)&site->key;
-+	}
-+
-+	return __static_call_init(mod, start, stop);
-+}
-+
-+static void static_call_del_module(struct module *mod)
-+{
-+	struct static_call_site *start = mod->static_call_sites;
-+	struct static_call_site *stop = mod->static_call_sites +
-+					mod->num_static_call_sites;
-+	struct static_call_key *key, *prev_key = NULL;
-+	struct static_call_mod *site_mod, **prev;
-+	struct static_call_site *site;
-+
-+	for (site = start; site < stop; site++) {
-+		key = static_call_key(site);
-+		if (key == prev_key)
-+			continue;
-+
-+		prev_key = key;
-+
-+		for (prev = &key->mods, site_mod = key->mods;
-+		     site_mod && site_mod->mod != mod;
-+		     prev = &site_mod->next, site_mod = site_mod->next)
-+			;
-+
-+		if (!site_mod)
-+			continue;
-+
-+		*prev = site_mod->next;
-+		kfree(site_mod);
-+	}
-+}
-+
-+static int static_call_module_notify(struct notifier_block *nb,
-+				     unsigned long val, void *data)
-+{
-+	struct module *mod = data;
-+	int ret = 0;
-+
-+	cpus_read_lock();
-+	static_call_lock();
-+
-+	switch (val) {
-+	case MODULE_STATE_COMING:
-+		ret = static_call_add_module(mod);
-+		if (ret) {
-+			WARN(1, "Failed to allocate memory for static calls");
-+			static_call_del_module(mod);
-+		}
-+		break;
-+	case MODULE_STATE_GOING:
-+		static_call_del_module(mod);
-+		break;
-+	}
-+
-+	static_call_unlock();
-+	cpus_read_unlock();
-+
-+	return notifier_from_errno(ret);
-+}
-+
-+static struct notifier_block static_call_module_nb = {
-+	.notifier_call = static_call_module_notify,
-+};
-+
-+#else
-+
-+static inline int __static_call_mod_text_reserved(void *start, void *end)
-+{
-+	return 0;
-+}
-+
-+#endif /* CONFIG_MODULES */
-+
-+int static_call_text_reserved(void *start, void *end)
-+{
-+	bool init = system_state < SYSTEM_RUNNING;
-+	int ret = __static_call_text_reserved(__start_static_call_sites,
-+			__stop_static_call_sites, start, end, init);
-+
-+	if (ret)
-+		return ret;
-+
-+	return __static_call_mod_text_reserved(start, end);
-+}
-+
-+int __init static_call_init(void)
-+{
-+	int ret;
-+
-+	if (static_call_initialized)
-+		return 0;
-+
-+	cpus_read_lock();
-+	static_call_lock();
-+	ret = __static_call_init(NULL, __start_static_call_sites,
-+				 __stop_static_call_sites);
-+	static_call_unlock();
-+	cpus_read_unlock();
-+
-+	if (ret) {
-+		pr_err("Failed to allocate memory for static_call!\n");
-+		BUG();
-+	}
-+
-+	static_call_initialized = true;
-+
-+#ifdef CONFIG_MODULES
-+	register_module_notifier(&static_call_module_nb);
-+#endif
-+	return 0;
-+}
-+early_initcall(static_call_init);
-+
-+#ifdef CONFIG_STATIC_CALL_SELFTEST
-+
-+static int func_a(int x)
-+{
-+	return x+1;
-+}
-+
-+static int func_b(int x)
-+{
-+	return x+2;
-+}
-+
-+DEFINE_STATIC_CALL(sc_selftest, func_a);
-+
-+static struct static_call_data {
-+      int (*func)(int);
-+      int val;
-+      int expect;
-+} static_call_data [] __initdata = {
-+      { NULL,   2, 3 },
-+      { func_b, 2, 4 },
-+      { func_a, 2, 3 }
-+};
-+
-+static int __init test_static_call_init(void)
-+{
-+      int i;
-+
-+      for (i = 0; i < ARRAY_SIZE(static_call_data); i++ ) {
-+	      struct static_call_data *scd = &static_call_data[i];
-+
-+              if (scd->func)
-+                      static_call_update(sc_selftest, scd->func);
-+
-+              WARN_ON(static_call(sc_selftest)(scd->val) != scd->expect);
-+      }
-+
-+      return 0;
-+}
-+early_initcall(test_static_call_init);
-+
-+#endif /* CONFIG_STATIC_CALL_SELFTEST */
+ static void io_req_task_link_timeout(struct io_kiocb *req, bool *locked)
+ {
+ 	struct io_kiocb *prev = req->timeout.prev;
+@@ -7249,8 +7259,10 @@ static int io_init_req(struct io_ring_ct
+ 			blk_start_plug_nr_ios(&state->plug, state->submit_nr);
+ 		}
+ 
+-		req->file = io_file_get(ctx, req, READ_ONCE(sqe->fd),
+-					(sqe_flags & IOSQE_FIXED_FILE));
++		if (req->flags & REQ_F_FIXED_FILE)
++			req->file = io_file_get_fixed(req, READ_ONCE(sqe->fd), 0);
++		else
++			req->file = io_file_get_normal(req, READ_ONCE(sqe->fd));
+ 		if (unlikely(!req->file))
+ 			return -EBADF;
+ 	}
 
 

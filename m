@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62FB4FD850
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33D24FDA7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359048AbiDLIdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1354220AbiDLH0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353521AbiDLHZn (ORCPT
+        with ESMTP id S1351615AbiDLHMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C482434BB;
-        Tue, 12 Apr 2022 00:01:01 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC1911A31;
+        Mon, 11 Apr 2022 23:50:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CDFA615BB;
-        Tue, 12 Apr 2022 07:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF32FC385A6;
-        Tue, 12 Apr 2022 07:00:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC8D614B0;
+        Tue, 12 Apr 2022 06:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35ABBC385A6;
+        Tue, 12 Apr 2022 06:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746860;
-        bh=Zygt8MRYFsVO8DaTiGJs09gQRp/2MWgpUr27wSNwVnU=;
+        s=korg; t=1649746235;
+        bh=OTYaN9cEFJk3+s8Bk6TF+yOQ9yew98O3/jc7PDaRvlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qzCQaHEDH+AFOt2Fx6Z/bhANomXE9DtBXZ5np4/dGN4waMnon4g5CVezGpjK/66cg
-         +zeN4m3LyKY8pT7CB/NC96ru9lNaQD6+p3zl6I9jr/xL49Pf/ZIHO5wqBw/TtLKqfP
-         w+fZ0eSmQlDA1KtnwkcFHNMRyL9QvNXS1Gslqn10=
+        b=iqw50bkHSTjfVn9ixxyhk6wzpZ2ZsCMTsDpvCOxcUon8LY20rIRWm3zapv2mxpjij
+         kO2fzcY4NPsoEZq+Zd6o54PyEy9YpRQIzvtM96hHJd1TLizkU+FU4rN2DprV83bJZB
+         MHnwxYlmFCk15P3IKRVdAIn7O0464gTjsQ+Uwj7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
-        ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 154/285] Revert "NFSv4: Handle the special Linux file open access mode"
-Date:   Tue, 12 Apr 2022 08:30:11 +0200
-Message-Id: <20220412062948.117828131@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 209/277] Revert "mmc: sdhci-xenon: fix annoying 1.8V regulator warning"
+Date:   Tue, 12 Apr 2022 08:30:12 +0200
+Message-Id: <20220412062948.089189503@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChenXiaoSong <chenxiaosong2@huawei.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit ab0fc21bc7105b54bafd85bd8b82742f9e68898a ]
+commit 7e2646ed47542123168d43916b84b954532e5386 upstream.
 
-This reverts commit 44942b4e457beda00981f616402a1a791e8c616e.
+This reverts commit bb32e1987bc55ce1db400faf47d85891da3c9b9f.
 
-After secondly opening a file with O_ACCMODE|O_DIRECT flags,
-nfs4_valid_open_stateid() will dereference NULL nfs4_state when lseek().
+Commit 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
+contains proper fix for the issue described in commit bb32e1987bc5 ("mmc:
+sdhci-xenon: fix annoying 1.8V regulator warning").
 
-Reproducer:
-  1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
-  2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
-  3. close(fd)
-  4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
-  5. lseek(fd)
-
-Reported-by: Lyu Tao <tao.lyu@epfl.ch>
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8d876bf472db ("mmc: sdhci-xenon: wait 5ms after set 1.8V signal enable")
+Cc: stable@vger.kernel.org # 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Marcin Wojtas <mw@semihalf.com>
+Link: https://lore.kernel.org/r/20220318141441.32329-1-pali@kernel.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/inode.c    | 1 -
- fs/nfs/nfs4file.c | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ drivers/mmc/host/sdhci-xenon.c |   10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index a09d3ff627c2..4da8a4a7bad7 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -1180,7 +1180,6 @@ int nfs_open(struct inode *inode, struct file *filp)
- 	nfs_fscache_open_file(inode, filp);
- 	return 0;
+--- a/drivers/mmc/host/sdhci-xenon.c
++++ b/drivers/mmc/host/sdhci-xenon.c
+@@ -241,16 +241,6 @@ static void xenon_voltage_switch(struct
+ {
+ 	/* Wait for 5ms after set 1.8V signal enable bit */
+ 	usleep_range(5000, 5500);
+-
+-	/*
+-	 * For some reason the controller's Host Control2 register reports
+-	 * the bit representing 1.8V signaling as 0 when read after it was
+-	 * written as 1. Subsequent read reports 1.
+-	 *
+-	 * Since this may cause some issues, do an empty read of the Host
+-	 * Control2 register here to circumvent this.
+-	 */
+-	sdhci_readw(host, SDHCI_HOST_CONTROL2);
  }
--EXPORT_SYMBOL_GPL(nfs_open);
  
- /*
-  * This function is called whenever some part of NFS notices that
-diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index e79ae4cbc395..c178db86a6e8 100644
---- a/fs/nfs/nfs4file.c
-+++ b/fs/nfs/nfs4file.c
-@@ -51,7 +51,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
- 		return err;
- 
- 	if ((openflags & O_ACCMODE) == 3)
--		return nfs_open(inode, filp);
-+		openflags--;
- 
- 	/* We can't create new files here */
- 	openflags &= ~(O_CREAT|O_EXCL);
--- 
-2.35.1
-
+ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
 
 

@@ -2,85 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E342A4FE0A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E4F4FE0B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354672AbiDLMnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S1353752AbiDLMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355479AbiDLMjN (ORCPT
+        with ESMTP id S1355484AbiDLMjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:39:13 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C8A2E2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id c64so9902340edf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
-        b=GTUU/BAw/7g1icPdyU1gicA+0STlI2aa4ncYMDx5RcmR/waZhtMZOSNr5gntvcxXkt
-         ZcRHjnk7S6mc7uTCeRabTQc9vxmnqPhg/QUV1E1kipzO+L0EyqtazSu7D+hHcyFzdRLY
-         xlaIvsEwqmFdCFMNA4xJ9nRZ+ILKSUyNWulsjOL3z46V0yzJoqFbUAbnwraaVq0bvp0w
-         uQlLLo3GU0MuerdCEEYIRrKWoo1PeJ1qi1IWeo5hFJP3kug2vwZN2B3S0Y7+T7Bi3itQ
-         QkRrJweOerYJHTf6hdqjrPxD+bLYZnhDzB85b3xjzrAz6MkqmXpnRN5ocAoLtSeLuVE7
-         z05w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
-        b=WSVgnF6Vr3Vl4RwkGZLwpxfSspxq7dleJMBPlQa3QVwc3AFj6W+k6Z/H7lHI/o1YY0
-         xYzjulumsVlfwTzEaU7fk39Sddh2xgJoxX5R1tmU+W76q5BzZDIKAMyxbdv/aAF222NL
-         mSjnjmIt1+r4XCdIgiFdXxVDD/UN4PN110IuryL6/eWT2TNFuBeqbzUwX7ieNRfOjO4Z
-         D1M8D1EV6gGDO6pCT6Ec1+ZqH+cWq+rIUwPhRSyxV8V2T/SQkDC5eWkH8NBSttg7AHgw
-         TE/ddP2IWLnJaPtbWhGxLxvqy3mxpXPZ8gMwFDQRFkfAzSAzv//w7HZHdu6AnqKN8VT7
-         RT2g==
-X-Gm-Message-State: AOAM532qNIjkfTFEZeyWo/kDr+zFkDC3ILhd1HPhtG1X6RMCzb2LEzDC
-        ndo1QVuRFYl/DoiaMevEd2OKhA==
-X-Google-Smtp-Source: ABdhPJzxtTWRt335RkLqbr9SGrvPqsb0D1/lwfuPdhnA0WbWgovri7fB6O1ERz8pptVoCEjSQJ+L3w==
-X-Received: by 2002:a05:6402:438d:b0:419:4550:d52b with SMTP id o13-20020a056402438d00b004194550d52bmr38259034edc.83.1649764939866;
-        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
-Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm4001892ejc.150.2022.04.12.05.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
-Message-ID: <37b21c24-22e0-2de2-697f-d22ff92b90c2@linaro.org>
-Date:   Tue, 12 Apr 2022 14:02:17 +0200
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0024C32D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FDA961017
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B70BC385A5;
+        Tue, 12 Apr 2022 12:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649764941;
+        bh=RL0TS6TyTsdDUGUm/EuXSEF8ETZ+oamHhp+RILM0/YA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u3mHLMHoovRPWuJ8y8P/Vdf5aWsXfBlbwPd/Lv1CC2gAYrz46aDVuZy2dSkGLSWmE
+         hpBubU2oQjoy5rFdmrvHhehRBFD4euGUaRkf+8y/ARPVcMFqqMajIZJKh10O45Oc9C
+         VsxROyNh+ZUUyk13ISrKKT92HWZsCR8RKZeqBRIs=
+Date:   Tue, 12 Apr 2022 14:02:18 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Liu Junqi <liujunqi@pku.edu.cn>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Remove D. Kershner from Unisys S-PAR
+ maintainers
+Message-ID: <YlVqStHr6acHnF5o@kroah.com>
+References: <20220412103629.8029-1-fmdefrancesco@gmail.com>
+ <YlVXV4J41KBzKHtm@kroah.com>
+ <2976258.CbtlEUcBR6@leap>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v13 1/6] dt-bindings: usb: dwc3: Add wakeup-source
- property support
-Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2976258.CbtlEUcBR6@leap>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,35 +60,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 21:16, Sandeep Maheswaram wrote:
-> Added support for wakeup-source property. This property can be
-> used to check and power down the phy during system suspend if
-> wake up is not supported.
+On Tue, Apr 12, 2022 at 01:08:28PM +0200, Fabio M. De Francesco wrote:
+> On marted? 12 aprile 2022 12:41:27 CEST Greg Kroah-Hartman wrote:
+> > On Tue, Apr 12, 2022 at 12:36:29PM +0200, Fabio M. De Francesco wrote:
+> > > The email address of David Kershner is no more reachable. Remove his
+> > > entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS and change
+> > > the status to "Orphan".
+> > > 
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > > 
+> > > v1->v2: Change also the status of the entry to "Orphan" and rework the
+> > > commit message. (Thanks to Greg Kroah-Hartman).
+> > > 
+> > >  MAINTAINERS | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > 
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 3ed62dcd144e..9283c63565b3 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -20184,9 +20184,8 @@ F:	include/linux/cdrom.h
+> > >  F:	include/uapi/linux/cdrom.h
+> > >  
+> > >  UNISYS S-PAR DRIVERS
+> > > -M:	David Kershner <david.kershner@unisys.com>
+> > >  L:	sparmaintainer@unisys.com (Unisys internal)
+> > 
+> > Again, please drop this "list" as it obviously is not going to anyone.
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> OK, I'll also drop the "L:" line. I wasn't sure about it because I see 
+> that there are other entries marked as "Orphan" and the list is still
+> there. But you are right: although the "sparmaintainer" list address is
+> not bouncing, it looks like nobody care to read messages there.
+>   
+> > And really, this whole code should be removed, no one seems to be using
+> > it, and if they are, we can easily revert the removal and mark them as
+> > the maintainer.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index f4471f8..4d4de2f 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -341,6 +341,11 @@ properties:
->        This port is used with the 'usb-role-switch' property  to connect the
->        dwc3 to type C connector.
->  
-> +  wakeup-source:
-> +    $ref: /schemas/types.yaml#/definitions/flag
+> 1) If I remove the entire drivers/staging/unisys/ I suppose that, in 
+> MAINTAINERS I should also remove the whole entry called "UNISYS S-PAR 
+> DRIVERS", not only the "L:" line. 
 
-I would prefer to use shorter "type: boolean", but in any case:
+Yes, _AND_ you need to also remove all files that are listed for that
+entry.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 2) Furthermore, I understand that I should also should change the relevant 
+> Kbuild files, otherwise all builds of staging would fail. 
 
-> +    description:
-> +      Enable USB remote wakeup.
+Yes.
 
+thanks,
 
-Best regards,
-Krzysztof
+greg k-h

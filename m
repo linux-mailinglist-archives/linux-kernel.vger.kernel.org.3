@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EF94FE0B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E342A4FE0A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354061AbiDLMmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S1354672AbiDLMnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355417AbiDLMjK (ORCPT
+        with ESMTP id S1355479AbiDLMjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:39:10 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C54E03F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:00:46 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id l7so31408569ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:00:46 -0700 (PDT)
+        Tue, 12 Apr 2022 08:39:13 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C8A2E2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c64so9902340edf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4XT57RJ2zR0pUw59EDpBr/xnn0uf45XYMH4qW2Nnhag=;
-        b=PjTkhyxG9YnT/WRgCigk6dnjQLEqvWLBnqJI2oxk5GEFzh065/3zJ6/VA5+CQBLpKU
-         ljnXnp3/rV4PlaXn22l0r6QtObTkHsit4HWew6uxkt95zQF27zPcfeMrGu1zLQxT067i
-         Vnb36PyoD+EwmuEiS0iLt+ph45Vo5xXTIjcLOg4tzTp2rpSSH9dOf/ofFNfk6B6Siigc
-         /BSb05fegwqITJVh7KcYQaq4ovOkCP93LqIZR+8XpYs87wTg2nwjn1wsEOoy9EVhzdf5
-         MCoUdVSyTzcG0bX89zamHIuTF1qRxE7G+9cKyrOte0dGyY2UgpMeINiTXpG9D9Ce5usj
-         zdCg==
+        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
+        b=GTUU/BAw/7g1icPdyU1gicA+0STlI2aa4ncYMDx5RcmR/waZhtMZOSNr5gntvcxXkt
+         ZcRHjnk7S6mc7uTCeRabTQc9vxmnqPhg/QUV1E1kipzO+L0EyqtazSu7D+hHcyFzdRLY
+         xlaIvsEwqmFdCFMNA4xJ9nRZ+ILKSUyNWulsjOL3z46V0yzJoqFbUAbnwraaVq0bvp0w
+         uQlLLo3GU0MuerdCEEYIRrKWoo1PeJ1qi1IWeo5hFJP3kug2vwZN2B3S0Y7+T7Bi3itQ
+         QkRrJweOerYJHTf6hdqjrPxD+bLYZnhDzB85b3xjzrAz6MkqmXpnRN5ocAoLtSeLuVE7
+         z05w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4XT57RJ2zR0pUw59EDpBr/xnn0uf45XYMH4qW2Nnhag=;
-        b=g72Jcmcj792IKnNDqmrJhsnqiMz106HaJvkNsVEIXJpgN8mQobECCE+CqB82nVsJsZ
-         SE5CsH+gdwxlhFFO0u4v/BWe5S2lvh4xyBU7HUJ0Yt9hadxEl7sybdA58lu+/FVGbEhu
-         w6VQ4Rqycvb67TZ8BA7yqCFhchIHMvD/Hf0F21ciWvifLJU4NqUtYbffP3PkndJVUK51
-         k4dr9gVb4fQUZdgVlUCoUg9Fh/8nN5O0mQZLmEPDSHivpWm9rnTVA1yMhUHYMnc1Jpq9
-         uZ+v0ylDS6YpYOcI1V+UZob7mZ34bQRJkO5Vo7XPr0mdz+j9c3WSfoLDK0fdOGdkPU50
-         h1tQ==
-X-Gm-Message-State: AOAM532lM7Ayv9BzmgYae+DRPylH+qwevWDCue0v1zcKSe2kiYmOk9GN
-        qJRmQAw5tOXxtbX+tv8cjCeIgQ==
-X-Google-Smtp-Source: ABdhPJz5Rcv2dy4vHSQGWUoNuyDX38ldlJdyBOsnSd7fJARXObJEOMnlXSoDY/87s+k5IVcc4n2vbQ==
-X-Received: by 2002:a17:906:3082:b0:6e0:111f:8986 with SMTP id 2-20020a170906308200b006e0111f8986mr33086544ejv.677.1649764845598;
-        Tue, 12 Apr 2022 05:00:45 -0700 (PDT)
+        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
+        b=WSVgnF6Vr3Vl4RwkGZLwpxfSspxq7dleJMBPlQa3QVwc3AFj6W+k6Z/H7lHI/o1YY0
+         xYzjulumsVlfwTzEaU7fk39Sddh2xgJoxX5R1tmU+W76q5BzZDIKAMyxbdv/aAF222NL
+         mSjnjmIt1+r4XCdIgiFdXxVDD/UN4PN110IuryL6/eWT2TNFuBeqbzUwX7ieNRfOjO4Z
+         D1M8D1EV6gGDO6pCT6Ec1+ZqH+cWq+rIUwPhRSyxV8V2T/SQkDC5eWkH8NBSttg7AHgw
+         TE/ddP2IWLnJaPtbWhGxLxvqy3mxpXPZ8gMwFDQRFkfAzSAzv//w7HZHdu6AnqKN8VT7
+         RT2g==
+X-Gm-Message-State: AOAM532qNIjkfTFEZeyWo/kDr+zFkDC3ILhd1HPhtG1X6RMCzb2LEzDC
+        ndo1QVuRFYl/DoiaMevEd2OKhA==
+X-Google-Smtp-Source: ABdhPJzxtTWRt335RkLqbr9SGrvPqsb0D1/lwfuPdhnA0WbWgovri7fB6O1ERz8pptVoCEjSQJ+L3w==
+X-Received: by 2002:a05:6402:438d:b0:419:4550:d52b with SMTP id o13-20020a056402438d00b004194550d52bmr38259034edc.83.1649764939866;
+        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
 Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id l14-20020a170906644e00b006e4dae79576sm12802578ejn.14.2022.04.12.05.00.44
+        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm4001892ejc.150.2022.04.12.05.02.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 05:00:45 -0700 (PDT)
-Message-ID: <54abc3c6-959f-58df-337b-dc847e9d7b1d@linaro.org>
-Date:   Tue, 12 Apr 2022 14:00:44 +0200
+        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
+Message-ID: <37b21c24-22e0-2de2-697f-d22ff92b90c2@linaro.org>
+Date:   Tue, 12 Apr 2022 14:02:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: ASoC: fix invalid yaml
+Subject: Re: [PATCH v13 1/6] dt-bindings: usb: dwc3: Add wakeup-source
+ property support
 Content-Language: en-US
-To:     Corentin Labbe <clabbe@baylibre.com>, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        robh+dt@kernel.org
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220411194409.3390002-1-clabbe@baylibre.com>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
+References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411194409.3390002-1-clabbe@baylibre.com>
+In-Reply-To: <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,19 +88,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 21:44, Corentin Labbe wrote:
-> The word "or" is useless and breaks yaml validation.
+On 11/04/2022 21:16, Sandeep Maheswaram wrote:
+> Added support for wakeup-source property. This property can be
+> used to check and power down the phy during system suspend if
+> wake up is not supported.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  Documentation/devicetree/bindings/sound/tas27xx.yaml | 1 -
->  1 file changed, 1 deletion(-)
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index f4471f8..4d4de2f 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -341,6 +341,11 @@ properties:
+>        This port is used with the 'usb-role-switch' property  to connect the
+>        dwc3 to type C connector.
+>  
+> +  wakeup-source:
+> +    $ref: /schemas/types.yaml#/definitions/flag
 
-Subject should be reversed for this subsystem, so:
-"ASoC; dt-bindings: tas27xx:"
+I would prefer to use shorter "type: boolean", but in any case:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+> +    description:
+> +      Enable USB remote wakeup.
 
 
 Best regards,

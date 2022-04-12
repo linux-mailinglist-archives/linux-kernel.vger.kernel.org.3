@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B947E4FD599
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2B84FD914
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384175AbiDLIj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S1359724AbiDLHnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357163AbiDLHju (ORCPT
+        with ESMTP id S1354100AbiDLHRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:50 -0400
+        Tue, 12 Apr 2022 03:17:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC8D13E36;
-        Tue, 12 Apr 2022 00:13:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B774B405;
+        Mon, 11 Apr 2022 23:58:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8858261708;
-        Tue, 12 Apr 2022 07:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94933C385A5;
-        Tue, 12 Apr 2022 07:13:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97EF361589;
+        Tue, 12 Apr 2022 06:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FB8C385A6;
+        Tue, 12 Apr 2022 06:58:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747597;
-        bh=1rVLR/bONBr0cUtCgca2ph/k+Es2uGQyvcanGGCrC9s=;
+        s=korg; t=1649746695;
+        bh=dugs0ojqUOtaiK0jk2J7yqGf+Jgt2OnCtFZNvN141wU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AdD842gg1o/pyEOqLSky0xn/tsvfZuGoDj+k6FkQiq3Sb1ptdMWhcAPVNYjRMoO1P
-         lsQMbXL/FD2aww/H5afu11h2hE//vqNcB3V0+L5hVqllbJ7YRtUbRuIdWRY87437C4
-         nZSkDj0LQIoNHozMdRi/3vRkHK70TgrxKRaiR2Yo=
+        b=c3+YU3MAdUbNq8RjoiG06LjGM89QXlmUMlCyS8TEHzjqybKwC2o2xcza2NOvmm1n5
+         djCHw/dPx+s6oxsBYZBTllKZhHvLCqJL9vkYNuHvabuAuKmouq417gJey57FOqYqrS
+         J+dF1XdOk3j46F+sma2+aLGhA5fwMHlfppTPF0o4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, George Shuklin <george.shuklin@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 136/343] net: account alternate interface name memory
+Subject: [PATCH 5.16 097/285] net: limit altnames to 64k total
 Date:   Tue, 12 Apr 2022 08:29:14 +0200
-Message-Id: <20220412062955.313243456@linuxfoundation.org>
+Message-Id: <20220412062946.465735946@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,31 +58,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 5d26cff5bdbebdf98ba48217c078ff102536f134 ]
+[ Upstream commit 155fb43b70b5fce341347a77d1af2765d1e8fbb8 ]
 
-George reports that altnames can eat up kernel memory.
-We should charge that memory appropriately.
+Property list (altname is a link "property") is wrapped
+in a nlattr. nlattrs length is 16bit so practically
+speaking the list of properties can't be longer than
+that, otherwise user space would have to interpret
+broken netlink messages.
+
+Prevent the problem from occurring by checking the length
+of the property list before adding new entries.
 
 Reported-by: George Shuklin <george.shuklin@gmail.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/rtnetlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/rtnetlink.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 2fb8eb6791e8..9c9ad3d4b766 100644
+index 6a7883ec0489..ef56dc8d7c44 100644
 --- a/net/core/rtnetlink.c
 +++ b/net/core/rtnetlink.c
-@@ -3658,7 +3658,7 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
+@@ -3631,12 +3631,23 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
+ 			   bool *changed, struct netlink_ext_ack *extack)
+ {
+ 	char *alt_ifname;
++	size_t size;
+ 	int err;
+ 
+ 	err = nla_validate(attr, attr->nla_len, IFLA_MAX, ifla_policy, extack);
  	if (err)
  		return err;
  
--	alt_ifname = nla_strdup(attr, GFP_KERNEL);
-+	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
++	if (cmd == RTM_NEWLINKPROP) {
++		size = rtnl_prop_list_size(dev);
++		size += nla_total_size(ALTIFNAMSIZ);
++		if (size >= U16_MAX) {
++			NL_SET_ERR_MSG(extack,
++				       "effective property list too long");
++			return -EINVAL;
++		}
++	}
++
+ 	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
  	if (!alt_ifname)
  		return -ENOMEM;
- 
 -- 
 2.35.1
 

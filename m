@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D854FE175
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5BA4FE1AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355071AbiDLNA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S1354945AbiDLNJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354926AbiDLNAR (ORCPT
+        with ESMTP id S1355075AbiDLNBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:00:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A05446154
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649766929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iJqglimaomRAKenwQeCDnCnI75AgWyOOY6lOl0E6tbs=;
-        b=Qh/XsueH5OQSbq4hWk2PEJ6QaSWoHBXlNQQ6XehhGV0OWgXrfHmFG+Hob6iFZa1cKC8VUZ
-        Mv/Ya4Y+8TWmDepwj213gjso1j75jFnhaEc9UoMKysuAnAvr7w/U0A1kPMMPJlq+QQgsjv
-        kqAka+sWE2ZemdyXYssoYXflfRunoXY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-2gvD7-gdM66dssevqWlD6Q-1; Tue, 12 Apr 2022 08:35:28 -0400
-X-MC-Unique: 2gvD7-gdM66dssevqWlD6Q-1
-Received: by mail-wm1-f71.google.com with SMTP id o6-20020a05600c510600b0038ec5f6d217so1215116wms.8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:35:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=iJqglimaomRAKenwQeCDnCnI75AgWyOOY6lOl0E6tbs=;
-        b=LDLIDVJJCr+XnTAD0sCtquBMI7IRsjzvW6OC4/1IRI6oB/93Qr3SIStFFE/9BQQ9Uq
-         qIy2pBWNfIX5tnSoLbtGCpY7qeFsb8h6elLnhqc0yyKLQFPLY3IzY34/jCUseburO/vL
-         6a87srQi14p/apAr6iCoyEgcuVyU1PcEWuioftCZ+ZPXd2uXXYnX/Nnh1b+mumsBJXSu
-         cDXXwWqmu5C5YbH3vC33zRiDHg+se0IlqtTPfjRLhYbFyatgzN89xdQtvO1Vr/gHhvDs
-         gmm701eL3PWyA7aF3X1VmR0TruB8L5vkKmbVPNYj05ZMxGqq0FKb1z5b89q1rU/CBY5U
-         mRrQ==
-X-Gm-Message-State: AOAM533L9wlnfIOWf/dboggsY/1g82WnR3FAzna69vgYASyLKURv1TU/
-        iJoVrRtA4J/xz/EA9NNeeP4UkP7iE7Luc5n/JQZwWoa6+9fYm37NRppYjU8YiGNmTpabV/hWw5p
-        5QvxbluZtcLeERbWEygJftbQ3
-X-Received: by 2002:a05:6000:1f8e:b0:207:a52d:f611 with SMTP id bw14-20020a0560001f8e00b00207a52df611mr9182379wrb.266.1649766927063;
-        Tue, 12 Apr 2022 05:35:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJydZ5Q8ljJxU2bpbKbM9Dux/MSsB7WSQBOCEUZQwPv9Vg5TXtMNLisSRZglh2z5p3/OYrFUJA==
-X-Received: by 2002:a05:6000:1f8e:b0:207:a52d:f611 with SMTP id bw14-20020a0560001f8e00b00207a52df611mr9182354wrb.266.1649766926776;
-        Tue, 12 Apr 2022 05:35:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1800:7c14:16cc:5291:a9f3? (p200300cbc70718007c1416cc5291a9f3.dip0.t-ipconnect.de. [2003:cb:c707:1800:7c14:16cc:5291:a9f3])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm28472436wrt.115.2022.04.12.05.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 05:35:26 -0700 (PDT)
-Message-ID: <9ba426a0-3cbf-2794-39bc-bc0dfbeb3841@redhat.com>
-Date:   Tue, 12 Apr 2022 14:35:25 +0200
+        Tue, 12 Apr 2022 09:01:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB3110FE0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:39:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 652D1B81B5D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:39:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2E3C385A5;
+        Tue, 12 Apr 2022 12:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649767152;
+        bh=r2ozEyixlXEDZat/EBQhfhK+ZomNGZGTkYgMhu0q//o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tICf7t/usfMJ3yYnlwiUXvo2DF7Ir2NQvHctzBOGx9VT1QWTJTGwyd0vh20t+G1R3
+         PQUzUs8wtg/wGOk40U9mv5kBJTmOzy+MkaoZaEikB7WIO1//gpBd2COJ6mUC1oMzHc
+         8WJ1jI+wZyA89GRepoT6oLrif0LehgCcGgIi0LCXehaLse62X4lQayHTo+TYHtwI31
+         kQaAumEWDrmUoiIkfYoP9yno2R+lFVCoYwD03P+GpyR0xcaw4g3Fseh+SSA7tgldFt
+         TrcNtJXSNPvCTilN2+i27EToYjuOlH8GLVbyHSZVxard92WHC/mszVRl7dHSES+HkD
+         kW8765DMjFVRQ==
+Date:   Tue, 12 Apr 2022 13:39:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
+Subject: Re: [PATCH] ASoC: wm8524: remove rate constraint for FE-BE case
+Message-ID: <YlVy6tAPMw+MHq/f@sirena.org.uk>
+References: <1649754826-2651-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v10 0/5] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20220406151858.3149821-1-zi.yan@sent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220406151858.3149821-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LwWF2GkpX7AfLGu/"
+Content-Disposition: inline
+In-Reply-To: <1649754826-2651-1-git-send-email-shengjiu.wang@nxp.com>
+X-Cookie: Approved for veterans.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.04.22 17:18, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Hi David,
 
-Hi!
+--LwWF2GkpX7AfLGu/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> This patchset tries to remove the MAX_ORDER-1 alignment requirement for CMA
-> and alloc_contig_range(). It prepares for my upcoming changes to make
-> MAX_ORDER adjustable at boot time[1]. It is on top of mmotm-2022-04-05-15-54.
+On Tue, Apr 12, 2022 at 05:13:46PM +0800, Shengjiu Wang wrote:
+> The constraint is propagate to Front End Bitstream
+> for Front End and Back End share same snd_soc_pcm_runtime.
 
-Sorry for the late reply, I've got way too many irons in the fire right now.
+> The constraint is not needed for Back End Bitstream
+> when there is be_hw_params_fixup() defined.
 
-> 
-> I also added "Content-Type: text/plain; charset=UTF-8" to all email bodies
-> explicitly, please let me know if you still cannot see the emails in a
-> proper format.
+> -	snd_pcm_hw_constraint_list(substream->runtime, 0,
+> -				   SNDRV_PCM_HW_PARAM_RATE,
+> -				   &wm8524->rate_constraint);
+> +	if (!rtd->dai_link->be_hw_params_fixup)
+> +		snd_pcm_hw_constraint_list(substream->runtime, 0,
+> +					   SNDRV_PCM_HW_PARAM_RATE,
+> +					   &wm8524->rate_constraint);
 
-Oh, thanks! But no need to work around Mimecast mailing issues on your
-side. This just has to be fixed for good on the RH side ...
+This applies in general to constraints set by the CODEC, it's not
+something that should be fixed at the driver level.  Peering into the
+runtime to see if DPCM is doing anything isn't a great solution here,
+nor is having to open code it into the driver.  I already had it in the
+back of my head to generalise the set constraints based on sysclk
+pattern into the core, that might be productive here.
 
+--LwWF2GkpX7AfLGu/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I yet heave to give #3 a thorough review, sorry for not commenting on
-that earlier. It's a bit more involved, especially, with all the
-possible corner cases :)
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Thanks,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJVcukACgkQJNaLcl1U
+h9DK0gf8CiRXWJm7/sW3H5tgx0lkpjF5i+wEkbvG0c1jAoEOwr5nKr3568cS0R4L
+4E8czDxBzq2KOgznS7d8uoIylxzFppv/nJaWh6E+qCuOwhIOPmvQnPa7Vce5M4JW
+hZa82ypUj3Nn3ZfCYh4L0Re3I4pS2OT6meuXBroHso0+hUmjVtWLpU64+yHlH2YI
+C49SoR3GdWwcWHcccdmkAlojQuhqn2Y/OCNww0ptvxiw/rRoRnYyxKmKUd6O9bRw
+pIaIxQAn9263ywhW4uhTfLnB1uXQd0XiXGKllIIb45ifASOIm6nUDBdnvembqVxc
+V7QB5yNHTY07UQ8vpynHiAGfqS+pYQ==
+=Sl43
+-----END PGP SIGNATURE-----
 
-David / dhildenb
-
+--LwWF2GkpX7AfLGu/--

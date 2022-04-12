@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3122D4FDA62
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617AF4FD5D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383993AbiDLIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S1357388AbiDLHkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357103AbiDLHjr (ORCPT
+        with ESMTP id S1353048AbiDLHOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E79ABCB6;
-        Tue, 12 Apr 2022 00:11:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57765326F9;
+        Mon, 11 Apr 2022 23:55:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD38D61701;
-        Tue, 12 Apr 2022 07:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2100C385A5;
-        Tue, 12 Apr 2022 07:11:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 088B7B81B35;
+        Tue, 12 Apr 2022 06:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530C1C385A1;
+        Tue, 12 Apr 2022 06:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747518;
-        bh=KyppwBAxf1ZILb2cK4QcPAex7NnhClg9RsYTWWUiftI=;
+        s=korg; t=1649746551;
+        bh=vavpxSQ8hCPwaPb0OpeD/TivYZJ03bn70nfTSq33xi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Syt/QEs5kqPbfj/4Z/tA6rv75n+BqLTnnUMjd21L9sp3krZCBw5OeVUYG/rY9M1NA
-         XMG28CWJEZWlwlFcowVYXzZsZPtmH2Vih9LfgIW14qhwk9fxDr/zb/pqyYTsPyISB+
-         QYlwyWAAP6bSq09OVZbpZCMoxhz3YvkBjrlw6yW0=
+        b=EB/vAX9LGbDyhvr3DX7hlZVq71QLn6n+Tj0QJi1rtw4kx0ywmfVjI5Ixs8KOe9san
+         yWTLqUUtyyQV7dg326p76XExBgvr2/fvTMCITcsR0JYVJtxEVTu4KPcTt7cR2mly5Q
+         cTWsLSYk+t5OcGkT0lgmNBawIeUFzscfQgxm7pk8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Neal Liu <neal_liu@aspeedtech.com>,
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 067/343] usb: ehci: add pci device support for Aspeed platforms
-Date:   Tue, 12 Apr 2022 08:28:05 +0200
-Message-Id: <20220412062953.037709591@linuxfoundation.org>
+Subject: [PATCH 5.16 029/285] net/smc: Send directly when TCP_CORK is cleared
+Date:   Tue, 12 Apr 2022 08:28:06 +0200
+Message-Id: <20220412062944.518440021@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neal Liu <neal_liu@aspeedtech.com>
+From: Tony Lu <tonylu@linux.alibaba.com>
 
-[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
+[ Upstream commit ea785a1a573b390a150010b3c5b81e1ccd8c98a8 ]
 
-Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-handshake CMD_RUN instead of STS_HALT") to support Aspeed
-ehci-pci device.
+According to the man page of TCP_CORK [1], if set, don't send out
+partial frames. All queued partial frames are sent when option is
+cleared again.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+When applications call setsockopt to disable TCP_CORK, this call is
+protected by lock_sock(), and tries to mod_delayed_work() to 0, in order
+to send pending data right now. However, the delayed work smc_tx_work is
+also protected by lock_sock(). There introduces lock contention for
+sending data.
+
+To fix it, send pending data directly which acts like TCP, without
+lock_sock() protected in the context of setsockopt (already lock_sock()ed),
+and cancel unnecessary dealyed work, which is protected by lock.
+
+[1] https://linux.die.net/man/7/tcp
+
+Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-pci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/smc/af_smc.c |  4 ++--
+ net/smc/smc_tx.c | 25 +++++++++++++++----------
+ net/smc/smc_tx.h |  1 +
+ 3 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index e87cf3a00fa4..638f03b89739 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
- /* defined here to avoid adding to pci_ids.h for single instance use */
- #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
- 
-+#define PCI_VENDOR_ID_ASPEED		0x1a03
-+#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
-+
- /*-------------------------------------------------------------------------*/
- #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
- static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
-@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 			ehci->has_synopsys_hc_bug = 1;
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index a0fb596459a3..0ec721b8059a 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2632,8 +2632,8 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 		    sk->sk_state != SMC_CLOSED) {
+ 			if (!val) {
+ 				SMC_STAT_INC(smc, cork_cnt);
+-				mod_delayed_work(smc->conn.lgr->tx_wq,
+-						 &smc->conn.tx_work, 0);
++				smc_tx_pending(&smc->conn);
++				cancel_delayed_work(&smc->conn.tx_work);
+ 			}
  		}
  		break;
-+	case PCI_VENDOR_ID_ASPEED:
-+		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
-+			ehci_info(ehci, "applying Aspeed HC workaround\n");
-+			ehci->is_aspeed = 1;
-+		}
-+		break;
- 	}
+diff --git a/net/smc/smc_tx.c b/net/smc/smc_tx.c
+index be241d53020f..7b0b6e24582f 100644
+--- a/net/smc/smc_tx.c
++++ b/net/smc/smc_tx.c
+@@ -597,27 +597,32 @@ int smc_tx_sndbuf_nonempty(struct smc_connection *conn)
+ 	return rc;
+ }
  
- 	/* optional debug port, normally in the first BAR */
+-/* Wakeup sndbuf consumers from process context
+- * since there is more data to transmit
+- */
+-void smc_tx_work(struct work_struct *work)
++void smc_tx_pending(struct smc_connection *conn)
+ {
+-	struct smc_connection *conn = container_of(to_delayed_work(work),
+-						   struct smc_connection,
+-						   tx_work);
+ 	struct smc_sock *smc = container_of(conn, struct smc_sock, conn);
+ 	int rc;
+ 
+-	lock_sock(&smc->sk);
+ 	if (smc->sk.sk_err)
+-		goto out;
++		return;
+ 
+ 	rc = smc_tx_sndbuf_nonempty(conn);
+ 	if (!rc && conn->local_rx_ctrl.prod_flags.write_blocked &&
+ 	    !atomic_read(&conn->bytes_to_rcv))
+ 		conn->local_rx_ctrl.prod_flags.write_blocked = 0;
++}
++
++/* Wakeup sndbuf consumers from process context
++ * since there is more data to transmit
++ */
++void smc_tx_work(struct work_struct *work)
++{
++	struct smc_connection *conn = container_of(to_delayed_work(work),
++						   struct smc_connection,
++						   tx_work);
++	struct smc_sock *smc = container_of(conn, struct smc_sock, conn);
+ 
+-out:
++	lock_sock(&smc->sk);
++	smc_tx_pending(conn);
+ 	release_sock(&smc->sk);
+ }
+ 
+diff --git a/net/smc/smc_tx.h b/net/smc/smc_tx.h
+index 07e6ad76224a..a59f370b8b43 100644
+--- a/net/smc/smc_tx.h
++++ b/net/smc/smc_tx.h
+@@ -27,6 +27,7 @@ static inline int smc_tx_prepared_sends(struct smc_connection *conn)
+ 	return smc_curs_diff(conn->sndbuf_desc->len, &sent, &prep);
+ }
+ 
++void smc_tx_pending(struct smc_connection *conn);
+ void smc_tx_work(struct work_struct *work);
+ void smc_tx_init(struct smc_sock *smc);
+ int smc_tx_sendmsg(struct smc_sock *smc, struct msghdr *msg, size_t len);
 -- 
 2.35.1
 

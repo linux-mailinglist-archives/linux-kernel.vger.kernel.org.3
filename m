@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7554FD675
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B904FD606
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351642AbiDLH2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S242311AbiDLI3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351752AbiDLHMx (ORCPT
+        with ESMTP id S1353636AbiDLHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E639217A8A;
-        Mon, 11 Apr 2022 23:52:13 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851D243AFD;
+        Tue, 12 Apr 2022 00:02:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3F5DB81B35;
-        Tue, 12 Apr 2022 06:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92E2C385A1;
-        Tue, 12 Apr 2022 06:52:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3481EB81A8F;
+        Tue, 12 Apr 2022 07:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842B6C385A6;
+        Tue, 12 Apr 2022 07:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746331;
-        bh=HYUEX2kYwW/fwRXKxRfNw0x/SATn9LUwe4xOoGFsWFk=;
+        s=korg; t=1649746956;
+        bh=fwImwd/7Co4y7GEoSjDf0Ksqgv10Qj+2A8a0J4ZLmGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MyDKZUn1nmqWJdJaxpEz82z2o3efnB4MDDHGiOyidbqLXL45/9m6uhLFEOJJ0KOHz
-         3qPNLZCRlHRO9EeIoD/PAaEoRQo707OEte+ST0eh9zEyelj5hWaO7wuFTBC08xz6YF
-         EKSiejii8WtMTHo9Rj8kavPmVOw/r5stSvv8pzK4=
+        b=2mEPf/xV9MWjj6tYtAqWQYScWHBx2jFRS+w0SaM6QWOa9kNznsfXUZuZGNtELJG5q
+         LyA0wwotAAlHO2ihh/cT4Y6ptsCi6RURdpTeQdM9CE728VEbdv/Qq9OecPstubZb5T
+         aEZ1w6TSQ8qIdqX9gA/bRvkL4cJSoaTFrfasGf7M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Emily Deng <Emily.Deng@amd.com>,
-        James Zhu <James.Zhu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 244/277] drm/amdgpu/vcn: Fix the register setting for vcn1
+        stable@vger.kernel.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 190/285] ice: clear cmd_type_offset_bsz for TX rings
 Date:   Tue, 12 Apr 2022 08:30:47 +0200
-Message-Id: <20220412062949.104005239@linuxfoundation.org>
+Message-Id: <20220412062949.146312296@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emily Deng <Emily.Deng@amd.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-commit 02fc996d5098f4c3f65bdf6cdb6b28e3f29ba789 upstream.
+[ Upstream commit e19778e6c911691856447c3bf9617f00b3e1347f ]
 
-Correct the code error for setting register UVD_GFX10_ADDR_CONFIG.
-Need to use inst_idx, or it only will set VCN0.
+Currently when XDP rings are created, each descriptor gets its DD bit
+set, which turns out to be the wrong approach as it can lead to a
+situation where more descriptors get cleaned than it was supposed to,
+e.g. when AF_XDP busy poll is run with a large batch size. In this
+situation, the driver would request for more buffers than it is able to
+handle.
 
-Signed-off-by: Emily Deng <Emily.Deng@amd.com>
-Reviewed-by: James Zhu <James.Zhu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by not setting the DD bits in ice_xdp_alloc_setup_rings(). They
+should be initialized to zero instead.
+
+Fixes: 9610bd988df9 ("ice: optimize XDP_TX workloads")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
-@@ -601,8 +601,8 @@ static void vcn_v3_0_mc_resume_dpg_mode(
- 			AMDGPU_GPU_PAGE_ALIGN(sizeof(struct amdgpu_fw_shared)), 0, indirect);
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index cd2fb24c3005..65742f296b0d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -2528,7 +2528,7 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
+ 		spin_lock_init(&xdp_ring->tx_lock);
+ 		for (j = 0; j < xdp_ring->count; j++) {
+ 			tx_desc = ICE_TX_DESC(xdp_ring, j);
+-			tx_desc->cmd_type_offset_bsz = cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE);
++			tx_desc->cmd_type_offset_bsz = 0;
+ 		}
+ 	}
  
- 	/* VCN global tiling registers */
--	WREG32_SOC15_DPG_MODE(0, SOC15_DPG_MODE_OFFSET(
--		UVD, 0, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
-+	WREG32_SOC15_DPG_MODE(inst_idx, SOC15_DPG_MODE_OFFSET(
-+		UVD, inst_idx, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
- }
- 
- static void vcn_v3_0_disable_static_power_gating(struct amdgpu_device *adev, int inst)
+-- 
+2.35.1
+
 
 

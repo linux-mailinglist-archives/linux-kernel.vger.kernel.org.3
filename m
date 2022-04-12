@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651264FE74F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1CD4FE756
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358500AbiDLRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S1358490AbiDLRlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358481AbiDLRkg (ORCPT
+        with ESMTP id S1356774AbiDLRki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:40:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167D362A36
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:19 -0700 (PDT)
+        Tue, 12 Apr 2022 13:40:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C12A62BCC
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2CA1619D7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F98C385A5;
-        Tue, 12 Apr 2022 17:38:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDB71619D7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F5EC385A1;
+        Tue, 12 Apr 2022 17:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649785098;
-        bh=HD2LcDKvmyG1fX0S/usHPsdJIssyypdemdstvg2vvdw=;
+        s=k20201202; t=1649785099;
+        bh=VsiW3CuUG+R7QVT9cZrUKPYiW2B49SVijz2OAHaLQF4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=gqoXRvUimZcFcceovn2J+Rf0GqMz1odxtZPMaghx4ByR0cKWfTWG5VEM2QrVeBYH1
-         npd9mnieADkXqady/jsxlCiUZNyO3H1Fb8/8MIVfRg58BELqI/sFUv6e80KNj3f/ln
-         YGDdmdqlVQilOFekgWKjXfw/XYyjj0gQENx6LwaD2HeyY8Ty8MEagMBL1g1giCdRhg
-         BLPA7o6y6XTBh743y7nn8IJlBCze24QHMaWADOrpBKh7SZ/VhLNzhKeWz05rwi9+Ed
-         wJkuwyvditcl0ucOyA+bG6E43tHGpppAk+5hOoV4X9ymQjf1kdT8gP3bXSveDJc4Wx
-         ltUG7WEEPRamQ==
+        b=BveF8bkvE+lr22QTXpRwLJ6STY4ghFnr6cz1scbsP+oqFS4cxL0HVhKTwKEgvFY9Y
+         iwU5I9ZrxspDXCMdZpGGzcCpTRXa8FJgYMoYJLPvvQ9kjCw6hcjn7Um00F6YMz50RE
+         JzQzdRX6OHI6MKNS8yMhk2BdYvCcB+BsnxBGCh4lTE3TTJMnc2tv5keysKjTkD4xLS
+         L1vbHdDFnxpfs46Hx6v6DWkf5Lv/CHEBcknYuOxXfUPGhmLh5kfSoKDK/km7KRNbCV
+         D9tWF3Y7P5ySdMo+Rj9CbKUFWGnfdFLfwr5JkqcwKzBHLKMYhu6fmecLxNoO7h0mfG
+         h/0m56u9a37Ig==
 From:   Mark Brown <broonie@kernel.org>
-To:     mchehab@kernel.org, alsa-devel@alsa-project.org
-Cc:     pierre-louis.bossart@linux.intel.com, cezary.rojewski@intel.com,
-        linux-kernel@vger.kernel.org, yang.jie@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, hdegoede@redhat.com,
-        Takashi Iwai <tiwai@suse.com>, peter.ujfalusi@linux.intel.com,
-        liam.r.girdwood@linux.intel.com, Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <cover.1649357263.git.mchehab@kernel.org>
-References: <cover.1649357263.git.mchehab@kernel.org>
-Subject: Re: [PATCH v5 0/4] Make headphone work on Huawei Matebook D15
-Message-Id: <164978509553.404572.15488518886546999478.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 18:38:15 +0100
+To:     rf@opensource.cirrus.com
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com
+In-Reply-To: <20220411165929.1302333-1-rf@opensource.cirrus.com>
+References: <20220411165929.1302333-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH] ASoC: cs35l45: Make exports namespaced
+Message-Id: <164978509825.404572.4732190389821838906.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 18:38:18 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,17 +54,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 20:49:55 +0200, Mauro Carvalho Chehab wrote:
-> Huawei Matebook D15 uses two different GPIOs are used to control the output:
+On Mon, 11 Apr 2022 17:59:29 +0100, Richard Fitzgerald wrote:
+> Use the new EXPORT_SYMBOL_NS_GPL() for exports from the set of
+> drivers for cs35l45.
 > 
-> 	- gpio0 controls the speaker output;
-> 	- gpio1 controls the headphone output.
 > 
-> Changing both at the same time cause spurious events that are mis-interpreted
-> as input events, causing troubles on apps. So, a delay is needed before turning
-> on such gpios.
-> 
-> [...]
 
 Applied to
 
@@ -75,14 +66,8 @@ Applied to
 
 Thanks!
 
-[1/4] ASoC: Intel: sof_es8336: simplify speaker gpio naming
-      commit: 890a4087a6c2045911b5002566d1528f710cd723
-[2/4] ASoC: Intel: sof_es8336: support a separate gpio to control headphone
-      commit: 6e1ff1459e0086312e61c2d1ff8b74395a082fcb
-[3/4] ASoC: Intel: sof_es8336: add a quirk for headset at mic1 port
-      commit: 7c7bb2a059b226ebadb14ce07460f6357023d56c
-[4/4] ASoC: Intel: sof_es8336: Add a quirk for Huawei Matebook D15
-      commit: c7cb4717f641db68e8117635bfcf62a9c27dc8d3
+[1/1] ASoC: cs35l45: Make exports namespaced
+      commit: 31c90dd56ae2945ce46ffa9728d1e1502f5a0c2e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

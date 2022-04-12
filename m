@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19504FE1EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F404FE225
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355547AbiDLNPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S1355690AbiDLNRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356788AbiDLNOK (ORCPT
+        with ESMTP id S1356838AbiDLNOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:14:10 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65D2BC;
-        Tue, 12 Apr 2022 06:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649768468; x=1681304468;
-  h=message-id:date:mime-version:subject:to:cc:references:
+        Tue, 12 Apr 2022 09:14:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48C6128
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649768561; x=1681304561;
+  h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=bifhyOCkRst28z4/YuVYetStnqamZXAtDYuVHvzQJXk=;
-  b=IbLkmIQ9b2/KgphnMB4zaDlajpuTi7hTl5MGS2nemVHv7FUFJ4fvSpnd
-   Bso+UT2x9Z/4TUoSm1iYe63mt4paqyyVJvyACR2UF8DP3NbX9CO7ECUyw
-   WStgSJ9G6P2+WRm8Ukfq2zhjZ0F+Gq31mSSF7g0DyiEgA0oSJKHKrWkJN
-   4=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Apr 2022 06:01:07 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:01:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 06:01:06 -0700
-Received: from [10.216.28.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Apr
- 2022 06:01:02 -0700
-Message-ID: <be05410d-8b68-ca5f-63a6-4565bcd43f66@quicinc.com>
-Date:   Tue, 12 Apr 2022 18:30:59 +0530
+  bh=gvqJWcb4v9bvjUM4ccwyUHqiZCCuCXPOz9JdAQU7q4Q=;
+  b=boOja9nF7cqgRVv2Shkh/5Z4L8sjwvbPrt15oZg8FJ+MyB9zLIedpjun
+   AWsuSxBoGUkXjUcyn38iDdoYrEjhISXtJ3TJivydAGZn/H1A1cLXCqTI+
+   DADkRohX+Gn6+VFvsCwWAAzTvkih3u5bqoRNGYQAoDO4Kfg4VuFYFoVCK
+   e+qzbaGleSRzNBiPT9DadgmRYeGRC/7h0T4ygtjxf4HNMXedh1sibbeXJ
+   8UAeGBRJDFzTKEFVtL18FNu7kqI5Amp5y6M4EQFlV7ZA3fuodToOm3L34
+   3x7kmfoyINkCHY3g2BCNgY+p6uBnAnJ0ME7WeUo0ViGQnuyAzpvr3bEEl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261216641"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="261216641"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:02:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="572756171"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.174]) ([10.254.210.174])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:02:37 -0700
+Message-ID: <6e9bac88-e544-aebe-81ec-d1171239fec3@linux.intel.com>
+Date:   Tue, 12 Apr 2022 21:02:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
- rx macros and external codecs
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v3 02/12] iommu: Add a flag to indicate immutable
+ singleton group
 Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        <quic_rohkumar@quicinc.com>
-References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
- <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
- <Yky2Iwt+tvxvu4/S@google.com>
- <8fea1165-c8b6-6ce2-86dc-82274af8c43d@quicinc.com>
- <YlSHPU7XITS2dju/@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YlSHPU7XITS2dju/@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
+ <20220410102443.294128-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB527679E5CE0516B2786F57518CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <7c70a136-6871-b48c-8e46-852bb1b62958@linux.intel.com>
+ <BN9PR11MB5276246A53447854DDA8920D8CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276246A53447854DDA8920D8CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +76,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/12/2022 1:23 AM, Matthias Kaehlcke wrote:
-Thanks for your time Matthias!!!
-> On Mon, Apr 11, 2022 at 07:32:33PM +0530, Srinivasa Rao Mandadapu wrote:
->> On 4/6/2022 3:05 AM, Matthias Kaehlcke wrote:
->> Thanks for your time Matthias!!!
->>> On Tue, Apr 05, 2022 at 04:43:38PM +0530, Srinivasa Rao Mandadapu wrote:
->>>> SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
->>>> codecs like WCD938x, max98360a using soundwire masters and i2s bus.
->>>> Add these nodes for sc7280 based platforms audio use case.
->>>> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
+On 2022/4/12 15:37, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, April 12, 2022 1:09 PM
+>> On 2022/4/12 11:15, Tian, Kevin wrote:
+>>>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>>> Sent: Sunday, April 10, 2022 6:25 PM
+>>>
 >>>>
->>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>> ---
->>> A change log would be helpful for reviewers
->> Change log added in cover letter.
->  From my perspective as a reviewer I find it more practical to have a
-> change log per patch.
-Okay. will do accordingly from next time.
->
->>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>> index de646d9..c6a04c3 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>> @@ -20,6 +20,14 @@
->>>>    #include "sc7280-chrome-common.dtsi"
->>>>    / {
->>>> +	max98360a: audio-codec-0 {
->>>> +		compatible = "maxim,max98360a";
->>>> +		pinctrl-names = "default";
->>>> +		pinctrl-0 = <&amp_en>;
->>>> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
->>>> +		#sound-dai-cells = <0>;
->>>> +	};
->>>> +
->>> This node shouldn't be at top but with the other device nodes, in
->>> alphabetical order, i.e. before 'pwmleds'.
->> Actually we are sorting as per node name. Hence kept it here. As per
->> previous reviewer comments, sorted accordingly.
+>>>> This adds a flag in the iommu_group struct to indicate an immutable
+>>>> singleton group, and uses standard PCI bus topology, isolation features,
+>>>> and DMA alias quirks to set the flag. If the device came from DT, assume
+>>>> it is static and then the singleton attribute can know from the device
+>>>> count in the group.
+>>>
+>>> where does the assumption come from?
 >>
->> Please suggest better approach.
-> True, I forgot the node names are used for sorting, not the labels.
-Okay.
->
->>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>>> index db74fc3..78ec84c 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>>> @@ -822,6 +822,127 @@
->>>>    			#power-domain-cells = <1>;
->>>>    		};
->>>> +		rxmacro: codec@3200000 {
->>> These node are not at the correct position. They should be sorted by
->>> address and hence be inserted between 'lpasscc@3000000' and
->>> 'interconnect@3c40000'.
->> Actually we are sorting as per node(codec) name. Hence kept it here. As per
->> previous reviewer comments, sorted accordingly.
-> Could you provide a pointer to those comments?
-Sorry. it seems we misunderstood.
->
-> My understanding is that we are sorting by node name when nodes don't have
-> addresses or for overrides in board files/snippets, however the nodes under
-> 'soc@0' are sorted by address.
->
-> Another nit: 'rx_macro, tx_macro, va_macro' instead of the labels without
-> underscore? Not really important, but maybe slightly more readable and
-> would match the 'spelling' of the compatible strings.
-Okay. Will change accordingly!!!
+>> Hotplug is the only factor that can dynamically affect the
+>> characteristics of IOMMU group singleton as far as I can see. If a
+>> device node was created from the DT, it could be treated as static,
+>> hence we can judge the singleton in iommu probe phase during boot.
+> 
+> I didn't get this. Let's look at your code in iommu_group_add_device():
+> 
+>   +	else if (is_of_node(dev_fwnode(dev)))
+>   +		group->immutable_singleton =
+>   +				(iommu_group_device_count(group) == 1);
+> 
+> Even if there is a multi-devices group above logic will set the flag when
+> the first device in the group is added since at that time there is only
+> one device in the group. We need other concrete information  to tell
+> it similar to how you walk PCI hierarchy to find out the fact...
+
+This is a small trick to make things simpler. Once more devices are
+added to the group, the flag will be flipped. All iommu_group's should
+be settled down before any drivers start to consume this flag.
+
+> 
+>>>> +	/*
+>>>> +	 * The device could be considered to be fully isolated if
+>>>> +	 * all devices on the path from the parent to the host-PCI
+>>>> +	 * bridge are protected from peer-to-peer DMA by ACS.
+>>>> +	 */
+>>>> +	if (!pci_is_root_bus(pdev->bus) &&
+>>>> +	    !pci_acs_path_enabled(pdev->bus->self, NULL, REQ_ACS_FLAGS))
+>>>> +		return false;
+>>>> +
+>>>> +	/* Multi-function devices should have ACS enabled. */
+>>>> +	if (pdev->multifunction && !pci_acs_enabled(pdev, REQ_ACS_FLAGS))
+>>>> +		return false;
+>>>
+>>> Looks my earlier comment was lost, i.e. you can just use
+>>> pci_acs_path_enabled(pdev) to cover above two checks.
+>>
+>> If a device is directly connected to the root bridge and it is not an
+>> MFD, do we still need ACS on it? The Intel idxd device seems to be such
+>> a device. I had a quick check with lspci, it has no ACS support.
+>>
+>> I probably missed anything.
+>>
+> 
+> single-function RCiEP doesn't need to implement ACS but this has
+> been covered by pci_acs_enabled() and pci_acs_path_enabled().
+
+Cool! I missed this part. :-) Thanks a lot.
+
+Best regards,
+baolu

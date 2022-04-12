@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248604FD567
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829F24FD538
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356545AbiDLHi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S1384068AbiDLIjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352682AbiDLHOP (ORCPT
+        with ESMTP id S1357097AbiDLHjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11082F038;
-        Mon, 11 Apr 2022 23:54:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89122BCAE;
+        Tue, 12 Apr 2022 00:11:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5C29B81B50;
-        Tue, 12 Apr 2022 06:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640F8C385A6;
-        Tue, 12 Apr 2022 06:54:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22BDB6171C;
+        Tue, 12 Apr 2022 07:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AED2C385A6;
+        Tue, 12 Apr 2022 07:11:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746496;
-        bh=RgR/bhlckyUFWZryIL/9PaFrl2riAKvcRqAMLZbrrAo=;
+        s=korg; t=1649747515;
+        bh=4Vz7YePsGVbWEpiTw4saS9KDNTEfxvNmGWIgTtvmbZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mtSi/LyMDlDig9uquGV/2lXTpkwfYGEp+87sZ4dfpyGO7a+FihISeRgKodKL6v9qK
-         ScT3nND5nqVlu6Loqs4u0VkWvY+C9hZ9vylpNDcKYEtmFMsZ+DgwH3AwsFBgtO3qvy
-         0o9RUu840piTdJqY18wOM5F7qr5M3Xpa2Tt2p/CU=
+        b=qkWShEaw3FgIdijqFps3QdJVo7eFjR/x6WzJEu77iAXpIFB7mFOGcQirTLLiuOsiE
+         1d6ClOnvmOzBnUNBeB9slqVjJ4YW41a7y4NKd4ImYj51Evw4qEYqEFFBLKDA+2sQV0
+         nsthqWOG2RuLaw+AHmpdmHnzjPJZ2Ak7BXlXHfzY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Venkateswara Naralasetty <quic_vnaralas@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 026/285] ath11k: fix kernel panic during unload/load ath11k modules
-Date:   Tue, 12 Apr 2022 08:28:03 +0200
-Message-Id: <20220412062944.433540459@linuxfoundation.org>
+        stable@vger.kernel.org, Zhou Guanghui <zhouguanghui1@huawei.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 066/343] iommu/arm-smmu-v3: fix event handling soft lockup
+Date:   Tue, 12 Apr 2022 08:28:04 +0200
+Message-Id: <20220412062953.009043383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Venkateswara Naralasetty <quic_vnaralas@quicinc.com>
+From: Zhou Guanghui <zhouguanghui1@huawei.com>
 
-[ Upstream commit 22b59cb965f79ee1accf83172441c9ca0ecb632a ]
+[ Upstream commit 30de2b541af98179780054836b48825fcfba4408 ]
 
-Call netif_napi_del() from ath11k_ahb_free_ext_irq() to fix
-the following kernel panic when unload/load ath11k modules
-for few iterations.
+During event processing, events are read from the event queue one
+by one until the queue is empty.If the master device continuously
+requests address access at the same time and the SMMU generates
+events, the cyclic processing of the event takes a long time and
+softlockup warnings may be reported.
 
-[  971.201365] Unable to handle kernel paging request at virtual address 6d97a208
-[  971.204227] pgd = 594c2919
-[  971.211478] [6d97a208] *pgd=00000000
-[  971.214120] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-[  971.412024] CPU: 2 PID: 4435 Comm: insmod Not tainted 5.4.89 #0
-[  971.434256] Hardware name: Generic DT based system
-[  971.440165] PC is at napi_by_id+0x10/0x40
-[  971.445019] LR is at netif_napi_add+0x160/0x1dc
+arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
+watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
+Call trace:
+ _dev_info+0x7c/0xa0
+ arm_smmu_evtq_thread+0x1c0/0x230
+ irq_thread_fn+0x30/0x80
+ irq_thread+0x128/0x210
+ kthread+0x134/0x138
+ ret_from_fork+0x10/0x1c
+Kernel panic - not syncing: softlockup: hung tasks
 
-[  971.743127] (napi_by_id) from [<807d89a0>] (netif_napi_add+0x160/0x1dc)
-[  971.751295] (netif_napi_add) from [<7f1209ac>] (ath11k_ahb_config_irq+0xf8/0x414 [ath11k_ahb])
-[  971.759164] (ath11k_ahb_config_irq [ath11k_ahb]) from [<7f12135c>] (ath11k_ahb_probe+0x40c/0x51c [ath11k_ahb])
-[  971.768567] (ath11k_ahb_probe [ath11k_ahb]) from [<80666864>] (platform_drv_probe+0x48/0x94)
-[  971.779670] (platform_drv_probe) from [<80664718>] (really_probe+0x1c8/0x450)
-[  971.789389] (really_probe) from [<80664cc4>] (driver_probe_device+0x15c/0x1b8)
-[  971.797547] (driver_probe_device) from [<80664f60>] (device_driver_attach+0x44/0x60)
-[  971.805795] (device_driver_attach) from [<806650a0>] (__driver_attach+0x124/0x140)
-[  971.814822] (__driver_attach) from [<80662adc>] (bus_for_each_dev+0x58/0xa4)
-[  971.823328] (bus_for_each_dev) from [<80663a2c>] (bus_add_driver+0xf0/0x1e8)
-[  971.831662] (bus_add_driver) from [<806658a4>] (driver_register+0xa8/0xf0)
-[  971.839822] (driver_register) from [<8030269c>] (do_one_initcall+0x78/0x1ac)
-[  971.847638] (do_one_initcall) from [<80392524>] (do_init_module+0x54/0x200)
-[  971.855968] (do_init_module) from [<803945b0>] (load_module+0x1e30/0x1ffc)
-[  971.864126] (load_module) from [<803948b0>] (sys_init_module+0x134/0x17c)
-[  971.871852] (sys_init_module) from [<80301000>] (ret_fast_syscall+0x0/0x50)
+Fix this by calling cond_resched() after the event information is
+printed.
 
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.6.0.1-00760-QCAHKSWPL_SILICONZ-1
-
-Signed-off-by: Venkateswara Naralasetty <quic_vnaralas@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/1642583973-21599-1-git-send-email-quic_vnaralas@quicinc.com
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+Link: https://lore.kernel.org/r/20220119070754.26528-1-zhouguanghui1@huawei.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/ahb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
-index 3fb0aa000825..24bd0520926b 100644
---- a/drivers/net/wireless/ath/ath11k/ahb.c
-+++ b/drivers/net/wireless/ath/ath11k/ahb.c
-@@ -391,6 +391,8 @@ static void ath11k_ahb_free_ext_irq(struct ath11k_base *ab)
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index 6dc6d8b6b368..f60381cdf1c4 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -1558,6 +1558,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
+ 				dev_info(smmu->dev, "\t0x%016llx\n",
+ 					 (unsigned long long)evt[i]);
  
- 		for (j = 0; j < irq_grp->num_irq; j++)
- 			free_irq(ab->irq_num[irq_grp->irqs[j]], irq_grp);
-+
-+		netif_napi_del(&irq_grp->napi);
- 	}
- }
++			cond_resched();
+ 		}
  
+ 		/*
 -- 
 2.35.1
 

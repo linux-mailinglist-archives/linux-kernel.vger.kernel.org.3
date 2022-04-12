@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3490E4FC91C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2D34FC92A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiDLALt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 20:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S240290AbiDLAUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiDLALo (ORCPT
+        with ESMTP id S231799AbiDLAUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:11:44 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C48B1A83E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:09:26 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z12so7854826edl.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y8z3URoguhv+IQTi/mouDUtJ1RmP13ZImOvifv5RI2M=;
-        b=NNPQX65hnmr/JIz88cXsNAgTPOFY8ndkzOTcWHNphGBsbC6wvrcR4hNkLJ38VbYNWF
-         T/9237QbwBREHvcfOV5UzvW9+vCtLgcmYw2B533YDJZzU9PiGwWAnPt+GbNggtxVdHKM
-         rhHO9xLfhxkT2A0SmDXyLqrI9wT704JxOnqPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y8z3URoguhv+IQTi/mouDUtJ1RmP13ZImOvifv5RI2M=;
-        b=uWln1nDAwDxOwg2jInETqDCMP2MJnb5p290xfaHTpsVxQWQ7KeCXBFLV4QOjqvvT6Z
-         UtZsh9RJoYG5RxAioGuscq83cE7NNZZ2XVNlUGaB8aeYARQNRXRNRe4k6LLVoAW91JnG
-         HHMxQNmE6A2AWiE+44TRtZ+eZ7SLURSUdsqYpCNg4E3pyU2aaGfE9L0ZJ+Pz7swFmfmR
-         QvCCdzRZx95bDHnGWzjoVBkzAsGvyE6Ad3Gvv1g8Ig3vRCTY6c6rxVCkAW6tky639wXM
-         +NLeQMpzacHhokgoAQKnbHcAfx4Go6rRdMd9B/2wf8rDlpBOW58SMAvH0vDcPCj0LSYl
-         zjog==
-X-Gm-Message-State: AOAM532s0AMBlh3kxdflOAWzouVx8USFWJw9zGKs+Ql4fYikx4ewH4lz
-        IWmsdwj0anW71Ar5E6SZzDBmD5uOiX3QXsxA
-X-Google-Smtp-Source: ABdhPJx9ngok7bjHmbniWAHY8psLHj2Fl/vmxMKUnApCO/lCHU4gfQYUomHDOJ+FKgtM4D5uSjFWgQ==
-X-Received: by 2002:a05:6402:11d2:b0:41d:8443:6849 with SMTP id j18-20020a05640211d200b0041d84436849mr4898504edw.311.1649722164958;
-        Mon, 11 Apr 2022 17:09:24 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm12417138eji.67.2022.04.11.17.09.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 17:09:22 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so613210wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:09:20 -0700 (PDT)
-X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
- o24-20020a1c7518000000b0037c07ebf255mr1394523wmc.29.1649722159789; Mon, 11
- Apr 2022 17:09:19 -0700 (PDT)
+        Mon, 11 Apr 2022 20:20:16 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469891C107;
+        Mon, 11 Apr 2022 17:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649722681; x=1681258681;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RsPgl6JS8IMFJXGV1Eo0MBdyDoNAzeMZdr4UYrfqzAA=;
+  b=Sxq7jxGaiCQR31J7THa3TcmZXHFu0WFSNXI7rnZpZNLLjK72QeUvtjYk
+   2Fuy560E2EioOHqQfyffQKh2qPnMWmAVLrKt+8feRIEtRv030XRykSdrm
+   Rr5k/FxOLch0DTi/DtIcwSO3mR6xY3EC8uvIFKMezSbri5ZymS1Tc6X4S
+   ky4daNyJt3/qkpPF07LrNiqGsi0Df7um2PUczd2ZuUemlHbWna29Nu/Jn
+   eFxN7I1Ba/dVduAtAGsC1JTYfW0QTrXYA353//Oe8bKV2Lziq8ZA05QDA
+   wI/WhUOvnJLDVT12UmcdBvou8kuXnseDrVmWZVlBK7GM31SVsqbQ/EmXS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322689108"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322689108"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:18:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="660258800"
+Received: from zhoufuro-mobl.ccr.corp.intel.com (HELO [10.249.171.224]) ([10.249.171.224])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:17:57 -0700
+Message-ID: <cca8a37b-a648-52ba-c14c-1e1078bc628e@linux.intel.com>
+Date:   Tue, 12 Apr 2022 08:17:55 +0800
 MIME-Version: 1.0
-References: <20220411093819.1012583-1-sumit.garg@linaro.org>
-In-Reply-To: <20220411093819.1012583-1-sumit.garg@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 11 Apr 2022 17:09:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WZXBG98nKp4qq_=B+VmJ=MUAJJdOhaV4OkAT=AvDcTfg@mail.gmail.com>
-Message-ID: <CAD=FV=WZXBG98nKp4qq_=B+VmJ=MUAJJdOhaV4OkAT=AvDcTfg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64: kgdb/kdb: Fix pending single-step debugging issues
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Will Deacon <will@kernel.org>, Wei Li <liwei391@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 5/7] net: phy: adin1100: Add initial support for
+ ADIN1100 industrial PHY
+Content-Language: en-US
+To:     alexandru.tachici@analog.com
+Cc:     andrew@lunn.ch, o.rempel@pengutronix.de, davem@davemloft.net,
+        devicetree@vger.kernel.org, hkallweit1@gmail.com, kuba@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, robh+dt@kernel.org,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Ramon Fried <rfried.dev@gmail.com>
+References: <20220324112620.46963-1-alexandru.tachici@analog.com>
+ <20220324112620.46963-6-alexandru.tachici@analog.com>
+ <CAGi-RUJLmT-jfjtaYvPjaNHX-QCohhkZ3rkXaHHbmOHk56jTaA@mail.gmail.com>
+From:   Zhou Furong <furong.zhou@linux.intel.com>
+In-Reply-To: <CAGi-RUJLmT-jfjtaYvPjaNHX-QCohhkZ3rkXaHHbmOHk56jTaA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,62 +71,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Mon, Apr 11, 2022 at 2:38 AM Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> This patch-set reworks pending fixes from Wei's series [1] to make
-> single-step debugging via kgdb/kdb on arm64 work as expected. There was
-> a prior discussion on ML [2] regarding if we should keep the interrupts
-> enabled during single-stepping but it turns out that in case of kgdb, it
-> is risky to enable interrupts as sometimes a resume after single
-> stepping an interrupt handler leads to following unbalanced locking
-> issue:
->
-> [  300.328300] WARNING: bad unlock balance detected!
-> [  300.328608] 5.18.0-rc1-00016-g3e732ebf7316-dirty #6 Not tainted
-> [  300.329058] -------------------------------------
-> [  300.329298] sh/173 is trying to release lock (dbg_slave_lock) at:
-> [  300.329718] [<ffffd57c951c016c>] kgdb_cpu_enter+0x7ac/0x820
-> [  300.330029] but there are no more locks to release!
-> [  300.330265]
-> [  300.330265] other info that might help us debug this:
-> [  300.330668] 4 locks held by sh/173:
-> [  300.330891]  #0: ffff4f5e454d8438 (sb_writers#3){.+.+}-{0:0}, at: vfs_write+0x98/0x204
-> [  300.331735]  #1: ffffd57c973bc2f0 (dbg_slave_lock){+.+.}-{2:2}, at: kgdb_cpu_enter+0x5b4/0x820
-> [  300.332259]  #2: ffffd57c973a9460 (rcu_read_lock){....}-{1:2}, at: kgdb_cpu_enter+0xe0/0x820
-> [  300.332717]  #3: ffffd57c973bc2a8 (dbg_master_lock){....}-{2:2}, at: kgdb_cpu_enter+0x1ec/0x820
->
-> So, I choose to keep interrupts disabled specifically for kgdb. This
-> series has been rebased to Linux 5.18-rc1 and I have dropped Doug's
-> review and test tags as there is significant rework involved.
+>> +static int adin_config_aneg(struct phy_device *phydev)
+>> +{
+>> +       struct adin_priv *priv = phydev->priv;
+>> +       int ret;
+>> +
+>> +       if (phydev->autoneg == AUTONEG_DISABLE) {
+>> +               ret = genphy_c45_pma_setup_forced(phydev);
+>> +               if (ret < 0)
+>> +                       return ret;
+>> +
+>> +               if (priv->tx_level_prop_present && priv->tx_level_2v4) {
+>> +                       ret = phy_set_bits_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_B10L_PMA_CTRL,
+>> +                                              MDIO_PMA_10T1L_CTRL_2V4_EN);
+>> +                       if (ret < 0)
+>> +                               return ret;
+>> +               } else {
+>> +                       ret = phy_clear_bits_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_B10L_PMA_CTRL,
+>> +                                                MDIO_PMA_10T1L_CTRL_2V4_EN);
+>> +                       if (ret < 0)
+>> +                               return ret;
+>> +               }
+move below out if/else
 
-Hmmmm. I guess it's really up to Will here, but re-reading his
-previous email made it pretty clear that he wasn't willing to land a
-solution that he wasn't willing to land a solution that left
-interrupts disabled during step. He also pointed out some things that
-would actually be broken, like single-stepping over a call to
-irqs_disabled() or single stepping over something that caused an
-exception where the exception handler needed interrupts enabled.
-
-I thought he had a proposal at:
-
-https://lore.kernel.org/r/20200626095551.GA9312@willie-the-truck
-
-...that was supposed to make all the problems go away and it was just
-that nobody had time to implement his proposal?
+if(ret < 0）
+	return ret;
 
 
-> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
-> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
->
-> Sumit Garg (2):
->   arm64: kgdb: Fix incorrect single stepping into the irq handler
->   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
->
->  arch/arm64/include/asm/debug-monitors.h |  1 +
->  arch/arm64/kernel/debug-monitors.c      |  5 ++++
->  arch/arm64/kernel/kgdb.c                | 35 +++++++++++++++++++++++--
->  3 files changed, 39 insertions(+), 2 deletions(-)
->
-> --
-> 2.25.1
->
+>> +static int adin_set_powerdown_mode(struct phy_device *phydev, bool en)
+>> +{
+>> +       int ret;
+>> +       int val;
+>> +
+>> +       if (en)
+>> +               val = ADIN_CRSM_SFT_PD_CNTRL_EN;
+>> +       else
+>> +               val = 0;please consider below change which looks neat
+            val = en? ADIN_CRSM_SFT_PD_CNTRL_EN : 0
+
+
+Best regards,
+Furong

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D2F4FD707
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2451A4FDAD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352454AbiDLHOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S1357585AbiDLHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352423AbiDLGzp (ORCPT
+        with ESMTP id S1352793AbiDLHO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EB23A701;
-        Mon, 11 Apr 2022 23:45:31 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DEA31235;
+        Mon, 11 Apr 2022 23:55:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89CDC60B5E;
-        Tue, 12 Apr 2022 06:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADCCC385A8;
-        Tue, 12 Apr 2022 06:45:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5BA6B81B35;
+        Tue, 12 Apr 2022 06:55:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03616C385A6;
+        Tue, 12 Apr 2022 06:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745931;
-        bh=pY4QV7aUWhR+x8fT1/v/jYPAQBiSOMIuk64AYnF/ntw=;
+        s=korg; t=1649746507;
+        bh=Gx6bBT9wWwtj076j6J67lVtzWzGV1SMVng2TtziW+Yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jkdvoch2Fhq0/59IFaogRL/p9wV78/ZUSKeiYl2AVh+nfjzSaLIDkL3SjHjZQaNOY
-         mIo6iLFIAG1taGrMDe/MYws5t4mcaolVEP08KPnSpkSz/yd4nOOBtePb70zomYAMla
-         FGcNcrClrEIFTI4I6JHsLhKdJ8bgKyuDbLY4llV0=
+        b=FOctDejWUyUHF1o/i6j/+sHUwPj3xRFnAG+x4FEqlXhqjLWtphgtrpGWA2exrh2uz
+         C+bamLCwQ9V8DkhUjTz06yltVFdvVDsnaIaBtyF51eqvHakbE7lxfMwR7KluizZpUU
+         qcnYUwvKobrNRO1s4TwWCtx1g9nP1+9BQ3Mh9mac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Lotus Fenn <lotusf@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Like Xu <likexu@tencent.com>,
+        David Dunn <daviddunn@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 059/277] iwlwifi: mvm: Correctly set fragmented EBS
-Date:   Tue, 12 Apr 2022 08:27:42 +0200
-Message-Id: <20220412062943.757256668@linuxfoundation.org>
+Subject: [PATCH 5.16 006/285] KVM: x86/svm: Clear reserved bits written to PerfEvtSeln MSRs
+Date:   Tue, 12 Apr 2022 08:27:43 +0200
+Message-Id: <20220412062943.857656374@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilan Peer <ilan.peer@intel.com>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit d8d4dd26b9e0469baf5017f0544d852fd4e3fb6d ]
+[ Upstream commit 9b026073db2f1ad0e4d8b61c83316c8497981037 ]
 
-Currently, fragmented EBS was set for a channel only if the 'hb_type'
-was set to fragmented or balanced scan. However, 'hb_type' is set only
-in case of CDB, and thus fragmented EBS is never set for a channel for
-non-CDB devices. Fix it.
+AMD EPYC CPUs never raise a #GP for a WRMSR to a PerfEvtSeln MSR. Some
+reserved bits are cleared, and some are not. Specifically, on
+Zen3/Milan, bits 19 and 42 are not cleared.
 
-Signed-off-by: Ilan Peer <ilan.peer@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220204122220.a6165ac9b9d5.I654eafa62fd647030ae6d4f07f32c96c3171decb@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+When emulating such a WRMSR, KVM should not synthesize a #GP,
+regardless of which bits are set. However, undocumented bits should
+not be passed through to the hardware MSR. So, rather than checking
+for reserved bits and synthesizing a #GP, just clear the reserved
+bits.
+
+This may seem pedantic, but since KVM currently does not support the
+"Host/Guest Only" bits (41:40), it is necessary to clear these bits
+rather than synthesizing #GP, because some popular guests (e.g Linux)
+will set the "Host Only" bit even on CPUs that don't support
+EFER.SVME, and they don't expect a #GP.
+
+For example,
+
+root@Ubuntu1804:~# perf stat -e r26 -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+                 0      r26
+
+       1.001070977 seconds time elapsed
+
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379957] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000130026) at rIP: 0xffffffff9b276a28 (native_write_msr+0x8/0x30)
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379958] Call Trace:
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379963]  amd_pmu_disable_event+0x27/0x90
+
+Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
+Reported-by: Lotus Fenn <lotusf@google.com>
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Reviewed-by: Like Xu <likexu@tencent.com>
+Reviewed-by: David Dunn <daviddunn@google.com>
+Message-Id: <20220226234131.2167175-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/x86/kvm/svm/pmu.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-index 5461bf399959..65e382756de6 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-@@ -1890,7 +1890,10 @@ static u8 iwl_mvm_scan_umac_chan_flags_v2(struct iwl_mvm *mvm,
- 			IWL_SCAN_CHANNEL_FLAG_CACHE_ADD;
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 04e483471dbb..39ee0e271d9c 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -260,12 +260,10 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	/* MSR_EVNTSELn */
+ 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_EVNTSEL);
+ 	if (pmc) {
+-		if (data == pmc->eventsel)
+-			return 0;
+-		if (!(data & pmu->reserved_bits)) {
++		data &= ~pmu->reserved_bits;
++		if (data != pmc->eventsel)
+ 			reprogram_gp_counter(pmc, data);
+-			return 0;
+-		}
++		return 0;
+ 	}
  
- 	/* set fragmented ebs for fragmented scan on HB channels */
--	if (iwl_mvm_is_scan_fragmented(params->hb_type))
-+	if ((!iwl_mvm_is_cdb_supported(mvm) &&
-+	     iwl_mvm_is_scan_fragmented(params->type)) ||
-+	    (iwl_mvm_is_cdb_supported(mvm) &&
-+	     iwl_mvm_is_scan_fragmented(params->hb_type)))
- 		flags |= IWL_SCAN_CHANNEL_FLAG_EBS_FRAG;
- 
- 	return flags;
+ 	return 1;
 -- 
 2.35.1
 

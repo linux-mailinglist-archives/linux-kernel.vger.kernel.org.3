@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DA34FDA10
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B624FDA30
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380963AbiDLIW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S1380890AbiDLIWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353742AbiDLHZx (ORCPT
+        with ESMTP id S1353744AbiDLHZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:25:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFBF388C;
-        Tue, 12 Apr 2022 00:04:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3456259;
+        Tue, 12 Apr 2022 00:04:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31DB8B81A8F;
-        Tue, 12 Apr 2022 07:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D46C385A6;
-        Tue, 12 Apr 2022 07:04:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D57B2B81B4D;
+        Tue, 12 Apr 2022 07:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE94C385A1;
+        Tue, 12 Apr 2022 07:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747053;
-        bh=xd+6zkjK1T71bZdK8lxeDi33yn7elOo0gA8j9wLhbsc=;
+        s=korg; t=1649747055;
+        bh=HN2gKPE33ztHWmIvmUrsSRtfdI7LL0HYsaqnw1yq2FU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zbF+THV9ljcC3+mGDuScILWsJhVR9TODxK6lykfw8TPDzG666H+Wm5NwufpKp1+4A
-         y46uTl6rvWnvyoUg6NXMKJLh9fBfZVxhWoNcatm1KKV9ZDyjrLSBUvcPbf/UTrIkaD
-         9nfDfOkK1Gp4hhYMvFhyvgltiUz1ynrdQmWl3/g0=
+        b=kN9eLTTcdpY2a3Yqc0Hpc1zrT1dDlUGVC7q2Sc/IFkmn5KbZfihrDB54pRTy9Gft/
+         kTSgGAK+9+JGGa6JKU/0z+s2JZWFwtYbjqB51xiq1eQQWvUZCi8LqX55DpvnGPAynw
+         t7yOTJjEvkgGBxqOhnW3AUExKZwwd1pWtmbOGpX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eugene Syromiatnikov <esyr@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 226/285] io_uring: implement compat handling for IORING_REGISTER_IOWQ_AFF
-Date:   Tue, 12 Apr 2022 08:31:23 +0200
-Message-Id: <20220412062950.182021874@linuxfoundation.org>
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.16 227/285] io_uring: fix race between timeout flush and removal
+Date:   Tue, 12 Apr 2022 08:31:24 +0200
+Message-Id: <20220412062950.211410295@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -54,39 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugene Syromiatnikov <esyr@redhat.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit 0f5e4b83b37a96e3643951588ed7176b9b187c0a upstream.
+commit e677edbcabee849bfdd43f1602bccbecf736a646 upstream.
 
-Similarly to the way it is done im mbind syscall.
+io_flush_timeouts() assumes the timeout isn't in progress of triggering
+or being removed/canceled, so it unconditionally removes it from the
+timeout list and attempts to cancel it.
 
-Cc: stable@vger.kernel.org # 5.14
-Fixes: fe76421d1da1dcdb ("io_uring: allow user configurable IO thread CPU affinity")
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+Leave it on the list and let the normal timeout cancelation take care
+of it.
+
+Cc: stable@vger.kernel.org # 5.5+
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ fs/io_uring.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -10799,7 +10799,15 @@ static __cold int io_register_iowq_aff(s
- 	if (len > cpumask_size())
- 		len = cpumask_size();
+@@ -1614,12 +1614,11 @@ static __cold void io_flush_timeouts(str
+ 	__must_hold(&ctx->completion_lock)
+ {
+ 	u32 seq = ctx->cached_cq_tail - atomic_read(&ctx->cq_timeouts);
++	struct io_kiocb *req, *tmp;
  
--	if (copy_from_user(new_mask, arg, len)) {
-+	if (in_compat_syscall()) {
-+		ret = compat_get_bitmap(cpumask_bits(new_mask),
-+					(const compat_ulong_t __user *)arg,
-+					len * 8 /* CHAR_BIT */);
-+	} else {
-+		ret = copy_from_user(new_mask, arg, len);
-+	}
-+
-+	if (ret) {
- 		free_cpumask_var(new_mask);
- 		return -EFAULT;
+ 	spin_lock_irq(&ctx->timeout_lock);
+-	while (!list_empty(&ctx->timeout_list)) {
++	list_for_each_entry_safe(req, tmp, &ctx->timeout_list, timeout.list) {
+ 		u32 events_needed, events_got;
+-		struct io_kiocb *req = list_first_entry(&ctx->timeout_list,
+-						struct io_kiocb, timeout.list);
+ 
+ 		if (io_is_timeout_noseq(req))
+ 			break;
+@@ -1636,7 +1635,6 @@ static __cold void io_flush_timeouts(str
+ 		if (events_got < events_needed)
+ 			break;
+ 
+-		list_del_init(&req->timeout.list);
+ 		io_kill_timeout(req, 0);
  	}
+ 	ctx->cq_last_tm_flush = seq;
+@@ -6223,6 +6221,7 @@ static int io_timeout_prep(struct io_kio
+ 	if (data->ts.tv_sec < 0 || data->ts.tv_nsec < 0)
+ 		return -EINVAL;
+ 
++	INIT_LIST_HEAD(&req->timeout.list);
+ 	data->mode = io_translate_timeout_mode(flags);
+ 	hrtimer_init(&data->timer, io_timeout_get_clock(data), data->mode);
+ 
 
 

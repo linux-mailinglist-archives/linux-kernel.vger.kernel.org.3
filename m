@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883054FD383
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676A84FD40F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352043AbiDLH2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S1353249AbiDLIDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351730AbiDLHMw (ORCPT
+        with ESMTP id S1353633AbiDLHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747FE167E5;
-        Mon, 11 Apr 2022 23:52:02 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7F443AF9;
+        Tue, 12 Apr 2022 00:02:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 269DAB81B35;
-        Tue, 12 Apr 2022 06:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B8CC385A8;
-        Tue, 12 Apr 2022 06:51:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1560615B4;
+        Tue, 12 Apr 2022 07:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3625C385A6;
+        Tue, 12 Apr 2022 07:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746319;
-        bh=YMs7DdWMitcpwA45VOAPxYqNjZD+cfm5Xmc4BAEvph4=;
+        s=korg; t=1649746954;
+        bh=Cmo89yAXoJxFmGVPhilXjPQI930qLUDic7RefpgLBM4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DDp87CfHFB6D11iTbw8sURPvItkdAVKJ1SgzKBNw56zwjH/g8lIO/latXsC+OvdaL
-         iiTroFfZGSUKC6HLr1E25xy9BAwFZ6gpY3fpV3mp+8AhKrhw/+ZEAm8DRq6XltZ+4k
-         nTAGTh6DDZ/0pP5Teg/eTWBqiHfbYG6E/UvdrhOQ=
+        b=RAXpcxHtaOTW8zqZ8S7Xpqdj3RnrR0ImYAeVe4FuotWuJlHNrnLd70fEsRn/8u8MB
+         food1SIAohoxP0W2Y+dCSWnSuZsO508RmI0bQeoyFZ4dw6kxAFl5sUyJG9G6AUjvHn
+         WHkM0Kq6erIL089gu656kMY9Y0aeFQM3r+7s9yjY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH 5.15 241/277] drm/panel: ili9341: fix optional regulator handling
-Date:   Tue, 12 Apr 2022 08:30:44 +0200
-Message-Id: <20220412062949.018964139@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 189/285] ice: xsk: fix VSI state check in ice_xsk_wakeup()
+Date:   Tue, 12 Apr 2022 08:30:46 +0200
+Message-Id: <20220412062949.117259792@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Mack <daniel@zonque.org>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-commit d14eb80e27795b7b20060f7b151cdfe39722a813 upstream.
+[ Upstream commit 72b915a2b444e9247c9d424a840e94263db07c27 ]
 
-If the optional regulator lookup fails, reset the pointer to NULL.
-Other functions such as mipi_dbi_poweron_reset_conditional() only do
-a NULL pointer check and will otherwise dereference the error pointer.
+ICE_DOWN is dedicated for pf->state. Check for ICE_VSI_DOWN being set on
+vsi->state in ice_xsk_wakeup().
 
-Fixes: 5a04227326b04c15 ("drm/panel: Add ilitek ili9341 panel driver")
-Signed-off-by: Daniel Mack <daniel@zonque.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220317225537.826302-1-daniel@zonque.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-ilitek-ili9341.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/panel/panel-ilitek-ili9341.c
-+++ b/drivers/gpu/drm/panel/panel-ilitek-ili9341.c
-@@ -612,8 +612,10 @@ static int ili9341_dbi_probe(struct spi_
- 	int ret;
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index dfef1e75469d..28c4f90ad07f 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -765,7 +765,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
+ 	struct ice_vsi *vsi = np->vsi;
+ 	struct ice_tx_ring *ring;
  
- 	vcc = devm_regulator_get_optional(dev, "vcc");
--	if (IS_ERR(vcc))
-+	if (IS_ERR(vcc)) {
- 		dev_err(dev, "get optional vcc failed\n");
-+		vcc = NULL;
-+	}
+-	if (test_bit(ICE_DOWN, vsi->state))
++	if (test_bit(ICE_VSI_DOWN, vsi->state))
+ 		return -ENETDOWN;
  
- 	dbidev = devm_drm_dev_alloc(dev, &ili9341_dbi_driver,
- 				    struct mipi_dbi_dev, drm);
+ 	if (!ice_is_xdp_ena_vsi(vsi))
+-- 
+2.35.1
+
 
 

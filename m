@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6B34FD865
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A1E4FD6FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353748AbiDLHeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S1353595AbiDLIbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351810AbiDLHM7 (ORCPT
+        with ESMTP id S1353580AbiDLHZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:59 -0400
+        Tue, 12 Apr 2022 03:25:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C8F6596;
-        Mon, 11 Apr 2022 23:53:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C413F43AE4;
+        Tue, 12 Apr 2022 00:01:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 047706149D;
-        Tue, 12 Apr 2022 06:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C79AC385A1;
-        Tue, 12 Apr 2022 06:53:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ED0460B2E;
+        Tue, 12 Apr 2022 07:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C05C385A6;
+        Tue, 12 Apr 2022 07:01:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746386;
-        bh=NnPyFX9ESh47Qq4ZcmAI1zcai2GgoRQxZAL1tOSFISA=;
+        s=korg; t=1649746907;
+        bh=YiaJDBbTcuhQHMi1q1uJq5SwFO2vcgROG+bHHXW7V2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pJMVmmHZOuMWUmrQugtYigfd+d/IOFUCese63HHC901r9+4gmEYvh5A6NxGuu5bvK
-         UBm3mwP8zevp1L1rbi1FF1SyjMUFonISX0reaFWXISnFcAo91+hAQXSsxJDz61RjzT
-         GprWUvO0d2eiesM2AMipsaHVcluORLWgMRuinbAs=
+        b=vOaR6hY8Bc/z49kFiI34yVD2ajrvI1bMOFP2Euqu9jCap5cnEH763JsPtgfHZVh3A
+         jmK9INguS4RS9kePAID5BFi4zZT9r5FDYESFz8TP7xSjDW8ziDogLitxCltWwlNLtN
+         jvPCgXGzU3g8kzPipAzxTcOb3bk/ZPwrw1jL0nPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 227/277] spi: core: add dma_map_dev for __spi_unmap_msg()
-Date:   Tue, 12 Apr 2022 08:30:30 +0200
-Message-Id: <20220412062948.614028684@linuxfoundation.org>
+        stable@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 174/285] arch/arm64: Fix topology initialization for core scheduling
+Date:   Tue, 12 Apr 2022 08:30:31 +0200
+Message-Id: <20220412062948.690247666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Koul <vkoul@kernel.org>
+From: Phil Auld <pauld@redhat.com>
 
-commit 409543cec01a84610029d6440c480c3fdd7214fb upstream.
+[ Upstream commit 5524cbb1bfcdff0cad0aaa9f94e6092002a07259 ]
 
-Commit b470e10eb43f ("spi: core: add dma_map_dev for dma device") added
-dma_map_dev for _spi_map_msg() but missed to add for unmap routine,
-__spi_unmap_msg(), so add it now.
+Arm64 systems rely on store_cpu_topology() to call update_siblings_masks()
+to transfer the toplogy to the various cpu masks. This needs to be done
+before the call to notify_cpu_starting() which tells the scheduler about
+each cpu found, otherwise the core scheduling data structures are setup
+in a way that does not match the actual topology.
 
-Fixes: b470e10eb43f ("spi: core: add dma_map_dev for dma device")
-Cc: stable@vger.kernel.org # v5.14+
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Link: https://lore.kernel.org/r/20220406132238.1029249-1-vkoul@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+With smt_mask not setup correctly we bail on `cpumask_weight(smt_mask) == 1`
+for !leaders in:
+
+ notify_cpu_starting()
+   cpuhp_invoke_callback_range()
+     sched_cpu_starting()
+       sched_core_cpu_starting()
+
+which leads to rq->core not being correctly set for !leader-rq's.
+
+Without this change stress-ng (which enables core scheduling in its prctl
+tests in newer versions -- i.e. with PR_SCHED_CORE support) causes a warning
+and then a crash (trimmed for legibility):
+
+[ 1853.805168] ------------[ cut here ]------------
+[ 1853.809784] task_rq(b)->core != rq->core
+[ 1853.809792] WARNING: CPU: 117 PID: 0 at kernel/sched/fair.c:11102 cfs_prio_less+0x1b4/0x1c4
+...
+[ 1854.015210] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+...
+[ 1854.231256] Call trace:
+[ 1854.233689]  pick_next_task+0x3dc/0x81c
+[ 1854.237512]  __schedule+0x10c/0x4cc
+[ 1854.240988]  schedule_idle+0x34/0x54
+
+Fixes: 9edeaea1bc45 ("sched: Core-wide rq->lock")
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lore.kernel.org/r/20220331153926.25742-1-pauld@redhat.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/kernel/smp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1072,11 +1072,15 @@ static int __spi_unmap_msg(struct spi_co
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 27df5c1e6baa..3b46041f2b97 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -234,6 +234,7 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 	 * Log the CPU info before it is marked online and might get read.
+ 	 */
+ 	cpuinfo_store_cpu();
++	store_cpu_topology(cpu);
  
- 	if (ctlr->dma_tx)
- 		tx_dev = ctlr->dma_tx->device->dev;
-+	else if (ctlr->dma_map_dev)
-+		tx_dev = ctlr->dma_map_dev;
- 	else
- 		tx_dev = ctlr->dev.parent;
+ 	/*
+ 	 * Enable GIC and timers.
+@@ -242,7 +243,6 @@ asmlinkage notrace void secondary_start_kernel(void)
  
- 	if (ctlr->dma_rx)
- 		rx_dev = ctlr->dma_rx->device->dev;
-+	else if (ctlr->dma_map_dev)
-+		rx_dev = ctlr->dma_map_dev;
- 	else
- 		rx_dev = ctlr->dev.parent;
+ 	ipi_setup(cpu);
  
+-	store_cpu_topology(cpu);
+ 	numa_add_cpu(cpu);
+ 
+ 	/*
+-- 
+2.35.1
+
 
 

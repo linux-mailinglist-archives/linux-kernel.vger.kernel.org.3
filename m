@@ -2,105 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B904FDD2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE22A4FDD27
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239901AbiDLK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S229684AbiDLK6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245287AbiDLKwe (ORCPT
+        with ESMTP id S1351477AbiDLKxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:52:34 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6757A22BC7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Fj8VO6yUX/TG+ZwJZmOwkh7zNQnO
-        gn90D0zMWyzIvnU=; b=lKHbOYSHXrHXzoAU0xuLD4BzV2ze1u63QPuRIEgJhIFL
-        X9sTyU4Jv8qE7LzoB5wW7DmVxTNj/YMhzpZPyjjxhmEvSH8SsSa1hEFGO0hui6E4
-        muRRWsVrk2hjNF6YzGn6AJdgDFATY/OvX2Y6/FXb1q4LJNtUyVS9zpT0lJBDmjU=
-Received: (qmail 987440 invoked from network); 12 Apr 2022 11:49:07 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Apr 2022 11:49:07 +0200
-X-UD-Smtp-Session: l3s3148p1@WEzI+HHcDucgAQnoAGZ4AFi7qjeMIP6q
-Date:   Tue, 12 Apr 2022 11:49:06 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] memory: renesas-rpc-if: Simplify single/double data
- register access
-Message-ID: <YlVLEnRaARVmWZnZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <19358863deae03b1b26f473e878305a1c6e40d19.1649681638.git.geert+renesas@glider.be>
- <YlVJc3z1xXT2emIc@ninjato>
- <CAMuHMdUGkba3hiRJPEw26oBdc6_MK_eBO==Z9QeinaoeZv8Qbw@mail.gmail.com>
+        Tue, 12 Apr 2022 06:53:32 -0400
+Received: from out28-123.mail.aliyun.com (out28-123.mail.aliyun.com [115.124.28.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E04923178;
+        Tue, 12 Apr 2022 02:49:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437479|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.016684-0.000618175-0.982698;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.NP95aWT_1649756947;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NP95aWT_1649756947)
+          by smtp.aliyun-inc.com(33.37.72.206);
+          Tue, 12 Apr 2022 17:49:08 +0800
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
+ dtbscheck
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+References: <cover.1649443080.git.hns@goldelico.com>
+ <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+ <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+ <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
+ <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
+ <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
+ <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
+ <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
+ <b6090a27-12b7-0c01-6d33-ae32b31b4b74@wanyeetech.com>
+ <8FA36CE4-CD39-4767-B49E-D112E4313036@goldelico.com>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <3e088e18-5df9-bf50-0070-b24b8a3c5f41@wanyeetech.com>
+Date:   Tue, 12 Apr 2022 17:49:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S735XdVRzV/i3nen"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUGkba3hiRJPEw26oBdc6_MK_eBO==Z9QeinaoeZv8Qbw@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8FA36CE4-CD39-4767-B49E-D112E4313036@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nikolaus,
 
---S735XdVRzV/i3nen
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022/4/11 上午3:13, H. Nikolaus Schaller wrote:
+> Hi,
+>
+>> Am 10.04.2022 um 18:32 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
+>>
+>> Hi folks,
+>>
+>> On 2022/4/9 下午9:53, H. Nikolaus Schaller wrote:
+>>>> Am 09.04.2022 um 15:44 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+>>>>
+>>>> On 09/04/2022 15:32, H. Nikolaus Schaller wrote:
+>>>>>> Am 09.04.2022 um 15:15 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+>>>>>>
+>>>>>> On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
+>>>>>>>> This looks wrong, the block usually should have a specific compatible.
+>>>>>>>> Please mention why it does not.
+>>>>>>> Well, I did not even have that idea that it could need an explanation.
+>>>>>>>
+>>>>>>> There is no "ingenic,jz4780-otg" and none is needed here to make it work.
+>>>>>> Make it work in what terms? We talk about hardware description, right?
+>>>>> Yes.
+>>>>>
+>>>>>>> Therefore the generic "snps,dwc2" is sufficient.
+>>>>>> No, you are mixing now driver behavior (is sufficient) with hardware
+>>>>>> description.
+>>>>> No. "snps,dwc2" is a hardware description for a licensed block.
+>>>>> Not a driver behavior.
+>>>> snps,dwc2 matches the original block, not necessarily this
+>>>> implementation. Unless you are sure?
+>>> I assume. Nobody has reported an issue without having any specific jz4780 driver in place.
+>>> Well, that is only evidence, not bullet proof.
+>>>
+>>>>>> Most of licensed blocks require the specific compatible to
+>>>>>> differentiate it.
+>>>>> If there is a need to differentiate.
+>>>> No, regardless whether there is a need currently, most of them have
+>>>> specific compatibles, because there are some minor differences. Even if
+>>>> difference is not visible from programming model or wiring, it might
+>>>> justify it's own specific compatible. For example because maybe once
+>>>> that tiny difference will require some changes.
+>>>>
+>>>> Someone added the ingenic compatible, so why do you assume that one tool
+>>>> (bindings) is correct but other piece of code (using specific
+>>>> compatible) is not? You use the argument "bindings warning" which is not
+>>>> enough. Argument that blocks are 100% same, is good enough, if you are
+>>>> sure. Just use it in commit msg. But are you sure that these are the
+>>>> same? Same pins, same programming model (entire model, not used by Linux)?
+>>> The compatible ingenic,jz4780-otg was introduced in 158c774d3c64859e84dd20e04d5fb18c8d3d318e.
+>>> Hence I have added Yanjie for clarification why he added it in the .dts and not in the bindings.
+>>
+>> It's my fault, last year I made an OTG driver for Ingenic SoCs and sent it
+>> to the mailing list, and then I received some revision comments, but for
+>> some personal reasons I didn't continue to improve it.
+>>
+>> I'll finish these modifications as soon as possible and send them out.
+>> Then after they merge into the mainline, this problem will be solved.
+> No need to apologize.
+>
+> If you agree I can add "ingenic,jz4780-otg" to the schema file and keep
+> the .dts in the v2 of my series.
 
 
-> > > +                     regmap_write(rpc->regmap, RPCIF_SMWDR0, *p++);
-> >
-> > Last '++' can be omitted?
->=20
-> I know. But I think it looks nicer this way ;-)
+Sure.
 
-I have to admit it looks a little like "I copy&pasted without thinking"
-to me :)
+Or you can wait a bit, I plan to send out new patches later today, it 
+contains "ingenic,jz4780-otg".
 
 
---S735XdVRzV/i3nen
-Content-Type: application/pgp-signature; name="signature.asc"
+> And I'll add you to the list of reviewers, so you can please comment v2
+> if it is correct or if we are still missing something.
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJVSxIACgkQFA3kzBSg
-KbYQCw//Tg4IDheuIWgzV7n9xNtp7Dk17Iz4LggQVlK/eKuuSJbsCwoapbtTVzGi
-tM+BG5tigk87t1bjkhUzbjK9vxclhEcLmi80UquzPswl4frW4nM/1SBFCuIlXmV9
-YqZnJlyM2e7RXjiftKfvmZO85x2eyvjv4nqEtj8b4tzog6HaPACQdQJYuxMxBz+Q
-635MoH0kP20jKL/7u+2lyAq97IkuR0sSXngakNiAB92T2WGJUTUcmBJaVGV7qQNG
-Zh0FH96JrX2RIq1Yl+s6Tfipsfgivw+l2gsgxQOKwuvcTyUZcuvWkZtL1A1tf0d4
-crws5bMBIxXJV1oKU/gU/azoy3xoGDOoz2TFn9dulprQSogW+/5sx2mA/usdU2j/
-IpbjZ4wiS6piDlXzplqXQDZjfVMSfnncfGjqmWRAmBVV0KV6BdSzEFBNsDqnx31D
-PkcY8ezxBL34YzKRJ2N+CwdozzAAxisA6DtuvK5nLdNbjz0P6tQsYYZjJUSsE587
-4g5cUbCpV72ZFYCuqNbcQFvuYA9/+fJQDdf/IrF4kvYP6LudwXRsIp0Nb79Xo4Z9
-9QQ/TmDDv6wQ4cEhDobBY/DcVhbvB+SOZ5dbPMJhIKooi0YWhNw7MikbVMmmDzRD
-jBXKkFQRfM8aShBo+dTG+Fs1MmZWiKoNLhYGpG3+9If+aZBcd/0=
-=C8Jw
------END PGP SIGNATURE-----
+Okay, thanks!
 
---S735XdVRzV/i3nen--
+
+>
+> Best regards and thanks,
+> Nikolaus

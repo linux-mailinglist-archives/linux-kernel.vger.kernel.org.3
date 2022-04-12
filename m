@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB194FD5FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B4D4FD725
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358731AbiDLHmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S1352371AbiDLHN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353617AbiDLHPu (ORCPT
+        with ESMTP id S1352204AbiDLGzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:15:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687BB3A724;
-        Mon, 11 Apr 2022 23:57:11 -0700 (PDT)
+        Tue, 12 Apr 2022 02:55:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC068393C4;
+        Mon, 11 Apr 2022 23:45:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C79EB60EEB;
-        Tue, 12 Apr 2022 06:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC5D4C385A1;
-        Tue, 12 Apr 2022 06:57:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C04CB81B43;
+        Tue, 12 Apr 2022 06:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDF5C385A8;
+        Tue, 12 Apr 2022 06:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746630;
-        bh=nrsOPGqxxHc5zGk9m8VTGwzLfhtP518ODdSA1JttUR8=;
+        s=korg; t=1649745903;
+        bh=qU6k39kQ1C01H9GAzZyVdj/oO7ak6LiTi1/TZBfgvsI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=prDZjNOTuHCYNSr1b+5QfTK6i0AreOjrpxwya1s7cygYVzrm/wvq0TPisCuv7mi6w
-         re7bLhK8qhDoUQBtFQbqOOceUnz5leLzQFI1OCEKNe87osZr8kclnWms3Al5BOdXYo
-         lL1RtZD9Be5zXsMUOvX5NkypFbBJjO04BJmqELa8=
+        b=xLxMeOC54u/H17qFdHEvl3lgp9N0rkqY/ULn/EqIJZRtj/2wC6wotT67blqbL+JLo
+         eIn5flN3XDKgz/jKbRQ2OiCuikTY0nftGw4uOdH9PE4szeitUqEWDWVcQvz2z8dLv2
+         Zcf2tdcaHTsQj7xU5QWpQfiEZ4O/vk7NPbjOvDSI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Melissa Wen <mwen@igalia.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 034/285] drm/v3d: fix missing unlock
+Subject: [PATCH 5.15 088/277] powerpc/64e: Tie PPC_BOOK3E_64 to PPC_FSL_BOOK3E
 Date:   Tue, 12 Apr 2022 08:28:11 +0200
-Message-Id: <20220412062944.661150123@linuxfoundation.org>
+Message-Id: <20220412062944.593056555@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit e57c1a3bd5e8e0c7181f65ae55581f0236a8f284 ]
+[ Upstream commit 1a76e520ee1831a81dabf8a9a58c6453f700026e ]
 
-[why]
-Unlock is needed on the error handling path to prevent dead lock.
-v3d_submit_cl_ioctl and v3d_submit_csd_ioctl is missing unlock.
+Since the IBM A2 CPU support was removed, see commit
+fb5a515704d7 ("powerpc: Remove platforms/wsp and associated pieces"),
+the only 64-bit Book3E CPUs we support are Freescale (NXP) ones.
 
-[how]
-Fix this by changing goto target on the error handling path. So
-changing the goto to target an error handling path
-that includes drm_gem_unlock reservations.
+However our Kconfig still allows configurating a kernel that has 64-bit
+Book3E support, but no Freescale CPU support enabled. Such a kernel
+would never boot, it doesn't know about any CPUs.
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-Reviewed-by: Melissa Wen <mwen@igalia.com>
-Signed-off-by: Melissa Wen <melissa.srw@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/1643377262-109975-1-git-send-email-lyz_cs@pku.edu.cn
+It also causes build errors, as reported by lkp, because
+PPC_BARRIER_NOSPEC is not enabled in such a configuration:
+
+  powerpc64-linux-ld: arch/powerpc/net/bpf_jit_comp64.o:(.toc+0x0):
+  undefined reference to `powerpc_security_features'
+
+To fix this, force PPC_FSL_BOOK3E to be selected whenever we are
+building a 64-bit Book3E kernel.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220304061222.2478720-1-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/v3d/v3d_gem.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/powerpc/platforms/Kconfig.cputype | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-index e47ae40a865a..91bdec3e0ef7 100644
---- a/drivers/gpu/drm/v3d/v3d_gem.c
-+++ b/drivers/gpu/drm/v3d/v3d_gem.c
-@@ -798,7 +798,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *data,
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index a208997ade88..87a95cbff2f3 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -111,6 +111,7 @@ config PPC_BOOK3S_64
  
- 		if (!render->base.perfmon) {
- 			ret = -ENOENT;
--			goto fail;
-+			goto fail_perfmon;
- 		}
- 	}
- 
-@@ -847,6 +847,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *data,
- 
- fail_unreserve:
- 	mutex_unlock(&v3d->sched_lock);
-+fail_perfmon:
- 	drm_gem_unlock_reservations(last_job->bo,
- 				    last_job->bo_count, &acquire_ctx);
- fail:
-@@ -1027,7 +1028,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *data,
- 						     args->perfmon_id);
- 		if (!job->base.perfmon) {
- 			ret = -ENOENT;
--			goto fail;
-+			goto fail_perfmon;
- 		}
- 	}
- 
-@@ -1056,6 +1057,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *data,
- 
- fail_unreserve:
- 	mutex_unlock(&v3d->sched_lock);
-+fail_perfmon:
- 	drm_gem_unlock_reservations(clean_job->bo, clean_job->bo_count,
- 				    &acquire_ctx);
- fail:
+ config PPC_BOOK3E_64
+ 	bool "Embedded processors"
++	select PPC_FSL_BOOK3E
+ 	select PPC_FPU # Make it a choice ?
+ 	select PPC_SMP_MUXED_IPI
+ 	select PPC_DOORBELL
+@@ -287,7 +288,7 @@ config FSL_BOOKE
+ config PPC_FSL_BOOK3E
+ 	bool
+ 	select ARCH_SUPPORTS_HUGETLBFS if PHYS_64BIT || PPC64
+-	select FSL_EMB_PERFMON
++	imply FSL_EMB_PERFMON
+ 	select PPC_SMP_MUXED_IPI
+ 	select PPC_DOORBELL
+ 	default y if FSL_BOOKE
 -- 
 2.35.1
 

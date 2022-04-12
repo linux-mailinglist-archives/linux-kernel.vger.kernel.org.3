@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AFC4FD470
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CFE4FD56D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386313AbiDLIzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S1386376AbiDLI5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359420AbiDLHnC (ORCPT
+        with ESMTP id S1359442AbiDLHnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:43:02 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9F2B2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:51 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id 3so5606899qkj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h09al9GPNRGrgzoVRTG5PYUk3CouyOtKbjw7IpJLnEw=;
-        b=uL+kHwbVi2G3PLmHPKhQRezY1+QnylU84gIWnxwYLhAZf4lMYVuPsml1LuIOjLqbB9
-         193viVP9OmCOliEoozEq7s7ABQeinAN7Y5n60+KMioz2upgcBYS/69sBneeqIO1d18F/
-         3UTCroZSTQACfGriv9S9EHjjkVig1lO5bTNprfQKfvC3RJlKQ9ftmWvfXpipdbdUbXe7
-         pIBHHwqpD4N6UCQfVLC7rZjVsBV2WWf9Gcp+79ng0E6Hyb361J8hSJXNu7YjR35rU0Ds
-         bxcadl1RjuIg1LHwlFMzlBrqKDrm9DEXBx1OaSufCCiEjcjpQ/PGgdZGKsC8JIEz9/eH
-         qhJg==
-X-Gm-Message-State: AOAM531EDPPLs/tnrkDHpfwvWA26Z3xMz4JGb3HA5Kd2bSDHTnyeTpSe
-        cDX/tj+YtayhOLtwCg7pLl8gPnr8Ypojfr0n
-X-Google-Smtp-Source: ABdhPJzRblZrIN6hFP/yVqZSHVaElweTattpKSgtKz5iq+JvRRwl+bSx+IQp93wYLKIay/S5n1jO5g==
-X-Received: by 2002:ae9:e8d0:0:b0:69b:ef92:c0b with SMTP id a199-20020ae9e8d0000000b0069bef920c0bmr2105500qkg.498.1649748230394;
-        Tue, 12 Apr 2022 00:23:50 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id c7-20020a37e107000000b0069c126c5107sm3890118qkm.39.2022.04.12.00.23.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:23:50 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id x200so7868086ybe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:49 -0700 (PDT)
-X-Received: by 2002:a25:29c2:0:b0:641:224f:17d6 with SMTP id
- p185-20020a2529c2000000b00641224f17d6mr10498662ybp.546.1649748229732; Tue, 12
- Apr 2022 00:23:49 -0700 (PDT)
+        Tue, 12 Apr 2022 03:43:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AFC25F5;
+        Tue, 12 Apr 2022 00:24:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8560D615B4;
+        Tue, 12 Apr 2022 07:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D2BC385A5;
+        Tue, 12 Apr 2022 07:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649748253;
+        bh=ItFdyeHxJZBIWoIuqEPa3lbUs8g+9s4r/h9r0eUdwgw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dEvDnVe0iGkhcHj0RjVp1jlrxbMwXAFEKnJ86vaupD1IcCEu2GCzCKgERAVkBX8st
+         USIP3lhU68Sp9qWoohjwgksBCkiJskRGTT7osn5nLpDmnBpZD4QYMPXlk7vo3RpKBx
+         /J1CuYALC7IesyeLMTncnR46xQXq48yoEHl1sDLE84gS/DyKQn4lhnGN4UcNe5O/u8
+         WKsCaD4NXP2a/noBdREk7mQofVwET70l6kIjyoUIJN7KUDBH/+w3mnV1g20ARxdO/C
+         H870RDXqjabCqMbYtJ2rwhgCQOqW1EstcfvfxNE65XxH1iTXvZetCWYY3EAEcwnP5z
+         tzNyt/BTPPQyQ==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>,
+        Aharon Landau <aharonl@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Michael Guralnik <michaelgur@nvidia.com>
+Subject: [PATCH rdma-next 00/12] Refactor UMR post send logic
+Date:   Tue, 12 Apr 2022 10:23:55 +0300
+Message-Id: <cover.1649747695.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-5-javierm@redhat.com>
-In-Reply-To: <20220411211243.11121-5-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 09:23:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
-Message-ID: <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] drm/solomon: Move device info from ssd130x-i2c to
- the core driver
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+From: Leon Romanovsky <leonro@nvidia.com>
 
-Thanks for your patch!
+Hi,
 
-On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> These are declared in the ssd130x-i2c transport driver but the information
-> is not I2C specific, and could be used by other SSD130x transport drivers.
->
-> Move them to the ssd130x core driver and just set the OF device entries to
-> an ID that could be used to lookup the correct device info from an array.
->
-> While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
-> bytes. Since even though are used by the I2C interface, it could also be
+UMR are special QPs that require slightly different logic than other
+QPs. This series from Aharon refactors the logic around UMR QP to
+separate file and functions to clean the post send flow.
 
-though they are ... they could
+Thanks
 
-> useful for other transport protocols such as SPI.
->
-> Suggested-by: Chen-Yu Tsai <wens@kernel.org>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Aharon Landau (12):
+  RDMA/mlx5: Move init and cleanup of UMR to umr.c
+  RDMA/mlx5: Move umr checks to umr.h
+  RDMA/mlx5: Move mkey ctrl segment logic to umr.c
+  RDMA/mlx5: Simplify get_umr_update_access_mask()
+  RDMA/mlx5: Expose wqe posting helpers outside of wr.c
+  RDMA/mlx5: Introduce mlx5_umr_post_send_wait()
+  RDMA/mlx5: Use mlx5_umr_post_send_wait() to revoke MRs
+  RDMA/mlx5: Use mlx5_umr_post_send_wait() to rereg pd access
+  RDMA/mlx5: Move creation and free of translation tables to umr.c
+  RDMA/mlx5: Use mlx5_umr_post_send_wait() to update MR pas
+  RDMA/mlx5: Use mlx5_umr_post_send_wait() to update xlt
+  RDMA/mlx5: Clean UMR QP type flow from mlx5_ib_post_send()
 
-> --- a/drivers/gpu/drm/solomon/ssd130x.c
-> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+ drivers/infiniband/hw/mlx5/Makefile  |   1 +
+ drivers/infiniband/hw/mlx5/main.c    | 109 +----
+ drivers/infiniband/hw/mlx5/mlx5_ib.h |  89 +---
+ drivers/infiniband/hw/mlx5/mr.c      | 421 +---------------
+ drivers/infiniband/hw/mlx5/odp.c     |  63 ++-
+ drivers/infiniband/hw/mlx5/qp.c      |   1 +
+ drivers/infiniband/hw/mlx5/umr.c     | 700 +++++++++++++++++++++++++++
+ drivers/infiniband/hw/mlx5/umr.h     |  97 ++++
+ drivers/infiniband/hw/mlx5/wr.c      | 377 +++------------
+ drivers/infiniband/hw/mlx5/wr.h      |  60 +++
+ 10 files changed, 976 insertions(+), 942 deletions(-)
+ create mode 100644 drivers/infiniband/hw/mlx5/umr.c
+ create mode 100644 drivers/infiniband/hw/mlx5/umr.h
 
-> @@ -860,7 +890,14 @@ struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap)
->
->         ssd130x->dev = dev;
->         ssd130x->regmap = regmap;
-> -       ssd130x->device_info = device_get_match_data(dev);
-> +
-> +       variant = (enum ssd130x_variants)device_get_match_data(dev);
+-- 
+2.35.1
 
-(uintptr_t), to avoid a cast from pointer to integer of different
-size warning.
-
-> +
-
-Please drop the blank line.
-
-> +       if (variant >= NR_SSD130X_VARIANTS)
-> +               return ERR_PTR(dev_err_probe(dev, -EINVAL,
-> +                                            "Invalid SSD130x variant\n"));
-> +
-> +       ssd130x->device_info = &ssd130x_variants[variant];
->
->         if (ssd130x->device_info->page_mode_only)
->                 ssd130x->page_address_mode = 1;
-
-With the above fixed:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

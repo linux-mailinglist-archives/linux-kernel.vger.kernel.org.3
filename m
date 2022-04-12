@@ -2,87 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864CD4FE654
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EB04FE656
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357873AbiDLQyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S1357880AbiDLQyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbiDLQyQ (ORCPT
+        with ESMTP id S1357878AbiDLQyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:54:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC82574A0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=vNCCOpYQH0vzjBgMNfNuyid5ryqUFOZ7U9dBWd0Rvbs=; b=hG5LgtEbRW6Jd7UfBudIS62Hpv
-        43P+/n1FACUCP+zPX3ZeyS3aH3E2HMQPVj0uief0hUFDc4aKp9bsKgd2G+4KAWiF8M4WKz0tNcYr+
-        WUkJinbR8oSCQA0Kx1wlsJRzw/7MLZcRzsi2XkujS1h5uMZMSkn5NlRsSH0YQpiZevjZCOA6oDLj3
-        guXIFHtt2nIvHiUogB0mr72bqRZYNy5MKZXBwQ+LPpuRzv3pYW1A+1+9sQwDPlBq6Fz5oE0S7bNjr
-        ysSpSRRuy3Bn0wybnD2iocu2/bKn6cAYPKyE1eGf03aEVW1pvlsg3IqhDEad368Cwukp44zkMbBIj
-        IIx3m/yQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neJkA-00DWhi-Jc; Tue, 12 Apr 2022 16:51:54 +0000
-Message-ID: <1dd4c336-d281-6da3-ba37-d13bbf7c2537@infradead.org>
-Date:   Tue, 12 Apr 2022 09:51:51 -0700
-MIME-Version: 1.0
+        Tue, 12 Apr 2022 12:54:19 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2087.outbound.protection.outlook.com [40.107.101.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C096B5AEC9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:52:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IplYyP5pgOnsEqj9CWureOr1m3sKbPGNhj0yelTI00qKL5uyL98jj1syf3+cLfj2/GC1iiUEhGBQ48eBde4r1PYlfc3cKPBqpl2HFUDq9nQ6QJ99Z0fdGpO2jvFB4WekX48SWvKaFJl+YjhwIGt6E4NBIjyZvSh/TSpZGbdPzDCrZz6xo4kW9dMI/py/EIxmYgidzQ4g63TzDj2Cst8U3UDwvCgQf+jIWtblqpSJoNPMkrCu723XXfzAHyYDdAMVbkZZf2u/D+pEHhDpzO9JOE20IffSfzID8+pn5/IidJ8nv5RIEfEC9FJAm5o+WFycJGp8YnBs6apK4jv5avuNcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i9+VxQ0kdK53D7JJkJZSl6Tvgt8DhDj5tBw8ovM0yCs=;
+ b=ejrdjT79wXuO1qVezBLnxLjEuHmQBd9kzbfP9kaI1bDCbNn04z1Oe/d3SZ1ukrCTfUIjztnpLrjtTIpm8ma5CqO2QFpmPV1sg3i0rNMFHKCmKgZXhh6khj2WttVqu+pSFQ5Ph/v9DBwXT0iCATOfiZ4CbvwCYtBXrZ7c9YoxZWyb9ULSy+GnpTagYeF1s7Mqy7paMV2UwEjKBufwDClsXK6AGG08A0X7cNSqpJe+JGm3VBsX2mtlYToH8X4G4Yz5Q1jv65KfcePmk5AH6gASipP2JwwzXj8ch/Qv37+CL7N5jy0AWOhK7qqqCZpg61qqx0cHklKHFO5jw2aitx2gig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i9+VxQ0kdK53D7JJkJZSl6Tvgt8DhDj5tBw8ovM0yCs=;
+ b=n4ucZ4dO3/7J85GFuS7KZqFtUWo0RlJxT1NhPLpRp+mcgxPzS54KQtsUXaeTjc+y6RCql2CSWa0ilx7TiO9naghHUaZVpFhl2dWU+IHbc+EsVIlaHpfOZa+YZRC1jvhuADawISPbsUNkViNK1qu/5HtJyQl1PEtfidM6t8woOHM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
+ by DM5PR12MB1867.namprd12.prod.outlook.com (2603:10b6:3:10d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
+ 2022 16:51:58 +0000
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::4967:ac3d:d5eb:ebb4]) by DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::4967:ac3d:d5eb:ebb4%9]) with mapi id 15.20.5144.029; Tue, 12 Apr 2022
+ 16:51:58 +0000
+Message-ID: <064d8958-a288-64e1-b2a4-c2302a456d5b@amd.com>
+Date:   Tue, 12 Apr 2022 12:51:56 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 -next] scripts: add compare-config utility
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
 Content-Language: en-US
-To:     Chen Lifu <chenlifu@huawei.com>, linux-kernel@vger.kernel.org
-References: <20220412083057.4101246-1-chenlifu@huawei.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220412083057.4101246-1-chenlifu@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+In-Reply-To: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT1PR01CA0113.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2c::22) To DM5PR12MB1947.namprd12.prod.outlook.com
+ (2603:10b6:3:111::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e5d502b5-ec87-46dd-72f2-08da1ca4c242
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1867:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB186750308282B26D13CD2F22EAED9@DM5PR12MB1867.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YUW2hc+J1W9hrY/V+ZkZwEM4Nkm11vxvMoj+p923LEVUpBW1JJULzdwml4gwGdDWWNQaCUU4xwwhWtxtRHuPqSrEzYEp8rdr5oV74T13CQwUz6NGZkZUAhf/r6FmMkGvz6O6vKs81MVf/2mGeNBF0rNTLv42IUXzf0JmrGu4i01iXbQi5LEsZgF/56gxi0PaxSdh0XoRZhUrFNuvgr1aeKQPBQy4o6zWZmY07XnJIyI1KpLeINAIUawI9TIb/IZXaO8Nv+drGSr3yGkNWBXbBDEw8nrWimdGWftgVoJhZQo658cBxOrSd4TLPsHUwRos34SWcuWPqE+MoHQYedeBKosPFnirMWJfVhEDh5PAKhXSpXSCKa9ScQS3f8NgYH0tbWI/uy4V1ozvTICqdfxY33M+0ZtTRpYIKNdeRApiJCKng4B9JPZXpMLtqpalXl+pv0mdaz2kFkuooaPWCYPPYy4uCSzddXIC94Qvsvywg42YOS6iYThIiVJW0Qc1iqtu6Onzy95g25YYILZTpaEZcsoLbITkGGZHTIx8cCdoaWroLfXf2G2RthORr66F5GiZm56fGya1AbsiYrxGrzIwttW67zn5QwpJlqigQT212Tupmx5OuyyIpclPRzIZX0TRtUWnZIB3UxDaU0lXPwFCAV00gynyk6u64oKdLWi9j6m6erHWIuWW3mAEDdC0HoWzNWjR46jPMOzoIXDoiDav6KPURPw/uobxR9UkcyUvXKc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(186003)(7416002)(5660300002)(31686004)(36756003)(8676002)(4326008)(66556008)(316002)(83380400001)(66946007)(110136005)(66476007)(8936002)(86362001)(6512007)(508600001)(2616005)(38100700002)(6486002)(6506007)(53546011)(2906002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UC9WYkd3dzl3K0huSlpvUDJwanJaOHpDaHZoYmpldTNMMmkxaU4rdkNyZDdt?=
+ =?utf-8?B?eVhzbTNJZ0s0RGlncVJWTW9sZGxvWDRUZFVTUjAxMGdDaFVqTTM3TFR5eWdm?=
+ =?utf-8?B?QTdCc1ZRaFk4VDZGekhzYWpyaFQ3aklzT0cvN2JNa2l3ZytSRHZRb21iaU1M?=
+ =?utf-8?B?NlI3dHJtTThwdUgvU3IreHFJV09TNlFqUWZ3dG1ibS9naVQrK2trZldaczRz?=
+ =?utf-8?B?NlZKUlFVdmRObzhiNEVnSWMyOFpnakdhQkg4WGwyR0lzSVRsb1dqbWF3RkN5?=
+ =?utf-8?B?RVBkS2FFQ3JMRkYzcXZsdldCRGRLREE0WHZyOGE0TWF1OXNTME1NQmw4YXNF?=
+ =?utf-8?B?dDJtVXQ3ZHRvRXZHOGk2OFc5cnQvWHI2cml0am5SWUdNRldCbFArU0M3a1Jz?=
+ =?utf-8?B?Z2I0Tnd6OTh0V0t0bmJYL1VaQmxGT3VWRUhvUlgrTmtwWVBsaVZhUDhwbmxF?=
+ =?utf-8?B?NjFva3lBWjNncTBTUFJGRmcyWCtyZG5XTi9WUUEyeFVkVlFwTVJrYkthK0NQ?=
+ =?utf-8?B?b0R4TGE3S0IvSlhmaTBGNXM4RCtsL3RRKzE3bWtjUmVpL0Y1UkI3b3hpUExW?=
+ =?utf-8?B?R2pTS1l5NUxXODhJdGpuUHR1UXhRaXNJRldFbWFEcS8yQU9xa0ZZbEtidHdM?=
+ =?utf-8?B?MG5xbVBWeDc1R1B0eUYyMHZpalU1OXBkbVB2ZC8rMExGT3FmdDRFSUNaV1hM?=
+ =?utf-8?B?c3dxUVV1eitDbDlzZ1JyYWVDK1drMVNwOXpxbGlHOUtJVzVkL0lpNlFvdGNi?=
+ =?utf-8?B?WUpPaHdMc0lPb0RzTTcrZWJCdkc5VkREdkR2dGV2Vk44eVJNcWUxV3hWbDV2?=
+ =?utf-8?B?WkEyU1lieEw1TkxQSEF3dVNoRHVkMC85Zm9tWkpZWkg3TTlKQnFCZmJPc3h0?=
+ =?utf-8?B?NDlKUWZvRUxNM3dsUWMzNGVXalc1QTZNTVh1WGRZOGpUSHNjUW5RRmZ6LzlY?=
+ =?utf-8?B?bEl1Nk9MWGZIZThJdXdkTkJubHJyYkRzOXc5VVBteG80cWUyMjkwbXZiVTNL?=
+ =?utf-8?B?b1ZaeGRhRGZQWHRES2wzclZCRnZKSzljaFBHU1hKQ1pVRUlNZVRncTJUUzFr?=
+ =?utf-8?B?RC9mdVhncmo0RDBqMkhJbjZrTmV4YVVITEd1aXhVbVdwMlB4RW1tT0xFeUtL?=
+ =?utf-8?B?NFV6Ym8zZHdtS3QxN3lsQURaVHZzakNVS1FPeDlQNUw0dHhvcVdqWUl4UXNy?=
+ =?utf-8?B?Qzg0ZDg4eXA4ZVNMQTd0Ky9UdE5ZalMzclFiS2dodGRMSXg3bHFBT3BRa0NW?=
+ =?utf-8?B?Mi92dHNkaGJWYnpaQUlFTk5uN0hHanV3cFlXM3l1Ly9uQnpocXpEc0ZGWGNE?=
+ =?utf-8?B?ZU1yL29FUDNlWE0wNk5YZnZDWWpQNEo2aXhib3BHNXVEOVFIaTh5RWJFcEMv?=
+ =?utf-8?B?eEhocnV4WHdhbktCSy9KS0tIaGNJWEtzbmpPOUZBYkNhMmEyR045bThNWFcx?=
+ =?utf-8?B?bjZKdEtJcmRYOWJLUEllcURiWHZ1clNlcGdVL3hnajdzcVhGSCtGUC9KYW5x?=
+ =?utf-8?B?Q1hrRnFGRStxQzJteTZTb2V0bmJLWEV3WGlneHNRVTczM1BURU5GdDk1RUx5?=
+ =?utf-8?B?d043aTJ5RXRVY2lsdHdIYUJXcExNWThydXBQdzZVRVB6N1FNU2hQNXlHSi8z?=
+ =?utf-8?B?OTgxYXhkbmk0cXdKZVpBWjQwMGZPNm5sREY2SnM2WDBsbzN6d3VBNVBwU0tp?=
+ =?utf-8?B?ZW5PN0EwdkYxcEhuNVhSQUxmcXR4dDFkZ1E1QmJmeFVEQnI5ZkswSzlveFI0?=
+ =?utf-8?B?NGQwRGV2aWkvOERDaHNXRGFDV2lCWjVzZ1VaelFrTU9wMlVEMmxERWN1UlZ6?=
+ =?utf-8?B?T09jZ3JNZkhVckFlb0JFUmNMdnM4emVwNVVUNytLaEJ3cjdlV01HYzJQZFRT?=
+ =?utf-8?B?N1g0VWIwb0JtMVJpeERmbVpkTEZOSStLYXY5WlVNblhXZDFoV0hSeW82VzZv?=
+ =?utf-8?B?eFVQVVVPbklTYXNsV1FsRFZXeEpoSzJzemt3SWhLSkE5WTNzaVVLWi9HYkM1?=
+ =?utf-8?B?Tnk1RCtrT1h3aVo4c1MxLzRmc0lNLzQ2YmRGQWY2ZllabTJqTWk1cUR4Ynh3?=
+ =?utf-8?B?NTdwV2h5YnZVNENrWTMwVlRpWHRzS3pRWUxKOG9FMFpFRXpncmhFTmJwSzZt?=
+ =?utf-8?B?MFk0eHJlUHFFYTdWWFFLZlpOb05kKzFXRHRtZTRjTXNPd0VBMHJaQ3hma0lQ?=
+ =?utf-8?B?bVVnQ2tXMWlPZEw2eWFIaEJNVDJJUnpPNDhyQXlPTitSTkRGOEpxMERjUHoz?=
+ =?utf-8?B?SHh0dHJ5OTJJOXBzVXVEWFBhaDdrcnhoemNjMUtkQnd2VkNxL2Z5allMUzZJ?=
+ =?utf-8?B?Q1puMlg4WEtzZVFKQW45dzhWdDRLM3RRK0NjY2hPTS95dEFYQnpKZlRpcmJk?=
+ =?utf-8?Q?9gXyTbM562m2Q6+8COHdYd57xnjE4xAJETUiVQg8ZqQhi?=
+X-MS-Exchange-AntiSpam-MessageData-1: pPzzlXIi0E3/cg==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d502b5-ec87-46dd-72f2-08da1ca4c242
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 16:51:58.8039
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TsUg8JufNfV45AVNHGMNP5hcTqbmxq62TUV0I8/OYaW/K0WzkLImU1dPns/PTnpTohQGaOyeYlI2JaGDPWdfeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1867
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 4/12/22 01:30, Chen Lifu wrote:
-> This is an alternative utility to compare two .config files. Unlike
-> existing utilities "diffconfig" in the kernel tree, it prints detailed
-> results in table style, and support config name prefix so that it can be
-> used elsewhere. It is useful sometimes, for example, to analyze .config files
-> through tables, or to compare Buildroot .config.
-> 
-> With grep and awk, it can print similar results like "diffconfg" as well.
-> 
-> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+On 2022-04-11 18:15, Dmitry Osipenko wrote:
+> Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
+> mutex when job is released, and thus, that code can sleep. This results
+> into "BUG: scheduling while atomic" if locks are contented while job is
+> freed. There is no good reason for releasing scheduler's jobs in IRQ
+> context, hence use normal context to fix the trouble.
 
-Is your goal to have this merged into the kernel source tree?
-If so, you should also send the patch the the kconfig maintainer and
-mailing list.
 
-The output is quite verbose in its default mode (no options specified).
-To get something useful, I use -C -O -N.
+I am not sure this is the beast Idea to leave job's sw fence signalling 
+to be
+executed in system_wq context which is prone to delays of executing
+various work items from around the system. Seems better to me to leave the
+fence signaling within the IRQ context and offload only the job freeing or,
+maybe handle rescheduling to thread context within drivers implemention
+of .free_job cb. Not really sure which is the better.
 
-For my uses and preferences, I would like to see a -D (e.g.) which
-is just a combination of -CON. And it would be nice if that was the
-default mode also. :)
+Andrey
 
+
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > ---
-> Changes in v2:
-> - Add config name prefix support
-> 
->  scripts/compare-config | 201 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 201 insertions(+)
->  create mode 100755 scripts/compare-config
-
-thanks.
--- 
-~Randy
+>   drivers/gpu/drm/scheduler/sched_entity.c | 6 +++---
+>   include/drm/gpu_scheduler.h              | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+> index 191c56064f19..6b25b2f4f5a3 100644
+> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> @@ -190,7 +190,7 @@ long drm_sched_entity_flush(struct drm_sched_entity *entity, long timeout)
+>   }
+>   EXPORT_SYMBOL(drm_sched_entity_flush);
+>   
+> -static void drm_sched_entity_kill_jobs_irq_work(struct irq_work *wrk)
+> +static void drm_sched_entity_kill_jobs_work(struct work_struct *wrk)
+>   {
+>   	struct drm_sched_job *job = container_of(wrk, typeof(*job), work);
+>   
+> @@ -207,8 +207,8 @@ static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
+>   	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
+>   						 finish_cb);
+>   
+> -	init_irq_work(&job->work, drm_sched_entity_kill_jobs_irq_work);
+> -	irq_work_queue(&job->work);
+> +	INIT_WORK(&job->work, drm_sched_entity_kill_jobs_work);
+> +	schedule_work(&job->work);
+>   }
+>   
+>   static struct dma_fence *
+> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+> index 0fca8f38bee4..addb135eeea6 100644
+> --- a/include/drm/gpu_scheduler.h
+> +++ b/include/drm/gpu_scheduler.h
+> @@ -28,7 +28,7 @@
+>   #include <linux/dma-fence.h>
+>   #include <linux/completion.h>
+>   #include <linux/xarray.h>
+> -#include <linux/irq_work.h>
+> +#include <linux/workqueue.h>
+>   
+>   #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
+>   
+> @@ -295,7 +295,7 @@ struct drm_sched_job {
+>   	 */
+>   	union {
+>   		struct dma_fence_cb		finish_cb;
+> -		struct irq_work 		work;
+> +		struct work_struct 		work;
+>   	};
+>   
+>   	uint64_t			id;

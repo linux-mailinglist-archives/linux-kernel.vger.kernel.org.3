@@ -2,128 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37604FEA73
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49CB4FEA3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiDLX0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S229530AbiDLXSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiDLXZ5 (ORCPT
+        with ESMTP id S229452AbiDLXSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:25:57 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB85089301
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:12:06 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id p65so487370ybp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:12:06 -0700 (PDT)
+        Tue, 12 Apr 2022 19:18:18 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C79D160698
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:05:26 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 12so142565oix.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=n/5q6ebK0JYN5I7SWFxTUh10KRu428isEGA+YMY0xN4=;
-        b=sWx01FzQ52rz4TlVeDegxVNeDfmRcpQfNXdHuvalmZDAgtXROZkhFaSuKhNQNiEgKI
-         WvlFxWz+QV5Kp6fkSTGX852h4t/pl5pqUJqvuJIOqiEc8LSxKkt8rUF1kXEbKFDR1EzA
-         8+CdvnE7j9qnxeZC8NukluEOv3a4ZauSz4IIdkSmPZjE27pZPt3Ai6KPB1GJeHtjtnZJ
-         f76ruUOfVhARU9cgrFz35mWiNg+SFn+TcMSHqSp5wIbAF7l8BJ4NOEdtAFeVCps1Pig9
-         WZvxSzQLJqSs1bqX7Cgtx/9Ck/qm30gPflZI0IzmDZVBgu72PlUQJ227r/wzW9kqbs5v
-         kdBw==
+        bh=NowsSEuQJIZua7/716N+9P9bKTm9KkV6U8XDawgBVQE=;
+        b=UIYv/D4877vchmD36c250N280pyX9NJSXwVvBFW2zFw637UNsQr8rbk54nJVwgG4/p
+         gg74h6IyN74e+jRYpL84GkYVlNrDuk7ElKsUwYip7jQro1zQf5Zs+X+RHyLJrIIttoh2
+         zXL9EALXQF/E2WvOoV5UG8/+CmzSYinIVC5crACR/XwGjB3ktu8OXSzd/YUhIaKIrfAD
+         WQjFHFFWw3NP8zx7xIkWPmynyo/8esYZ31lr1NrVrEhpJ0vF2jGcrLi/9JVnjbShMHZH
+         Q/NV5VR/vXBg3ToJX5l33KOml4OkRQunpzZ5vUjuOSbW/qIwqhr/ZWtKzXPu05auPYxq
+         HAag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=n/5q6ebK0JYN5I7SWFxTUh10KRu428isEGA+YMY0xN4=;
-        b=kHqrvQpl5ZIeSWIrcFx/t5g1rz08CX0Sfps1DM2p4603HmKd53w5dB5HvRNcVENP6R
-         XZJxRfAeSX4AgnaDJb9PT+3MgnL0vaLm9ydQhV2VixownwFq9PIO9GSZbffWe8B/yWa4
-         6YPcL8q1PbjNJoDmr+w8udRv6xvo42kkFGioaVRUk9fFI9Vqf53kHByG4h2MC9sOCPhx
-         v0lLIJL3MbhFWeJZTjhJ2RMezT3zQV5PbNmXMPskMuhZg/XRXrmqYa4GmPmIdlaljTxB
-         s4sQg7YY3ErALiCiRVCtkQoWrrVA2qpJf4u2yWufMwChVntnXlDL7RzcrwdiQWSwCn5p
-         5Qdg==
-X-Gm-Message-State: AOAM531ZjeY/MWD03LA+tdJ3+H9F3J1NXxeMASP6CrYeJKtFm++Yfgdl
-        qbKrI+EPeUX6p+XLtYMkvhTdaPBDGX0mj9EN
-X-Google-Smtp-Source: ABdhPJzM73G6wmlf7ocdRD76spYGYiPKpTlOlDLnwAhgIxZiQVyrqx/COh0e31S0X6g2LDDnvC7doA==
-X-Received: by 2002:a9d:4709:0:b0:5cd:9619:890f with SMTP id a9-20020a9d4709000000b005cd9619890fmr13115445otf.118.1649798943160;
-        Tue, 12 Apr 2022 14:29:03 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 123-20020a4a0181000000b00324a1217e96sm13290162oor.35.2022.04.12.14.29.02
+        bh=NowsSEuQJIZua7/716N+9P9bKTm9KkV6U8XDawgBVQE=;
+        b=t3qNkFa24lInC/L8zpV0wxTXcEun4EBrZHMq/nwnEPRe8GKp32NRJmrqyyXwkH3NYP
+         e9PiVF0wH/pEHa2I7Q95rq6tomV7EDSw3WzKKGrW8VgpzD4fcTmIMOUHZGJcapDYHYA6
+         TWhijTk0L2zIW7zfN6Z46fRikrXKXyfMOBzoyie92ZrrJZe2IZDHZ8P0/y90g+iVlCaC
+         l3czyVMHQR4hOLmuKukSPGo5mA5+eJMCKbVJHguttDzxBzQ//ETvvJiZbAWtNJGnFPvf
+         EkLiDztvjKeVe1+SXEURKgItpqMtmoeE+zhJ0XzXh4eBMwAIBvh3nO+Bgr8er/wE6Fyq
+         LEow==
+X-Gm-Message-State: AOAM531JnLvDKAUm8bzDmPXDO8kpUIjXEwCqS3B0QNstwPb/Kxg09zvo
+        gZ48zadrzlPTKhSWzWE5RQ+y5Pv1WIb7mw==
+X-Google-Smtp-Source: ABdhPJy3r+oVme8d4eH28hz36G3liW90OQkeDuh9SsuKbSxUpbmxkrB4M7+PMd1WrrNt1quENaPYxw==
+X-Received: by 2002:a17:90a:4d0d:b0:1cb:9dac:7ed0 with SMTP id c13-20020a17090a4d0d00b001cb9dac7ed0mr7228521pjg.198.1649799097115;
+        Tue, 12 Apr 2022 14:31:37 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm40502527pfo.155.2022.04.12.14.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 14:29:02 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 14:31:17 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dmaengine: qcom: gpi: Add support for ee_offset
-Message-ID: <YlXvpdmBRVaCVBRo@ripper>
-References: <20220406132508.1029348-1-vkoul@kernel.org>
- <20220406132508.1029348-3-vkoul@kernel.org>
+        Tue, 12 Apr 2022 14:31:36 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 21:31:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH V3 2/4] KVM: X86: Introduce role.glevel for level
+ expanded pagetable
+Message-ID: <YlXvtMqWpyM9Bjox@google.com>
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-3-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406132508.1029348-3-vkoul@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220330132152.4568-3-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 06 Apr 06:25 PDT 2022, Vinod Koul wrote:
+On Wed, Mar 30, 2022, Lai Jiangshan wrote:
+> +  role.glevel:
+> +    The level in guest pagetable if the sp is indirect.  Is 0 if the sp
+> +    is direct without corresponding guest pagetable, like TDP or !CR0.PG.
+> +    When role.level > guest paging level, indirect sp is created on the
+> +    top with role.glevel = guest paging level and acks as passthrough sp
 
-> Controller on newer SoCs like SM8450 have registers at at offset. Add
-> ee_offset to driver_data and add this compatible for the driver.
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+s/acks/acts
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> +    and its contents are specially installed rather than the translations
+> +    of the corresponding guest pagetable.
+>    gfn:
+>      Either the guest page table containing the translations shadowed by this
+>      page, or the base page frame for linear translations.  See role.direct.
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 9694dd5e6ccc..67e1bccaf472 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -314,7 +314,7 @@ struct kvm_kernel_irq_routing_entry;
+>   *     cr0_wp=0, therefore these three bits only give rise to 5 possibilities.
+>   *
+>   * Therefore, the maximum number of possible upper-level shadow pages for a
+> - * single gfn is a bit less than 2^13.
+> + * single gfn is a bit less than 2^15.
+>   */
+>  union kvm_mmu_page_role {
+>  	u32 word;
+> @@ -331,7 +331,8 @@ union kvm_mmu_page_role {
+>  		unsigned smap_andnot_wp:1;
+>  		unsigned ad_disabled:1;
+>  		unsigned guest_mode:1;
+> -		unsigned :6;
+> +		unsigned glevel:4;
 
-Regards,
-Bjorn
+We don't need 4 bits for this.  Crossing our fingers that we never had to shadow
+a 2-level guest with a 6-level host, we can do:
 
-> ---
->  drivers/dma/qcom/gpi.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
-> index 3429ceccd13b..0b402d923eae 100644
-> --- a/drivers/dma/qcom/gpi.c
-> +++ b/drivers/dma/qcom/gpi.c
-> @@ -2152,6 +2152,7 @@ static int gpi_probe(struct platform_device *pdev)
+		unsigned passthrough_delta:2;
+
+Where the field is ignored if direct=1, '0' for non-passthrough, and 1-3 to handle
+shadow_root_level - guest_root_level.  Basically the same idea as Paolo's smushing
+of direct+passthrough into mapping_level, just dressed up differently.
+
+Side topic, we should steal a bit back from "level", or at least document that we
+can steal a bit if necessary.
+
+> +		unsigned :2;
+>  
+>  		/*
+>  		 * This is left at the top of the word so that
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 02eae110cbe1..d53037df8177 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -737,8 +737,12 @@ static void mmu_free_pte_list_desc(struct pte_list_desc *pte_list_desc)
+>  
+>  static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
 >  {
->  	struct gpi_dev *gpi_dev;
->  	unsigned int i;
-> +	u32 ee_offset;
->  	int ret;
->  
->  	gpi_dev = devm_kzalloc(&pdev->dev, sizeof(*gpi_dev), GFP_KERNEL);
-> @@ -2179,6 +2180,9 @@ static int gpi_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	ee_offset = (uintptr_t)device_get_match_data(gpi_dev->dev);
-> +	gpi_dev->ee_base = gpi_dev->ee_base - ee_offset;
+> -	if (!sp->role.direct)
+> +	if (!sp->role.direct) {
+> +		if (unlikely(sp->role.glevel < sp->role.level))
+
+Regardless of whatever magic we end up using, there should be an is_passthrough_sp()
+helper to wrap the magic.
+
+> +			return sp->gfn;
 > +
->  	gpi_dev->ev_factor = EV_FACTOR;
+>  		return sp->gfns[index];
+> +	}
 >  
->  	ret = dma_set_mask(gpi_dev->dev, DMA_BIT_MASK(64));
-> @@ -2282,9 +2286,10 @@ static int gpi_probe(struct platform_device *pdev)
+>  	return sp->gfn + (index << ((sp->role.level - 1) * PT64_LEVEL_BITS));
 >  }
->  
->  static const struct of_device_id gpi_of_match[] = {
-> -	{ .compatible = "qcom,sdm845-gpi-dma" },
-> -	{ .compatible = "qcom,sm8150-gpi-dma" },
-> -	{ .compatible = "qcom,sm8250-gpi-dma" },
-> +	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
-> +	{ .compatible = "qcom,sm8150-gpi-dma", .data = (void *)0x0 },
-> +	{ .compatible = "qcom,sm8250-gpi-dma", .data = (void *)0x0 },
-> +	{ .compatible = "qcom,sm8450-gpi-dma", .data = (void *)0x10000 },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, gpi_of_match);
-> -- 
-> 2.34.1
-> 

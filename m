@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47384FD797
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BB14FD9E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352324AbiDLHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S1384110AbiDLIjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352091AbiDLGzC (ORCPT
+        with ESMTP id S1357104AbiDLHjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:02 -0400
+        Tue, 12 Apr 2022 03:39:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7032982;
-        Mon, 11 Apr 2022 23:44:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989DEDEA4;
+        Tue, 12 Apr 2022 00:12:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F135560B60;
-        Tue, 12 Apr 2022 06:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FA2C385A8;
-        Tue, 12 Apr 2022 06:44:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34EA56153F;
+        Tue, 12 Apr 2022 07:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415B6C385A6;
+        Tue, 12 Apr 2022 07:12:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745894;
-        bh=rQ1sIUJmPcKMjONAfGVjnlPTe+lzGwpPriP4zODIReU=;
+        s=korg; t=1649747526;
+        bh=LiN4xAlbtOMQmCAMYa+oEGTr4Vv1YS5mZ2fgoK15uO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w/+g3EOX86VAwwGthAQm5ylH/c5c4JE0Bv8xEUAemgCIHaw1qYHG8E6XHOZQi81xL
-         UA6C1QxeScpaxUYNFW9dk4fbFW5v6ieIjiYL9B5TW3FBQ3Rb3TdCEnIiWP9pqlKmHE
-         SwTSXRpNJhcCBgnjyykMutX1OlLltivU/lQ7jm9Q=
+        b=FD04ZgobCRENG1h0YSZ8DxEEIh42Ch/PugylS6e0nx0q5OQoq1SHDWgVZCGI+sZIO
+         4gvf4GbcoZz8T2bi1qS/GbHY150u5zURoSZKYY2ktW9LK8f4+eMiHZN+h2qT1PIjdx
+         l8+dQT2oss2r8eTkZk1Y/5+D0kjIDHL/j8FIpGQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Chen <lchen@ambarella.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        stable@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 085/277] PCI: endpoint: Fix misused goto label
+Subject: [PATCH 5.17 070/343] libbpf: Fix accessing the first syscall argument on arm64
 Date:   Tue, 12 Apr 2022 08:28:08 +0200
-Message-Id: <20220412062944.507058773@linuxfoundation.org>
+Message-Id: <20220412062953.123150338@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Chen <lchen@ambarella.com>
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit bf8d87c076f55b8b4dfdb6bc6c6b6dc0c2ccb487 ]
+[ Upstream commit fbca4a2f649730b67488a8b36140ce4d2cf13c63 ]
 
-Fix a misused goto label jump since that can result in a memory leak.
+On arm64, the first syscall argument should be accessed via orig_x0
+(see arch/arm64/include/asm/syscall.h). Currently regs[0] is used
+instead, leading to bpf_syscall_macro test failure.
 
-Link: https://lore.kernel.org/r/17e7b9b9ee6.c6d9c6a02564.4545388417402742326@zohomail.com
-Signed-off-by: Li Chen <lchen@ambarella.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+orig_x0 cannot be added to struct user_pt_regs, since its layout is a
+part of the ABI. Therefore provide access to it only through
+PT_REGS_PARM1_CORE_SYSCALL() by using a struct pt_regs flavor.
+
+Reported-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220209021745.2215452-10-iii@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/bpf_tracing.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index c7e45633beaf..5b833f00e980 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -451,7 +451,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
- 		if (!epf_test->dma_supported) {
- 			dev_err(dev, "Cannot transfer data using DMA\n");
- 			ret = -EINVAL;
--			goto err_map_addr;
-+			goto err_dma_map;
- 		}
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 41f5f3149875..bed07c35b8de 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -140,6 +140,10 @@
  
- 		src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
+ #elif defined(bpf_target_arm64)
+ 
++struct pt_regs___arm64 {
++	unsigned long orig_x0;
++};
++
+ /* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
+ #define __PT_REGS_CAST(x) ((const struct user_pt_regs *)(x))
+ #define __PT_PARM1_REG regs[0]
+@@ -152,6 +156,8 @@
+ #define __PT_RC_REG regs[0]
+ #define __PT_SP_REG sp
+ #define __PT_IP_REG pc
++#define PT_REGS_PARM1_SYSCALL(x) ({ _Pragma("GCC error \"use PT_REGS_PARM1_CORE_SYSCALL() instead\""); 0l; })
++#define PT_REGS_PARM1_CORE_SYSCALL(x) BPF_CORE_READ((const struct pt_regs___arm64 *)(x), orig_x0)
+ 
+ #elif defined(bpf_target_mips)
+ 
 -- 
 2.35.1
 

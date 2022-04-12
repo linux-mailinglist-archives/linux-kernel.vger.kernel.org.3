@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7393A4FD02F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDAA4FD031
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350687AbiDLGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S1350736AbiDLGnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350198AbiDLGk3 (ORCPT
+        with ESMTP id S1350220AbiDLGka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:40:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FCEDF0A;
-        Mon, 11 Apr 2022 23:35:48 -0700 (PDT)
+        Tue, 12 Apr 2022 02:40:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A23DFD0;
+        Mon, 11 Apr 2022 23:35:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E37BB81B40;
-        Tue, 12 Apr 2022 06:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E054C385A6;
-        Tue, 12 Apr 2022 06:35:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE4266189D;
+        Tue, 12 Apr 2022 06:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB77DC385A6;
+        Tue, 12 Apr 2022 06:35:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745346;
-        bh=k6MVIFARZQ6g50RBnCIzx3cvvXS7ccTygWy55DHgzXg=;
+        s=korg; t=1649745349;
+        bh=X/XV6dqIM01stGb6muJgsi2Mox5PAsrFHhzqwvCyAKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F/A4UCXgDosGwR79HlNASvoO29pnuRlzEvZZsj3kGoemFAApQKGPXyeY1v7Q+c9f/
-         EU17kyFkyX53vkwyVazPMn35caiy5qNAyYtePkPBIgcRg6TbzH/nCl0Z2cEJiCz21u
-         zwbsFYmmVZ8kK8mwQ0PQCcHgntq4taJ1616EHvXI=
+        b=gA3yXvhJIRpu/RKE6FPChOH24TyI1xE7ufIRX+7eV4KKkdlCBidmTCTlvy3qM2BjM
+         0DvlHTmQ69BJydlWBVdDX1PoKN61y5za0oPyJ3MZaVA7j7C8ixnaoKUCR0dz6u5N2W
+         YCClAdbGWec8KrPuVkb7tuEArJsPVPBkX7G2bRms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 064/171] usb: dwc3: omap: fix "unbalanced disables for smps10_out1" on omap5evm
-Date:   Tue, 12 Apr 2022 08:29:15 +0200
-Message-Id: <20220412062929.735119815@linuxfoundation.org>
+Subject: [PATCH 5.10 065/171] xtensa: fix DTC warning unit_address_format
+Date:   Tue, 12 Apr 2022 08:29:16 +0200
+Message-Id: <20220412062929.763780643@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -54,72 +54,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: H. Nikolaus Schaller <hns@goldelico.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-[ Upstream commit ac01df343e5a6c6bcead2ed421af1fde30f73e7e ]
+[ Upstream commit e85d29ba4b24f68e7a78cb85c55e754362eeb2de ]
 
-Usually, the vbus_regulator (smps10 on omap5evm) boots up disabled.
+DTC issues the following warnings when building xtfpga device trees:
 
-Hence calling regulator_disable() indirectly through dwc3_omap_set_mailbox()
-during probe leads to:
+ /soc/flash@00000000/partition@0x0: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x6000000: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x6800000: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x7fe0000: unit name should not have leading "0x"
 
-[   10.332764] WARNING: CPU: 0 PID: 1628 at drivers/regulator/core.c:2853 _regulator_disable+0x40/0x164
-[   10.351919] unbalanced disables for smps10_out1
-[   10.361298] Modules linked in: dwc3_omap(+) clk_twl6040 at24 gpio_twl6040 palmas_gpadc palmas_pwrbutton
-industrialio snd_soc_omap_mcbsp(+) snd_soc_ti_sdma display_connector ti_tpd12s015 drm leds_gpio
-drm_panel_orientation_quirks ip_tables x_tables ipv6 autofs4
-[   10.387818] CPU: 0 PID: 1628 Comm: systemd-udevd Not tainted 5.17.0-rc1-letux-lpae+ #8139
-[   10.405129] Hardware name: Generic OMAP5 (Flattened Device Tree)
-[   10.411455]  unwind_backtrace from show_stack+0x10/0x14
-[   10.416970]  show_stack from dump_stack_lvl+0x40/0x4c
-[   10.422313]  dump_stack_lvl from __warn+0xb8/0x170
-[   10.427377]  __warn from warn_slowpath_fmt+0x70/0x9c
-[   10.432595]  warn_slowpath_fmt from _regulator_disable+0x40/0x164
-[   10.439037]  _regulator_disable from regulator_disable+0x30/0x64
-[   10.445382]  regulator_disable from dwc3_omap_set_mailbox+0x8c/0xf0 [dwc3_omap]
-[   10.453116]  dwc3_omap_set_mailbox [dwc3_omap] from dwc3_omap_probe+0x2b8/0x394 [dwc3_omap]
-[   10.467021]  dwc3_omap_probe [dwc3_omap] from platform_probe+0x58/0xa8
-[   10.481762]  platform_probe from really_probe+0x168/0x2fc
-[   10.481782]  really_probe from __driver_probe_device+0xc4/0xd8
-[   10.481782]  __driver_probe_device from driver_probe_device+0x24/0xa4
-[   10.503762]  driver_probe_device from __driver_attach+0xc4/0xd8
-[   10.510018]  __driver_attach from bus_for_each_dev+0x64/0xa0
-[   10.516001]  bus_for_each_dev from bus_add_driver+0x148/0x1a4
-[   10.524880]  bus_add_driver from driver_register+0xb4/0xf8
-[   10.530678]  driver_register from do_one_initcall+0x90/0x1c4
-[   10.536661]  do_one_initcall from do_init_module+0x4c/0x200
-[   10.536683]  do_init_module from load_module+0x13dc/0x1910
-[   10.551159]  load_module from sys_finit_module+0xc8/0xd8
-[   10.561319]  sys_finit_module from __sys_trace_return+0x0/0x18
-[   10.561336] Exception stack(0xc344bfa8 to 0xc344bff0)
-[   10.561341] bfa0:                   b6fb5778 b6fab8d8 00000007 b6ecfbb8 00000000 b6ed0398
-[   10.561341] bfc0: b6fb5778 b6fab8d8 855c0500 0000017b 00020000 b6f9a3cc 00000000 b6fb5778
-[   10.595500] bfe0: bede18f8 bede18e8 b6ec9aeb b6dda1c2
-[   10.601345] ---[ end trace 0000000000000000 ]---
+Drop leading 0x from flash partition unit names.
 
-Fix this unnecessary warning by checking if the regulator is enabled.
-
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Link: https://lore.kernel.org/r/af3b750dc2265d875deaabcf5f80098c9645da45.1646744616.git.hns@goldelico.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi | 8 ++++----
+ arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi  | 8 ++++----
+ arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi   | 4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
-index e196673f5c64..efaf0db595f4 100644
---- a/drivers/usb/dwc3/dwc3-omap.c
-+++ b/drivers/usb/dwc3/dwc3-omap.c
-@@ -242,7 +242,7 @@ static void dwc3_omap_set_mailbox(struct dwc3_omap *omap,
- 		break;
- 
- 	case OMAP_DWC3_ID_FLOAT:
--		if (omap->vbus_reg)
-+		if (omap->vbus_reg && regulator_is_enabled(omap->vbus_reg))
- 			regulator_disable(omap->vbus_reg);
- 		val = dwc3_omap_read_utmi_ctrl(omap);
- 		val |= USBOTGSS_UTMI_OTG_CTRL_IDDIG;
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
+index 9bf8bad1dd18..c33932568aa7 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
+@@ -8,19 +8,19 @@
+ 			reg = <0x00000000 0x08000000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "data";
+ 				reg = <0x00000000 0x06000000>;
+ 			};
+-			partition@0x6000000 {
++			partition@6000000 {
+ 				label = "boot loader area";
+ 				reg = <0x06000000 0x00800000>;
+ 			};
+-			partition@0x6800000 {
++			partition@6800000 {
+ 				label = "kernel image";
+ 				reg = <0x06800000 0x017e0000>;
+ 			};
+-			partition@0x7fe0000 {
++			partition@7fe0000 {
+ 				label = "boot environment";
+ 				reg = <0x07fe0000 0x00020000>;
+ 			};
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
+index 40c2f81f7cb6..7bde2ab2d6fb 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
+@@ -8,19 +8,19 @@
+ 			reg = <0x08000000 0x01000000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "boot loader area";
+ 				reg = <0x00000000 0x00400000>;
+ 			};
+-			partition@0x400000 {
++			partition@400000 {
+ 				label = "kernel image";
+ 				reg = <0x00400000 0x00600000>;
+ 			};
+-			partition@0xa00000 {
++			partition@a00000 {
+ 				label = "data";
+ 				reg = <0x00a00000 0x005e0000>;
+ 			};
+-			partition@0xfe0000 {
++			partition@fe0000 {
+ 				label = "boot environment";
+ 				reg = <0x00fe0000 0x00020000>;
+ 			};
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
+index fb8d3a9f33c2..0655b868749a 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
+@@ -8,11 +8,11 @@
+ 			reg = <0x08000000 0x00400000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "boot loader area";
+ 				reg = <0x00000000 0x003f0000>;
+ 			};
+-			partition@0x3f0000 {
++			partition@3f0000 {
+ 				label = "boot environment";
+ 				reg = <0x003f0000 0x00010000>;
+ 			};
 -- 
 2.35.1
 

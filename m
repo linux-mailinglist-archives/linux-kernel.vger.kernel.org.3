@@ -2,220 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A0F4FE693
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E3F4FE6A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358003AbiDLRM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S1358035AbiDLRPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344490AbiDLRMY (ORCPT
+        with ESMTP id S1358012AbiDLRPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:12:24 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085FA3EB8B;
-        Tue, 12 Apr 2022 10:10:05 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9x06054349;
-        Tue, 12 Apr 2022 12:09:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649783399;
-        bh=gkbreXK02oGII3XSANbrgsHYHJuMvjntCaE/6UPrzPQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=BVLg3whoHh6uRCPNNRpmKSaUvdI9+05dXnq+edvvEUCFcI/OHrInIYQ/YgcB7Gwg/
-         3PCv2XJLGv4k7ajn2RZ4VKfL8WzaDa8jmVdk7zmQl/lpZjRXnsONBhmJ95MViYQ7NZ
-         0x5WTH1BXc/0QvxLKJGaWL09XopS99rB/Hytqr4c=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CH9x92017606
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 12:09:59 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 12:09:59 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 12:09:59 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9tS0017746;
-        Tue, 12 Apr 2022 12:09:56 -0500
-Message-ID: <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
-Date:   Tue, 12 Apr 2022 22:39:54 +0530
+        Tue, 12 Apr 2022 13:15:44 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0F960CC1;
+        Tue, 12 Apr 2022 10:13:26 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23CFFEOP006081;
+        Tue, 12 Apr 2022 10:13:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=wlVn6fY+kYU0+d2DIEXTBmOvS1VyeF2b/+ulkmqFdcA=;
+ b=ZN3YOxWDtUcv0OELbjzvuhTUeyxshptSR7wgfCjDBvn8CnwyA3r4gDkDnhF7aiOAUisQ
+ JefWbb8iA85rh/m11DlzPsUYh8EMmUXGx/E4FPfXASIxZ4g18mNWa08B5BukRntkA4YY
+ 28ooL/lrWqE1rvBahr8oq18eXHyWskT1UFM= 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fckykh1mm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 10:13:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=COpTlTfXAvbYQgGdKtJbu2YqoZavXOjVwHEHnfGyPxI68/uKvgoqnvFs4E1zFiSF1G9lsYjB5Z+DVbeM/lXGYsQLZBLnmu2Q29zFCMjr/0d+AyAPb/HsUITuTFJTps14K18gpWRWh1vD5y4ugXyRow+/0aGbG8gcLTmJAuOdhYZ4xY9B2NpR/2MZhQ53kLsS7/yhV2DE4+SoQwMjfixl3H1UfQ03K18Tmv1LqEsCFAMAc/z4OklMhV4aO4vKF70O0TkgnxCmxF/XbzWYjvQ3Ux46Su809pvjdmLS2dLUhXi32R/Quhtzu3iXN/PMnLcOgF5OGYsSq2zzR1w6ZjQAcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wlVn6fY+kYU0+d2DIEXTBmOvS1VyeF2b/+ulkmqFdcA=;
+ b=RzbgnkJy+9LsfKCBinUJ75HYOAyLPVKWSuQ8bioUevjyGWRt2bjLS2zJjWjnrSeEu8olfCG5OiFNCC/ntEi4J0QJUItQkkMA0mBLF/0CLNo0pqx2craunUuBSulsDIO9U3WuIpz8FId3LT9ALu2AMc4pVcQtv2kU6uqyiCRmnSP1xWBta2rd0Gcgyz+TR5Dg54r4OM2BDup+FUJn0rTqjnr4WxuAoQ4oEXm+9ykAUn4KRLDmKtak8GUZDM/TN27rgZW699rsf1PgQQKzwDWz7D188wkm93lqfrkmKM9VCutr3Gh/GOyCUVcer3dC32l7qE+eDvnGoGAEKvkxfmv/hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
+ by CH2PR15MB4792.namprd15.prod.outlook.com (2603:10b6:610:12::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.30; Tue, 12 Apr
+ 2022 17:13:17 +0000
+Received: from SA1PR15MB5016.namprd15.prod.outlook.com
+ ([fe80::100b:5604:7f1e:e983]) by SA1PR15MB5016.namprd15.prod.outlook.com
+ ([fe80::100b:5604:7f1e:e983%5]) with mapi id 15.20.5144.030; Tue, 12 Apr 2022
+ 17:13:17 +0000
+Date:   Tue, 12 Apr 2022 10:13:15 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, paulmck@kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, andrii@kernel.org,
+        ast@kernel.org, bpf <bpf@vger.kernel.org>
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+Message-ID: <20220412171315.i6e6n3b6v7xclje6@kafai-mbp.dhcp.thefacebook.com>
+References: <20220401130114.GC4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
+ <20220401152037.GD4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220401152814.GA2841044@paulmck-ThinkPad-P17-Gen-1>
+ <20220401154837.GA2842076@paulmck-ThinkPad-P17-Gen-1>
+ <7a90a9b5-df13-6824-32d1-931f19c96cba@quicinc.com>
+ <CACYkzJ4FzbFu5NfdRMParp3Ome=ygVAqQPs2v6UGzRDt2LC6iw@mail.gmail.com>
+ <20220405203818.qsi7j74jpsex7oky@kafai-mbp.dhcp.thefacebook.com>
+ <CACYkzJ5PkwidPAomc-+js=OTFdzwf38hMO01Q_rbsPM-HZTTkg@mail.gmail.com>
+ <CACYkzJ77k7=UwAve-DBkhO7cmBh7W9e6JgFrc3HoHQ3AU1Xfsg@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACYkzJ77k7=UwAve-DBkhO7cmBh7W9e6JgFrc3HoHQ3AU1Xfsg@mail.gmail.com>
+X-ClientProxiedBy: BY3PR05CA0033.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::8) To SA1PR15MB5016.namprd15.prod.outlook.com
+ (2603:10b6:806:1db::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/4] arm64: dts: ti: j721e: Add VTM node
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, <robh+dt@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>, <kristo@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-3-j-keerthy@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220412101409.7980-3-j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 770f5a91-0e27-49fb-04a9-08da1ca7bc5e
+X-MS-TrafficTypeDiagnostic: CH2PR15MB4792:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR15MB47925A4C38A3B29157384052D5ED9@CH2PR15MB4792.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iRMA7mCHvGk0+6GKPKHcoBxdZIaqd0xLHmjEQBPDXwGWBQMftM8Cv3lGlFdD0TrDukwteHY+QKYEZE+qXmeOFvEfXUJLDPNlJc4peinBKjsrIe6HGIwlsWg+TpVS4oib0HKoKxjwntDChyyVF4XcyWowRkOeUc7X6pD0+XptJP0aBHtu0+j+DAZ37hCD5vG9S/kdXRxlS0kc+vQ2st9+USHmWtwNMcVsmWUNRvaUrLGFAvZI+yCzXR6XRXBHaA/ZuVlOs6LvoORhzfz5f+AU8GvWwhWm9l3ex0BACny56Q9ZwEF+NpBwlP1XXqGFqTnojBB81rIIxjh5VRqP0daC9wEWQhcCr74YucHNSsIMLE3XVvsG7JclIvQSIhYHpJ4l7WlazsJBokJaCLnDfhCJklL395oauzG+ubNn+nJEwgzZfuQ3KQ7PfoRQeMHtIGLq0CO40p36q8yE5VaUYmpVhvNRpebeNG2WYafqKfp2hzyL8/qG4fwhDKIeMNfEwloSpI7gVhZ0txBGq84HTdE4rtGMX8I8t+O7tWWYRijmbOuHg+TcaAOFpEjPZkz+00e4ZECY+HtA3rX/tCOylCUTqBkbAX1qDMacz2tfiQEpQyDtZsnJKFr4NuoB4v60fx9JDkM1gDym6aaSEmVGVeCh3Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(1076003)(2906002)(316002)(83380400001)(186003)(54906003)(6916009)(8936002)(86362001)(38100700002)(5660300002)(4326008)(8676002)(66476007)(66556008)(66946007)(52116002)(53546011)(6512007)(9686003)(6506007)(508600001)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rXQee8Mx993YAp2Amdd9FWM6JzSY1XV0uoVtr0fW/6Rr4SvMKF1cZnLjRdoV?=
+ =?us-ascii?Q?sw6enhG819u0RQNOgO4f7DU5F80CcZxMZHF3lCuL1sLaW1GRaRDp6+ALSyXu?=
+ =?us-ascii?Q?op2D4WEDSgrjpCW53etU8Wq0Lf27Vs860l9nsSzEHqj5nr49vP3RF+ae6Iuw?=
+ =?us-ascii?Q?0Kj57NghlWiuCMYa/bRachNjf014f19K3h69vUePlHT0iSFYkYB2Le5dYHXu?=
+ =?us-ascii?Q?0TxjJya4JUwa9ErpLBjxO7fH+mVPfLoORC/e0l6JiUbarGyAbo5MJD1jbRTs?=
+ =?us-ascii?Q?37rO+FalzcMwLA1334OdSCIOVV/BWlKb56bi7DIVgb8hUGS5uJ82A2sN0YZS?=
+ =?us-ascii?Q?GK64ATGerUt9HRMclIXfHaiYNuTnEJvMymYDKD5c87A/xdoOiSnOVFiHJw32?=
+ =?us-ascii?Q?qD66g6KDNIDR6yRC0rA3ZczMaQU5EzNPpVPxjSvJNNYBk5Nf1HGUlfgApI+Y?=
+ =?us-ascii?Q?PilS0QeQGKuyKmlo4mA+fUpx2WIARp7UVcTvJY4aGgG/6PobDtfYNhGhs/iq?=
+ =?us-ascii?Q?PsD/IgNVQ3cc8x7fd+8ntbAmxZgAxWM+2dymuk6+cc4PyWHgaLBUGchM4Z5G?=
+ =?us-ascii?Q?ZZh4u1UB8UxpHswbvt2xjekrlVvUPaiziRMvSsA8OSF8lBFbLS+4tFevpUrd?=
+ =?us-ascii?Q?iKXWUr8YxnTW0XU6t1O0bAGx9WXNiPj6QEx27GdJShYp+tkI0w7Z0BdJA5Sl?=
+ =?us-ascii?Q?e3JRuK1WVo4pskOMLCXlv5KL+xvhyQ1gEXZOD2oZf1ErcTedJWCMAAt6kbPC?=
+ =?us-ascii?Q?ZSp2aYo8gXctfVhiTHnSMjBDeR6QIQLgGsEbiNH5oBuR4sx7u33mi3zPDCl6?=
+ =?us-ascii?Q?J9/3bltQ2fUkydTBsmoDIx6/+gGxEx+k+Up6O9QwX0c1prFxDORtek8fBDEC?=
+ =?us-ascii?Q?XyNDzmi3QYqCtWjnIwYi1pUShe7d6BlgLNWCM1KloQZPGYtX+qgwdTA/gLXK?=
+ =?us-ascii?Q?5ezM2jHO/2OnJGiXU7wOp7fWam2xRxblwDlK397eOOQSxtIVyIOmADplXXmX?=
+ =?us-ascii?Q?nFol7O6ZBfNqShxzFt5GpxBBErx6yk3uay2rH5DOp3g67SULEetd5BJQxdqb?=
+ =?us-ascii?Q?sPpStQqYIypK06AWtrtyKx5e/ej9gIFVQSKVfrVWfylF4CEgKYP2lnVu/7YC?=
+ =?us-ascii?Q?TQXjoDfb8c3cnhfWGFjJuwCMI2kWYv+Qczmv9NPZSD+QupF9oD6tWwKy+18x?=
+ =?us-ascii?Q?tyMa0Gsswucdcx3d1R9ivZhfnHsp2kA81giOuU12XtcaBiXngCoyjmwlG7S2?=
+ =?us-ascii?Q?pB9Vtffni2vQxsjBeN/qY6CLTicAaBnVZulGprfXcX4jOY+pwtT8ZRbByvxg?=
+ =?us-ascii?Q?6s03bwaZpa6XT+Vsjv4LMQIGssDKJNANkuLw4bVaiLikxLtOeryIyJckDrWL?=
+ =?us-ascii?Q?ttJOE/uHfGGc/w0jRJmGLxLFb9vCIDSXN/GAP23Xf6JYEUnG8iMIIBhNnORp?=
+ =?us-ascii?Q?D7tHv13IIcUMdWuSymmN7nMDEnnnqH/BrIi4tUQOzDVgK12GnbvCP2WPf0a6?=
+ =?us-ascii?Q?rTLci+tXt2u1KlBh6vW3tsj5txkRUi4U9s2OJbsInExjulLcUmrQsE/L3UgI?=
+ =?us-ascii?Q?kJdAwtR1HcQXx+AIvtXhvVMIab9DCXJKmJMxwS+C5nNhtDu9lPHRj0y8sqsT?=
+ =?us-ascii?Q?QY7Rn7u3Oq5qv5HU7t5ezZ2O3ICuy8qJsu5yyZLC/XeYHdCIGS21R9LMofNo?=
+ =?us-ascii?Q?UMTbOMllqBVgBshsbdhum7OAFKE+ORaVrclxW+VBzODVcpXwSiAUi8Bo5aRa?=
+ =?us-ascii?Q?/xSwkMtjxSlKCIKiVnUf6EwU+ymypOs=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 770f5a91-0e27-49fb-04a9-08da1ca7bc5e
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5016.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 17:13:17.4240
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JMeRxsk7hrCno3viHlwSEAkppzRalH8NJBc3jNPvxsk9OPAJfw0U6v0FfZGDw5nC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR15MB4792
+X-Proofpoint-ORIG-GUID: Jhy6_aaxOZ6MfTaFgRzo92aHYK9YMs7i
+X-Proofpoint-GUID: Jhy6_aaxOZ6MfTaFgRzo92aHYK9YMs7i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keerthy
-
-On 12/04/22 3:44 pm, Keerthy wrote:
-> VTM stands for Voltage Thermal Management
+On Tue, Apr 12, 2022 at 08:28:07AM +0200, KP Singh wrote:
+> On Wed, Apr 6, 2022 at 5:44 PM KP Singh <kpsingh@kernel.org> wrote:
+> >
+> > On Tue, Apr 5, 2022 at 10:38 PM Martin KaFai Lau <kafai@fb.com> wrote:
+> > >
+> > > On Tue, Apr 05, 2022 at 02:04:34AM +0200, KP Singh wrote:
+> > > > > >>> Either way, how frequently is call_rcu_tasks_trace() being invoked in
+> > > > > >>> your setup?  If it is being invoked frequently, increasing delays would
+> > > > > >>> allow multiple call_rcu_tasks_trace() instances to be served by a single
+> > > > > >>> tasklist scan.
+> > > > > >>>
+> > > > > >>>> Given that, I do not think bpf_sk_storage_free() can/should use
+> > > > > >>>> call_rcu_tasks_trace(),
+> > > > > >>>> we probably will have to fix this soon (or revert from our kernels)
+> > > > > >>>
+> > > > > >>> Well, you are in luck!!!  This commit added call_rcu_tasks_trace() to
+> > > > > >>> bpf_selem_unlink_storage_nolock(), which is invoked in a loop by
+> > > > > >>> bpf_sk_storage_free():
+> > > > > >>>
+> > > > > >>> 0fe4b381a59e ("bpf: Allow bpf_local_storage to be used by sleepable programs")
+> > > > > >>>
+> > > > > >>> This commit was authored by KP Singh, who I am adding on CC.  Or I would
+> > > > > >>> have, except that you beat me to it.  Good show!!!  ;-)
+> > > >
+> > > > Hello :)
+> > > >
+> > > > Martin, if this ends up being an issue we might have to go with the
+> > > > initial proposed approach
+> > > > of marking local storage maps explicitly as sleepable so that not all
+> > > > maps are forced to be
+> > > > synchronized via trace RCU.
+> > > >
+> > > > We can make the verifier reject loading programs that try to use
+> > > > non-sleepable local storage
+> > > > maps in sleepable programs.
+> > > >
+> > > > Do you think this is a feasible approach we can take or do you have
+> > > > other suggestions?
+> > > bpf_sk_storage_free() does not need to use call_rcu_tasks_trace().
+> > > The same should go for the bpf_{task,inode}_storage_free().
+> > > The sk at this point is being destroyed.  No bpf prog (sleepable or not)
+> > > can have a hold on this sk.  The only storage reader left is from
+> > > bpf_local_storage_map_free() which is under rcu_read_lock(),
+> > > so a 'kfree_rcu(selem, rcu)' is enough.
+> > > A few lines below in bpf_sk_storage_free(), 'kfree_rcu(sk_storage, rcu)'
+> > > is currently used instead of call_rcu_tasks_trace() for the same reason.
+> > >
+> > > KP, if the above makes sense, can you make a patch for it?
+> > > The bpf_local_storage_map_free() code path also does not need
+> > > call_rcu_tasks_trace(), so may as well change it together.
+> > > The bpf_*_storage_delete() helper and the map_{delete,update}_elem()
+> > > syscall still require the call_rcu_tasks_trace().
+> >
+> > Thanks, I will send a patch.
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  9 +++
->  arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  | 73 +++++++++++++++++++
->  arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  4 +
->  3 files changed, 86 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> index b4972dfb7da8..6290f563b8e7 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> @@ -418,4 +418,13 @@
->  		interrupt-names = "int0", "int1";
->  		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
->  	};
-> +
-> +	wkup_vtm0: wkup_vtm0@42040000 {
-> +		compatible = "ti,j721e-vtm";
-> +		reg = <0x0 0x42040000 0x0 0x350>,
-> +			<0x0 0x42050000 0x0 0x350>,
-> +			<0x0 0x43000300 0x0 0x10>;
-
-Please follow convention of using 0x00 as rest of the file:
-
-		reg = <0x00 0x42040000 0x00 0x350>,
-		....
-
-> +		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +		#thermal-sensor-cells = <1>;
-> +	};
->  };
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
-> new file mode 100644
-> index 000000000000..e922042f356f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +wkup_thermal: wkup_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +	trips {
-> +		wkup_crit: wkup_crit {
-
-
-Here and elsewhere no "-" in node names please.
-
-You can use:
-
-https://github.com/nmenon/kernel_patch_verify
-kpv -C -n <no of commits>
-
-This catches most issues like above
-
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +mpu_thermal: mpu_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 1>;
-> +
-> +	trips {
-> +		mpu_crit: mpu_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +c7x_thermal: c7x_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 2>;
-> +
-> +	trips {
-> +		c7x_crit: c7x_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +gpu_thermal: gpu_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 3>;
-> +
-> +	trips {
-> +		gpu_crit: gpu_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +r5f_thermal: r5f_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 4>;
-> +
-> +	trips {
-> +		r5f_crit: r5f_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> index 0e23886c9fd1..6979863eb500 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> @@ -181,6 +181,10 @@
->  				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
->  		};
->  	};
-> +
-> +	thermal_zones: thermal-zones {
-> +		#include "k3-j721e-thermal.dtsi"
-> +	};
-
-Bit weird representation, any reason why thermal-zones {} cannot be
-moved into k3-j721e-thermal.dtsi?
-
->  };
->  
->  /* Now include the peripherals for each bus segments */
-
-
-Regards
-Vignesh
+> Martin, does this work? (I can send it as a patch later today)
+LGTM. Thanks.

@@ -2,122 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F20F4FE5EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7AD4FE5E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357679AbiDLQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S1348084AbiDLQeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357690AbiDLQe6 (ORCPT
+        with ESMTP id S243406AbiDLQed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:34:58 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473D65E745;
-        Tue, 12 Apr 2022 09:32:39 -0700 (PDT)
+        Tue, 12 Apr 2022 12:34:33 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33F05DE6D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649781159; x=1681317159;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P66e4gojOVMBKxSt1qupuHDJXLtN+UPi+7Xzg41aZrw=;
-  b=CDHh+bR0+TfrJk1nXTdQtUJpiWPKCr2pxz1CBykVKv2uMp78VQknDt12
-   vPXXDS70v6vM/0RVDGrso8VsOisSEPZ9MoMVbtvAIkxBXjTLbKxZGEoeS
-   W/DOxdDgoQxBr/h9jOWGmm9xQmgdSg/Kwc33APd+TTi6UOvmeKr9XJ/2x
-   w6nMqKIq3/DmDYJ4xzNSPEgI7mXd/ZCdDe+VIpYBtCrf+4lyhUetnsm87
-   9JFYspVInUhEVP7rkPsJoJgmSZu4lm5bP6JRP06B5gaYvjsrTmnn8qOB0
-   n79Vq90JPkknO9RPOa4tc5KOeZqDv6HsZnvPhP/fjVjr9K74NbkbR5BAH
+  t=1649781134; x=1681317134;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KHX2L3FCEjjS2GpVNfVcIgf1yeK+WvX/Qvr9mamnz2o=;
+  b=AeRXR0LPb+STNjWzV5njT/oWMLHWbcQg8DQDrxrKF7ttaMYUaIonaB9O
+   EAJ2lqYm3qX0KZATcNDWCYwYJI3sEz2PNy2UTGk0WI/4NBY63IYhZwW44
+   qGnkug/LU6yAoChEJQPPXuorz1kN1TQPZNmSI2hvsT9keCWkkSVAtIoVL
+   1KuH2r83pWt1ryUxo5Jzu6EM4hGjamqeU9nQUi1cGZi/sYiklS2xI6tXt
+   YvF9ltDBt4A2kvqV541dv0d9YElCH4ASyGCWJs2gZsFst7WzcvvybGjPo
+   1BhUBoCQSZHqtVWx9Rt/8qhYn47BOIIMRMZCI98E0gTQ1ti74E7WCFKtK
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242368545"
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="322872818"
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="242368545"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 09:17:24 -0700
+   d="scan'208";a="322872818"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 09:17:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="559390278"
+   d="scan'208";a="551780219"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Apr 2022 09:17:20 -0700
+  by orsmga007.jf.intel.com with ESMTP; 12 Apr 2022 09:17:19 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1neJCh-0002z1-4l;
+        id 1neJCh-0002z3-6E;
         Tue, 12 Apr 2022 16:17:19 +0000
-Date:   Wed, 13 Apr 2022 00:16:42 +0800
+Date:   Wed, 13 Apr 2022 00:16:51 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204130028.O6wRGxzY-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+Subject: [jirislaby:devel 48/48] drivers/tty/serial/atmel_serial.c:981:24:
+ warning: variable 'tx_len' is uninitialized when used here
+Message-ID: <202204130036.n7mzFmFK-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-buildonly-randconfig-r005-20220412 (https://download.01.org/0day-ci/archive/20220413/202204130028.O6wRGxzY-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   ea94a80635daaf36a289f1ec1f982b1e094faeca
+commit: ea94a80635daaf36a289f1ec1f982b1e094faeca [48/48] tty: serial, use kfifo
+config: hexagon-randconfig-r045-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130036.n7mzFmFK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=ea94a80635daaf36a289f1ec1f982b1e094faeca
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout ea94a80635daaf36a289f1ec1f982b1e094faeca
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
-   static const char * const cap_name[] = {
-                             ^
-   1 warning generated.
+>> drivers/tty/serial/atmel_serial.c:981:24: warning: variable 'tx_len' is uninitialized when used here [-Wuninitialized]
+                   atmel_port->tx_len = tx_len;
+                                        ^~~~~~
+   drivers/tty/serial/atmel_serial.c:927:21: note: initialize the variable 'tx_len' to silence this warning
+           unsigned int tx_len, /*part1_len, part2_len,*/ sg_len;
+                              ^
+                               = 0
+   drivers/tty/serial/atmel_serial.c:985:13: warning: variable 'sg_len' is uninitialized when used here [-Wuninitialized]
+                                                  sg_len,
+                                                  ^~~~~~
+   drivers/tty/serial/atmel_serial.c:927:55: note: initialize the variable 'sg_len' to silence this warning
+           unsigned int tx_len, /*part1_len, part2_len,*/ sg_len;
+                                                                ^
+                                                                 = 0
+   2 warnings generated.
 
 
-vim +/cap_name +30 drivers/usb/typec/class.c
+vim +/tx_len +981 drivers/tty/serial/atmel_serial.c
 
-    29	
-  > 30	static const char * const cap_name[] = {
-    31		[TYPEC_SINK]		= "sink-capabilities",
-    32		[TYPEC_SOURCE]		= "source-capabilities",
-    33	};
-    34	
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   976  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   977  		/*
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   978  		 * save tx_len so atmel_complete_tx_dma() will increase
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   979  		 * xmit->tail correctly
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   980  		 */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02  @981  		atmel_port->tx_len = tx_len;
+08f738be88bb7a Elen Song       2013-07-22   982  
+08f738be88bb7a Elen Song       2013-07-22   983  		desc = dmaengine_prep_slave_sg(chan,
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   984  					       sgl,
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   985  					       sg_len,
+08f738be88bb7a Elen Song       2013-07-22   986  					       DMA_MEM_TO_DEV,
+08f738be88bb7a Elen Song       2013-07-22   987  					       DMA_PREP_INTERRUPT |
+08f738be88bb7a Elen Song       2013-07-22   988  					       DMA_CTRL_ACK);
+08f738be88bb7a Elen Song       2013-07-22   989  		if (!desc) {
+08f738be88bb7a Elen Song       2013-07-22   990  			dev_err(port->dev, "Failed to send via dma!\n");
+08f738be88bb7a Elen Song       2013-07-22   991  			return;
+08f738be88bb7a Elen Song       2013-07-22   992  		}
+08f738be88bb7a Elen Song       2013-07-22   993  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   994  		dma_sync_sg_for_device(port->dev, sg_tx, 1, DMA_TO_DEVICE);
+08f738be88bb7a Elen Song       2013-07-22   995  
+08f738be88bb7a Elen Song       2013-07-22   996  		atmel_port->desc_tx = desc;
+08f738be88bb7a Elen Song       2013-07-22   997  		desc->callback = atmel_complete_tx_dma;
+08f738be88bb7a Elen Song       2013-07-22   998  		desc->callback_param = atmel_port;
+08f738be88bb7a Elen Song       2013-07-22   999  		atmel_port->cookie_tx = dmaengine_submit(desc);
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1000  		if (dma_submit_error(atmel_port->cookie_tx)) {
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1001  			dev_err(port->dev, "dma_submit_error %d\n",
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1002  				atmel_port->cookie_tx);
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1003  			return;
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1004  		}
+4f4b9b5895614e Tudor Ambarus   2021-11-25  1005  
+4f4b9b5895614e Tudor Ambarus   2021-11-25  1006  		dma_async_issue_pending(chan);
+08f738be88bb7a Elen Song       2013-07-22  1007  	}
+08f738be88bb7a Elen Song       2013-07-22  1008  
+ea94a80635daaf Jiri Slaby      2022-01-05  1009  	if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
+08f738be88bb7a Elen Song       2013-07-22  1010  		uart_write_wakeup(port);
+08f738be88bb7a Elen Song       2013-07-22  1011  }
+08f738be88bb7a Elen Song       2013-07-22  1012  
+
+:::::: The code at line 981 was first introduced by commit
+:::::: 5f258b3e3d223b5cb6d1753b2f9b821ba4455f81 tty/serial: at91: use 32bit writes into TX FIFO when DMA is enabled
+
+:::::: TO: Cyrille Pitchen <cyrille.pitchen@atmel.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service

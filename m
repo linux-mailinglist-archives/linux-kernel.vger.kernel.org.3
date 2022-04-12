@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E044FDAA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0124FD6FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354619AbiDLH0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S1384924AbiDLIme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351682AbiDLHMt (ORCPT
+        with ESMTP id S1357268AbiDLHjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F4A15A0F;
-        Mon, 11 Apr 2022 23:51:33 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C288DDF35;
+        Tue, 12 Apr 2022 00:14:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FE706149D;
-        Tue, 12 Apr 2022 06:51:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCA4C385A1;
-        Tue, 12 Apr 2022 06:51:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81856B81A8F;
+        Tue, 12 Apr 2022 07:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9731C385A1;
+        Tue, 12 Apr 2022 07:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746292;
-        bh=AY9XliJqhQHz3+D1GqTzQinJSnUeCbZ2PTPqsNyVaYY=;
+        s=korg; t=1649747672;
+        bh=kUn2qAPqnhLi5OlFTb3kcm5yBG9tINbEWnBPKsnb0Rs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agMODraYXgVdxVMQlLzmVSblZ2vTmVrujzgM6RsYuHC8ZacFVE04W0AGW5K3iO07E
-         +RfezlH7sZFIwCXRsS3QSLP9RTvLiB2YDe4E60JqdouLgXBOS7BN4sPb3dBOwX1SJP
-         vF765D+XKff288Wnk/KrUykPTPmtRjI7mXSY+M/Y=
+        b=1VYX004eLTAyU8kQJfG9T2fM6sjagt8zXQDB/kfLoTbNblSMzmP5oddrqSy9dxi7/
+         B+1m45fjIIkpN4ManvTBZw6Z0r7Z66lWTQqXPslqkUvul6cOEdV4z+tYWwxLrWujMS
+         rswVrrVMJ8QVdJEZqhVEUEE62aL0egwVscaty7z8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 180/277] dpaa2-ptp: Fix refcount leak in dpaa2_ptp_probe
+Subject: [PATCH 5.17 165/343] opp: Expose of-nodes name in debugfs
 Date:   Tue, 12 Apr 2022 08:29:43 +0200
-Message-Id: <20220412062947.245289421@linuxfoundation.org>
+Message-Id: <20220412062956.134808515@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit 2b04bd4f03bba021959ca339314f6739710f0954 ]
+[ Upstream commit 021dbecabc93b1610b5db989d52a94e0c6671136 ]
 
-This node pointer is returned by of_find_compatible_node() with
-refcount incremented. Calling of_node_put() to aovid the refcount leak.
+It is difficult to find which OPPs are active at the moment, specially
+if there are multiple OPPs with same frequency available in the device
+tree (controlled by supported hardware feature).
 
-Fixes: d346c9e86d86 ("dpaa2-ptp: reuse ptp_qoriq driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220404125336.13427-1-linmq006@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Expose name of the DT node to find out the exact OPP.
+
+While at it, also expose level field.
+
+Reported-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-ptp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/opp/debugfs.c | 5 +++++
+ drivers/opp/opp.h     | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ptp.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ptp.c
-index 32b5faa87bb8..208a3459f2e2 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ptp.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ptp.c
-@@ -168,7 +168,7 @@ static int dpaa2_ptp_probe(struct fsl_mc_device *mc_dev)
- 	base = of_iomap(node, 0);
- 	if (!base) {
- 		err = -ENOMEM;
--		goto err_close;
-+		goto err_put;
- 	}
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 596c185b5dda..b5f2f9f39392 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -10,6 +10,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
++#include <linux/of.h>
+ #include <linux/init.h>
+ #include <linux/limits.h>
+ #include <linux/slab.h>
+@@ -131,9 +132,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+ 	debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
+ 	debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
+ 	debugfs_create_ulong("rate_hz", S_IRUGO, d, &opp->rate);
++	debugfs_create_u32("level", S_IRUGO, d, &opp->level);
+ 	debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
+ 			     &opp->clock_latency_ns);
  
- 	err = fsl_mc_allocate_irqs(mc_dev);
-@@ -212,6 +212,8 @@ static int dpaa2_ptp_probe(struct fsl_mc_device *mc_dev)
- 	fsl_mc_free_irqs(mc_dev);
- err_unmap:
- 	iounmap(base);
-+err_put:
-+	of_node_put(node);
- err_close:
- 	dprtc_close(mc_dev->mc_io, 0, mc_dev->mc_handle);
- err_free_mcp:
++	opp->of_name = of_node_full_name(opp->np);
++	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
++
+ 	opp_debug_create_supplies(opp, opp_table, d);
+ 	opp_debug_create_bw(opp, opp_table, d);
+ 
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 407c3bfe51d9..45e3a55239a1 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -96,6 +96,7 @@ struct dev_pm_opp {
+ 
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *dentry;
++	const char *of_name;
+ #endif
+ };
+ 
 -- 
 2.35.1
 

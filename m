@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF674FEA91
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08664FEA2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 00:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiDLX1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S229509AbiDLWtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 18:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiDLX0Z (ORCPT
+        with ESMTP id S229469AbiDLWtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:26:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900C9C9B49;
-        Tue, 12 Apr 2022 15:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DC3261C54;
-        Tue, 12 Apr 2022 21:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B9CC385A5;
-        Tue, 12 Apr 2022 21:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649798949;
-        bh=kpS0EcU/RLQzTaKo85ZEC/dgBcrpXX2fe+n6wE10HoY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GaLCgYlHxpFu6dokBt6GCrmgjotR4ofYQfGcSFBOLeVJbLpcwYNstaIrRFFIghgom
-         d4/BYVT4yedX7dhBWKTquSxLJru2kufnM1pSd6adoQdHT5dspvAHMXGF+D7LBSbyGy
-         uqwHRxFNdMWVDYxR0VfF+2gKqAXrxjAQgzuLbxkHXicMZ4BZiA4YlOWRDTjH9tpsz+
-         lFMd8q2AcF3LrzmBQ/fhVQi3g0E+SpAYkcw2R0hXBqNrKSdDI4R0a0zA/04HGUFz7K
-         uaJaecV/iiyppRN+sMAt+0yP/ErIwQTkaBGZvf6wgKDX4lLyfLcopor9Ly3uCGIfYU
-         NpNRnUyxLeliQ==
-Date:   Tue, 12 Apr 2022 14:29:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Michael Walle <michael@walle.cc>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Colin Ian King <colin.king@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next v3 14/18] sfc: Remove usage of list iterator
- for list_add() after the loop body
-Message-ID: <20220412142905.54489567@kernel.org>
-In-Reply-To: <20220412121557.3553555-15-jakobkoschel@gmail.com>
-References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
-        <20220412121557.3553555-15-jakobkoschel@gmail.com>
+        Tue, 12 Apr 2022 18:49:06 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF551BE12D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:30:34 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w7so168433pfu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bKc2RsG7u0Dt9SRYrdepMbEzWeuJkK4ThHyJlKzG4oQ=;
+        b=KvGviDahz+0YxI4Ikdgo2vKDTpdEKuUdKS0LYj1ul1SopRDHL2WTRg3B7lZb+G5BXQ
+         LLz2+aXrSvqvyscboBTUiCg7RIFAhidq6am/3nwGtpp5axMP3ebS5boDlxfZzXH+aRhx
+         qaLgBg9AvSkRfR1pX9sJbgmlEhK88ttwpgCX4dIrOdy3O5ZoIHCYxixh+IAfj1OucRJW
+         eCeb3DHLKPyIOayoBJcK1HZT7L09K3TYhIR1BtzUdbbCWTTAotB5hSHUcWyS4Mwq/Ezj
+         ebREbAEiDq+b/h1CDf8gxUMUHRiPQCbP9d0GYjxEqP3itNGatAptHDF87Wk/PS8suAVw
+         +clQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bKc2RsG7u0Dt9SRYrdepMbEzWeuJkK4ThHyJlKzG4oQ=;
+        b=3vRzmvBF+MXgOrl5HT/rjHQUwSaSitJnUcpSmd82IOMGfMwHg5e2Cm3V13AtFC+otZ
+         ip0/B7Xa3mXQdWR4R0PEs5SWWk47xwEKDKPdS9LzE6IShTJ57R/G6ohaTukMvVNeqQvH
+         umm/Ez6U4V27GQuStyL/OBi7gxmlyoJyq4xidsjmLUbphLWfe/bMZON5VMJHmvmpFe5O
+         3McNaRVNhcydJgkBTyuLI2dpKdLpTMouMHX6DLwNB1p7o6NsqF8R9A2yATc+sj10IaUg
+         MqRPZnSxxkBQOjQDu8C78KARiDaSM2d3cHuMHnjbMYoDpRWI5tRNues/o/4H74gMf2JW
+         xY8Q==
+X-Gm-Message-State: AOAM530daZdgvl8oniQFfryRMpEe0UPkgefhIxXzAE77XWOQ0m32eeel
+        vSK+EfNxzFp6YQcMlBIxers4Z5zAyC+5u/6ly/5+qA==
+X-Google-Smtp-Source: ABdhPJyyil8BZGNUAaxupefL2LwqP4c7rGgTZBi2Ndy2D3Tc3LXcIpd0IqCPcKte9vCXggWHFoPkUNDd64ZCAnDRD9E=
+X-Received: by 2002:a65:638d:0:b0:39d:74ad:ce0b with SMTP id
+ h13-20020a65638d000000b0039d74adce0bmr7400676pgv.103.1649799016617; Tue, 12
+ Apr 2022 14:30:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411205321.13109-1-mahak_g@cs.iitr.ac.in> <c5fc1685-b1cc-7cfa-1ddd-e2f93105c2a5@intel.com>
+ <027acae3-29ee-ae35-4448-a56e66383849@lwfinger.net>
+In-Reply-To: <027acae3-29ee-ae35-4448-a56e66383849@lwfinger.net>
+From:   MAHAK GUPTA <mahak_g@cs.iitr.ac.in>
+Date:   Wed, 13 Apr 2022 02:59:39 +0530
+Message-ID: <CANnaPbBpWmp3PUgp=yRxhykzKjpP1HHh9Fk0aEBJ_+EGNUStvA@mail.gmail.com>
+Subject: Re: [PATCH] staging: r8188eu: correct multiple misspellings in driver r8188eu
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     Dave Jiang <dave.jiang@intel.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 14:15:53 +0200 Jakob Koschel wrote:
-> -	struct list_head *head = &efx->rss_context.list;
-> +	struct list_head *head = *pos = &efx->rss_context.list;
-
-ENOTBUILT, please wait with the reposting. Since you posted two
-versions today I guess that's 2x 24h? :)
+On Tue, Apr 12, 2022 at 10:48 PM Larry Finger <Larry.Finger@lwfinger.net> wrote:
+>
+> On 4/11/22 16:28, Dave Jiang wrote:
+> > Subject:
+> >
+> > staging: r8188eu: fix multiple spelling errors in driver source
+> >
+> > Given that it already annotated that it's the r8188eu driver, no need to add "in
+> > driver r8188eu".
+> >
+> > Maybe the log can be something less terse:
+> >
+> > Fix multiple spelling errors reported by checkpatch.
+> >
+> >
+> > Probably doesn't hurt to fix other issues on the same line while you are at it.
+> > See below...
+>
+> Wrong on the first and last points. That subject is exactly what should be used
+> - it describes what is being modified.
+>
+> A given patch should fix one, and only one, problem.
+>
+> Yes, the commit message could be less terse, but that is not a problem.
+Ok so considering the last comment, I am sending version 2 of this
+patch with an appropriate commit message.
+>
+> Larry

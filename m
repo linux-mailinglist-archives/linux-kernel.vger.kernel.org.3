@@ -2,92 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71BD4FE030
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90C04FE058
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351680AbiDLMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S1348361AbiDLMdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355538AbiDLM3a (ORCPT
+        with ESMTP id S242619AbiDLMdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:29:30 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A627353A46
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649763820; x=1681299820;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/CXkkOa1Qb1zYpVNyIs99QKNPxZBdARfFd4I1EE/yEY=;
-  b=GsbkOgSzplfKZwBD3YXZXsUmk6vm4beGJ1DdOyi6+Hw3I4C/4lW+TG3h
-   Qnx2dGRtQrw/mzfrAdRNIUxHBSJO22FaQPzUTOi6hJAdXP1QBQXYr28TM
-   jenVvXDLiz2ZFi2YyIoJezyUNaFmRa1QBV8lYJyCD5O/xQj8tJEPWjb32
-   XyC3uxm1DNhC2yJMz2B62b0rKYTvxTYht/LFJVlniKOIONpVIaUWnGIXA
-   RcFm+Cm46VaQ7iqw0JgeBJnXgv9WpTxA0LWzwRBhvkXz8SsuNE3fKka2L
-   RbvBsoGSx1cItdTv9CxWEOcsVI9R8jeI18SbVr501lfojhjEIgOAQAG0E
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262536050"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="262536050"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:43:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="724417241"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 04:43:31 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neEvi-0002ou-NZ;
-        Tue, 12 Apr 2022 11:43:30 +0000
-Date:   Tue, 12 Apr 2022 19:43:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 6/12] ERROR:
- modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko]
- undefined!
-Message-ID: <202204121911.NhZSbyFC-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 08:33:18 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3306E5A148;
+        Tue, 12 Apr 2022 04:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=QpiJQfWHbBnBAAsAw08p4CUh7MIO02xp7lOV7zzMMvs=; b=OiXNRx0CqOS6fYgnuGbrwnOtga
+        oTsOVpfVk14kqLP293KTqLwon1/RU1f0V62LbmzjmL7imP82ltol1wjoLfaK5t6/mY7Qs3HYWrjCh
+        Z5n+mPYMAE3achGsb0prut357sV8BXJQztUV/snpOSALGUfOOSuJhtjkf8m57kQJsKhHFVlbDpcQk
+        lGGfxabNbuS2WgwCRGEByKRCHhJZPawwuQVrl5wRqvyXnYTpdxrbeV45Csqkrv75mKq8zlPQZb0+T
+        t2NnmHCc7N3W2eNEryJ2vUHgiBcI/JOUHyTiMW7zMbqcjpb/zO/VtRMyQFBQBvjE8/ERk+9jG/ylS
+        VbeeYf+Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neF2o-004JiZ-Iz; Tue, 12 Apr 2022 11:50:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6236F3001AE;
+        Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 3BA8B3017997D; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Message-ID: <20220412114421.691372568@infradead.org>
+User-Agent: quilt/0.66
+Date:   Tue, 12 Apr 2022 13:44:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/5] ptrace-vs-PREEMPT_RT and freezer rewrite
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
-head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
-commit: 223939a5e0da931df37ab6bcd3e84bd74d931f35 [6/12] mips: use fallback for random_get_entropy() instead of zero
-config: mips-decstation_64_defconfig (https://download.01.org/0day-ci/archive/20220412/202204121911.NhZSbyFC-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/223939a5e0da931df37ab6bcd3e84bd74d931f35
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
-        git checkout 223939a5e0da931df37ab6bcd3e84bd74d931f35
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+Hi all,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviving the freezer rewrite that was languishing, reinvigorated by the
+recent ptrace-vs-PREEMPT_RT trouble.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+The first patch adds additional state to signal/ptrace stop states, this state
+is then used to fix the PREEMPT_RT issue (patch #2) and allow the new freezer
+to recover the special stop states (patch #5).
 
->> ERROR: modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko] undefined!
+I'm not completely happy with the ptrace solution, but I think it solves all
+the various issues I found. I still dislike wait_task_inactive() and now we
+have a second copy of that :/
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Please consider carefully..
+
+---
+ drivers/acpi/x86/s2idle.c         |  12 +-
+ drivers/android/binder.c          |   4 +-
+ drivers/media/pci/pt3/pt3.c       |   4 +-
+ drivers/scsi/scsi_transport_spi.c |   7 +-
+ fs/cifs/inode.c                   |   4 +-
+ fs/cifs/transport.c               |   5 +-
+ fs/coredump.c                     |   5 +-
+ fs/nfs/file.c                     |   3 +-
+ fs/nfs/inode.c                    |  12 +-
+ fs/nfs/nfs3proc.c                 |   3 +-
+ fs/nfs/nfs4proc.c                 |  14 +--
+ fs/nfs/nfs4state.c                |   3 +-
+ fs/nfs/pnfs.c                     |   4 +-
+ fs/xfs/xfs_trans_ail.c            |   8 +-
+ include/linux/completion.h        |   1 +
+ include/linux/freezer.h           | 244 ++------------------------------------
+ include/linux/sched.h             |  49 ++++----
+ include/linux/sched/jobctl.h      |   8 ++
+ include/linux/sched/signal.h      |  15 ++-
+ include/linux/sunrpc/sched.h      |   7 +-
+ include/linux/suspend.h           |   8 +-
+ include/linux/umh.h               |   9 +-
+ include/linux/wait.h              |  40 ++++++-
+ init/do_mounts_initrd.c           |  10 +-
+ kernel/cgroup/legacy_freezer.c    |  23 ++--
+ kernel/exit.c                     |   4 +-
+ kernel/fork.c                     |   5 +-
+ kernel/freezer.c                  | 139 ++++++++++++++++------
+ kernel/futex/waitwake.c           |   8 +-
+ kernel/hung_task.c                |   4 +-
+ kernel/power/hibernate.c          |  35 ++++--
+ kernel/power/main.c               |  18 +--
+ kernel/power/process.c            |  10 +-
+ kernel/power/suspend.c            |  12 +-
+ kernel/power/user.c               |  24 ++--
+ kernel/ptrace.c                   | 185 +++++++++++++++++++++++------
+ kernel/sched/completion.c         |   9 ++
+ kernel/sched/core.c               |  24 ++--
+ kernel/signal.c                   |  23 ++--
+ kernel/time/hrtimer.c             |   4 +-
+ kernel/umh.c                      |  18 ++-
+ mm/khugepaged.c                   |   4 +-
+ net/sunrpc/sched.c                |  12 +-
+ net/unix/af_unix.c                |   8 +-
+ 44 files changed, 541 insertions(+), 507 deletions(-)
+

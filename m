@@ -2,167 +2,543 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4054FD517
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5E94FD96F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384545AbiDLImA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S1359748AbiDLItK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357244AbiDLHjx (ORCPT
+        with ESMTP id S1357648AbiDLHke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:53 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2C4DFC;
-        Tue, 12 Apr 2022 00:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UtaxEETAanzEBI5ZCrBTObGqYu4eUkH/80V7BcVtCTE=; b=dn8/9vrX7GguY418rNKJLb9/N8
-        DSEK325oohvxQUlkohyA3zbONZVq22faYjHytu7U9EcG0/w5p2boa8VoGa0ygJ5UgLWdl6xFH6Ker
-        jThloXxYvrgRtNj3DNedbOCFIT5JxUyv/RT19yqtM2ydtRUQ9yWpFex1nsJ2LgQ81Wa0=;
-Received: from p57a6f1f9.dip0.t-ipconnect.de ([87.166.241.249] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1neAip-0007Yd-LZ; Tue, 12 Apr 2022 09:13:55 +0200
-Message-ID: <ece29b0d-bbbe-7c03-a6b4-60e44453ca31@nbd.name>
-Date:   Tue, 12 Apr 2022 09:13:54 +0200
+        Tue, 12 Apr 2022 03:40:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB8C326C3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649747777; x=1681283777;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PZUyZ/wdReWiRWGJoBu0ovuXFC2VudMft8k979HyzRA=;
+  b=NvAW9Dt3l1kBQAo9T2HdQ0kFPD42uPXVOthkBqwc16WgOMUpU4OGr9Vw
+   bIa3hHnYHcBMAAbKVnTjDB3i634x2xYpD0TjLUXGi+rKTtC1ULU+CT2jq
+   7tkK5g2nwLRzxi95j0jwkYvQ8brD5YfGj2odmhe6mDqtiQ/2ha9LNrMy5
+   FENKwI3BnVowc+kzlemDIZJ9P/4dNHKm8rwDcLUWFz6SBOoO4aLu0FWdm
+   DklKrKrUqATcliVJkZtXiD5WLfFBV92Wyhx6/T439aL7pA6BYbI9GEuDW
+   hchOFkSZG/lsCgQnK/j4IxayHFyHmvD6XgPaF8g14YFpfZSXl1uWy+1Nj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="249579638"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="249579638"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:16:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="525916584"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 00:16:14 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neAl3-0002cS-OL;
+        Tue, 12 Apr 2022 07:16:13 +0000
+Date:   Tue, 12 Apr 2022 15:15:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Akira Kawata <akirakawata1@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.10 9690/9999] fs/binfmt_elf.c:823:16:
+ warning: variable 'load_addr' set but not used
+Message-ID: <202204121527.yG4uNLH6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v2 14/14] net: ethernet: mtk_eth_soc: support creating mac
- address based offload entries
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-15-nbd@nbd.name> <Yk8pJRxnVCfdk8xi@lunn.ch>
- <f25a6278-1baf-cc27-702a-5d93eedda438@nbd.name> <YlQmf7qGAnq/3nW0@lunn.ch>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <YlQmf7qGAnq/3nW0@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   3a166b51d36ae1f85bed764b7c07a6ca6d6c73a1
+commit: dd85ed4af8f5cb42990fb5f42c22d268028693a3 [9690/9999] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+config: powerpc-pseries_defconfig (https://download.01.org/0day-ci/archive/20220412/202204121527.yG4uNLH6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=dd85ed4af8f5cb42990fb5f42c22d268028693a3
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout dd85ed4af8f5cb42990fb5f42c22d268028693a3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-On 11.04.22 15:00, Andrew Lunn wrote:
-> On Thu, Apr 07, 2022 at 08:21:43PM +0200, Felix Fietkau wrote:
->> 
->> On 07.04.22 20:10, Andrew Lunn wrote:
->> > On Tue, Apr 05, 2022 at 09:57:55PM +0200, Felix Fietkau wrote:
->> > > This will be used to implement a limited form of bridge offloading.
->> > > Since the hardware does not support flow table entries with just source
->> > > and destination MAC address, the driver has to emulate it.
->> > > 
->> > > The hardware automatically creates entries entries for incoming flows, even
->> > > when they are bridged instead of routed, and reports when packets for these
->> > > flows have reached the minimum PPS rate for offloading.
->> > > 
->> > > After this happens, we look up the L2 flow offload entry based on the MAC
->> > > header and fill in the output routing information in the flow table.
->> > > The dynamically created per-flow entries are automatically removed when
->> > > either the hardware flowtable entry expires, is replaced, or if the offload
->> > > rule they belong to is removed
->> > 
->> > > +
->> > > +	if (found)
->> > > +		goto out;
->> > > +
->> > > +	eh = eth_hdr(skb);
->> > > +	ether_addr_copy(key.dest_mac, eh->h_dest);
->> > > +	ether_addr_copy(key.src_mac, eh->h_source);
->> > > +	tag = skb->data - 2;
->> > > +	key.vlan = 0;
->> > > +	switch (skb->protocol) {
->> > > +#if IS_ENABLED(CONFIG_NET_DSA)
->> > > +	case htons(ETH_P_XDSA):
->> > > +		if (!netdev_uses_dsa(skb->dev) ||
->> > > +		    skb->dev->dsa_ptr->tag_ops->proto != DSA_TAG_PROTO_MTK)
->> > > +			goto out;
->> > > +
->> > > +		tag += 4;
->> > > +		if (get_unaligned_be16(tag) != ETH_P_8021Q)
->> > > +			break;
->> > > +
->> > > +		fallthrough;
->> > > +#endif
->> > > +	case htons(ETH_P_8021Q):
->> > > +		key.vlan = get_unaligned_be16(tag + 2) & VLAN_VID_MASK;
->> > > +		break;
->> > > +	default:
->> > > +		break;
->> > > +	}
->> > 
->> > I'm trying to understand the architecture here.
->> > 
->> > We have an Ethernet interface and a Wireless interface. The slow path
->> > is that frames ingress from one of these interfaces, Linux decides
->> > what to do with them, either L2 or L3, and they then egress probably
->> > out the other interface.
->> > 
->> > The hardware will look at the frames and try to spot flows? It will
->> > then report any it finds. You can then add an offload, telling it for
->> > a flow it needs to perform L2 or L3 processing, and egress out a
->> > specific port? Linux then no longer sees the frame, the hardware
->> > handles it, until the flow times out?
->> Yes, the hw handles it until either the flow times out, or the corresponding
->> offload entry is removed.
->> 
->> For OpenWrt I also wrote a daemon that uses tc classifier BPF to accelerate
->> the software bridge and create hardware offload entries as well via hardware
->> TC flower rules: https://github.com/nbd168/bridger
->> It works in combination with these changes.
-> 
-> What about the bridge? In Linux, it is the software bridge which
-> controls all this at L2, and it should be offloading the flows, via
-> switchdev. The egress port you derive here is from the software bridge
-> FDB?
-My code uses netlink to fetch and monitor the bridge configuration, 
-including fdb, port state, vlans, etc. and it uses that for the offload 
-path - no extra configuration needed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->> > So i'm wondering what is going on here. So is this a frame which has
->> > ingressed, either from the WiFi, or another switch port, gone to the
->> > software bridge, bridges to a DSA slave interface, the DSA tagger has
->> > added a tag and now it is in the master interface? Can you accelerate
->> > such frames? What is adding the DSA tag on the fast path? And in the
->> > opposite direction, frames which egress the switch which have a DSA
->> > tag and are heading to the WiFi, what is removing the tag? Does the
->> > accelerator also understand the tag and know what to do with it?WiFi ->
->> > Ethernet is not supported by MT7622, but will be added for newer
-> 
->> SoCs like MT7986. The PPE supports both parsing and inserting MT7530
->> compatible DSA tags. For Ethernet->WiFi flows, the PPE will also add
->> required metadata that is parsed by the MT7915 WiFi Firmware in order to
->> figure out what vif/station the packets were meant for.
-> 
-> O.K. What about IGMP and multicast? Does the accelerate match on IGMP
-> and forwards it to the CPU, rather than follow the flow rules? Can you
-> set multiple egress destinations for multicast so that it can go both
-> to the switch and the host, when the host has a local interest in the
-> traffic?
-IGMP/multicast isn't handled yet at the moment. I still need to do some 
-research on what can be offloaded and how. The offload only handles 
-unicast and everything else is going through the CPU.
+All warnings (new ones prefixed by >>):
 
-- Felix
+>> fs/binfmt_elf.c:823:16: warning: variable 'load_addr' set but not used [-Wunused-but-set-variable]
+           unsigned long load_addr, load_bias = 0, phdr_addr = 0;
+                         ^
+   1 warning generated.
+
+
+vim +/load_addr +823 fs/binfmt_elf.c
+
+   819	
+   820	static int load_elf_binary(struct linux_binprm *bprm)
+   821	{
+   822		struct file *interpreter = NULL; /* to shut gcc up */
+ > 823		unsigned long load_addr, load_bias = 0, phdr_addr = 0;
+   824		int load_addr_set = 0;
+   825		unsigned long error;
+   826		struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
+   827		struct elf_phdr *elf_property_phdata = NULL;
+   828		unsigned long elf_bss, elf_brk;
+   829		int bss_prot = 0;
+   830		int retval, i;
+   831		unsigned long elf_entry;
+   832		unsigned long e_entry;
+   833		unsigned long interp_load_addr = 0;
+   834		unsigned long start_code, end_code, start_data, end_data;
+   835		unsigned long reloc_func_desc __maybe_unused = 0;
+   836		int executable_stack = EXSTACK_DEFAULT;
+   837		struct elfhdr *elf_ex = (struct elfhdr *)bprm->buf;
+   838		struct elfhdr *interp_elf_ex = NULL;
+   839		struct arch_elf_state arch_state = INIT_ARCH_ELF_STATE;
+   840		struct mm_struct *mm;
+   841		struct pt_regs *regs;
+   842	
+   843		retval = -ENOEXEC;
+   844		/* First of all, some simple consistency checks */
+   845		if (memcmp(elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
+   846			goto out;
+   847	
+   848		if (elf_ex->e_type != ET_EXEC && elf_ex->e_type != ET_DYN)
+   849			goto out;
+   850		if (!elf_check_arch(elf_ex))
+   851			goto out;
+   852		if (elf_check_fdpic(elf_ex))
+   853			goto out;
+   854		if (!bprm->file->f_op->mmap)
+   855			goto out;
+   856	
+   857		elf_phdata = load_elf_phdrs(elf_ex, bprm->file);
+   858		if (!elf_phdata)
+   859			goto out;
+   860	
+   861		elf_ppnt = elf_phdata;
+   862		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+   863			char *elf_interpreter;
+   864	
+   865			if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
+   866				elf_property_phdata = elf_ppnt;
+   867				continue;
+   868			}
+   869	
+   870			if (elf_ppnt->p_type != PT_INTERP)
+   871				continue;
+   872	
+   873			/*
+   874			 * This is the program interpreter used for shared libraries -
+   875			 * for now assume that this is an a.out format binary.
+   876			 */
+   877			retval = -ENOEXEC;
+   878			if (elf_ppnt->p_filesz > PATH_MAX || elf_ppnt->p_filesz < 2)
+   879				goto out_free_ph;
+   880	
+   881			retval = -ENOMEM;
+   882			elf_interpreter = kmalloc(elf_ppnt->p_filesz, GFP_KERNEL);
+   883			if (!elf_interpreter)
+   884				goto out_free_ph;
+   885	
+   886			retval = elf_read(bprm->file, elf_interpreter, elf_ppnt->p_filesz,
+   887					  elf_ppnt->p_offset);
+   888			if (retval < 0)
+   889				goto out_free_interp;
+   890			/* make sure path is NULL terminated */
+   891			retval = -ENOEXEC;
+   892			if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
+   893				goto out_free_interp;
+   894	
+   895			interpreter = open_exec(elf_interpreter);
+   896			kfree(elf_interpreter);
+   897			retval = PTR_ERR(interpreter);
+   898			if (IS_ERR(interpreter))
+   899				goto out_free_ph;
+   900	
+   901			/*
+   902			 * If the binary is not readable then enforce mm->dumpable = 0
+   903			 * regardless of the interpreter's permissions.
+   904			 */
+   905			would_dump(bprm, interpreter);
+   906	
+   907			interp_elf_ex = kmalloc(sizeof(*interp_elf_ex), GFP_KERNEL);
+   908			if (!interp_elf_ex) {
+   909				retval = -ENOMEM;
+   910				goto out_free_ph;
+   911			}
+   912	
+   913			/* Get the exec headers */
+   914			retval = elf_read(interpreter, interp_elf_ex,
+   915					  sizeof(*interp_elf_ex), 0);
+   916			if (retval < 0)
+   917				goto out_free_dentry;
+   918	
+   919			break;
+   920	
+   921	out_free_interp:
+   922			kfree(elf_interpreter);
+   923			goto out_free_ph;
+   924		}
+   925	
+   926		elf_ppnt = elf_phdata;
+   927		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++)
+   928			switch (elf_ppnt->p_type) {
+   929			case PT_GNU_STACK:
+   930				if (elf_ppnt->p_flags & PF_X)
+   931					executable_stack = EXSTACK_ENABLE_X;
+   932				else
+   933					executable_stack = EXSTACK_DISABLE_X;
+   934				break;
+   935	
+   936			case PT_LOPROC ... PT_HIPROC:
+   937				retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
+   938							  bprm->file, false,
+   939							  &arch_state);
+   940				if (retval)
+   941					goto out_free_dentry;
+   942				break;
+   943			}
+   944	
+   945		/* Some simple consistency checks for the interpreter */
+   946		if (interpreter) {
+   947			retval = -ELIBBAD;
+   948			/* Not an ELF interpreter */
+   949			if (memcmp(interp_elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
+   950				goto out_free_dentry;
+   951			/* Verify the interpreter has a valid arch */
+   952			if (!elf_check_arch(interp_elf_ex) ||
+   953			    elf_check_fdpic(interp_elf_ex))
+   954				goto out_free_dentry;
+   955	
+   956			/* Load the interpreter program headers */
+   957			interp_elf_phdata = load_elf_phdrs(interp_elf_ex,
+   958							   interpreter);
+   959			if (!interp_elf_phdata)
+   960				goto out_free_dentry;
+   961	
+   962			/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
+   963			elf_property_phdata = NULL;
+   964			elf_ppnt = interp_elf_phdata;
+   965			for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
+   966				switch (elf_ppnt->p_type) {
+   967				case PT_GNU_PROPERTY:
+   968					elf_property_phdata = elf_ppnt;
+   969					break;
+   970	
+   971				case PT_LOPROC ... PT_HIPROC:
+   972					retval = arch_elf_pt_proc(interp_elf_ex,
+   973								  elf_ppnt, interpreter,
+   974								  true, &arch_state);
+   975					if (retval)
+   976						goto out_free_dentry;
+   977					break;
+   978				}
+   979		}
+   980	
+   981		retval = parse_elf_properties(interpreter ?: bprm->file,
+   982					      elf_property_phdata, &arch_state);
+   983		if (retval)
+   984			goto out_free_dentry;
+   985	
+   986		/*
+   987		 * Allow arch code to reject the ELF at this point, whilst it's
+   988		 * still possible to return an error to the code that invoked
+   989		 * the exec syscall.
+   990		 */
+   991		retval = arch_check_elf(elf_ex,
+   992					!!interpreter, interp_elf_ex,
+   993					&arch_state);
+   994		if (retval)
+   995			goto out_free_dentry;
+   996	
+   997		/* Flush all traces of the currently running executable */
+   998		retval = begin_new_exec(bprm);
+   999		if (retval)
+  1000			goto out_free_dentry;
+  1001	
+  1002		/* Do this immediately, since STACK_TOP as used in setup_arg_pages
+  1003		   may depend on the personality.  */
+  1004		SET_PERSONALITY2(*elf_ex, &arch_state);
+  1005		if (elf_read_implies_exec(*elf_ex, executable_stack))
+  1006			current->personality |= READ_IMPLIES_EXEC;
+  1007	
+  1008		if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
+  1009			current->flags |= PF_RANDOMIZE;
+  1010	
+  1011		setup_new_exec(bprm);
+  1012	
+  1013		/* Do this so that we can load the interpreter, if need be.  We will
+  1014		   change some of these later */
+  1015		retval = setup_arg_pages(bprm, randomize_stack_top(STACK_TOP),
+  1016					 executable_stack);
+  1017		if (retval < 0)
+  1018			goto out_free_dentry;
+  1019		
+  1020		elf_bss = 0;
+  1021		elf_brk = 0;
+  1022	
+  1023		start_code = ~0UL;
+  1024		end_code = 0;
+  1025		start_data = 0;
+  1026		end_data = 0;
+  1027	
+  1028		/* Now we do a little grungy work by mmapping the ELF image into
+  1029		   the correct location in memory. */
+  1030		for(i = 0, elf_ppnt = elf_phdata;
+  1031		    i < elf_ex->e_phnum; i++, elf_ppnt++) {
+  1032			int elf_prot, elf_flags;
+  1033			unsigned long k, vaddr;
+  1034			unsigned long total_size = 0;
+  1035			unsigned long alignment;
+  1036	
+  1037			if (elf_ppnt->p_type != PT_LOAD)
+  1038				continue;
+  1039	
+  1040			if (unlikely (elf_brk > elf_bss)) {
+  1041				unsigned long nbyte;
+  1042		            
+  1043				/* There was a PT_LOAD segment with p_memsz > p_filesz
+  1044				   before this one. Map anonymous pages, if needed,
+  1045				   and clear the area.  */
+  1046				retval = set_brk(elf_bss + load_bias,
+  1047						 elf_brk + load_bias,
+  1048						 bss_prot);
+  1049				if (retval)
+  1050					goto out_free_dentry;
+  1051				nbyte = ELF_PAGEOFFSET(elf_bss);
+  1052				if (nbyte) {
+  1053					nbyte = ELF_MIN_ALIGN - nbyte;
+  1054					if (nbyte > elf_brk - elf_bss)
+  1055						nbyte = elf_brk - elf_bss;
+  1056					if (clear_user((void __user *)elf_bss +
+  1057								load_bias, nbyte)) {
+  1058						/*
+  1059						 * This bss-zeroing can fail if the ELF
+  1060						 * file specifies odd protections. So
+  1061						 * we don't check the return value
+  1062						 */
+  1063					}
+  1064				}
+  1065			}
+  1066	
+  1067			elf_prot = make_prot(elf_ppnt->p_flags, &arch_state,
+  1068					     !!interpreter, false);
+  1069	
+  1070			elf_flags = MAP_PRIVATE | MAP_DENYWRITE | MAP_EXECUTABLE;
+  1071	
+  1072			vaddr = elf_ppnt->p_vaddr;
+  1073			/*
+  1074			 * If we are loading ET_EXEC or we have already performed
+  1075			 * the ET_DYN load_addr calculations, proceed normally.
+  1076			 */
+  1077			if (elf_ex->e_type == ET_EXEC || load_addr_set) {
+  1078				elf_flags |= MAP_FIXED;
+  1079			} else if (elf_ex->e_type == ET_DYN) {
+  1080				/*
+  1081				 * This logic is run once for the first LOAD Program
+  1082				 * Header for ET_DYN binaries to calculate the
+  1083				 * randomization (load_bias) for all the LOAD
+  1084				 * Program Headers, and to calculate the entire
+  1085				 * size of the ELF mapping (total_size). (Note that
+  1086				 * load_addr_set is set to true later once the
+  1087				 * initial mapping is performed.)
+  1088				 *
+  1089				 * There are effectively two types of ET_DYN
+  1090				 * binaries: programs (i.e. PIE: ET_DYN with INTERP)
+  1091				 * and loaders (ET_DYN without INTERP, since they
+  1092				 * _are_ the ELF interpreter). The loaders must
+  1093				 * be loaded away from programs since the program
+  1094				 * may otherwise collide with the loader (especially
+  1095				 * for ET_EXEC which does not have a randomized
+  1096				 * position). For example to handle invocations of
+  1097				 * "./ld.so someprog" to test out a new version of
+  1098				 * the loader, the subsequent program that the
+  1099				 * loader loads must avoid the loader itself, so
+  1100				 * they cannot share the same load range. Sufficient
+  1101				 * room for the brk must be allocated with the
+  1102				 * loader as well, since brk must be available with
+  1103				 * the loader.
+  1104				 *
+  1105				 * Therefore, programs are loaded offset from
+  1106				 * ELF_ET_DYN_BASE and loaders are loaded into the
+  1107				 * independently randomized mmap region (0 load_bias
+  1108				 * without MAP_FIXED).
+  1109				 */
+  1110				if (interpreter) {
+  1111					load_bias = ELF_ET_DYN_BASE;
+  1112					if (current->flags & PF_RANDOMIZE)
+  1113						load_bias += arch_mmap_rnd();
+  1114					alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
+  1115					if (alignment)
+  1116						load_bias &= ~(alignment - 1);
+  1117					elf_flags |= MAP_FIXED;
+  1118				} else
+  1119					load_bias = 0;
+  1120	
+  1121				/*
+  1122				 * Since load_bias is used for all subsequent loading
+  1123				 * calculations, we must lower it by the first vaddr
+  1124				 * so that the remaining calculations based on the
+  1125				 * ELF vaddrs will be correctly offset. The result
+  1126				 * is then page aligned.
+  1127				 */
+  1128				load_bias = ELF_PAGESTART(load_bias - vaddr);
+  1129	
+  1130				total_size = total_mapping_size(elf_phdata,
+  1131								elf_ex->e_phnum);
+  1132				if (!total_size) {
+  1133					retval = -EINVAL;
+  1134					goto out_free_dentry;
+  1135				}
+  1136			}
+  1137	
+  1138			error = elf_map(bprm->file, load_bias + vaddr, elf_ppnt,
+  1139					elf_prot, elf_flags, total_size);
+  1140			if (BAD_ADDR(error)) {
+  1141				retval = IS_ERR((void *)error) ?
+  1142					PTR_ERR((void*)error) : -EINVAL;
+  1143				goto out_free_dentry;
+  1144			}
+  1145	
+  1146			if (!load_addr_set) {
+  1147				load_addr_set = 1;
+  1148				load_addr = (elf_ppnt->p_vaddr - elf_ppnt->p_offset);
+  1149				if (elf_ex->e_type == ET_DYN) {
+  1150					load_bias += error -
+  1151					             ELF_PAGESTART(load_bias + vaddr);
+  1152					load_addr += load_bias;
+  1153					reloc_func_desc = load_bias;
+  1154				}
+  1155			}
+  1156	
+  1157			/*
+  1158			 * Figure out which segment in the file contains the Program
+  1159			 * Header table, and map to the associated memory address.
+  1160			 */
+  1161			if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
+  1162			    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
+  1163				phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
+  1164					    elf_ppnt->p_vaddr;
+  1165			}
+  1166	
+  1167			k = elf_ppnt->p_vaddr;
+  1168			if ((elf_ppnt->p_flags & PF_X) && k < start_code)
+  1169				start_code = k;
+  1170			if (start_data < k)
+  1171				start_data = k;
+  1172	
+  1173			/*
+  1174			 * Check to see if the section's size will overflow the
+  1175			 * allowed task size. Note that p_filesz must always be
+  1176			 * <= p_memsz so it is only necessary to check p_memsz.
+  1177			 */
+  1178			if (BAD_ADDR(k) || elf_ppnt->p_filesz > elf_ppnt->p_memsz ||
+  1179			    elf_ppnt->p_memsz > TASK_SIZE ||
+  1180			    TASK_SIZE - elf_ppnt->p_memsz < k) {
+  1181				/* set_brk can never work. Avoid overflows. */
+  1182				retval = -EINVAL;
+  1183				goto out_free_dentry;
+  1184			}
+  1185	
+  1186			k = elf_ppnt->p_vaddr + elf_ppnt->p_filesz;
+  1187	
+  1188			if (k > elf_bss)
+  1189				elf_bss = k;
+  1190			if ((elf_ppnt->p_flags & PF_X) && end_code < k)
+  1191				end_code = k;
+  1192			if (end_data < k)
+  1193				end_data = k;
+  1194			k = elf_ppnt->p_vaddr + elf_ppnt->p_memsz;
+  1195			if (k > elf_brk) {
+  1196				bss_prot = elf_prot;
+  1197				elf_brk = k;
+  1198			}
+  1199		}
+  1200	
+  1201		e_entry = elf_ex->e_entry + load_bias;
+  1202		phdr_addr += load_bias;
+  1203		elf_bss += load_bias;
+  1204		elf_brk += load_bias;
+  1205		start_code += load_bias;
+  1206		end_code += load_bias;
+  1207		start_data += load_bias;
+  1208		end_data += load_bias;
+  1209	
+  1210		/* Calling set_brk effectively mmaps the pages that we need
+  1211		 * for the bss and break sections.  We must do this before
+  1212		 * mapping in the interpreter, to make sure it doesn't wind
+  1213		 * up getting placed where the bss needs to go.
+  1214		 */
+  1215		retval = set_brk(elf_bss, elf_brk, bss_prot);
+  1216		if (retval)
+  1217			goto out_free_dentry;
+  1218		if (likely(elf_bss != elf_brk) && unlikely(padzero(elf_bss))) {
+  1219			retval = -EFAULT; /* Nobody gets to see this, but.. */
+  1220			goto out_free_dentry;
+  1221		}
+  1222	
+  1223		if (interpreter) {
+  1224			elf_entry = load_elf_interp(interp_elf_ex,
+  1225						    interpreter,
+  1226						    load_bias, interp_elf_phdata,
+  1227						    &arch_state);
+  1228			if (!IS_ERR((void *)elf_entry)) {
+  1229				/*
+  1230				 * load_elf_interp() returns relocation
+  1231				 * adjustment
+  1232				 */
+  1233				interp_load_addr = elf_entry;
+  1234				elf_entry += interp_elf_ex->e_entry;
+  1235			}
+  1236			if (BAD_ADDR(elf_entry)) {
+  1237				retval = IS_ERR((void *)elf_entry) ?
+  1238						(int)elf_entry : -EINVAL;
+  1239				goto out_free_dentry;
+  1240			}
+  1241			reloc_func_desc = interp_load_addr;
+  1242	
+  1243			allow_write_access(interpreter);
+  1244			fput(interpreter);
+  1245	
+  1246			kfree(interp_elf_ex);
+  1247			kfree(interp_elf_phdata);
+  1248		} else {
+  1249			elf_entry = e_entry;
+  1250			if (BAD_ADDR(elf_entry)) {
+  1251				retval = -EINVAL;
+  1252				goto out_free_dentry;
+  1253			}
+  1254		}
+  1255	
+  1256		kfree(elf_phdata);
+  1257	
+  1258		set_binfmt(&elf_format);
+  1259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

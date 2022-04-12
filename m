@@ -2,241 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0D14FEAE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CDD4FEA64
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiDLX3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S230520AbiDLXbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiDLX2G (ORCPT
+        with ESMTP id S230337AbiDLXbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:28:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9AF619C27
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649802855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z+ent/yy95aJOm6DnI9kx/1sJTBsC05TLsSw4BZBHzs=;
-        b=SeC0Mk7HbI8AUy0rgdAO4pUfy759ub4kmNn8RfMv4zk2dtjON/fgv7jmh3DGkewVjh5VUc
-        0PLJjPyyydwrKb+PrSzBV3KsxSS8uTjDgKKsD9CsOZdKJ3xQUpWuurtnJE2y5X6AwHBi4b
-        2C6XMa2237kRq3jVuuEMoUO502AZ5Ck=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-jV2QJMBaNQm-JZsySZMRTA-1; Tue, 12 Apr 2022 16:14:14 -0400
-X-MC-Unique: jV2QJMBaNQm-JZsySZMRTA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C51D85A5BE;
-        Tue, 12 Apr 2022 20:14:13 +0000 (UTC)
-Received: from cmirabil.remote.csb (unknown [10.22.32.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BA279416363;
-        Tue, 12 Apr 2022 20:14:12 +0000 (UTC)
-From:   Charles Mirabile <cmirabil@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Charles Mirabile <cmirabil@redhat.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH v8 4/6] dt-bindings: mfd: sensehat: Add Raspberry Pi Sense HAT schema
-Date:   Tue, 12 Apr 2022 16:13:41 -0400
-Message-Id: <20220412201343.8074-5-cmirabil@redhat.com>
-In-Reply-To: <20220412201343.8074-1-cmirabil@redhat.com>
-References: <20220412201343.8074-1-cmirabil@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 12 Apr 2022 19:31:22 -0400
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7124A1637F6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:28:19 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id s21-20020a056808009500b002d9b146c8d6so106609oic.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
+        b=mwfr+1QL20PQIeOZQZw4zuZEGgBuBUOGgqdqpg6THGQZKaFw5Wj8PV8H59rdqaaBLU
+         96DEcj2/yCle2oJspe3XQ+wvE7SynQC2qq8T45bjBHdWr775iHRDb1Awf9JLNlMzGg0Z
+         g9Vavh5XkBcZCDWPUCYqQaA2bJ40hvxQocKz/LgmqNRswWSq0TrGjsidj6Uh160Cxgg9
+         Br/LGeUfE2qBk04WfS9pWdcxkZ6ZfhQUGAQUPaDVZVTwx2AivA1G7qb2eWdfFOoTI0KO
+         79/zwiYoOluzurGB1K8giL4K789L/VwUjzCmIrbzk2s/dgPratqPJ30cmLHHGCauiOdw
+         Ag0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
+        b=epUvTt2lE4ISiaBTZFn41btqhEK/UakSx+BHlT4o2V2Ll5H1U1cJMKU0nOR7OSTK1M
+         5DRUU7weZASA53K+Dk1m0nJ7qItCdhXwd6QWBl9NtEIyrcw+KivtHsO/+c4eb6G6q53E
+         LC4tIRAV3DpbTTPtmt8bOI0MumN0WePGWg5N3KIIYlJ5GCySQkEJB3wEdjzczkNwBpCZ
+         5ICNrbNcFHCF3Zv1l0CEY0sI+2qDJPS7wgPNjGgoSUl0/ewPHDaiNdMZ92Ui/SssvmUv
+         T5lJhPbnG3Y+YPlY8jYH1QTbytMhi4aVgWMqipqxUvsS8PqxZKxvkoD/I3LKj4fc9RM6
+         bcLA==
+X-Gm-Message-State: AOAM5326b6kizzUNOWEgK654tOZeppau2/bnThelk37+OirZiJLmcz1u
+        HvH21/2u78569/zJSmX+D81zSIUd2PTSpQ3SJSiF
+X-Google-Smtp-Source: ABdhPJzT2Zt45zo3Wf9Ef/5d1NiGtDnKycptXlg/R76ipboiOT8KRuG6nigv1WkYm1tB4Mt/wit/6RMj+xbJNsBmESHI
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8927:f9ed:8b14:ddae])
+ (user=axelrasmussen job=sendgmr) by 2002:a17:90b:3c47:b0:1cb:8121:dcc8 with
+ SMTP id pm7-20020a17090b3c4700b001cb8121dcc8mr6997487pjb.35.1649795391430;
+ Tue, 12 Apr 2022 13:29:51 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 13:29:42 -0700
+In-Reply-To: <20220412202942.386981-1-axelrasmussen@google.com>
+Message-Id: <20220412202942.386981-2-axelrasmussen@google.com>
+Mime-Version: 1.0
+References: <20220412202942.386981-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH 2/2] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the device tree bindings for the Sense HAT
-and each of its children devices in yaml form.
+Prefer this new interface, but if using it fails for any reason just
+fall back to using userfaultfd(2) as before.
 
-Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
-Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- .../raspberrypi,sensehat-display.yaml         | 27 ++++++++
- .../input/raspberrypi,sensehat-joystick.yaml  | 33 +++++++++
- .../bindings/mfd/raspberrypi,sensehat.yaml    | 69 +++++++++++++++++++
- 3 files changed, 129 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
- create mode 100644 Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+ tools/testing/selftests/vm/userfaultfd.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml b/Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
-new file mode 100644
-index 000000000000..5e41d6b7817d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/auxdisplay/raspberrypi,sensehat-display.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 92a4516f8f0d..a50c430f036c 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -383,13 +383,32 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+ 	}
+ }
+ 
++static void __userfaultfd_open_dev(void)
++{
++	int fd;
 +
-+title: Raspberry Pi Sensehat Display
++	uffd = -1;
++	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
++	if (fd < 0)
++		return;
 +
-+maintainers:
-+  - Charles Mirabile <cmirabil@redhat.com>
-+  - Mwesigwa Guma <mguma@redhat.com>
-+  - Joel Savitz <jsavitz@redhat.com>
++	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
++		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	close(fd);
++}
 +
-+description:
-+  This device is part of the sensehat multi function device.
-+  For more information see ../mfd/raspberrypi,sensehat.yaml.
-+
-+  This device features a programmable 8x8 RGB LED matrix.
-+
-+properties:
-+  compatible:
-+    const: raspberrypi,sensehat-display
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml b/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
-new file mode 100644
-index 000000000000..c97cd1d8eac6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
-@@ -0,0 +1,33 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/raspberrypi,sensehat-joystick.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Raspberry Pi Sensehat Joystick
-+
-+maintainers:
-+  - Charles Mirabile <cmirabil@redhat.com>
-+  - Mwesigwa Guma <mguma@redhat.com>
-+  - Joel Savitz <jsavitz@redhat.com>
-+
-+description:
-+  This device is part of the sensehat multi function device.
-+  For more information see ../mfd/raspberrypi,sensehat.yaml.
-+
-+  This device features a five button joystick (up, down,left,
-+  right, click)
-+
-+properties:
-+  compatible:
-+    const: raspberrypi,sensehat-joystick
-+
-+  interrupts:
-+    items:
-+      - description: pin number for joystick interrupt
-+
-+required:
-+  - compatible
-+  - interrupts
-+
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml b/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
-new file mode 100644
-index 000000000000..2484ec91b430
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/raspberrypi,sensehat.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Raspberry Pi Sensehat
-+
-+maintainers:
-+  - Charles Mirabile <cmirabil@redhat.com>
-+  - Mwesigwa Guma <mguma@redhat.com>
-+  - Joel Savitz <jsavitz@redhat.com>
-+
-+description:
-+  The Raspberry Pi Sensehat is an addon board originally developed
-+  for the Raspberry Pi that has a joystick and an 8x8 RGB LED display
-+  as well as several environmental sensors. It connects via i2c and
-+  a gpio for irq.
-+
-+properties:
-+  compatible:
-+    const: raspberrypi,sensehat
-+
-+  reg:
-+    items:
-+      - description: i2c device address
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  "joystick":
-+    $ref: ../input/raspberrypi,sensehat-joystick.yaml
-+
-+  "display":
-+    $ref: ../auxdisplay/raspberrypi,sensehat-display.yaml
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - joystick
-+  - display
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      sensehat@46 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        compatible = "raspberrypi,sensehat";
-+        reg = <0x46>;
-+        display {
-+          compatible = "raspberrypi,sensehat-display";
-+        };
-+        joystick {
-+          compatible = "raspberrypi,sensehat-joystick";
-+          interrupts = <23 GPIO_ACTIVE_HIGH>;
-+        };
-+      };
-+    };
+ static void userfaultfd_open(uint64_t *features)
+ {
+ 	struct uffdio_api uffdio_api;
+ 
+-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	__userfaultfd_open_dev();
++	if (uffd < 0) {
++		printf("/dev/userfaultfd failed, fallback to userfaultfd(2)\n");
++		uffd = syscall(__NR_userfaultfd,
++			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	}
+ 	if (uffd < 0)
+-		err("userfaultfd syscall not available in this kernel");
++		err("userfaultfd syscall failed");
+ 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
+ 
+ 	uffdio_api.api = UFFD_API;
 -- 
-2.31.1
+2.35.1.1178.g4f1659d476-goog
 

@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60AD4FE5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A5A4FE5B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355689AbiDLQXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S1354619AbiDLQX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357541AbiDLQXB (ORCPT
+        with ESMTP id S244084AbiDLQXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:23:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7075D197
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:20:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649780440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6yP5J8nxyQra9M+hDPLnlcwcmCfGna/5XejuacIZlIg=;
-        b=N1oK5VzI2sa6RgXreww7KwtqF40d6u/LCoCgJFgO8kafu/rANPi3P9s/Mv64JAZy/2SHx1
-        wkfMklYPg/2vXD1//kKVQHg0oQE9e0vuDChQsCjyR/4aEn+wEZouXcrhEroIX9kvV61I8b
-        DSgCQN+54Ys47eIJ+kdXZS+YAeknOvhEs/5sJ9A71pYM/sGrL2DY6M8IR/FelMLZxaZnYT
-        y0xHcebe9vmiJBBv/QzFCCOXaO/Jm76Yt1VZYAmyiaFpKXHsiRivefq5lLg7eIfPgSFXSM
-        VGxMc10744do/HfRWfGRsABriLu7wy16abYLSZJug8pbv684H027vRV1DxM2KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649780440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6yP5J8nxyQra9M+hDPLnlcwcmCfGna/5XejuacIZlIg=;
-        b=H9k4MA+4/IG3seXGL3Q1NlTEfYreQBmGC4uAirVJ2d42xxjgyVPlQfkkl1u3wl9HV6/izf
-        2uVUBgNLY/T64lAA==
-To:     Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-In-Reply-To: <1a7944c7-d717-d5af-f71d-92326f7bb7f6@redhat.com>
-References: <20220408032809.3696798-1-npache@redhat.com>
- <20220408081549.GM2731@worktop.programming.kicks-ass.net>
- <ee07a31c-c514-4a88-599f-14a30e93f32e@redhat.com> <87k0bzk7e5.ffs@tglx>
- <1a7944c7-d717-d5af-f71d-92326f7bb7f6@redhat.com>
-Date:   Tue, 12 Apr 2022 18:20:40 +0200
-Message-ID: <87h76yff3b.ffs@tglx>
+        Tue, 12 Apr 2022 12:23:25 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEA95D1AB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:21:05 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e8so12071833wra.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IaklH84rCrU4lpiXP8yvmTmjobzVXsRZJg68fB8ePQQ=;
+        b=i3Q1ntS34MHnFnrjwc0Pbeet7hWR1qSDsWaKlXU5MtWO9FTbHXUXWY84f0wOAKyn/a
+         qElYCluYnJQttU4yE1fwZ8ELRgwX8oH/ee23KVlJ0QRQFz1LjbvmUTd2YWD2ppbJLn9R
+         7ftv3OxWcznJyZGMv5eJ7KLHnvK166uBHoiodxemrDgxQbzCXLEtpvXvZWqKaEFz4Eyp
+         KxJLn5TTsK84FNSYFp1k7Ze/BhvPKVgicjKa5c8N18uqyoiUT0APkzgrEmOdQWk3DvPp
+         eN6xdNexFUiMIrrw0vKuQ/4n7Dva1rZITGZA+ECi7joUeqyCahCx1w88UZxx4p4FIlfA
+         uKeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IaklH84rCrU4lpiXP8yvmTmjobzVXsRZJg68fB8ePQQ=;
+        b=f/q4BRWhIxxs7lvu6BT+wQaGaXRT5oJQqmWAKLl6HC6xqYwAjOWLh82Odff7FqfE5v
+         8kNUq3lHmwIj/OY2bRyQx3Cjik/vtx6hjZlorP8JzbqD2YEsochKqgdvHQIQmNnvkQFP
+         nEjbWEuOepgRDJ/AwoT9ZZMgInJKDa50W9YJ89W6Ww6HpYk/4keSA5aTcPJ/NL6eqFvE
+         6IRPv4ryGJgXHFOAH/3TutqT1yQZJw8nTgBSeZ8Z7HV3xaHgW+66TyHxc7s+Rp82jUv9
+         42YdtBKtahLDX4CUeCVG+OgZGiQ8F5peq0caNzSnP2whC2YQFepd9J4C5NTgWOaDNjiN
+         kQ7A==
+X-Gm-Message-State: AOAM531KUxJVuf5BzRpsei/KHRveaLJJWpo+f5amhvLLvLTiC/DEklS9
+        cgAMC98bBr///gUcTkLtlOjXUPSs6xe7mKj5wVGmvQ==
+X-Google-Smtp-Source: ABdhPJw3cfndLH3ZUhpSzzjuo9DBHjuzswehgTFoF0He2DYxPgFCa/mATA8WHqbj7bEk2KuOvbIrutr8YUle9ZXKziw=
+X-Received: by 2002:adf:8123:0:b0:206:1759:f164 with SMTP id
+ 32-20020adf8123000000b002061759f164mr30353021wrm.654.1649780463588; Tue, 12
+ Apr 2022 09:21:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220412154817.2728324-1-irogers@google.com>
+In-Reply-To: <20220412154817.2728324-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 12 Apr 2022 09:20:51 -0700
+Message-ID: <CAP-5=fX8YatuJZG6dYftwWy0NnkRyJWqtyw7D0WAU9xDjh+b0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Tidy up symbol end fixup
+To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        William Cohen <wcohen@redhat.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Denis Nikitin <denik@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11 2022 at 19:51, Nico Pache wrote:
-> On 4/8/22 09:54, Thomas Gleixner wrote:
->> The below reproduces the problem nicely, i.e. the lock() in the parent
->> times out. So why would the OOM killer fail to cause the same problem
->> when it reaps the private anon mapping where the private futex sits?
->> 
->> If you revert the lock order in the child the robust muck works.
+On Tue, Apr 12, 2022 at 8:48 AM Ian Rogers <irogers@google.com> wrote:
 >
-> Thanks for the reproducer Thomas :)
+> Fixing up more symbol ends as introduced in:
+> https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
+> caused perf annotate to run into memory limits - every symbol holds
+> all the disassembled code in the annotation, and so making symbols
+> ends further away dramatically increased memory usage (40MB to
+>  >1GB). Modify the symbol end logic so that special kernel cases aren't
+> applied in the common case.
 >
-> I think I need to re-up my knowledge around COW and how it effects
-> that stack. There are increased oddities when you add the pthread
-> library that I cant fully wrap my head around at the moment.
+> v2. Drops a merged patch. Fixes a build issue with libbfd enabled.
+>
+> Ian Rogers (4):
+>   perf symbols: Always do architecture specific fixups
+>   perf symbols: Add is_kernel argument to fixup end
+>   perf symbol: By default only fix zero length symbols
+>   perf symbols: More specific architecture end fixing
+>
+>  tools/perf/arch/arm64/util/machine.c   | 14 +++++++++-----
+>  tools/perf/arch/powerpc/util/machine.c | 10 +++++++---
+>  tools/perf/arch/s390/util/machine.c    | 12 ++++++++----
+>  tools/perf/util/symbol-elf.c           |  2 +-
+>  tools/perf/util/symbol.c               | 16 +++++++++-------
+>  tools/perf/util/symbol.h               |  4 ++--
+>  6 files changed, 36 insertions(+), 22 deletions(-)
 
-The pthread library functions are just conveniance so I did not have to
-hand code the futex and robust list handling.
+Missed the:
 
-> My confusion lies in how the parent/child share a robust list here, but they
-> obviously do. In my mind the mut_s would be different in the child/parent after
-> the fork and pthread_mutex_init (and friends) are done in the child.
-
-They don't share a robust list, each thread has it's own.
-
-The shared mutex mut_s is initialized in the parent before fork and it's
-the same address in the child and it's not COWed because the mapping is
-MAP_SHARED.
-
-The child allocates private memory and initializes the private mutex in
-that private mapping.
-
-So now child does:
-
-   pthread_mutex_lock(mut_s);
-
-That's the mutex in the memory shared with the parent. After that the
-childs robusts list head points to mut_s::robust_list.
-
-Now it does:
-
-   pthread_mutex_lock(mut_p);
-
-after that the childs robust list head points to mut_p::robust_list and
-mut_p::robust_list points to mut_s::robust_list.
-
-So now the child unmaps the private memory and exists.
-
-The kernel tries to walk the robust list pointer and faults when trying
-to access mut_p. End of walk and mut_s stays locked.
-
-So now think about the OOM case. The killed process has a shared mapping
-with some other unrelated process (file, shmem) where mut_p sits.
-
-It gets killed after:
-		pthread_mutex_lock(mut_s);
-		pthread_mutex_lock(mut_p);
-
-So the OOM reaper rips the VMA which contains mut_p and therefore breaks
-the chain which is necessary to reach mut_p.
-
-See?
+Signed-off-by: Ian Rogers <irogers@google.com>
 
 Thanks,
+Ian
 
-        tglx
-
-
-
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

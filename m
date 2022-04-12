@@ -2,153 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A117B4FE975
+	by mail.lfdr.de (Postfix) with ESMTP id 104624FE973
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiDLU2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S230227AbiDLU3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiDLU1k (ORCPT
+        with ESMTP id S230061AbiDLU25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:27:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2599DD975
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649794458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKeEjLPVCQWQYsPyoUlmVTqyS0GcmUXtUuQ8I/MM+9k=;
-        b=d1APatTUtJgTTmLWKehB8mbBAuQPeaXhE7p9YFm+MmGo4ja/FFno4+FEofGTvyeX5gNU3P
-        IOpT9zp0uU5PlCfeJBiFyaiIPlnbEP0e27O0YpzjcRS3YTqnLXVI9Z3lIISYYRMsYGZCy1
-        kKNK9DnhbhWryN9x3jlwQG+Mm0IzsN0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-9r7wI2JXNEKUjGeycyMjeA-1; Tue, 12 Apr 2022 16:14:14 -0400
-X-MC-Unique: 9r7wI2JXNEKUjGeycyMjeA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 68A721C05155;
-        Tue, 12 Apr 2022 20:14:14 +0000 (UTC)
-Received: from cmirabil.remote.csb (unknown [10.22.32.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3397416363;
-        Tue, 12 Apr 2022 20:14:13 +0000 (UTC)
-From:   Charles Mirabile <cmirabil@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Charles Mirabile <cmirabil@redhat.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH v8 6/6] DO NOT MERGE: full sensehat device tree overlay for raspberry pi 4
-Date:   Tue, 12 Apr 2022 16:13:43 -0400
-Message-Id: <20220412201343.8074-7-cmirabil@redhat.com>
-In-Reply-To: <20220412201343.8074-1-cmirabil@redhat.com>
-References: <20220412201343.8074-1-cmirabil@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 16:28:57 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDAE0ACC
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649795196; x=1681331196;
+  h=from:to:cc:subject:date:message-id;
+  bh=wzMgb7GR+grF1fIvEBxI4JfuKlzfjR11uwpwF7cfEU0=;
+  b=TFten+KEnTeg44mUbyt1dR4KwKX3Sy6f7Za+2WjLRiqllcBxygfth7Jy
+   j7KIrhemS6lRPdcpyPw9Ews2ju+IFoZukJU/WPlVVeERlPp0Z9q2vi5Co
+   3uBmB6XoGzAHWgfLoKHNN4HPEIM8AZ2s4/p/YwFuackM4vD69DOmBe9ZE
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Apr 2022 13:16:55 -0700
+X-QCInternal: smtphost
+Received: from th-lint-014.qualcomm.com ([10.63.177.51])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 12 Apr 2022 13:16:55 -0700
+Received: by th-lint-014.qualcomm.com (Postfix, from userid 455663)
+        id 587FA139C; Tue, 12 Apr 2022 13:16:55 -0700 (PDT)
+From:   Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+Subject: [PATCH] mm, page_alloc: check pfn is valid before moving to freelist
+Date:   Tue, 12 Apr 2022 13:16:22 -0700
+Message-Id: <cover.1649794059.git.quic_sudaraja@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch shold not be merged - dtbs files are not stored in the
-kernel tree. We just provide this file so the code can be tested.
+There are possible scenario where a pageblock can have partial physical
+hole and partial part of System RAM. This happens when base address in RAM
+partition table is not aligned to pageblock size.
 
-This overlay is suitable for testing the driver, it can be compiled with
-dtc and put in the /boot/overlays/ folder then specified in config.txt
-by putting the lines:
+Example:
 
-dtoverlay=		#suppress loading of default overlay for HAT
-dtoverlay=sensehat	#load custom overlay
+Say we have this first two entries in RAM partition table -
 
-at the beginning before any other lines in config.txt
+Base Addr: 0x0000000080000000 Length: 0x0000000058000000
+Base Addr: 0x00000000E3930000 Length: 0x0000000020000000
+...
 
-Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
-Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
----
- sensehat.dtbs | 54 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 sensehat.dtbs
+Physical hole: 0xD8000000 - 0xE3930000
 
-diff --git a/sensehat.dtbs b/sensehat.dtbs
-new file mode 100644
-index 000000000000..82d129c847fb
---- /dev/null
-+++ b/sensehat.dtbs
-@@ -0,0 +1,54 @@
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	compatible = "brcm,bcm2835";
-+};
-+
-+&i2c1 {
-+	#address-cells = <0x01>;
-+	#size-cells = <0x00>;
-+	status = "okay";
-+
-+	sensehat@46 {
-+		#address-cells = <0x01>;
-+		#size-cells = <0x00>;
-+		compatible = "raspberrypi,sensehat";
-+		reg = <0x46>;
-+		interrupt-parent = <&gpio>;
-+		status = "okay";
-+		display {
-+			compatible = "raspberrypi,sensehat-display";
-+			status = "okay";
-+		};
-+		joystick {
-+			compatible = "raspberrypi,sensehat-joystick";
-+			interrupts = <23 1>;
-+			status = "okay";
-+		};
-+	};
-+
-+	lsm9ds1-magn@1c {
-+		compatible = "st,lsm9ds1-magn";
-+		reg = <0x1c>;
-+		status = "okay";
-+	};
-+
-+	lsm9ds1-accel@6a {
-+		compatible = "st,lsm9ds1-accel";
-+		reg = <0x6a>;
-+		status = "okay";
-+	};
-+
-+	lps25h-press@5c {
-+		compatible = "st,lps25h-press";
-+		reg = <0x5c>;
-+		status = "okay";
-+	};
-+
-+	hts221-humid@5f {
-+		compatible = "st,hts221-humid\0st,hts221";
-+		reg = <0x5f>;
-+		status = "okay";
-+	};
-+};
+On system having 4K as page size and hence pageblock size being 4MB, the
+base address 0xE3930000 is not aligned to 4MB pageblock size.
+
+Now we will have pageblock which has partial physical hole and partial part
+of System RAM -
+
+
+[pageblock 0xE3800000 - 0xE3C00000]
+0xE3800000 - 0xE3930000 -- physical hole
+0xE3930000 - 0xE3C00000 -- System RAM
+
+Now doing __alloc_pages say we get a valid page with PFN 0xE3B00 from 
+__rmqueue_fallback, we try to put other pages from the same pageblock as well
+into freelist by calling steal_suitable_fallback().
+
+We then search for freepages from start of the pageblock due to below code -
+
+ move_freepages_block(zone, page, migratetype, ...)
+{
+    pfn = page_to_pfn(page);
+    start_pfn = pfn & ~(pageblock_nr_pages - 1);
+    end_pfn = start_pfn + pageblock_nr_pages - 1;
+...
+}
+
+With the pageblock which has partial physical hole at the beginning, we will
+run into PFNs from the physical hole whose struct page is not initialized and
+is invalid, and system would crash as we operate on invalid struct page to find
+out of page is in Buddy or LRU or not
+
+[  107.629453][ T9688] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[  107.639214][ T9688] Mem abort info:
+[  107.642829][ T9688]   ESR = 0x96000006
+[  107.646696][ T9688]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  107.678615][ T9688] user pgtable: 4k pages, 39-bit VAs, pgdp=000000098a237000
+[  107.697582][ T9688] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+
+
+
+[  108.209839][ T9688] pc : move_freepages_block+0x174/0x27c
+[  108.215407][ T9688] lr : steal_suitable_fallback+0x20c/0x398
+
+[  108.305908][ T9688] Call trace:
+[  108.309151][ T9688]  move_freepages_block+0x174/0x27c        [PageLRU]
+[  108.314359][ T9688]  steal_suitable_fallback+0x20c/0x398
+[  108.319826][ T9688]  rmqueue_bulk+0x250/0x934
+[  108.324325][ T9688]  rmqueue_pcplist+0x178/0x2ac
+[  108.329086][ T9688]  rmqueue+0x5c/0xc10
+[  108.333048][ T9688]  get_page_from_freelist+0x19c/0x430
+[  108.338430][ T9688]  __alloc_pages+0x134/0x424
+[  108.343017][ T9688]  page_cache_ra_unbounded+0x120/0x324
+[  108.348494][ T9688]  do_sync_mmap_readahead+0x1b0/0x234
+[  108.353878][ T9688]  filemap_fault+0xe0/0x4c8
+[  108.358375][ T9688]  do_fault+0x168/0x6cc
+[  108.362518][ T9688]  handle_mm_fault+0x5c4/0x848
+[  108.367280][ T9688]  do_page_fault+0x3fc/0x5d0
+[  108.371867][ T9688]  do_translation_fault+0x6c/0x1b0
+[  108.376985][ T9688]  do_mem_abort+0x68/0x10c
+[  108.381389][ T9688]  el0_ia+0x50/0xbc
+[  108.385175][ T9688]  el0t_32_sync_handler+0x88/0xbc
+[  108.390208][ T9688]  el0t_32_sync+0x1b8/0x1bc
+
+
+Hence, avoid operating on invalid pages within the same pageblock by checking
+if pfn is valid or not.
+
+
+=============
+
+Not sure what/where should be the right fix. Or are there any assumptions that
+Base Addresses in RAM aprtition table should be aligned to pageblock size?
+Clearly that pages within the same pageblock which has partial physical hole,
+they are not being initialized and hence we would be operating on invalid pages
+while doing move_freepages_block.
+
+Thoughts or suggestions?
+
+
+Sudarshan Rajagopalan (1):
+  mm, page_alloc: check pfn is valid before moving to freelist
+
+ mm/page_alloc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
 -- 
-2.31.1
+2.7.4
 

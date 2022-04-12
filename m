@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E894FCAD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4994FCAEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245095AbiDLA5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 20:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S1343672AbiDLA52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245722AbiDLAyh (ORCPT
+        with ESMTP id S245490AbiDLAzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:54:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2751B20BD7;
-        Mon, 11 Apr 2022 17:49:04 -0700 (PDT)
+        Mon, 11 Apr 2022 20:55:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F102E02D;
+        Mon, 11 Apr 2022 17:49:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073B76184B;
-        Tue, 12 Apr 2022 00:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25844C385A3;
-        Tue, 12 Apr 2022 00:49:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9418BB815C8;
+        Tue, 12 Apr 2022 00:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D89BC385A3;
+        Tue, 12 Apr 2022 00:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724543;
-        bh=0w5fkYWRq9t9bwKn/65Gjp/8xhsgA6n0+Ym3YnpIS4k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tH+jA/JxqYBkfthGjOeGB2T21nVZNF23W5Id+bFuSviUrEdTT9kbhQjvzZ9cDic9v
-         tbriKq11uJCq9vqpH/ZnSTh9dKE0SC9c+r6Uj4xDcj5Mxewd7sy/lrEWaKpzu3PNRU
-         2Hw/MprrXyHO25md64eUlWBeeFbQYwFNJAx/gbOcwxRDhbIkVUVTfF2uvSFZ5jFKgx
-         dcS1t22QPjLVF+lXb7NkwhD4L0Z5vowczDOZZu5gzGWcn1lWaLMMKcg2hpWmWJSOiv
-         drGGzLkcLRop0hqYMCJsMf1VgluWOwpI2wHJmX+lCm29sF6OPyaZguC51Q3PJK1gz1
-         hMODTwuhY0VFw==
+        s=k20201202; t=1649724549;
+        bh=tGzXzQhqgL+alx1Q6zWeqj7q4zL1AuwH2it+jAec/5w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nDR5SuQUCau+RnZSKuYyirNv6zWIcvJ5PjMdE0UhQIRLODwwkd6Q+IAO9betuC4SP
+         x8m7sdhxiJCyBuw3VEOnjIppn6iUjTdH+zzaHbRnF4fokQjYvYys/DB3b5NbjmYrvm
+         hgS2+Gmmr5fZdVpNZC5igY90ZlrMT2qx0DxXnXblgvaNxTH7QQ5YuuhunsGbI7L6MC
+         f45z68azfeydBwmYhv2MqmRLAhxd5/hasuAyGdc1USdViNzE99oJZi2Uit7As2jMir
+         MgIHt9tHJWXjgP3PwD2NDAL4O66ewTzxOnNlGpzpZecN/3BeRWya+fCiKd0iNjm5g+
+         afdkqVqQiTzmg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Borislav Petkov <bp@suse.de>, Frank Li <Frank.li@nxp.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.15 41/41] perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
-Date:   Mon, 11 Apr 2022 20:46:53 -0400
-Message-Id: <20220412004656.350101-41-sashal@kernel.org>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.10 01/30] drm/amd: Add USBC connector ID
+Date:   Mon, 11 Apr 2022 20:48:35 -0400
+Message-Id: <20220412004906.350678-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004656.350101-1-sashal@kernel.org>
-References: <20220412004656.350101-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -65,54 +57,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Aurabindo Pillai <aurabindo.pillai@amd.com>
 
-[ Upstream commit d02b4dd84e1a90f7f1444d027c0289bf355b0d5a ]
+[ Upstream commit c5c948aa894a831f96fccd025e47186b1ee41615 ]
 
-Fix:
+[Why&How] Add a dedicated AMDGPU specific ID for use with
+newer ASICs that support USB-C output
 
-  In file included from <command-line>:0:0:
-  In function ‘ddr_perf_counter_enable’,
-      inlined from ‘ddr_perf_irq_handler’ at drivers/perf/fsl_imx8_ddr_perf.c:651:2:
-  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_729’ \
-	declared with attribute error: FIELD_PREP: mask is not constant
-    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-...
-
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Frank Li <Frank.li@nxp.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220405151517.29753-10-bp@alien8.de
-Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/perf/fsl_imx8_ddr_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/ObjectID.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
-index 94ebc1ecace7..b1b2a55de77f 100644
---- a/drivers/perf/fsl_imx8_ddr_perf.c
-+++ b/drivers/perf/fsl_imx8_ddr_perf.c
-@@ -29,7 +29,7 @@
- #define CNTL_OVER_MASK		0xFFFFFFFE
+diff --git a/drivers/gpu/drm/amd/amdgpu/ObjectID.h b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+index 5b393622f592..a0f0a17e224f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/ObjectID.h
++++ b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+@@ -119,6 +119,7 @@
+ #define CONNECTOR_OBJECT_ID_eDP                   0x14
+ #define CONNECTOR_OBJECT_ID_MXM                   0x15
+ #define CONNECTOR_OBJECT_ID_LVDS_eDP              0x16
++#define CONNECTOR_OBJECT_ID_USBC                  0x17
  
- #define CNTL_CSV_SHIFT		24
--#define CNTL_CSV_MASK		(0xFF << CNTL_CSV_SHIFT)
-+#define CNTL_CSV_MASK		(0xFFU << CNTL_CSV_SHIFT)
+ /* deleted */
  
- #define EVENT_CYCLES_ID		0
- #define EVENT_CYCLES_COUNTER	0
 -- 
 2.35.1
 

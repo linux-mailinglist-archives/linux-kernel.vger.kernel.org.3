@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02F54FDA29
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F51A4FD975
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384209AbiDLIjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S1353415AbiDLHPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357164AbiDLHju (ORCPT
+        with ESMTP id S1351128AbiDLHAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF713E01;
-        Tue, 12 Apr 2022 00:13:15 -0700 (PDT)
+        Tue, 12 Apr 2022 03:00:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BFA42EF3;
+        Mon, 11 Apr 2022 23:46:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE7E3B81A8F;
-        Tue, 12 Apr 2022 07:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC49C385A6;
-        Tue, 12 Apr 2022 07:13:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A06D61093;
+        Tue, 12 Apr 2022 06:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADDA1C385A8;
+        Tue, 12 Apr 2022 06:46:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747592;
-        bh=bnNakFxqskyH9Z6SrX9IiVWIDVGGSYF51Zlbl2yDyU4=;
+        s=korg; t=1649746000;
+        bh=UXOL9ozP+2qJrD/MwC8apLa02lpVVWnL6ePTyLoqf4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V7QhNBnL4DbKr+LSkZNAp5JNKLkeQ7vztwVgQb881Vtw7fi5tcW5V7rXB7Ebwl4Y/
-         NERoZ1Z480tgSHW84r2tnfXd0PinHa6KGVxRbGp2HU5hwdlbFT5kEtFvohg7Vijd+l
-         sgST0Uuk7WFeZLSJudkoJ+V0x3GWPRslD7u7S7nY=
+        b=VRFWvCiw8/e5ymjqp3bs2ZObnZmeiCSUtZzILFgSoY7JrtKtVN0blH7lFn4vjnPYz
+         ulqXR5qqRLMoqnK3Kh4zSYTjmWFyqBtgBtUsCBz9n76UVirqDT32pI8jqwTXkFKNv/
+         iAcHPhlDRNaIgbYYXVQkgfcxAS64XEUUf3AgvoIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Ohad Sharabi <osharabi@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 108/343] mctp: make __mctp_dev_get() take a refcount hold
+Subject: [PATCH 5.15 123/277] habanalabs: fix possible memory leak in MMU DR fini
 Date:   Tue, 12 Apr 2022 08:28:46 +0200
-Message-Id: <20220412062954.511957104@linuxfoundation.org>
+Message-Id: <20220412062945.601076144@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,137 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Johnston <matt@codeconstruct.com.au>
+From: Ohad Sharabi <osharabi@habana.ai>
 
-[ Upstream commit dc121c0084910db985cf1c8ba6fce5d8c307cc02 ]
+[ Upstream commit eb85eec858c1a5c11d3a0bff403f6440b05b40dc ]
 
-Previously there was a race that could allow the mctp_dev refcount
-to hit zero:
+This patch fixes what seems to be copy paste error.
 
-rcu_read_lock();
-mdev = __mctp_dev_get(dev);
-// mctp_unregister() happens here, mdev->refs hits zero
-mctp_dev_hold(dev);
-rcu_read_unlock();
+We will have a memory leak if the host-resident shadow is NULL (which
+will likely happen as the DR and HR are not dependent).
 
-Now we make __mctp_dev_get() take the hold itself. It is safe to test
-against the zero refcount because __mctp_dev_get() is called holding
-rcu_read_lock and mctp_dev uses kfree_rcu().
-
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mctp/device.c     | 21 ++++++++++++++++++---
- net/mctp/route.c      |  5 ++++-
- net/mctp/test/utils.c |  1 -
- 3 files changed, 22 insertions(+), 5 deletions(-)
+ drivers/misc/habanalabs/common/mmu/mmu_v1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mctp/device.c b/net/mctp/device.c
-index ef2755f82f87..f86ef6d751bd 100644
---- a/net/mctp/device.c
-+++ b/net/mctp/device.c
-@@ -24,12 +24,25 @@ struct mctp_dump_cb {
- 	size_t a_idx;
- };
- 
--/* unlocked: caller must hold rcu_read_lock */
-+/* unlocked: caller must hold rcu_read_lock.
-+ * Returned mctp_dev has its refcount incremented, or NULL if unset.
-+ */
- struct mctp_dev *__mctp_dev_get(const struct net_device *dev)
+diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+index 0f536f79dd9c..e68e9f71c546 100644
+--- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
++++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+@@ -467,7 +467,7 @@ static void hl_mmu_v1_fini(struct hl_device *hdev)
  {
--	return rcu_dereference(dev->mctp_ptr);
-+	struct mctp_dev *mdev = rcu_dereference(dev->mctp_ptr);
-+
-+	/* RCU guarantees that any mdev is still live.
-+	 * Zero refcount implies a pending free, return NULL.
-+	 */
-+	if (mdev)
-+		if (!refcount_inc_not_zero(&mdev->refs))
-+			return NULL;
-+	return mdev;
- }
+ 	/* MMU H/W fini was already done in device hw_fini() */
  
-+/* Returned mctp_dev does not have refcount incremented. The returned pointer
-+ * remains live while rtnl_lock is held, as that prevents mctp_unregister()
-+ */
- struct mctp_dev *mctp_dev_get_rtnl(const struct net_device *dev)
- {
- 	return rtnl_dereference(dev->mctp_ptr);
-@@ -123,6 +136,7 @@ static int mctp_dump_addrinfo(struct sk_buff *skb, struct netlink_callback *cb)
- 				if (mdev) {
- 					rc = mctp_dump_dev_addrinfo(mdev,
- 								    skb, cb);
-+					mctp_dev_put(mdev);
- 					// Error indicates full buffer, this
- 					// callback will get retried.
- 					if (rc < 0)
-@@ -297,7 +311,7 @@ void mctp_dev_hold(struct mctp_dev *mdev)
+-	if (!ZERO_OR_NULL_PTR(hdev->mmu_priv.hr.mmu_shadow_hop0)) {
++	if (!ZERO_OR_NULL_PTR(hdev->mmu_priv.dr.mmu_shadow_hop0)) {
+ 		kvfree(hdev->mmu_priv.dr.mmu_shadow_hop0);
+ 		gen_pool_destroy(hdev->mmu_priv.dr.mmu_pgt_pool);
  
- void mctp_dev_put(struct mctp_dev *mdev)
- {
--	if (refcount_dec_and_test(&mdev->refs)) {
-+	if (mdev && refcount_dec_and_test(&mdev->refs)) {
- 		dev_put(mdev->dev);
- 		kfree_rcu(mdev, rcu);
- 	}
-@@ -369,6 +383,7 @@ static size_t mctp_get_link_af_size(const struct net_device *dev,
- 	if (!mdev)
- 		return 0;
- 	ret = nla_total_size(4); /* IFLA_MCTP_NET */
-+	mctp_dev_put(mdev);
- 	return ret;
- }
- 
-diff --git a/net/mctp/route.c b/net/mctp/route.c
-index e52cef750500..05fbd318eb98 100644
---- a/net/mctp/route.c
-+++ b/net/mctp/route.c
-@@ -786,7 +786,7 @@ int mctp_local_output(struct sock *sk, struct mctp_route *rt,
- {
- 	struct mctp_sock *msk = container_of(sk, struct mctp_sock, sk);
- 	struct mctp_skb_cb *cb = mctp_cb(skb);
--	struct mctp_route tmp_rt;
-+	struct mctp_route tmp_rt = {0};
- 	struct mctp_sk_key *key;
- 	struct net_device *dev;
- 	struct mctp_hdr *hdr;
-@@ -892,6 +892,7 @@ int mctp_local_output(struct sock *sk, struct mctp_route *rt,
- 		mctp_route_release(rt);
- 
- 	dev_put(dev);
-+	mctp_dev_put(tmp_rt.dev);
- 
- 	return rc;
- 
-@@ -1057,11 +1058,13 @@ static int mctp_pkttype_receive(struct sk_buff *skb, struct net_device *dev,
- 
- 	rt->output(rt, skb);
- 	mctp_route_release(rt);
-+	mctp_dev_put(mdev);
- 
- 	return NET_RX_SUCCESS;
- 
- err_drop:
- 	kfree_skb(skb);
-+	mctp_dev_put(mdev);
- 	return NET_RX_DROP;
- }
- 
-diff --git a/net/mctp/test/utils.c b/net/mctp/test/utils.c
-index 7b7918702592..e03ba66bbe18 100644
---- a/net/mctp/test/utils.c
-+++ b/net/mctp/test/utils.c
-@@ -54,7 +54,6 @@ struct mctp_test_dev *mctp_test_create_dev(void)
- 
- 	rcu_read_lock();
- 	dev->mdev = __mctp_dev_get(ndev);
--	mctp_dev_hold(dev->mdev);
- 	rcu_read_unlock();
- 
- 	return dev;
 -- 
 2.35.1
 

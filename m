@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FC34FD909
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13BD4FD988
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357931AbiDLJBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S1353707AbiDLHP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357127AbiDLHjs (ORCPT
+        with ESMTP id S1351441AbiDLHD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:48 -0400
+        Tue, 12 Apr 2022 03:03:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB31E096;
-        Tue, 12 Apr 2022 00:12:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC89D4474A;
+        Mon, 11 Apr 2022 23:47:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA84CB81B55;
-        Tue, 12 Apr 2022 07:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A25C385A5;
-        Tue, 12 Apr 2022 07:12:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32B13B81B4A;
+        Tue, 12 Apr 2022 06:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75577C385A8;
+        Tue, 12 Apr 2022 06:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747540;
-        bh=f4cy6lBY19D7k4IFU8QzAsLt3NLEQwMDsH8Qum2ngQc=;
+        s=korg; t=1649746024;
+        bh=YKg+E1rgLLe/atlLYBLJei1HwcSZ8NIm+I9CGwB5kAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OYoqn68ottBs/BoTQTkk3BPKV+CUNFyxRFxQqkM1ie9q+uziqDDqlcC06N1GZOGyA
-         MDdz2vXO+8p3x31gT4KsYLJX6YzJmehRT8K2B+faZk+vAguctUBpMcesrMyzvVSNKs
-         4TWh7UXqXqMfnRjkTSyfOyxqful6HNZKrtR5VmJU=
+        b=eHs6Cn8Ysah9N1JiNYYQQG18GNRfjHi6LI2XQXig5HQ1cYkPwP5UOI0WGd/jYeqy0
+         rkiAfjBJFT7gSHxQPitnvTdFGhmdS/+oW6Ey4TfMKv+7yHJIb/brJFAiWQj2c1QKCC
+         Ofuzn+WZGSskhOtlsWTmImoQQ451j3ZL+ZmrSwdk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 117/343] mips: ralink: fix a refcount leak in ill_acc_of_setup()
+Subject: [PATCH 5.15 132/277] x86: Annotate call_on_stack()
 Date:   Tue, 12 Apr 2022 08:28:55 +0200
-Message-Id: <20220412062954.767196595@linuxfoundation.org>
+Message-Id: <20220412062945.857488242@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 4a0a1436053b17e50b7c88858fb0824326641793 ]
+[ Upstream commit be0075951fde739f14ee2b659e2fd6e2499c46c0 ]
 
-of_node_put(np) needs to be called when pdev == NULL.
+vmlinux.o: warning: objtool: page_fault_oops()+0x13c: unreachable instruction
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+0000 000000000005b460 <page_fault_oops>:
+...
+0128    5b588:  49 89 23                mov    %rsp,(%r11)
+012b    5b58b:  4c 89 dc                mov    %r11,%rsp
+012e    5b58e:  4c 89 f2                mov    %r14,%rdx
+0131    5b591:  48 89 ee                mov    %rbp,%rsi
+0134    5b594:  4c 89 e7                mov    %r12,%rdi
+0137    5b597:  e8 00 00 00 00          call   5b59c <page_fault_oops+0x13c>    5b598: R_X86_64_PLT32   handle_stack_overflow-0x4
+013c    5b59c:  5c                      pop    %rsp
+
+vmlinux.o: warning: objtool: sysvec_reboot()+0x6d: unreachable instruction
+
+0000 00000000000033f0 <sysvec_reboot>:
+...
+005d     344d:  4c 89 dc                mov    %r11,%rsp
+0060     3450:  e8 00 00 00 00          call   3455 <sysvec_reboot+0x65>        3451: R_X86_64_PLT32    irq_enter_rcu-0x4
+0065     3455:  48 89 ef                mov    %rbp,%rdi
+0068     3458:  e8 00 00 00 00          call   345d <sysvec_reboot+0x6d>        3459: R_X86_64_PC32     .text+0x47d0c
+006d     345d:  e8 00 00 00 00          call   3462 <sysvec_reboot+0x72>        345e: R_X86_64_PLT32    irq_exit_rcu-0x4
+0072     3462:  5c                      pop    %rsp
+
+Both cases are due to a call_on_stack() calling a __noreturn function.
+Since that's an inline asm, GCC can't do anything about the
+instructions after the CALL. Therefore put in an explicit
+ASM_REACHABLE annotation to make sure objtool and gcc are consistently
+confused about control flow.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220308154319.468805622@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/ralink/ill_acc.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/include/asm/irq_stack.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
-index 115a69fc20ca..f395ae218470 100644
---- a/arch/mips/ralink/ill_acc.c
-+++ b/arch/mips/ralink/ill_acc.c
-@@ -61,6 +61,7 @@ static int __init ill_acc_of_setup(void)
- 	pdev = of_find_device_by_node(np);
- 	if (!pdev) {
- 		pr_err("%pOFn: failed to lookup pdev\n", np);
-+		of_node_put(np);
- 		return -EINVAL;
- 	}
+diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_stack.h
+index 8d55bd11848c..e087cd7837c3 100644
+--- a/arch/x86/include/asm/irq_stack.h
++++ b/arch/x86/include/asm/irq_stack.h
+@@ -99,7 +99,8 @@
+ }
  
+ #define ASM_CALL_ARG0							\
+-	"call %P[__func]				\n"
++	"call %P[__func]				\n"		\
++	ASM_REACHABLE
+ 
+ #define ASM_CALL_ARG1							\
+ 	"movq	%[arg1], %%rdi				\n"		\
 -- 
 2.35.1
 

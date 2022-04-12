@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2654FE330
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6ED64FE334
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356605AbiDLN6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S233823AbiDLN6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356516AbiDLN57 (ORCPT
+        with ESMTP id S1356595AbiDLN6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:57:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F8F51;
-        Tue, 12 Apr 2022 06:55:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F252361AF8;
-        Tue, 12 Apr 2022 13:55:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E449C385A1;
-        Tue, 12 Apr 2022 13:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649771741;
-        bh=9nB9btp7CggAjhl+lMpMoIhd72xBiqUVJqFe1BoEDNo=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=F4o+8xh8x9IasDQcuT65ggd6IbezxA/1VXWH34mTgZycmR1b4l7qOvIx3MFaHj3KU
-         byjmUcaMbc6D7h6VnrLdmEFPFrFn8sjSXBfhL61g0NjDtZfg3Ka+t3Wd5A8T4h0aBM
-         L9Rol7iJBqgASCDxwOv/iUtazdP3yYmJnrRq6g5KT1sPNRAm5rWwgvA/F4SXeYRwBn
-         dhe4igjU19t39gncWhpQbKPwQO3oiXUR90ikOMCvYVCwXlXw9jVLMcFB7QaI0jVZox
-         kNJ5hvJuQa10Sn9w70/RDyk0BKS8MRl8ygVZzgWFfGOb5At8HIMlQ6THlSVN95cAw9
-         pcmM5TvLsCrFQ==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 12 Apr 2022 09:58:18 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4035F95;
+        Tue, 12 Apr 2022 06:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649771759; x=1681307759;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EYdikBSkBJ4H7A++I5E1/miVOcZwRE1w+sy2tyOFVmQ=;
+  b=OUlSM9s7iag+ItDieoKvTThAuzT4daZjf30ujsEOQmLx1ZqzY9kGPiGm
+   dRxSEhYgY2Cj7VcfRhqlrqKK6xKZBNF6AQ4YAneua3tVFt/cGb58g9rJV
+   a2y0e3MV/o/uqImJtE54H+21cV3U19JtXA9qlfFVbCfiOnrvjDgfsNihc
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Apr 2022 06:55:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:55:59 -0700
+Received: from [10.110.54.13] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Apr
+ 2022 06:55:56 -0700
+Message-ID: <e2bbed61-b818-c391-bf65-824ea2a2ee5a@quicinc.com>
+Date:   Tue, 12 Apr 2022 19:25:50 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 ] remoteproc: Use unbounded workqueue for recovery work
+Content-Language: en-US
+To:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
+References: <1649694620-10070-1-git-send-email-quic_mojha@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1649694620-10070-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wireless: ipw2x00: Refine the error handling of
- ipw2100_pci_init_one()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220409062449.3752252-1-zheyuma97@gmail.com>
-References: <20220409062449.3752252-1-zheyuma97@gmail.com>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     stas.yakovlev@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164977173724.30373.497076954212523434.kvalo@kernel.org>
-Date:   Tue, 12 Apr 2022 13:55:39 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,18 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zheyu Ma <zheyuma97@gmail.com> wrote:
+Hi,
 
-> The driver should release resources in reverse order, i.e., the
-> resources requested first should be released last, and the driver
-> should adjust the order of error handling code by this rule.
-> 
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Can we consider this ? please suggest.
 
-Can someone review this, please?
+Thanks,
+-Mukesh
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220409062449.3752252-1-zheyuma97@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+On 4/11/2022 10:00 PM, Mukesh Ojha wrote:
+> There could be a scenario where there is too much load on a core
+> (n number of tasks which is affined) or in a case when multiple
+> rproc subsystem is going for a recovery and they queued recovery
+> work to one core so even though subsystem are independent there
+> recovery will be delayed if one of the subsystem recovery work
+> is taking more time in completing.
+>
+> If we make this queue unbounded, the recovery work could be picked
+> on any cpu. This patch try to address this.
+>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Changes in v3:
+>    - Add fallback option to go back to earlier path incase recovery wq
+>      creation fails.
+>
+> Changes in v2:
+>    - Removed WQ_HIGHPRI.
+>    - Updated commit text.
+>
+>   drivers/remoteproc/remoteproc_core.c | 15 +++++++++++++--
+>   1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index c510125..6446c84 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
+>   
+>   /* Unique indices for remoteproc devices */
+>   static DEFINE_IDA(rproc_dev_index);
+> +static struct workqueue_struct *rproc_recovery_wq;
+>   
+>   static const char * const rproc_crash_names[] = {
+>   	[RPROC_MMUFAULT]	= "mmufault",
+> @@ -2755,8 +2756,11 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+>   	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
+>   		rproc->name, rproc_crash_to_string(type));
+>   
+> -	/* Have a worker handle the error; ensure system is not suspended */
+> -	queue_work(system_freezable_wq, &rproc->crash_handler);
+> +	if (rproc_recovery_wq)
+> +		queue_work(rproc_recovery_wq, &rproc->crash_handler);
+> +	else
+> +		queue_work(system_freezable_wq, &rproc->crash_handler);
+> +
+>   }
+>   EXPORT_SYMBOL(rproc_report_crash);
+>   
+> @@ -2805,6 +2809,11 @@ static void __exit rproc_exit_panic(void)
+>   
+>   static int __init remoteproc_init(void)
+>   {
+> +	rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq",
+> +						WQ_UNBOUND | WQ_FREEZABLE, 0);
+> +	if (!rproc_recovery_wq)
+> +		pr_err("remoteproc: creation of rproc_recovery_wq failed\n");
+> +
+>   	rproc_init_sysfs();
+>   	rproc_init_debugfs();
+>   	rproc_init_cdev();
+> @@ -2821,6 +2830,8 @@ static void __exit remoteproc_exit(void)
+>   	rproc_exit_panic();
+>   	rproc_exit_debugfs();
+>   	rproc_exit_sysfs();
+> +	if (rproc_recovery_wq)
+> +		destroy_workqueue(rproc_recovery_wq);
+>   }
+>   module_exit(remoteproc_exit);
+>   

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C184FD897
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7A54FD6B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353853AbiDLHhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S1356520AbiDLHir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352334AbiDLHNx (ORCPT
+        with ESMTP id S1352665AbiDLHOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB35C1D331;
-        Mon, 11 Apr 2022 23:54:40 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12CE2F03A;
+        Mon, 11 Apr 2022 23:55:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12095B81B44;
-        Tue, 12 Apr 2022 06:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57797C385A1;
-        Tue, 12 Apr 2022 06:54:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F094861531;
+        Tue, 12 Apr 2022 06:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE85C385A6;
+        Tue, 12 Apr 2022 06:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746477;
-        bh=LAxfqD32x6ZFr0TQ72MXLdGPukvlyZn5mmFfZ5YXYLc=;
+        s=korg; t=1649746499;
+        bh=t0g3o+vjO6oyTmJLg+UH2gahFuYs6k7jNgBfmjGR/W4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lg5tNmjnL1YHpi5xDdDngh4X0cn0E2XHXTe4fbkt8369BNHf+sUS+XfS1X2fF9Zle
-         O9Et76JodfwzlSw4vBOPoKn1YVBWN1iKvB1A8KxZbjRgpyPZEsVTIGCJu5d1BAiNSK
-         qKeK7GzlQBNIe9hhuZnCtSQG6NjfJc6eLrIG8FQM=
+        b=iHzZSKYNTTBEjkCC9mNgiyPuA1NOcTcztk0E5cHhb0NKxxLWviBDRD6ErCqVBH1js
+         gTOMCsik/rdTMC62fwfIXijY5TA2I8FHKJUvzPB3V4WrU465+4xJJgYBQMtHQq0S+P
+         V+dWmOhpg5HiniPOuWSRNaFbAxaNmr1UXevauAlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 002/285] um: fix and optimize xor select template for CONFIG64 and timetravel mode
-Date:   Tue, 12 Apr 2022 08:27:39 +0200
-Message-Id: <20220412062943.744489101@linuxfoundation.org>
+Subject: [PATCH 5.16 003/285] rtc: wm8350: Handle error for wm8350_register_irq
+Date:   Tue, 12 Apr 2022 08:27:40 +0200
+Message-Id: <20220412062943.773641655@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -57,53 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit e3a33af812c611d99756e2ec61e9d7068d466bdf ]
+[ Upstream commit 43f0269b6b89c1eec4ef83c48035608f4dcdd886 ]
 
-Due to dropped inclusion of asm-generic/xor.h, xor_block_8regs symbol is
-missing with CONFIG64 and break compilation, as the asm/xor_64.h also did
-not include it. The patch recreate the logic from arch/x86, which check
-whether AVX is available and add fallbacks for 32bit and 64bit config of
-um.
+As the potential failure of the wm8350_register_irq(),
+it should be better to check it and return error if fails.
+Also, it need not free 'wm_rtc->rtc' since it will be freed
+automatically.
 
-A very minor additional "fix" is, the return of the macro parameter
-instead of NULL, as this is the original intent of the macro, but
-this does not change the actual behavior.
-
-Fixes: c0ecca6604b8 ("um: enable the use of optimized xor routines in UML")
-Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 077eaf5b40ec ("rtc: rtc-wm8350: add support for WM8350 RTC")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220303085030.291793-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/include/asm/xor.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-wm8350.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/arch/um/include/asm/xor.h b/arch/um/include/asm/xor.h
-index f512704a9ec7..22b39de73c24 100644
---- a/arch/um/include/asm/xor.h
-+++ b/arch/um/include/asm/xor.h
-@@ -4,8 +4,10 @@
+diff --git a/drivers/rtc/rtc-wm8350.c b/drivers/rtc/rtc-wm8350.c
+index 2018614f258f..6eaa9321c074 100644
+--- a/drivers/rtc/rtc-wm8350.c
++++ b/drivers/rtc/rtc-wm8350.c
+@@ -432,14 +432,21 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
- #ifdef CONFIG_64BIT
- #undef CONFIG_X86_32
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_sse_pf64))
- #else
- #define CONFIG_X86_32 1
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_8regs))
- #endif
+-	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
+ 			    wm8350_rtc_update_handler, 0,
+ 			    "RTC Seconds", wm8350);
++	if (ret)
++		return ret;
++
+ 	wm8350_mask_irq(wm8350, WM8350_IRQ_RTC_SEC);
  
- #include <asm/cpufeature.h>
-@@ -16,7 +18,7 @@
- #undef XOR_SELECT_TEMPLATE
- /* pick an arbitrary one - measuring isn't possible with inf-cpu */
- #define XOR_SELECT_TEMPLATE(x)	\
--	(time_travel_mode == TT_MODE_INFCPU ? &xor_block_8regs : NULL)
-+	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
- #endif
+-	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
+ 			    wm8350_rtc_alarm_handler, 0,
+ 			    "RTC Alarm", wm8350);
++	if (ret) {
++		wm8350_free_irq(wm8350, WM8350_IRQ_RTC_SEC, wm8350);
++		return ret;
++	}
  
- #endif
+ 	return 0;
+ }
 -- 
 2.35.1
 

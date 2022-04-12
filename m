@@ -2,152 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242734FDC72
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C094FDC71
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381027AbiDLK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S1347154AbiDLK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbiDLKUx (ORCPT
+        with ESMTP id S1358236AbiDLKUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:20:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6364EA01
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:26:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 45B7E21607;
-        Tue, 12 Apr 2022 09:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649755605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/z3vs/uGK6fYvmeCC8WIfRK8ClbBQCivi/ZueGKwhRg=;
-        b=CCrJGkWfhf6K63aXfS7Jy9M27QPYITldqJDk62cMjm8rShXsPSTfaSbMCd89qcKLPcq/WD
-        ijjxP4UWux1A00vzr3NrHXBek0Dub9htK3YCODbp8WDaJCmMRNlYmiYGeZZJUt5ZdkOoJB
-        VYM1Xtr6rDcVf9p3AJC95woI4H5RGdI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649755605;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/z3vs/uGK6fYvmeCC8WIfRK8ClbBQCivi/ZueGKwhRg=;
-        b=XP+jAGBAXo0qytAx75Y2ByiVQmQcc1SGvd5uN+dQj41CUHsxIj501pYwWjDQ1UfpwsF853
-        7m3Es8sJkdcXLOAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CE71513A99;
-        Tue, 12 Apr 2022 09:26:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XXqKMdRFVWKDLAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 12 Apr 2022 09:26:44 +0000
-Message-ID: <7225391a-5798-94ae-7a01-9a9dd344e13a@suse.cz>
-Date:   Tue, 12 Apr 2022 11:26:44 +0200
+        Tue, 12 Apr 2022 06:20:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1E4FC79
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:28:20 -0700 (PDT)
+X-UUID: 1c074ba5c47e4697b18b2313055fe597-20220412
+X-UUID: 1c074ba5c47e4697b18b2313055fe597-20220412
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 740492044; Tue, 12 Apr 2022 17:28:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Apr 2022 17:28:10 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Apr 2022 17:28:10 +0800
+Message-ID: <354ea7554096b0745d4f947685add33c8c8d2d62.camel@mediatek.com>
+Subject: Re: [PATCH 1/1] sched/pelt: Refine the enqueue_load_avg calculate
+ method
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 12 Apr 2022 17:28:10 +0800
+In-Reply-To: <20220412085845.GA14088@vingu-book>
+References: <20220411061702.22978-1-kuyo.chang@mediatek.com>
+         <CAKfTPtAyhc-tAWXmXcHstmiBSMjj5GENizX__KRDab28NRum1A@mail.gmail.com>
+         <5a90b20570ecacf457f68da7a106d3b2f8c2269e.camel@mediatek.com>
+         <20220412085845.GA14088@vingu-book>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-10-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3 09/16] mm/rmap: use page_move_anon_rmap() when reusing
- a mapped PageAnon() page exclusively
-In-Reply-To: <20220329160440.193848-10-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 18:04, David Hildenbrand wrote:
-> We want to mark anonymous pages exclusive, and when using
-> page_move_anon_rmap() we know that we are the exclusive user, as
-> properly documented. This is a preparation for marking anonymous pages
-> exclusive in page_move_anon_rmap().
+On Tue, 2022-04-12 at 10:58 +0200, Vincent Guittot wrote:
+> Le mardi 12 avril 2022 à 10:51:23 (+0800), Kuyo Chang a écrit :
+> > On Mon, 2022-04-11 at 10:39 +0200, Vincent Guittot wrote:
+> > > On Mon, 11 Apr 2022 at 08:17, Kuyo Chang <kuyo.chang@mediatek.com
+> > > >
+> > > wrote:
+> > > > 
+> > > > From: kuyo chang <kuyo.chang@mediatek.com>
+> > > > 
+> > > > I meet the warning message at cfs_rq_is_decayed at below code.
+> > > > 
+> > > > SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+> > > >                     cfs_rq->avg.util_avg ||
+> > > >                     cfs_rq->avg.runnable_avg)
+> > > > 
+> > > > Following is the calltrace.
+> > > > 
+> > > > Call trace:
+> > > > __update_blocked_fair
+> > > > update_blocked_averages
+> > > > newidle_balance
+> > > > pick_next_task_fair
+> > > > __schedule
+> > > > schedule
+> > > > pipe_read
+> > > > vfs_read
+> > > > ksys_read
+> > > > 
+> > > > After code analyzing and some debug messages, I found it exits
+> > > > a
+> > > > corner
+> > > > case at attach_entity_load_avg which will cause load_sum is
+> > > > zero
+> > > > and
+> > > > load_avg is not.
+> > > > Consider se_weight is 88761 according by sched_prio_to_weight
+> > > > table.
+> > > > And assume the get_pelt_divider() is 47742, se->avg.load_avg is
+> > > > 1.
+> > > > By the calculating for se->avg.load_sum as following will
+> > > > become
+> > > > zero
+> > > > as following.
+> > > > se->avg.load_sum =
+> > > >         div_u64(se->avg.load_avg * se->avg.load_sum,
+> > > > se_weight(se));
+> > > > se->avg.load_sum = 1*47742/88761 = 0.
+> > > 
+> > > The root problem is there, se->avg.load_sum must not be null if
+> > > se->avg.load_avg is not null because the correct relation between
+> > > _avg
+> > > and _sum is:
+> > > 
+> > > load_avg = weight * load_sum / divider.
+> > > 
+> > > so the fix should be attach_entity_load_avg() and probably the
+> > > below
+> > > is enough
+> > > 
+> > > se->avg.load_sum = div_u64(se->avg.load_avg * se->avg.load_sum,
+> > > se_weight(se)) + 1;
+> > 
+> > Thanks for your kindly suggestion.
+> > +1 would make the calcuation for load_sum may be overestimate?
+> > How about the below code make sense for fix the corner case?
+> > 
+> > --- 
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -3832,7 +3832,8 @@ static void attach_entity_load_avg(struct
+> > cfs_rq
+> > *cfs_rq, struct sched_entity *s
+> >  	se->avg.load_sum = divider;
+> >  	if (se_weight(se)) {
+> >  		se->avg.load_sum =
+> > -			div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se));
+> > +			(se->avg.load_avg * se->avg.load_sum >
+> > se_weight(se)) ?
+> > +			div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se)) : 1;
+> >  	}
+> >  
+> >  	enqueue_load_avg(cfs_rq, se);
+> > -- 
+> > 2.18.0
 > 
-> In both instances, we're holding page lock and are sure that we're the
-> exclusive owner (page_count() == 1). hugetlb already properly uses
-> page_move_anon_rmap() in the write fault handler.
-
-Yeah, note that do_wp_page() used to call page_move_anon_rmap() always since
-the latter was introduced, until commit 09854ba94c6a ("mm: do_wp_page()
-simplification"). Probably not intended.
-
-> Note that in case of a PTE-mapped THP, we'll only end up calling this
-> function if the whole THP is only referenced by the single PTE mapping
-> a single subpage (page_count() == 1); consequently, it's fine to modify
-> the compound page mapping inside page_move_anon_rmap().
+> In this case, the below is easier to read
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  mm/huge_memory.c | 2 ++
->  mm/memory.c      | 1 +
->  2 files changed, 3 insertions(+)
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 1658a9428d96..2c685474db23 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3836,10 +3836,12 @@ static void attach_entity_load_avg(struct
+> cfs_rq *cfs_rq, struct sched_entity *s
 > 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index c4526343565a..dd16819c5edc 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1317,6 +1317,8 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
->  		try_to_free_swap(page);
->  	if (page_count(page) == 1) {
->  		pmd_t entry;
-> +
-> +		page_move_anon_rmap(page, vma);
->  		entry = pmd_mkyoung(orig_pmd);
->  		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
->  		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 03e29c9614e0..4303c0fdcf17 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3303,6 +3303,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->  		 * and the page is locked, it's dark out, and we're wearing
->  		 * sunglasses. Hit it.
->  		 */
-> +		page_move_anon_rmap(page, vma);
->  		unlock_page(page);
->  		wp_page_reuse(vmf);
->  		return VM_FAULT_WRITE;
+>         se->avg.runnable_sum = se->avg.runnable_avg * divider;
+> 
+> -       se->avg.load_sum = divider;
+> -       if (se_weight(se)) {
+> +       se->avg.load_sum = se->avg.load_avg * divider;
+> +       if (se_weight(se) < se->avg.load_sum) {
+>                 se->avg.load_sum =
+> -                       div_u64(se->avg.load_avg * se->avg.load_sum,
+> se_weight(se));
+> +                       div_u64(se->avg.load_sum, se_weight(se));
+> +       } else {
+> +               se->avg.load_sum = 1;
+>         }
+> 
+>         enqueue_load_avg(cfs_rq, se);
+
+It really easier to read.
+Thanks for your kindly suggestion.
+
+
+> 
+> 
+> > 
+> > 
+> > > > 
+> > > > After enqueue_load_avg code as below.
+> > > > cfs_rq->avg.load_avg += se->avg.load_avg;
+> > > > cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > > > 
+> > > > Then the load_sum for cfs_rq will be 1 while the load_sum for
+> > > > cfs_rq is 0.
+> > > > So it will hit the warning message.
+> > > > 
+> > > > After all, I refer the following commit patch to do the similar
+> > > > thing at
+> > > > enqueue_load_avg.
+> > > > sched/pelt: Relax the sync of load_sum with load_avg
+> > > > 
+> > > > After long time testing, the kernel warning was gone and the
+> > > > system
+> > > > runs
+> > > > as well as before.
+> > > > 
+> > > > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+> > > > ---
+> > > >  kernel/sched/fair.c | 6 ++++--
+> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > index d4bd299d67ab..30d8b6dba249 100644
+> > > > --- a/kernel/sched/fair.c
+> > > > +++ b/kernel/sched/fair.c
+> > > > @@ -3074,8 +3074,10 @@ account_entity_dequeue(struct cfs_rq
+> > > > *cfs_rq, struct sched_entity *se)
+> > > >  static inline void
+> > > >  enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity
+> > > > *se)
+> > > >  {
+> > > > -       cfs_rq->avg.load_avg += se->avg.load_avg;
+> > > > -       cfs_rq->avg.load_sum += se_weight(se) * se-
+> > > > >avg.load_sum;
+> > > > +       add_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+> > > > +       add_positive(&cfs_rq->avg.load_sum, se_weight(se) * se-
+> > > > > avg.load_sum);
+> > > > 
+> > > > +       cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
+> > > > +                                         cfs_rq->avg.load_avg
+> > > > *
+> > > > PELT_MIN_DIVIDER);
+> > > >  }
+> > > > 
+> > > >  static inline void
+> > > > --
+> > > > 2.18.0
+> > > > 
 

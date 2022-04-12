@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B034FD4AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CF54FDAA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377311AbiDLHtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S1353746AbiDLHQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354491AbiDLHSA (ORCPT
+        with ESMTP id S1351490AbiDLHDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:18:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8811A2B;
-        Mon, 11 Apr 2022 23:59:21 -0700 (PDT)
+        Tue, 12 Apr 2022 03:03:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C57644773;
+        Mon, 11 Apr 2022 23:47:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77356B81B4E;
-        Tue, 12 Apr 2022 06:59:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC699C385A6;
-        Tue, 12 Apr 2022 06:59:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFD226140D;
+        Tue, 12 Apr 2022 06:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B185C385B8;
+        Tue, 12 Apr 2022 06:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746759;
-        bh=Mwin/5Z2LETU0PQ82LTkCGbb0D5dBVUz2kv+JwHsx4A=;
+        s=korg; t=1649746030;
+        bh=/LdLn56K79WT1DjgPInoA/ynOA9lvBAWGr9XbM7Cibg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aVhBFWhaMxFS79sSYqaIEouWeh+Rh822zVnfsRYoX6nxKcHS4Pv9y/6rEnEDcMPZK
-         ddgq35ny9gxibwivQTLoCar8Gy3LaQE0L9QDFHTCHB+VfOonSMv5NrefZeiT4DE2jb
-         S6v6oS9xwigLZ8p0J9NSnrGyLYtsGfNe3X6yfitM=
+        b=QnMdnWxx2wvfo3+/ZkA8902erSL3mjqwVTwVPv1xy6HHOw2O54Y/0tz8FPnOg9+ir
+         zayNpXKNWgeUcgbOzRcCrcV6ybTMcymr6uRqHvqGWOtRFMNuUtFYY8cph/G1hWMj6z
+         RlrwEUDcYnPQH1LQBTHHnVysTBed8KOX44AMpW4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 079/285] scsi: hisi_sas: Free irq vectors in order for v3 HW
+Subject: [PATCH 5.15 133/277] x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
 Date:   Tue, 12 Apr 2022 08:28:56 +0200
-Message-Id: <20220412062945.944462587@linuxfoundation.org>
+Message-Id: <20220412062945.885995232@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,107 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Liu <liuqi115@huawei.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 554fb72ee34f4732c7f694f56c3c6e67790352a0 ]
+[ Upstream commit aaeed6ecc1253ce1463fa1aca0b70a4ccbc9fa75 ]
 
-If the driver probe fails to request the channel IRQ or fatal IRQ, the
-driver will free the IRQ vectors before freeing the IRQs in free_irq(),
-and this will cause a kernel BUG like this:
+There are two outstanding issues with CONFIG_X86_X32_ABI and
+llvm-objcopy, with similar root causes:
 
-------------[ cut here ]------------
-kernel BUG at drivers/pci/msi.c:369!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-Call trace:
-   free_msi_irqs+0x118/0x13c
-   pci_disable_msi+0xfc/0x120
-   pci_free_irq_vectors+0x24/0x3c
-   hisi_sas_v3_probe+0x360/0x9d0 [hisi_sas_v3_hw]
-   local_pci_probe+0x44/0xb0
-   work_for_cpu_fn+0x20/0x34
-   process_one_work+0x1d0/0x340
-   worker_thread+0x2e0/0x460
-   kthread+0x180/0x190
-   ret_from_fork+0x10/0x20
----[ end trace b88990335b610c11 ]---
+1. llvm-objcopy does not properly convert .note.gnu.property when going
+   from x86_64 to x86_x32, resulting in a corrupted section when
+   linking:
 
-So we use devm_add_action() to control the order in which we free the
-vectors.
+   https://github.com/ClangBuiltLinux/linux/issues/1141
 
-Link: https://lore.kernel.org/r/1645703489-87194-4-git-send-email-john.garry@huawei.com
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+2. llvm-objcopy produces corrupted compressed debug sections when going
+   from x86_64 to x86_x32, also resulting in an error when linking:
+
+   https://github.com/ClangBuiltLinux/linux/issues/514
+
+After commit 41c5ef31ad71 ("x86/ibt: Base IBT bits"), the
+.note.gnu.property section is always generated when
+CONFIG_X86_KERNEL_IBT is enabled, which causes the first issue to become
+visible with an allmodconfig build:
+
+  ld.lld: error: arch/x86/entry/vdso/vclock_gettime-x32.o:(.note.gnu.property+0x1c): program property is too short
+
+To avoid this error, do not allow CONFIG_X86_X32_ABI to be selected when
+using llvm-objcopy. If the two issues ever get fixed in llvm-objcopy,
+this can be turned into a feature check.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220314194842.3452-3-nathan@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ arch/x86/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index b3bdbea3c955..8392463d57de 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2390,17 +2390,25 @@ static irqreturn_t cq_interrupt_v3_hw(int irq_no, void *p)
- 	return IRQ_WAKE_THREAD;
- }
- 
-+static void hisi_sas_v3_free_vectors(void *data)
-+{
-+	struct pci_dev *pdev = data;
-+
-+	pci_free_irq_vectors(pdev);
-+}
-+
- static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
- {
- 	int vectors;
- 	int max_msi = HISI_SAS_MSI_COUNT_V3_HW, min_msi;
- 	struct Scsi_Host *shost = hisi_hba->shost;
-+	struct pci_dev *pdev = hisi_hba->pci_dev;
- 	struct irq_affinity desc = {
- 		.pre_vectors = BASE_VECTORS_V3_HW,
- 	};
- 
- 	min_msi = MIN_AFFINE_VECTORS_V3_HW;
--	vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
-+	vectors = pci_alloc_irq_vectors_affinity(pdev,
- 						 min_msi, max_msi,
- 						 PCI_IRQ_MSI |
- 						 PCI_IRQ_AFFINITY,
-@@ -2412,6 +2420,7 @@ static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
- 	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
- 	shost->nr_hw_queues = hisi_hba->cq_nvecs;
- 
-+	devm_add_action(&pdev->dev, hisi_sas_v3_free_vectors, pdev);
- 	return 0;
- }
- 
-@@ -4763,7 +4772,7 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	rc = scsi_add_host(shost, dev);
- 	if (rc)
--		goto err_out_free_irq_vectors;
-+		goto err_out_debugfs;
- 
- 	rc = sas_register_ha(sha);
- 	if (rc)
-@@ -4792,8 +4801,6 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	sas_unregister_ha(sha);
- err_out_register_ha:
- 	scsi_remove_host(shost);
--err_out_free_irq_vectors:
--	pci_free_irq_vectors(pdev);
- err_out_debugfs:
- 	debugfs_exit_v3_hw(hisi_hba);
- err_out_ha:
-@@ -4817,7 +4824,6 @@ hisi_sas_v3_destroy_irqs(struct pci_dev *pdev, struct hisi_hba *hisi_hba)
- 
- 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, nr), cq);
- 	}
--	pci_free_irq_vectors(pdev);
- }
- 
- static void hisi_sas_v3_remove(struct pci_dev *pdev)
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 1f96809606ac..819f8c2e2c67 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2798,6 +2798,11 @@ config IA32_AOUT
+ config X86_X32
+ 	bool "x32 ABI for 64-bit mode"
+ 	depends on X86_64
++	# llvm-objcopy does not convert x86_64 .note.gnu.property or
++	# compressed debug sections to x86_x32 properly:
++	# https://github.com/ClangBuiltLinux/linux/issues/514
++	# https://github.com/ClangBuiltLinux/linux/issues/1141
++	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
+ 	help
+ 	  Include code to run binaries for the x32 native 32-bit ABI
+ 	  for 64-bit processors.  An x32 process gets access to the
 -- 
 2.35.1
 

@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9764FE784
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EF54FE788
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358570AbiDLR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S242073AbiDLSAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243499AbiDLR6r (ORCPT
+        with ESMTP id S241440AbiDLSAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:58:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70A58E57
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A6A4619FA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAE2C385A1;
-        Tue, 12 Apr 2022 17:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649786188;
-        bh=6oXyr4qSszqrDDIC74ST89Ik9P/w7VoRTbzZBuF4jtE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mwyz5Grs9bx03m0WIXTHSUbER+tsU3Db4ke2pTBkBtdtNOQHEvJE5j2JrZ6hTdSS7
-         cLHyJlxIrfuFqRmHAN+WDkglsl2GqY+WRoihNWgeEmONNQaDPGo0Oz40wNSweoeszO
-         H3sX0HqZidwdlHMnFwryXNEjB+jca0mRkmDH4QhRiV5v/HhuXWD2mKDll6Nf6CQnJg
-         HannvPl5Vj9rasJCcJaWAKN91UKotJUQMWg8BjCT1SjyQs8sZCkMBTGYRFCeyySWJA
-         O/7ok8P7fjN8sHCNoFQYVBS7eacPe1ifMm/iycXaGPGR3RGLlfAmpCY+IduPHJdpnQ
-         MrIqLI8dDhyeA==
-Date:   Tue, 12 Apr 2022 20:56:19 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ariel Marcovitch <arielmarcovitch@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: False positive kmemleak report for dtb properties names on
- powerpc
-Message-ID: <YlW9Q05HDWwSmr7l@kernel.org>
-References: <9dd08bb5-f39e-53d8-f88d-bec598a08c93@gmail.com>
- <YjtXXlnbEp64eL0T@arm.com>
- <Yjtvtkn+CishCef6@kernel.org>
- <2603cae9-3b75-cd13-1d41-2f1bed6ca32e@gmail.com>
- <a9d13878-7820-d41c-9357-135094c8357f@csgroup.eu>
- <87pmlm6bn0.fsf@mpe.ellerman.id.au>
+        Tue, 12 Apr 2022 14:00:50 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF85A159
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:58:31 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so38900551ejd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J9OXqLFIOmY45YdEhCkrYsT/5m2M2Fid8gfnSIyZnec=;
+        b=aWE/FOQfmSIdDS/9fp2gU6EzziIgyF8OK61PyvmQFGdlCkFpCNEFKSAgiUtGSYqHLB
+         XXbM/3lVa68BPNFRFgxy8qSkFuPbbcL/nKFfhQWD1NPo+JBOvWgQf275+QMO0AI8b+n+
+         3RVFd5+ZpOHLTX0AvoZIyohExmi9Dxog5TAw0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J9OXqLFIOmY45YdEhCkrYsT/5m2M2Fid8gfnSIyZnec=;
+        b=SVxvGeCqTsIYgvtzTSXX1NYtGABr/Aqk7GioWIU8V91CGR4hlFHAlFWiZ9U9sCfIhf
+         WUfapgITxR3L4JywoHtFy5sfSCVEzwokzabxbbALylTiNOkHWmnGYP1uGSDexcL0SHw4
+         rNsIRHtVPaoksPgQRK9TcmfO5MzXQEID+/UMTvl71J9+/gZEwmcz3+2NMCYBRv0XFTJd
+         HjljLKitHVzt8oumkx0X22KJ1x9ylvWdKZJA9QgyrMjqDiEQ3nvy5YYy/Yh5+MpaIscu
+         vtqywD+/jLrbH7pnM8siketEpuc1lGttESoB9FHTgM+JVZm0qGr+ZDnYB+7A2GE40vF7
+         splw==
+X-Gm-Message-State: AOAM532zYuVMo3/E+DVE8OItJ776aCjh3F9tklBbHSWkOZrclw8fkDLl
+        CZrv+FQ8alcC0JfWN/6QbpXaVe+3yFqdNh6gKDV75pbU33+3KViZtmoA+tobekpvULeNb72CRGW
+        oScn5ez3sLGmFTJcEs6Kz6dJQqG7UxA==
+X-Google-Smtp-Source: ABdhPJyhNJo6CZgtb2oVqRdxL6W93DjAkmgh+YNhODAi9NSDqrqRc21OEqreBHnW4uvIfzh1y0tHiZuFB54FgmxXu8o=
+X-Received: by 2002:a17:906:eb42:b0:6e8:9197:f0e0 with SMTP id
+ mc2-20020a170906eb4200b006e89197f0e0mr10583318ejb.550.1649786310059; Tue, 12
+ Apr 2022 10:58:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87pmlm6bn0.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220409134926.331728-1-zheyuma97@gmail.com>
+In-Reply-To: <20220409134926.331728-1-zheyuma97@gmail.com>
+From:   Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+Date:   Tue, 12 Apr 2022 11:58:12 -0600
+Message-ID: <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: mpi3mr: Fix an error code when probing the driver
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        mpi3mr-drvr-developers <mpi3mr-linuxdrv.pdl@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000fbc41f05dc78ce89"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,87 +71,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 04:47:47PM +1000, Michael Ellerman wrote:
-> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> > Hi Ariel
-> >
-> > Le 09/04/2022 à 15:47, Ariel Marcovitch a écrit :
-> >> Hi Christophe, did you get the chance to look at this?
-> >
-> > I tested something this morning, it works for me, see below
-> >
-> >> 
-> >> On 23/03/2022 21:06, Mike Rapoport wrote:
-> >>> Hi Catalin,
-> >>>
-> >>> On Wed, Mar 23, 2022 at 05:22:38PM +0000, Catalin Marinas wrote:
-> >>>> Hi Ariel,
-> >>>>
-> >>>> On Fri, Feb 18, 2022 at 09:45:51PM +0200, Ariel Marcovitch wrote:
-> >>>>> I was running a powerpc 32bit kernel (built using
-> >>>>> qemu_ppc_mpc8544ds_defconfig
-> >>>>> buildroot config, with enabling DEBUGFS+KMEMLEAK+HIGHMEM in the kernel
-> >>>>> config)
-> >
-> > ...
-> >
-> >>>>> I don't suppose I can just shuffle the calls in setup_arch() around, 
-> >>>>> so I
-> >>>>> wanted to hear your opinions first
-> >>>> I think it's better if we change the logic than shuffling the calls.
-> >>>> IIUC MEMBLOCK_ALLOC_ACCESSIBLE means that __va() works on the phys
-> >>>> address return by memblock, so something like below (untested):
-> >>> MEMBLOCK_ALLOC_ACCESSIBLE means "anywhere", see commit e63075a3c937
-> >>> ("memblock: Introduce default allocation limit and use it to replace
-> >>> explicit ones"), so it won't help to detect high memory.
-> >>>
-> >>> If I remember correctly, ppc initializes memblock *very* early, so 
-> >>> setting
-> >>> max_low_pfn along with lowmem_end_addr in
-> >>> arch/powerpc/mm/init_32::MMU_init() makes sense to me.
-> >>>
-> >>> Maybe ppc folks have other ideas...
-> >>> I've added Christophe who works on ppc32 these days.
-> >
-> > I think memblock is already available at the end of MMU_init() on PPC32 
-> > and at the end of early_setup() on PPC64. It means it is ready when we 
-> > enter setup_arch().
-> >
-> > I tested the change below, it works for me, I don't get any kmemleak 
-> > report anymore.
-> >
-> > diff --git a/arch/powerpc/kernel/setup-common.c 
-> > b/arch/powerpc/kernel/setup-common.c
-> > index 518ae5aa9410..9f4e50b176c9 100644
-> > --- a/arch/powerpc/kernel/setup-common.c
-> > +++ b/arch/powerpc/kernel/setup-common.c
-> > @@ -840,6 +840,9 @@ void __init setup_arch(char **cmdline_p)
-> >   	/* Set a half-reasonable default so udelay does something sensible */
-> >   	loops_per_jiffy = 500000000 / HZ;
-> >
-> > +	/* Parse memory topology */
-> > +	mem_topology_setup();
-> > +
-> >   	/* Unflatten the device-tree passed by prom_init or kexec */
-> >   	unflatten_device_tree();
-> 
-> The 64-bit/NUMA version of mem_topology_setup() requires the device tree
-> to be unflattened, so I don't think that can work.
-> 
-> Setting max_low_pfn etc in MMU_init() as Mike suggested seems more
-> likely to work.
-> 
-> But we might need to set it again in mem_topology_setup() though, so
-> that things that change memblock_end_of_DRAM() are reflected, eg. memory
-> limit or crash dump?
+--000000000000fbc41f05dc78ce89
+Content-Type: text/plain; charset="UTF-8"
 
-I don't think this can cause issues for kmemleak Ariel reported. The
-kmemleak checks if there is a linear mapping for a PFN or that PFN is only
-accessible via HIGHMEM. Memory limit or crash dump won't change the split,
-or am I missing something?
- 
-> cheers
+On Sat, Apr 9, 2022 at 7:49 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> During the process of driver probing, probe function should return < 0
+> for failure, otherwise kernel will treat value >= 0 as success.
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> ---
+>  drivers/scsi/mpi3mr/mpi3mr_os.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+> index f7cd70a15ea6..240bfdf9788b 100644
+> --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
+> +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+> @@ -4222,9 +4222,10 @@ mpi3mr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>         struct Scsi_Host *shost = NULL;
+>         int retval = 0, i;
+>
+> -       if (osintfc_mrioc_security_status(pdev)) {
+> +       retval = osintfc_mrioc_security_status(pdev);
+> +       if (retval) {
+>                 warn_non_secure_ctlr = 1;
+> -               return 1; /* For Invalid and Tampered device */
+> +               return retval; /* For Invalid and Tampered device */
+>         }
+NAK. The driver has to return 1 when invalid/tampered controllers are
+detected just to say the controller is held by the mpi3mr driver
+without any actual operation.
+>
+>         shost = scsi_host_alloc(&mpi3mr_driver_template,
+> --
+> 2.25.1
+>
 
 -- 
-Sincerely yours,
-Mike.
+This electronic communication and the information and any files transmitted 
+with it, or attached to it, are confidential and are intended solely for 
+the use of the individual or entity to whom it is addressed and may contain 
+information that is confidential, legally privileged, protected by privacy 
+laws, or otherwise restricted from disclosure to anyone else. If you are 
+not the intended recipient or the person responsible for delivering the 
+e-mail to the intended recipient, you are hereby notified that any use, 
+copying, distributing, dissemination, forwarding, printing, or copying of 
+this e-mail is strictly prohibited. If you received this e-mail in error, 
+please return the e-mail to the sender, delete it from your computer, and 
+destroy any printed copy of it.
+
+--000000000000fbc41f05dc78ce89
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+AYPMVSim4+pTItuq9IB5a3B4lXktI8GoZ4icvNq/tDUC+UQBkiyx41thyEA3MCL+kgpIDnw1yNbe
+DuhEcmBxC3E4cziK/swLRngmgXt+5vyInAJZt7HlQxtmx5IEZ4mXQ9lv/ZbRm6xdAgMBAAGjggHc
+MIIB2DAOBgNVHQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRw
+Oi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MC5jcnQwQQYIKwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJz
+b25hbHNpZ24yY2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZo
+dHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRC
+MEAwPqA8oDqGOGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAuY3JsMCYGA1UdEQQfMB2BG3NhdGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbTATBgNVHSUE
+DDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU
+pgsVbwKDpO1jbwtH74jMrhpldKgwDQYJKoZIhvcNAQELBQADggEBAAs3g9+OH401HDPcsiK943D1
+29CLPOuPWwMLezDdRvDcSqXw/gHia/3hEqnSZiSNEHi7WJ+bhd7c/kLupVhlae5tQwGMchue4U6R
+/3Ck8BQ5wivGrL3n0hksKHrXs+pPI96sat0kZCX/OVLJ6KfZoNBnl4lgXkgjfrWs/2U+gcMU2lmw
+zhujPHSNF2UIyRNtvcw0NozAtiov/KGLHocfrD39IAsX9SpKaqH6W0lFtOeevTeAg7Y0yXo7HXKY
+t+RqMzkDTXFXS6MXhqwXQHf6laWJkR9smRePlZ7BHSurIjHbpKhVaYCd6aKI4gUlq2t/zr+ct4Ls
+WZg6a7glbWLB4YExggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxT
+aWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAy
+MDIwAgx1ZyicYAvHT9A0GRQwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFAnjN8Y
+svRthHfEnLcTMjtEMxcBug6YUWsC141KwMSPMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIyMDQxMjE3NTgzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCpJczeK0ESOHBwA/0eeBZTWZpd
+gPyaTAErpjLcmDIO8clLWQKVwz8Rk9AC3kAuj9XV5viiD+xAL2E2L654pIBZKMrMXa3TLdGWG2CQ
+Ba87SmO0nGGK6dBt6Dfg6kmlbBjf/Te1nfDm/6ECbikUvitOmeIVQejpgLPzqwadD4ZBOEoOyPbi
+LZMk3fwyczBgP8ktaXiwac89gJrMmBLVaChedY9NoUCU5b6XpjD6QmId80qSMZWr3RKr3YcCJU+Y
+iJwOEmhK0K/msUTiaoGH/jwH0pCytTZtAuYGnCcbMZGZrfY3mAro7hVFC8bpDZr2GB3ce8UeUAxI
+q8kl+LAwp/Fn
+--000000000000fbc41f05dc78ce89--

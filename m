@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADCB4FD511
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0724E4FD930
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376408AbiDLItX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S245557AbiDLIbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357678AbiDLHkh (ORCPT
+        with ESMTP id S1353575AbiDLHZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E8637A3F;
-        Tue, 12 Apr 2022 00:16:37 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22D543ACB;
+        Tue, 12 Apr 2022 00:01:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8454B81B62;
-        Tue, 12 Apr 2022 07:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F77BC385A5;
-        Tue, 12 Apr 2022 07:16:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DCAC60B65;
+        Tue, 12 Apr 2022 07:01:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26ADAC385A1;
+        Tue, 12 Apr 2022 07:01:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747794;
-        bh=6Gj3u1l9n/DaLADElMNFEcYCcb3QHToLKpQJMhKKuwU=;
+        s=korg; t=1649746899;
+        bh=dvOuvkLBEN4EUP6zEmDLAeop9VeIEiE+x9OuTkj65Xc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s6iKZB91Ve+saFj6wHXOAGDOR9BrYCj5n48jgNUeATEF41xiq1gops8FDxiJYrSTM
-         nfkZaY0Fx/6EYtTXcPCKThT1LIsBtxOil9d5G9zjdqwD7Cj1KGvZEv/y8/a//hHHW2
-         RyVfug/WrCNN+fvU+FAAoaep9o9+PYde2aMOW14Q=
+        b=aBhbH6f/iChIXsnt8ixi8MDzpjZ8Iz1BaIUSq/dRvMb/AV6hfAJkbC7NokX9dz8dP
+         eefp53PfsItMmV1RxhZzl8rWl5r/csPRIPvtGDSlgqN1u940mfKJx8+Ljk4+smO8c7
+         FpnakphqBeDLysSp/8wS7fgmLGMOiKHnLraXujkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Alice Michael <alice.michael@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 209/343] ice: Clear default forwarding VSI during VSI release
-Date:   Tue, 12 Apr 2022 08:30:27 +0200
-Message-Id: <20220412062957.381340949@linuxfoundation.org>
+        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 171/285] drm/imx: dw_hdmi-imx: Fix bailout in error cases of probe
+Date:   Tue, 12 Apr 2022 08:30:28 +0200
+Message-Id: <20220412062948.603954297@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,63 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Vecera <ivecera@redhat.com>
+From: Liu Ying <victor.liu@nxp.com>
 
-[ Upstream commit bd8c624c0cd59de0032752ba3001c107bba97f7b ]
+[ Upstream commit e8083acc3f8cc2097917018e947fd4c857f60454 ]
 
-VSI is set as default forwarding one when promisc mode is set for
-PF interface, when PF is switched to switchdev mode or when VF
-driver asks to enable allmulticast or promisc mode for the VF
-interface (when vf-true-promisc-support priv flag is off).
-The third case is buggy because in that case VSI associated with
-VF remains as default one after VF removal.
+In dw_hdmi_imx_probe(), if error happens after dw_hdmi_probe() returns
+successfully, dw_hdmi_remove() should be called where necessary as
+bailout.
 
-Reproducer:
-1. Create VF
-   echo 1 > sys/class/net/ens7f0/device/sriov_numvfs
-2. Enable allmulticast or promisc mode on VF
-   ip link set ens7f0v0 allmulticast on
-   ip link set ens7f0v0 promisc on
-3. Delete VF
-   echo 0 > sys/class/net/ens7f0/device/sriov_numvfs
-4. Try to enable promisc mode on PF
-   ip link set ens7f0 promisc on
-
-Although it looks that promisc mode on PF is enabled the opposite
-is true because ice_vsi_sync_fltr() responsible for IFF_PROMISC
-handling first checks if any other VSI is set as default forwarding
-one and if so the function does not do anything. At this point
-it is not possible to enable promisc mode on PF without re-probe
-device.
-
-To resolve the issue this patch clear default forwarding VSI
-during ice_vsi_release() when the VSI to be released is the default
-one.
-
-Fixes: 01b5e89aab49 ("ice: Add VF promiscuous support")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Alice Michael <alice.michael@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c805ec7eb210 ("drm/imx: dw_hdmi-imx: move initialization into probe")
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220128091944.3831256-1-victor.liu@nxp.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/imx/dw_hdmi-imx.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 53256aca27c7..20d755822d43 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -3147,6 +3147,8 @@ int ice_vsi_release(struct ice_vsi *vsi)
- 		}
+diff --git a/drivers/gpu/drm/imx/dw_hdmi-imx.c b/drivers/gpu/drm/imx/dw_hdmi-imx.c
+index 87428fb23d9f..a2277a0d6d06 100644
+--- a/drivers/gpu/drm/imx/dw_hdmi-imx.c
++++ b/drivers/gpu/drm/imx/dw_hdmi-imx.c
+@@ -222,6 +222,7 @@ static int dw_hdmi_imx_probe(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	const struct of_device_id *match = of_match_node(dw_hdmi_imx_dt_ids, np);
+ 	struct imx_hdmi *hdmi;
++	int ret;
+ 
+ 	hdmi = devm_kzalloc(&pdev->dev, sizeof(*hdmi), GFP_KERNEL);
+ 	if (!hdmi)
+@@ -243,10 +244,15 @@ static int dw_hdmi_imx_probe(struct platform_device *pdev)
+ 	hdmi->bridge = of_drm_find_bridge(np);
+ 	if (!hdmi->bridge) {
+ 		dev_err(hdmi->dev, "Unable to find bridge\n");
++		dw_hdmi_remove(hdmi->hdmi);
+ 		return -ENODEV;
  	}
  
-+	if (ice_is_vsi_dflt_vsi(pf->first_sw, vsi))
-+		ice_clear_dflt_vsi(pf->first_sw);
- 	ice_fltr_remove_all(vsi);
- 	ice_rm_vsi_lan_cfg(vsi->port_info, vsi->idx);
- 	err = ice_rm_vsi_rdma_cfg(vsi->port_info, vsi->idx);
+-	return component_add(&pdev->dev, &dw_hdmi_imx_ops);
++	ret = component_add(&pdev->dev, &dw_hdmi_imx_ops);
++	if (ret)
++		dw_hdmi_remove(hdmi->hdmi);
++
++	return ret;
+ }
+ 
+ static int dw_hdmi_imx_remove(struct platform_device *pdev)
 -- 
 2.35.1
 

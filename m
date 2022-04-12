@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120D64FD815
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051DC4FDB1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243137AbiDLHW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S244854AbiDLJCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352961AbiDLHGk (ORCPT
+        with ESMTP id S1357249AbiDLHjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:06:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B2127;
-        Mon, 11 Apr 2022 23:49:01 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CE6F15;
+        Tue, 12 Apr 2022 00:14:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D33EB81B35;
-        Tue, 12 Apr 2022 06:48:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7EBCC385A6;
-        Tue, 12 Apr 2022 06:48:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7A96171C;
+        Tue, 12 Apr 2022 07:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37597C385A1;
+        Tue, 12 Apr 2022 07:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746138;
-        bh=2iUMAivM5OcC/XYFeQNoON5q/FeRFZMAPLQB86xdYuA=;
+        s=korg; t=1649747655;
+        bh=2kkz2HUea5hGrLe3sIdjMljDa9VPFb9vQcDZSKUWuuM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gKCTGsndPdFGxKS75/dpji328oXYCmFdBrgSUkMNrzuic0DBtB8GCzrQJaX6lLCLa
-         dkAFZMQJDESCdcbpsbUxpAOAFiF25aWu2dhFmtj0mpH1dAsLAoQZAP1pzgHpSB3Tzv
-         3gCWLWJf1S7+r8OlOm5BlGDWqSVrBAs4WU9t1oqo=
+        b=r+Mz38X1iy2i7dwYYS5qHn3z51afrOex7ljTT8Pfo09J2QYD363wRBNntNb8yEtVo
+         WDyCzHfunUoMWmRAoeS14QL2DPtnJHnrAy7eRuga8OpRsPOMlBqI0nHO/PH4qDvzJS
+         4WeE9QaCVJNqIbv4oTAHxGOhsZKBm53nmQoxg5lo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 173/277] bnxt_en: Prevent XDP redirect from running when stopping TX queue
-Date:   Tue, 12 Apr 2022 08:29:36 +0200
-Message-Id: <20220412062947.045122094@linuxfoundation.org>
+Subject: [PATCH 5.17 159/343] staging: vchiq_core: handle NULL result of find_service_by_handle
+Date:   Tue, 12 Apr 2022 08:29:37 +0200
+Message-Id: <20220412062955.964487496@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ray Jui <ray.jui@broadcom.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 27d4073f8d9af0340362554414f4961643a4f4de ]
+[ Upstream commit ca225857faf237234d2fffe5d1919467dfadd822 ]
 
-Add checks in the XDP redirect callback to prevent XDP from running when
-the TX ring is undergoing shutdown.
+In case of an invalid handle the function find_servive_by_handle
+returns NULL. So take care of this and avoid a NULL pointer dereference.
 
-Also remove redundant checks in the XDP redirect callback to validate the
-txr and the flag that indicates the ring supports XDP. The modulo
-arithmetic on 'tx_nr_rings_xdp' already guarantees the derived TX
-ring is an XDP ring.  txr is also guaranteed to be valid after checking
-BNXT_STATE_OPEN and within RCU grace period.
-
-Fixes: f18c2b77b2e4 ("bnxt_en: optimized XDP_REDIRECT support")
-Reviewed-by: Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>
-Signed-off-by: Ray Jui <ray.jui@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Link: https://lore.kernel.org/r/1642968143-19281-18-git-send-email-stefan.wahren@i2se.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../staging/vc04_services/interface/vchiq_arm/vchiq_core.c  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index c59e46c7a1ca..148b58f3468b 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -229,14 +229,16 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
- 	ring = smp_processor_id() % bp->tx_nr_rings_xdp;
- 	txr = &bp->tx_ring[ring];
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+index 7fe20d4b7ba2..b7295236671c 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
+@@ -2306,6 +2306,9 @@ void vchiq_msg_queue_push(unsigned int handle, struct vchiq_header *header)
+ 	struct vchiq_service *service = find_service_by_handle(handle);
+ 	int pos;
  
-+	if (READ_ONCE(txr->dev_state) == BNXT_DEV_STATE_CLOSING)
-+		return -EINVAL;
++	if (!service)
++		return;
 +
- 	if (static_branch_unlikely(&bnxt_xdp_locking_key))
- 		spin_lock(&txr->xdp_tx_lock);
+ 	while (service->msg_queue_write == service->msg_queue_read +
+ 		VCHIQ_MAX_SLOTS) {
+ 		if (wait_for_completion_interruptible(&service->msg_queue_pop))
+@@ -2326,6 +2329,9 @@ struct vchiq_header *vchiq_msg_hold(unsigned int handle)
+ 	struct vchiq_header *header;
+ 	int pos;
  
- 	for (i = 0; i < num_frames; i++) {
- 		struct xdp_frame *xdp = frames[i];
++	if (!service)
++		return NULL;
++
+ 	if (service->msg_queue_write == service->msg_queue_read)
+ 		return NULL;
  
--		if (!txr || !bnxt_tx_avail(bp, txr) ||
--		    !(bp->bnapi[ring]->flags & BNXT_NAPI_FLAG_XDP))
-+		if (!bnxt_tx_avail(bp, txr))
- 			break;
- 
- 		mapping = dma_map_single(&pdev->dev, xdp->data, xdp->len,
 -- 
 2.35.1
 

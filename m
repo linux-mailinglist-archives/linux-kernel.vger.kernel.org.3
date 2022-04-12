@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1CD4FE756
+	by mail.lfdr.de (Postfix) with ESMTP id F29AC4FE758
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358490AbiDLRlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S1358541AbiDLRlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356774AbiDLRki (ORCPT
+        with ESMTP id S1356075AbiDLRkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:40:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C12A62BCC
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:20 -0700 (PDT)
+        Tue, 12 Apr 2022 13:40:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2576212D;
+        Tue, 12 Apr 2022 10:38:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDB71619D7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F5EC385A1;
-        Tue, 12 Apr 2022 17:38:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76E26619D7;
+        Tue, 12 Apr 2022 17:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAA5C385A1;
+        Tue, 12 Apr 2022 17:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649785099;
-        bh=VsiW3CuUG+R7QVT9cZrUKPYiW2B49SVijz2OAHaLQF4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BveF8bkvE+lr22QTXpRwLJ6STY4ghFnr6cz1scbsP+oqFS4cxL0HVhKTwKEgvFY9Y
-         iwU5I9ZrxspDXCMdZpGGzcCpTRXa8FJgYMoYJLPvvQ9kjCw6hcjn7Um00F6YMz50RE
-         JzQzdRX6OHI6MKNS8yMhk2BdYvCcB+BsnxBGCh4lTE3TTJMnc2tv5keysKjTkD4xLS
-         L1vbHdDFnxpfs46Hx6v6DWkf5Lv/CHEBcknYuOxXfUPGhmLh5kfSoKDK/km7KRNbCV
-         D9tWF3Y7P5ySdMo+Rj9CbKUFWGnfdFLfwr5JkqcwKzBHLKMYhu6fmecLxNoO7h0mfG
-         h/0m56u9a37Ig==
+        s=k20201202; t=1649785103;
+        bh=3LtPJpBag3FhKWTyd+lv8UDX78WC5GQyaw42g+nIqes=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=UjIJzPKAWvTCCDrcA4R3ttd9UxR9RuVChvAK6SmbrP2BngxvpQeiEzvpyAXU58NqG
+         XOlE43X2n9QAo9TjXzXSgYj0JQxPVK0K9z1zB6rsKNtIS2I9ES9N6kk7pq1cp828Zu
+         KH2lfWe1NyJH4hyJCaqaZ1GnX22l3pmDQOszT03WhZN1JsWR0mWVirK+6YbkRzggwC
+         sKCzNpu+ZQWUoLOLKEPyTVIXIokdKMsHrHknLu7TOwa1YTAaaUNWg4x6yx41q6Yjkx
+         0jL3QVaJSxe0yIysga/YEFhNPsKDwlNprAm0952JWNro561CN1LZXK19fA7AXB7YYD
+         XG4oAXW9TgLbw==
 From:   Mark Brown <broonie@kernel.org>
-To:     rf@opensource.cirrus.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20220411165929.1302333-1-rf@opensource.cirrus.com>
-References: <20220411165929.1302333-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] ASoC: cs35l45: Make exports namespaced
-Message-Id: <164978509825.404572.4732190389821838906.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 18:38:18 +0100
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linmq006@gmail.com, vigneshr@ti.com
+In-Reply-To: <20220411111034.24447-1-linmq006@gmail.com>
+References: <20220411111034.24447-1-linmq006@gmail.com>
+Subject: Re: [PATCH] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
+Message-Id: <164978510277.404853.11478015977958567610.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 18:38:22 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,20 +53,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 17:59:29 +0100, Richard Fitzgerald wrote:
-> Use the new EXPORT_SYMBOL_NS_GPL() for exports from the set of
-> drivers for cs35l45.
+On Mon, 11 Apr 2022 11:10:33 +0000, Miaoqian Lin wrote:
+> wait_for_completion_timeout() returns unsigned long not int.
+> It returns 0 if timed out, and positive if completed.
+> The check for <= 0 is ambiguous and should be == 0 here
+> indicating timeout which is the only error case.
 > 
 > 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: cs35l45: Make exports namespaced
-      commit: 31c90dd56ae2945ce46ffa9728d1e1502f5a0c2e
+[1/1] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
+      commit: 8b1ea69a63eb62f97cef63e6d816b64ed84e8760
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

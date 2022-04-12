@@ -2,158 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD964FE190
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53044FE1BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244628AbiDLNG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S1356055AbiDLNIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356618AbiDLND4 (ORCPT
+        with ESMTP id S1356702AbiDLND7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:03:56 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78407DF38;
-        Tue, 12 Apr 2022 05:47:41 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2ebf3746f87so104918667b3.6;
-        Tue, 12 Apr 2022 05:47:41 -0700 (PDT)
+        Tue, 12 Apr 2022 09:03:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A28A113F2C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649767673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FMp2oMMI19CzMX6iZstGkcYLomzwrXcccsJxHhfXPhs=;
+        b=Vv0RjNhXo/LGNqdDqpjSpu4e7WoEv57/I6JlpspI3GHhU/VIRsgOHAkhigJxCvxOWPQNCu
+        zL4K+ZE+ET76Aq0bFR4IDeViZU7+m3sQlTFIdJQJ02B2uJuvqTvPE0xE01CP3QU+XlRtdc
+        vVAU1ol/5hYvSDeik44AumjtgDPiYUM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-Rx3jMNbWN_KBdxNC2wfOWQ-1; Tue, 12 Apr 2022 08:47:52 -0400
+X-MC-Unique: Rx3jMNbWN_KBdxNC2wfOWQ-1
+Received: by mail-wm1-f70.google.com with SMTP id f12-20020a05600c154c00b0038ea9ed0a4aso1240409wmg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:47:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WkUiUdHoDpNAi0zdRE9ANpSiniGW0nNNuGE1NcaA95g=;
-        b=gWjcCu10Px+LOvFKkiouMLdDu/etUh9mMnmtPTUjWcamfHIO3o7kKCY38mZVvbpMJD
-         rqzgvqJC8TWXxxe56pTqK82DiN9s3ZN47I3cCrE76WwrOSDIBHzwaFivGrC6u0XMWMBx
-         hkxNsjZxAOE79T/HI0px3tnoytWwecbQuac9ES3x/QXhYfiAxZRsXnBRcRmwEweYHlEU
-         U4EBFyLQIg3QSN+8DuQlr6uiimoO39ts0/mkbmTbpKvHMAMthljutztjgusWWpRCA1dk
-         xib5jymJBhVhxono0FwmmkL30lPaEmCmHEAZzU7lTaxu92OpyxXynLJLsc60KY95MP03
-         hmIw==
-X-Gm-Message-State: AOAM530iave7ZTpxohdlQ6nbytHX7RjBhevmh72KkWdYWUehlzQeuyru
-        bS9rUS8FSSdZ9ymjSgJVLj6jPZApJlS7bx+nBqwNhgGP
-X-Google-Smtp-Source: ABdhPJzqMRaCdna/2UYv9JsfsWjK4Bxln8AmtcV2uN/a+VAXsHvJMw4uCW2Lg3nDHyZCTmndPY/RhPSzoDb3lcuzUQ4=
-X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
- x66-20020a817c45000000b002eb4759cc32mr30158169ywc.515.1649767660662; Tue, 12
- Apr 2022 05:47:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FMp2oMMI19CzMX6iZstGkcYLomzwrXcccsJxHhfXPhs=;
+        b=GJJP/VoFYvLq2hyNF74XOn6ADjeo5iZa4fnAAvKqeSBE/Re5kBKpOANOwIC+QYY+56
+         xMYh38r+CYLApHRyajiC5DqtLbVwcYt4X7cSo7Tl8qeH5mC8TRA1DKnkwtOjoXefqnsI
+         rPIv8navPfWwbwTmf9arFbAfWtr0aQefZqFZrjbGkNW2tESsHvlIyxKdnptqt8VVwhoG
+         ybgIccRX0ZIEDW8CLBmzjNSLHz2KDhZC/9uR++uTg7G7y2OcC0rsfYhz7+dw7Jg+ae6H
+         BnXAj9UZ3a+8t0anG7I3RCDfnZUArAl2MuEgtEaN49N/zFR2vB9Rilods6OpfFhVzhQ6
+         tzKQ==
+X-Gm-Message-State: AOAM530xHH6zIsmF1zN+jiyne8zqnsEZi6Zpw+RqZc1UaZXaybE9pKlS
+        qs/e0xCMdnE3/sff4uHkBqbZbzNtS4HilRCBv1LptApQUybyGMzMxkvTeJV5Om8acmi6kBum+8C
+        xmGkvJpgJDv4LGe/D/wyGYiSj
+X-Received: by 2002:a05:600c:1e11:b0:38c:b316:e6f5 with SMTP id ay17-20020a05600c1e1100b0038cb316e6f5mr3957218wmb.93.1649767671357;
+        Tue, 12 Apr 2022 05:47:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxSkWhDIignmxXyAnDO0ScbN/QuD6EP6hkvM1u+QuSX0qwvbJHTPBW68CS/aavtXCIxO1Rnvw==
+X-Received: by 2002:a05:600c:1e11:b0:38c:b316:e6f5 with SMTP id ay17-20020a05600c1e1100b0038cb316e6f5mr3957202wmb.93.1649767671079;
+        Tue, 12 Apr 2022 05:47:51 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id g7-20020a5d64e7000000b00204a13925dcsm31349422wri.11.2022.04.12.05.47.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 05:47:50 -0700 (PDT)
+Message-ID: <dd918de6-aaf3-a9d1-0504-4b6a3f3d4e9c@redhat.com>
+Date:   Tue, 12 Apr 2022 14:47:49 +0200
 MIME-Version: 1.0
-References: <22622452.6Emhk5qWAg@kreacher> <202204121052.HOrN6tpw-lkp@intel.com>
-In-Reply-To: <202204121052.HOrN6tpw-lkp@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Apr 2022 14:47:29 +0200
-Message-ID: <CAJZ5v0jMXBC63aPdt5FuMqC9sDN_avNbRaPyXjjyVkESMCxkXw@mail.gmail.com>
-Subject: Re: [PATCH 14/20] ACPICA: executer/exsystem: Inform users about ACPI
- spec violation
-To:     kernel test robot <lkp@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/5] drm/solomon: Move device info from ssd130x-i2c to
+ the core driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chen-Yu Tsai <wens@kernel.org>
+References: <20220411211243.11121-1-javierm@redhat.com>
+ <20220411211243.11121-5-javierm@redhat.com>
+ <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
+ <4128b288-2b9a-f9cd-01f3-a1d50d3e10bb@redhat.com>
+ <YlVgpHqqqFy43L37@smile.fi.intel.com> <YlVg8PE6SBzhmqjI@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YlVg8PE6SBzhmqjI@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 4:54 AM kernel test robot <lkp@intel.com> wrote:
+On 4/12/22 13:22, Andy Shevchenko wrote:
+> On Tue, Apr 12, 2022 at 02:21:08PM +0300, Andy Shevchenko wrote:
+>> On Tue, Apr 12, 2022 at 10:07:02AM +0200, Javier Martinez Canillas wrote:
+>>> On 4/12/22 09:23, Geert Uytterhoeven wrote:
+>>>> On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
+>>>> <javierm@redhat.com> wrote:
+> 
+> ...
+> 
+>>>>> -       ssd130x->device_info = device_get_match_data(dev);
+>>>>> +
+>>>>> +       variant = (enum ssd130x_variants)device_get_match_data(dev);
+>>>>
+>>>> (uintptr_t), to avoid a cast from pointer to integer of different
+>>>> size warning.
+>>>>
+>>>
+>>> Indeed. The kernel test robot reported the same.
+>>
+>> Not only because of this, but also with the non-NULL pointers I prefer the old
+>> style without ugly castings.
+>>
+>> Instead, you may export the array (in the driver's namespace) and use
+>> &info[ID] pointer for the specific device info.
+> 
+> Note that device_get_match_data() has no clue if the data is absent or
+> data == (void *)0.
 >
-> Hi "Rafael,
->
-> Thank you for the patch! Yet something to improve:
 
-This is addressed by one of the subsequent patches in the series.
+Yep, we could make the enum start at 1 and check for !variant but that's
+something that will also be prevented by your suggestion to just use the
+&info[ID] instead.
 
-> [auto build test ERROR on rafael-pm/linux-next]
-> [also build test ERROR on linus/master linux/master v5.18-rc2 next-20220411]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> config: i386-randconfig-a006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121052.HOrN6tpw-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/5cdc6166cc35043a80f5f328d6e6b58190c4e46c
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922
->         git checkout 5cdc6166cc35043a80f5f328d6e6b58190c4e46c
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> Note: the linux-review/Rafael-J-Wysocki/ACPICA-ACPICA-20220331/20220412-030922 HEAD 32181ae3d3173aeee41f709612dfa4d52951b39d builds fine.
->       It only hurts bisectability.
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/acpi/acpica/exsystem.c:140:7: error: use of undeclared identifier 'how_long_US'; did you mean 'how_long_us'?
->                    if (how_long_US > 100) {
->                        ^~~~~~~~~~~
->                        how_long_us
->    drivers/acpi/acpica/exsystem.c:123:41: note: 'how_long_us' declared here
->    acpi_status acpi_ex_system_do_stall(u32 how_long_us)
->                                            ^
->    1 error generated.
->
->
-> vim +140 drivers/acpi/acpica/exsystem.c
->
->    105
->    106  /*******************************************************************************
->    107   *
->    108   * FUNCTION:    acpi_ex_system_do_stall
->    109   *
->    110   * PARAMETERS:  how_long_us     - The amount of time to stall,
->    111   *                                in microseconds
->    112   *
->    113   * RETURN:      Status
->    114   *
->    115   * DESCRIPTION: Suspend running thread for specified amount of time.
->    116   *              Note: ACPI specification requires that Stall() does not
->    117   *              relinquish the processor, and delays longer than 100 usec
->    118   *              should use Sleep() instead. We allow stalls up to 255 usec
->    119   *              for compatibility with other interpreters and existing BIOSs.
->    120   *
->    121   ******************************************************************************/
->    122
->    123  acpi_status acpi_ex_system_do_stall(u32 how_long_us)
->    124  {
->    125          acpi_status status = AE_OK;
->    126
->    127          ACPI_FUNCTION_ENTRY();
->    128
->    129          if (how_long_us > 255) {
->    130                  /*
->    131                   * Longer than 255 microseconds, this is an error
->    132                   *
->    133                   * (ACPI specifies 100 usec as max, but this gives some slack in
->    134                   * order to support existing BIOSs)
->    135                   */
->    136                  ACPI_ERROR((AE_INFO,
->    137                              "Time parameter is too large (%u)", how_long_us));
->    138                  status = AE_AML_OPERAND_VALUE;
->    139          } else {
->  > 140                  if (how_long_US > 100) {
->    141                          ACPI_WARNING((AE_INFO,
->    142                                        "Time parameter %u us > 100 us violating ACPI spec, please fix the firmware.",
->    143                                        how_long_us));
->    144                  }
->    145                  acpi_os_stall(how_long_us);
->    146          }
->    147
->    148          return (status);
->    149  }
->    150
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

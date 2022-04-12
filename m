@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893E64FE09F
+	by mail.lfdr.de (Postfix) with ESMTP id D091F4FE0A0
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350910AbiDLMnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        id S1352868AbiDLMoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353900AbiDLMmN (ORCPT
+        with ESMTP id S1353896AbiDLMmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:42:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E0113DEF;
-        Tue, 12 Apr 2022 05:07:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4987013D36;
+        Tue, 12 Apr 2022 05:07:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC83B818BB;
-        Tue, 12 Apr 2022 12:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D77C385A9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 006B7B81B3B;
         Tue, 12 Apr 2022 12:07:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3091DC385A5;
+        Tue, 12 Apr 2022 12:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649765236;
-        bh=ogE5ybnNzjbeaUs8XfhvgUoIApTax4ov6E7K92asMNs=;
-        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-        b=D0eLDKVUOEryqXyU30wgT0oTEy0cz/IBaKwg4xHwd+6zv6MHtDFJdDgz5RoGilSzn
-         wtTvZ9lQMiF/VuljH7jAAEFKCiUKlWUH0htyeFlif5dgbPJlc5jbaAiIy8/Wual4pY
-         dt/zfJWayDw6bcWo3oxKz8ku+NdWPo8xHTOWSAWh5fk47gtku9hhwzxwbvpME1k28g
-         sF/MepEwB7/h7R4oHkMDGRrMF2/EGQ9oJJ0pM/fcJ710znASgvZfTpTAV9V46bH07Z
-         ybe7bKFYcKiK8Om358xyiV67yCbz1YdOWEWwt3OAZ6mKejFeiNZLkB2fRoM5gkpcxY
-         8ErR7+RY+Bf+A==
-Received: by mail-vs1-f41.google.com with SMTP id u2so14017745vsl.6;
-        Tue, 12 Apr 2022 05:07:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5309oIEfuOy4YTUes1u9SkB5WY9zW45XbBLMKDurRpumRH6/Ev9x
-        S7Bzh5rpKSsbduID0i1o9a5mt1USvXJ1WVUfCJo=
-X-Google-Smtp-Source: ABdhPJzjEEHJ1j3lKpjqp/WFdHMDZcR/5QTgBJgXwmPXWsXCZQHuWZkG7PxraL3PSeHLZ50+5phOm6ZKNJy+juNEIBM=
-X-Received: by 2002:a05:6102:3098:b0:328:1825:61f8 with SMTP id
- l24-20020a056102309800b00328182561f8mr7138726vsb.39.1649765235208; Tue, 12
- Apr 2022 05:07:15 -0700 (PDT)
+        s=k20201202; t=1649765234;
+        bh=HElbpEp36SC+U2mOLk3U92uAL/Z9YUiPP4dM37u9zlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M/B6TZqYrKLYCklOOVU0gKAdNLzpxZZQTouCDWTqTAO5cLBG0RNVGaHLeAaJ/N6E4
+         T2bTNcoKuxy73nb7uQUq4MmE9msmyUeEmVpJEeyhqWkoEwg71QWmWuRey08YFiNq5v
+         KGFJqY3YMnZJTPYhhdIgRSmTYdm5hPlEO3lw4Og/SVNSQBczScPjzv/4D7EWLcDnQE
+         mVtWtz58he+7Uu720ASzKT6sR/HEncfksMJNvSWfDlsknwBUXoJBciiaDdVZFWMn5P
+         c67CJIjRonUOHAk8ZtYtvvZ6yIF8+ULPvBNOUpeAp++2j/10pjICgyz2Q0AfHnbCdy
+         taRNehvT8xCkg==
+Date:   Tue, 12 Apr 2022 13:07:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
+        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.17 34/49] spi: cadence-quadspi: fix protocol
+ setup for non-1-1-X operations
+Message-ID: <YlVrbR6Giy2OXe1R@sirena.org.uk>
+References: <20220412004411.349427-1-sashal@kernel.org>
+ <20220412004411.349427-34-sashal@kernel.org>
+ <d618fc184f162b1da8d75729b5939bed52308040.camel@ew.tq-group.com>
 MIME-Version: 1.0
-References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-2-javierm@redhat.com>
-In-Reply-To: <20220411211243.11121-2-javierm@redhat.com>
-Reply-To: wens@kernel.org
-From:   Chen-Yu Tsai <wens@kernel.org>
-Date:   Tue, 12 Apr 2022 20:07:03 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65CBZp3DZFGX0GMTaQQPYMKJTJMNoU2V5u7MxsLN7ONKQ@mail.gmail.com>
-Message-ID: <CAGb2v65CBZp3DZFGX0GMTaQQPYMKJTJMNoU2V5u7MxsLN7ONKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: display: ssd1307fb: Deprecate "-i2c"
- compatible strings
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4+g+U9H/I8tUHNb6"
+Content-Disposition: inline
+In-Reply-To: <d618fc184f162b1da8d75729b5939bed52308040.camel@ew.tq-group.com>
+X-Cookie: Approved for veterans.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,51 +60,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 5:12 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> The current compatible strings for SSD130x I2C controllers contain both an
-> "fb" and "-i2c" suffixes. It seems to indicate that are for a fbdev driver
-> and also that are for devices that can be accessed over an I2C bus.
->
-> But a DT is supposed to describe the hardware and not Linux implementation
-> details. So let's deprecate those compatible strings and add new ones that
-> only contain the vendor and device name, without any of these suffixes.
->
-> These will just describe the device and can be matched by both I2C and SPI
-> DRM drivers.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
->
-> Changes in v2:
-> - Drop the -i2c suffixes from the compatible strings too (Geert Uytterhoeven).
->
->  .../bindings/display/solomon,ssd1307fb.yaml   | 37 ++++++++++++-------
->  1 file changed, 24 insertions(+), 13 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> index ade61d502edd..6b9d0c72739a 100644
-> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> @@ -12,12 +12,23 @@ maintainers:
->
->  properties:
->    compatible:
-> -    enum:
-> -      - sinowealth,sh1106-i2c
-> -      - solomon,ssd1305fb-i2c
-> -      - solomon,ssd1306fb-i2c
-> -      - solomon,ssd1307fb-i2c
-> -      - solomon,ssd1309fb-i2c
-> +    oneOf:
-> +      # Deprecated compatible strings
-> +      - items:
-> +          - enum:
-> +              - sinowealth,sh1106-i2c
 
-I think you can just drop this one, since it was just merged and isn't
-part of any release yet. It's not even in -rc.
+--4+g+U9H/I8tUHNb6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-ChenYu
+On Tue, Apr 12, 2022 at 01:49:19PM +0200, Matthias Schiffer wrote:
+
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
+
+> what's your plan regarding this patch and the other patch I sent [1]? I
+> think there has been some confusion regarding which solution we want to
+> backport to stable kernels (well, at least I'm confused...)
+
+Well, it's up to the stable people what they choose to backport -
+they're generally fairly aggressive about what they pick up so I guess
+they want to take this one?
+
+> I'm fine with this patch getting backported, but in that case [1]
+> doesn't make sense anymore (in fact I expected this patch to be dropped
+> for now when I submitted [1], due to Pratyush Yadav's concerns).
+
+> [1] https://patchwork.kernel.org/project/spi-devel-general/patch/20220406132832.199777-1-matthias.schiffer@ew.tq-group.com/
+
+For the benefit of those playing at home that's "spi: cadence-quadspi:
+fix incorrect supports_op() return value".  It's much more the sort of
+thing I'd expect to see backported to stable so it seems good from that
+point of view.
+
+--4+g+U9H/I8tUHNb6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJVa20ACgkQJNaLcl1U
+h9BClAf/UqUUpSphtpgTNkktLrxmPRmeDDAcukSyTu4K97s55pKoZsTJ0y666nAk
+nozPL3LN1OPxpjiUiwn2+IFjYY2U3IV+VwTnUEFZgSq5D7G0/+kiRY9DWZB//8td
+1T6jDSzqZVQ3r19WePZGI3yFsTf3WrcykirQc7kKc7YtL/UvzQOLobSDstdfLY2v
+9GZrztzHepoyO2vvf0UTAWs8RtEhyEwmtwCmWm0z5kt4cnhsMAhhttAXBUWmRJMz
+tcvti4BADXte7/dqG1sJXiy8GhDDQeU9iT0+OCZawVjbAVS6LFv4WfTPQSvBpTVG
+tDn0Fc4aYcfnb5wjzHcTVmqH2/2cCQ==
+=4C/4
+-----END PGP SIGNATURE-----
+
+--4+g+U9H/I8tUHNb6--

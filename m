@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0ECC4FDC67
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C94FDC6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343889AbiDLK0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S1380373AbiDLK0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379254AbiDLKTi (ORCPT
+        with ESMTP id S1379586AbiDLKTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:19:38 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8128220E4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:18:30 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id m14so2370727wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:18:30 -0700 (PDT)
+        Tue, 12 Apr 2022 06:19:45 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4EDDFD0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:21:27 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u18so10904333eda.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t1lzjwxfRXe1DwU9VxJjnLzAF8CyRAgCWO3N0tVaS6A=;
-        b=f01vyjAEjFoGUrkbgP2UXQGBY1xVxDhe0SiX9aofWD9JMxHLgQk63dG1EqGaWLpYv+
-         UzFRqPYlI69MMAP6HRWmAqnO3RWWmHVrd8TjspfasQaP/WBMuyG2wpcrm3IGN6/DgUoV
-         8N9x5l8Nz3gyMLUcSxxZ52Z394Od1YSmPAtSDX+4evi4ZNIdRIz1TqAMoUYBRJw7OGw4
-         Lpri9tle00M6lwOn1g0zLhElnDIUExObh2NYjkw85BvbXWliFSOZ3Taas/l4HczG5LCX
-         R2NAX3FE9vhKR9VeYBXr/RVJc6fSBVj5N0t5Kp6+EXGr06njt6IX4KtfcxPcAa1TI1UI
-         oRmQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JaTsKAtJSNi54rHJhG+hyScjwgHDH7ka4b7b1ta/ySE=;
+        b=iJelTY48iYoGFyhaVFKLSxyokhQc4j93X9lAO5VhyZM9gCgpC+PF7tZeerg9RneIfw
+         Eb70dzcx4VMDRiJEbpiXy+8uVTAXBY4jhu2+7BeoSYso4U5tRiab2Gj1RA3qgIUUyhl1
+         mvn5o+J92QpBLV223Feml/8T2wb9WuAYrl9wiGwC6fL/hU8FsDjTbSSLWc36Jp6oaVHy
+         EvfxX6ySNbJzY4TAoWCpUnP3I1iU5aUbqERMjyiRfzpGxWBBLlv6zs1sRXdREAHlFj7A
+         Q9b8ze2DYdv3O4yZ+CMXhYuNm4K8ZmJptFpggymArTWdcckk5aCVuDck954SAUZ6JpuF
+         UsSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t1lzjwxfRXe1DwU9VxJjnLzAF8CyRAgCWO3N0tVaS6A=;
-        b=sIKw4W//QSyYvyz0AQbeUdPOBEF9RS/2ZxdPqAwjabVftwBmHXDU1JWQImYdUHQhyg
-         rOmWl5BvIZHav9nLnGgOYeNzrmNISI0WMrpp60gypjexhnc6Moyt6McM/Bum77M/DPrG
-         8OF6KdGcYs5fNFjw4ahSEOK2HQoUv21M/zS4MaEmL+FVXprz9ON8Nx60+qhxe2EAZLbb
-         0hshnIsvnkaEdPFqH7U6QqV7TN7Fb0LYbGo2GTE9H8QBNx6yCNkANm7tQOANy0Mj5JJa
-         2IRvu4SDU5MrcYcajqGIrS+PYxlSI2jrJrX6WioTmuI2q6BwU40luQbA+KuoSJKPlmtM
-         aMug==
-X-Gm-Message-State: AOAM532v3CNdps0IYD4HxFaKc0u0LzvfQnsmd4dBanS/N3pB3jhE1UY2
-        RjRdn7OXVpKnfBGTHiT1NG7pfD6MWP/UsR9qsFMXqg==
-X-Google-Smtp-Source: ABdhPJyJZQSz39RZRShX34GTe7gth4LcPYRJldMbR5u2AYoxr6ePL9Zbhj0Uk6ECOq/NAoYbHYNTVCHKNrEl1z2ynwE=
-X-Received: by 2002:adf:cd87:0:b0:207:b0ad:6d8 with SMTP id
- q7-20020adfcd87000000b00207b0ad06d8mr1062384wrj.111.1649755109255; Tue, 12
- Apr 2022 02:18:29 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JaTsKAtJSNi54rHJhG+hyScjwgHDH7ka4b7b1ta/ySE=;
+        b=CirxBPwTN3KMEVkCAk2LeeNx1tOrpP8A6+fXglZa1BrK821h6k84EAawENcHJb9Tsd
+         nns6HAiT7X7M/ns44etk9hAD9bH9qKxEGmjvEsvmMQOzcZajheveiyNXemGllltKiK/3
+         dtZbUSbLeXV8S3of3BY6bd8Ru09Q7k+o9HBgRvMiDNgzdJ6HeRUqYNnez2yNXVkYO/bD
+         Kvkt1qDeTh2SgTnThh83Jikdl32yqg2A0MroPhJyz+Omsqr1pnaCbqEAJpuRVuECMjJA
+         WkSuYxXnUwzVWyYbNRKF4/+Z0W+bSMk6Ki2kEIEoRYvKCWo5Le633nAjVW/NLO2cR3rE
+         Ce4Q==
+X-Gm-Message-State: AOAM532vOIDR8ufJKwXYEP/SJYL+u7mqCG8LUNo9odVvjClz9/09gp/5
+        fSwx5IDhUT8SSwxA4tCAmuhRPz9RJ4eoqL+M
+X-Google-Smtp-Source: ABdhPJw5C5ynAEjOGwr/Emmjbh1RB5R+OcYH/bF0ZPE6x+rHILFMQ21c/S2l6KrpC8SuS8oQX3VIXQ==
+X-Received: by 2002:a05:6402:3713:b0:41d:96f6:8a09 with SMTP id ek19-20020a056402371300b0041d96f68a09mr1070881edb.136.1649755286201;
+        Tue, 12 Apr 2022 02:21:26 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id dd6-20020a1709069b8600b006df08710d00sm13200550ejc.85.2022.04.12.02.21.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 02:21:25 -0700 (PDT)
+Message-ID: <2853deaa-324a-6c54-2fe3-3f4b78d110bb@linaro.org>
+Date:   Tue, 12 Apr 2022 11:21:24 +0200
 MIME-Version: 1.0
-References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-9-james.clark@arm.com>
-In-Reply-To: <20220304171913.2292458-9-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 12 Apr 2022 10:18:18 +0100
-Message-ID: <CAJ9a7Vj+0GN3xN2S9=hMUJuLtnSmHVbN8W-B4H_juSG+DG+z5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 08/15] coresight: etm4x: Cleanup TRCSTALLCTLR register accesses
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: phy: qcom,qmp: Add SDX65 USB PHY binding
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, kishon@ti.com, vkoul@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649740652-17515-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1649740652-17515-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1649740652-17515-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,74 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
->
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 12 ++++++------
->  drivers/hwtracing/coresight/coresight-etm4x.h       |  4 ++++
->  2 files changed, 10 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index 2d29e9daf515..cd24590ea38a 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -397,22 +397,22 @@ static ssize_t mode_store(struct device *dev,
->
->         /* bit[8], Instruction stall bit */
->         if ((config->mode & ETM_MODE_ISTALL_EN) && (drvdata->stallctl == true))
-> -               config->stall_ctrl |= BIT(8);
-> +               config->stall_ctrl |= TRCSTALLCTLR_ISTALL;
->         else
-> -               config->stall_ctrl &= ~BIT(8);
-> +               config->stall_ctrl &= ~TRCSTALLCTLR_ISTALL;
->
->         /* bit[10], Prioritize instruction trace bit */
->         if (config->mode & ETM_MODE_INSTPRIO)
-> -               config->stall_ctrl |= BIT(10);
-> +               config->stall_ctrl |= TRCSTALLCTLR_INSTPRIORITY;
->         else
-> -               config->stall_ctrl &= ~BIT(10);
-> +               config->stall_ctrl &= ~TRCSTALLCTLR_INSTPRIORITY;
->
->         /* bit[13], Trace overflow prevention bit */
->         if ((config->mode & ETM_MODE_NOOVERFLOW) &&
->                 (drvdata->nooverflow == true))
-> -               config->stall_ctrl |= BIT(13);
-> +               config->stall_ctrl |= TRCSTALLCTLR_NOOVERFLOW;
->         else
-> -               config->stall_ctrl &= ~BIT(13);
-> +               config->stall_ctrl &= ~TRCSTALLCTLR_NOOVERFLOW;
->
->         /* bit[9] Start/stop logic control bit */
->         if (config->mode & ETM_MODE_VIEWINST_STARTSTOP)
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index cbba46f14ada..36934056a5dc 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -196,6 +196,10 @@
->  #define TRCEVENTCTL1R_ATB                      BIT(11)
->  #define TRCEVENTCTL1R_LPOVERRIDE               BIT(12)
->
-> +#define TRCSTALLCTLR_ISTALL                    BIT(8)
-> +#define TRCSTALLCTLR_INSTPRIORITY              BIT(10)
-> +#define TRCSTALLCTLR_NOOVERFLOW                        BIT(13)
-> +
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> --
-> 2.28.0
->
+On 12/04/2022 07:17, Rohit Agarwal wrote:
+> Add devicetree YAML binding for Qualcomm QMP Super Speed (SS) PHY found
+> in SDX65.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

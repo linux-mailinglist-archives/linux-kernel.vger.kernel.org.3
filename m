@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D734FDAB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2510E4FD7F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354344AbiDLHwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S1353133AbiDLHZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353351AbiDLHZV (ORCPT
+        with ESMTP id S1351381AbiDLHLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A8743484;
-        Tue, 12 Apr 2022 00:00:27 -0700 (PDT)
+        Tue, 12 Apr 2022 03:11:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D2D4A925;
+        Mon, 11 Apr 2022 23:50:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2EB5B81B50;
-        Tue, 12 Apr 2022 07:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BD3C385A6;
-        Tue, 12 Apr 2022 07:00:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A475B818BD;
+        Tue, 12 Apr 2022 06:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C5BC385A6;
+        Tue, 12 Apr 2022 06:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746824;
-        bh=8zM8QI4pd7hbRwGTnpQmopHT4m0J7CoRJmXnqWJoGhw=;
+        s=korg; t=1649746198;
+        bh=zFR/McWdC53gwYGUS48EKxU8CLjPY+MFboF6l4luGII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IZy30D8hlx7gttbsTosl1Va3HAlj2hdTLZE7+NCCKg7WoBwP0rkI75NTLkdhzsNF9
-         sR7c7TKhdEk7Ev/crmBGv/gN6kktZHKo2UVHlFxYwD/taNjmmK/ywHonq7SZo8tFnP
-         nv+KuqHO4xCoPXa1yARoTyTh5MFJHvVGdhOPjhJo=
+        b=mbLijMDcqnCHlvJuLBEdyAFTTYP+0ohp89hWo3clKPa8RKffLoJATUgscNAAk/x60
+         l1/2Pcs5t5kMDwqqJ3ELi7/2oMhXw6aZWz8oNlmmpZ9S2ZNPFPsNGF1cGYufSt8XrT
+         xkVcBwC/cOtnPJpOEv5CkCCocENIXPY089AICBRE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 143/285] NFS: nfsiod should not block forever in mempool_alloc()
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 197/277] io_uring: nospec index for tags on files update
 Date:   Tue, 12 Apr 2022 08:30:00 +0200
-Message-Id: <20220412062947.796831775@linuxfoundation.org>
+Message-Id: <20220412062947.740159935@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,133 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit 515dcdcd48736576c6f5c197814da6f81c60a21e ]
+[ Upstream commit 34bb77184123ae401100a4d156584f12fa630e5c ]
 
-The concern is that since nfsiod is sometimes required to kick off a
-commit, it can get locked up waiting forever in mempool_alloc() instead
-of failing gracefully and leaving the commit until later.
+Don't forget to array_index_nospec() for indexes before updating rsrc
+tags in __io_sqe_files_update(), just use already safe and precalculated
+index @i.
 
-Try to allocate from the slab first, with GFP_KERNEL | __GFP_NORETRY,
-then fall back to a non-blocking attempt to allocate from the memory
-pool.
-
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: c3bdad0271834 ("io_uring: add generic rsrc update with tags")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/internal.h      |  7 +++++++
- fs/nfs/pnfs_nfs.c      |  8 ++++++--
- fs/nfs/write.c         | 24 +++++++++---------------
- include/linux/nfs_fs.h |  2 +-
- 4 files changed, 23 insertions(+), 18 deletions(-)
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
-index 12f6acb483bb..85957db80975 100644
---- a/fs/nfs/internal.h
-+++ b/fs/nfs/internal.h
-@@ -572,6 +572,13 @@ nfs_write_match_verf(const struct nfs_writeverf *verf,
- 		!nfs_write_verifier_cmp(&req->wb_verf, &verf->verifier);
- }
- 
-+static inline gfp_t nfs_io_gfp_mask(void)
-+{
-+	if (current->flags & PF_WQ_WORKER)
-+		return GFP_KERNEL | __GFP_NORETRY | __GFP_NOWARN;
-+	return GFP_KERNEL;
-+}
-+
- /* unlink.c */
- extern struct rpc_task *
- nfs_async_rename(struct inode *old_dir, struct inode *new_dir,
-diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
-index 316f68f96e57..657c242a18ff 100644
---- a/fs/nfs/pnfs_nfs.c
-+++ b/fs/nfs/pnfs_nfs.c
-@@ -419,7 +419,7 @@ static struct nfs_commit_data *
- pnfs_bucket_fetch_commitdata(struct pnfs_commit_bucket *bucket,
- 			     struct nfs_commit_info *cinfo)
- {
--	struct nfs_commit_data *data = nfs_commitdata_alloc(false);
-+	struct nfs_commit_data *data = nfs_commitdata_alloc();
- 
- 	if (!data)
- 		return NULL;
-@@ -515,7 +515,11 @@ pnfs_generic_commit_pagelist(struct inode *inode, struct list_head *mds_pages,
- 	unsigned int nreq = 0;
- 
- 	if (!list_empty(mds_pages)) {
--		data = nfs_commitdata_alloc(true);
-+		data = nfs_commitdata_alloc();
-+		if (!data) {
-+			nfs_retry_commit(mds_pages, NULL, cinfo, -1);
-+			return -ENOMEM;
-+		}
- 		data->ds_commit_index = -1;
- 		list_splice_init(mds_pages, &data->pages);
- 		list_add_tail(&data->list, &list);
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index e86aff429993..8eb7466182ac 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -70,27 +70,17 @@ static mempool_t *nfs_wdata_mempool;
- static struct kmem_cache *nfs_cdata_cachep;
- static mempool_t *nfs_commit_mempool;
- 
--struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail)
-+struct nfs_commit_data *nfs_commitdata_alloc(void)
- {
- 	struct nfs_commit_data *p;
- 
--	if (never_fail)
--		p = mempool_alloc(nfs_commit_mempool, GFP_NOIO);
--	else {
--		/* It is OK to do some reclaim, not no safe to wait
--		 * for anything to be returned to the pool.
--		 * mempool_alloc() cannot handle that particular combination,
--		 * so we need two separate attempts.
--		 */
-+	p = kmem_cache_zalloc(nfs_cdata_cachep, nfs_io_gfp_mask());
-+	if (!p) {
- 		p = mempool_alloc(nfs_commit_mempool, GFP_NOWAIT);
--		if (!p)
--			p = kmem_cache_alloc(nfs_cdata_cachep, GFP_NOIO |
--					     __GFP_NOWARN | __GFP_NORETRY);
- 		if (!p)
- 			return NULL;
-+		memset(p, 0, sizeof(*p));
- 	}
--
--	memset(p, 0, sizeof(*p));
- 	INIT_LIST_HEAD(&p->pages);
- 	return p;
- }
-@@ -1825,7 +1815,11 @@ nfs_commit_list(struct inode *inode, struct list_head *head, int how,
- 	if (list_empty(head))
- 		return 0;
- 
--	data = nfs_commitdata_alloc(true);
-+	data = nfs_commitdata_alloc();
-+	if (!data) {
-+		nfs_retry_commit(head, NULL, cinfo, -1);
-+		return -ENOMEM;
-+	}
- 
- 	/* Set up the argument struct */
- 	nfs_init_commit(data, head, NULL, cinfo);
-diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
-index 92525222abfd..445e9343be3e 100644
---- a/include/linux/nfs_fs.h
-+++ b/include/linux/nfs_fs.h
-@@ -584,7 +584,7 @@ extern int nfs_wb_all(struct inode *inode);
- extern int nfs_wb_page(struct inode *inode, struct page *page);
- extern int nfs_wb_page_cancel(struct inode *inode, struct page* page);
- extern int  nfs_commit_inode(struct inode *, int);
--extern struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail);
-+extern struct nfs_commit_data *nfs_commitdata_alloc(void);
- extern void nfs_commit_free(struct nfs_commit_data *data);
- bool nfs_commit_end(struct nfs_mds_commit_info *cinfo);
- 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5fc3a62eae72..21823d1e91de 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8589,7 +8589,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
+ 				err = -EBADF;
+ 				break;
+ 			}
+-			*io_get_tag_slot(data, up->offset + done) = tag;
++			*io_get_tag_slot(data, i) = tag;
+ 			io_fixed_file_set(file_slot, file);
+ 			err = io_sqe_file_register(ctx, file, i);
+ 			if (err) {
 -- 
 2.35.1
 

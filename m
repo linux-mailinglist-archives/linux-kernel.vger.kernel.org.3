@@ -2,90 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900164FEB8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC8E4FEAF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiDLX1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S229528AbiDLXWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiDLX00 (ORCPT
+        with ESMTP id S229824AbiDLXWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:26:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99322D111B;
-        Tue, 12 Apr 2022 15:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8334D61C33;
-        Tue, 12 Apr 2022 21:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FC0C385A5;
-        Tue, 12 Apr 2022 21:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649800120;
-        bh=e0KhySr/UtVkziqmjJzUDp0PRfv9k6FipuSZSV+okHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ibyqs9v6j63iFgpc/JkvmS94m1mI+LGZvtxl9CNeQUfnJZ9YtGZVZv2bC9LEhmhJS
-         3mipIKZoiUbkwS+aI4+zyyGzRsPH6D3XIGs/UYbrmGYqW4dDuqYUPz7uA7/1q11p3m
-         oPq3dqCzmFQAQGOIwbYBBDMp+x+B1y87gDEw8Vlnj0WB1uKoESmySEXNPHya1yDMXF
-         rugicO7BoTsdP2yGShAJuUqfsOJjsdjzReXIWd4i+/SgOnXBg4M6ouptd8lzk7aqj1
-         kqMpPlqJ+cyNgh1caK3O7i7F11r46F3Jv529Y4m0a9lwFS0cMLxAs40qgg/ClrCq9W
-         umDphqHnoOjLA==
-Date:   Tue, 12 Apr 2022 14:48:38 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] init/Kconfig: Remove USELIB syscall by default
-Message-ID: <YlXztpgTxmn29KF3@dev-arch.thelio-3990X>
-References: <20220412212519.4113845-1-keescook@chromium.org>
+        Tue, 12 Apr 2022 19:22:39 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2051.outbound.protection.outlook.com [40.107.236.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65098CF48F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:08:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cTUh9ea4uplN9Dcy4GKesyumSG1Eu9H8lOqeb6/jzj5M4HSAJGFtJ/nFa4sXjwO28UIAhhr4RYfv4TyMxCYWXLE6hN2pb4Hrnvt9G+8TiFKNcW1/cETkzUwbjzJkqzEqacGoYWBzdoIfJgWs4zCPTanH7naF7Ep3NzXDvb43VZ81sxGbW4gCxuwRo+BlvNejbEGqzuMl/9HuuhscYcKlIjxkSrq0oU00SK+8AHyaPmM/wrg/8nOxaHDBmXbB7aaS1+1q9SSFDqGXLz+J89nLjFBhZ6EhIWBYtR7A60oRYZmHcyHF8Y8wSOlefkW+hHrFKmfVArEXg4+Qn96nB7mhXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=feKgFyWTBY9vsJnZz6EY9lyCPDWYEyUBNvsY+5VSy/Q=;
+ b=f5m6Xb1PDSI+1pcpfduS241ta+wjuknNikBa4wu2p1Y1ggJtot7LQOSEH2PG7PtGUzZRsHWW20699YUyVcha67bAgBNUnHDdS0BQbkovjk1aEK47x4Vr7tXjHamd+2niSwjVYkiN2mfHaK0eE4eUthH1PGczhplwjLSuRAfas1xej6lm1HaDOxmgBEsRo2RYZKleWwznh+v3Doj0TU+TNKdm04jMqcj4g+b417Nf4kUKPS7JY6X+cX2fMst+yW2DaSnzy0j/F3KQtBtUnYnx2y8LjsldMt4i3LpXfyqDuCeEBMTN4XvtsmHMmoFIu/JcvEpYQOlLLHwh+K4rU+bYQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=feKgFyWTBY9vsJnZz6EY9lyCPDWYEyUBNvsY+5VSy/Q=;
+ b=4wxfd+P5fuM8YVT19D05cqxaIBzDPr6VOrDx9W2c6G/gtDPS+HEbaPFNj3kpl+1ttWEOqFxSimM6AY2LCu9hIAdgG4PH22aFNMvZf3ehuAJpN19S4uNU9hBQCGhbonPGAizaE0F9qRpTF5eofwbhSwGZwCEkMx6qIJHNRt6SG8E=
+Received: from DM6PR11CA0050.namprd11.prod.outlook.com (2603:10b6:5:14c::27)
+ by DM5PR12MB1580.namprd12.prod.outlook.com (2603:10b6:4:10::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
+ 2022 21:52:12 +0000
+Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:14c:cafe::1e) by DM6PR11CA0050.outlook.office365.com
+ (2603:10b6:5:14c::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
+ Transport; Tue, 12 Apr 2022 21:52:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5164.19 via Frontend Transport; Tue, 12 Apr 2022 21:52:12 +0000
+Received: from doryam3r2rack03-34.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 16:52:11 -0500
+From:   Richard Gong <richard.gong@amd.com>
+To:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+        <xinhui.pan@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
+        <richard.gong@amd.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based systems
+Date:   Tue, 12 Apr 2022 16:50:00 -0500
+Message-ID: <20220412215000.897344-1-richard.gong@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412212519.4113845-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4b262629-cc60-46ec-3114-08da1cceb391
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1580:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1580C35E59E32FCA4898A20495ED9@DM5PR12MB1580.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CwGeFqowpQAizLK6QW5664aPukU/8X3vl6KTMKbcl2GUbPW2pf2usudCYP4Ygekq2iCJRgkVhrE0sApG3COA6lVpMSOCi8I5jYXHw0rn4qpo0grrXOkBpuOSVxr57D434tiyr2R2r+QzSQJ+WaZ0Hm40K+nzDCfbABjb9q9BH0U3AqESsoEHGnw9bKKzK9f4CZneLfQfUck4+tP9uPeZAUjhGhyKqdClVJEvWrF7RzadCBZVnwwSUMM7sq8/LZxuzWOXFmZ+v1RSChdje7m7bQOe1knKkQPV+PM9Kh4TSQy8c5dbEXeizSme4XrfIKEywXc/TvLVrk1zA14M8Y0lNCXneuKD8/nqsO2BFL9hn4gkfUxrVUwrq8d3WamhU/JRYVm1UrP7orqzheIUF+7a770tLnNdCo/zIkm8SGtHLuxD2CTQiC/AY3TV29lUU7YO9Oyn98LWUz8vr7BbplkGbQUjZ7yiBF66EFYP/M3OEd1xa+UuiPShhz/N6rZ9a/b7K9lVVcDpAeyzQhyESBbgtdyhFZ0IjkKk+GRfiDAXlMikLTytBPQCR7IigsJaNOfRyJuSMaFcalvBdZOo3CY4OOQgqNcceY6vomv8TC2APno7yy9vG0XQ8cspyXM5eeldMKMIFScFkXIEVju7WX8LizNeHNduBzZTBd7W5kWzM+TnM0C1WQZmKsyue9tgFsuAqel5KkcBFTA7Jy3y65AXJw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(8676002)(4326008)(5660300002)(70206006)(70586007)(2906002)(86362001)(40460700003)(36756003)(356005)(6666004)(1076003)(81166007)(16526019)(82310400005)(110136005)(44832011)(54906003)(2616005)(186003)(36860700001)(508600001)(47076005)(966005)(26005)(83380400001)(426003)(336012)(316002)(8936002)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 21:52:12.6886
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b262629-cc60-46ec-3114-08da1cceb391
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1580
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 02:25:20PM -0700, Kees Cook wrote:
-> The uselib syscall has been long deprecated. There's no need to keep
-> this enabled by default under X86_32.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+There are some AMD GFX cards (such as WX3200 and RX640) that won't work
+with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
+video/display output, Intel Alder Lake based systems will hang during
+suspend/resume.
 
-The 'bool "" + def_bool' was weird and I had to look up what libc5 even
-was :)
+The issue was initially reported on one system (Dell Precision 3660 with
+BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
+Lake based systems.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Add extra check to disable ASPM on Intel Alder Lake based systems.
 
-> ---
->  init/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index ddcbefe535e9..5cddb9ba0eef 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -435,8 +435,8 @@ config CROSS_MEMORY_ATTACH
->  	  See the man page for more details.
->  
->  config USELIB
-> -	bool "uselib syscall"
-> -	def_bool ALPHA || M68K || SPARC || X86_32 || IA32_EMULATION
-> +	bool "uselib syscall (for libc5 and earlier)"
-> +	default ALPHA || M68K || SPARC
->  	help
->  	  This option enables the uselib syscall, a system call used in the
->  	  dynamic linker from libc5 and earlier.  glibc does not use this
-> -- 
-> 2.32.0
-> 
+Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Richard Gong <richard.gong@amd.com>
+---
+v4: s/CONFIG_X86_64/CONFIG_X86
+    enhanced check logic
+v3: s/intel_core_asom_chk/aspm_support_quirk_check
+    correct build error with W=1 option
+v2: correct commit description
+    move the check from chip family to problematic platform
+---
+ drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+index 039b90cdc3bc..b33e0a9bee65 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+@@ -81,6 +81,10 @@
+ #include "mxgpu_vi.h"
+ #include "amdgpu_dm.h"
+ 
++#if IS_ENABLED(CONFIG_X86)
++#include <asm/intel-family.h>
++#endif
++
+ #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+@@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+ 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+ }
+ 
++static bool aspm_support_quirk_check(void)
++{
++	if (IS_ENABLED(CONFIG_X86)) {
++		struct cpuinfo_x86 *c = &cpu_data(0);
++
++		return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
++	}
++
++	return true;
++}
++
+ static void vi_program_aspm(struct amdgpu_device *adev)
+ {
+ 	u32 data, data1, orig;
+ 	bool bL1SS = false;
+ 	bool bClkReqSupport = true;
+ 
+-	if (!amdgpu_device_should_use_aspm(adev))
++	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
+ 		return;
+ 
+ 	if (adev->flags & AMD_IS_APU ||
+-- 
+2.25.1
+

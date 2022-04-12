@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57554FD8D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4A04FD887
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345009AbiDLHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        id S1352229AbiDLHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354374AbiDLHRk (ORCPT
+        with ESMTP id S1352713AbiDLHFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:17:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28234AE04;
-        Mon, 11 Apr 2022 23:59:04 -0700 (PDT)
+        Tue, 12 Apr 2022 03:05:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3E2483AF;
+        Mon, 11 Apr 2022 23:48:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E0B5B81B4F;
-        Tue, 12 Apr 2022 06:59:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60BDC385A8;
-        Tue, 12 Apr 2022 06:59:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2903F60A21;
+        Tue, 12 Apr 2022 06:48:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD3FC385A1;
+        Tue, 12 Apr 2022 06:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746742;
-        bh=0o03kzCxA2FzdbHm9jf0Ja7nQwzJQdUEsHNBzdG6oH0=;
+        s=korg; t=1649746115;
+        bh=gd8iSxgW8PBNOLgAnqpE0vsod2iKWP2nUWete6C1iPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKQxo9GIifWr8qU6363DHHVUnWGELQJHxOiD5TwS5vsTfxCwSRceMlR8Bb01+4Edf
-         7Pm8dW7Oke+sB49cBadN0lfuVu6Qr01idKP45fP1gcMO+ajyp8Nk6BXqbvE+khS/ML
-         ZwzVIKtEoZMjhEAAp9PuT1KujAYuZ9mNWj8Wln1w=
+        b=CUw4+1G6674c75UaqTp1hl0U/dzB8i25edwzbpgAIQDERCumz8ADO9W+0+yW9uhrT
+         PAkdjTpziXfjmRB0gHb9y5zZ7u8RCT9vX+g6Olhllc95ao1D+i3wL/yGuYQaSphI0Q
+         NwPhIisztZ8NmPAxsMLP1n5wg63fHHrT+XgzMrdQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 112/285] init/main.c: return 1 from handled __setup() functions
+Subject: [PATCH 5.15 166/277] drm/imx: Fix memory leak in imx_pd_connector_get_modes
 Date:   Tue, 12 Apr 2022 08:29:29 +0200
-Message-Id: <20220412062946.898927011@linuxfoundation.org>
+Message-Id: <20220412062946.840716123@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,55 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit f9a40b0890658330c83c95511f9d6b396610defc ]
+[ Upstream commit bce81feb03a20fca7bbdd1c4af16b4e9d5c0e1d3 ]
 
-initcall_blacklist() should return 1 to indicate that it handled its
-cmdline arguments.
+Avoid leaking the display mode variable if of_get_drm_display_mode
+fails.
 
-set_debug_rodata() should return 1 to indicate that it handled its
-cmdline arguments.  Print a warning if the option string is invalid.
-
-This prevents these strings from being added to the 'init' program's
-environment as they are not init arguments/parameters.
-
-Link: https://lkml.kernel.org/r/20220221050901.23985-1-rdunlap@infradead.org
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 76ecd9c9fb24 ("drm/imx: parallel-display: check return code from of_get_drm_display_mode()")
+Addresses-Coverity-ID: 1443943 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220108165230.44610-1-jose.exposito89@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- init/main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/imx/parallel-display.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/init/main.c b/init/main.c
-index cb68bc48a682..792a8d9cc560 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1189,7 +1189,7 @@ static int __init initcall_blacklist(char *str)
- 		}
- 	} while (str_entry);
+diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
+index 06cb1a59b9bc..63ba2ad84679 100644
+--- a/drivers/gpu/drm/imx/parallel-display.c
++++ b/drivers/gpu/drm/imx/parallel-display.c
+@@ -75,8 +75,10 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
+ 		ret = of_get_drm_display_mode(np, &imxpd->mode,
+ 					      &imxpd->bus_flags,
+ 					      OF_USE_NATIVE_MODE);
+-		if (ret)
++		if (ret) {
++			drm_mode_destroy(connector->dev, mode);
+ 			return ret;
++		}
  
--	return 0;
-+	return 1;
- }
- 
- static bool __init_or_module initcall_blacklisted(initcall_t fn)
-@@ -1451,7 +1451,9 @@ static noinline void __init kernel_init_freeable(void);
- bool rodata_enabled __ro_after_init = true;
- static int __init set_debug_rodata(char *str)
- {
--	return strtobool(str, &rodata_enabled);
-+	if (strtobool(str, &rodata_enabled))
-+		pr_warn("Invalid option string for rodata: '%s'\n", str);
-+	return 1;
- }
- __setup("rodata=", set_debug_rodata);
- #endif
+ 		drm_mode_copy(mode, &imxpd->mode);
+ 		mode->type |= DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
 -- 
 2.35.1
 

@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A7A4FE685
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A0E4FE68F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354054AbiDLRIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S1357976AbiDLRKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358037AbiDLRHw (ORCPT
+        with ESMTP id S1350498AbiDLRKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:07:52 -0400
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17256005C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:05:34 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KdBtj1VTxzMqLVJ;
-        Tue, 12 Apr 2022 19:05:33 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KdBth2cV3zlhMBP;
-        Tue, 12 Apr 2022 19:05:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1649783133;
-        bh=WIAqrTnf62NAS0tQGLe8JoQbbvgbUmacFvHp891JW6g=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=DWeNvZZDbPHmTCU+9PS7yiMNtuL8zaK+RZuoWGZjGUtOH8YoFj1gspSKJa5STgn/F
-         PxF7DDMrIHUTeYcm1arziMgGg0ELlv58gJWKuZk4iz5C/OkD6FqY7SW/PN7qlBEDeU
-         FstuiSvjT6tLhSKKFm+MzEXz1OcHnz0+qZDvtVeQ=
-Message-ID: <acdf5af3-f256-8d53-ec44-fcef4022ec62@digikod.net>
-Date:   Tue, 12 Apr 2022 19:05:49 +0200
+        Tue, 12 Apr 2022 13:10:38 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F9614037;
+        Tue, 12 Apr 2022 10:08:20 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id r8so19668472oib.5;
+        Tue, 12 Apr 2022 10:08:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8ncYZG5WZb4xBrOPr/eInboRfbbDNW68lt8cRNT2hsk=;
+        b=uJAKHYcA02jQiMHU0l6fx8dGUzedJS8wsNMoQnoRCMb85uZGCsdK5bsxtb05xwcc6n
+         Z4RBB9CkyQyQ+Fo5Ti7AQBZJQIw3R+3eTkLTptReWVF0XqVD4W6gi0Bo2OcNLfmAPKKh
+         jMrysdyxhFNEnTC3o+zt+oLYxW7RzQvLZL9gYnwCJyTKeIyWt0mK0Ou4koqasrmMrgpv
+         Z1HW0mPxq/Lib02LBj1D7uVUI//nYcGXJ/fHbTcv1QzHPXtp3CgQ9ueJC6rlAQyzU6Jt
+         6vo1abG2JztXMlSw6d18Zb9vFp03fFM2F7yBXjbwzAiAX712V9wTBijTgUpWjB6tY4E6
+         8QFw==
+X-Gm-Message-State: AOAM530S1rxLLsbG2pKtrGDMBYcaWoIqvZVq/PcyQtBhOSFbvNqYbEHw
+        uT99SXUroZ3e2a6Tss15HA==
+X-Google-Smtp-Source: ABdhPJxrB37u8Aq8wyh7LZk3laglHfhYexiAKjReaVXTY1ffpS6Zhknewp/6/5OyHiDfXMZIUfYenw==
+X-Received: by 2002:a54:4010:0:b0:2ec:f4e0:8acb with SMTP id x16-20020a544010000000b002ecf4e08acbmr2209538oie.97.1649783299883;
+        Tue, 12 Apr 2022 10:08:19 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c19-20020a9d7853000000b005cdbc0f02ccsm13743143otm.68.2022.04.12.10.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:08:19 -0700 (PDT)
+Received: (nullmailer pid 472113 invoked by uid 1000);
+        Tue, 12 Apr 2022 17:08:18 -0000
+Date:   Tue, 12 Apr 2022 12:08:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Magnus Damm <magnus.damm@gmail.com>
+Subject: Re: [PATCH] dt-bindings: power: renesas,rcar-sysc: correct typo in
+ path
+Message-ID: <YlWyAgVZ6FylBvDq@robh.at.kernel.org>
+References: <20220411095317.221317-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, bpf <bpf@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20220412153906.428179-1-mic@digikod.net>
- <CANiq72=ogSxwz8iJLZaYD4nSkE71sBhT4dZyDv1HYyo5R43=pw@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v1] clang-format: Update and extend the for_each list with
- tools/
-In-Reply-To: <CANiq72=ogSxwz8iJLZaYD4nSkE71sBhT4dZyDv1HYyo5R43=pw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411095317.221317-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm wondering about the ASSERT_* and EXPECT_* macros from 
-tools/testing/selftests/kselftest_harness.h
-Do you think we should treat them as "for macros" as well? They can 
-either be used with or without a following code block.
+On Mon, 11 Apr 2022 11:53:17 +0200, Krzysztof Kozlowski wrote:
+> Fix typo '.' -> '/' in the path to headers.
+> 
+> Fixes: 981a34054038 ("dt-bindings: power: renesas,rcar-sysc: drop useless consumer example")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-
-On 12/04/2022 17:58, Miguel Ojeda wrote:
-> Hi Mickaël,
-> 
-> On Tue, Apr 12, 2022 at 5:39 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> Add tools/ to the shell fragment generating the for_each list and update
->> it.  This is useful to format files in the tools directory (e.g.
->> selftests) with the same coding style as the kernel.
-> 
-> Sounds good to me. There have been discussions about doing it for the
-> entire tree too, so we can start with this.
-> 
-> Cheers,
-> Miguel
+Applied, thanks!

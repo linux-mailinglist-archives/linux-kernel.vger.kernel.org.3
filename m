@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92914FD69B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78AC4FDB20
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355126AbiDLH1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S1388807AbiDLJWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351576AbiDLHMQ (ORCPT
+        with ESMTP id S1357368AbiDLHkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AED4B1C3;
-        Mon, 11 Apr 2022 23:50:17 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB5825291;
+        Tue, 12 Apr 2022 00:15:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85C1061464;
-        Tue, 12 Apr 2022 06:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3F5C385A6;
-        Tue, 12 Apr 2022 06:50:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48720B81B66;
+        Tue, 12 Apr 2022 07:15:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0246C385A1;
+        Tue, 12 Apr 2022 07:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746216;
-        bh=FBesncHoP0Ov3S83wnwhUVjLgMn3giE2KDvtaHZAkXc=;
+        s=korg; t=1649747739;
+        bh=gFJMmxIdjkvGWKqOpfx87ESS9X+rnP3buzs2rAUSAM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uBCCEuAtZqKqVPG46Gh4Lsmmsal43aMwZ/hD+gYco2sZeQ42+ELjjFtJHiYRJa5cp
-         K0DbHYaTyRMsk4rfGNY5FKg4nv+Yh92lK9HKILKur/5yCDf4GiiSLpO+WpbMGTEbGF
-         t6vhR4zWeHBiUr03HkxGCCpyk2pm8EFRoMoWWFdQ=
+        b=z3Kwei+ExwK5Q774ExVnOsWAb5RI+sgdf61AWqvgTGfrdT56D38IJbrTZA4nAe5TG
+         jrvMVMe3quS3qnUepPFe3SJCmFvGX3h9+VInMDKn/DSqVVPhPQu4ZWcGOMkkzXtRvt
+         euYgRphFSihPpRAVFrG7X+clvDwmPh9f4z4Sf8D8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Suman Anna <s-anna@ti.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Tony Lindgren <tony@atomide.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 202/277] iommu/omap: Fix regression in probe for NULL pointer dereference
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 187/343] NFS: nfsiod should not block forever in mempool_alloc()
 Date:   Tue, 12 Apr 2022 08:30:05 +0200
-Message-Id: <20220412062947.885574545@linuxfoundation.org>
+Message-Id: <20220412062956.758206730@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +55,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 71ff461c3f41f6465434b9e980c01782763e7ad8 ]
+[ Upstream commit 515dcdcd48736576c6f5c197814da6f81c60a21e ]
 
-Commit 3f6634d997db ("iommu: Use right way to retrieve iommu_ops") started
-triggering a NULL pointer dereference for some omap variants:
+The concern is that since nfsiod is sometimes required to kick off a
+commit, it can get locked up waiting forever in mempool_alloc() instead
+of failing gracefully and leaving the commit until later.
 
-__iommu_probe_device from probe_iommu_group+0x2c/0x38
-probe_iommu_group from bus_for_each_dev+0x74/0xbc
-bus_for_each_dev from bus_iommu_probe+0x34/0x2e8
-bus_iommu_probe from bus_set_iommu+0x80/0xc8
-bus_set_iommu from omap_iommu_init+0x88/0xcc
-omap_iommu_init from do_one_initcall+0x44/0x24
+Try to allocate from the slab first, with GFP_KERNEL | __GFP_NORETRY,
+then fall back to a non-blocking attempt to allocate from the memory
+pool.
 
-This is caused by omap iommu probe returning 0 instead of ERR_PTR(-ENODEV)
-as noted by Jason Gunthorpe <jgg@ziepe.ca>.
-
-Looks like the regression already happened with an earlier commit
-6785eb9105e3 ("iommu/omap: Convert to probe/release_device() call-backs")
-that changed the function return type and missed converting one place.
-
-Cc: Drew Fustini <dfustini@baylibre.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>
-Cc: Suman Anna <s-anna@ti.com>
-Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-Fixes: 6785eb9105e3 ("iommu/omap: Convert to probe/release_device() call-backs")
-Fixes: 3f6634d997db ("iommu: Use right way to retrieve iommu_ops")
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Tested-by: Drew Fustini <dfustini@baylibre.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20220331062301.24269-1-tony@atomide.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/omap-iommu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfs/internal.h      |  7 +++++++
+ fs/nfs/pnfs_nfs.c      |  8 ++++++--
+ fs/nfs/write.c         | 24 +++++++++---------------
+ include/linux/nfs_fs.h |  2 +-
+ 4 files changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-index 91749654fd49..be60f6f3a265 100644
---- a/drivers/iommu/omap-iommu.c
-+++ b/drivers/iommu/omap-iommu.c
-@@ -1661,7 +1661,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
- 	num_iommus = of_property_count_elems_of_size(dev->of_node, "iommus",
- 						     sizeof(phandle));
- 	if (num_iommus < 0)
--		return 0;
-+		return ERR_PTR(-ENODEV);
+diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
+index 2de7c56a1fbe..db9f611e8efd 100644
+--- a/fs/nfs/internal.h
++++ b/fs/nfs/internal.h
+@@ -573,6 +573,13 @@ nfs_write_match_verf(const struct nfs_writeverf *verf,
+ 		!nfs_write_verifier_cmp(&req->wb_verf, &verf->verifier);
+ }
  
- 	arch_data = kcalloc(num_iommus + 1, sizeof(*arch_data), GFP_KERNEL);
- 	if (!arch_data)
++static inline gfp_t nfs_io_gfp_mask(void)
++{
++	if (current->flags & PF_WQ_WORKER)
++		return GFP_KERNEL | __GFP_NORETRY | __GFP_NOWARN;
++	return GFP_KERNEL;
++}
++
+ /* unlink.c */
+ extern struct rpc_task *
+ nfs_async_rename(struct inode *old_dir, struct inode *new_dir,
+diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
+index 316f68f96e57..657c242a18ff 100644
+--- a/fs/nfs/pnfs_nfs.c
++++ b/fs/nfs/pnfs_nfs.c
+@@ -419,7 +419,7 @@ static struct nfs_commit_data *
+ pnfs_bucket_fetch_commitdata(struct pnfs_commit_bucket *bucket,
+ 			     struct nfs_commit_info *cinfo)
+ {
+-	struct nfs_commit_data *data = nfs_commitdata_alloc(false);
++	struct nfs_commit_data *data = nfs_commitdata_alloc();
+ 
+ 	if (!data)
+ 		return NULL;
+@@ -515,7 +515,11 @@ pnfs_generic_commit_pagelist(struct inode *inode, struct list_head *mds_pages,
+ 	unsigned int nreq = 0;
+ 
+ 	if (!list_empty(mds_pages)) {
+-		data = nfs_commitdata_alloc(true);
++		data = nfs_commitdata_alloc();
++		if (!data) {
++			nfs_retry_commit(mds_pages, NULL, cinfo, -1);
++			return -ENOMEM;
++		}
+ 		data->ds_commit_index = -1;
+ 		list_splice_init(mds_pages, &data->pages);
+ 		list_add_tail(&data->list, &list);
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 60693ab6a032..d0b9083bbfb5 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -70,27 +70,17 @@ static mempool_t *nfs_wdata_mempool;
+ static struct kmem_cache *nfs_cdata_cachep;
+ static mempool_t *nfs_commit_mempool;
+ 
+-struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail)
++struct nfs_commit_data *nfs_commitdata_alloc(void)
+ {
+ 	struct nfs_commit_data *p;
+ 
+-	if (never_fail)
+-		p = mempool_alloc(nfs_commit_mempool, GFP_NOIO);
+-	else {
+-		/* It is OK to do some reclaim, not no safe to wait
+-		 * for anything to be returned to the pool.
+-		 * mempool_alloc() cannot handle that particular combination,
+-		 * so we need two separate attempts.
+-		 */
++	p = kmem_cache_zalloc(nfs_cdata_cachep, nfs_io_gfp_mask());
++	if (!p) {
+ 		p = mempool_alloc(nfs_commit_mempool, GFP_NOWAIT);
+-		if (!p)
+-			p = kmem_cache_alloc(nfs_cdata_cachep, GFP_NOIO |
+-					     __GFP_NOWARN | __GFP_NORETRY);
+ 		if (!p)
+ 			return NULL;
++		memset(p, 0, sizeof(*p));
+ 	}
+-
+-	memset(p, 0, sizeof(*p));
+ 	INIT_LIST_HEAD(&p->pages);
+ 	return p;
+ }
+@@ -1826,7 +1816,11 @@ nfs_commit_list(struct inode *inode, struct list_head *head, int how,
+ 	if (list_empty(head))
+ 		return 0;
+ 
+-	data = nfs_commitdata_alloc(true);
++	data = nfs_commitdata_alloc();
++	if (!data) {
++		nfs_retry_commit(head, NULL, cinfo, -1);
++		return -ENOMEM;
++	}
+ 
+ 	/* Set up the argument struct */
+ 	nfs_init_commit(data, head, NULL, cinfo);
+diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
+index 161e4f5ea7a0..c9d3dc79d587 100644
+--- a/include/linux/nfs_fs.h
++++ b/include/linux/nfs_fs.h
+@@ -585,7 +585,7 @@ extern int nfs_wb_all(struct inode *inode);
+ extern int nfs_wb_page(struct inode *inode, struct page *page);
+ extern int nfs_wb_page_cancel(struct inode *inode, struct page* page);
+ extern int  nfs_commit_inode(struct inode *, int);
+-extern struct nfs_commit_data *nfs_commitdata_alloc(bool never_fail);
++extern struct nfs_commit_data *nfs_commitdata_alloc(void);
+ extern void nfs_commit_free(struct nfs_commit_data *data);
+ bool nfs_commit_end(struct nfs_mds_commit_info *cinfo);
+ 
 -- 
 2.35.1
 

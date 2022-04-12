@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A284FD79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CD94FD57B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380366AbiDLIVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S1380152AbiDLIV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353907AbiDLHZ5 (ORCPT
+        with ESMTP id S1353933AbiDLHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:25:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F3B11C12;
-        Tue, 12 Apr 2022 00:05:11 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9C91263E;
+        Tue, 12 Apr 2022 00:05:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14155B81B4D;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AA78B81A8F;
+        Tue, 12 Apr 2022 07:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09BB9C385A6;
         Tue, 12 Apr 2022 07:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED21C385A6;
-        Tue, 12 Apr 2022 07:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747108;
-        bh=5JSIA/Lvh8ph+aTBot7Q4dH+1Hwb/0nwpJ+yIcQqTJQ=;
+        s=korg; t=1649747111;
+        bh=4kHxTx+nZTZet0xhrBn9ebOlglwAHA+XhrKvmS0m9VA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gf/1Hu+Jhpj+pAMbMxY2gnvPD1goFNlhKoHQTA5lGPYQ6KqX40fZ9aYSBkp57yfKR
-         YhYMGDgsp7FqVaEQRBd943Zwi5p12DgB2WgM+8xW1jRwvy8m1xih+Lhi1fvs987/ad
-         ULhNzuvyK+zrE8HEu95oi6pIr7KJITPk/xigwf64=
+        b=xUovsqyXJP3uyjWzgBdDLYVbZP2asZRpih4yMIIHavrNsb+IJUg6ukbJCMGT0tl9b
+         p0mbKGYNI8s3AxQnB/bEaMZAPnw4CYrbjr8Idbce6/YRjUl8upJQ6Uapkgfn7mXlA3
+         mD94iwoAz2xNp5zrRYrx91OyaKieqX2ERrfBGxr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 206/285] SUNRPC: Handle low memory situations in call_status()
-Date:   Tue, 12 Apr 2022 08:31:03 +0200
-Message-Id: <20220412062949.605371162@linuxfoundation.org>
+Subject: [PATCH 5.16 207/285] SUNRPC: svc_tcp_sendmsg() should handle errors from xdr_alloc_bvec()
+Date:   Tue, 12 Apr 2022 08:31:04 +0200
+Message-Id: <20220412062949.633716901@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -57,35 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 9d82819d5b065348ce623f196bf601028e22ed00 ]
+[ Upstream commit b056fa070814897be32d83b079dbc311375588e7 ]
 
-We need to handle ENFILE, ENOBUFS, and ENOMEM, because
-xprt_wake_pending_tasks() can be called with any one of these due to
-socket creation failures.
+The allocation is done with GFP_KERNEL, but it could still fail in a low
+memory situation.
 
-Fixes: b61d59fffd3e ("SUNRPC: xs_tcp_connect_worker{4,6}: merge common code")
+Fixes: 4a85a6a3320b ("SUNRPC: Handle TCP socket sends with kernel_sendpage() again")
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/clnt.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/sunrpc/svcsock.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
-index bf1fd6caaf92..0222ad4523a9 100644
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -2364,6 +2364,11 @@ call_status(struct rpc_task *task)
- 	case -EPIPE:
- 	case -EAGAIN:
- 		break;
-+	case -ENFILE:
-+	case -ENOBUFS:
-+	case -ENOMEM:
-+		rpc_delay(task, HZ>>2);
-+		break;
- 	case -EIO:
- 		/* shutdown or soft timeout */
- 		goto out_exit;
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index 478f857cdaed..6ea3d87e1147 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -1096,7 +1096,9 @@ static int svc_tcp_sendmsg(struct socket *sock, struct xdr_buf *xdr,
+ 	int ret;
+ 
+ 	*sentp = 0;
+-	xdr_alloc_bvec(xdr, GFP_KERNEL);
++	ret = xdr_alloc_bvec(xdr, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
+ 
+ 	ret = kernel_sendmsg(sock, &msg, &rm, 1, rm.iov_len);
+ 	if (ret < 0)
 -- 
 2.35.1
 

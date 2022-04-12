@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EA34FE56E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67E74FE575
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357556AbiDLP5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S233983AbiDLP6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357473AbiDLP4k (ORCPT
+        with ESMTP id S1357469AbiDLP5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:56:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC6F55A0;
-        Tue, 12 Apr 2022 08:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649778845; x=1681314845;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=S/RdM4HIQ/M3AD9TZlGFbxa+CRrzvVu2swh7M3JNMGY=;
-  b=ILEUX+8v4VG4882BVbEHem1vJlpOtnECxBHviyepVgbX+A2N7bVYGFk5
-   mCT+CROYcA7Gez61drCqLPYJaRJR1uBeJt2D0S9+2Et8HXajo22ggSXQq
-   MT1o7SegYZVAFCy1m6jtofhCFa/Dn7yHyxAQrR+6ee3+J4zmF2U8L71n1
-   qSAP6L3zzAejsF+S/OGQAEGCK5JY8zUWu/c7JuWwQPUxrgpfAH1lbtY8Z
-   zvO7wX4gPuqZI8EUIeWjaMhQRcNEj2bk3NXYZhgHg5d6fmJ/beswhIi/9
-   tJNtc/1hE37JkgowpQZYat+hDZVLntguYlutqKKFNV+9bp812j2jtThA7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="249690306"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="249690306"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:54:05 -0700
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="551764539"
-Received: from vtelkarx-mobl.amr.corp.intel.com (HELO [10.209.191.73]) ([10.209.191.73])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:54:04 -0700
-Message-ID: <90457491-1ac3-b04a-856a-25c6e04d429a@intel.com>
-Date:   Tue, 12 Apr 2022 08:54:10 -0700
+        Tue, 12 Apr 2022 11:57:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB18388
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 40D2ACE1F65
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0B4C385A1;
+        Tue, 12 Apr 2022 15:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649778889;
+        bh=dbQHjtWTndQ3IhJbJ7Bf8ue3XoQqen/tZP8psUGBdro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D0Flk52zzKTiOJtrDbgYOw3HQZfvDWYR5IKWnmBiBv05GWrNgJEFRwVa7lDxf2EDo
+         SZIZG3XhBYGNiBN8PR23PBJWk6w73PpfhJ23BSXmSq0vypF4dM+TRah0cQD6APe0xP
+         zZBeatO+KMyPwMoUvG1R1aTl//Qvq68wnbq4gPXw=
+Date:   Tue, 12 Apr 2022 17:54:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: vme: Adjusted VME_USER in Kconfig
+Message-ID: <YlWgxjZk8kiwARtL@kroah.com>
+References: <20220401050045.3686663-1-codeagain@codeagain.dev>
+ <YkaW0ThT8Ah3z0wW@kroah.com>
+ <YkaXRpIElW1BwKGb@kroah.com>
+ <37e5203d1efd310ea82cf91c18c6a07eea743ac7.camel@codeagain.dev>
+ <Ykl/iBR+pDaaLImA@kroah.com>
+ <20220412151432.zsdxrag7myyzgv6o@AN5Bruno>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Neelima Krishnan <neelima.krishnan@intel.com>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>
-References: <20220411180131.5054-1-jon@nutanix.com>
- <41a3ca80-d3e2-47d2-8f1c-9235c55de8d1@intel.com>
- <AE4621FC-0947-4CEF-A1B3-87D4E00C786D@nutanix.com>
- <e800ba74-0ff6-8d98-8978-62c02cf1f8ea@intel.com>
- <1767A554-CC0A-412D-B70C-12DF0AF4C690@nutanix.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/tsx: fix KVM guest live migration for tsx=on
-In-Reply-To: <1767A554-CC0A-412D-B70C-12DF0AF4C690@nutanix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412151432.zsdxrag7myyzgv6o@AN5Bruno>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/22 06:36, Jon Kohler wrote:
-> So my theory here is to extend the logical effort of the microcode driven
-> automatic disablement as well as the tsx=auto automatic disablement and
-> have tsx=on force abort all transactions on X86_BUG_TAA SKUs, but leave
-> the CPU features enumerated to maintain live migration.
+On Tue, Apr 12, 2022 at 12:14:32PM -0300, Bruno Moreira-Guedes wrote:
+> On Sun, Apr 03, 2022 at 01:05:44PM +0200, Greg Kroah-Hartman wrote:
+> > 
+> >On Fri, Apr 01, 2022 at 03:21:50PM -0300, Bruno wrote:
+> >> With my tests in my, I have found two other things that I think are
+> >> remarkable to mention. First one is a missing `depends on` line for
+> >> `VME_BRIDGE` in drivers/staging/vme/devices/Kconfig, not visible
+> >> because they were in the same tree, but now unveiled. I'm fixing it,
+> >> do you think it's best to add it in the same patch?
+> > 
+> > Make that a second patch, and resend it as part of a patch series since
+> > your first patch here is gone from my queue.
 > 
-> This would still leave TSX totally good on Ice Lake / non-buggy systems.
+> This patch is already sent, so I'll trim most of this message to avoid
+> duplicating the discussions. There's only one thing I'd like some input
+> first, if you don't mind.
 > 
-> If it would help, I'm working up an RFC patch, and we could discuss there?
+> >> Do you think it would be interesting for a future patch to provide
+> >> some output when drivers from the staging tree are present in the
+> >> running kernel image?
+> > 
+> > If you can figure out how to do so, that would be interesting to see.
+> I think I might have figured out. In "include/modules.h" and
+> "include/init.h" I happened to notice the driver initialization is
+> handled by some macros. After some inspection through gcc -E and looking
+> how they are defined, I figured out a scenario (when MODULE is not
+> defined) where the module_init() macro is defined as (among other
+> things) an inline initcall function that wraps the driver initialization
+> function.
+> 
+> So I thought about implementing it by creating a -DSTAGING flag in 
+> drivers/staging/Makefile, and then using this macro to make an #ifdef
+> STAGING to add a similar inline wrapping function, except that in this
+> case the function makes a pr_warning() before calling the initialization
+> function.
+> 
+> Do you think it would be a good way of solving that?
 
-Sure.  But, it sounds like you really want a new tdx=something rather
-than to muck with tsx=on behavior.  Surely someone else will come along
-and complain that we broke their TDX setup if we change its behavior.
+Yes, that would be a possible way, try it and see!
 
-Maybe you should just pay the one-time cost and move your whole fleet
-over to tsx=off if you truly believe nobody is using it.
-
+greg k-h

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FD54FDA03
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481BD4FD542
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357138AbiDLIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S1353505AbiDLHPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357221AbiDLHjx (ORCPT
+        with ESMTP id S1349248AbiDLHBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4901D1582D;
-        Tue, 12 Apr 2022 00:13:57 -0700 (PDT)
+        Tue, 12 Apr 2022 03:01:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B098443AC9;
+        Mon, 11 Apr 2022 23:46:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D766461045;
-        Tue, 12 Apr 2022 07:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E335CC385A1;
-        Tue, 12 Apr 2022 07:13:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 665DB61014;
+        Tue, 12 Apr 2022 06:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C783C385A1;
+        Tue, 12 Apr 2022 06:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747636;
-        bh=Hh8TQDDukf6SBZKFe+GfLCSWmvkOIWW41tky6bIOHxg=;
+        s=korg; t=1649746010;
+        bh=lPnrHUUe7cSIJC6PkcHFb1xOLLsK4k/cCRA3seRDegM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w5f4NSYM0fJ/iefeF4bI70uYnrHRpzSAwVZt4bIPShIxrDPkgQtiWbRryoI7hFmna
-         XDTDgEKjyXWnBYrarGnRpmPAGKaKCtgqzD9z2Y52xHbvQUTMioQfL3X56JqXvINexl
-         pdbXKBIwCd31m3eQMtRMUAtyH/1j3z3PFrtqfQak=
+        b=NPfMA5pDO7Bkc5hgeQ3Bd0KI/rO13zP+uQi9ji4Y7l0qgfHmqD9rZfKK6Z9lBsa2o
+         FtGokKSV3fT43/dLYZZZSBj90xrS5lSuaUaEKaFPcDElqTPSBfxqMyYFe/zovWGKFF
+         9U9tKHVbdjyPQtmKOmIVK5HkOPqI8OqtC+IXvG+E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 111/343] power: supply: axp288_charger: Use acpi_quirk_skip_acpi_ac_and_battery()
-Date:   Tue, 12 Apr 2022 08:28:49 +0200
-Message-Id: <20220412062954.597367971@linuxfoundation.org>
+Subject: [PATCH 5.15 127/277] SUNRPC/call_alloc: async tasks mustnt block waiting for memory
+Date:   Tue, 12 Apr 2022 08:28:50 +0200
+Message-Id: <20220412062945.715679113@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 00d0566614b7bb7b226cb5a6895b0180ffe6915a ]
+[ Upstream commit c487216bec83b0c5a8803e5c61433d33ad7b104d ]
 
-Normally the native AXP288 fg/charger drivers are preferred but one some
-devices the ACPI drivers should be used instead.
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.
+So it must not block waiting for memory.
 
-The ACPI battery/ac drivers use the acpi_quirk_skip_acpi_ac_and_battery()
-helper to determine if they should skip loading because native fuel-gauge/
-charger drivers like the AXP288 drivers will be used.
+mempools are particularly a problem as memory can only be released back
+to the mempool by an async rpc task running.  If all available
+workqueue threads are waiting on the mempool, no thread is available to
+return anything.
 
-The new acpi_quirk_skip_acpi_ac_and_battery() helper includes a list of
-exceptions for boards where the ACPI drivers should be used instead.
+rpc_malloc() can block, and this might cause deadlocks.
+So check RPC_IS_ASYNC(), rather than RPC_IS_SWAPPER() to determine if
+blocking is acceptable.
 
-Use this new helper to avoid loading on such boards. Note this requires
-adding a Kconfig dependency on ACPI, this is not a problem because ACPI
-should be enabled on all boards with an AXP288 PMIC anyways.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/Kconfig          | 2 +-
- drivers/power/supply/axp288_charger.c | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ net/sunrpc/sched.c              | 4 +++-
+ net/sunrpc/xprtrdma/transport.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index b366e2fd8e97..d7534f12e9ef 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -351,7 +351,7 @@ config AXP20X_POWER
+diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
+index c045f63d11fa..6e4d476c6324 100644
+--- a/net/sunrpc/sched.c
++++ b/net/sunrpc/sched.c
+@@ -1012,8 +1012,10 @@ int rpc_malloc(struct rpc_task *task)
+ 	struct rpc_buffer *buf;
+ 	gfp_t gfp = GFP_NOFS;
  
- config AXP288_CHARGER
- 	tristate "X-Powers AXP288 Charger"
--	depends on MFD_AXP20X && EXTCON_AXP288 && IOSF_MBI
-+	depends on MFD_AXP20X && EXTCON_AXP288 && IOSF_MBI && ACPI
- 	help
- 	  Say yes here to have support X-Power AXP288 power management IC (PMIC)
- 	  integrated charger.
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index c498e62ab4e2..19746e658a6a 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -838,6 +838,13 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	struct power_supply_config charger_cfg = {};
- 	unsigned int val;
++	if (RPC_IS_ASYNC(task))
++		gfp = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		gfp = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		gfp |= __GFP_MEMALLOC;
  
-+	/*
-+	 * Normally the native AXP288 fg/charger drivers are preferred but
-+	 * on some devices the ACPI drivers should be used instead.
-+	 */
-+	if (!acpi_quirk_skip_acpi_ac_and_battery())
-+		return -ENODEV;
-+
- 	/*
- 	 * On some devices the fuelgauge and charger parts of the axp288 are
- 	 * not used, check that the fuelgauge is enabled (CC_CTRL != 0).
+ 	size += sizeof(struct rpc_buffer);
+ 	if (size <= RPC_BUFFER_MAXSIZE)
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index 16e5696314a4..a52277115500 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -574,8 +574,10 @@ xprt_rdma_allocate(struct rpc_task *task)
+ 	gfp_t flags;
+ 
+ 	flags = RPCRDMA_DEF_GFP;
++	if (RPC_IS_ASYNC(task))
++		flags = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		flags = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		flags |= __GFP_MEMALLOC;
+ 
+ 	if (!rpcrdma_check_regbuf(r_xprt, req->rl_sendbuf, rqst->rq_callsize,
+ 				  flags))
 -- 
 2.35.1
 

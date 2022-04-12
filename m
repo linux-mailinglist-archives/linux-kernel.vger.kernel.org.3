@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B07D4FDA2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D644A4FDAD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352460AbiDLH2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S1388741AbiDLJWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351689AbiDLHMv (ORCPT
+        with ESMTP id S1357666AbiDLHkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA48C29830;
-        Mon, 11 Apr 2022 23:51:08 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B163298C;
+        Tue, 12 Apr 2022 00:16:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 36656CE1C09;
-        Tue, 12 Apr 2022 06:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9D7C385A6;
-        Tue, 12 Apr 2022 06:51:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1740361045;
+        Tue, 12 Apr 2022 07:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29486C385A1;
+        Tue, 12 Apr 2022 07:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746265;
-        bh=LrO/NPznNV1aounXGisBxWbAil2ax0fJhHmdqmv6spY=;
+        s=korg; t=1649747783;
+        bh=/hvW6BrL+dD+5tDeRCEM3J4yR7J9VZvX5DWRVZsQhc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FTQWHqVxF+I24X1oef0toaMtwQ+WAX3vE25Eem6sT1Fy5atbD3kk7kbUCAaS0tHry
-         DA8+RaBOksS/2sa9XEdvgh5OxSSgQnzde0/dzm7HS1irya/82l/3HIoKC+jQLITpxt
-         +Bh+9JrAa8kSbgRaefp0PWhF3d8gO14am3wx+I8c=
+        b=OSXCX+2l2w3Sz0TkUPjtwGcIr22T+/e0puZGG3uNCzS4Q6lYt3f1DUHbzrcXuqBDA
+         yTbylQvwdtpD41hFH4HIg2o83SvtvMqqJqG3dyq69sRlu3kRZqVjgTLTL0R/jCJT/J
+         vrNNOVBTG2iwxbFL/AG4asKrfASA9TRAZkKhkg5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 219/277] io_uring: defer splice/tee file validity check until command issue
-Date:   Tue, 12 Apr 2022 08:30:22 +0200
-Message-Id: <20220412062948.379725655@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 205/343] net/tls: fix slab-out-of-bounds bug in decrypt_internal
+Date:   Tue, 12 Apr 2022 08:30:23 +0200
+Message-Id: <20220412062957.268239136@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,147 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-commit a3e4bc23d5470b2beb7cc42a86b6a3e75b704c15 upstream.
+[ Upstream commit 9381fe8c849cfbe50245ac01fc077554f6eaa0e2 ]
 
-In preparation for not using the file at prep time, defer checking if this
-file refers to a valid io_uring instance until issue time.
+The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
+tls_set_sw_offload(). The return value of crypto_aead_ivsize()
+for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
+memory space will trigger slab-out-of-bounds bug as following:
 
-This also means we can get rid of the cleanup flag for splice and tee.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
+Read of size 16 at addr ffff888114e84e60 by task tls/10911
 
-Cc: stable@vger.kernel.org # v5.15+
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x34/0x44
+ print_report.cold+0x5e/0x5db
+ ? decrypt_internal+0x385/0xc40 [tls]
+ kasan_report+0xab/0x120
+ ? decrypt_internal+0x385/0xc40 [tls]
+ kasan_check_range+0xf9/0x1e0
+ memcpy+0x20/0x60
+ decrypt_internal+0x385/0xc40 [tls]
+ ? tls_get_rec+0x2e0/0x2e0 [tls]
+ ? process_rx_list+0x1a5/0x420 [tls]
+ ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
+ decrypt_skb_update+0x9d/0x400 [tls]
+ tls_sw_recvmsg+0x3c8/0xb50 [tls]
+
+Allocated by task 10911:
+ kasan_save_stack+0x1e/0x40
+ __kasan_kmalloc+0x81/0xa0
+ tls_set_sw_offload+0x2eb/0xa20 [tls]
+ tls_setsockopt+0x68c/0x700 [tls]
+ __sys_setsockopt+0xfe/0x1b0
+
+Replace the crypto_aead_ivsize() with prot->iv_size + prot->salt_size
+when memcpy() iv value in TLS_1_3_VERSION scenario.
+
+Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |   49 +++++++++++++++++++++----------------------------
- 1 file changed, 21 insertions(+), 28 deletions(-)
+ net/tls/tls_sw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -623,10 +623,10 @@ struct io_epoll {
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index efc84845bb6b..75a699591383 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -1495,7 +1495,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+ 	if (prot->version == TLS_1_3_VERSION ||
+ 	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
+ 		memcpy(iv + iv_offset, tls_ctx->rx.iv,
+-		       crypto_aead_ivsize(ctx->aead_recv));
++		       prot->iv_size + prot->salt_size);
+ 	else
+ 		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
  
- struct io_splice {
- 	struct file			*file_out;
--	struct file			*file_in;
- 	loff_t				off_out;
- 	loff_t				off_in;
- 	u64				len;
-+	int				splice_fd_in;
- 	unsigned int			flags;
- };
- 
-@@ -1452,14 +1452,6 @@ static void io_prep_async_work(struct io
- 		if (def->unbound_nonreg_file)
- 			req->work.flags |= IO_WQ_WORK_UNBOUND;
- 	}
--
--	switch (req->opcode) {
--	case IORING_OP_SPLICE:
--	case IORING_OP_TEE:
--		if (!S_ISREG(file_inode(req->splice.file_in)->i_mode))
--			req->work.flags |= IO_WQ_WORK_UNBOUND;
--		break;
--	}
- }
- 
- static void io_prep_async_link(struct io_kiocb *req)
-@@ -4027,18 +4019,11 @@ static int __io_splice_prep(struct io_ki
- 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
- 
--	sp->file_in = NULL;
- 	sp->len = READ_ONCE(sqe->len);
- 	sp->flags = READ_ONCE(sqe->splice_flags);
--
- 	if (unlikely(sp->flags & ~valid_flags))
- 		return -EINVAL;
--
--	sp->file_in = io_file_get(req->ctx, req, READ_ONCE(sqe->splice_fd_in),
--				  (sp->flags & SPLICE_F_FD_IN_FIXED));
--	if (!sp->file_in)
--		return -EBADF;
--	req->flags |= REQ_F_NEED_CLEANUP;
-+	sp->splice_fd_in = READ_ONCE(sqe->splice_fd_in);
- 	return 0;
- }
- 
-@@ -4053,20 +4038,27 @@ static int io_tee_prep(struct io_kiocb *
- static int io_tee(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_splice *sp = &req->splice;
--	struct file *in = sp->file_in;
- 	struct file *out = sp->file_out;
- 	unsigned int flags = sp->flags & ~SPLICE_F_FD_IN_FIXED;
-+	struct file *in;
- 	long ret = 0;
- 
- 	if (issue_flags & IO_URING_F_NONBLOCK)
- 		return -EAGAIN;
-+
-+	in = io_file_get(req->ctx, req, sp->splice_fd_in,
-+				  (sp->flags & SPLICE_F_FD_IN_FIXED));
-+	if (!in) {
-+		ret = -EBADF;
-+		goto done;
-+	}
-+
- 	if (sp->len)
- 		ret = do_tee(in, out, sp->len, flags);
- 
- 	if (!(sp->flags & SPLICE_F_FD_IN_FIXED))
- 		io_put_file(in);
--	req->flags &= ~REQ_F_NEED_CLEANUP;
--
-+done:
- 	if (ret != sp->len)
- 		req_set_fail(req);
- 	io_req_complete(req, ret);
-@@ -4085,15 +4077,22 @@ static int io_splice_prep(struct io_kioc
- static int io_splice(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_splice *sp = &req->splice;
--	struct file *in = sp->file_in;
- 	struct file *out = sp->file_out;
- 	unsigned int flags = sp->flags & ~SPLICE_F_FD_IN_FIXED;
- 	loff_t *poff_in, *poff_out;
-+	struct file *in;
- 	long ret = 0;
- 
- 	if (issue_flags & IO_URING_F_NONBLOCK)
- 		return -EAGAIN;
- 
-+	in = io_file_get(req->ctx, req, sp->splice_fd_in,
-+				  (sp->flags & SPLICE_F_FD_IN_FIXED));
-+	if (!in) {
-+		ret = -EBADF;
-+		goto done;
-+	}
-+
- 	poff_in = (sp->off_in == -1) ? NULL : &sp->off_in;
- 	poff_out = (sp->off_out == -1) ? NULL : &sp->off_out;
- 
-@@ -4102,8 +4101,7 @@ static int io_splice(struct io_kiocb *re
- 
- 	if (!(sp->flags & SPLICE_F_FD_IN_FIXED))
- 		io_put_file(in);
--	req->flags &= ~REQ_F_NEED_CLEANUP;
--
-+done:
- 	if (ret != sp->len)
- 		req_set_fail(req);
- 	io_req_complete(req, ret);
-@@ -6649,11 +6647,6 @@ static void io_clean_op(struct io_kiocb
- 			kfree(io->free_iov);
- 			break;
- 			}
--		case IORING_OP_SPLICE:
--		case IORING_OP_TEE:
--			if (!(req->splice.flags & SPLICE_F_FD_IN_FIXED))
--				io_put_file(req->splice.file_in);
--			break;
- 		case IORING_OP_OPENAT:
- 		case IORING_OP_OPENAT2:
- 			if (req->open.filename)
+-- 
+2.35.1
+
 
 

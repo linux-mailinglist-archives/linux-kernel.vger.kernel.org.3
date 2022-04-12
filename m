@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4E14FD80C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123764FD986
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355042AbiDLIGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S1385817AbiDLIxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354069AbiDLH0C (ORCPT
+        with ESMTP id S1359214AbiDLHmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1E618349;
-        Tue, 12 Apr 2022 00:05:31 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72409554BF;
+        Tue, 12 Apr 2022 00:20:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6787760B2B;
-        Tue, 12 Apr 2022 07:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723C3C385A1;
-        Tue, 12 Apr 2022 07:05:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29E7CB81A8F;
+        Tue, 12 Apr 2022 07:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73797C385A1;
+        Tue, 12 Apr 2022 07:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747130;
-        bh=98APagSa0U42erfRQUeR32abN7Mgn6/L5uXCLR4wu94=;
+        s=korg; t=1649748027;
+        bh=u1+eONhLb4ECviN+wgOEn248x+H4smqRChUv5JM4SuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0yHXB6LO0xMH56XZgP+slhTJVqixzSRNEmzsDsLOfYoCasG/ibJ/7Bo46+jkwW3n3
-         tthA1DnPhtyrMetPLlR2zTDOtcm9I+Q3ge1z7PFgfXP6rm8QXsrD6SN0MfcqgNOa9y
-         QOX7GDXU0BLp9aLC1jWsWQye7jFll8Ms4abFQxkA=
+        b=TZqpsO8jAS95IDRKzkUq6JBc/ccjXdDYszGZe9uSCMug3hKv0Pa2jc3wL0/HuikQO
+         9yNk5LOX/HJYjMyUTH53BiVWDaZpqi6EG76C4MTGfE7TaIrPEmZpYC/HCOOgIhLc5K
+         GPESZi5kXgIADF1k4lu5ONPxxV9CtYtIn+QBCG5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Emily Deng <Emily.Deng@amd.com>,
-        James Zhu <James.Zhu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.16 255/285] drm/amdgpu/vcn: Fix the register setting for vcn1
+        stable@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.17 294/343] gpio: Restrict usage of GPIO chip irq members before initialization
 Date:   Tue, 12 Apr 2022 08:31:52 +0200
-Message-Id: <20220412062951.020268143@linuxfoundation.org>
+Message-Id: <20220412062959.813051346@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emily Deng <Emily.Deng@amd.com>
+From: Shreeya Patel <shreeya.patel@collabora.com>
 
-commit 02fc996d5098f4c3f65bdf6cdb6b28e3f29ba789 upstream.
+commit 5467801f1fcbdc46bc7298a84dbf3ca1ff2a7320 upstream.
 
-Correct the code error for setting register UVD_GFX10_ADDR_CONFIG.
-Need to use inst_idx, or it only will set VCN0.
+GPIO chip irq members are exposed before they could be completely
+initialized and this leads to race conditions.
 
-Signed-off-by: Emily Deng <Emily.Deng@amd.com>
-Reviewed-by: James Zhu <James.Zhu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+One such issue was observed for the gc->irq.domain variable which
+was accessed through the I2C interface in gpiochip_to_irq() before
+it could be initialized by gpiochip_add_irqchip(). This resulted in
+Kernel NULL pointer dereference.
+
+Following are the logs for reference :-
+
+kernel: Call Trace:
+kernel:  gpiod_to_irq+0x53/0x70
+kernel:  acpi_dev_gpio_irq_get_by+0x113/0x1f0
+kernel:  i2c_acpi_get_irq+0xc0/0xd0
+kernel:  i2c_device_probe+0x28a/0x2a0
+kernel:  really_probe+0xf2/0x460
+kernel: RIP: 0010:gpiochip_to_irq+0x47/0xc0
+
+To avoid such scenarios, restrict usage of GPIO chip irq members before
+they are completely initialized.
+
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
 Cc: stable@vger.kernel.org
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpio/gpiolib.c      |   19 +++++++++++++++++++
+ include/linux/gpio/driver.h |    9 +++++++++
+ 2 files changed, 28 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
-@@ -569,8 +569,8 @@ static void vcn_v3_0_mc_resume_dpg_mode(
- 			AMDGPU_GPU_PAGE_ALIGN(sizeof(struct amdgpu_fw_shared)), 0, indirect);
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1404,6 +1404,16 @@ static int gpiochip_to_irq(struct gpio_c
+ {
+ 	struct irq_domain *domain = gc->irq.domain;
  
- 	/* VCN global tiling registers */
--	WREG32_SOC15_DPG_MODE(0, SOC15_DPG_MODE_OFFSET(
--		UVD, 0, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
-+	WREG32_SOC15_DPG_MODE(inst_idx, SOC15_DPG_MODE_OFFSET(
-+		UVD, inst_idx, mmUVD_GFX10_ADDR_CONFIG), adev->gfx.config.gb_addr_config, 0, indirect);
++#ifdef CONFIG_GPIOLIB_IRQCHIP
++	/*
++	 * Avoid race condition with other code, which tries to lookup
++	 * an IRQ before the irqchip has been properly registered,
++	 * i.e. while gpiochip is still being brought up.
++	 */
++	if (!gc->irq.initialized)
++		return -EPROBE_DEFER;
++#endif
++
+ 	if (!gpiochip_irqchip_irq_valid(gc, offset))
+ 		return -ENXIO;
+ 
+@@ -1593,6 +1603,15 @@ static int gpiochip_add_irqchip(struct g
+ 
+ 	acpi_gpiochip_request_interrupts(gc);
+ 
++	/*
++	 * Using barrier() here to prevent compiler from reordering
++	 * gc->irq.initialized before initialization of above
++	 * GPIO chip irq members.
++	 */
++	barrier();
++
++	gc->irq.initialized = true;
++
+ 	return 0;
  }
  
- static void vcn_v3_0_disable_static_power_gating(struct amdgpu_device *adev, int inst)
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -219,6 +219,15 @@ struct gpio_irq_chip {
+ 	bool per_parent_data;
+ 
+ 	/**
++	 * @initialized:
++	 *
++	 * Flag to track GPIO chip irq member's initialization.
++	 * This flag will make sure GPIO chip irq members are not used
++	 * before they are initialized.
++	 */
++	bool initialized;
++
++	/**
+ 	 * @init_hw: optional routine to initialize hardware before
+ 	 * an IRQ chip will be added. This is quite useful when
+ 	 * a particular driver wants to clear IRQ related registers
 
 

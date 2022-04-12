@@ -2,107 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B114FE475
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DF74FE46D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356916AbiDLPSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
+        id S1356884AbiDLPQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356891AbiDLPSd (ORCPT
+        with ESMTP id S1356869AbiDLPQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:18:33 -0400
-X-Greylist: delayed 326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 08:16:13 PDT
-Received: from nibbler.cm4all.net (nibbler.cm4all.net [82.165.145.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7215E74C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:16:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by nibbler.cm4all.net (Postfix) with ESMTP id 8A3ABC007D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:10:45 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at nibbler.cm4all.net
-Received: from nibbler.cm4all.net ([127.0.0.1])
-        by localhost (nibbler.cm4all.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id lI6n_RWVLLF0 for <linux-kernel@vger.kernel.org>;
-        Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
-Received: from zero.intern.cm-ag (zero.intern.cm-ag [172.30.16.10])
-        by nibbler.cm4all.net (Postfix) with SMTP id 5F1FDC00A5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
-Received: (qmail 29504 invoked from network); 12 Apr 2022 20:59:24 +0200
-Received: from unknown (HELO rabbit.intern.cm-ag) (172.30.3.1)
-  by zero.intern.cm-ag with SMTP; 12 Apr 2022 20:59:24 +0200
-Received: by rabbit.intern.cm-ag (Postfix, from userid 1023)
-        id 329E3460C77; Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
-Date:   Tue, 12 Apr 2022 17:10:38 +0200
-From:   Max Kellermann <mk@cm4all.com>
-To:     dhowells@redhat.com
-Cc:     linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: fscache corruption in Linux 5.17?
-Message-ID: <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 12 Apr 2022 11:16:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFCF387B9;
+        Tue, 12 Apr 2022 08:14:35 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23CEndSf013362;
+        Tue, 12 Apr 2022 15:14:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=z9Mc5Z7O6/eJFTtDaBXWB7HJdfgDz8mO40uWSlWFwuM=;
+ b=UulRKzuIDkGh3PuHaW7kBrObwfogo6WSMRVrgQIYPwN6FqWUvZ8tc39XUrcUEs6abGdV
+ YVj5XUtDu0dAaG1cOJQa7kWJL22FrT9/va1NqYd/CCJUbhoYB/4+f3DgMZ627ULyKvW1
+ nkrf10qEs06vPe1Co7l7PsB98xjVxyYSSkLAvj7BTfbbNI2wJZPh/ZZCm86rWaT9T2I0
+ JJL96mh5Uy4jGvSLzOxPqqSr3Fr+f7dVbzwbnZQudhHt6nLusijH81IIxuYNs4ysmPHK
+ CySGzryX3edjmlN7scc3/lWxjuO7OKWD5hnSG58vcFtGc8N/cuyMGYb4gVxmr6LTlhqP /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fd8b65sh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 15:14:15 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23CFBVeh028406;
+        Tue, 12 Apr 2022 15:14:14 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fd8b65sg2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 15:14:14 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23CEvv5d031030;
+        Tue, 12 Apr 2022 15:14:11 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3fbsj03275-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 15:14:11 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23CFE98V53281108
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 15:14:09 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54CFF42042;
+        Tue, 12 Apr 2022 15:14:09 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B1B54203F;
+        Tue, 12 Apr 2022 15:14:06 +0000 (GMT)
+Received: from sig-9-65-64-123.ibm.com (unknown [9.65.64.123])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Apr 2022 15:14:06 +0000 (GMT)
+Message-ID: <2913e2998892833d4bc7d866b99dcd9bd234e82e.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 RESEND] efi: Do not import certificates from UEFI
+ Secure Boot for T2 Macs
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     "jarkko@kernel.org" <jarkko@kernel.org>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        "admin@kodeit.net" <admin@kodeit.net>
+Date:   Tue, 12 Apr 2022 11:13:52 -0400
+In-Reply-To: <B857EF0F-23D7-4B82-8A1E-7480C19C9AC5@live.com>
+References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
+         <f55551188f2a17a7a5da54ea4a38bfbae938a62f.camel@linux.ibm.com>
+         <B857EF0F-23D7-4B82-8A1E-7480C19C9AC5@live.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VL29UvswhcIeofTBN-DnUeLg90zeqr8c
+X-Proofpoint-ORIG-GUID: -AP3CmwIOBSGN_aB583esCRjb3Y92MuS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-12_05,2022-04-12_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 spamscore=0 phishscore=0
+ clxscore=1015 malwarescore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204120073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Tue, 2022-04-12 at 14:13 +0000, Aditya Garg wrote:
+> >> @@ -138,6 +181,11 @@ static int __init load_uefi_certs(void)
+> >>      unsigned long dbsize = 0, dbxsize = 0, mokxsize = 0;
+> >>      efi_status_t status;
+> >>      int rc = 0;
+> >> +    const struct dmi_system_id *dmi_id;
+> >> +
+> >> +    dmi_id = dmi_first_match(uefi_skip_cert);
+> >> +    if (dmi_id)
+> >> +            return 0;
+> > 
+> > uefi_check_ignore_db(), get_cert_list(), uefi_check_ignore_db(), and
+> > /load_moklist_certs() are all defined all static and are gated here by
+> > this dmi_first_match(). There's probably no need for any of the other
+> > calls to dmi_first_match().
+> I couldn’t get you here. Could you elaborate?
 
-two weeks ago, I updated a cluster of web servers to Linux kernel
-5.17.1 (5.16.x previously) which includes your rewrite of the fscache
-code.
+dmi_first_match() is called here at the beginning of load_uefi_certs().
+Only if it succeeds would uefi_check_ignore_db(), get_cert_list(),
+uefi_check_ignore_db(), or
+load_moklist_certs() be called.  Is there a need for adding a call to
+dmi_first_match() in any of these other functions?
 
-In the last few days, there were numerous complaints about broken
-WordPress installations after WordPress was updated.  There were
-PHP syntax errors everywhere.
+thanks,
 
-Indeed there were broken PHP files, but the interesting part is: those
-corruptions were only on one of the web servers; the others were fine,
-the file contents were only broken on one of the servers.
+Mimi
 
-File size and time stamp and everyhing in "stat" is identical, just
-the file contents are corrupted; it looks like a mix of old and new
-contents.  The corruptions always started at multiples of 4096 bytes.
+> > 
+> > Like in all the other cases, there should be some sort of message. At
+> > minimum, there should be a pr_info().
+> > 
+> >> 
+> >>      if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
+> >>              return false;
+> > 
 
-An example diff:
-
- --- ok/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
- +++ broken/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
- @@ -5348,7 +5348,7 @@
-                 /**
-                  * Filters the threshold for how many of the first content media elements to not lazy-load.
-                  *
- -                * For these first content media elements, the `loading` attribute will be omitted. By default, this is the case
- +                * For these first content media elements, the `loading` efault, this is the case
-                  * for only the very first content media element.
-                  *
-                  * @since 5.9.0
- @@ -5377,3 +5377,4 @@
-  
-         return $content_media_count;
-  }
- +^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@
-
-The corruption can be explained by WordPress commit
-https://github.com/WordPress/WordPress/commit/07855db0ee8d5cff2 which
-makes the file 31 bytes longer (185055 -> 185086).  The "broken" web
-server sees the new contents until offset 184320 (= 45 * 4096), but
-sees the old contents from there on; followed by 31 null bytes
-(because the kernel reads past the end of the cache?).
-
-All web servers mount a storage via NFSv3 with fscache.
-
-My suspicion is that this is caused by a fscache regression in Linux
-5.17.  What do you think?
-
-What can I do to debug this further, is there any information you
-need?  I don't know much about how fscache works internally and how to
-obtain information.
-
-Max
 

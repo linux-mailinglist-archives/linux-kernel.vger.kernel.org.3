@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9E84FD635
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129DE4FD9A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354539AbiDLHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S1359822AbiDLHnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352294AbiDLHFG (ORCPT
+        with ESMTP id S1354122AbiDLHRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:06 -0400
+        Tue, 12 Apr 2022 03:17:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797CD4739E;
-        Mon, 11 Apr 2022 23:47:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9834D4B42A;
+        Mon, 11 Apr 2022 23:58:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2F65B81B43;
-        Tue, 12 Apr 2022 06:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17911C385A1;
-        Tue, 12 Apr 2022 06:47:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1019FB81B49;
+        Tue, 12 Apr 2022 06:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B92FC385A8;
+        Tue, 12 Apr 2022 06:58:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746074;
-        bh=+jloK1x6yesqpkLixBF6zJTts935DxetEL6Gh082koc=;
+        s=korg; t=1649746697;
+        bh=YgBs7SCqNKxfkEo9PqweIDQmp3ZWSfZhb89F6s7+12c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=osiotdPzWDukE1QhH8YptcM9qE9/CoPJbduPFasoc5Op/siuxkg+x8dJw8NF6RDU7
-         x6VSFxhPFWxaX1sgh8z1aJoTvnJx3wNZlvvgxCXEYdujW2143X/MWbltnIZQjz8AuO
-         /AoIgoXnnLhQ6v9Mk02o2tmLn3E4fLVHTYvD4j1E=
+        b=ipayGuo5GZWTCtDw8Hx60AyxKu2KHHYITf9NmnzdhOP5/lfz2to3Xwh3hTZrzgqtK
+         P11WfknbcPHhAuBHP0ajDBDLNamO2OqEfuSsHUXQjp8R0KzPhvAYBnK8ywm4W52sHr
+         ymxLWeZcJ7BT1fKAzR4UoxRNqgM3J0QulGnAVjm0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 152/277] scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
+Subject: [PATCH 5.16 098/285] net/mlx5e: Remove overzealous validations in netlink EEPROM query
 Date:   Tue, 12 Apr 2022 08:29:15 +0200
-Message-Id: <20220412062946.437671584@linuxfoundation.org>
+Message-Id: <20220412062946.493988457@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,57 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit eaba83b5b8506bbc9ee7ca2f10aeab3fff3719e7 ]
+[ Upstream commit 970adfb76095fa719778d70a6b86030d2feb88dd ]
 
-In commit edb854a3680b ("scsi: core: Reallocate device's budget map on
-queue depth change"), the sbitmap for the device budget map may be
-reallocated after the slave device depth is configured.
+Unlike the legacy EEPROM callbacks, when using the netlink EEPROM query
+(get_module_eeprom_by_page) the driver should not try to validate the
+query parameters, but just perform the read requested by the userspace.
 
-When the sbitmap is reallocated we use the result from
-scsi_device_max_queue_depth() for the sbitmap size, but don't resize to
-match the actual device queue depth.
+Recent discussion in the mailing list:
+https://lore.kernel.org/netdev/20220120093051.70845141@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net/
 
-Fix by resizing the sbitmap after reallocating the budget sbitmap. We do
-this instead of init'ing the sbitmap to the device queue depth as the user
-may want to change the queue depth later via sysfs or other.
-
-Link: https://lore.kernel.org/r/1647423870-143867-1-git-send-email-john.garry@huawei.com
-Fixes: edb854a3680b ("scsi: core: Reallocate device's budget map on queue depth change")
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_scan.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../net/ethernet/mellanox/mlx5/core/port.c    | 23 -------------------
+ 1 file changed, 23 deletions(-)
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 7266880c70c2..9466474ff01b 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -207,6 +207,8 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
- 	int ret;
- 	struct sbitmap sb_backup;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/port.c b/drivers/net/ethernet/mellanox/mlx5/core/port.c
+index 7b16a1188aab..fd79860de723 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/port.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/port.c
+@@ -433,35 +433,12 @@ int mlx5_query_module_eeprom_by_page(struct mlx5_core_dev *dev,
+ 				     struct mlx5_module_eeprom_query_params *params,
+ 				     u8 *data)
+ {
+-	u8 module_id;
+ 	int err;
  
-+	depth = min_t(unsigned int, depth, scsi_device_max_queue_depth(sdev));
-+
- 	/*
- 	 * realloc if new shift is calculated, which is caused by setting
- 	 * up one new default queue depth after calling ->slave_configure
-@@ -229,6 +231,9 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
- 				scsi_device_max_queue_depth(sdev),
- 				new_shift, GFP_KERNEL,
- 				sdev->request_queue->node, false, true);
-+	if (!ret)
-+		sbitmap_resize(&sdev->budget_map, depth);
-+
- 	if (need_free) {
- 		if (ret)
- 			sdev->budget_map = sb_backup;
+ 	err = mlx5_query_module_num(dev, &params->module_number);
+ 	if (err)
+ 		return err;
+ 
+-	err = mlx5_query_module_id(dev, params->module_number, &module_id);
+-	if (err)
+-		return err;
+-
+-	switch (module_id) {
+-	case MLX5_MODULE_ID_SFP:
+-		if (params->page > 0)
+-			return -EINVAL;
+-		break;
+-	case MLX5_MODULE_ID_QSFP:
+-	case MLX5_MODULE_ID_QSFP28:
+-	case MLX5_MODULE_ID_QSFP_PLUS:
+-		if (params->page > 3)
+-			return -EINVAL;
+-		break;
+-	case MLX5_MODULE_ID_DSFP:
+-		break;
+-	default:
+-		mlx5_core_err(dev, "Module ID not recognized: 0x%x\n", module_id);
+-		return -EINVAL;
+-	}
+-
+ 	if (params->i2c_address != MLX5_I2C_ADDR_HIGH &&
+ 	    params->i2c_address != MLX5_I2C_ADDR_LOW) {
+ 		mlx5_core_err(dev, "I2C address not recognized: 0x%x\n", params->i2c_address);
 -- 
 2.35.1
 

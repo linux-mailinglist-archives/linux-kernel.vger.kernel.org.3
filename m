@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAEA4FE4B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68A34FE4B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354358AbiDLP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S1356995AbiDLP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351692AbiDLP1U (ORCPT
+        with ESMTP id S230501AbiDLP3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:27:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF60D1D0C1;
-        Tue, 12 Apr 2022 08:25:02 -0700 (PDT)
+        Tue, 12 Apr 2022 11:29:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8433E1CFCF;
+        Tue, 12 Apr 2022 08:26:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7396C61681;
-        Tue, 12 Apr 2022 15:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA35C385A1;
-        Tue, 12 Apr 2022 15:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B082616B8;
+        Tue, 12 Apr 2022 15:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672F2C385A1;
+        Tue, 12 Apr 2022 15:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649777101;
-        bh=qTHICTuekXrpH6b/BwbRVneUr43m2u13rD5wYaHb0tk=;
+        s=k20201202; t=1649777210;
+        bh=PJsqgsQBozipWtIrkNQ4IOXOyZa6YXCt+E60ahBP+p8=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=WfDqhk+fPIg5mcfjCE+N1SsIzxi1aotYZTuPp6JL9cTOpz6s6sXshi+atLVdIOaQI
-         RB08bc/c5kwvkqHTfwu4i4BBVR15DmO2vHeVcxV7RUF1Pj+8hmof+2+frADbYuhiUn
-         acQIjanYSd9qnxrNiFUmgOoTK32QC74rlYcCybUAZWCYiOEXnl7a45E5p2cg6t/NFZ
-         M+CuMg5tbTLVRdcH5hO95hF49+n3cZk2IJKpmhLmRSqYnNJMGdXd6ACIqvbAuIhWwH
-         BlpyfT87MseV5BPL86N3wLY0F+V0YXEy2LdyNBxgDfqjOPIgVGc9UuPV0C/z3nUy1/
-         5UQeobwrtfzHA==
+        b=hegew9VcIRcim4ZpIwiHgi8E4zl7/uCfKWDoaFdkwVjjBv3if3IxylN/UZwPVgT0B
+         JBrJn2O+JZdqGzaMvHgColLmY76/XIS4jQJI1hvS0ip3lHGnEUVQywPVQnQ8iI24S/
+         WpUCnx2xVnJkNr3pP1o/tNM9LipgQPXggvtye+VbKxCnQc1jgSgQEZUturbvszAX6H
+         WzhVYJ+PN06CFSqjmysblK2z9xmZC/2LsNNwkBR/33xe3i6VDIruFEo4k8cFihKpwC
+         kwAdj+jInVtrn0/Il7A4rtSO1GaTgk2ai7Fa7gpLkcGowHoGM3+aDMb1xTlxsNtFDR
+         ZFmlz6ImQf+bw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 685795C0E58; Tue, 12 Apr 2022 08:25:01 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 08:25:01 -0700
+        id 01AC05C0E58; Tue, 12 Apr 2022 08:26:49 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 08:26:49 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Benedikt Spranger <b.spranger@linutronix.de>
-Subject: Re: [PATCH] rcu/torture: Change order of warning and trace dump
-Message-ID: <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20220411151903.28167-1-anna-maria@linutronix.de>
- <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,57 +75,276 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:09:15AM -0700, Paul E. McKenney wrote:
-> On Mon, Apr 11, 2022 at 05:19:03PM +0200, Anna-Maria Behnsen wrote:
-> > Dumping a big ftrace buffer could lead to a RCU stall. So there is the
-> > ftrace buffer and the stall information which needs to be printed. When
-> > there is additionaly a WARN_ON() which describes the reason for the ftrace
-> > buffer dump and the WARN_ON() is executed _after_ ftrace buffer dump, the
-> > information get lost in the middle of the RCU stall information.
+On Tue, Apr 12, 2022 at 02:48:15PM +0200, Paul Heidekrüger wrote:
+> On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
+> > On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> > > Hi all,
+> > > 
+> > > work on my dependency checker tool is progressing nicely, and it is
+> > > flagging, what I believe is, a harmful addr to ctrl dependency
+> > > transformation. For context, see [1] and [2]. I'm using the Clang
+> > > compiler.
+> > > 
+> > > The dependency in question runs from line 618 into the for loop
+> > > increment, i.e. the third expresion in the for loop condition, in line
+> > > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+> > > 
+> > > I did my best to reverse-engineer some pseudocode from Clang's IR for
+> > > showing what I think is going on.
 > > 
-> > Therefore print WARN_ON() message before dumping the ftrace buffer in
-> > rcu_torture_writer().
+> > First, thank you very much for doing this work!
 > > 
-> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > Reviewed-by: Benedikt Spranger <b.spranger@linutronix.de>
+> > > Clang's unoptimised version:
+> > > 
+> > > > restart:
+> > > > 	if(place_holder != NULL)
+> > > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > > > 	if(delegation != NULL)
+> > > > 		if(delegation != place_holder_deleg)
+> > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > > > 
+> > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > > > 		/*
+> > > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > > > 		 * "delegation" might be assigned either a value depending on 
+> > > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > > > 		 * or NULL.
+> > > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > > > 		 * points to.
+> > > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > > > 		 * and the for loop's increment is executed.
+> > > > 		 */
+> > > > 	}
+> > > 
+> > > Clang's optimised version:
+> > > 
+> > > > restart:
+> > > > 	if(place_holder == NULL) {
+> > > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > > 	} else {
+> > > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > > > 			if(cmp == place_holder_deleg) {
+> > > > 				delegation = place_holder_deleg;
+> > > > 			} else {
+> > > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > > > 			}
+> > > > 		} else {
+> > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > > 		}
+> > > > 	}
+> > > > 
+> > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > > > 		/*
+> > > > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > > > 		 * since the "rcu_dereference()" was only used for an assignment
+> > > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > > > 		 * Therefore, the loop increment cannot depend on the
+> > > > 		 * "rcu_dereference()" either. The dependency chain has been
+> > > > 		 * broken.
+> > > > 		 */
+> > > >         }
+> > > 
+> > > The above is an abstraction of the following control flow path in
+> > > "nfs_server_return_marked_delegations()":
+> > > 
+> > > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> > > choice but to skip the dependency beginning in line 620, since
+> > > "place_holder" is NULL the first time round.
+> > > 
+> > > 2. Now take a path until "place_holder", the condition for the
+> > > dependency beginning, becomes true and "!delegation || delegation !=
+> > > place_holder_deleg", the condition for the assignment in line 620,
+> > > becomes false. Then, enter the loop again and take a path to one of the
+> > > "goto restart" statements without reassigning to "delegation".
+> > > 
+> > > 3. After going back to "restart", since the condition for line 618
+> > > became true, "rcu_dereference()" into "delegation".
+> > > 
+> > > 4. Enter the for loop again, but avoid the "goto restart" statements in
+> > > the first iteration and ensure that "&(delegation)->super_list !=
+> > > &server->delegations", the loop condition, remains true and "delegation"
+> > > isn't assigned NULL.
+> > > 
+> > > 5. When the for loop condition is reached for the second time, the loop
+> > > increment is executed and there is an address dependency.
+> > > 
+> > > Now, why would the compiler decide to assign "place_holder_deleg" to
+> > > "delegation" instead of what "rcu_dereference()" returned? Here's my
+> > > attempt at explaining.
+> > > 
+> > > In the pseudo code above, i.e. in the optimised IR, the assignment of
+> > > "place_holder_deleg" is guarded by two conditions. It is executed iff
+> > > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> > > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> > > NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> > > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> > > would be wrong.
+> > > 
+> > > Assume control flow has just reached the first if, i.e. line 617, in
+> > > source code. Since "place_holder" isn't NULL, it will execute the first
+> > > if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> > > reached the second if. Per our aussmption, "rcu_dereference()" returned
+> > > something that wasn't NULL. Therefore, "!delegation", the first part of
+> > > the second if condition's OR, will be false.
+> > > 
+> > > However, if we want "rcu_dereference() == delegation" to hold after the
+> > > two if's, we can't enter the second if anyway, as it will overwrite
+> > > "delegation" with a value that might not be equal to what
+> > > "rcu_dereference()" returned. So, we want the second part of the second
+> > > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> > > as well.
+> > > 
+> > > When is that the case? It is the case when "delegation ==
+> > > place_holder_deleg" holds.
+> > > 
+> > > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> > > to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> > > != NULL" must hold before the two if's, which is what we wanted to show
+> > > and what the compiler figured out too.
+> > > 
+> > > TL;DR: it appears the compiler optimisation is plausible, yet it still
+> > > breaks the address dependency.
+> > > 
+> > > For those interested, I have made the unoptimised and optimised IR CFGs
+> > > available. In the optimised one, the interesting part is the transition
+> > > from "if.end" to "if.end13".
+> > > 
+> > > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> > > 
+> > > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> > > 
+> > > What do you think?
+> > > 
+> > > Many thanks,
+> > > Paul
+> > > 
+> > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+> > 
+> > If I understand this correctly (rather unlikely), this stems from
+> > violating the following rule in Documentation/RCU/rcu_dereference.rst:
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > -	Be very careful about comparing pointers obtained from
+> > 	rcu_dereference() against non-NULL values.  As Linus Torvalds
+> > 	explained, if the two pointers are equal, the compiler could
+> > 	substitute the pointer you are comparing against for the pointer
+> > 	obtained from rcu_dereference().  For example::
+> > 
+> > 		p = rcu_dereference(gp);
+> > 		if (p == &default_struct)
+> > 			do_default(p->a);
+> > 
+> > 	Because the compiler now knows that the value of "p" is exactly
+> > 	the address of the variable "default_struct", it is free to
+> > 	transform this code into the following::
+> > 
+> > 		p = rcu_dereference(gp);
+> > 		if (p == &default_struct)
+> > 			do_default(default_struct.a);
+> > 
+> > 	On ARM and Power hardware, the load from "default_struct.a"
+> > 	can now be speculated, such that it might happen before the
+> > 	rcu_dereference().  This could result in bugs due to misordering.
+> > 
+> > 	However, comparisons are OK in the following cases:
+> > 
+> > 	-	The comparison was against the NULL pointer.  If the
+> > 		compiler knows that the pointer is NULL, you had better
+> > 		not be dereferencing it anyway.  If the comparison is
+> > 		non-equal, the compiler is none the wiser.  Therefore,
+> > 		it is safe to compare pointers from rcu_dereference()
+> > 		against NULL pointers.
+> > 
+> > 	-	The pointer is never dereferenced after being compared.
+> > 		Since there are no subsequent dereferences, the compiler
+> > 		cannot use anything it learned from the comparison
+> > 		to reorder the non-existent subsequent dereferences.
+> > 		This sort of comparison occurs frequently when scanning
+> > 		RCU-protected circular linked lists.
+> > 
+> > 		Note that if checks for being within an RCU read-side
+> > 		critical section are not required and the pointer is never
+> > 		dereferenced, rcu_access_pointer() should be used in place
+> > 		of rcu_dereference().
+> > 
+> > 	-	The comparison is against a pointer that references memory
+> > 		that was initialized "a long time ago."  The reason
+> > 		this is safe is that even if misordering occurs, the
+> > 		misordering will not affect the accesses that follow
+> > 		the comparison.  So exactly how long ago is "a long
+> > 		time ago"?  Here are some possibilities:
+> > 
+> > 		-	Compile time.
+> > 
+> > 		-	Boot time.
+> > 
+> > 		-	Module-init time for module code.
+> > 
+> > 		-	Prior to kthread creation for kthread code.
+> > 
+> > 		-	During some prior acquisition of the lock that
+> > 			we now hold.
+> > 
+> > 		-	Before mod_timer() time for a timer handler.
+> > 
+> > 		There are many other possibilities involving the Linux
+> > 		kernel's wide array of primitives that cause code to
+> > 		be invoked at a later time.
+> > 
+> > 	-	The pointer being compared against also came from
+> > 		rcu_dereference().  In this case, both pointers depend
+> > 		on one rcu_dereference() or another, so you get proper
+> > 		ordering either way.
+> > 
+> > 		That said, this situation can make certain RCU usage
+> > 		bugs more likely to happen.  Which can be a good thing,
+> > 		at least if they happen during testing.  An example
+> > 		of such an RCU usage bug is shown in the section titled
+> > 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+> > 
+> > 	-	All of the accesses following the comparison are stores,
+> > 		so that a control dependency preserves the needed ordering.
+> > 		That said, it is easy to get control dependencies wrong.
+> > 		Please see the "CONTROL DEPENDENCIES" section of
+> > 		Documentation/memory-barriers.txt for more details.
+> > 
+> > 	-	The pointers are not equal *and* the compiler does
+> > 		not have enough information to deduce the value of the
+> > 		pointer.  Note that the volatile cast in rcu_dereference()
+> > 		will normally prevent the compiler from knowing too much.
+> > 
+> > 		However, please note that if the compiler knows that the
+> > 		pointer takes on only one of two values, a not-equal
+> > 		comparison will provide exactly the information that the
+> > 		compiler needs to deduce the value of the pointer.
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > But it would be good to support this use case, for example, by having
+> > the compiler provide some way of marking the "delegation" variable as
+> > carrying a full dependency.
+> > 
+> > Or did I miss a turn in here somewhere?
+> > 
+> > 							Thanx, Paul
 > 
-> Hello, Anna-Maria!
-> 
-> Good point, but we get caught out either way.  Either we take the chance
-> of losing the WARN() message as you say, or we take the chance of the
-> activity in the WARN() message overwriting needed information in the
-> trace buffer.
-> 
-> Would it work to shut off tracing, do the WARN(), and only then do the
-> rcu_ftrace_dump()?
+> Actually, I think you're spot on! The original source code has a,
+> allbeit nested, comparison of "delegation" against a non-NULL value,
+> which is exactly what the documentation discourages as it helps the
+> compiler figure out the value of "delegation".
 
-And presumably you are looking at this because your testing is
-triggering it.  This WARN() assumes that the system running rcutorture
-is otherwise idle.  If you are (say) running kernel builds while also
-running rcutorture, then this WARN() is expected behavior.  So if you need
-this sort of testing, we need do something like adding another rcutorture
-module parameter (background_load?) that suppresses this warning.
+Sometimes I get lucky.  ;-)
+
+> I'll try to prepare a patch, using my dependency checker tool to verify
+> that this was indeed the issue.
+
+This would be a kernel patch to avoid the comparison?  Or a patch to
+the compiler to tell it that the "delegation" variable carries a full
+dependency?  Either would be useful, just curious.
 
 							Thanx, Paul
-
-> > ---
-> >  kernel/rcu/rcutorture.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> > index 55d049c39608..cbbe37d7701e 100644
-> > --- a/kernel/rcu/rcutorture.c
-> > +++ b/kernel/rcu/rcutorture.c
-> > @@ -1287,8 +1287,8 @@ rcu_torture_writer(void *arg)
-> >  				if (list_empty(&rcu_tortures[i].rtort_free) &&
-> >  				    rcu_access_pointer(rcu_torture_current) !=
-> >  				    &rcu_tortures[i]) {
-> > -					rcu_ftrace_dump(DUMP_ALL);
-> >  					WARN(1, "%s: rtort_pipe_count: %d\n", __func__, rcu_tortures[i].rtort_pipe_count);
-> > +					rcu_ftrace_dump(DUMP_ALL);
-> >  				}
-> >  		if (stutter_waited)
-> >  			sched_set_normal(current, oldnice);
-> > -- 
-> > 2.20.1
-> > 

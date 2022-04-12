@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FC74FD89E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C0D4FD43B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383110AbiDLIfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S1357069AbiDLHjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356333AbiDLHfR (ORCPT
+        with ESMTP id S1352903AbiDLHOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:35:17 -0400
+        Tue, 12 Apr 2022 03:14:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F11E50E0C;
-        Tue, 12 Apr 2022 00:09:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E125B31928;
+        Mon, 11 Apr 2022 23:55:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9133B81B50;
-        Tue, 12 Apr 2022 07:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E65BC385A6;
-        Tue, 12 Apr 2022 07:09:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2323B81B35;
+        Tue, 12 Apr 2022 06:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C17C385A6;
+        Tue, 12 Apr 2022 06:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747355;
-        bh=PavfG5KJ6cWoEDDVC5lfDN5ZmM9XXHm3w/O0k/krWlg=;
+        s=korg; t=1649746515;
+        bh=/uKbheoXCqGmE+l6GjoWxiFv0SNKT75bIlepXGZFYGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mfNyjZYQp6oopjpH8Uel+YHE4IDXf8Rhphgm0Za6bhC5ZOrshx+i0oyf0dyNl6uxK
-         7RDsG6An401VbtnbPsI5AaHwDU5DHutXb1dn4LgeFrWk429keGI2k0dgECAtRRbVn8
-         /cVVdcVJovbUl1eNXBYjQGSqGMZOsDGgs/vg9fDA=
+        b=0bhuGt3LcBQnd9vEz8F5aHEY7k5U9QCtQThuq6dkCm1EHWwjUPHcGgQlyT5BJCW8J
+         /W9s2DQtMAoh+ndCHGvSwXDtwXB+DoqBE4OBTaBSHyUhtQ7wL1sBKp2HZkiQlMc74K
+         GMu/kGkp75ll0FCP+1e2OtKJ/LCGY0QoIMjDgxIc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 048/343] mt76: mt7921: fix crash when startup fails.
+        stable@vger.kernel.org, Anisse Astier <anisse@astier.eu>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 009/285] drm: Add orientation quirk for GPD Win Max
 Date:   Tue, 12 Apr 2022 08:27:46 +0200
-Message-Id: <20220412062952.493639313@linuxfoundation.org>
+Message-Id: <20220412062943.945074073@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Greear <greearb@candelatech.com>
+From: Anisse Astier <anisse@astier.eu>
 
-[ Upstream commit 827e7799c61b978fbc2cc9dac66cb62401b2b3f0 ]
+[ Upstream commit 0b464ca3e0dd3cec65f28bc6d396d82f19080f69 ]
 
-If the nic fails to start, it is possible that the
-reset_work has already been scheduled.  Ensure the
-work item is canceled so we do not have use-after-free
-crash in case cleanup is called before the work item
-is executed.
+Panel is 800x1280, but mounted on a laptop form factor, sideways.
 
-This fixes crash on my x86_64 apu2 when mt7921k radio
-fails to work.  Radio still fails, but OS does not
-crash.
-
-Signed-off-by: Ben Greear <greearb@candelatech.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211229222200.53128-3-anisse@astier.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/main.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-index 7a8d2596c226..4abb7a6e775a 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-@@ -273,6 +273,7 @@ static void mt7921_stop(struct ieee80211_hw *hw)
- 
- 	cancel_delayed_work_sync(&dev->pm.ps_work);
- 	cancel_work_sync(&dev->pm.wake_work);
-+	cancel_work_sync(&dev->reset_work);
- 	mt76_connac_free_pending_tx_skbs(&dev->pm, NULL);
- 
- 	mt7921_mutex_acquire(dev);
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index b910978d3e48..4e853acfd1e8 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -180,6 +180,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "MicroPC"),
+ 		},
+ 		.driver_data = (void *)&lcd720x1280_rightside_up,
++	}, {	/* GPD Win Max */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "GPD"),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G1619-01"),
++		},
++		.driver_data = (void *)&lcd800x1280_rightside_up,
+ 	}, {	/*
+ 		 * GPD Pocket, note that the the DMI data is less generic then
+ 		 * it seems, devices with a board-vendor of "AMI Corporation"
 -- 
 2.35.1
 

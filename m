@@ -2,277 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACBE4FCE87
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EF74FCED4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347659AbiDLFLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S1347850AbiDLFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347631AbiDLFLQ (ORCPT
+        with ESMTP id S235842AbiDLFTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:11:16 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6185B340FF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649740140; x=1681276140;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=zE7wi6OheYHsLolA4WbgwXAqoZPUdneCI7YMnZcvNds=;
-  b=nfndm+W/BUuJK4rO9nF3x3RtxJX2nG85funf8GcUqy1X3oM1hMuTbqce
-   ITDa5M+csQ5cHjkEGgJgS99y3k9vtVzsH0lvpk/cJ7uRkYkqN1bWEC4NJ
-   /Gr4f0bfMZbRldxLNQiO7oH4VlYeRnyzogBFa0EdQp86mFODhzOw5Pq6X
-   zmpGng7/aiJI7ykV+CwYVaTBRbNO6Ib1GgEMk5NkrM/nkB6XYCifGQJyh
-   4mI48HEFr4QRY6jbPXpl4rg0H2XNQifruhy1u3tnwBad1ESjjQGsmPGbb
-   ZLll1/FR6WGqYupiwVR3suEAeTwOwOc2LsAAfEhZOUwYvMHPwLTbOmWec
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325189457"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="325189457"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:08:59 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="572565571"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.210]) ([10.254.215.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:08:55 -0700
-Message-ID: <7c70a136-6871-b48c-8e46-852bb1b62958@linux.intel.com>
-Date:   Tue, 12 Apr 2022 13:08:52 +0800
+        Tue, 12 Apr 2022 01:19:55 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564A34667
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:17:39 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BLtKoi031973;
+        Tue, 12 Apr 2022 05:12:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=T/urJczvHDv5myBj58z5EDdVGdIEAXtuJOnPWJruEc4=;
+ b=Vrjc5nhvQibHYSyyEUcZCLCIIrhEKkLQN7UzLKWqKTAOLr1Fc2oFmu93scVZ900Rdm0c
+ tv65su1kNY9HLjM9+l/8FLV/DUQq+bf2rZkJ/RDFK1PwqHYGyl9m7SdInCJcWGF39scM
+ jU8te5raKzhcbJjP/4q/TLPc2YHAqRN4k0kYGzqOi/AMaM5edzN4VXbDxJwLZPTeY6n2
+ Otm9Xh/XbGtOOYS0uksiBDzc7OadeP7ipqZQNhsqcDfk4Izmz07GIVRTdJ4IlQGAVgk8
+ 4w2SSMLV3elIHrDCguzkXzhLPTRT9UgyzpwAqY1jtNjfSwwTU3BAWAE0+6abO9iTEIYZ pQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd5fw7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 05:12:32 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23C5BPOe006131;
+        Tue, 12 Apr 2022 05:12:31 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k2cgu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 05:12:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bPoTrU4GYr9ZwsH7++uZvE3A5rwJpUVIpuzPnGqSGMz0ATdE48st1pvJZt0NQh/hl+25HmfzpiMj1jSFSUf9C428LZ84xCsTp3tHw/ehaSVflC94RveGekbNISq4Hf3VSqid6/EFWUhm1X/+HWw1hKf1j/Yzsim/oyH5C+zFy8WpzbQgafghx8Ap8nxCSzswLvXPY+sTtQemocLFycnTYQ+pASmIfp3sJZbeX5RPnNDDgftjs4xiWFs2umV7mc54DvwBNVZVdkX/xNRRQ9Py+Y9WK01UL2YSqajvSMTnlVs0cKMygb4ZmecwddC7CT8UAzKi5w7bSjSnfZpSZuxAaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T/urJczvHDv5myBj58z5EDdVGdIEAXtuJOnPWJruEc4=;
+ b=AcDOxCkeXUtnWFIKlPgkWum+PcQUPxrT3EH4iH41hFaW4QDbF46nN40f72FR2f/W1+cC9LdmIM+Grp/pZKAlnWzSGfIy4EJdoVhl9eTLglDme+QmNFqXhjwBdcXeCq7RDMnUDGqvvw+zZUTX9odCx6aoK8LBXJS7R7Cjo2RZ4bQNsJ6EevECCB9H32vW4AhXkQVj1AnYbTMQaRx0DKVEw7sHYlgdB8D3WVkOrftGxDQdC9QJY68tD4IKHEqyD5Tc4ZyM6cRoY69mS1OYlK6q8MaomUtPEpghcL1jKk+dqlgwvyUMM5HiI2juWnK9PUOnqF94isXBjzgbqzdXv1wXhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T/urJczvHDv5myBj58z5EDdVGdIEAXtuJOnPWJruEc4=;
+ b=L1SjuoFpGw0v739sk0Y2XUhFeBVXyqccpv4uKN5+rmeUhW8wVN2uH0Id9So+vdHfUuwF2kPOdQiCzTArx5jvLnED88bfoPfsuISLWbe7XL/t6f/oYMwCLT5gXrk9iqVcChvjgkxH02cFslCnuI1hnX0ks3b6aUsRyAqwEOOjlP4=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB3339.namprd10.prod.outlook.com
+ (2603:10b6:5:1ae::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
+ 2022 05:12:29 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Tue, 12 Apr 2022
+ 05:12:29 +0000
+Date:   Tue, 12 Apr 2022 08:12:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] staging: r8188eu: don't set _SUCCESS again
+Message-ID: <20220412051217.GL12805@kadam>
+References: <20220409151557.207980-1-martin@kaiser.cx>
+ <20220409151557.207980-3-martin@kaiser.cx>
+ <20220411101834.GW3293@kadam>
+ <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0019.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:15::31) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
- <20220410102443.294128-3-baolu.lu@linux.intel.com>
- <BN9PR11MB527679E5CE0516B2786F57518CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH RFC v3 02/12] iommu: Add a flag to indicate immutable
- singleton group
-In-Reply-To: <BN9PR11MB527679E5CE0516B2786F57518CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eb7ce8c0-3327-4e82-5c4f-08da1c430a52
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3339:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB33391FDE7B126F93BF0FF8208EED9@DM6PR10MB3339.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KJqJfuSEmltzwpB1h+Q89ieEZL/gledONYe4PbU5A867SzmzIHhtIZvCE+1Tm5IzTS4WOEHLJrLLWTF9pQPH+x1AkEPuQ3U6z/7vX7U/huxERODP2/ziraRJaWc4PXpo8b1Yv1wvQGopZbpr+SRiw22s5NM6q+4DNIuWNzndtseilpSpqMnM2f8g7GDbSqHdohlKCnuifZvFF1bf6Cccxt4xIoHnOT5K17aYRkWXLBq8EgAvvSBloX+Nv5akIBy5u7qF+4fVnoTt3PmFgcbS9syUiqzWATZponh7G87EM3pmUugHr9o2Ua2fj5u7UPpEvV6dWOcipZjUZaDuKPI60eaJJlPYiPVZdE9XdDZi2AHPdlfmUmLPSRYaypmuK3vDYAyoyurKb+ZrifkX5VahizK/u+G0IVpXyiSUBOmF+Fy9dldXhKIbgCxj0YBA06pr0zvm8dKcpzgD/Z3xJn1tApH6q6q8XmX9nRBLLxA1+twa6+0cYxCR9yrE09nt/8YdY827oi2XM+hmlobvsHkt3cqOY+QAIwtJvA/aKzVKiZKcpaUe1mF0DRIsF/QCOlkh/zZ0IfsJz79+XlAJdgZaqNNx1amWP9R4oJIG1RBuVAQMEN9N7L5KFM259qNvYB1OAeHRVUxai4zLPQ9g0QiNZzOe/3//vbErwQtN/QiMmEkpDZ2Pj9NJRlrsLm7n0g4KS8l6peYYViDpWAOHCNIm7g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66476007)(6666004)(6506007)(9686003)(316002)(38100700002)(8676002)(8936002)(6916009)(26005)(33716001)(66556008)(86362001)(4326008)(44832011)(5660300002)(33656002)(66946007)(52116002)(186003)(6512007)(4744005)(2906002)(1076003)(508600001)(6486002)(54906003)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aj5fcvLEVvTzJdhk4Enj4OJor/uu/DD/pCCDrEEALYXW/PTRnUSKJ1yaSAaE?=
+ =?us-ascii?Q?ul7HfuNYIDqIlHj3mMlHfMYtqJ049hQuoVqLnk1AsFL3ZlDNiDBc/oxcVUH6?=
+ =?us-ascii?Q?Qwsw58jve1+XCqjSw4+6Gl1Y+mUKg+ADW0bNoJD9xz5pbVmoSdVO/xuZlYvC?=
+ =?us-ascii?Q?Ql7GZB8+Jr3kIwSaKgBFSQgVmFyz0pLdHy9ukauazsP+l5nb5mQN/TX2x1DJ?=
+ =?us-ascii?Q?k/qWfJ4jTCwMUI3K1KmJwEdFfnMD9DAH06PLUY415123HA6qifr4WscQ4Pb4?=
+ =?us-ascii?Q?taknUQGGiLMuwqlqyGUhJrJJOCU2+9oQWKVYu5Ut+fvgeTiUNNQTxqXVtlVQ?=
+ =?us-ascii?Q?7Dg9KeftNUDwmE9GQDptwRkaT8dXTM6StoBhlpe3HfSVPBho13Q5biTpqc9A?=
+ =?us-ascii?Q?AUT9qpouWiv5zrZaQFU/bqdY5bXFhYOqi/do5VRF8f9WsQC8Jzv/eiz2/Ly0?=
+ =?us-ascii?Q?rGNy4YXayZmBqPwSWtlDsQ0X0YXQZDGfk8enMIPnb9RH9GQ93gv9nPsuXi2R?=
+ =?us-ascii?Q?fUen+WSm3/FTdhzP/ocxKbnDPAX98vRlLBth4AkzHB8srf0N22DP6w6Mkdm8?=
+ =?us-ascii?Q?4+HmM9tS7ekIQxXXA7KYzHAvJay9V0ozMAy0pzs62zwa29BLgU9LRgupHveI?=
+ =?us-ascii?Q?nf+NPU+eShTqgKPGp82Ec1+kzkSOZ2PQk6CucXP1kMQYyrlXZ41g1swqM8tg?=
+ =?us-ascii?Q?ZDBCrseny0PPfHru9Wo2RTXfZuML9B57Bs9X2ZACEyd5BajO41Q1WPMCkZRi?=
+ =?us-ascii?Q?S5rXDqKlFX4Wn5wmSBTGKhuHRHBZoxMlovTuVfzLbyzylFnvnkxJfDLgNLCM?=
+ =?us-ascii?Q?pisgA5KdlultY3bzpqx9G6AFhywSu+16sJ5JbD9ppOPlxqZfFwwIv8mdgFXp?=
+ =?us-ascii?Q?1UIBOVRH8JF2RQT1njGFZWe+hK1oNlV9TYQU4DTPCUF9gvuedSd+9ymqmAC7?=
+ =?us-ascii?Q?dWjNH3D3jYY0itmsGy9QZMur9U5qbzalfTVnU0eLB6Hne1madITMRri3VP2J?=
+ =?us-ascii?Q?7eEJyFDegZS+dxJBbNWzg3puK5Y0l8MH3WN8LVaJHownjbd3SimdjuTN9nLM?=
+ =?us-ascii?Q?6DWi6+Y3st1CF8SJAVjdN0XLR6eM4TjMiABE7XrIphNHRxHP/Fd+7E4pWk/y?=
+ =?us-ascii?Q?qoTsPlVGTS4jDjgQbD3QS1VkCQCs5zaI4YbPBrHX3BuDmwXg0sNs40XlbSOv?=
+ =?us-ascii?Q?7O6TlbqIZ3mrfR+FXBw5SI59N86gP/6xAcguxodlhh/EX9ysqWEP1SYTqOv4?=
+ =?us-ascii?Q?Ehrf7o3jdSsSNR2uX0K0CdrrgeS5K32UvqW7Oc3ckMVYYPf8fVl90tGAIyaN?=
+ =?us-ascii?Q?/QxIhcYNr63xrUW5QliX4ZSjcdyhedQcPj5Git9q5cP4XS/wXv0+vPuO8Q+5?=
+ =?us-ascii?Q?NJ8xXf40xozwf2TNs29bXPLkc8Jx1ODfSl1yrIX6sidmT27P1DdIJtm6+L2p?=
+ =?us-ascii?Q?CJtlrqjHlKxLzPgaoAZV1GSUUn9UBPUXOCGQ5Jc7LU6JnVq26hzC8O67Y4yN?=
+ =?us-ascii?Q?+tFaQ2O7JM6QG1vwuIhIfRb+VqtxYnHxgf/YqqaLcy4JHrNehXrPBWzDGAcm?=
+ =?us-ascii?Q?EmJjd6N3FGYcpUCuIX48Dk59QE4zgpiP0g+1kJzf+WJ8Mu73Fopc7zAsCwL5?=
+ =?us-ascii?Q?jQVEgACHLHbyvJZCw7Au/+xphNktEag+v0o2mCUmfco8WuksVufVhGPYqoZB?=
+ =?us-ascii?Q?CcYVioGtKzAaOfQzR9t75nHUGQsxHYm8uz4qa7TorQJJ8hDARdxXapBpfF7i?=
+ =?us-ascii?Q?BLwS94OXfDU5hu2v/MRwoyoeQClm94c=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb7ce8c0-3327-4e82-5c4f-08da1c430a52
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 05:12:29.1340
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3FjuuYw/2XDClEphgrGK64KTGe4Fryz+aSH3G9IY7Q2vrqqE68euXsXanHX/Uh0AWe5Eo4sPb9B1WuZ8JJ+02n1oxT8ARpft2G0TMhTFB10=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3339
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
+ definitions=2022-04-12_01:2022-04-11,2022-04-12 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204120023
+X-Proofpoint-ORIG-GUID: 2vFuVH43Ngy6EoKGNiE-hHsEIIENtPT7
+X-Proofpoint-GUID: 2vFuVH43Ngy6EoKGNiE-hHsEIIENtPT7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-Thanks for your time.
-
-On 2022/4/12 11:15, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Sunday, April 10, 2022 6:25 PM
->>
->> Some features require that a single device must be immutably isolated,
->> even when hot plug is supported.
+On Mon, Apr 11, 2022 at 08:39:18PM +0200, Martin Kaiser wrote:
+> Thus wrote Dan Carpenter (dan.carpenter@oracle.com):
 > 
-> This reads confusing, as hotplug cannot be allowed in a singleton group.
-> What you actually meant suppose to be:
+> > On Sat, Apr 09, 2022 at 05:15:51PM +0200, Martin Kaiser wrote:
+> > > ret is initialized to _SUCCESS, there's no need to set it again.
 > 
-> "Enabling certain device features require the device in a singleton iommu
-> group which is immutable in fabric i.e. not affected by hotplug"
-
-Yours is better. Thank you.
-
+> > > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 > 
->> For example, the SVA bind()/unbind()
->> interfaces require that the device exists in a singleton group. If we
->> have a singleton group that doesn't have ACS (or similar technologies)
->> and someone hotplugs in another device on a bridge, then our SVA is
->> completely broken and we get data corruption.
+> > I liked the original code better.  Otherwise you wonder, is it
+> > intentional to return success on this path. 
 > 
-> this needs the background that PASID doesn't join PCI packet routing
-> thus the dma address (CPU VA) may hit a p2p range.
-
-Sure.
-
+> You're right. The original code is easier to understand. It's not
+> obvious that this check should return _SUCCESS and the remaining ones
+> return _FAIL.
 > 
->>
->> This adds a flag in the iommu_group struct to indicate an immutable
->> singleton group, and uses standard PCI bus topology, isolation features,
->> and DMA alias quirks to set the flag. If the device came from DT, assume
->> it is static and then the singleton attribute can know from the device
->> count in the group.
-> 
-> where does the assumption come from?
+> Greg, could you drop this patch or should I resend the series without
+> this patch?
 
-Hotplug is the only factor that can dynamically affect the
-characteristics of IOMMU group singleton as far as I can see. If a
-device node was created from the DT, it could be treated as static,
-hence we can judge the singleton in iommu probe phase during boot.
+Martin, if Greg's already applied this patch then just leave it as-is.
 
-> 
->>
->> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->> Suggested-by: Kevin Tian <kevin.tian@intel.com>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>   drivers/iommu/iommu.c | 67 ++++++++++++++++++++++++++++++++++++----
->> ---
->>   1 file changed, 57 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 0c42ece25854..56ffbf5fdc18 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -48,6 +48,7 @@ struct iommu_group {
->>   	struct list_head entry;
->>   	unsigned int owner_cnt;
->>   	void *owner;
->> +	bool immutable_singleton;
-> 
-> Just call it 'singleton' with a comment to explain it must be immutable?
+We're going to have to go through and remove all the _SUCCESS/_FAIL
+stuff anyway.  This problem will be cleaned up in end.  No need to worry
+about it.
 
-I was just trying to distinguish "singleton" and "immutable singleton".
-A group is singleton if it only contains a single device in the device
-list, while a group is immutable singleton only if the fabric doesn't
-allow to change the state.
+regards,
+dan carpenter
 
-> 
->>   };
->>
->>   struct group_device {
->> @@ -74,6 +75,16 @@ static const char * const
->> iommu_group_resv_type_string[] = {
->>   #define IOMMU_CMD_LINE_DMA_API		BIT(0)
->>   #define IOMMU_CMD_LINE_STRICT		BIT(1)
->>
->> +/*
->> + * To consider a PCI device isolated, we require ACS to support Source
->> + * Validation, Request Redirection, Completer Redirection, and Upstream
->> + * Forwarding.  This effectively means that devices cannot spoof their
->> + * requester ID, requests and completions cannot be redirected, and all
->> + * transactions are forwarded upstream, even as it passes through a
->> + * bridge where the target device is downstream.
->> + */
->> +#define REQ_ACS_FLAGS   (PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR |
->> PCI_ACS_UF)
->> +
->>   static int iommu_alloc_default_domain(struct iommu_group *group,
->>   				      struct device *dev);
->>   static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
->> @@ -89,6 +100,7 @@ static int
->> iommu_create_device_direct_mappings(struct iommu_group *group,
->>   static struct iommu_group *iommu_group_get_for_dev(struct device *dev);
->>   static ssize_t iommu_group_store_type(struct iommu_group *group,
->>   				      const char *buf, size_t count);
->> +static int iommu_group_device_count(struct iommu_group *group);
->>
->>   #define IOMMU_GROUP_ATTR(_name, _mode, _show, _store)
->> 	\
->>   struct iommu_group_attribute iommu_group_attr_##_name =		\
->> @@ -844,6 +856,37 @@ static bool iommu_is_attach_deferred(struct device
->> *dev)
->>   	return false;
->>   }
->>
->> +static int has_pci_alias(struct pci_dev *pdev, u16 alias, void *opaque)
->> +{
->> +	return -EEXIST;
->> +}
->> +
->> +static bool pci_immutably_isolated(struct pci_dev *pdev)
->> +{
->> +	/* Skip the bridges. */
->> +	if (pci_is_bridge(pdev))
->> +		return false;
->> +
->> +	/*
->> +	 * The device could be considered to be fully isolated if
->> +	 * all devices on the path from the parent to the host-PCI
->> +	 * bridge are protected from peer-to-peer DMA by ACS.
->> +	 */
->> +	if (!pci_is_root_bus(pdev->bus) &&
->> +	    !pci_acs_path_enabled(pdev->bus->self, NULL, REQ_ACS_FLAGS))
->> +		return false;
->> +
->> +	/* Multi-function devices should have ACS enabled. */
->> +	if (pdev->multifunction && !pci_acs_enabled(pdev, REQ_ACS_FLAGS))
->> +		return false;
-> 
-> Looks my earlier comment was lost, i.e. you can just use
-> pci_acs_path_enabled(pdev) to cover above two checks.
-
-If a device is directly connected to the root bridge and it is not an
-MFD, do we still need ACS on it? The Intel idxd device seems to be such
-a device. I had a quick check with lspci, it has no ACS support.
-
-I probably missed anything.
-
-> 
->> +
->> +	/* Filter out devices which has any alias device. */
->> +	if (pci_for_each_dma_alias(pdev, has_pci_alias, NULL))
->> +		return false;
->> +
->> +	return true;
->> +}
->> +
->>   /**
->>    * iommu_group_add_device - add a device to an iommu group
->>    * @group: the group into which to add the device (reference should be held)
->> @@ -898,6 +941,20 @@ int iommu_group_add_device(struct iommu_group
->> *group, struct device *dev)
->>   	list_add_tail(&device->list, &group->devices);
->>   	if (group->domain  && !iommu_is_attach_deferred(dev))
->>   		ret = __iommu_attach_device(group->domain, dev);
->> +
->> +	/*
->> +	 * Use standard PCI bus topology, isolation features, and DMA
->> +	 * alias quirks to set the immutable singleton attribute. If
->> +	 * the device came from DT, assume it is static and then
->> +	 * singleton can know from the device count in the group.
->> +	 */
->> +	if (dev_is_pci(dev))
->> +		group->immutable_singleton =
->> +				pci_immutably_isolated(to_pci_dev(dev));
->> +	else if (is_of_node(dev_fwnode(dev)))
->> +		group->immutable_singleton =
->> +				(iommu_group_device_count(group) == 1);
->> +
->>   	mutex_unlock(&group->mutex);
->>   	if (ret)
->>   		goto err_put_group;
->> @@ -1290,16 +1347,6 @@ EXPORT_SYMBOL_GPL(iommu_group_id);
->>   static struct iommu_group *get_pci_alias_group(struct pci_dev *pdev,
->>   					       unsigned long *devfns);
->>
->> -/*
->> - * To consider a PCI device isolated, we require ACS to support Source
->> - * Validation, Request Redirection, Completer Redirection, and Upstream
->> - * Forwarding.  This effectively means that devices cannot spoof their
->> - * requester ID, requests and completions cannot be redirected, and all
->> - * transactions are forwarded upstream, even as it passes through a
->> - * bridge where the target device is downstream.
->> - */
->> -#define REQ_ACS_FLAGS   (PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR |
->> PCI_ACS_UF)
->> -
->>   /*
->>    * For multifunction devices which are not isolated from each other, find
->>    * all the other non-isolated functions and look for existing groups.  For
->> --
->> 2.25.1
-> 
-
-Best regards,
-baolu

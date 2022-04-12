@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261244FD747
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F97D4FD7AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358183AbiDLI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S1385755AbiDLIwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353665AbiDLHZv (ORCPT
+        with ESMTP id S1359053AbiDLHm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3CC2655E;
-        Tue, 12 Apr 2022 00:02:51 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472F254FA5;
+        Tue, 12 Apr 2022 00:20:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35B0561045;
-        Tue, 12 Apr 2022 07:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48291C385A6;
-        Tue, 12 Apr 2022 07:02:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A80A86171C;
+        Tue, 12 Apr 2022 07:20:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9F4C385A1;
+        Tue, 12 Apr 2022 07:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746970;
-        bh=DI2OLZuJYTJKh/eDk6ZeULcIY4vdi2GMVgMYgoJDwpU=;
+        s=korg; t=1649748006;
+        bh=et5H9Lo/I7eEZHEtzI0oQ2lysaJnffjyER3MhMUSTHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K4sGY7Dm2+vJvmLDudQtA9oT3JVapoGS83jD5uF5rK6X7AiyeVAIUklBsUypJklmO
-         UDClYYUQUmbOjZRwo8zj6rEVZ8vPnYfrjeqUkNwX/g27GSfD/VNls1670z8XdMaFfa
-         S+XbVQjdqzCyw5RJEpGk9IENNWUMgetbQbsiLNtk=
+        b=HDdc2IoS9SMR5WIONiSqTEqfwmwGUgxGeuWWm4I3qtV/bGKP4z1P3N9a86KZwIsi/
+         cCs+xyBHqdKWicWV3a337fcsl4AdEqu7qjK2SZDphnLfoF4SpXW1DayH7rYXPDV+nN
+         LiZMRUiZlXeh6JxVcTPrFSsNOCxYBxJZZJ+iIqwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Habets <habetsm.xilinx@gmail.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 195/285] net: sfc: fix using uninitialized xdp tx_queue
-Date:   Tue, 12 Apr 2022 08:30:52 +0200
-Message-Id: <20220412062949.290196039@linuxfoundation.org>
+        stable@vger.kernel.org, "Pudak, Filip" <Filip.Pudak@windriver.com>,
+        "Xiao, Jiguang" <Jiguang.Xiao@windriver.com>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Pudak@vger.kernel.org,
+        Xiao@vger.kernel.org
+Subject: [PATCH 5.17 235/343] ipv6: Fix stats accounting in ip6_pkt_drop
+Date:   Tue, 12 Apr 2022 08:30:53 +0200
+Message-Id: <20220412062958.118107935@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,89 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: David Ahern <dsahern@kernel.org>
 
-[ Upstream commit fb5833d81e4333294add35d3ac7f7f52a7bf107f ]
+[ Upstream commit 1158f79f82d437093aeed87d57df0548bdd68146 ]
 
-In some cases, xdp tx_queue can get used before initialization.
-1. interface up/down
-2. ring buffer size change
+VRF devices are the loopbacks for VRFs, and a loopback can not be
+assigned to a VRF. Accordingly, the condition in ip6_pkt_drop should
+be '||' not '&&'.
 
-When CPU cores are lower than maximum number of channels of sfc driver,
-it creates new channels only for XDP.
-
-When an interface is up or ring buffer size is changed, all channels
-are initialized.
-But xdp channels are always initialized later.
-So, the below scenario is possible.
-Packets are received to rx queue of normal channels and it is acted
-XDP_TX and tx_queue of xdp channels get used.
-But these tx_queues are not initialized yet.
-If so, TX DMA or queue error occurs.
-
-In order to avoid this problem.
-1. initializes xdp tx_queues earlier than other rx_queue in
-efx_start_channels().
-2. checks whether tx_queue is initialized or not in efx_xdp_tx_buffers().
-
-Splat looks like:
-   sfc 0000:08:00.1 enp8s0f1np1: TX queue 10 spurious TX completion id 250
-   sfc 0000:08:00.1 enp8s0f1np1: resetting (RECOVER_OR_ALL)
-   sfc 0000:08:00.1 enp8s0f1np1: MC command 0x80 inlen 100 failed rc=-22
-   (raw=22) arg=789
-   sfc 0000:08:00.1 enp8s0f1np1: has been disabled
-
-Fixes: f28100cb9c96 ("sfc: fix lack of XDP TX queues - error XDP TX failed (-22)")
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 1d3fd8a10bed ("vrf: Use orig netdev to count Ip6InNoRoutes and a fresh route lookup when sending dest unreach")
+Reported-by: Pudak, Filip <Filip.Pudak@windriver.com>
+Reported-by: Xiao, Jiguang <Jiguang.Xiao@windriver.com>
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220404150908.2937-1-dsahern@kernel.org
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 2 +-
- drivers/net/ethernet/sfc/tx.c           | 3 +++
- drivers/net/ethernet/sfc/tx_common.c    | 2 ++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ net/ipv6/route.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index 4753c0c5af10..1f8cfd806008 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -1123,7 +1123,7 @@ void efx_start_channels(struct efx_nic *efx)
- 	struct efx_rx_queue *rx_queue;
- 	struct efx_channel *channel;
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index ea1cf414a92e..da1bf48e7937 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -4495,7 +4495,7 @@ static int ip6_pkt_drop(struct sk_buff *skb, u8 code, int ipstats_mib_noroutes)
+ 	struct inet6_dev *idev;
+ 	int type;
  
--	efx_for_each_channel(channel, efx) {
-+	efx_for_each_channel_rev(channel, efx) {
- 		efx_for_each_channel_tx_queue(tx_queue, channel) {
- 			efx_init_tx_queue(tx_queue);
- 			atomic_inc(&efx->active_queues);
-diff --git a/drivers/net/ethernet/sfc/tx.c b/drivers/net/ethernet/sfc/tx.c
-index d16e031e95f4..6983799e1c05 100644
---- a/drivers/net/ethernet/sfc/tx.c
-+++ b/drivers/net/ethernet/sfc/tx.c
-@@ -443,6 +443,9 @@ int efx_xdp_tx_buffers(struct efx_nic *efx, int n, struct xdp_frame **xdpfs,
- 	if (unlikely(!tx_queue))
- 		return -EINVAL;
- 
-+	if (!tx_queue->initialised)
-+		return -EINVAL;
-+
- 	if (efx->xdp_txq_queues_mode != EFX_XDP_TX_QUEUES_DEDICATED)
- 		HARD_TX_LOCK(efx->net_dev, tx_queue->core_txq, cpu);
- 
-diff --git a/drivers/net/ethernet/sfc/tx_common.c b/drivers/net/ethernet/sfc/tx_common.c
-index d530cde2b864..9bc8281b7f5b 100644
---- a/drivers/net/ethernet/sfc/tx_common.c
-+++ b/drivers/net/ethernet/sfc/tx_common.c
-@@ -101,6 +101,8 @@ void efx_fini_tx_queue(struct efx_tx_queue *tx_queue)
- 	netif_dbg(tx_queue->efx, drv, tx_queue->efx->net_dev,
- 		  "shutting down TX queue %d\n", tx_queue->queue);
- 
-+	tx_queue->initialised = false;
-+
- 	if (!tx_queue->buffer)
- 		return;
- 
+-	if (netif_is_l3_master(skb->dev) &&
++	if (netif_is_l3_master(skb->dev) ||
+ 	    dst->dev == net->loopback_dev)
+ 		idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
+ 	else
 -- 
 2.35.1
 

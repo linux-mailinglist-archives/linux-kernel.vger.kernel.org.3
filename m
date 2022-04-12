@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F084FEB43
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708E84FEB15
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiDLXlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S229648AbiDLXoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiDLXk6 (ORCPT
+        with ESMTP id S232067AbiDLXn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:40:58 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24373AACA4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:22:46 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id b188so308030oia.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:22:46 -0700 (PDT)
+        Tue, 12 Apr 2022 19:43:29 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69806EBAC6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:25:22 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 17so236497lji.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cXG2uBz6lRa6SmsxOh4UHnvAS1v6j3gtk2oaRONS+x4=;
-        b=VPl1Lq9jWUOfdQHl/1KZuWWM6wCjlya9ZIm56mGgKOGxFiC5BaCc1BSVeUdc1pyItB
-         BIIRsGb7m/uTTFP7EQ9bwdIRf6Qc2mw3gELQG2VwZAg2xJ2tVel9MI1+ME9SUoGaJ8Ck
-         Z8ts0Cz8Sv7S9Fzd/Im/JfbGqbs45u5Dpd4A8hT36LVn0vEKF5gJNhz9Xj3HxeT5GFx9
-         3orzrVLxvjY3XUMpiLuJPsctZxiLUWVgCZp6UZHqMNblOrfxFCYbsUPAtL6PjFLKvIYv
-         yR16Pm/ZW/nafNyxKUqk8z/2UQ0ECbaF4NEyEpOJWqi+m9FgHi5wKcizOSX3GGI9F65b
-         O8Bw==
+        bh=sEf3ghNJkoFaoWuY+1wI1QnhHwrm43YYsrClV3MyqfI=;
+        b=REbi327RrkR6HSTgkHSf+nZ3SQfIOuOq2YEO+YINnAhIuEKbRbk23Oj4KWA5yWFdXF
+         pBvcZAq7HFUQl0JgP0of0X9f+/dcqWixfDipfytfFy4mshNdYQsjyIWrzcStRvzJxz72
+         pzBvPQjmX1wRRKbyjJuqOV/6DQkkGws4nvIkI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cXG2uBz6lRa6SmsxOh4UHnvAS1v6j3gtk2oaRONS+x4=;
-        b=Tercn0nlL+s6g/AI+lcdTn0bDs60nzpJy7M0secDSA0c99JwH5axS/PSnGHPC2fgUQ
-         ALUx3MHHQ/+hk8NejKZx+usaSqQ0/xaL1SwjcY5uY2KgmyE6BoTRJmU5E36QsLQwwK5g
-         hVrM09GX+j3gWG3Qj4qIBipFBIq0thLT67gYp9P3w8ZiTHf9DJAD//SgDWNVxNUjOKSR
-         eRZsGfbOEdIzIi0SkjVGcB7yUggoboPvoeQDflb4xi3rOuMKubcrCKV808ZwlUz309xC
-         PJyyN2hOuqw5rws9qPHpUqDjL3D5Rz45t36wB24uIkn30kThwl4hyDYjFINAbNPAzFID
-         S6gQ==
-X-Gm-Message-State: AOAM532B7s0ttFoyyrZeqBuzBSFV81UyOdMXM85TF9Aj8epdK0pZ6fnv
-        9erux+3uqI0sSPjFrLt0tERCN//0uaErtDmwo+ahhw==
-X-Google-Smtp-Source: ABdhPJzEsDa0QPWqZoKnqzlrHygJjKtOSvpADAV6Jhisjm10RxdCfr8ioS/LCXNm6BQQZeX47QnFzwejPCzwj9rtzOk=
-X-Received: by 2002:a05:6808:1154:b0:2da:2fbd:eba9 with SMTP id
- u20-20020a056808115400b002da2fbdeba9mr2979048oiu.133.1649805765445; Tue, 12
- Apr 2022 16:22:45 -0700 (PDT)
+        bh=sEf3ghNJkoFaoWuY+1wI1QnhHwrm43YYsrClV3MyqfI=;
+        b=wMmZrLhoPusyb5gjH6G+n8vbBnNIazHQjYAXPIQ4i4+QG7tho7CfWkn4efsK2hjogI
+         VthZXvwHPxc4w13lKcddqe6F4QgA41fqvKxVENT6DT62wG49y3Lh6e1eppP9kPfkNWTN
+         lyelf+lNfcYyODjhRxcFr2gQORQYMiQZbZosuzw/kstvhfJd+B0y/OgCjgLlESM7ZyKC
+         b4EMT8VGp51rSOJHqQ44TEubHbtIkIU7frtX7SByx4bXfhhwNttLg/W/XC2cJ1YyPbBJ
+         Z57HRsqjccUHv2F8cklwx5XOCjPXoVJN4Q1T4/3ruvD788wXIdQ3E2SzODPsxjoW5KSK
+         BZkg==
+X-Gm-Message-State: AOAM5324avWeS1cx39fO6nlgOiQKuXIUq3sDjWEt9GuxoFNsCg3/e5Q2
+        2g3ZueA8EwydOzVl0eOjWVai+M+NdBp98ECX
+X-Google-Smtp-Source: ABdhPJy5NyPw4C81VjTM7ObOP4ccxsGyGvbGoOMHDyyGsjfyxN2iJkmXo4SZAwHTztXoN1q4sQ/XBg==
+X-Received: by 2002:a2e:918d:0:b0:24c:84ca:199b with SMTP id f13-20020a2e918d000000b0024c84ca199bmr125278ljg.339.1649805920474;
+        Tue, 12 Apr 2022 16:25:20 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id z7-20020a195047000000b0046bb9225f5fsm407771lfj.234.2022.04.12.16.25.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 16:25:19 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id x33so545314lfu.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:25:18 -0700 (PDT)
+X-Received: by 2002:ac2:5483:0:b0:46b:9dc3:cdd4 with SMTP id
+ t3-20020ac25483000000b0046b9dc3cdd4mr11503890lfk.542.1649805918419; Tue, 12
+ Apr 2022 16:25:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com> <20220410160904.3758789-2-ruansy.fnst@fujitsu.com>
-In-Reply-To: <20220410160904.3758789-2-ruansy.fnst@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 12 Apr 2022 16:22:34 -0700
-Message-ID: <CAPcyv4iqHMR4Pee0Mjca2iM6Vhht8s=56-ZefYvpBmxuEi0Q6A@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] dax: Introduce holder for dax_device
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
+References: <alpine.LRH.2.02.2204111023230.6206@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wijDnLH2K3Rh2JJo-SmWL_ntgzQCDxPeXbJ9A-vTF3ZvA@mail.gmail.com>
+ <alpine.LRH.2.02.2204111236390.31647@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wgsHK4pDDoEgCyKgGyo-AMGpy1jg2QbstaCR0G-v568yg@mail.gmail.com>
+ <alpine.LRH.2.02.2204120520140.19025@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiJTqx4Pec653ZFKEiNv2jtfWsNyevoV9TYa05kD0vVsg@mail.gmail.com> <alpine.LRH.2.02.2204121253260.26107@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2204121253260.26107@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 12 Apr 2022 13:25:02 -1000
+X-Gmail-Original-Message-ID: <CAHk-=whu4qvXYPwh3HS1bcJMOuMiap_g8=EqcHb7P3TQyvM6Cw@mail.gmail.com>
+Message-ID: <CAHk-=whu4qvXYPwh3HS1bcJMOuMiap_g8=EqcHb7P3TQyvM6Cw@mail.gmail.com>
+Subject: Re: [PATCH] stat: fix inconsistency between struct stat and struct compat_stat
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 9:09 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+On Tue, Apr 12, 2022 at 7:42 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
 >
-> To easily track filesystem from a pmem device, we introduce a holder for
-> dax_device structure, and also its operation.  This holder is used to
-> remember who is using this dax_device:
->  - When it is the backend of a filesystem, the holder will be the
->    instance of this filesystem.
->  - When this pmem device is one of the targets in a mapped device, the
->    holder will be this mapped device.  In this case, the mapped device
->    has its own dax_device and it will follow the first rule.  So that we
->    can finally track to the filesystem we needed.
->
-> The holder and holder_ops will be set when filesystem is being mounted,
-> or an target device is being activated.
->
+> As long as both major and minor numbers are less than 256, these functions
+> return equivalent results. So, I think it's safe to replace old_encode_dev
+> with new_encode_dev.
 
-Looks good to me:
+You are of course 100% right, and I should have looked more closely at
+the code rather than going by my (broken) assumptions based on old
+memory of what we did when we did that "new" stat expansion.
 
-Reviewed-by: Dan Williams <dan.j.wiliams@intel.com>
+I take back all my objections that were completely bogus.
 
-I am assuming this will be staged in a common DAX branch, but holler
-now if this should go through the XFS tree.
+             Linus

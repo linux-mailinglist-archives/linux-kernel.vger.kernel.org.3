@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275EC4FDA7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EA14FD5A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353947AbiDLHQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S1383750AbiDLIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351948AbiDLHE3 (ORCPT
+        with ESMTP id S1357053AbiDLHjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3502946154;
-        Mon, 11 Apr 2022 23:47:30 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2A0532D6;
+        Tue, 12 Apr 2022 00:11:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2084661045;
-        Tue, 12 Apr 2022 06:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344E2C385A6;
-        Tue, 12 Apr 2022 06:47:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 241C9B81A8F;
+        Tue, 12 Apr 2022 07:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A73AC385A5;
+        Tue, 12 Apr 2022 07:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746049;
-        bh=Hzb/60PTNbC86qMbYGr/Gly1OYzLxsR3fCnMTsch53k=;
+        s=korg; t=1649747460;
+        bh=bcdUogpj52SUG8nQQS8SqrwbgPj2XDWbLfXBv7xXEhg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tzHgx0k16FI44/Vg4sIBIvNHPnEx44Yvf98MgX8dd4nEDXvR0PYHnNLQw6889kmVO
-         tN75qn2BQ9a8gYFN69m9Ns5psXx0QrLy7m8e7p8t/3PIRTn+uI5G/+OI9KVtiN/T6U
-         6iLWYC9s8WoadIXr2WHwhZAO1c1vbisTNuwxCfAM=
+        b=SRMwFzJlSpdkjqHx0WWcMBFDjv9mTY5Or4LepehLSRvLrGTHv7ZSce8swMKeOlRkt
+         76GWHQjA0HiVcTszOECk1OSqD1Wq95dp4GO4MCFCKAbwe2rxcHjFA9l5v2In+Z7tdJ
+         G8Frs6BZKBsX4Q4S8mELhDz3albQGaPnlwXtouB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 101/277] MIPS: ingenic: correct unit node address
-Date:   Tue, 12 Apr 2022 08:28:24 +0200
-Message-Id: <20220412062944.964837277@linuxfoundation.org>
+Subject: [PATCH 5.17 087/343] iwlwifi: mvm: Correctly set fragmented EBS
+Date:   Tue, 12 Apr 2022 08:28:25 +0200
+Message-Id: <20220412062953.617437038@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Ilan Peer <ilan.peer@intel.com>
 
-[ Upstream commit 8931ddd8d6a55fcefb20f44a38ba42bb746f0b62 ]
+[ Upstream commit d8d4dd26b9e0469baf5017f0544d852fd4e3fb6d ]
 
-Unit node addresses should not have leading 0x:
+Currently, fragmented EBS was set for a channel only if the 'hb_type'
+was set to fragmented or balanced scan. However, 'hb_type' is set only
+in case of CDB, and thus fragmented EBS is never set for a channel for
+non-CDB devices. Fix it.
 
-  Warning (unit_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have leading "0x"
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220204122220.a6165ac9b9d5.I654eafa62fd647030ae6d4f07f32c96c3171decb@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index 9e34f433b9b5..efbbddaf0fde 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -450,7 +450,7 @@
- 			#address-cells = <1>;
- 			#size-cells = <1>;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+index 5f92a09db374..4cd507cb412d 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -1893,7 +1893,10 @@ static u8 iwl_mvm_scan_umac_chan_flags_v2(struct iwl_mvm *mvm,
+ 			IWL_SCAN_CHANNEL_FLAG_CACHE_ADD;
  
--			eth0_addr: eth-mac-addr@0x22 {
-+			eth0_addr: eth-mac-addr@22 {
- 				reg = <0x22 0x6>;
- 			};
- 		};
+ 	/* set fragmented ebs for fragmented scan on HB channels */
+-	if (iwl_mvm_is_scan_fragmented(params->hb_type))
++	if ((!iwl_mvm_is_cdb_supported(mvm) &&
++	     iwl_mvm_is_scan_fragmented(params->type)) ||
++	    (iwl_mvm_is_cdb_supported(mvm) &&
++	     iwl_mvm_is_scan_fragmented(params->hb_type)))
+ 		flags |= IWL_SCAN_CHANNEL_FLAG_EBS_FRAG;
+ 
+ 	return flags;
 -- 
 2.35.1
 

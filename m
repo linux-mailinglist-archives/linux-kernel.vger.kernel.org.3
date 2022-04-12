@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0790B4FCBFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA454FCC09
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235621AbiDLBw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S236263AbiDLB5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiDLBwx (ORCPT
+        with ESMTP id S236738AbiDLB5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:52:53 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5717A7676
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:50:36 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id z14so3970053qto.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:50:36 -0700 (PDT)
+        Mon, 11 Apr 2022 21:57:32 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B9A186E8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:55:16 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id z6so20890479iot.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0zgX0lRBSeUYGjy4/2KaVjVU1Nii6uaJF61nZ62EHQo=;
-        b=ALgJryFJ8KuYRsLAi1C70WILaGJYBJhDByCkA4L1ffkmDCQ/ZcrlTh7vQsszZdUX9o
-         tpDYK5/Bl7zAg9xOpA/+n1JSC/YhUIL83iiBcKEtVOlvRZZGuNfD0QM3biDB0YQUqt/e
-         q2kTTCfXhdiIagqLBL8nroWc/e7+9wyvqvTqEwVkfKvsPBKFlTI26gP+mFCkuOMwgwb/
-         tsbhTwcL+tE5V4KpcWj7r+B5T7Ocwk2aKDVRlKZfLstP+CkTxl/gO9wxp41K9fPIfd44
-         SHMI5MfC4wFxdQeXE84aVPZLm7YaYklDFHx32VoPtEl06EIkyB/M89AjY30pDhgfkeX1
-         Ytjw==
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oBVB6OMaVmW4VIDZAaEbON7kMyciD94DEsz9UZvj85o=;
+        b=QjwzsS6usi7V1XeKXWF4Vglaq7eM5rnAiKiLughIP0ghQ//qBSt6pXF8Wy65karFKN
+         f5jGgz69NhX4t81wiicmvfqWge29IsgGZrbnJjrHvbdZ2WShrE8PlKzG0n6jd0SJM/Yl
+         7/Ls7B7PW47llnfhBXZ/+IzbGcfA7wRwyCQ4I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0zgX0lRBSeUYGjy4/2KaVjVU1Nii6uaJF61nZ62EHQo=;
-        b=T8eEntfSvSo/6B9i6jR5kPSRrg1VTLIgLu4Vl94tRgTsG9vKiJAL1G13EJhWi3bk/R
-         8Gw4JAiqkgyyqA1n/ITkw1G6s/8UZge4sq7lf6cJBTG8KIioXmvHOAC4FtBYR6zh+QHO
-         amkI0uWMSJ8nV2c/0doJdiZ66/mnKirgXIAT5C0A0A8MNBNxMGfKLHgx3l/idVuo+ZUb
-         SqXoZffpYjgZFwgGIu2eZXtMzpwjJM1fXKgURJDjNF6Nna2CdvvNWcNTzXGmQLjldEFW
-         om2xjC5nGqjeqqbRU39j2rA3UsVNb9/kgBJ96spX5LPQ5Nj+FTqqvX4Yz0USPN2cHQdx
-         fP7g==
-X-Gm-Message-State: AOAM531w/aQXkYkgUQBt0pdG03OqUNHmfK34mXckTlCCsFsJu1KiYBFr
-        HGnUwO71WgerUgK7bDhuMno=
-X-Google-Smtp-Source: ABdhPJyVeA6zt+aob1XQm4uc32KoNAGhowGFGSAdjfqXLMJZMqwhQg9FsbA9zzbKZLBucKwnc+oolA==
-X-Received: by 2002:ac8:688c:0:b0:2f0:4bcd:1e46 with SMTP id m12-20020ac8688c000000b002f04bcd1e46mr1159320qtq.577.1649728235524;
-        Mon, 11 Apr 2022 18:50:35 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme.lan ([2607:fb90:50fb:900e:25ab:983d:ac30:58b5])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac85cd0000000b002e1ed82f1e5sm29556305qta.75.2022.04.11.18.50.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 18:50:35 -0700 (PDT)
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     johan@kernel.org
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oBVB6OMaVmW4VIDZAaEbON7kMyciD94DEsz9UZvj85o=;
+        b=l1Swg9NDBqvA48o6UH4nMVVqb6gM5u7DM7u7xaQbhxoqOfjPZ9brnipZApMy/mkPKm
+         nFmUz34UJuXpcyMw6DhuJ/bRnDT3Ih83EZqFw0mLfshU9qMj+JwN3bS3kL+FVkdeAxwn
+         34BDIU0ps2VY0orEt8Q6w60lWK1nNuDUvSH+HJHpJdVqN70NSlCGousAA9YzX4zJN35c
+         ETTTcwZs2gCRG6VfQfhqTNHibq1hMMTWMwjbyjKXYpwB3JGhWNtaNk2TvkAscbGQLdaS
+         S1aUOM4EtmPBPknf8oFqbo7zbk1QQaZHtg+5SNHcVzLHeCoibnnE16NcfXH2ryOrnulZ
+         IteA==
+X-Gm-Message-State: AOAM531S4gXWeb34nGQYUVf7VE8F8+REF8WMR+mXMfQb6V3mYj0vySA6
+        IQJugXEn6GM2tbKqXNqexf0X+g==
+X-Google-Smtp-Source: ABdhPJyr6vt6puQIS2gbji09gkrJPhnfDSc5vipjeTwUTA07rThe82vQKJkBr4KzhKq/ChbxNSs8wQ==
+X-Received: by 2002:a05:6602:2a45:b0:648:b21c:6f49 with SMTP id k5-20020a0566022a4500b00648b21c6f49mr14820942iov.206.1649728516198;
+        Mon, 11 Apr 2022 18:55:16 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id a2-20020a5d9ec2000000b00645ab33390dsm21121751ioe.9.2022.04.11.18.55.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 18:55:15 -0700 (PDT)
+Message-ID: <9c3bdbce-e898-696b-b645-6e566faffa85@ieee.org>
+Date:   Mon, 11 Apr 2022 20:55:14 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/2] staging: greybus: fix warnings reported by checkpatch
+Content-Language: en-US
+To:     Jaehee Park <jhpark1013@gmail.com>, johan@kernel.org
 Cc:     elder@kernel.org, gregkh@linuxfoundation.org,
         greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
-        jhpark1013@gmail.com
-Subject: [PATCH 2/2] staging: greybus: remove return in an empty void function
-Date:   Mon, 11 Apr 2022 21:50:22 -0400
-Message-Id: <eaf51ac31d264179298cb24c91f05a14e3651bda.1649712572.git.jhpark1013@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1649712572.git.jhpark1013@gmail.com>
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
 References: <cover.1649712572.git.jhpark1013@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <cover.1649712572.git.jhpark1013@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issue found by checkpatch:
-WARNING: void function return statements are not generally useful
+On 4/11/22 8:50 PM, Jaehee Park wrote:
+> The first patch corrects a typo in a comment. The second patch fixes
+> 'void function return statements are not generally useful' warning.
+> 
+> Jaehee Park (2):
+>    staging: greybus: correct typo in comment 'Atleast' to 'At least'
+>    staging: greybus: remove return in an empty void function
+> 
+>   drivers/staging/greybus/arche-apb-ctrl.c | 2 +-
+>   drivers/staging/greybus/audio_codec.c    | 1 -
+>   2 files changed, 1 insertion(+), 2 deletions(-)
+> 
 
-Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
----
- drivers/staging/greybus/audio_codec.c | 1 -
- 1 file changed, 1 deletion(-)
+These are really trivial patches.  Whether the second
+one is even worth changing is questionable (it represents
+"code churn" without really adding value).
 
-diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
-index 0f50d1e51e2c..3e3a16568def 100644
---- a/drivers/staging/greybus/audio_codec.c
-+++ b/drivers/staging/greybus/audio_codec.c
-@@ -1032,7 +1032,6 @@ static int gbcodec_probe(struct snd_soc_component *comp)
- static void gbcodec_remove(struct snd_soc_component *comp)
- {
- 	/* Empty function for now */
--	return;
- }
- 
- static int gbcodec_write(struct snd_soc_component *comp, unsigned int reg,
--- 
-2.25.1
+That said, you've properly submitted the patches and I
+have no problem with either one.  So someone else can
+object, but if they do not:
 
+Reviewed-by: Alex Elder <elder@linaro.org>

@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006ED4FE458
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48394FE460
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356848AbiDLPLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S1356858AbiDLPOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiDLPLh (ORCPT
+        with ESMTP id S245345AbiDLPOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:11:37 -0400
-Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D976263AF
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:09:18 -0700 (PDT)
+        Tue, 12 Apr 2022 11:14:02 -0400
+Received: from m228-6.mailgun.net (m228-6.mailgun.net [159.135.228.6])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 4F4F55D664
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:11:30 -0700 (PDT)
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1649776158; h=Content-Transfer-Encoding: MIME-Version:
+ s=k1; t=1649776304; h=Content-Transfer-Encoding: MIME-Version:
  Content-Type: References: In-Reply-To: Date: Cc: To: To: From: From:
  Subject: Subject: Message-ID: Sender: Sender;
- bh=pRfsjKQMKEiJTaYrkvSSRfmjO8y0ghzSTEyo8t10Amo=; b=KYkqWLhp/cxHfFabmmZUClxDLP4DvFKCWZ8F0iCYrvD1V+rGYfVgYYigu9pGyuzwdLd8LpYX
- ppzX4EVYWIieGmfK7HIejV53CEC4yag5LTmfEHZ1WQuvhquKioPlHcHsOC+648/yD/KTcfM2
- kK0tHgkJOXLnbSS61tpDIKlHKxc=
-X-Mailgun-Sending-Ip: 159.135.228.4
+ bh=AvVjR2TA13qsMyt2vEIFNLrpwflj1R27xnS3KKT/zCE=; b=FXmMBrpk74jMz5nsG2vL7O+Qus4K9PvEUKhNIBi1UBaFmRcAWu4KgjDyBujw06k0EYoj9huK
+ BxYCtinyUHI2HlAtSs6lW5l1HJUJAjhfq7OhObAgButmezf6YUqNmr1XzZppvPxZpUiPN+1k
+ 3kI3BYN9z9GKGKs4lMRllO4LqTY=
+X-Mailgun-Sending-Ip: 159.135.228.6
 X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
 Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6255961c77e17d301d9cead1 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Tue, 12 Apr 2022 15:09:16 GMT
+ [67.205.190.89]) by smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 6255965ac172fc5066619f37 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Tue, 12 Apr 2022 15:10:18 GMT
 Sender: michael@michaelkloos.com
 Received: from qpc.home.michaelkloos.com (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 02E73400CB;
-        Tue, 12 Apr 2022 15:09:14 +0000 (UTC)
-Message-ID: <ecce92cfd03450e0e41d85bae6c72ef4949ee1b7.camel@michaelkloos.com>
-Subject: Re: [PATCH 5.16 095/285] riscv: Fixed misaligned memory access.
+        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 2E3EC400CB;
+        Tue, 12 Apr 2022 15:10:17 +0000 (UTC)
+Message-ID: <29f936775615ff75923bded8fabd163bd5e2c627.camel@michaelkloos.com>
+Subject: Re: [PATCH 5.17 135/343] riscv: Fixed misaligned memory access.
  Fixed pointer comparison.
 From:   "Michael T. Kloos" <michael@michaelkloos.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
 Cc:     stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
         Sasha Levin <sashal@kernel.org>
-Date:   Tue, 12 Apr 2022 11:09:14 -0400
-In-Reply-To: <20220412062946.406503987@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
-         <20220412062946.406503987@linuxfoundation.org>
+Date:   Tue, 12 Apr 2022 11:10:16 -0400
+In-Reply-To: <20220412062955.285001325@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
+         <20220412062955.285001325@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
@@ -51,14 +51,15 @@ Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Backporting to 5.16 looks good to me.
+Backporting to 5.17 looks good to me.
 
 	Michael
 

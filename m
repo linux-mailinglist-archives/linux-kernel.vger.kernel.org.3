@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA80F4FD612
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA5A4FD754
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388343AbiDLJWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S1388189AbiDLJVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377937AbiDLHym (ORCPT
+        with ESMTP id S1377924AbiDLHyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:54:42 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B456215;
-        Tue, 12 Apr 2022 00:32:13 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C7W0sa012289;
-        Tue, 12 Apr 2022 02:32:00 -0500
+        Tue, 12 Apr 2022 03:54:41 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED7D506C8;
+        Tue, 12 Apr 2022 00:31:58 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C7VegL024395;
+        Tue, 12 Apr 2022 02:31:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649748720;
-        bh=eW8lzeaakM005YYC3nGUxibHVtMvgv2QH/HoZA6ps4E=;
-        h=From:To:CC:Subject:Date;
-        b=oF19xDgtVjIvwawiV9/9oOl8Z6RHs+gMb4E+lAbens7ksRIfxlDSWugU4rMAqCP+P
-         jljOSKtihdAP76ebpxpNkAGBgkypGW71rMpnqZD/MldHVP3QmF6apqnWx614A99GTN
-         EnqkDnr00Lk5kqxrqPkEmnoBbxPfxfSbHLd9m21c=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C7W0SZ031891
+        s=ti-com-17Q1; t=1649748700;
+        bh=6AJZHAvc6kDT9/m7rBLTEzcu/QyIsm+/F/qafjCkGmk=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=n7xcgnLtDkztYhDpaIzdxYG38vhw6uiRIoELHkEsVsU3bQalKAyPABZ1Muk0sa6Js
+         qS2FCkuc0bOPmzFbNlV08P+VAhPa/AE62MtY5zOUO51NYIup2IsKuM0WwsijbO7Krg
+         dwBAgKkTyBtp2slpWIjDXG/VB10aOZuefvg/gzuc=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C7VeTk057268
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 02:32:00 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 12 Apr 2022 02:31:40 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
  Apr 2022 02:31:39 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
  (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
  Frontend Transport; Tue, 12 Apr 2022 02:31:39 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C7Vd4X112001;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C7Vdc1105779;
         Tue, 12 Apr 2022 02:31:39 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -50,10 +50,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Nishanth Menon <nm@ti.com>
-Subject: [PATCH 0/2] rtc: Introduce rtc-ti-k3
-Date:   Tue, 12 Apr 2022 02:31:36 -0500
-Message-ID: <20220412073138.25027-1-nm@ti.com>
+Subject: [PATCH 1/2] dt-bindings: rtc: Add TI K3 RTC devicetree bindings documentation
+Date:   Tue, 12 Apr 2022 02:31:37 -0500
+Message-ID: <20220412073138.25027-2-nm@ti.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220412073138.25027-1-nm@ti.com>
+References: <20220412073138.25027-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,31 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This adds the documentation for the devicetree bindings of the Texas
+Instruments RTC modules on K3 family of SoCs such as AM62x SoCs or
+newer.
 
-This series adds support for TI K3 RTC as instantiated on TI's AM625
-SoC.
-
-Documentation in the current early release version of Technical
-Reference Manual is incomplete at the moment, but due to be updated
-later this year.
-https://www.ti.com/lit/pdf/spruiv7
-
-Testing log can be found here (20220411 + additional patch to get mmc
-root fs): https://gist.github.com/nmenon/88c56d63c2e163e7ba1e06f30eee52cc
-
-Nishanth Menon (2):
-  dt-bindings: rtc: Add TI K3 RTC devicetree bindings documentation
-  rtc: Introduce ti-k3-rtc
-
- .../devicetree/bindings/rtc/ti,k3-rtc.yaml    |  87 +++
- drivers/rtc/Kconfig                           |  10 +
- drivers/rtc/Makefile                          |   1 +
- drivers/rtc/rtc-ti-k3.c                       | 687 ++++++++++++++++++
- 4 files changed, 785 insertions(+)
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ .../devicetree/bindings/rtc/ti,k3-rtc.yaml    | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
- create mode 100644 drivers/rtc/rtc-ti-k3.c
 
+diff --git a/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml b/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+new file mode 100644
+index 000000000000..16aebb8013a1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/ti,k3-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments K3 Real Time Clock
++
++maintainers:
++  - Nishanth Menon <nm@ti.com>
++
++description: |
++  This RTC appears in the AM62x family of SoCs.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - ti,am62-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: VBUS Interface clock
++      - description: 32k Clock source (external or internal).
++
++  clock-names:
++    items:
++      - const: "vbus"
++      - const: "osc32k"
++
++  power-domains:
++    maxItems: 1
++
++  assigned-clocks:
++    description: |
++      override default osc32k parent clock reference to the osc32k clock entry
++    maxItems: 1
++
++  assigned-clock-parents:
++    description: |
++      override default osc32k parent clock phandle of the new parent clock of osc32k
++    maxItems: 1
++
++  wakeup-source: true
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    rtc@2b1f0000 {
++        compatible = "ti,am62-rtc";
++        reg = <0x2b1f0000 0x100>;
++        interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&bar 0>;
++        clocks = <&foo 0>, <&foo 1>;
++        clock-names = "vbus", "osc32k";
++        wakeup-source;
++    };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    rtc@2b1f0000 {
++        compatible = "ti,am62-rtc";
++        reg = <0x2b1f0000 0x100>;
++        interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&bar 0>;
++        clocks = <&foo 0>, <&foo 1>;
++        clock-names = "vbus", "osc32k";
++        wakeup-source;
++        assigned-clocks = <&foo 1>;
++        assigned-clock-parents = <&foo 2>;
++
++    };
 -- 
 2.31.1
 

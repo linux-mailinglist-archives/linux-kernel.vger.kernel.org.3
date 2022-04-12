@@ -2,283 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4974FE628
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8EB74FE62A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345764AbiDLQpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S1357846AbiDLQpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357896AbiDLQph (ORCPT
+        with ESMTP id S1345761AbiDLQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:45:37 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142B5EBD6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id 12so5484322pll.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cC6hNcDSob2h1qJMPH49Fl94mXox8pjM3QZWLbewUDg=;
-        b=iJKyH5b1m6N+YNB3hGi95xmA6mRRknNsWMP1Zu3scy9gU2ivs51h5RABH8Vwp+ylJL
-         fEAJzU+2ooh5U9PqZZ3d96P0u34xZdPGA7fMkRokxribDQOpLnWqsyG0XNHT3q/Mw19o
-         p/Ots6B3AT62Zbo4TN2TdCGufXWsWVJ2+dAa6hHfcOZKmV7auEz6i6vN9v4Hb5RUDpgT
-         rCfHI+VsIDLhEV4jJdlM4m5GEYYAxJWbrTZ+lbxMAgFBBUcoSyfyAbsI5Q7xFz6K4AFg
-         GfH7buQE/RnVNsX+w2C4BwMZzeoGRyQlb5qkbG3Ebg2IeD9L9jJOdi+GnpH6jpIF1W0X
-         06RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cC6hNcDSob2h1qJMPH49Fl94mXox8pjM3QZWLbewUDg=;
-        b=Bn41R3iT2DiS7iPZAQy7f0xfR1ayJxQR66Y+ogMjSGFqIvfH37u3hsDdqwIJ8fHcUG
-         /7iVVAU5+6H1sBSB15VwSdsc2i5Ai0r/+HYA9bDoP0JzNPckad7NRjVdcMAesmU9ysCx
-         7sebRPHvYeyTR748eEwwnSee2NYNVcwkQEufquZwRAQwzKZDgcKW87OYKzqYlol3gHHC
-         XmxGlJpDKJS3vx4yAzSxlryAxqoumOVQyG3fixC7U+tPCVN2V06mJPb8GaJIYKebQZqk
-         bnU3mdw7Z4XDT+WQtJTQV3BTIfEvMIJPL+5c3y6DaOBhqlSiHd+Vk9m/dXGnuHd3z0F4
-         RgeQ==
-X-Gm-Message-State: AOAM532XJtInHI3NINA+KGDfvh3/fk9jPFlZITj4hYl5f6j/sUxvy9aY
-        fRthUxmzHf06BIOxIzdLDfuDEg==
-X-Google-Smtp-Source: ABdhPJxG3Hrann2XtU6smEa42o9pXeSIJgM7E0Zud6j1a3qpLaNEVbPIwBvvEyx9yG4qD134bG956g==
-X-Received: by 2002:a17:902:6bc6:b0:157:c19e:d149 with SMTP id m6-20020a1709026bc600b00157c19ed149mr23604400plt.24.1649781799109;
-        Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004fe1a045e97sm28488104pfj.118.2022.04.12.09.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 09:43:18 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 16:43:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
- disabling dirty logging
-Message-ID: <YlWsImxP0C01BUtM@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <20220321224358.1305530-10-bgardon@google.com>
+        Tue, 12 Apr 2022 12:45:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F83749C99;
+        Tue, 12 Apr 2022 09:43:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CC5AB81B79;
+        Tue, 12 Apr 2022 16:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68123C385A5;
+        Tue, 12 Apr 2022 16:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649781798;
+        bh=BzDL5+rVL2ZyfPd0SEPtDbzn2wLAu6B6TXyHMgQILAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kMczoEcvWHgTHfeGLRbfsrbl78ZIH+0LB8K+5C2LA8eX1kt58BwIbV/75qa4TAYBV
+         qZNQ/agpJTpNh+Lj9cOnKKfMdHQXXZ9kT8P64d8LVe0nZTJXFZkRvOTvP/g0YSTmy1
+         wXmIaJirX6PLDu5DmiGMh8l8PPqwIjF3yuR8pyqw=
+Date:   Tue, 12 Apr 2022 18:43:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-mm <linux-mm@kvack.org>
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
+Message-ID: <YlWsI/v0SWjpyofc@kroah.com>
+References: <20220412062942.022903016@linuxfoundation.org>
+ <CA+G9fYseyeNoxQwEWtiiU8dLs_1coNa+sdV-1nqoif6tER_46Q@mail.gmail.com>
+ <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
+ <CA+G9fYuJKsYMR2vW+7d=xjDj9zoBtTF5=pSmcQRaiQitAjXCcw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321224358.1305530-10-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CA+G9fYuJKsYMR2vW+7d=xjDj9zoBtTF5=pSmcQRaiQitAjXCcw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022, Ben Gardon wrote:
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 1bff453f7cbe..6c08a5731fcb 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -171,4 +171,10 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
->  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
->  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
->  
-> +void
-> +build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
-> +				int shadow_root_level);
-
-Same comments from the earlier patch.
-
-> +extern int max_huge_page_level __read_mostly;
-
-Can you put this at the top of the heaader?  x86.h somehow ended up with extern
-variables being declared in the middle of the file and I find it very jarring,
-e.g. global definitions are pretty much never buried in the middle of a .c file.
-
->  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index af60922906ef..eb8929e394ec 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1709,6 +1709,66 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
->  		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
->  }
->  
-> +static bool try_promote_lpage(struct kvm *kvm,
-
-I believe we've settled on huge_page instead of lpage.
-
-And again, I strongly prefer a 0/-errno return instead of a boolean as seeing
--EBUSY or whatever makes it super obviously that the early returns are failure
-paths.
-
-> +			      const struct kvm_memory_slot *slot,
-> +			      struct tdp_iter *iter)
-> +{
-> +	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
-> +	struct rsvd_bits_validate shadow_zero_check;
-> +	bool map_writable;
-> +	kvm_pfn_t pfn;
-> +	u64 new_spte;
-> +	u64 mt_mask;
-> +
-> +	/*
-> +	 * If addresses are being invalidated, don't do in-place promotion to
-> +	 * avoid accidentally mapping an invalidated address.
-> +	 */
-> +	if (unlikely(kvm->mmu_notifier_count))
-> +		return false;
-> +
-> +	if (iter->level > max_huge_page_level || iter->gfn < slot->base_gfn ||
-> +	    iter->gfn >= slot->base_gfn + slot->npages)
-> +		return false;
-> +
-> +	pfn = __gfn_to_pfn_memslot(slot, iter->gfn, true, NULL, true,
-> +				   &map_writable, NULL);
-> +	if (is_error_noslot_pfn(pfn))
-> +		return false;
-> +
-> +	/*
-> +	 * Can't reconstitute an lpage if the consituent pages can't be
-
-"huge page", though honestly I'd just drop the comment, IMO this is more intuitive
-then say the checks against the slot stuff above.
-
-> +	 * mapped higher.
-> +	 */
-> +	if (iter->level > kvm_mmu_max_mapping_level(kvm, slot, iter->gfn,
-> +						    pfn, PG_LEVEL_NUM))
-> +		return false;
-> +
-> +	build_tdp_shadow_zero_bits_mask(&shadow_zero_check, iter->root_level);
-> +
-> +	/*
-> +	 * In some cases, a vCPU pointer is required to get the MT mask,
-> +	 * however in most cases it can be generated without one. If a
-> +	 * vCPU pointer is needed kvm_x86_try_get_mt_mask will fail.
-> +	 * In that case, bail on in-place promotion.
-> +	 */
-> +	if (unlikely(!static_call(kvm_x86_try_get_mt_mask)(kvm, iter->gfn,
-
-I wouldn't bother with the "unlikely".  It's wrong for a VM with non-coherent DMA,
-and it's very unlikely (heh) to actually be a meaningful optimization in any case.
-
-> +							   kvm_is_mmio_pfn(pfn),
-> +							   &mt_mask)))
-> +		return false;
-> +
-> +	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
-
-A comment stating the return type is intentionally ignore would be helpful.  Not
-strictly necessary because it's mostly obvious after looking at the details, but
-it'd save someone from having to dig into said details.
-
-> +		  map_writable, mt_mask, &shadow_zero_check, &new_spte);
-
-Bad indentation.
-
-> +
-> +	if (tdp_mmu_set_spte_atomic(kvm, iter, new_spte))
-> +		return true;
-
-And by returning an int, and because the failure path rereads the SPTE for you,
-this becomes:
-
-	return tdp_mmu_set_spte_atomic(kvm, iter, new_spte);
-
-> +
-> +	/* Re-read the SPTE as it must have been changed by another thread. */
-> +	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
-> +
-> +	return false;
-> +}
-> +
->  /*
->   * Clear leaf entries which could be replaced by large mappings, for
->   * GFNs within the slot.
-
-This comment needs to be updated to include the huge page promotion behavior. And
-maybe renamed the function too?  E.g.
-
-static void zap_or_promote_collapsible_sptes(struct kvm *kvm,
-					     struct kvm_mmu_page *root,
-					     const struct kvm_memory_slot *slot)
-
-> @@ -1729,8 +1789,17 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
->  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
->  			continue;
->  
-> -		if (!is_shadow_present_pte(iter.old_spte) ||
-> -		    !is_last_spte(iter.old_spte, iter.level))
-> +		if (iter.level > max_huge_page_level ||
-> +		    iter.gfn < slot->base_gfn ||
-> +		    iter.gfn >= slot->base_gfn + slot->npages)
-
-Isn't this exact check in try_promote_lpage()?  Ditto for the kvm_mmu_max_mapping_level()
-check that's just out of sight.  That one in particular can be somewhat expsensive,
-especially when KVM is fixed to use a helper that disable IRQs so the host page tables
-aren't freed while they're being walked.  Oh, and the huge page promotion path
-doesn't incorporate the reserved pfn check.
-
-In other words, shouldn't this be:
-
-
-		if (!is_shadow_present_pte(iter.old_spte))
-			continue;
-
-		if (iter.level > max_huge_page_level ||
-		    iter.gfn < slot->base_gfn ||
-		    iter.gfn >= slot->base_gfn + slot->npages)
-			continue;
-
-		pfn = spte_to_pfn(iter.old_spte);
-		if (kvm_is_reserved_pfn(pfn) ||
-		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
-							    pfn, PG_LEVEL_NUM))
-			continue;
-
-Followed by the promotion stuff.  And then unless I'm overlooking something, "pfn"
-can be passed into try_promote_huge_page(), it just needs to be masked appropriately.
-I.e. the promotion path can avoid the __gfn_to_pfn_memslot() lookup and also drop
-its is_error_noslot_pfn() check since the pfn is pulled from the SPTE and KVM should
-never install garbage into the SPTE (emulated/noslot MMIO pfns fail the shadow
-present check).
-
-> +			continue;
-> +
-> +		if (!is_shadow_present_pte(iter.old_spte))
-> +			continue;
-
-I strongly prefer to keep the !is_shadow_present_pte() check first, it really
-should be the first thing any of these flows check.
-
-> +
-> +		/* Try to promote the constitutent pages to an lpage. */
-> +		if (!is_last_spte(iter.old_spte, iter.level) &&
-> +		    try_promote_lpage(kvm, slot, &iter))
-
-There is an undocumented function change here, and I can't tell if it's intentional.
-If the promotion fails, KVM continues on an zaps the non-leaf shadow page.  If that
-is intentional behavior, it should be done in a follow-up patch, e.g. so that it can
-be easily reverted if it turns out that zappping e.g. a PUD is bad for performance.
-
-I.e. shouldn't this be:
-
-		if (!is_last_spte(iter.old_spte, iter.level)) {
-			try_promote_huge_page(...);
-			continue;
-		}
-
-and then converted to the current variant in a follow-up?
-
->  			continue;
->  
->  		pfn = spte_to_pfn(iter.old_spte);
-> -- 
-> 2.35.1.894.gb6a874cedc-goog
+On Tue, Apr 12, 2022 at 09:13:59PM +0530, Naresh Kamboju wrote:
+> Hi Marco
 > 
+> On Tue, 12 Apr 2022 at 20:32, Marco Elver <elver@google.com> wrote:
+> >
+> > On Tue, 12 Apr 2022 at 16:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > On Tue, 12 Apr 2022 at 12:11, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > This is the start of the stable review cycle for the 5.15.34 release.
+> > > > There are 277 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > >
+> > > > Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> > > > Anything received after that time might be too late.
+> > > >
+> > > > The whole patch series can be found in one patch at:
+> > > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc1.gz
+> > > > or in the git tree and branch at:
+> > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > > > and the diffstat can be found below.
+> > > >
+> > > > thanks,
+> > > >
+> > > > greg k-h
+> > >
+> > >
+> > > On linux stable-rc 5.15 x86 and i386 builds failed due to below error [1]
+> > > with config [2].
+> > >
+> > > The finding is when kunit config is enabled the builds pass.
+> > > CONFIG_KUNIT=y
+> > >
+> > > But with CONFIG_KUNIT not set the builds failed.
+> > >
+> > > x86_64-linux-gnu-ld: mm/kfence/core.o: in function `__kfence_alloc':
+> > > core.c:(.text+0x901): undefined reference to `filter_irq_stacks'
+> > > make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > I see these three commits, I will bisect and get back to you
+> > >
+> > > 2f222c87ceb4 kfence: limit currently covered allocations when pool nearly full
+> > > e25487912879 kfence: move saving stack trace of allocations into
+> > > __kfence_alloc()
+> > > d99355395380 kfence: count unexpectedly skipped allocations
+> >
+> > My guess is that this commit is missing:
+> 
+> This patch is missing Fixes: tag.
+> 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f39f21b3ddc7fc0f87eb6dc75ddc81b5bbfb7672
+> 
+> For your information, I have reverted the below commit and build pass.
+> 
+> kfence: limit currently covered allocations when pool nearly full
+> 
+> [ Upstream commit 08f6b10630f284755087f58aa393402e15b92977 ]
+
+I've added the above commit, does that fix the issue?
+
+Hm, I can test that here, let me try it...
+
+greg k-h

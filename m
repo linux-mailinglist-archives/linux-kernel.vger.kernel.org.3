@@ -2,174 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351494FE77C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F634FE780
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358553AbiDLRyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S1358560AbiDLR4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiDLRyX (ORCPT
+        with ESMTP id S237885AbiDLR4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:54:23 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7F947AF4;
-        Tue, 12 Apr 2022 10:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
-        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=jmqFnXO2ZqZwvHpgNAB6QeZncj7ETg2mnMiU2ejcaaE=; b=kFJmPNgcrTrkb88HIJO/HCKje7
-        2eFdAtCq7U3T1febm9lJDI4aTtGD+sTL26jKqiTHXT+2O1kmvaGyAYr25staFA96BQImT3N5aEqpW
-        Pr9lK7/XWH2DSeTm23KdBoN14/1TBE+drx6zgZkTSOe3Exh7Mz/gzG9+HaPa96DEZk8Y=;
-Received: from p57a6f1f9.dip0.t-ipconnect.de ([87.166.241.249] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1neKgD-0008Kt-FP; Tue, 12 Apr 2022 19:51:53 +0200
-Message-ID: <2989e566-a1d2-2288-8ef3-759f20aa0c2e@nbd.name>
-Date:   Tue, 12 Apr 2022 19:51:52 +0200
+        Tue, 12 Apr 2022 13:56:37 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291AF6466
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:54:19 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a21so3230275pfv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g/wkfqACAO1R6swGFiX5nmXcMTqZOKO9AQAJHkwa6Yw=;
+        b=Wyi6GlmOv6SCb15h1hHMmawDej03rLQGj8tm+MM1gNExlxevz5zy3nG6NqtSX5dMLY
+         o0GPLv/gNUI+uypOTtJ4v3mkbxiAaj0hIe2FpOhQ5v33iFzbWz9bCXoMYDiD0+rv8inD
+         7zwE5VbVWzq5NBIAQ5hvXRZombD21rM4yBf+AzpcXtxheWJqC1iQTgbIYC/XamQQW3ci
+         IX+t4jSob5vv4PPadlRhsGh9Tt3R3ViEDqgerLcGMx5v/bUjnUb/t6rzh77S0LGliyS2
+         HEVvhKOhWQ/t9hWCQLhtV8AjRYtmixTBfhHNGJQi8nuDqOkGPU7zB92m+4DT9x6UPkCD
+         UGkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g/wkfqACAO1R6swGFiX5nmXcMTqZOKO9AQAJHkwa6Yw=;
+        b=jycLXbtSI2sPF9H5TT94VI5yBZJim33utgXhA72uz5QO/IpIJdcskSJio1qCtQtms/
+         K+IgybWgkvbV+d5qI/Efk3cKXfcbFPx2kwI5n3oaxtOOQPNIXmU9Im5/VsO3ZW3Vt7LQ
+         69nO1PavQvBs1RgpfLzprLpol0BuvAeDppsQ/yOulxgNE6v8ieHCF5Ksaz7mtXQcymVT
+         HhegRRGKwT3xk3yidRgJvQPYWblZo2ftyoXLPcg3hbUpcKAelUfXZ7RSVAZSjFPjHnEQ
+         DRwmi8MAfVDSE7i+pVmJDR1BeTHka9j+dAg71jbhLRTaD1d5/o79ZhzI7rjk2ppxgamm
+         eqNA==
+X-Gm-Message-State: AOAM531Ej63opxN7QTW10LzSLE1jUDVkBg1oKn1PwVwIO7yeq6R+VJws
+        cFubdL7JOcdzbZl3z9l5jqxvJjT1bLid+Q==
+X-Google-Smtp-Source: ABdhPJxC3qAvnQwz7E+luTSIs+vtI3r9OV9g+oYs3RNcQcviCeKYBgNXNo/OdMyXBVCyHNajsJZVOA==
+X-Received: by 2002:a63:c51:0:b0:39c:c5ac:9f3b with SMTP id 17-20020a630c51000000b0039cc5ac9f3bmr23602561pgm.257.1649786058500;
+        Tue, 12 Apr 2022 10:54:18 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm43049232pfh.143.2022.04.12.10.54.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:54:17 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 17:54:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v4 07/10] KVM: x86/MMU: Allow NX huge pages to be
+ disabled on a per-vm basis
+Message-ID: <YlW8xkay+EuM/c3M@google.com>
+References: <20220411211015.3091615-1-bgardon@google.com>
+ <20220411211015.3091615-8-bgardon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-15-nbd@nbd.name> <Yk8pJRxnVCfdk8xi@lunn.ch>
- <f25a6278-1baf-cc27-702a-5d93eedda438@nbd.name> <YlQmf7qGAnq/3nW0@lunn.ch>
- <ece29b0d-bbbe-7c03-a6b4-60e44453ca31@nbd.name> <YlV5jEzNZT1aKmNL@lunn.ch>
- <ee1d6c89-95f4-bf28-cf25-36b18ffb342f@nbd.name> <YlWK5Dozpo7nIS9j@lunn.ch>
- <29cecc87-8689-6a73-a5ef-43eb2b8f33cd@nbd.name> <YlW4zF1s3SRTl2ue@lunn.ch>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH v2 14/14] net: ethernet: mtk_eth_soc: support creating mac
- address based offload entries
-In-Reply-To: <YlW4zF1s3SRTl2ue@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411211015.3091615-8-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022, Ben Gardon wrote:
+> @@ -6079,6 +6080,11 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		}
+>  		mutex_unlock(&kvm->lock);
+>  		break;
+> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
+> +		kvm->arch.disable_nx_huge_pages = true;
 
-On 12.04.22 19:37, Andrew Lunn wrote:
->> It basically has to keep track of all possible destination ports, their STP
->> state, all their fdb entries, member VLANs of all ports. It has to quickly
->> react to changes in any of these.
-> 
-> switchdev gives you all of those i think. DSA does not make use of
-> them all, in particularly the fdb entries, because of the low
-> bandwidth management link to the switch. But look at the Mellanox
-> switch, it keeps its hardware fdb entries in sync with the software
-> fdb.
-> 
-> And you get every quick access to these, sometimes too quick in that
-> it is holding a spinlock when it calls the switchdev functions, and
-> you need to defer the handling in your driver if you want to use a
-> mutex, perform blocking IO etc.
-> 
->> In order to implement this properly, I would also need to make more changes
->> to mac80211. Right now, mac80211 drivers do not have access to the
->> net_device pointer of virtual interfaces. So mac80211 itself would likely
->> need to implement the switchdev ops and handle some of this.
-> 
-> So this again sounds like something which would be shared by IPA, and
-> any other hardware which can accelerate forwarding between WiFi and
-> some other sort of interface.
-I would really like to see an example of how this should be done.
-Is there a work in progress tree for IPA with offloading? Because the 
-code that I see upstream doesn't seem to have any of that - or did I 
-look in the wrong place?
+It's probably worth requiring cap->args[0] to be zero, KVM has been burned too many
+times by lack of extensibility.
 
->> There are also some other issues where I don't know how this is supposed to
->> be solved properly:
->> On MT7622 most of the bridge ports are connected to a MT7531 switch using
->> DSA. Offloading (lan->wlan bridging or L3/L4 NAT/routing) is not handled by
->> the switch itself, it is handled by a packet processing engine in the SoC,
->> which knows how to handle the DSA tags of the MT7531 switch.
->> 
->> So if I were to handle this through switchdev implemented on the wlan and
->> ethernet devices, it would technically not be part of the same switch, since
->> it's a behind a different component with a different driver.
-> 
-> What is important here is the user experience. The user is not
-> expected to know there is an accelerate being used. You setup the
-> bridge just as normal, using iproute2. You add routes in the normal
-> way, either by iproute2, or frr can add routes from OSPF, BGP, RIP or
-> whatever, via zebra. I'm not sure anybody has yet accelerated NAT, but
-> the same principle should be used, using iptables in the normal way,
-> and the accelerate is then informed and should accelerate it if
-> possible.
-Accelerated NAT on MT7622 is already present in the upstream code for a 
-while. It's there for ethernet, and with my patches it also works for 
-ethernet -> wlan.
+> +		kvm_update_nx_huge_pages(kvm);
 
-> switchdev gives you notification of when anything changes. You can
-> have multiple receivers of these notifications, so the packet
-> processor can act on them as well as the DSA switch.
->   
->> Also, is switchdev able to handle the situation where only parts of the
->> traffic is offloaded and the rest (e.g. multicast) is handled through the
->> regular software path?
-> 
-> Yes, that is not a problem. I deliberately use the term
-> accelerator. We accelerate what Linux can already do. If the
-> accelerator hardware is not capable of something, Linux still is, so
-> just pass it the frames and it will do the right thing. Multicast is a
-> good example of this, many of the DSA switch drivers don't accelerate
-> it.
-Don't get me wrong, I'm not against switchdev support at all. I just 
-don't know how to do it yet, and the code that I put in place is useful 
-for non-switchdev use cases as well.
+Is there actually a use case to do this while the VM is running?  Given that this
+is a one-way control, i.e. userspace can't re-enable the mitigation, me thinks the
+answer is no.  And logically, I don't see why userspace would suddenly decide to
+trust the guest at some random point in time.
 
->> In my opinion, handling it through the TC offload has a number of
->> advantages:
->> - It's a lot simpler
->> - It uses the same kind of offloading rules that my software fastpath
->> already uses
->> - It allows more fine grained control over which traffic should be offloaded
->> (src mac -> destination MAC tuple)
->> 
->> I also plan on extending my software fast path code to support emulating
->> bridging of WiFi client mode interfaces. This involves doing some MAC
->> address translation with some IP address tracking. I want that to support
->> hardware offload as well.
->> 
->> I really don't think that desire for supporting switchdev based offload
->> should be a blocker for accepting this code now, especially since my
->> implementation relies on existing Linux network APIs without inventing any
->> new ones, and there are valid use cases for using it, even with switchdev
->> support in place.
-> 
-> What we need to avoid is fragmentation of the way we do things. It has
-> been decided that switchdev is how we use accelerators, and the user
-> should not really know anything about the accelerator. No other in
-> kernel network accelerator needs a user space component listening to
-> netlink notifications and programming the accelerator from user space.
-> Do we really want two ways to do this?
-There's always some overlap in what the APIs can do. And when it comes 
-to the "client mode bridge" use case that I mentioned, I would also need 
-exactly the same API that I put in place here. And this is not something 
-that can (or even should) be done using switchdev. mac80211 prevents 
-adding client mode interfaces to bridges for a reason.
+So, require this to be done before vCPUs are created, then there's no need to
+zap SPTEs because there can't be any SPTEs to zap.  Then the previous patch also
+goes away.  Or to be really draconian, disallow the cap if memslots have been
+created, though I think created_vcpus will be sufficient now and in the future.
 
-- Felix
+We can always lift the restriction if someone has a use case for toggling this
+while the VM is running, but we can't do the reverse.

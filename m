@@ -2,119 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049344FD6ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0659C4FDA52
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390053AbiDLJY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S1377104AbiDLJ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355539AbiDLIIb (ORCPT
+        with ESMTP id S1379574AbiDLIUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:08:31 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E867CB78
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:37:54 -0700 (PDT)
-X-UUID: a112a8e74bcc4e8cafd2fe0dbea82415-20220412
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0009f623-99a6-4f2d-b87c-b7bf1ad04e0d,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:14,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:59
-X-CID-INFO: VERSION:1.1.4,REQID:0009f623-99a6-4f2d-b87c-b7bf1ad04e0d,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:14,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:59
-X-CID-META: VersionHash:faefae9,CLOUDID:d549dea8-d103-4e36-82b9-b0e86991b3df,C
-        OID:6db2902810e7,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:3,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: a112a8e74bcc4e8cafd2fe0dbea82415-20220412
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 204760330; Tue, 12 Apr 2022 15:37:49 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 12 Apr 2022 15:37:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 15:37:48 +0800
-Message-ID: <db475c5f8ff801ca0e48d89f5257de491f173b0b.camel@mediatek.com>
-Subject: Re: [PATCH v4,1/4] drm/mediatek: Adjust the timing of mipi signal
- from LP00 to LP11
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jitao.shi@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 12 Apr 2022 15:37:48 +0800
-In-Reply-To: <1649644308-8455-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
-         <1649644308-8455-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 12 Apr 2022 04:20:39 -0400
+X-Greylist: delayed 584 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 00:48:49 PDT
+Received: from mail.bizcorp24.com (mail.bizcorp24.com [80.211.189.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6684667C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:48:49 -0700 (PDT)
+Received: by mail.bizcorp24.com (Postfix, from userid 1001)
+        id CB7AA88FA5; Tue, 12 Apr 2022 08:38:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcorp24.com;
+        s=mail; t=1649749155;
+        bh=dqbL4I2PbKQDd8D+BmP5Ia+tOlRQnYhmr+yxRmvobYw=;
+        h=Date:From:To:Subject:From;
+        b=En2zQNNQqVkMuwf+uD0+vsSks2cEm/lab5wLQs8wrilc+0/Hi35XzuvQqWwu9mEmf
+         tMx27o/BgvNZkTYOXf4rp2OhpJ5OJMb+zij163S7FGDauBWNeoWz1EZ6yh6Wzzjv0c
+         Vm4b96lBVEIiHErwJ1NxleyOLj402gi/jQOAFVH2yfM/WPzGPz97JlfZv175uJjIYr
+         RGHoB9Dvv44nYBeafwujJ6XJKoFesVU+s52CryyVdkxD9YOzwSNa66QhVbEI6yD2Ut
+         e7A0bAGZAYrAJZZ2X1aE5dAlaEGGwW3NVbzHZRyWDtmh5hyUzZxlghGq7Hkc87zJF5
+         7olwZphzws0ww==
+Received: by mail.bizcorp24.com for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:37:55 GMT
+Message-ID: <20220412074501-0.1.2z.acho.0.7wqn2ei4b6@bizcorp24.com>
+Date:   Tue, 12 Apr 2022 07:37:55 GMT
+From:   "Antonio Valverde" <antonio.valverde@bizcorp24.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Servicio de la flota
+X-Mailer: mail.bizcorp24.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
-> 
-> Old sequence:
-> 1. Pull the MIPI signal high
-> 2. Delay & Dsi_reset
-> 3. Set the dsi timing register
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
-> 
-> The sequence after patching is:
-> 1. Set the dsi timing register
-> 2. Pull the MIPI signal high
-> 3. Delay & Dsi_reset
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
-> 
-> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
-> API")
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index ccb0511b9cd5..262c027d8c2f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -649,14 +649,14 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_phy_timconfig(dsi);
->  
-> -	mtk_dsi_rxtx_control(dsi);
-> -	usleep_range(30, 100);
-> -	mtk_dsi_reset_dphy(dsi);
->  	mtk_dsi_ps_control_vact(dsi);
->  	mtk_dsi_set_vm_cmd(dsi);
->  	mtk_dsi_config_vdo_timing(dsi);
->  	mtk_dsi_set_interrupt_enable(dsi);
->  
-> +	mtk_dsi_rxtx_control(dsi);
-> +	usleep_range(30, 100);
-> +	mtk_dsi_reset_dphy(dsi);
->  	mtk_dsi_clk_ulp_mode_leave(dsi);
->  	mtk_dsi_lane0_ulp_mode_leave(dsi);
->  	mtk_dsi_clk_hs_mode(dsi, 0);
+Buenos d=C3=ADas:
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Le escribo para hablarle sobre una de las mejores herramientas GPS en el =
+mercado.
 
+La herramienta, que me gustar=C3=ADa presentarle brevemente, dispone de m=
+uchas funciones =C3=BAtiles para su trabajo, que optimizan los procesos d=
+e transporte y le ayudan a realizar tareas de campo de manera m=C3=A1s ef=
+iciente.
+
+=C2=BFQuiere conocer los detalles?
+
+
+Atentamente,
+Antonio Valverde

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8221A4FD639
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3FE4FD99F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359115AbiDLHmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S1357528AbiDLJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353814AbiDLHQK (ORCPT
+        with ESMTP id S1357132AbiDLHjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:16:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C4D41621;
-        Mon, 11 Apr 2022 23:57:33 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F12FD31;
+        Tue, 12 Apr 2022 00:12:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5381F6158C;
-        Tue, 12 Apr 2022 06:57:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6348DC385A1;
-        Tue, 12 Apr 2022 06:57:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A147B81B55;
+        Tue, 12 Apr 2022 07:12:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869B0C385A1;
+        Tue, 12 Apr 2022 07:12:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746652;
-        bh=pVMto6fjjwueK9ViwPV90DDETbSPUIeOI1EqV4D79rk=;
+        s=korg; t=1649747556;
+        bh=5NTmI6cF9YlOd3EfQBumtiJWmNT4gp1nOCiCo3LgUOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pL7uD65QQck5UnQayyb4ObBj/ejJjOHTS9SCW+9K0WJRORfP5W7HnVTYY0+s1881L
-         P3QgysqvXiXkZPSrbc4/CPNuQXt3znNIDLZjQPh/9hIsf1Q086GyaQBf5+F5IpDb46
-         QMkjH0MdNzu7EeGAleB/xCdYZBxcqOJo0n8r6uTs=
+        b=2qK2JZk0NufA0hFxJ5KW+mkcBCFlYqedLfIN30xSEbewJiqvVoYrsOB0yD2zACrB4
+         1IFU2rogHRkqpO0MyAQNCfmIc3ThxsF7cERGMEgIy4hnj8ZEAsvVUwJeRVjYsJasu2
+         rKdybTYx6XY2Hn3+gYfiWX/TwzptEMnz8zN1nxd8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Leonardo=20M=C3=B6rlein?= <freifunk@irrelefant.net>,
-        Sven Eckelmann <sven@narfation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 083/285] macvtap: advertise link netns via netlink
-Date:   Tue, 12 Apr 2022 08:29:00 +0200
-Message-Id: <20220412062946.059501973@linuxfoundation.org>
+Subject: [PATCH 5.17 123/343] Bluetooth: Fix not checking for valid hdev on bt_dev_{info,warn,err,dbg}
+Date:   Tue, 12 Apr 2022 08:29:01 +0200
+Message-Id: <20220412062954.935795098@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit a02192151b7dbf855084c38dca380d77c7658353 ]
+[ Upstream commit 9b392e0e0b6d026da5a62bb79a08f32e27af858e ]
 
-Assign rtnl_link_ops->get_link_net() callback so that IFLA_LINK_NETNSID is
-added to rtnetlink messages. This fixes iproute2 which otherwise resolved
-the link interface to an interface in the wrong namespace.
+This fixes attemting to print hdev->name directly which causes them to
+print an error:
 
-Test commands:
+kernel: read_version:367: (efault): sock 000000006a3008f2
 
-  ip netns add nst
-  ip link add dummy0 type dummy
-  ip link add link macvtap0 link dummy0 type macvtap
-  ip link set macvtap0 netns nst
-  ip -netns nst link show macvtap0
-
-Before:
-
-  10: macvtap0@gre0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 500
-      link/ether 5e:8f:ae:1d:60:50 brd ff:ff:ff:ff:ff:ff
-
-After:
-
-  10: macvtap0@if2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 500
-      link/ether 5e:8f:ae:1d:60:50 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-
-Reported-by: Leonardo Mörlein <freifunk@irrelefant.net>
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Link: https://lore.kernel.org/r/20220228003240.1337426-1-sven@narfation.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/macvtap.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/net/bluetooth/bluetooth.h | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/macvtap.c b/drivers/net/macvtap.c
-index 6b12902a803f..cecf8c63096c 100644
---- a/drivers/net/macvtap.c
-+++ b/drivers/net/macvtap.c
-@@ -133,11 +133,17 @@ static void macvtap_setup(struct net_device *dev)
- 	dev->tx_queue_len = TUN_READQ_SIZE;
- }
+diff --git a/include/net/bluetooth/bluetooth.h b/include/net/bluetooth/bluetooth.h
+index a647e5fabdbd..2aa5e95808a5 100644
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -204,19 +204,21 @@ void bt_err_ratelimited(const char *fmt, ...);
+ #define BT_DBG(fmt, ...)	pr_debug(fmt "\n", ##__VA_ARGS__)
+ #endif
  
-+static struct net *macvtap_link_net(const struct net_device *dev)
-+{
-+	return dev_net(macvlan_dev_real_dev(dev));
-+}
++#define bt_dev_name(hdev) ((hdev) ? (hdev)->name : "null")
 +
- static struct rtnl_link_ops macvtap_link_ops __read_mostly = {
- 	.kind		= "macvtap",
- 	.setup		= macvtap_setup,
- 	.newlink	= macvtap_newlink,
- 	.dellink	= macvtap_dellink,
-+	.get_link_net	= macvtap_link_net,
- 	.priv_size      = sizeof(struct macvtap_dev),
- };
+ #define bt_dev_info(hdev, fmt, ...)				\
+-	BT_INFO("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	BT_INFO("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
+ #define bt_dev_warn(hdev, fmt, ...)				\
+-	BT_WARN("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	BT_WARN("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
+ #define bt_dev_err(hdev, fmt, ...)				\
+-	BT_ERR("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	BT_ERR("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
+ #define bt_dev_dbg(hdev, fmt, ...)				\
+-	BT_DBG("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	BT_DBG("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
  
+ #define bt_dev_warn_ratelimited(hdev, fmt, ...)			\
+-	bt_warn_ratelimited("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	bt_warn_ratelimited("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
+ #define bt_dev_err_ratelimited(hdev, fmt, ...)			\
+-	bt_err_ratelimited("%s: " fmt, (hdev)->name, ##__VA_ARGS__)
++	bt_err_ratelimited("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
+ 
+ /* Connection and socket states */
+ enum {
 -- 
 2.35.1
 

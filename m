@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6CD4FD24C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D92D4FD1DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiDLHIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S1350640AbiDLHJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351861AbiDLGyg (ORCPT
+        with ESMTP id S1351906AbiDLGyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:54:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E30275C5;
-        Mon, 11 Apr 2022 23:44:10 -0700 (PDT)
+        Tue, 12 Apr 2022 02:54:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE0C2E089;
+        Mon, 11 Apr 2022 23:44:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C856660EF8;
-        Tue, 12 Apr 2022 06:44:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B2CC385AB;
-        Tue, 12 Apr 2022 06:44:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E005B81B49;
+        Tue, 12 Apr 2022 06:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729F8C385A6;
+        Tue, 12 Apr 2022 06:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745849;
-        bh=zoKKUcXe1kDU5z83JNQPmKJeI8pD5n3WPLK/949w17w=;
+        s=korg; t=1649745854;
+        bh=xzKKvEPIb9KjNF/wwMwEYc2tMJfBK/HAkE92Z6kXDEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sD/e8KlXyShPx5NBw0+8VMSVStFt/0vcJ807DeTSrYzY1E3qNwk64Emy+m+o7hHIR
-         dX8qiqsENe3O50FrA7MWmJBYT+rv6MNelGLx7BcbXPmAXhDK7yGG7BpsdwZkb7QGtW
-         NNHMHzDsvHpPKPaM1W54/cmoZkcnFSKXuP2W2qUw=
+        b=xjWN075Ox/n7rF2vQKH7aqrLyXVNXimodONtU8lVXRccjReArdNpOXah1tZYjHD8D
+         y08YISjVSya0PwO1ZRw30cROiPUZan3MX7oGy7/XlrFUFR7SS0XT7rCUFaR4e81VoK
+         j2VeD7QRILoDldGct3/45Qw2H8e9duCBtqy0MaMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 070/277] scsi: pm8001: Fix tag leaks on error
-Date:   Tue, 12 Apr 2022 08:27:53 +0200
-Message-Id: <20220412062944.073624110@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 072/277] mt76: mt7915: fix injected MPDU transmission to not use HW A-MSDU
+Date:   Tue, 12 Apr 2022 08:27:55 +0200
+Message-Id: <20220412062944.130405039@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
 References: <20220412062942.022903016@linuxfoundation.org>
@@ -56,100 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 
-[ Upstream commit 4c8f04b1905cd4b776d0b720463c091545478ef7 ]
+[ Upstream commit 28225a6ef80ebf46c46e5fbd5b1ee231a0b2b5b7 ]
 
-In pm8001_chip_set_dev_state_req(), pm8001_chip_fw_flash_update_req(),
-pm80xx_chip_phy_ctl_req() and pm8001_chip_reg_dev_req() add missing calls
-to pm8001_tag_free() to free the allocated tag when pm8001_mpi_build_cmd()
-fails.
+Before, the hardware would be allowed to transmit injected 802.11 MPDUs
+as A-MSDU. This resulted in corrupted frames being transmitted. Now,
+injected MPDUs are transmitted as-is, without A-MSDU.
 
-Similarly, in pm8001_exec_internal_task_abort(), if the chip ->task_abort
-method fails, the tag allocated for the abort request task must be
-freed. Add the missing call to pm8001_tag_free().
+The fix was verified with frame injection on MT7915 hardware, both with
+and without the injected frame being encrypted.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-22-damien.lemoal@opensource.wdc.com
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+If the hardware cannot do A-MSDU aggregation on MPDUs, this problem
+would also be present in the TX path where mac80211 does the 802.11
+encapsulation. However, I have not observed any such problem when
+disabling IEEE80211_HW_SUPPORTS_TX_ENCAP_OFFLOAD to force that mode.
+Therefore this fix is isolated to injected frames only.
+
+The same A-MSDU logic is also present in the mt7921 driver, so it is
+likely that this fix should be applied there too. I do not have access
+to mt7921 hardware so I have not been able to test that.
+
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 9 +++++++++
- drivers/scsi/pm8001/pm8001_sas.c | 2 +-
- drivers/scsi/pm8001/pm80xx_hwi.c | 9 +++++++--
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/mac.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 2adf1435a187..619fbcf37933 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4488,6 +4488,9 @@ static int pm8001_chip_reg_dev_req(struct pm8001_hba_info *pm8001_ha,
- 		SAS_ADDR_SIZE);
- 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
- 			sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
- 	return rc;
- }
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+index ff613d705611..7691292526e0 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+@@ -899,6 +899,7 @@ mt7915_mac_write_txwi_80211(struct mt7915_dev *dev, __le32 *txwi,
+ 		val = MT_TXD3_SN_VALID |
+ 		      FIELD_PREP(MT_TXD3_SEQ, IEEE80211_SEQ_TO_SN(seqno));
+ 		txwi[3] |= cpu_to_le32(val);
++		txwi[7] &= ~cpu_to_le32(MT_TXD7_HW_AMSDU);
+ 	}
  
-@@ -4900,6 +4903,9 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
- 	ccb->ccb_tag = tag;
- 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
- 		tag);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
- 	return rc;
- }
- 
-@@ -5004,6 +5010,9 @@ pm8001_chip_set_dev_state_req(struct pm8001_hba_info *pm8001_ha,
- 	payload.nds = cpu_to_le32(state);
- 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
- 			sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
- 	return rc;
- 
- }
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-index 491cecbbe1aa..5fb08acbc0e5 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -831,10 +831,10 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
- 
- 		res = PM8001_CHIP_DISP->task_abort(pm8001_ha,
- 			pm8001_dev, flag, task_tag, ccb_tag);
--
- 		if (res) {
- 			del_timer(&task->slow_task->timer);
- 			pm8001_dbg(pm8001_ha, FAIL, "Executing internal task failed\n");
-+			pm8001_tag_free(pm8001_ha, ccb_tag);
- 			goto ex_err;
- 		}
- 		wait_for_completion(&task->slow_task->completion);
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index df140eca341f..5561057109de 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4920,8 +4920,13 @@ static int pm80xx_chip_phy_ctl_req(struct pm8001_hba_info *pm8001_ha,
- 	payload.tag = cpu_to_le32(tag);
- 	payload.phyop_phyid =
- 		cpu_to_le32(((phy_op & 0xFF) << 8) | (phyId & 0xFF));
--	return pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
--			sizeof(payload), 0);
-+
-+	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
-+				  sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
-+	return rc;
- }
- 
- static u32 pm80xx_chip_is_our_interrupt(struct pm8001_hba_info *pm8001_ha)
+ 	val = FIELD_PREP(MT_TXD7_TYPE, fc_type) |
 -- 
 2.35.1
 

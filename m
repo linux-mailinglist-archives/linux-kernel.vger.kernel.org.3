@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61504FD5BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9574FD804
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352784AbiDLHO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S1383689AbiDLIhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352598AbiDLG4E (ORCPT
+        with ESMTP id S1356959AbiDLHjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:56:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ACB245B7;
-        Mon, 11 Apr 2022 23:46:10 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3760728E33;
+        Tue, 12 Apr 2022 00:10:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B701EB818C8;
-        Tue, 12 Apr 2022 06:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE08C385A1;
-        Tue, 12 Apr 2022 06:46:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75CCE6157E;
+        Tue, 12 Apr 2022 07:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C2CC385A5;
+        Tue, 12 Apr 2022 07:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745967;
-        bh=OQWOmuqUFSTpEgakia4l7pulw8EHANnP/KZzLKSdX4o=;
+        s=korg; t=1649747437;
+        bh=htaFqnftVObrnN1B1DrLIaFhG697hzt0hv0PLXg/hdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MN+q5ymzItEogKFnzObJ/9Rr8du/GIE13UbKoTgtzFbkrTDp7598ZCuGIQdmM0VQZ
-         E98MqZYp2xOlMUqPGvBgNySGTX9PJIBCLYbefuK2hoafRHAQ3Q1o6isXYWn/fLxr+H
-         Z0Gt7WzKQpppscUUl/jsqu6EOF4uO/EdCgjVmJb0=
+        b=Rzs9fC5u8kMA7Poha9SykkhkN1mnOp8jrnR2gYoAT5cWwZlUGGaBYtkKrgnaq6bA6
+         E2eGIrfSUNl9utKFBj86NeUxSgBYcgJAkHrrzUeKRjKADh49wVj+a09zvfFIlbL5EA
+         CHskQgImjDzLaG2u2omYK9e6yZ1zj2BfbLNCTqAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Shuklin <george.shuklin@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Kevin Tang <kevin3.tang@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 095/277] net: limit altnames to 64k total
+Subject: [PATCH 5.17 080/343] drm/sprd: fix potential NULL dereference
 Date:   Tue, 12 Apr 2022 08:28:18 +0200
-Message-Id: <20220412062944.792494036@linuxfoundation.org>
+Message-Id: <20220412062953.409337667@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Kevin Tang <kevin3.tang@gmail.com>
 
-[ Upstream commit 155fb43b70b5fce341347a77d1af2765d1e8fbb8 ]
+[ Upstream commit 8668658aebb0a19d877d5a81c004baf716c4aaa6 ]
 
-Property list (altname is a link "property") is wrapped
-in a nlattr. nlattrs length is 16bit so practically
-speaking the list of properties can't be longer than
-that, otherwise user space would have to interpret
-broken netlink messages.
+'drm' could be null in sprd_drm_shutdown, and drm_warn maybe dereference
+it, remove this warning log.
 
-Prevent the problem from occurring by checking the length
-of the property list before adding new entries.
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kevin Tang <kevin3.tang@gmail.com>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/all/20220117084044.9210-1-kevin3.tang@gmail.com
 
-Reported-by: George Shuklin <george.shuklin@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+v1 -> v2:
+- Split checking platform_get_resource() return value to a separate patch
+- Use dev_warn() instead of removing the warning log
+
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/rtnetlink.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/gpu/drm/sprd/sprd_drm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index a8c319dc224a..9c0e8ccf9bc5 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3631,12 +3631,23 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
- 			   bool *changed, struct netlink_ext_ack *extack)
- {
- 	char *alt_ifname;
-+	size_t size;
- 	int err;
+diff --git a/drivers/gpu/drm/sprd/sprd_drm.c b/drivers/gpu/drm/sprd/sprd_drm.c
+index a077e2d4d721..af2be97d5ed0 100644
+--- a/drivers/gpu/drm/sprd/sprd_drm.c
++++ b/drivers/gpu/drm/sprd/sprd_drm.c
+@@ -155,7 +155,7 @@ static void sprd_drm_shutdown(struct platform_device *pdev)
+ 	struct drm_device *drm = platform_get_drvdata(pdev);
  
- 	err = nla_validate(attr, attr->nla_len, IFLA_MAX, ifla_policy, extack);
- 	if (err)
- 		return err;
+ 	if (!drm) {
+-		drm_warn(drm, "drm device is not available, no shutdown\n");
++		dev_warn(&pdev->dev, "drm device is not available, no shutdown\n");
+ 		return;
+ 	}
  
-+	if (cmd == RTM_NEWLINKPROP) {
-+		size = rtnl_prop_list_size(dev);
-+		size += nla_total_size(ALTIFNAMSIZ);
-+		if (size >= U16_MAX) {
-+			NL_SET_ERR_MSG(extack,
-+				       "effective property list too long");
-+			return -EINVAL;
-+		}
-+	}
-+
- 	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
- 	if (!alt_ifname)
- 		return -ENOMEM;
 -- 
 2.35.1
 

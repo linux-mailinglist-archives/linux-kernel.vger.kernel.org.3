@@ -2,219 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71204FE9D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 23:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443404FE9B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiDLVIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 17:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S229620AbiDLU5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiDLVIW (ORCPT
+        with ESMTP id S229379AbiDLU5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 17:08:22 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6226E15D058;
-        Tue, 12 Apr 2022 13:56:29 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id e8so13043066wra.7;
-        Tue, 12 Apr 2022 13:56:29 -0700 (PDT)
+        Tue, 12 Apr 2022 16:57:06 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31030147537
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:52:13 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so14196975otj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=DqMC6Vs8XFHQhcFRE5fkKJXeyhfO8KrefwPFKdUZtCk=;
-        b=mT3f6o6xyKP/QNK6+A4sGJyXB4ue9Xe4//e6ckZZvlhk4FxoxL5Qh3J1aG2BDuU/CU
-         Mi3yLFiXqYiVnn1bb9qr/IdP4CXb8YVFmnlgj/Nm9rCf5wiaoiXb0Rf7Nl1sXe4bOExy
-         3A8TDFgsOTqSaNWAumWiCQHKLgitWLtM01YAmBYAI+wtS3vbdSZ7SBKG7cHNwmeGVDsh
-         Qfb/FWh7VgqieoO9lMqAaNabMn7DZDaESC7Q5q2JoNrMsGbzT02W/clUvxkOjoJEECBY
-         TXZMqAWsqXcYXpjoVOBNOOu244Ek//c+IDSgQpUZeCuDtgVuvuEb3zLNeKuopF8oJwqy
-         ZltQ==
+        bh=E/sfuAYENU6UCHVTWqjFkHV1/OSU1AIAFVjMvfNyJ5k=;
+        b=wHUAnWUOVTPZ0YoLJMOSVtGGQZHYba4E5Nb/7yndemn1YzYnQDp9JX7Sla5M/2OShh
+         JdHuMh9a0HG+wltK0D/G9iflV38ag2iC5fwzIEV6lYXZ6q8xNlDmQRf++iJpG4q8muyA
+         Uj9eGVzjzNR6o+qx5utWqwZ/1XMP/GISj9MAkqTwtHnMLIjVoNtNHrhD4wRh3uLwVWbF
+         EEpjn9NRHsbk1v5PFGsXFfXsZs3jIelQBHh+SFG5pXIppMvUeYTKBcVuNTtofrgKbI2P
+         4tXBqNzsWur6OZt6If3nTcdsTaHpwlqRUSU6h8/P1x8EBYqwlyiuQbqvwfvKEE0uCDMI
+         ncSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=DqMC6Vs8XFHQhcFRE5fkKJXeyhfO8KrefwPFKdUZtCk=;
-        b=uCXES36KxcJJSZ5FyjLGbg410G5PKOako6eJmKwySlvowt5knJd1AS3xk+vwGi/aPK
-         VszxSt2qz+09QN7Mo65RuFGgbH/+pzum19DSo3JrzgnAtsdUfn9aOrmofg11OX2vzCYa
-         /ViGEDev2dJgDOQwCu0IKCIByFFRIAntjmKmM0zzD4H5m61ou982X4yhaRBtORZdQDw6
-         U4sUeFijR9rSvregUT9Itd/MadR7esk+otI7DlXIXmGCgyu5vEhyEJHbfj83PA8eME3m
-         nbAUreVDj6yhCnm3EIhZQmstqRRIoyr1lYuW8SoQ0OQhqrPA8e80wgZcd/J3UEXS/jdp
-         4XeA==
-X-Gm-Message-State: AOAM532Q2T9Mibr2an+VVmDJZF2K+oz1PrEKLbtLC5VNlGAszCP7+Bmj
-        jVakU3/XS3Ua+QOfyhV/ifZ3+JWjnROtUA==
-X-Google-Smtp-Source: ABdhPJwykljm7T3aamkw4LwfP0Tg8dcXjfFJvjSrqx4NZaWASx46mBe81WwDk1WdNLoHVi9P+O2cXQ==
-X-Received: by 2002:a05:6402:2059:b0:41d:82c2:208a with SMTP id bc25-20020a056402205900b0041d82c2208amr9907207edb.379.1649796378263;
-        Tue, 12 Apr 2022 13:46:18 -0700 (PDT)
-Received: from krava ([83.240.62.142])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170906340400b006d077e850b5sm13368177ejb.23.2022.04.12.13.46.16
+        bh=E/sfuAYENU6UCHVTWqjFkHV1/OSU1AIAFVjMvfNyJ5k=;
+        b=Ldct07oTfE2K/iL8WNKHwZm0M8Dh0rtBXUEqyVsoFxZ0PR/gFTpq+kmyXZ/G//lXsy
+         xKIENfGp3wBOw5H0mQKewnwG4i21cUqIEQgdWguL+hS+CmOQpEcha50PeHy73rgk1TXx
+         UtVVCkG10vxcBD6UKbnigLqcAtXzMRwIML/Lzatws4O+RZBB1js7tt3Mm16Ayt9dFS8J
+         pIHeWQvmjw8tkKqm/y5f6HcWQrzHmv741oMAFElcuEnYKmNyex51bHma0pVb6pLEOD6o
+         9Avqrdx2jAziKFtLWFXl46MZ3ykR0NpbVRJSIc3o+bp7LIqt4vXFT7RfE2p9s1PLe6xX
+         83vQ==
+X-Gm-Message-State: AOAM533B6EYWrt/q3rtPMlhMDp2Z2HeD5NOSwfSijK0yngPRLB93NtEt
+        qYMsOaaLcCFG4SVNQNDucqqxUA==
+X-Google-Smtp-Source: ABdhPJwjcIvzgdEJLnuijwZQ02tCKe+ogBaa/q1YYFlZAZ+Xy8RMe6e4X1zADMRvNMJtvgts4wtLqA==
+X-Received: by 2002:a05:6830:4409:b0:5cd:ad47:5b47 with SMTP id q9-20020a056830440900b005cdad475b47mr14024722otv.49.1649796687913;
+        Tue, 12 Apr 2022 13:51:27 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id u20-20020a4a9e94000000b003291f6ac4b2sm12602878ook.28.2022.04.12.13.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 13:46:17 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 22:46:15 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-ID: <YlXlF5ivTR1QLMfk@krava>
-References: <20220407125224.310255-1-jolsa@kernel.org>
- <20220407125224.310255-2-jolsa@kernel.org>
- <20220408231925.uc2cfeev7p6nzfww@MBP-98dd607d3435.dhcp.thefacebook.com>
+        Tue, 12 Apr 2022 13:51:27 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 15:51:25 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
+ interconnect fields
+Message-ID: <YlXmTbKwYtvLSjgp@builder.lan>
+References: <20220407172145.31903-1-jonathan@marek.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408231925.uc2cfeev7p6nzfww@MBP-98dd607d3435.dhcp.thefacebook.com>
+In-Reply-To: <20220407172145.31903-1-jonathan@marek.ca>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 04:19:25PM -0700, Alexei Starovoitov wrote:
-> On Thu, Apr 07, 2022 at 02:52:21PM +0200, Jiri Olsa wrote:
-> > Adding kallsyms_lookup_names function that resolves array of symbols
-> > with single pass over kallsyms.
-> > 
-> > The user provides array of string pointers with count and pointer to
-> > allocated array for resolved values.
-> > 
-> >   int kallsyms_lookup_names(const char **syms, u32 cnt,
-> >                             unsigned long *addrs)
-> > 
-> > Before we iterate kallsyms we sort user provided symbols by name and
-> > then use that in kalsyms iteration to find each kallsyms symbol in
-> > user provided symbols.
-> > 
-> > We also check each symbol to pass ftrace_location, because this API
-> > will be used for fprobe symbols resolving. This can be optional in
-> > future if there's a need.
-> > 
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/linux/kallsyms.h |  6 +++++
-> >  kernel/kallsyms.c        | 48 ++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 54 insertions(+)
-> > 
-> > diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> > index ce1bd2fbf23e..5320a5e77f61 100644
-> > --- a/include/linux/kallsyms.h
-> > +++ b/include/linux/kallsyms.h
-> > @@ -72,6 +72,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
-> >  #ifdef CONFIG_KALLSYMS
-> >  /* Lookup the address for a symbol. Returns 0 if not found. */
-> >  unsigned long kallsyms_lookup_name(const char *name);
-> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs);
-> >  
-> >  extern int kallsyms_lookup_size_offset(unsigned long addr,
-> >  				  unsigned long *symbolsize,
-> > @@ -103,6 +104,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
-> >  	return 0;
-> >  }
-> >  
-> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> > +{
-> > +	return -ERANGE;
-> > +}
-> > +
-> >  static inline int kallsyms_lookup_size_offset(unsigned long addr,
-> >  					      unsigned long *symbolsize,
-> >  					      unsigned long *offset)
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index 79f2eb617a62..a3738ddf9e87 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -29,6 +29,8 @@
-> >  #include <linux/compiler.h>
-> >  #include <linux/module.h>
-> >  #include <linux/kernel.h>
-> > +#include <linux/bsearch.h>
-> > +#include <linux/sort.h>
-> >  
-> >  /*
-> >   * These will be re-linked against their real values
-> > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
-> >  	return __sprint_symbol(buffer, address, -1, 1, 1);
-> >  }
-> >  
-> > +static int symbols_cmp(const void *a, const void *b)
-> > +{
-> > +	const char **str_a = (const char **) a;
-> > +	const char **str_b = (const char **) b;
-> > +
-> > +	return strcmp(*str_a, *str_b);
-> > +}
-> > +
-> > +struct kallsyms_data {
-> > +	unsigned long *addrs;
-> > +	const char **syms;
-> > +	u32 cnt;
-> > +	u32 found;
-> > +};
-> > +
-> > +static int kallsyms_callback(void *data, const char *name,
-> > +			     struct module *mod, unsigned long addr)
-> > +{
-> > +	struct kallsyms_data *args = data;
-> > +
-> > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> > +		return 0;
-> > +
-> > +	addr = ftrace_location(addr);
-> > +	if (!addr)
-> > +		return 0;
-> > +
-> > +	args->addrs[args->found++] = addr;
-> > +	return args->found == args->cnt ? 1 : 0;
-> > +}
-> > +
-> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> > +{
-> > +	struct kallsyms_data args;
-> > +
-> > +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
-> 
-> It's nice to share symbols_cmp for sort and bsearch,
-> but messing technically input argument 'syms' like this will cause
-> issues sooner or later.
-> Lets make caller do the sort.
-> Unordered input will cause issue with bsearch, of course,
-> but it's a lesser evil. imo.
+On Thu 07 Apr 12:21 CDT 2022, Jonathan Marek wrote:
+
+> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
+> Ignored and undocumented with upstream UFS driver so delete for now.
 > 
 
-Masami,
-this logic bubbles up to the register_fprobe_syms, because user
-provides symbols as its argument. Can we still force this assumption
-to the 'syms' array, like with the comment change below?
+Just to clarify, the binding do document interconnects and the property
+should be there in the end. v1 (why isn't this marked v2?) was correct.
 
-FYI the bpf side does not use register_fprobe_syms, it uses
-register_fprobe_ips, because it always needs ips as search
-base for cookie values
+What I asked for was a statement on why it should be picked up for
+v5.18-rc (as Dmitry requested).
 
-thanks,
-jirka
+Regards,
+Bjorn
 
-
----
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index d466803dc2b2..28379c0e23e5 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -250,7 +250,7 @@ EXPORT_SYMBOL_GPL(register_fprobe_ips);
- /**
-  * register_fprobe_syms() - Register fprobe to ftrace by symbols.
-  * @fp: A fprobe data structure to be registered.
-- * @syms: An array of target symbols.
-+ * @syms: An array of target symbols, must be alphabetically sorted.
-  * @num: The number of entries of @syms.
-  *
-  * Register @fp to the symbols given by @syms array. This will be useful if
+> Fixes: aa2d0bf04a3c ("arm64: dts: qcom: sm8450: add interconnect nodes")
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 2c18e1ef9e82d..90cdbec3cac99 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -1663,9 +1663,6 @@ ufs_mem_hc: ufshc@1d84000 {
+>  
+>  			iommus = <&apps_smmu 0xe0 0x0>;
+>  
+> -			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
+> -					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
+> -			interconnect-names = "ufs-ddr", "cpu-ufs";
+>  			clock-names =
+>  				"core_clk",
+>  				"bus_aggr_clk",
+> -- 
+> 2.26.1
+> 

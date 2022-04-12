@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADCF4FD580
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C934FDADF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiDLInE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S1352452AbiDLHYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357129AbiDLHjs (ORCPT
+        with ESMTP id S1353213AbiDLHH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E8FE0EB;
-        Tue, 12 Apr 2022 00:12:33 -0700 (PDT)
+        Tue, 12 Apr 2022 03:07:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5002049F26;
+        Mon, 11 Apr 2022 23:49:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DC5DB81B4F;
-        Tue, 12 Apr 2022 07:12:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4465C385A1;
-        Tue, 12 Apr 2022 07:12:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1788461014;
+        Tue, 12 Apr 2022 06:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0C8C385A1;
+        Tue, 12 Apr 2022 06:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747551;
-        bh=eM3zSXnaKtt3m9HyT5kgK2aDOmYWDuK0rx7nb8xNlD0=;
+        s=korg; t=1649746173;
+        bh=mxzMGIsc4EElzjxQs773kRlvMwo90Gx/WqNBvtQSY4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MMCc+9ahUQKpMS05STeAz763vj2PWQ1YlrSEb4dBgf1//tFI/x1umKtNFyHHy06pQ
-         4KBX6C7F7aZe9/PfcW/Z7QY99LRMrKHPr2DNzA53pQf/S/d22XpSiZ/SFBL7IFuqEE
-         ZgSJOwzT29Lp7rIRUHsYbY+rQWGSxnlhq2fVwb+8=
+        b=NwWxAf+lc+Ghj/h6G7JjLP+Jx/WsKKH9G7b3JREq6fFOiGBFRyclw9gNlQfhNffKT
+         dJm35o1dG5ssyTl0lImojd6Req4yVRe/GOMUUuPmnl4q0l72xhQOU4UGq++XLtILGU
+         dv1ITtAJs+sLoWBMn5tGbaElvfA/+M6Fh6obYAHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Harold Huang <baymaxhuang@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 121/343] tuntap: add sanity checks about msg_controllen in sendmsg
-Date:   Tue, 12 Apr 2022 08:28:59 +0200
-Message-Id: <20220412062954.878973078@linuxfoundation.org>
+Subject: [PATCH 5.15 137/277] SUNRPC: Fix socket waits for write buffer space
+Date:   Tue, 12 Apr 2022 08:29:00 +0200
+Message-Id: <20220412062946.000155475@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,69 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harold Huang <baymaxhuang@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 74a335a07a17d131b9263bfdbdcb5e40673ca9ca ]
+[ Upstream commit 7496b59f588dd52886fdbac7633608097543a0a5 ]
 
-In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
-tun_sendmsg. Although we donot use msg_controllen in this path, we should
-check msg_controllen to make sure the caller pass a valid msg_ctl.
+The socket layer requires that we use the socket lock to protect changes
+to the sock->sk_write_pending field and others.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
-
-Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-Suggested-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Link: https://lore.kernel.org/r/20220303022441.383865-1-baymaxhuang@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/tap.c   | 3 ++-
- drivers/net/tun.c   | 3 ++-
- drivers/vhost/net.c | 1 +
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ net/sunrpc/xprtsock.c | 54 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 39 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 8e3a28ba6b28..ba2ef5437e16 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
- 	struct xdp_buff *xdp;
- 	int i;
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index 04f1b78bcbca..2096b26adde5 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -763,12 +763,12 @@ xs_stream_start_connect(struct sock_xprt *transport)
+ /**
+  * xs_nospace - handle transmit was incomplete
+  * @req: pointer to RPC request
++ * @transport: pointer to struct sock_xprt
+  *
+  */
+-static int xs_nospace(struct rpc_rqst *req)
++static int xs_nospace(struct rpc_rqst *req, struct sock_xprt *transport)
+ {
+-	struct rpc_xprt *xprt = req->rq_xprt;
+-	struct sock_xprt *transport = container_of(xprt, struct sock_xprt, xprt);
++	struct rpc_xprt *xprt = &transport->xprt;
+ 	struct sock *sk = transport->inet;
+ 	int ret = -EAGAIN;
  
--	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-+	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-+	    ctl && ctl->type == TUN_MSG_PTR) {
- 		for (i = 0; i < ctl->num; i++) {
- 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
- 			tap_get_user_xdp(q, xdp);
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index fed85447701a..de999e0fedbc 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -2489,7 +2489,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	if (!tun)
- 		return -EBADFD;
+@@ -779,25 +779,49 @@ static int xs_nospace(struct rpc_rqst *req)
  
--	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-+	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-+	    ctl && ctl->type == TUN_MSG_PTR) {
- 		struct tun_page tpage;
- 		int n = ctl->num;
- 		int flush = 0;
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 28ef323882fb..792ab5f23647 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
- 		goto signal_used;
+ 	/* Don't race with disconnect */
+ 	if (xprt_connected(xprt)) {
++		struct socket_wq *wq;
++
++		rcu_read_lock();
++		wq = rcu_dereference(sk->sk_wq);
++		set_bit(SOCKWQ_ASYNC_NOSPACE, &wq->flags);
++		rcu_read_unlock();
++
+ 		/* wait for more buffer space */
++		set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+ 		sk->sk_write_pending++;
+ 		xprt_wait_for_buffer_space(xprt);
+ 	} else
+ 		ret = -ENOTCONN;
  
- 	msghdr->msg_control = &ctl;
-+	msghdr->msg_controllen = sizeof(ctl);
- 	err = sock->ops->sendmsg(sock, msghdr, 0);
- 	if (unlikely(err < 0)) {
- 		vq_err(&nvq->vq, "Fail to batch sending packets\n");
+ 	spin_unlock(&xprt->transport_lock);
++	return ret;
++}
+ 
+-	/* Race breaker in case memory is freed before above code is called */
+-	if (ret == -EAGAIN) {
+-		struct socket_wq *wq;
++static int xs_sock_nospace(struct rpc_rqst *req)
++{
++	struct sock_xprt *transport =
++		container_of(req->rq_xprt, struct sock_xprt, xprt);
++	struct sock *sk = transport->inet;
++	int ret = -EAGAIN;
+ 
+-		rcu_read_lock();
+-		wq = rcu_dereference(sk->sk_wq);
+-		set_bit(SOCKWQ_ASYNC_NOSPACE, &wq->flags);
+-		rcu_read_unlock();
++	lock_sock(sk);
++	if (!sock_writeable(sk))
++		ret = xs_nospace(req, transport);
++	release_sock(sk);
++	return ret;
++}
+ 
+-		sk->sk_write_space(sk);
+-	}
++static int xs_stream_nospace(struct rpc_rqst *req)
++{
++	struct sock_xprt *transport =
++		container_of(req->rq_xprt, struct sock_xprt, xprt);
++	struct sock *sk = transport->inet;
++	int ret = -EAGAIN;
++
++	lock_sock(sk);
++	if (!sk_stream_memory_free(sk))
++		ret = xs_nospace(req, transport);
++	release_sock(sk);
+ 	return ret;
+ }
+ 
+@@ -887,7 +911,7 @@ static int xs_local_send_request(struct rpc_rqst *req)
+ 	case -ENOBUFS:
+ 		break;
+ 	case -EAGAIN:
+-		status = xs_nospace(req);
++		status = xs_stream_nospace(req);
+ 		break;
+ 	default:
+ 		dprintk("RPC:       sendmsg returned unrecognized error %d\n",
+@@ -963,7 +987,7 @@ static int xs_udp_send_request(struct rpc_rqst *req)
+ 		/* Should we call xs_close() here? */
+ 		break;
+ 	case -EAGAIN:
+-		status = xs_nospace(req);
++		status = xs_sock_nospace(req);
+ 		break;
+ 	case -ENETUNREACH:
+ 	case -ENOBUFS:
+@@ -1083,7 +1107,7 @@ static int xs_tcp_send_request(struct rpc_rqst *req)
+ 		/* Should we call xs_close() here? */
+ 		break;
+ 	case -EAGAIN:
+-		status = xs_nospace(req);
++		status = xs_stream_nospace(req);
+ 		break;
+ 	case -ECONNRESET:
+ 	case -ECONNREFUSED:
 -- 
 2.35.1
 

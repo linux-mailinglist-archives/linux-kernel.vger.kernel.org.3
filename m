@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02ED44FD8E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172A24FD88D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353812AbiDLHQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S1359055AbiDLHm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351714AbiDLHEC (ORCPT
+        with ESMTP id S1353790AbiDLHQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0414507E;
-        Mon, 11 Apr 2022 23:47:21 -0700 (PDT)
+        Tue, 12 Apr 2022 03:16:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB9241604;
+        Mon, 11 Apr 2022 23:57:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD892B818C8;
-        Tue, 12 Apr 2022 06:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB11C385A6;
-        Tue, 12 Apr 2022 06:47:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E74560EEB;
+        Tue, 12 Apr 2022 06:57:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9760CC385A1;
+        Tue, 12 Apr 2022 06:57:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746038;
-        bh=c+omZP6b97ce8PuNMw7NgKdL3P/XKwm+AoC4Zyoc8Sc=;
+        s=korg; t=1649746650;
+        bh=J+IzGTWnEZGe/MKM2rGhq26NMXflsdebyu/IUCQhgJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gCt2JlVvjNOY8uaOnPlBucpPwAt7uboWpf+lamYcC55hu3r4t/RbEmGsv4ntqs3Ag
-         nC3kaBsXdqpqv/LwSJv8dM6KoJjjBD17SSHkxVB3lBiNqGfIL74trrwlUChuNi1iqQ
-         Xf2dThzzUtLmo0jbszT8AKbzEIeTFvra9mlljJTw=
+        b=kppuP2Z/nNwb5OzPStmOtAKAx3maECCUgcKzFNXBweylxdfeLQBzbzBl7uGho7N52
+         qwk7eZ7NMjVPj5y2jHicUVd4BTiJ1FMgeXV8a1QrIoVCHgrUBzl32MxV19yEuZK4Aj
+         a+N1wAJOk8qrmMMe4YV9ntJKrKbEZXHtP74+YQz0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
-        Haimin Zhang <tcs_kernel@tencent.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 136/277] jfs: prevent NULL deref in diFree
+Subject: [PATCH 5.16 082/285] mips: ralink: fix a refcount leak in ill_acc_of_setup()
 Date:   Tue, 12 Apr 2022 08:28:59 +0200
-Message-Id: <20220412062945.971780604@linuxfoundation.org>
+Message-Id: <20220412062946.030512089@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs_kernel@tencent.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit a53046291020ec41e09181396c1e829287b48d47 ]
+[ Upstream commit 4a0a1436053b17e50b7c88858fb0824326641793 ]
 
-Add validation check for JFS_IP(ipimap)->i_imap to prevent a NULL deref
-in diFree since diFree uses it without do any validations.
-When function jfs_mount calls diMount to initialize fileset inode
-allocation map, it can fail and JFS_IP(ipimap)->i_imap won't be
-initialized. Then it calls diFreeSpecial to close fileset inode allocation
-map inode and it will flow into jfs_evict_inode. Function jfs_evict_inode
-just validates JFS_SBI(inode->i_sb)->ipimap, then calls diFree. diFree use
-JFS_IP(ipimap)->i_imap directly, then it will cause a NULL deref.
+of_node_put(np) needs to be called when pdev == NULL.
 
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
-Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jfs/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/ralink/ill_acc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/jfs/inode.c b/fs/jfs/inode.c
-index 57ab424c05ff..072821b50ab9 100644
---- a/fs/jfs/inode.c
-+++ b/fs/jfs/inode.c
-@@ -146,12 +146,13 @@ void jfs_evict_inode(struct inode *inode)
- 		dquot_initialize(inode);
+diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
+index bdf53807d7c2..bea857c9da8b 100644
+--- a/arch/mips/ralink/ill_acc.c
++++ b/arch/mips/ralink/ill_acc.c
+@@ -61,6 +61,7 @@ static int __init ill_acc_of_setup(void)
+ 	pdev = of_find_device_by_node(np);
+ 	if (!pdev) {
+ 		pr_err("%pOFn: failed to lookup pdev\n", np);
++		of_node_put(np);
+ 		return -EINVAL;
+ 	}
  
- 		if (JFS_IP(inode)->fileset == FILESYSTEM_I) {
-+			struct inode *ipimap = JFS_SBI(inode->i_sb)->ipimap;
- 			truncate_inode_pages_final(&inode->i_data);
- 
- 			if (test_cflag(COMMIT_Freewmap, inode))
- 				jfs_free_zero_link(inode);
- 
--			if (JFS_SBI(inode->i_sb)->ipimap)
-+			if (ipimap && JFS_IP(ipimap)->i_imap)
- 				diFree(inode);
- 
- 			/*
 -- 
 2.35.1
 

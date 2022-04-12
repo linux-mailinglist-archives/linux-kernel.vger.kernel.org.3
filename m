@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D251B4FDFC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769714FDFA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbiDLMal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S243265AbiDLMau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354303AbiDLM22 (ORCPT
+        with ESMTP id S1352820AbiDLM1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:28:28 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 04:40:26 PDT
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B2E3A71A;
-        Tue, 12 Apr 2022 04:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1649763278; bh=zpeerSXmbG/t+M5drVYbi8mhlf53wi2ByStwNHLIGBM=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=Zln2DnULEY4CpEK+7gh7m/jRAB1NSzcRbVjzhCauEFtG/4Asr827YJayxSvaDS/hm
-         etLqS53Fy7csDocrQUPX80D7bxOVFjlNxwJGcYPs1U5K88zCsEAsKwq2LmevMyMYC7
-         wyOiNf6buZWAYO5FUz2Lp3OLlAgCsbx7QthmpqI0=
-Date:   Tue, 12 Apr 2022 13:34:38 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>
-To:     Jarrah <kernel@undef.tools>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH 3/5] Input: pinephone-keyboard - Build in the default
- keymap
-Message-ID: <20220412113438.eeuptiner7lrzfpl@core.my.home>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>,
-        Jarrah <kernel@undef.tools>, Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20220129230043.12422-1-samuel@sholland.org>
- <20220129230043.12422-4-samuel@sholland.org>
- <bde4ae40-98b6-7a77-2059-33c34442b604@undef.tools>
+        Tue, 12 Apr 2022 08:27:46 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C1091350;
+        Tue, 12 Apr 2022 04:34:51 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id t67so15741195ybi.2;
+        Tue, 12 Apr 2022 04:34:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W1U5xFnCbAJqJlqW5lfTRRnL2eQXPaE2FVgJo9bdhcA=;
+        b=ExrDDzN2M0V+2e70wKBDpp4ADkXYieviKaQtsRS6GyG4bqnBkxEMOxHppkwZ02E3mM
+         DLbti58FIIRSSp0Dcd82ipRNLpSXJ7Vyxx67zDyiDyG/nFCDQ4pkrzKXaQOyfD3e4ItB
+         rShqMZqDE2FY3yF3NaZLSuLHs6TMkNqZEfHflNGjRx1zmTy7lYY+9LiHdLrC/iOMaNFr
+         beZjk1UlDHxHs0CFSB0QxvJ9jS5aQCNe2YyDbjwKx5eJ/QLvFdubiEAv8ktncJQ132Ei
+         TK+F3qhoLUM1PAwkTTsj1/lAoH/WrWXq0nw7XomRjZTS0ij7JQcZ+hTryZ5kHs9IGzbm
+         SMUw==
+X-Gm-Message-State: AOAM531PAtwZ8dq+YmboMfV+tYhDONw9S6bbmozjAMxaDauaB4nlxO0W
+        bA7u/nDTn8VYrGAyaQLIMSMZwKyVxwom34BHlag=
+X-Google-Smtp-Source: ABdhPJzf+3ccXvLG34P7mp8/CQDA1raZe3l1qBOxnaibK6Y8se3ym4rOWOmExQ9+0/cdsmy7jvYZXaKcISy7A1mD6hY=
+X-Received: by 2002:a25:e082:0:b0:641:cf5:b91f with SMTP id
+ x124-20020a25e082000000b006410cf5b91fmr13366995ybg.482.1649763290879; Tue, 12
+ Apr 2022 04:34:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bde4ae40-98b6-7a77-2059-33c34442b604@undef.tools>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher> <YlVPhCLcFVbFPN36@lahna>
+In-Reply-To: <YlVPhCLcFVbFPN36@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 12 Apr 2022 13:34:39 +0200
+Message-ID: <CAJZ5v0idfZ+Zpn7quGtny9-swLMa0VwATmAgtp=JRSqyONqwYg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] PCI/PM: Improvements related to device transitions
+ into D0
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 08:20:24PM +1000, Jarrah wrote:
-> 
-> On 1/30/22 10:00, Samuel Holland wrote:
-> > +
-> > +static const uint32_t ppkb_default_fn_keymap[] = {
-> > +	KEY(0,  0, KEY_FN_ESC),
-> > +	KEY(0,  1, KEY_F1),
-> > +	KEY(0,  2, KEY_F2),
-> > +	KEY(0,  3, KEY_F3),
-> > +	KEY(0,  4, KEY_F4),
-> > +	KEY(0,  5, KEY_F5),
-> > +	KEY(0,  6, KEY_F6),
-> > +	KEY(0,  7, KEY_F7),
-> > +	KEY(0,  8, KEY_F8),
-> > +	KEY(0,  9, KEY_F9),
-> > +	KEY(0, 10, KEY_F10),
-> > +	KEY(0, 11, KEY_DELETE),
-> > +
-> > +	KEY(2,  0, KEY_SYSRQ),
-> > +	KEY(2, 10, KEY_INSERT),
-> > +
-> 
-> 
-> The driver currently being patched into most distros supporting the keyboard
-> exposes the symbols printed on the keyboard rather than the F* keys on the
-> function layer. While I agree than exposing function keys on the Fn layer is
-> more logical, in practice running this patch for a day I've found it's far
-> more useful to have quick access to the standard set of symbols (such as |
-> and -) than to have the function keys.
-> 
-> Would it be possible to either set the default back to symbols or expose
-> another layer (potentially under the "pine" key)? An alternative solution
-> proposed on the Mobian issue for this was to add a module option, allowing
-> these to be switched at runtime rather than compile time.
+Hi Mika,
 
-You will not get access to all the symbols anyway, this way. You should solve
-this via xkb and kernel keymaps (man keymaps(5)). Normal users should not be
-modifying basic keymap in DT or the driver anyway.
+On Tue, Apr 12, 2022 at 1:24 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi Rafael,
+>
+> On Mon, Apr 11, 2022 at 04:17:41PM +0200, Rafael J. Wysocki wrote:
+> > Hi All,
+> >
+> > On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
+> > > Hi All,
+> > >
+> > > This series supersedes the one at
+> > >
+> > > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
+> > >
+> > > It addresses some potential issues related to PCI device transitions from
+> > > low-power states into D0 and makes the related code more straightforward
+> > > and so easier to follow.
+> > >
+> > > Please refer to the patch changelogs for details.
+> >
+> > Here's a v2 of this patch series which is being sent, because I realized that
+> > one of the checks in pci_power_up() added by patch [4/7] in v1 was redundant
+> > and can be dropped, but that affected the last 3 patches in the series and
+> > then I noticed that more improvements were possible and hence the new patches
+> > [2/9].
+>
+> I sent a few minor nits separately. The series looks good to me in
+> general and certainly improves readability :)
+>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-kind regards,
-	o.
+Thank you!
+
+I'll address the issues that you have pointed out and send a v3 of
+this series later this week.

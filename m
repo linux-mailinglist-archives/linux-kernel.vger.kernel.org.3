@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D134FD928
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F223D4FD60A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385127AbiDLImw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S1359453AbiDLHnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357140AbiDLHjs (ORCPT
+        with ESMTP id S1353951AbiDLHQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4658F12745;
-        Tue, 12 Apr 2022 00:12:53 -0700 (PDT)
+        Tue, 12 Apr 2022 03:16:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14B3424A6;
+        Mon, 11 Apr 2022 23:57:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFC16B81B40;
-        Tue, 12 Apr 2022 07:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CEAC385A5;
-        Tue, 12 Apr 2022 07:12:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 321DAB81B35;
+        Tue, 12 Apr 2022 06:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FDDC385A1;
+        Tue, 12 Apr 2022 06:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747570;
-        bh=3mqLrVOoC/oN+O05pbj3f0xUloAMzNFYHVq/bqvXAmI=;
+        s=korg; t=1649746669;
+        bh=aABrg2qXOHwWj9zhs2YvoI7o2oQfRonePBbJJ9XmXCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lao3SB9MGl2DBw1Pa7tfhnIGxeWrZK4t9FGE53+mV1p9KDX8W2c2sk5m0FB1mwQYv
-         EIyjsqBKfQpEiAJsDVFi4n5bjW/cF09WIvDZex0Ko8hMD0ZJLU2EP0tjemzFRzo/ao
-         2YUSSazjeayY9Lcdab1t4Lh6icSP/MDYvHdwCDQU=
+        b=aLcRtBPKUGAkKMS9e9QH2TjLN28qzTYB/ZjQCaSCYwcxgkbD7yABuob/gu5XwCu4e
+         8USIze0A4NILre04n2pvRXbVoZHMNB8QHVmWzErnkA4QeDJpdXpeaG7QXGN6wML+L4
+         03Hd7JHK8skuBWy8JnT5BUaqD55cEGp8qJFo5taE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Alexander Lobakin <alobakin@pm.me>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 127/343] MIPS: fix fortify panic when copying asm exception handlers
-Date:   Tue, 12 Apr 2022 08:29:05 +0200
-Message-Id: <20220412062955.050353309@linuxfoundation.org>
+Subject: [PATCH 5.16 089/285] MIPS: fix fortify panic when copying asm exception handlers
+Date:   Tue, 12 Apr 2022 08:29:06 +0200
+Message-Id: <20220412062946.231665606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -104,7 +104,7 @@ index bb36a400203d..8c56b862fd9c 100644
  
  typedef void (*vi_handler_t)(void);
 diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index a486486b2355..246c6a6b0261 100644
+index d26b0fb8ea06..b9b31b13062d 100644
 --- a/arch/mips/kernel/traps.c
 +++ b/arch/mips/kernel/traps.c
 @@ -2091,19 +2091,19 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)

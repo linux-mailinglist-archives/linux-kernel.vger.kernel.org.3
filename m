@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE694FCC56
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FFF4FCC6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244548AbiDLCSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S244789AbiDLCSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243942AbiDLCSe (ORCPT
+        with ESMTP id S244900AbiDLCSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:18:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B633A1B;
-        Mon, 11 Apr 2022 19:16:18 -0700 (PDT)
+        Mon, 11 Apr 2022 22:18:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F433E05;
+        Mon, 11 Apr 2022 19:16:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C27F61697;
-        Tue, 12 Apr 2022 02:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DBAC385A4;
-        Tue, 12 Apr 2022 02:16:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E592616B4;
+        Tue, 12 Apr 2022 02:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F72DC385A4;
+        Tue, 12 Apr 2022 02:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649729777;
-        bh=+vTX2+LmH++7Pu5Shh4Uo4lXVzWdHkKYI41k6YSLJJE=;
+        s=korg; t=1649729784;
+        bh=czcqbI3NFXXdksle1p+xxdrXMUzuEzwDxXYTfL5oygc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=v7M7INNLgEZQE6SBiglzE66UBjgkcXhuHBB5+i1GqjY3bnVXvwddo7ZV+t64wV8jW
-         rQswAF4M1KJZDWoB+yWTRxmIa8yOkVwrjoqEzbqgpuH20d7tceiFye8aJhHv2U6dXc
-         cVYYtMP4kr5qoIrc7sGwiQxWx7FrtUji3t7YTkZY=
-Date:   Mon, 11 Apr 2022 19:16:15 -0700
+        b=rQA0FJhIvd3j58VrCNw7I1Yfx0ql9MAgEtN6wa/W51NW9ByMZZi7Af4aiWAOCcGev
+         l203DMHBLREf/WeMVdQJvt10IiSkJaXQK+nP5Mr2J8mjmckbSDbH2MLxYT67D0h2y0
+         8eC7yVrTHMivKkxXx8Iah8DroA5D+MGlY9IBvK/4=
+Date:   Mon, 11 Apr 2022 19:16:21 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Yu Zhao <yuzhao@google.com>
 Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
@@ -67,11 +67,11 @@ Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
         Shuang Zhai <szhai2@cs.rochester.edu>,
         Sofia Trinh <sofia.trinh@edi.works>,
         Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
-Message-Id: <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
-In-Reply-To: <20220407031525.2368067-6-yuzhao@google.com>
+Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
+Message-Id: <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
+In-Reply-To: <20220407031525.2368067-9-yuzhao@google.com>
 References: <20220407031525.2368067-1-yuzhao@google.com>
-        <20220407031525.2368067-6-yuzhao@google.com>
+        <20220407031525.2368067-9-yuzhao@google.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -86,119 +86,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Apr 2022 21:15:17 -0600 Yu Zhao <yuzhao@google.com> wrote:
+On Wed,  6 Apr 2022 21:15:20 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-> Evictable pages are divided into multiple generations for each lruvec.
-> The youngest generation number is stored in lrugen->max_seq for both
-> anon and file types as they are aged on an equal footing. The oldest
-> generation numbers are stored in lrugen->min_seq[] separately for anon
-> and file types as clean file pages can be evicted regardless of swap
-> constraints. These three variables are monotonically increasing.
-> 
+>
 > ...
 >
-> +static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
-
-There's a lot of function inlining here.  Fortunately the compiler will
-ignore it all, because some of it looks wrong.  Please review (and
-remeasure!).  If inlining is reqlly justified, use __always_inline, and
-document the reasons for doing so.
-
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -6083,6 +6083,29 @@ static void mem_cgroup_move_task(void)
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_LRU_GEN
+> +static void mem_cgroup_attach(struct cgroup_taskset *tset)
 > +{
-> +	int gen;
-> +	unsigned long old_flags, new_flags;
+> +	struct cgroup_subsys_state *css;
+> +	struct task_struct *task = NULL;
 > +
-> +	do {
-> +		new_flags = old_flags = READ_ONCE(folio->flags);
-> +		if (!(new_flags & LRU_GEN_MASK))
-> +			return false;
-> +
-> +		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
-> +		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
-> +
-> +		gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
-> +
-> +		new_flags &= ~LRU_GEN_MASK;
-> +		/* for shrink_page_list() */
-> +		if (reclaiming)
-> +			new_flags &= ~(BIT(PG_referenced) | BIT(PG_reclaim));
-> +		else if (lru_gen_is_active(lruvec, gen))
-> +			new_flags |= BIT(PG_active);
-> +	} while (cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
+> +	cgroup_taskset_for_each_leader(task, css, tset)
+> +		break;
 
-Clearly the cmpxchg loop is handling races against a concurrent
-updater.  But it's unclear who that updater is, what are the dynamics
-here and why the designer didn't use, say, spin_lock().  The way to
-clarify such thigs is with code comments!
+Does this actually do anything?
 
+> +	if (!task)
+> +		return;
+> +
+> +	task_lock(task);
+> +	if (task->mm && task->mm->owner == task)
+> +		lru_gen_migrate_mm(task->mm);
+> +	task_unlock(task);
+> +}
 >  
-> +#endif /* !__GENERATING_BOUNDS_H */
-> +
-> +/*
-> + * Evictable pages are divided into multiple generations. The youngest and the
-> + * oldest generation numbers, max_seq and min_seq, are monotonically increasing.
-> + * They form a sliding window of a variable size [MIN_NR_GENS, MAX_NR_GENS]. An
-> + * offset within MAX_NR_GENS, gen, indexes the LRU list of the corresponding
-
-The "within MAX_NR_GENS, gen," text here is unclear?
-
-> + * generation. The gen counter in folio->flags stores gen+1 while a page is on
-> + * one of lrugen->lists[]. Otherwise it stores 0.
-> + *
-> + * A page is added to the youngest generation on faulting. The aging needs to
-> + * check the accessed bit at least twice before handing this page over to the
-> + * eviction. The first check takes care of the accessed bit set on the initial
-> + * fault; the second check makes sure this page hasn't been used since then.
-> + * This process, AKA second chance, requires a minimum of two generations,
-> + * hence MIN_NR_GENS. And to maintain ABI compatibility with the active/inactive
-
-Where is the ABI compatibility issue?  Is it in some way in which the
-legacy LRU is presented to userspace?
-
-> + * LRU, these two generations are considered active; the rest of generations, if
-> + * they exist, are considered inactive. See lru_gen_is_active(). PG_active is
-> + * always cleared while a page is on one of lrugen->lists[] so that the aging
-> + * needs not to worry about it. And it's set again when a page considered active
-> + * is isolated for non-reclaiming purposes, e.g., migration. See
-> + * lru_gen_add_folio() and lru_gen_del_folio().
-> + *
-> + * MAX_NR_GENS is set to 4 so that the multi-gen LRU can support twice of the
-
-"twice the number of"?
-> + * categories of the active/inactive LRU when keeping track of accesses through
-> + * page tables. It requires order_base_2(MAX_NR_GENS+1) bits in folio->flags.
-> + */
-
-Helpful comment, overall.
-
-> 
 > ...
 >
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -909,6 +909,14 @@ config ANON_VMA_NAME
->  	  area from being merged with adjacent virtual memory areas due to the
->  	  difference in their name.
->  
-> +config LRU_GEN
-> +	bool "Multi-Gen LRU"
-> +	depends on MMU
-> +	# the following options can use up the spare bits in page flags
-> +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
-> +	help
-> +	  A high performance LRU implementation to overcommit memory.
+> +static void update_batch_size(struct lru_gen_mm_walk *walk, struct folio *folio,
+> +			      int old_gen, int new_gen)
+> +{
+> +	int type = folio_is_file_lru(folio);
+> +	int zone = folio_zonenum(folio);
+> +	int delta = folio_nr_pages(folio);
 > +
->  source "mm/damon/Kconfig"
+> +	VM_BUG_ON(old_gen >= MAX_NR_GENS);
+> +	VM_BUG_ON(new_gen >= MAX_NR_GENS);
 
-This is a problem.  I had to jump through hoops just to be able to
-compile-test this.  Turns out I had to figure out how to disable
-MAXSMP.
+General rule: don't add new BUG_ONs, because they crash the kenrel. 
+It's better to use WARN_ON or WARN_ON_ONCE then try to figure out a way
+to keep the kernel limping along.  At least so the poor user can gather logs.
 
-Can we please figure out a way to ensure that more testers are at least
-compile testing this?  Allnoconfig, defconfig, allyesconfig, allmodconfig.
+> +	walk->batched++;
+> +
+> +	walk->nr_pages[old_gen][type][zone] -= delta;
+> +	walk->nr_pages[new_gen][type][zone] += delta;
+> +}
+> +
 
-Also, I suggest that we actually make MGLRU the default while in linux-next.
-
->
-> ...
->

@@ -2,248 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4773E4FCBDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADAA4FCBDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244800AbiDLB12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S245439AbiDLB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiDLB10 (ORCPT
+        with ESMTP id S232253AbiDLB16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:27:26 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D571A82A
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:25:10 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h5so14789373pgc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:25:10 -0700 (PDT)
+        Mon, 11 Apr 2022 21:27:58 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B886A1A824;
+        Mon, 11 Apr 2022 18:25:42 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id h5so14790292pgc.7;
+        Mon, 11 Apr 2022 18:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qLkG0TlTkLtkn7/YDi2Nz0t09sVP5EaquDCxlZc7iVE=;
-        b=qtFpfnhXLPAMO82Aps6yxmMJSr67hbNkkZXmdGS/KL8Y8KczxORah8E8wSDUtYFOZd
-         IAJGjfeySrEbHSuM15fwAqUB02UhRrzMTbEZ0JNup0o0cPQ5whA0/l6r5uJlqLUMJYG1
-         su6lWltTtv6nf/kmK6rT0z4bg8JrODCn8066McpWbQnVVMOopX5xV0KjOoFOSbd9aXMS
-         2TFmU4KP31uZqaluiZ2MYgg48UrBYipcv5WPua4VJF3j3wu4AERnN4paFhyAdATlZGCz
-         ypoFhTAwNJELuKspm1q/0GWfl/+jIDq8bJ9Dq4YDo3SJhJno/7NT5xCM1JTM62op7pDa
-         UG7A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TNhAr9IyPTBjGimzBz9nywCikjUEwdp04TPn/doIlVY=;
+        b=DQokl79QPCuTveZ0JPDhUGU2LZxaZUQ4bL40Op784Me21fu1M2W3ZAOi6lhhzqCjzL
+         4Lq6kGJ5sC4UzZH7Ji2QBZZpx/iZlRENsNY6F+d742sBmnwi54zZe3yxB5wuJjCXeALv
+         aHOMnFiMHhoGYBQ4JIuIMqLnAYdONA9vA+WKmiKgYeec0xcGgmq7N5Gv/dF7oyGWB5GO
+         rd2/InIjSIHlngKpYjenjEY6SlthUYLK+NE4vpN7rWgz7Gw0s7HojulaCyY8Xpqa4Lbt
+         LICU5/gv6RIk2AX8TdfeQ8XRU1YQ5O9ZKFKDejDZA85OQmyU6rsMvbF8gfjgBrv01rFw
+         klUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qLkG0TlTkLtkn7/YDi2Nz0t09sVP5EaquDCxlZc7iVE=;
-        b=fqjCxqz7R0SCYqs7RDb90KShiZrpxR9NgzleSMXwItlODPUuAZg7vkUE2j/lDB7Tka
-         O0pQuO/xt1Y1PiCTg/NkKsM0Nes8i8Cz3kd+m1WNWK6sg7cLqVTXh2txob6g636JzAo8
-         wp8nyTDtQUkQnAbvyiZUybLLStWoIUHuh3Vzvq8ZwIqRrarufgyBY+brXAxpwETwleYG
-         j6+FsJdIhalv4e5VDSqAKRioEm6Rra7yWXucoi+hTpKhY4cViRNxM700bhud3aD3POvB
-         vhSsvmgnqv4gSd570+dH4Elt+Yu/ays0zLy2Z3T1AlS5OBM42fLhpsoWF9Z3j56b6YdM
-         fRPQ==
-X-Gm-Message-State: AOAM530vm2ihNUwUvsxhf7wF5F0FksCXjiiyV9ZA0If93aZ+hieTB0Yw
-        qLX14YMYS2jzsom8AO4JHyPRxA==
-X-Google-Smtp-Source: ABdhPJx7pt1bxVJmlx1dwnHe4fO6l3jJivv3igbrMW3nFY6RPvJVoTAnmhVy0/cSdpzFZAh2BeRonA==
-X-Received: by 2002:a63:1543:0:b0:39d:9729:1992 with SMTP id 3-20020a631543000000b0039d97291992mr536239pgv.155.1649726709466;
-        Mon, 11 Apr 2022 18:25:09 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id e14-20020a62aa0e000000b00505c05545f8sm4916521pff.108.2022.04.11.18.25.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TNhAr9IyPTBjGimzBz9nywCikjUEwdp04TPn/doIlVY=;
+        b=sdfUkCrISTi38kbKj6to9xPbxDsJ47b2Fnc5WIWsWI3EIUXH8Ztt/ajPN/NsoB9pum
+         BmjjI7IP6gU7AEhG7WbLUpkrmRjKLS8Hg57OC1nev++a+qqfRmJ7YFjTgASSF95QFOCG
+         Ykr8btHKluWZvFK5XTbQ0IxaxEsj/uJjIpIK+0zLP7UxijhbQo4zKp9vwxoXQdfAGqmB
+         1/YpwwbzmePt4L/dS0K6sfGiUEEAhSjsWWA/ekIXE2kr5Hysur7yKU6UnuH8ceUMDiKr
+         JV0cHSTUvKEf77RjVzCuM5xCeQWQGd5e1QZaatyLOYKbEYtSJwU0VFDQ2qrur7a2FugS
+         OGhA==
+X-Gm-Message-State: AOAM532I6tzFw+kEU6RIUAUm52y1of2aXJ5klj8+uZFXrDDC2EdS0Iym
+        3R0YtJ/qSOoPqSxUO456nY8=
+X-Google-Smtp-Source: ABdhPJzq9/iX0tXOPjv+uevKkGpblIWdbUcvmdxEovaAZUO/l3DnrZBv16KOsMdG3HcPW+JUhBHgWA==
+X-Received: by 2002:a63:1061:0:b0:399:5cd:3ddf with SMTP id 33-20020a631061000000b0039905cd3ddfmr28131265pgq.271.1649726742096;
+        Mon, 11 Apr 2022 18:25:42 -0700 (PDT)
+Received: from localhost.localdomain ([103.149.162.115])
+        by smtp.gmail.com with ESMTPSA id o5-20020a17090a3d4500b001c97528521asm707461pjf.6.2022.04.11.18.25.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 18:25:08 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 01:25:05 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v4 04/10] KVM: selftests: Read binary stat data in lib
-Message-ID: <YlTU8YXmoLED1VHC@google.com>
-References: <20220411211015.3091615-1-bgardon@google.com>
- <20220411211015.3091615-5-bgardon@google.com>
+        Mon, 11 Apr 2022 18:25:41 -0700 (PDT)
+From:   Dongli Si <kvmx86@gmail.com>
+X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
+To:     like.xu.linux@gmail.com
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jmattson@google.com,
+        jolsa@kernel.org, joro@8bytes.org, kim.phillips@amd.com,
+        kvmx86@gmail.com, liam.merwick@oracle.com,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@kernel.org, namhyung@kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org
+Subject: Re: [PATCH] perf/x86/amd: cpu_hw_events::perf_ctr_virt_mask should only be used on host
+Date:   Tue, 12 Apr 2022 09:25:30 +0800
+Message-Id: <20220412012530.794790-1-sidongli1997@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <edfc8bd1-8dc3-9e88-d9c3-6a427b039a98@gmail.com>
+References: <edfc8bd1-8dc3-9e88-d9c3-6a427b039a98@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411211015.3091615-5-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Ben Gardon wrote:
-> Move the code to read the binary stats data to the KVM selftests
-> library. It will be re-used by other tests to check KVM behavior.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+On Mon 11 Apr 2022 22:29:18 +0800, Like Xu wrote:
+> Or you can work it out to make nested vPMU functional on AMD.
+Unless in the future kvm wants to emulate on L1 HV the behavior of not
+count when HO bit is set and SVM is disabled, otherwise it doesn't make
+sense to use perf_ctr_virt_mask in the guest to mask HO bit. At least for
+now, this patch helps clarify what perf_ctr_virt_mask actually does.
 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     |  3 +++
->  .../selftests/kvm/kvm_binary_stats_test.c     | 20 +++++-------------
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 21 +++++++++++++++++++
->  3 files changed, 29 insertions(+), 15 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index c5f34551ff76..b2684cfc2cb1 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -405,6 +405,9 @@ struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
->  					  struct kvm_stats_header *header);
->  void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
->  			struct kvm_stats_desc *stats_desc);
-> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
-> +		   struct kvm_stats_desc *desc, uint64_t *data,
-> +		   ssize_t max_elements);
->  
->  uint32_t guest_get_vcpuid(void);
->  
-> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> index e4795bad7db6..97b180249ba0 100644
-> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> @@ -20,6 +20,8 @@
->  #include "asm/kvm.h"
->  #include "linux/kvm.h"
->  
-> +#define STAT_MAX_ELEMENTS 1000
-> +
->  static void stats_test(int stats_fd)
->  {
->  	ssize_t ret;
-> @@ -29,7 +31,7 @@ static void stats_test(int stats_fd)
->  	struct kvm_stats_header header;
->  	char *id;
->  	struct kvm_stats_desc *stats_desc;
-> -	u64 *stats_data;
-> +	u64 stats_data[STAT_MAX_ELEMENTS];
->  	struct kvm_stats_desc *pdesc;
->  
->  	/* Read kvm stats header */
-> @@ -130,25 +132,13 @@ static void stats_test(int stats_fd)
->  			pdesc->offset, pdesc->name);
->  	}
->  
-> -	/* Allocate memory for stats data */
-> -	stats_data = malloc(size_data);
-> -	TEST_ASSERT(stats_data, "Allocate memory for stats data");
-> -	/* Read kvm stats data as a bulk */
-> -	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-> -	TEST_ASSERT(ret == size_data, "Read KVM stats data");
->  	/* Read kvm stats data one by one */
-> -	size_data = 0;
->  	for (i = 0; i < header.num_desc; ++i) {
->  		pdesc = (void *)stats_desc + i * size_desc;
-> -		ret = pread(stats_fd, stats_data,
-> -				pdesc->size * sizeof(*stats_data),
-> -				header.data_offset + size_data);
-> -		TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
-> -				"Read data of KVM stats: %s", pdesc->name);
-> -		size_data += pdesc->size * sizeof(*stats_data);
-> +		read_stat_data(stats_fd, &header, pdesc, stats_data,
-> +			       ARRAY_SIZE(stats_data));
->  	}
->  
-> -	free(stats_data);
->  	free(stats_desc);
->  	free(id);
->  }
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index e3ae26fbef03..64e2085f1129 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2593,3 +2593,24 @@ void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
->  	TEST_ASSERT(ret == stats_descs_size(header),
->  		    "Read KVM stats descriptors");
->  }
-> +
-> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
-> +		   struct kvm_stats_desc *desc, uint64_t *data,
-> +		   ssize_t max_elements)
-> +{
-> +	ssize_t ret;
-> +
-> +	TEST_ASSERT(desc->size <= max_elements,
-> +		    "Max data elements should be at least as large as stat data");
-> +
-> +	ret = pread(stats_fd, data, desc->size * sizeof(*data),
-> +		    header->data_offset + desc->offset);
+> This is not a typical revert commit.
+Thanks for pointing out the problem with my patch,
+I will write another patch specifically to revert this commit.
 
-hmm, by checking the comments in kvm.h, I cannot infer desc->offset
-should be added with header->data_offset. So, could you add the
-following commit into your series. I feel that we need to improve
-readability a little bit. Existing comments for kvm_stats_desc is not
-quite helpful for users.
+> Please check the chronological order of the related commits and the motivations.
+I know that commit df51fe7ea1c1c fixed the problem of use vPMU on old KVM,
+but I think it's a speculative way and make things a little obscure,
+because this #GP is actually a KVM problem rather than a guest problem,
+I think it is the user's responsibility to update their host kernel.
 
-From: Mingwei Zhang <mizhang@google.com>
-Date: Tue, 12 Apr 2022 01:09:10 +0000
-Subject: [PATCH] KVM: stats: improve readability of kvm_stats_header and
- kvm_stats_desc
+> > +	/*
+> > +	 * When SVM is disabled, set the Host-Only bit will cause the
+> > +	 * performance counter to not work.
+> It's ridiculous. Based on the AMD APM Table 13-3. Host/Guest Only Bits,
+> the performance counter would count "Host events" rather than "not work".
+You are wrong, you can test it on the host, and the description of the
+commit 1018faa6cf23 also pointed out this problem, this is the result of an
+experiment, AMD APM has not documented this problem.
 
-Some comments on these data structures are not quite helpful from user
-perspective. For instance, kvm_stats_header->name_size was shared across
-all stats. This might be a little bit counter-intuitive, since each stat
-should have a different name length. So it has to be the maximum length of
-the stats string. We cannot infer that by just reading the comments without
-going through the implementation. In addition, kvm_stat_desc->offset is a
-relative offset base on kvm_stats_header->data_offset. It is better to call
-it out clearly in comments.
+I forgot to say this is the behavior on the host, I will improve this
+comment to specify 'why' more clearly, like this:
+	/*
+	 * It turns out that when SVM is disabled on the host (L0), set the
+	 * Host-Only bit will cause the performance counter to not count.
+	 */
 
-Update the comments of the fields in these two data structures.
+> Note, your proposal change should work on the L0, L1 and L2.
+Yes, I tested it on L0, L1, L2 with 5.18-rc1 and it works as expected.
 
-Cc: Jing Zhang <zhangjingos@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- include/uapi/linux/kvm.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+There is a related discussion here:
+https://lore.kernel.org/all/20220320002106.1800166-1-sidongli1997@gmail.com/
 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 5c0d7c77e9bd..986728b5b3fb 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1987,7 +1987,7 @@ struct kvm_dirty_gfn {
- /**
-  * struct kvm_stats_header - Header of per vm/vcpu binary statistics data.
-  * @flags: Some extra information for header, always 0 for now.
-- * @name_size: The size in bytes of the memory which contains statistics
-+ * @name_size: The maximum size in bytes of the memory which contains statistics
-  *             name string including trailing '\0'. The memory is allocated
-  *             at the send of statistics descriptor.
-  * @num_desc: The number of statistics the vm or vcpu has.
-@@ -2042,7 +2042,8 @@ struct kvm_stats_header {
-  * @size: The number of data items for this stats.
-  *        Every data item is of type __u64.
-  * @offset: The offset of the stats to the start of stat structure in
-- *          structure kvm or kvm_vcpu.
-+ *          structure kvm or kvm_vcpu. When using it, add its value with
-+ *          kvm_stats_header->data_offset.
-  * @bucket_size: A parameter value used for histogram stats. It is only used
-  *		for linear histogram stats, specifying the size of the bucket;
-  * @name: The name string for the stats. Its size is indicated by the
+Regards,
+Dongli
 
-base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
---
-2.35.1.1178.g4f1659d476-goog
-> +
-> +	/* ret from pread is in bytes. */
-> +	ret = ret / sizeof(*data);
-> +
-> +	TEST_ASSERT(ret == desc->size,
-> +		    "Read data of KVM stats: %s", desc->name);
-> +
-> +	return ret;
-> +}
-> -- 
-> 2.35.1.1178.g4f1659d476-goog
-> 

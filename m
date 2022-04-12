@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBEA4FCC58
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912184FCC64
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245034AbiDLCTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
+        id S237881AbiDLCTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244844AbiDLCSs (ORCPT
+        with ESMTP id S244900AbiDLCS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:18:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C4733A1B;
-        Mon, 11 Apr 2022 19:16:32 -0700 (PDT)
+        Mon, 11 Apr 2022 22:18:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890BB33E22;
+        Mon, 11 Apr 2022 19:16:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FA236168C;
-        Tue, 12 Apr 2022 02:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B932C385A3;
-        Tue, 12 Apr 2022 02:16:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A522B81A02;
+        Tue, 12 Apr 2022 02:16:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844E1C385A3;
+        Tue, 12 Apr 2022 02:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649729791;
-        bh=hxuKFNGBeqS7vQiUwSPiIBI/AqNtviIZC+add1y1ko8=;
+        s=korg; t=1649729797;
+        bh=KaZSlo6LIAX65euqklpjff6NFiyuc2oTEahQLo/+iVE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mopX5Sy7AFPqL3cDVB4gG3iNilwP9Ot+R6JYewM4MOcsc6K2vGgX3GoToffvY9nwC
-         LhzNDzD+Zczh3PgOiZj3/YGSl79ke2DibNlXBhvqkDKYGNN5fiUsbbTuRyc9Geqq1U
-         thiQiWMkVd6JWhndwJJT4g769mJp5YGtwyCk+dAY=
-Date:   Mon, 11 Apr 2022 19:16:27 -0700
+        b=io4M4pnrSSa7MOeQoMszm+txnYiQiXzl5iRHCTCpj22aUWsmS1+ZChXNLDl+5sgBX
+         el+oq9nDoL3sl9M/6/P/vHa0GbdoBjKUCTMdwh6PMASetM8W6ZIYdskyD5Ux8AlFLI
+         Z/P340QLfzEMZ1nPWkGN3T9kNEwvNTYXCicl3Nq0=
+Date:   Mon, 11 Apr 2022 19:16:34 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Yu Zhao <yuzhao@google.com>
 Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
@@ -67,11 +67,11 @@ Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
         Shuang Zhai <szhai2@cs.rochester.edu>,
         Sofia Trinh <sofia.trinh@edi.works>,
         Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 10/14] mm: multi-gen LRU: kill switch
-Message-Id: <20220411191627.629f21de83cd0a520ef4a142@linux-foundation.org>
-In-Reply-To: <20220407031525.2368067-11-yuzhao@google.com>
+Subject: Re: [PATCH v10 12/14] mm: multi-gen LRU: debugfs interface
+Message-Id: <20220411191634.674554d3de2ba37b3db40ca2@linux-foundation.org>
+In-Reply-To: <20220407031525.2368067-13-yuzhao@google.com>
 References: <20220407031525.2368067-1-yuzhao@google.com>
-        <20220407031525.2368067-11-yuzhao@google.com>
+        <20220407031525.2368067-13-yuzhao@google.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -86,140 +86,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Apr 2022 21:15:22 -0600 Yu Zhao <yuzhao@google.com> wrote:
+On Wed,  6 Apr 2022 21:15:24 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-> Add /sys/kernel/mm/lru_gen/enabled as a kill switch. Components that
-> can be disabled include:
->   0x0001: the multi-gen LRU core
->   0x0002: walking page table, when arch_has_hw_pte_young() returns
->           true
->   0x0004: clearing the accessed bit in non-leaf PMD entries, when
->           CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=y
->   [yYnN]: apply to all the components above
-> E.g.,
->   echo y >/sys/kernel/mm/lru_gen/enabled
->   cat /sys/kernel/mm/lru_gen/enabled
->   0x0007
->   echo 5 >/sys/kernel/mm/lru_gen/enabled
->   cat /sys/kernel/mm/lru_gen/enabled
->   0x0005
+> Add /sys/kernel/debug/lru_gen for working set estimation and proactive
+> reclaim. These features are required to optimize job scheduling (bin
+> packing) in data centers [1][2].
 
-I'm shocked that this actually works.  How does it work?  Existing
-pages & folios are drained over time or synchrnously?  Supporting
-structures remain allocated, available for reenablement?
+debugfs is for ephemeral temp stuf which can and will change or
+disappear at any time.  Anything which is "required" by userspace
+should not be in debufgs.
 
-Why is it thought necessary to have this?  Is it expected to be
-permanent?
+Presumably sysfs is the place.  Fully documented and with usage
+examples in the changelog so we can carefully review the proposed
+extensions to Linux's ABI.  Extensions which must be maintained
+unchanged for all time.
 
-> NB: the page table walks happen on the scale of seconds under heavy
-> memory pressure, in which case the mmap_lock contention is a lesser
-> concern, compared with the LRU lock contention and the I/O congestion.
-> So far the only well-known case of the mmap_lock contention happens on
-> Android, due to Scudo [1] which allocates several thousand VMAs for
-> merely a few hundred MBs. The SPF and the Maple Tree also have
-> provided their own assessments [2][3]. However, if walking page tables
-> does worsen the mmap_lock contention, the kill switch can be used to
-> disable it. In this case the multi-gen LRU will suffer a minor
-> performance degradation, as shown previously.
-> 
-> Clearing the accessed bit in non-leaf PMD entries can also be
-> disabled, since this behavior was not tested on x86 varieties other
-> than Intel and AMD.
-> 
-> ...
->
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -432,6 +432,18 @@ static inline void cgroup_put(struct cgroup *cgrp)
->  	css_put(&cgrp->self);
->  }
->  
-> +extern struct mutex cgroup_mutex;
-> +
-> +static inline void cgroup_lock(void)
-> +{
-> +	mutex_lock(&cgroup_mutex);
-> +}
-> +
-> +static inline void cgroup_unlock(void)
-> +{
-> +	mutex_unlock(&cgroup_mutex);
-> +}
 
-It's a tad rude to export mutex_lock like this without (apparently)
-informing its owner (Tejun).
 
-And if we're going to wrap its operations via helper fuctions then
-
-- presumably all cgroup_mutex operations should be wrapped and
-
-- exiting open-coded operations on this mutex should be converted.
-
->
-> ...
->
-> +static bool drain_evictable(struct lruvec *lruvec)
-> +{
-> +	int gen, type, zone;
-> +	int remaining = MAX_LRU_BATCH;
-> +
-> +	for_each_gen_type_zone(gen, type, zone) {
-> +		struct list_head *head = &lruvec->lrugen.lists[gen][type][zone];
-> +
-> +		while (!list_empty(head)) {
-> +			bool success;
-> +			struct folio *folio = lru_to_folio(head);
-> +
-> +			VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
-> +			VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
-> +			VM_BUG_ON_FOLIO(folio_is_file_lru(folio) != type, folio);
-> +			VM_BUG_ON_FOLIO(folio_zonenum(folio) != zone, folio);
-
-So many new BUG_ONs to upset Linus :(
-
-> +			success = lru_gen_del_folio(lruvec, folio, false);
-> +			VM_BUG_ON(!success);
-> +			lruvec_add_folio(lruvec, folio);
-> +
-> +			if (!--remaining)
-> +				return false;
-> +		}
-> +	}
-> +
-> +	return true;
-> +}
-> +
->
-> ...
->
-> +static ssize_t store_enable(struct kobject *kobj, struct kobj_attribute *attr,
-> +			    const char *buf, size_t len)
-> +{
-> +	int i;
-> +	unsigned int caps;
-> +
-> +	if (tolower(*buf) == 'n')
-> +		caps = 0;
-> +	else if (tolower(*buf) == 'y')
-> +		caps = -1;
-> +	else if (kstrtouint(buf, 0, &caps))
-> +		return -EINVAL;
-
-See kstrtobool()
-
-> +	for (i = 0; i < NR_LRU_GEN_CAPS; i++) {
-> +		bool enable = caps & BIT(i);
-> +
-> +		if (i == LRU_GEN_CORE)
-> +			lru_gen_change_state(enable);
-> +		else if (enable)
-> +			static_branch_enable(&lru_gen_caps[i]);
-> +		else
-> +			static_branch_disable(&lru_gen_caps[i]);
-> +	}
-> +
-> +	return len;
-> +}
->
-> ...
->

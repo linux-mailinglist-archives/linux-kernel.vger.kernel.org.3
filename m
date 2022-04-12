@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7B84FD61D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15264FDAEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383551AbiDLIhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1383766AbiDLIiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356777AbiDLHjU (ORCPT
+        with ESMTP id S1357057AbiDLHjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:20 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A164D52B32;
-        Tue, 12 Apr 2022 00:10:13 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id e22so15455778qvf.9;
-        Tue, 12 Apr 2022 00:10:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=un7uuVJLSD5oo1I82UIYzEg0eG1oNWsHj8ZvVK3CntI=;
-        b=L+hQHeYSmVigFt+b6xeULgFH4nuk9cg4I8asH7SB04/jw8SBFeK2zB6J0M6ov9Vcsd
-         RKOO4dyxqAQcO1+PuL1LZpYPwoGc8+eyl4eSpuNaIMcrRzpYacUPsxfigUs/KxoYtGol
-         Qsl6jXScFMlz3dIAd60qgGBIBOfEIkzsmgkEJHNp+sPRfA45XYfUfEYpSJr9wpOIvloH
-         fdVxHlavV+n6uDIoWeC/i53bky0CMr8AnT8rMpvqbXPv/n2W/3nILainmXdjF5nzBMDx
-         3SV+qg2KPx3kZ5VHB6LpnAZFYKOGgcnZ+NwJ5YM5DnpmGZ5GeT1VrDp2tBeAskvfGajo
-         Z3Jw==
-X-Gm-Message-State: AOAM5308p3o4/xg/krRis3Ems4A7m+3zIsg6M/2pOS6jHtEIB90V3nH5
-        TkwpAQB6i974Mo1PxrklDjVznfrn9Av5qW3h
-X-Google-Smtp-Source: ABdhPJxLBv5cJryliABFuSMeFqzI6FAkMvdmUBuPpxF87f7gHMxfjytV7n5g7KedxEeK3xmhc9gGlQ==
-X-Received: by 2002:ad4:5f0f:0:b0:441:1e3a:dbc with SMTP id fo15-20020ad45f0f000000b004411e3a0dbcmr29779951qvb.99.1649747411863;
-        Tue, 12 Apr 2022 00:10:11 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id y66-20020a37af45000000b0067dc0fc539fsm20767890qke.86.2022.04.12.00.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:10:11 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id p65so13282791ybp.9;
-        Tue, 12 Apr 2022 00:10:10 -0700 (PDT)
-X-Received: by 2002:a25:29c2:0:b0:641:224f:17d6 with SMTP id
- p185-20020a2529c2000000b00641224f17d6mr10469449ybp.546.1649747410632; Tue, 12
- Apr 2022 00:10:10 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A949BE2D;
+        Tue, 12 Apr 2022 00:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vPcJ0Jyf7TJXhPIUKaJIMiRr+nnNAGQ8o4ZIzMyfJYY=; b=JfeLXhwuu380orBQHL6JRm1SVF
+        ECgAYHr9tIUbUxfb+zKByQ6M5m+UdFOUQ3oWMUgfARd8XUeBIcoZKH4jMTF0OLs1YmEiCyYE8hkGF
+        XeAvGXsdinDYUCjJZxz8av+f1EguCiwG6ujUBcMZk64iEp/JwJs2onTAAlsbh9dlFgQyuTN/rfqH1
+        CXc/7TG6vwZodEaUB48AU2zdyv0KpVtqtNVkG1Etqm5djS39M0C2LM1Q4BHXQmYYinaJ2TknXylvG
+        79BlEtn404BwdqU+lAF3zdqB1ZAjc0YYEabv0Pb9CRim3qTlsCFdSU9sav2J9o8doCeMah26Wz5SW
+        foWlpEMA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neAfS-004F93-S8; Tue, 12 Apr 2022 07:10:27 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2AA8D98619A; Tue, 12 Apr 2022 09:10:26 +0200 (CEST)
+Date:   Tue, 12 Apr 2022 09:10:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>, Stephen Rothwell <sfr@rothwell.id.au>,
+        linux-mm@kvack.org, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, page-reclaim@google.com,
+        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
+Message-ID: <20220412071026.GU2731@worktop.programming.kicks-ass.net>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-9-yuzhao@google.com>
+ <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
 MIME-Version: 1.0
-References: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
- <20220411103528.2187797-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2204111240560.38484@ramsan.of.borg>
- <87zgkrqyff.fsf@tynnyri.adurom.net>
-In-Reply-To: <87zgkrqyff.fsf@tynnyri.adurom.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 09:09:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUgdPBTwg8LN8x_sZRWWzdE9ZKytZuAna+qdKL1Ced5Vw@mail.gmail.com>
-Message-ID: <CAMuHMdUgdPBTwg8LN8x_sZRWWzdE9ZKytZuAna+qdKL1Ced5Vw@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.18-rc2
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalle,
+On Mon, Apr 11, 2022 at 07:16:21PM -0700, Andrew Morton wrote:
+> On Wed,  6 Apr 2022 21:15:20 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-On Mon, Apr 11, 2022 at 8:15 PM Kalle Valo <kvalo@kernel.org> wrote:
-> Geert Uytterhoeven <geert@linux-m68k.org> writes:
-> > On Mon, 11 Apr 2022, Geert Uytterhoeven wrote:
-> >> JFYI, when comparing v5.18-rc2[1] to v5.18-rc1[3], the summaries are:
+> > +#ifdef CONFIG_LRU_GEN
+> > +static void mem_cgroup_attach(struct cgroup_taskset *tset)
+> > +{
+> > +	struct cgroup_subsys_state *css;
+> > +	struct task_struct *task = NULL;
+> > +
+> > +	cgroup_taskset_for_each_leader(task, css, tset)
+> > +		break;
+> 
+> Does this actually do anything?
 
-> >   + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_491' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
-> >   + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_520' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
-> >
-> > mipsel/mips-allmodconfig
-> > arm64-gcc5.4/arm64-allmodconfig
-> >
-> > Actual error is:
-> >
-> >     /kisskb/src/drivers/net/wireless/mediatek/mt76/mt76x2/pci.c: In function 'mt76x2e_probe':
-> >     /kisskb/src/include/linux/compiler_types.h:352:38: error: call to '__compiletime_assert_520' declared with attribute error: FIELD_PREP: mask is not constant
->
-> Does this commit fix it:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git/commit/?id=dbc2b1764734857d68425468ffa8486e97ab89df
->
-> Or is this another issue?
-
-I'm not in a position to verify this, but given both configs used gcc-5,
-I assume this will fix the issue.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yeah, it finds the first leader if there is any, but this is indeed
+quite terrible coding style.

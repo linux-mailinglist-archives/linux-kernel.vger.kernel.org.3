@@ -2,185 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69D74FCCC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBAF4FCCC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343671AbiDLC6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S1344023AbiDLC64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235508AbiDLC6C (ORCPT
+        with ESMTP id S231405AbiDLC6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:58:02 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B6B15FD1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:55:45 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KcqxC29znzBsGf;
-        Tue, 12 Apr 2022 10:51:27 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 10:55:43 +0800
-Subject: Re: [PATCH 4/4] mm/migration: fix potential pte_unmap on an not
- mapped pte
-To:     David Hildenbrand <david@redhat.com>
-CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <ying.huang@intel.com>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <dave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <jhubbard@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <osalvador@suse.de>, <sfr@canb.auug.org.au>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220409073846.22286-1-linmiaohe@huawei.com>
- <20220409073846.22286-5-linmiaohe@huawei.com>
- <a190e78f-d833-780b-6fbe-b129c2505deb@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3dc955b1-43c9-487a-b1e6-f0f128da7722@huawei.com>
-Date:   Tue, 12 Apr 2022 10:55:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 11 Apr 2022 22:58:53 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7447D15FD1;
+        Mon, 11 Apr 2022 19:56:37 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 876B83201134;
+        Mon, 11 Apr 2022 22:56:34 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 11 Apr 2022 22:56:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1649732194; x=
+        1649818594; bh=GEVsmM8mHkm2qG9DTDJgBu3H8Y9rP3KCaLB0pTjkV5s=; b=G
+        vqYuC1RwjHaEKN20jPrg/yicidZ2nqNoJ2CRITPHmY8knRo/a5PW1Vy4vqkM3pwT
+        5VDLFmJe3UFS9YexgXgpQh86JUP4Z/0Yny4uZS2sES2N369XBtiqju2ferrZeM1B
+        EVgxPioUk3DEYHXigkKmoNWDs6DEFsD4KH+73n7O1jZrDuHPb44lynRpfeSXAHax
+        PUixnA2yP1Fx0xqY3HsudNMdKJhlKYw2QWAf4XltHPgOwX7Xw1X3eFKeEyDfEySO
+        VCztEDKxjBxg4jwkfQnlcQG0zgmkLKyJD5f6/hz6318UMmHSjxUTvnnw2hEd69SX
+        /ImufdQIXHcxh3QwzPF3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1649732194; x=1649818594; bh=GEVsmM8mHkm2q
+        G9DTDJgBu3H8Y9rP3KCaLB0pTjkV5s=; b=RHbmbrRjpYdes/hY+qNpyMtTGA7Vt
+        v2o9jaYz/ghQV6r/b4JabiNX+DQvyNWpIplpm9DsWnG1rL0YacZ/FII8Im4+9TQ5
+        BkZFmDys9Z6d5gtgEumkx68/TZm6SNXJv/LaJ39wrbgE91AVMJeP06ruZzgce1jh
+        Bh2EnPTB2mGhwOqWnaDOgo1STWlEB3YQZ4lZ8AK7A8srL8rQ8OdceAbdN5f/zcSK
+        qc7z6vrhpxvsEf+WBn6Rw4mHcHzo0FQ+Vs/qWEcUGhVYysGYe7EhAehi9TbWaMP6
+        FhmBO0cGcpg1TMr8dom4wAPI6hnA4Wmb79ZHcAvjmKRTOAQndkFTuCNIg==
+X-ME-Sender: <xms:YepUYg6C6oiPRMxmgjjI9LV9IbU33EiZ1mglFefbQN4WmAhMKqy8Cg>
+    <xme:YepUYh4QkE1fWKFstK5Ua-ye-x2udMZOn9KRNzoNmsiPMSmb24DnCyoAET15gBE9J
+    tIJ86wWpx7Ivv6emg>
+X-ME-Received: <xmr:YepUYvco2kvij6BP1YI2gzxmwuw4qePQhGGUawxvLTRjl-WKn-P1AAw4GsfrR1k2DZHOZeutCH4N0TZJB5aIyT3FApUy2Feft4T_CirlkG7lFA0iphTQGeeUHg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekjedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfelkeduveejtdejhfeiledvhfeggeeiieeklefhfeefffffffeg
+    udetteelieejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:YepUYlLHSIcWA_HfEcGpcgURZgVRR5Jquw3pvxmwwBAK81VncHqRKg>
+    <xmx:YepUYkJO7BQTpjaeGpZlDZDnr6zO9VMyHr9RtT_k3tlGfqwkIovYHA>
+    <xmx:YepUYmw6qxhWvT_NAC1uJnjAZ-_Y7zefUor75-DkmBLEaBlXWjxyzA>
+    <xmx:YupUYhD16u6z1peFxWat0RxNgFZVyHG8fe8B4pjvTgWzoB_gN1q2kA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Apr 2022 22:56:32 -0400 (EDT)
+Subject: Re: [PATCH 03/10] drm/sun4i: Remove obsolete references to
+ PHYS_OFFSET
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20220411043423.37333-1-samuel@sholland.org>
+ <20220411043423.37333-4-samuel@sholland.org> <3167527.44csPzL39Z@kista>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <04d64c79-8379-7fad-2554-c8b88d733ec0@sholland.org>
+Date:   Mon, 11 Apr 2022 21:56:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <a190e78f-d833-780b-6fbe-b129c2505deb@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <3167527.44csPzL39Z@kista>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/11 19:41, David Hildenbrand wrote:
-> On 09.04.22 09:38, Miaohe Lin wrote:
->> __migration_entry_wait and migration_entry_wait_on_locked assume pte is
->> always mapped from caller. But this is not the case when it's called from
->> migration_entry_wait_huge and follow_huge_pmd. And a parameter unmap to
->> indicate whether pte needs to be unmapped to fix this issue.
+On 4/11/22 10:37 AM, Jernej Škrabec wrote:
+> Dne ponedeljek, 11. april 2022 ob 06:34:15 CEST je Samuel Holland napisal(a):
+>> commit b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a
+>> central place") added a platform device notifier that sets the DMA
+>> offset for all of the display engine frontend and backend devices.
+>>
+>> The code applying the offset to DMA buffer physical addresses was then
+>> removed from the backend driver in commit 756668ba682e ("drm/sun4i:
+>> backend: Remove the MBUS quirks"), but the code subtracting PHYS_OFFSET
+>> was left in the frontend driver.
+>>
+>> As a result, the offset was applied twice in the frontend driver. This
+>> likely went unnoticed because it only affects specific configurations
+>> (scaling or certain pixel formats) where the frontend is used, on boards
+>> with both one of these older SoCs and more than 1 GB of DRAM.
+>>
+>> In addition, the references to PHYS_OFFSET prevent compiling the driver
+>> on architectures where PHYS_OFFSET is not defined.
+>>
+>> Fixes: b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a central 
+> place")
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > 
-> Hm.
+> Good catch! Actually, people complained about non-working display on 
+> Cubietruck IIRC, which has 2 GB of RAM.
 > 
-> 
-> migration_entry_wait_on_locked documents
-> 
-> "@ptep: mapped pte pointer. Will return with the ptep unmapped. Only
-> required for pte entries, pass NULL for pmd entries."
-> 
-> Setting ptep implies that we have a *mapped pte* pointer that requires unmap.
-> If some code sets that although that's not guaranteed, that calling code
-> is wrong and needs to be fixed to not pass a ptep.
-> 
-> 
-> hugetlbfs never requires a map/unmap. I really don't see we there is need to
-> adjust migration_entry_wait_on_locked(): just don't pass a ptep as documented.
-> 
-> What's really nasty here is that hugetlbfs actually mostly works on PMD/PUD,
-> but we call it PTEs. One corner case might be CONT PTEs, but they are also
-> accessed without a map+unmap.
-> 
-> Regarding __migration_entry_wait(), I think we should just stop using it for
-> hugetlbfs and have a proper hugetlbfs variant that calls
-> hugetlb_migration_entry_wait(ptep == NULL), and knows that although we're
-> handling ptes, we're usually not actually holding ptes in our hands
-> that need a map+unmap.
-> 
-> 
-> Something like (including some cleanups mm parameter):
+> Did you test this on HW?
 
-This really helps! Many thanks! Will try to do this in next version. :)
+The only DE1 board I have is an A33 tablet with 512 MB of DRAM. So while I
+boot-tested the patch, I am not able to verify if it has any real effect.
 
-> 
-> 
-> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> index 32d517a28969..898c407ad8f7 100644
-> --- a/include/linux/swapops.h
-> +++ b/include/linux/swapops.h
-> @@ -234,8 +234,8 @@ extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->  					spinlock_t *ptl);
->  extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->  					unsigned long address);
-> -extern void migration_entry_wait_huge(struct vm_area_struct *vma,
-> -		struct mm_struct *mm, pte_t *pte);
-> +extern void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl);
-> +extern void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte);
->  #else
->  static inline swp_entry_t make_readable_migration_entry(pgoff_t offset)
->  {
-> @@ -261,8 +261,9 @@ static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->  					spinlock_t *ptl) { }
->  static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->  					 unsigned long address) { }
-> +static inline void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl) { }
->  static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
-> -		struct mm_struct *mm, pte_t *pte) { }
-> +					     pte_t *pte) { }
->  static inline int is_writable_migration_entry(swp_entry_t entry)
->  {
->  	return 0;
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 48740e6c3476..2b38eaaa2e60 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -5622,7 +5622,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->  		 */
->  		entry = huge_ptep_get(ptep);
->  		if (unlikely(is_hugetlb_entry_migration(entry))) {
-> -			migration_entry_wait_huge(vma, mm, ptep);
-> +			migration_entry_wait_huge(vma, ptep);
->  			return 0;
->  		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
->  			return VM_FAULT_HWPOISON_LARGE |
-> @@ -6770,7 +6770,7 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
->  	} else {
->  		if (is_hugetlb_entry_migration(pte)) {
->  			spin_unlock(ptl);
-> -			__migration_entry_wait(mm, (pte_t *)pmd, ptl);
-> +			__migration_entry_wait_huge((pte_t *)pmd, ptl);
->  			goto retry;
->  		}
->  		/*
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 231907e89b93..84b685a235fe 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -315,11 +315,26 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->  	__migration_entry_wait(mm, ptep, ptl);
->  }
->  
-> +void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl)
-> +{
-> +	swp_entry_t entry;
-> +	pte_t pte;
-> +
-> +	spin_lock(ptl);
-> +	pte = huge_ptep_get(ptep);
-> +
-> +	if (unlikely(!is_hugetlb_entry_migration(pte)))
-> +		spin_unlock(ptl);
-> +	else
-> +		migration_entry_wait_on_locked(pte_to_swp_entry(pte), NULL, ptl);
-> +}
-> +
->  void migration_entry_wait_huge(struct vm_area_struct *vma,
->  		struct mm_struct *mm, pte_t *pte)
->  {
-> -	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), mm, pte);
-> -	__migration_entry_wait(mm, pte, ptl);
-> +	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->mm, pte);
-> +
-> +	__migration_entry_wait_huge(pte, ptl);
->  }
->  
->  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> 
+The reason for sending this is that folks ran in to compilation errors on
+RISC-V. And I was surprised to still see references to PHYS_OFFSET, since
+sunxi_mbus.c includes the frontend compatibles.
 
+Regards,
+Samuel
+
+> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> 
+> Best regards,
+> Jernej

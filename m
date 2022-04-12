@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BB64FE4F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72CD4FE4FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357156AbiDLPmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S1357214AbiDLPnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242784AbiDLPmV (ORCPT
+        with ESMTP id S1357205AbiDLPnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:42:21 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAD75C661;
-        Tue, 12 Apr 2022 08:40:02 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so13614444otj.10;
-        Tue, 12 Apr 2022 08:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=updOeMl3EWnF1pS4jf+Nm9m7E0WIYeBIm4x0SWDVuQY=;
-        b=PQ1wyr2FrAehgU4XTU9Yq48fQ96SLtAlPQ1SmXWhEoqumJPpAQsYXy1tAj3/aUXef0
-         mGuT0p+Fb30D00GWkZPd6bty/UWN7noW5Kbb9PsRM2XKvpBMl/1jJyOj8gRtSo5fjWQn
-         XVO4MXgvOy4EvcS5m2JwvjJU1EFAmLhiIk3xzH0WB1Nwp0ijnfEcOd5X1gT3V2tw5o42
-         8X7ZsuixtWfhS8w7XKBgWuhNeOrxIB8caNYeF4cv58bVBfa4YLsAwSvZ47gga1wIew+j
-         OnFT/9p5yl7y6QoDuj8lTpQkqzqoV+EL1xQFV1mBqKzamEX1zjBTJMPsSN7TCm3zY7U+
-         fKQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=updOeMl3EWnF1pS4jf+Nm9m7E0WIYeBIm4x0SWDVuQY=;
-        b=gEqa4dHYwXhuvnY4hhEcGp8BonvWd79Qn3MQMp2GgklpGahhUeQjJyTFLpVNoIJONO
-         6U+xNTxCCluS+7qXM/973lcKBlcxjfv6Gof0BZ8iv9N1tgCkOiB0UliSWxu+rUnXqZDB
-         Uho2+Qtr8rNHSnzx3RvcMMy/vlySMB/2DP1Slo7lEZkH3zthRcFGkOwbJVkAtwHmjM4h
-         VT+xku1pLzo1i5vsMIQw53PbsTv1bgjR5N3XzPY2qOkQPeWtI74ax3hmJJjFoglT9qCJ
-         touaa4ZiY5CQXfUhcRRy0zoX1EdhxK+XPR6r71TsYHz7uIHN3kN3hGhUDDLUcF7H14Hz
-         mFxA==
-X-Gm-Message-State: AOAM533w1h+whPg4eo7AYDAWKKRenWy+CJ8fo1PCpXQL1yDK3Og+WUlZ
-        ScvHQ6lrXVxW9pe0MnXWi7XgnE8WvZ8=
-X-Google-Smtp-Source: ABdhPJy/T/3w8cKGQssXTNtCqPm9zBUIk/NHOB/rjCK54RUN25uHKkBKjcc5oxStvgusk0u6YDxKxw==
-X-Received: by 2002:a9d:4c14:0:b0:5e6:c6be:824d with SMTP id l20-20020a9d4c14000000b005e6c6be824dmr7488255otf.204.1649778002283;
-        Tue, 12 Apr 2022 08:40:02 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm12694109oig.52.2022.04.12.08.40.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 08:40:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6d0ce49e-06e8-ce9b-ee8d-8bbabbe398f5@roeck-us.net>
-Date:   Tue, 12 Apr 2022 08:39:59 -0700
+        Tue, 12 Apr 2022 11:43:35 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7029B5FF0E;
+        Tue, 12 Apr 2022 08:41:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ji9p3k+DZNSkPSFRD4DA1jqza+5s1gUPzla0dzs1tqGPMolaV8uvDVblnk+XcCxYwm5sIOzBagqMRDd4kS422e507Rdtf+jS061xuZnbj5L6ZJOt7LQw9frYm6kKIEiCE1XhMY2gXrKZ9LxzEOZVOnF17/X8vA5EZFMVQ3H+fvlZ6+B3PGNskvL4ruBdPzkCdwvYDCpLzdnjZeNn24P8AH8ooKn6h+4uzp4Tr49qGSDnQRapdHdbGTjGDwmNkMYVlpdyguF3z1Gr1WWYSynEjGhoanJqniTRTgAAokJcecS/IaZ+5dUmIuKdyppWJoqM/GpRLyQR9zcCTN4p+3mjpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uwS8/y7TLBaZ8jiuFYLOUTUxrfzCDNkakjMKigS8Qqs=;
+ b=iherAi5NAfFKTI2BkSsmtZuAAOswch9C8Zz09KvDHcelpuW99niyf7izIy2x2SY7jjrT++id44i8HN5lFtw3L7wAsmT8YxcT1q88QzEHeYy2JNOdFi1eOwho4zfviVcQhwuZwy6p8EYiOxbn0sxq9g3JYvR89C/vZk6X57xnF75op/nq1Kv2YpsSydPeCQfh3BT36J88wdAHnzzqYAZJX/Dt0x7u82cScfON2dlXGaX/0UZ/ROTuqfPbLCA//ZN8x+1GAod31ib4+Zud+uLd7LGhlXWoJ/QzoyVFtws8anfBfKovWFduFAlz5H8onpryHdSdIVMM5KEgvOQ5z1XMrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uwS8/y7TLBaZ8jiuFYLOUTUxrfzCDNkakjMKigS8Qqs=;
+ b=AaYSB4JvUGRW6SpqKA0KS+MqECYQFde44pjMcmunKem/KFu7HEZVnCkYOhTxjK5YM7dz/f5Co7XO/AwXLfZgSZUODWKglQDWEpuqI6HXu6O9PScirlPwy8+m3BXQuPOyZVCOjeJiyOlO6mBUxyl4x5snZSBmWB9Df4BrQPv39sk=
+Received: from MW4PR04CA0376.namprd04.prod.outlook.com (2603:10b6:303:81::21)
+ by CY4PR12MB1541.namprd12.prod.outlook.com (2603:10b6:910:7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
+ 2022 15:41:02 +0000
+Received: from CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::53) by MW4PR04CA0376.outlook.office365.com
+ (2603:10b6:303:81::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18 via Frontend
+ Transport; Tue, 12 Apr 2022 15:41:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT051.mail.protection.outlook.com (10.13.174.114) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5144.20 via Frontend Transport; Tue, 12 Apr 2022 15:41:01 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 12 Apr
+ 2022 10:40:57 -0500
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        <hpa@zytor.com>, Yazen Ghannam <yazen.ghannam@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH v5 0/2] x86/mce: Support extended MCA_ADDR address on SMCA systems
+Date:   Tue, 12 Apr 2022 10:40:36 -0500
+Message-ID: <20220412154038.261750-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Michael Ellerman <mpe@ellerman.id.au>
-References: <20220412062942.022903016@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 454b51a0-977c-46bd-c359-08da1c9ad92b
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1541:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB154151116CFE83BD53AB7A9090ED9@CY4PR12MB1541.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VkpTMFgzQCDTGA4JQbGSPUg3thEU1/R//MoWeMBg/6kMTrzcDEnirHK7m+D/DhFluLPb0BfeDt8aTPIhPDRylrYE2y88LUz2+MquOejTcUKONbmfB5XYaBClduN7NG8b2mHAdX/nTYXBpD9/+0k+8HrM1ACP5MiJXvVr7iDYGCLMkdKg8KraXYUPADYqRxrFtjTD4sOYcCEbw0Lsadiu4I3Zx7GmTfpHS2w5Qh2ql3d4MnADUrezjIKoBrGyYlAI0D2y7qt14mv5QZYZ60zHoFo8ySPeOIJQRelJ+VHr3UMdCodETJr78JJo7WmfJMUo/vrR753GCQ0D91U7OShS0foqAhu5XdvEbRFM1Enk0hm2vA/ivrIzfYQiSJX9lEr8kSSpJKW8ienf/CexpfJ2QAdO69+nQ9ZKH2nfgwlSsjxXnsofJqY+89gawEw595ySvzwPYOMdXkKtSvRztxYeOgaVGHMV82Gc5y5Jz0u23yCFjhu53X+nnuaGNoiQcoOVCzHjF+RoSGbJJVVvbIA3o1+vWmYDUrpo455RtYPYM8usvmYX5Uy030zKnK+XRUHfrZIpStvqkkTYxqYDL3Bq6iGTBYjUTaEU4/yXEyMCvFta66QEqfpJEa3S/emt+d5Ts0xI+xBVtDK5hkZTqKtMI1/B4dqgdTKjh9IaMNZj0a6z//5JCsqmNDP+StMQWx2FXb2y4WCXQB6JN2N+5CfiUnDd1ZQvxE/QdT+9Sd/abKygoYQ2OxyPfYpm684dJnkJ4Ae1dkAHsFIgVS53SI6DBWrjIIEX8flrw25LjUyXzK8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(1076003)(8676002)(70206006)(70586007)(2616005)(83380400001)(4326008)(16526019)(26005)(47076005)(336012)(426003)(86362001)(5660300002)(36756003)(508600001)(54906003)(966005)(110136005)(8936002)(82310400005)(186003)(4744005)(81166007)(316002)(7696005)(36860700001)(40460700003)(6666004)(2906002)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 15:41:01.8536
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 454b51a0-977c-46bd-c359-08da1c9ad92b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1541
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 23:26, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.34 release.
-> There are 277 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
-> Anything received after that time might be too late.
-> 
+This series of patches adds support for extended physical address on newer
+AMD CPUs.
 
+The first patch defines a separate helper function to extract
+MCA_ADDR[ErrorAddr]. And the second patch adds support for extended
+ErrorAddr bits in MCA_ADDR.
 
-Building powerpc:skiroot_defconfig ... failed
---------------
-Error log:
-arch/powerpc/lib/code-patching.c:119:19: error: conflicting types for 'unmap_patch_area'; have 'int(long unsigned int)'
-   119 | static inline int unmap_patch_area(unsigned long addr)
-       |                   ^~~~~~~~~~~~~~~~
-arch/powerpc/lib/code-patching.c:51:13: note: previous declaration of 'unmap_patch_area' with type 'void(long unsigned int)'
-    51 | static void unmap_patch_area(unsigned long addr);
-       |             ^~~~~~~~~~~~~~~~
-arch/powerpc/lib/code-patching.c:51:13: error: 'unmap_patch_area' used but never defined [-Werror]
+Link:
+https://lkml.kernel.org/r/20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com
 
-Commit 520c23a20890 ("powerpc/code-patching: Pre-map patch area")
-is the last patch in a series of patches applied to the file since v5.15.
-It is not tagged for stable, and it does not include a Fixes: tag.
-I am not sure if it makes sense to apply it on its own. Copying
-Michael.
+Smita Koralahalli (2):
+  x86/mce: Define function to extract ErrorAddr from MCA_ADDR
+  x86/mce: Add support for Extended Physical Address MCA changes
 
-Guenter
+ arch/x86/kernel/cpu/mce/amd.c      | 21 ++++++++-------
+ arch/x86/kernel/cpu/mce/core.c     | 21 ++++-----------
+ arch/x86/kernel/cpu/mce/internal.h | 41 ++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 25 deletions(-)
+
+-- 
+2.17.1
+

@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A420D4FD912
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AFC4FD470
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386820AbiDLJEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S1386313AbiDLIzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359036AbiDLHm1 (ORCPT
+        with ESMTP id S1359420AbiDLHnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:27 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B6F54FBB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:20:03 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id s6so3938807qta.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XvbKywfbm/xW7byqKZQzUxfarlYd7JRaSauDk7cot/s=;
-        b=R8F5T5+9GDyIxEi/DKA9g4pcixd9+sQKyQvYDCAo/eL4g9kmL0xUQb4FUzjPaRMS47
-         sOfG15j4SuMQf0pOCoe2h0vQkgr4GQeH6qdvrTNdYtdDzUY4mj9Ck1NzCErFI7dSFPQ7
-         azysapIySswploKHk3qMTX71RL4oF/zuqd2zxvLKam0sGwvLSsr4Bxhnz3c+qs9hPAxV
-         ydHmzj/Kv4Q0OCwR5/FeZUeu4adf1x6QwhUN8DHnEaKXxJTM76XTouyqfgBclt9ZFGXF
-         3b1CsSanEEREH8pCsGLb+q3TVVmJoRXGTc8EwFY8C02KdHcF6J3Hi6YGShc5g3OMNG7R
-         XSyA==
+        Tue, 12 Apr 2022 03:43:02 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9F2B2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:51 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id 3so5606899qkj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XvbKywfbm/xW7byqKZQzUxfarlYd7JRaSauDk7cot/s=;
-        b=zVp4q2KB+0PZZlRPqjLrqv1JiFK0RMOt5wscWv2+hYgcCHzXvYgJAU6bPwGCNVQ51T
-         EvH6QgGVYkMu4GdRM2Kg+UbzJebRNtEaDe+22OUb22/hNKnBFpykJhvJGUMZ9SUVz+4V
-         FgH4dnSjYpVzcWlxgiAIcUguferWGNcFOXjGHfIL8smR8kTm1hkTv7rh/WwLo+aTSrYu
-         p164KIs0KQBQDaZHRhtE/rKOhZ2nQwAjWkwoQum652hDTHGFVpmM12j+W+lxfuYmeL9v
-         e6Tpx+u7TVg6oCasiqfA5O1pmPTHE1OkNfQ/E+DOZECbto2KZHx1Ufrt4Ws8uop0dZxB
-         9GRg==
-X-Gm-Message-State: AOAM533WmWiiaaHWO4HdmJUWUKGF5Yd5puhY1VV2thRMQJtJ5Mk9zsQ+
-        iLAgcoQOrsVbrsoGQKfe69KUqa62QuM=
-X-Google-Smtp-Source: ABdhPJxEovphxMbVpe6bGcAdFG8wBzxYcIjvyJGtjzWiHCnDTOKXjW9BJhvdYMMObfsvCtRjPH5dEg==
-X-Received: by 2002:ac8:5e13:0:b0:2e1:cd7e:a29e with SMTP id h19-20020ac85e13000000b002e1cd7ea29emr2229127qtx.31.1649748002212;
-        Tue, 12 Apr 2022 00:20:02 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05620a209300b0069c0bef5892sm4701145qka.78.2022.04.12.00.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 00:20:01 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     bsingharora@gmail.com, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
-        xu xin <xu.xin16@zte.com.cn>
-Subject: [PATCH] kernel: make taskstats available from all net namespaces
-Date:   Tue, 12 Apr 2022 07:19:46 +0000
-Message-Id: <20220412071946.2532318-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h09al9GPNRGrgzoVRTG5PYUk3CouyOtKbjw7IpJLnEw=;
+        b=uL+kHwbVi2G3PLmHPKhQRezY1+QnylU84gIWnxwYLhAZf4lMYVuPsml1LuIOjLqbB9
+         193viVP9OmCOliEoozEq7s7ABQeinAN7Y5n60+KMioz2upgcBYS/69sBneeqIO1d18F/
+         3UTCroZSTQACfGriv9S9EHjjkVig1lO5bTNprfQKfvC3RJlKQ9ftmWvfXpipdbdUbXe7
+         pIBHHwqpD4N6UCQfVLC7rZjVsBV2WWf9Gcp+79ng0E6Hyb361J8hSJXNu7YjR35rU0Ds
+         bxcadl1RjuIg1LHwlFMzlBrqKDrm9DEXBx1OaSufCCiEjcjpQ/PGgdZGKsC8JIEz9/eH
+         qhJg==
+X-Gm-Message-State: AOAM531EDPPLs/tnrkDHpfwvWA26Z3xMz4JGb3HA5Kd2bSDHTnyeTpSe
+        cDX/tj+YtayhOLtwCg7pLl8gPnr8Ypojfr0n
+X-Google-Smtp-Source: ABdhPJzRblZrIN6hFP/yVqZSHVaElweTattpKSgtKz5iq+JvRRwl+bSx+IQp93wYLKIay/S5n1jO5g==
+X-Received: by 2002:ae9:e8d0:0:b0:69b:ef92:c0b with SMTP id a199-20020ae9e8d0000000b0069bef920c0bmr2105500qkg.498.1649748230394;
+        Tue, 12 Apr 2022 00:23:50 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id c7-20020a37e107000000b0069c126c5107sm3890118qkm.39.2022.04.12.00.23.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 00:23:50 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id x200so7868086ybe.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:23:49 -0700 (PDT)
+X-Received: by 2002:a25:29c2:0:b0:641:224f:17d6 with SMTP id
+ p185-20020a2529c2000000b00641224f17d6mr10498662ybp.546.1649748229732; Tue, 12
+ Apr 2022 00:23:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-5-javierm@redhat.com>
+In-Reply-To: <20220411211243.11121-5-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Apr 2022 09:23:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
+Message-ID: <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] drm/solomon: Move device info from ssd130x-i2c to
+ the core driver
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hi Javier,
 
-If getdelays run in a non-init network namespace, it will fail in
-getting delayacct stats even if it has privilege of root user, which
-seems to be not very reasonable. We can simply reproduce this by
-executing commands:
-	unshare -n
-	getdelays -d -p <pid>
+Thanks for your patch!
 
-I don't think net namespace should be an obstacle to the normal
-execution of getdelay function. So let's make it available from
-all net namespaces.
+On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> These are declared in the ssd130x-i2c transport driver but the information
+> is not I2C specific, and could be used by other SSD130x transport drivers.
+>
+> Move them to the ssd130x core driver and just set the OF device entries to
+> an ID that could be used to lookup the correct device info from an array.
+>
+> While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
+> bytes. Since even though are used by the I2C interface, it could also be
 
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- kernel/taskstats.c | 1 +
- 1 file changed, 1 insertion(+)
+though they are ... they could
 
-diff --git a/kernel/taskstats.c b/kernel/taskstats.c
-index 72415e22342b..f7e246336218 100644
---- a/kernel/taskstats.c
-+++ b/kernel/taskstats.c
-@@ -688,6 +688,7 @@ static struct genl_family family __ro_after_init = {
- 	.module		= THIS_MODULE,
- 	.ops		= taskstats_ops,
- 	.n_ops		= ARRAY_SIZE(taskstats_ops),
-+	.netnsok	= true,
- };
- 
- /* Needed early in initialization */
--- 
-2.25.1
+> useful for other transport protocols such as SPI.
+>
+> Suggested-by: Chen-Yu Tsai <wens@kernel.org>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
+> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+
+> @@ -860,7 +890,14 @@ struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap)
+>
+>         ssd130x->dev = dev;
+>         ssd130x->regmap = regmap;
+> -       ssd130x->device_info = device_get_match_data(dev);
+> +
+> +       variant = (enum ssd130x_variants)device_get_match_data(dev);
+
+(uintptr_t), to avoid a cast from pointer to integer of different
+size warning.
+
+> +
+
+Please drop the blank line.
+
+> +       if (variant >= NR_SSD130X_VARIANTS)
+> +               return ERR_PTR(dev_err_probe(dev, -EINVAL,
+> +                                            "Invalid SSD130x variant\n"));
+> +
+> +       ssd130x->device_info = &ssd130x_variants[variant];
+>
+>         if (ssd130x->device_info->page_mode_only)
+>                 ssd130x->page_address_mode = 1;
+
+With the above fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

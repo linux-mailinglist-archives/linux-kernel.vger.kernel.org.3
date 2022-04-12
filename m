@@ -2,127 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4054FDC52
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D6A4FDC44
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359604AbiDLKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S243283AbiDLKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359459AbiDLJ7T (ORCPT
+        with ESMTP id S1357785AbiDLJzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:59:19 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8671FCFC;
-        Tue, 12 Apr 2022 02:03:46 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l7so30543765ejn.2;
-        Tue, 12 Apr 2022 02:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=70TMPjs2G4Sxbi1aiGiAsrrAufNW6Ksdkcybh7WxoB8=;
-        b=GEzmKtdFUICh2CcidOrecNvoQEhsKuI67kkEbuc2hczZVN+u1r9PUNfPWi92xi92F+
-         xSJvwV7bQQZCXInvJ2F0nu6byEHBsLzHS69h85zYV34uRkWAk7NTodkr36aBYKXnA0aq
-         VI2Sel8DvstfsyD+ocJToMyCcp4jCIBtHHouJRHQmjQgMmigUEgZtPiJglCKIL2dYqRI
-         ruo2jsuVfnUG/ocsSOY+crhkjsOJpAxwT2xbVekJ6iV6ZSrljy3vFwvDagpwiGpOpLiw
-         k9dI4sZ97e1nJrjFKwMTu9OMVeMMIhQzZZvSkSmOY7r8lcx6o8ULmVrsIW1Bp+wLpJ9a
-         9cxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=70TMPjs2G4Sxbi1aiGiAsrrAufNW6Ksdkcybh7WxoB8=;
-        b=zPV1NN0SiWNuzjemTzFSrrmxI85Zcy6q9fiNUKxwJlmhXbumEHgRPitov1rFxY8U55
-         9ewuKugrqOymdmzmvtv7M1zxVDcHNhJxDweS0x/F4qpMi1ZrDlg/5eWToC9BZzQnQ3xR
-         jskIwKEtpA6EX0QIwvG74Z9x++Dk9mmTA96Gg0sfjxvtP1mH93c2eIZKGGBbQgTwZuLx
-         uU42m+F9quje4GpgWtSr5gVic/FAc++LQWTeKCVSLO+XQ0DLaSI4thtCgPMP3otGEwti
-         dFx2CCI4Gl9mNLYVp1mzo1szGc4x+NNDnX1k/6heKLLtIIPf3Gep+X5l+g6lLZrgGmsV
-         jNLw==
-X-Gm-Message-State: AOAM533rZpxE0BhmsyTCW/YxTbnjuGKqtp5qneHC/Vc/6eLU7Iye9ngH
-        Wyldp11+oyFGSOqFsXNcMl9h2CJPw8WzW9LN0Rs=
-X-Google-Smtp-Source: ABdhPJzLoY7VZJrAuBDBL4jnbvvPHu5VHjiARPtktQLW6/PHvVE7xQZqjuQStZkyjWLmt6MSRGiK/7kVLjioOAqxfOw=
-X-Received: by 2002:a17:907:8a05:b0:6e8:441c:358d with SMTP id
- sc5-20020a1709078a0500b006e8441c358dmr20635472ejc.77.1649754224895; Tue, 12
- Apr 2022 02:03:44 -0700 (PDT)
+        Tue, 12 Apr 2022 05:55:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7335E2654B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:59:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 15FF4210F4;
+        Tue, 12 Apr 2022 08:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649753994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dXcY0HxQD9QkaG2No5hFxre2uSwE5KR0ptaqz9/fqEk=;
+        b=MGW40pK02mzEEDHBwBA/uzxo7HodeYyTTwL8q/BmidqNqZZ/3cZbod6dMpog1L3fq5jsrc
+        dwfl54xzecqe7ItCAH4dWXYOKgxvpP6UhpnQvQS00d9xMw99yF6XUfTUi/R74KVhDhh6EP
+        ic39NqRgonS+QdgDnmnJKQzmAU7cdIk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649753994;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dXcY0HxQD9QkaG2No5hFxre2uSwE5KR0ptaqz9/fqEk=;
+        b=YQdOsW4MALpmgNzrAteIibSpYMZY8u/lNgFKPpFXk0hcM1LSwIcmSBjgiat41EMJ+EGYPO
+        eYwvI6YAIE9nc7DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D8B713780;
+        Tue, 12 Apr 2022 08:59:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uY5JG4k/VWJbIQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 12 Apr 2022 08:59:53 +0000
+Date:   Tue, 12 Apr 2022 10:59:51 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
+        songmuchun@bytedance.com, hch@infradead.org, willy@infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] mm/vmscan: remove unneeded can_split_huge_page
+ check
+Message-ID: <YlU/h0fdE1L846Bd@localhost.localdomain>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+ <20220409093500.10329-3-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20220411203133.19929-1-jagathjog1996@gmail.com> <20220411203133.19929-2-jagathjog1996@gmail.com>
-In-Reply-To: <20220411203133.19929-2-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 12 Apr 2022 11:59:32 +0300
-Message-ID: <CAHp75Vf8X4b2jeNKFcOLP+0XGcFbk0aS-_iN5vqAQOBf+e1VqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] iio: accel: bma400: Fix the scale min and max
- macro values
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409093500.10329-3-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:31 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> Changing the scale macro values to match the bma400 sensitivity
-> for 1 LSB of all the available ranges.
+On Sat, Apr 09, 2022 at 05:34:53PM +0800, Miaohe Lin wrote:
+> We don't need to check can_split_folio() because folio_maybe_dma_pinned()
+> is checked before. It will avoid the long term pinned pages to be swapped
+> out. And we can live with short term pinned pages. Without can_split_folio
+> checking we can simplify the code. Also activate_locked can be changed to
+> keep_locked as it's just short term pinning.
 
-Shouldn't this carry a Fixes tag?
+What do you mean by "we can live with short term pinned pages"?
+Does it mean that it was not pinned when we check
+folio_maybe_dma_pinned() but now it is?
 
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+To me it looks like the pinning is fluctuating and we rely on
+split_folio_to_list() to see whether we succeed or not, and if not
+we give it another spin in the next round?
+
+> Suggested-by: Huang, Ying <ying.huang@intel.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  drivers/iio/accel/bma400.h | 23 +++++++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> index c4c8d74155c2..5d6a1976503f 100644
-> --- a/drivers/iio/accel/bma400.h
-> +++ b/drivers/iio/accel/bma400.h
-> @@ -83,8 +83,27 @@
->  #define BMA400_ACC_ODR_MIN_WHOLE_HZ 25
->  #define BMA400_ACC_ODR_MIN_HZ       12
->
-> -#define BMA400_SCALE_MIN            38357
-> -#define BMA400_SCALE_MAX            306864
-> +/*
-> + * BMA400_SCALE_MIN macro value represents m/s^2 for 1 LSB before
-> + * converting to micro values for +-2g range.
-> + *
-> + * For +-2g - 1 LSB = 0.976562 milli g = 0.009576 m/s^2
-> + * For +-4g - 1 LSB = 1.953125 milli g = 0.019153 m/s^2
-> + * For +-16g - 1 LSB = 7.8125 milli g = 0.076614 m/s^2
-> + *
-> + * The raw value which is used to select the different ranges is determined
-> + * by the first bit set position from the scale value, so BMA400_SCALE_MIN
-> + * should be odd.
-> + *
-> + * Scale values for +-2g, +-4g, +-8g and +-16g is populated into bma400_scales
-
-are populated
-
-> + * array by left shifting BMA400_SCALE_MIN.
-> + * eg:
-
-e.g.:
-
-> + * To select +-2g = 9577 << 0 = raw value to write is 0.
-> + * To select +-8g = 9577 << 2 = raw value to write is 2.
-> + * To select +-16g = 9577 << 3 = raw value to write is 3.
-> + */
-> +#define BMA400_SCALE_MIN            9577
-> +#define BMA400_SCALE_MAX            76617
->
->  #define BMA400_NUM_REGULATORS       2
->  #define BMA400_VDD_REGULATOR        0
-
+>  mm/vmscan.c | 22 ++++++++--------------
+>  1 file changed, 8 insertions(+), 14 deletions(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 4a76be47bed1..01f5db75a507 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1711,20 +1711,14 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+>  					goto keep_locked;
+>  				if (folio_maybe_dma_pinned(folio))
+>  					goto keep_locked;
+> -				if (PageTransHuge(page)) {
+> -					/* cannot split THP, skip it */
+> -					if (!can_split_folio(folio, NULL))
+> -						goto activate_locked;
+> -					/*
+> -					 * Split pages without a PMD map right
+> -					 * away. Chances are some or all of the
+> -					 * tail pages can be freed without IO.
+> -					 */
+> -					if (!folio_entire_mapcount(folio) &&
+> -					    split_folio_to_list(folio,
+> -								page_list))
+> -						goto activate_locked;
+> -				}
+> +				/*
+> +				 * Split pages without a PMD map right
+> +				 * away. Chances are some or all of the
+> +				 * tail pages can be freed without IO.
+> +				 */
+> +				if (PageTransHuge(page) && !folio_entire_mapcount(folio) &&
+> +				    split_folio_to_list(folio, page_list))
+> +					goto keep_locked;
+>  				if (!add_to_swap(page)) {
+>  					if (!PageTransHuge(page))
+>  						goto activate_locked_split;
+> -- 
+> 2.23.0
+> 
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Oscar Salvador
+SUSE Labs

@@ -2,88 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA6C4FD4F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EE44FD7EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388148AbiDLJVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S1389684AbiDLJYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377925AbiDLHyl (ORCPT
+        with ESMTP id S1377707AbiDLHxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:54:41 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8826D5047A;
-        Tue, 12 Apr 2022 00:31:55 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C7VnrD012170;
-        Tue, 12 Apr 2022 02:31:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649748709;
-        bh=vSHKAce0PuZloOOm4qVWYzbOX8w6lDDgPlaHriTZ10M=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=JqDbimH7940kctnxRkiuOG++gKolPnJBGU4z23O+P94wp9ar6/UclfGFIFiUFE+ps
-         B2Gu7thtSLJqbLZKMq/ziQE/GFBTt0XNyduZpVHR36MTBqw22imQOPZvIxMJIHr2Mx
-         bcDdiq2H0iNDjGhKLtlzzG7/+WQFW49qNmDo5wXE=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C7VnVM057477
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 02:31:49 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 02:30:21 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 02:30:20 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C7UKhI026798;
-        Tue, 12 Apr 2022 02:30:20 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <linux-crypto@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <j-choudhary@ti.com>,
-        <robh+dt@kernel.org>
-Subject: [PATCH 2/2] crypto: sa2ul: Add the new compatible for AM62
-Date:   Tue, 12 Apr 2022 13:00:16 +0530
-Message-ID: <20220412073016.6014-3-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220412073016.6014-1-j-choudhary@ti.com>
-References: <20220412073016.6014-1-j-choudhary@ti.com>
+        Tue, 12 Apr 2022 03:53:13 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF83A50057
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:31:22 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id b189so13076065qkf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:31:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vPZwLQHFGbE+YddKPiwbAMBD+8+olRhnFPT9yzLHixE=;
+        b=M2WEwWhsS5LUsL7JxqIMgLVWkxTd3CZbXf9y7CpyZ4uG0vD8865/ENv6Q1yBk619M9
+         pfNgXIYH+Ob8Uve6sjvq7OLZqyOdUC1/AhXOkZ0EcKc583c/TO3gM4hUqqOFkxiBLgGx
+         BXwdkKyyqgPnTZXQNkvouqe9FQZNMIKris5r1kfjxlRn0Oa3McUKzyQao6pl+gOTk9zp
+         5YvQ5EohAPQOJPlulwAzLNTc2z/rawfx1PbfGfkDNfkSYboNee4Fnrhbj9EJd/Af5i10
+         yjN6dCRxlm3GLk5MBahon+DuDdnqi4T7xnDf1APOY5/OVnEawrAwKqjMP35FXkIoe3oQ
+         1r9A==
+X-Gm-Message-State: AOAM531dttITz2aZpz6qU1kIvLV8HQfJAxksSAwhkzjPYWQZvZ4zbl1v
+        2bg5c88Enf2ryD9ChcUm87++R4u/OFRxIzzO
+X-Google-Smtp-Source: ABdhPJxdI6CnhoDqXHFEF6pMKo5b1kU2hJN1EbOPLOACfXGqo55I0QCiXPjvFHdq4Dw1nLU9MmEHMw==
+X-Received: by 2002:a37:4349:0:b0:680:f1f5:23b0 with SMTP id q70-20020a374349000000b00680f1f523b0mr2096137qka.530.1649748681853;
+        Tue, 12 Apr 2022 00:31:21 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id j21-20020ac85f95000000b002e1cde99863sm26257166qta.83.2022.04.12.00.31.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 00:31:21 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2edbd522c21so30953057b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:31:21 -0700 (PDT)
+X-Received: by 2002:a81:4f0d:0:b0:2ec:1556:815 with SMTP id
+ d13-20020a814f0d000000b002ec15560815mr8100148ywb.256.1649748680829; Tue, 12
+ Apr 2022 00:31:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-6-javierm@redhat.com>
+In-Reply-To: <20220411211243.11121-6-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Apr 2022 09:31:09 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWsmtBdcV=LL4yqprtbum4f9cSu8orjoPACECa5QENmsg@mail.gmail.com>
+Message-ID: <CAMuHMdWsmtBdcV=LL4yqprtbum4f9cSu8orjoPACECa5QENmsg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] drm/solomon: Add SSD130x OLED displays SPI support
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chen-Yu Tsai <wens@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <maxime@cerno.tech>,
+        YueHaibing <yuehaibing@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new compatible for am62x in of_match_table.
+Hi Javier,
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- drivers/crypto/sa2ul.c | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> The ssd130x driver only provides the core support for these devices but it
+> does not have any bus transport logic. Add a driver to interface over SPI.
+>
+> There is a difference in the communication protocol when using 4-wire SPI
+> instead of I2C. For the latter, a control byte that contains a D/C# field
+> has to be sent. This field tells the controller whether the data has to be
+> written to the command register or to the graphics display data memory.
+>
+> But for 4-wire SPI that control byte is not used, instead a real D/C# line
+> must be pulled HIGH for commands data and LOW for graphics display data.
+>
+> For this reason the standard SPI regmap can't be used and a custom .write
+> bus handler is needed.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-diff --git a/drivers/crypto/sa2ul.c b/drivers/crypto/sa2ul.c
-index 51b58e57153f..6957a125b447 100644
---- a/drivers/crypto/sa2ul.c
-+++ b/drivers/crypto/sa2ul.c
-@@ -2379,6 +2379,7 @@ static const struct of_device_id of_match[] = {
- 	{ .compatible = "ti,j721e-sa2ul", .data = &am654_match_data, },
- 	{ .compatible = "ti,am654-sa2ul", .data = &am654_match_data, },
- 	{ .compatible = "ti,am64-sa2ul", .data = &am64_match_data, },
-+	{ .compatible = "ti,am62-sa3ul", .data = &am64_match_data, },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, of_match);
--- 
-2.17.1
+Thanks for your patch!
 
+> --- /dev/null
+> +++ b/drivers/gpu/drm/solomon/ssd130x-spi.c
+
+> +static struct gpio_desc *ssd130x_spi_get_dc(struct device *dev)
+> +{
+> +       struct gpio_desc *dc = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
+> +
+> +       if (IS_ERR(dc))
+> +               return ERR_PTR(dev_err_probe(dev, PTR_ERR(dc), "Failed to get dc gpio\n"));
+> +
+> +       return dc;
+> +}
+> +
+> +static int ssd130x_spi_probe(struct spi_device *spi)
+> +{
+> +       struct ssd130x_spi_transport *t;
+> +       struct ssd130x_device *ssd130x;
+> +       struct regmap *regmap;
+> +       struct device *dev = &spi->dev;
+> +
+> +       t = devm_kzalloc(dev, sizeof(*t), GFP_KERNEL);
+> +       if (!t)
+> +               return dev_err_probe(dev, -ENOMEM,
+> +                                    "Failed to allocate SPI transport data\n");
+> +
+> +       t->spi = spi;
+> +
+> +       t->dc = ssd130x_spi_get_dc(&spi->dev);
+> +       if (IS_ERR(t->dc))
+> +               return PTR_ERR(t->dc);
+
+This can be simplified (no need for the PTR_ERR(ERR_PTR(...) dance)
+by open-coding ssd130x_spi_get_dc() here.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

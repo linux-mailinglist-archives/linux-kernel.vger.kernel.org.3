@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA114FD7B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7910B4FD5BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359017AbiDLIcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S1353377AbiDLHZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353513AbiDLHZn (ORCPT
+        with ESMTP id S1351607AbiDLHMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8698542EE4;
-        Tue, 12 Apr 2022 00:00:54 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EEB11A35;
+        Mon, 11 Apr 2022 23:50:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B06FB81B35;
-        Tue, 12 Apr 2022 07:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2768C385A6;
-        Tue, 12 Apr 2022 07:00:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 724A66103A;
+        Tue, 12 Apr 2022 06:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EFE9C385A1;
+        Tue, 12 Apr 2022 06:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746852;
-        bh=vSEirDE08DDshdO7veGpX3SMni+/P5RvHskaZiqXZ6o=;
+        s=korg; t=1649746229;
+        bh=yFy9U19sXHN41q82kKN50sXNb/tbKR+J5nGyLCB4Wqg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CdbeSHVTEU5SiwcyBoTowIC8T0Izi/S+vT/PT003QWbi1pOEERgXYIYcTWYMPsp8w
-         XC6UzfsckjLfCvCbv5xhi6/RlwPCZzS4u0Qj3WX/pt0YhMORWkET27EPAZ10Zvaw22
-         HAEnGYQqvCR7j5H5eXBwTwQyrfy6bbaWJqIhNMjs=
+        b=dLif6W3QMjVmqdLqUfT3QFEozwmGewlOHj8SQcdiWLP00i4puJEbAVcAvecUIaxnU
+         sp0vnevPDDdjsxW2VEdqTkkEvJYAdJjyKkg5wR+mhPJdC34dn1dobF3oCyOEVzvZLA
+         5K7afSJil0QwZD5HNTL4xzSeXzoDQuT5gqSOHKqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 152/285] drm/amdgpu: fix off by one in amdgpu_gfx_kiq_acquire()
-Date:   Tue, 12 Apr 2022 08:30:09 +0200
-Message-Id: <20220412062948.060922813@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 207/277] scsi: mpt3sas: Fix use after free in _scsih_expander_node_remove()
+Date:   Tue, 12 Apr 2022 08:30:10 +0200
+Message-Id: <20220412062948.030549519@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 1647b54ed55d4d48c7199d439f8834626576cbe9 ]
+commit 87d663d40801dffc99a5ad3b0188ad3e2b4d1557 upstream.
 
-This post-op should be a pre-op so that we do not pass -1 as the bit
-number to test_bit().  The current code will loop downwards from 63 to
--1.  After changing to a pre-op, it loops from 63 to 0.
+The function mpt3sas_transport_port_remove() called in
+_scsih_expander_node_remove() frees the port field of the sas_expander
+structure, leading to the following use-after-free splat from KASAN when
+the ioc_info() call following that function is executed (e.g. when doing
+rmmod of the driver module):
 
-Fixes: 71c37505e7ea ("drm/amdgpu/gfx: move more common KIQ code to amdgpu_gfx.c")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[ 3479.371167] ==================================================================
+[ 3479.378496] BUG: KASAN: use-after-free in _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.386936] Read of size 1 at addr ffff8881c037691c by task rmmod/1531
+[ 3479.393524]
+[ 3479.395035] CPU: 18 PID: 1531 Comm: rmmod Not tainted 5.17.0-rc8+ #1436
+[ 3479.401712] Hardware name: Supermicro Super Server/H12SSL-NT, BIOS 2.1 06/02/2021
+[ 3479.409263] Call Trace:
+[ 3479.411743]  <TASK>
+[ 3479.413875]  dump_stack_lvl+0x45/0x59
+[ 3479.417582]  print_address_description.constprop.0+0x1f/0x120
+[ 3479.423389]  ? _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.429469]  kasan_report.cold+0x83/0xdf
+[ 3479.433438]  ? _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.439514]  _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.445411]  ? _raw_spin_unlock_irqrestore+0x2d/0x40
+[ 3479.452032]  scsih_remove+0x525/0xc90 [mpt3sas]
+[ 3479.458212]  ? mpt3sas_expander_remove+0x1d0/0x1d0 [mpt3sas]
+[ 3479.465529]  ? down_write+0xde/0x150
+[ 3479.470746]  ? up_write+0x14d/0x460
+[ 3479.475840]  ? kernfs_find_ns+0x137/0x310
+[ 3479.481438]  pci_device_remove+0x65/0x110
+[ 3479.487013]  __device_release_driver+0x316/0x680
+[ 3479.493180]  driver_detach+0x1ec/0x2d0
+[ 3479.498499]  bus_remove_driver+0xe7/0x2d0
+[ 3479.504081]  pci_unregister_driver+0x26/0x250
+[ 3479.510033]  _mpt3sas_exit+0x2b/0x6cf [mpt3sas]
+[ 3479.516144]  __x64_sys_delete_module+0x2fd/0x510
+[ 3479.522315]  ? free_module+0xaa0/0xaa0
+[ 3479.527593]  ? __cond_resched+0x1c/0x90
+[ 3479.532951]  ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+[ 3479.539607]  ? syscall_enter_from_user_mode+0x21/0x70
+[ 3479.546161]  ? trace_hardirqs_on+0x1c/0x110
+[ 3479.551828]  do_syscall_64+0x35/0x80
+[ 3479.556884]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 3479.563402] RIP: 0033:0x7f1fc482483b
+...
+[ 3479.943087] ==================================================================
+
+Fix this by introducing the local variable port_id to store the port ID
+value before executing mpt3sas_transport_port_remove(). This local variable
+is then used in the call to ioc_info() instead of dereferencing the freed
+port structure.
+
+Link: https://lore.kernel.org/r/20220322055702.95276-1-damien.lemoal@opensource.wdc.com
+Fixes: 7d310f241001 ("scsi: mpt3sas: Get device objects using sas_address & portID")
+Cc: stable@vger.kernel.org
+Acked-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-index 1916ec84dd71..e7845df6cad2 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-@@ -266,7 +266,7 @@ static int amdgpu_gfx_kiq_acquire(struct amdgpu_device *adev,
- 		    * adev->gfx.mec.num_pipe_per_mec
- 		    * adev->gfx.mec.num_queue_per_pipe;
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -11035,6 +11035,7 @@ _scsih_expander_node_remove(struct MPT3S
+ {
+ 	struct _sas_port *mpt3sas_port, *next;
+ 	unsigned long flags;
++	int port_id;
  
--	while (queue_bit-- >= 0) {
-+	while (--queue_bit >= 0) {
- 		if (test_bit(queue_bit, adev->gfx.mec.queue_bitmap))
- 			continue;
+ 	/* remove sibling ports attached to this expander */
+ 	list_for_each_entry_safe(mpt3sas_port, next,
+@@ -11055,6 +11056,8 @@ _scsih_expander_node_remove(struct MPT3S
+ 			    mpt3sas_port->hba_port);
+ 	}
  
--- 
-2.35.1
-
++	port_id = sas_expander->port->port_id;
++
+ 	mpt3sas_transport_port_remove(ioc, sas_expander->sas_address,
+ 	    sas_expander->sas_address_parent, sas_expander->port);
+ 
+@@ -11062,7 +11065,7 @@ _scsih_expander_node_remove(struct MPT3S
+ 	    "expander_remove: handle(0x%04x), sas_addr(0x%016llx), port:%d\n",
+ 	    sas_expander->handle, (unsigned long long)
+ 	    sas_expander->sas_address,
+-	    sas_expander->port->port_id);
++	    port_id);
+ 
+ 	spin_lock_irqsave(&ioc->sas_node_lock, flags);
+ 	list_del(&sas_expander->list);
 
 

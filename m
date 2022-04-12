@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA424FCC5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE694FCC56
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244346AbiDLCSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S244548AbiDLCSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243840AbiDLCSc (ORCPT
+        with ESMTP id S243942AbiDLCSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:18:32 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C312B33A3E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:16:16 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id e189so17663106oia.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yJmVOiXHRC894zOY6mDb3Ms45ex+JV6XJHfYGj0ktxs=;
-        b=E6JCh905N2KkeZjfmODyDmP+/ngO2s+HrNbPj0kHEr5OD8GngGjgwFRimD1757vGxv
-         bP61qrph29/vElOkxw4LK++ubx4AL1eBwIUI91ZMH3c/3mhUYEzi2YS63ZJTdMShqu6/
-         kAa/GEjol69gGS6kd4vJeGhxEWSL4hP3Avt5xrxekisVNowe+D/Jbo6hQeilH1XY0Cno
-         muyMbKQWUpozGCX3N2pkdCuRqR+Bq/23CXn86SLCyeu1i/CrogR3C89efvTrV1aL3NoP
-         VzNoi1CldT9Q+uUm8uY0JU4pCMMpO6/FxZreLLlM5xjDvu9WNfQVBngSUiXjbP42rrRa
-         uTpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yJmVOiXHRC894zOY6mDb3Ms45ex+JV6XJHfYGj0ktxs=;
-        b=wOlbeWMykiE7fPky/3CDelZM0Nms0lmhwuN+A+VMWBKkGKJSEPwvejfIXhTZum2mw3
-         s5UBFwrL9hkV4c5JeQ5Dr8k7rtCQlMSvRS94qlQm4XAnNkLr+k4O6fulfQiQSkdcrBRy
-         UjoRe21TKVZhe3hTAfWdWJjZU4HPdbu/vis9zumHgOxud06wAV0Uzn7rclGT3bR5lsB6
-         MlFehvVXx21DOV/x4PI7A0sbbwyb3mc7m5fCcQNrZ1VMvrndmTpEkPybjB58+67nicBt
-         Zndio+bVU75WLjwlyEDW6+DvfgKPGqsS4V+LH+FeSpWuHgQ7zVg2d7+xWcekIWcapCQQ
-         ZqvA==
-X-Gm-Message-State: AOAM5302afNS/HXJ8qQXnlkPAD3sx2VWoLtIrPQCfUTBHfo62a9uicp8
-        YofCBeCuKFqrQFXb1V8i+gkVIg==
-X-Google-Smtp-Source: ABdhPJxY6gBcnJ4YDZAXXBG3oCLvf6MOEE4hm/uV2wxXCElES4lKfHVqqCKExbMQ4KU9/Uvhnb6TRg==
-X-Received: by 2002:a05:6808:1704:b0:2f9:bb17:21f6 with SMTP id bc4-20020a056808170400b002f9bb1721f6mr803262oib.23.1649729776015;
-        Mon, 11 Apr 2022 19:16:16 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05683011c300b005e6e4a5bd35sm2164701otq.79.2022.04.11.19.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 19:16:15 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 21:16:13 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
- interconnect fields
-Message-ID: <YlTg7QPkWMBP4HAb@builder.lan>
-References: <20220407172145.31903-1-jonathan@marek.ca>
- <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
- <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
- <f1fb2d71-4adf-bcc7-76b3-c7102ab9f2e9@marek.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1fb2d71-4adf-bcc7-76b3-c7102ab9f2e9@marek.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 11 Apr 2022 22:18:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B633A1B;
+        Mon, 11 Apr 2022 19:16:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C27F61697;
+        Tue, 12 Apr 2022 02:16:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DBAC385A4;
+        Tue, 12 Apr 2022 02:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649729777;
+        bh=+vTX2+LmH++7Pu5Shh4Uo4lXVzWdHkKYI41k6YSLJJE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=v7M7INNLgEZQE6SBiglzE66UBjgkcXhuHBB5+i1GqjY3bnVXvwddo7ZV+t64wV8jW
+         rQswAF4M1KJZDWoB+yWTRxmIa8yOkVwrjoqEzbqgpuH20d7tceiFye8aJhHv2U6dXc
+         cVYYtMP4kr5qoIrc7sGwiQxWx7FrtUji3t7YTkZY=
+Date:   Mon, 11 Apr 2022 19:16:15 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, page-reclaim@google.com,
+        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?ISO-8859-1?Q? "Holger_Hoffst=E4tte" ?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
+Message-Id: <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
+In-Reply-To: <20220407031525.2368067-6-yuzhao@google.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+        <20220407031525.2368067-6-yuzhao@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,60 +86,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 07 Apr 17:38 CDT 2022, Jonathan Marek wrote:
+On Wed,  6 Apr 2022 21:15:17 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-> On 4/7/22 5:16 PM, Krzysztof Kozlowski wrote:
-> > On 07/04/2022 21:40, Vladimir Zapolskiy wrote:
-> > > On 4/7/22 20:21, Jonathan Marek wrote:
-> > > > Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
-> > > > Ignored and undocumented with upstream UFS driver so delete for now.
-> > 
-> > This is the upstream and they are documented here, although as pointed
-> > by Vladimir this was rather a reverse-documentation. The documentation
-> > might be incorrect, but then the bindings should be corrected instead of
-> > only modifying the DTS.
-> > 
-> > > 
-> > > Basically the description was added by a commit 462c5c0aa798 ("dt-bindings: ufs:
-> > > qcom,ufs: convert to dtschema").
-> > > 
-> > > It's questionable, if an example in the new yaml file is totally correct
-> > > in connection to the discussed issue.
-> > 
-> > To be honest - the example probably is not correct, because it was based
-> > on existing DTS without your patch. :)
-> > 
-> > Another question is whether the interconnect properties are here correct
-> > at all. I assumed that DTS is correct because it should describe the
-> > hardware, even if driver does not use it. However maybe that was a false
-> > assumption...
-> > 
+> Evictable pages are divided into multiple generations for each lruvec.
+> The youngest generation number is stored in lrugen->max_seq for both
+> anon and file types as they are aged on an equal footing. The oldest
+> generation numbers are stored in lrugen->min_seq[] separately for anon
+> and file types as clean file pages can be evicted regardless of swap
+> constraints. These three variables are monotonically increasing.
 > 
-> writing-bindings.rst says it is OK to document even if it isn't used by the
-> driver (seems wrong to me, at least for interconnects which are a firmware
-> abstraction and not hardware).
+> ...
+>
+> +static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
+
+There's a lot of function inlining here.  Fortunately the compiler will
+ignore it all, because some of it looks wrong.  Please review (and
+remeasure!).  If inlining is reqlly justified, use __always_inline, and
+document the reasons for doing so.
+
+> +{
+> +	int gen;
+> +	unsigned long old_flags, new_flags;
+> +
+> +	do {
+> +		new_flags = old_flags = READ_ONCE(folio->flags);
+> +		if (!(new_flags & LRU_GEN_MASK))
+> +			return false;
+> +
+> +		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
+> +		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+> +
+> +		gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
+> +
+> +		new_flags &= ~LRU_GEN_MASK;
+> +		/* for shrink_page_list() */
+> +		if (reclaiming)
+> +			new_flags &= ~(BIT(PG_referenced) | BIT(PG_reclaim));
+> +		else if (lru_gen_is_active(lruvec, gen))
+> +			new_flags |= BIT(PG_active);
+> +	} while (cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
+
+Clearly the cmpxchg loop is handling races against a concurrent
+updater.  But it's unclear who that updater is, what are the dynamics
+here and why the designer didn't use, say, spin_lock().  The way to
+clarify such thigs is with code comments!
+
+>  
+> +#endif /* !__GENERATING_BOUNDS_H */
+> +
+> +/*
+> + * Evictable pages are divided into multiple generations. The youngest and the
+> + * oldest generation numbers, max_seq and min_seq, are monotonically increasing.
+> + * They form a sliding window of a variable size [MIN_NR_GENS, MAX_NR_GENS]. An
+> + * offset within MAX_NR_GENS, gen, indexes the LRU list of the corresponding
+
+The "within MAX_NR_GENS, gen," text here is unclear?
+
+> + * generation. The gen counter in folio->flags stores gen+1 while a page is on
+> + * one of lrugen->lists[]. Otherwise it stores 0.
+> + *
+> + * A page is added to the youngest generation on faulting. The aging needs to
+> + * check the accessed bit at least twice before handing this page over to the
+> + * eviction. The first check takes care of the accessed bit set on the initial
+> + * fault; the second check makes sure this page hasn't been used since then.
+> + * This process, AKA second chance, requires a minimum of two generations,
+> + * hence MIN_NR_GENS. And to maintain ABI compatibility with the active/inactive
+
+Where is the ABI compatibility issue?  Is it in some way in which the
+legacy LRU is presented to userspace?
+
+> + * LRU, these two generations are considered active; the rest of generations, if
+> + * they exist, are considered inactive. See lru_gen_is_active(). PG_active is
+> + * always cleared while a page is on one of lrugen->lists[] so that the aging
+> + * needs not to worry about it. And it's set again when a page considered active
+> + * is isolated for non-reclaiming purposes, e.g., migration. See
+> + * lru_gen_add_folio() and lru_gen_del_folio().
+> + *
+> + * MAX_NR_GENS is set to 4 so that the multi-gen LRU can support twice of the
+
+"twice the number of"?
+> + * categories of the active/inactive LRU when keeping track of accesses through
+> + * page tables. It requires order_base_2(MAX_NR_GENS+1) bits in folio->flags.
+> + */
+
+Helpful comment, overall.
+
 > 
+> ...
+>
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -909,6 +909,14 @@ config ANON_VMA_NAME
+>  	  area from being merged with adjacent virtual memory areas due to the
+>  	  difference in their name.
+>  
+> +config LRU_GEN
+> +	bool "Multi-Gen LRU"
+> +	depends on MMU
+> +	# the following options can use up the spare bits in page flags
+> +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+> +	help
+> +	  A high performance LRU implementation to overcommit memory.
+> +
+>  source "mm/damon/Kconfig"
 
-The devicetree, and hence the binding, should describe the hardware, so
-that an implementation can make use of the hardware. So there's no
-problem expressing the interconnect in the binding/dts even though the
-driver isn't using it.
+This is a problem.  I had to jump through hoops just to be able to
+compile-test this.  Turns out I had to figure out how to disable
+MAXSMP.
 
-I'm not sure if I'm misunderstanding you, the interconnect paths
-described here are a description of the hardware requirements for this
-device. (I.e. it need the buses between ufs and ddr, and cpu and ufs to
-operate).
+Can we please figure out a way to ensure that more testers are at least
+compile testing this?  Allnoconfig, defconfig, allyesconfig, allmodconfig.
 
-> 462c5c0aa798 wasn't in my 5.17+ tree pulled after dts changes were merged (I
-> guess doc changes come later), so my commit message is incorrect, but I
-> think it makes more sense to have the documentation reflect the driver. Its
-> also not an important issue, so I'll let others sort it out.
-> 
+Also, I suggest that we actually make MGLRU the default while in linux-next.
 
-I believe that the correctness of the interconnect property will ensure
-that the interconnect provider doesn't hit sync_state until the ufs
-driver has probed - regardless of the driver actually implementing the
-interconnect voting. But perhaps I've misunderstood the magic involved?
-
-Regards,
-Bjorn
+>
+> ...
+>

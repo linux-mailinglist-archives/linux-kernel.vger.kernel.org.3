@@ -2,100 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62774FCE32
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245D64FCE17
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbiDLEmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
+        id S240711AbiDLEko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346571AbiDLEmJ (ORCPT
+        with ESMTP id S231811AbiDLEkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:42:09 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537DE31;
-        Mon, 11 Apr 2022 21:39:47 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BLtKjb031973;
-        Tue, 12 Apr 2022 04:39:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2021-07-09; bh=RpMZW/U3P5tVksdvNelEblhiKLUKeauIp6aIxmelim4=;
- b=eyD6lWkKmsWpksKcTlMbYSYGFTn+0o8//+ZavJVRI2rYyNLIYI5DMUpnQrgJ6BGZZPR0
- eMxk9SPRcHYbQUWlTO4LYt/4KqD3vqd3XUQ2nK+4/gdRt1wctOHNC1w7ns+CAniaMN1e
- /4bjuC40DSqManRJ3Y9d5ZUko9qQHP5vM1YFC5ovXBK4G39n8QXH4pfFpoKrX2/IDUyJ
- 9uW5Zjca6JwH1eQw9paxCAkR/C15T0Kzq3+9sOgAZbCwZP+ItebzU0isnMcku0uDlKqG
- eaP8YDDCWN7tenYL6xrtpXmb+FHB8BwhKufhMn+Ayi+DCaPllvtmF9nmg6up+U80oQYw RQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd5ekb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 04:39:25 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23C4aCrY035802;
-        Tue, 12 Apr 2022 04:39:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9gy4nc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 04:39:24 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 23C4dOZX040689;
-        Tue, 12 Apr 2022 04:39:24 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9gy4k0-1;
-        Tue, 12 Apr 2022 04:39:24 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
-        Steve French <sfrench@samba.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: potential buffer overflow in handling symlinks
-Date:   Mon, 11 Apr 2022 21:38:22 -0700
-Message-Id: <20220412043823.57037-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 12 Apr 2022 00:40:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03BF02980C;
+        Mon, 11 Apr 2022 21:38:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FD71570;
+        Mon, 11 Apr 2022 21:38:23 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.38.213])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49E993F70D;
+        Mon, 11 Apr 2022 21:38:18 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     christophe.leroy@csgroup.eu, catalin.marinas@arm.com,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V5 0/7] mm/mmap: Drop arch_vm_get_page_prot() and arch_filter_pgprot()
+Date:   Tue, 12 Apr 2022 10:08:41 +0530
+Message-Id: <20220412043848.80464-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: xqL3uRre6-QmHJhJSpdr_eNJvtynp2K3
-X-Proofpoint-GUID: xqL3uRre6-QmHJhJSpdr_eNJvtynp2K3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch printed a warning:
-	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
-	__memcpy() 'dctx->buf' too small (16 vs u32max)
+protection_map[] is an array based construct that translates given vm_flags
+combination. This array contains page protection map, which is populated by
+the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+to determine page protection value for a given vm_flags. vm_get_page_prot()
+implementation, could again call platform overrides arch_vm_get_page_prot()
+and arch_filter_pgprot(). Some platforms override protection_map[] that was
+originally built with __SXXX/__PXXX with different runtime values.
 
-It's caused because Smatch marks 'link_len' as untrusted since it comes
-from sscanf(). Add a check to ensure that 'link_len' is not larger than
-the size of the 'link_str' buffer.
+Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+, protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+between the platform and generic MM, finally defining vm_get_page_prot().
 
-Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
- fs/cifs/link.c | 3 +++
- 1 file changed, 3 insertions(+)
+Hence this series proposes to drop later two abstraction levels and instead
+just move the responsibility of defining vm_get_page_prot() to the platform
+(still utilizing generic protection_map[] array) itself making it clean and
+simple.
 
-diff --git a/fs/cifs/link.c b/fs/cifs/link.c
-index 852e54e..ebfedae 100644
---- a/fs/cifs/link.c
-+++ b/fs/cifs/link.c
-@@ -85,6 +85,9 @@
- 	if (rc != 1)
- 		return -EINVAL;
- 
-+	if (link_len > buf_len - CIFS_MF_SYMLINK_LINK_OFFSET)
-+		return -EINVAL;
-+
- 	rc = symlink_hash(link_len, link_str, md5_hash);
- 	if (rc) {
- 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+to define custom vm_get_page_prot(). This starts converting platforms that
+define the overrides arch_filter_pgprot() or arch_vm_get_page_prot() which
+enables for those constructs to be dropped off completely.
+
+The series has been inspired from an earlier discuss with Christoph Hellwig
+
+https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
+
+This series applies on 5.18-rc2.
+
+This series has been cross built for multiple platforms.
+
+- Anshuman
+
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Changes in V5:
+
+- Collected new tags on various patches in the series
+- Coalesced arm64_arch_vm_get_page_prot() into vm_get_page_prot() per Catalin
+- Modified powerpc's vm_get_page_prot() implementation per Christophe
+
+Changes in V4:
+
+https://lore.kernel.org/all/20220407103251.1209606-1-anshuman.khandual@arm.com/
+
+- ARCH_HAS_VM_GET_PAGE_PROT now excludes generic protection_map[]
+- Changed platform's vm_get_page_prot() to use generic protection_map[]
+- Dropped all platform changes not enabling either arch_vm_get_page_prot() or arch_filter_pgprot() 
+- Dropped all previous tags as code base has changed
+
+Changes in V3:
+
+https://lore.kernel.org/all/1646045273-9343-1-git-send-email-anshuman.khandual@arm.com/
+
+- Dropped variable 'i' from sme_early_init() on x86 platform
+- Moved CONFIG_COLDFIRE vm_get_page_prot() inside arch/m68k/mm/mcfmmu.c
+- Moved CONFIG_SUN3 vm_get_page_prot() inside arch/m68k/mm/sun3mmu.c
+- Dropped cachebits for vm_get_page_prot() inside arch/m68k/mm/motorola.c
+- Dropped PAGE_XXX_C definitions from arch/m68k/include/asm/motorola_pgtable.h
+- Used PAGE_XXX instead for vm_get_page_prot() inside arch/m68k/mm/motorola.c
+- Dropped all references to protection_map[] in the tree
+- Replaced s/extensa/xtensa/ on the patch title
+- Moved left over comments from pgtable.h into init.c on nios2 platform
+
+Changes in V2:
+
+https://lore.kernel.org/all/1645425519-9034-1-git-send-email-anshuman.khandual@arm.com/
+
+- Dropped the entire comment block in [PATCH 30/30] per Geert
+- Replaced __P010 (although commented) with __PAGE_COPY on arm platform
+- Replaced __P101 with PAGE_READONLY on um platform
+
+Changes in V1:
+
+https://lore.kernel.org/all/1644805853-21338-1-git-send-email-anshuman.khandual@arm.com/
+
+- Add white spaces around the | operators 
+- Moved powerpc_vm_get_page_prot() near vm_get_page_prot() on powerpc
+- Moved arm64_vm_get_page_prot() near vm_get_page_prot() on arm64
+- Moved sparc_vm_get_page_prot() near vm_get_page_prot() on sparc
+- Compacted vm_get_page_prot() switch cases on all platforms
+-  _PAGE_CACHE040 inclusion is dependent on CPU_IS_040_OR_060
+- VM_SHARED case should return PAGE_NONE (not PAGE_COPY) on SH platform
+- Reorganized VM_SHARED, VM_EXEC, VM_WRITE, VM_READ
+- Dropped the last patch [RFC V1 31/31] which added macros for vm_flags combinations
+  https://lore.kernel.org/all/1643029028-12710-32-git-send-email-anshuman.khandual@arm.com/
+
+Changes in RFC:
+
+https://lore.kernel.org/all/1643029028-12710-1-git-send-email-anshuman.khandual@arm.com/
+
+
+Anshuman Khandual (6):
+  mm/mmap: Add new config ARCH_HAS_VM_GET_PAGE_PROT
+  powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop arch_filter_pgprot()
+  mm/mmap: Drop arch_vm_get_page_pgprot()
+
+Christoph Hellwig (1):
+  x86/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+
+ arch/arm64/Kconfig                 |  1 +
+ arch/arm64/include/asm/mman.h      | 24 --------------------
+ arch/arm64/mm/mmap.c               | 25 +++++++++++++++++++++
+ arch/powerpc/Kconfig               |  1 +
+ arch/powerpc/include/asm/mman.h    | 12 ----------
+ arch/powerpc/mm/book3s64/pgtable.c | 20 +++++++++++++++++
+ arch/sparc/Kconfig                 |  1 +
+ arch/sparc/include/asm/mman.h      |  6 -----
+ arch/sparc/mm/init_64.c            | 13 +++++++++++
+ arch/x86/Kconfig                   |  2 +-
+ arch/x86/include/asm/pgtable.h     |  5 -----
+ arch/x86/include/uapi/asm/mman.h   | 14 ------------
+ arch/x86/mm/Makefile               |  2 +-
+ arch/x86/mm/pgprot.c               | 35 ++++++++++++++++++++++++++++++
+ include/linux/mman.h               |  4 ----
+ mm/Kconfig                         |  2 +-
+ mm/mmap.c                          | 14 ++++--------
+ 17 files changed, 103 insertions(+), 78 deletions(-)
+ create mode 100644 arch/x86/mm/pgprot.c
+
 -- 
-1.8.3.1
+2.25.1
 

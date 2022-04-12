@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C194FD75A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B6D4FDC5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiDLJvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S1379859AbiDLKUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353613AbiDLJnu (ORCPT
+        with ESMTP id S1355890AbiDLJzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:43:50 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756360A83
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso2189965pjh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VCefrZdfoSNAmADQ4rDEGDGpMamNwlihzSsXzq1s8T8=;
-        b=p53JNlmEO3AdY9Dcfd9psNc/BECz9tDHElvzGGZfzA4B1FRN0VKefh0WsP2jNk6nyC
-         Bcgeekw4Pes1N003jaQiy2vWoXFlY/m0t2O7oZSx0JvKN2n21eZBGiFcnW/NIV1+5JbC
-         dYL3nRA/1fGrfn2sH1XT7bv97Zu+nK6XrzaIFzOV6yboyRmscCMxs70mldh7roTkDEUD
-         VekK/Jlw58pHUtrjJQ5wzU9IWIl3via84gTlJ1bv+NaqxzXhSld+rLf+j6X2Bt7lh0Z4
-         ODjdzXg2b/y/YV5sRe524vcJfu9AxSFOhBF2aWs04ZN26gIxR9Q7Jc51AVTPdP46RgU6
-         AAdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VCefrZdfoSNAmADQ4rDEGDGpMamNwlihzSsXzq1s8T8=;
-        b=Hz92TnfLfjkcbjukJ8izSv/VMtwKb8jkCGFTt602i0NWCPfB0Jl0W1XXhjXXLBYjat
-         2Mxe3OpaynLqIwiWUyZBMS7v4ASEesxzx/VZNPSlk52FmLRcUdc1cYD7uN2YKV/F1Kyl
-         GQ/YqQzAxa0jIpQcA1eFpZ4qONwoHQGfyCVM4UBV9hDKYGti+j9g1YUz7/HLw3VmCXuf
-         zJy/MAhdMnLqwVBANgWc/8bMy/t+RZA1tvjFkKCnN356YzdexgzeKOk352upgLy7oZxE
-         7K/CNfwkd9qgdI+RwcExhSzNxLEkbYcZRMRtb5mAmLgaIcAV3a7he9H4zoiTPigRyhZ5
-         pxIA==
-X-Gm-Message-State: AOAM531oi5Pdoox8lTjG7ZgAV1VbPXJhkPOqM9/BwCebK1cy23xRkT5V
-        DJPJJFitDF9Uqm5nq0D7IdDzr0J00EA=
-X-Google-Smtp-Source: ABdhPJzbmsBk4kOMnyThdwbADw3SdgTf4CORQF62zG2osZ117ScN+2nEjEN00BR+93+8bZWnYXb5vQ==
-X-Received: by 2002:a17:90a:e7c6:b0:1c7:443:3fdf with SMTP id kb6-20020a17090ae7c600b001c704433fdfmr3834381pjb.3.1649753590047;
-        Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm39899515pfl.135.2022.04.12.01.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 01:53:09 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     lee.jones@linaro.org, gremlin@gremlin.it
-Cc:     gregkh@linuxfoundation.org, mad_soft@inbox.ru,
-        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] mfd: fix error check return value of platform_get_irq()
-Date:   Tue, 12 Apr 2022 08:53:05 +0000
-Message-Id: <20220412085305.2533030-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Apr 2022 05:55:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284369CE4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:57:43 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kd0365x7Tz1HBnN;
+        Tue, 12 Apr 2022 16:57:06 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 16:57:40 +0800
+Subject: Re: [PATCH 1/3] mm/memory-failure.c: avoid false-postive
+ PageSwapCache test
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220407130352.15618-1-linmiaohe@huawei.com>
+ <20220407130352.15618-2-linmiaohe@huawei.com>
+ <20220411063520.GA3175313@hori.linux.bs1.fc.nec.co.jp>
+ <792748d6-3b41-d118-27bd-75e79390ba1a@huawei.com>
+ <20220412063724.GB3227993@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <624f330e-a01c-d0d3-82ee-f2f8f55188f2@huawei.com>
+Date:   Tue, 12 Apr 2022 16:57:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20220412063724.GB3227993@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On 2022/4/12 14:37, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Apr 11, 2022 at 09:19:26PM +0800, Miaohe Lin wrote:
+>> On 2022/4/11 14:35, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>> On Thu, Apr 07, 2022 at 09:03:50PM +0800, Miaohe Lin wrote:
+>>>> PageSwapCache is only reliable when PageAnon is true because PG_swapcache
+>>>> serves as PG_owner_priv_1 which can be used by fs if it's pagecache page.
+>>>> So we should test PageAnon to distinguish pagecache page from swapcache
+>>>> page to avoid false-postive PageSwapCache test.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/memory-failure.c | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>>> index ef402b490663..2e97302d62e4 100644
+>>>> --- a/mm/memory-failure.c
+>>>> +++ b/mm/memory-failure.c
+>>>> @@ -2262,7 +2262,7 @@ static int __soft_offline_page(struct page *page)
+>>>>  		return 0;
+>>>>  	}
+>>>>  
+>>>> -	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
+>>>> +	if (!PageHuge(page) && PageLRU(page) && !PageAnon(page))
+>>>>  		/*
+>>>>  		 * Try to invalidate first. This should work for
+>>>>  		 * non dirty unmapped page cache pages.
+>>>> -- 
+>>>
+>>> I foudn that with this change the following VM_BUG_ON_FOLIO() is triggered
+>>> when calling soft-offline for a swapcache.  Maybe we need check both of
+>>> PageAnon and PageSwapCache instead of either?
+>>>
+>>
+>> Many thanks for your test! This is my overlook. Sorry about it! :( The root cause is that the page is
+>> added into swapcache and lru( so that it can pass the HWPoisonHandlable check) but page anon is not
+>> set yet due to page lock is held by __soft_offline_page. So we have the below core dump:
+>>
+>> [   41.232172] page:0000000033d8a20c refcount:0 mapcount:0 mapping:00000000bc103d88 index:0x36d pfn:0x14359b
+>> 										^^^ page is not anon
+>>
+>> [   41.236576] flags: 0x57ffffc0080415(locked|uptodate|lru|owner_priv_1|swapbacked|node=1|zone=2|lastcpupid=0x1fffff)
+>> 								^^^^^^^^^^^^^^^^^^ page is in swapcache
+>>
+>> It seems we can check !PageAnon(page) && !PageSwapCache(page), as you suggested, to fix this issue. But maybe I
+>> should drop this patch because invalidate_inode_page will always return 0 for PageAnon due to folio_mapping == NULL.
+>> So nothing is really done for anonymous page here. And the origin !PageSwapCache(page) check should do the right work.
+> 
+> Thanks for clarification.
+> 
+>> Or we shouldn't even try to call invalidate_inode_page with anonymous page in principle?
+> 
+> I think just keeping the current behavior is fine (because as you stated
+> above invalidate_inode_page() simple ignores anonymous pages).
+> 
 
-platform_get_irq() return negative value on failure, so null check of
-irq is incorrect. Fix it by comparing whether it is less than zero.
+Will drop this patch. Sorry for make noise. :(
 
-Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/mfd/ipaq-micro.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
-index e92eeeb67a98..4cd5ecc72211 100644
---- a/drivers/mfd/ipaq-micro.c
-+++ b/drivers/mfd/ipaq-micro.c
-@@ -403,7 +403,7 @@ static int __init micro_probe(struct platform_device *pdev)
- 	micro_reset_comm(micro);
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq)
-+	if (irq < 0)
- 		return -EINVAL;
- 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
- 			       IRQF_SHARED, "ipaq-micro",
--- 
-2.25.1
+> Thanks,
+> Naoya Horiguchi
+> 
+>> BTW: PageSwapCache should be reliable here as folio_test_swapbacked is checked implicitly inside it. In such case, PG_swapcache
+>> can't serve as PG_owner_priv_1 as pagecache page shouldn't set PG_swapbacked (shmem will set PG_swapbacked but PG_owner_priv_1
+>> is not used anyway). Or am I miss something again?
 

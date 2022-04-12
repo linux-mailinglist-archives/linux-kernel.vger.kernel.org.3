@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD3D4FD3FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56994FD392
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355109AbiDLIHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        id S1387172AbiDLJF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354361AbiDLH0T (ORCPT
+        with ESMTP id S1359260AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404C345079;
-        Tue, 12 Apr 2022 00:06:12 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853462BB09;
+        Tue, 12 Apr 2022 00:21:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F64B81B50;
-        Tue, 12 Apr 2022 07:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24139C385A1;
-        Tue, 12 Apr 2022 07:06:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23CDC61045;
+        Tue, 12 Apr 2022 07:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A9CC385A1;
+        Tue, 12 Apr 2022 07:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747169;
-        bh=zfD7YjenlyUPbPHuXN1cKuXgTMmzI3+KRTFSfXHPC28=;
+        s=korg; t=1649748077;
+        bh=bScr1sUFM94SlTUGziiSSo1pd7DcDs5dN8ORKndYxrE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izdKqfnL5uBU0KaqfnOLa2TvdrivpsUWnARd4RQBVpWWxsF4j0F7L8y3VUdw1yL7F
-         lg0F3Bc3l1y7o0jy070hjbzLwi1JAliyBzCaeuxPKMpG7NdrFXK/U3lBYeRdIUsJam
-         E6S5gsRujBqCD52hhnwwEbLykvFn1jZl52d0d2l8=
+        b=xNCyJqi0D5gni5rYImrx0qVqVK8BWN5upCL7YMJLOGcgkCyZ56DUw7eelHfeDTYWw
+         1jYX7JE1u5WBOIsJm9UiY3CKirEH+b9EZYjfi57nb04Hfsxs6BX7hB/Ef7foeZ0lqU
+         1Q8pJRJMfcHcA48x5FRiyh9dMqa1bm4SzQfj0ZzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.16 268/285] perf python: Fix probing for some clang command line options
-Date:   Tue, 12 Apr 2022 08:32:05 +0200
-Message-Id: <20220412062951.392626163@linuxfoundation.org>
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 5.17 310/343] drm/amdkfd: Create file descriptor after client is added to smi_clients list
+Date:   Tue, 12 Apr 2022 08:32:08 +0200
+Message-Id: <20220412063000.270200900@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,60 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Lee Jones <lee.jones@linaro.org>
 
-commit dd6e1fe91cdd52774ca642d1da75b58a86356b56 upstream.
+commit e79a2398e1b2d47060474dca291542368183bc0f upstream.
 
-The clang compiler complains about some options even without a source
-file being available, while others require one, so use the simple
-tools/build/feature/test-hello.c file.
+This ensures userspace cannot prematurely clean-up the client before
+it is fully initialised which has been proven to cause issues in the
+past.
 
-Then check for the "is not supported" string in its output, in addition
-to the "unknown argument" already being looked for.
-
-This was noticed when building with clang-13 where -ffat-lto-objects
-isn't supported and since we were looking just for "unknown argument"
-and not providing a source code to clang, was mistakenly assumed as
-being available and not being filtered to set of command line options
-provided to clang, leading to a build failure.
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Fangrui Song <maskray@google.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Keeping <john@metanate.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Michael Petlan <mpetlan@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Link: http://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Felix Kuehling <Felix.Kuehling@amd.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/setup.py |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -1,12 +1,14 @@
--from os import getenv
-+from os import getenv, path
- from subprocess import Popen, PIPE
- from re import sub
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
+@@ -268,15 +268,6 @@ int kfd_smi_event_open(struct kfd_dev *d
+ 		return ret;
+ 	}
  
- cc = getenv("CC")
- cc_is_clang = b"clang version" in Popen([cc.split()[0], "-v"], stderr=PIPE).stderr.readline()
-+src_feature_tests  = getenv('srctree') + '/tools/build/feature'
+-	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
+-			       O_RDWR);
+-	if (ret < 0) {
+-		kfifo_free(&client->fifo);
+-		kfree(client);
+-		return ret;
+-	}
+-	*fd = ret;
+-
+ 	init_waitqueue_head(&client->wait_queue);
+ 	spin_lock_init(&client->lock);
+ 	client->events = 0;
+@@ -286,5 +277,20 @@ int kfd_smi_event_open(struct kfd_dev *d
+ 	list_add_rcu(&client->list, &dev->smi_clients);
+ 	spin_unlock(&dev->smi_lock);
  
- def clang_has_option(option):
--    return [o for o in Popen([cc, option], stderr=PIPE).stderr.readlines() if b"unknown argument" in o] == [ ]
-+    cc_output = Popen([cc, option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
-+    return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
- 
- if cc_is_clang:
-     from distutils.sysconfig import get_config_vars
++	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
++			       O_RDWR);
++	if (ret < 0) {
++		spin_lock(&dev->smi_lock);
++		list_del_rcu(&client->list);
++		spin_unlock(&dev->smi_lock);
++
++		synchronize_rcu();
++
++		kfifo_free(&client->fifo);
++		kfree(client);
++		return ret;
++	}
++	*fd = ret;
++
+ 	return 0;
+ }
 
 

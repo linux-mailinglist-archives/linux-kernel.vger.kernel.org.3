@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFD04FD3DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1674FD39F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358351AbiDLHl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S1352424AbiDLHOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353349AbiDLHPO (ORCPT
+        with ESMTP id S1352316AbiDLGzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:15:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1FF393C9;
-        Mon, 11 Apr 2022 23:56:53 -0700 (PDT)
+        Tue, 12 Apr 2022 02:55:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F6C3A18E;
+        Mon, 11 Apr 2022 23:45:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A23B6158E;
-        Tue, 12 Apr 2022 06:56:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBE6C385A1;
-        Tue, 12 Apr 2022 06:56:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCF060C1B;
+        Tue, 12 Apr 2022 06:45:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A802FC385A6;
+        Tue, 12 Apr 2022 06:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746612;
-        bh=en1lduSAZMJqlcpjsWnyj4N6Vi7Ju+gSq8fZkkkk1Wo=;
+        s=korg; t=1649745917;
+        bh=y/u96vZ793nrYR/50kxGeRzF5tIcQXK3h5BNc9Lj49U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mvA+ndCvM/aY7FMCT83LDaPsm6diEgtmdvOUUrLfyCKpnRc/fBcCorZc3He3A8UBN
-         rrTALsAGrI9H0hCRkgQp30t5nN2ocELK7TQFqsLmJu24S2FhHfrC5DFepaQ+R3QV7H
-         aeD5VjmkYU+gl/Me4fL9LT1iTA1eSugYx53ZNDDg=
+        b=vO8aVPWM54Ne7IFIvmU41NNA/FYR6cjtHdHX4QhlzSpiDFcwjK34pV6TJ6STuh1Nw
+         CqAJhSB/DiBr9H6iJiEOP5paoYCiDTra6l3NDgbYJc9K8LesRJq8hlb6A9dRI3PviY
+         DU6qgbJLrqw95OWDBskEdzzPHSsNexk+yVl2aM6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 031/285] bpf: Make dst_port field in struct bpf_sock 16-bit wide
-Date:   Tue, 12 Apr 2022 08:28:08 +0200
-Message-Id: <20220412062944.575866124@linuxfoundation.org>
+Subject: [PATCH 5.15 092/277] can: etas_es58x: es58x_fd_rx_event_msg(): initialize rx_event_msg before calling es58x_check_msg_len()
+Date:   Tue, 12 Apr 2022 08:28:15 +0200
+Message-Id: <20220412062944.706674633@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,92 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-[ Upstream commit 4421a582718ab81608d8486734c18083b822390d ]
+[ Upstream commit 7a8cd7c0ee823a1cc893ab3feaa23e4b602bfb9a ]
 
-Menglong Dong reports that the documentation for the dst_port field in
-struct bpf_sock is inaccurate and confusing. From the BPF program PoV, the
-field is a zero-padded 16-bit integer in network byte order. The value
-appears to the BPF user as if laid out in memory as so:
+Function es58x_fd_rx_event() invokes the es58x_check_msg_len() macro:
 
-  offsetof(struct bpf_sock, dst_port) + 0  <port MSB>
-                                      + 8  <port LSB>
-                                      +16  0x00
-                                      +24  0x00
+| 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
 
-32-, 16-, and 8-bit wide loads from the field are all allowed, but only if
-the offset into the field is 0.
+While doing so, it dereferences an uninitialized
+variable: *rx_event_msg.
 
-32-bit wide loads from dst_port are especially confusing. The loaded value,
-after converting to host byte order with bpf_ntohl(dst_port), contains the
-port number in the upper 16-bits.
+This is actually harmless because es58x_check_msg_len() only uses
+preprocessor macros (sizeof() and __stringify()) on
+*rx_event_msg. c.f. [1].
 
-Remove the confusion by splitting the field into two 16-bit fields. For
-backward compatibility, allow 32-bit wide loads from offsetof(struct
-bpf_sock, dst_port).
+Nonetheless, this pattern is confusing so the lines are reordered to
+make sure that rx_event_msg is correctly initialized.
 
-While at it, allow loads 8-bit loads at offset [0] and [1] from dst_port.
+This patch also fixes a false positive warning reported by cppcheck:
 
-Reported-by: Menglong Dong <imagedong@tencent.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/r/20220130115518.213259-2-jakub@cloudflare.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+| cppcheck possible warnings: (new ones prefixed by >>, may not be real problems)
+|
+|    In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
+| >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialized variable: rx_event_msg [uninitvar]
+|     ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
+|           ^
+
+[1] https://elixir.bootlin.com/linux/v5.16/source/drivers/net/can/usb/etas_es58x/es58x_core.h#L467
+
+Link: https://lore.kernel.org/all/20220306101302.708783-1-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/bpf.h |  3 ++-
- net/core/filter.c        | 10 +++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 2b3c3f83076c..61bbaf340a89 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5414,7 +5414,8 @@ struct bpf_sock {
- 	__u32 src_ip4;
- 	__u32 src_ip6[4];
- 	__u32 src_port;		/* host byte order */
--	__u32 dst_port;		/* network byte order */
-+	__be16 dst_port;	/* network byte order */
-+	__u16 :16;		/* zero padding */
- 	__u32 dst_ip4;
- 	__u32 dst_ip6[4];
- 	__u32 state;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d4cdf11656b3..4721ed65bcc5 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7975,6 +7975,7 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 			      struct bpf_insn_access_aux *info)
- {
- 	const int size_default = sizeof(__u32);
-+	int field_size;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+index af042aa55f59..26bf4775e884 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+@@ -171,12 +171,11 @@ static int es58x_fd_rx_event_msg(struct net_device *netdev,
+ 	const struct es58x_fd_rx_event_msg *rx_event_msg;
+ 	int ret;
  
- 	if (off < 0 || off >= sizeof(struct bpf_sock))
- 		return false;
-@@ -7986,7 +7987,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case offsetof(struct bpf_sock, family):
- 	case offsetof(struct bpf_sock, type):
- 	case offsetof(struct bpf_sock, protocol):
--	case offsetof(struct bpf_sock, dst_port):
- 	case offsetof(struct bpf_sock, src_port):
- 	case offsetof(struct bpf_sock, rx_queue_mapping):
- 	case bpf_ctx_range(struct bpf_sock, src_ip4):
-@@ -7995,6 +7995,14 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
- 		bpf_ctx_record_field_size(info, size_default);
- 		return bpf_ctx_narrow_access_ok(off, size, size_default);
-+	case bpf_ctx_range(struct bpf_sock, dst_port):
-+		field_size = size == size_default ?
-+			size_default : sizeof_field(struct bpf_sock, dst_port);
-+		bpf_ctx_record_field_size(info, field_size);
-+		return bpf_ctx_narrow_access_ok(off, size, field_size);
-+	case offsetofend(struct bpf_sock, dst_port) ...
-+	     offsetof(struct bpf_sock, dst_ip4) - 1:
-+		return false;
- 	}
++	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
+ 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
+ 	if (ret)
+ 		return ret;
  
- 	return size == size_default;
+-	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
+-
+ 	return es58x_rx_err_msg(netdev, rx_event_msg->error_code,
+ 				rx_event_msg->event_code,
+ 				get_unaligned_le64(&rx_event_msg->timestamp));
 -- 
 2.35.1
 

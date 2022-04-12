@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6634FCE4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A1C4FCE50
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347067AbiDLE6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S1347151AbiDLE6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiDLE6G (ORCPT
+        with ESMTP id S1347174AbiDLE6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:58:06 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB5211C07;
-        Mon, 11 Apr 2022 21:55:46 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGsxLBlViWOkfAA--.10756S3;
-        Tue, 12 Apr 2022 12:55:40 +0800 (CST)
-Subject: Re: [PATCH] MAINTAINERS: update IOMAP FILESYSTEM LIBRARY and XFS
- FILESYSTEM
-To:     "Darrick J. Wong" <djwong@kernel.org>
-References: <1649733686-6128-1-git-send-email-yangtiezhu@loongson.cn>
- <20220412033917.GB16799@magnolia> <20220412035042.GC16799@magnolia>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <dchinner@redhat.com>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <0d629b54-a29c-aeed-1330-840b1b98a8a3@loongson.cn>
-Date:   Tue, 12 Apr 2022 12:55:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 12 Apr 2022 00:58:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDEE33EB0;
+        Mon, 11 Apr 2022 21:56:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id bg24so4839699pjb.1;
+        Mon, 11 Apr 2022 21:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ZDxyd/adi3fkSI+1jAcisi2UBvnL6C6PcXGBplZX2u8=;
+        b=p+Rs/hvFdSFaj6LoK3tiNZCsFmbX+R2B5xDjEGbsEuD5rTvtY+7/3CprRZ/QmzUMZL
+         CqjKYBO854g/BU95kxaajdXdZFO8y11UFvqPztDsmO1amqsc78ZNlsr5ipLba7a7KA0T
+         CYtjca+7c1Xpdmd/Szo1BzlRC4f2LOfsWSMEa1Q5Ns0HgYPsC9pq4AxrGadgi1EfJy5n
+         X1pYrKmcv3Wbl+PggS5/ukqqJhtjCaf9qZKyALGdrwNR11fC4hcib4yp5qCWpmSZVdyb
+         i+9dqEDvqfdCYNq+ydlhvg3kEwlfM1npgkVMElv8eZI9p2487gVADDcZCsmVBXsPl7m9
+         ttBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ZDxyd/adi3fkSI+1jAcisi2UBvnL6C6PcXGBplZX2u8=;
+        b=Qxjj4MXodg+88StngeK5ppVzWDHJ4vDHh6px4uA6UWbXtkPy7OMCArnZuK9+vy+ucG
+         k7fu1QX5jMr5tETrVdVZ3WAnaDmRu2QVle9899khA/4lln373LBXbPdJFmayqL38PO9B
+         GrvbRKgeVAkaqftF1I/tLbdbFeI8SwHIN3JeE8V4RHooweIhcPzEL346V+CQm+Y3aW2e
+         WBWU7gQOAC1vKAyaH/3l73amKi746zRV6Gkhibu5d/X4DZG4+4qGH3jlFrrGtA1h8q2I
+         hrbYA3JyCAgkbR01uJYH4Qn4EVlVpC182yGv0WWuiWVrfSvrWiomhhtXT1Tjg3fC4a36
+         CJeg==
+X-Gm-Message-State: AOAM53258i+PYEGgVLay6RTeHfsLDXf0aL6WkdiDXD9EqOShsCdye5jA
+        CFOyVsPSzM3/m8D9jbU1s2w=
+X-Google-Smtp-Source: ABdhPJz/M/CGf5j20eOYNfGCIGqfS/YmISxAz19JpTLThxaMhI467H76iT17xT8Ke61WLyHZICR79A==
+X-Received: by 2002:a17:902:ec92:b0:158:71e5:fcda with SMTP id x18-20020a170902ec9200b0015871e5fcdamr6028529plg.143.1649739362586;
+        Mon, 11 Apr 2022 21:56:02 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.113])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa79af4000000b005056a0171bdsm15689430pfp.6.2022.04.11.21.55.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 21:56:02 -0700 (PDT)
+Message-ID: <fa9f787d-467d-18e1-79bf-72a720bbde86@gmail.com>
+Date:   Tue, 12 Apr 2022 12:55:56 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220412035042.GC16799@magnolia>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxGsxLBlViWOkfAA--.10756S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWDGr47AF48ZrykKF1kAFb_yoWkKwc_CF
-        4UCw4kG3yUXry5AFsakF17Zr98tF48Xr48J3W0qw17X3Z8Ja4Fyw40kr93Wr98GryIyr4D
-        CFWDWr17try2vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIkYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26F4j6r4UJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07jnb18UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH] perf/x86/amd: cpu_hw_events::perf_ctr_virt_mask should
+ only be used on host
+Content-Language: en-US
+To:     Dongli Si <kvmx86@gmail.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jmattson@google.com,
+        jolsa@kernel.org, joro@8bytes.org, kim.phillips@amd.com,
+        liam.merwick@oracle.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@kernel.org, namhyung@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, x86@kernel.org
+References: <edfc8bd1-8dc3-9e88-d9c3-6a427b039a98@gmail.com>
+ <20220412012530.794790-1-sidongli1997@gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <20220412012530.794790-1-sidongli1997@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/4/2022 9:25 am, Dongli Si wrote:
+> On Mon 11 Apr 2022 22:29:18 +0800, Like Xu wrote:
+>> Or you can work it out to make nested vPMU functional on AMD.
+> Unless in the future kvm wants to emulate on L1 HV the behavior of not
+> count when HO bit is set and SVM is disabled, otherwise it doesn't make
 
+In fact, I would prefer that we make a little effort to enable nested vPMU.
 
-On 04/12/2022 11:50 AM, Darrick J. Wong wrote:
-> On Mon, Apr 11, 2022 at 08:39:17PM -0700, Darrick J. Wong wrote:
->> On Tue, Apr 12, 2022 at 11:21:26AM +0800, Tiezhu Yang wrote:
->>> Remove the following section entries of IOMAP FILESYSTEM LIBRARY:
->>>
->>> M:	linux-xfs@vger.kernel.org
->>> M:	linux-fsdevel@vger.kernel.org
->>>
->>> Remove the following section entry of XFS FILESYSTEM:
->>>
->>> M:	linux-xfs@vger.kernel.org
->>>
->>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>
->> WTF?
->>
->>  ▄▄   ▄   ▄▄   ▄    ▄
->>  █▀▄  █   ██   █  ▄▀
->>  █ █▄ █  █  █  █▄█
->>  █  █ █  █▄▄█  █  █▄
->>  █   ██ █    █ █   ▀▄
->
-> *OH*, I see, you're getting rid of the M(ail): entry, probably because
-> it's redundant with L(ist): or something??  Still... why does it matter?
+> sense to use perf_ctr_virt_mask in the guest to mask HO bit. At least for
+> now, this patch helps clarify what perf_ctr_virt_mask actually does.
 
-Yes, the section entries are redundant. Sorry for the unclear description.
+This has been clarified by the commit 1018faa6cf23.
 
-The intention of this patch is to clean up the redundant section entries.
+> 
+>> This is not a typical revert commit.
+> Thanks for pointing out the problem with my patch,
+> I will write another patch specifically to revert this commit.
 
->
-> Seriously, changelogs need to say /why/ they're changing something, not
-> simply restate what's already in the diff.
+The indispensable commit df51fe7ea1c1 is concerned with the symmetric use of
+'disable_mask' in both __x86_pmu_enable_event() and x86_pmu_disable_event().
 
-OK, thank you. Should I send a v2 patch to update the commit message
-or just ignore this patch?
+I had this false assumption at that time, and we'd better support HOST, GUEST}ONLY
+bits in the L1 for L2 guest, and if not, it's bug. Please help. :D
 
-Thanks,
-Tiezhu
+> 
+>> Please check the chronological order of the related commits and the motivations.
+> I know that commit df51fe7ea1c1c fixed the problem of use vPMU on old KVM,
+> but I think it's a speculative way and make things a little obscure,
+> because this #GP is actually a KVM problem rather than a guest problem,
 
+And we have 9b026073db2f to fix KVM for older guest kernel.
+
+> I think it is the user's responsibility to update their host kernel.
+> 
+>>> +	/*
+>>> +	 * When SVM is disabled, set the Host-Only bit will cause the
+>>> +	 * performance counter to not work.
+>> It's ridiculous. Based on the AMD APM Table 13-3. Host/Guest Only Bits,
+>> the performance counter would count "Host events" rather than "not work".
+> You are wrong, you can test it on the host, and the description of the
+> commit 1018faa6cf23 also pointed out this problem, this is the result of an
+> experiment, AMD APM has not documented this problem.
+
+I have to say it's true on a ZEN3 host after a quick experiment.
+
+> 
+> I forgot to say this is the behavior on the host, I will improve this
+> comment to specify 'why' more clearly, like this:
+> 	/*
+> 	 * It turns out that when SVM is disabled on the host (L0), set the
+
+Again, we need the semantics to hold true on L1.
+
+> 	 * Host-Only bit will cause the performance counter to not count.
+> 	 */
+> 
+>> Note, your proposal change should work on the L0, L1 and L2.
+> Yes, I tested it on L0, L1, L2 with 5.18-rc1 and it works as expected.
+
+Specifically for L1, we need rely on the EFER[SVME] check instead of the
+meaningless "boot_cpu_has(X86_FEATURE_HYPERVISOR)".
+
+> 
+> There is a related discussion here:
+> https://lore.kernel.org/all/20220320002106.1800166-1-sidongli1997@gmail.com/
+> 
+> Regards,
+> Dongli
+> 
+> 

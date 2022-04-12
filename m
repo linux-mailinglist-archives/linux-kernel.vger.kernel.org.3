@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4936F4FE00B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196D34FE010
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353457AbiDLMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S1351859AbiDLMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354073AbiDLMEV (ORCPT
+        with ESMTP id S1352553AbiDLMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:04:21 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BC547ADC;
-        Tue, 12 Apr 2022 04:07:00 -0700 (PDT)
-X-UUID: 676868af6406413787f0d702b42f98eb-20220412
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:51df6b48-84d7-4058-bb75-9795b7018160,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.4,REQID:51df6b48-84d7-4058-bb75-9795b7018160,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:faefae9,CLOUDID:8e5ae6a8-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 676868af6406413787f0d702b42f98eb-20220412
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <deren.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 417370313; Tue, 12 Apr 2022 19:06:56 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 12 Apr 2022 19:06:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 19:06:55 +0800
-Message-ID: <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
-Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
-From:   Deren Wu <deren.wu@mediatek.com>
-To:     Kalle Valo <kvalo@kernel.org>, Philippe Schenker <dev@pschenker.ch>
-CC:     <linux-wireless@vger.kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        <linux@leemhuis.info>, "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        "YN Chen" <YN.Chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <netdev@vger.kernel.org>
-Date:   Tue, 12 Apr 2022 19:06:54 +0800
-In-Reply-To: <87y20aod5d.fsf@kernel.org>
-References: <20220412090415.17541-1-dev@pschenker.ch>
-         <87y20aod5d.fsf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 12 Apr 2022 08:08:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1506971A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:08:33 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bv19so13578256ejb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XFfMi83HyHhMrMz7nwFOvyizW6aspWQXX9TyM36MU7E=;
+        b=b7HD5VaNyiC3VzWVe5JREGw3WwW2DOqpJI4Bewo3xtQrIgFagoll75IZ3yOOR+4Ia8
+         Hq4uYn4Ma4bitgj6j3950YPwpqiihH2Psdv+JCkyXm+S369Fy8GLOxE06+xJz6+0fQu3
+         I8c2Y92E+Yqxiv7F1vQlKYnTlhH4SsP2NwatqTCS/hyQdsHcxHGHuN6Yw/rVQMl8fWCc
+         cB4FbbrvDCNASHjiGMm9kAX8yKSeZ9Up1/v5BaVEgKPeYi+tWMZXeD4nlK6jyZYk+LF4
+         HHLnI/a0wiIPO3AwudG3TnJWJ8SWv5/83nlmU8h+GscuAUHMufwenXyKP054m1UHd1ZB
+         /T9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XFfMi83HyHhMrMz7nwFOvyizW6aspWQXX9TyM36MU7E=;
+        b=zTsrDVI4U6UClTNtUtX2gNp9uyQNnvPfTiI4FIx8XSzYf6S1kswLXrSW5lKvOI3zXw
+         fQvZUsOo0rDyrl00NZHB/pz5tCyz/YjG0RQlh+S5lK0alWcVMWb6exr8SpnlFJWzTMxN
+         7jcODwj6nOtSyCnsnX9cdreCJhCOlo5w4QaRsEP7s8ixBAFtc5Cw8PBcjU4xc93Mz7Hr
+         oOzoUy/AnleDsQ4qkRGMGuDZfHlW5WbQtJSHS2ckmE21PmZMBQ7ie4EEZ59w5SNIVA8P
+         dQ/TZSWteBU5MXWgXK5QLXIhNppbNgqgTcrFq2C7vMGk/Jqtwe/AGMmpAwIYKJJAtk6H
+         V+Dg==
+X-Gm-Message-State: AOAM5309rmzrmmYGpsU7YVRYG0XdwEAuW5tI2FKH0J25/O4V00EcWtch
+        Ivze2dUwZIqttUcFujSJcdE=
+X-Google-Smtp-Source: ABdhPJwLHaReY6LYzG74fFgMURZEJwl58p1XJ+dhTszQwIgB+7Fq69dLJACk10WyGa4/ANaPw78qNQ==
+X-Received: by 2002:a17:906:1692:b0:6e8:7641:c620 with SMTP id s18-20020a170906169200b006e87641c620mr12908634ejd.183.1649761711448;
+        Tue, 12 Apr 2022 04:08:31 -0700 (PDT)
+Received: from leap.localnet (host-82-60-208-254.retail.telecomitalia.it. [82.60.208.254])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170906144b00b006cf61dfb03esm13023344ejc.62.2022.04.12.04.08.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 04:08:30 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Liu Junqi <liujunqi@pku.edu.cn>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Remove D. Kershner from Unisys S-PAR maintainers
+Date:   Tue, 12 Apr 2022 13:08:28 +0200
+Message-ID: <2976258.CbtlEUcBR6@leap>
+In-Reply-To: <YlVXV4J41KBzKHtm@kroah.com>
+References: <20220412103629.8029-1-fmdefrancesco@gmail.com> <YlVXV4J41KBzKHtm@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
-> Philippe Schenker <dev@pschenker.ch> writes:
-> 
-> > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+On marted? 12 aprile 2022 12:41:27 CEST Greg Kroah-Hartman wrote:
+> On Tue, Apr 12, 2022 at 12:36:29PM +0200, Fabio M. De Francesco wrote:
+> > The email address of David Kershner is no more reachable. Remove his
+> > entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS and change
+> > the status to "Orphan".
 > > 
-> > This commit introduces a regression on some systems where the
-> > kernel is
-> > crashing in different locations after a reboot was issued.
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
 > > 
-> > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with latest
-> > firmware.
+> > v1->v2: Change also the status of the entry to "Orphan" and rework the
+> > commit message. (Thanks to Greg Kroah-Hartman).
 > > 
-> > Link: 
-> > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireless/5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/__;!!CTRNKA9wMg0ARbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B99Q14J4iDycWA9cq36Y$
+> >  MAINTAINERS | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 3ed62dcd144e..9283c63565b3 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -20184,9 +20184,8 @@ F:	include/linux/cdrom.h
+> >  F:	include/uapi/linux/cdrom.h
 > >  
-> > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+> >  UNISYS S-PAR DRIVERS
+> > -M:	David Kershner <david.kershner@unisys.com>
+> >  L:	sparmaintainer@unisys.com (Unisys internal)
 > 
-> Can I take this to wireless tree? Felix, ack?
-> 
-> I'll also add:
-> 
-> Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
-> 
+> Again, please drop this "list" as it obviously is not going to anyone.
 
-Hi Kalle,
+OK, I'll also drop the "L:" line. I wasn't sure about it because I see 
+that there are other entries marked as "Orphan" and the list is still
+there. But you are right: although the "sparmaintainer" list address is
+not bouncing, it looks like nobody care to read messages there.
+  
+> And really, this whole code should be removed, no one seems to be using
+> it, and if they are, we can easily revert the removal and mark them as
+> the maintainer.
 
-We have a patch for a similar problem. Can you wait for the
-verification by Philippe?
-Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure after
-reboot")
-Link: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76?id=602cc0c9618a819ab00ea3c9400742a0ca318380
+1) If I remove the entire drivers/staging/unisys/ I suppose that, in 
+MAINTAINERS I should also remove the whole entry called "UNISYS S-PAR 
+DRIVERS", not only the "L:" line. 
 
-I can reproduce the problem in my v5.16-rc5 desktop. And the issue can
-be fixed when the patch applied.
+2) Furthermore, I understand that I should also should change the relevant 
+Kbuild files, otherwise all builds of staging would fail. 
+
+I'm sorry for asking but, as you probably recall, I have no prior experience 
+with removing drivers from trees and with the Kbuild's infrastructure. I'll 
+take some time to read how it works.
+
+Are the two arguments above correct?
+
+Thanks,
+
+Fabio M. De Francesco
 
 
-Hi Philippe,
-
-Can you please help to check the patch in your platform?
-
-
-Regards,
-Deren
 

@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE02E4FD3A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF184FD410
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358858AbiDLHmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S1353143AbiDLIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353747AbiDLHQC (ORCPT
+        with ESMTP id S1357219AbiDLHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:16:02 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAB140E40;
-        Mon, 11 Apr 2022 23:57:26 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id s2so16691101pfh.6;
-        Mon, 11 Apr 2022 23:57:26 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:53 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298341572E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:13:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x33so24162398lfu.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=bNjBEe/YPe6Z4q3I9FKAbfmaWyUfpZN/Nwef8zNH/KU=;
-        b=HXDUZRx+zwaxgI7xlkULMXh5Y+QtBcnOXlT16mLRmI7TL2jnSxkSQEC675xjS/jG1t
-         pqoGTyAUJLsUK2BKmyFQeizPhltMgs/iMcSsIuyzJQvl3t/89GJUJUHDqNfi5vgAuZq9
-         ey7EKWRtPPdXHh011jhNutwRey/N7slZjc0hfqnR0x8ZqfZGwe1f6zjAhOEyIBkL89tp
-         L4VBSqoI3nLb2PGX6K8zHJrWifQgJ2uU/NHsMQG+Kn6c2iHE+LLrhxQhhKNHANPPUXQr
-         BP9MOrxNNRGSDQQwk7CmYe8lLy32WsX/0G8OL31HCSqVxECsxpaQxprBLcK2MkZZ52hY
-         OZag==
+        d=emlid.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bCdGhs8/+WdbuSK8w12DNJiZfrFySBvjWoRaQGXzrgo=;
+        b=IJlogSJ+lfEbnl7Zbo9UZTCKbCGkMo9dOtOxum9KW7EDQQCEEOH7l76rsQQzzXmSEk
+         FwJ7H5uhOHoWWY846y0kUAJWFeK8QVQG6uuHQLTKY/LWq0X1+P9Y74qRBpcfyQK+Iz+L
+         xIkr1BMXboRz8afEp1B+QCb2XgwKtXOtTZm52oCWL73jQTWs/BpSNAH1t9wgCknua7t3
+         g5emvOmJEASNXfbDxSDcwodextwcLSRFfWnm+b5wKYrBH8oYrYrYR8FciyKw/o7xqRjL
+         bgdNbmqE6NdD5FlKQyW3aPun2rlVkL+SyzD3THMqV3phIvaOeuDU4bFItjNtET2pEspk
+         24Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bNjBEe/YPe6Z4q3I9FKAbfmaWyUfpZN/Nwef8zNH/KU=;
-        b=xZ9CflJoZQD0WD1L5Y/VGnvl8qLLXPK8wBnNL8X3lcRDH6LFaI9Wz/Dn/ZCfqzsBqY
-         Ty13N0l1hGYjSj1cz3Uyb8yVlT15Ao0M2bo23NV82iULpzm6jKa9J2dFal+sRbKJG3r+
-         6vRZL1Anc5uXQ+zmuPym2YFElBRUNwCxz6/4ypy/Pj0xfx6zyBnxV6TSha7SFEBkUCNy
-         OXCTdBJL98QMjNki5OmF/n9dbL9N7WOmqA0bRHmPI9Yhns5EnZQasB+FFYqE/66xLZe3
-         BadQYVkrt0nFq2DvNN5TrCqwSz8WHRf2wwTcosONh2RRN7SI2ZzSNWZsQA1JOT9C5kuA
-         3nKA==
-X-Gm-Message-State: AOAM531kcBpB4p5rUpcnWH2ygY1pbNNn7v3M2e/GQlGWeuft+zt+9fv/
-        Nlxvsm09rOpH4EJr3wR8q6Y=
-X-Google-Smtp-Source: ABdhPJwEOsSUBhuxpQW12wQ4nw3SgeA7lRPZ/kq+Y7rTFTCDN6m6jj7rBzvOGQ/DxADd6iG97ABukg==
-X-Received: by 2002:a05:6a00:238f:b0:4f7:78b1:2f6b with SMTP id f15-20020a056a00238f00b004f778b12f6bmr36673622pfc.17.1649746645568;
-        Mon, 11 Apr 2022 23:57:25 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id s16-20020a056a001c5000b00505688553e1sm16442805pfw.57.2022.04.11.23.57.22
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bCdGhs8/+WdbuSK8w12DNJiZfrFySBvjWoRaQGXzrgo=;
+        b=VqRIgQD8oc9Tp3b/d4suHqreSfovOxGD9G/P0eX9msxq308bLltDLFZIG+KkoR1g/w
+         r07FT50FNIdqzO0QaNN0ZmTYkXj+mIROcjgGkq14BiyR9B7CbNs2L4xQuvwYoDIC+tjV
+         fKKVggn/Ot6KDzYUIE75DnLTJ1ovBswwUCY8Bh1ooc9WHqujXSrlSkad/yj/APgRW2sV
+         QxuqUon/SHPdAGvdHMt703VEJ0WRGwb72XQhL+s9Jv7lymslLg215uZ1njUnLV1Xb+P8
+         WVs0CdHZVJbVsUXitNlCUvrNdUgHmy/y1F9BrxezkYREVTu0oXRgWXvsLM7W2Ix8ojJL
+         r1fg==
+X-Gm-Message-State: AOAM5326Kb9yMIf9KMTuB1VDyEIPYcZuFDr/Dlk9bF47LE5Md+pf6Kh9
+        cattLTBkJXuGcXp5gA3wMnTBo+sCFqNm1uHwxIQ=
+X-Google-Smtp-Source: ABdhPJxJD8QEh7NEMMkI2Ulc92476UGnYJt1yjhTiCmllJn+nJJiiuZtY64e/smzwquQJo9X0zW+dg==
+X-Received: by 2002:a05:6512:2391:b0:46b:a28d:4fe1 with SMTP id c17-20020a056512239100b0046ba28d4fe1mr7508363lfv.448.1649747630450;
+        Tue, 12 Apr 2022 00:13:50 -0700 (PDT)
+Received: from emlid-ThinkPad-E480.localdomain ([85.143.205.202])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056512304a00b0044ac20061e9sm3540725lfb.104.2022.04.12.00.13.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 23:57:25 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] clk: imx: scu: Fix pm_runtime_get_sync() error checking
-Date:   Tue, 12 Apr 2022 06:57:18 +0000
-Message-Id: <20220412065719.17735-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 00:13:49 -0700 (PDT)
+From:   Andrei Lalaev <andrei.lalaev@emlid.com>
+To:     andy.shevchenko@gmail.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrei Lalaev <andrei.lalaev@emlid.com>
+Subject: Re: [PATCH] gpiolib: of: fix bounds check for valid mask
+Date:   Tue, 12 Apr 2022 10:03:58 +0300
+Message-Id: <20220412070355.139507-1-andrei.lalaev@emlid.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHp75VePiCm6wH7aXcbnrt-4nntqx99s45wYk3+C2AKs=Usang@mail.gmail.com>
+References: <CAHp75VePiCm6wH7aXcbnrt-4nntqx99s45wYk3+C2AKs=Usang@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the device is already in a runtime PM enabled state
-pm_runtime_get_sync() will return 1, so a test for negative
-value should be used to check for errors.
+On Mon, Apr 11, 2022 at 7:55 PM Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Fixes: 78edeb080330 ("clk: imx: scu: add runtime pm support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/clk/imx/clk-scu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-index 083da31dc3ea..18c6190eeffd 100644
---- a/drivers/clk/imx/clk-scu.c
-+++ b/drivers/clk/imx/clk-scu.c
-@@ -529,7 +529,7 @@ static int imx_clk_scu_probe(struct platform_device *pdev)
- 		pm_runtime_enable(dev);
- 
- 		ret = pm_runtime_get_sync(dev);
--		if (ret) {
-+		if (ret < 0) {
- 			pm_genpd_remove_device(dev);
- 			pm_runtime_disable(dev);
- 			return ret;
--- 
-2.17.1
+> On top of that, it would be nice to be sure that at least all current
+> in-kernel users (meaning all DTS provided so far by the kernel) do
+> interpret it as start,size.
 
+I checked the DTS and only 36 of them use "gpio-reserved-ranges".
+The 33 of them use tuple with the second element that is less than the first.
+So it means that the maintainers interpreted it as "start,size".
+
+And only 3 of them use one tuple with the second element is greater than the first.
+The list of this DTS:
+    1. arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+        AngeloGioacchino Del Regno added it in the commit 9da65e441d4d
+        ("arm64: dts: qcom: Add support for SONY Xperia X Performance / XZ / XZs (msm8996, Tone platform)")
+        But in another commit 8b36c824b9a77 ("arm64: dts: qcom: sdm630-xperia-nile: Add all RPM and fixed regulators")
+        he clearly interpreted it as "start,size" because the second element
+        is less than the first.
+
+    2. arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+        The same maintainer as for the previous DTS.
+        He added "reserved-range" in the commit 122d2c5f31b6e
+        ("arm64: dts: qcom: Add support for MSM8998 F(x)tec Pro1 QX1000")
+
+    3. arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+        Bhupesh Sharma added it in the commit 12dd4ebda47ab
+        ("arm64: dts: qcom: Fix usb entries for SA8155p adp board")
+
+Should I ask these maintainers how they interpreted this property?
+
+> Otherwise this will be an (unacceptable) ABI change and hence documentation
+> would need to be fixed with variable names in the code
+
+I want you to notice that "of_gpiochip_init_valid_mask" uses "bitmap_clear"
+that clears "nbits" bits starting from the "start". So it can't be interpreted
+as "start,end". That's why I think everyone interprets it as "start,size" because
+it works like "start,size" and the documentation tells it is "start,size".

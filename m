@@ -2,92 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FF84FE43C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B734FE43D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356768AbiDLPAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S1356795AbiDLPAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiDLPA3 (ORCPT
+        with ESMTP id S1356788AbiDLPAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:00:29 -0400
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182E153730
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:58:11 -0700 (PDT)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 3824D1F4B;
-        Tue, 12 Apr 2022 14:58:10 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 72E3B20018;
-        Tue, 12 Apr 2022 14:58:08 +0000 (UTC)
-Message-ID: <070642693caa4c18282b08714a21026d814cd1a0.camel@perches.com>
-Subject: Re: [Patch net-next 3/3] MAINTAINERS: Add maintainers for Microchip
- T1 Phy driver
-From:   Joe Perches <joe@perches.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com
-Date:   Tue, 12 Apr 2022 07:58:07 -0700
-In-Reply-To: <20220412063317.4173-4-arun.ramadoss@microchip.com>
-References: <20220412063317.4173-1-arun.ramadoss@microchip.com>
-         <20220412063317.4173-4-arun.ramadoss@microchip.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 72E3B20018
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: m1xco8uidj5thif6k37k4gprddjjjqq4
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18c+GKq6R78PY4V+EkUEYA/ONBnFdTa+zw=
-X-HE-Tag: 1649775488-399066
+        Tue, 12 Apr 2022 11:00:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAEC53A65
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:58:23 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3AEE0215FE;
+        Tue, 12 Apr 2022 14:58:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649775502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wrdhrovfp9igpg1Vn3cvddXhYs7PD/M9oeVuBu/dN1k=;
+        b=oHGXztL3xxxiG5VbYRn2wMINMpTRQcN5bsirlVHHnK6xpad5OlcIiJc/tbyYzbTdLXhRbE
+        9G/KxJ3CQRf5oHhMXQXn8FtVQlzQifrJfzuVRG3ewK2EqKZ2GMh26JxNNP0e2m2MrAoGum
+        BMF8R7V/DdKpGtcqFdNDMK1SvhPPtak=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649775502;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wrdhrovfp9igpg1Vn3cvddXhYs7PD/M9oeVuBu/dN1k=;
+        b=trf+dqRui6VJjShzcbp73HBkABw4ffcw5D+4InEPmHzM+G/IafSqZ6fkf6e1BBrt7zaPC1
+        yslxlMFAXATVQqBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 23008A3B8A;
+        Tue, 12 Apr 2022 14:58:22 +0000 (UTC)
+Date:   Tue, 12 Apr 2022 16:58:22 +0200
+Message-ID: <s5hr1628i29.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: bcm2835-audio: remove compat ALSA card
+In-Reply-To: <69de07fb-efdb-5296-f48b-e3af2ac5ef49@i2se.com>
+References: <20220408150359.26661-1-athierry@redhat.com>
+        <69de07fb-efdb-5296-f48b-e3af2ac5ef49@i2se.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 12:03 +0530, Arun Ramadoss wrote:
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
->  MAINTAINERS | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Fri, 08 Apr 2022 23:00:52 +0200,
+Stefan Wahren wrote:
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd768d43e048..cede8ccf19b2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12903,6 +12903,12 @@ F:	drivers/net/dsa/microchip/*
->  F:	include/linux/platform_data/microchip-ksz.h
->  F:	net/dsa/tag_ksz.c
->  
-> +MICROCHIP LAN87xx/LAN937x T1 PHY DRIVER
-> +M:	UNGLinuxDriver@microchip.com
+> Hi Adrien,
+> 
+> [ add Maxime and Takashi ]
+> 
+> Am 08.04.22 um 17:03 schrieb Adrien Thierry:
+> > Remove compat ALSA card, which has overlapping functionality with the
+> > two other cards described by the driver (HDMI and headphones)
+> >
+> > This handles TODO item "Revisit multi-cards options and PCM route mixer
+> > control".
+> >
+> > Move the S/PDIF device that was part of the compat ALSA card to the HDMI
+> > card.
+> >
+> > Only enable headphones card by default, because HDMI breaks when using
+> > both vc4 and bcm2835-audio with HDMI card enabled.
+> >
+> > Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> > ---
+> >
+> > I was able to test PCM output on 3.5mm and HDMI on a Raspberry Pi 4.
+> > However, I couldn't test the HDMI S/PDIF device since I don't own a S/PDIF
+> > capable speaker.
+> 
+> thanks for taking care of this issue. Unfortunately i cannot give a
+> technical review to this patch. So hoping Maxime or Takashi can do ...
 
-Individual people are maintainers.
-Random exploder addresses are not maintainers.
+I have no longer RPi around me, so cannot actually test, but the code
+changes (mostly dropping the superfluous part) looks OK.
 
-Please use an actual person and maybe add something like
-
-M:	Actual name <actual_email@domain.tld>
-R:	UNGLinuxDriver@microchip.com
-
-instead
-
-> +L:	netdev@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/net/phy/microchip_t1.c
-> +
->  MICROCHIP LAN743X ETHERNET DRIVER
->  M:	Bryan Whitehead <bryan.whitehead@microchip.com>
->  M:	UNGLinuxDriver@microchip.com
+The concern is, though, about the compatibility with the already
+running setup.  But vc04 is still in staging, and that can be an
+excuse for the possible breakage, I suppose.
 
 
+thanks,
+
+Takashi
+
+> 
+> Best regards
+> 
+> >
+> >   .../vc04_services/bcm2835-audio/bcm2835-ctl.c | 86 ++-----------------
+> >   .../vc04_services/bcm2835-audio/bcm2835.c     | 33 ++-----
+> >   2 files changed, 15 insertions(+), 104 deletions(-)
+> >
+> > diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-ctl.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-ctl.c
+> > index 3703409715da..1c1f040122d7 100644
+> > --- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-ctl.c
+> > +++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-ctl.c
+> > @@ -117,15 +117,6 @@ static const struct snd_kcontrol_new snd_bcm2835_ctl[] = {
+> >   		.get = snd_bcm2835_ctl_get,
+> >   		.put = snd_bcm2835_ctl_put,
+> >   	},
+> > -	{
+> > -		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> > -		.name = "PCM Playback Route",
+> > -		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+> > -		.private_value = PCM_PLAYBACK_DEVICE,
+> > -		.info = snd_bcm2835_ctl_info,
+> > -		.get = snd_bcm2835_ctl_get,
+> > -		.put = snd_bcm2835_ctl_put,
+> > -	},
+> >   };
+> >     static int snd_bcm2835_spdif_default_info(struct snd_kcontrol
+> > *kcontrol,
+> > @@ -220,7 +211,14 @@ static int create_ctls(struct bcm2835_chip *chip, size_t size,
+> >   	return 0;
+> >   }
+> >   -int snd_bcm2835_new_ctl(struct bcm2835_chip *chip)
+> > +int snd_bcm2835_new_headphones_ctl(struct bcm2835_chip *chip)
+> > +{
+> > +	strscpy(chip->card->mixername, "Broadcom Mixer", sizeof(chip->card->mixername));
+> > +	return create_ctls(chip, ARRAY_SIZE(snd_bcm2835_ctl),
+> > +			   snd_bcm2835_ctl);
+> > +}
+> > +
+> > +int snd_bcm2835_new_hdmi_ctl(struct bcm2835_chip *chip)
+> >   {
+> >   	int err;
+> >   @@ -232,71 +230,3 @@ int snd_bcm2835_new_ctl(struct bcm2835_chip
+> > *chip)
+> >   			   snd_bcm2835_spdif);
+> >   }
+> >   -static const struct snd_kcontrol_new snd_bcm2835_headphones_ctl[]
+> > = {
+> > -	{
+> > -		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> > -		.name = "Headphone Playback Volume",
+> > -		.index = 0,
+> > -		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE |
+> > -			  SNDRV_CTL_ELEM_ACCESS_TLV_READ,
+> > -		.private_value = PCM_PLAYBACK_VOLUME,
+> > -		.info = snd_bcm2835_ctl_info,
+> > -		.get = snd_bcm2835_ctl_get,
+> > -		.put = snd_bcm2835_ctl_put,
+> > -		.count = 1,
+> > -		.tlv = {.p = snd_bcm2835_db_scale}
+> > -	},
+> > -	{
+> > -		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> > -		.name = "Headphone Playback Switch",
+> > -		.index = 0,
+> > -		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+> > -		.private_value = PCM_PLAYBACK_MUTE,
+> > -		.info = snd_bcm2835_ctl_info,
+> > -		.get = snd_bcm2835_ctl_get,
+> > -		.put = snd_bcm2835_ctl_put,
+> > -		.count = 1,
+> > -	}
+> > -};
+> > -
+> > -int snd_bcm2835_new_headphones_ctl(struct bcm2835_chip *chip)
+> > -{
+> > -	strscpy(chip->card->mixername, "Broadcom Mixer", sizeof(chip->card->mixername));
+> > -	return create_ctls(chip, ARRAY_SIZE(snd_bcm2835_headphones_ctl),
+> > -			   snd_bcm2835_headphones_ctl);
+> > -}
+> > -
+> > -static const struct snd_kcontrol_new snd_bcm2835_hdmi[] = {
+> > -	{
+> > -		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> > -		.name = "HDMI Playback Volume",
+> > -		.index = 0,
+> > -		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE |
+> > -			  SNDRV_CTL_ELEM_ACCESS_TLV_READ,
+> > -		.private_value = PCM_PLAYBACK_VOLUME,
+> > -		.info = snd_bcm2835_ctl_info,
+> > -		.get = snd_bcm2835_ctl_get,
+> > -		.put = snd_bcm2835_ctl_put,
+> > -		.count = 1,
+> > -		.tlv = {.p = snd_bcm2835_db_scale}
+> > -	},
+> > -	{
+> > -		.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> > -		.name = "HDMI Playback Switch",
+> > -		.index = 0,
+> > -		.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+> > -		.private_value = PCM_PLAYBACK_MUTE,
+> > -		.info = snd_bcm2835_ctl_info,
+> > -		.get = snd_bcm2835_ctl_get,
+> > -		.put = snd_bcm2835_ctl_put,
+> > -		.count = 1,
+> > -	}
+> > -};
+> > -
+> > -int snd_bcm2835_new_hdmi_ctl(struct bcm2835_chip *chip)
+> > -{
+> > -	strscpy(chip->card->mixername, "Broadcom Mixer", sizeof(chip->card->mixername));
+> > -	return create_ctls(chip, ARRAY_SIZE(snd_bcm2835_hdmi),
+> > -			   snd_bcm2835_hdmi);
+> > -}
+> > -
+> > diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
+> > index 628732d7bf6a..00bc898b0189 100644
+> > --- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
+> > +++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
+> > @@ -10,17 +10,13 @@
+> >   #include "bcm2835.h"
+> >     static bool enable_hdmi;
+> > -static bool enable_headphones;
+> > -static bool enable_compat_alsa = true;
+> > +static bool enable_headphones = true;
+> >   static int num_channels = MAX_SUBSTREAMS;
+> >     module_param(enable_hdmi, bool, 0444);
+> >   MODULE_PARM_DESC(enable_hdmi, "Enables HDMI virtual audio device");
+> >   module_param(enable_headphones, bool, 0444);
+> >   MODULE_PARM_DESC(enable_headphones, "Enables Headphones virtual audio device");
+> > -module_param(enable_compat_alsa, bool, 0444);
+> > -MODULE_PARM_DESC(enable_compat_alsa,
+> > -		 "Enables ALSA compatibility virtual audio device");
+> >   module_param(num_channels, int, 0644);
+> >   MODULE_PARM_DESC(num_channels, "Number of audio channels (default: 8)");
+> >   @@ -63,19 +59,20 @@ struct bcm2835_audio_driver {
+> >   	enum snd_bcm2835_route route;
+> >   };
+> >   -static int bcm2835_audio_alsa_newpcm(struct bcm2835_chip *chip,
+> > +static int bcm2835_audio_dual_newpcm(struct bcm2835_chip *chip,
+> >   				     const char *name,
+> >   				     enum snd_bcm2835_route route,
+> >   				     u32 numchannels)
+> >   {
+> >   	int err;
+> >   -	err = snd_bcm2835_new_pcm(chip, "bcm2835 ALSA", 0,
+> > AUDIO_DEST_AUTO,
+> > -				  numchannels - 1, false);
+> > +	err = snd_bcm2835_new_pcm(chip, name, 0, route,
+> > +				  numchannels, false);
+> > +
+> >   	if (err)
+> >   		return err;
+> >   -	err = snd_bcm2835_new_pcm(chip, "bcm2835 IEC958/HDMI", 1, 0,
+> > 1, true);
+> > +	err = snd_bcm2835_new_pcm(chip, "IEC958", 1, route, 1, true);
+> >   	if (err)
+> >   		return err;
+> >   @@ -90,18 +87,6 @@ static int bcm2835_audio_simple_newpcm(struct
+> > bcm2835_chip *chip,
+> >   	return snd_bcm2835_new_pcm(chip, name, 0, route, numchannels, false);
+> >   }
+> >   -static struct bcm2835_audio_driver bcm2835_audio_alsa = {
+> > -	.driver = {
+> > -		.name = "bcm2835_alsa",
+> > -		.owner = THIS_MODULE,
+> > -	},
+> > -	.shortname = "bcm2835 ALSA",
+> > -	.longname  = "bcm2835 ALSA",
+> > -	.minchannels = 2,
+> > -	.newpcm = bcm2835_audio_alsa_newpcm,
+> > -	.newctl = snd_bcm2835_new_ctl,
+> > -};
+> > -
+> >   static struct bcm2835_audio_driver bcm2835_audio_hdmi = {
+> >   	.driver = {
+> >   		.name = "bcm2835_hdmi",
+> > @@ -110,7 +95,7 @@ static struct bcm2835_audio_driver bcm2835_audio_hdmi = {
+> >   	.shortname = "bcm2835 HDMI",
+> >   	.longname  = "bcm2835 HDMI",
+> >   	.minchannels = 1,
+> > -	.newpcm = bcm2835_audio_simple_newpcm,
+> > +	.newpcm = bcm2835_audio_dual_newpcm,
+> >   	.newctl = snd_bcm2835_new_hdmi_ctl,
+> >   	.route = AUDIO_DEST_HDMI
+> >   };
+> > @@ -134,10 +119,6 @@ struct bcm2835_audio_drivers {
+> >   };
+> >     static struct bcm2835_audio_drivers children_devices[] = {
+> > -	{
+> > -		.audio_driver = &bcm2835_audio_alsa,
+> > -		.is_enabled = &enable_compat_alsa,
+> > -	},
+> >   	{
+> >   		.audio_driver = &bcm2835_audio_hdmi,
+> >   		.is_enabled = &enable_hdmi,
+> >
+> > base-commit: 1831fed559732b132aef0ea8261ac77e73f7eadf
+> 

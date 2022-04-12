@@ -2,243 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40474FE301
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AFB4FE2F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356185AbiDLNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S1351066AbiDLNok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355968AbiDLNox (ORCPT
+        with ESMTP id S236249AbiDLNoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:44:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CF6D4ECE3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3F40153B;
-        Tue, 12 Apr 2022 06:42:34 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.57.94.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7BCEE3F70D;
-        Tue, 12 Apr 2022 06:42:33 -0700 (PDT)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v4 2/7] sched/fair: Decay task PELT values during wakeup migration
-Date:   Tue, 12 Apr 2022 14:42:15 +0100
-Message-Id: <20220412134220.1588482-3-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412134220.1588482-1-vincent.donnefort@arm.com>
-References: <20220412134220.1588482-1-vincent.donnefort@arm.com>
+        Tue, 12 Apr 2022 09:44:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3884ECCE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:18 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kd6MV07y1zdZcX;
+        Tue, 12 Apr 2022 21:41:42 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 21:42:16 +0800
+Subject: Re: [PATCH v2 2/9] mm/vmscan: remove unneeded can_split_huge_page
+ check
+To:     Oscar Salvador <osalvador@suse.de>
+CC:     <akpm@linux-foundation.org>, <ying.huang@intel.com>,
+        <songmuchun@bytedance.com>, <hch@infradead.org>,
+        <willy@infradead.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+ <20220409093500.10329-3-linmiaohe@huawei.com>
+ <YlU/h0fdE1L846Bd@localhost.localdomain>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <7455b680-3d89-5d3e-ba0e-6e4358b114a2@huawei.com>
+Date:   Tue, 12 Apr 2022 21:42:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YlU/h0fdE1L846Bd@localhost.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before being migrated to a new CPU, a task sees its PELT values
-synchronized with rq last_update_time. Once done, that same task will also
-have its sched_avg last_update_time reset. This means the time between
-the migration and the last clock update (B) will not be accounted for in
-util_avg and a discontinuity will appear. This issue is amplified by the
-PELT clock scaling. If the clock hasn't been updated while the CPU is
-idle, clock_pelt will not be aligned with clock_task and that time (A)
-will be also lost.
+On 2022/4/12 16:59, Oscar Salvador wrote:
+> On Sat, Apr 09, 2022 at 05:34:53PM +0800, Miaohe Lin wrote:
+>> We don't need to check can_split_folio() because folio_maybe_dma_pinned()
+>> is checked before. It will avoid the long term pinned pages to be swapped
+>> out. And we can live with short term pinned pages. Without can_split_folio
+>> checking we can simplify the code. Also activate_locked can be changed to
+>> keep_locked as it's just short term pinning.
+> 
+> What do you mean by "we can live with short term pinned pages"?
+> Does it mean that it was not pinned when we check
+> folio_maybe_dma_pinned() but now it is?
+> 
+> To me it looks like the pinning is fluctuating and we rely on
+> split_folio_to_list() to see whether we succeed or not, and if not
+> we give it another spin in the next round?
 
-   ---------|----- A -----|-----------|------- B -----|>
-        clock_pelt   clock_task     clock            now
+Yes. Short term pinned pages is relative to long term pinned pages and these pages won't be
+pinned for a noticeable time. So it's expected to split the folio successfully in the next
+round as the pinning is really fluctuating. Or am I miss something?
 
-This is especially problematic for asymmetric CPU capacity systems which
-need stable util_avg signals for task placement and energy estimation.
+Many thanks for your comment and reply!
 
-Ideally, this problem would be solved by updating the runqueue clocks
-before the migration. But that would require taking the runqueue lock
-which is quite expensive [1]. Instead estimate the missing time and update
-the task util_avg with that value:
-
-  A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
-
-Neither clock_task, clock_pelt nor clock can be accessed without the
-runqueue lock. The new cfs_rq last_update_lag is therefore created and
-contains those three values when the last_update_time value for that very
-same cfs_rq is updated.
-
-  last_update_lag = clock - clock_task + clock_pelt
-
-And we can then write the missing time as follow:
-
-  A + B = sched_clock_cpu() - last_update_lag
-
-The B. part of the missing time is however an estimation that doesn't take
-into account IRQ and Paravirt time.
-
-Now we have an estimation for A + B, we can create an estimator for the
-PELT value at the time of the migration. We need for this purpose to
-inject last_update_time which is a combination of both clock_pelt and
-lost_idle_time. The latter is a time value which is completely lost from a
-PELT point of view and must be ignored. And finally, we can write:
-
-  now = last_update_time + A + B
-      = last_update_time + sched_clock_cpu() - last_update_lag
-
-This estimation has a cost, mostly due to sched_clock_cpu(). Limit the
-usage to the case where the source CPU is idle as we know this is when the
-clock is having the biggest risk of being outdated.
-
-[1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
-
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5dd38c9df0cc..e234d015657f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3694,6 +3694,57 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
- 
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- 
-+#ifdef CONFIG_NO_HZ_COMMON
-+static inline void update_cfs_rq_lag(struct cfs_rq *cfs_rq)
-+{
-+	struct rq *rq = rq_of(cfs_rq);
-+
-+	u64_u32_store(cfs_rq->last_update_lag,
-+#ifdef CONFIG_CFS_BANDWIDTH
-+		      /* Timer stopped by throttling */
-+		      unlikely(cfs_rq->throttle_count) ? U64_MAX :
-+#endif
-+		      rq->clock - rq->clock_task + rq->clock_pelt);
-+}
-+
-+static inline void migrate_se_pelt_lag(struct sched_entity *se)
-+{
-+	u64 now, last_update_lag;
-+	struct cfs_rq *cfs_rq;
-+	struct rq *rq;
-+	bool is_idle;
-+
-+	cfs_rq = cfs_rq_of(se);
-+	rq = rq_of(cfs_rq);
-+
-+	rcu_read_lock();
-+	is_idle = is_idle_task(rcu_dereference(rq->curr));
-+	rcu_read_unlock();
-+
-+	/*
-+	 * The lag estimation comes with a cost we don't want to pay all the
-+	 * time. Hence, limiting to the case where the source CPU is idle and
-+	 * we know we are at the greatest risk to have an outdated clock.
-+	 */
-+	if (!is_idle)
-+		return;
-+
-+	last_update_lag = u64_u32_load(cfs_rq->last_update_lag);
-+
-+	/* The clock has been stopped for throttling */
-+	if (last_update_lag == U64_MAX)
-+		return;
-+
-+	now = se->avg.last_update_time - last_update_lag +
-+	      sched_clock_cpu(cpu_of(rq));
-+
-+	__update_load_avg_blocked_se(now, se);
-+}
-+#else
-+static void update_cfs_rq_lag(struct cfs_rq *cfs_rq) {}
-+static void migrate_se_pelt_lag(struct sched_entity *se) {}
-+#endif
-+
- /**
-  * update_cfs_rq_load_avg - update the cfs_rq's load/util averages
-  * @now: current time, as per cfs_rq_clock_pelt()
-@@ -3774,6 +3825,7 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 			   cfs_rq->last_update_time_copy,
- 			   sa->last_update_time);
- #endif
-+	update_cfs_rq_lag(cfs_rq);
- 
- 	return decayed;
- }
-@@ -6946,6 +6998,8 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
-  */
- static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- {
-+	struct sched_entity *se = &p->se;
-+
- 	/*
- 	 * As blocked tasks retain absolute vruntime the migration needs to
- 	 * deal with this by subtracting the old and adding the new
-@@ -6953,7 +7007,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	 * the task on the new runqueue.
- 	 */
- 	if (READ_ONCE(p->__state) == TASK_WAKING) {
--		struct sched_entity *se = &p->se;
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
- 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-@@ -6965,25 +7018,28 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 		 * rq->lock and can modify state directly.
- 		 */
- 		lockdep_assert_rq_held(task_rq(p));
--		detach_entity_cfs_rq(&p->se);
-+		detach_entity_cfs_rq(se);
- 
- 	} else {
-+		remove_entity_load_avg(se);
-+
- 		/*
--		 * We are supposed to update the task to "current" time, then
--		 * its up to date and ready to go to new CPU/cfs_rq. But we
--		 * have difficulty in getting what current time is, so simply
--		 * throw away the out-of-date time. This will result in the
--		 * wakee task is less decayed, but giving the wakee more load
--		 * sounds not bad.
-+		 * Here, the task's PELT values have been updated according to
-+		 * the current rq's clock. But if that clock hasn't been
-+		 * updated in a while, a substantial idle time will be missed,
-+		 * leading to an inflation after wake-up on the new rq.
-+		 *
-+		 * Estimate the missing time from the rq clock and update
-+		 * sched_avg to improve the PELT continuity after migration.
- 		 */
--		remove_entity_load_avg(&p->se);
-+		migrate_se_pelt_lag(se);
- 	}
- 
- 	/* Tell new CPU we are migrated */
--	p->se.avg.last_update_time = 0;
-+	se->avg.last_update_time = 0;
- 
- 	/* We have migrated, no longer consider this task hot */
--	p->se.exec_start = 0;
-+	se->exec_start = 0;
- 
- 	update_scan_period(p, new_cpu);
- }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e2cf6e48b165..2f6446295e7d 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -593,6 +593,12 @@ struct cfs_rq {
- 	struct sched_avg	avg;
- #ifndef CONFIG_64BIT
- 	u64			last_update_time_copy;
-+#endif
-+#ifdef CONFIG_NO_HZ_COMMON
-+	u64			last_update_lag;
-+#ifndef CONFIG_64BIT
-+	u64                     last_update_lag_copy;
-+#endif
- #endif
- 	struct {
- 		raw_spinlock_t	lock ____cacheline_aligned;
--- 
-2.25.1
+> 
+>> Suggested-by: Huang, Ying <ying.huang@intel.com>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/vmscan.c | 22 ++++++++--------------
+>>  1 file changed, 8 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 4a76be47bed1..01f5db75a507 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -1711,20 +1711,14 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+>>  					goto keep_locked;
+>>  				if (folio_maybe_dma_pinned(folio))
+>>  					goto keep_locked;
+>> -				if (PageTransHuge(page)) {
+>> -					/* cannot split THP, skip it */
+>> -					if (!can_split_folio(folio, NULL))
+>> -						goto activate_locked;
+>> -					/*
+>> -					 * Split pages without a PMD map right
+>> -					 * away. Chances are some or all of the
+>> -					 * tail pages can be freed without IO.
+>> -					 */
+>> -					if (!folio_entire_mapcount(folio) &&
+>> -					    split_folio_to_list(folio,
+>> -								page_list))
+>> -						goto activate_locked;
+>> -				}
+>> +				/*
+>> +				 * Split pages without a PMD map right
+>> +				 * away. Chances are some or all of the
+>> +				 * tail pages can be freed without IO.
+>> +				 */
+>> +				if (PageTransHuge(page) && !folio_entire_mapcount(folio) &&
+>> +				    split_folio_to_list(folio, page_list))
+>> +					goto keep_locked;
+>>  				if (!add_to_swap(page)) {
+>>  					if (!PageTransHuge(page))
+>>  						goto activate_locked_split;
+>> -- 
+>> 2.23.0
+>>
+>>
+> 
 

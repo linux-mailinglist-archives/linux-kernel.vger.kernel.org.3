@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174B14FD828
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1F44FD4F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381277AbiDLIXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S243806AbiDLHbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353715AbiDLHZw (ORCPT
+        with ESMTP id S1351856AbiDLHNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897B4E80;
-        Tue, 12 Apr 2022 00:04:05 -0700 (PDT)
+        Tue, 12 Apr 2022 03:13:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9ED46;
+        Mon, 11 Apr 2022 23:53:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CEE60B65;
-        Tue, 12 Apr 2022 07:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3038AC385A1;
-        Tue, 12 Apr 2022 07:04:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DB66B81B47;
+        Tue, 12 Apr 2022 06:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD045C385A1;
+        Tue, 12 Apr 2022 06:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747044;
-        bh=fvIHxnnFvwmIhSD9YWqBPMFEOBPHcD8Axfxa+wT9Qgk=;
+        s=korg; t=1649746420;
+        bh=yACMg3K5W5/I6pA+flBzd9n3DRtIlF1HetQbnpP/24s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xZQz4gWGOexgtYZsqsuye/c2nrnOBPdV6MUYkeztifpju9f1R/imNRghv1rCgqfBA
-         r9IRpphGi2i6ShHHBcrJyx7UXFeOsik2qBQoFHjoUBLpxQTeBciZ147u89DUlCdLxF
-         F5T+ED+/OmHZPD5qysM2phU2ryM4v20sme0uaV6s=
+        b=H0RIirf/AbI7/mxqKX6lQ1ECLdiz4PXGNMcBFn07EAbYpucKEVkKyIsmr14cl/0HF
+         04AsHAOPRoyXhhUxPoG8pminbNJDoRDsqE4iMvGVktWrPoPQr3ZMK2VXZrkbkdLbSr
+         W5k6Nj8vDC1bH0OyFN3nWUzPHStVUGMYTUcvkvtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Hocko <mhocko@suse.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 223/285] mm/mempolicy: fix mpol_new leak in shared_policy_replace
+        stable@vger.kernel.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.15 277/277] powerpc: Fix virt_addr_valid() for 64-bit Book3E & 32-bit
 Date:   Tue, 12 Apr 2022 08:31:20 +0200
-Message-Id: <20220412062950.093125745@linuxfoundation.org>
+Message-Id: <20220412062950.057689842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-commit 4ad099559b00ac01c3726e5c95dc3108ef47d03e upstream.
+commit ffa0b64e3be58519ae472ea29a1a1ad681e32f48 upstream.
 
-If mpol_new is allocated but not used in restart loop, mpol_new will be
-freed via mpol_put before returning to the caller.  But refcnt is not
-initialized yet, so mpol_put could not do the right things and might
-leak the unused mpol_new.  This would happen if mempolicy was updated on
-the shared shmem file while the sp->lock has been dropped during the
-memory allocation.
+mpe: On 64-bit Book3E vmalloc space starts at 0x8000000000000000.
 
-This issue could be triggered easily with the below code snippet if
-there are many processes doing the below work at the same time:
+Because of the way __pa() works we have:
+  __pa(0x8000000000000000) == 0, and therefore
+  virt_to_pfn(0x8000000000000000) == 0, and therefore
+  virt_addr_valid(0x8000000000000000) == true
 
-  shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
-  shm = shmat(shmid, 0, 0);
-  loop many times {
-    mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
-    mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
-          maxnode, 0);
-  }
+Which is wrong, virt_addr_valid() should be false for vmalloc space.
+In fact all vmalloc addresses that alias with a valid PFN will return
+true from virt_addr_valid(). That can cause bugs with hardened usercopy
+as described below by Kefeng Wang:
 
-Link: https://lkml.kernel.org/r/20220329111416.27954-1-linmiaohe@huawei.com
-Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Cc: KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: <stable@vger.kernel.org>	[3.8]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+  When running ethtool eth0 on 64-bit Book3E, a BUG occurred:
+
+    usercopy: Kernel memory exposure attempt detected from SLUB object not in SLUB page?! (offset 0, size 1048)!
+    kernel BUG at mm/usercopy.c:99
+    ...
+    usercopy_abort+0x64/0xa0 (unreliable)
+    __check_heap_object+0x168/0x190
+    __check_object_size+0x1a0/0x200
+    dev_ethtool+0x2494/0x2b20
+    dev_ioctl+0x5d0/0x770
+    sock_do_ioctl+0xf0/0x1d0
+    sock_ioctl+0x3ec/0x5a0
+    __se_sys_ioctl+0xf0/0x160
+    system_call_exception+0xfc/0x1f0
+    system_call_common+0xf8/0x200
+
+  The code shows below,
+
+    data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
+    copy_to_user(useraddr, data, gstrings.len * ETH_GSTRING_LEN))
+
+  The data is alloced by vmalloc(), virt_addr_valid(ptr) will return true
+  on 64-bit Book3E, which leads to the panic.
+
+  As commit 4dd7554a6456 ("powerpc/64: Add VIRTUAL_BUG_ON checks for __va
+  and __pa addresses") does, make sure the virt addr above PAGE_OFFSET in
+  the virt_addr_valid() for 64-bit, also add upper limit check to make
+  sure the virt is below high_memory.
+
+  Meanwhile, for 32-bit PAGE_OFFSET is the virtual address of the start
+  of lowmem, high_memory is the upper low virtual address, the check is
+  suitable for 32-bit, this will fix the issue mentioned in commit
+  602946ec2f90 ("powerpc: Set max_mapnr correctly") too.
+
+On 32-bit there is a similar problem with high memory, that was fixed in
+commit 602946ec2f90 ("powerpc: Set max_mapnr correctly"), but that
+commit breaks highmem and needs to be reverted.
+
+We can't easily fix __pa(), we have code that relies on its current
+behaviour. So for now add extra checks to virt_addr_valid().
+
+For 64-bit Book3S the extra checks are not necessary, the combination of
+virt_to_pfn() and pfn_valid() should yield the correct result, but they
+are harmless.
+
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[mpe: Add additional change log detail]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220406145802.538416-1-mpe@ellerman.id.au
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mempolicy.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/include/asm/page.h |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2653,6 +2653,7 @@ alloc_new:
- 	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
- 	if (!mpol_new)
- 		goto err_out;
-+	atomic_set(&mpol_new->refcnt, 1);
- 	goto restart;
- }
+--- a/arch/powerpc/include/asm/page.h
++++ b/arch/powerpc/include/asm/page.h
+@@ -132,7 +132,11 @@ static inline bool pfn_valid(unsigned lo
+ #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+ #define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
  
+-#define virt_addr_valid(kaddr)	pfn_valid(virt_to_pfn(kaddr))
++#define virt_addr_valid(vaddr)	({					\
++	unsigned long _addr = (unsigned long)vaddr;			\
++	_addr >= PAGE_OFFSET && _addr < (unsigned long)high_memory &&	\
++	pfn_valid(virt_to_pfn(_addr));					\
++})
+ 
+ /*
+  * On Book-E parts we need __va to parse the device tree and we can't
 
 

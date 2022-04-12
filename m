@@ -2,127 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093124FCAEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEA14FCB99
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244902AbiDLBCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S1343685AbiDLBGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245667AbiDLA4n (ORCPT
+        with ESMTP id S1345124AbiDLA62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:56:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FF41FCC0;
-        Mon, 11 Apr 2022 17:49:31 -0700 (PDT)
+        Mon, 11 Apr 2022 20:58:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1B731218;
+        Mon, 11 Apr 2022 17:50:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0B09B8198C;
-        Tue, 12 Apr 2022 00:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DC5C385AB;
-        Tue, 12 Apr 2022 00:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDF2D60A69;
+        Tue, 12 Apr 2022 00:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39CE2C385A4;
+        Tue, 12 Apr 2022 00:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724569;
-        bh=bUn5MsT2K3tXiL4OUAHoHpu6WGSu0PQnC8Qt/TN43SE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ViCn0Y6LM+yv0btIMrHmlN+58EMx9MaXxxgCwKhNVwVOxuIGaKehJl/ZLscRhnQJ4
-         mJ7lLRBHAgazX8B77zxLgrABdwYaIefAtrLOI4/52lNZv6Zx7nVnc4Pj3Huyu3F35f
-         kHg7hiF5+AdmI3BRZTSyJWhLXYe6Jvk2Qw49+XyCjhOnI1yx1y2U4F/JrX9rH4s1as
-         JjqNeKBJRlY7dTDblK05yNU7Bp5KPimltOU5ziXBZKlFCnPwICA7lEag1Pl9TdGHbv
-         p6RKbqYj3pLBihxkZscNumNxW4BMAGw2c028jnQipUQUJjAibgIzUsKd1kzgSMe50o
-         dPSG4eTamKURw==
-Date:   Tue, 12 Apr 2022 09:49:23 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
-Message-Id: <20220412094923.0abe90955e5db486b7bca279@kernel.org>
-In-Reply-To: <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
-References: <20220407125224.310255-1-jolsa@kernel.org>
-        <20220407125224.310255-5-jolsa@kernel.org>
-        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1649724650;
+        bh=tGzXzQhqgL+alx1Q6zWeqj7q4zL1AuwH2it+jAec/5w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u/pDjD0cGhirQNp4mXs+mE1nmO2YZ6ED2UXXBxoRy+R2vif61h6ZWFE/nZibJEjK8
+         4XCwtLdofLejw7MYCIhR1Cz0fSk1XOReXiu4HImxA4SohIcklxlPvFAM3mwLPuiVdU
+         dgdGoew2Gc2mXQW1uIVkXdnPfdFFrM9txj+MnuDnLXxLgLPasCF9SscLcIpkZaRBQB
+         FeePfOS5A/68IrObqdMHPwf0I3lJkKdA+kPNV9S8cNAAt8USBaYhMoo+dPDVWQLD43
+         oDIYEilE8gWWA/GOsXu3eXw7xYG6CZbTZF2NNoCCPuRZJKUWi7YUwX7TUWkjd1+ro3
+         wFphKHpdauI2Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.4 01/21] drm/amd: Add USBC connector ID
+Date:   Mon, 11 Apr 2022 20:50:20 -0400
+Message-Id: <20220412005042.351105-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 15:15:40 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+From: Aurabindo Pillai <aurabindo.pillai@amd.com>
 
-> > +#define DEBUGFS "/sys/kernel/debug/tracing/"
-> > +
-> > +static int get_syms(char ***symsp, size_t *cntp)
-> > +{
-> > +       size_t cap = 0, cnt = 0, i;
-> > +       char *name, **syms = NULL;
-> > +       struct hashmap *map;
-> > +       char buf[256];
-> > +       FILE *f;
-> > +       int err;
-> > +
-> > +       /*
-> > +        * The available_filter_functions contains many duplicates,
-> > +        * but other than that all symbols are usable in kprobe multi
-> > +        * interface.
-> > +        * Filtering out duplicates by using hashmap__add, which won't
-> > +        * add existing entry.
-> > +        */
-> > +       f = fopen(DEBUGFS "available_filter_functions", "r");
-> 
-> I'm really curious how did you manage to attach to everything in
-> available_filter_functions because when I'm trying to do that I fail.
-> available_filter_functions has a bunch of functions that should not be
-> attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
-> 
->   void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
+[ Upstream commit c5c948aa894a831f96fccd025e47186b1ee41615 ]
 
-Hmm, this sounds like a bug in ftrace side. IIUC, the
-"available_filter_functions" only shows the functions which is NOT
-instrumented by mcount, we should not see any notrace functions on it.
+[Why&How] Add a dedicated AMDGPU specific ID for use with
+newer ASICs that support USB-C output
 
-Technically, this is done by __no_instrument_function__ attribute.
+Signed-off-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/amdgpu/ObjectID.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-#if defined(CC_USING_HOTPATCH)
-#define notrace                 __attribute__((hotpatch(0, 0)))
-#elif defined(CC_USING_PATCHABLE_FUNCTION_ENTRY)
-#define notrace                 __attribute__((patchable_function_entry(0, 0)))
-#else
-#define notrace                 __attribute__((__no_instrument_function__))
-#endif
-
-> 
-> So first, curious what I am doing wrong or rather why it succeeds in
-> your case ;)
-> 
-> But second, just wanted to plea to "fix" available_filter_functions to
-> not list stuff that should not be attachable. Can you please take a
-> look and checks what's going on there and why do we have notrace
-> functions (and what else should *NOT* be there)?
-
-Can you share how did you reproduce the issue? I'll check it.
-
-Thank you,
-
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/ObjectID.h b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+index 5b393622f592..a0f0a17e224f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/ObjectID.h
++++ b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+@@ -119,6 +119,7 @@
+ #define CONNECTOR_OBJECT_ID_eDP                   0x14
+ #define CONNECTOR_OBJECT_ID_MXM                   0x15
+ #define CONNECTOR_OBJECT_ID_LVDS_eDP              0x16
++#define CONNECTOR_OBJECT_ID_USBC                  0x17
+ 
+ /* deleted */
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.35.1
+

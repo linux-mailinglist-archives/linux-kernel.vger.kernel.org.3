@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5C04FD659
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C3F4FD4D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351768AbiDLHMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S1385631AbiDLIwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351437AbiDLGxg (ORCPT
+        with ESMTP id S1358960AbiDLHmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5293CA4B;
-        Mon, 11 Apr 2022 23:40:38 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E5A54BDD;
+        Tue, 12 Apr 2022 00:19:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76749B81B49;
-        Tue, 12 Apr 2022 06:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEEAC385A1;
-        Tue, 12 Apr 2022 06:40:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF2AAB81B66;
+        Tue, 12 Apr 2022 07:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CB7C385A5;
+        Tue, 12 Apr 2022 07:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745636;
-        bh=UG8E96NmWmyT1eR57RezFnkCYzgTjNbUM2DsOBIh/tU=;
+        s=korg; t=1649747981;
+        bh=vr7Wo20zHLHWbtiSd/Y1L2t36ZxOiBHBQ+ROACpAYAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cEGawEv0mzrFdrmsa2iIgQImuq7dy62ph/otoNdf/xa0TKcXo7wf57FMgSseZjiqb
-         aPqnDpobfCZkKy4HZbWR7cQxUGnHtLrfh/HNbPYXvSMMwDyA6WLNeIv7YqakvtiWnH
-         3oobhEopz8+Vrq/gATLv0mGVCbLEtsDj4xsFqiMc=
+        b=oJyhQ5uv5iSsITGFYasK7pA6r2tILlebTKymbTBzdxF/0sQX8/OmpARncK2YL0h7r
+         seT6VWdKrTsomLmEnxZKniu0PCf4lwBEQuKAKRSVFS2mf685NV3NAz7MYW2UcsMm2J
+         pYDE9m1v5mJJkZaomPD3KOMwR/Qa0mMqDnqdh4Ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.10 166/171] selftests: cgroup: Test open-time cgroup namespace usage for migration checks
+        stable@vger.kernel.org, Ilya Maximets <i.maximets@ovn.org>,
+        Aaron Conole <aconole@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 239/343] net: openvswitch: dont send internal clone attribute to the userspace.
 Date:   Tue, 12 Apr 2022 08:30:57 +0200
-Message-Id: <20220412062932.704412068@linuxfoundation.org>
+Message-Id: <20220412062958.231026041@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
-References: <20220412062927.870347203@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,145 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Ilya Maximets <i.maximets@ovn.org>
 
-commit bf35a7879f1dfb0d050fe779168bcf25c7de66f5 upstream.
+[ Upstream commit 3f2a3050b4a3e7f32fc0ea3c9b0183090ae00522 ]
 
-When a task is writing to an fd opened by a different task, the perm check
-should use the cgroup namespace of the latter task. Add a test for it.
+'OVS_CLONE_ATTR_EXEC' is an internal attribute that is used for
+performance optimization inside the kernel.  It's added by the kernel
+while parsing user-provided actions and should not be sent during the
+flow dump as it's not part of the uAPI.
 
-Tested-by: Michal Koutný <mkoutny@suse.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The issue doesn't cause any significant problems to the ovs-vswitchd
+process, because reported actions are not really used in the
+application lifecycle and only supposed to be shown to a human via
+ovs-dpctl flow dump.  However, the action list is still incorrect
+and causes the following error if the user wants to look at the
+datapath flows:
+
+  # ovs-dpctl add-dp system@ovs-system
+  # ovs-dpctl add-flow "<flow match>" "clone(ct(commit),0)"
+  # ovs-dpctl dump-flows
+  <flow match>, packets:0, bytes:0, used:never,
+    actions:clone(bad length 4, expected -1 for: action0(01 00 00 00),
+                  ct(commit),0)
+
+With the fix:
+
+  # ovs-dpctl dump-flows
+  <flow match>, packets:0, bytes:0, used:never,
+    actions:clone(ct(commit),0)
+
+Additionally fixed an incorrect attribute name in the comment.
+
+Fixes: b233504033db ("openvswitch: kernel datapath clone action")
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Acked-by: Aaron Conole <aconole@redhat.com>
+Link: https://lore.kernel.org/r/20220404104150.2865736-1-i.maximets@ovn.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/cgroup/test_core.c |   97 +++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+ net/openvswitch/actions.c      | 2 +-
+ net/openvswitch/flow_netlink.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -1,11 +1,14 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+index 780d9e2246f3..8955f31fa47e 100644
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -1051,7 +1051,7 @@ static int clone(struct datapath *dp, struct sk_buff *skb,
+ 	int rem = nla_len(attr);
+ 	bool dont_clone_flow_key;
  
-+#define _GNU_SOURCE
- #include <linux/limits.h>
-+#include <linux/sched.h>
- #include <sys/types.h>
- #include <sys/mman.h>
- #include <sys/wait.h>
- #include <unistd.h>
- #include <fcntl.h>
-+#include <sched.h>
- #include <stdio.h>
- #include <errno.h>
- #include <signal.h>
-@@ -741,6 +744,99 @@ cleanup:
- 	return ret;
- }
+-	/* The first action is always 'OVS_CLONE_ATTR_ARG'. */
++	/* The first action is always 'OVS_CLONE_ATTR_EXEC'. */
+ 	clone_arg = nla_data(attr);
+ 	dont_clone_flow_key = nla_get_u32(clone_arg);
+ 	actions = nla_next(clone_arg, &rem);
+diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
+index 0d677c9c2c80..2679007f8aeb 100644
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -3429,7 +3429,9 @@ static int clone_action_to_attr(const struct nlattr *attr,
+ 	if (!start)
+ 		return -EMSGSIZE;
  
-+struct lesser_ns_open_thread_arg {
-+	const char	*path;
-+	int		fd;
-+	int		err;
-+};
-+
-+static int lesser_ns_open_thread_fn(void *arg)
-+{
-+	struct lesser_ns_open_thread_arg *targ = arg;
-+
-+	targ->fd = open(targ->path, O_RDWR);
-+	targ->err = errno;
-+	return 0;
-+}
-+
-+/*
-+ * cgroup migration permission check should be performed based on the cgroup
-+ * namespace at the time of open instead of write.
-+ */
-+static int test_cgcore_lesser_ns_open(const char *root)
-+{
-+	static char stack[65536];
-+	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
-+	int ret = KSFT_FAIL;
-+	char *cg_test_a = NULL, *cg_test_b = NULL;
-+	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
-+	int cg_test_b_procs_fd = -1;
-+	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
-+	pid_t pid;
-+	int status;
-+
-+	cg_test_a = cg_name(root, "cg_test_a");
-+	cg_test_b = cg_name(root, "cg_test_b");
-+
-+	if (!cg_test_a || !cg_test_b)
-+		goto cleanup;
-+
-+	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
-+	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
-+
-+	if (!cg_test_a_procs || !cg_test_b_procs)
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_a) || cg_create(cg_test_b))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_b))
-+		goto cleanup;
-+
-+	if (chown(cg_test_a_procs, test_euid, -1) ||
-+	    chown(cg_test_b_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	targ.path = cg_test_b_procs;
-+	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
-+		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
-+		    &targ);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (waitpid(pid, &status, 0) < 0)
-+		goto cleanup;
-+
-+	if (!WIFEXITED(status))
-+		goto cleanup;
-+
-+	cg_test_b_procs_fd = targ.fd;
-+	if (cg_test_b_procs_fd < 0)
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_a))
-+		goto cleanup;
-+
-+	if ((status = write(cg_test_b_procs_fd, "0", 1)) >= 0 || errno != ENOENT)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (cg_test_b_procs_fd >= 0)
-+		close(cg_test_b_procs_fd);
-+	if (cg_test_b)
-+		cg_destroy(cg_test_b);
-+	if (cg_test_a)
-+		cg_destroy(cg_test_a);
-+	free(cg_test_b_procs);
-+	free(cg_test_a_procs);
-+	free(cg_test_b);
-+	free(cg_test_a);
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct corecg_test {
- 	int (*fn)(const char *root);
-@@ -757,6 +853,7 @@ struct corecg_test {
- 	T(test_cgcore_thread_migration),
- 	T(test_cgcore_destroy),
- 	T(test_cgcore_lesser_euid_open),
-+	T(test_cgcore_lesser_ns_open),
- };
- #undef T
+-	err = ovs_nla_put_actions(nla_data(attr), rem, skb);
++	/* Skipping the OVS_CLONE_ATTR_EXEC that is always the first attribute. */
++	attr = nla_next(nla_data(attr), &rem);
++	err = ovs_nla_put_actions(attr, rem, skb);
  
+ 	if (err)
+ 		nla_nest_cancel(skb, start);
+-- 
+2.35.1
+
 
 

@@ -2,155 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1111F4FE5F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01D44FE5F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357701AbiDLQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S1357690AbiDLQkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351070AbiDLQgA (ORCPT
+        with ESMTP id S234647AbiDLQki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:36:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF65E774;
-        Tue, 12 Apr 2022 09:33:36 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23CGPGkJ012260;
-        Tue, 12 Apr 2022 16:33:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=c9kdWw+POzaQW+fleidcvusNLGMoZpz2IqM3kYRaRSg=;
- b=FHG1G18Bs+P8aVfQEPV5AOxQ0Kp+5HIFLBoKAXJl7UfdS6MHzxFJVkZoqaoK+6AaamE3
- j4fNq1sILZ8AsrMYmj7rwMsGSlc41949zI/nZldEo5Tl69yoMAA9BdbO9cgtC/vyjTE2
- gbrXHJvO+9o/YqqUuYh0Ybol8YGhCga50F4NLxNCk5nMz431wFng4HBrZ9AbUg5b/RFR
- jqdvhxecLOymI6BDlUgCHnZ5eBlt9jAxYANwkvZb5AIPk69eI6tm/YeAQHLvUKiaetsA
- W3KOLH2fTKslTF1GQfkW5/QuisTNLeaprgYq555+SlNSJ2GHdoURXyX1JysqxGyaRr0m fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx786us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:33:29 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23CGPY5R012890;
-        Tue, 12 Apr 2022 16:33:29 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx786tq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:33:29 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23CGGDri006815;
-        Tue, 12 Apr 2022 16:33:27 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fb1dj582r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:33:27 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23CGXN3O43974992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 16:33:23 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8D57AE04D;
-        Tue, 12 Apr 2022 16:33:23 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 442C6AE045;
-        Tue, 12 Apr 2022 16:33:19 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.163.3.143])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 12 Apr 2022 16:33:18 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH v2 0/4] Fix perf bench numa, futex and epoll to work with
- machines having #CPUs > 1K
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <YlG/1cegJ3Fh/zj/@kernel.org>
-Date:   Tue, 12 Apr 2022 22:03:14 +0530
-Cc:     Ian Rogers <irogers@google.com>, maddy@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        kajoljain <kjain@linux.ibm.com>, disgoel@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <64B99006-B94E-485E-8382-91E50244A5E4@linux.vnet.ibm.com>
-References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
- <YlGmAd3LEh9He6Pg@kernel.org> <YlG/1cegJ3Fh/zj/@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iBl1BFr_njItt3Pb-ald9kpXGlfMjtih
-X-Proofpoint-ORIG-GUID: wPH9ZGI864VHPwR9yJmIplFR6L0lQuno
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204120079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 12:40:38 -0400
+Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9310C1BEAE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:38:20 -0700 (PDT)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id B4DED2536E;
+        Tue, 12 Apr 2022 16:38:18 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id CB08922;
+        Tue, 12 Apr 2022 16:38:11 +0000 (UTC)
+Message-ID: <38692bbdd535dfe249babd1eb6aca24b2e1070e8.camel@perches.com>
+Subject: Re: [PATCH 4/5] MAINTAINERS: update MAINTAINERS file
+From:   Joe Perches <joe@perches.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     Samyon Furman <samyon.furman@broadcom.com>,
+        Joel Peshkin <joel.peshkin@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Dan Beygelman <dan.beygelman@broadcom.com>,
+        Tomer Yacoby <tomer.yacoby@broadcom.com>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 12 Apr 2022 09:38:09 -0700
+In-Reply-To: <20220411172815.20916-5-william.zhang@broadcom.com>
+References: <20220411172815.20916-1-william.zhang@broadcom.com>
+         <20220411172815.20916-5-william.zhang@broadcom.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: CB08922
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: 59qrfu693xokzw7ai9f6zsi1gbgxqqed
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1926vEBFWIjUSOwGm9YLGj7cPVOg3NK36c=
+X-HE-Tag: 1649781491-409073
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-04-11 at 10:28 -0700, William Zhang wrote:
+> Add maintainters, SCM tree, files and directories for the new BCMBCA
 
+typo of maintainers
 
-> On 09-Apr-2022, at 10:48 PM, Arnaldo Carvalho de Melo =
-<acme@kernel.org> wrote:
->=20
-> Em Sat, Apr 09, 2022 at 12:28:01PM -0300, Arnaldo Carvalho de Melo =
-escreveu:
->> Em Wed, Apr 06, 2022 at 11:21:09PM +0530, Athira Rajeev escreveu:
->>> The perf benchmark for collections: numa, futex and epoll
->>> hits failure in system configuration with CPU's more than 1024.
->>> These benchmarks uses "sched_getaffinity" and "sched_setaffinity"
->>> in the code to work with affinity.
->>=20
->> Applied 1-3, 4 needs some reworking and can wait for v5.19, the first =
-3
->> are fixes, so can go now.
->=20
-> Now trying to fix this:
->=20
->  26     7.89 debian:9                      : FAIL gcc version 6.3.0 =
-20170516 (Debian 6.3.0-18+deb9u1)
->    bench/numa.c: In function 'alloc_data':
->    bench/numa.c:359:6: error: 'orig_mask' may be used uninitialized in =
-this function [-Werror=3Dmaybe-uninitialized]
->      ret =3D sched_setaffinity(0, size, mask);
->      ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    bench/numa.c:409:13: note: 'orig_mask' was declared here
->      cpu_set_t *orig_mask;
->                 ^~~~~~~~~
->    cc1: all warnings being treated as errors
->    /git/perf-5.18.0-rc1/tools/build/Makefile.build:139: recipe for =
-target 'bench' failed
->    make[3]: *** [bench] Error 2
->=20
->=20
-> Happened in several distros.
+> arch. Only add 47622 for this change and will update in the future
+> when more SoCs are supported.
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -3740,6 +3740,20 @@ F:	drivers/net/dsa/bcm_sf2*
+>  F:	include/linux/dsa/brcm.h
+>  F:	include/linux/platform_data/b53.h
+>  
+> +BROADCOM BCMBCA ARM ARCHITECTURE
+> +M:	William Zhang <william.zhang@broadcom.com>
+> +M:	Anand Gore <anand.gore@broadcom.com>
+> +M:	Kursad Oney <kursad.oney@broadcom.com>
+> +M:	bcm-kernel-feedback-list@broadcom.com
 
-Hi Arnaldo
+Unnamed exploders are not maintainers.
 
-Thanks for pointing it. I could be able to recreate this compile error =
-in Debian.
-The reason for this issue is variable orig_mask which is used and =
-initialised in =E2=80=9Calloc_data"
-function within if condition for "init_cpu0=E2=80=9D. We can fix this =
-issue by initialising it to NULL since
-it is accessed conditionally. I also made some changes to CPU_FREE the =
-mask in other error paths.
-I will post a V3 with these changes.
+Maybe:
 
-Athira
+R:	Broadcom BCMBCA reviewers <bcm-kernel-feedback-list@broadcom.com>
 
->=20
-> - Arnaldo
+> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> +S:	Maintained
+> +T:	git git://github.com/broadcom/stblinux.git
+> +F:	Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
+> +F:	arch/arm/boot/dts/bcm47622.dtsi
+> +F:	arch/arm/boot/dts/bcm947622.dts
+> +N:	bcmbca
+> +N:	bcm[9]?47622
+
+bcm9?47622 is simpler, though it doesn't seem this is actually useful.
+Where is it actually used in files other than the ones already listed?
+
 

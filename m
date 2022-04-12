@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18064FCD6E
+	by mail.lfdr.de (Postfix) with ESMTP id 5B11D4FCD6D
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245658AbiDLEDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S1344427AbiDLEDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239821AbiDLECd (ORCPT
+        with ESMTP id S234145AbiDLECd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 00:02:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84B02DD72;
-        Mon, 11 Apr 2022 21:00:17 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3C427B03;
+        Mon, 11 Apr 2022 21:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83412B81B14;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72ED66176E;
         Tue, 12 Apr 2022 04:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 267D1C385AE;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 47111C385B4;
         Tue, 12 Apr 2022 04:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649736015;
-        bh=34Ml6GzHkj3zF6xanNUVROhywpBQ0j8Ex47ZQ60nfSM=;
+        bh=Og37zLvNTYtINm9dkZ2PhXXYIso0cAOuj31rpYiLeNo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=W1CNhPWJI82u3kxt3ANsWQG/V0eR/Dio/ClKBz1hrLZMnRddgpRpC25BR7ia4SrjN
-         OC62XrjJsZcqCfU5+vBQjhJ7ubpgH6BJQ9PIQ0x9eh1tMpbJ4oWUVZEpL2sqvqVkvP
-         HziM1hKBdV2/AXVXbaNwo47C92PpNgaHIlWPjLl21PLkn2BubZKo8cvgvbqswAiso9
-         PQCeIH3DKIyLDa03iZxTCRziRNXkYlYE4JIgHUYM3iAtYviPlfRDD2rW9ANIL6hJyK
-         GseXEBlTko9GOVmCMi/1brKa8N0nMZMs1DgN5Q6YZjg2qyAc1EmVkXd+kSnz84LtGC
-         Fok4wV9dNoqyA==
+        b=TStTsT+p5ok/fCi2B9C0wx2pXd0hkr/BrOmaIo7Fl87n5uSvYpYIF7QtkzC/3byx+
+         hIFnyO9RiWOZ8L7nY4H/TANLW0T1zKw1nYERjSByYODxRCjvoay/9SINX55MmbiNgC
+         m+P4QyolFk6Z2OcR4AjacALHJiPIqK/AJJO81RTbmiUHYtPfLqITN7oUk+Zj2LW3NB
+         H4V1wpr7L+sloXWabZeWYgcbbCWZ0vrHpKf9/b9fZ5Ghcxv78nIqcSERhAF83NVnof
+         4021aixcO1/f4c6V1ayiBwadkGs5rHxnMdunYKt6dK9sxvbPJyvyCjcHVq9D34dZGC
+         pW1kq0FZfBYFg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09A2FE8DBD1;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D1BDE8DD63;
         Tue, 12 Apr 2022 04:00:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2] sfc: ef10: Fix assigning negative value to unsigned
- variable
+Subject: Re: [PATCH] net/cadence: using pm_runtime_resume_and_get instead of
+ pm_runtime_get_sync
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164973601503.30868.3317524742602882068.git-patchwork-notify@kernel.org>
+Message-Id: <164973601517.30868.9155139360828245200.git-patchwork-notify@kernel.org>
 Date:   Tue, 12 Apr 2022 04:00:15 +0000
-References: <1649640757-30041-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1649640757-30041-1-git-send-email-baihaowen@meizu.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
+References: <20220411013812.2517212-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220411013812.2517212-1-chi.minghao@zte.com.cn>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
         davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chi.minghao@zte.com.cn, zealci@zte.com.cn
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,21 +65,20 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 11 Apr 2022 09:32:37 +0800 you wrote:
-> fix warning reported by smatch:
-> 251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
-> warn: assigning (-208) to unsigned variable 'ip_tot_len'
+On Mon, 11 Apr 2022 01:38:12 +0000 you wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
-> V1->V2: to assign "0x10000 - EFX_TSO2_MAX_HDRLEN" is the actual
-> semantics of the value.
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 > 
 > [...]
 
 Here is the summary with links:
-  - [V2] sfc: ef10: Fix assigning negative value to unsigned variable
-    https://git.kernel.org/netdev/net-next/c/b8ff3395fbdf
+  - net/cadence: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+    https://git.kernel.org/netdev/net-next/c/b66bfc131c69
 
 You are awesome, thank you!
 -- 

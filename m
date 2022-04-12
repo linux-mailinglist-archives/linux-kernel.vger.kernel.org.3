@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75BD4FCD6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFE74FCD72
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiDLEE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S240594AbiDLEGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345752AbiDLEEE (ORCPT
+        with ESMTP id S229772AbiDLEGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:04:04 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C833A0F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:01:27 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id y19so3313934qvk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:01:27 -0700 (PDT)
+        Tue, 12 Apr 2022 00:06:41 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20320F7E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id z19so18300972qtw.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=4NRq9wUKR0Pv6QYoD5yUdpYhNg4tlKq7MmYRIVRzyYg=;
-        b=QzCANZSdJ5P0+QrETcEAa6nqQQp1jd5ilnjCvFDnDT7sdPxYaJ10EojfQFQAg69hNZ
-         pc425I6h5uZoTbN4CZVHIRffDzOOpuJennuxofR1caDO8EZAE4n/XKf8cRtK/VKaSjIA
-         uVzhZ2dKVH+8iSdQvlWf0yBGRTe4KFfS/dpFO46TdYcVOtuUYXz/a5YXgzGPXWMeHkv9
-         V20UJ6t8nLZvj253txKvxL2aMaAB616KPMuEMfUeg8WpYHCfXqnJG8dkVr09Eh8edyjW
-         f/wQweIS/rbsNs74SDT+yfLu04AAa8W1EUknm3+hS4og/ZPN8eqVz9oB6XGqfkwQiEcB
-         qggQ==
+        d=marek-ca.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=J+x3SPFdGypefdXDIqiyFTr8SFo5yaCISlCMQJFopck=;
+        b=x/IyGL9sWWNEgc+7aqpoOSGvBo3BrA/8tfHhrVWZlHv5Zqb6+sNfP+t1XNvlgELoyC
+         tL68P2ifPMWhTeUceZ//SyqhR6E0r1uOq0OBFPpwizKLpsUzafMr4ALbioXVlzzOhFgZ
+         CChwBJ24GWepEFfC1OvFF/RJE1oygWYYAUHIi4csnS3wtvBa5roOQcTi9gqU996Tn+Qx
+         OyJfWaHwHDnclIB0jaE34V4WIEJsPOLrjFSeXYFnm5lp7YB9CCE8N3+kxljOG9n7hjIE
+         35v78d2T8xqDg1VE1aDcRI+tlV11qeupdXuZ0L3cww33z8q0Vz+vU7C6JyY1RvDK6WOH
+         4s8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4NRq9wUKR0Pv6QYoD5yUdpYhNg4tlKq7MmYRIVRzyYg=;
-        b=XvwA60HQFwUtqSl3XkP1n9Hs78AFaYRgFpC8MJcmWnu3kLwW5mc4CJVWV1hj/IIXod
-         oyfOnRCdlFaXsDDmXB5wMKD5FiIrl8tiUTUL7koMlj11h61a6/ocSEpaJQwWm0SZW9AZ
-         MUf/z+fuzVd4KQgyacEGAnEkM+sa6ZRUvcO9wx1iZX1lE7pbYsTcEhjRPXZ9eeh9kbL9
-         Upi5qIHL1bRa0ClY/K9rgu3pP8r88UbYGv+Wumvryqww5UHK+S6hbwZs++nkN2gzM75k
-         9Fh0LyIHQX+IjCyRxiBWruX/CcmSL4m+MSOKE89RfddHfyZ41MW8V1rebZ3CIc6hYwAg
-         DNkQ==
-X-Gm-Message-State: AOAM532S1WBfR6k/nVgBguurhWJobx+sJ0FDmoOexna9XEaWQEUrDOz+
-        egde+4CvtSGw68Pj/LbkuzhZq/SMUYbXa79p
-X-Google-Smtp-Source: ABdhPJzqhYzE8rSosQ1y35nYVPJCR/QBBweg90gLw/1MosTidp4k6pHMqgdf7sjn4nLxuVotsKjRUg==
-X-Received: by 2002:a05:6214:19c8:b0:444:32f0:2351 with SMTP id j8-20020a05621419c800b0044432f02351mr2073117qvc.109.1649736086971;
-        Mon, 11 Apr 2022 21:01:26 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme ([2607:fb90:50fb:900e:25ab:983d:ac30:58b5])
-        by smtp.gmail.com with ESMTPSA id t125-20020a372d83000000b0069c1df12422sm3349402qkh.84.2022.04.11.21.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 21:01:26 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 00:01:23 -0400
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
-Subject: Re: [PATCH] staging: wfx: use container_of() to get vif
-Message-ID: <20220412040123.GB2856917@jaehee-ThinkPad-X1-Extreme>
-References: <20220407204128.GA1810425@jaehee-ThinkPad-X1-Extreme>
- <alpine.DEB.2.22.394.2204081149360.2196@hadrien>
- <20220408222102.GB2511628@jaehee-ThinkPad-X1-Extreme>
- <1911301.taCxCBeP46@pc-42>
- <alpine.DEB.2.22.394.2204091737130.2655@hadrien>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=J+x3SPFdGypefdXDIqiyFTr8SFo5yaCISlCMQJFopck=;
+        b=TdCqstdUSafmsaTTK8OkVUUlai6Q7MEBChOFND54dKKGr5X8Q+/09YM3o6LGnL2t2g
+         txLWBqJHh0JrprCXVib67up3taWtpVUvW3uxTvMRsmKez2iYh/0CuQnp6o1AaNEGkJK0
+         ZaufDuZjST9xLIQeLsjIqw/v8e0jJ8WN1nmsDjIhLMhbyhF8QgFB0cN4/FUyyw0bCqqA
+         atNNumoZ9KNiWv0mGUsxPr0OzYflD2lgwQXWFvE08OkwGXNWTNVql17OCzvWXk7SIrJs
+         CkN023D1rp6fIAaeF4CEBMX/IY/MGw0gxorfCVC0+xO/OSde286uwL0vW7etis59KQx7
+         T1cQ==
+X-Gm-Message-State: AOAM532I+7d4VTvsPyZcabrqfXU8lcEZ2sNYLrRMiABXFw+RfJTGB5fZ
+        ta0ehwOvF3l4gFuURY7h5jChfQ==
+X-Google-Smtp-Source: ABdhPJwA2WVOHW3EXR6l/HiIz94aEB/WpqZC/ssR0ezUv3tSP+2pzRH/BbFwctn+X60WSZ9mNg2pag==
+X-Received: by 2002:a05:622a:138a:b0:2e1:ea16:4fd9 with SMTP id o10-20020a05622a138a00b002e1ea164fd9mr1927029qtk.527.1649736263011;
+        Mon, 11 Apr 2022 21:04:23 -0700 (PDT)
+Received: from [192.168.0.189] (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
+        by smtp.gmail.com with ESMTPSA id e15-20020a05622a110f00b002e1ed105652sm26677261qty.2.2022.04.11.21.04.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 21:04:22 -0700 (PDT)
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: delete incorrect ufs
+ interconnect fields
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20220407172145.31903-1-jonathan@marek.ca>
+ <e41c26c2-8aa4-cfd2-27b0-eb011f45eda0@linaro.org>
+ <865ff6bc-95a2-8b39-5cf2-bb2d3f592c5a@linaro.org>
+ <f1fb2d71-4adf-bcc7-76b3-c7102ab9f2e9@marek.ca>
+ <YlTg7QPkWMBP4HAb@builder.lan>
+From:   Jonathan Marek <jonathan@marek.ca>
+Message-ID: <20db508c-0ccf-e4a6-87a4-17c41871703c@marek.ca>
+Date:   Tue, 12 Apr 2022 00:04:23 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alpine.DEB.2.22.394.2204091737130.2655@hadrien>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <YlTg7QPkWMBP4HAb@builder.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,68 +86,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 05:37:32PM +0200, Julia Lawall wrote:
+On 4/11/22 10:16 PM, Bjorn Andersson wrote:
+> On Thu 07 Apr 17:38 CDT 2022, Jonathan Marek wrote:
 > 
+>> On 4/7/22 5:16 PM, Krzysztof Kozlowski wrote:
+>>> On 07/04/2022 21:40, Vladimir Zapolskiy wrote:
+>>>> On 4/7/22 20:21, Jonathan Marek wrote:
+>>>>> Upstream sm8450.dtsi has #interconnect-cells = <2>; so these are wrong.
+>>>>> Ignored and undocumented with upstream UFS driver so delete for now.
+>>>
+>>> This is the upstream and they are documented here, although as pointed
+>>> by Vladimir this was rather a reverse-documentation. The documentation
+>>> might be incorrect, but then the bindings should be corrected instead of
+>>> only modifying the DTS.
+>>>
+>>>>
+>>>> Basically the description was added by a commit 462c5c0aa798 ("dt-bindings: ufs:
+>>>> qcom,ufs: convert to dtschema").
+>>>>
+>>>> It's questionable, if an example in the new yaml file is totally correct
+>>>> in connection to the discussed issue.
+>>>
+>>> To be honest - the example probably is not correct, because it was based
+>>> on existing DTS without your patch. :)
+>>>
+>>> Another question is whether the interconnect properties are here correct
+>>> at all. I assumed that DTS is correct because it should describe the
+>>> hardware, even if driver does not use it. However maybe that was a false
+>>> assumption...
+>>>
+>>
+>> writing-bindings.rst says it is OK to document even if it isn't used by the
+>> driver (seems wrong to me, at least for interconnects which are a firmware
+>> abstraction and not hardware).
+>>
 > 
-> On Sat, 9 Apr 2022, Jérôme Pouiller wrote:
+> The devicetree, and hence the binding, should describe the hardware, so
+> that an implementation can make use of the hardware. So there's no
+> problem expressing the interconnect in the binding/dts even though the
+> driver isn't using it.
 > 
-> > On Saturday 9 April 2022 00:21:02 CEST Jaehee Park wrote:
-> > > On Fri, Apr 08, 2022 at 11:49:49AM +0200, Julia Lawall wrote:
-> > > > On Thu, 7 Apr 2022, Jaehee Park wrote:
-> > > >
-> > > > > Use container_of() to get vif. This improves the code in two ways:
-> > > > > [1] it speeds up the compilation because container_of() saves steps to
-> > > > > retrieve vif (the representation of ieee80211_vif), and
-> > > >
-> > > > I don't understand this part.
-> > > >
-> > > > julia
-> > > >
-> > >
-> > > Thank you for your message. I revised the commit message (below)--
-> > > I hope it makes it clearer. I'm open to suggestions as well!
-> > >
-> > > Currently, upon virtual interface creation, wfx_add_interface() stores
-> > > a reference to the corresponding struct ieee80211_vif in private data,
-> > > for later usage. This is not needed when using the container_of
-> > > construct. This construct already has all the info it needs to retrieve
-> > > the reference to the corresponding struct from the offset that is
-> > > already available, inherent in container_of(), between its type and
-> > > member inputs (struct ieee80211_vif and drv_priv, respectively).
-> > > Remove vif (which was previously storing the reference to the struct
-> > > ieee80211_vif) from the struct wfx_vif, define a macro
-> > > wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
-> > > the newly defined container_of construct.
-> > >
-> > > Sorry if I'm putting out more information than was asked for:
-> > > Diagram is worth a thousand words; this one is made by Stefano when
-> > > he was explaining the container_of() construct:
-> > >
-> > > .-----------------------------------.
-> > > |  .------------------------------. |
-> > > '->| struct ieee80211_vif         | |
-> > >    |------------------------------| |
-> > >    | 1                            | |
-> > >    | 2                            | |
-> > >    |  .--------------------------.| |
-> > >    | 3| struct wfx_vif drv_priv   | |
-> > >    |  |---------------------------| |
-> > >    |  | ...                       | |
-> > >    |  |                           | |
-> > >    |  | struct ieee80211_vif *vif---'
-> > >    '------------------------------'
-> > > In this example, the offset is 3.
-> > > What I want to convey here is the compiler already knows the offset
-> > > of drv_priv within struct ieee80211_vif by using the container_of()
-> > > construct. So, it doesn't need to do extra work.
-> >
-> > Wow, nice ascii art :)
-> >
-> > I think that Julia has not understand why you said it "speeds up the
-> > compilation". I think you meant "speeds up the execution", don't you?
+> I'm not sure if I'm misunderstanding you, the interconnect paths
+> described here are a description of the hardware requirements for this
+> device. (I.e. it need the buses between ufs and ddr, and cpu and ufs to
+> operate).
 > 
-> Yes, that was my concern.
-> 
-> julia
 
-Understood-- Thank you Julia and Jérôme for catching my mistake and clarifying! 
+This is pedantic but what if my kernel lives in imem and not ddr. Or it 
+runs on adsp and not cpu? "ufs-ddr" and "cpu-ufs" are not necessarily 
+hardware requirements.
+
+(I was thinking of something else when I wrote that comment, but it 
+doesn't actually matter if its firmware/hardware if a driver can 
+implement the same functionality either way)
+
+>> 462c5c0aa798 wasn't in my 5.17+ tree pulled after dts changes were merged (I
+>> guess doc changes come later), so my commit message is incorrect, but I
+>> think it makes more sense to have the documentation reflect the driver. Its
+>> also not an important issue, so I'll let others sort it out.
+>>
+> 
+> I believe that the correctness of the interconnect property will ensure
+> that the interconnect provider doesn't hit sync_state until the ufs
+> driver has probed - regardless of the driver actually implementing the
+> interconnect voting. But perhaps I've misunderstood the magic involved?
+> 
+
+AFAICT, if its not used by the driver it will be ignored completely, 
+unless you use OPP (which has some interconnect magic).
+
+> Regards,
+> Bjorn
+> 

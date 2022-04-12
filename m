@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997F54FDEBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4034FDED0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237880AbiDLL7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S1345321AbiDLL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345871AbiDLL44 (ORCPT
+        with ESMTP id S1345816AbiDLL44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 07:56:56 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB05AA7E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:41:23 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id c10so5965915wrb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nST2CJez2iVLsyrt/7bqoBrsZt1B2xdjNSFZ+8nf/0U=;
-        b=sxLpo/DCzc+OuotFT3EIJUNlVlyf+C37xOk9T1xL2c/tlx3Gafkn5qQZXg6Ti0UaLz
-         wpGuix74WAl18sp9ZvjCTQrPwJ0C6KSB+GKoZ7r/BwCY96aBrdH767J6Z9gYuU1yT9jO
-         FZ/w3bnkSsut8HU3Bi3uzk1SnGj8TQaXDgm9XII+k58Im3KIChHnOeztyWvTAi/v2W6A
-         XXkb3k08ROxMiHCIy5yBKcDH9wlmW+QfSYH+IvephHz4dKl1akgtXjB2h76M2XMcSJLh
-         RNoyHIFxlslecoL689hYcs9h3EntFqizPHfPR9RYgYD0h1HgSjX2S74RnlHEh9O8H+DU
-         RiTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nST2CJez2iVLsyrt/7bqoBrsZt1B2xdjNSFZ+8nf/0U=;
-        b=e/4Xz2+Z74sazIIPIbThg3JfpuUNQwi/GcD+g1rihiOonFTs9y2sro0fJdd3ISNBLg
-         Y2fA7UM7Jb+FdhAYr6/PbW7oBdNSlRs1CiTfp7gonV3ks/04j2FSVX2mjcas+OERGt4Q
-         mPmAiOv2gW1ixl90vr7iYblauud90f2OPQ3QtPKLz90iaUTLIM6O3VwPaUxZS99xkRU2
-         JUZ7jix5XpEn1PjwRoCWOISboNXNlp3U/AmM8LLvcnH7d3EcY5pnrCfKRPjvnNW9Z0hh
-         ztyHbva15wXk4/+dOMhAVskokY3CmqfHR6SBNr1YpXRiWvls7AUFuEBzKEW0yROEjXTx
-         VLSA==
-X-Gm-Message-State: AOAM530CDT8b7PqO709MWcAz6KTGcoMbxA0iRBt6X+vXZFTr5UGgXWr0
-        NH8A88SyFNAlIeiqbd9HGjIoeXMuaVBZ3I4YIZTu3Q==
-X-Google-Smtp-Source: ABdhPJzNClNcR3j8j+NnaIHmAra6bFvY2xXUBBkoQMXGPnSO0pddRT1buUtEcplNexu17u6VffwUjaMC8iTvABO9S2Q=
-X-Received: by 2002:a05:6000:2c9:b0:204:1675:843e with SMTP id
- o9-20020a05600002c900b002041675843emr28364968wry.699.1649760081801; Tue, 12
- Apr 2022 03:41:21 -0700 (PDT)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764160CF6;
+        Tue, 12 Apr 2022 03:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649760130; x=1681296130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zpueg+jyVnMsOFoZwW8zB/OcFNbXOpiTPlELbqYLlwc=;
+  b=nW6qxJeyxnEknF1riWv3R253BFhnRrlq+239kG5dMahU2qu7UONHYzmy
+   GSJ79WfPqKFJ6gZq8+nwNsNAf5WOIxVX58lZ5a2sSZkUyZ2PVITslZock
+   mbiUmH7hFDScrJCKPEl6O4291+x9GRRiwkUvnKKoudpKIHvqGvEO8l/jL
+   NmKCYtF52/PeMB01ynydkvljE/dTtPN9Jp6gb+iii1oFfMDadpkTZWbYy
+   OkW+VLllaT8YUVI5B7GfoYXKDHPghnSaHwkNUUAJXELPIq2D7TstOY+RT
+   za8xdZw6/HmjJe0oTuWQI6M8NGTc8dlveZBdeYtV3zdkxHxndlPOVa6cd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261192960"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="261192960"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:42:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="660438063"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2022 03:42:07 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neDyJ-0002m8-8p;
+        Tue, 12 Apr 2022 10:42:07 +0000
+Date:   Tue, 12 Apr 2022 18:41:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
+        jic23@kernel.org, andy.shevchenko@gmail.com
+Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] iio: accel: bma400: Add support for activity and
+ inactivity events
+Message-ID: <202204121837.e1RdwIqu-lkp@intel.com>
+References: <20220411203133.19929-10-jagathjog1996@gmail.com>
 MIME-Version: 1.0
-References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-15-james.clark@arm.com>
-In-Reply-To: <20220304171913.2292458-15-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 12 Apr 2022 11:41:10 +0100
-Message-ID: <CAJ9a7VgJ-Z0u=u9NwnA_3cxftyXzhTa3QsJVhRUTYfGxiXzaQQ@mail.gmail.com>
-Subject: Re: [PATCH v3 14/15] coresight: etm4x: Cleanup TRCBBCTLR register accesses
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411203133.19929-10-jagathjog1996@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,57 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
->
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 4 ++--
->  drivers/hwtracing/coresight/coresight-etm4x.h       | 3 +++
->  2 files changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index 25f76a656308..3ae6f4432646 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -707,10 +707,10 @@ static ssize_t bb_ctrl_store(struct device *dev,
->          * individual range comparators. If include then at least 1
->          * range must be selected.
->          */
-> -       if ((val & BIT(8)) && (BMVAL(val, 0, 7) == 0))
-> +       if ((val & TRCBBCTLR_MODE) && (FIELD_GET(TRCBBCTLR_RANGE_MASK, val) == 0))
->                 return -EINVAL;
->
-> -       config->bb_ctrl = val & GENMASK(8, 0);
-> +       config->bb_ctrl = val & (TRCBBCTLR_MODE | TRCBBCTLR_RANGE_MASK);
->         return size;
->  }
->  static DEVICE_ATTR_RW(bb_ctrl);
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 3b81c104a44b..15704982357f 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -220,6 +220,9 @@
->
->  #define TRCSSPCICRn_PC_MASK                    GENMASK(7, 0)
->
-> +#define TRCBBCTLR_MODE                         BIT(8)
-> +#define TRCBBCTLR_RANGE_MASK                   GENMASK(7, 0)
-> +
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> --
-> 2.28.0
->
+Hi Jagath,
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on v5.18-rc2 next-20220412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220412-043436
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204121837.e1RdwIqu-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/15ee6de45ed7a028569638c198e170bb98cef4ab
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220412-043436
+        git checkout 15ee6de45ed7a028569638c198e170bb98cef4ab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__cmpxchg_small" [drivers/iio/accel/bma400_core.ko] undefined!
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+0-DAY CI Kernel Test Service
+https://01.org/lkp

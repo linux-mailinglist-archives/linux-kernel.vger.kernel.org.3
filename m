@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F02B4FE862
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA94B4FE85C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358933AbiDLTAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S1358869AbiDLTAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358809AbiDLTAX (ORCPT
+        with ESMTP id S1358812AbiDLTAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 15:00:23 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E5C45045;
-        Tue, 12 Apr 2022 11:58:04 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id t207so13106393qke.2;
-        Tue, 12 Apr 2022 11:58:04 -0700 (PDT)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAB34B871
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:05 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id u18so12806568eda.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IqOtlYyePRN/r4aPym/C6r8euVVGX9fSqK0zMFP5Scg=;
-        b=RcOBcyge8gEW8ksmv2HQErR8WAWybEJlUOFbo4QaXLgFpzSWCcz2HpLldyWyZDRf/o
-         4B/GiE31GGs4G7a8Tvr6WpiA44ufpBHoxkDmEKFkUXTiW3JmPk5t61JYhhtWm27CeSI3
-         UXO+4I9SFy5OdzF1sA7ljZjoxhBKT8HU0XJ08BrG2+dxkUjMpH19yhQlQmPbHhY2Vstd
-         u/R74B8Bg80QFdaG2tQCvKVAY9yFZ31j2556dzztumPjttg3AP1GSRWHjxivFGIocohz
-         q9sR9FxtFR5PQV8hgAbfHsM1cUtzj0W2c+IyfNckz4qBkRqfDMoH9k8JOjZFOnJSiw/2
-         UetA==
+        bh=P83BpPosTwKlH7SaIyI97o8/90EHDJt3E+4hDWW/yXg=;
+        b=iAVLcdBHQNnx/Tw+la/1EVMwd3ENyyk43q3x/W0681+7OR6tYYnTMYb1qOCo71cJbx
+         3q0xtFXBujVeuJeUdyCvbe/lKsGwGglZF/E+zKcCEVujwnCKyw/iGRfxYp9ep19X1L8U
+         7APv12fBuoX5jX80594NPXmX5YAvEZTxJ6KeoQ33cHv09E3bRy6llG8JpD9FyKZeTt4n
+         2gmfhMRH5J01qD22uSR8Gfsp/dQE5xQtcwJ3EKAXs8tvKv3STdeY8Y4pow+c6qe7BvxP
+         6hzC/xgZwe8jOJtXcnTsF6cjG6Elmzoe3pZ4RI8mA5Ct0sCRWearU/7K7tnXB7NIQTA/
+         03gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IqOtlYyePRN/r4aPym/C6r8euVVGX9fSqK0zMFP5Scg=;
-        b=FgVg/ggW5uGVxgNZhsaBO3TM7Q9OdJDGyPd9Di6Dalw1G3xJkq5k4fMJVspBiNkko7
-         fHILAo+KqMZg1MpdfNIjILiP6nVtCoDHohHPkTA6zvaMLHzNAnTzoJwBGTKxqVaMJCxJ
-         FzxzKjf8XKzTJTO6+DtBFWhpbLYVgGvInIGXyzIm9uQn7rw0beG4JyxFIpAuFg9fS3Pr
-         WBPw1DCGs7YLZmaxuuUcws9QDccp3N8ZGkWCMVQTMZxM7PoSAxSoIE8k3GSV0Maj6tIa
-         DvO8+FEYGt+qpF7n0BxVuKOLDYh+1XCA3wz+LYqUQgxgKcXaD1P0D4p2zhHnKqiHFeNy
-         CShg==
-X-Gm-Message-State: AOAM533EvPaWfSkkFhrToQyXL1rKulKpUqkVrSSnzzCD1RPfBWzdkBRh
-        3/pIYLGAB40QIN2M5vWK9tw=
-X-Google-Smtp-Source: ABdhPJyYQ0Cq+V1iYlc6ojDyOm4DcmTLilZwXR3xUcUPCgObjvW2mTuJxmGVy++nUaOzCscfbpTHpA==
-X-Received: by 2002:a37:6004:0:b0:69b:dd65:3f36 with SMTP id u4-20020a376004000000b0069bdd653f36mr4238319qkb.487.1649789883614;
+        bh=P83BpPosTwKlH7SaIyI97o8/90EHDJt3E+4hDWW/yXg=;
+        b=AFzf3zfOuPzBgxmqxaNMBa/ofMNh2heyNTa5LSFHh+vmEDx0/NrSjh7sNsOU8hJjoQ
+         6/6mZ5fMoyXL19M0XB4FyZ2yDs8W7qvYQXAL4MypKqZoKtyWFHawgZLzy4FFxdW25lrt
+         mzWrBvXcWLfG1vl5nlaBM7d+IFTxvCeuQVZ8zoc5UxWg0QH1k6TQN8koMIujYvVygnKW
+         FoXM2y/5VerXAsGaXVDHWInWHTm1VUztbJTb4H+j0GMw/Bp/xYAXeJh23d3k3Pb2ps0e
+         DoK6qEAlJyQi63V25KP4H+ju+Z5RV1S43teHZcMX/sKt72kmOzQdTjYa26Xzn7EmHfM9
+         Fylw==
+X-Gm-Message-State: AOAM530N4MtceJLFHimb0OeGhGvshl0Qx4+EOQL0SGzISCHkXIjrE5NV
+        bvGU278A/CcJAMVdSs/8Rd+j7B28WXY=
+X-Google-Smtp-Source: ABdhPJxoZUoGuosYL2+S8ZIvCyaA5aUdc3/mzJZUGnzbijUSjmCMQhEGx46Pjea0oH8CxXu2A1UhQQ==
+X-Received: by 2002:aa7:cb93:0:b0:415:d57a:4603 with SMTP id r19-20020aa7cb93000000b00415d57a4603mr39865733edt.62.1649789883857;
         Tue, 12 Apr 2022 11:58:03 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05622a05d200b002f07ed88a54sm1820610qtb.46.2022.04.12.11.58.03
+Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm13443482ejm.103.2022.04.12.11.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 12 Apr 2022 11:58:03 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] arm64: dts: rockchip: enable pcie controller on quartz64-a
-Date:   Tue, 12 Apr 2022 14:57:51 -0400
-Message-Id: <20220412185751.124783-5-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412185751.124783-1-pgwipeout@gmail.com>
-References: <20220412185751.124783-1-pgwipeout@gmail.com>
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 3/6] staging: r8188eu: change void parameters to u8
+Date:   Tue, 12 Apr 2022 20:57:51 +0200
+Message-Id: <20220412185754.8695-4-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220412185754.8695-1-straube.linux@gmail.com>
+References: <20220412185754.8695-1-straube.linux@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,80 +71,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the nodes to enable the pcie controller on the quartz64 model a
-board.
+The second parameter of write_fw(), page_write() and block_write()
+is a void pointer, but we always pass an u8 pointer. We can convert
+this parameter to an u8 pointer. The pointer is not changed in the
+functions, so we can safely remove the local variable bufferPtr.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ drivers/staging/r8188eu/core/rtw_fw.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 141a433429b5..85926d46337d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -125,6 +125,18 @@ vbus: vbus {
- 		vin-supply = <&vcc12v_dcin>;
- 	};
+diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
+index 5f59acfd8b5d..3cea4e41ab13 100644
+--- a/drivers/staging/r8188eu/core/rtw_fw.c
++++ b/drivers/staging/r8188eu/core/rtw_fw.c
+@@ -71,7 +71,7 @@ static void fw_download_enable(struct adapter *padapter, bool enable)
+ 	}
+ }
  
-+	vcc3v3_pcie_p: vcc3v3_pcie_p {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pcie_enable_h>;
-+		regulator-name = "vcc3v3_pcie_p";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3v3>;
-+	};
-+
- 	vcc5v0_usb: vcc5v0_usb {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc5v0_usb";
-@@ -201,6 +213,10 @@ &combphy1 {
- 	status = "okay";
- };
+-static int block_write(struct adapter *padapter, void *buffer, u32 size)
++static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
+ {
+ 	int ret = _SUCCESS;
+ 	u32	blockSize_p1 = 4;	/*  (Default) Phase #1 : PCI muse use 4-byte write to download FW */
+@@ -79,7 +79,6 @@ static int block_write(struct adapter *padapter, void *buffer, u32 size)
+ 	u32	blockSize_p3 = 1;	/*  Phase #3 : Use 1-byte, the remnant of FW image. */
+ 	u32	blockCount_p1 = 0, blockCount_p2 = 0, blockCount_p3 = 0;
+ 	u32	remainSize_p1 = 0, remainSize_p2 = 0;
+-	u8 *bufferPtr	= (u8 *)buffer;
+ 	u32	i = 0, offset = 0;
  
-+&combphy2 {
-+	status = "okay";
-+};
-+
- &cpu0 {
- 	cpu-supply = <&vdd_cpu>;
- };
-@@ -509,6 +525,14 @@ rgmii_phy1: ethernet-phy@0 {
- 	};
- };
+ 	blockSize_p1 = MAX_REG_BLOCK_SIZE;
+@@ -89,7 +88,7 @@ static int block_write(struct adapter *padapter, void *buffer, u32 size)
+ 	remainSize_p1 = size % blockSize_p1;
  
-+&pcie2x1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie_reset_h>;
-+	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+	vpcie3v3-supply = <&vcc3v3_pcie_p>;
-+};
-+
- &pinctrl {
- 	bt {
- 		bt_enable_h: bt-enable-h {
-@@ -534,6 +558,16 @@ diy_led_enable_h: diy-led-enable-h {
- 		};
- 	};
+ 	for (i = 0; i < blockCount_p1; i++) {
+-		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), blockSize_p1, (bufferPtr + i * blockSize_p1));
++		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), blockSize_p1, (buffer + i * blockSize_p1));
+ 		if (ret == _FAIL)
+ 			goto exit;
+ 	}
+@@ -102,7 +101,7 @@ static int block_write(struct adapter *padapter, void *buffer, u32 size)
+ 		remainSize_p2 = remainSize_p1 % blockSize_p2;
  
-+	pcie {
-+		pcie_enable_h: pcie-enable-h {
-+			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
-+		pcie_reset_h: pcie-reset-h {
-+			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
+ 		for (i = 0; i < blockCount_p2; i++) {
+-			ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + offset + i * blockSize_p2), blockSize_p2, (bufferPtr + offset + i * blockSize_p2));
++			ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + offset + i * blockSize_p2), blockSize_p2, (buffer + offset + i * blockSize_p2));
+ 
+ 			if (ret == _FAIL)
+ 				goto exit;
+@@ -116,7 +115,7 @@ static int block_write(struct adapter *padapter, void *buffer, u32 size)
+ 		blockCount_p3 = remainSize_p2 / blockSize_p3;
+ 
+ 		for (i = 0; i < blockCount_p3; i++) {
+-			ret = rtw_write8(padapter, (FW_8188E_START_ADDRESS + offset + i), *(bufferPtr + offset + i));
++			ret = rtw_write8(padapter, (FW_8188E_START_ADDRESS + offset + i), *(buffer + offset + i));
+ 
+ 			if (ret == _FAIL)
+ 				goto exit;
+@@ -127,7 +126,7 @@ static int block_write(struct adapter *padapter, void *buffer, u32 size)
+ 	return ret;
+ }
+ 
+-static int page_write(struct adapter *padapter, u32 page, void *buffer, u32 size)
++static int page_write(struct adapter *padapter, u32 page, u8 *buffer, u32 size)
+ {
+ 	u8 value8;
+ 	u8 u8Page = (u8)(page & 0x07);
+@@ -138,21 +137,20 @@ static int page_write(struct adapter *padapter, u32 page, void *buffer, u32 size
+ 	return block_write(padapter, buffer, size);
+ }
+ 
+-static int write_fw(struct adapter *padapter, void *buffer, u32 size)
++static int write_fw(struct adapter *padapter, u8 *buffer, u32 size)
+ {
+ 	/*  Since we need dynamic decide method of dwonload fw, so we call this function to get chip version. */
+ 	/*  We can remove _ReadChipVersion from ReadpadapterInfo8192C later. */
+ 	int ret = _SUCCESS;
+ 	u32	pageNums, remainSize;
+ 	u32	page, offset;
+-	u8 *bufferPtr = (u8 *)buffer;
+ 
+ 	pageNums = size / MAX_PAGE_SIZE;
+ 	remainSize = size % MAX_PAGE_SIZE;
+ 
+ 	for (page = 0; page < pageNums; page++) {
+ 		offset = page * MAX_PAGE_SIZE;
+-		ret = page_write(padapter, page, bufferPtr + offset, MAX_PAGE_SIZE);
++		ret = page_write(padapter, page, buffer + offset, MAX_PAGE_SIZE);
+ 
+ 		if (ret == _FAIL)
+ 			goto exit;
+@@ -160,7 +158,7 @@ static int write_fw(struct adapter *padapter, void *buffer, u32 size)
+ 	if (remainSize) {
+ 		offset = pageNums * MAX_PAGE_SIZE;
+ 		page = pageNums;
+-		ret = page_write(padapter, page, bufferPtr + offset, remainSize);
++		ret = page_write(padapter, page, buffer + offset, remainSize);
+ 
+ 		if (ret == _FAIL)
+ 			goto exit;
 -- 
-2.25.1
+2.35.1
 

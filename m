@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E5E4FD783
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39AF4FD70C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378992AbiDLITd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S1355229AbiDLIHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354764AbiDLH0m (ORCPT
+        with ESMTP id S1354787AbiDLH0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:42 -0400
+        Tue, 12 Apr 2022 03:26:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234C946B38;
-        Tue, 12 Apr 2022 00:06:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B70F4704D;
+        Tue, 12 Apr 2022 00:06:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D50F615B9;
-        Tue, 12 Apr 2022 07:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3B8C385A1;
-        Tue, 12 Apr 2022 07:06:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4F74616B3;
+        Tue, 12 Apr 2022 07:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CD2C385A6;
+        Tue, 12 Apr 2022 07:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747194;
-        bh=yACMg3K5W5/I6pA+flBzd9n3DRtIlF1HetQbnpP/24s=;
+        s=korg; t=1649747198;
+        bh=XwUz5NgVuhsGb/iOf7TIf0swvsE/bb+9ol3LL0KyTCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F+pJakB8iYIANmIYEpvzBcb0gtLTeddWOzTXYN5stuSnwqFNpI/0ECG9NNB3GXu+u
-         aQBVRiL0bhwjlDQAPBK3NUmbDms+uuqF722tMVirfCXtK9jx4ei0MkuQyyZcEopxw4
-         h0sBSqL/ECF5RqSXrR1POR3V5YGgBulGdtMcB30A=
+        b=0KbzelUKoU3NMLkf0ThG6UZ9ss4aDgLOWQQnIbDhBilVPHr8DgW1T1tgAPTcsrBfJ
+         CFMEOxz2vmNwn9xi49E8WkJvBrQhEkFYEzA9I8iLBquHN7Z9K0xaiVQoXdeIGlvPg/
+         Rg19tiUksSQ6GFuf26zxcOPfimOt/O5V3r8qxV+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Erhard F." <erhard_f@mailbox.org>,
         Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 276/285] powerpc: Fix virt_addr_valid() for 64-bit Book3E & 32-bit
-Date:   Tue, 12 Apr 2022 08:32:13 +0200
-Message-Id: <20220412062951.621295308@linuxfoundation.org>
+Subject: [PATCH 5.16 277/285] Revert "powerpc: Set max_mapnr correctly"
+Date:   Tue, 12 Apr 2022 08:32:14 +0200
+Message-Id: <20220412062951.648724736@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -57,89 +58,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-commit ffa0b64e3be58519ae472ea29a1a1ad681e32f48 upstream.
+commit 1ff5c8e8c835e8a81c0868e3050c76563dd56a2c upstream.
 
-mpe: On 64-bit Book3E vmalloc space starts at 0x8000000000000000.
+This reverts commit 602946ec2f90d5bd965857753880db29d2d9a1e9.
 
-Because of the way __pa() works we have:
-  __pa(0x8000000000000000) == 0, and therefore
-  virt_to_pfn(0x8000000000000000) == 0, and therefore
-  virt_addr_valid(0x8000000000000000) == true
+If CONFIG_HIGHMEM is enabled, no highmem will be added with max_mapnr
+set to max_low_pfn, see mem_init():
 
-Which is wrong, virt_addr_valid() should be false for vmalloc space.
-In fact all vmalloc addresses that alias with a valid PFN will return
-true from virt_addr_valid(). That can cause bugs with hardened usercopy
-as described below by Kefeng Wang:
+  for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
+        ...
+        free_highmem_page();
+  }
 
-  When running ethtool eth0 on 64-bit Book3E, a BUG occurred:
+Now that virt_addr_valid() has been fixed in the previous commit, we can
+revert the change to max_mapnr.
 
-    usercopy: Kernel memory exposure attempt detected from SLUB object not in SLUB page?! (offset 0, size 1048)!
-    kernel BUG at mm/usercopy.c:99
-    ...
-    usercopy_abort+0x64/0xa0 (unreliable)
-    __check_heap_object+0x168/0x190
-    __check_object_size+0x1a0/0x200
-    dev_ethtool+0x2494/0x2b20
-    dev_ioctl+0x5d0/0x770
-    sock_do_ioctl+0xf0/0x1d0
-    sock_ioctl+0x3ec/0x5a0
-    __se_sys_ioctl+0xf0/0x160
-    system_call_exception+0xfc/0x1f0
-    system_call_common+0xf8/0x200
-
-  The code shows below,
-
-    data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
-    copy_to_user(useraddr, data, gstrings.len * ETH_GSTRING_LEN))
-
-  The data is alloced by vmalloc(), virt_addr_valid(ptr) will return true
-  on 64-bit Book3E, which leads to the panic.
-
-  As commit 4dd7554a6456 ("powerpc/64: Add VIRTUAL_BUG_ON checks for __va
-  and __pa addresses") does, make sure the virt addr above PAGE_OFFSET in
-  the virt_addr_valid() for 64-bit, also add upper limit check to make
-  sure the virt is below high_memory.
-
-  Meanwhile, for 32-bit PAGE_OFFSET is the virtual address of the start
-  of lowmem, high_memory is the upper low virtual address, the check is
-  suitable for 32-bit, this will fix the issue mentioned in commit
-  602946ec2f90 ("powerpc: Set max_mapnr correctly") too.
-
-On 32-bit there is a similar problem with high memory, that was fixed in
-commit 602946ec2f90 ("powerpc: Set max_mapnr correctly"), but that
-commit breaks highmem and needs to be reverted.
-
-We can't easily fix __pa(), we have code that relies on its current
-behaviour. So for now add extra checks to virt_addr_valid().
-
-For 64-bit Book3S the extra checks are not necessary, the combination of
-virt_to_pfn() and pfn_valid() should yield the correct result, but they
-are harmless.
-
+Fixes: 602946ec2f90 ("powerpc: Set max_mapnr correctly")
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-[mpe: Add additional change log detail]
+Reported-by: Erhard F. <erhard_f@mailbox.org>
+[mpe: Update change log to reflect series reordering]
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220406145802.538416-1-mpe@ellerman.id.au
+Link: https://lore.kernel.org/r/20220406145802.538416-2-mpe@ellerman.id.au
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/page.h |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/powerpc/mm/mem.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -132,7 +132,11 @@ static inline bool pfn_valid(unsigned lo
- #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
- #define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
+--- a/arch/powerpc/mm/mem.c
++++ b/arch/powerpc/mm/mem.c
+@@ -256,7 +256,7 @@ void __init mem_init(void)
+ #endif
  
--#define virt_addr_valid(kaddr)	pfn_valid(virt_to_pfn(kaddr))
-+#define virt_addr_valid(vaddr)	({					\
-+	unsigned long _addr = (unsigned long)vaddr;			\
-+	_addr >= PAGE_OFFSET && _addr < (unsigned long)high_memory &&	\
-+	pfn_valid(virt_to_pfn(_addr));					\
-+})
+ 	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
+-	set_max_mapnr(max_low_pfn);
++	set_max_mapnr(max_pfn);
  
- /*
-  * On Book-E parts we need __va to parse the device tree and we can't
+ 	kasan_late_init();
+ 
 
 

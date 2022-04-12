@@ -2,204 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5894FEB79
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC37B4FEA22
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 00:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiDLXad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S229487AbiDLWc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 18:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiDLXaD (ORCPT
+        with ESMTP id S229527AbiDLWcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:30:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98AC0540
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649801689; x=1681337689;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=X/cRMn1yUyCDO+ggS8EbXLT8u15dGYu0SlcSAPYTWQo=;
-  b=DCkN42LuTqFu2sjqHOYJJlwTyaKlXVh3biPv+L5jUcoqc1Cb5Xvjyb4Y
-   yTUa5/1yO81QGR5/Ht2sujRFDfFIILaY05mhEoy1KO40v1PtgffAmR20A
-   sXjuTQB3MpH51vnIcttl7NG39wtQI8uocwEtkM7gHqiAr8tcQVsRrOiKs
-   NtzGakPN11UCnp8n/AUk+2XSDl7j5CE9gmxeWF18i42n+qVhrshq47tHm
-   eVICEzWQlJJ6bEhRwseysdC8awlkaaTklJiL7JNyynxTsa4aSjW+O2aQw
-   RoMrEMp1ejneCi8GLtBxWuwMhasI3x1vpr5v+13+I9xZRb8ew7gVk7NLv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="287526899"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="287526899"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 14:12:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="507719745"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga003.jf.intel.com with ESMTP; 12 Apr 2022 14:12:41 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 12 Apr 2022 14:12:40 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 12 Apr 2022 14:12:40 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 12 Apr 2022 14:12:40 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 12 Apr 2022 14:12:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WWKPOeoqJqMiI3UKPe/4FsBp7/1ln9Hkl2vlVSSrJQ6ZKxqwhq2bdYabB+azVLFt13Px73/ea1DbvTwRuuwBfFVImMpEFaIbgwyYmyHszzMGjiID4WZ9qDscsY2tXo3XYiK7yQ5RE0Sp3cHpO796HXP6IAQ6ev+nN14eNyYV/F3MInmRZ2hwR7nmCCDq6obQzFQH3MnmxApYmwzoSeRsag7naondDHdMTnxe3Nbkbwi4QxVVnTv0nlg+rkr876oVc+/FBbyYPe4iB+LBd1l/Os6lWXgAR2qcmPKJGSMF/e5JTtZXvv4c1b5Zuv4h5ParL44T8olib41XQk/1qMkElA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X/cRMn1yUyCDO+ggS8EbXLT8u15dGYu0SlcSAPYTWQo=;
- b=Qj13TiaCWMM7hspg9dp4dr7HjDsgWR7qE1IoR9OBVjfzErFYTCPYWuVkFfj8Wt98P5bgQTCElKbD0eJ6Cj7y0m3foZRws53/CYg1tz7Cb8rz0RXIZ2EpJ8rGLX4xR2qAghZ7iKV4rdCMB+y9YCqgi7WLC7b2P+MIGPkkHY5Qi2KGNP8NJSQwCOybG54Mf9MjaxKWKIf/bFWLc+3GZBgiwCy+13XQmNkHrrjdrHl4ZkIfOg8D7UdCwu7YDyvTUQQvcXNrM5OdoCleMtIo9aezqNNLWGMxUei+aPQFH+jtgootKakrlvpUtWJJkifE1dOqrAHCgHbuMgxHgEcDWYLbOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
- by MN2PR11MB3917.namprd11.prod.outlook.com (2603:10b6:208:135::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Tue, 12 Apr
- 2022 21:12:36 +0000
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::d87b:eb8b:b755:c336]) by MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::d87b:eb8b:b755:c336%9]) with mapi id 15.20.5144.029; Tue, 12 Apr 2022
- 21:12:36 +0000
-From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
-To:     "andrew@aj.id.au" <andrew@aj.id.au>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "joel@jms.id.au" <joel@jms.id.au>
-CC:     "lv.ruyi@zte.com.cn" <lv.ruyi@zte.com.cn>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
-        "zealci@zte.com.cn" <zealci@zte.com.cn>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
-Subject: Re: [PATCH] peci: fix error check return value of platform_get_irq()
-Thread-Topic: [PATCH] peci: fix error check return value of platform_get_irq()
-Thread-Index: AQHYTkv6Gt0PlPxOG0KKXS5Je2+nnazsx3eA
-Date:   Tue, 12 Apr 2022 21:12:36 +0000
-Message-ID: <d09484f7cda13de3f156bd1bcba8c2671495dcd1.camel@intel.com>
-References: <20220412090148.2533219-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220412090148.2533219-1-lv.ruyi@zte.com.cn>
-Accept-Language: en-US, pl-PL
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.40.4 (3.40.4-3.fc34) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5ee4b7b2-d774-4709-f1de-08da1cc92b3c
-x-ms-traffictypediagnostic: MN2PR11MB3917:EE_
-x-microsoft-antispam-prvs: <MN2PR11MB39170F00D6352FA96B453D63ECED9@MN2PR11MB3917.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VhPVT2pCDZ0XCtTCUMg7R70Oy8JTOtdxSEgRwZWgUlqzPzXKvE+/aWj4e5H1QWYCQCO3SOWpl+IE2YkWF8MfESqVTIPxLuVOUSZY0Bs5qN8sfSy5AxSA98uztCq5wTDAlOcU3VezYmdGpTUvlFDiTkl3C0fZIZhiMuyPCkEjZjAPmFSJZzYP0M6O+5Mg2oYeOC1xE/M0ZfWPTVNF6Oky1hbY6myktWsn4eS00qE7iI1J2aI/du91N5vPrL269HZP5tacRR0eqzQs8vC1/bsu+DWVfJ83Wm/KXVJg+Z7uo3p94DQ0JVATA2EUM8qmRV7TFpdkdWV/zVCjpiymLCjj/fNy3X61EtPd/pSG4cdA4PhB6EFjIB4oyBg8mXsR3sf2nhGHJZOw1Soo2iAbfqwNXgfSS8paIq7SLhxWPWxvL9xP+GVr9b1aM4UpAJG6oDT9ZiYA+0T00jYv/6Jeoe0atLhklo/MIKoUxkpCjygR4T988/XxyxzCaG34JnYbZp4gTmtdnEKobmbh8K3GStctBKuX7dYaQLZCa716QC7X4FXItswG+qEDam+7SaF51hWIgaNTFd7shGIJCr9+puFgpX0m2Qnxf6Ysg0jSkIKITN8p70iAJSvkv03kJ8itX2fxE+Nvzqa27UzebN4Qs4SZRicLf7k2um9EmfHdeDA9cCFGuCI9uYWXUSOAF6UsQrU9+DMuU1Hz0nAn9m66E2wbkg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(86362001)(71200400001)(26005)(6512007)(186003)(2616005)(6506007)(7416002)(8936002)(4326008)(8676002)(38070700005)(82960400001)(5660300002)(2906002)(64756008)(66446008)(122000001)(36756003)(66476007)(38100700002)(54906003)(110136005)(6486002)(508600001)(66556008)(91956017)(66946007)(76116006)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cVVDeStoQTUvejR0Y3V0OE1sQmFlZEFVOTNTNzhrVXN0VHpOM3BmN1p3L1k5?=
- =?utf-8?B?WWowdGNtU0dobXp4ZUdzUEV3RlZXYmRBa3dZVFV0MDZsMEZzaUJ6d2EzZ0J3?=
- =?utf-8?B?MWp3MnI4NmVEQ0VhM0hCblRHb0xUM3M1NnN2ckxacmUxa3UrYkFQM1hEem9E?=
- =?utf-8?B?VTFkMithS1djTHlKR1kzdXJrS21KWVF5cFYzbHZJU2g1N2NsNjJVYWNlbk10?=
- =?utf-8?B?VjhybitRSXVrR1MzM25KVkY5SVhWNnRqeEdYdDFQZDhocVBaZE95L1JMSmFk?=
- =?utf-8?B?UldRWUt3Ri9UbERReDBUT2ZmWDkvM0ZCWUFRVnc3VE00cDhSNFdEa0daM1Vm?=
- =?utf-8?B?VXgwMy9SZllGdnRzb1hMN2hYQlpzMWZqU3N2MEFZYWF3c0pOYjFVcnd4eDJ0?=
- =?utf-8?B?a3o4bVdRVEdnb1pGZjlBZklUQldCQUZiMWZJTmNOWjZlRG1Nek10aDh4ajJ3?=
- =?utf-8?B?R1kvZmNoOWNNQUo4NHNHby9sV2hYV0JUN2V5cjYrbXlJcS96cXgwbElpc0Ju?=
- =?utf-8?B?KzdnRnV5MnZtNTdHbTBNRVNySW5QZXhXT1JPOUd3czBkQTBYa0JKOTFsWjI2?=
- =?utf-8?B?OTcxU1hRUGVMUHlWb1JacnM2cldTUmthdkpVelBLQkdtODdCd3NVNS9wVmtw?=
- =?utf-8?B?M2xxaXg3bFpyRXgzd1M5RFdsQ2ZHM1phZnBzM2ljV0JQaHM0NDVRcngyZmJ0?=
- =?utf-8?B?bzdWcmxFb0JYSzJoVkszaEdIV1daOGc5Qlh0UmRKaFJ1bnc5NGZrTVZYblBo?=
- =?utf-8?B?OWlYKzg3TnBNc1FPaUJJVGpVUTlDK3dpc0VtSUdkTVlKR1YzREZ2Sk5DR0Fv?=
- =?utf-8?B?cUdLcFJlK2o0ekNZVDJkNkdRSnFEOVQzVHVrTkZPQTVIdHlMeXFsaHcvZ3Fh?=
- =?utf-8?B?TnhGOGRGZ3l0SWhHS0FHZFRPTVNwTGFrc3dDeXlBYlFoSTV4YThNWEZSOWVw?=
- =?utf-8?B?OTN1QXVpVUtmdXR0UE5XYU1BampFcHd5czEzUldERzZBNGVyUnZWKzBHLzlP?=
- =?utf-8?B?TkRPa3pQeWdzRGp2aHlkT2ROVWNVMWZCcVJpZ3BWdmZSdEpUQXY1YjAwamVx?=
- =?utf-8?B?WlI5a2p6bkI2Z2daaVMrTjF1cnVrVTVqVjkyYnRVbXBuMUZQL0xsOUd6eDhJ?=
- =?utf-8?B?Sy9ubzdac3BlZkowM05Ydkx1dDNFbmI0TWMrSzg2SkxTck5uVmdnckdWWGpM?=
- =?utf-8?B?cnY1Y0lRWXdpQUViMXJ2TmgyUWs3d0NrMEFwaHhNY2lOVW1iVWJuM1dPSWR0?=
- =?utf-8?B?SDR4dEhmR2VzSnFGUHVNZ1c5SFNPMkwyM2MyWEhtdDU4ditRVzYweVJpZjA5?=
- =?utf-8?B?dGM5RGYvdnhRTzBZeU5DZzNEdHhvenpjWjJqK2NtZVF4OHhwRFVNN3ZxRHln?=
- =?utf-8?B?TnJVaXBVVnVQWVZoeGRrWVd1ZWZrM29HdjZEb3lZcFJvMFdIQnBQbnRrNDV5?=
- =?utf-8?B?VjVzSVhBKzRMVVdGUnVJaThKV0dSYTlKTGFMSlhiZllZRTF0VDc0U3dJMU1F?=
- =?utf-8?B?L01CVVQ2RlJrYnoyc2toekRxcFRxTWlsdldGeWxLMjR0N1R1K1E5NURlaWUx?=
- =?utf-8?B?Z3FTTkRvT0JYbVlGVzd6UzA1WWxSUWwrSGpPWUZOSFcxYUJ1QzZVSWRwRzlN?=
- =?utf-8?B?dDNSS3lUSW1rWGZScFhoWFpEZS95K1BGS2dDV2FmNE1uOGVZSUxDa3hrdGVQ?=
- =?utf-8?B?OGF6aU53cDUwY3hoMVZhc1ZOZUVMN1RLbnppV0Jlc1U3VXBIeTVSZVprMW4z?=
- =?utf-8?B?VWlwUGVRUmo4QjQyL1VMc3plWWlsdE5YbHBGQkZub1I1SUgrZk9ja3NSUGIy?=
- =?utf-8?B?UmV5OUVWaVpReWV6WVdYd1hURGRTWWo1bFpjMGdOMzV4TWc0MzhXcXkwT0ZU?=
- =?utf-8?B?eDloRVBheXBwbUVydnAvK1RvNTl6RFVqRHZ6RDBQK0JBNjMzVGprN2tCU3px?=
- =?utf-8?B?WG9lRzlKZCtFVGs5cnZ6ckdsbG9sdmc1SFFvNk92Mkt5MVZPNVFlWDYrclZT?=
- =?utf-8?B?R1poNVZScUp0VGNqY2x2UlE1bzBKQ00zZ21aVC9aTDhzai80a3pTUVMwSEha?=
- =?utf-8?B?RFpTWmdRUy9UMGxrdUt4eHNxbXJsV0hGSEhtMG4xdE9IOWJuNENBWEM5UjdH?=
- =?utf-8?B?RzNmVjZzLzdhQktSQkIyQTUzVzI4OUU0QkM2dktRSlh4WFE3Zzl0ekJ2U2Rw?=
- =?utf-8?B?WGUvMXVKejJEZ1UycUJVdTRBMXVVcDMrWHJZblMvQXBpK21TbW43azhBbWUz?=
- =?utf-8?B?VHBpcUMrOUdsQWlsMlBNaGtKdXhKZkdCdHZQenRhb0dhdXBDVGQ5UW9PNkZH?=
- =?utf-8?B?ZTZmaEtoQ1Q5M3FqVnl6T2ZRaXZzMFhtb0pNZlBoME1TeDNxaml2MHg5TUxx?=
- =?utf-8?Q?31+K0nJlI1iizejs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C6A9105924FFA9468BBAEB83EC90A1FC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 12 Apr 2022 18:32:25 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8761D1A7733
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:44 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id t4so18395944pgc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=knG9M3UYQieXfNA2xBybpWoSnTduc8ITKXA/PJQTuvE=;
+        b=N4Pn9XBMGe+1OSsSvf0TKA+WHDQEDctYbjd2ywUDQay5xt4RobfdJqq/dQLSRXPXY9
+         OZWBNrtQ1rWdIFovQx8BwIg/4TArhupIVUGvLewL/soCnwuyuUIDs1EpK1DnwYBXJLBS
+         GnaMdOyf+EzFITDXdiP6K7eLcSo5DCCmuiMNZdcLy1FhXEQz9AtoBE5+yTmHsc9y4t9h
+         OfKHfLxDZ7SXbcuwCSEpeO/WTnbWEf1s5UepVvBYWpYZviFsywwjr36wXtK1edvX1X/+
+         WqQujedZWJoCgOsDOdSq5hzUBCvKGvsABheFwNk3wYcvQMB9tI+TRMJAFu4P26QFTq+D
+         FpDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=knG9M3UYQieXfNA2xBybpWoSnTduc8ITKXA/PJQTuvE=;
+        b=DdvRZmmLSG9Uc0pgndFuPUjVF0Q9JnxrYD00TLDHgIk/lbWPDntrjEOuo8ECwReXtx
+         GrGD2MBHb6HhA2yyPooRxI9fMAxRraQB049UU7AE5dcJE0Lkt90JNfrNubJteM2iBNwP
+         jdqg6oXOckRZ/wq58cOuygpbSrUSUycs2a+FXkTSjm4rkEs3HmxSC2jW7JEcZpeaUdwR
+         LcJLCTJb6xpwW9UdDeiTC1pJHSTTh5d5pIKCZ+KIhkcDqj6RJC7ULUfsnTRe2+1Px9wX
+         m4tgwJ9zHxwGumoywF5uN6wp2XR4JGgWkl4B+zOGlfmJ1UgdDxHQLn187kpHoJneqj0l
+         SUww==
+X-Gm-Message-State: AOAM5334OrCocGHfI5OgpT0JJhk9F42tUbb2N/PW0FdOn35+H00mhsZl
+        WEoKWPi6XI8E8yKMC2zUM/Dkag==
+X-Google-Smtp-Source: ABdhPJwIB/I0m6Z1vpJVIM1zCzFcYNBDyM0Q8/OVLOPqFiN3cPMCp15+J1ilmqJAp824tzokxXjO0g==
+X-Received: by 2002:a65:6a07:0:b0:39d:8c35:426b with SMTP id m7-20020a656a07000000b0039d8c35426bmr5198065pgu.171.1649798071171;
+        Tue, 12 Apr 2022 14:14:31 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001ca2f87d271sm432615pjp.15.2022.04.12.14.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 14:14:30 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 21:14:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+Message-ID: <YlXrshJa2Sd1WQ0P@google.com>
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-4-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ee4b7b2-d774-4709-f1de-08da1cc92b3c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2022 21:12:36.5452
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cld+ku744YEEjbgn69npe3r1pBG7hKV1Sz+jW2pr4OKcEi5/eBZNSgi5hyh6yOhq+LZBtjL8h/R3dTFTOs9w1qIcKNPf0ugxr25rYxFBPdU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3917
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330132152.4568-4-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA0LTEyIGF0IDA5OjAxICswMDAwLCBjZ2VsLnp0ZUBnbWFpbC5jb20gd3Jv
-dGU6DQo+IEZyb206IEx2IFJ1eWkgPGx2LnJ1eWlAenRlLmNvbS5jbj4NCg0KVGhhbmtzIGZvciB0
-aGUgZml4LiBDYW4gd2UgcHJlZml4IHRoZSBzdWJqZWN0IHdpdGggInBlY2k6IGFzcGVlZDoiPyBK
-dXN0IHRvDQpkaXN0aW5ndWlzaCBjaGFuZ2VzIHJlbGF0ZWQgdG8gc3BlY2lmaWMgY29udHJvbGxl
-ciBmcm9tIHRoZSBvbmVzIHRvdWNoaW5nIHBlY2ktDQpjb3JlLg0KDQo+IA0KPiBwbGF0Zm9ybV9n
-ZXRfaXJxKCkgcmV0dXJuIG5lZ2F0aXZlIHZhbHVlIG9uIGZhaWx1cmUsIHNvIG51bGwgY2hlY2sg
-b2YNCj4gcHJpdi0+aXJxIGlzIGluY29ycmVjdC4gRml4IGl0IGJ5IGNvbXBhcmluZyB3aGV0aGVy
-IGl0IGlzIGxlc3MgdGhhbiB6ZXJvLg0KPiANCj4gRml4ZXM6IGE4NWU0YzUyMDg2YyAoInBlY2k6
-IEFkZCBwZWNpLWFzcGVlZCBjb250cm9sbGVyIGRyaXZlciIpDQo+IFJlcG9ydGVkLWJ5OiBaZWFs
-IFJvYm90IDx6ZWFsY2lAenRlLmNvbS5jbj4NCj4gU2lnbmVkLW9mZi1ieTogTHYgUnV5aSA8bHYu
-cnV5aUB6dGUuY29tLmNuPg0KDQpSZXZpZXdlZC1ieTogSXdvbmEgV2luaWFyc2thIDxpd29uYS53
-aW5pYXJza2FAaW50ZWwuY29tPg0KDQotSXdvbmENCg0KPiAtLS0NCj4gwqBkcml2ZXJzL3BlY2kv
-Y29udHJvbGxlci9wZWNpLWFzcGVlZC5jIHwgMiArLQ0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGVj
-aS9jb250cm9sbGVyL3BlY2ktYXNwZWVkLmMNCj4gYi9kcml2ZXJzL3BlY2kvY29udHJvbGxlci9w
-ZWNpLWFzcGVlZC5jDQo+IGluZGV4IDE5MjVkZGMxM2YwMC4uNzMxYzVkOGY3NWM2IDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL3BlY2kvY29udHJvbGxlci9wZWNpLWFzcGVlZC5jDQo+ICsrKyBiL2Ry
-aXZlcnMvcGVjaS9jb250cm9sbGVyL3BlY2ktYXNwZWVkLmMNCj4gQEAgLTUyMyw3ICs1MjMsNyBA
-QCBzdGF0aWMgaW50IGFzcGVlZF9wZWNpX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBk
-ZXYpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIFBUUl9FUlIocHJp
-di0+YmFzZSk7DQo+IMKgDQo+IMKgwqDCoMKgwqDCoMKgwqBwcml2LT5pcnEgPSBwbGF0Zm9ybV9n
-ZXRfaXJxKHBkZXYsIDApOw0KPiAtwqDCoMKgwqDCoMKgwqBpZiAoIXByaXYtPmlycSkNCj4gK8Kg
-wqDCoMKgwqDCoMKgaWYgKHByaXYtPmlycSA8IDApDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgcmV0dXJuIHByaXYtPmlycTsNCj4gwqANCj4gwqDCoMKgwqDCoMKgwqDCoHJldCA9
-IGRldm1fcmVxdWVzdF9pcnEoJnBkZXYtPmRldiwgcHJpdi0+aXJxLCBhc3BlZWRfcGVjaV9pcnFf
-aGFuZGxlciwNCg==
+On Wed, Mar 30, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> Currently pae_root is special root page, this patch adds facility to
+> allow using kvm_mmu_get_page() to allocate pae_root shadow page.
+
+I don't think this will work for shadow paging.  CR3 only has to be 32-byte aligned
+for PAE paging.  Unless I'm missing something subtle in the code, KVM will incorrectly
+reuse a pae_root if the guest puts multiple PAE CR3s on a single page because KVM's
+gfn calculation will drop bits 11:5.
+
+Handling this as a one-off is probably easier.  For TDP, only 32-bit KVM with NPT
+benefits from reusing roots, IMO and shaving a few pages in that case is not worth
+the complexity.
+
+> @@ -332,7 +337,8 @@ union kvm_mmu_page_role {
+>  		unsigned ad_disabled:1;
+>  		unsigned guest_mode:1;
+>  		unsigned glevel:4;
+> -		unsigned :2;
+> +		unsigned pae_root:1;
+
+If we do end up adding a role bit, it can simply be "root", which may or may not
+be useful for other things.  is_pae_root() is then a combo of root+level.  This
+will clean up the code a bit as role.root is (mostly?) hardcoded based on the
+function, e.g. root allocators set it, child allocators clear it.
+
+> +		unsigned :1;
+>  
+>  		/*
+>  		 * This is left at the top of the word so that
+> @@ -699,6 +705,7 @@ struct kvm_vcpu_arch {
+>  	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+>  	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
+>  	struct kvm_mmu_memory_cache mmu_page_header_cache;
+> +	void *mmu_pae_root_cache;
+>  
+>  	/*
+>  	 * QEMU userspace and the guest each have their own FPU state.
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index d53037df8177..81ccaa7c1165 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -694,6 +694,35 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>  	}
+>  }
+>  
+> +static int mmu_topup_pae_root_cache(struct kvm_vcpu *vcpu)
+> +{
+> +	struct page *page;
+> +
+> +	if (vcpu->arch.mmu->shadow_root_level != PT32E_ROOT_LEVEL)
+> +		return 0;
+> +	if (vcpu->arch.mmu_pae_root_cache)
+> +		return 0;
+> +
+> +	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_DMA32);
+> +	if (!page)
+> +		return -ENOMEM;
+> +	vcpu->arch.mmu_pae_root_cache = page_address(page);
+> +
+> +	/*
+> +	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
+> +	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
+> +	 * that KVM's writes and the CPU's reads get along.  Note, this is
+> +	 * only necessary when using shadow paging, as 64-bit NPT can get at
+> +	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
+> +	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
+> +	 */
+> +	if (!tdp_enabled)
+> +		set_memory_decrypted((unsigned long)vcpu->arch.mmu_pae_root_cache, 1);
+> +	else
+> +		WARN_ON_ONCE(shadow_me_mask);
+> +	return 0;
+> +}
+> +
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  {
+>  	int r;
+> @@ -705,6 +734,9 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  		return r;
+>  	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+>  				       PT64_ROOT_MAX_LEVEL);
+> +	if (r)
+> +		return r;
+> +	r = mmu_topup_pae_root_cache(vcpu);
+
+This doesn't need to be called from the common mmu_topup_memory_caches(), e.g. it
+will unnecessarily require allocating another DMA32 page when handling a page fault.
+I'd rather call this directly kvm_mmu_load(), which also makes it more obvious
+that the cache really is only used for roots.
+
+>  	if (r)
+>  		return r;
+>  	if (maybe_indirect) {
+> @@ -717,12 +749,23 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  					  PT64_ROOT_MAX_LEVEL);
+>  }
+>  
+
+...
+
+>  static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
+>  			     struct kvm_mmu_page *sp)
+>  {
+> +	struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
+>  	u64 spte;
+>  
+>  	BUILD_BUG_ON(VMX_EPT_WRITABLE_MASK != PT_WRITABLE_MASK);
+>  
+> -	spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+> +	if (!parent_sp->role.pae_root)
+
+Hmm, without role.root, this could be:
+
+	if (sp->role.level == (PT32E_ROOT_level - 1) &&
+	    ((__pa(sptep) & PT64_BASE_ADDR_MASK) == vcpu->arch.mmu->root.hpa))
+		spte = make_pae_pdpte(sp->spt);
+	else
+		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+
+Which is gross, but it works.  We could also do FNAME(link_shadow_page) to send
+PAE roots down a dedicated path (also gross).  Point being, I don't think we
+strictly need a "root" flag unless the PAE roots are put in mmu_page_hash.
+
+> +		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+> +	else
+> +		spte = make_pae_pdpte(sp->spt);
+>  
+>  	mmu_spte_set(sptep, spte);
+>  
+> @@ -4782,6 +4847,8 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
+>  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
+>  	role.base.direct = true;
+>  	role.base.has_4_byte_gpte = false;
+> +	if (role.base.level == PT32E_ROOT_LEVEL)
+> +		role.base.pae_root = 1;
+>  
+>  	return role;
+>  }
+> @@ -4848,6 +4915,9 @@ kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
+>  	else
+>  		role.base.level = PT64_ROOT_4LEVEL;
+>  
+> +	if (role.base.level == PT32E_ROOT_LEVEL)
+> +		role.base.pae_root = 1;
+> +
+>  	return role;
+>  }
+>  
+> @@ -4893,6 +4963,8 @@ kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
+>  
+>  	role.base.direct = false;
+>  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
+> +	if (role.base.level == PT32E_ROOT_LEVEL)
+> +		role.base.pae_root = 1;
+>  
+>  	return role;
+>  }
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 67489a060eba..1015f33e0758 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -1043,6 +1043,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
+>  		.access = 0x7,
+>  		.quadrant = 0x3,
+>  		.glevel = 0xf,
+> +		.pae_root = 0x1,
+>  	};
+>  
+>  	/*
+> -- 
+> 2.19.1.6.gb485710b
+> 

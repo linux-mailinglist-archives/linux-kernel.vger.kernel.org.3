@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF284FD038
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1E84FD03D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351005AbiDLGns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        id S1349095AbiDLGpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350327AbiDLGkz (ORCPT
+        with ESMTP id S234045AbiDLGlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:40:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F31D13EA3;
-        Mon, 11 Apr 2022 23:36:14 -0700 (PDT)
+        Tue, 12 Apr 2022 02:41:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0715721;
+        Mon, 11 Apr 2022 23:36:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97EFEB81B40;
-        Tue, 12 Apr 2022 06:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F347C385A1;
-        Tue, 12 Apr 2022 06:36:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D9661904;
+        Tue, 12 Apr 2022 06:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6431C385A8;
+        Tue, 12 Apr 2022 06:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745371;
-        bh=5Yo9zPmpBKuLXJEskPXMJiqE3CJEvDRDKoo0TjzcPK0=;
+        s=korg; t=1649745374;
+        bh=kG613ITA0rlCXv5UM6fjdDsUYUOzfekdDiHldNCJFA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PuZARJk4REljDBy5+T9fW15RKbdCpVotJCJiHR1OOo2gLXcSWL0GVo3qrsO++6aID
-         h6lq/2KXTxijpAtVyyd1zrQrTeM1Izs6e50+7vfs8sxxtGjEqO34nQf6vv0tW+j5SF
-         Afy6YmcXKSQROY15XqEi4XOm2caxHpRS+NdjjfkA=
+        b=sxm2PG+t7e4ab8HLY5shALpTfOX50R7lLWn0vWgwVZzkcHRXNWRGykaZ28jHeXNCV
+         gDAbk5RRX0LQ3k5f/L7Mxf5GxMzW8COYPIWtQKpaYo1Pr9H/GNPCliD3YPUgaKZiBO
+         MQXuVnRMwOQVNsNuCnPxSylpKq62NZ2+8JarF/Vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 034/171] power: supply: axp288-charger: Set Vhold to 4.4V
-Date:   Tue, 12 Apr 2022 08:28:45 +0200
-Message-Id: <20220412062928.874615850@linuxfoundation.org>
+Subject: [PATCH 5.10 035/171] iwlwifi: mvm: Correctly set fragmented EBS
+Date:   Tue, 12 Apr 2022 08:28:46 +0200
+Message-Id: <20220412062928.903412605@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -55,83 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Ilan Peer <ilan.peer@intel.com>
 
-[ Upstream commit 5ac121b81b4051e7fc83d5b3456a5e499d5bd147 ]
+[ Upstream commit d8d4dd26b9e0469baf5017f0544d852fd4e3fb6d ]
 
-The AXP288's recommended and factory default Vhold value (minimum
-input voltage below which the input current draw will be reduced)
-is 4.4V. This lines up with other charger IC's such as the TI
-bq2419x/bq2429x series which use 4.36V or 4.44V.
+Currently, fragmented EBS was set for a channel only if the 'hb_type'
+was set to fragmented or balanced scan. However, 'hb_type' is set only
+in case of CDB, and thus fragmented EBS is never set for a channel for
+non-CDB devices. Fix it.
 
-For some reason some BIOS-es initialize Vhold to 4.6V or even 4.7V
-which combined with the typical voltage drop over typically low
-wire gauge micro-USB cables leads to the input-current getting
-capped below 1A (with a 2A capable dedicated charger) based on Vhold.
-
-This leads to slow charging, or even to the device slowly discharging
-if the device is in heavy use.
-
-As the Linux AXP288 drivers use the builtin BC1.2 charger detection
-and send the input-current-limit according to the detected charger
-there really is no reason not to use the recommended 4.4V Vhold.
-
-Set Vhold to 4.4V to fix the slow charging issue on various devices.
-
-There is one exception, the special-case of the HP X2 2-in-1s which
-combine this BC1.2 capable PMIC with a Type-C port and a 5V/3A factory
-provided charger with a Type-C plug which does not do BC1.2. These
-have their input-current-limit hardcoded to 3A (like under Windows)
-and use a higher Vhold on purpose to limit the current when used
-with other chargers. To avoid touching Vhold on these HP X2 laptops
-the code setting Vhold is added to an else branch of the if checking
-for these models.
-
-Note this also fixes the sofar unused VBUS_ISPOUT_VHOLD_SET_MASK
-define, which was wrong.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220204122220.a6165ac9b9d5.I654eafa62fd647030ae6d4f07f32c96c3171decb@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_charger.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index a4df1ea92386..f65bf7b295c5 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -41,11 +41,11 @@
- #define VBUS_ISPOUT_CUR_LIM_1500MA	0x1	/* 1500mA */
- #define VBUS_ISPOUT_CUR_LIM_2000MA	0x2	/* 2000mA */
- #define VBUS_ISPOUT_CUR_NO_LIM		0x3	/* 2500mA */
--#define VBUS_ISPOUT_VHOLD_SET_MASK	0x31
-+#define VBUS_ISPOUT_VHOLD_SET_MASK	0x38
- #define VBUS_ISPOUT_VHOLD_SET_BIT_POS	0x3
- #define VBUS_ISPOUT_VHOLD_SET_OFFSET	4000	/* 4000mV */
- #define VBUS_ISPOUT_VHOLD_SET_LSB_RES	100	/* 100mV */
--#define VBUS_ISPOUT_VHOLD_SET_4300MV	0x3	/* 4300mV */
-+#define VBUS_ISPOUT_VHOLD_SET_4400MV	0x4	/* 4400mV */
- #define VBUS_ISPOUT_VBUS_PATH_DIS	BIT(7)
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+index 46255d2c555b..17b992526694 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -1706,7 +1706,10 @@ static u8 iwl_mvm_scan_umac_chan_flags_v2(struct iwl_mvm *mvm,
+ 			IWL_SCAN_CHANNEL_FLAG_CACHE_ADD;
  
- #define CHRG_CCCV_CC_MASK		0xf		/* 4 bits */
-@@ -744,6 +744,16 @@ static int charger_init_hw_regs(struct axp288_chrg_info *info)
- 		ret = axp288_charger_vbus_path_select(info, true);
- 		if (ret < 0)
- 			return ret;
-+	} else {
-+		/* Set Vhold to the factory default / recommended 4.4V */
-+		val = VBUS_ISPOUT_VHOLD_SET_4400MV << VBUS_ISPOUT_VHOLD_SET_BIT_POS;
-+		ret = regmap_update_bits(info->regmap, AXP20X_VBUS_IPSOUT_MGMT,
-+					 VBUS_ISPOUT_VHOLD_SET_MASK, val);
-+		if (ret < 0) {
-+			dev_err(&info->pdev->dev, "register(%x) write error(%d)\n",
-+				AXP20X_VBUS_IPSOUT_MGMT, ret);
-+			return ret;
-+		}
- 	}
+ 	/* set fragmented ebs for fragmented scan on HB channels */
+-	if (iwl_mvm_is_scan_fragmented(params->hb_type))
++	if ((!iwl_mvm_is_cdb_supported(mvm) &&
++	     iwl_mvm_is_scan_fragmented(params->type)) ||
++	    (iwl_mvm_is_cdb_supported(mvm) &&
++	     iwl_mvm_is_scan_fragmented(params->hb_type)))
+ 		flags |= IWL_SCAN_CHANNEL_FLAG_EBS_FRAG;
  
- 	/* Read current charge voltage and current limit */
+ 	return flags;
 -- 
 2.35.1
 

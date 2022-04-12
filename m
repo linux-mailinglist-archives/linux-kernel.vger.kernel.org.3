@@ -2,297 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D5E4FE456
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544A74FE457
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356840AbiDLPIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S1354098AbiDLPK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiDLPIp (ORCPT
+        with ESMTP id S233387AbiDLPK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:08:45 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9315C362;
-        Tue, 12 Apr 2022 08:06:27 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bv19so14926898ejb.6;
-        Tue, 12 Apr 2022 08:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=On6x4n5aVEZBUYriyh4Itpr/oxnyB3oIsnuoMQ6fdAo=;
-        b=DXB30EkRvzrBh6ZH6ZmHCtoT7jsazmOtDBN7ieFDUsPgAgzUrDKXpDQhxEfAEwGJ8C
-         BQCXHKHPy2//FojkJMa2AlscVJJoKWuR6Da0D1DfjZkCNPhlAGPjvut2Adw6W9afHRVH
-         E+nIO4J30jZENSGFuVZkTNY6HhCtEq961/VlsyWpgRfM/Ys8Vdje1HPojgtdZoBRCY/I
-         bQmSlZzUyAdU8fXoRYMnlsB9/99ghL7WCgAD8345Fnj2U3Khy8br1GliikH88YXsmmBx
-         WtBxsQ0lQHUngUYa410+pD05iHX9gPT1Z/HFHXJUjGdCbs0Bue4yQSZmRvaw3bfzYxUC
-         8k1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=On6x4n5aVEZBUYriyh4Itpr/oxnyB3oIsnuoMQ6fdAo=;
-        b=oZXm4II7qx4m1JR+hDcmSqlNKMOWf+LLU+XN1ep+7JXCvPMQy0s0+DWEeS3Dc9xYNu
-         5OLzJ74CZJ6PV/mwtqaUbtnfEIZaPNsn5Ys62r5laC1qwhVmwZcFq1dT3QKKUzcnyEh3
-         1l0fOZvKaZQ+0aN9AZbyZRKmlA/FvqQ3/JGWKaV8kOd3GTcZrauKMzPSiZdlst1jtM06
-         zs2M4nND0AAEXcjj05ESNd9qr9+rSFRWoyFMMRUp4DY8cR1DsbWKb34BCfDAuq1TS9eY
-         kTjUdjF3UMo1OMEVEN/lyJ7dkDrtjCooRv7SiZIoHtY5SWauFkinnCKcCAZifrtSxTnE
-         9hPA==
-X-Gm-Message-State: AOAM530MhIw5jKqv595JcCBgR45f3CeDuWeE65IDWx8frH2snUB1Yk9x
-        XNA1KmfmWaKN1vsEG06oIJE=
-X-Google-Smtp-Source: ABdhPJzR7mWeT6i+zXp188jOFrfIe5psN5Vd6PinMp5BKJfDAGiN3tkP1HiUL2tp5T6YSB1pyfYMYA==
-X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id l8-20020a170906794800b006da64ed178emr36400111ejo.523.1649775985927;
-        Tue, 12 Apr 2022 08:06:25 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id r16-20020a056402019000b00418ed60c332sm16811031edv.65.2022.04.12.08.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:06:24 -0700 (PDT)
-Message-ID: <781bfe33efb1e44d22f71e6711da7d15be9d3ab4.camel@gmail.com>
-Subject: Re: [PATCH 1/1] scsi: ufs: remove redundant HPB unmap
-From:   Bean Huo <huobean@gmail.com>
-To:     Po-Wen Kao <powen.kao@mediatek.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
-        yohan.joung@sk.com, jason.li@sk.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Date:   Tue, 12 Apr 2022 17:06:23 +0200
-In-Reply-To: <20220412073131.10644-1-powen.kao@mediatek.com>
-References: <20220412073131.10644-1-powen.kao@mediatek.com>
+        Tue, 12 Apr 2022 11:10:57 -0400
+Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D67335C36B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:08:36 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
+ s=k1; t=1649776118; h=Content-Transfer-Encoding: MIME-Version:
+ Content-Type: References: In-Reply-To: Date: Cc: To: To: From: From:
+ Subject: Subject: Message-ID: Sender: Sender;
+ bh=BOPY8/YlyRVi5g7p9d+bksG1qoX425WPJHFuZ2H7PKA=; b=eSgyY1Apr87xY+GGebCCr82Lqq2gHHgDYoFFV0+22Q+oXHC/ewuF2YXvcOmAdHilX+kkgzrg
+ WYQnWZyBvq5DR/LStzZuTKX3JZUcPezlEgv/v5CEgHPme0f3dJOd3lUEBLtvu9VzUPgt0G8g
+ lYsNiyxDhZAhLakYmLH/DatUYjo=
+X-Mailgun-Sending-Ip: 159.135.228.4
+X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
+Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
+ [67.205.190.89]) by smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 625595f177e17d301d9b95a8 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Tue, 12 Apr 2022 15:08:33 GMT
+Sender: michael@michaelkloos.com
+Received: from qpc.home.michaelkloos.com (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
+        by drop1.michaelkloos.com (Postfix) with ESMTPSA id D970A400CB;
+        Tue, 12 Apr 2022 15:08:31 +0000 (UTC)
+Message-ID: <707bdc983458a7c4c4b572ddb4f2f048ff92edf3.camel@michaelkloos.com>
+Subject: Re: [PATCH 5.15 093/277] riscv: Fixed misaligned memory access.
+ Fixed pointer comparison.
+From:   "Michael T. Kloos" <michael@michaelkloos.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Date:   Tue, 12 Apr 2022 11:08:31 -0400
+In-Reply-To: <20220412062944.735774186@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
+         <20220412062944.735774186@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 15:31 +0800, Po-Wen Kao wrote:
-> Since the HPB mapping is already reset in ufshpb_init by setting
-> flag QUERY_FLAG_IDN_HPB_RESET, there is no need doing so again in
-> ufshpb_hpb_lu_prepared.
->=20
-> This would also resolve the issue where HPB WRTIE BUFFER is issued
-> before UAC being cleared.
->=20
-> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+Backporting to 5.15 looks good to me.
+
+	Michael
+
+On Tue, 2022-04-12 at 08:28 +0200, Greg Kroah-Hartman wrote:
+> From: Michael T. Kloos <michael@michaelkloos.com>
+> 
+> [ Upstream commit 9d1f0ec9f71780e69ceb9d91697600c747d6e02e ]
+> 
+> Rewrote the RISC-V memmove() assembly implementation.  The
+> previous implementation did not check memory alignment and it
+> compared 2 pointers with a signed comparison.  The misaligned
+> memory access would cause the kernel to crash on systems that
+> did not emulate it in firmware and did not support it in hardware.
+> Firmware emulation is slow and may not exist.  The RISC-V spec
+> does not guarantee that support for misaligned memory accesses
+> will exist.  It should not be depended on.
+> 
+> This patch now checks for XLEN granularity of co-alignment between
+> the pointers.  Failing that, copying is done by loading from the 2
+> contiguous and naturally aligned XLEN memory locations containing
+> the overlapping XLEN sized data to be copied.  The data is shifted
+> into the correct place and binary or'ed together on each
+> iteration.  The result is then stored into the corresponding
+> naturally aligned XLEN sized location in the destination.  For
+> unaligned data at the terminations of the regions to be copied
+> or for copies less than (2 * XLEN) in size, byte copy is used.
+> 
+> This patch also now uses unsigned comparison for the pointers and
+> migrates to the newer assembler annotations from the now deprecated
+> ones.
+> 
+> Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
-> =C2=A0drivers/scsi/ufs/ufshpb.c | 7 -------
-> =C2=A01 file changed, 7 deletions(-)
->=20
-> diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-> index a86d0cc50de2..5c09d44c4bd5 100644
-> --- a/drivers/scsi/ufs/ufshpb.c
-> +++ b/drivers/scsi/ufs/ufshpb.c
-> @@ -934,11 +934,6 @@ static int ufshpb_issue_umap_single_req(struct
-> ufshpb_lu *hpb,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ufshpb_issue_umap_=
-req(hpb, rgn, true);
-> =C2=A0}
-> =C2=A0
-> -static int ufshpb_issue_umap_all_req(struct ufshpb_lu *hpb)
-> -{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ufshpb_issue_umap_req(h=
-pb, NULL, false);
-> -}
+>  arch/riscv/lib/memmove.S | 368 +++++++++++++++++++++++++++++++++------
+>  1 file changed, 310 insertions(+), 58 deletions(-)
+> 
+> diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
+> index 07d1d2152ba5..e0609e1f0864 100644
+> --- a/arch/riscv/lib/memmove.S
+> +++ b/arch/riscv/lib/memmove.S
+> @@ -1,64 +1,316 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
+> + */
+>  
+>  #include <linux/linkage.h>
+>  #include <asm/asm.h>
+>  
+> -ENTRY(__memmove)
+> -WEAK(memmove)
+> -        move    t0, a0
+> -        move    t1, a1
 > -
-> =C2=A0static void __ufshpb_evict_region(struct ufshpb_lu *hpb,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ufshpb_region *rgn)
-> =C2=A0{
-> @@ -2459,8 +2454,6 @@ static void ufshpb_hpb_lu_prepared(struct
-> ufs_hba *hba)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ufs=
-hpb_set_state(hpb, HPB_PRESENT);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if =
-((hpb->lu_pinned_end - hpb-
-> >lu_pinned_start) > 0)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0queue_work(ufshpb_wq, &hpb-
-> >map_work);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!hpb-=
->is_hcm)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ufshpb_issue_umap_all_req(hpb);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0} else {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev=
-_err(hba->dev, "destroy HPB lu %d\n", hpb-
-> >lun);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ufs=
-hpb_destroy_lu(hba, sdev);
+> -        beq     a0, a1, exit_memcpy
+> -        beqz    a2, exit_memcpy
+> -        srli    t2, a2, 0x2
+> -
+> -        slt     t3, a0, a1
+> -        beqz    t3, do_reverse
+> -
+> -        andi    a2, a2, 0x3
+> -        li      t4, 1
+> -        beqz    t2, byte_copy
+> -
+> -word_copy:
+> -        lw      t3, 0(a1)
+> -        addi    t2, t2, -1
+> -        addi    a1, a1, 4
+> -        sw      t3, 0(a0)
+> -        addi    a0, a0, 4
+> -        bnez    t2, word_copy
+> -        beqz    a2, exit_memcpy
+> -        j       byte_copy
+> -
+> -do_reverse:
+> -        add     a0, a0, a2
+> -        add     a1, a1, a2
+> -        andi    a2, a2, 0x3
+> -        li      t4, -1
+> -        beqz    t2, reverse_byte_copy
+> -
+> -reverse_word_copy:
+> -        addi    a1, a1, -4
+> -        addi    t2, t2, -1
+> -        lw      t3, 0(a1)
+> -        addi    a0, a0, -4
+> -        sw      t3, 0(a0)
+> -        bnez    t2, reverse_word_copy
+> -        beqz    a2, exit_memcpy
+> -
+> -reverse_byte_copy:
+> -        addi    a0, a0, -1
+> -        addi    a1, a1, -1
+> +SYM_FUNC_START(__memmove)
+> +SYM_FUNC_START_WEAK(memmove)
+> +	/*
+> +	 * Returns
+> +	 *   a0 - dest
+> +	 *
+> +	 * Parameters
+> +	 *   a0 - Inclusive first byte of dest
+> +	 *   a1 - Inclusive first byte of src
+> +	 *   a2 - Length of copy n
+> +	 *
+> +	 * Because the return matches the parameter register a0,
+> +	 * we will not clobber or modify that register.
+> +	 *
+> +	 * Note: This currently only works on little-endian.
+> +	 * To port to big-endian, reverse the direction of shifts
+> +	 * in the 2 misaligned fixup copy loops.
+> +	 */
+>  
+> +	/* Return if nothing to do */
+> +	beq a0, a1, return_from_memmove
+> +	beqz a2, return_from_memmove
+> +
+> +	/*
+> +	 * Register Uses
+> +	 *      Forward Copy: a1 - Index counter of src
+> +	 *      Reverse Copy: a4 - Index counter of src
+> +	 *      Forward Copy: t3 - Index counter of dest
+> +	 *      Reverse Copy: t4 - Index counter of dest
+> +	 *   Both Copy Modes: t5 - Inclusive first multibyte/aligned of dest
+> +	 *   Both Copy Modes: t6 - Non-Inclusive last multibyte/aligned of dest
+> +	 *   Both Copy Modes: t0 - Link / Temporary for load-store
+> +	 *   Both Copy Modes: t1 - Temporary for load-store
+> +	 *   Both Copy Modes: t2 - Temporary for load-store
+> +	 *   Both Copy Modes: a5 - dest to src alignment offset
+> +	 *   Both Copy Modes: a6 - Shift ammount
+> +	 *   Both Copy Modes: a7 - Inverse Shift ammount
+> +	 *   Both Copy Modes: a2 - Alternate breakpoint for unrolled loops
+> +	 */
+> +
+> +	/*
+> +	 * Solve for some register values now.
+> +	 * Byte copy does not need t5 or t6.
+> +	 */
+> +	mv   t3, a0
+> +	add  t4, a0, a2
+> +	add  a4, a1, a2
+> +
+> +	/*
+> +	 * Byte copy if copying less than (2 * SZREG) bytes. This can
+> +	 * cause problems with the bulk copy implementation and is
+> +	 * small enough not to bother.
+> +	 */
+> +	andi t0, a2, -(2 * SZREG)
+> +	beqz t0, byte_copy
+> +
+> +	/*
+> +	 * Now solve for t5 and t6.
+> +	 */
+> +	andi t5, t3, -SZREG
+> +	andi t6, t4, -SZREG
+> +	/*
+> +	 * If dest(Register t3) rounded down to the nearest naturally
+> +	 * aligned SZREG address, does not equal dest, then add SZREG
+> +	 * to find the low-bound of SZREG alignment in the dest memory
+> +	 * region.  Note that this could overshoot the dest memory
+> +	 * region if n is less than SZREG.  This is one reason why
+> +	 * we always byte copy if n is less than SZREG.
+> +	 * Otherwise, dest is already naturally aligned to SZREG.
+> +	 */
+> +	beq  t5, t3, 1f
+> +		addi t5, t5, SZREG
+> +	1:
+> +
+> +	/*
+> +	 * If the dest and src are co-aligned to SZREG, then there is
+> +	 * no need for the full rigmarole of a full misaligned fixup copy.
+> +	 * Instead, do a simpler co-aligned copy.
+> +	 */
+> +	xor  t0, a0, a1
+> +	andi t1, t0, (SZREG - 1)
+> +	beqz t1, coaligned_copy
+> +	/* Fall through to misaligned fixup copy */
+> +
+> +misaligned_fixup_copy:
+> +	bltu a1, a0, misaligned_fixup_copy_reverse
+> +
+> +misaligned_fixup_copy_forward:
+> +	jal  t0, byte_copy_until_aligned_forward
+> +
+> +	andi a5, a1, (SZREG - 1) /* Find the alignment offset of src (a1) */
+> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
+> +	sub  a5, a1, t3 /* Find the difference between src and dest */
+> +	andi a1, a1, -SZREG /* Align the src pointer */
+> +	addi a2, t6, SZREG /* The other breakpoint for the unrolled loop*/
+> +
+> +	/*
+> +	 * Compute The Inverse Shift
+> +	 * a7 = XLEN - a6 = XLEN + -a6
+> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
+> +	 * Add that to XLEN.  XLEN = SZREG * 8.
+> +	 */
+> +	not  a7, a6
+> +	addi a7, a7, (SZREG * 8 + 1)
+> +
+> +	/*
+> +	 * Fix Misalignment Copy Loop - Forward
+> +	 * load_val0 = load_ptr[0];
+> +	 * do {
+> +	 * 	load_val1 = load_ptr[1];
+> +	 * 	store_ptr += 2;
+> +	 * 	store_ptr[0 - 2] = (load_val0 >> {a6}) | (load_val1 << {a7});
+> +	 *
+> +	 * 	if (store_ptr == {a2})
+> +	 * 		break;
+> +	 *
+> +	 * 	load_val0 = load_ptr[2];
+> +	 * 	load_ptr += 2;
+> +	 * 	store_ptr[1 - 2] = (load_val1 >> {a6}) | (load_val0 << {a7});
+> +	 *
+> +	 * } while (store_ptr != store_ptr_end);
+> +	 * store_ptr = store_ptr_end;
+> +	 */
+> +
+> +	REG_L t0, (0 * SZREG)(a1)
+> +	1:
+> +	REG_L t1, (1 * SZREG)(a1)
+> +	addi  t3, t3, (2 * SZREG)
+> +	srl   t0, t0, a6
+> +	sll   t2, t1, a7
+> +	or    t2, t0, t2
+> +	REG_S t2, ((0 * SZREG) - (2 * SZREG))(t3)
+> +
+> +	beq   t3, a2, 2f
+> +
+> +	REG_L t0, (2 * SZREG)(a1)
+> +	addi  a1, a1, (2 * SZREG)
+> +	srl   t1, t1, a6
+> +	sll   t2, t0, a7
+> +	or    t2, t1, t2
+> +	REG_S t2, ((1 * SZREG) - (2 * SZREG))(t3)
+> +
+> +	bne   t3, t6, 1b
+> +	2:
+> +	mv    t3, t6 /* Fix the dest pointer in case the loop was broken */
+> +
+> +	add  a1, t3, a5 /* Restore the src pointer */
+> +	j byte_copy_forward /* Copy any remaining bytes */
+> +
+> +misaligned_fixup_copy_reverse:
+> +	jal  t0, byte_copy_until_aligned_reverse
+> +
+> +	andi a5, a4, (SZREG - 1) /* Find the alignment offset of src (a4) */
+> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
+> +	sub  a5, a4, t4 /* Find the difference between src and dest */
+> +	andi a4, a4, -SZREG /* Align the src pointer */
+> +	addi a2, t5, -SZREG /* The other breakpoint for the unrolled loop*/
+> +
+> +	/*
+> +	 * Compute The Inverse Shift
+> +	 * a7 = XLEN - a6 = XLEN + -a6
+> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
+> +	 * Add that to XLEN.  XLEN = SZREG * 8.
+> +	 */
+> +	not  a7, a6
+> +	addi a7, a7, (SZREG * 8 + 1)
+> +
+> +	/*
+> +	 * Fix Misalignment Copy Loop - Reverse
+> +	 * load_val1 = load_ptr[0];
+> +	 * do {
+> +	 * 	load_val0 = load_ptr[-1];
+> +	 * 	store_ptr -= 2;
+> +	 * 	store_ptr[1] = (load_val0 >> {a6}) | (load_val1 << {a7});
+> +	 *
+> +	 * 	if (store_ptr == {a2})
+> +	 * 		break;
+> +	 *
+> +	 * 	load_val1 = load_ptr[-2];
+> +	 * 	load_ptr -= 2;
+> +	 * 	store_ptr[0] = (load_val1 >> {a6}) | (load_val0 << {a7});
+> +	 *
+> +	 * } while (store_ptr != store_ptr_end);
+> +	 * store_ptr = store_ptr_end;
+> +	 */
+> +
+> +	REG_L t1, ( 0 * SZREG)(a4)
+> +	1:
+> +	REG_L t0, (-1 * SZREG)(a4)
+> +	addi  t4, t4, (-2 * SZREG)
+> +	sll   t1, t1, a7
+> +	srl   t2, t0, a6
+> +	or    t2, t1, t2
+> +	REG_S t2, ( 1 * SZREG)(t4)
+> +
+> +	beq   t4, a2, 2f
+> +
+> +	REG_L t1, (-2 * SZREG)(a4)
+> +	addi  a4, a4, (-2 * SZREG)
+> +	sll   t0, t0, a7
+> +	srl   t2, t1, a6
+> +	or    t2, t0, t2
+> +	REG_S t2, ( 0 * SZREG)(t4)
+> +
+> +	bne   t4, t5, 1b
+> +	2:
+> +	mv    t4, t5 /* Fix the dest pointer in case the loop was broken */
+> +
+> +	add  a4, t4, a5 /* Restore the src pointer */
+> +	j byte_copy_reverse /* Copy any remaining bytes */
+> +
+> +/*
+> + * Simple copy loops for SZREG co-aligned memory locations.
+> + * These also make calls to do byte copies for any unaligned
+> + * data at their terminations.
+> + */
+> +coaligned_copy:
+> +	bltu a1, a0, coaligned_copy_reverse
+> +
+> +coaligned_copy_forward:
+> +	jal t0, byte_copy_until_aligned_forward
+> +
+> +	1:
+> +	REG_L t1, ( 0 * SZREG)(a1)
+> +	addi  a1, a1, SZREG
+> +	addi  t3, t3, SZREG
+> +	REG_S t1, (-1 * SZREG)(t3)
+> +	bne   t3, t6, 1b
+> +
+> +	j byte_copy_forward /* Copy any remaining bytes */
+> +
+> +coaligned_copy_reverse:
+> +	jal t0, byte_copy_until_aligned_reverse
+> +
+> +	1:
+> +	REG_L t1, (-1 * SZREG)(a4)
+> +	addi  a4, a4, -SZREG
+> +	addi  t4, t4, -SZREG
+> +	REG_S t1, ( 0 * SZREG)(t4)
+> +	bne   t4, t5, 1b
+> +
+> +	j byte_copy_reverse /* Copy any remaining bytes */
+> +
+> +/*
+> + * These are basically sub-functions within the function.  They
+> + * are used to byte copy until the dest pointer is in alignment.
+> + * At which point, a bulk copy method can be used by the
+> + * calling code.  These work on the same registers as the bulk
+> + * copy loops.  Therefore, the register values can be picked
+> + * up from where they were left and we avoid code duplication
+> + * without any overhead except the call in and return jumps.
+> + */
+> +byte_copy_until_aligned_forward:
+> +	beq  t3, t5, 2f
+> +	1:
+> +	lb   t1,  0(a1)
+> +	addi a1, a1, 1
+> +	addi t3, t3, 1
+> +	sb   t1, -1(t3)
+> +	bne  t3, t5, 1b
+> +	2:
+> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
+> +
+> +byte_copy_until_aligned_reverse:
+> +	beq  t4, t6, 2f
+> +	1:
+> +	lb   t1, -1(a4)
+> +	addi a4, a4, -1
+> +	addi t4, t4, -1
+> +	sb   t1,  0(t4)
+> +	bne  t4, t6, 1b
+> +	2:
+> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
+> +
+> +/*
+> + * Simple byte copy loops.
+> + * These will byte copy until they reach the end of data to copy.
+> + * At that point, they will call to return from memmove.
+> + */
+>  byte_copy:
+> -        lb      t3, 0(a1)
+> -        addi    a2, a2, -1
+> -        sb      t3, 0(a0)
+> -        add     a1, a1, t4
+> -        add     a0, a0, t4
+> -        bnez    a2, byte_copy
+> -
+> -exit_memcpy:
+> -        move a0, t0
+> -        move a1, t1
+> -        ret
+> -END(__memmove)
+> +	bltu a1, a0, byte_copy_reverse
+> +
+> +byte_copy_forward:
+> +	beq  t3, t4, 2f
+> +	1:
+> +	lb   t1,  0(a1)
+> +	addi a1, a1, 1
+> +	addi t3, t3, 1
+> +	sb   t1, -1(t3)
+> +	bne  t3, t4, 1b
+> +	2:
+> +	ret
+> +
+> +byte_copy_reverse:
+> +	beq  t4, t3, 2f
+> +	1:
+> +	lb   t1, -1(a4)
+> +	addi a4, a4, -1
+> +	addi t4, t4, -1
+> +	sb   t1,  0(t4)
+> +	bne  t4, t3, 1b
+> +	2:
+> +
+> +return_from_memmove:
+> +	ret
+> +
+> +SYM_FUNC_END(memmove)
+> +SYM_FUNC_END(__memmove)
 
-
-Hi Po-Wen,
-Yes, it is redundant in this flow, but it is needed in the reset flow,
-I built this cleanup patch, but don't know if it can fix the issue
-where HPB WRTIE BUFFER is issued before UAC being cleared. would you
-test on your platform? I will verify it on our UFS later.
-
-
-
-Subject: [PATCH] scsi: ufshpb: UFSHPB cleanup
-
-Remove redundant ufshpb_reset*, and merge into a single helper
-ufshbp_state_toggle().
-
-Delete the redundant Inactivation code of all HPB Regions in the cold
-boot stage, and add inactivating all HPB Regions when the HPP status
-changes from HPB_RESET to HBP_PRESENT.
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c |  4 ++--
- drivers/scsi/ufs/ufshpb.c | 38 +++++++++++++-------------------------
- drivers/scsi/ufs/ufshpb.h |  6 ++----
- 3 files changed, 17 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 0899d5b8cdad..d8b59d017ce4 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7223,7 +7223,7 @@ static int ufshcd_host_reset_and_restore(struct
-ufs_hba *hba)
- 	 * Stop the host controller and complete the requests
- 	 * cleared by h/w
- 	 */
--	ufshpb_reset_host(hba);
-+	ufshpb_state_toggle(hba, HPB_RESET);
- 	ufshcd_hba_stop(hba);
- 	hba->silence_err_logs =3D true;
- 	ufshcd_complete_requests(hba);
-@@ -8184,7 +8184,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba,
-bool init_dev_params)
- 	/* Enable Auto-Hibernate if configured */
- 	ufshcd_auto_hibern8_enable(hba);
-=20
--	ufshpb_reset(hba);
-+	ufshpb_state_toggle(hba, HPB_PRESENT);
- out:
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	if (ret)
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 3ca745ad616c..4ed156031413 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -2278,39 +2278,29 @@ static bool ufshpb_check_hpb_reset_query(struct
-ufs_hba *hba)
- 	return flag_res;
- }
-=20
--void ufshpb_reset(struct ufs_hba *hba)
-+void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE state)
- {
- 	struct ufshpb_lu *hpb;
- 	struct scsi_device *sdev;
-=20
- 	shost_for_each_device(sdev, hba->host) {
- 		hpb =3D ufshpb_get_hpb_data(sdev);
--		if (!hpb)
--			continue;
-=20
--		if (ufshpb_get_state(hpb) !=3D HPB_RESET)
-+		if (!hpb || ufshpb_get_state(hpb) !=3D state)
- 			continue;
-=20
--		ufshpb_set_state(hpb, HPB_PRESENT);
--	}
--}
--
--void ufshpb_reset_host(struct ufs_hba *hba)
--{
--	struct ufshpb_lu *hpb;
--	struct scsi_device *sdev;
--
--	shost_for_each_device(sdev, hba->host) {
--		hpb =3D ufshpb_get_hpb_data(sdev);
--		if (!hpb)
--			continue;
--
--		if (ufshpb_get_state(hpb) !=3D HPB_PRESENT)
--			continue;
--		ufshpb_set_state(hpb, HPB_RESET);
--		ufshpb_cancel_jobs(hpb);
--		ufshpb_discard_rsp_lists(hpb);
-+		ufshpb_set_state(hpb, state);
-+		if (state =3D=3D HPB_RESET) {
-+			ufshpb_cancel_jobs(hpb);
-+			ufshpb_discard_rsp_lists(hpb);
-+		}
- 	}
-+	/*
-+	 * Inactivating all HPB Region in device side in case HPB
-state changed
-+	 * from HPB_RESET to HPB_PRESENT
-+	 */
-+	if (!hpb->is_hcm && state =3D=3D HPB_PRESENT)
-+		ufshpb_issue_umap_all_req(hpb);
- }
-=20
- void ufshpb_suspend(struct ufs_hba *hba)
-@@ -2456,8 +2446,6 @@ static void ufshpb_hpb_lu_prepared(struct ufs_hba
-*hba)
- 			ufshpb_set_state(hpb, HPB_PRESENT);
- 			if ((hpb->lu_pinned_end - hpb-
->lu_pinned_start) > 0)
- 				queue_work(ufshpb_wq, &hpb->map_work);
--			if (!hpb->is_hcm)
--				ufshpb_issue_umap_all_req(hpb);
- 		} else {
- 			dev_err(hba->dev, "destroy HPB lu %d\n", hpb-
->lun);
- 			ufshpb_destroy_lu(hba, sdev);
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index b475dbd78988..a130f0b16c3e 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -288,8 +288,7 @@ static int ufshpb_prep(struct ufs_hba *hba, struct
-ufshcd_lrb *lrbp) { return 0;
- static void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb
-*lrbp) {}
- static void ufshpb_resume(struct ufs_hba *hba) {}
- static void ufshpb_suspend(struct ufs_hba *hba) {}
--static void ufshpb_reset(struct ufs_hba *hba) {}
--static void ufshpb_reset_host(struct ufs_hba *hba) {}
-+static void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE
-state) {}
- static void ufshpb_init(struct ufs_hba *hba) {}
- static void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device
-*sdev) {}
- static void ufshpb_destroy_lu(struct ufs_hba *hba, struct scsi_device
-*sdev) {}
-@@ -303,8 +302,7 @@ int ufshpb_prep(struct ufs_hba *hba, struct
-ufshcd_lrb *lrbp);
- void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
- void ufshpb_resume(struct ufs_hba *hba);
- void ufshpb_suspend(struct ufs_hba *hba);
--void ufshpb_reset(struct ufs_hba *hba);
--void ufshpb_reset_host(struct ufs_hba *hba);
-+void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE
-state);
- void ufshpb_init(struct ufs_hba *hba);
- void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device
-*sdev);
- void ufshpb_destroy_lu(struct ufs_hba *hba, struct scsi_device *sdev);

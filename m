@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C66E4FE0A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30134FE0A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353703AbiDLMo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S1351338AbiDLMpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354399AbiDLMmy (ORCPT
+        with ESMTP id S1349500AbiDLMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:42:54 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFF468323
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649765319; x=1681301319;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=9BKMBQYeN/NiMXBksh7LG49m1sBKXcvyEtC8Ta/5KDM=;
-  b=mnsBnMNrdffTE+/oUuMVb+NvUM35iN/itfOtXCfBFBS9kE/wPM5oPlvi
-   guMNucIWdG1qJV4urGsr8MjtDlspVA8wWILgOT62vtbsGL7J+iXeEdLDZ
-   cNb8kCFvSMJjy5rR8BDlcdanso3LBkUwN5QTMr/JMDdaUB46KoOoGfZLZ
-   EmdJslLTuSjZrIdLE2DaDP4cKKY8JOj4rVmzXVYG3D5SreyHepAr3t8t/
-   FgVwvCxd7bMXobJCKhX9tqhYW8fjWys3iod10m9vVxIeGRNTebSJUZ77H
-   PhIEQp1MqXTyuP/r4uftw42PVk87mRy0l00/Ty0Tbk05O6ybNEmBlIxC5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242946973"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="242946973"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 05:08:22 -0700
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="572735067"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.174]) ([10.254.210.174])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 05:08:18 -0700
-Message-ID: <ff4426d8-c76e-dd9b-96b9-fc35eede00c4@linux.intel.com>
-Date:   Tue, 12 Apr 2022 20:08:16 +0800
+        Tue, 12 Apr 2022 08:45:21 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0879376E19
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:10:01 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id o2so10177731lfu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nPnzcyNV3A/4UYBzWHKTKf4kIp6tVvkH+WsDEXjDC24=;
+        b=lDM2BhUHoH9Y+RgQ9Bejy2VOEq3wZBs2rmgzsGi+vSzCT9TnP/8p3Wpupm7r3FXUdb
+         8tJJOEslIMEHSsBsANKpcplIDLfo2t7FROT/4UUxv3JT5Lfof+D9K6xXjn9GZ0IX18I5
+         i5wr6Qmz7ObO0Z+1rOwSjltkoXo5eguNJmHBQ0fa0oyubBBMv3A9dg2++8Ec6PZJ0G6g
+         y8bArUarnYMM3yVpAzhImHBpfpz9qai/H6kAyrM6mEe2xFj9adjKuacadXwFgwMhFpvV
+         SAPoPZa4ThafUqA6nzvJQrfLxbQOIbgW/dCztPJCl6GvdP3vuHEWyLDxZm7vzyMxUnUO
+         qV1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nPnzcyNV3A/4UYBzWHKTKf4kIp6tVvkH+WsDEXjDC24=;
+        b=ejsy6+0JjTnaTrYdAg3vYIB22onQw8zNNfTvVC+EnkCrxmZvtxZSNZUJpOak+5foB+
+         xygicJCEwoaPjDxlb8Nk2NYbxl2DVPABX/JSoF+xpHtBANg91YVqqsrhc0PRCC5YaPt9
+         E1Obk8YotBdSNN5KLGZP84v+z4cbu7lGMNLg2Wlu+e0cA5f+P9X/SONwFYOMUtaaABBq
+         kPh1KpMtgjDdhszs57GuJYMd8GU0D3kGJ0/55QHejO+QyUJcxhaGLFQtTxmbGbuqjl+k
+         zYDM15s9pSPUvXfBjdfk6wcjyXay4vYlBYXgyl0quDNlSaR6q6GQWubponTs7nOmi4hH
+         LayQ==
+X-Gm-Message-State: AOAM533nK9+aKo3VGZP/pJjI5JboaKLqLZoWGquqf1M7htc64LA7gQS9
+        SyEAiGC8FNgSvuiDohMcB6l6w0FP7/6sShwGbiJORQ==
+X-Google-Smtp-Source: ABdhPJw+QK0ioHa/IORYPR20pHaGiyG//MIdGQmMFH88fHxyhrzPKtKt7GOnvFjngT2GteOSQr2B4Jw9WZ+8GibsNMQ=
+X-Received: by 2002:ac2:4bcf:0:b0:46b:ae4d:2855 with SMTP id
+ o15-20020ac24bcf000000b0046bae4d2855mr4980780lfq.184.1649765396161; Tue, 12
+ Apr 2022 05:09:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
- <20220410102443.294128-5-baolu.lu@linux.intel.com>
- <BN9PR11MB52764EB5F4BB89909585662B8CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH RFC v3 04/12] iommu/sva: Basic data structures for SVA
-In-Reply-To: <BN9PR11MB52764EB5F4BB89909585662B8CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220410193544.1745684-1-aford173@gmail.com>
+In-Reply-To: <20220410193544.1745684-1-aford173@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 12 Apr 2022 14:09:20 +0200
+Message-ID: <CAPDyKFpWMmteaJ3Afz2TD4ba2iE-0vf4VJ_V-kkEE332OzywpQ@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, aford@beaconembedded.com,
+        haibo.chen@nxp.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <Kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +74,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/12 14:56, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Sunday, April 10, 2022 6:25 PM
->>
->> Use below data structures for SVA implementation in the IOMMU core:
->>
->> - struct iommu_sva_ioas
->>    Represent the I/O address space shared with an application CPU address
->>    space. This structure has a 1:1 relationship with an mm_struct. It
->>    graps a "mm->mm_count" refcount during creation and drop it on release.
-> 
-> s/graps/grabs
+On Sun, 10 Apr 2022 at 21:35, Adam Ford <aford173@gmail.com> wrote:
+>
+> The SDHC controller in the imx8mn and imx8mp have the same controller
+> as the imx8mm which is slightly different than that of the imx7d.
+>
+> Using the fallback of the imx8mm enables the controllers to support
+> HS400-ES which is not available on the imx7d. After discussion with NXP,
+> it turns out that the imx8qm should fall back to the imx8qxp, because
+> those have some additional flags not present in the imx8mm.
+>
+> Mark the current state of the fallbacks as deprecated, and add the
+> proper fallbacks so in the future, the deprecated combination can be
+> removed and prevent any future devices from using the wrong fallback.
+>
+> Suggested-by: haibo.chen@nxp.com
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Thanks!
+Applied for next, thanks!
 
-> 
->>
->> - struct iommu_domain (IOMMU_DOMAIN_SVA type)
->>    Represent a hardware pagetable that the IOMMU hardware could use for
->>    SVA translation. Multiple iommu domains could be bound with an SVA ioas
->>    and each graps a refcount from ioas in order to make sure ioas could
->>    only be freed after all domains have been unbound.
->>
->> - struct iommu_sva
->>    Represent a bond relationship between an SVA ioas and an iommu domain.
->>    If a bond already exists, it's reused and a reference is taken.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> 
-> btw given the actually intention of above structures does it make more
-> sense to s/iommu_sva_ioas/iommu_sva/ and s/iommu_sva/iommu_sva_bond?
+Kind regards
+Uffe
 
-The use of iommu_sva has been scattered in external files as it's the
-return type or parameter of the the iommu sva intefaces:
 
-$ git grep "struct iommu_sva" :^drivers/iommu :^include/linux
-drivers/dma/idxd/cdev.c:        struct iommu_sva *sva;
-drivers/dma/idxd/cdev.c:        struct iommu_sva *sva;
-drivers/dma/idxd/idxd.h:        struct iommu_sva *sva;
-drivers/dma/idxd/init.c:        struct iommu_sva *sva;
-drivers/misc/uacce/uacce.c:     struct iommu_sva *handle;
-
-Your suggestion makes sense to me as I've also thought about it. :-)
-It might be easier to arrive there through a separated cleanup series.
-
-Best regards,
-baolu
+> ---
+> V4:  Mark deprecated items with "deprecated: true" instead of a comment
+> V3:  Add support for the interim fallback on imx8mn and imx8mp where
+>      they both fallback to imx8mm, but keep the imx7d to prevent any
+>      breakage.
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 7dbbcae9485c..58447095f000 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -34,22 +34,46 @@ properties:
+>            - fsl,imx6ull-usdhc
+>            - fsl,imx7d-usdhc
+>            - fsl,imx7ulp-usdhc
+> +          - fsl,imx8mm-usdhc
+>            - fsl,imxrt1050-usdhc
+>            - nxp,s32g2-usdhc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mq-usdhc
+> +          - const: fsl,imx7d-usdhc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mn-usdhc
+> +              - fsl,imx8mp-usdhc
+> +              - fsl,imx93-usdhc
+> +              - fsl,imx8ulp-usdhc
+> +          - const: fsl,imx8mm-usdhc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8qm-usdhc
+> +          - const: fsl,imx8qxp-usdhc
+>        - items:
+>            - enum:
+>                - fsl,imx8mm-usdhc
+>                - fsl,imx8mn-usdhc
+>                - fsl,imx8mp-usdhc
+> -              - fsl,imx8mq-usdhc
+>                - fsl,imx8qm-usdhc
+>                - fsl,imx8qxp-usdhc
+>            - const: fsl,imx7d-usdhc
+> +        deprecated: true
+>        - items:
+>            - enum:
+> -              - fsl,imx93-usdhc
+> -              - fsl,imx8ulp-usdhc
+> +              - fsl,imx8mn-usdhc
+> +              - fsl,imx8mp-usdhc
+>            - const: fsl,imx8mm-usdhc
+> +          - const: fsl,imx7d-usdhc
+> +        deprecated: true
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8qm-usdhc
+> +          - const: fsl,imx8qxp-usdhc
+> +          - const: fsl,imx7d-usdhc
+> +        deprecated: true
+>
+>    reg:
+>      maxItems: 1
+> --
+> 2.34.1
+>

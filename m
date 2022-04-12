@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211DE4FDD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36434FDD7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240733AbiDLLJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S244220AbiDLLKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354105AbiDLLFC (ORCPT
+        with ESMTP id S1354088AbiDLLFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 07:05:02 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8416579C;
-        Tue, 12 Apr 2022 02:56:31 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C9uMkm096818;
-        Tue, 12 Apr 2022 04:56:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649757382;
-        bh=ugRzal5VjfUjawoYrtpjB5VqZuPi1bn0ckWPOzleY+I=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=C1f8WWG9B+NuH/0xhstTTtlhzitG0rhgxCIrYltEffUaic4JJMPgjkaJIsf2/+4Ug
-         431a7/S5g/wkQ84AW+CxPOAUMHEQd31cfQqvw6akWggMX3fd4nmUxEb5hUCaxEIzb5
-         MZqqMr0moR311MI/KhWkJY2IdK+96z5saHQwOPss=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C9uMvC027020
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 04:56:22 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 04:56:21 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 04:56:21 -0500
-Received: from [10.249.96.184] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C9uGJA115407;
-        Tue, 12 Apr 2022 04:56:17 -0500
-Message-ID: <f3ae48a8-7177-3a92-bdfd-3b243a5527c1@ti.com>
-Date:   Tue, 12 Apr 2022 12:56:18 +0300
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37A73C48E;
+        Tue, 12 Apr 2022 02:56:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id B9CA61F444DB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649757412;
+        bh=ta29d4wnkNjIs8vxiW+spXtMVlKSVX42O2OgeMWUE4M=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=kvhz7L+WR7F9HsP7+DAE1iJ09kPWZRmi5f2q6+wTFMWAjrPkNWY3Jzpgqp30kF162
+         9ej87DkBRElok2belFURZJE+6KAffcONlx+uSragUy+EKLYmrLe+OmnInaVU38Utnj
+         oGDfaSbiVVHQL6Yf2olT656ydNf9P6W4M76WukTbNC94PbuWprXpn8hcs1neMp19bi
+         iNzDzyCfCh2mIdCCNxP2XuZopGSbEx58bF1q1D3kWpmOuMeUlqToTVLTBXzlWDyGYS
+         beMdM6XO+lz1xQI7S8U0f+hcwzSbrlRYbQ5mvoaXJTg3bPRXH5hIYNcxpGgH7YbXoc
+         9fEZqqnyfRE+w==
+Message-ID: <2b603d3d-c6c1-13d7-8f77-042317a41d00@collabora.com>
+Date:   Tue, 12 Apr 2022 12:56:46 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC 13/13] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Subject: Re: [PATCH v7 17/20] memory: emif: Use kernel_can_power_off()
 Content-Language: en-US
-To:     Puranjay Mohan <p-mohan@ti.com>, Andrew Lunn <andrew@lunn.ch>
-CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        <mathieu.poirier@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <netdev@vger.kernel.org>, <vigneshr@ti.com>,
-        <kishon@ti.com>, Roger Quadros <rogerq@kernel.org>
-References: <20220406094358.7895-1-p-mohan@ti.com>
- <20220406094358.7895-14-p-mohan@ti.com> <Yk3d/cC36fhNmfY2@lunn.ch>
- <468d4d9b-44b4-2894-2a75-4caab1e72147@ti.com>
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-In-Reply-To: <468d4d9b-44b4-2894-2a75-4caab1e72147@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <20220411233832.391817-18-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220411233832.391817-18-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,79 +102,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 12/04/2022 12:45, Puranjay Mohan wrote:
-> + Roger, Grygorii
+On 4/12/22 02:38, Dmitry Osipenko wrote:
+> Replace legacy pm_power_off with kernel_can_power_off() helper that
+> is aware about chained power-off handlers.
 > 
-> On 07/04/22 00:07, Andrew Lunn wrote:
->>> +static int emac_phy_connect(struct prueth_emac *emac)
->>> +{
->>> +	struct prueth *prueth = emac->prueth;
->>> +
->>> +	/* connect PHY */
->>> +	emac->phydev = of_phy_connect(emac->ndev, emac->phy_node,
->>> +				      &emac_adjust_link, 0, emac->phy_if);
->>
->>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
->>> +				    struct device_node *eth_np,
->>> +				    phy_interface_t phy_if)
->>> +{
->>> +	struct device *dev = prueth->dev;
->>> +	struct regmap *ctrl_mmr;
->>> +	u32 rgmii_tx_id = 0;
->>> +	u32 icssgctrl_reg;
->>> +
->>> +	if (!phy_interface_mode_is_rgmii(phy_if))
->>> +		return 0;
->>> +
->>> +	ctrl_mmr = syscon_regmap_lookup_by_phandle(eth_np, "ti,syscon-rgmii-delay");
->>> +	if (IS_ERR(ctrl_mmr)) {
->>> +		dev_err(dev, "couldn't get ti,syscon-rgmii-delay\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	if (of_property_read_u32_index(eth_np, "ti,syscon-rgmii-delay", 1,
->>> +				       &icssgctrl_reg)) {
->>> +		dev_err(dev, "couldn't get ti,rgmii-delay reg. offset\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
->>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
->>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
->>> +
->>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
->>> +
->>> +	return 0;
->>> +}
->>>
->>
->> O.K, so this does not do what i initially thought it was doing. I was
->> thinking it was to fine tune the delay, ti,syscon-rgmii-delay would be
->> a small pico second value to allow the 2ns delay to be tuned to the
->> board.
->>
->> But now i think this is actually inserting the full 2ns delay?
->>
->> The problem is, you also pass phy_if to of_phy_connect() so the PHY
->> will also insert the delay if requested. So you end up with double
->> delays for rgmii_id and rgmii_txid.
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/memory/emif.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
+> index edf3ba7447ed..fa6845313a43 100644
+> --- a/drivers/memory/emif.c
+> +++ b/drivers/memory/emif.c
+> @@ -630,7 +630,7 @@ static irqreturn_t emif_threaded_isr(int irq, void *dev_id)
+>  		dev_emerg(emif->dev, "SDRAM temperature exceeds operating limit.. Needs shut down!!!\n");
+>  
+>  		/* If we have Power OFF ability, use it, else try restarting */
+> -		if (pm_power_off) {
+> +		if (kernel_can_power_off()) {
+>  			kernel_power_off();
+>  		} else {
+>  			WARN(1, "FIXME: NO pm_power_off!!! trying restart\n");
 
-It's misunderstanding here. The bit field name in TRM is RGMII0_ID_MODE
-and meaning:
-0h - Internal transmit delay is enabled
-1h - Internal transmit delay is not enabled.
+Adding ack from Krzysztof that he gave to v6. It's missing in v7 by
+accident.
 
-So here internal delay will be disabled for RGMII_ID/RGMII_TXID.
-
->>
->> The general recommendation is that the PHY inserts the delay, based on
->> phy-mode. The MAC does not add a delay, so i suggest you always write
->> 0 here, just to ensure the system is in a deterministic state, and the
->> bootloader and not being messing around with things.
->>
->> 	   Andrew
-
--- 
-Best regards,
-Grygorii, Ukraine
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

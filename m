@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3AF4FCD4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798CA4FCD56
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345200AbiDLDwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 23:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S1345646AbiDLDxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 23:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345029AbiDLDwh (ORCPT
+        with ESMTP id S1345657AbiDLDxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 23:52:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580F815710
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649735420; x=1681271420;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=p5Fr7gCHeKXLExKllFUyUZ0Mk9kDfxkf+kMmA7V5wIU=;
-  b=OW8BmLhqGKawjL1s9TsDGhyF1MF+4ZPQ/cFV5Z+5o3gUzA3QcWaqIzE5
-   BVgaF/5vn9hvSD4HafWQMsKGdqgqblYb2XNTmIXfO2Hpk69dlgu7Y/JRn
-   xi+0NKnWxTMyS5VVZnSf8Td+IgLNnYLzjBVsR58FyV4MRlwPFKpkpbZn1
-   1XEXDlsThvdFazfhlbjS99HBhFXlA8oGfzIgQkpxSSCkoAHixPy4DO721
-   cfwCydjPViKW7TSojGtZrER7tWT4Mb3C9i/lESlWXvzqkxS0ny7j22GTM
-   WlGFH/5ddToDlghdh0vpzr/YjYWSfCVNnSX9Wd/CsWQQe89gu+ZdSr2WZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262449814"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="262449814"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 20:50:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="507376467"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 20:50:18 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne7Xl-0002UM-QZ;
-        Tue, 12 Apr 2022 03:50:17 +0000
-Date:   Tue, 12 Apr 2022 11:50:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 400331f8ffa3bec5c561417e5eec6848464e9160
-Message-ID: <6254f6ee.BX1EvZSNYpHiKkvP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 11 Apr 2022 23:53:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A39933343;
+        Mon, 11 Apr 2022 20:50:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CCF561735;
+        Tue, 12 Apr 2022 03:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A21C385A6;
+        Tue, 12 Apr 2022 03:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649735443;
+        bh=dbjm/Ip6Jo5BhNungtA0HT0445pR5PAm6Wft+hCHZhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n7dsbpVeo2ApX3NdtVkElk6OCKqgz2VZUtQS9PXgZgP4ENjMFL/OJtOjeKdDRW6bT
+         H2azFbYRr92mwG+VMwINMzmLQaoreAnPvgilDaJRNFLIsaVWUZSHNqYwtI8igTtmzL
+         AbGzFIuNhBbPbuvYjTz1uIzfdxEBYkdtUt+HnJcot44pp7dFMYOacvwkqyPijYJVKE
+         quW1qXfIlNDsXMkPnE3jOK6lcdlafCree/FJPeqGhvOBrDyn3N3h+HZ6U7wydhlmzN
+         3f/V1LTfZllZE7na2RGiel26+1Hkn1ezyHivhvEH+z8Kdbv5v+DFuK+tBN0ZPvcqU3
+         BZmQxq61lKlNA==
+Date:   Mon, 11 Apr 2022 20:50:42 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <dchinner@redhat.com>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: update IOMAP FILESYSTEM LIBRARY and XFS
+ FILESYSTEM
+Message-ID: <20220412035042.GC16799@magnolia>
+References: <1649733686-6128-1-git-send-email-yangtiezhu@loongson.cn>
+ <20220412033917.GB16799@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220412033917.GB16799@magnolia>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,147 +58,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 400331f8ffa3bec5c561417e5eec6848464e9160  x86/tsx: Disable TSX development mode at boot
+On Mon, Apr 11, 2022 at 08:39:17PM -0700, Darrick J. Wong wrote:
+> On Tue, Apr 12, 2022 at 11:21:26AM +0800, Tiezhu Yang wrote:
+> > Remove the following section entries of IOMAP FILESYSTEM LIBRARY:
+> > 
+> > M:	linux-xfs@vger.kernel.org
+> > M:	linux-fsdevel@vger.kernel.org
+> > 
+> > Remove the following section entry of XFS FILESYSTEM:
+> > 
+> > M:	linux-xfs@vger.kernel.org
+> > 
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> WTF?
+> 
+>  ▄▄   ▄   ▄▄   ▄    ▄
+>  █▀▄  █   ██   █  ▄▀
+>  █ █▄ █  █  █  █▄█
+>  █  █ █  █▄▄█  █  █▄
+>  █   ██ █    █ █   ▀▄
 
-elapsed time: 740m
+*OH*, I see, you're getting rid of the M(ail): entry, probably because
+it's redundant with L(ist): or something??  Still... why does it matter?
 
-configs tested: 123
-configs skipped: 3
+Seriously, changelogs need to say /why/ they're changing something, not
+simply restate what's already in the diff.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--D
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20220411
-arm                            lart_defconfig
-arc                           tb10x_defconfig
-arm                          gemini_defconfig
-i386                                defconfig
-sh                               alldefconfig
-sh                            migor_defconfig
-arm                         cm_x300_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                      mgcoge_defconfig
-mips                  decstation_64_defconfig
-arm                       imx_v6_v7_defconfig
-arm                          pxa3xx_defconfig
-m68k                       m5475evb_defconfig
-sh                 kfr2r09-romimage_defconfig
-xtensa                          iss_defconfig
-powerpc                     ep8248e_defconfig
-arm                        realview_defconfig
-sh                          sdk7780_defconfig
-parisc64                         alldefconfig
-powerpc                      ppc40x_defconfig
-xtensa                  cadence_csp_defconfig
-sh                          rsk7203_defconfig
-mips                         cobalt_defconfig
-nios2                            alldefconfig
-sh                               j2_defconfig
-m68k                       m5249evb_defconfig
-powerpc                     stx_gp3_defconfig
-arm                  randconfig-c002-20220411
-x86_64               randconfig-c001-20220411
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a016-20220411
-x86_64               randconfig-a012-20220411
-x86_64               randconfig-a013-20220411
-x86_64               randconfig-a014-20220411
-x86_64               randconfig-a015-20220411
-x86_64               randconfig-a011-20220411
-i386                 randconfig-a015-20220411
-i386                 randconfig-a011-20220411
-i386                 randconfig-a016-20220411
-i386                 randconfig-a012-20220411
-i386                 randconfig-a013-20220411
-i386                 randconfig-a014-20220411
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220411
-s390                 randconfig-r044-20220411
-riscv                randconfig-r042-20220411
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-powerpc              randconfig-c003-20220411
-arm                  randconfig-c002-20220411
-riscv                randconfig-c006-20220411
-x86_64               randconfig-c007-20220411
-mips                 randconfig-c004-20220411
-i386                 randconfig-c001-20220411
-hexagon                             defconfig
-powerpc                     ppa8548_defconfig
-x86_64                           allyesconfig
-arm                           sama7_defconfig
-arm                          pxa168_defconfig
-i386                 randconfig-a003-20220411
-i386                 randconfig-a001-20220411
-i386                 randconfig-a004-20220411
-i386                 randconfig-a002-20220411
-i386                 randconfig-a005-20220411
-i386                 randconfig-a006-20220411
-x86_64               randconfig-a003-20220411
-x86_64               randconfig-a004-20220411
-x86_64               randconfig-a006-20220411
-x86_64               randconfig-a001-20220411
-x86_64               randconfig-a002-20220411
-x86_64               randconfig-a005-20220411
-hexagon              randconfig-r041-20220411
-hexagon              randconfig-r045-20220411
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> --D
+> 
+> > ---
+> >  MAINTAINERS | 3 ---
+> >  1 file changed, 3 deletions(-)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 61d9f11..726608f 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -10238,8 +10238,6 @@ F:	drivers/net/ethernet/sgi/ioc3-eth.c
+> >  IOMAP FILESYSTEM LIBRARY
+> >  M:	Christoph Hellwig <hch@infradead.org>
+> >  M:	Darrick J. Wong <djwong@kernel.org>
+> > -M:	linux-xfs@vger.kernel.org
+> > -M:	linux-fsdevel@vger.kernel.org
+> >  L:	linux-xfs@vger.kernel.org
+> >  L:	linux-fsdevel@vger.kernel.org
+> >  S:	Supported
+> > @@ -21596,7 +21594,6 @@ F:	drivers/xen/*swiotlb*
+> >  XFS FILESYSTEM
+> >  C:	irc://irc.oftc.net/xfs
+> >  M:	Darrick J. Wong <djwong@kernel.org>
+> > -M:	linux-xfs@vger.kernel.org
+> >  L:	linux-xfs@vger.kernel.org
+> >  S:	Supported
+> >  W:	http://xfs.org/
+> > -- 
+> > 2.1.0
+> > 

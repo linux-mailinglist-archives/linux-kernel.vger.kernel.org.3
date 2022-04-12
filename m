@@ -2,175 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393504FD59F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149E04FD72D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377379AbiDLJfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S1377497AbiDLJfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388457AbiDLJWN (ORCPT
+        with ESMTP id S1388634AbiDLJWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:22:13 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BF847070;
-        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id k29so3790pgm.12;
-        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
+        Tue, 12 Apr 2022 05:22:35 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9B72662
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:29:07 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id i20so13455408wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8dj27SHCv5b3Wvo3cWAib4es//0Hr77RKSwBft96qwE=;
-        b=MvkGj8kC7BvSx/tQjd+DEgKZ3id7BVEEJPlg5EhjgkhKoKyPuN7dwigevkaC7aO3ti
-         TB+WEIQd1SWESEKgzNQ88pB9DSZfVlcmghDv+FlCjq8kLDzEZ/HN3ZO1BxyF847G/hiJ
-         Ebw8J7p+BmGJ3jSMuhUG9bp24ZE9ruXFhTJ2cN5xMDRRwPWLNtqO9EP0XqgmkDAPeGFG
-         wzVaBGkIOZ5EfEs3nIWtvZgycRZ0KlXeCPgADt8QUmhYiI1nRc4lXDIjXUoUTDN/W87y
-         ChiyWJiBtqzQLEHIvTYWb1hT9jRpsij8HmYHI55Uf2RDs8XF5nQ7bKVjYf9IRbJyavCh
-         6Ksw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CqvBmP+Qc0+EuRXZjCQaYGdhPsRI95L6d6IBMT4+9C4=;
+        b=rsVtHOQaJ9doBkbGLUnKPy/TDXrqUhyOrvVYLBBHT4Ful8BQ9j7zk2pqxD+3gI4LEL
+         1h0vsG1MIP+9vgqB/Ut2B+tAwiNhwV6d2ovlMnv19Ldmd2dkbExOgSnsRYnAIaq273u6
+         L3pLSzlndrAcmkG4HgL23adAdW2Ed/3DxgUuqhiqKdFvmhrrgWClg2PJG7PuGByShg7/
+         SaAXQs9vUS7Yc1U5eFciQxMGCyQKLqNZV8L2XNJUOvaAYYT9nfFVSd/1Q57rY/ffZDXL
+         2O4HkZc1etowuJNkjHzcNLk1LPv39Jr6Kniurdf1mrlQ/4PhdPNCcRtiPLSPEsjygz0B
+         XyvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8dj27SHCv5b3Wvo3cWAib4es//0Hr77RKSwBft96qwE=;
-        b=kOsZ1Au2VBHrnCaM9v5XM2BPMUdV1YJJYxHlSYWWrGPjCcTgLNGfNemJffBKP4FHOw
-         o2RfP4tcHcOlvPckO0Eyoz1VCupc+Hun564WjZUQk+meyhQFADeHkmSGZFIhKEq4PQGz
-         pfF25xFi4IUG491MBVaIszl1N/RY+cKIDxd0C0vO0MurEqijoZps4uzrtQI3xmMil7IL
-         LzM9IX9rXA2jgpa5O3Guy1Dmu/q8kKGeUc06r9EYYTZ/l4GGpqxvulfSTpYAtKsBqhDs
-         PCApAFQSHnxixWVpPueiDJgSb09GXvzmEfJ5WIBPo8BTeRnUpWALgT8pcCsYqgtfrAAh
-         xlSQ==
-X-Gm-Message-State: AOAM530ZQcYdJpx5169VL3XKPkFr2oHrmpxP/8X+xuWL9e8a0vxK2swb
-        zEgYmrU1q5cWll6+f1sPKzU=
-X-Google-Smtp-Source: ABdhPJwmL6nvNIgc2qB6277prLSlKDBoJ9rDxe+gbZfcxGjX2/wQgi65ZQMUL2G6CWQlHoa4lFSqiw==
-X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id bq20-20020a056a000e1400b004fe3cdb023fmr3450814pfb.86.1649752132287;
-        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm1981783pgn.35.2022.04.12.01.28.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 01:28:51 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     grygorii.strashko@ti.com
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: ethernet: ti: cpsw: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Tue, 12 Apr 2022 08:28:47 +0000
-Message-Id: <20220412082847.2532584-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CqvBmP+Qc0+EuRXZjCQaYGdhPsRI95L6d6IBMT4+9C4=;
+        b=KOr9XmmPkVRZmJdb8E8+FOrWly35345zqFlXj+yiyX+jyAuH10gJmzsE1PCU9QL/Le
+         omvsym9jMNkG9sbgenrt5DvGt989nK7oyVidYOZu67OM27uhIHnbOI5jKzVpdnVJsBLq
+         OyNrhhYbQ3kVo6LzQY7Q/gPlcOQFNVnbqiaoc1NIntfemmHLceEvbI74IJ0BIv0mKzCT
+         /io9Mc16jAYSqvgJbQHT3x828fb5vwDRhy9OZueKnGobr1f0BnuRY9itWUqwNPBjndDQ
+         Bm9COYt+TqQECC9xUfmwa8fDHDXolxvaRoIx9OBVaO+bnRqw7iK+TFQutQVP0QY0i3Nx
+         owDg==
+X-Gm-Message-State: AOAM531OXmx6QS2/bhp+Q93Ibgh5FXAnDIiScRengRYw0SHEj7zkBiTj
+        kxeo0+RWaIUz/EEqJGoholS/p51h/7wqa4Yysj0T6A==
+X-Google-Smtp-Source: ABdhPJxuzITykVKFvdy/AFU8aIjZw9nOtOrS0NjyNzbs5DXwm/9UkwFLlYnRjRMr8tD47iDgZo6bHFiJ2MOMNUSuy0s=
+X-Received: by 2002:adf:816b:0:b0:203:7fae:a245 with SMTP id
+ 98-20020adf816b000000b002037faea245mr28603032wrm.619.1649752145967; Tue, 12
+ Apr 2022 01:29:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-2-james.clark@arm.com>
+In-Reply-To: <20220304171913.2292458-2-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Tue, 12 Apr 2022 09:28:54 +0100
+Message-ID: <CAJ9a7Vi+XpJhn8dCWNMNHSoH=rrHc17GdTnGpKjKaFOB9K8AWQ@mail.gmail.com>
+Subject: Re: [PATCH v3 01/15] coresight: etm4x: Cleanup TRCIDR0 register accesses
+To:     James Clark <James.Clark@arm.com>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        Anshuman.Khandual@arm.com, leo.yan@linaro.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
+>
+> This is a no-op change for style and consistency and has no effect on
+> the binary output by the compiler. In sysreg.h fields are defined as
+> the register name followed by the field name and then _MASK. This
+> allows for grepping for fields by name rather than using magic numbers.
+>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
+>  drivers/hwtracing/coresight/coresight-etm4x.h | 13 +++++++
+>  2 files changed, 21 insertions(+), 28 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 7f416a12000e..9120390a7613 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -1097,41 +1097,21 @@ static void etm4_init_arch_data(void *info)
+>         etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+>
+>         /* INSTP0, bits[2:1] P0 tracing support field */
+> -       if (BMVAL(etmidr0, 1, 2) == 0b11)
+> -               drvdata->instrp0 = true;
+> -       else
+> -               drvdata->instrp0 = false;
+> -
+> +       drvdata->instrp0 = !!(FIELD_GET(TRCIDR0_INSTP0_MASK, etmidr0) == 0b11);
+>         /* TRCBB, bit[5] Branch broadcast tracing support bit */
+> -       if (BMVAL(etmidr0, 5, 5))
+> -               drvdata->trcbb = true;
+> -       else
+> -               drvdata->trcbb = false;
+> -
+> +       drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
+>         /* TRCCOND, bit[6] Conditional instruction tracing support bit */
+> -       if (BMVAL(etmidr0, 6, 6))
+> -               drvdata->trccond = true;
+> -       else
+> -               drvdata->trccond = false;
+> -
+> +       drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
+>         /* TRCCCI, bit[7] Cycle counting instruction bit */
+> -       if (BMVAL(etmidr0, 7, 7))
+> -               drvdata->trccci = true;
+> -       else
+> -               drvdata->trccci = false;
+> -
+> +       drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
+>         /* RETSTACK, bit[9] Return stack bit */
+> -       if (BMVAL(etmidr0, 9, 9))
+> -               drvdata->retstack = true;
+> -       else
+> -               drvdata->retstack = false;
+> -
+> +       drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
+>         /* NUMEVENT, bits[11:10] Number of events field */
+> -       drvdata->nr_event = BMVAL(etmidr0, 10, 11);
+> +       drvdata->nr_event = FIELD_GET(TRCIDR0_NUMEVENT_MASK, etmidr0);
+>         /* QSUPP, bits[16:15] Q element support field */
+> -       drvdata->q_support = BMVAL(etmidr0, 15, 16);
+> +       drvdata->q_support = FIELD_GET(TRCIDR0_QSUPP_MASK, etmidr0);
+>         /* TSSIZE, bits[28:24] Global timestamp size field */
+> -       drvdata->ts_size = BMVAL(etmidr0, 24, 28);
+> +       drvdata->ts_size = FIELD_GET(TRCIDR0_TSSIZE_MASK, etmidr0);
+>
+>         /* maximum size of resources */
+>         etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+> index 3c4d69b096ca..300741fbc0de 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+> @@ -130,6 +130,19 @@
+>
+>  #define TRCRSR_TA                      BIT(12)
+>
+> +/*
+> + * Bit positions of registers that are defined above, in the sysreg.h style
+> + * of _MASK for multi bit fields and BIT() for single bits.
+> + */
+> +#define TRCIDR0_INSTP0_MASK                    GENMASK(2, 1)
+> +#define TRCIDR0_TRCBB                          BIT(5)
+> +#define TRCIDR0_TRCCOND                                BIT(6)
+> +#define TRCIDR0_TRCCCI                         BIT(7)
+> +#define TRCIDR0_RETSTACK                       BIT(9)
+> +#define TRCIDR0_NUMEVENT_MASK                  GENMASK(11, 10)
+> +#define TRCIDR0_QSUPP_MASK                     GENMASK(16, 15)
+> +#define TRCIDR0_TSSIZE_MASK                    GENMASK(28, 24)
+> +
+>  /*
+>   * System instructions to access ETM registers.
+>   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
+> --
+> 2.28.0
+>
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/net/ethernet/ti/cpsw.c | 36 ++++++++++++----------------------
- 1 file changed, 12 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
-index 03575c017500..9f37b5b196a5 100644
---- a/drivers/net/ethernet/ti/cpsw.c
-+++ b/drivers/net/ethernet/ti/cpsw.c
-@@ -756,11 +756,9 @@ static int cpsw_ndo_open(struct net_device *ndev)
- 	int ret;
- 	u32 reg;
- 
--	ret = pm_runtime_get_sync(cpsw->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(cpsw->dev);
-+	ret = pm_runtime_resume_and_get(cpsw->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	netif_carrier_off(ndev);
- 
-@@ -968,11 +966,9 @@ static int cpsw_ndo_set_mac_address(struct net_device *ndev, void *p)
- 	if (!is_valid_ether_addr(addr->sa_data))
- 		return -EADDRNOTAVAIL;
- 
--	ret = pm_runtime_get_sync(cpsw->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(cpsw->dev);
-+	ret = pm_runtime_resume_and_get(cpsw->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	if (cpsw->data.dual_emac) {
- 		vid = cpsw->slaves[priv->emac_port].port_vlan;
-@@ -1052,11 +1048,9 @@ static int cpsw_ndo_vlan_rx_add_vid(struct net_device *ndev,
- 	if (vid == cpsw->data.default_vlan)
- 		return 0;
- 
--	ret = pm_runtime_get_sync(cpsw->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(cpsw->dev);
-+	ret = pm_runtime_resume_and_get(cpsw->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	if (cpsw->data.dual_emac) {
- 		/* In dual EMAC, reserved VLAN id should not be used for
-@@ -1090,11 +1084,9 @@ static int cpsw_ndo_vlan_rx_kill_vid(struct net_device *ndev,
- 	if (vid == cpsw->data.default_vlan)
- 		return 0;
- 
--	ret = pm_runtime_get_sync(cpsw->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(cpsw->dev);
-+	ret = pm_runtime_resume_and_get(cpsw->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	if (cpsw->data.dual_emac) {
- 		int i;
-@@ -1567,11 +1559,9 @@ static int cpsw_probe(struct platform_device *pdev)
- 	/* Need to enable clocks with runtime PM api to access module
- 	 * registers
- 	 */
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto clean_runtime_disable_ret;
--	}
- 
- 	ret = cpsw_probe_dt(&cpsw->data, pdev);
- 	if (ret)
-@@ -1734,11 +1724,9 @@ static int cpsw_remove(struct platform_device *pdev)
- 	struct cpsw_common *cpsw = platform_get_drvdata(pdev);
- 	int i, ret;
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	for (i = 0; i < cpsw->data.slaves; i++)
- 		if (cpsw->slaves[i].ndev)
 -- 
-2.25.1
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

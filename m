@@ -2,160 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9629C4FD992
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B50F4FD521
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391278AbiDLJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S1377280AbiDLJ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357401AbiDLITC (ORCPT
+        with ESMTP id S1379577AbiDLIUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:19:02 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA33C222B8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:43:41 -0700 (PDT)
-X-UUID: cadb30c01bd247c69b4ac5647a7994d9-20220412
-X-UUID: cadb30c01bd247c69b4ac5647a7994d9-20220412
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 254130138; Tue, 12 Apr 2022 15:43:35 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 12 Apr 2022 15:43:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 15:43:34 +0800
-Message-ID: <3c9140fbba123550b5532f9917dae4ef10ed5611.camel@mediatek.com>
-Subject: Re: [PATCH v4, 3/4] drm/mediatek: keep dsi as LP00 before dcs cmds
- transfer
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jitao.shi@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 12 Apr 2022 15:43:34 +0800
-In-Reply-To: <7a4e5afb-6947-ed7f-8555-c7402aaa3a29@collabora.com>
-References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
-         <1649644308-8455-4-git-send-email-xinlei.lee@mediatek.com>
-         <7a4e5afb-6947-ed7f-8555-c7402aaa3a29@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 12 Apr 2022 04:20:39 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD78B46154
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:48:27 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0A4B9FF80A;
+        Tue, 12 Apr 2022 07:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649749706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YW/FpTIll39+9L5ULUaE9f07ZfIeCCQhSd38iCsA3pg=;
+        b=aXzEGK9EGcOVOJifzQG1YR9RgJX9bx4SRppY92QDfZCpkF7UG+SuAE+Vt3fD+s4lUG9Dp/
+        6E2GOvRJUD3BrQQRuyBjEG+aPdyB+l36E0p6D5FAv0+/lUp9U/0BO+UexyjYN4nbjbBKi3
+        yKTP2jtMkAMg4BZuEJtHoDGlf3stW/95B1L1ZFDcIx1wGTsTUjAmLnV+PLRNQbOc8s11D6
+        FHRkgZg4BlnxjYRczCsHCgpPCxz242Zd0t2mGEjZrB8JJvC4krFD1gtGPAUu6q1j90u+c/
+        8BFlf51DjUxZS/ikaKKj/5jV85k1S3INssgYwm81Xq1Zsnt5wDKZwG/775U/ug==
+Date:   Tue, 12 Apr 2022 09:48:22 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bastian Hecht <hechtb@googlemail.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mtd: rawnand: Fix return value check of
+ wait_for_completion_timeout
+Message-ID: <20220412094822.3818ebc2@xps13>
+In-Reply-To: <61783400-4df2-47af-78a7-7acb715c3a71@gmail.com>
+References: <202204121253.NcZifMQi-lkp@intel.com>
+        <20220412063703.8537-1-linmq006@gmail.com>
+        <20220412090649.33bb3f8b@xps13>
+        <61783400-4df2-47af-78a7-7acb715c3a71@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 11:07 +0200, AngeloGioacchino Del Regno wrote:
-> Il 11/04/22 04:31, xinlei.lee@mediatek.com ha scritto:
-> > From: Jitao Shi <jitao.shi@mediatek.com>
-> > 
-> > To comply with the panel sequence, hold the mipi signal to LP00
-> > before the dcs cmds transmission,
-> > and pull the mipi signal high from LP00 to LP11 until the start of
-> > the dcs cmds transmission.
-> > The normal panel timing is :
-> > (1) pp1800 DC pull up
-> > (2) avdd & avee AC pull high
-> > (3) lcm_reset pull high -> pull low -> pull high
-> > (4) Pull MIPI signal high (LP11) -> initial code -> send video
-> > data(HS mode)
-> > The power-off sequence is reversed.
-> > If dsi is not in cmd mode, then dsi will pull the mipi signal high
-> > in the mtk_output_dsi_enable function.
-> > 
-> > Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the
-> > drm_panel_bridge API")
-> > 
-> > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> > ---
-> >   drivers/gpu/drm/mediatek/mtk_dsi.c | 28 +++++++++++++++++++++--
-> > -----
-> >   1 file changed, 21 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > index cf76c53a1af6..9ad6f08c8bfe 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > @@ -203,6 +203,7 @@ struct mtk_dsi {
-> >   	struct mtk_phy_timing phy_timing;
-> >   	int refcount;
-> >   	bool enabled;
-> > +	bool lanes_ready;
-> >   	u32 irq_data;
-> >   	wait_queue_head_t irq_wait_queue;
-> >   	const struct mtk_dsi_driver_data *driver_data;
-> > @@ -654,13 +655,6 @@ static int mtk_dsi_poweron(struct mtk_dsi
-> > *dsi)
-> >   	mtk_dsi_config_vdo_timing(dsi);
-> >   	mtk_dsi_set_interrupt_enable(dsi);
-> >   
-> > -	mtk_dsi_rxtx_control(dsi);
-> > -	usleep_range(30, 100);
-> > -	mtk_dsi_reset_dphy(dsi);
-> > -	mtk_dsi_clk_ulp_mode_leave(dsi);
-> > -	mtk_dsi_lane0_ulp_mode_leave(dsi);
-> > -	mtk_dsi_clk_hs_mode(dsi, 0);
-> > -
-> >   	return 0;
-> >   err_disable_engine_clk:
-> >   	clk_disable_unprepare(dsi->engine_clk);
-> > @@ -689,6 +683,23 @@ static void mtk_dsi_poweroff(struct mtk_dsi
-> > *dsi)
-> >   	clk_disable_unprepare(dsi->digital_clk);
-> >   
-> >   	phy_power_off(dsi->phy);
-> > +
-> > +	dsi->lanes_ready = false;
-> > +}
-> > +
-> > +static void mtk_dsi_lane_ready(struct mtk_dsi *dsi)
-> > +{
-> > +	if (!dsi->lanes_ready) {
-> > +		dsi->lanes_ready = true;
-> > +		mtk_dsi_rxtx_control(dsi);
-> > +		usleep_range(30, 100);
-> > +		mtk_dsi_reset_dphy(dsi);
-> > +		mtk_dsi_clk_ulp_mode_leave(dsi);
-> > +		mtk_dsi_lane0_ulp_mode_leave(dsi);
-> > +		mtk_dsi_clk_hs_mode(dsi, 0);
-> > +		msleep(20);
-> 
-> This is a very long sleep, which wasn't present before this change.
-> Please document the reasons why we need this 20ms sleep with a
-> comment
-> in the code.
-> 
-> Regards,
-> Angelo
-> 
-> 
+Hi Miaoqian,
 
-Hello Xinlei,
+linmq006@gmail.com wrote on Tue, 12 Apr 2022 15:42:02 +0800:
 
-As Angelo mentioned.
-I think you should add this in commit message and driver comments.
-(Your reply in v3.)
-"The 20ms delay in mtk_dsi_lane_ready() is because dsi needs to give
-dsi_rx(panel) a reaction time after pulling up the mipi signal."
+> Hi Miquel,
+>=20
+> Thanks for your reply.
+>=20
+> On 2022/4/12 15:06, Miquel Raynal wrote:
+> > Hi Miaoqian,
+> >
+> > linmq006@gmail.com wrote on Tue, 12 Apr 2022 06:36:52 +0000:
+> > =20
+> >> wait_for_completion_timeout() returns unsigned long not int.
+> >> It returns 0 if timed out, and positive if completed.
+> >> The check for <=3D 0 is ambiguous and should be =3D=3D 0 here
+> >> indicating timeout which is the only error case.
+> >>
+> >> Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
+> >> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> >> ---
+> >> change in v2:
+> >> - initialize ret to 1.
+> >> ---
+> >>  drivers/mtd/nand/raw/sh_flctl.c | 8 +++++---
+> >>  1 file changed, 5 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/sh_flctl.c b/drivers/mtd/nand/raw/sh=
+_flctl.c
+> >> index b85b9c6fcc42..2373251f585b 100644
+> >> --- a/drivers/mtd/nand/raw/sh_flctl.c
+> >> +++ b/drivers/mtd/nand/raw/sh_flctl.c
+> >> @@ -384,7 +384,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flct=
+l *flctl, unsigned long *buf,
+> >>  	dma_addr_t dma_addr;
+> >>  	dma_cookie_t cookie;
+> >>  	uint32_t reg;
+> >> -	int ret;
+> >> +	int ret =3D 1; =20
+> > Does not look right. I know this function returns > 0 on positive
+> > outcomes but this does not make any sense in the first place. =20
+>=20
+> Yes, I made a mistake, Now I realize that in v2, it will return 1 in erro=
+r path
+>=20
+> when DMA submit failed.
 
-BRs,
-Rex
+Not 1, but a proper error code please (-ETIMEDOUT, -EINVAL, whatever)
 
+>=20
+> And for patch v1, it will return 0=C2=A0 if calls wait_for_completion_tim=
+eout succeeds.
+>=20
+> > This function is static and only called twice, please turn it into
+> > something like:
+> >
+> > if (dma_fifo_transfer())
+> > 	error
+> > else
+> > 	ok =20
+>=20
+> So I want to keep ret>0 means success.
+>=20
+> Or could I set ret > 0 after in wait_for_completion_timeout() success pat=
+h?
+>=20
+> like:
+>=20
+> =C2=A0=C2=A0=C2=A0 if(time_left =3D=3D 0)
+>=20
+> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D -ETIMEDO=
+UT;
+>=20
+> =C2=A0=C2=A0=C2=A0 else
+>=20
+> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0 ret =3D 1;
+
+You can initialize ret to zero at to top. So that anything !=3D 0 is an
+error (like a lot of functions in the kernel). And use:
+
+	if (dma_fifo_transfer())
+		error();
+
+>=20
+> What do you think?
+>=20
+>=20
+> Thanks,
+>=20
+> >> +	unsigned long time_left;
+> >> =20
+> >>  	if (dir =3D=3D DMA_FROM_DEVICE) {
+> >>  		chan =3D flctl->chan_fifo0_rx;
+> >> @@ -425,13 +426,14 @@ static int flctl_dma_fifo0_transfer(struct sh_fl=
+ctl *flctl, unsigned long *buf,
+> >>  		goto out;
+> >>  	}
+> >> =20
+> >> -	ret =3D
+> >> +	time_left =3D
+> >>  	wait_for_completion_timeout(&flctl->dma_complete,
+> >>  				msecs_to_jiffies(3000));
+> >> =20
+> >> -	if (ret <=3D 0) {
+> >> +	if (time_left =3D=3D 0) {
+> >>  		dmaengine_terminate_all(chan);
+> >>  		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
+> >> +		ret =3D -ETIMEDOUT;
+> >>  	}
+> >> =20
+> >>  out: =20
+> >
+> > Thanks,
+> > Miqu=C3=A8l =20
+
+
+Thanks,
+Miqu=C3=A8l

@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CBE4FD3A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4958A4FD3E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390299AbiDLJYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S1390510AbiDLJZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356171AbiDLIJI (ORCPT
+        with ESMTP id S1354958AbiDLIKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:09:08 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF7DEEA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:39:39 -0700 (PDT)
-X-UUID: 476df98acc14430c9712202fa00f6542-20220412
-X-UUID: 476df98acc14430c9712202fa00f6542-20220412
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1947215072; Tue, 12 Apr 2022 15:39:31 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 12 Apr 2022 15:39:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 15:39:30 +0800
-Message-ID: <152363cfcfe240f9249fb08f06442d2ab9286900.camel@mediatek.com>
-Subject: Re: [PATCH v4,4/4] drm/mediatek: Add pull-down MIPI operation in
- mtk_dsi_poweroff function
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jitao.shi@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 12 Apr 2022 15:39:30 +0800
-In-Reply-To: <1649644308-8455-5-git-send-email-xinlei.lee@mediatek.com>
-References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
-         <1649644308-8455-5-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 12 Apr 2022 04:10:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55177A196
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:40:19 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1neB8A-0007gH-Lm; Tue, 12 Apr 2022 09:40:06 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1neB89-00AQZl-EK; Tue, 12 Apr 2022 09:40:05 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Cc:     David Jander <david@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>
+Subject: [PATCH v1 08/17] arm: dts: imx6qdl-vicut1.dtsi: Remove conflicting pinctrl entry
+Date:   Tue, 12 Apr 2022 09:39:55 +0200
+Message-Id: <20220412074004.2485264-9-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220412074004.2485264-1-o.rempel@pengutronix.de>
+References: <20220412074004.2485264-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> In the dsi_enable function, mtk_dsi_rxtx_control is to
-> pull up the MIPI signal operation. Before dsi_disable,
-> MIPI should also be pulled down by writing a register 
-> instead of disabling dsi.
-> 
-> If disable dsi without pulling the mipi signal low, the value of
-> the register will still maintain the setting of the mipi signal being
-> pulled high.
-> After resume, even if the mipi signal is not pulled high, it will
-> still
-> be in the high state.
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index 9ad6f08c8bfe..e35343357f90 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -676,6 +676,8 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_lane0_ulp_mode_enter(dsi);
->  	mtk_dsi_clk_ulp_mode_enter(dsi);
-> +	/* set the lane number as 0 to pull down mipi */
-> +	writel(0, dsi->regs + DSI_TXRX_CTRL);
->  
->  	mtk_dsi_disable(dsi);
->  
+From: David Jander <david@protonic.nl>
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+The function of DISP0_DAT9 is dependent on hardware revision of two
+particular variants. This setting should be done by the bootloader anyway,
+and is not needed in the kernel, so remove it from the DT.
+
+Signed-off-by: David Jander <david@protonic.nl>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
+index a93e7f8302aa..6c943ca950f4 100644
+--- a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
+@@ -655,10 +655,6 @@ MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20		0x1b0b0
+ 			MX6QDL_PAD_EIM_D20__GPIO3_IO20			0x100b0
+ 			/* DIP1_FB */
+ 			MX6QDL_PAD_DI0_PIN2__GPIO4_IO18			0x1b0b0
+-
+-			/* New in UT2: FIXME: ISB PWM should start off, PD */
+-			/* ISB_LED_PWM */
+-			MX6QDL_PAD_DISP0_DAT9__GPIO4_IO30		0x130b0
+ 		>;
+ 	};
+ 
+-- 
+2.30.2
 

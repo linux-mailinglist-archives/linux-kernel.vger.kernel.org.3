@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639C24FD91F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BA84FD667
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344122AbiDLI2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S1359329AbiDLId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353130AbiDLHdk (ORCPT
+        with ESMTP id S1354788AbiDLHeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:33:40 -0400
+        Tue, 12 Apr 2022 03:34:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C849F05;
-        Tue, 12 Apr 2022 00:08:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF9B49F9B;
+        Tue, 12 Apr 2022 00:09:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A82CC6153F;
-        Tue, 12 Apr 2022 07:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEF2C385A1;
-        Tue, 12 Apr 2022 07:08:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD93616AB;
+        Tue, 12 Apr 2022 07:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2C3C385A5;
+        Tue, 12 Apr 2022 07:08:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747336;
-        bh=nFWpWCPbOaoMAwUpLix+4mXkQpbORA6GkI7rlenqrL8=;
+        s=korg; t=1649747338;
+        bh=544pZh+MuYtqKjVkhTsjQTV5ihsjgTsy4DhO/PGIKcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vwot+Ao/sKdz2BreXJqDj1tX4r8HP4VMf83JSszmYG2i5Ql22kPwJ59V0YjKvizrf
-         dB4Vxg3rwqh1EbaLAza4jLOzc6bOU32YtbtelDSNUbmYZWLZKQF0fGZs6hcdnvMhlZ
-         RQ08EWHXNCeBhpYZNP2YKt/Jf7huKqjAsYDPq+K0=
+        b=o1RE26BYuXQKef0skNaYjAnP+rXWleHv4eAo3rZZcpGSytXax73wPx1qVDz5A4NUl
+         nuRRiMWsmsnzb5A6teX9HQFAZ5KOFiL8jkmO5+nwNZB/L+0Nw4XCcGXObI05gqFGm/
+         H17qOIsKHff50nrL4q2lGThiq83NCdjCakmYjZa4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 042/343] drm/bridge: Add missing pm_runtime_put_sync
-Date:   Tue, 12 Apr 2022 08:27:40 +0200
-Message-Id: <20220412062952.321103313@linuxfoundation.org>
+Subject: [PATCH 5.17 043/343] bpf: Make dst_port field in struct bpf_sock 16-bit wide
+Date:   Tue, 12 Apr 2022 08:27:41 +0200
+Message-Id: <20220412062952.349558761@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -56,75 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit 46f47807738441e354873546dde0b000106c068a ]
+[ Upstream commit 4421a582718ab81608d8486734c18083b822390d ]
 
-pm_runtime_get_sync() will increase the rumtime PM counter
-even when it returns an error. Thus a pairing decrement is needed
-to prevent refcount leak. Fix this by replacing this API with
-pm_runtime_resume_and_get(), which will not change the runtime
-PM counter on error. Besides, a matching decrement is needed
-on the error handling path to keep the counter balanced.
+Menglong Dong reports that the documentation for the dst_port field in
+struct bpf_sock is inaccurate and confusing. From the BPF program PoV, the
+field is a zero-padded 16-bit integer in network byte order. The value
+appears to the BPF user as if laid out in memory as so:
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/1643008835-73961-1-git-send-email-lyz_cs@pku.edu.cn
+  offsetof(struct bpf_sock, dst_port) + 0  <port MSB>
+                                      + 8  <port LSB>
+                                      +16  0x00
+                                      +24  0x00
+
+32-, 16-, and 8-bit wide loads from the field are all allowed, but only if
+the offset into the field is 0.
+
+32-bit wide loads from dst_port are especially confusing. The loaded value,
+after converting to host byte order with bpf_ntohl(dst_port), contains the
+port number in the upper 16-bits.
+
+Remove the confusion by splitting the field into two 16-bit fields. For
+backward compatibility, allow 32-bit wide loads from offsetof(struct
+bpf_sock, dst_port).
+
+While at it, allow loads 8-bit loads at offset [0] and [1] from dst_port.
+
+Reported-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Link: https://lore.kernel.org/r/20220130115518.213259-2-jakub@cloudflare.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/nwl-dsi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ include/uapi/linux/bpf.h |  3 ++-
+ net/core/filter.c        | 10 +++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-index 6e484d836cfe..691039aba87f 100644
---- a/drivers/gpu/drm/bridge/nwl-dsi.c
-+++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-@@ -861,18 +861,19 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
- 	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
- 	drm_mode_debug_printmodeline(adjusted_mode);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 015bfec0dbfd..51b0f899424a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5500,7 +5500,8 @@ struct bpf_sock {
+ 	__u32 src_ip4;
+ 	__u32 src_ip6[4];
+ 	__u32 src_port;		/* host byte order */
+-	__u32 dst_port;		/* network byte order */
++	__be16 dst_port;	/* network byte order */
++	__u16 :16;		/* zero padding */
+ 	__u32 dst_ip4;
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9eb785842258..82fcb7533663 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8033,6 +8033,7 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 			      struct bpf_insn_access_aux *info)
+ {
+ 	const int size_default = sizeof(__u32);
++	int field_size;
  
--	pm_runtime_get_sync(dev);
-+	if (pm_runtime_resume_and_get(dev) < 0)
-+		return;
- 
- 	if (clk_prepare_enable(dsi->lcdif_clk) < 0)
--		return;
-+		goto runtime_put;
- 	if (clk_prepare_enable(dsi->core_clk) < 0)
--		return;
-+		goto runtime_put;
- 
- 	/* Step 1 from DSI reset-out instructions */
- 	ret = reset_control_deassert(dsi->rst_pclk);
- 	if (ret < 0) {
- 		DRM_DEV_ERROR(dev, "Failed to deassert PCLK: %d\n", ret);
--		return;
-+		goto runtime_put;
+ 	if (off < 0 || off >= sizeof(struct bpf_sock))
+ 		return false;
+@@ -8044,7 +8045,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case offsetof(struct bpf_sock, family):
+ 	case offsetof(struct bpf_sock, type):
+ 	case offsetof(struct bpf_sock, protocol):
+-	case offsetof(struct bpf_sock, dst_port):
+ 	case offsetof(struct bpf_sock, src_port):
+ 	case offsetof(struct bpf_sock, rx_queue_mapping):
+ 	case bpf_ctx_range(struct bpf_sock, src_ip4):
+@@ -8053,6 +8053,14 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
+ 		bpf_ctx_record_field_size(info, size_default);
+ 		return bpf_ctx_narrow_access_ok(off, size, size_default);
++	case bpf_ctx_range(struct bpf_sock, dst_port):
++		field_size = size == size_default ?
++			size_default : sizeof_field(struct bpf_sock, dst_port);
++		bpf_ctx_record_field_size(info, field_size);
++		return bpf_ctx_narrow_access_ok(off, size, field_size);
++	case offsetofend(struct bpf_sock, dst_port) ...
++	     offsetof(struct bpf_sock, dst_ip4) - 1:
++		return false;
  	}
  
- 	/* Step 2 from DSI reset-out instructions */
-@@ -882,13 +883,18 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
- 	ret = reset_control_deassert(dsi->rst_esc);
- 	if (ret < 0) {
- 		DRM_DEV_ERROR(dev, "Failed to deassert ESC: %d\n", ret);
--		return;
-+		goto runtime_put;
- 	}
- 	ret = reset_control_deassert(dsi->rst_byte);
- 	if (ret < 0) {
- 		DRM_DEV_ERROR(dev, "Failed to deassert BYTE: %d\n", ret);
--		return;
-+		goto runtime_put;
- 	}
-+
-+	return;
-+
-+runtime_put:
-+	pm_runtime_put_sync(dev);
- }
- 
- static void
+ 	return size == size_default;
 -- 
 2.35.1
 

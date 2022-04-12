@@ -2,64 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FA74FCF3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174CC4FCF3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348574AbiDLGD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S1348641AbiDLGDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243946AbiDLGD0 (ORCPT
+        with ESMTP id S1348578AbiDLGDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:03:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91A728E21;
-        Mon, 11 Apr 2022 23:01:07 -0700 (PDT)
+        Tue, 12 Apr 2022 02:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86602E68A;
+        Mon, 11 Apr 2022 23:01:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88434B81B37;
-        Tue, 12 Apr 2022 06:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B19C385A1;
-        Tue, 12 Apr 2022 06:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649743265;
-        bh=TQ9nlWWmfc9iRUY4qhKmJUR81ULKujQpg9YoNQ0C930=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dZQZ/Rgqrf1bN4S34dnalooW8COMViJgAPdTH0LR6dn8V1wcpL3izcflq3cQxVi9Z
-         85aOx+SNp5xn5VMmPjl4H8qysD6qUz8qkW+oabmFvnV1o8K56+AfAFJ1K2RFXT051s
-         anNs6HLmcoX2iMQoOhRg28klZFDGlkeWLGRBfi4+nhJv7/Dlodd4SXHCBYKZfMeV9c
-         Zk6r+NTGzsyBkItV0HmDug+jB/sX35bIUrmU0Hy4lw0TEoMX37bna9+a35RrloAllo
-         +eEvNCci6Xvg26akcjqxz0tlDLCM1T/wHZ1Regr+KJhgm/Nt4z2LfZGK4SVNR4zUCx
-         WC7buhKOYAV9w==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ec42eae76bso40055687b3.10;
-        Mon, 11 Apr 2022 23:01:05 -0700 (PDT)
-X-Gm-Message-State: AOAM5304jYz8KSzVuXkgp7PxnFWlfbMwFH4H3PyuCgzedr+31+p9YFM5
-        o+YUWq3BfNu0knlY7ej/i6iD0jIT1E3OeFmdrBo=
-X-Google-Smtp-Source: ABdhPJwzGCRuLMNTaqDIAYXmBETryWKD44RD4bPhNkE9g2fCam2blArU9EULFeLTjwkpkVuYiqf0ELUay2OlPfmLabI=
-X-Received: by 2002:a0d:f6c6:0:b0:2e5:bf17:4dce with SMTP id
- g189-20020a0df6c6000000b002e5bf174dcemr29970697ywf.130.1649743264274; Mon, 11
- Apr 2022 23:01:04 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4554B61876;
+        Tue, 12 Apr 2022 06:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A038C385A1;
+        Tue, 12 Apr 2022 06:01:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649743272;
+        bh=8oySYUnW/7GlC7l9j44YAFtXZz1Ne1H6iUNwIbnrork=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LzwRc1BzhqVI9NBkHE/Lda3SWcmwmfvqLzV68LkbkIXzBwfm31GEpvK5nDTOSmzux
+         n3AeCa7dChEL5zQKjjr5mdczZ0Owqc7Z8xQEWwnu0sMFO0/oOHusStOHlBkHAP2BgG
+         zavBcC+/ifcP3eYuzFYjOdqkfAU4HiE6zJsqRAlg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.310
+Date:   Tue, 12 Apr 2022 08:01:04 +0200
+Message-Id: <1649743264201115@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220411233549.740157-1-song@kernel.org> <20220411233549.740157-2-song@kernel.org>
- <YlT9i9DFvwDx9+AD@infradead.org>
-In-Reply-To: <YlT9i9DFvwDx9+AD@infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 11 Apr 2022 23:00:53 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7XJHa3OaTT-4=33c70gUjCaWFrVe8h8J-hZetjxXeeog@mail.gmail.com>
-Message-ID: <CAPhsuW7XJHa3OaTT-4=33c70gUjCaWFrVe8h8J-hZetjxXeeog@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 1/3] vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        rick.p.edgecombe@intel.com, imbrenda@linux.ibm.com,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,83 +50,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 9:18 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, Apr 11, 2022 at 04:35:46PM -0700, Song Liu wrote:
-> > Huge page backed vmalloc memory could benefit performance in many cases.
-> > Since some users of vmalloc may not be ready to handle huge pages,
-> > VM_NO_HUGE_VMAP was introduced to allow vmalloc users to opt-out huge
-> > pages. However, it is not easy to add VM_NO_HUGE_VMAP to all the users
-> > that may try to allocate >= PMD_SIZE pages, but are not ready to handle
-> > huge pages properly.
->
-> This is a good place to document what the problems are, and how they are
-> hard to track down (e.g. because the allocations are passed down I/O
-> stacks)
+I'm announcing the release of the 4.9.310 kernel.
 
-Will add it in v3.
+All users of the 4.9 kernel series must upgrade.
 
->
-> >
-> > Replace VM_NO_HUGE_VMAP with an opt-in flag, VM_ALLOW_HUGE_VMAP, so that
-> > users that benefit from huge pages could ask specificially.
-> >
-> > Also, replace vmalloc_no_huge() with opt-in helper vmalloc_huge().
->
-> We still need to find out what the primary users of the large vmalloc
-> hashes was and convert them.
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-@ Claudio and Nicholas,
+thanks,
 
-Could you please help identify users of large vmalloc? So far, I found
-alloc_large_system_hash(), and something like the following seems to
-work:
+greg k-h
 
-diff --git i/mm/page_alloc.c w/mm/page_alloc.c
-index 6e5b4488a0c5..20d38b8482c4 100644
---- i/mm/page_alloc.c
-+++ w/mm/page_alloc.c
-@@ -8919,7 +8919,7 @@ void *__init alloc_large_system_hash(const char
-*tablename,
-                                table = memblock_alloc_raw(size,
-                                                           SMP_CACHE_BYTES);
-                } else if (get_order(size) >= MAX_ORDER || hashdist) {
--                       table = __vmalloc(size, gfp_flags);
-+                       table = __vmalloc_huge(size, gfp_flags);
-                        virt = true;
-                        if (table)
-                                huge = is_vm_area_hugepages(table);
-diff --git i/mm/vmalloc.c w/mm/vmalloc.c
-index 7cc2be6a7554..cbadbe83e6a6 100644
---- i/mm/vmalloc.c
-+++ w/mm/vmalloc.c
-@@ -3253,6 +3253,14 @@ void *__vmalloc(unsigned long size, gfp_t gfp_mask)
- }
- EXPORT_SYMBOL(__vmalloc);
+------------
 
-+void *__vmalloc_huge(unsigned long size, gfp_t gfp_mask)
-+{
-+       return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-+                                   gfp_mask, PAGE_KERNEL, VM_ALLOW_HUGE_VMAP,
-+                                   NUMA_NO_NODE, __builtin_return_address(0));
-+}
-+EXPORT_SYMBOL_GPL(__vmalloc_huge);
-+
- /**
-  * vmalloc - allocate virtually contiguous memory
-  * @size:    allocation size
+ Documentation/arm64/silicon-errata.txt |    1 
+ Documentation/kernel-parameters.txt    |    9 
+ Makefile                               |    2 
+ arch/arm/include/asm/kvm_host.h        |    5 
+ arch/arm/kvm/psci.c                    |    4 
+ arch/arm64/Kconfig                     |   24 +
+ arch/arm64/include/asm/arch_timer.h    |   44 +-
+ arch/arm64/include/asm/assembler.h     |   34 +
+ arch/arm64/include/asm/cpu.h           |    1 
+ arch/arm64/include/asm/cpucaps.h       |    4 
+ arch/arm64/include/asm/cpufeature.h    |  232 +++++++++++-
+ arch/arm64/include/asm/cputype.h       |   63 +++
+ arch/arm64/include/asm/fixmap.h        |    6 
+ arch/arm64/include/asm/insn.h          |    2 
+ arch/arm64/include/asm/kvm_host.h      |    4 
+ arch/arm64/include/asm/kvm_mmu.h       |    2 
+ arch/arm64/include/asm/mmu.h           |    8 
+ arch/arm64/include/asm/processor.h     |    6 
+ arch/arm64/include/asm/sections.h      |    6 
+ arch/arm64/include/asm/sysreg.h        |    5 
+ arch/arm64/include/asm/vectors.h       |   74 ++++
+ arch/arm64/kernel/bpi.S                |   55 +++
+ arch/arm64/kernel/cpu_errata.c         |  595 ++++++++++++++++++++++++++-------
+ arch/arm64/kernel/cpufeature.c         |  167 ++++++---
+ arch/arm64/kernel/cpuinfo.c            |    1 
+ arch/arm64/kernel/entry.S              |  197 ++++++++--
+ arch/arm64/kernel/fpsimd.c             |    1 
+ arch/arm64/kernel/insn.c               |   29 +
+ arch/arm64/kernel/smp.c                |    6 
+ arch/arm64/kernel/traps.c              |    4 
+ arch/arm64/kernel/vmlinux.lds.S        |    2 
+ arch/arm64/kvm/hyp/hyp-entry.S         |    4 
+ arch/arm64/kvm/hyp/switch.c            |    9 
+ arch/arm64/mm/fault.c                  |   17 
+ arch/arm64/mm/mmu.c                    |   11 
+ drivers/clocksource/Kconfig            |    4 
+ drivers/clocksource/arm_arch_timer.c   |  192 ++++++++--
+ include/linux/arm-smccc.h              |    7 
+ 38 files changed, 1507 insertions(+), 330 deletions(-)
 
+Anshuman Khandual (1):
+      arm64: Add Cortex-X2 CPU part definition
 
->
-> > +extern void *vmalloc_huge(unsigned long size) __alloc_size(1);
->
-> No need for the extern.
->
-> > +EXPORT_SYMBOL(vmalloc_huge);
->
-> EXPORT_SYMBOL_GPL for all advanced vmalloc functionality, please.
+Arnd Bergmann (1):
+      arm64: arch_timer: avoid unused function warning
 
-Will fix these in v3.
+Dave Martin (1):
+      arm64: capabilities: Update prototype for enable call back
 
-Thanks,
-Song
+Ding Tianhong (2):
+      clocksource/drivers/arm_arch_timer: Remove fsl-a008585 parameter
+      clocksource/drivers/arm_arch_timer: Introduce generic errata handling infrastructure
+
+Greg Kroah-Hartman (1):
+      Linux 4.9.310
+
+James Morse (20):
+      arm64: Remove useless UAO IPI and describe how this gets enabled
+      arm64: entry.S: Add ventry overflow sanity checks
+      arm64: entry: Make the trampoline cleanup optional
+      arm64: entry: Free up another register on kpti's tramp_exit path
+      arm64: entry: Move the trampoline data page before the text page
+      arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
+      arm64: entry: Don't assume tramp_vectors is the start of the vectors
+      arm64: entry: Move trampoline macros out of ifdef'd section
+      arm64: entry: Make the kpti trampoline's kpti sequence optional
+      arm64: entry: Allow the trampoline text to occupy multiple pages
+      arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+      arm64: Move arm64_update_smccc_conduit() out of SSBD ifdef
+      arm64: entry: Add vectors that have the bhb mitigation sequences
+      arm64: entry: Add macro for reading symbol addresses from the trampoline
+      arm64: Add percpu vectors for EL1
+      KVM: arm64: Add templates for BHB mitigation sequences
+      arm64: Mitigate spectre style branch history side channels
+      KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
+      arm64: add ID_AA64ISAR2_EL1 sys register
+      arm64: Use the clearbhb instruction in mitigations
+
+Marc Zyngier (6):
+      arm64: arch_timer: Add infrastructure for multiple erratum detection methods
+      arm64: arch_timer: Add erratum handler for CPU-specific capability
+      arm64: arch_timer: Add workaround for ARM erratum 1188873
+      arm64: Add silicon-errata.txt entry for ARM erratum 1188873
+      arm64: Make ARM64_ERRATUM_1188873 depend on COMPAT
+      arm64: Add part number for Neoverse N1
+
+Rob Herring (1):
+      arm64: Add part number for Arm Cortex-A77
+
+Robert Richter (1):
+      arm64: errata: Provide macro for major and minor cpu revisions
+
+Suzuki K Poulose (10):
+      arm64: Add MIDR encoding for Arm Cortex-A55 and Cortex-A35
+      arm64: capabilities: Move errata work around check on boot CPU
+      arm64: capabilities: Move errata processing code
+      arm64: capabilities: Prepare for fine grained capabilities
+      arm64: capabilities: Add flags to handle the conflicts on late CPU
+      arm64: capabilities: Clean up midr range helpers
+      arm64: Add helpers for checking CPU MIDR against a range
+      arm64: capabilities: Add support for checks based on a list of MIDRs
+      arm64: Add Neoverse-N2, Cortex-A710 CPU part definition
+      arm64: Add helper to decode register from instruction
+

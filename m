@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C184FE81D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC374FE81F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358735AbiDLSj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S1353317AbiDLSlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiDLSj2 (ORCPT
+        with ESMTP id S233371AbiDLSlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:39:28 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7717851586
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:37:09 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id cw11so2166314pfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:37:09 -0700 (PDT)
+        Tue, 12 Apr 2022 14:41:18 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CF05159C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:38:59 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id md4so11004625pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=message-id:date:mime-version:user-agent:subject:to:cc:references
          :from:in-reply-to;
-        bh=PAmqedAjb4ThGc1RNcCWiegUa2JI9p/ThXEnhQjYPLM=;
-        b=NQRPYxdbevOwWqWvFgMFgE9Z/zGQD0aAzu1rRAz0k/BYFOjSNm1MZiu1KkrnUF5CyO
-         DijCBDOMXjlda+/FhDn0dsrHp8krRrw8Uu8zbgFlNkIsbA3W3OEFYCkZmbowtbX6nM5O
-         Q6OGfFD+zWP7SfSP/FNq/GhUFee4Y29iUz9Z4=
+        bh=2mpOe+dtClkMxJ60qh2eEb8BFx0vZKocN6YeJItoI3c=;
+        b=gRuQ2EWX2HEez96nIhg598a03UFnmUbobubpOuDgXburkhLyNSl7zyluydKaD1kTnW
+         AnuwXMVwmPS+xrqGcVOw/VyZT+oq22dLGtp6OhCFsZuHSuyq2DkH39LHZZK6PyXjaGTl
+         vkFpyAnEHC0vGJPSl3ExqnOqSwbYIWcNTqVfE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :to:cc:references:from:in-reply-to;
-        bh=PAmqedAjb4ThGc1RNcCWiegUa2JI9p/ThXEnhQjYPLM=;
-        b=zmfYs9NxbEuUUc8+eprRVlE4UPll34ulN4rpQmLa3vYQ1JaMtnvy0shBYLyfxE/sH1
-         9VFGPpEOTlz5FDks95yZ3btiPVNAECdoNoVc3pwVz9tDiHQ6rowjxu96hHbgKusD5Wht
-         bgCn8eqk0+f/M0un/5fhlCaFNLlbxGL+NYnxXnpjThVzzNqW2gVCY/Sj6UNgEl/pozbp
-         gYhu+n2+y5MGuPflc+oWQOCWbAjT6v44/kNuHDk0wZzuhJWAB/BIVI1QEuff0tVqmsXw
-         kks6drlEYL8EVUV8rWrnREZe59yYguf0lg1nIdCMgyHaN53+xvmNfWMHr5q9/3nNJVhx
-         3RqA==
-X-Gm-Message-State: AOAM530+IFaEGiqbDaXfaCmixmr2FljiSF9619or7JfSR2mpvo6e2oK3
-        i66HRQ+grBkN/a4c6KZqqJc7BQ==
-X-Google-Smtp-Source: ABdhPJw35QS0Dkt2fY4BzyIhs52PUSGlEPi1eVIz3sayrXqK5vi/wFGcISPcv+iX6HrR/v5/zNMlhQ==
-X-Received: by 2002:a05:6a00:1152:b0:4be:ab79:fcfa with SMTP id b18-20020a056a00115200b004beab79fcfamr39612861pfm.3.1649788627855;
-        Tue, 12 Apr 2022 11:37:07 -0700 (PDT)
+        bh=2mpOe+dtClkMxJ60qh2eEb8BFx0vZKocN6YeJItoI3c=;
+        b=0f4GEwEHsF87dTNAtqfxePrhLbrPOf3IWMOmzTkKczT5/NaKJrZDRoPf0Jl4nS7px8
+         +XoAI5tP4tc22pCjXMZouCnA56Q4xX89ryRmzv4hYud8pX/BhtjqMmCT4vyqNr3RHTNV
+         umGvb+XCfnLljuWRSxhEGC3uo8ldk20JgV7GN8gLRZOK3J1SzvLW91KtrUTa0R1WVrCy
+         SmqtRiq6WAcSW8XfnY7/hbqMb0ELY6bgXLrR+uoFfE1Nt7g0JOegdza/VAlAx45fPpdH
+         7ay03DQdrkt+4pkyQsduIg6J53cUos19nCaVrTJzJnz2t7ukxDuboRAIaXSvRmnWdULn
+         d5wA==
+X-Gm-Message-State: AOAM530m1SSVXR5TquAANvOWSD8ZGH3lRAOVHLnOtm6v2F0DlyzxKd6+
+        RzWNA2pv+p+YDC8EXefDLqebEA==
+X-Google-Smtp-Source: ABdhPJx/sJSrweQHvrdVRKgICDw+M/XbRqlTe4l9yGgHZC7MZ+1jKQXHOvkzK6Kj+6Lpcwr7UNkB0A==
+X-Received: by 2002:a17:903:124a:b0:154:c860:6d52 with SMTP id u10-20020a170903124a00b00154c8606d52mr39169914plh.159.1649788738293;
+        Tue, 12 Apr 2022 11:38:58 -0700 (PDT)
 Received: from [10.67.99.21] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 2-20020a17090a0f0200b001cb6621403csm211131pjy.24.2022.04.12.11.37.03
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm197327pjj.56.2022.04.12.11.38.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 11:37:04 -0700 (PDT)
-Message-ID: <51c11778-b252-53b0-8161-9d7928816b55@broadcom.com>
-Date:   Tue, 12 Apr 2022 11:37:03 -0700
+        Tue, 12 Apr 2022 11:38:53 -0700 (PDT)
+Message-ID: <db3d90d6-2365-4591-f323-514a98e85772@broadcom.com>
+Date:   Tue, 12 Apr 2022 11:38:51 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 4/5] MAINTAINERS: update MAINTAINERS file
-To:     Joe Perches <joe@perches.com>,
+Subject: Re: [PATCH 3/5] ARM: dts: add dts files for bcmbca soc 47622
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
 Cc:     Samyon Furman <samyon.furman@broadcom.com>,
         Joel Peshkin <joel.peshkin@broadcom.com>,
@@ -60,14 +60,21 @@ Cc:     Samyon Furman <samyon.furman@broadcom.com>,
         Tomer Yacoby <tomer.yacoby@broadcom.com>,
         Anand Gore <anand.gore@broadcom.com>,
         Kursad Oney <kursad.oney@broadcom.com>,
-        linux-kernel@vger.kernel.org
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org
 References: <20220411172815.20916-1-william.zhang@broadcom.com>
- <20220411172815.20916-5-william.zhang@broadcom.com>
- <38692bbdd535dfe249babd1eb6aca24b2e1070e8.camel@perches.com>
+ <20220411172815.20916-4-william.zhang@broadcom.com>
+ <ed806d35-3613-4f9c-54ba-b31fc5ed91c8@linaro.org>
+ <147e23b6-c5a3-a9fa-c0e1-defe906e42a9@broadcom.com>
+ <60a9a401-7d1f-5100-7c3d-45452ebfa2ae@linaro.org>
 From:   William Zhang <william.zhang@broadcom.com>
-In-Reply-To: <38692bbdd535dfe249babd1eb6aca24b2e1070e8.camel@perches.com>
+In-Reply-To: <60a9a401-7d1f-5100-7c3d-45452ebfa2ae@linaro.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000033298e05dc795908"
+        boundary="000000000000c7e5db05dc795f99"
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -78,62 +85,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000033298e05dc795908
+--000000000000c7e5db05dc795f99
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Joe,
 
-On 4/12/22 09:38, Joe Perches wrote:
-> On Mon, 2022-04-11 at 10:28 -0700, William Zhang wrote:
->> Add maintainters, SCM tree, files and directories for the new BCMBCA
-> 
-> typo of maintainers
-Thanks for catching that.
 
+On 4/12/22 09:27, Krzysztof Kozlowski wrote:
+> On 12/04/2022 17:37, William Zhang wrote:
+>>>> +/ {
+>>>> +	compatible = "brcm,bcm47622";
+>>>
+>>> This does not match your bindings. Even if it is not used.
+>> Did I miss anything? But it matches one of the compatible strings in
+>> brcm,bcmbca.yaml.
 > 
->> arch. Only add 47622 for this change and will update in the future
->> when more SoCs are supported.
-> []
->> diff --git a/MAINTAINERS b/MAINTAINERS
-> []
->> @@ -3740,6 +3740,20 @@ F:	drivers/net/dsa/bcm_sf2*
->>   F:	include/linux/dsa/brcm.h
->>   F:	include/linux/platform_data/b53.h
->>   
->> +BROADCOM BCMBCA ARM ARCHITECTURE
->> +M:	William Zhang <william.zhang@broadcom.com>
->> +M:	Anand Gore <anand.gore@broadcom.com>
->> +M:	Kursad Oney <kursad.oney@broadcom.com>
->> +M:	bcm-kernel-feedback-list@broadcom.com
+> Your bindings expect that this compatible is followed with "brcm,bcmbca".
 > 
-> Unnamed exploders are not maintainers.
+> (...)
+Thanks! My misunderstanding.
 > 
-> Maybe:
+>>>> +	periph-bus@ff800000 {
+>>>
+>>> just "bus" to be generic?
+>> This node represents the peripheral bus in the soc. Would prefer to use
+>> the specific name unless it is not allowed by the linux dts.
 > 
-> R:	Broadcom BCMBCA reviewers <bcm-kernel-feedback-list@broadcom.com>
-Copied from other BCM entry in this file. It is mailing list which does 
-not really need an name. And I guess it is better to be put under L as 
-other BCM entry does.
+> It is allowed but the Devicetree spec explicitly asks for generic names
+> and gives example: bus ("2.2.2 Generic Names Recommendation"). Specific
+> names are discouraged.
+Will use bus.
+> 
+> Best regards,
+> Krzysztof
 
-> 
->> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->> +S:	Maintained
->> +T:	git git://github.com/broadcom/stblinux.git
->> +F:	Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
->> +F:	arch/arm/boot/dts/bcm47622.dtsi
->> +F:	arch/arm/boot/dts/bcm947622.dts
->> +N:	bcmbca
->> +N:	bcm[9]?47622
-> 
-> bcm9?47622 is simpler, though it doesn't seem this is actually useful.
-> Where is it actually used in files other than the ones already listed?
-> 
-We may have future changes for 47622.
-> 
-
---00000000000033298e05dc795908
+--000000000000c7e5db05dc795f99
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -204,13 +191,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIO4MGAq3HolJWL5AEC5mxE5Fvvi+
-JWO+FWgZtM2XfKeCMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDQxMjE4MzcwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIB+zwv6y/IKwfgsfrnmBEhbrvXDw
+3hTKAtHw6RART4WBMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDQxMjE4Mzg1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCnd9j9nAffff8nLsmR/38JeMYw/fvka/8DdlownxGt8OlT
-tvtiUt2tfyDodHG5QG7RDLyBbDScPtWd/1UVO2Oxb3b00TAUqHKukVHhnSf4cJ5xfc55r97XwIT4
-ef0ywjqzRfSXuDUFKzBimIaUqkZlfw6PRliJaW1VUppk7MggzimL4uyjvmZk86H/sfNHHki+sjks
-6XD6ztfXF+HrKrNfOHa9Z8c1bm3GzAX94QaDwgnd3NQyCl5ZyNWGlMcBrOhBug3z7bEMOdMPbvp/
-CI0IdaOAkbg2aJMT1zQSCUV+b+HAV3+yEBs4tE/4jqFIG+y37ozyGN3u5QgfGkVv+tOS
---00000000000033298e05dc795908--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQC+yWizSrqKFyKXzebKByhU4+vaFNJdXX6RRe4j1Tf7UIhv
+xSYTOp5cuM7JCfH1rYNaJqgGMsQyL2n3aL72pvuwk0qoE2MqfcwNO5F/gVEFhi9gwGem7z9HrXQI
+kKtTju5netMayUF1apWQeVL2QPFslrTEHpfl/6IqqHYPapRpVzFD7bag1T29YQvx8L174TVwtTJg
+RE73hz04MI6GlQ89UTUePsWSaGSxlAy3nikgg1oMCW9Vd7+m9dX6HWf8Fn5JEjfDjPKSNyTh3Uwd
+cIK6QoNxc2tDXhIU/lPOMx07dLKRsvIyHTQ7tjBW6s1OM3cws62D4++Ttp1y4PHCXXUQ
+--000000000000c7e5db05dc795f99--

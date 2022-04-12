@@ -2,107 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4626D4FCCCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3650A4FCCD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243886AbiDLDCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 23:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S1343785AbiDLDIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 23:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344502AbiDLDCo (ORCPT
+        with ESMTP id S229488AbiDLDIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 23:02:44 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD68659E;
-        Mon, 11 Apr 2022 20:00:28 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so1270273pjn.3;
-        Mon, 11 Apr 2022 20:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=uU3ASWwQMXglTC0BJovN6yhg5XXxgX4m5/XBuAm/JyI=;
-        b=jvcE4mrDotCy7xNE4Bu4NGcT7b5pc9/AWKU40YrtiyQHLR6QLCwoupFxGocFjHnpMK
-         DVWtoyjnX5XzMglhlVp8adrLOJnU3Wcfq7E37bGJcMd4bKa+dre0Q+hdh2mQii+xGd4K
-         ggn2Qe6kMJUG0tVTAIN+ZNYVKup/SWOtn8+MWWrxZv5N6ErTXvZrDBpxNG1XVESnF+Df
-         bg+N/27iAJ+i3/c5V3dD1Dwx+qHG2p6Zr3KvpZ/Qf4ZJHRny/ZunGxcYIXD8YUhSL7RF
-         HgKyrV8YHD4DNIlKlc+dVEfY7xXTjRituLaJG058MnLfEqvgj8VsA9suIxXvtOiCcJP6
-         xrUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=uU3ASWwQMXglTC0BJovN6yhg5XXxgX4m5/XBuAm/JyI=;
-        b=dnrEKZ5zUQULmpJnQvbYNaRTKZwbULTzaqkkAvJ65VeRv4W9PhyKVRd7gVAUkauvau
-         Pj4dbR7sK8U5beCjTQuse/0BTo/IGkQOYevVYZGihnPbtkqJIFx1vTyY0EcXKKopXGin
-         2fcPG40/4oqaoKoGID2XEIIuRoLJqinzofoNSWASL7wXeNLRXC7cOYm7xNp32qd5ncy3
-         1CSCgpc97jz08ew7/3e1MdumeISiN7MtjjtFQMlr/LZIO7WoSgPYPGW9KzypCg93SMK2
-         WPAuDhG99JCmgeil/A4XZ6hhfFxSYBgrriBsVNYry+wKh9eXcqDE1e/Q0HPgY8FItVtL
-         HGyg==
-X-Gm-Message-State: AOAM533VJfsadg+sBb35NDxWVD9teS8ZaWzgHTtUvglqvi9Mw+701h7a
-        xMW1pK/e0FO9MxX+oJoXcOne2fsYkOCQjzaaV5E=
-X-Google-Smtp-Source: ABdhPJw7lrJR/7sYrVrkxswZFXRGv/C7RoD6rHnhOaG/5pCsYoRqU6xVpldn1WqGT+fq5T93EQY8nA==
-X-Received: by 2002:a17:90b:2685:b0:1cb:6521:dd78 with SMTP id pl5-20020a17090b268500b001cb6521dd78mr2580838pjb.194.1649732427708;
-        Mon, 11 Apr 2022 20:00:27 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id pj9-20020a17090b4f4900b001c744034e7csm860544pjb.2.2022.04.11.20.00.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 20:00:27 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ivan Drobyshevskyi <drobyshevskyi@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] iio: proximity: Fix return value check of wait_for_completion_timeout
-Date:   Tue, 12 Apr 2022 03:00:21 +0000
-Message-Id: <20220412030022.20249-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Apr 2022 23:08:10 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC85C1E3F2;
+        Mon, 11 Apr 2022 20:05:52 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:35434.877325499
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 99C9D2800C8;
+        Tue, 12 Apr 2022 11:05:40 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id de0dab191c834796a0a1b839c11b71e6 for rafael@kernel.org;
+        Tue, 12 Apr 2022 11:05:49 CST
+X-Transaction-ID: de0dab191c834796a0a1b839c11b71e6
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     rafael@kernel.org, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, keescook@chromium.org, anton@enomsg.org,
+        ccross@android.com, robert.moore@intel.com, tony.luck@intel.com,
+        lenb@kernel.org, james.morse@arm.com, bp@alien8.de,
+        tglx@linutronix.de, mingo@redhat.com, ying.huang@intel.com,
+        gong.chen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH v7] ACPI: APEI: fix missing erst record id
+Date:   Tue, 12 Apr 2022 11:05:19 +0800
+Message-Id: <1649732719-4304-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wait_for_completion_timeout() returns unsigned long not int.
-It returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case.
+Read a record is cleared by others, but the deleted record cache entry is
+still created by erst_get_record_id_next. When next enumerate the records,
+get the cached deleted record, then erst_read return -ENOENT and try to
+get next record, loop back to first ID will return 0 in function
+__erst_record_id_cache_add_one and then set record_id as
+APEI_ERST_INVALID_RECORD_ID, finished this time read operation.
+It will result in read the records just in the cache hereafter.
 
-Fixes: 3cef2e31b54b ("iio: proximity: vl53l0x: Add IRQ support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+This patch cleared the deleted record cache, fix the issue that
+"./erst-inject -p" shows record counts not equal to "./erst-inject -n".
+
+A reproducer of the problem(retry many times):
+
+[root@localhost erst-inject]# ./erst-inject -c 0xaaaaa00011
+[root@localhost erst-inject]# ./erst-inject -p
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00012
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00013
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00014
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000006
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000007
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000008
+[root@localhost erst-inject]# ./erst-inject -p
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00012
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00013
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00014
+[root@localhost erst-inject]# ./erst-inject -n
+total error record count: 6
+
+Changelog:
+v1->v2  Fix style problems
+v2->v3  Fix apei_read_mce called erst_get_record_id_next and modify
+the commit message.
+v3->v4  Add erst_clear_cache in another retry.
+v4->v5  Implement a new function for looking for a specific record
+ type, suggested by Tony Luck.
+v5->v6  In function erst_clear_cache, using mutex_lock insead of
+mutex_lock_interruptible ensure that the cache is cleared.
+	If erst_read return value is less than record head length,
+consider it as EIO; other error return to caller; creatorid is
+not wanted, consider it ENOENT and keep the cache for other types.
+v6->v7  Rename erst_read_record arguments "recordhead" to "recordlen".
+
+Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
- drivers/iio/proximity/vl53l0x-i2c.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/x86/kernel/cpu/mce/apei.c |  8 ++--
+ drivers/acpi/apei/erst-dbg.c   |  3 +-
+ drivers/acpi/apei/erst.c       | 77 +++++++++++++++++++++++++++++++---
+ include/acpi/apei.h            |  2 +
+ 4 files changed, 78 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
-index 661a79ea200d..a284b20529fb 100644
---- a/drivers/iio/proximity/vl53l0x-i2c.c
-+++ b/drivers/iio/proximity/vl53l0x-i2c.c
-@@ -104,6 +104,7 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	u16 tries = 20;
- 	u8 buffer[12];
- 	int ret;
-+	unsigned long time_left;
+diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
+index 0e3ae64d3b76..717192915f28 100644
+--- a/arch/x86/kernel/cpu/mce/apei.c
++++ b/arch/x86/kernel/cpu/mce/apei.c
+@@ -177,16 +177,14 @@ ssize_t apei_read_mce(struct mce *m, u64 *record_id)
+ 	/* no more record */
+ 	if (*record_id == APEI_ERST_INVALID_RECORD_ID)
+ 		goto out;
+-	rc = erst_read(*record_id, &rcd.hdr, sizeof(rcd));
++	rc = erst_read_record(*record_id, &rcd.hdr, sizeof(rcd), sizeof(rcd),
++			&CPER_CREATOR_MCE);
+ 	/* someone else has cleared the record, try next one */
+ 	if (rc == -ENOENT)
+ 		goto retry;
+ 	else if (rc < 0)
+ 		goto out;
+-	/* try to skip other type records in storage */
+-	else if (rc != sizeof(rcd) ||
+-		 !guid_equal(&rcd.hdr.creator_id, &CPER_CREATOR_MCE))
+-		goto retry;
++
+ 	memcpy(m, &rcd.mce, sizeof(*m));
+ 	rc = sizeof(*m);
+ out:
+diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
+index c740f0faad39..8bc71cdc2270 100644
+--- a/drivers/acpi/apei/erst-dbg.c
++++ b/drivers/acpi/apei/erst-dbg.c
+@@ -111,7 +111,8 @@ static ssize_t erst_dbg_read(struct file *filp, char __user *ubuf,
+ 		goto out;
+ 	}
+ retry:
+-	rc = len = erst_read(id, erst_dbg_buf, erst_dbg_buf_len);
++	rc = len = erst_read_record(id, erst_dbg_buf, erst_dbg_buf_len,
++			erst_dbg_buf_len, NULL);
+ 	/* The record may be cleared by others, try read next record */
+ 	if (rc == -ENOENT)
+ 		goto retry_next;
+diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
+index 698d67cee052..31b077eedb58 100644
+--- a/drivers/acpi/apei/erst.c
++++ b/drivers/acpi/apei/erst.c
+@@ -856,6 +856,74 @@ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
+ }
+ EXPORT_SYMBOL_GPL(erst_read);
  
- 	ret = i2c_smbus_write_byte_data(client, VL_REG_SYSRANGE_START, 1);
- 	if (ret < 0)
-@@ -112,10 +113,8 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	if (data->client->irq) {
- 		reinit_completion(&data->completion);
++static void erst_clear_cache(u64 record_id)
++{
++	int i;
++	u64 *entries;
++
++	mutex_lock(&erst_record_id_cache.lock);
++
++	entries = erst_record_id_cache.entries;
++	for (i = 0; i < erst_record_id_cache.len; i++) {
++		if (entries[i] == record_id)
++			entries[i] = APEI_ERST_INVALID_RECORD_ID;
++	}
++	__erst_record_id_cache_compact();
++
++	mutex_unlock(&erst_record_id_cache.lock);
++}
++
++ssize_t erst_read_record(u64 record_id, struct cper_record_header *record,
++		size_t buflen, size_t recordlen, const guid_t *creatorid)
++{
++	ssize_t len;
++
++	/*
++	 * if creatorid is NULL, read any record for erst-dbg module
++	 */
++	if (creatorid == NULL) {
++		len = erst_read(record_id, record, buflen);
++		if (len == -ENOENT)
++			erst_clear_cache(record_id);
++
++		return len;
++	}
++
++	len = erst_read(record_id, record, buflen);
++	/*
++	 * if erst_read return value is -ENOENT skip to next record_id,
++	 * and clear the record_id cache.
++	 */
++	if (len == -ENOENT) {
++		erst_clear_cache(record_id);
++		goto out;
++	}
++
++	if (len < 0)
++		goto out;
++
++	/*
++	 * if erst_read return value is less than record head length,
++	 * consider it as -EIO, and clear the record_id cache.
++	 */
++	if (len < recordlen) {
++		len = -EIO;
++		erst_clear_cache(record_id);
++		goto out;
++	}
++
++	/*
++	 * if creatorid is not wanted, consider it as not found,
++	 * for skipping to next record_id.
++	 */
++	if (!guid_equal(&record->creator_id, creatorid))
++		len = -ENOENT;
++
++out:
++	return len;
++}
++EXPORT_SYMBOL_GPL(erst_read_record);
++
+ int erst_clear(u64 record_id)
+ {
+ 	int rc, i;
+@@ -996,16 +1064,13 @@ static ssize_t erst_reader(struct pstore_record *record)
+ 		goto out;
+ 	}
  
--		ret = wait_for_completion_timeout(&data->completion, HZ/10);
--		if (ret < 0)
--			return ret;
--		else if (ret == 0)
-+		time_left = wait_for_completion_timeout(&data->completion, HZ/10);
-+		if (time_left == 0)
- 			return -ETIMEDOUT;
+-	len = erst_read(record_id, &rcd->hdr, rcd_len);
++	len = erst_read_record(record_id, &rcd->hdr, rcd_len, sizeof(*rcd),
++			&CPER_CREATOR_PSTORE);
+ 	/* The record may be cleared by others, try read next record */
+ 	if (len == -ENOENT)
+ 		goto skip;
+-	else if (len < 0 || len < sizeof(*rcd)) {
+-		rc = -EIO;
++	else if (len < 0)
+ 		goto out;
+-	}
+-	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE))
+-		goto skip;
  
- 		vl53l0x_clear_irq(data);
+ 	record->buf = kmalloc(len, GFP_KERNEL);
+ 	if (record->buf == NULL) {
+diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+index afaca3a075e8..dc60f7db5524 100644
+--- a/include/acpi/apei.h
++++ b/include/acpi/apei.h
+@@ -46,6 +46,8 @@ int erst_get_record_id_next(int *pos, u64 *record_id);
+ void erst_get_record_id_end(void);
+ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
+ 		  size_t buflen);
++ssize_t erst_read_record(u64 record_id, struct cper_record_header *record,
++		size_t buflen, size_t recordlen, const guid_t *creatorid);
+ int erst_clear(u64 record_id);
+ 
+ int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
 -- 
-2.17.1
+2.23.0
 

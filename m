@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DFF4FE703
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286C04FE70F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358261AbiDLRdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S1355147AbiDLRea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358157AbiDLRcH (ORCPT
+        with ESMTP id S1358236AbiDLRcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:32:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D533F38D91;
-        Tue, 12 Apr 2022 10:29:40 -0700 (PDT)
+        Tue, 12 Apr 2022 13:32:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5E4F46;
+        Tue, 12 Apr 2022 10:29:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E38BB81F5F;
-        Tue, 12 Apr 2022 17:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AEFC385A8;
-        Tue, 12 Apr 2022 17:29:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE746B81F62;
+        Tue, 12 Apr 2022 17:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469EBC385AA;
+        Tue, 12 Apr 2022 17:29:45 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OcnsdZq/"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vof7oTMJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649784574;
+        t=1649784584;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WiAJXmLxknq3UKqF4V8mtGGXug0zyNtyNRbkPHgA0JU=;
-        b=OcnsdZq/Cm1X9Y9NRUoVJyU8HdCxYAy0YsJvfKn5Sf5LzxID3iYryT9HePNOiY0ZhiuvaT
-        x6FLIJk4ZYH/IZhN6/6q+20DKFVvTUCp78HopSYmGe9upkfyY3vg55tn6zQ9ero3F30jWN
-        jsv4Xs+/tLv58rNMRFjAMrkxlZg6qUw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 685815e5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 12 Apr 2022 17:29:33 +0000 (UTC)
+        bh=IHzRJmPvA7OgZjJx+ZTbqcYHIM/uCZIijqXsNo6FZ2U=;
+        b=Vof7oTMJysi9826NZ4wlTUzj07MRSpSZZLRNThVcodnHpNfVYD9AbgGScQ4b9YIr68xe13
+        pllwAUZ1aN8ajP631O+A2iZ/DS5Ii+7ZBpv+IhUqlhiWGaqgjObm2n7g7XVrH8Qvn+P1S5
+        K9LhwsoVl2jT/V71ZNOjmtwbBy150So=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8bae4d27 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 12 Apr 2022 17:29:43 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         tglx@linutronix.de, arnd@arndb.de
@@ -66,9 +66,9 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
         linux-um@lists.infradead.org, x86@kernel.org,
         linux-xtensa@linux-xtensa.org
-Subject: [PATCH v3 03/10] riscv: use fallback for random_get_entropy() instead of zero
-Date:   Tue, 12 Apr 2022 19:27:47 +0200
-Message-Id: <20220412172754.149498-4-Jason@zx2c4.com>
+Subject: [PATCH v3 04/10] mips: use fallback for random_get_entropy() instead of zero
+Date:   Tue, 12 Apr 2022 19:27:48 +0200
+Message-Id: <20220412172754.149498-5-Jason@zx2c4.com>
 In-Reply-To: <20220412172754.149498-1-Jason@zx2c4.com>
 References: <20220412172754.149498-1-Jason@zx2c4.com>
 MIME-Version: 1.0
@@ -94,26 +94,25 @@ better than returning zero all the time.
 
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- arch/riscv/include/asm/timex.h | 2 +-
+ arch/mips/include/asm/timex.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
-index 507cae273bc6..d6a7428f6248 100644
---- a/arch/riscv/include/asm/timex.h
-+++ b/arch/riscv/include/asm/timex.h
-@@ -41,7 +41,7 @@ static inline u32 get_cycles_hi(void)
- static inline unsigned long random_get_entropy(void)
- {
- 	if (unlikely(clint_time_val == NULL))
--		return 0;
-+		return random_get_entropy_fallback();
- 	return get_cycles();
+diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
+index b05bb70a2e46..abc60a6395e3 100644
+--- a/arch/mips/include/asm/timex.h
++++ b/arch/mips/include/asm/timex.h
+@@ -94,7 +94,7 @@ static inline unsigned long random_get_entropy(void)
+ 	else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
+ 		return read_c0_random();
+ 	else
+-		return 0;	/* no usable register */
++		return random_get_entropy_fallback();	/* no usable register */
  }
- #define random_get_entropy()	random_get_entropy()
+ #define random_get_entropy random_get_entropy
+ 
 -- 
 2.35.1
 

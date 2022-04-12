@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9AB4FD8AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BAC4FD493
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352519AbiDLHOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S1356665AbiDLHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352421AbiDLGzp (ORCPT
+        with ESMTP id S1352755AbiDLHOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:45 -0400
+        Tue, 12 Apr 2022 03:14:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139803A5E8;
-        Mon, 11 Apr 2022 23:45:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9AC3057B;
+        Mon, 11 Apr 2022 23:55:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99330B81B35;
-        Tue, 12 Apr 2022 06:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F46C385A8;
-        Tue, 12 Apr 2022 06:45:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FB1EB81B58;
+        Tue, 12 Apr 2022 06:55:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640CEC385A8;
+        Tue, 12 Apr 2022 06:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745928;
-        bh=1eZQ2mG1B5Ze4BFKltM7j3jjf6Smhu+NEKul0MLnFVQ=;
+        s=korg; t=1649746504;
+        bh=vybQH3WAbxLgOAVrLtEeY+o9UeXLxHV9W7C9J12Q6Sk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdgqRBUM/6wdIqDB7dRrIDVu0RwVwfgyj8sDoabgHjxBJe9BS0UoK+eFmSzJTiPkw
-         UP9VJEx7I+Z8uoUI75UPJepfeubCtVEM0LW+md/kNKqsFBJNePwWGoQNw4K0aKUj6Y
-         OD9nHnV21Obt+DtpN7I3KGxQPv7Nd3lMYgT3354M=
+        b=d34eIitu/6UdqSlkN/fXbl+gEusAJ88MURYl0K67/2UXIqfchrsjVYDfawHxIQCrq
+         RGtRYwnt4IvTl9RoJNNIwKcxFfCs122Ojy7lI8ELmUzFOqPeGEhXMkOqejK7zpUfOy
+         qtyU6Xmtz/jD5hxkajT8ypgRO3puGxHyx6cr2H00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Peter Gonda <pgonda@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 058/277] usb: dwc3: pci: Set the swnode from inside dwc3_pci_quirks()
-Date:   Tue, 12 Apr 2022 08:27:41 +0200
-Message-Id: <20220412062943.729241476@linuxfoundation.org>
+Subject: [PATCH 5.16 005/285] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
+Date:   Tue, 12 Apr 2022 08:27:42 +0200
+Message-Id: <20220412062943.829667081@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Peter Gonda <pgonda@google.com>
 
-[ Upstream commit e285cb403994419e997749c9a52b9370884ae0c8 ]
+[ Upstream commit 4a9e7b9ea252842bc8b14d495706ac6317fafd5d ]
 
-The quirk handling may need to set some different properties
-which means using a different swnode, move the setting of the swnode
-to inside dwc3_pci_quirks() so that the quirk handling can choose
-a different swnode.
+Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
+which is referenced by nested_svm_virtualize_tpr() in svm.h. Remove
+include from svm_onhpyerv.c which was done only because of lack of
+include in svm.h.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220213130524.18748-4-hdegoede@redhat.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Message-Id: <20220304161032.2270688-1-pgonda@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ arch/x86/kvm/svm/svm.h          | 2 ++
+ arch/x86/kvm/svm/svm_onhyperv.c | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 06d0e88ec8af..4d9608cc55f7 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -185,7 +185,8 @@ static const struct software_node dwc3_pci_amd_mr_swnode = {
- 	.properties = dwc3_pci_mr_properties,
- };
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 1b460e539926..01d35efaa646 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -22,6 +22,8 @@
+ #include <asm/svm.h>
+ #include <asm/sev-common.h>
  
--static int dwc3_pci_quirks(struct dwc3_pci *dwc)
-+static int dwc3_pci_quirks(struct dwc3_pci *dwc,
-+			   const struct software_node *swnode)
- {
- 	struct pci_dev			*pdev = dwc->pci;
++#include "kvm_cache_regs.h"
++
+ #define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
  
-@@ -242,7 +243,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
- 		}
- 	}
+ #define	IOPM_SIZE PAGE_SIZE * 3
+diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
+index 98aa981c04ec..8cdc62c74a96 100644
+--- a/arch/x86/kvm/svm/svm_onhyperv.c
++++ b/arch/x86/kvm/svm/svm_onhyperv.c
+@@ -4,7 +4,6 @@
+  */
  
--	return 0;
-+	return device_add_software_node(&dwc->dwc3->dev, swnode);
- }
+ #include <linux/kvm_host.h>
+-#include "kvm_cache_regs.h"
  
- #ifdef CONFIG_PM
-@@ -307,11 +308,7 @@ static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	dwc->dwc3->dev.parent = dev;
- 	ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
- 
--	ret = device_add_software_node(&dwc->dwc3->dev, (void *)id->driver_data);
--	if (ret < 0)
--		goto err;
--
--	ret = dwc3_pci_quirks(dwc);
-+	ret = dwc3_pci_quirks(dwc, (void *)id->driver_data);
- 	if (ret)
- 		goto err;
+ #include <asm/mshyperv.h>
  
 -- 
 2.35.1

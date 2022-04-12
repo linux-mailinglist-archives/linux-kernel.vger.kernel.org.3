@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3A34FD536
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B604FD4B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383614AbiDLIhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S1357363AbiDLIS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356782AbiDLHjV (ORCPT
+        with ESMTP id S1355747AbiDLH3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A852B05;
-        Tue, 12 Apr 2022 00:10:07 -0700 (PDT)
+        Tue, 12 Apr 2022 03:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478694F477;
+        Tue, 12 Apr 2022 00:08:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA6FB81B4F;
-        Tue, 12 Apr 2022 07:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3015C385A5;
-        Tue, 12 Apr 2022 07:10:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9008616B3;
+        Tue, 12 Apr 2022 07:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39FEC385A6;
+        Tue, 12 Apr 2022 07:08:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747405;
-        bh=fFmeQeLVr78bZio484MKOB9cuQ1QBglk5UFyOuYQChI=;
+        s=korg; t=1649747295;
+        bh=sKVhV7fgBd8sxwJqL0C6kTu4zyY3fj413l1HQZdr/vY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qwY+aVRq2rWCnwB8yjGYA/k2opQ2GfdOGGGlj+Og8KVkDFDMde7kvwrH9pQLxxFGp
-         HC3u/3auJqfLSztKzGL9LYZBIJyq954TE37w3Y+r4vWjgRDc4Jt/kQHpEHWuDcXVVq
-         48NqXhniDWn4G13UOlYPGFaYz+ZbAw592UPKhGeo=
+        b=YK6DsxmbL+UZXcMeOYeLj9TXuY5nQjwVznlY/STaQBI73YLxNwNOOnI9RpupuSyGi
+         6dj9hES1bifPoX3ZB7H5yJsEz1b/jz0coQX3iYsutljShzelMHkBKEqjtFGqRsdj4n
+         rGvkbgtFnaUlKggSm7tpuY7Ydui+JN4v6C6FWYIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 027/343] Bluetooth: hci_sync: Fix queuing commands when HCI_UNREGISTER is set
-Date:   Tue, 12 Apr 2022 08:27:25 +0200
-Message-Id: <20220412062951.888710019@linuxfoundation.org>
+Subject: [PATCH 5.17 028/343] selftests, xsk: Fix bpf_res cleanup test
+Date:   Tue, 12 Apr 2022 08:27:26 +0200
+Message-Id: <20220412062951.918237990@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -56,35 +58,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-[ Upstream commit 0b94f2651f56b9e4aa5f012b0d7eb57308c773cf ]
+[ Upstream commit 3b22523bca02b0d5618c08b93d8fd1fb578e1cc3 ]
 
-hci_cmd_sync_queue shall return an error if HCI_UNREGISTER flag has
-been set as that means hci_unregister_dev has been called so it will
-likely cause a uaf after the timeout as the hdev will be freed.
+After commit 710ad98c363a ("veth: Do not record rx queue hint in veth_xmit"),
+veth no longer receives traffic on the same queue as it was sent on. This
+breaks the bpf_res test for the AF_XDP selftests as the socket tied to
+queue 1 will not receive traffic anymore.
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Modify the test so that two sockets are tied to queue id 0 using a shared
+umem instead. When killing the first socket enter the second socket into
+the xskmap so that traffic will flow to it. This will still test that the
+resources are not cleaned up until after the second socket dies, without
+having to rely on veth supporting rx_queue hints.
+
+Reported-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20220125082945.26179-1-magnus.karlsson@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sync.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/bpf/xdpxceiver.c | 80 +++++++++++++++---------
+ tools/testing/selftests/bpf/xdpxceiver.h |  2 +-
+ 2 files changed, 50 insertions(+), 32 deletions(-)
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 48c837530a11..8f4c5698913d 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -379,6 +379,9 @@ int hci_cmd_sync_queue(struct hci_dev *hdev, hci_cmd_sync_work_func_t func,
- {
- 	struct hci_cmd_sync_work_entry *entry;
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index ffa5502ad95e..5f8296d29e77 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -266,22 +266,24 @@ static int xsk_configure_umem(struct xsk_umem_info *umem, void *buffer, u64 size
+ }
  
-+	if (hci_dev_test_flag(hdev, HCI_UNREGISTER))
-+		return -ENODEV;
+ static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem,
+-				struct ifobject *ifobject, u32 qid)
++				struct ifobject *ifobject, bool shared)
+ {
+-	struct xsk_socket_config cfg;
++	struct xsk_socket_config cfg = {};
+ 	struct xsk_ring_cons *rxr;
+ 	struct xsk_ring_prod *txr;
+ 
+ 	xsk->umem = umem;
+ 	cfg.rx_size = xsk->rxqsize;
+ 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+-	cfg.libbpf_flags = 0;
++	cfg.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD;
+ 	cfg.xdp_flags = ifobject->xdp_flags;
+ 	cfg.bind_flags = ifobject->bind_flags;
++	if (shared)
++		cfg.bind_flags |= XDP_SHARED_UMEM;
+ 
+ 	txr = ifobject->tx_on ? &xsk->tx : NULL;
+ 	rxr = ifobject->rx_on ? &xsk->rx : NULL;
+-	return xsk_socket__create(&xsk->xsk, ifobject->ifname, qid, umem->umem, rxr, txr, &cfg);
++	return xsk_socket__create(&xsk->xsk, ifobject->ifname, 0, umem->umem, rxr, txr, &cfg);
+ }
+ 
+ static struct option long_options[] = {
+@@ -387,7 +389,6 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 	for (i = 0; i < MAX_INTERFACES; i++) {
+ 		struct ifobject *ifobj = i ? ifobj_rx : ifobj_tx;
+ 
+-		ifobj->umem = &ifobj->umem_arr[0];
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+ 		ifobj->use_poll = false;
+ 		ifobj->pacing_on = true;
+@@ -401,11 +402,12 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 			ifobj->tx_on = false;
+ 		}
+ 
++		memset(ifobj->umem, 0, sizeof(*ifobj->umem));
++		ifobj->umem->num_frames = DEFAULT_UMEM_BUFFERS;
++		ifobj->umem->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
 +
- 	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
- 	if (!entry)
- 		return -ENOMEM;
+ 		for (j = 0; j < MAX_SOCKETS; j++) {
+-			memset(&ifobj->umem_arr[j], 0, sizeof(ifobj->umem_arr[j]));
+ 			memset(&ifobj->xsk_arr[j], 0, sizeof(ifobj->xsk_arr[j]));
+-			ifobj->umem_arr[j].num_frames = DEFAULT_UMEM_BUFFERS;
+-			ifobj->umem_arr[j].frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 			ifobj->xsk_arr[j].rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+ 		}
+ 	}
+@@ -950,7 +952,10 @@ static void tx_stats_validate(struct ifobject *ifobject)
+ 
+ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ {
++	u64 umem_sz = ifobject->umem->num_frames * ifobject->umem->frame_size;
+ 	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
++	int ret, ifindex;
++	void *bufs;
+ 	u32 i;
+ 
+ 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
+@@ -958,23 +963,20 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 	if (ifobject->umem->unaligned_mode)
+ 		mmap_flags |= MAP_HUGETLB;
+ 
+-	for (i = 0; i < test->nb_sockets; i++) {
+-		u64 umem_sz = ifobject->umem->num_frames * ifobject->umem->frame_size;
+-		u32 ctr = 0;
+-		void *bufs;
+-		int ret;
++	bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
++	if (bufs == MAP_FAILED)
++		exit_with_error(errno);
+ 
+-		bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
+-		if (bufs == MAP_FAILED)
+-			exit_with_error(errno);
++	ret = xsk_configure_umem(ifobject->umem, bufs, umem_sz);
++	if (ret)
++		exit_with_error(-ret);
+ 
+-		ret = xsk_configure_umem(&ifobject->umem_arr[i], bufs, umem_sz);
+-		if (ret)
+-			exit_with_error(-ret);
++	for (i = 0; i < test->nb_sockets; i++) {
++		u32 ctr = 0;
+ 
+ 		while (ctr++ < SOCK_RECONF_CTR) {
+-			ret = xsk_configure_socket(&ifobject->xsk_arr[i], &ifobject->umem_arr[i],
+-						   ifobject, i);
++			ret = xsk_configure_socket(&ifobject->xsk_arr[i], ifobject->umem,
++						   ifobject, !!i);
+ 			if (!ret)
+ 				break;
+ 
+@@ -985,8 +987,22 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 		}
+ 	}
+ 
+-	ifobject->umem = &ifobject->umem_arr[0];
+ 	ifobject->xsk = &ifobject->xsk_arr[0];
++
++	if (!ifobject->rx_on)
++		return;
++
++	ifindex = if_nametoindex(ifobject->ifname);
++	if (!ifindex)
++		exit_with_error(errno);
++
++	ret = xsk_setup_xdp_prog(ifindex, &ifobject->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
++
++	ret = xsk_socket__update_xskmap(ifobject->xsk->xsk, ifobject->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
+ }
+ 
+ static void testapp_cleanup_xsk_res(struct ifobject *ifobj)
+@@ -1142,14 +1158,16 @@ static void testapp_bidi(struct test_spec *test)
+ 
+ static void swap_xsk_resources(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx)
+ {
++	int ret;
++
+ 	xsk_socket__delete(ifobj_tx->xsk->xsk);
+-	xsk_umem__delete(ifobj_tx->umem->umem);
+ 	xsk_socket__delete(ifobj_rx->xsk->xsk);
+-	xsk_umem__delete(ifobj_rx->umem->umem);
+-	ifobj_tx->umem = &ifobj_tx->umem_arr[1];
+ 	ifobj_tx->xsk = &ifobj_tx->xsk_arr[1];
+-	ifobj_rx->umem = &ifobj_rx->umem_arr[1];
+ 	ifobj_rx->xsk = &ifobj_rx->xsk_arr[1];
++
++	ret = xsk_socket__update_xskmap(ifobj_rx->xsk->xsk, ifobj_rx->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
+ }
+ 
+ static void testapp_bpf_res(struct test_spec *test)
+@@ -1408,13 +1426,13 @@ static struct ifobject *ifobject_create(void)
+ 	if (!ifobj->xsk_arr)
+ 		goto out_xsk_arr;
+ 
+-	ifobj->umem_arr = calloc(MAX_SOCKETS, sizeof(*ifobj->umem_arr));
+-	if (!ifobj->umem_arr)
+-		goto out_umem_arr;
++	ifobj->umem = calloc(1, sizeof(*ifobj->umem));
++	if (!ifobj->umem)
++		goto out_umem;
+ 
+ 	return ifobj;
+ 
+-out_umem_arr:
++out_umem:
+ 	free(ifobj->xsk_arr);
+ out_xsk_arr:
+ 	free(ifobj);
+@@ -1423,7 +1441,7 @@ static struct ifobject *ifobject_create(void)
+ 
+ static void ifobject_delete(struct ifobject *ifobj)
+ {
+-	free(ifobj->umem_arr);
++	free(ifobj->umem);
+ 	free(ifobj->xsk_arr);
+ 	free(ifobj);
+ }
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 2f705f44b748..62a3e6388632 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -125,10 +125,10 @@ struct ifobject {
+ 	struct xsk_socket_info *xsk;
+ 	struct xsk_socket_info *xsk_arr;
+ 	struct xsk_umem_info *umem;
+-	struct xsk_umem_info *umem_arr;
+ 	thread_func_t func_ptr;
+ 	struct pkt_stream *pkt_stream;
+ 	int ns_fd;
++	int xsk_map_fd;
+ 	u32 dst_ip;
+ 	u32 src_ip;
+ 	u32 xdp_flags;
 -- 
 2.35.1
 

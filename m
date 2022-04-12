@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6879D4FDA7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17544FD6D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384318AbiDLIkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S1358797AbiDLHmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357223AbiDLHjx (ORCPT
+        with ESMTP id S1353723AbiDLHQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB121582B;
-        Tue, 12 Apr 2022 00:13:54 -0700 (PDT)
+        Tue, 12 Apr 2022 03:16:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5303CA4B;
+        Mon, 11 Apr 2022 23:57:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07BF561701;
-        Tue, 12 Apr 2022 07:13:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1363DC385A5;
-        Tue, 12 Apr 2022 07:13:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E80906149D;
+        Tue, 12 Apr 2022 06:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F63C385A1;
+        Tue, 12 Apr 2022 06:57:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747633;
-        bh=/uOxVJWrytHOQa/dr3wg/Qm9js3id4tXNTPbdtNpAHA=;
+        s=korg; t=1649746641;
+        bh=s3rTPzLdP+vcfBDue10vk9k6ZAOU2FAsRuK4KdnuB5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EmLdsOgiBp9gAh4LiiQEeeZ3MDjbd0kZ5hCdxKneFRDl53naiwM2Q9zbz63UJkmmL
-         iZkH9DBTJtYboIzlj1KvrVUpThjvl8PVbL2vqovCzYeOOXLJCEfGmPwxfEdEW1vtPt
-         C5UmBSPkgJWNI+hVfoXVIYJeFhuU9BC+uYKXIirw=
+        b=Qgv89YVBYUVBmIA5cnAZI22e3a6uWTLbQXpl8is8GHOGU5kdaTqRtp0EHfyaI6o0m
+         9Ce9qXfenDdGLyycWkwOCJILXKOYBt2gqGdAYTaAvc6w87a8EYHLK3Yemkc+vtSVVW
+         Gq+JAUOlLqcO1rU5rCDCI1Q0cSyL462LA8sT4Jqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 110/343] mt76: mt7615: Fix assigning negative values to unsigned variable
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 071/285] scsi: pm8001: Fix pm8001_mpi_task_abort_resp()
 Date:   Tue, 12 Apr 2022 08:28:48 +0200
-Message-Id: <20220412062954.569850456@linuxfoundation.org>
+Message-Id: <20220412062945.716497217@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Li <yang.lee@linux.alibaba.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 9273ffcc9a11942bd586bb42584337ef3962b692 ]
+[ Upstream commit 7e6b7e740addcea450041b5be8e42f0a4ceece0f ]
 
-Smatch reports the following:
-drivers/net/wireless/mediatek/mt76/mt7615/mac.c:1865
-mt7615_mac_adjust_sensitivity() warn: assigning (-110) to unsigned
-variable 'def_th'
-drivers/net/wireless/mediatek/mt76/mt7615/mac.c:1865
-mt7615_mac_adjust_sensitivity() warn: assigning (-98) to unsigned
-variable 'def_th'
+The call to pm8001_ccb_task_free() at the end of
+pm8001_mpi_task_abort_resp() already frees the ccb tag. So when the device
+NCQ_ABORT_ALL_FLAG is set, the tag should not be freed again.  Also change
+the hardcoded 0xBFFFFFFF value to ~NCQ_ABORT_ALL_FLAG as it ought to be.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220220031810.738362-19-damien.lemoal@opensource.wdc.com
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-index ba31bb7caaf9..5d69e77814c9 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-@@ -1841,7 +1841,7 @@ mt7615_mac_adjust_sensitivity(struct mt7615_phy *phy,
- 	struct mt7615_dev *dev = phy->dev;
- 	int false_cca = ofdm ? phy->false_cca_ofdm : phy->false_cca_cck;
- 	bool ext_phy = phy != &dev->phy;
--	u16 def_th = ofdm ? -98 : -110;
-+	s16 def_th = ofdm ? -98 : -110;
- 	bool update = false;
- 	s8 *sensitivity;
- 	int signal;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 6332cf23bf6b..1b1860f305ef 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -3717,12 +3717,11 @@ int pm8001_mpi_task_abort_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 	mb();
+ 
+ 	if (pm8001_dev->id & NCQ_ABORT_ALL_FLAG) {
+-		pm8001_tag_free(pm8001_ha, tag);
+ 		sas_free_task(t);
+-		/* clear the flag */
+-		pm8001_dev->id &= 0xBFFFFFFF;
+-	} else
++		pm8001_dev->id &= ~NCQ_ABORT_ALL_FLAG;
++	} else {
+ 		t->task_done(t);
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

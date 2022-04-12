@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C994FD001
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FEF4FD01B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350117AbiDLGlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S1350519AbiDLGmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350558AbiDLGiL (ORCPT
+        with ESMTP id S1350104AbiDLGkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:38:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1960817E33;
-        Mon, 11 Apr 2022 23:34:56 -0700 (PDT)
+        Tue, 12 Apr 2022 02:40:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E172736694;
+        Mon, 11 Apr 2022 23:35:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B95EDB81B3B;
-        Tue, 12 Apr 2022 06:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A2BC385A6;
-        Tue, 12 Apr 2022 06:34:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EB5761890;
+        Tue, 12 Apr 2022 06:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0F1C385A6;
+        Tue, 12 Apr 2022 06:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745293;
-        bh=ClpIoo0LS0P+ll1ENChkG3eZ30WX9Q8orKrp5KGiIeM=;
+        s=korg; t=1649745323;
+        bh=KyppwBAxf1ZILb2cK4QcPAex7NnhClg9RsYTWWUiftI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MoDJPDtP9SBUBpy2Tu0YugyDA//JxDKNEL5o4zXFfPQXdRnT23xbSqAeHziodCNEl
-         mCBSinW3Dir2fdrjLie5h509daKKG0QLBFELE3d0CpcFxXgfeHq4kAd6K/Qkj1hHCJ
-         a8p34knnrzNGsgiPNsLX6ElfJOUN4ES564iSmm68=
+        b=1fK4gl68lsJkEg1297fjjHC8tuiI/6HAA585ctXkpUyk9Hapw0kOIB7njhkqPuMjQ
+         0UbmEKqudIKnm/oBHeIhDGnxWPCFzKAsrqVdVLm+gxNGLJMtTJr0/HAABrb434WKTu
+         Yt4IsBaGaE++gF93XGjNQEOSpdAT3nUTNCABctj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Guanghui <zhouguanghui1@huawei.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 029/171] iommu/arm-smmu-v3: fix event handling soft lockup
-Date:   Tue, 12 Apr 2022 08:28:40 +0200
-Message-Id: <20220412062928.728963213@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 030/171] usb: ehci: add pci device support for Aspeed platforms
+Date:   Tue, 12 Apr 2022 08:28:41 +0200
+Message-Id: <20220412062928.757033885@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -54,53 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Guanghui <zhouguanghui1@huawei.com>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit 30de2b541af98179780054836b48825fcfba4408 ]
+[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
 
-During event processing, events are read from the event queue one
-by one until the queue is empty.If the master device continuously
-requests address access at the same time and the SMMU generates
-events, the cyclic processing of the event takes a long time and
-softlockup warnings may be reported.
+Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+handshake CMD_RUN instead of STS_HALT") to support Aspeed
+ehci-pci device.
 
-arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
-watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
-Call trace:
- _dev_info+0x7c/0xa0
- arm_smmu_evtq_thread+0x1c0/0x230
- irq_thread_fn+0x30/0x80
- irq_thread+0x128/0x210
- kthread+0x134/0x138
- ret_from_fork+0x10/0x1c
-Kernel panic - not syncing: softlockup: hung tasks
-
-Fix this by calling cond_resched() after the event information is
-printed.
-
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-Link: https://lore.kernel.org/r/20220119070754.26528-1-zhouguanghui1@huawei.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/ehci-pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 7067b7c11626..483c1362cc4a 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1368,6 +1368,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
- 				dev_info(smmu->dev, "\t0x%016llx\n",
- 					 (unsigned long long)evt[i]);
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index e87cf3a00fa4..638f03b89739 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
+ /* defined here to avoid adding to pci_ids.h for single instance use */
+ #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
  
-+			cond_resched();
++#define PCI_VENDOR_ID_ASPEED		0x1a03
++#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
++
+ /*-------------------------------------------------------------------------*/
+ #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
+ static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
+@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 			ehci->has_synopsys_hc_bug = 1;
  		}
+ 		break;
++	case PCI_VENDOR_ID_ASPEED:
++		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
++			ehci_info(ehci, "applying Aspeed HC workaround\n");
++			ehci->is_aspeed = 1;
++		}
++		break;
+ 	}
  
- 		/*
+ 	/* optional debug port, normally in the first BAR */
 -- 
 2.35.1
 

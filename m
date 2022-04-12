@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704584FDFB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0126D4FE00A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353344AbiDLMI4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 12 Apr 2022 08:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S1352169AbiDLMIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352860AbiDLMDn (ORCPT
+        with ESMTP id S1352785AbiDLMDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:03:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03148232D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:00:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1neEGE-000510-FH; Tue, 12 Apr 2022 13:00:38 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1neEGA-002Z8P-Ul; Tue, 12 Apr 2022 13:00:33 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1neEG8-0006zj-QC; Tue, 12 Apr 2022 13:00:32 +0200
-Message-ID: <1ee3b0619ee976eaf88e7207318770d441418c94.camel@pengutronix.de>
-Subject: Re: [PATCH V4] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        adrian.hunter@intel.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        chris@printf.net, venkatg@codeaurora.org, gdjakov@mm-sol.com,
-        quic_asutoshd@quicinc.com
-Cc:     linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com
-Date:   Tue, 12 Apr 2022 13:00:32 +0200
-In-Reply-To: <1649759983-22035-1-git-send-email-quic_c_sbhanu@quicinc.com>
-References: <1649759983-22035-1-git-send-email-quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Tue, 12 Apr 2022 08:03:33 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED348230E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:00:37 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id lc2so15977865ejb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OtcTMPrlTNXp9PoEitk/L5i1H2nBEkZl9nT/eENrV+k=;
+        b=JP11LSQ8zmmCyddbwbvylUfq6jyldvILsPwHS7McGLy7YDYX1x9vn/jRHL3rf3XWju
+         wPAdtWSFjJeJCTvSfu2LN0xiPGnQu245SCs7W5aC4+5sKeKu4DVj0o6bmNZ5senwX2i9
+         GlyeYcYPnitR4Qpwh74fskxFTnPRBx6C0Pv+mytp2DaixRWajZvGWJOwijTbJTd9Y/cZ
+         lFGzzl2DY7OGkxALK6Xo0PKHUU+1ITCmDkbL3ANYKygN3DlPIKJXlup4TeZmypXTCRMx
+         sdIguhdGNRottJqWbk7hnfEvAWpVArMTtWTQcSIIb2HY+LZRpueOJ5OnuFjmL8WTzrhC
+         Z4xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OtcTMPrlTNXp9PoEitk/L5i1H2nBEkZl9nT/eENrV+k=;
+        b=BYeZy1o6DREt9r9MtNUheZ9bybPrII4mdstqzS6dMAb4L1HfY583vF/f/QMYfpUpbP
+         W8A0uXigiYzsX2aGbflNTLRrP28vQ0LzHfRv2/XQBLEDSvhi8RdlRhm20L00IPbgL9Zl
+         qD0MLt8X8DF35RXay/yigA7Uy4ziB8cvuCcvd788XSIeLLDuuzjb1xumH6lNgQSQKZwS
+         HAAcIgcJRqQ2qrM5WwXRW71LS16/eVKYGcFByO29MbYdx9hyN9EKFDi0PWWn7hSfYA33
+         nK/cMa3/2lA/Vbc5fONPO5uOXr+woKZxmq6nQ/1RG9RVh4chNIitA39v/azGfkmLKTGy
+         zaqg==
+X-Gm-Message-State: AOAM530VUVrHWWBC2IAXdIiemsERNPK+kRjgopyJRkCPb5kYZTcaPqqe
+        XAwve6mcNc4a+eHhwkl9nLBZmg==
+X-Google-Smtp-Source: ABdhPJzso1r/MNJ6FRO8mE1JENt7ea2m3TSMGr0XG0JAdS/nUDEI9+uadS9945xfvLwwJfuPRNVRJw==
+X-Received: by 2002:a17:907:6e9e:b0:6e8:5723:bf8f with SMTP id sh30-20020a1709076e9e00b006e85723bf8fmr17926034ejc.563.1649761235531;
+        Tue, 12 Apr 2022 04:00:35 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056402238c00b0041ce094cf47sm11268939eda.60.2022.04.12.04.00.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 04:00:34 -0700 (PDT)
+Message-ID: <f64eb8c9-c597-70d4-1247-fbd39f593ece@linaro.org>
+Date:   Tue, 12 Apr 2022 13:00:33 +0200
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: Add bosch acc board
+Content-Language: en-US
+To:     Philip Oberfichtner <pro@denx.de>, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Winker Matthias <Matthias.Winker@de.bosch.com>
+References: <20220412101905.514310-1-pro@denx.de>
+ <20220412101905.514310-2-pro@denx.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412101905.514310-2-pro@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,105 +82,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Di, 2022-04-12 at 16:09 +0530, Shaik Sajida Bhanu wrote:
-> Reset GCC_SDCC_BCR register before every fresh initilazation. This will
-> reset whole SDHC-msm controller, clears the previous power control
-> states and avoids, software reset timeout issues as below.
+On 12/04/2022 12:19, Philip Oberfichtner wrote:
+> Add device tree binding for the Bosch ACC board, based on i.MX6 Dual.
 > 
-> [ 5.458061][ T262] mmc1: Reset 0x1 never completed.
-> [ 5.462454][ T262] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-> [ 5.469065][ T262] mmc1: sdhci: Sys addr: 0x00000000 | Version: 0x00007202
-> [ 5.475688][ T262] mmc1: sdhci: Blk size: 0x00000000 | Blk cnt: 0x00000000
-> [ 5.482315][ T262] mmc1: sdhci: Argument: 0x00000000 | Trn mode: 0x00000000
-> [ 5.488927][ T262] mmc1: sdhci: Present: 0x01f800f0 | Host ctl: 0x00000000
-> [ 5.495539][ T262] mmc1: sdhci: Power: 0x00000000 | Blk gap: 0x00000000
-> [ 5.502162][ T262] mmc1: sdhci: Wake-up: 0x00000000 | Clock: 0x00000003
-> [ 5.508768][ T262] mmc1: sdhci: Timeout: 0x00000000 | Int stat: 0x00000000
-> [ 5.515381][ T262] mmc1: sdhci: Int enab: 0x00000000 | Sig enab: 0x00000000
-> [ 5.521996][ T262] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
-> [ 5.528607][ T262] mmc1: sdhci: Caps: 0x362dc8b2 | Caps_1: 0x0000808f
-> [ 5.535227][ T262] mmc1: sdhci: Cmd: 0x00000000 | Max curr: 0x00000000
-> [ 5.541841][ T262] mmc1: sdhci: Resp[0]: 0x00000000 | Resp[1]: 0x00000000
-> [ 5.548454][ T262] mmc1: sdhci: Resp[2]: 0x00000000 | Resp[3]: 0x00000000
-> [ 5.555079][ T262] mmc1: sdhci: Host ctl2: 0x00000000
-> [ 5.559651][ T262] mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP-----------
-> [ 5.566621][ T262] mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg: 0x6000642c | DLL cfg2: 0x0020a000
-> [ 5.575465][ T262] mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl: 0x00010800 | DDR cfg: 0x80040873
-> [ 5.584658][ T262] mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88218a8 Vndr func3: 0x02626040
-> 
-> Fixes: 0eb0d9f4de34 ("mmc: sdhci-msm: Initial support for Qualcomm chipsets")
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+> Signed-off-by: Philip Oberfichtner <pro@denx.de>
 > ---
->  drivers/mmc/host/sdhci-msm.c | 38 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> index 50c71e0..0e5fb62 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -17,6 +17,7 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/interconnect.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/reset.h>
->  
-> 
-> 
-> 
->  #include "sdhci-pltfm.h"
->  #include "cqhci.h"
-> @@ -2482,6 +2483,39 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
->  	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
->  }
->  
-> 
-> 
-> 
-> +static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
-> +{
-> +	struct reset_control *reset;
-> +	int ret = 0;
 
-No need to initialize ret.
 
-> +
-> +	reset = reset_control_get_optional_exclusive(dev, NULL);
-> +	if (IS_ERR(reset))
-> +		return dev_err_probe(dev, PTR_ERR(reset),
-> +				"unable to acquire core_reset\n");
-> +
-> +	if (!reset)
-> +		return ret;
-> +
-> +	ret = reset_control_assert(reset);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "core_reset assert failed\n");
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Missing reset_control_put(reset) in the error path.
 
-> +
-> +	/*
-> +	 * The hardware requirement for delay between assert/deassert
-> +	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
-> +	 * ~125us (4/32768). To be on the safe side add 200us delay.
-> +	 */
-> +	usleep_range(200, 210);
-> +
-> +	ret = reset_control_deassert(reset);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
-
-Same as above. Maybe make both ret = dev_err_probe() and goto ...
-
-> +
-> +	usleep_range(200, 210);
-
-... here.
-
-> +	reset_control_put(reset);
-> +
-> +	return ret;
-> +}
-
-regards
-Philipp
+Best regards,
+Krzysztof

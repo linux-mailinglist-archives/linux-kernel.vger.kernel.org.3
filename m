@@ -2,128 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022DF4FE18D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F93F4FE1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244247AbiDLNIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S1356158AbiDLNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357306AbiDLNEi (ORCPT
+        with ESMTP id S1356980AbiDLNEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:04:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AA264CD66
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649767733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7sDaKWcAgM2XIl9bdUk6bun++oBfH1mVBruEjkqdxaY=;
-        b=ipGMV5hSB8jh9OpyTwjlW9jWGMI27rDRqiJUh/vM3OtILyrCeuBxSTmSZhkDIt1Qkp9Z3e
-        4D79P4FJWJq38lJtGzMLtYdmQsUwyJuWrV8kjSpW/ITQgNKx5/FbM3jyfs9WmWODCBlWen
-        HLeeQ2PmE9cDDseX7pcVueqIUo/qI+s=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-s0_5Kg0pMN-wOAnGn201EQ-1; Tue, 12 Apr 2022 08:48:52 -0400
-X-MC-Unique: s0_5Kg0pMN-wOAnGn201EQ-1
-Received: by mail-wm1-f70.google.com with SMTP id l19-20020a05600c1d1300b0038e736f98faso5932393wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:48:52 -0700 (PDT)
+        Tue, 12 Apr 2022 09:04:12 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573F539B8C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:48:23 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id bg24so5982112pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SBWFAF/XPapM1EK+gmdZ5oUq3bsgCRTxORe+fGjXmTg=;
+        b=hS5tvpYdRrcQrLpo6fyXay4Ko5tB5b0Tk9kxF6AXKdzCyRXRoKXlRtxnU0LPrXzC2T
+         RVrBLWWd7e5dI5mwyLXJfdQOLRQ//pBARSuvuIAsUb5g2IxgOjr9QCmNueWBYCULomA8
+         JI0C1mUlAXbCR9eLQBpFpfhJOQqV0yvnJb3pFmJ+s16ppdIZVkB2ds8cI3pf65QacvAH
+         MwIQEUA1PjaP3S/rvKF7GavLtSJ7gdJWbWt1zRMQm/Muu1YuL8TxSDjlIfq3RQXNXLyf
+         WY0a+kjOgpq7UvXsef0O5WHaQxgE04XbXEBmlHn1C2FVjiuI2V5pHcLuhbk8IBpg3pEn
+         sGCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7sDaKWcAgM2XIl9bdUk6bun++oBfH1mVBruEjkqdxaY=;
-        b=kRD+pCxFPfcaFJXWrlvWi23BOI8TaXBzbWOL02i1aGmKZcYLg7w5yj+Q9VPMiEkA08
-         5RG7oQMj3bpeazuARL01426lBgcqbnGI2Byk6rFWrwPXs5kcyYl+LcN63MJde37K3v4t
-         /f8YtJ9bQ+63p7wrweyHdR0gcHrDouHXYdh27DLQOfPYyYsEoMArrH6Jc4OZtQzXlupp
-         aaKpeLvCdacd5xa8qOj9PDPlmGuT9CH952e+nms9U/m/rLV7x64Oxeyk3DkyFpLvn/a7
-         MX6z2D2fSdJPWBPPRYy+F4PQPA06ICsLYXuch78r4i5sbH1OvMVxbQQ/1cVIPEOXvJOU
-         cpxg==
-X-Gm-Message-State: AOAM5301q5kIGUbbPILIpt7MbYUxevF7q3Ov/eZ+AYc6nT4AUYCwhDjd
-        lKmUSiZabEd1PU+z8csDNv00h8zc+DS+jDO2A4gCsRirxHlfu+lhti1hbPkol+EFtYUP6CyqGOQ
-        urmsXvdO19cXcMoHB+LuCYlK9
-X-Received: by 2002:adf:e74a:0:b0:1f0:25cb:3ad5 with SMTP id c10-20020adfe74a000000b001f025cb3ad5mr29127157wrn.231.1649767731312;
-        Tue, 12 Apr 2022 05:48:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw5+Ddw+bigt24MEWgaP362cD4jvNRoenFXKs2B/0FJXlJzyo/PVEoLpDt5RoNn56qZNIA2XA==
-X-Received: by 2002:adf:e74a:0:b0:1f0:25cb:3ad5 with SMTP id c10-20020adfe74a000000b001f025cb3ad5mr29127143wrn.231.1649767731066;
-        Tue, 12 Apr 2022 05:48:51 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id b1-20020adfd1c1000000b002058537af75sm30602485wrd.104.2022.04.12.05.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 05:48:50 -0700 (PDT)
-Message-ID: <d25cfc04-8ee5-ea6d-a353-6b0ac1fd58be@redhat.com>
-Date:   Tue, 12 Apr 2022 14:48:49 +0200
+        bh=SBWFAF/XPapM1EK+gmdZ5oUq3bsgCRTxORe+fGjXmTg=;
+        b=Q4xRjOrtGbxA7vsgBzXXTZlk7+gK2qcLRyTno3EazF+0V7G3B4dfUV0QGCyVtKeOGh
+         p88tdY/51rifAx/vcm6ITPAgoT7O+jf5APDiSEJUYRLJsy6BoHzNgaMiOp9SXNYJ2q6A
+         Pba0dvdYdyI91rVaWhehVwwR2hBO2XbknXR3c7cBckdBFSdqn+pBeecMCGcbk8Tk/i/6
+         VhZWDdAnTxALftQlQ8zWr1fs/mdTac8qSNE9d8CqbolBgzH+9c2y96H7ogIVpkmxHLil
+         keHUQOX7NpBPGA4glhPT8dbHVHlTTdgL3uITH2heLP1LfTjYqf7t+PuVgiz8RYndHOJS
+         tVqQ==
+X-Gm-Message-State: AOAM530Wn88OWEjTVBt9bSvtCEsaBkhglCp60xe8VjRMXYM/LpFi1NKd
+        1DMKkj7hBjq51hzC4JTIr8qmCzWyG9c=
+X-Google-Smtp-Source: ABdhPJw9nAilFk9LEP5VDPn8u/Q1uNGHuCf5UWZLKTzXDnHNJJE78DTtE3aajXwFTiKfSlgWF+YjvA==
+X-Received: by 2002:a17:902:c94d:b0:158:4e50:7a32 with SMTP id i13-20020a170902c94d00b001584e507a32mr13357373pla.163.1649767702559;
+        Tue, 12 Apr 2022 05:48:22 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id n24-20020aa79058000000b00505686a982asm17899192pfo.125.2022.04.12.05.48.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Apr 2022 05:48:22 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Oleg Nesterov <oleg@redhat.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH V2] x86/sev: Mark the code returning to user space as syscall gap
+Date:   Tue, 12 Apr 2022 20:49:08 +0800
+Message-Id: <20220412124909.10467-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: display: ssd1307fb: Deprecate "-i2c"
- compatible strings
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220411211243.11121-1-javierm@redhat.com>
- <20220411211243.11121-2-javierm@redhat.com>
- <20220412112855.uccrkoqgjim2dbts@houat>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220412112855.uccrkoqgjim2dbts@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Maxime,
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-On 4/12/22 13:28, Maxime Ripard wrote:
-> On Mon, Apr 11, 2022 at 11:12:39PM +0200, Javier Martinez Canillas wrote:
+When returning to user space, the %rsp is user controlled value.
 
-[snip]
+If it is SNP-guest and the hypervisor decides to mess with the code-page
+for this path while a CPU is executing it.  This will cause a #VC on
+that CPU and that could hit in the syscall return path and mislead
+the #VC handler.
 
->>  
->>    reg:
->>      maxItems: 1
->> @@ -136,7 +147,7 @@ allOf:
->>        properties:
->>          compatible:
->>            contains:
->> -            const: sinowealth,sh1106-i2c
->> +            const: sinowealth,sh1106
-> 
-> I think we should have both in the condition here, but it looks good
-> otherwise.
->
+So make ip_within_syscall_gap() return true in this case.
 
-Right, we want to keep enforcing for the deprecated compatible strings.
+Cc: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+---
+[V1]: https://lore.kernel.org/lkml/20211213042215.3096-4-jiangshanlai@gmail.com/
+
+Changed from V1:
+	Update changelog.
+
+ arch/x86/entry/entry_64.S        | 2 ++
+ arch/x86/entry/entry_64_compat.S | 2 ++
+ arch/x86/include/asm/proto.h     | 4 ++++
+ arch/x86/include/asm/ptrace.h    | 4 ++++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 4faac48ebec5..4f678b6045cd 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -215,8 +215,10 @@ syscall_return_via_sysret:
  
-> Maxime
-> 
-
+ 	popq	%rdi
+ 	popq	%rsp
++SYM_INNER_LABEL(entry_SYSRETQ_unsafe_stack, SYM_L_GLOBAL)
+ 	swapgs
+ 	sysretq
++SYM_INNER_LABEL(entry_SYSRETQ_end, SYM_L_GLOBAL)
+ SYM_CODE_END(entry_SYSCALL_64)
+ 
+ /*
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index 4fdb007cddbd..3c0e14960e2b 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -297,6 +297,7 @@ sysret32_from_system_call:
+ 	 * code.  We zero R8-R10 to avoid info leaks.
+          */
+ 	movq	RSP-ORIG_RAX(%rsp), %rsp
++SYM_INNER_LABEL(entry_SYSRETL_compat_unsafe_stack, SYM_L_GLOBAL)
+ 
+ 	/*
+ 	 * The original userspace %rsp (RSP-ORIG_RAX(%rsp)) is stored
+@@ -314,6 +315,7 @@ sysret32_from_system_call:
+ 	xorl	%r10d, %r10d
+ 	swapgs
+ 	sysretl
++SYM_INNER_LABEL(entry_SYSRETL_compat_end, SYM_L_GLOBAL)
+ SYM_CODE_END(entry_SYSCALL_compat)
+ 
+ /*
+diff --git a/arch/x86/include/asm/proto.h b/arch/x86/include/asm/proto.h
+index 0f899c8d7a4e..647d71535ce3 100644
+--- a/arch/x86/include/asm/proto.h
++++ b/arch/x86/include/asm/proto.h
+@@ -13,6 +13,8 @@ void syscall_init(void);
+ #ifdef CONFIG_X86_64
+ void entry_SYSCALL_64(void);
+ void entry_SYSCALL_64_safe_stack(void);
++void entry_SYSRETQ_unsafe_stack(void);
++void entry_SYSRETQ_end(void);
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2);
+ #endif
+ 
+@@ -28,6 +30,8 @@ void entry_SYSENTER_compat(void);
+ void __end_entry_SYSENTER_compat(void);
+ void entry_SYSCALL_compat(void);
+ void entry_SYSCALL_compat_safe_stack(void);
++void entry_SYSRETL_compat_unsafe_stack(void);
++void entry_SYSRETL_compat_end(void);
+ void entry_INT80_compat(void);
+ #ifdef CONFIG_XEN_PV
+ void xen_entry_INT80_compat(void);
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index 4357e0f2cd5f..f4db78b09c8f 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -186,9 +186,13 @@ static __always_inline bool ip_within_syscall_gap(struct pt_regs *regs)
+ 	bool ret = (regs->ip >= (unsigned long)entry_SYSCALL_64 &&
+ 		    regs->ip <  (unsigned long)entry_SYSCALL_64_safe_stack);
+ 
++	ret = ret || (regs->ip >= (unsigned long)entry_SYSRETQ_unsafe_stack &&
++		      regs->ip <  (unsigned long)entry_SYSRETQ_end);
+ #ifdef CONFIG_IA32_EMULATION
+ 	ret = ret || (regs->ip >= (unsigned long)entry_SYSCALL_compat &&
+ 		      regs->ip <  (unsigned long)entry_SYSCALL_compat_safe_stack);
++	ret = ret || (regs->ip >= (unsigned long)entry_SYSRETL_compat_unsafe_stack &&
++		      regs->ip <  (unsigned long)entry_SYSRETL_compat_end);
+ #endif
+ 
+ 	return ret;
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.19.1.6.gb485710b
 

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D2F4FE32C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C064FE31D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356328AbiDLNzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S1354794AbiDLNzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356311AbiDLNzH (ORCPT
+        with ESMTP id S1356330AbiDLNzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:55:07 -0400
+        Tue, 12 Apr 2022 09:55:18 -0400
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7B57170;
-        Tue, 12 Apr 2022 06:52:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E80056C39;
+        Tue, 12 Apr 2022 06:52:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649771567;
-  x=1681307567;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649771571;
+  x=1681307571;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=a52on8qx1rwRS1jCAPqKnMH8/yG5QTkEx/mAWQ8yWFc=;
-  b=cFKbVsKD/RxogGZO6hCr2iml+AtlQcjHdAdoSR9BF2/2BCgZh8rfz+pT
-   bUHMkMgSaYThJzDbQupPfG+6tpe4U7Qic9clNAoFPUZlXJCqqxjAgQtHo
-   ZlO6X8Mkx3Y0aMN1ALvp/XulwSjUIbQyskNAGB4qGBpy4cAanQ0J2AgmW
-   a9r/jHJQvnB7GsBnIwIfI6yFwFzCLM6Vbomk6CbZMC5YGzanlrF9vTAe8
-   wL1h5TQjdze546OWV9ScrPemUkLfvMLIY5gS642a6xCRyQPkM2bYOxIiq
-   32WB5MGQ84AT+6m/d0vXvUiYCMSR+87E6S3GXHxaCiM8SkfaaIzOv8spy
-   A==;
+  bh=K91frgE7fQCIgdbC5FhbdbWCQaH9dDYWZTy2E8xDW70=;
+  b=IrlSulPHP5eHwg684gNOOhKRkl9wwghVBsesUuuXAX25SRDLIquP139J
+   6uP5RnvEPLkY5HDD4fqj/HAMDH/i9WSaewKEJCyMFbmTrAKSJv24zrRlB
+   vgLCjyCnpQxDMRkF10GmtJmcxxFOXPdE4Y/M+Hiq4wkeNkYmNDHDLRcV4
+   x//97yUQ/Bpiev0UKoJN0FuEAzMEE5sw46Qu6gkgf7aFwx7ur5rr5clfr
+   QE+SI5DyECo/PR99yAjbQyEcwxfnJLojYsKyHUkbMQOA4XrzdispaH+Bx
+   +WPfyNs0iG9oAZJ6rySXZ5+DkiZ47pT3w8vgfhgccaDPse7RBnZg+HR3F
+   g==;
 From:   Camel Guo <camel.guo@axis.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>
 CC:     Camel Guo <camel.guo@axis.com>, <linux-hwmon@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <kernel@axis.com>
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Date:   Tue, 12 Apr 2022 15:52:31 +0200
-Message-ID: <20220412135232.1943677-2-camel.guo@axis.com>
+Subject: [PATCH v2 2/2] hwmon: (tmp401) Add support of three advanced features
+Date:   Tue, 12 Apr 2022 15:52:32 +0200
+Message-ID: <20220412135232.1943677-3-camel.guo@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220412135232.1943677-1-camel.guo@axis.com>
 References: <20220412135232.1943677-1-camel.guo@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -55,151 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the TMP401, TMP411 and TMP43x device devicetree bindings
+tmp401 driver supports TMP401, TMP411 and TMP43X temperature sensors.
+According to their datasheet:
+- all of them support extended temperature range feature;
+- TMP411 and TPM43X support n-factor correction feature;
+- TMP43X support beta compensation feature.
+
+In order to support setting them during bootup, this commit reads
+ti,extended-range-enable, ti,n-factor and ti,beta-compensation and set
+the corresponding registers during probing.
 
 Signed-off-by: Camel Guo <camel.guo@axis.com>
 ---
 
 Notes:
- v2:
- - Fix format and describe hardware properties instead of programming
-   models
+ v2: no change
 
- .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 112 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 113 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+ drivers/hwmon/tmp401.c | 43 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-new file mode 100644
-index 000000000000..dae4df36935e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-@@ -0,0 +1,112 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/ti,tmp401.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TMP401, TPM411 and TMP43x temperature sensor
-+
-+maintainers:
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+description: |
-+  ±1°C Remote and Local temperature sensor
-+
-+  Datasheets:
-+  https://www.ti.com/lit/ds/symlink/tmp401.pdf
-+  https://www.ti.com/lit/ds/symlink/tmp411.pdf
-+  https://www.ti.com/lit/ds/symlink/tmp431.pdf
-+  https://www.ti.com/lit/ds/symlink/tmp435.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tmp401
-+      - ti,tmp411
-+      - ti,tmp431
-+      - ti,tmp432
-+      - ti,tmp435
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  ti,extended-range-enable:
-+    description:
-+      When set, this sensor measures over extended temperature range.
-+    type: boolean
-+
-+  ti,n-factor:
-+    description:
-+      value to be used for converting remote channel measurements to
-+      temperature.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    items:
-+      minimum: 0
-+      maximum: 255
-+
-+  ti,beta-compensation:
-+    description:
-+      value to select beta correction range.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    items:
-+      minimum: 0
-+      maximum: 15
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ti,tmp401
-+    then:
-+      properties:
-+        ti,n-factor: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ti,tmp401
-+              - ti,tmp411
-+    then:
-+      properties:
-+        ti,beta-compensation: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      sensor@4c {
-+        compatible = "ti,tmp401";
-+        reg = <0x4c>;
-+      };
-+    };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      sensor@4c {
-+        compatible = "ti,tmp431";
-+        reg = <0x4c>;
-+        ti,extended-range-enable;
-+        ti,n-factor = <0x3b>;
-+        ti,beta-compensation = <0x7>;
-+      };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61d9f114c37f..6b0d8f5cc68e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19838,6 +19838,7 @@ TMP401 HARDWARE MONITOR DRIVER
- M:	Guenter Roeck <linux@roeck-us.net>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
- F:	Documentation/hwmon/tmp401.rst
- F:	drivers/hwmon/tmp401.c
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index b86d9df7105d..75cdf5d2907e 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -41,6 +41,8 @@ enum chips { tmp401, tmp411, tmp431, tmp432, tmp435 };
+ #define TMP401_STATUS				0x02
+ #define TMP401_CONFIG				0x03
+ #define TMP401_CONVERSION_RATE			0x04
++#define TMP4XX_N_FACTOR_REG			0x18
++#define TMP43X_BETA_RANGE			0x25
+ #define TMP401_TEMP_CRIT_HYST			0x21
+ #define TMP401_MANUFACTURER_ID_REG		0xFE
+ #define TMP401_DEVICE_ID_REG			0xFF
+@@ -543,6 +545,7 @@ static int tmp401_init_client(struct tmp401_data *data)
+ 	struct regmap *regmap = data->regmap;
+ 	u32 config, config_orig;
+ 	int ret;
++	u32 val = 0;
  
+ 	/* Set conversion rate to 2 Hz */
+ 	ret = regmap_write(regmap, TMP401_CONVERSION_RATE, 5);
+@@ -557,10 +560,48 @@ static int tmp401_init_client(struct tmp401_data *data)
+ 	config_orig = config;
+ 	config &= ~TMP401_CONFIG_SHUTDOWN;
+ 
++	if (of_property_read_bool(data->client->dev.of_node, "ti,extended-range-enable")) {
++		/* Enable measurement over extended temperature range */
++		config |= TMP401_CONFIG_RANGE;
++	}
++
+ 	data->extended_range = !!(config & TMP401_CONFIG_RANGE);
+ 
+-	if (config != config_orig)
++	if (config != config_orig) {
+ 		ret = regmap_write(regmap, TMP401_CONFIG, config);
++		if (ret < 0)
++			return ret;
++	}
++
++	ret = of_property_read_u32(data->client->dev.of_node, "ti,n-factor", &val);
++	if (!ret) {
++		if (data->kind == tmp401) {
++			dev_err(&data->client->dev, "ti,tmp401 does not support n-factor correction\n");
++			return -EINVAL;
++		}
++		if (val > 255) {
++			dev_err(&data->client->dev, "n-factor is invalid (%u)\n", val);
++			return -EINVAL;
++		}
++		ret = regmap_write(regmap, TMP4XX_N_FACTOR_REG, val);
++		if (ret < 0)
++			return ret;
++	}
++
++	ret = of_property_read_u32(data->client->dev.of_node, "ti,beta-compensation", &val);
++	if (!ret) {
++		if (data->kind == tmp401 || data->kind == tmp411) {
++			dev_err(&data->client->dev, "ti,tmp401 or ti,tmp411 does not support beta compensation\n");
++			return -EINVAL;
++		}
++		if (val > 15) {
++			dev_err(&data->client->dev, "beta-compensation is invalid (%u)\n", val);
++			return -EINVAL;
++		}
++		ret = regmap_write(regmap, TMP43X_BETA_RANGE, val);
++		if (ret < 0)
++			return ret;
++	}
+ 
+ 	return ret;
+ }
 -- 
 2.30.2
 

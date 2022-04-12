@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C7C4FEB22
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B694FEAFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiDLXcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S230420AbiDLXgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiDLXb6 (ORCPT
+        with ESMTP id S231250AbiDLXco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:31:58 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70CBD90FC8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:17:53 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8D1B592009C; Wed, 13 Apr 2022 00:17:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 7EA6492009B;
-        Tue, 12 Apr 2022 23:17:50 +0100 (BST)
-Date:   Tue, 12 Apr 2022 23:17:50 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Gleixner <tglx@linutronix.de>
-cc:     Daniel Vacek <neelx@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/apic: Clarify i82489DX bit overlap in APIC_LVT0
-In-Reply-To: <87ee22f3ci.ffs@tglx>
-Message-ID: <alpine.DEB.2.21.2204122235140.9383@angie.orcam.me.uk>
-References: <20220202140244.1681140-1-neelx@redhat.com> <874k361liu.ffs@tglx> <CACjP9X_A7aLmvypyOz1UrXM571gx_X5q7=w-1j+G+MSbCteiEw@mail.gmail.com> <87ee22f3ci.ffs@tglx>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 12 Apr 2022 19:32:44 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3DC12ED
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:19:38 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id r2so23861043iod.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QYfke9cQ37ascPzVzI8WQsr0KDmS2lmrJZHbSR7rmzc=;
+        b=CJcyS7cB4IV4VT9pHwMg4WD5hVcCmgTMeqpnKGqQMzmnllLkKGWOoKAalQb+2+5HEP
+         oFRGPD4/AJEJ0hrwmR+2AL2srBfRrlq9uIh7cjBkn4uOHfs+rBxMSqdatLOaJQ/KeCG+
+         lS7hZJnEbIfOv+V+ztyiX6Uf8ytIqsz5TW8X0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QYfke9cQ37ascPzVzI8WQsr0KDmS2lmrJZHbSR7rmzc=;
+        b=F7PtnUTr3oDWsIHgfg5WN15atsbUgKoMOtxSUDaHA7DwUmSFSUZR7FvWiGHZRkGoIH
+         dz5R0S5eliOtIhaxjQ52m+NmT3MW/4gboxB2T77l+sDAfTV6bYgRxAttCGEeVWqRLVT2
+         ZGw0+FMQiHpmQBHXpBjL+CLC9QtYpqUROKkYIv5cH8jxpZ2DLlScMZqiSC4axcXDKBuH
+         mAFZ74XxMNspU4N0zoKwO/bs92jnxnzqUg4lRh4y9crwjX/TKhVbUi783r1NH7rNRvMN
+         GCzCnQffx/0tczTDC9o1hd7xuW6Y1oTuOwhLCMCwb86XACTcVaABkXd6ldEIsK4N7ZiQ
+         JADg==
+X-Gm-Message-State: AOAM530JnVeq/EM3uVq1AHbbyZpy2+xkRSmQ6xIDAsVgKVFsJpvVu1Zx
+        kZ5OFZQghfyf/hGeIwrsbTtnSg==
+X-Google-Smtp-Source: ABdhPJxaiPnXmbQxtgSjy5SJs+0QkjEymVY455S1XO+9MvSqdxQuJLaq4dY4gqricFC0yjkcJ/ydzw==
+X-Received: by 2002:a5e:aa0b:0:b0:649:4cff:38e3 with SMTP id s11-20020a5eaa0b000000b006494cff38e3mr16663892ioe.78.1649801977839;
+        Tue, 12 Apr 2022 15:19:37 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id m6-20020a923f06000000b002ca74f4fab2sm10764983ila.14.2022.04.12.15.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 15:19:37 -0700 (PDT)
+Subject: Re: [PATCH 5.17 000/343] 5.17.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8ef71886-028a-8ae3-aaf8-9110e0535163@linuxfoundation.org>
+Date:   Tue, 12 Apr 2022 16:19:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022, Thomas Gleixner wrote:
+On 4/12/22 12:26 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.3 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> Daniel stumbled over the undocumented bit overlap of the i82498DX external
-> APIC and the TSC deadline timer configuration bit in modern APICs.
+Compiled and booted on my test system. No dmesg regressions.
 
- For the record, it's documented in the i82498DX datasheet[1] and user 
-manual[2]:
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-'Bits [19:18] Timer Base: This field selects the time base input to be 
-used by the timer.
-
-  00: (Base 0): Uses "CLKIN" as input.
-
-  01: (Base 1): Uses "TMBASE".
-
-  10: (Base 2): Uses the output of the divider (Base 2).'
-
-(the wording is virtually the same in both sources).  Base 2 setting is 
-compatible with later APIC implementations. 
-
- Since you're removing the macros and the documents referred aren't easily 
-available it may be worth to mention the settings somewhere, such as the 
-comment you're adding.
-
- Intel indeed did not document the two-bit field in any later literature, 
-and the i82498DX part cannot be used with any other APIC device due to a 
-protocol (and also wiring) difference in the inter-APIC communication bus.
-
- There's also bit 2 of the Divide Configuration Register.  That bit is 
-hardwired to 0 in later APIC versions, however in the i82498DX it selects 
-the time base input to be used by the divider, 0 for CLK (CLKIN) or 1 for 
-TMBASE.  Conversely bit 3 is hardwired to 0 in the i82498DX.
-
-References:
-
-[1] "82489DX Advanced Programmable Interrupt Controller", Intel 
-    Corporation, Order Number: 290446-002, October 1993, Section 6.12 
-    "Timer Registers", p.27
-
-[2] M. Jayakumar, "AP-388 82489DX User's Manual", Multiprocessor 
-    Technology Group, Intel Corporation, Order Number: 292116-002, 
-    November 1995, Section "Register Programming Details", p.22
-
- FWIW,
-
-  Maciej
+thanks,
+-- Shuah

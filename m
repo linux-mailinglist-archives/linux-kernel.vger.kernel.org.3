@@ -2,204 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EF54FE788
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA6D4FE78F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242073AbiDLSAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S1347679AbiDLSE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241440AbiDLSAu (ORCPT
+        with ESMTP id S232756AbiDLSEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:00:50 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF85A159
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:58:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r13so38900551ejd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:58:31 -0700 (PDT)
+        Tue, 12 Apr 2022 14:04:24 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080395A15D;
+        Tue, 12 Apr 2022 11:02:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so3790076pjb.0;
+        Tue, 12 Apr 2022 11:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J9OXqLFIOmY45YdEhCkrYsT/5m2M2Fid8gfnSIyZnec=;
-        b=aWE/FOQfmSIdDS/9fp2gU6EzziIgyF8OK61PyvmQFGdlCkFpCNEFKSAgiUtGSYqHLB
-         XXbM/3lVa68BPNFRFgxy8qSkFuPbbcL/nKFfhQWD1NPo+JBOvWgQf275+QMO0AI8b+n+
-         3RVFd5+ZpOHLTX0AvoZIyohExmi9Dxog5TAw0=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KD3zlhA4cnu+F8Ye3bhSZQoi9dOhZ7oX6Of6NoxUUuk=;
+        b=iCV26r+EyhOpvQyEn8WdLCWBOQ4OpaL8UodOn8ua4BC/Q/QHEOiVx5lPx/ZLNmhkr3
+         z+juAfN3JLD9T5FhqgJRBwEqc0LKZnjU2fSzjGEFGDJMEbOJd4jtE9YPC0w5FnNiGMvk
+         4RkbVGo09yl2USiIoe/oMQfhxY1Pef+eCmp8tDE5vDiLu2q0U2/QZazh/ayjMJj47/UL
+         UtCBr0ROq5yagnvTt4xiLC4Ut52nYyab2dCgb8921SBD/ydYeP/+8ltyei70aJ6ZNSe0
+         eBbYeU89jNImPvSLIDF4JIUuluccMh43n13h0XJaomdvq0nDzlONJZ6S/87nRRCr/eud
+         Iz8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J9OXqLFIOmY45YdEhCkrYsT/5m2M2Fid8gfnSIyZnec=;
-        b=SVxvGeCqTsIYgvtzTSXX1NYtGABr/Aqk7GioWIU8V91CGR4hlFHAlFWiZ9U9sCfIhf
-         WUfapgITxR3L4JywoHtFy5sfSCVEzwokzabxbbALylTiNOkHWmnGYP1uGSDexcL0SHw4
-         rNsIRHtVPaoksPgQRK9TcmfO5MzXQEID+/UMTvl71J9+/gZEwmcz3+2NMCYBRv0XFTJd
-         HjljLKitHVzt8oumkx0X22KJ1x9ylvWdKZJA9QgyrMjqDiEQ3nvy5YYy/Yh5+MpaIscu
-         vtqywD+/jLrbH7pnM8siketEpuc1lGttESoB9FHTgM+JVZm0qGr+ZDnYB+7A2GE40vF7
-         splw==
-X-Gm-Message-State: AOAM532zYuVMo3/E+DVE8OItJ776aCjh3F9tklBbHSWkOZrclw8fkDLl
-        CZrv+FQ8alcC0JfWN/6QbpXaVe+3yFqdNh6gKDV75pbU33+3KViZtmoA+tobekpvULeNb72CRGW
-        oScn5ez3sLGmFTJcEs6Kz6dJQqG7UxA==
-X-Google-Smtp-Source: ABdhPJyhNJo6CZgtb2oVqRdxL6W93DjAkmgh+YNhODAi9NSDqrqRc21OEqreBHnW4uvIfzh1y0tHiZuFB54FgmxXu8o=
-X-Received: by 2002:a17:906:eb42:b0:6e8:9197:f0e0 with SMTP id
- mc2-20020a170906eb4200b006e89197f0e0mr10583318ejb.550.1649786310059; Tue, 12
- Apr 2022 10:58:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KD3zlhA4cnu+F8Ye3bhSZQoi9dOhZ7oX6Of6NoxUUuk=;
+        b=tjdXmagNocT1UQHBKiyC1rO3DvCyQkGrf1PPCHw/csTZg3hynpTCg1Zii3HYYFIlKb
+         xb42WrDNYvrOByCPY20eP88k2eJoZJLol8y32WWWYu6jLYfHIVfd7bK68CGSubat2sqB
+         WWYf7smkl8Y0713SkHNGntnKMHuD2ICPIReH6N268xifTFXQkcNy4ZtQ1qn8t94G1bID
+         0KP+ZO4lZpgpuFpvO+tXoGs3nwxdi91kVcepuBg+p+j7CUqWqntzQGTDLwyqyU+fAeTh
+         jC3UNktXwlHzawTTAE+OkBNYV0Qkv/f69jADyLegP1cxQDbeFF7CaAwgRVoNM8qkzQz4
+         9sgg==
+X-Gm-Message-State: AOAM530yqT/8PR8t8ke+LKSxY4dfmFYo7umLg9JTpsOqyCmmsGU5jk3G
+        NLvVwAHXSaBhhziXyWizvp97y2/fDBI=
+X-Google-Smtp-Source: ABdhPJza/agHmGrmFLgonFL7VOBBA4SS8lMXCPSs9MfxWwOxa5kiBqig+Iy0FNNkQutRNULcGytwDw==
+X-Received: by 2002:a17:90a:d584:b0:1bc:e520:91f2 with SMTP id v4-20020a17090ad58400b001bce52091f2mr6402022pju.192.1649786525466;
+        Tue, 12 Apr 2022 11:02:05 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id m13-20020a62a20d000000b004fe0ce6d7a1sm30027607pff.193.2022.04.12.11.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 11:02:05 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 23:31:59 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA
+ binding to json format
+Message-ID: <20220412180159.GA29479@9a2d8922b8f1>
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+ <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
+ <20220411105810.GB33220@9a2d8922b8f1>
+ <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
+ <20220412061953.GA95928@9a2d8922b8f1>
+ <8ff07720-3c52-99e6-8046-501f4ae28518@linaro.org>
 MIME-Version: 1.0
-References: <20220409134926.331728-1-zheyuma97@gmail.com>
-In-Reply-To: <20220409134926.331728-1-zheyuma97@gmail.com>
-From:   Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Date:   Tue, 12 Apr 2022 11:58:12 -0600
-Message-ID: <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: mpi3mr: Fix an error code when probing the driver
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        jejb@linux.ibm.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        mpi3mr-drvr-developers <mpi3mr-linuxdrv.pdl@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fbc41f05dc78ce89"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ff07720-3c52-99e6-8046-501f4ae28518@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000fbc41f05dc78ce89
-Content-Type: text/plain; charset="UTF-8"
+> > Which example schema are you talking about?
+> 
+> There is only one example-schema.
+> $ find ./linux -name 'example-schema*'
 
-On Sat, Apr 9, 2022 at 7:49 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
->
-> During the process of driver probing, probe function should return < 0
-> for failure, otherwise kernel will treat value >= 0 as success.
->
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/scsi/mpi3mr/mpi3mr_os.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-> index f7cd70a15ea6..240bfdf9788b 100644
-> --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-> +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-> @@ -4222,9 +4222,10 @@ mpi3mr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->         struct Scsi_Host *shost = NULL;
->         int retval = 0, i;
->
-> -       if (osintfc_mrioc_security_status(pdev)) {
-> +       retval = osintfc_mrioc_security_status(pdev);
-> +       if (retval) {
->                 warn_non_secure_ctlr = 1;
-> -               return 1; /* For Invalid and Tampered device */
-> +               return retval; /* For Invalid and Tampered device */
->         }
-NAK. The driver has to return 1 when invalid/tampered controllers are
-detected just to say the controller is held by the mpi3mr driver
-without any actual operation.
->
->         shost = scsi_host_alloc(&mpi3mr_driver_template,
-> --
-> 2.25.1
->
+Example seems good to me. I will change to boolean.
 
--- 
-This electronic communication and the information and any files transmitted 
-with it, or attached to it, are confidential and are intended solely for 
-the use of the individual or entity to whom it is addressed and may contain 
-information that is confidential, legally privileged, protected by privacy 
-laws, or otherwise restricted from disclosure to anyone else. If you are 
-not the intended recipient or the person responsible for delivering the 
-e-mail to the intended recipient, you are hereby notified that any use, 
-copying, distributing, dissemination, forwarding, printing, or copying of 
-this e-mail is strictly prohibited. If you received this e-mail in error, 
-please return the e-mail to the sender, delete it from your computer, and 
-destroy any printed copy of it.
+> > Anyway Krzysztof, can you confirm the same as you have been actively
+> > contributing to Qcom peripherals. I will add credit in follow-up
+> > submission.
+> 
+> Honestly not now, because I don't have access to related datasheets (I
+> am working on this).
 
---000000000000fbc41f05dc78ce89
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Yes definitely and you also must be having bunch of items in your todo list.
+Actually, I also don't have access to datasheets that's why was looking
+for inputs.
 
-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
-AYPMVSim4+pTItuq9IB5a3B4lXktI8GoZ4icvNq/tDUC+UQBkiyx41thyEA3MCL+kgpIDnw1yNbe
-DuhEcmBxC3E4cziK/swLRngmgXt+5vyInAJZt7HlQxtmx5IEZ4mXQ9lv/ZbRm6xdAgMBAAGjggHc
-MIIB2DAOBgNVHQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRw
-Oi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MC5jcnQwQQYIKwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJz
-b25hbHNpZ24yY2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZo
-dHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRC
-MEAwPqA8oDqGOGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAuY3JsMCYGA1UdEQQfMB2BG3NhdGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbTATBgNVHSUE
-DDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU
-pgsVbwKDpO1jbwtH74jMrhpldKgwDQYJKoZIhvcNAQELBQADggEBAAs3g9+OH401HDPcsiK943D1
-29CLPOuPWwMLezDdRvDcSqXw/gHia/3hEqnSZiSNEHi7WJ+bhd7c/kLupVhlae5tQwGMchue4U6R
-/3Ck8BQ5wivGrL3n0hksKHrXs+pPI96sat0kZCX/OVLJ6KfZoNBnl4lgXkgjfrWs/2U+gcMU2lmw
-zhujPHSNF2UIyRNtvcw0NozAtiov/KGLHocfrD39IAsX9SpKaqH6W0lFtOeevTeAg7Y0yXo7HXKY
-t+RqMzkDTXFXS6MXhqwXQHf6laWJkR9smRePlZ7BHSurIjHbpKhVaYCd6aKI4gUlq2t/zr+ct4Ls
-WZg6a7glbWLB4YExggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxT
-aWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAy
-MDIwAgx1ZyicYAvHT9A0GRQwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFAnjN8Y
-svRthHfEnLcTMjtEMxcBug6YUWsC141KwMSPMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIyMDQxMjE3NTgzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
-CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCpJczeK0ESOHBwA/0eeBZTWZpd
-gPyaTAErpjLcmDIO8clLWQKVwz8Rk9AC3kAuj9XV5viiD+xAL2E2L654pIBZKMrMXa3TLdGWG2CQ
-Ba87SmO0nGGK6dBt6Dfg6kmlbBjf/Te1nfDm/6ECbikUvitOmeIVQejpgLPzqwadD4ZBOEoOyPbi
-LZMk3fwyczBgP8ktaXiwac89gJrMmBLVaChedY9NoUCU5b6XpjD6QmId80qSMZWr3RKr3YcCJU+Y
-iJwOEmhK0K/msUTiaoGH/jwH0pCytTZtAuYGnCcbMZGZrfY3mAro7hVFC8bpDZr2GB3ce8UeUAxI
-q8kl+LAwp/Fn
---000000000000fbc41f05dc78ce89--
+> You can though try to look at original (vendor) sources:
+> https://git.codelinaro.org/clo/la/kernel/msm-4.19 (sdm845)
+> https://git.codelinaro.org/clo/la/kernel/msm-3.18 (msm8996)
+
+Great. I'll see if I can make most out of it.

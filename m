@@ -2,81 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB1C4FE5A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373D74FE5AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350780AbiDLQUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S1357508AbiDLQUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236190AbiDLQUL (ORCPT
+        with ESMTP id S236190AbiDLQUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:20:11 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5A555BED;
-        Tue, 12 Apr 2022 09:17:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id CB88F1F44415
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649780272;
-        bh=HG4zMAQTMsRTHk1kQ+DW7QY45qxSF73vy5Es63Yx/Hs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ie3NRjpwbAQ6cKLOUQoYITA6lfCLeBMXZqyKTetVNOwu1eFOnlDIS0Hyl1ms1j+hU
-         CWOJDqVXrI5AdKOkIllkSsrz7hrLwsPJnS9Lo7jPIeMg7Haa0JyzweD+PRe0JVHK04
-         ZdlRENGtXaYzDJkDtrAOgzDh2HuOBspLV5vsR5KvgvMnDPjBV9GuGDNfdc8Zg1ayuo
-         FtTuW85jObOrIekLzn62cGHsY6Dn2+F5biP5AN/aBfvU/5q1WAtgooD7FRil6SaE+d
-         +9sTEHPcko2Bzusdvyvz0qWsvXuJOVIe/j909WNAbo4d2EucJ2a9qTbxxjgbf35+8g
-         Gdk3RqTWV2VbA==
-Message-ID: <084cce2b-5c50-1d14-70f8-a313d61b901d@collabora.com>
-Date:   Tue, 12 Apr 2022 18:17:48 +0200
+        Tue, 12 Apr 2022 12:20:41 -0400
+Received: from rosenzweig.io (rosenzweig.io [138.197.143.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0358580E2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:18:22 -0700 (PDT)
+Received: by rosenzweig.io (Postfix, from userid 1000)
+        id 588E441BA2; Tue, 12 Apr 2022 16:18:21 +0000 (UTC)
+Date:   Tue, 12 Apr 2022 16:18:21 +0000
+From:   Alyssa Rosenzweig <alyssa@rosenzweig.io>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: merge DART into ARM/APPLE MACHINE
+Message-ID: <YlWmTZxuEemYjNdr@rosenzweig.io>
+References: <20220412161211.23162-1-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] spi: spi-mtk-nor: initialize spi controller after resume
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412161211.23162-1-sven@svenpeter.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/04/22 13:57, Allen-KH Cheng ha scritto:
-> After system resumes, the registers of nor controller are
-> initialized with default values. The nor controller will
-> not function properly.
+Acked-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+
+On Tue, Apr 12, 2022 at 06:12:11PM +0200, Sven Peter wrote:
+> It's the same people anyway.
 > 
-> To handle both issues above, we add mtk_nor_init() in
-> mtk_nor_resume after pm_runtime_force_resume().
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  MAINTAINERS | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
 > 
-> Fixes: 3bfd9103c7af ("spi: spi-mtk-nor: Add power management support")
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fd768d43e048..5af879de869c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1375,14 +1375,6 @@ L:	linux-input@vger.kernel.org
+>  S:	Odd fixes
+>  F:	drivers/input/mouse/bcm5974.c
+>  
+> -APPLE DART IOMMU DRIVER
+> -M:	Sven Peter <sven@svenpeter.dev>
+> -R:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> -L:	iommu@lists.linux-foundation.org
+> -S:	Maintained
+> -F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> -F:	drivers/iommu/apple-dart.c
+> -
+>  APPLE PCIE CONTROLLER DRIVER
+>  M:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
+>  M:	Marc Zyngier <maz@kernel.org>
+> @@ -1836,6 +1828,7 @@ F:	Documentation/devicetree/bindings/arm/apple/*
+>  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+>  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+>  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+> +F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+>  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+>  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> @@ -1845,6 +1838,7 @@ F:	arch/arm64/boot/dts/apple/
+>  F:	drivers/clk/clk-apple-nco.c
+>  F:	drivers/i2c/busses/i2c-pasemi-core.c
+>  F:	drivers/i2c/busses/i2c-pasemi-platform.c
+> +F:	drivers/iommu/apple-dart.c
+>  F:	drivers/irqchip/irq-apple-aic.c
+>  F:	drivers/mailbox/apple-mailbox.c
+>  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+> -- 
+> 2.25.1
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-
-That's just one issue, not two, so... "To handle both issues [etc]" should become
-something like:
-"Solve this issue by reinitializing the registers right after resuming the
-controller"
-
-After fixing the commit description,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-

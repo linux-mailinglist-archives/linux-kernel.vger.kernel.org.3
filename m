@@ -2,186 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187ED4FE848
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4884FE851
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351737AbiDLS7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S1358816AbiDLTAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351915AbiDLS7Q (ORCPT
+        with ESMTP id S1346239AbiDLTAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:59:16 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734071B7A2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:56:57 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id j2so34828384ybu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:56:57 -0700 (PDT)
+        Tue, 12 Apr 2022 15:00:18 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93551CFEE;
+        Tue, 12 Apr 2022 11:58:00 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id j6so14508741qkp.9;
+        Tue, 12 Apr 2022 11:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eHMwq1hCh/WshGI8cTMIpUbiFRbaWH2+E/KWSNCulF0=;
-        b=DMyoyas2eSkhhVmvnWgufXkDHSzqfnS6ZOW9Mf+ms7554uhXbpQDI7yMDzmNZsI6jY
-         12Gss+w65bvDjdAkZKLMft7FGFtykJXlNLTH6mbkPY8t4bQlaxksxrjzw1fhh5iNun3H
-         j3Hxub+s20/83m+ZnppQ9RKkKl41NV+HbUWNv4hRHfRulyiz8z3X3ipzxpjMCAGEh+w1
-         0Ufk1VETl6NHXwfolyiiAUL5lo5/tVBFuHWTG5osvxeZqdbjswmlCOuzxfTTex2AQH3W
-         UM07xvjisCrHhNoN3smZgSpuGKAAKOCUOlbgud+rxRCep97226Lxnei5LWF5rjG+UT9r
-         1fqg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TuwBH94C0n6aA7QlxhA8EuWZbFghowwSP20mti+OFE0=;
+        b=ESPesL+ha/VDC3WrnqhfHAxmVJd6vyaeXQYrIEbyIgkDHHSFzvSSRG6aHsHf54kpC1
+         haUrOukpFRo2T1pTEo9TFmO5OJOCaIt2fmsEjaDBHUnhnZBGZUR2FHgwkjeqUifabIT+
+         SWL9dkwmdYbt6f1OmxymQDv/LVutahk9EbMqCbQv9Hd7+zxvIBujpnYRbdLmVOjX/+1J
+         nHpXIz0tL9J/ZPfdnj6au8YmN3L0tdLyoYqqzwxDJe5lhTSnjfL5oV0ch8Kcs+4B5ouf
+         wZGB7/Nfva344S2fz8Ycq+cjww060hnnVNuNds9E7+p4tXJ8Shyg2rYix7F03qY8Ei+Q
+         hHYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eHMwq1hCh/WshGI8cTMIpUbiFRbaWH2+E/KWSNCulF0=;
-        b=vRzRj6inLc6ltTsSLGZmgXFuE+gOfUmlzK7RBmp+RUDBx3u7hsdgN1+qB1sSUPmjr/
-         7OwPrapLuOjr3/GjDk8yCdp6xyDalXqG8Z3ICS4W/8d/O5d/wH8s1G3rOjEU5KkIFBxL
-         4fnliz7MipQ7pTX0gSYbo6m/P5WBhx63yp7fBlabBc0SyfyhFfkmsaTREs8I2NQ8a60d
-         3+h3abLL5tqb3LATrvNNdw4b7bffGbtMkTbW00RiW7ha24huQE371YaAyLYoCyQU41m/
-         iC5aq7Obp58NLThlFTG0zmSYULzlKo4b4XeCCDVGSZTUhyQEN3ZG5UFtTou8mu9uCrlM
-         KKHw==
-X-Gm-Message-State: AOAM533tMrCZ1qeHRfTYEDODL2vxPa2ZhZsn1qtOiy1wBcetMnJYfPJm
-        y/i0owLZUcMshAt6d5DV+28FNAT8AeiCjfEHZmMeLw==
-X-Google-Smtp-Source: ABdhPJzaWphCzALFcxOPkJ8Yh4i0c37CrY2FUZ4X7yXa/GXuJWd2LYCi4Ydsj2f/4IW3w4Qu/3+zGMTf/7Sfq4hcyHI=
-X-Received: by 2002:a25:add6:0:b0:641:2562:4022 with SMTP id
- d22-20020a25add6000000b0064125624022mr11431719ybe.391.1649789816478; Tue, 12
- Apr 2022 11:56:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TuwBH94C0n6aA7QlxhA8EuWZbFghowwSP20mti+OFE0=;
+        b=bRqO6H975N51eXLkjEakWtJuvId0ju/vY8WYQG1E1bssoBVHIrJpOLUwZ2QWwfxrEC
+         rycFs2h49AMGTeacbKdmAswAVAFB3yjKv6AbjGUXOqSVt/hvSKBJpSVU/0P9kajn6v8P
+         ZAKsjQMSpMbHFLFnVVE6UKVMMUk+pmdNRSW6NjW6smE7RADXYNo9W+wmVN1OaQbn3oCw
+         x9FQDCwzlxzdLfHQ77AwGIHiqY+gam0M4ecf0PDpZgG3Yo22ukxkNC0flF0y7rJYw5Vg
+         FFvXrZoI7Dmy6QWQwNuGChRERRCDZAIpwLz1nFPfLvChdXQUT2Fr+Pt0ZtfdgbjqR6aN
+         zn1A==
+X-Gm-Message-State: AOAM533658kk2wBU7Y6oMb6yd/MqNygZ2vE9frROE8K4PF+uv17kCLt+
+        1zIyEnoI17poHArEGwZ5avc=
+X-Google-Smtp-Source: ABdhPJyXUdC+5P5g3zdNWZC3j13Lm90y+xiyQ1BBV27wd2BAygeNwg1QX7qc/UHSRd88hpinwbmSYw==
+X-Received: by 2002:a37:9f55:0:b0:69b:f262:bace with SMTP id i82-20020a379f55000000b0069bf262bacemr4228890qke.236.1649789879757;
+        Tue, 12 Apr 2022 11:57:59 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id d18-20020a05622a05d200b002f07ed88a54sm1820610qtb.46.2022.04.12.11.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 11:57:59 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/4] Enable rk356x PCIe controller
+Date:   Tue, 12 Apr 2022 14:57:47 -0400
+Message-Id: <20220412185751.124783-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220411211015.3091615-1-bgardon@google.com> <20220411211015.3091615-4-bgardon@google.com>
- <YlTN3yq1iBPkw6Aa@google.com>
-In-Reply-To: <YlTN3yq1iBPkw6Aa@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 12 Apr 2022 11:56:45 -0700
-Message-ID: <CANgfPd8mZ9-zQBvK=OASQ+n7eq_FpvpStMc_yD-UsmFdQ3OCvA@mail.gmail.com>
-Subject: Re: [PATCH v4 03/10] KVM: selftests: Read binary stats desc in lib
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 5:55 PM Mingwei Zhang <mizhang@google.com> wrote:
->
-> On Mon, Apr 11, 2022, Ben Gardon wrote:
-> > Move the code to read the binary stats descriptors to the KVM selftests
-> > library. It will be re-used by other tests to check KVM behavior.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  .../selftests/kvm/include/kvm_util_base.h     |  4 +++
-> >  .../selftests/kvm/kvm_binary_stats_test.c     |  9 ++----
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++++
-> >  3 files changed, 35 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > index 5ba3132f3110..c5f34551ff76 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > @@ -401,6 +401,10 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
-> >  int vm_get_stats_fd(struct kvm_vm *vm);
-> >  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
-> >  void read_vm_stats_header(int stats_fd, struct kvm_stats_header *header);
-> > +struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
-> > +                                       struct kvm_stats_header *header);
-> > +void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
-> > +                     struct kvm_stats_desc *stats_desc);
-> >
-> >  uint32_t guest_get_vcpuid(void);
-> >
-> > diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > index 22c22a90f15a..e4795bad7db6 100644
-> > --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > @@ -62,14 +62,9 @@ static void stats_test(int stats_fd)
-> >                                                       header.data_offset),
-> >                       "Descriptor block is overlapped with data block");
-> >
-> > -     /* Allocate memory for stats descriptors */
-> > -     stats_desc = calloc(header.num_desc, size_desc);
-> > -     TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-> >       /* Read kvm stats descriptors */
-> > -     ret = pread(stats_fd, stats_desc,
-> > -                     size_desc * header.num_desc, header.desc_offset);
-> > -     TEST_ASSERT(ret == size_desc * header.num_desc,
-> > -                     "Read KVM stats descriptors");
-> > +     stats_desc = alloc_vm_stats_desc(stats_fd, &header);
-> > +     read_vm_stats_desc(stats_fd, &header, stats_desc);
-> >
-> >       /* Sanity check for fields in descriptors */
-> >       for (i = 0; i < header.num_desc; ++i) {
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 0caf28e324ed..e3ae26fbef03 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -2564,3 +2564,32 @@ void read_vm_stats_header(int stats_fd, struct kvm_stats_header *header)
-> >       ret = read(stats_fd, header, sizeof(*header));
-> >       TEST_ASSERT(ret == sizeof(*header), "Read stats header");
-> >  }
-> > +
-> > +static ssize_t stats_descs_size(struct kvm_stats_header *header)
-> > +{
-> > +     return header->num_desc *
-> > +            (sizeof(struct kvm_stats_desc) + header->name_size);
-> > +}
-> I was very confused on header->name_size. So this field means the
-> maximum string size of a stats name, right? Can we update the comments
-> in the kvm.h to specify that? By reading the comments, I don't really
-> feel this is how we should use this field.
+This series enables the DesignWare based PCIe controller on the rk356x
+series of chips.
+We drop the fallback to the core driver due to compatibility issues.
+We add support for legacy interrupts for cards that lack MSI support
+(which is partially broken currently).
+We then add the device tree nodes to enable PCIe on the Quartz64 Model
+A.
 
-I believe that's right. I agree the documentation on that was a little
-confusing.
+Patch 1 drops the snps,dw,pcie fallback from the dt-binding
+Patch 2 adds legacy interrupt support to the driver
+Patch 3 adds the device tree binding to the rk356x.dtsi
+Patch 4 enables the PCIe controller on the Quartz64-A
 
->
-> hmm, if that is true, isn't this field a compile time value? Why do we
-> have to get it at runtime?
+Peter Geis (4):
+  dt-bindings: pci: remove fallback from Rockchip DesignWare binding
+  PCI: dwc: rockchip: add legacy interrupt support
+  arm64: dts: rockchip: add rk3568 pcie2x1 controller
+  arm64: dts: rockchip: enable pcie controller on quartz64-a
 
-It's compile time for the kernel but not for the userspace binaries
-which ultimately consume the stats.
-We could cheat in this selftest perhaps, but then it wouldn't be as
-good of a test.
+ .../bindings/pci/rockchip-dw-pcie.yaml        |  3 +-
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 68 +++++++++++++-
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c | 92 ++++++++++++++++++-
+ 4 files changed, 189 insertions(+), 8 deletions(-)
 
->
-> > +
-> > +/* Caller is responsible for freeing the returned kvm_stats_desc. */
-> > +struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
-> > +                                       struct kvm_stats_header *header)
-> > +{
-> > +     struct kvm_stats_desc *stats_desc;
-> > +
-> > +     stats_desc = malloc(stats_descs_size(header));
-> > +     TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-> > +
-> > +     return stats_desc;
-> > +}
-> > +
-> > +void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
-> > +                     struct kvm_stats_desc *stats_desc)
-> > +{
-> > +     ssize_t ret;
-> > +
-> > +     ret = pread(stats_fd, stats_desc, stats_descs_size(header),
-> > +                 header->desc_offset);
-> > +     TEST_ASSERT(ret == stats_descs_size(header),
-> > +                 "Read KVM stats descriptors");
-> > +}
-> > --
-> > 2.35.1.1178.g4f1659d476-goog
-> >
+-- 
+2.25.1
+

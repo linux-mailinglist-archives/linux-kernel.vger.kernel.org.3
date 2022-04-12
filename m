@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E29F4FE214
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19504FE1EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348135AbiDLNPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S1355547AbiDLNPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356782AbiDLNOJ (ORCPT
+        with ESMTP id S1356788AbiDLNOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:14:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2211C0C;
-        Tue, 12 Apr 2022 06:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649768459; x=1681304459;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=lExz5hm5xcTzyOEY6YHWDS3MJSoSHVq4Qg2JWxxoCRg=;
-  b=Y+6d7TPQpIfSQQxlgYThQcAbaudKPjvUzwzJcvxX3Sqil7dW7Emrc8xt
-   l24+fusu2XXmJIJ1UYbAJlMnVgkJRL06DZqmGsZHBtH0dUexAFAjpwUB8
-   wO61WBwfoh1XZcH20OrK9QnoYUalxPPKCDX6CRDhb1cGcJX2g/24ViUQf
-   vvWThyvfl8ERv4DT4oIWY5W9RNdyRj4RQjxoxjaemKkKLLY7qiVtRrOmW
-   P/v11FVG4/ZDbW21y1F2WTeQPGlcIhu3fE/QOYD5gUbWSiqkWw24R0FxG
-   vG9GG03m04HF7kdfrErSKP9AsZmbTO+L7VCG556xANO4+mGSf66TO0aYk
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="348805462"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="348805462"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:00:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="699826034"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 06:00:51 -0700
-Date:   Tue, 12 Apr 2022 21:00:40 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220412130040.GD8013@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <CALCETrWk1Y47JQC=V028A7Tmc9776Oo4AjgwqRtd9K=XDh6=TA@mail.gmail.com>
- <CAGtprH9DGyxSKSwVhc0Td3x-M4-C6j=+d3DEtkxOty+PPB0V_g@mail.gmail.com>
+        Tue, 12 Apr 2022 09:14:10 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65D2BC;
+        Tue, 12 Apr 2022 06:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649768468; x=1681304468;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bifhyOCkRst28z4/YuVYetStnqamZXAtDYuVHvzQJXk=;
+  b=IbLkmIQ9b2/KgphnMB4zaDlajpuTi7hTl5MGS2nemVHv7FUFJ4fvSpnd
+   Bso+UT2x9Z/4TUoSm1iYe63mt4paqyyVJvyACR2UF8DP3NbX9CO7ECUyw
+   WStgSJ9G6P2+WRm8Ukfq2zhjZ0F+Gq31mSSF7g0DyiEgA0oSJKHKrWkJN
+   4=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Apr 2022 06:01:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:01:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 12 Apr 2022 06:01:06 -0700
+Received: from [10.216.28.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Apr
+ 2022 06:01:02 -0700
+Message-ID: <be05410d-8b68-ca5f-63a6-4565bcd43f66@quicinc.com>
+Date:   Tue, 12 Apr 2022 18:30:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9DGyxSKSwVhc0Td3x-M4-C6j=+d3DEtkxOty+PPB0V_g@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
+ rx macros and external codecs
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
+        <quic_rohkumar@quicinc.com>
+References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
+ <Yky2Iwt+tvxvu4/S@google.com>
+ <8fea1165-c8b6-6ce2-86dc-82274af8c43d@quicinc.com>
+ <YlSHPU7XITS2dju/@google.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YlSHPU7XITS2dju/@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 11:35:05AM -1000, Vishal Annapurve wrote:
-> On Mon, Mar 28, 2022 at 10:17 AM Andy Lutomirski <luto@kernel.org> wrote:
-> >
-> > On Thu, Mar 10, 2022 at 6:09 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > >
-> > > This is the v5 of this series which tries to implement the fd-based KVM
-> > > guest private memory. The patches are based on latest kvm/queue branch
-> > > commit:
-> > >
-> > >   d5089416b7fb KVM: x86: Introduce KVM_CAP_DISABLE_QUIRKS2
-> >
-> > Can this series be run and a VM booted without TDX?  A feature like
-> > that might help push it forward.
-> >
-> > --Andy
-> 
-> I have posted a RFC series with selftests to exercise the UPM feature
-> with normal non-confidential VMs via
-> https://lore.kernel.org/kvm/20220408210545.3915712-1-vannapurve@google.com/
 
-Thanks Vishal, this sounds very helpful, it already started to find
-bugs.
-
-Chao
-> 
-> -- Vishal
+On 4/12/2022 1:23 AM, Matthias Kaehlcke wrote:
+Thanks for your time Matthias!!!
+> On Mon, Apr 11, 2022 at 07:32:33PM +0530, Srinivasa Rao Mandadapu wrote:
+>> On 4/6/2022 3:05 AM, Matthias Kaehlcke wrote:
+>> Thanks for your time Matthias!!!
+>>> On Tue, Apr 05, 2022 at 04:43:38PM +0530, Srinivasa Rao Mandadapu wrote:
+>>>> SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
+>>>> codecs like WCD938x, max98360a using soundwire masters and i2s bus.
+>>>> Add these nodes for sc7280 based platforms audio use case.
+>>>> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
+>>>>
+>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>>> ---
+>>> A change log would be helpful for reviewers
+>> Change log added in cover letter.
+>  From my perspective as a reviewer I find it more practical to have a
+> change log per patch.
+Okay. will do accordingly from next time.
+>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>> index de646d9..c6a04c3 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>> @@ -20,6 +20,14 @@
+>>>>    #include "sc7280-chrome-common.dtsi"
+>>>>    / {
+>>>> +	max98360a: audio-codec-0 {
+>>>> +		compatible = "maxim,max98360a";
+>>>> +		pinctrl-names = "default";
+>>>> +		pinctrl-0 = <&amp_en>;
+>>>> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+>>>> +		#sound-dai-cells = <0>;
+>>>> +	};
+>>>> +
+>>> This node shouldn't be at top but with the other device nodes, in
+>>> alphabetical order, i.e. before 'pwmleds'.
+>> Actually we are sorting as per node name. Hence kept it here. As per
+>> previous reviewer comments, sorted accordingly.
+>>
+>> Please suggest better approach.
+> True, I forgot the node names are used for sorting, not the labels.
+Okay.
+>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>>> index db74fc3..78ec84c 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>>> @@ -822,6 +822,127 @@
+>>>>    			#power-domain-cells = <1>;
+>>>>    		};
+>>>> +		rxmacro: codec@3200000 {
+>>> These node are not at the correct position. They should be sorted by
+>>> address and hence be inserted between 'lpasscc@3000000' and
+>>> 'interconnect@3c40000'.
+>> Actually we are sorting as per node(codec) name. Hence kept it here. As per
+>> previous reviewer comments, sorted accordingly.
+> Could you provide a pointer to those comments?
+Sorry. it seems we misunderstood.
+>
+> My understanding is that we are sorting by node name when nodes don't have
+> addresses or for overrides in board files/snippets, however the nodes under
+> 'soc@0' are sorted by address.
+>
+> Another nit: 'rx_macro, tx_macro, va_macro' instead of the labels without
+> underscore? Not really important, but maybe slightly more readable and
+> would match the 'spelling' of the compatible strings.
+Okay. Will change accordingly!!!

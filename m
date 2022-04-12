@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2562B4FE2D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F914FE2E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354022AbiDLNkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S1352632AbiDLNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbiDLNkQ (ORCPT
+        with ESMTP id S234919AbiDLNlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:40:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0CE2DD66;
-        Tue, 12 Apr 2022 06:37:58 -0700 (PDT)
+        Tue, 12 Apr 2022 09:41:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6738D2DD43
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:38:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8822161AB2;
-        Tue, 12 Apr 2022 13:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3058DC385A5;
-        Tue, 12 Apr 2022 13:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649770677;
-        bh=WU7Zz13KbGEiSCrTwZGReYOqbMBpyPSKUG1GNJKkz8c=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=iHesB0XV42gPxXUCfNNPArPeE6m+LJCrmh5FGgY1xGXNhCKQj4DGcqxGaoFGMe2a6
-         uoKNTQXhtdnyldiMjFL5+aNzjRJXXdX8KlwM8NDQA8UKz1mLdT1+y1bluUB0f8kpXK
-         DT+SrFSdDORF7eqwdUGI5EIaOwOZi6Tl0eoyUT8klSxAFKvf0mYY/qCPASHrC4cuFF
-         ztLXJLvMtF2RjgJlrBXUkd/XzCcaf5Of2+ps7iEaZtvKxwCQ5i0YjGTXPxdqveDNzF
-         jUmVGVp/mm0kwJdgr9D1YjSWDyjOZ00/sbvb+sMcDPekOLeVa4xxYHdKHAuD2q7+tk
-         Tuly76KayoFOg==
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 028E4618F7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F87AC385A1;
+        Tue, 12 Apr 2022 13:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649770728;
+        bh=If4KJxS1/AVf307xWkNZDRnv4N5rmqUpTEKgaBEdAsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y7esKDYjUXe0+ELyCyQfNazoS1s5EBVql/1k7Jpr+CgQLqu6dWGk98m30pJl1klQy
+         ON6oRW1/Eo4aCzDefZ6DUd49Y2WuuIKgbFul9C9XkctvAjZeoxxN087dlfTqM+rJ34
+         SoSxSmpIIaF4w4SAkmXbA3C9CPO9r5/Pm3PY905s=
+Date:   Tue, 12 Apr 2022 15:38:45 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] staging: r8188eu: don't set _SUCCESS again
+Message-ID: <YlWA5XkVDd9UJ81v@kroah.com>
+References: <20220409151557.207980-1-martin@kaiser.cx>
+ <20220409151557.207980-3-martin@kaiser.cx>
+ <20220411101834.GW3293@kadam>
+ <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] rtw89: rtw89_ser: add const to struct state_ent and
- event_ent
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <2fd88e6119f62b968477ef9781abb1832d399fd6.camel@perches.com>
-References: <2fd88e6119f62b968477ef9781abb1832d399fd6.camel@perches.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164977067440.31115.9442852945406484108.kvalo@kernel.org>
-Date:   Tue, 12 Apr 2022 13:37:56 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,24 +57,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joe Perches <joe@perches.com> wrote:
-
-> Change the struct and the uses to const to reduce data.
+On Mon, Apr 11, 2022 at 08:39:18PM +0200, Martin Kaiser wrote:
+> Thus wrote Dan Carpenter (dan.carpenter@oracle.com):
 > 
-> $ size drivers/net/wireless/realtek/rtw89/ser.o* (x86-64 defconfig w/ rtw89)
->    text	   data	    bss	    dec	    hex	filename
->    3741	      8	      0	   3749	    ea5	drivers/net/wireless/realtek/rtw89/ser.o.new
->    3437	    312	      0	   3749	    ea5	drivers/net/wireless/realtek/rtw89/ser.o.old
+> > On Sat, Apr 09, 2022 at 05:15:51PM +0200, Martin Kaiser wrote:
+> > > ret is initialized to _SUCCESS, there's no need to set it again.
 > 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+> > > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> 
+> > I liked the original code better.  Otherwise you wonder, is it
+> > intentional to return success on this path. 
+> 
+> You're right. The original code is easier to understand. It's not
+> obvious that this check should return _SUCCESS and the remaining ones
+> return _FAIL.
+> 
+> Greg, could you drop this patch or should I resend the series without
+> this patch?
 
-Patch applied to wireless-next.git, thanks.
+Please resend without this one.
 
-af5175acc8e2 rtw89: rtw89_ser: add const to struct state_ent and event_ent
+thanks,
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/2fd88e6119f62b968477ef9781abb1832d399fd6.camel@perches.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+greg k-h

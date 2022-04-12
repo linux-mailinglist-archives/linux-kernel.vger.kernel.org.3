@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29E34FD846
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A764FD487
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356729AbiDLHjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S1377127AbiDLHrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352825AbiDLHOa (ORCPT
+        with ESMTP id S1352874AbiDLHOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8046EE0EB;
-        Mon, 11 Apr 2022 23:55:11 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6757F3137A;
+        Mon, 11 Apr 2022 23:55:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94D0E61451;
-        Tue, 12 Apr 2022 06:55:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47ADC385B6;
-        Tue, 12 Apr 2022 06:55:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0656FB81B43;
+        Tue, 12 Apr 2022 06:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50978C385A1;
+        Tue, 12 Apr 2022 06:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746510;
-        bh=dlwLqBXYP8OkZ069bvbEEpvkzus7DEWuXsJub3j4qr8=;
+        s=korg; t=1649746512;
+        bh=79S49V6b0/rMojkpv1DYVKJ96IF3SgOqW38WP5Qw2YQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hm3P3445RuM/VSD1+/gJVxcHDZ301ro/DbqbPpw8FcJ20t0CRdJ9Kw51TOzHG9oSZ
-         /ZFFlQBmJZlTo81cZrTdgYeyi5UL+gt6PTtvL/yq7XcoQln2WjEdDIjfiOjjmTo9ni
-         pNXjPrnAaLPWzHtqpfJoUKrDflrPGRItTYIS/sIg=
+        b=lz1ds3huSHQmBgyPbPrEEw2+Z53gFXUPo+R6IfzhqeN+IsbdnSxbRYTeSw5dmaMNm
+         lTkoh/DdSLUb0Xweplb/Z7yLuH5DrcE7E+X/4k1vqOp/Da2tAw7hq/MgutKFIYQ90e
+         knAcB0816R71QJqE051JCcVlk8OlCQ3TkSnNGoVI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>,
-        Jim Mattson <jmattson@google.com>,
-        Like Xu <likexu@tencent.com>,
+        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 007/285] KVM: x86/pmu: Fix and isolate TSX-specific performance event logic
-Date:   Tue, 12 Apr 2022 08:27:44 +0200
-Message-Id: <20220412062943.886304721@linuxfoundation.org>
+Subject: [PATCH 5.16 008/285] KVM: x86/emulator: Emulate RDPID only if it is enabled in guest
+Date:   Tue, 12 Apr 2022 08:27:45 +0200
+Message-Id: <20220412062943.915528084@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -57,129 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-[ Upstream commit e644896f5106aa3f6d7e8c7adf2e4dc0fce53555 ]
+[ Upstream commit a836839cbfe60dc434c5476a7429cf2bae36415d ]
 
-HSW_IN_TX* bits are used in generic code which are not supported on
-AMD. Worse, these bits overlap with AMD EventSelect[11:8] and hence
-using HSW_IN_TX* bits unconditionally in generic code is resulting in
-unintentional pmu behavior on AMD. For example, if EventSelect[11:8]
-is 0x2, pmc_reprogram_counter() wrongly assumes that
-HSW_IN_TX_CHECKPOINTED is set and thus forces sampling period to be 0.
+When RDTSCP is supported but RDPID is not supported in host,
+RDPID emulation is available. However, __kvm_get_msr() would
+only fail when RDTSCP/RDPID both are disabled in guest, so
+the emulator wouldn't inject a #UD when RDPID is disabled but
+RDTSCP is enabled in guest.
 
-Also per the SDM, both bits 32 and 33 "may only be set if the processor
-supports HLE or RTM" and for "IN_TXCP (bit 33): this bit may only be set
-for IA32_PERFEVTSEL2."
-
-Opportunistically eliminate code redundancy, because if the HSW_IN_TX*
-bit is set in pmc->eventsel, it is already set in attr.config.
-
-Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Reported-by: Jim Mattson <jmattson@google.com>
-Fixes: 103af0a98788 ("perf, kvm: Support the in_tx/in_tx_cp modifiers in KVM arch perfmon emulation v5")
-Co-developed-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
-Message-Id: <20220309084257.88931-1-likexu@tencent.com>
+Fixes: fb6d4d340e05 ("KVM: x86: emulate RDPID")
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/pmu.c           | 15 +++++----------
- arch/x86/kvm/vmx/pmu_intel.c | 13 ++++++++++---
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ arch/x86/kvm/emulate.c     | 4 +++-
+ arch/x86/kvm/kvm_emulate.h | 1 +
+ arch/x86/kvm/x86.c         | 6 ++++++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 255ef63a4354..227b06dd1fea 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -96,8 +96,7 @@ static void kvm_perf_overflow_intr(struct perf_event *perf_event,
- 
- static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 				  u64 config, bool exclude_user,
--				  bool exclude_kernel, bool intr,
--				  bool in_tx, bool in_tx_cp)
-+				  bool exclude_kernel, bool intr)
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 5705446c1213..769ba8ffd700 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -3514,8 +3514,10 @@ static int em_rdpid(struct x86_emulate_ctxt *ctxt)
  {
- 	struct perf_event *event;
- 	struct perf_event_attr attr = {
-@@ -113,16 +112,14 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+ 	u64 tsc_aux = 0;
  
- 	attr.sample_period = get_sample_period(pmc, pmc->counter);
- 
--	if (in_tx)
--		attr.config |= HSW_IN_TX;
--	if (in_tx_cp) {
-+	if ((attr.config & HSW_IN_TX_CHECKPOINTED) &&
-+	    guest_cpuid_is_intel(pmc->vcpu)) {
- 		/*
- 		 * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
- 		 * period. Just clear the sample period so at least
- 		 * allocating the counter doesn't fail.
- 		 */
- 		attr.sample_period = 0;
--		attr.config |= HSW_IN_TX_CHECKPOINTED;
- 	}
- 
- 	event = perf_event_create_kernel_counter(&attr, -1, current,
-@@ -229,9 +226,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
- 	pmc_reprogram_counter(pmc, type, config,
- 			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
- 			      !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
--			      eventsel & ARCH_PERFMON_EVENTSEL_INT,
--			      (eventsel & HSW_IN_TX),
--			      (eventsel & HSW_IN_TX_CHECKPOINTED));
-+			      eventsel & ARCH_PERFMON_EVENTSEL_INT);
+-	if (ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux))
++	if (!ctxt->ops->guest_has_rdpid(ctxt))
+ 		return emulate_ud(ctxt);
++
++	ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux);
+ 	ctxt->dst.val = tsc_aux;
+ 	return X86EMUL_CONTINUE;
  }
- EXPORT_SYMBOL_GPL(reprogram_gp_counter);
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 68b420289d7e..fb09cd22cb7f 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -226,6 +226,7 @@ struct x86_emulate_ops {
+ 	bool (*guest_has_long_mode)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_movbe)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_fxsr)(struct x86_emulate_ctxt *ctxt);
++	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
  
-@@ -267,7 +262,7 @@ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
- 			      kvm_x86_ops.pmu_ops->find_fixed_event(idx),
- 			      !(en_field & 0x2), /* exclude user */
- 			      !(en_field & 0x1), /* exclude kernel */
--			      pmi, false, false);
-+			      pmi);
+ 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index ff181a6c1005..08522041df59 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7466,6 +7466,11 @@ static bool emulator_guest_has_fxsr(struct x86_emulate_ctxt *ctxt)
+ 	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_FXSR);
  }
- EXPORT_SYMBOL_GPL(reprogram_fixed_counter);
  
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 9e380a939c72..ee2452215e93 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -395,6 +395,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	struct kvm_pmc *pmc;
- 	u32 msr = msr_info->index;
- 	u64 data = msr_info->data;
-+	u64 reserved_bits;
- 
- 	switch (msr) {
- 	case MSR_CORE_PERF_FIXED_CTR_CTRL:
-@@ -449,7 +450,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
- 			if (data == pmc->eventsel)
- 				return 0;
--			if (!(data & pmu->reserved_bits)) {
-+			reserved_bits = pmu->reserved_bits;
-+			if ((pmc->idx == 2) &&
-+			    (pmu->raw_event_mask & HSW_IN_TX_CHECKPOINTED))
-+				reserved_bits ^= HSW_IN_TX_CHECKPOINTED;
-+			if (!(data & reserved_bits)) {
- 				reprogram_gp_counter(pmc, data);
- 				return 0;
- 			}
-@@ -523,8 +528,10 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	entry = kvm_find_cpuid_entry(vcpu, 7, 0);
- 	if (entry &&
- 	    (boot_cpu_has(X86_FEATURE_HLE) || boot_cpu_has(X86_FEATURE_RTM)) &&
--	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM)))
--		pmu->reserved_bits ^= HSW_IN_TX|HSW_IN_TX_CHECKPOINTED;
-+	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM))) {
-+		pmu->reserved_bits ^= HSW_IN_TX;
-+		pmu->raw_event_mask |= (HSW_IN_TX|HSW_IN_TX_CHECKPOINTED);
-+	}
- 
- 	bitmap_set(pmu->all_valid_pmc_idx,
- 		0, pmu->nr_arch_gp_counters);
++static bool emulator_guest_has_rdpid(struct x86_emulate_ctxt *ctxt)
++{
++	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_RDPID);
++}
++
+ static ulong emulator_read_gpr(struct x86_emulate_ctxt *ctxt, unsigned reg)
+ {
+ 	return kvm_register_read_raw(emul_to_vcpu(ctxt), reg);
+@@ -7548,6 +7553,7 @@ static const struct x86_emulate_ops emulate_ops = {
+ 	.guest_has_long_mode = emulator_guest_has_long_mode,
+ 	.guest_has_movbe     = emulator_guest_has_movbe,
+ 	.guest_has_fxsr      = emulator_guest_has_fxsr,
++	.guest_has_rdpid     = emulator_guest_has_rdpid,
+ 	.set_nmi_mask        = emulator_set_nmi_mask,
+ 	.get_hflags          = emulator_get_hflags,
+ 	.exiting_smm         = emulator_exiting_smm,
 -- 
 2.35.1
 

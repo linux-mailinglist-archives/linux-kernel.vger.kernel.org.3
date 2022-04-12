@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5C94FE0E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEBD4FE0F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354490AbiDLMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S1354653AbiDLMwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355776AbiDLMsf (ORCPT
+        with ESMTP id S1355778AbiDLMsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:48:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2FE3A72E;
-        Tue, 12 Apr 2022 05:19:33 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 12:19:30 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444883B012;
+        Tue, 12 Apr 2022 05:19:34 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 12:19:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649765971;
+        s=2020; t=1649765972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9NpdWSphFBid/89npUSGNL3SE9N2vITi79LW7flhQo0=;
-        b=bJ4qf9vs5GCHSOfa9qWJqlDRSzPXB7lpJs7B8Pl/88MmEQEQyG0TOQrW61AKfmVGLL06Li
-        6JRE/xn4S4flWn79dlR5SnY/vKvYBMKH3CjxqVWu3ovyJJL5rHhNaZLpvR9r3qeqUI7LK7
-        cHdENRhXerWmez36gXOSkY5jzlCvbN5KfWIAb+/vHym+K27c3MrBs0A6S4rgH17VMYIhny
-        DRH54NliV5RLFF/ctlDmYuZAuAOxUbKOELm1LRBC4UoSOLKR04fMgDhxsclpMtn+ZEf9+h
-        7jj4mB1tWevAl1GGAIFMVznwxCUdsRVBuE7U+ffMWxQcu3V25OaN3rhnV7mIRA==
+        bh=v5q536+xcLUMFhu65pWhMxgwQyw8MpnlpovYWdiwIs4=;
+        b=O9sgWJeuAG1KRxoZfkbBTlfdx2Zx298bIlvL1O9mBUhj0YSV8Vo6gqDks4gUJ67Njz83QN
+        oJzsHim//DguVLy+lPhXuRvzL5fTwvqwfZrItSY7HKMfuHVbbN4uZSACXuQGosOszw5vGL
+        QsXvRTj/TJ0AEC5TyM4OCzaLgP3c7efVKVtjrVEp+HbbNBPSAcJYN5X2Qe8FfxW/NfNxfS
+        tGe6hYhE0Pv394aQiBrNAFLXcCA8f4nuxl+ug8t6cebfn7GW/2slxVw4N0EZFVFoM5LBOF
+        NU46xBKLqOTY3diBrdY/fsY6uLIjal+1ZmVay761f89ugiNXv1K73MUbRhu7mg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649765971;
+        s=2020e; t=1649765972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9NpdWSphFBid/89npUSGNL3SE9N2vITi79LW7flhQo0=;
-        b=ZHqFNVVjVF1xqbPTQpUG3DA+XYa53sadQfbjTDqT6nekpvdbiZIOW3pTPSryq6BFFN+0+e
-        Jm41LGGG1lTzYhAA==
-From:   "tip-bot2 for Longpeng(Mike)" <tip-bot2@linutronix.de>
+        bh=v5q536+xcLUMFhu65pWhMxgwQyw8MpnlpovYWdiwIs4=;
+        b=k96QegTOyLboiY8TQdGL/we1vM55u8S51MOHM4pvkMsaGxqCTDldmLPuD6r3Pzu7Ik3Biq
+        Lm4AQzRYfzuqmMCg==
+From:   "tip-bot2 for Boris Ostrovsky" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] cpu/hotplug: Allow the CPU in CPU_UP_PREPARE state to
- be brought up again.
-Cc:     "Longpeng(Mike)" <longpeng2@huawei.com>,
+Subject: [tip: smp/core] x86/xen: Allow to retry if cpu_initialize_context() failed.
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Henry Wang <Henry.Wang@arm.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220209080214.1439408-3-bigeasy@linutronix.de>
-References: <20220209080214.1439408-3-bigeasy@linutronix.de>
+In-Reply-To: <20220209080214.1439408-2-bigeasy@linutronix.de>
+References: <20220209080214.1439408-2-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <164976597017.4207.3233698884104111909.tip-bot2@tip-bot2>
+Message-ID: <164976597110.4207.17740112682185994045.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -72,59 +68,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     c7dfb2591b23856182e2c9da6b1d526ef7fd6b2e
-Gitweb:        https://git.kernel.org/tip/c7dfb2591b23856182e2c9da6b1d526ef7fd6b2e
-Author:        Longpeng(Mike) <longpeng2@huawei.com>
-AuthorDate:    Wed, 09 Feb 2022 09:02:14 +01:00
+Commit-ID:     e8a69f12f01f487c6a0e704eb14ccf2dd015277d
+Gitweb:        https://git.kernel.org/tip/e8a69f12f01f487c6a0e704eb14ccf2dd015277d
+Author:        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+AuthorDate:    Wed, 09 Feb 2022 09:02:13 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 12 Apr 2022 14:13:01 +02:00
 
-cpu/hotplug: Allow the CPU in CPU_UP_PREPARE state to be brought up again.
+x86/xen: Allow to retry if cpu_initialize_context() failed.
 
-A CPU will not show up in virtualized environment which includes an
-Enclave. The VM splits its resources into a primary VM and a Enclave
-VM. While the Enclave is active, the hypervisor will ignore all requests to
-bring up a CPU and this CPU will remain in CPU_UP_PREPARE state.
+If memory allocation in cpu_initialize_context() fails then it will
+bring up the VCPU and leave with the corresponding CPU bit set in
+xen_cpu_initialized_map.
 
-The kernel will wait up to ten seconds for CPU to show up (do_boot_cpu())
-and then rollback the hotplug state back to CPUHP_OFFLINE leaving the CPU
-state in CPU_UP_PREPARE. The CPU state is set back to CPUHP_TEARDOWN_CPU
-during the CPU_POST_DEAD stage.
+The following (presumably successful) CPU bring up will BUG in
+xen_pv_cpu_up() because nothing for that VCPU would be initialized.
 
-After the Enclave VM terminates, the primary VM can bring up the CPU
-again.
+Clear the CPU bits, that were set in cpu_initialize_context() in case
+the memory allocation fails.
 
-Allow to bring up the CPU if it is in the CPU_UP_PREPARE state.
+[ bigeasy: Creating a patch from Boris' email. ]
 
-[bigeasy: Rewrite commit description.]
-
-Signed-off-by: Longpeng(Mike) <longpeng2@huawei.com>
+Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Dongli Zhang <dongli.zhang@oracle.com>
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-Reviewed-by: Henry Wang <Henry.Wang@arm.com>
-Link: https://lore.kernel.org/r/20220209080214.1439408-3-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20220209080214.1439408-2-bigeasy@linutronix.de
 
 ---
- kernel/smpboot.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/xen/smp_pv.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/smpboot.c b/kernel/smpboot.c
-index f6bc0bc..b9f5454 100644
---- a/kernel/smpboot.c
-+++ b/kernel/smpboot.c
-@@ -392,6 +392,13 @@ int cpu_check_up_prepare(int cpu)
- 		 */
- 		return -EAGAIN;
+diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
+index 688aa8b..ba7af2e 100644
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -260,8 +260,11 @@ cpu_initialize_context(unsigned int cpu, struct task_struct *idle)
+ 		return 0;
  
-+	case CPU_UP_PREPARE:
-+		/*
-+		 * Timeout while waiting for the CPU to show up. Allow to try
-+		 * again later.
-+		 */
-+		return 0;
-+
- 	default:
+ 	ctxt = kzalloc(sizeof(*ctxt), GFP_KERNEL);
+-	if (ctxt == NULL)
++	if (ctxt == NULL) {
++		cpumask_clear_cpu(cpu, xen_cpu_initialized_map);
++		cpumask_clear_cpu(cpu, cpu_callout_mask);
+ 		return -ENOMEM;
++	}
  
- 		/* Should not happen.  Famous last words. */
+ 	gdt = get_cpu_gdt_rw(cpu);
+ 

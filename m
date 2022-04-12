@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0C54FD794
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F354FD9E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380748AbiDLIWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S1376572AbiDLJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353773AbiDLHZy (ORCPT
+        with ESMTP id S1358880AbiDLHmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C84E6394;
-        Tue, 12 Apr 2022 00:04:27 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF55E54689;
+        Tue, 12 Apr 2022 00:19:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2884661045;
-        Tue, 12 Apr 2022 07:04:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35552C385A1;
-        Tue, 12 Apr 2022 07:04:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37A86B81B4F;
+        Tue, 12 Apr 2022 07:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86621C385A1;
+        Tue, 12 Apr 2022 07:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747066;
-        bh=i89we5TJeVE6OkMcDfmOAm0MKkNg7SRdvldGSUnPKxA=;
+        s=korg; t=1649747967;
+        bh=TicIjItdnUUdAbljP2+7kXCA1D8V7E6pwj/dcqzE28I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cbfmz6CT2GzePJbQoT9NKR1fCJEX3TaIPYv+69Yasgmi+mJ2whyPy4ahlcd31/cSv
-         dE8cgdXIpu+HmJ294lx8qgRMbwCp0vDKkxSSl3qbyAINjcoKa8gteMLgqukOB4zSX3
-         yCxQDvrkIMEJ8bbNNebS8+I9TS67NadKzA3vUHrU=
+        b=z+cGSOiSmdoa9H6ALG5NMOQtITk6JHcxWEOhbMVAT+52TtpgVSrkUriq6b6/bKZpY
+         zGKbiG/fEFaUtf5GV/j3CdRUc9noaZaF2fqHgvHv/6xhotaUPcoYHVevsye37xyTQW
+         tAld1p7quhcXvXqtum05/z4iRZezZrxXHYHJB1dk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.16 230/285] perf/x86/intel: Update the FRONTEND MSR mask on Sapphire Rapids
-Date:   Tue, 12 Apr 2022 08:31:27 +0200
-Message-Id: <20220412062950.298626777@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.17 270/343] mmc: renesas_sdhi: dont overwrite TAP settings when HS400 tuning is complete
+Date:   Tue, 12 Apr 2022 08:31:28 +0200
+Message-Id: <20220412062959.116305353@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-commit e590928de7547454469693da9bc7ffd562e54b7e upstream.
+commit 03e59b1e2f56245163b14c69e0a830c24b1a3a47 upstream.
 
-On Sapphire Rapids, the FRONTEND_RETIRED.MS_FLOWS event requires the
-FRONTEND MSR value 0x8. However, the current FRONTEND MSR mask doesn't
-support it.
+When HS400 tuning is complete and HS400 is going to be activated, we
+have to keep the current number of TAPs and should not overwrite them
+with a hardcoded value. This was probably a copy&paste mistake when
+upporting HS400 support from the BSP.
 
-Update intel_spr_extra_regs[] to support it.
-
-Fixes: 61b985e3e775 ("perf/x86/intel: Add perf core PMU support for Sapphire Rapids")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: 26eb2607fa28 ("mmc: renesas_sdhi: add eMMC HS400 mode support")
+Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/1648482543-14923-2-git-send-email-kan.liang@linux.intel.com
+Link: https://lore.kernel.org/r/20220404114902.12175-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/events/intel/core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/renesas_sdhi_core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -281,7 +281,7 @@ static struct extra_reg intel_spr_extra_
- 	INTEL_UEVENT_EXTRA_REG(0x012a, MSR_OFFCORE_RSP_0, 0x3fffffffffull, RSP_0),
- 	INTEL_UEVENT_EXTRA_REG(0x012b, MSR_OFFCORE_RSP_1, 0x3fffffffffull, RSP_1),
- 	INTEL_UEVENT_PEBS_LDLAT_EXTRA_REG(0x01cd),
--	INTEL_UEVENT_EXTRA_REG(0x01c6, MSR_PEBS_FRONTEND, 0x7fff17, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x01c6, MSR_PEBS_FRONTEND, 0x7fff1f, FE),
- 	INTEL_UEVENT_EXTRA_REG(0x40ad, MSR_PEBS_FRONTEND, 0x7, FE),
- 	INTEL_UEVENT_EXTRA_REG(0x04c2, MSR_PEBS_FRONTEND, 0x8, FE),
- 	EVENT_EXTRA_END
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -396,10 +396,10 @@ static void renesas_sdhi_hs400_complete(
+ 			SH_MOBILE_SDHI_SCC_TMPPORT2_HS400OSEL) |
+ 			sd_scc_read32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT2));
+ 
+-	/* Set the sampling clock selection range of HS400 mode */
+ 	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_DTCNTL,
+ 		       SH_MOBILE_SDHI_SCC_DTCNTL_TAPEN |
+-		       0x4 << SH_MOBILE_SDHI_SCC_DTCNTL_TAPNUM_SHIFT);
++		       sd_scc_read32(host, priv,
++				     SH_MOBILE_SDHI_SCC_DTCNTL));
+ 
+ 	/* Avoid bad TAP */
+ 	if (bad_taps & BIT(priv->tap_set)) {
 
 

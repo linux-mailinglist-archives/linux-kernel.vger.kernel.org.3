@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC6D4FD5ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B1D4FD727
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353739AbiDLHqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S1379309AbiDLIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351623AbiDLHMs (ORCPT
+        with ESMTP id S1358392AbiDLHle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D012513D57;
-        Mon, 11 Apr 2022 23:50:44 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61F84B1CC;
+        Tue, 12 Apr 2022 00:17:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E7146103A;
-        Tue, 12 Apr 2022 06:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838C2C385A1;
-        Tue, 12 Apr 2022 06:50:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0014D616E7;
+        Tue, 12 Apr 2022 07:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DADCC385A5;
+        Tue, 12 Apr 2022 07:17:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746243;
-        bh=QhsvxtWGhK5wtgUU105j/Ut1BdLJxJR/yoBWlg8U0ts=;
+        s=korg; t=1649747874;
+        bh=1kvO8kzrocGOeyhH3q7quzIPRU0KgSJ0xpJoB6yzKzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t83h1Jsxkb6IQUqlHJ8emFD92GLklLZ1y//WLU8bUYLzTFvqbQcNIyN+WVNW+gCl2
-         S0x0djpsmTXQP6coIiQJLVqS6njK8F1DByvEiFCLe+l9WJT+Dxdm1hZHJfFZaciEda
-         ffkt7nElHpqXakW2GlEcLIEBvBjQ4ilw4AcWVu3Q=
+        b=esBlPdLALJWjT52vkc5aH1ml7HLF3JxkGQLt9hcjqQFYNIw3Y+c8CrfmTE/v+Hzmx
+         v1bes7OB0H+3Gl4UkDHEAy6EkhRxyusNwhAaq7V0SAV9EQQgHuA7Pq9jIC8dLQMDN3
+         W//5IcLguFcegjYDAsj/I/z5cMbDeWrboZCf0OSs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yann Gautier <yann.gautier@foss.st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 211/277] mmc: mmci: stm32: correctly check all elements of sg list
-Date:   Tue, 12 Apr 2022 08:30:14 +0200
-Message-Id: <20220412062948.147725878@linuxfoundation.org>
+        stable@vger.kernel.org, Lyu Tao <tao.lyu@epfl.ch>,
+        ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 197/343] Revert "NFSv4: Handle the special Linux file open access mode"
+Date:   Tue, 12 Apr 2022 08:30:15 +0200
+Message-Id: <20220412062957.042415016@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yann Gautier <yann.gautier@foss.st.com>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-commit 0d319dd5a27183b75d984e3dc495248e59f99334 upstream.
+[ Upstream commit ab0fc21bc7105b54bafd85bd8b82742f9e68898a ]
 
-Use sg and not data->sg when checking sg list elements. Else only the
-first element alignment is checked.
-The last element should be checked the same way, for_each_sg already set
-sg to sg_next(sg).
+This reverts commit 44942b4e457beda00981f616402a1a791e8c616e.
 
-Fixes: 46b723dd867d ("mmc: mmci: add stm32 sdmmc variant")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-Link: https://lore.kernel.org/r/20220317111944.116148-2-yann.gautier@foss.st.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+After secondly opening a file with O_ACCMODE|O_DIRECT flags,
+nfs4_valid_open_stateid() will dereference NULL nfs4_state when lseek().
+
+Reproducer:
+  1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
+  2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
+  3. close(fd)
+  4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
+  5. lseek(fd)
+
+Reported-by: Lyu Tao <tao.lyu@epfl.ch>
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/mmci_stm32_sdmmc.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/nfs/inode.c    | 1 -
+ fs/nfs/nfs4file.c | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/mmc/host/mmci_stm32_sdmmc.c
-+++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-@@ -62,8 +62,8 @@ static int sdmmc_idma_validate_data(stru
- 	 * excepted the last element which has no constraint on idmasize
- 	 */
- 	for_each_sg(data->sg, sg, data->sg_len - 1, i) {
--		if (!IS_ALIGNED(data->sg->offset, sizeof(u32)) ||
--		    !IS_ALIGNED(data->sg->length, SDMMC_IDMA_BURST)) {
-+		if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
-+		    !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
- 			dev_err(mmc_dev(host->mmc),
- 				"unaligned scatterlist: ofst:%x length:%d\n",
- 				data->sg->offset, data->sg->length);
-@@ -71,7 +71,7 @@ static int sdmmc_idma_validate_data(stru
- 		}
- 	}
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index d96baa4450e3..e4fb939a2904 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -1180,7 +1180,6 @@ int nfs_open(struct inode *inode, struct file *filp)
+ 	nfs_fscache_open_file(inode, filp);
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(nfs_open);
  
--	if (!IS_ALIGNED(data->sg->offset, sizeof(u32))) {
-+	if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
- 		dev_err(mmc_dev(host->mmc),
- 			"unaligned last scatterlist: ofst:%x length:%d\n",
- 			data->sg->offset, data->sg->length);
+ /*
+  * This function is called whenever some part of NFS notices that
+diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
+index e79ae4cbc395..c178db86a6e8 100644
+--- a/fs/nfs/nfs4file.c
++++ b/fs/nfs/nfs4file.c
+@@ -51,7 +51,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
+ 		return err;
+ 
+ 	if ((openflags & O_ACCMODE) == 3)
+-		return nfs_open(inode, filp);
++		openflags--;
+ 
+ 	/* We can't create new files here */
+ 	openflags &= ~(O_CREAT|O_EXCL);
+-- 
+2.35.1
+
 
 

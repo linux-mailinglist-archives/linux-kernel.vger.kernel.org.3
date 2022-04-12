@@ -2,274 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2134FDD35
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BDF4FDD5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiDLLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S1353330AbiDLLIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377400AbiDLK4h (ORCPT
+        with ESMTP id S236023AbiDLLCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:56:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0568FE65;
-        Tue, 12 Apr 2022 02:50:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB204B81BE0;
-        Tue, 12 Apr 2022 09:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472F4C385A5;
-        Tue, 12 Apr 2022 09:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649757031;
-        bh=qjB85O8DbKC3TvZDkCMMn0qt2Y9QJcIc9o8iYjgvdPE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B3z/sKKRaIf4WlVMtQFgs2+uZ3KVUCYiJcROQYqjKX8aRVHI90YihGtFeyiK0wAOF
-         s6cR96hKyAMd0kRyYgXDyi4HHizJ8SI4z46vGxYn4vcFIHzUsG45Qevmqj78hxsP6I
-         gRC69Ui5pfhKULGjQrD0tK0RWtniMRydQu6A6SKneZYsT5D1hxtYkAVHrWQfisM6ml
-         QC8Y5d9Ya5LOSyxYW0OZuXCS9JNi+F7J8cKfRquKUaHEryL/tZdTz7SdZaZRQfzo1z
-         Vi4pDGxunliVwF/T2JNFAvcfUxbBoNe6W6KfipNP5X2NxvHpwVTQSiZ+xJBO7EykNv
-         Ypl2A3ore+AmA==
-Received: by pali.im (Postfix)
-        id 268C42B53; Tue, 12 Apr 2022 11:50:29 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
-Date:   Tue, 12 Apr 2022 11:49:46 +0200
-Message-Id: <20220412094946.27069-5-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220412094946.27069-1-pali@kernel.org>
-References: <20220412094946.27069-1-pali@kernel.org>
+        Tue, 12 Apr 2022 07:02:11 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C311B27E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:53:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id u18so10994525eda.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AkVeS3a8EOgJCI7taXEOSueT1F/9iu1WjMPXVz5t0OM=;
+        b=DXQFxzUBZrSWjyf1SQB0KWaNd5EnJ1CjA7KgQkRSFKh1NG9tM9mlpfhduyc5qGFmn1
+         q8kOK+QdVXfAfuCkMku1nK9WbmGlR1+opEUKDQXMDPtur2fw55c2e//psWPPmjLc83ul
+         WSFRL5RolZqBBasK6HBrOGkUsL7ETOzoVMBN+7NkkOHGSuy8c1n8zuDitpFiJZqEr+cw
+         tkJYea3e6UA5eZYaW7W2a0Rm5qJawXkULzYfDkY6XZXSEA0T9E28uQGNw81F0r8/r3RY
+         V47qqvxvw7kluf4gOxYqksJ/5mwOJUuXetdD8Z1CAdjIoObTRNooxkJG7veYCWm/qL4N
+         zl5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AkVeS3a8EOgJCI7taXEOSueT1F/9iu1WjMPXVz5t0OM=;
+        b=qtm6SWMcFGSsmy66rfYMSZw4L54vCHyeLugtu01uet26kBgKKd9HxppRdDFK6Yp50P
+         Y8o0utsmT3Xu8fWEcbdMpgKDnO1Fsl/cPahWN0z7dvLrmFePyYUemMGmKk1IvR+6knE1
+         O6eXVnMY68NcA+F8gjsl3cw8OTRDwnNKriQJQKNi6Es84TAGaQPsNTZEdALzAq1b3ydV
+         3PsPW9pA60ECW3QZhVQ9k3AfWPKexpXxt9VGvmQBB+FmJTVb2QfSxpOAP54uTOhco2cb
+         c3wrNG0ObayWJei7tPRIUAom0wbUsuLGlwV6pEdCSQxfloUPJFtRVFF32hyKZ1xwdDps
+         58tw==
+X-Gm-Message-State: AOAM530sDvb1PNjR9s2gRV6V0/Y0CMk98r1mDt1ixQGcmUlcrYt8+RXv
+        ShbOGpAhb73XKertkiwqJ1k=
+X-Google-Smtp-Source: ABdhPJzxk/99mygfKqOVg/8e1fwoyQ7REMllcxW5KV8GSfggKkGv6IrNXD9A4XthW/W7HsL0uqyjRA==
+X-Received: by 2002:a05:6402:198:b0:410:83e3:21d7 with SMTP id r24-20020a056402019800b0041083e321d7mr38115046edv.159.1649757226168;
+        Tue, 12 Apr 2022 02:53:46 -0700 (PDT)
+Received: from leap.localnet (host-82-60-208-254.retail.telecomitalia.it. [82.60.208.254])
+        by smtp.gmail.com with ESMTPSA id w1-20020a1709064a0100b006e89334f5dfsm2338416eju.136.2022.04.12.02.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 02:53:44 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Vihas Makwana <makvihas@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH v2 0/7] drop some unnecessary wrappers
+Date:   Tue, 12 Apr 2022 11:53:42 +0200
+Message-ID: <3484215.R56niFO833@leap>
+In-Reply-To: <20220412050630.GY3293@kadam>
+References: <20220411102136.14937-1-makvihas@gmail.com> <37499399.10thIPus4b@leap> <20220412050630.GY3293@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DT supplies the 'slot-power-limit-milliwatt' property, program
-the value in the Slot Power Limit in the Slot Capabilities register
-and program the Root Port to send a Set_Slot_Power_Limit Message
-when the Link transitions to DL_Up.
+On marted=EC 12 aprile 2022 07:06:30 CEST Dan Carpenter wrote:
+> On Mon, Apr 11, 2022 at 10:34:44PM +0200, Fabio M. De Francesco wrote:
+> > On luned=EC 11 aprile 2022 12:21:29 CEST Vihas Makwana wrote:
+> > > Drop some unnecessary wrappers and update all the references
+> > > accordingly.
+> > > Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
+> > >=20
+> > > v1 -> v2:
+> > > Drop the wrapper functions with underscores prefixed.
+> > >=20
+> > > Vihas Makwana (7):
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_free_cmd_priv
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_init_cmd_priv
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_init_evt_priv
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_init_mlme_priv
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_free_mlme_priv
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_alloc_network
+> > >   staging: r8188eu: drop unnecessary wrapper _rtw_dequeue_cmd
+> > >=20
+> > >  drivers/staging/r8188eu/core/rtw_cmd.c     | 145 +++++++----------
+> > >  drivers/staging/r8188eu/core/rtw_mlme.c    | 179 +++++++++----------=
+=2D-
+> > >  drivers/staging/r8188eu/include/rtw_mlme.h |   4 +-
+> > >  3 files changed, 135 insertions(+), 193 deletions(-)
+> > >=20
+> > > --=20
+> > > 2.30.2
+> > >=20
+> > Formally, you are removing the wrapped functions (or helpers, if you=20
+> > prefer) by moving their code into the wrappers. To say that you are=20
+> > removing the wrappers is not correct.
+>=20
+> I once had someone make me re-write a commit message four time just as a
+> kind of bullying and then at the end he was like, "You said NULL
+> dereference instead of NULL pointer dereference so I had to re-write the
+> commit message and I added some comment to the kernel git log explaining
+> how you suck." =20
+> So these days I have made it a rule that if you're going
+> to complain about commit messages then you have to write your own for
+> people to cut and paste.  Otherwise people are like, "You're too stupid
+> to read my mind.  LOL.  Do it again."
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-Changes in v5:
-* Fix compile error due to wrong patch rebasing
-Changes in v2:
-* Fix handling of slot power limit with scale x1.0 (0x00 value)
-* Use FIELD_PREP instead of _SHIFT macros
-* Changed commit message to Bjorn's suggestion
-* Changed comments in the code to match PCIe spec
-* Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
----
- drivers/pci/controller/pci-mvebu.c | 97 ++++++++++++++++++++++++++++--
- 1 file changed, 92 insertions(+), 5 deletions(-)
+I'm assuming you don't believe that I attempted some kind of bullying simil=
+ar
+to what you had to face when you sent the above-mentioned patch.
 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index a75d2b9196f9..a9678d658c2a 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -8,6 +8,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/gpio.h>
-@@ -66,6 +67,12 @@
- #define  PCIE_STAT_BUS                  0xff00
- #define  PCIE_STAT_DEV                  0x1f0000
- #define  PCIE_STAT_LINK_DOWN		BIT(0)
-+#define PCIE_SSPL_OFF		0x1a0c
-+#define  PCIE_SSPL_VALUE_SHIFT		0
-+#define  PCIE_SSPL_VALUE_MASK		GENMASK(7, 0)
-+#define  PCIE_SSPL_SCALE_SHIFT		8
-+#define  PCIE_SSPL_SCALE_MASK		GENMASK(9, 8)
-+#define  PCIE_SSPL_ENABLE		BIT(16)
- #define PCIE_RC_RTSTA		0x1a14
- #define PCIE_DEBUG_CTRL         0x1a60
- #define  PCIE_DEBUG_SOFT_RESET		BIT(20)
-@@ -111,6 +118,8 @@ struct mvebu_pcie_port {
- 	struct mvebu_pcie_window iowin;
- 	u32 saved_pcie_stat;
- 	struct resource regs;
-+	u8 slot_power_limit_value;
-+	u8 slot_power_limit_scale;
- 	struct irq_domain *intx_irq_domain;
- 	raw_spinlock_t irq_lock;
- 	int intx_irq;
-@@ -239,7 +248,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
- 
- static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- {
--	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
-+	u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
- 
- 	/* Setup PCIe controller to Root Complex mode. */
- 	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-@@ -292,6 +301,20 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- 	/* Point PCIe unit MBUS decode windows to DRAM space. */
- 	mvebu_pcie_setup_wins(port);
- 
-+	/*
-+	 * Program Root Port to automatically send Set_Slot_Power_Limit
-+	 * PCIe Message when changing status from Dl_Down to Dl_Up and valid
-+	 * slot power limit was specified.
-+	 */
-+	sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-+	sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
-+	if (port->slot_power_limit_value) {
-+		sspl |= port->slot_power_limit_value << PCIE_SSPL_VALUE_SHIFT;
-+		sspl |= port->slot_power_limit_scale << PCIE_SSPL_SCALE_SHIFT;
-+		sspl |= PCIE_SSPL_ENABLE;
-+	}
-+	mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-+
- 	/* Mask all interrupt sources. */
- 	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
- 
-@@ -628,9 +651,24 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
- 			  (PCI_EXP_LNKSTA_DLLLA << 16) : 0);
- 		break;
- 
--	case PCI_EXP_SLTCTL:
--		*value = PCI_EXP_SLTSTA_PDS << 16;
-+	case PCI_EXP_SLTCTL: {
-+		u16 slotctl = le16_to_cpu(bridge->pcie_conf.slotctl);
-+		u16 slotsta = le16_to_cpu(bridge->pcie_conf.slotsta);
-+		u32 val = 0;
-+		/*
-+		 * When slot power limit was not specified in DT then
-+		 * ASPL_DISABLE bit is stored only in emulated config space.
-+		 * Otherwise reflect status of PCIE_SSPL_ENABLE bit in HW.
-+		 */
-+		if (!port->slot_power_limit_value)
-+			val |= slotctl & PCI_EXP_SLTCTL_ASPL_DISABLE;
-+		else if (!(mvebu_readl(port, PCIE_SSPL_OFF) & PCIE_SSPL_ENABLE))
-+			val |= PCI_EXP_SLTCTL_ASPL_DISABLE;
-+		/* This callback is 32-bit and in high bits is slot status. */
-+		val |= slotsta << 16;
-+		*value = val;
- 		break;
-+	}
- 
- 	case PCI_EXP_RTSTA:
- 		*value = mvebu_readl(port, PCIE_RC_RTSTA);
-@@ -774,6 +812,22 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
- 		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL);
- 		break;
- 
-+	case PCI_EXP_SLTCTL:
-+		/*
-+		 * Allow to change PCIE_SSPL_ENABLE bit only when slot power
-+		 * limit was specified in DT and configured into HW.
-+		 */
-+		if ((mask & PCI_EXP_SLTCTL_ASPL_DISABLE) &&
-+		    port->slot_power_limit_value) {
-+			u32 sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-+			if (new & PCI_EXP_SLTCTL_ASPL_DISABLE)
-+				sspl &= ~PCIE_SSPL_ENABLE;
-+			else
-+				sspl |= PCIE_SSPL_ENABLE;
-+			mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-+		}
-+		break;
-+
- 	case PCI_EXP_RTSTA:
- 		/*
- 		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA)
-@@ -868,8 +922,26 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
- 	/*
- 	 * Older mvebu hardware provides PCIe Capability structure only in
- 	 * version 1. New hardware provides it in version 2.
-+	 * Enable slot support which is emulated.
- 	 */
--	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver);
-+	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver | PCI_EXP_FLAGS_SLOT);
-+
-+	/*
-+	 * Set Presence Detect State bit permanently as there is no support for
-+	 * unplugging PCIe card from the slot. Assume that PCIe card is always
-+	 * connected in slot.
-+	 *
-+	 * Set physical slot number to port+1 as mvebu ports are indexed from
-+	 * zero and zero value is reserved for ports within the same silicon
-+	 * as Root Port which is not mvebu case.
-+	 *
-+	 * Also set correct slot power limit.
-+	 */
-+	bridge->pcie_conf.slotcap = cpu_to_le32(
-+		FIELD_PREP(PCI_EXP_SLTCAP_SPLV, port->slot_power_limit_value) |
-+		FIELD_PREP(PCI_EXP_SLTCAP_SPLS, port->slot_power_limit_scale) |
-+		FIELD_PREP(PCI_EXP_SLTCAP_PSN, port->port+1));
-+	bridge->pcie_conf.slotsta = cpu_to_le16(PCI_EXP_SLTSTA_PDS);
- 
- 	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
- 	bridge->subsystem_id = ssdev_id >> 16;
-@@ -1191,6 +1263,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
- {
- 	struct device *dev = &pcie->pdev->dev;
- 	enum of_gpio_flags flags;
-+	u32 slot_power_limit;
- 	int reset_gpio, ret;
- 	u32 num_lanes;
- 
-@@ -1291,6 +1364,15 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
- 		port->reset_gpio = gpio_to_desc(reset_gpio);
- 	}
- 
-+	slot_power_limit = of_pci_get_slot_power_limit(child,
-+				&port->slot_power_limit_value,
-+				&port->slot_power_limit_scale);
-+	if (slot_power_limit)
-+		dev_info(dev, "%s: Slot power limit %u.%uW\n",
-+			 port->name,
-+			 slot_power_limit / 1000,
-+			 (slot_power_limit / 100) % 10);
-+
- 	port->clk = of_clk_get_by_name(child, NULL);
- 	if (IS_ERR(port->clk)) {
- 		dev_err(dev, "%s: cannot get clock\n", port->name);
-@@ -1587,7 +1669,7 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
- {
- 	struct mvebu_pcie *pcie = platform_get_drvdata(pdev);
- 	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
--	u32 cmd;
-+	u32 cmd, sspl;
- 	int i;
- 
- 	/* Remove PCI bus with all devices. */
-@@ -1624,6 +1706,11 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
- 		/* Free config space for emulated root bridge. */
- 		pci_bridge_emul_cleanup(&port->bridge);
- 
-+		/* Disable sending Set_Slot_Power_Limit PCIe Message. */
-+		sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-+		sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
-+		mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-+
- 		/* Disable and clear BARs and windows. */
- 		mvebu_pcie_disable_wins(port);
- 
--- 
-2.20.1
+Nevertheless, I was expecting some sort of reaction from you but I think=20
+that you are misunderstanding what my intentions were.
+
+I didn't suggest a re-write of the commit messages. I just pointed out that=
+=20
+those messages are formally inaccurate but that these kinds of small formal=
+=20
+inaccuracies won't ever prevent Vihas' patches from being accepted as they =
+are.
+
+It's only that, IMO, if people start to take care of being formally correct=
+=20
+in drivers/staging, even when they do simple changes, they train their minds
+to improve their abilities to communicate in the future when they eventually
+decide to submit much more complex patches in other subsystems.
+
+> But in this case the commit message is fine.  The key things with a
+> commit message are:
+>=20
+> 1) What's the motivation
+> 2) What's the effect for the user
+> 3) Are all the surprising aspects are explained.  Do I have enough
+>    information to review it quickly.
+>=20
+> Removing wrappers is the motivation.  No need to explain that further.
+> No effects for the user.
+> There were no surprising bits.
+>=20
+> It's fine.
+
+I agree with you: "it's fine". I respect your opinion and your pragmatism:
+after all, here, everything is pretty clear, so why bother?
+
+However, writing accurate and formally correct commit messages takes the=20
+same amount of time of writing inaccurate messages. So, why not do better=20
+next time?
+
+Again, I don't suggest to do so now. Not for these patches, because it woul=
+d=20
+only be a loss of precious time.
+
+Thanks,
+
+=46abio M. De Francesco=20
+
+>=20
+> regards,
+> dan carpenter
+>=20
+>=20
+
+
+
 

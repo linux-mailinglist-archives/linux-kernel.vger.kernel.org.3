@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C254FE5D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BC64FE5D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357618AbiDLQal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S1357588AbiDLQau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357318AbiDLQaV (ORCPT
+        with ESMTP id S1357569AbiDLQaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 12:30:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4A855D5F2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:27:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48ED5D5ED
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649780874;
+        s=mimecast20190719; t=1649780875;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mo5J49WlO6IQDZ+qlm/WdbORrfFgaHGgkwawEPzuzxE=;
-        b=FGW/tSP91WZhMTmZBM39rSA0BFvvq4f3WsWaZTYQ1om9jQzY+l5XX9Eb6S+WsIuZ2jrPw7
-        Ul1kpz42XYnLZZOYtXu+IEqDUWpjGwQLuCwdIKxN2HfP71cUlFL05Q+27NVib9FBHvBn6X
-        SEEU9MAaw017VSjRD/1eC4A0Ojao9W4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4qHKa3ZaE0n6rBQ9YSS4vax+vsIDK3+3iyrOxfgB78w=;
+        b=Y3BQ35HJJlcHBgj8dc9v4L0wzojdSxtCTWT46M4CA8Btjothu14aLFFhadZLcQNTnKP8vW
+        PAa/XQP87L8ZkUGkPTp0ZYy8HQrJjTYoMpqOhY5qkJUqYeRBuE9tlEPN97D9gQtvVjCkXo
+        lRzYQnNBbDlQN+4zWuqk75MMFG/Uiio=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-RghSxd3GMcCATcLNtZm_kw-1; Tue, 12 Apr 2022 12:27:52 -0400
-X-MC-Unique: RghSxd3GMcCATcLNtZm_kw-1
-Received: by mail-wr1-f70.google.com with SMTP id f2-20020a056000036200b00207a14a1f96so1705531wrf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:27:52 -0700 (PDT)
+ us-mta-60-YwF-ivU5O7yoi6xujPKAug-1; Tue, 12 Apr 2022 12:27:54 -0400
+X-MC-Unique: YwF-ivU5O7yoi6xujPKAug-1
+Received: by mail-wm1-f69.google.com with SMTP id q25-20020a1ce919000000b0038ead791083so1478045wmc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:27:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mo5J49WlO6IQDZ+qlm/WdbORrfFgaHGgkwawEPzuzxE=;
-        b=LUIJ2S+oAUcrHReTmwK8aVrhqruLKJhHwg1tXKR0qWEtJLLMsEKaqZZRM5ftonvYm5
-         y5ArhNzcLFKJmGTUb4oXmVh489HKHYis1x2ttmOWrT4RVdJ1MwrjysSFdENI48hiMnfq
-         YB8+n+/eROC2XI5i2fYLW+qYcbaUIV8+HK0m2eEkrJJ4AIj6dMkXDHn/LsQslmLnd4J5
-         oGg5AK1RvJoFAnT1vr2W2GPDCceFYUWDVj5IZ7BbG3JCbwV3pp4tKTJcB1fos3DFHPuk
-         zdgzL/dB46i9YJWS/l5kR4M+sEEC4y/0K7T1/h7goN4B0fJ8/EBCxOnLvZx0FjRWmn1X
-         s9BA==
-X-Gm-Message-State: AOAM530M970PUV3dBtgq8V1ButOZ7MRbSQOtB2JNePPJdSs6OOzT35ZN
-        9SIONQ1g5OD1OVWWp9jvBZNQgYGKnJb1Jn/Fi1vTgL7WYmhrK7xGNXx2/+WwgrwMK6LLSV2P3gK
-        15T3nh1lLfVYpfYTekRO1fNCxCC98fFyCyIwIRdGawwSK4CiwPxEAYa/RpYxtcCB9X0w5iIoHsh
-        Q=
-X-Received: by 2002:a05:600c:4f15:b0:38c:b729:4838 with SMTP id l21-20020a05600c4f1500b0038cb7294838mr4905867wmq.132.1649780871564;
-        Tue, 12 Apr 2022 09:27:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxFwQJtMdTDB/u8o8piRC+wUS5qF5b+LUpWOn//PSBN3fYXg6a2kN8KjW30Vy8Ka6FUFNzvg==
-X-Received: by 2002:a05:600c:4f15:b0:38c:b729:4838 with SMTP id l21-20020a05600c4f1500b0038cb7294838mr4905834wmq.132.1649780871306;
-        Tue, 12 Apr 2022 09:27:51 -0700 (PDT)
+        bh=4qHKa3ZaE0n6rBQ9YSS4vax+vsIDK3+3iyrOxfgB78w=;
+        b=WBuiPUeoDPKmLsH4ZXEnq0wXIZJMRKWFYO2saqBzDThnAG1waxMlW7geWI2VlkNusQ
+         DTaOXEXmVi7OnwZ9SoQ15CsTitC+iUcbaABdD1UK2DZdigCe+7PtjAvpzQO16t7GBjJ9
+         nhgIq6R/ykto2wuUq1DsNkUmpcbshsvkyB/WX7/sk4vzLxcOq2AUY9LzzHzfqsRWArPV
+         7UO5L7MfyYyCX29LjPi1E/xxVIKLnEAQVOaFSPWhhG8AqpMXu62tkiYzhihVIkcL6Tbp
+         HwZBUynpxMx/NSCP0+VJTU42zD7H4lEEQmKcypZAMC1HY7IsEJVhNGgELDSms/QV3GA6
+         ajwQ==
+X-Gm-Message-State: AOAM530tRnjPw6NkWjTOBZES1otQLT+gf4cAaVgenTbLw7KQsP2Jeghj
+        ijCPHw9orKDsqT3CxfbfrX7Xn50PIrQvrPBGRw/7Y55gpjA752/P1FpE7NRvMcgvlgImvqYKO5+
+        prkSq1gZ2Fp5lCGxYpA0Z71+HeeDpMlbP3OEH4LRsCh2z6gF1FPjiGSWvl/TAaqBDk6d0xPugfv
+        k=
+X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr4861385wmk.111.1649780872811;
+        Tue, 12 Apr 2022 09:27:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxQpDf/vKaz+nFjHprARrN0OuUEjxREzyZtfW6KM/URrKifXWZjC6q7NkGzTQjVmLslypRy6Q==
+X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr4861351wmk.111.1649780872578;
+        Tue, 12 Apr 2022 09:27:52 -0700 (PDT)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm7700358wrq.81.2022.04.12.09.27.50
+        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm7700358wrq.81.2022.04.12.09.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 09:27:51 -0700 (PDT)
+        Tue, 12 Apr 2022 09:27:52 -0700 (PDT)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -68,9 +68,9 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>
-Subject: [PATCH v3 3/5] drm/solomon: Add ssd130x new compatible strings and deprecate old ones.
-Date:   Tue, 12 Apr 2022 18:27:27 +0200
-Message-Id: <20220412162729.184783-4-javierm@redhat.com>
+Subject: [PATCH v3 4/5] drm/solomon: Move device info from ssd130x-i2c to the core driver
+Date:   Tue, 12 Apr 2022 18:27:28 +0200
+Message-Id: <20220412162729.184783-5-javierm@redhat.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412162729.184783-1-javierm@redhat.com>
 References: <20220412162729.184783-1-javierm@redhat.com>
@@ -86,56 +86,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current compatible strings for SSD130x I2C controllers contain an "fb"
-and "-i2c" suffixes. These have been deprecated and more correct ones were
-added, that don't encode a subsystem or bus used to interface the devices.
+These are declared in the ssd130x-i2c transport driver but the information
+is not I2C specific, and could be used by other SSD130x transport drivers.
 
+Move them to the ssd130x core driver and just set the OF device entries to
+an ID that could be used to lookup the correct device info from an array.
+
+While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
+bytes. Since even though they are used by the I2C interface, they could
+also be useful for other transport protocols such as SPI.
+
+Suggested-by: Chen-Yu Tsai <wens@kernel.org>
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 Acked-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 
 Changes in v3:
-- Drop the "sinowealth,sh1106-i2c", wasn't in a released version (Chen-Yu Tsai)
+- s/it/they in the commit description (Geert Uytterhoeven)
+- Drop unnecessary blank line (Geert Uytterhoeven)
+- Export variants array and use &info[ID] in device table (Andy Shevchenko)
 
 Changes in v2:
-- Use the compatible strings that don't have "fb-i2c" (Geert Uytterhoeven).
+- Drop ssd13x_variant_to_info() and just use the array index (Neil Armstrong).
 
- drivers/gpu/drm/solomon/ssd130x-i2c.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/solomon/ssd130x-i2c.c | 51 +++++----------------------
+ drivers/gpu/drm/solomon/ssd130x.c     | 36 +++++++++++++++++--
+ drivers/gpu/drm/solomon/ssd130x.h     | 14 ++++++++
+ 3 files changed, 56 insertions(+), 45 deletions(-)
 
 diff --git a/drivers/gpu/drm/solomon/ssd130x-i2c.c b/drivers/gpu/drm/solomon/ssd130x-i2c.c
-index d099b241dd3f..45867ef2bc8b 100644
+index 45867ef2bc8b..13b0713e31ad 100644
 --- a/drivers/gpu/drm/solomon/ssd130x-i2c.c
 +++ b/drivers/gpu/drm/solomon/ssd130x-i2c.c
-@@ -88,9 +88,26 @@ static struct ssd130x_deviceinfo ssd130x_ssd1309_deviceinfo = {
+@@ -53,76 +53,43 @@ static void ssd130x_i2c_shutdown(struct i2c_client *client)
+ 	ssd130x_shutdown(ssd130x);
+ }
  
+-static struct ssd130x_deviceinfo ssd130x_sh1106_deviceinfo = {
+-	.default_vcomh = 0x40,
+-	.default_dclk_div = 1,
+-	.default_dclk_frq = 5,
+-	.page_mode_only = 1,
+-};
+-
+-static struct ssd130x_deviceinfo ssd130x_ssd1305_deviceinfo = {
+-	.default_vcomh = 0x34,
+-	.default_dclk_div = 1,
+-	.default_dclk_frq = 7,
+-};
+-
+-static struct ssd130x_deviceinfo ssd130x_ssd1306_deviceinfo = {
+-	.default_vcomh = 0x20,
+-	.default_dclk_div = 1,
+-	.default_dclk_frq = 8,
+-	.need_chargepump = 1,
+-};
+-
+-static struct ssd130x_deviceinfo ssd130x_ssd1307_deviceinfo = {
+-	.default_vcomh = 0x20,
+-	.default_dclk_div = 2,
+-	.default_dclk_frq = 12,
+-	.need_pwm = 1,
+-};
+-
+-static struct ssd130x_deviceinfo ssd130x_ssd1309_deviceinfo = {
+-	.default_vcomh = 0x34,
+-	.default_dclk_div = 1,
+-	.default_dclk_frq = 10,
+-};
+-
  static const struct of_device_id ssd130x_of_match[] = {
  	{
--		.compatible = "sinowealth,sh1106-i2c",
-+		.compatible = "sinowealth,sh1106",
- 		.data = &ssd130x_sh1106_deviceinfo,
+ 		.compatible = "sinowealth,sh1106",
+-		.data = &ssd130x_sh1106_deviceinfo,
++		.data = &ssd130x_variants[SH1106_ID],
  	},
-+	{
-+		.compatible = "solomon,ssd1305",
-+		.data = &ssd130x_ssd1305_deviceinfo,
-+	},
-+	{
-+		.compatible = "solomon,ssd1306",
-+		.data = &ssd130x_ssd1306_deviceinfo,
-+	},
-+	{
-+		.compatible = "solomon,ssd1307",
-+		.data = &ssd130x_ssd1307_deviceinfo,
-+	},
-+	{
-+		.compatible = "solomon,ssd1309",
-+		.data = &ssd130x_ssd1309_deviceinfo,
-+	},
-+	/* Deprecated but kept for backward compatibility */
+ 	{
+ 		.compatible = "solomon,ssd1305",
+-		.data = &ssd130x_ssd1305_deviceinfo,
++		.data = &ssd130x_variants[SSD1305_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1306",
+-		.data = &ssd130x_ssd1306_deviceinfo,
++		.data = &ssd130x_variants[SSD1306_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1307",
+-		.data = &ssd130x_ssd1307_deviceinfo,
++		.data = &ssd130x_variants[SSD1307_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1309",
+-		.data = &ssd130x_ssd1309_deviceinfo,
++		.data = &ssd130x_variants[SSD1309_ID],
+ 	},
+ 	/* Deprecated but kept for backward compatibility */
  	{
  		.compatible = "solomon,ssd1305fb-i2c",
- 		.data = &ssd130x_ssd1305_deviceinfo,
+-		.data = &ssd130x_ssd1305_deviceinfo,
++		.data = &ssd130x_variants[SSD1305_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1306fb-i2c",
+-		.data = &ssd130x_ssd1306_deviceinfo,
++		.data = &ssd130x_variants[SSD1306_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1307fb-i2c",
+-		.data = &ssd130x_ssd1307_deviceinfo,
++		.data = &ssd130x_variants[SSD1307_ID],
+ 	},
+ 	{
+ 		.compatible = "solomon,ssd1309fb-i2c",
+-		.data = &ssd130x_ssd1309_deviceinfo,
++		.data = &ssd130x_variants[SSD1309_ID],
+ 	},
+ 	{ /* sentinel */ }
+ };
+diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+index a7e784518c69..c9b80ab8727b 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.c
++++ b/drivers/gpu/drm/solomon/ssd130x.c
+@@ -39,11 +39,9 @@
+ #define DRIVER_MAJOR	1
+ #define DRIVER_MINOR	0
+ 
+-#define SSD130X_DATA				0x40
+-#define SSD130X_COMMAND				0x80
+-
+ #define SSD130X_PAGE_COL_START_LOW		0x00
+ #define SSD130X_PAGE_COL_START_HIGH		0x10
++
+ #define SSD130X_SET_ADDRESS_MODE		0x20
+ #define SSD130X_SET_COL_RANGE			0x21
+ #define SSD130X_SET_PAGE_RANGE			0x22
+@@ -94,6 +92,38 @@
+ 
+ #define MAX_CONTRAST 255
+ 
++const struct ssd130x_deviceinfo ssd130x_variants[] = {
++	[SH1106_ID] = {
++		.default_vcomh = 0x40,
++		.default_dclk_div = 1,
++		.default_dclk_frq = 5,
++		.page_mode_only = 1,
++	},
++	[SSD1305_ID] = {
++		.default_vcomh = 0x34,
++		.default_dclk_div = 1,
++		.default_dclk_frq = 7,
++	},
++	[SSD1306_ID] = {
++		.default_vcomh = 0x20,
++		.default_dclk_div = 1,
++		.default_dclk_frq = 8,
++		.need_chargepump = 1,
++	},
++	[SSD1307_ID] = {
++		.default_vcomh = 0x20,
++		.default_dclk_div = 2,
++		.default_dclk_frq = 12,
++		.need_pwm = 1,
++	},
++	[SSD1309_ID] = {
++		.default_vcomh = 0x34,
++		.default_dclk_div = 1,
++		.default_dclk_frq = 10,
++	}
++};
++EXPORT_SYMBOL_GPL(ssd130x_variants);
++
+ static inline struct ssd130x_device *drm_to_ssd130x(struct drm_device *drm)
+ {
+ 	return container_of(drm, struct ssd130x_device, drm);
+diff --git a/drivers/gpu/drm/solomon/ssd130x.h b/drivers/gpu/drm/solomon/ssd130x.h
+index f5b062576fdf..d14f78c2eb07 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.h
++++ b/drivers/gpu/drm/solomon/ssd130x.h
+@@ -18,6 +18,18 @@
+ 
+ #include <linux/regmap.h>
+ 
++#define SSD130X_DATA				0x40
++#define SSD130X_COMMAND				0x80
++
++enum ssd130x_variants {
++	SH1106_ID,
++	SSD1305_ID,
++	SSD1306_ID,
++	SSD1307_ID,
++	SSD1309_ID,
++	NR_SSD130X_VARIANTS
++};
++
+ struct ssd130x_deviceinfo {
+ 	u32 default_vcomh;
+ 	u32 default_dclk_div;
+@@ -71,6 +83,8 @@ struct ssd130x_device {
+ 	u8 page_end;
+ };
+ 
++extern const struct ssd130x_deviceinfo ssd130x_variants[];
++
+ struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap);
+ int ssd130x_remove(struct ssd130x_device *ssd130x);
+ void ssd130x_shutdown(struct ssd130x_device *ssd130x);
 -- 
 2.35.1
 

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A9E4FD4E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C7C4FD5E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354519AbiDLIFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S1386795AbiDLJEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353760AbiDLHZy (ORCPT
+        with ESMTP id S1358841AbiDLHmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:54 -0400
+        Tue, 12 Apr 2022 03:42:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AFB62E5;
-        Tue, 12 Apr 2022 00:04:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B5F54187;
+        Tue, 12 Apr 2022 00:19:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BA0360B2E;
-        Tue, 12 Apr 2022 07:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD756C385AA;
-        Tue, 12 Apr 2022 07:04:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD6EF616B2;
+        Tue, 12 Apr 2022 07:19:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9CFC385AB;
+        Tue, 12 Apr 2022 07:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747061;
-        bh=KXy/IacbeYaGiCa4DIP5MYCW5TZXiRuOhqsi9RysQGE=;
+        s=korg; t=1649747965;
+        bh=50NiPYZNS7W5h3kIdqJdXNGJ3ub+7+rCMrcv/3A7b9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lr0YVZKSAXAw3ulTh+NNI0ZGhFJXEA+C4H2ihAHiahsIZausai78dngBO/YmITO2x
-         e46aYIdHX7T1mm0vadfOqUZHcra4wC8jtByBlrY0FR1TFrWHO/ljK0W1JV5L0zQ8sk
-         Ajs56SY57L6j9l7bxCa1QEqGuiNhoIpcF6+nUoEU=
+        b=DuVEBbmtKA6mbNoqJKRi5JzgZ6GyB4GXGYw4YE0f7ojbk3Spj0onVzJ0jmbIprvyW
+         b7ubUa3qUSxsrvm+qJamdlcCkTZBXqTl9mC6rn5LowxbWGNTM1G+DgZFB93fGC2Ezj
+         isMVJJkRN+/KA4yUNqsga9fm51GBz9XosH9NV33U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Neelima Krishnan <neelima.krishnan@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 229/285] x86/speculation: Restore speculation related MSRs during S3 resume
-Date:   Tue, 12 Apr 2022 08:31:26 +0200
-Message-Id: <20220412062950.270270388@linuxfoundation.org>
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.17 269/343] mmc: renesas_sdhi: special 4tap settings only apply to HS400
+Date:   Tue, 12 Apr 2022 08:31:27 +0200
+Message-Id: <20220412062959.087272710@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,60 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-commit e2a1256b17b16f9b9adf1b6fea56819e7b68e463 upstream.
+commit 46d4820f949a3030b19ee482c68a50b06dd27590 upstream.
 
-After resuming from suspend-to-RAM, the MSRs that control CPU's
-speculative execution behavior are not being restored on the boot CPU.
+Previous documentation was vague, so we included SDR104 for slow SDnH
+clock settings. It turns out now, that it is only needed for HS400.
 
-These MSRs are used to mitigate speculative execution vulnerabilities.
-Not restoring them correctly may leave the CPU vulnerable.  Secondary
-CPU's MSRs are correctly being restored at S3 resume by
-identify_secondary_cpu().
-
-During S3 resume, restore these MSRs for boot CPU when restoring its
-processor state.
-
-Fixes: 772439717dbf ("x86/bugs/intel: Set proper CPU features and setup RDS")
-Reported-by: Neelima Krishnan <neelima.krishnan@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
-Acked-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+Fixes: bb6d3fa98a41 ("clk: renesas: rcar-gen3: Switch to new SD clock handling")
 Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Link: https://lore.kernel.org/r/20220404100508.3209-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/power/cpu.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/mmc/host/renesas_sdhi_core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -503,10 +503,24 @@ static int pm_cpu_check(const struct x86
- 	return ret;
- }
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -144,9 +144,9 @@ static unsigned int renesas_sdhi_clk_upd
+ 		return clk_get_rate(priv->clk);
  
-+static void pm_save_spec_msr(void)
-+{
-+	u32 spec_msr_id[] = {
-+		MSR_IA32_SPEC_CTRL,
-+		MSR_IA32_TSX_CTRL,
-+		MSR_TSX_FORCE_ABORT,
-+		MSR_IA32_MCU_OPT_CTRL,
-+		MSR_AMD64_LS_CFG,
-+	};
-+
-+	msr_build_context(spec_msr_id, ARRAY_SIZE(spec_msr_id));
-+}
-+
- static int pm_check_save_msr(void)
- {
- 	dmi_check_system(msr_save_dmi_table);
- 	pm_cpu_check(msr_save_cpu_table);
-+	pm_save_spec_msr();
- 
- 	return 0;
- }
+ 	if (priv->clkh) {
++		/* HS400 with 4TAP needs different clock settings */
+ 		bool use_4tap = priv->quirks && priv->quirks->hs400_4taps;
+-		bool need_slow_clkh = (host->mmc->ios.timing == MMC_TIMING_UHS_SDR104) ||
+-				      (host->mmc->ios.timing == MMC_TIMING_MMC_HS400);
++		bool need_slow_clkh = host->mmc->ios.timing == MMC_TIMING_MMC_HS400;
+ 		clkh_shift = use_4tap && need_slow_clkh ? 1 : 2;
+ 		ref_clk = priv->clkh;
+ 	}
 
 

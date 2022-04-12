@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D194FCBCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E187B4FCBD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242867AbiDLBTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S242917AbiDLBTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348746AbiDLBSS (ORCPT
+        with ESMTP id S1349081AbiDLBSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:18:18 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ABBBE1E;
-        Mon, 11 Apr 2022 18:14:49 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 12 Apr
- 2022 09:14:49 +0800
+        Mon, 11 Apr 2022 21:18:40 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1870D10C0;
+        Mon, 11 Apr 2022 18:16:24 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 12 Apr
+ 2022 09:16:22 +0800
 Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
  (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 12 Apr
- 2022 09:14:47 +0800
+ 2022 09:16:22 +0800
 From:   Haowen Bai <baihaowen@meizu.com>
 To:     Vinod Koul <vkoul@kernel.org>
 CC:     Haowen Bai <baihaowen@meizu.com>, <dmaengine@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] dmaengine: pl08x: drop the useless function "NULL"
-Date:   Tue, 12 Apr 2022 09:14:45 +0800
-Message-ID: <1649726086-12889-1-git-send-email-baihaowen@meizu.com>
+Subject: [PATCH V3] dmaengine: pl08x: drop the useless function
+Date:   Tue, 12 Apr 2022 09:16:20 +0800
+Message-ID: <1649726180-13133-1-git-send-email-baihaowen@meizu.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <YlQ1i3DFqoFFFszO@matsya>
 References: <YlQ1i3DFqoFFFszO@matsya>
@@ -37,9 +37,9 @@ Content-Type: text/plain
 X-Originating-IP: [172.16.137.70]
 X-ClientProxiedBy: IT-EXMB-1-123.meizu.com (172.16.1.123) To
  IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,6 +52,7 @@ better way, drop the function.
 Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 ---
 V1->V2: drop the useless function.
+V2->V3: change title
 
  drivers/dma/amba-pl08x.c | 11 -----------
  1 file changed, 11 deletions(-)

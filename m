@@ -2,112 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1294FC901
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7194FC90B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238123AbiDKX62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S239203AbiDLAEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbiDKX6Z (ORCPT
+        with ESMTP id S236437AbiDLAEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:58:25 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D452B271
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:56:09 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 2so16720656pjw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u4J7Bf/GotxjJfY4hYTghw/TTioM2LYvPTAkJWjY17E=;
-        b=HQ+2vciUuGFcRUAADBBBewhLLxx/n8IwutVwi9bDSH5UBx/sMIz11gFenVTKEO5i2V
-         Z3KkkM9CsYrzCcapeOzqAPFCFARrC/nGi7vHH0YUZMEyTwShG2fVEKyBuJ+b4TCzPDd6
-         szbu08LY1PXwGtFdjtHzkI48ZOaN1iB6bh793hvWxqcO0deFyRSoPQt9LUnPAXwTeeVl
-         Tb/JasLYg9PNiFlSaZ65haBXwam6yS94qYrcv5vEzr4MKjqx1+yFqkfPGe4cwK/rfrsj
-         +9U3IHhasFilk7p3D90KspNTXQykty6L7GEhgqlF9JxHABSU3bCtlbzBEt8Xnh/InXLg
-         0JMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u4J7Bf/GotxjJfY4hYTghw/TTioM2LYvPTAkJWjY17E=;
-        b=7vLYqmF8RbWm+fAaYYARn+2vRYvfJI7liJ+ZGPrzIuaIpWmmc44CMoum7gPKhFLmjB
-         UWJbrT+jRnTE22OueW+xmbejjhrPtkuKyk0IkcbHho2/mNqTqMg3jtd/JtZOwyciOkOc
-         jm8cE44VDW2PowjQ1eCV02Yq7bpMgoejJFx+suxgnezxbRvAq/MEOhE1D4YP4owgKurh
-         zVTsohRaxKxtJe4MOjrHy4IcjzMBycQV6Hwxl1Xl5xlBl/NbORYqZz3iSIUcJLQF4Lss
-         QqRm0g++22BvPxSbsTm5LIFAeVr0MZCS4GFdsZXIqvvDJr0WODQt2td6qJ5Gs7plWdso
-         2hFg==
-X-Gm-Message-State: AOAM530+hnqtrU/ZvxKGFF0aw2YAdl2kmCV8pqtnF6nNXZeLn26cmnF+
-        XhLB1dn2LaW2KUje6WJn679hVc/pZkQoD+CtfwprOA==
-X-Google-Smtp-Source: ABdhPJwz526LJSdeFPj6/c7PsF49maypY+wjW8NyQ8pIICoB0k38/TF9Lk5dkB3kd2++yFgVX8lzKCKbNtcxf9v/5dw=
-X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
- d22-20020a170902729600b0014b4bc60e81mr34383349pll.132.1649721368525; Mon, 11
- Apr 2022 16:56:08 -0700 (PDT)
+        Mon, 11 Apr 2022 20:04:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6512ED42
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:02:29 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BNicXa024777;
+        Tue, 12 Apr 2022 00:02:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Ymhm3gWLFUXXkn5483f/1Rx+YzD94Ie5+Dy9QnMA8pY=;
+ b=nMj6Kj2t1b92u0VcCmR6oYCfajpyNsrxYFqMKOSUcbx0EbCBtvtMoNvVxmcjcDCImz5b
+ Knyqm9f97FyI7AMfZgI4b4kcQt1lsS+NvtplK1x0TipnVcjSO/sDyaNQzqUnUYtMc3yp
+ Losyt5avJAMTUssB1+JIYAoTUOCav761xOdnF1cAibWL56zJ0UZpDEnxVfqDAk6wceWA
+ aoxJQDPOmXHqCGFoZvvnvWXU2ntwerzFXWvL9JOon7Hbxm7pQgsh43qIN2VvK6YHOmuO
+ XOwzWhrOnAx8CD+j+BKpgG/g2OAyX4uM4xRzZ0Vm4jdGSSUbfJyoaB2OCiij5D7QTPlu dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fcx9987ph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 00:02:05 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23BNnExM003563;
+        Tue, 12 Apr 2022 00:02:04 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fcx9987p1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 00:02:04 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23BNrv2L030620;
+        Tue, 12 Apr 2022 00:02:02 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fb1dj3v9e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 00:02:02 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23C020kV24248614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 00:02:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8251A11C050;
+        Tue, 12 Apr 2022 00:02:00 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C11AC11C04A;
+        Tue, 12 Apr 2022 00:01:59 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.66.170])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 12 Apr 2022 00:01:59 +0000 (GMT)
+Date:   Tue, 12 Apr 2022 02:01:45 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH V2 4/5] virtio-pci: implement synchronize_vqs()
+Message-ID: <20220412020145.32e26e5a.pasic@linux.ibm.com>
+In-Reply-To: <877d7vbspu.fsf@redhat.com>
+References: <20220406083538.16274-1-jasowang@redhat.com>
+        <20220406083538.16274-5-jasowang@redhat.com>
+        <20220406075952-mutt-send-email-mst@kernel.org>
+        <87wng2e527.fsf@redhat.com>
+        <20220408150307.24b6b99f.pasic@linux.ibm.com>
+        <20220410034556-mutt-send-email-mst@kernel.org>
+        <CACGkMEtarZb6g3ij5=+As17+d9jtdAqNa1EzSuTXc7Pq_som0Q@mail.gmail.com>
+        <877d7vbspu.fsf@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-5-jane.chu@oracle.com>
- <Yk0i/pODntZ7lbDo@infradead.org> <196d51a3-b3cc-02ae-0d7d-ee6fbb4d50e4@oracle.com>
- <Yk52415cnFa39qil@infradead.org>
-In-Reply-To: <Yk52415cnFa39qil@infradead.org>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 11 Apr 2022 16:55:58 -0700
-Message-ID: <CAPcyv4gfF4AhxD_vqCS9CTRraj8GAMDYQ7Zb411+FvxhF4ccOw@mail.gmail.com>
-Subject: Re: [PATCH v7 4/6] dax: add DAX_RECOVERY flag and .recovery_write dev_pgmap_ops
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jane Chu <jane.chu@oracle.com>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1bvXk22wNw3YGkUdJsgQgRpdAVK_Flry
+X-Proofpoint-ORIG-GUID: 0h2qVqskP8RMF8-85NvyW9SJF_9wzeKg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-11_09,2022-04-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204110128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 10:31 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Wed, Apr 06, 2022 at 05:32:31PM +0000, Jane Chu wrote:
-> > Yes, I believe Dan was motivated by avoiding the dm dance as a result of
-> > adding .recovery_write to dax_operations.
-> >
-> > I understand your point about .recovery_write is device specific and
-> > thus not something appropriate for device agnostic ops.
-> >
-> > I can see 2 options so far -
-> >
-> > 1)  add .recovery_write to dax_operations and do the dm dance to hunt
-> > down to the base device that actually provides the recovery action
->
-> That would be my preference.  But I'll wait for Dan to chime in.
+On Mon, 11 Apr 2022 16:27:41 +0200
+Cornelia Huck <cohuck@redhat.com> wrote:
 
-Yeah, so the motivation was avoiding plumbing recovery through stacked
-lookups when the recovery is specific to a pfn and the provider of
-that pfn, but I also see it from Christoph's perspective that the only
-agent that cares about recovery is the fsdax I/O path. Certainly
-having ->dax_direct_access() take a DAX_RECOVERY flag and the op
-itself go through the pgmap is a confusing split that I did not
-anticipate when I made the suggestion. Since that flag must be there,
-then the ->recovery_write() should also stay relative to a dax device.
+> On Mon, Apr 11 2022, Jason Wang <jasowang@redhat.com> wrote:
+> 
+> > On Sun, Apr 10, 2022 at 3:51 PM Michael S. Tsirkin <mst@redhat.com> wrote:  
+> >>
+> >> On Fri, Apr 08, 2022 at 03:03:07PM +0200, Halil Pasic wrote:  
+> >> > On Wed, 06 Apr 2022 15:04:32 +0200
+> >> > Cornelia Huck <cohuck@redhat.com> wrote:
+> >> >  
+> >> > > On Wed, Apr 06 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >> > >  
+> >> > > > On Wed, Apr 06, 2022 at 04:35:37PM +0800, Jason Wang wrote:  
+> >> > > >> This patch implements PCI version of synchronize_vqs().
+> >> > > >>
+> >> > > >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> > > >> Cc: Peter Zijlstra <peterz@infradead.org>
+> >> > > >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> >> > > >> Cc: Marc Zyngier <maz@kernel.org>
+> >> > > >> Signed-off-by: Jason Wang <jasowang@redhat.com>  
+> >> > > >
+> >> > > > Please add implementations at least for ccw and mmio.  
+> >> > >
+> >> > > I'm not sure what (if anything) can/should be done for ccw...  
+> >> >
+> >> > If nothing needs to be done I would like to have at least a comment in
+> >> > the code that explains why. So that somebody who reads the code
+> >> > doesn't wonder: why is virtio-ccw not implementing that callback.  
+> >>
+> >> Right.
+> >>
+> >> I am currently thinking instead of making this optional in the
+> >> core we should make it mandatory, and have transports which do not
+> >> need to sync have an empty stub with documentation explaining why.  
+> 
+> Yes, that makes sense to me. If we can explain why we don't need to do
+> anything, we should keep that explanation easily accessible.
+> 
+> >>
+> >> Also, do we want to document this sync is explicitly for irq enable/disable?
+> >> synchronize_irq_enable_disable?  
+> >
+> > I would not since the transport is not guaranteed to use an interrupt
+> > for callbacks.
+> >  
+> >>
+> >>  
+> >> > >  
+> >> > > >  
+> >> > > >> ---
+> >> > > >>  drivers/virtio/virtio_pci_common.c | 14 ++++++++++++++
+> >> > > >>  drivers/virtio/virtio_pci_common.h |  2 ++
+> >> > > >>  drivers/virtio/virtio_pci_legacy.c |  1 +
+> >> > > >>  drivers/virtio/virtio_pci_modern.c |  2 ++
+> >> > > >>  4 files changed, 19 insertions(+)
+> >> > > >>
+> >> > > >> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+> >> > > >> index d724f676608b..b78c8bc93a97 100644
+> >> > > >> --- a/drivers/virtio/virtio_pci_common.c
+> >> > > >> +++ b/drivers/virtio/virtio_pci_common.c
+> >> > > >> @@ -37,6 +37,20 @@ void vp_synchronize_vectors(struct virtio_device *vdev)
+> >> > > >>                  synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> >> > > >>  }
+> >> > > >>
+> >> > > >> +void vp_synchronize_vqs(struct virtio_device *vdev)
+> >> > > >> +{
+> >> > > >> +        struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> >> > > >> +        int i;
+> >> > > >> +
+> >> > > >> +        if (vp_dev->intx_enabled) {
+> >> > > >> +                synchronize_irq(vp_dev->pci_dev->irq);
+> >> > > >> +                return;
+> >> > > >> +        }
+> >> > > >> +
+> >> > > >> +        for (i = 0; i < vp_dev->msix_vectors; ++i)
+> >> > > >> +                synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> >> > > >> +}
+> >> > > >> +  
+> >> > >
+> >> > > ...given that this seems to synchronize threaded interrupt handlers?
+> >> > > Halil, do you think ccw needs to do anything? (AFAICS, we only have one
+> >> > > 'irq' for channel devices anyway, and the handler just calls the
+> >> > > relevant callbacks directly.)  
+> >> >
+> >> > Sorry I don't understand enough yet. A more verbose documentation on
+> >> > "virtio_synchronize_vqs - synchronize with virtqueue callbacks" would
+> >> > surely benefit me. It may be more than enough for a back-belt but it
+> >> > ain't enough for me to tell what is the callback supposed to accomplish.  
+> 
+> +1 for more explanations.
+> 
+> >> >
+> >> > I will have to study this discussion and the code more thoroughly.
+> >> > Tentatively I side with Jason and Michael in a sense, that I don't
+> >> > believe virtio-ccw is safe against rough interrupts.  
+> >
+> > That's my feeling as well.  
+> 
+> I'd say ccw is safe against "notification interrupts before indicators
+> have been registered".
 
-Apologies for the thrash Jane.
+I believe Jason's scope is broader than that. Let me try to explain. A
+quote form the standard:
+"""
+3.1.1 Driver Requirements: Device Initialization
+The driver MUST follow this sequence to initialize a device: 
+    1. Reset the device. 
+    2. Set the ACKNOWLEDGE status bit: the guest OS has noticed the device. 
+    3. Set the DRIVER status bit: the guest OS knows how to drive the device. 
+    4. Read device feature bits, and write the subset of feature bits understood by the OS and driver to the device. During this step the driver MAY read (but MUST NOT write) the device-specific configuration fields to check that it can support the device before accepting it. 
+    5. Set the FEATURES_OK status bit. The driver MUST NOT accept new feature bits after this step. 
+    6. Re-read device status to ensure the FEATURES_OK bit is still set: otherwise, the device does not support our subset of features and the device is unusable. 
+    7. Perform device-specific setup, including discovery of virtqueues for the device, optional per-bus setup, reading and possibly writing the device’s virtio configuration space, and population of virtqueues. 
+    8. Set the DRIVER_OK status bit. At this point the device is “live”.
+"""
 
-One ask though, please separate plumbing the new flag argument to
-->dax_direct_access() and plumbing the new operation into preparation
-patches before filling them in with the new goodness.
+That means stuff may happen between "discovery of virtqueues" and "DRIVER_OK". So it
+is not sufficient to be "safe against notifications before indicators
+have been registered", but we want to be also safe between "indicators have
+been registered" and "DRIVER_OK status has been set". 
+
+@Jason: can you confirm?
+
+Regarding the question "are we safe against notifications before
+indicators have been registered" I think we really need to think about
+something like Secure Execution. We don't have, and we are unlikely
+to have in hardware virtio-ccw implementations, and for a malicious hypervisor
+that has full access to the guest memory hardening makes no sense.
+
+But if we assume that an attacker can inject adapter interrupts for an arbitrary
+ISC, and can poke any shared memory (notifier bits are shared)... Things might
+become critical already when register_adapter_interrupt() does it's magic.
+
+
+> For the reverse case, maybe we should always
+> invalidate the indicators in the reset case? More information regarding
+> the attack vector would help here :)
+> 
+> My main concern is that we would need to synchronize against a single
+> interrupt that covers all kinds of I/O interrupts, not just a single
+> device...
+> 
+
+Could we synchronize on struct airq_info's lock member? If we were
+to grab all of these that might be involved...
+
+AFAIU for the synchronize implementation we need a lock or a set of locks
+that contain all the possible vring_interrupt() calls with the queuues
+that belong to the given device as a critical section. That way, one
+has the acquire's and release's in place so that the vrign_interrupt()
+either guaranteed to finish before the change of driver_ready is
+guaranteed to be complete, or it is guaranteed to see the change.
+
+In any case, I guess we should first get clear on the first part. I.e.
+when do we want to allow host->guest notifications.
+
+Regards,
+Halil
+

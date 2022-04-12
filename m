@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3297F4FDB1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A901A4FDA4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387293AbiDLJGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S1354933AbiDLIG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359138AbiDLHmd (ORCPT
+        with ESMTP id S1354054AbiDLH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F3229C9A;
-        Tue, 12 Apr 2022 00:20:20 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D5A16589;
+        Tue, 12 Apr 2022 00:05:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2017C616B2;
-        Tue, 12 Apr 2022 07:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B716C385A5;
-        Tue, 12 Apr 2022 07:20:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 545E4B81B51;
+        Tue, 12 Apr 2022 07:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A34C385A6;
+        Tue, 12 Apr 2022 07:05:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748019;
-        bh=3RUt2KxfRxSsYsWSSjP4U2KH/Rhc8qyzgbW8l/zg94U=;
+        s=korg; t=1649747125;
+        bh=K13Fcmd4pjZ4VFRVTHDJAb+fVTQ92rUnm6te9GXG10M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VWTOMeKdRFTvk5q9m8o9rGAHltTix9wp6zXC7dT+qeU9BjzFbPxmepPBv0wXcxfsy
-         70q9cB4QIbdX8l9A5bknZFF9XYYAyvi99Uvve9rPzPywXy8yBdZfGMxCLKBfaJA2PH
-         rTN9YdCV9c9LaKbxkrNOvEifpZd6WbiMc9DXqwFA=
+        b=SCIsJ5DLuh0C4DEhD0uZNHq0xXDIvSaqNSEvnkZakognbi8eag2r5BtLoB6+S5vEZ
+         Ivf0NZWS1yzTjbzPamWPDzu20+mwuvjGZOZFqyxmmDcFdWZHAFPb3gCIsYJdOlklb8
+         jGriCBcw86qrY0SSIqOB/jPnrRMZruvS+M7VLKeg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 5.17 291/343] arm64: patch_text: Fixup last cpu should be master
-Date:   Tue, 12 Apr 2022 08:31:49 +0200
-Message-Id: <20220412062959.727297612@linuxfoundation.org>
+        stable@vger.kernel.org, Benjamin Marty <info@benjaminmarty.ch>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 253/285] drm/amdgpu/display: change pipe policy for DCN 2.1
+Date:   Tue, 12 Apr 2022 08:31:50 +0200
+Message-Id: <20220412062950.962957758@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Benjamin Marty <info@benjaminmarty.ch>
 
-commit 31a099dbd91e69fcab55eef4be15ed7a8c984918 upstream.
+commit 879791ad8bf3dc5453061cad74776a617b6e3319 upstream.
 
-These patch_text implementations are using stop_machine_cpuslocked
-infrastructure with atomic cpu_count. The original idea: When the
-master CPU patch_text, the others should wait for it. But current
-implementation is using the first CPU as master, which couldn't
-guarantee the remaining CPUs are waiting. This patch changes the
-last CPU as the master to solve the potential risk.
+Fixes crash on MST Hub disconnect.
 
-Fixes: ae16480785de ("arm64: introduce interfaces to hotpatch kernel and module code")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220407073323.743224-2-guoren@kernel.org
-Signed-off-by: Will Deacon <will@kernel.org>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1849
+Fixes: ee2698cf79cc ("drm/amd/display: Changed pipe split policy to allow for multi-display pipe split")
+Signed-off-by: Benjamin Marty <info@benjaminmarty.ch>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/patching.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm64/kernel/patching.c
-+++ b/arch/arm64/kernel/patching.c
-@@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_
- 	int i, ret = 0;
- 	struct aarch64_insn_patch *pp = arg;
- 
--	/* The first CPU becomes master */
--	if (atomic_inc_return(&pp->cpu_count) == 1) {
-+	/* The last CPU becomes master */
-+	if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
- 		for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
- 			ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
- 							     pp->new_insns[i]);
+--- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+@@ -874,7 +874,7 @@ static const struct dc_debug_options deb
+ 		.clock_trace = true,
+ 		.disable_pplib_clock_request = true,
+ 		.min_disp_clk_khz = 100000,
+-		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
++		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
+ 		.force_single_disp_pipe_split = false,
+ 		.disable_dcc = DCC_ENABLE,
+ 		.vsr_support = true,
 
 

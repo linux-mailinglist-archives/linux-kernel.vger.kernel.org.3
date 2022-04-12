@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470FA4FD694
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9394FD9EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354885AbiDLIGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S1379634AbiDLIUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354029AbiDLH0A (ORCPT
+        with ESMTP id S1354120AbiDLH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9707215722;
-        Tue, 12 Apr 2022 00:05:24 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FAF443D3;
+        Tue, 12 Apr 2022 00:05:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BBD5B81B4D;
-        Tue, 12 Apr 2022 07:05:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA116C385A6;
-        Tue, 12 Apr 2022 07:05:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 525F860B65;
+        Tue, 12 Apr 2022 07:05:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB7EC385A1;
+        Tue, 12 Apr 2022 07:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747122;
-        bh=yqQ8br7MQ3MrgXQimt529wUVNzkOSYPYS0M367HdvJU=;
+        s=korg; t=1649747152;
+        bh=J+TnkjUnUJTPTjWdY0vnCLiIu4RAOPI2eSIf3Ml9EyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2bcEbQq/S3Wp3sTnywYSEHs4+bBeRcO7hEuHc8pjC21AfEb3l65FAnenLgkST1sNK
-         3FnbjzcvQiW907WjJxSemqtwf5/fSdqVtqdTDsEutAU9E/KxR7tuFHjDivFTJ3K49D
-         teLKHSnM+kIvoP9dGwP/Utn6NlKDnobkGAWM2V4A=
+        b=WTGXDF779W1JkxqQXvkE5X0mKDkm/AeE4Nk58q9tiNT0MMLYmAiiq8X6Mw/yqVYbG
+         J5FW+Kupa9QuawAbR9qzmbPvLMB+M1i6PevfvkIOG0ZCH2BZQoLw2ujO4VPrskHLe6
+         QRaG2Pgpr+GewKJx7cOtiL20ZOktdyM9mzfdl6OQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.16 244/285] perf/x86/intel: Dont extend the pseudo-encoding to GP counters
-Date:   Tue, 12 Apr 2022 08:31:41 +0200
-Message-Id: <20220412062950.703096996@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@kernel.org
+Subject: [PATCH 5.16 245/285] ata: sata_dwc_460ex: Fix crash due to OOB write
+Date:   Tue, 12 Apr 2022 08:31:42 +0200
+Message-Id: <20220412062950.730976971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -54,73 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Christian Lamparter <chunkeey@gmail.com>
 
-commit 4a263bf331c512849062805ef1b4ac40301a9829 upstream.
+commit 7aa8104a554713b685db729e66511b93d989dd6a upstream.
 
-The INST_RETIRED.PREC_DIST event (0x0100) doesn't count on SPR.
-perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+the driver uses libata's "tag" values from in various arrays.
+Since the mentioned patch bumped the ATA_TAG_INTERNAL to 32,
+the value of the SATA_DWC_QCMD_MAX needs to account for that.
 
- Performance counter stats for 'CPU(s) 0':
+Otherwise ATA_TAG_INTERNAL usage cause similar crashes like
+this as reported by Tice Rex on the OpenWrt Forum and
+reproduced (with symbols) here:
 
-           607,246      cpu/event=0xc0,umask=0x0/
-                 0      cpu/event=0x0,umask=0x1/
+| BUG: Kernel NULL pointer dereference at 0x00000000
+| Faulting instruction address: 0xc03ed4b8
+| Oops: Kernel access of bad area, sig: 11 [#1]
+| BE PAGE_SIZE=4K PowerPC 44x Platform
+| CPU: 0 PID: 362 Comm: scsi_eh_1 Not tainted 5.4.163 #0
+| NIP:  c03ed4b8 LR: c03d27e8 CTR: c03ed36c
+| REGS: cfa59950 TRAP: 0300   Not tainted  (5.4.163)
+| MSR:  00021000 <CE,ME>  CR: 42000222  XER: 00000000
+| DEAR: 00000000 ESR: 00000000
+| GPR00: c03d27e8 cfa59a08 cfa55fe0 00000000 0fa46bc0 [...]
+| [..]
+| NIP [c03ed4b8] sata_dwc_qc_issue+0x14c/0x254
+| LR [c03d27e8] ata_qc_issue+0x1c8/0x2dc
+| Call Trace:
+| [cfa59a08] [c003f4e0] __cancel_work_timer+0x124/0x194 (unreliable)
+| [cfa59a78] [c03d27e8] ata_qc_issue+0x1c8/0x2dc
+| [cfa59a98] [c03d2b3c] ata_exec_internal_sg+0x240/0x524
+| [cfa59b08] [c03d2e98] ata_exec_internal+0x78/0xe0
+| [cfa59b58] [c03d30fc] ata_read_log_page.part.38+0x1dc/0x204
+| [cfa59bc8] [c03d324c] ata_identify_page_supported+0x68/0x130
+| [...]
 
-The encoding for INST_RETIRED.PREC_DIST is pseudo-encoding, which
-doesn't work on the generic counters. However, current perf extends its
-mask to the generic counters.
+This is because sata_dwc_dma_xfer_complete() NULLs the
+dma_pending's next neighbour "chan" (a *dma_chan struct) in
+this '32' case right here (line ~735):
+> hsdevp->dma_pending[tag] = SATA_DWC_DMA_PENDING_NONE;
 
-The pseudo event-code for a fixed counter must be 0x00. Check and avoid
-extending the mask for the fixed counter event which using the
-pseudo-encoding, e.g., ref-cycles and PREC_DIST event.
+Then the next time, a dma gets issued; dma_dwc_xfer_setup() passes
+the NULL'd hsdevp->chan to the dmaengine_slave_config() which then
+causes the crash.
 
-With the patch,
-perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+With this patch, SATA_DWC_QCMD_MAX is now set to ATA_MAX_QUEUE + 1.
+This avoids the OOB. But please note, there was a worthwhile discussion
+on what ATA_TAG_INTERNAL and ATA_MAX_QUEUE is. And why there should not
+be a "fake" 33 command-long queue size.
 
- Performance counter stats for 'CPU(s) 0':
+Ideally, the dw driver should account for the ATA_TAG_INTERNAL.
+In Damien Le Moal's words: "... having looked at the driver, it
+is a bigger change than just faking a 33rd "tag" that is in fact
+not a command tag at all."
 
-           583,184      cpu/event=0xc0,umask=0x0/
-           583,048      cpu/event=0x0,umask=0x1/
-
-Fixes: 2de71ee153ef ("perf/x86/intel: Fix ICL/SPR INST_RETIRED.PREC_DIST encodings")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/1648482543-14923-1-git-send-email-kan.liang@linux.intel.com
+Fixes: 28361c403683c ("libata: add extra internal command")
+Cc: stable@kernel.org # 4.18+
+BugLink: https://github.com/openwrt/openwrt/issues/9505
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/events/intel/core.c      |    6 +++++-
- arch/x86/include/asm/perf_event.h |    5 +++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ drivers/ata/sata_dwc_460ex.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -5521,7 +5521,11 @@ static void intel_pmu_check_event_constr
- 			/* Disabled fixed counters which are not in CPUID */
- 			c->idxmsk64 &= intel_ctrl;
+--- a/drivers/ata/sata_dwc_460ex.c
++++ b/drivers/ata/sata_dwc_460ex.c
+@@ -145,7 +145,11 @@ struct sata_dwc_device {
+ #endif
+ };
  
--			if (c->idxmsk64 != INTEL_PMC_MSK_FIXED_REF_CYCLES)
-+			/*
-+			 * Don't extend the pseudo-encoding to the
-+			 * generic counters
-+			 */
-+			if (!use_fixed_pseudo_encoding(c->code))
- 				c->idxmsk64 |= (1ULL << num_counters) - 1;
- 		}
- 		c->idxmsk64 &=
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -241,6 +241,11 @@ struct x86_pmu_capability {
- #define INTEL_PMC_IDX_FIXED_SLOTS	(INTEL_PMC_IDX_FIXED + 3)
- #define INTEL_PMC_MSK_FIXED_SLOTS	(1ULL << INTEL_PMC_IDX_FIXED_SLOTS)
+-#define SATA_DWC_QCMD_MAX	32
++/*
++ * Allow one extra special slot for commands and DMA management
++ * to account for libata internal commands.
++ */
++#define SATA_DWC_QCMD_MAX	(ATA_MAX_QUEUE + 1)
  
-+static inline bool use_fixed_pseudo_encoding(u64 code)
-+{
-+	return !(code & 0xff);
-+}
-+
- /*
-  * We model BTS tracing as another fixed-mode PMC.
-  *
+ struct sata_dwc_device_port {
+ 	struct sata_dwc_device	*hsdev;
 
 

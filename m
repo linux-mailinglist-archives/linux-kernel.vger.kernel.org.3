@@ -2,113 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B72F4FDD0F
+	by mail.lfdr.de (Postfix) with ESMTP id 934B14FDD10
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242073AbiDLKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S1347871AbiDLKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357244AbiDLKpy (ORCPT
+        with ESMTP id S1357289AbiDLKpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:45:54 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E591D30D;
-        Tue, 12 Apr 2022 02:45:35 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id t207so11857674qke.2;
-        Tue, 12 Apr 2022 02:45:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BYcXejDmOeWgzk9C0JmypYS2H5WpNhj4UivpuQIYqc4=;
-        b=d4eOTFp51DIfqhTHlxOmfjcwv0VEn7gZTCsPFVSS7IQMgE+T8a6FDei4ViYYdw1l/T
-         FIyPSotgcjms2YqL/0iUlGGmLfp6CPtbFie4OFyKa1bTE6cAPD04Qmvc/quYSgrA1Q+/
-         e60dho0gQACixgHXLcDhPrC7PfaAgloV8+L3yzIr4v7mh3bbydwdh57UKWZJBAFj63Jp
-         ljM9FPTtsFFk87jW7yp4USRwW1Dg2wCvs2eb3lF4L514PeymPV/MuLmwBkOnpM6IMEtz
-         UDIw9nICdaGezvcM6LpHC0rScA72DnFvTmfcUpZMDM2fyG9GUa7xaKlwBM4sHc2ddYUj
-         F5EQ==
-X-Gm-Message-State: AOAM5335JihLD5OsNSa27bq8jHXQKuR94vapfo1r8SgbIdlfB9tTgIF9
-        H1n9SsRUTm07WeWKa/xzrneT3VCVG4NBXYge
-X-Google-Smtp-Source: ABdhPJyh/kxuKP9aiGd5zIdnjH3WHW9owun8i+czaXo3e8poYojnb8H01DyA5vVA+3LWZd8FdVSy+Q==
-X-Received: by 2002:a05:620a:171e:b0:69c:2480:cfea with SMTP id az30-20020a05620a171e00b0069c2480cfeamr2450685qkb.247.1649756734450;
-        Tue, 12 Apr 2022 02:45:34 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id w17-20020ac857d1000000b002e19feda592sm27070116qta.85.2022.04.12.02.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 02:45:34 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ebf3746f87so100072127b3.6;
-        Tue, 12 Apr 2022 02:45:33 -0700 (PDT)
-X-Received: by 2002:a81:5210:0:b0:2ef:21e3:54dd with SMTP id
- g16-20020a815210000000b002ef21e354ddmr2967434ywb.438.1649756733392; Tue, 12
- Apr 2022 02:45:33 -0700 (PDT)
+        Tue, 12 Apr 2022 06:45:55 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE462F386;
+        Tue, 12 Apr 2022 02:45:48 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C9jUKe067665;
+        Tue, 12 Apr 2022 04:45:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649756730;
+        bh=VDZc9Kk2A5AD9uS5jLQGDKo7YqCKDe0p6HsXL4ysfhI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=iv8hwZ5BypRzsvkov7dNiU9fES4zKD4AeB2e2tT3+IZ2IG/soRzihAEobXxhPnn1w
+         oKcYmdxfOt35wXl3f2vA2v8XTwsSrdbvJSowEbnP0I2nK4fFWEuy/DXYMghvNxi/Q4
+         t9indP3WDNhlqvzmwclK8zlA/i2MSfpAqVA0PYuQ=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C9jUhf021475
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 04:45:30 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 04:45:29 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 04:45:29 -0500
+Received: from [10.24.69.24] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C9jOXs106716;
+        Tue, 12 Apr 2022 04:45:24 -0500
+Message-ID: <468d4d9b-44b4-2894-2a75-4caab1e72147@ti.com>
+Date:   Tue, 12 Apr 2022 15:15:23 +0530
 MIME-Version: 1.0
-References: <19358863deae03b1b26f473e878305a1c6e40d19.1649681638.git.geert+renesas@glider.be>
- <YlVJc3z1xXT2emIc@ninjato>
-In-Reply-To: <YlVJc3z1xXT2emIc@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 11:45:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUGkba3hiRJPEw26oBdc6_MK_eBO==Z9QeinaoeZv8Qbw@mail.gmail.com>
-Message-ID: <CAMuHMdUGkba3hiRJPEw26oBdc6_MK_eBO==Z9QeinaoeZv8Qbw@mail.gmail.com>
-Subject: Re: [PATCH] memory: renesas-rpc-if: Simplify single/double data
- register access
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC 13/13] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <netdev@vger.kernel.org>, <vigneshr@ti.com>,
+        <kishon@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+References: <20220406094358.7895-1-p-mohan@ti.com>
+ <20220406094358.7895-14-p-mohan@ti.com> <Yk3d/cC36fhNmfY2@lunn.ch>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <Yk3d/cC36fhNmfY2@lunn.ch>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
++ Roger, Grygorii
 
-On Tue, Apr 12, 2022 at 11:42 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> On Mon, Apr 11, 2022 at 02:55:29PM +0200, Geert Uytterhoeven wrote:
-> > For manual write and read, factor out the common access to the first
-> > data register by keeping track of the current data pointer.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Works fine with reading/writing on a V3U, so:
->
-> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->
-> I agree the code is more concise. I am not sure, though, if it is really
-> more readable. But I don't mind very much, so except for a small nit:
->
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thanks!
-
-> > +                     if (nbytes == 8)
-> > +                             regmap_write(rpc->regmap, RPCIF_SMWDR1, *p++);
-> > +                     regmap_write(rpc->regmap, RPCIF_SMWDR0, *p++);
->
-> Last '++' can be omitted?
-
-I know. But I think it looks nicer this way ;-)
-The compiler doesn't care anyway.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 07/04/22 00:07, Andrew Lunn wrote:
+>> +static int emac_phy_connect(struct prueth_emac *emac)
+>> +{
+>> +	struct prueth *prueth = emac->prueth;
+>> +
+>> +	/* connect PHY */
+>> +	emac->phydev = of_phy_connect(emac->ndev, emac->phy_node,
+>> +				      &emac_adjust_link, 0, emac->phy_if);
+> 
+>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
+>> +				    struct device_node *eth_np,
+>> +				    phy_interface_t phy_if)
+>> +{
+>> +	struct device *dev = prueth->dev;
+>> +	struct regmap *ctrl_mmr;
+>> +	u32 rgmii_tx_id = 0;
+>> +	u32 icssgctrl_reg;
+>> +
+>> +	if (!phy_interface_mode_is_rgmii(phy_if))
+>> +		return 0;
+>> +
+>> +	ctrl_mmr = syscon_regmap_lookup_by_phandle(eth_np, "ti,syscon-rgmii-delay");
+>> +	if (IS_ERR(ctrl_mmr)) {
+>> +		dev_err(dev, "couldn't get ti,syscon-rgmii-delay\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	if (of_property_read_u32_index(eth_np, "ti,syscon-rgmii-delay", 1,
+>> +				       &icssgctrl_reg)) {
+>> +		dev_err(dev, "couldn't get ti,rgmii-delay reg. offset\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
+>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
+>> +
+>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
+>> +
+>> +	return 0;
+>> +}
+>>
+> 
+> O.K, so this does not do what i initially thought it was doing. I was
+> thinking it was to fine tune the delay, ti,syscon-rgmii-delay would be
+> a small pico second value to allow the 2ns delay to be tuned to the
+> board.
+> 
+> But now i think this is actually inserting the full 2ns delay?
+> 
+> The problem is, you also pass phy_if to of_phy_connect() so the PHY
+> will also insert the delay if requested. So you end up with double
+> delays for rgmii_id and rgmii_txid.
+> 
+> The general recommendation is that the PHY inserts the delay, based on
+> phy-mode. The MAC does not add a delay, so i suggest you always write
+> 0 here, just to ensure the system is in a deterministic state, and the
+> bootloader and not being messing around with things.
+> 
+> 	   Andrew

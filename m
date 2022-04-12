@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E534FCF83
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF2B4FCFE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348737AbiDLGbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1350000AbiDLGjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348699AbiDLGbH (ORCPT
+        with ESMTP id S1350184AbiDLGhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:31:07 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF4335865;
-        Mon, 11 Apr 2022 23:28:51 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id bo5so16637033pfb.4;
-        Mon, 11 Apr 2022 23:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AWPJQl0O9reNTOqA4s+DVRhGYY/e+TZiRNvFAD49Eq0=;
-        b=kl1Y3+MOsimk1c9G0ZgEIdYDzHXcFBZzXklwvq4vEtXlrTpi12RmuE3IPeBjDW5LXM
-         LxAFmAXUAFLHQy2El+ofs1WDqstq9EaCxNxUb1L1tRg7xZrWSl8/YWJyDDbvn8giBWf6
-         /y8jkanDcX85vyGuNmZaCJySQ64kzcbDV6W3LkxPp0ppiUz5MKTVJx/05B6sOOC/ecSt
-         4lC/04NnRjL1gF62QMp7i7XSv+gpWX7D3nHPMUFmgS/h0TgbDgS+BQ/XlOsS0dFjULci
-         VKFA2QuCCTvzSytAkdjleCQEC4s/b2MYp/UL0IKuabajylGFZKkTfmHtLbnYwMkqzSuQ
-         4iYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AWPJQl0O9reNTOqA4s+DVRhGYY/e+TZiRNvFAD49Eq0=;
-        b=koNxeqNoe7lo+lhhrpWgYjmri1c3+dnZTvQZYHOXWSWd4ow7SOu1oCD4hKrd01c+YR
-         dp4E5nLTR8j8y2laJJp7S0TpR1miOgD9Q6VcDl8VG6pi/Ylw9GLzEX5h120AwaYnW1JS
-         XBGO2GZOBeamlk5JxPIggMwdGnNqTOvfIsSqVDcKhZp6HMw68vPRDI29AAG87m5+2dLA
-         /03VydwaHVUkJT+DSYu0uPwsxaYFnwgJktu9ictyN2plTubn/IKT1MWfEP6Nv+rhYVoQ
-         6ieQODXa3dLOAUkAdhhjYo27ip3ulfSO9cN5foDHLtYaS03fNhXLFbNDcCN5pglMBkgt
-         ymOQ==
-X-Gm-Message-State: AOAM533to6Ba5tM28CDozy7shqNW64yA2QEE64Xn9AaCQCBlJfVGDYd0
-        uHlK03h1sIh4+dmS00D6eS70ZJXT7s/D8c10SA==
-X-Google-Smtp-Source: ABdhPJwFj1oEy80pxWbYOfZRRfn5FeybU3w4qp6NEf3c4Bnc7sWesUmDssvvU3fu59IukIuD4tc4rBe3c7GQbTYgxHU=
-X-Received: by 2002:a63:610:0:b0:39d:300c:ad9b with SMTP id
- 16-20020a630610000000b0039d300cad9bmr10300635pgg.113.1649744930773; Mon, 11
- Apr 2022 23:28:50 -0700 (PDT)
+        Tue, 12 Apr 2022 02:37:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B2C13EA3;
+        Mon, 11 Apr 2022 23:34:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 702F5B81B4A;
+        Tue, 12 Apr 2022 06:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9984C385A1;
+        Tue, 12 Apr 2022 06:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649745262;
+        bh=81z2h1KVHNB5zfs48nVJ9EZ4tsJ+/5iEXZGNdjODKYQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H0Xb75I+Tj5eKWWrRyWTSwJSP69sR8Ijtzm1kANwxxkn0LmKPzc/oPiZZXRxxbIMn
+         Seyiwn8dPmwzFdqM8ibHovLCPC9ut2Di4Ooh0Lcj8CPezy2Z9x+GN9OopnctUc/Q4a
+         yJjE6H1ryKUumaT47Huc6LQDpYj9PWcHxNUeF1Uo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 028/171] PCI: aardvark: Fix support for MSI interrupts
+Date:   Tue, 12 Apr 2022 08:28:39 +0200
+Message-Id: <20220412062928.700590024@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
+References: <20220412062927.870347203@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <CAMhUBjkVME8D5KsHvT=uddBsW_Bh6wr7qeXS=UpQD4LgPmHffQ@mail.gmail.com>
- <05433153-0424-ab66-1573-993d0490c5bc@opensource.wdc.com> <556511649635338@mail.yandex.com>
-In-Reply-To: <556511649635338@mail.yandex.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Tue, 12 Apr 2022 14:28:39 +0800
-Message-ID: <CAMhUBjn4HJAy2aXv_M9rSJcZZv7ZihyK3rb5bj2NFyFx6W5dUg@mail.gmail.com>
-Subject: Re: [BUG] ata: pata_marvell: Warning when probing the module
-To:     Ozgur <ozgur@linux.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 8:09 AM Ozgur <ozgur@linux.com> wrote:
->
->
->
-> 11.04.2022, 02:53, "Damien Le Moal" <damien.lemoal@opensource.wdc.com>:
->
-> On 4/10/22 15:30, Zheyu Ma wrote:
->
->  Hello,
->
->  I found a bug in the pata_marvell module.
->  When probing the driver, it seems to trigger the error path and
->  executes the function marvell_cable_detect(), but the
->  'ap->ioaddr.bmdma_addr' is not initialized, which causes a warning.
->
->
->
-> Hello,
-> i'm not sure if this is a bug because you get as ap points to a port number.
->
-> (ap->port_no)
->
-> it points to 0x1 port that appears in error message.
+From: Pali Rohár <pali@kernel.org>
 
-Please correct me if i'm wrong, actually 'ap->port_no' is zero, and
-the 'ap->ioaddr.bmdma_addr' is zero too since it is not initialized.
+[ Upstream commit b0b0b8b897f8e12b2368e868bd7cdc5742d5c5a9 ]
 
-> otherwise BUG will work and if it cannot read warning will return.
-> ( BUG(); is macro )
+Aardvark hardware supports Multi-MSI and MSI_FLAG_MULTI_PCI_MSI is already
+set for the MSI chip. But when allocating MSI interrupt numbers for
+Multi-MSI, the numbers need to be properly aligned, otherwise endpoint
+devices send MSI interrupt with incorrect numbers.
 
-Zheyu Ma
+Fix this issue by using function bitmap_find_free_region() instead of
+bitmap_find_next_zero_area().
+
+To ensure that aligned MSI interrupt numbers are used by endpoint devices,
+we cannot use Linux virtual irq numbers (as they are random and not
+properly aligned). Instead we need to use the aligned hwirq numbers.
+
+This change fixes receiving MSI interrupts on Armada 3720 boards and
+allows using NVMe disks which use Multi-MSI feature with 3 interrupts.
+
+Without this NVMe disks freeze booting as linux nvme-core.c is waiting
+60s for an interrupt.
+
+Link: https://lore.kernel.org/r/20220110015018.26359-4-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/pci/controller/pci-aardvark.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+index 49ff8bf10c74..af051fb88699 100644
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1186,7 +1186,7 @@ static void advk_msi_irq_compose_msi_msg(struct irq_data *data,
+ 
+ 	msg->address_lo = lower_32_bits(msi_msg);
+ 	msg->address_hi = upper_32_bits(msi_msg);
+-	msg->data = data->irq;
++	msg->data = data->hwirq;
+ }
+ 
+ static int advk_msi_set_affinity(struct irq_data *irq_data,
+@@ -1203,15 +1203,11 @@ static int advk_msi_irq_domain_alloc(struct irq_domain *domain,
+ 	int hwirq, i;
+ 
+ 	mutex_lock(&pcie->msi_used_lock);
+-	hwirq = bitmap_find_next_zero_area(pcie->msi_used, MSI_IRQ_NUM,
+-					   0, nr_irqs, 0);
+-	if (hwirq >= MSI_IRQ_NUM) {
+-		mutex_unlock(&pcie->msi_used_lock);
+-		return -ENOSPC;
+-	}
+-
+-	bitmap_set(pcie->msi_used, hwirq, nr_irqs);
++	hwirq = bitmap_find_free_region(pcie->msi_used, MSI_IRQ_NUM,
++					order_base_2(nr_irqs));
+ 	mutex_unlock(&pcie->msi_used_lock);
++	if (hwirq < 0)
++		return -ENOSPC;
+ 
+ 	for (i = 0; i < nr_irqs; i++)
+ 		irq_domain_set_info(domain, virq + i, hwirq + i,
+@@ -1229,7 +1225,7 @@ static void advk_msi_irq_domain_free(struct irq_domain *domain,
+ 	struct advk_pcie *pcie = domain->host_data;
+ 
+ 	mutex_lock(&pcie->msi_used_lock);
+-	bitmap_clear(pcie->msi_used, d->hwirq, nr_irqs);
++	bitmap_release_region(pcie->msi_used, d->hwirq, order_base_2(nr_irqs));
+ 	mutex_unlock(&pcie->msi_used_lock);
+ }
+ 
+-- 
+2.35.1
+
+
+

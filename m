@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1BB4FD9F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61FB4FDA48
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351535AbiDLHWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S1354359AbiDLJTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352962AbiDLHGk (ORCPT
+        with ESMTP id S1357594AbiDLHkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:06:40 -0400
+        Tue, 12 Apr 2022 03:40:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C32949275;
-        Mon, 11 Apr 2022 23:48:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EDF2F3B8;
+        Tue, 12 Apr 2022 00:16:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E11FB81895;
-        Tue, 12 Apr 2022 06:48:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FCD2C385A1;
-        Tue, 12 Apr 2022 06:48:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26EFBB81B62;
+        Tue, 12 Apr 2022 07:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CBCAC385A5;
+        Tue, 12 Apr 2022 07:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746135;
-        bh=CFFPmTqDSL1l7fMi/IJ2pXxrUgADjKGYrYGmw+KJEjg=;
+        s=korg; t=1649747767;
+        bh=9knYtZs4cQxxwU+rTTGT8DPToBcIrwxkKouo22iwZ0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b6KgdwelhC1q67Cn7patDFT+YXdk5jF4j7lGyAyspdFMkNEdpWJ2CxyvD99Lqj0eW
-         xnx778HCUyqVcMwvLhUN0M//SGbuQW7TdTsl1Ydgl7+VMP+SHsT/nvO9uliKmZLwS5
-         09kXjPkl2NiPd/GrAdaz0lTCSYmjsiotLhXj26+E=
+        b=lQd04LzbtbwJCxRrQcvWWa8wdaOdMMXakPh3GB1rFd23rPDVs096hvcGxxXpk/ne8
+         36quy3AkEhfg/FW67TLim9UEaEojoBjKW+aGGeh0NkPjSfNDQYwbLME39lIH6LS3uA
+         ipsS2UkMFKKb7Cr0yQ0ro33slu4yGBdotSk3rywE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Andy Gospodarek <gospo@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 172/277] bnxt_en: reserve space inside receive page for skb_shared_info
+Subject: [PATCH 5.17 157/343] clk: mediatek: Fix memory leaks on probe
 Date:   Tue, 12 Apr 2022 08:29:35 +0200
-Message-Id: <20220412062947.016436698@linuxfoundation.org>
+Message-Id: <20220412062955.906954562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,43 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Gospodarek <gospo@broadcom.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit facc173cf700e55b2ad249ecbd3a7537f7315691 ]
+[ Upstream commit 7a688c91d3fd54c53e7a9edd6052cdae98dd99d8 ]
 
-Insufficient space was being reserved in the page used for packet
-reception, so the interface MTU could be set too large to still have
-room for the contents of the packet when doing XDP redirect.  This
-resulted in the following message when redirecting a packet between
-3520 and 3822 bytes with an MTU of 3822:
+Handle the error branches to free memory where required.
 
-[311815.561880] XDP_WARN: xdp_update_frame_from_buff(line:200): Driver BUG: missing reserved tailroom
-
-Fixes: f18c2b77b2e4 ("bnxt_en: optimized XDP_REDIRECT support")
-Reviewed-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Signed-off-by: Andy Gospodarek <gospo@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Addresses-Coverity-ID: 1491825 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Link: https://lore.kernel.org/r/20220115183059.GA10809@elementary
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/mediatek/clk-mt8192.c | 36 +++++++++++++++++++++++++------
+ 1 file changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 0aaaeecd67ea..e5874c829226 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -584,7 +584,8 @@ struct nqe_cn {
- #define BNXT_MAX_MTU		9500
- #define BNXT_MAX_PAGE_MODE_MTU	\
- 	((unsigned int)PAGE_SIZE - VLAN_ETH_HLEN - NET_IP_ALIGN -	\
--	 XDP_PACKET_HEADROOM)
-+	 XDP_PACKET_HEADROOM - \
-+	 SKB_DATA_ALIGN((unsigned int)sizeof(struct skb_shared_info)))
+diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
+index cbc7c6dbe0f4..79ddb3cc0b98 100644
+--- a/drivers/clk/mediatek/clk-mt8192.c
++++ b/drivers/clk/mediatek/clk-mt8192.c
+@@ -1236,9 +1236,17 @@ static int clk_mt8192_infra_probe(struct platform_device *pdev)
  
- #define BNXT_MIN_PKT_SIZE	52
+ 	r = mtk_clk_register_gates(node, infra_clks, ARRAY_SIZE(infra_clks), clk_data);
+ 	if (r)
+-		return r;
++		goto free_clk_data;
++
++	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	if (r)
++		goto free_clk_data;
++
++	return r;
  
+-	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++free_clk_data:
++	mtk_free_clk_data(clk_data);
++	return r;
+ }
+ 
+ static int clk_mt8192_peri_probe(struct platform_device *pdev)
+@@ -1253,9 +1261,17 @@ static int clk_mt8192_peri_probe(struct platform_device *pdev)
+ 
+ 	r = mtk_clk_register_gates(node, peri_clks, ARRAY_SIZE(peri_clks), clk_data);
+ 	if (r)
+-		return r;
++		goto free_clk_data;
++
++	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	if (r)
++		goto free_clk_data;
+ 
+-	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	return r;
++
++free_clk_data:
++	mtk_free_clk_data(clk_data);
++	return r;
+ }
+ 
+ static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
+@@ -1271,9 +1287,17 @@ static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
+ 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+ 	r = mtk_clk_register_gates(node, apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
+ 	if (r)
+-		return r;
++		goto free_clk_data;
+ 
+-	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
++	if (r)
++		goto free_clk_data;
++
++	return r;
++
++free_clk_data:
++	mtk_free_clk_data(clk_data);
++	return r;
+ }
+ 
+ static const struct of_device_id of_match_clk_mt8192[] = {
 -- 
 2.35.1
 

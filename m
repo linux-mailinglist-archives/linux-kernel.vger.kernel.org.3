@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DFE4FD87E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D702D4FD4A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386535AbiDLI60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S1355206AbiDLIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359262AbiDLHmw (ORCPT
+        with ESMTP id S1354736AbiDLH0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FEA2C115;
-        Tue, 12 Apr 2022 00:21:25 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C51246B20;
+        Tue, 12 Apr 2022 00:06:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AD5DB81B60;
-        Tue, 12 Apr 2022 07:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A099FC385A1;
-        Tue, 12 Apr 2022 07:21:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC4FDB81B4F;
+        Tue, 12 Apr 2022 07:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41C7C385A1;
+        Tue, 12 Apr 2022 07:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748083;
-        bh=IHC89Aams0XWjbco/J0P17dgBmvKn2Cdsf7vbUdm+nw=;
+        s=korg; t=1649747189;
+        bh=blGm2AT+cTPGsrJEUISAdrsP2vZTBXy06uJ2DzObYds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Upo/voo4D7JP2da8o/xaIcduYnTTiYNEshlijUPL8gRD0/owMF+9bp4MOSyl/Twt3
-         EhOtVsyFrB34IZ/+8gdkiei9x6i+eyzrJtN6sY2WKsFhMAsJVDM957lHGF4oeCCWVu
-         +Yiq7i8Qy6rrPKHXXRYNttiLXesmQe1M8f5d9gWk=
+        b=aHtEH8mewo7ghXeJhZS8POGc26y3Okkoh8ULsCmUqQ/MioWjgX654oWbxUA+9vHEk
+         /oX9QJ797CXD/ISwYuFzMAigizYSZqwaA/TCv2Q+RtXArXfJQOJthAvp3ZeUq5ZoyS
+         bQYks7aPXTvk708FF044yyFnUoVwf1jl/Mb9NCFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fu <foyjog@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.17 312/343] SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
-Date:   Tue, 12 Apr 2022 08:32:10 +0200
-Message-Id: <20220412063000.327988062@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Zhong <yang.zhong@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <bonzini@gnu.org>
+Subject: [PATCH 5.16 274/285] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
+Date:   Tue, 12 Apr 2022 08:32:11 +0200
+Message-Id: <20220412062951.564252341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,114 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Yang Zhong <yang.zhong@intel.com>
 
-commit f00432063db1a0db484e85193eccc6845435b80e upstream.
+commit 063452fd94d153d4eb38ad58f210f3d37a09cca4 upstream.
 
-We must ensure that all sockets are closed before we call xprt_free()
-and release the reference to the net namespace. The problem is that
-calling fput() will defer closing the socket until delayed_fput() gets
-called.
-Let's fix the situation by allowing rpciod and the transport teardown
-code (which runs on the system wq) to call __fput_sync(), and directly
-close the socket.
+ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
+permission bitmap of thread_group_leader()->fpu. But the code overwrites
+the bitmap with the requested feature bit only rather than adding it.
 
-Reported-by: Felix Fu <foyjog@gmail.com>
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: a73881c96d73 ("SUNRPC: Fix an Oops in udp_poll()")
-Cc: stable@vger.kernel.org # 5.1.x: 3be232f11a3c: SUNRPC: Prevent immediate close+reconnect
-Cc: stable@vger.kernel.org # 5.1.x: 89f42494f92f: SUNRPC: Don't call connect() more than once on a TCP socket
-Cc: stable@vger.kernel.org # 5.1.x
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fix the code to add the requested feature bit to the master bitmask.
+
+Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Paolo Bonzini <bonzini@gnu.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
+[chang: Backport for 5.16]
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file_table.c               |    1 +
- include/trace/events/sunrpc.h |    1 -
- net/sunrpc/xprt.c             |    7 +------
- net/sunrpc/xprtsock.c         |   16 +++++++++++++---
- 4 files changed, 15 insertions(+), 10 deletions(-)
+ arch/x86/kernel/fpu/xstate.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -412,6 +412,7 @@ void __fput_sync(struct file *file)
- }
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1626,7 +1626,7 @@ static int __xstate_request_perm(u64 per
+ 		return ret;
  
- EXPORT_SYMBOL(fput);
-+EXPORT_SYMBOL(__fput_sync);
- 
- void __init files_init(void)
- {
---- a/include/trace/events/sunrpc.h
-+++ b/include/trace/events/sunrpc.h
-@@ -1005,7 +1005,6 @@ DEFINE_RPC_XPRT_LIFETIME_EVENT(connect);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_auto);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_done);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_force);
--DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_cleanup);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(destroy);
- 
- DECLARE_EVENT_CLASS(rpc_xprt_event,
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -929,12 +929,7 @@ void xprt_connect(struct rpc_task *task)
- 	if (!xprt_lock_write(xprt, task))
- 		return;
- 
--	if (test_and_clear_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
--		trace_xprt_disconnect_cleanup(xprt);
--		xprt->ops->close(xprt);
--	}
--
--	if (!xprt_connected(xprt)) {
-+	if (!xprt_connected(xprt) && !test_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
- 		task->tk_rqstp->rq_connect_cookie = xprt->connect_cookie;
- 		rpc_sleep_on_timeout(&xprt->pending, task, NULL,
- 				xprt_request_timeout(task->tk_rqstp));
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -880,7 +880,7 @@ static int xs_local_send_request(struct
- 
- 	/* Close the stream if the previous transmission was incomplete */
- 	if (xs_send_request_was_aborted(transport, req)) {
--		xs_close(xprt);
-+		xprt_force_disconnect(xprt);
- 		return -ENOTCONN;
- 	}
- 
-@@ -918,7 +918,7 @@ static int xs_local_send_request(struct
- 			-status);
- 		fallthrough;
- 	case -EPIPE:
--		xs_close(xprt);
-+		xprt_force_disconnect(xprt);
- 		status = -ENOTCONN;
- 	}
- 
-@@ -1203,6 +1203,16 @@ static void xs_reset_transport(struct so
- 
- 	if (sk == NULL)
- 		return;
-+	/*
-+	 * Make sure we're calling this in a context from which it is safe
-+	 * to call __fput_sync(). In practice that means rpciod and the
-+	 * system workqueue.
-+	 */
-+	if (!(current->flags & PF_WQ_WORKER)) {
-+		WARN_ON_ONCE(1);
-+		set_bit(XPRT_CLOSE_WAIT, &xprt->state);
-+		return;
-+	}
- 
- 	if (atomic_read(&transport->xprt.swapper))
- 		sk_clear_memalloc(sk);
-@@ -1226,7 +1236,7 @@ static void xs_reset_transport(struct so
- 	mutex_unlock(&transport->recv_mutex);
- 
- 	trace_rpc_socket_close(xprt, sock);
--	fput(filp);
-+	__fput_sync(filp);
- 
- 	xprt_disconnect_done(xprt);
- }
+ 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+-	WRITE_ONCE(fpu->perm.__state_perm, requested);
++	WRITE_ONCE(fpu->perm.__state_perm, mask);
+ 	/* Protected by sighand lock */
+ 	fpu->perm.__state_size = ksize;
+ 	fpu->perm.__user_state_size = usize;
 
 

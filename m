@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32584FE92B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7264FE932
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiDLT6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S232586AbiDLUD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiDLT5h (ORCPT
+        with ESMTP id S232269AbiDLUCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:57:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3DA5E172;
-        Tue, 12 Apr 2022 12:50:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED08A61BEF;
-        Tue, 12 Apr 2022 19:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2128C385A1;
-        Tue, 12 Apr 2022 19:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649793037;
-        bh=nT93jamfbYnoTsEm4Lz28WvUjv7TcUJr8AkbHMTMDsE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FFTT6xhZR3P/Za71GH6f8NdS9a3R+L4wdP/9Dnnt9P9nSVQMSXWkFM2e/xJok2D+w
-         BoUuK5stxD3hBYUF2nP+768waVpkiZtg1kz1Y+50upJV2x2JWRyb0Bxdrj41Gr9+so
-         8cEA4J9JScVxL2v3NJJiV0OK+6FUGIDqnrydku9ZE8tX47x2Ef5skrIpNOlqpIIzjI
-         9ZIW0MJYtT9veiko9WPcNEBI7mc/F5MO0MXiKOyFqPBhYrLQKnaPbyhh1yv2FRlg6h
-         KP6iWtKTADlDuw9lwfVhDiOteHLpemmKzcYva+0WDI/ijYl2upquQg/EUsr/Sv++/O
-         /ktC1HEV/ziBA==
-From:   Mark Brown <broonie@kernel.org>
-To:     allen-kh.cheng@mediatek.com, ikjn@chromium.org,
-        matthias.bgg@gmail.com
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-References: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-Subject: Re: [PATCH] spi: spi-mtk-nor: initialize spi controller after resume
-Message-Id: <164979303551.449574.9303978009033918270.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 20:50:35 +0100
+        Tue, 12 Apr 2022 16:02:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D82E7DE1D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649793236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ktu/FmbfdAxFSlIYnoKvOmDiTJHsefITneobmc6G+mM=;
+        b=YPctwdO0NOyq5PvBu7HQ4eprtsDe0sfvJavZPGzdmVT9RbJGCrK38Mghjl1ZOYjui6P/0H
+        DzyLDUOZhS76kDNxwLP7rEeJQL9F2X7c/35VhlZykDLY741gUSJXGdXMNx5M5rY31G4FD9
+        9YJgM5d18sezJRLqrO4slV1k5p//8oI=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-48-Fo9b__GvOa6MVD1PMfv-dA-1; Tue, 12 Apr 2022 15:53:53 -0400
+X-MC-Unique: Fo9b__GvOa6MVD1PMfv-dA-1
+Received: by mail-il1-f199.google.com with SMTP id x6-20020a923006000000b002bea39c3974so13324692ile.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:53:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ktu/FmbfdAxFSlIYnoKvOmDiTJHsefITneobmc6G+mM=;
+        b=PXrT3gNwbVqrwD58m6o3wzNtdyxcLIpgmP2g0y/dZobZFjYN50pKubX3wFM+m1d4Xi
+         pmyNlAYGs7vAjzT76gezkWpSRWLRL9Fl99Mfc8xiqYXHsirgHetYATApuqkLgOGxJbbY
+         hzClK1J1azlmp2bKG1teLIx4cj6D81B+I6EP/famN0aarGrstpBVpXFdmxTxdinRTcSA
+         042HsOCwyEWKsxrsFT1iHXWOLUF/mHrcR8dWTFdEPz2iQn80dZANMODsVtghD9Jophcb
+         VHCWwq0msad21OpQQNHgIzXlwlNEu5E7Wq1cIWq+xe5JkWSOgdmJKLfwXpXeFRXwKsuM
+         TTuQ==
+X-Gm-Message-State: AOAM532bvcnVEzMkHoiUm7Edv4sHLixMZsaob/1jda3iALlOp+e2SRbF
+        zr6DOALyjD12q6P6pZedUFBi6oAp4Jkn5bi6W86jT/3PlXhaekvxZvJPn32dRWiTsc8v2Lq4veB
+        uoQnMafTvier5yw/Hdo/mWZNN
+X-Received: by 2002:a05:6638:d51:b0:326:4f60:f2c4 with SMTP id d17-20020a0566380d5100b003264f60f2c4mr1666117jak.211.1649793232579;
+        Tue, 12 Apr 2022 12:53:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwKhc8KBBIu03VM32gpa8Lhg+/5hy0VZsV9Ah94tlicv6v7mtbET3C3fQCFaTOhFxemxsAnjw==
+X-Received: by 2002:a05:6638:d51:b0:326:4f60:f2c4 with SMTP id d17-20020a0566380d5100b003264f60f2c4mr1666114jak.211.1649793232373;
+        Tue, 12 Apr 2022 12:53:52 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056e020bf000b002ca51236f60sm15162919ilu.9.2022.04.12.12.53.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 12:53:52 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 15:53:50 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Subject: Re: [PATCH v8 02/23] mm: Teach core mm about pte markers
+Message-ID: <YlXYzpcTQW8NdTTm@xz-m1.local>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014833.14015-1-peterx@redhat.com>
+ <87a6crawzy.fsf@nvdebian.thelocal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87a6crawzy.fsf@nvdebian.thelocal>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 19:57:43 +0800, Allen-KH Cheng wrote:
-> After system resumes, the registers of nor controller are
-> initialized with default values. The nor controller will
-> not function properly.
+Hi, Alistair,
+
+On Tue, Apr 12, 2022 at 11:22:01AM +1000, Alistair Popple wrote:
+> I've been reviewing existing pte_none() call sites and noticed the following:
 > 
-> To handle both issues above, we add mtk_nor_init() in
-> mtk_nor_resume after pm_runtime_force_resume().
+> From khugepaged_scan_pmd():
 > 
-> [...]
+> pte_t pteval = *_pte;
+> if (is_swap_pte(pteval)) {
+>     if (++unmapped <= khugepaged_max_ptes_swap) {
+>         /*
+> * Always be strict with uffd-wp
+> * enabled swap entries.  Please see
+> * comment below for pte_uffd_wp().
+>          */
+>         if (pte_swp_uffd_wp(pteval)) {
+>             result = SCAN_PTE_UFFD_WP;
+>             goto out_unmap;
+>         }
+>         continue;
+>     } else {
+>         result = SCAN_EXCEED_SWAP_PTE;
+>         count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
+>         goto out_unmap;
+>     }
+> }
+> if (pte_none(pteval) || is_zero_pfn(pte_pfn(pteval))) {
+>     if (!userfaultfd_armed(vma) &&
+>         ++none_or_zero <= khugepaged_max_ptes_none) {
+>         continue;
+>     } else {
+>         result = SCAN_EXCEED_NONE_PTE;
+>         count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
+>         goto out_unmap;
+>     }
+> }
+> 
+> I think the above could encounter a marker PTE right? So the behviour would be
+> wrong in that case. As I understand things the is_swap_pte() path will be taken
+> rather than pte_none() but in the absence of any special handling shouldn't
+> marker PTE's mostly be treated as pte_none() here?
+> 
+> I think you need to s/pte_none/pte_none_mostly/ here and swap the order of
+> conditionals around.
 
-Applied to
+Isn't khugepaged_scan_pmd() only for anonymous?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: spi-mtk-nor: initialize spi controller after resume
-      commit: 317c2045618cc1f8d38beb8c93a7bdb6ad8638c6
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The shmem side is covered by khugepaged_scan_file(), imho.  We definitely
+don't want to collapse shmem vma ranges that has uffd-wp registered, and
+that's actually handled explicilty in "mm/khugepaged: Don't recycle vma
+pgtable if uffd-wp registered".  Please feel free to have a look.
 
 Thanks,
-Mark
+
+-- 
+Peter Xu
+

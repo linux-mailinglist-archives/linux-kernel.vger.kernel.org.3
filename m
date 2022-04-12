@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8020A4FD57E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9944FD5A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352985AbiDLHqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S1353658AbiDLHPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354401AbiDLHRq (ORCPT
+        with ESMTP id S1351326AbiDLHDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:17:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347D7E47;
-        Mon, 11 Apr 2022 23:59:13 -0700 (PDT)
+        Tue, 12 Apr 2022 03:03:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9219143AC6;
+        Mon, 11 Apr 2022 23:47:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7DF6B81A8F;
-        Tue, 12 Apr 2022 06:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098CEC385A1;
-        Tue, 12 Apr 2022 06:59:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AF3DB81B4D;
+        Tue, 12 Apr 2022 06:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988F6C385A1;
+        Tue, 12 Apr 2022 06:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746750;
-        bh=V16sdjrQ3Xk+an7cuedzBos7XNkFk0cmeNRCfE4Tdoc=;
+        s=korg; t=1649746022;
+        bh=WsGVm2ifufobQw4sI2QEzE15gWhPGQlXBw2iENliwjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ey1E8evDyNzmhnIXp0I3iWLDJLP09FXwNxUHTpSpgRSPs74WqACZm37S/uUhePhCP
-         hKEhbUq4MO/3VbIH0OVzihQY/MS9dxKhwbpQRyZh/IqPlnCj0VleroyvP39iu6/qEq
-         zchY75DAseTmUiRJqwYfj7p/HtUghfvc3dqAVjBQ=
+        b=HekywgdYkw0tKz7X2yvNYWjFaY0PqErf6QJoBTEKx7JIfgfi7YPlROLxaQdoUgBut
+         maXaBzYNbZFvNvFD8nv8oHNJVYKyPgcbtXkatKcjTk33DDUJzu+/iXnPFqGylR0+Rb
+         ufvjC8owC8whqej7aRepQtaP+e13xWY8wagLAqZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Laurent Dufour <ldufour@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 076/285] powerpc/64s/hash: Make hash faults work in NMI context
-Date:   Tue, 12 Apr 2022 08:28:53 +0200
-Message-Id: <20220412062945.859720664@linuxfoundation.org>
+Subject: [PATCH 5.15 131/277] NFS: swap-out must always use STABLE writes.
+Date:   Tue, 12 Apr 2022 08:28:54 +0200
+Message-Id: <20220412062945.829306431@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,229 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 8b91cee5eadd2021f55e6775f2d50bd56d00c217 ]
+[ Upstream commit c265de257f558a05c1859ee9e3fed04883b9ec0e ]
 
-Hash faults are not resoved in NMI context, instead causing the access
-to fail. This is done because perf interrupts can get backtraces
-including walking the user stack, and taking a hash fault on those could
-deadlock on the HPTE lock if the perf interrupt hits while the same HPTE
-lock is being held by the hash fault code. The user-access for the stack
-walking will notice the access failed and deal with that in the perf
-code.
+The commit handling code is not safe against memory-pressure deadlocks
+when writing to swap.  In particular, nfs_commitdata_alloc() blocks
+indefinitely waiting for memory, and this can consume all available
+workqueue threads.
 
-The reason to allow perf interrupts in is to better profile hash faults.
+swap-out most likely uses STABLE writes anyway as COND_STABLE indicates
+that a stable write should be used if the write fits in a single
+request, and it normally does.  However if we ever swap with a small
+wsize, or gather unusually large numbers of pages for a single write,
+this might change.
 
-The problem with this is any hash fault on a kernel access that happens
-in NMI context will crash, because kernel accesses must not fail.
+For safety, make it explicit in the code that direct writes used for swap
+must always use FLUSH_STABLE.
 
-Hard lockups, system reset, machine checks that access vmalloc space
-including modules and including stack backtracing and symbol lookup in
-modules, per-cpu data, etc could all run into this problem.
-
-Fix this by disallowing perf interrupts in the hash fault code (the
-direct hash fault is covered by MSR[EE]=0 so the PMI disable just needs
-to extend to the preload case). This simplifies the tricky logic in hash
-faults and perf, at the cost of reduced profiling of hash faults.
-
-perf can still latch addresses when interrupts are disabled, it just
-won't get the stack trace at that point, so it would still find hot
-spots, just sometimes with confusing stack chains.
-
-An alternative could be to allow perf interrupts here but always do the
-slowpath stack walk if we are in nmi context, but that slows down all
-perf interrupt stack walking on hash though and it does not remove as
-much tricky code.
-
-Reported-by: Laurent Dufour <ldufour@linux.ibm.com>
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Tested-by: Laurent Dufour <ldufour@linux.ibm.com>
-Reviewed-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220204035348.545435-1-npiggin@gmail.com
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/interrupt.h  |  2 +-
- arch/powerpc/mm/book3s64/hash_utils.c | 54 ++++-----------------------
- arch/powerpc/perf/callchain.h         |  9 +----
- arch/powerpc/perf/callchain_64.c      | 27 --------------
- 4 files changed, 10 insertions(+), 82 deletions(-)
+ fs/nfs/direct.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/interrupt.h b/arch/powerpc/include/asm/interrupt.h
-index a1d238255f07..a07960066b5f 100644
---- a/arch/powerpc/include/asm/interrupt.h
-+++ b/arch/powerpc/include/asm/interrupt.h
-@@ -567,7 +567,7 @@ DECLARE_INTERRUPT_HANDLER_RAW(do_slb_fault);
- DECLARE_INTERRUPT_HANDLER(do_bad_slb_fault);
- 
- /* hash_utils.c */
--DECLARE_INTERRUPT_HANDLER_RAW(do_hash_fault);
-+DECLARE_INTERRUPT_HANDLER(do_hash_fault);
- 
- /* fault.c */
- DECLARE_INTERRUPT_HANDLER(do_page_fault);
-diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-index cfd45245d009..f77fd4428db3 100644
---- a/arch/powerpc/mm/book3s64/hash_utils.c
-+++ b/arch/powerpc/mm/book3s64/hash_utils.c
-@@ -1522,8 +1522,7 @@ int hash_page(unsigned long ea, unsigned long access, unsigned long trap,
- }
- EXPORT_SYMBOL_GPL(hash_page);
- 
--DECLARE_INTERRUPT_HANDLER(__do_hash_fault);
--DEFINE_INTERRUPT_HANDLER(__do_hash_fault)
-+DEFINE_INTERRUPT_HANDLER(do_hash_fault)
+diff --git a/fs/nfs/direct.c b/fs/nfs/direct.c
+index 28afc315ec0c..c220810c61d1 100644
+--- a/fs/nfs/direct.c
++++ b/fs/nfs/direct.c
+@@ -793,7 +793,7 @@ static const struct nfs_pgio_completion_ops nfs_direct_write_completion_ops = {
+  */
+ static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+ 					       struct iov_iter *iter,
+-					       loff_t pos)
++					       loff_t pos, int ioflags)
  {
- 	unsigned long ea = regs->dar;
- 	unsigned long dsisr = regs->dsisr;
-@@ -1582,35 +1581,6 @@ DEFINE_INTERRUPT_HANDLER(__do_hash_fault)
- 	}
- }
+ 	struct nfs_pageio_descriptor desc;
+ 	struct inode *inode = dreq->inode;
+@@ -801,7 +801,7 @@ static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+ 	size_t requested_bytes = 0;
+ 	size_t wsize = max_t(size_t, NFS_SERVER(inode)->wsize, PAGE_SIZE);
  
--/*
-- * The _RAW interrupt entry checks for the in_nmi() case before
-- * running the full handler.
-- */
--DEFINE_INTERRUPT_HANDLER_RAW(do_hash_fault)
--{
--	/*
--	 * If we are in an "NMI" (e.g., an interrupt when soft-disabled), then
--	 * don't call hash_page, just fail the fault. This is required to
--	 * prevent re-entrancy problems in the hash code, namely perf
--	 * interrupts hitting while something holds H_PAGE_BUSY, and taking a
--	 * hash fault. See the comment in hash_preload().
--	 *
--	 * We come here as a result of a DSI at a point where we don't want
--	 * to call hash_page, such as when we are accessing memory (possibly
--	 * user memory) inside a PMU interrupt that occurred while interrupts
--	 * were soft-disabled.  We want to invoke the exception handler for
--	 * the access, or panic if there isn't a handler.
--	 */
--	if (unlikely(in_nmi())) {
--		do_bad_page_fault_segv(regs);
--		return 0;
--	}
--
--	__do_hash_fault(regs);
--
--	return 0;
--}
--
- #ifdef CONFIG_PPC_MM_SLICES
- static bool should_hash_preload(struct mm_struct *mm, unsigned long ea)
- {
-@@ -1677,26 +1647,18 @@ static void hash_preload(struct mm_struct *mm, pte_t *ptep, unsigned long ea,
- #endif /* CONFIG_PPC_64K_PAGES */
+-	nfs_pageio_init_write(&desc, inode, FLUSH_COND_STABLE, false,
++	nfs_pageio_init_write(&desc, inode, ioflags, false,
+ 			      &nfs_direct_write_completion_ops);
+ 	desc.pg_dreq = dreq;
+ 	get_dreq(dreq);
+@@ -947,11 +947,13 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter,
+ 	pnfs_init_ds_commit_info_ops(&dreq->ds_cinfo, inode);
  
- 	/*
--	 * __hash_page_* must run with interrupts off, as it sets the
--	 * H_PAGE_BUSY bit. It's possible for perf interrupts to hit at any
--	 * time and may take a hash fault reading the user stack, see
--	 * read_user_stack_slow() in the powerpc/perf code.
--	 *
--	 * If that takes a hash fault on the same page as we lock here, it
--	 * will bail out when seeing H_PAGE_BUSY set, and retry the access
--	 * leading to an infinite loop.
-+	 * __hash_page_* must run with interrupts off, including PMI interrupts
-+	 * off, as it sets the H_PAGE_BUSY bit.
- 	 *
--	 * Disabling interrupts here does not prevent perf interrupts, but it
--	 * will prevent them taking hash faults (see the NMI test in
--	 * do_hash_page), then read_user_stack's copy_from_user_nofault will
--	 * fail and perf will fall back to read_user_stack_slow(), which
--	 * walks the Linux page tables.
-+	 * It's otherwise possible for perf interrupts to hit at any time and
-+	 * may take a hash fault reading the user stack, which could take a
-+	 * hash miss and deadlock on the same H_PAGE_BUSY bit.
- 	 *
- 	 * Interrupts must also be off for the duration of the
- 	 * mm_is_thread_local test and update, to prevent preempt running the
- 	 * mm on another CPU (XXX: this may be racy vs kthread_use_mm).
- 	 */
--	local_irq_save(flags);
-+	powerpc_local_irq_pmu_save(flags);
+ 	if (swap) {
+-		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
++		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos,
++							    FLUSH_STABLE);
+ 	} else {
+ 		nfs_start_io_direct(inode);
  
- 	/* Is that local to this CPU ? */
- 	if (mm_is_thread_local(mm))
-@@ -1721,7 +1683,7 @@ static void hash_preload(struct mm_struct *mm, pte_t *ptep, unsigned long ea,
- 				   mm_ctx_user_psize(&mm->context),
- 				   pte_val(*ptep));
+-		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
++		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos,
++							    FLUSH_COND_STABLE);
  
--	local_irq_restore(flags);
-+	powerpc_local_irq_pmu_restore(flags);
- }
- 
- /*
-diff --git a/arch/powerpc/perf/callchain.h b/arch/powerpc/perf/callchain.h
-index d6fa6e25234f..19a8d051ddf1 100644
---- a/arch/powerpc/perf/callchain.h
-+++ b/arch/powerpc/perf/callchain.h
-@@ -2,7 +2,6 @@
- #ifndef _POWERPC_PERF_CALLCHAIN_H
- #define _POWERPC_PERF_CALLCHAIN_H
- 
--int read_user_stack_slow(const void __user *ptr, void *buf, int nb);
- void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
- 			    struct pt_regs *regs);
- void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
-@@ -26,17 +25,11 @@ static inline int __read_user_stack(const void __user *ptr, void *ret,
- 				    size_t size)
- {
- 	unsigned long addr = (unsigned long)ptr;
--	int rc;
- 
- 	if (addr > TASK_SIZE - size || (addr & (size - 1)))
- 		return -EFAULT;
- 
--	rc = copy_from_user_nofault(ret, ptr, size);
--
--	if (IS_ENABLED(CONFIG_PPC64) && !radix_enabled() && rc)
--		return read_user_stack_slow(ptr, ret, size);
--
--	return rc;
-+	return copy_from_user_nofault(ret, ptr, size);
- }
- 
- #endif /* _POWERPC_PERF_CALLCHAIN_H */
-diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
-index 8d0df4226328..488e8a21a11e 100644
---- a/arch/powerpc/perf/callchain_64.c
-+++ b/arch/powerpc/perf/callchain_64.c
-@@ -18,33 +18,6 @@
- 
- #include "callchain.h"
- 
--/*
-- * On 64-bit we don't want to invoke hash_page on user addresses from
-- * interrupt context, so if the access faults, we read the page tables
-- * to find which page (if any) is mapped and access it directly. Radix
-- * has no need for this so it doesn't use read_user_stack_slow.
-- */
--int read_user_stack_slow(const void __user *ptr, void *buf, int nb)
--{
--
--	unsigned long addr = (unsigned long) ptr;
--	unsigned long offset;
--	struct page *page;
--	void *kaddr;
--
--	if (get_user_page_fast_only(addr, FOLL_WRITE, &page)) {
--		kaddr = page_address(page);
--
--		/* align address to page boundary */
--		offset = addr & ~PAGE_MASK;
--
--		memcpy(buf, kaddr + offset, nb);
--		put_page(page);
--		return 0;
--	}
--	return -EFAULT;
--}
--
- static int read_user_stack_64(const unsigned long __user *ptr, unsigned long *ret)
- {
- 	return __read_user_stack(ptr, ret, sizeof(*ret));
+ 		if (mapping->nrpages) {
+ 			invalidate_inode_pages2_range(mapping,
 -- 
 2.35.1
 

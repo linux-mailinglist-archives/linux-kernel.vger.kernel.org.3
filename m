@@ -2,175 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA2C4FEA7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF4D4FEA6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiDLXXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S229801AbiDLXXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiDLXWm (ORCPT
+        with ESMTP id S229882AbiDLXWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:22:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E71DC4;
-        Tue, 12 Apr 2022 15:50:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A105161CB6;
-        Tue, 12 Apr 2022 22:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDC8C385A1;
-        Tue, 12 Apr 2022 22:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649803849;
-        bh=qT1HHgdYzFd0FlgtfwqtDoefeQb+fd5285v/Cp2+Hwo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=eSLTP/jAO4DSU/9JfWQCq76W+fOxlgqL0DR5qTTz/mu3MAUA9tJScKEUoxknoeETd
-         hKb3gaNKbbuYQZhTI2SjYXA2w/4c5cwIlhODGOh5pVd02JrM5Uw5oxuiqam2snqhPX
-         9XGlOVAE1bfwSdw8Hp4mUN0uJL3T+LwNWZZbijg2AxD6cN1hOLC3PlQU7noEBP0ght
-         7lJ6XGhH/lCvNHsab8MtwWfIjrmdPAa6o96ZxdjuYSx+qzeBCe7jUXt+G2xJX695U7
-         QGDX/ktEK8RD2Hmo5S20z2lLfmF4yu4xWX9FljZllCBEIgRMk82Tg4x+6Z0OUMzoig
-         LwrKABckLltVA==
-Date:   Tue, 12 Apr 2022 17:50:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        kai.heng.feng@canonical.com, chris.packham@alliedtelesis.co.nz,
-        yangyicong@hisilicon.com, treding@nvidia.com, jonathanh@nvidia.com,
-        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <20220412225047.GA627910@bhelgaas>
+        Tue, 12 Apr 2022 19:22:44 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCA46376;
+        Tue, 12 Apr 2022 15:51:55 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id n5so28398vsc.4;
+        Tue, 12 Apr 2022 15:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ezdzc9fwB75FHs1RJU/8xMrtLkAqryX8e9lSQiCG6+o=;
+        b=cU9m/K7Eni83YVgmrXwmtrkQj72C5hzDjLWdtTFybmcwnahHAfZEs0iJx1d8hNPrL9
+         xLycI8nlRheQ1e3GZSFw+o8gPaVGVlgIlQ5Ip3jUXrCXhK2FUZtv2Oco1mOXlR0rl07a
+         D1x8VEftu5H+lm98oDGx1Z6quG27tqLunILzlWPwv9r+INhfInQ3G1tjUhJa84jztczf
+         wU7Q2I06GHcTllXmnxqHBjlkF4E3P5+yLNQM38rUAzaUFloU0b/oP9wvTMj7SaXTSyvl
+         psRBO6sjwXyjtAKMXk+JBM2B4Gbw5o+wY3ubKZkov1HV6cnIvH2yWDgQk1mKp00kX6+F
+         urOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ezdzc9fwB75FHs1RJU/8xMrtLkAqryX8e9lSQiCG6+o=;
+        b=Ms5KjXn+BzqAI4G07rSPr/NLU1Pn16+Qk8cGsEzKKIftJGyamedcoPrfk4kvbId6tg
+         90VCCB8xGQWSchpGamRZqo0rTDhrEICR9WrBJT/6Gl/dNTHdecE7oGVJKW2ER18D+4SR
+         BBuWvluHJ8M+W1vVP746Oigvr+DKo3+sbgeO49gCF3Mto7lGWlfCnIe5L7AbBhG8/9Y0
+         DLCSdWkMp73lJ2BxeNP6etu2/vYCgIYAwbLfZxkK4my9r6SsvNfyHdmk3yjbWdEWHadl
+         bc9he0U5nKSYmTXOezUPQt/xnrw39+keOCZJlsX0q8zDOydPgdPw82qxA/36dY0RNtOH
+         +XiA==
+X-Gm-Message-State: AOAM5324c5ypZFP8OWzLf9n8kvOGQGs3FaJR7SVZHk389jYjPGQZoO/3
+        l+uSfRycX8TXeLs7HEnTD4sSVImO/oDgWxQsGpzS+Bbypz4=
+X-Google-Smtp-Source: ABdhPJzFmqDl3FEyc+heWcRNc23/etW3e72ExFo4mTnsv5LYt8gIlxwoTVFLMaA+QTD9Uvi6pY0ytv9F1xXaDufGqkA=
+X-Received: by 2002:a67:f693:0:b0:328:295b:3077 with SMTP id
+ n19-20020a67f693000000b00328295b3077mr6317205vso.80.1649803914668; Tue, 12
+ Apr 2022 15:51:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d8cc8c0-31a1-0290-5aa5-0c7b16db1edb@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407125224.310255-1-jolsa@kernel.org> <20220407125224.310255-5-jolsa@kernel.org>
+ <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com> <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+In-Reply-To: <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Apr 2022 15:51:43 -0700
+Message-ID: <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Ricky for rtsx_pci ASPM behavior, Rajat, Prasad for L1 SS stuff,
-Victor for interest in disabling ASPM during save/restore]
+On Mon, Apr 11, 2022 at 5:49 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Mon, 11 Apr 2022 15:15:40 -0700
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> > > +#define DEBUGFS "/sys/kernel/debug/tracing/"
+> > > +
+> > > +static int get_syms(char ***symsp, size_t *cntp)
+> > > +{
+> > > +       size_t cap = 0, cnt = 0, i;
+> > > +       char *name, **syms = NULL;
+> > > +       struct hashmap *map;
+> > > +       char buf[256];
+> > > +       FILE *f;
+> > > +       int err;
+> > > +
+> > > +       /*
+> > > +        * The available_filter_functions contains many duplicates,
+> > > +        * but other than that all symbols are usable in kprobe multi
+> > > +        * interface.
+> > > +        * Filtering out duplicates by using hashmap__add, which won't
+> > > +        * add existing entry.
+> > > +        */
+> > > +       f = fopen(DEBUGFS "available_filter_functions", "r");
+> >
+> > I'm really curious how did you manage to attach to everything in
+> > available_filter_functions because when I'm trying to do that I fail.
+> > available_filter_functions has a bunch of functions that should not be
+> > attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
+> >
+> >   void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
+>
+> Hmm, this sounds like a bug in ftrace side. IIUC, the
+> "available_filter_functions" only shows the functions which is NOT
+> instrumented by mcount, we should not see any notrace functions on it.
+>
+> Technically, this is done by __no_instrument_function__ attribute.
+>
+> #if defined(CC_USING_HOTPATCH)
+> #define notrace                 __attribute__((hotpatch(0, 0)))
+> #elif defined(CC_USING_PATCHABLE_FUNCTION_ENTRY)
+> #define notrace                 __attribute__((patchable_function_entry(0, 0)))
+> #else
+> #define notrace                 __attribute__((__no_instrument_function__))
+> #endif
+>
+> >
+> > So first, curious what I am doing wrong or rather why it succeeds in
+> > your case ;)
+> >
+> > But second, just wanted to plea to "fix" available_filter_functions to
+> > not list stuff that should not be attachable. Can you please take a
+> > look and checks what's going on there and why do we have notrace
+> > functions (and what else should *NOT* be there)?
+>
+> Can you share how did you reproduce the issue? I'll check it.
+>
 
-On Wed, Feb 16, 2022 at 06:41:39PM +0530, Vidya Sagar wrote:
-> On 2/16/2022 11:30 AM, Kenneth R. Crudup wrote:
-> > On Wed, 16 Feb 2022, Vidya Sagar wrote:
-> > 
-> > > I see that the ASPM-L1 state of Realtek NIC which was in
-> > > disabled state before hibernate got enabled after hibernate.
-> > 
-> > That's actually my SD-Card reader; there's a good chance the BIOS
-> > does "something" to it at boot time, as it's possible to boot from
-> > SD-Card on my laptop.
-> > 
-> > > This patch doesn't do anything to LnkCtl register which has
-> > > control for ASPM L1 state.
-> > 
-> > > Could you please check why ASPM L1 got enabled post hibernation?
-> > 
-> > I wouldn't know how to do that; if you're still interested in that
-> > let me know what to do to determine that.
+$ sudo cat /sys/kernel/debug/tracing/available_filter_functions | grep
+__bpf_tramp
+__bpf_tramp_image_release
+__bpf_tramp_image_put_rcu_tasks
+__bpf_tramp_image_put_rcu
+__bpf_tramp_image_put_deferred
+__bpf_tramp_exit
 
-> I would like Bjorn to take a call on it.
-> At this point, there are contradictions in observations.
 
-Remind me what contradictions you see?  I know Kenny saw NVMe errors
-on a kernel that included 4257f7e008ea ("PCI/ASPM: Save/restore L1SS
-Capability for suspend/resume") in December 2020 [1], and that he did
-*not* see those errors on 4257f7e008ea in February 2022 [2].  Is that
-what you mean?
+__bpf_tramp_exit is notrace function, so shouldn't be here. Notice
+that __bpf_tramp_enter (which is also notrace) are not in
+available_filter_functions.
 
-> Just to summarize,
-> - The root ports in your laptop don't have support for L1SS
-> - With the same old code base with which the errors were observed plus my
-> patch on top of it, I see that ASPM-L1 state getting enabled for one of the
-> endpoints (Realtek SD-Card reader) after system comes out of hibernation
-> even though ASPM-L1 was disabled before the system enter into hibernation.
-> No errors are reported now.
+So it's quite bizarre and inconsistent.
 
-I assume you refer to [2], where on 4257f7e008ea ("PCI/ASPM:
-Save/restore L1SS Capability for suspend/resume"), Kenny saw ASPM L1
-disabled before hibernate and enabled afterwards:
-
-  --- pre-hibernate
-  +++ post-hibernate
-    00:1d.7 PCI bridge [0604]: Intel [8086:34b7]
-      Bus: primary=00, secondary=58, subordinate=58
-	LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
-    58:00.0 RTS525A PCI Express Card Reader [10ec:525a]
-  -     LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
-  -             ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-  +     LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk-
-  +             ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
-
-Per PCIe r6.0, sec 7.5.3.7, "ASPM L1 must be enabled by software in
-the Upstream component on a Link prior to enabling ASPM L1 in the
-Downstream component on that Link," so this definitely seems broken,
-but wouldn't explain the NVMe issue.
-
-The PCI core (pcie_config_aspm_link()) always enables L1 in the
-upstream component before the downstream one, but 58:00.0 uses the
-rtsx_pci driver, which does a lot of its own ASPM fiddling, so my
-guess is that it's doing something wrong here.
-
-> - With the linux-next top of the tree plus my patch, no change in the ASPM
-> states and no errors also reported.
-
-I don't know which report this refers to.
-
-> This points to BIOS being buggy (both old and new with new one being less
-> problematic)
-
-I agree that a BIOS change between [1] and [2] seems plausible, but I
-don't think we can prove that yet.  I'm slightly queasy because while
-Kenny may have updated his BIOS, most people will not have.
-
-I think we should try this patch again with some changes and maybe
-some debug logging:
-
-  - I wonder if we should integrate the LTR, L1 SS, and Link Control
-    ASPM restore instead of having them spread around through
-    pci_restore_ltr_state(), pci_restore_aspm_l1ss_state(), and
-    pci_restore_pcie_state().  Maybe a new pci_restore_aspm() that
-    would be called from pci_restore_pcie_state()?
-
-  - For L1 PM Substates configuration, sec 5.5.4 says that both ports
-    must be configured while ASPM L1 is disabled, but I don't think we
-    currently guarantee this: we restore all the upstream component
-    state first, and we don't know the ASPM state of the downstream
-    one.  Maybe we need to:
-
-      * When restoring upstream component,
-          + disable its ASPM
-
-      * When restoring downstream component,
-          + disable its ASPM
-	  + restore upstream component's LTR, L1SS
-	  + restore downstream component's LTR, L1SS
-	  + restore upstream component's ASPM
-	  + restore downstream component's ASPM
-
-      This seems pretty messy, but seems like what the spec requires.
-
-    - Add some pci_dbg() logging of all these save/restore values to
-      help debug any issues.
-
-Bjorn
-
-[1] https://lore.kernel.org/r/20201228040513.GA611645@bjorn-Precision-5520
-[2] https://lore.kernel.org/r/3ca14a7-b726-8430-fe61-a3ac183a1088@panix.com
+> Thank you,
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>

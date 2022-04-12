@@ -2,180 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025754FE4D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF554FE4D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357114AbiDLPi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S1357120AbiDLPiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357131AbiDLPiZ (ORCPT
+        with ESMTP id S1357114AbiDLPiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:38:25 -0400
+        Tue, 12 Apr 2022 11:38:12 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215BB5839A;
-        Tue, 12 Apr 2022 08:36:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778E1554A1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649777763; x=1681313763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Spu/bhtmnuIg6Wi9yv/iXZ31D/WFe0Ipz3ysdwlpdic=;
-  b=Gf7yrMiUcjZagdYHr0dr5SPReg/aWFoxBc4ZIewVTjd8PLkibxfMbAoZ
-   Ou+q1Xf1osezsJCjn1rOkNUFfJV2WiC3eb7KUJJ3XeqS4eWXvSVPO9OeI
-   sqo9e5kfLWZjTJpJvoTe6Pw3ohWS3bcJCYT6UlZIMaZt6I3hxEZvz3lYL
-   3iS1TnnvOkob/aAwgURbbSpzF33t1nxhQORqIM27rQEwsdjZZ4b6DfcK8
-   WNc7DueuLlKrJxrPA1Z++L8uHULeI2NFlKG/d47m1m0llxPZ3skCyKVKd
-   SiJe8PZL0fVL5dkME0DqAqgrtqYRkuA0NXTbInbk8y3JoUgKKM7z3n/iw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="322847250"
+  t=1649777752; x=1681313752;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=lj9QUXdM5GCMuPvK+BqdMIEkmXMFoN2VtIV9O9lZiCQ=;
+  b=iniVuKkxRvTnQUOsODUFsiEQ0X3IH9yvSxQHt5ppDlaIXHBLxV12D4f0
+   lh3tPHiu740cetLhrI3kunqcdbycN0MPWA2aeReTWcZYJKBAhcQmO/ATe
+   uv+ME/Np6e12UpnxeZRD4e8JrEZ04HOTDlA6rxgFyUayiBp/PX2ngpbQk
+   gvDB2fgYah3/HBcHOcl1+nfJb8dLcFm7n9GHmmGp3UVJaAbFYYSL0inBF
+   46t3lKTDMaEh0AygoBi8esHs92ZLMfLKZ+LjyJzC1odCEn5t7lvgvv4FO
+   m6CE7olpBIQq0Yg0IP3X11YnBj8XbYGx6MFzswio/1C4OqolbKpOxgP19
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="322847209"
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="322847250"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:36:02 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="322847209"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:35:51 -0700
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="611492406"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 08:35:59 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neIYh-0002wW-94;
-        Tue, 12 Apr 2022 15:35:59 +0000
-Date:   Tue, 12 Apr 2022 23:35:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204122323.iqiRhgAI-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+   d="scan'208";a="551758622"
+Received: from vtelkarx-mobl.amr.corp.intel.com (HELO [10.209.191.73]) ([10.209.191.73])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:35:50 -0700
+Message-ID: <8b1e40c9-b2e8-7b73-d9ad-2c6a5a167370@intel.com>
+Date:   Tue, 12 Apr 2022 08:35:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220207230254.3342514-6-fenghua.yu@intel.com>
+ <Ygt4h0PgYzKOiB38@8bytes.org>
+ <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
+ <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
+ <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <41ed3405-66d9-0cde-fc01-b3eacb85a081@intel.com> <YlWWavIDMNpbD3Ye@larix>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+In-Reply-To: <YlWWavIDMNpbD3Ye@larix>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On 4/12/22 08:10, Jean-Philippe Brucker wrote:
+>> I wonder if the Intel and ARM IOMMU code differ in the way they keep
+>> references to the mm, or if this affects Intel as well, but we just
+>> haven't tested the code enough.
+> The Arm code was written expecting the PASID to be freed on unbind(), not
+> mm exit. I missed the change of behavior, sorry (I thought your plan was
+> to extend PASID lifetime, not shorten it?) but as is it seems very broken.
+> For example in the iommu_sva_unbind_device(), we have
+> arm_smmu_mmu_notifier_put() clearing the PASID table entry for
+> "mm->pasid", which is going to end badly if the PASID has been cleared or
+> reallocated. We can't clear the PASID entry in mm exit because at that
+> point the device may still be issuing DMA for that PASID and we need to
+> quiesce the entry rather than deactivate it.
 
-I love your patch! Perhaps something to improve:
+I think we ended up flipping some of this around on the Intel side.
+Instead of having to quiesce the device on mm exit, we don't let the mm
+exit until the device is done.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+When you program the pasid into the device, it's a lot like when you
+create a thread.  We bump the reference count on the mm when we program
+the page table pointer into a CPU.  We drop the thread's reference to
+the mm when the thread exits and will no longer be using the page tables.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204122323.iqiRhgAI-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/usb/typec/
+Same thing with pasids.  We bump the refcount on the mm when the pasid
+is programmed into the device.  Once the device is done with the mm, we
+drop the mm.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
->> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
---
->> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
-
-
-vim +717 drivers/usb/typec/pd.c
-
-c99df888db9e4c Heikki Krogerus 2022-04-12  663  
-c99df888db9e4c Heikki Krogerus 2022-04-12  664  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  665   * pd_register - Unregister USB Power Delivery Support.
-c99df888db9e4c Heikki Krogerus 2022-04-12  666   * @pd: The USB PD contract.
-c99df888db9e4c Heikki Krogerus 2022-04-12  667   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  668  void pd_unregister(struct pd *pd)
-c99df888db9e4c Heikki Krogerus 2022-04-12 @669  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  670  	if (IS_ERR_OR_NULL(pd))
-c99df888db9e4c Heikki Krogerus 2022-04-12  671  		return;
-c99df888db9e4c Heikki Krogerus 2022-04-12  672  
-c99df888db9e4c Heikki Krogerus 2022-04-12  673  	kobject_put(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  674  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  675  EXPORT_SYMBOL_GPL(pd_unregister);
-c99df888db9e4c Heikki Krogerus 2022-04-12  676  
-c99df888db9e4c Heikki Krogerus 2022-04-12  677  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  678   * pd_link_device - Link device to its USB PD object.
-c99df888db9e4c Heikki Krogerus 2022-04-12  679   * @pd: The USB PD instance.
-c99df888db9e4c Heikki Krogerus 2022-04-12  680   * @dev: The device.
-c99df888db9e4c Heikki Krogerus 2022-04-12  681   *
-c99df888db9e4c Heikki Krogerus 2022-04-12  682   * This function can be used to create a symlink named "usb_power_delivery" for
-c99df888db9e4c Heikki Krogerus 2022-04-12  683   * @dev that points to @pd.
-c99df888db9e4c Heikki Krogerus 2022-04-12  684   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  685  int pd_link_device(struct pd *pd, struct device *dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  686  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  687  	int ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  688  
-c99df888db9e4c Heikki Krogerus 2022-04-12  689  	if (IS_ERR_OR_NULL(pd) || !dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  690  		return 0;
-c99df888db9e4c Heikki Krogerus 2022-04-12  691  
-c99df888db9e4c Heikki Krogerus 2022-04-12  692  	ret = sysfs_create_link(&dev->kobj, &pd->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  693  	if (ret)
-c99df888db9e4c Heikki Krogerus 2022-04-12  694  		return ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  695  
-c99df888db9e4c Heikki Krogerus 2022-04-12  696  	ret = sysfs_create_link(&pd->kobj, &dev->kobj, dev_name(dev));
-c99df888db9e4c Heikki Krogerus 2022-04-12  697  	if (ret) {
-c99df888db9e4c Heikki Krogerus 2022-04-12  698  		sysfs_remove_link(&dev->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  699  		return ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  700  	}
-c99df888db9e4c Heikki Krogerus 2022-04-12  701  
-c99df888db9e4c Heikki Krogerus 2022-04-12  702  	kobject_get(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  703  	get_device(dev);
-c99df888db9e4c Heikki Krogerus 2022-04-12  704  
-c99df888db9e4c Heikki Krogerus 2022-04-12  705  	return 0;
-c99df888db9e4c Heikki Krogerus 2022-04-12  706  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  707  EXPORT_SYMBOL_GPL(pd_link_device);
-c99df888db9e4c Heikki Krogerus 2022-04-12  708  
-c99df888db9e4c Heikki Krogerus 2022-04-12  709  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  710   * pd_link_device - Unlink device from its USB PD object.
-c99df888db9e4c Heikki Krogerus 2022-04-12  711   * @pd: The USB PD instance.
-c99df888db9e4c Heikki Krogerus 2022-04-12  712   * @dev: The device.
-c99df888db9e4c Heikki Krogerus 2022-04-12  713   *
-c99df888db9e4c Heikki Krogerus 2022-04-12  714   * Remove the symlink that was previously created with pd_link_device().
-c99df888db9e4c Heikki Krogerus 2022-04-12  715   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  716  void pd_unlink_device(struct pd *pd, struct device *dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12 @717  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  718  	if (IS_ERR_OR_NULL(pd) || !dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  719  		return;
-c99df888db9e4c Heikki Krogerus 2022-04-12  720  
-c99df888db9e4c Heikki Krogerus 2022-04-12  721  	sysfs_remove_link(&dev->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  722  	sysfs_remove_link(&pd->kobj, dev_name(dev));
-c99df888db9e4c Heikki Krogerus 2022-04-12  723  	kobject_put(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  724  	put_device(dev);
-c99df888db9e4c Heikki Krogerus 2022-04-12  725  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  726  EXPORT_SYMBOL_GPL(pd_unlink_device);
-c99df888db9e4c Heikki Krogerus 2022-04-12  727  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Basically, instead of recounting the pasid itself, we just refcount the mm.

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675A14FD76A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA464FD798
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377512AbiDLHuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S1384880AbiDLIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351469AbiDLHUY (ORCPT
+        with ESMTP id S1357271AbiDLHjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:20:24 -0400
+        Tue, 12 Apr 2022 03:39:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920C628E28;
-        Mon, 11 Apr 2022 23:59:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2CDFFB;
+        Tue, 12 Apr 2022 00:14:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D11C8615BB;
-        Tue, 12 Apr 2022 06:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F2EC385A1;
-        Tue, 12 Apr 2022 06:59:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8522561045;
+        Tue, 12 Apr 2022 07:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEDFC385A1;
+        Tue, 12 Apr 2022 07:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746776;
-        bh=hZRak8zB8UWPBxxT//igy3oc37r7YLVaBqEBOxrUdtc=;
+        s=korg; t=1649747675;
+        bh=vAiDl1GwVbQ82UKpOaMdXzGgdpkyRkO6Fv8harzJaY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WISlkggcuVESbQEOT29xZc82Uu2b59fbnzGkC0SbnvpO4Y2hk13ktm4pN7M8/hTA5
-         hlNUmYH3LjgyRZXmJJqyHtLkpD88IgWUYgHh7ZJhvWmkQOaFX831JAj2rxmjl1Q1Aa
-         DSiStbkDLZc+nBUIia2qkYr0MfUs7tQerX5qogoU=
+        b=kJEPD98mgdrCaH7jXoTlUJrCY6SMP2Fxvpz2G+6X0891E5/JYE7ZiskqJ69qlpv3d
+         p27R8hsz0iVvvdOKso+mgVtAJzlkEDdVCk3B8ITGjEGQKAoXuz5fEjCg70UgYxOz0d
+         JqxB2kontUorx/9oihrImgD5P6OWuuirbHK9l8gg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 127/285] NFSv4: Protect the state recovery thread against direct reclaim
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 166/343] staging: wfx: apply the necessary SDIO quirks for the Silabs WF200
 Date:   Tue, 12 Apr 2022 08:29:44 +0200
-Message-Id: <20220412062947.331674049@linuxfoundation.org>
+Message-Id: <20220412062956.162857858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Jérôme Pouiller <jerome.pouiller@silabs.com>
 
-[ Upstream commit 3e17898aca293a24dae757a440a50aa63ca29671 ]
+[ Upstream commit 96e0cbca1cb96e9d3deac3051aa816e13082f3fd ]
 
-If memory allocation triggers a direct reclaim from the state recovery
-thread, then we can deadlock. Use memalloc_nofs_save/restore to ensure
-that doesn't happen.
+Until now, the SDIO quirks are applied directly from the driver.
+However, it is better to apply the quirks before driver probing. So,
+this patch relocate the quirks in the MMC framework.
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Note that the WF200 has no valid SDIO VID/PID. Therefore, we match DT
+rather than on the SDIO VID/PID.
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Link: https://lore.kernel.org/r/20220216093112.92469-3-Jerome.Pouiller@silabs.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4state.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/mmc/core/quirks.h      | 5 +++++
+ drivers/staging/wfx/bus_sdio.c | 3 ---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
-index 499bef9fe118..94f1876afab2 100644
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -49,6 +49,7 @@
- #include <linux/workqueue.h>
- #include <linux/bitops.h>
- #include <linux/jiffies.h>
-+#include <linux/sched/mm.h>
+diff --git a/drivers/mmc/core/quirks.h b/drivers/mmc/core/quirks.h
+index 20f568727277..f879dc63d936 100644
+--- a/drivers/mmc/core/quirks.h
++++ b/drivers/mmc/core/quirks.h
+@@ -149,6 +149,11 @@ static const struct mmc_fixup __maybe_unused sdio_fixup_methods[] = {
+ static const struct mmc_fixup __maybe_unused sdio_card_init_methods[] = {
+ 	SDIO_FIXUP_COMPATIBLE("ti,wl1251", wl1251_quirk, 0),
  
- #include <linux/sunrpc/clnt.h>
- 
-@@ -2560,9 +2561,17 @@ static void nfs4_layoutreturn_any_run(struct nfs_client *clp)
- 
- static void nfs4_state_manager(struct nfs_client *clp)
- {
-+	unsigned int memflags;
- 	int status = 0;
- 	const char *section = "", *section_sep = "";
- 
-+	/*
-+	 * State recovery can deadlock if the direct reclaim code tries
-+	 * start NFS writeback. So ensure memory allocations are all
-+	 * GFP_NOFS.
-+	 */
-+	memflags = memalloc_nofs_save();
++	SDIO_FIXUP_COMPATIBLE("silabs,wf200", add_quirk,
++			      MMC_QUIRK_BROKEN_BYTE_MODE_512 |
++			      MMC_QUIRK_LENIENT_FN0 |
++			      MMC_QUIRK_BLKSZ_FOR_BYTE_MODE),
 +
- 	/* Ensure exclusive access to NFSv4 state */
- 	do {
- 		trace_nfs4_state_mgr(clp);
-@@ -2657,6 +2666,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state);
- 		}
+ 	END_FIXUP
+ };
  
-+		memalloc_nofs_restore(memflags);
- 		nfs4_end_drain_session(clp);
- 		nfs4_clear_state_manager_bit(clp);
+diff --git a/drivers/staging/wfx/bus_sdio.c b/drivers/staging/wfx/bus_sdio.c
+index a670176ba06f..0612f8a7c085 100644
+--- a/drivers/staging/wfx/bus_sdio.c
++++ b/drivers/staging/wfx/bus_sdio.c
+@@ -207,9 +207,6 @@ static int wfx_sdio_probe(struct sdio_func *func,
  
-@@ -2674,6 +2684,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			return;
- 		if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
- 			return;
-+		memflags = memalloc_nofs_save();
- 	} while (refcount_read(&clp->cl_count) > 1 && !signalled());
- 	goto out_drain;
+ 	bus->func = func;
+ 	sdio_set_drvdata(func, bus);
+-	func->card->quirks |= MMC_QUIRK_LENIENT_FN0 |
+-			      MMC_QUIRK_BLKSZ_FOR_BYTE_MODE |
+-			      MMC_QUIRK_BROKEN_BYTE_MODE_512;
  
-@@ -2686,6 +2697,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			clp->cl_hostname, -status);
- 	ssleep(1);
- out_drain:
-+	memalloc_nofs_restore(memflags);
- 	nfs4_end_drain_session(clp);
- 	nfs4_clear_state_manager_bit(clp);
- }
+ 	sdio_claim_host(func);
+ 	ret = sdio_enable_func(func);
 -- 
 2.35.1
 

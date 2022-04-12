@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB334FD881
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656034FD44C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379768AbiDLIU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S1385846AbiDLIxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354086AbiDLH0D (ORCPT
+        with ESMTP id S1359238AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5C9186DE;
-        Tue, 12 Apr 2022 00:05:37 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A905C55758;
+        Tue, 12 Apr 2022 00:20:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAC8F60B2B;
-        Tue, 12 Apr 2022 07:05:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7A4C385A8;
-        Tue, 12 Apr 2022 07:05:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED96B81B62;
+        Tue, 12 Apr 2022 07:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A393BC385A5;
+        Tue, 12 Apr 2022 07:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747136;
-        bh=sXMl2ZYE8rt5NfFeBPGIcHAYJuUylPNTH8SOiNKZ7n8=;
+        s=korg; t=1649748036;
+        bh=XVofjJ5ibd0lC46pPClYFZWxKn/UrgzU/kZncze9kwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZsWSO8dTr9fvqk3u3QMlJaBNdJmETeeasegn3livoQLDcEjamKMixcs+3XSwKdRQ
-         GK/EfhI5y7xLm2j1Kjx+uLCRPmzxb/4rRz797lu6d9HeHZnB/wZnOuJpytiXq0rczH
-         iSH/gTPcsRwibLs7Ry5KgXpxMZIEbv7W93RJ4rr0=
+        b=EraJXSbBrRcei3OAVbe/KefoqWNMlItPbfUmZ34M7/lTFZ1nDV/qaijlQeaJTaLV/
+         g8l906csSMsY8BGsCaajrypQT0d3Bt74y81HW+k4OAru3q0q7QJm7ejlS9hHKpoUz1
+         PhdaUg/XJ0Dnl5D2PSsgw2DLZnkTja/Ju9L89qZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 5.16 257/285] drm/amdkfd: Create file descriptor after client is added to smi_clients list
-Date:   Tue, 12 Apr 2022 08:31:54 +0200
-Message-Id: <20220412062951.079211206@linuxfoundation.org>
+        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.17 297/343] perf/x86/intel: Dont extend the pseudo-encoding to GP counters
+Date:   Tue, 12 Apr 2022 08:31:55 +0200
+Message-Id: <20220412062959.896992705@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,70 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+From: Kan Liang <kan.liang@linux.intel.com>
 
-commit e79a2398e1b2d47060474dca291542368183bc0f upstream.
+commit 4a263bf331c512849062805ef1b4ac40301a9829 upstream.
 
-This ensures userspace cannot prematurely clean-up the client before
-it is fully initialised which has been proven to cause issues in the
-past.
+The INST_RETIRED.PREC_DIST event (0x0100) doesn't count on SPR.
+perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
 
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+ Performance counter stats for 'CPU(s) 0':
+
+           607,246      cpu/event=0xc0,umask=0x0/
+                 0      cpu/event=0x0,umask=0x1/
+
+The encoding for INST_RETIRED.PREC_DIST is pseudo-encoding, which
+doesn't work on the generic counters. However, current perf extends its
+mask to the generic counters.
+
+The pseudo event-code for a fixed counter must be 0x00. Check and avoid
+extending the mask for the fixed counter event which using the
+pseudo-encoding, e.g., ref-cycles and PREC_DIST event.
+
+With the patch,
+perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+
+ Performance counter stats for 'CPU(s) 0':
+
+           583,184      cpu/event=0xc0,umask=0x0/
+           583,048      cpu/event=0x0,umask=0x1/
+
+Fixes: 2de71ee153ef ("perf/x86/intel: Fix ICL/SPR INST_RETIRED.PREC_DIST encodings")
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/1648482543-14923-1-git-send-email-kan.liang@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c |   24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ arch/x86/events/intel/core.c      |    6 +++++-
+ arch/x86/include/asm/perf_event.h |    5 +++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-@@ -270,15 +270,6 @@ int kfd_smi_event_open(struct kfd_dev *d
- 		return ret;
- 	}
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -5515,7 +5515,11 @@ static void intel_pmu_check_event_constr
+ 			/* Disabled fixed counters which are not in CPUID */
+ 			c->idxmsk64 &= intel_ctrl;
  
--	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
--			       O_RDWR);
--	if (ret < 0) {
--		kfifo_free(&client->fifo);
--		kfree(client);
--		return ret;
--	}
--	*fd = ret;
--
- 	init_waitqueue_head(&client->wait_queue);
- 	spin_lock_init(&client->lock);
- 	client->events = 0;
-@@ -288,5 +279,20 @@ int kfd_smi_event_open(struct kfd_dev *d
- 	list_add_rcu(&client->list, &dev->smi_clients);
- 	spin_unlock(&dev->smi_lock);
+-			if (c->idxmsk64 != INTEL_PMC_MSK_FIXED_REF_CYCLES)
++			/*
++			 * Don't extend the pseudo-encoding to the
++			 * generic counters
++			 */
++			if (!use_fixed_pseudo_encoding(c->code))
+ 				c->idxmsk64 |= (1ULL << num_counters) - 1;
+ 		}
+ 		c->idxmsk64 &=
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -241,6 +241,11 @@ struct x86_pmu_capability {
+ #define INTEL_PMC_IDX_FIXED_SLOTS	(INTEL_PMC_IDX_FIXED + 3)
+ #define INTEL_PMC_MSK_FIXED_SLOTS	(1ULL << INTEL_PMC_IDX_FIXED_SLOTS)
  
-+	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
-+			       O_RDWR);
-+	if (ret < 0) {
-+		spin_lock(&dev->smi_lock);
-+		list_del_rcu(&client->list);
-+		spin_unlock(&dev->smi_lock);
++static inline bool use_fixed_pseudo_encoding(u64 code)
++{
++	return !(code & 0xff);
++}
 +
-+		synchronize_rcu();
-+
-+		kfifo_free(&client->fifo);
-+		kfree(client);
-+		return ret;
-+	}
-+	*fd = ret;
-+
- 	return 0;
- }
+ /*
+  * We model BTS tracing as another fixed-mode PMC.
+  *
 
 

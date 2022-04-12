@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8704FDE14
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69A04FDDE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbiDLL0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S1348537AbiDLL0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347599AbiDLLZd (ORCPT
+        with ESMTP id S1352737AbiDLLZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:25:33 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C97A0BFA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:06:10 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-df22f50e0cso20272609fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:06:10 -0700 (PDT)
+        Tue, 12 Apr 2022 07:25:41 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A6C237E5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:08:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id ll10so9580533pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:user-agent:references:in-reply-to:mime-version:date:message-id
-         :subject:to:cc;
-        bh=tZvbGpFjILGpekjAvGDF0y9dQ6Kd+gBt4gVMWfKJuAk=;
-        b=Xo8+YSn3qT7Jhf9u4FuGYXY6Bov1PRuEhL0/Es2kDk9T156ExPENxfB+L80w1q/WN8
-         AY7X2X8pBC+egX5EAP7hbmLqVYYquyMaM+9TMa0V8rrwt4eOMwpnKS1rXrmKnJYddRKl
-         WXqMioKIAM/xFynvUhz/5U8QrlcdzmdQycq7DES/Sco99BT/85Gs/jV5R1n5nlmInzkN
-         Xusklq+2enfKbeU1Z/uYCXgSMZElx/lRCPsCgmbehOhUkX+zIy72zJ9+1JEhZnnHiF0b
-         7lrsXEthfoBv0c5BqbSXLUfcVprx8t79rP5dVaUdlBdoIR+brcAYyZc6c3+7XT7Jw7uM
-         vcvQ==
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y8/JYtLwGTr+r9WhKddIHXBLC5TCTeFp3FTZ8BAk6HA=;
+        b=BWQF6hyEhV41fw/Vfjf8js/WHVuO3KDWVkQ8iaSse8fQWRUMxww5Qo6CNykQ17EiqJ
+         R9plY4ivF9hhzBQTg1z4+y6mKIq64h787PG2tMSkM21BHRwuDGku3NMVlkP3l2pUgZOr
+         0uS52KvkqEcGka6JR8QD5Suprc65T9w/aFdLzxiyKHmZYNHvqkwYPzD3ZC1QXAMSuioi
+         oxCseOUn1dQARtF/OdcH0P1WWbsgSOSymXv1WylLOHKcVTOM1K+1+5zNFRKwXh3K8CHw
+         P2lU4Oksd7J26mj5hEnZmKUemEGP293GCRcM9Ix94AXPVy8w6j8ZGMy7mTjFDfuo4kOt
+         j01w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:user-agent:references:in-reply-to
-         :mime-version:date:message-id:subject:to:cc;
-        bh=tZvbGpFjILGpekjAvGDF0y9dQ6Kd+gBt4gVMWfKJuAk=;
-        b=oOReS94c5FmvKcXv+cVaxJMEfEaGVEcnVUxFv2u97mz44FG0uxESYEKke31Mb34Sy4
-         +ufexYafQpDfmb/K1Q6Rf65Rs/MZeTy9bUoBuC9ty0HRpklxSA0/bamPd+V5xw3OngWA
-         8qw8q2+RrRv3ceDBij4oeuSVr8fV3+c9xoT/QEEcZTRHA4B/yVGJI6Qpmt313Y5RgX1P
-         ONBMNicaeHLMrw6DNLANSkx40uXOpczhnt2xx6m2w51xeyLtcvtDRK9FVIKU5jraN+1e
-         +bpZ24/zSToLx3l5mlAOQA1GsvcueXcWGgYtdBc49kuGrjahWBjkKbLKZsOtMwMq+y2h
-         73tQ==
-X-Gm-Message-State: AOAM532MktM7Wu/VW6frQaoxqt/ibbjrtmJuczfoLBZzwolr41Muecc7
-        K7nIineWX803aRm1L3ZBmO9YzDk1lzjbyWlVZU95Bw==
-X-Google-Smtp-Source: ABdhPJw3WX7NFQkxU4ADRLrRdzB/pHuRSdo1xjaZj5zggo6wW/RSRVmkJtH7xxbo7eDcNYsrg++TE2K0RicigcNQMoo=
-X-Received: by 2002:a05:6870:f21a:b0:dd:9bec:caf8 with SMTP id
- t26-20020a056870f21a00b000dd9beccaf8mr1670792oao.78.1649757969594; Tue, 12
- Apr 2022 03:06:09 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 12 Apr 2022 03:06:08 -0700
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220327223927.20848-1-granquet@baylibre.com> <20220327223927.20848-4-granquet@baylibre.com>
- <YkOPB5W7uXkOc72/@robh.at.kernel.org>
-In-Reply-To: <YkOPB5W7uXkOc72/@robh.at.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y8/JYtLwGTr+r9WhKddIHXBLC5TCTeFp3FTZ8BAk6HA=;
+        b=LD+Zke4kjgkWF+3XE5kCpPUQCsr83gFQnpQxCnKs85pLPfvVLCh72diY15l4LGssRf
+         N43jrNMTRMFKAjImHS1FYiY1kX+PL6x+aN1kN5cWnriDqGxBhYR0XoAraPXcAxgKE8C1
+         IQPYmdOVNH1LET3miwgRR+F4Egn564QbcusxjpicQCyCGUIcy7djv5E1BP6dSlMae4ol
+         BM3ihIQhgUYpvJDb6cscu4OlaJ+n3sU76Nh2WVeupQ9Xoc00b9W1JdxqnYbaRyuz+kWi
+         4mzxXR2rE1Syktc7h8ol/MlB8YMLUqs4XhnjHzuCOfGP6fauvlmb7PGuselp+ZJTFoQW
+         Rd8g==
+X-Gm-Message-State: AOAM530+z9af+Lg5wBuUz2OMgFWqCPEIxYv5aykcrLhFf4Lqk8UuMynC
+        lUHZHXIYjA3DxOE5vkgN1G5YzQ==
+X-Google-Smtp-Source: ABdhPJz9BsX5BLP589MLDfJnGsKt1qLr3mtq0HfL/T8EgEobf38Mq+9s+26t59TCgZOSJxq3Z6xS9g==
+X-Received: by 2002:a17:902:8684:b0:154:af35:82ce with SMTP id g4-20020a170902868400b00154af3582cemr37178055plo.137.1649758106758;
+        Tue, 12 Apr 2022 03:08:26 -0700 (PDT)
+Received: from localhost.localdomain ([122.182.197.47])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056a00130900b004f73df40914sm37515088pfu.82.2022.04.12.03.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 03:08:25 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 0/6] KVM RISC-V Sv57x4 support and HFENCE improvements
+Date:   Tue, 12 Apr 2022 15:37:07 +0530
+Message-Id: <20220412100713.1415094-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Tue, 12 Apr 2022 03:06:08 -0700
-Message-ID: <CABnWg9tvh31wibtTO2nETfJ9XtST0Ejjea0_2q1Hd5GRs9DN4Q@mail.gmail.com>
-Subject: Re: [PATCH v9 03/22] dt-bindings: mediatek,dp_phy: Add Display Port
- PHY binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, tzimmermann@suse.de,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, markyacoub@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 00:58, Rob Herring <robh@kernel.org> wrote:
->On Mon, Mar 28, 2022 at 12:39:08AM +0200, Guillaume Ranquet wrote:
->> This phy controller is embedded in the Display Port Controller on mt8195 SoCs.
->
->Sorry, but I think you need to go back to what you had in v8. While yes,
->the phy and controller IP often do change independently, this h/w looks
->pretty interwined.
+This series adds Sv57x4 support for KVM RISC-V G-stage and various
+HFENCE related improvements.
 
-Understood, I'll revert back to v8.
+These patches can also be found in riscv_kvm_sv57_plus_v1 branch at:
+https://github.com/avpatel/linux.git
 
->
->You could make the controller a phy provider to itself if you wanted.
+Anup Patel (6):
+  RISC-V: KVM: Use G-stage name for hypervisor page table
+  RISC-V: KVM: Add Sv57x4 mode support for G-stage
+  RISC-V: KVM: Treat SBI HFENCE calls as NOPs
+  RISC-V: KVM: Introduce range based local HFENCE functions
+  RISC-V: KVM: Reduce KVM_MAX_VCPUS value
+  RISC-V: KVM: Add remote HFENCE functions based on VCPU requests
 
-Not sure I follow, could you point me to an example?
+ arch/riscv/include/asm/csr.h      |   1 +
+ arch/riscv/include/asm/kvm_host.h | 119 ++++++--
+ arch/riscv/kvm/main.c             |  11 +-
+ arch/riscv/kvm/mmu.c              | 264 ++++++++---------
+ arch/riscv/kvm/tlb.S              |  74 -----
+ arch/riscv/kvm/tlb.c              | 456 ++++++++++++++++++++++++++++++
+ arch/riscv/kvm/vcpu.c             |  34 ++-
+ arch/riscv/kvm/vcpu_exit.c        |   6 +-
+ arch/riscv/kvm/vcpu_sbi_replace.c |  40 ++-
+ arch/riscv/kvm/vcpu_sbi_v01.c     |  35 ++-
+ arch/riscv/kvm/vm.c               |   8 +-
+ arch/riscv/kvm/vmid.c             |  30 +-
+ 12 files changed, 791 insertions(+), 287 deletions(-)
+ delete mode 100644 arch/riscv/kvm/tlb.S
+ create mode 100644 arch/riscv/kvm/tlb.c
 
-Thx,
-Guillaume.
->
->>
->> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->> ---
->>  .../bindings/phy/mediatek,dp-phy.yaml         | 43 +++++++++++++++++++
->>  1 file changed, 43 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->> new file mode 100644
->> index 000000000000..1f5ffca4e140
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->> @@ -0,0 +1,43 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +# Copyright (c) 2022 MediaTek
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/phy/mediatek,dp-phy.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MediaTek Display Port PHY
->> +
->> +maintainers:
->> +  - CK Hu <ck.hu@mediatek.com>
->> +  - Jitao shi <jitao.shi@mediatek.com>
->> +
->> +description: |
->> +  Device tree bindings for the Mediatek (embedded) Display Port PHY
->> +  present on some Mediatek SoCs.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - mediatek,mt8195-dp-phy
->> +
->> +  mediatek,dp-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: Phandle to the Display Port node.
->> +
->> +  "#phy-cells":
->> +    const: 0
->> +
->> +required:
->> +  - compatible
->> +  - mediatek,dp-syscon
->> +  - "#phy-cells"
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    dp_phy: dp-phy {
->> +      compatible = "mediatek,mt8195-dp-phy";
->> +      mediatek,dp-syscon = <&dp_tx>;
->> +      #phy-cells = <0>;
->> +    };
->> --
->> 2.34.1
->>
->>
+-- 
+2.25.1
+

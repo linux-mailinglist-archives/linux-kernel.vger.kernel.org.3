@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941D4FD42C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784D34FD41C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382118AbiDLJVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S1379438AbiDLIUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356664AbiDLHjL (ORCPT
+        with ESMTP id S1355863AbiDLH3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918A9527D6;
-        Tue, 12 Apr 2022 00:09:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:29:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CC4FC4E;
+        Tue, 12 Apr 2022 00:08:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15BAAB81B5E;
-        Tue, 12 Apr 2022 07:09:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E520C385B8;
-        Tue, 12 Apr 2022 07:09:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A88F616C5;
+        Tue, 12 Apr 2022 07:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA69C385A1;
+        Tue, 12 Apr 2022 07:08:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747396;
-        bh=CWMqiwxtlvgKbd+NivmB/OV5GOd11UOQAsCVPwOiIpw=;
+        s=korg; t=1649747303;
+        bh=uvmvK5G4Vh3vydzA/XSSQgtsGxMG1xvRkHz1oUWROgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fBkE0I0Mfgs7EsLoBXx9+XgopXKusHMedbEWzw3Et2p7Zyn5mprdwPlj7Nmx4Hr7I
-         MUUx47IgD0vIEgpA2DaQXHL82+4Yo1LXBgb/+WGSrfPcPqSHnVtYqoSgZnb/pkBrTU
-         UdZAg/07axexTsQF+1hnH3IsoCZr5W4WGMmwlwwo=
+        b=1kf8i/TBlbV5LdNnS5aw6QXIdeXrZBoSzhiz8U6hp9wVVy8aMuxH2yYnrInxn5vW4
+         GBvji5V1SY7MOKT5T/cVp+a9wqqLl4gmO62ibe0d2CgA54WzFnF23arYXU5YlZpM75
+         EWkcw72dU+ebfaEE1qQ1PJyDxIrQ6jVSbA2UdgHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wayne Chang <waynec@nvidia.com>,
+        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
+        Ruili Ji <ruili.ji@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 024/343] usb: gadget: tegra-xudc: Fix control endpoints definitions
-Date:   Tue, 12 Apr 2022 08:27:22 +0200
-Message-Id: <20220412062951.801989962@linuxfoundation.org>
+Subject: [PATCH 5.17 031/343] drm/amdkfd: Ensure mm remain valid in svm deferred_list work
+Date:   Tue, 12 Apr 2022 08:27:29 +0200
+Message-Id: <20220412062952.004344561@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -54,62 +57,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wayne Chang <waynec@nvidia.com>
+From: Philip Yang <Philip.Yang@amd.com>
 
-[ Upstream commit 7bd42fb95eb4f98495ccadf467ad15124208ec49 ]
+[ Upstream commit 367c9b0f1b8750a704070e7ae85234d591290434 ]
 
-According to the Tegra Technical Reference Manual, the seq_num
-field of control endpoint is not [31:24] but [31:27]. Bit 24
-is reserved and bit 26 is splitxstate.
+svm_deferred_list work should continue to handle deferred_range_list
+which maybe split to child range to avoid child range leak, and remove
+ranges mmu interval notifier to avoid mm mm_count leak. So taking mm
+reference when adding range to deferred list, to ensure mm is valid in
+the scheduled deferred_list_work, and drop the mm referrence after range
+is handled.
 
-The change fixes the wrong control endpoint's definitions.
-
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Link: https://lore.kernel.org/r/20220107091349.149798-1-waynec@nvidia.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Philip Yang <Philip.Yang@amd.com>
+Reported-by: Ruili Ji <ruili.ji@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/tegra-xudc.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 62 ++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 716d9ab2d2ff..be76f891b9c5 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -272,8 +272,10 @@ BUILD_EP_CONTEXT_RW(deq_hi, deq_hi, 0, 0xffffffff)
- BUILD_EP_CONTEXT_RW(avg_trb_len, tx_info, 0, 0xffff)
- BUILD_EP_CONTEXT_RW(max_esit_payload, tx_info, 16, 0xffff)
- BUILD_EP_CONTEXT_RW(edtla, rsvd[0], 0, 0xffffff)
--BUILD_EP_CONTEXT_RW(seq_num, rsvd[0], 24, 0xff)
-+BUILD_EP_CONTEXT_RW(rsvd, rsvd[0], 24, 0x1)
- BUILD_EP_CONTEXT_RW(partial_td, rsvd[0], 25, 0x1)
-+BUILD_EP_CONTEXT_RW(splitxstate, rsvd[0], 26, 0x1)
-+BUILD_EP_CONTEXT_RW(seq_num, rsvd[0], 27, 0x1f)
- BUILD_EP_CONTEXT_RW(cerrcnt, rsvd[1], 18, 0x3)
- BUILD_EP_CONTEXT_RW(data_offset, rsvd[2], 0, 0x1ffff)
- BUILD_EP_CONTEXT_RW(numtrbs, rsvd[2], 22, 0x1f)
-@@ -1554,6 +1556,9 @@ static int __tegra_xudc_ep_set_halt(struct tegra_xudc_ep *ep, bool halt)
- 		ep_reload(xudc, ep->index);
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+index f2805ba74c80..225affcddbc1 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+@@ -1985,10 +1985,9 @@ svm_range_update_notifier_and_interval_tree(struct mm_struct *mm,
+ }
  
- 		ep_ctx_write_state(ep->context, EP_STATE_RUNNING);
-+		ep_ctx_write_rsvd(ep->context, 0);
-+		ep_ctx_write_partial_td(ep->context, 0);
-+		ep_ctx_write_splitxstate(ep->context, 0);
- 		ep_ctx_write_seq_num(ep->context, 0);
+ static void
+-svm_range_handle_list_op(struct svm_range_list *svms, struct svm_range *prange)
++svm_range_handle_list_op(struct svm_range_list *svms, struct svm_range *prange,
++			 struct mm_struct *mm)
+ {
+-	struct mm_struct *mm = prange->work_item.mm;
+-
+ 	switch (prange->work_item.op) {
+ 	case SVM_OP_NULL:
+ 		pr_debug("NULL OP 0x%p prange 0x%p [0x%lx 0x%lx]\n",
+@@ -2071,34 +2070,41 @@ static void svm_range_deferred_list_work(struct work_struct *work)
+ 	pr_debug("enter svms 0x%p\n", svms);
  
- 		ep_reload(xudc, ep->index);
-@@ -2809,7 +2814,10 @@ static void tegra_xudc_reset(struct tegra_xudc *xudc)
- 	xudc->setup_seq_num = 0;
- 	xudc->queued_setup_packet = false;
+ 	p = container_of(svms, struct kfd_process, svms);
+-	/* Avoid mm is gone when inserting mmu notifier */
+-	mm = get_task_mm(p->lead_thread);
+-	if (!mm) {
+-		pr_debug("svms 0x%p process mm gone\n", svms);
+-		return;
+-	}
+-retry:
+-	mmap_write_lock(mm);
+-
+-	/* Checking for the need to drain retry faults must be inside
+-	 * mmap write lock to serialize with munmap notifiers.
+-	 */
+-	if (unlikely(atomic_read(&svms->drain_pagefaults))) {
+-		mmap_write_unlock(mm);
+-		svm_range_drain_retry_fault(svms);
+-		goto retry;
+-	}
  
--	ep_ctx_write_seq_num(ep0->context, xudc->setup_seq_num);
-+	ep_ctx_write_rsvd(ep0->context, 0);
-+	ep_ctx_write_partial_td(ep0->context, 0);
-+	ep_ctx_write_splitxstate(ep0->context, 0);
-+	ep_ctx_write_seq_num(ep0->context, 0);
+ 	spin_lock(&svms->deferred_list_lock);
+ 	while (!list_empty(&svms->deferred_range_list)) {
+ 		prange = list_first_entry(&svms->deferred_range_list,
+ 					  struct svm_range, deferred_list);
+-		list_del_init(&prange->deferred_list);
+ 		spin_unlock(&svms->deferred_list_lock);
  
- 	deq_ptr = trb_virt_to_phys(ep0, &ep0->transfer_ring[ep0->deq_ptr]);
+ 		pr_debug("prange 0x%p [0x%lx 0x%lx] op %d\n", prange,
+ 			 prange->start, prange->last, prange->work_item.op);
  
++		mm = prange->work_item.mm;
++retry:
++		mmap_write_lock(mm);
++
++		/* Checking for the need to drain retry faults must be inside
++		 * mmap write lock to serialize with munmap notifiers.
++		 */
++		if (unlikely(atomic_read(&svms->drain_pagefaults))) {
++			mmap_write_unlock(mm);
++			svm_range_drain_retry_fault(svms);
++			goto retry;
++		}
++
++		/* Remove from deferred_list must be inside mmap write lock, for
++		 * two race cases:
++		 * 1. unmap_from_cpu may change work_item.op and add the range
++		 *    to deferred_list again, cause use after free bug.
++		 * 2. svm_range_list_lock_and_flush_work may hold mmap write
++		 *    lock and continue because deferred_list is empty, but
++		 *    deferred_list work is actually waiting for mmap lock.
++		 */
++		spin_lock(&svms->deferred_list_lock);
++		list_del_init(&prange->deferred_list);
++		spin_unlock(&svms->deferred_list_lock);
++
+ 		mutex_lock(&svms->lock);
+ 		mutex_lock(&prange->migrate_mutex);
+ 		while (!list_empty(&prange->child_list)) {
+@@ -2109,19 +2115,20 @@ static void svm_range_deferred_list_work(struct work_struct *work)
+ 			pr_debug("child prange 0x%p op %d\n", pchild,
+ 				 pchild->work_item.op);
+ 			list_del_init(&pchild->child_list);
+-			svm_range_handle_list_op(svms, pchild);
++			svm_range_handle_list_op(svms, pchild, mm);
+ 		}
+ 		mutex_unlock(&prange->migrate_mutex);
+ 
+-		svm_range_handle_list_op(svms, prange);
++		svm_range_handle_list_op(svms, prange, mm);
+ 		mutex_unlock(&svms->lock);
++		mmap_write_unlock(mm);
++
++		/* Pairs with mmget in svm_range_add_list_work */
++		mmput(mm);
+ 
+ 		spin_lock(&svms->deferred_list_lock);
+ 	}
+ 	spin_unlock(&svms->deferred_list_lock);
+-
+-	mmap_write_unlock(mm);
+-	mmput(mm);
+ 	pr_debug("exit svms 0x%p\n", svms);
+ }
+ 
+@@ -2139,6 +2146,9 @@ svm_range_add_list_work(struct svm_range_list *svms, struct svm_range *prange,
+ 			prange->work_item.op = op;
+ 	} else {
+ 		prange->work_item.op = op;
++
++		/* Pairs with mmput in deferred_list_work */
++		mmget(mm);
+ 		prange->work_item.mm = mm;
+ 		list_add_tail(&prange->deferred_list,
+ 			      &prange->svms->deferred_range_list);
 -- 
 2.35.1
 

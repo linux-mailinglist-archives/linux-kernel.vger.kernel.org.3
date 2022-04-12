@@ -2,211 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DB14FE776
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351494FE77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358548AbiDLRwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S1358553AbiDLRyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiDLRwS (ORCPT
+        with ESMTP id S233776AbiDLRyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:52:18 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981194756F;
-        Tue, 12 Apr 2022 10:49:59 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q14so24993315ljc.12;
-        Tue, 12 Apr 2022 10:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=bZD6MIHOgstiitM1UOkrGGlVLBJ6vm9PI8DMS7m0H98=;
-        b=dymxGqcQwtPQPM6BPjjBYCYZXG8ECnjuvlwfz0ISm2672OAB2V6jnch6NLABRwyi0y
-         FbVdqZC84Uwxc61L7KKgWOoReDCbY2oowB86e1km5QKO/4dfaCLjyIZ8pq7Pzg9RVdh7
-         EpUZm5M8ciyCUfnTNNlTqCDgxHU5ssagpbiC4FRSbU7B7QRAZltyPEbz/eAng7KM0MSF
-         16Hoch8imIBBEWytaRg94lcgTdtXX5y6GsvosltNqBjSdNuw0trpVqzv1764Dnifw8P6
-         iuThqU1mdYBbnFc/SgLKE5z5uLerFdr07hOTU2znNxIYd38e5WRRriR9+n+kw3IYH6jX
-         ShWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bZD6MIHOgstiitM1UOkrGGlVLBJ6vm9PI8DMS7m0H98=;
-        b=Pmrm0FL0JUxG3gpxg15nJVaeAvwBt+ySn2ikN5FsmUisoqBAWuK8aupO5bBtjDUy8P
-         NGg0cGWbHz08DjlTXbCC2tJdO9ktis6oeV8tiSsKI/qNBZfiUbDS5bNGAp2jme08FyHY
-         6VlDxXednvGaBSVOHrPjfU8EdtGbzJ0gfL7586FFehMPvKfQy7lYzMvOGM3F0QRBjpZ2
-         20JQMcY2abSj8mfoZh8qvsf6JcjxfDIvWoDwkp01WL9i/w2idPpfgS49gOX+cYdAyqoz
-         Bq9eHksf/x6h6Dl/GB9D4GzKPLzVsC/OpnHND9GsqPPVdVbOCQEDwfT4cYxquAeqRrTl
-         IcPg==
-X-Gm-Message-State: AOAM53041WpXnve9EQoIZUxSBz942dnZOSnK+rVhZPdKSE82Fnjp/KzI
-        QGFkN/js9HMxroHWvFZPaDE=
-X-Google-Smtp-Source: ABdhPJxveI9cOFkBq9T1R6cPlKQLl1G0bBU3Tc2fCUa97Rtzngv/cvXMNyWJdUZ4qO6S9gkX0Mnh7A==
-X-Received: by 2002:a2e:a362:0:b0:24b:5c8d:3a71 with SMTP id i2-20020a2ea362000000b0024b5c8d3a71mr9752706ljn.305.1649785797726;
-        Tue, 12 Apr 2022 10:49:57 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id n26-20020a2e879a000000b0024b47286a60sm1666071lji.135.2022.04.12.10.49.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 10:49:57 -0700 (PDT)
-Message-ID: <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
-Date:   Tue, 12 Apr 2022 19:49:55 +0200
+        Tue, 12 Apr 2022 13:54:23 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7F947AF4;
+        Tue, 12 Apr 2022 10:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
+        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=jmqFnXO2ZqZwvHpgNAB6QeZncj7ETg2mnMiU2ejcaaE=; b=kFJmPNgcrTrkb88HIJO/HCKje7
+        2eFdAtCq7U3T1febm9lJDI4aTtGD+sTL26jKqiTHXT+2O1kmvaGyAYr25staFA96BQImT3N5aEqpW
+        Pr9lK7/XWH2DSeTm23KdBoN14/1TBE+drx6zgZkTSOe3Exh7Mz/gzG9+HaPa96DEZk8Y=;
+Received: from p57a6f1f9.dip0.t-ipconnect.de ([87.166.241.249] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1neKgD-0008Kt-FP; Tue, 12 Apr 2022 19:51:53 +0200
+Message-ID: <2989e566-a1d2-2288-8ef3-759f20aa0c2e@nbd.name>
+Date:   Tue, 12 Apr 2022 19:51:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for Buffalo WZR-1166DHP2
-To:     SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-15-nbd@nbd.name> <Yk8pJRxnVCfdk8xi@lunn.ch>
+ <f25a6278-1baf-cc27-702a-5d93eedda438@nbd.name> <YlQmf7qGAnq/3nW0@lunn.ch>
+ <ece29b0d-bbbe-7c03-a6b4-60e44453ca31@nbd.name> <YlV5jEzNZT1aKmNL@lunn.ch>
+ <ee1d6c89-95f4-bf28-cf25-36b18ffb342f@nbd.name> <YlWK5Dozpo7nIS9j@lunn.ch>
+ <29cecc87-8689-6a73-a5ef-43eb2b8f33cd@nbd.name> <YlW4zF1s3SRTl2ue@lunn.ch>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH v2 14/14] net: ethernet: mtk_eth_soc: support creating mac
+ address based offload entries
+In-Reply-To: <YlW4zF1s3SRTl2ue@lunn.ch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.2022 17:44, SHIMAMOTO Takayoshi wrote:
-> Buffalo WZR-1166DHP2  wireless router with
+
+On 12.04.22 19:37, Andrew Lunn wrote:
+>> It basically has to keep track of all possible destination ports, their STP
+>> state, all their fdb entries, member VLANs of all ports. It has to quickly
+>> react to changes in any of these.
 > 
->   - BCM4708A0
->   - 256MiB DDR2 SDRAM
->   - 128MiB NAND flash
->   - 2T2R 11ac/a/b/g/n Wi-Fi
->   - 4x 10/100M ethernet switch
-
-Isn't that 10/100/1000?
-
-
-> The hardware configuration is very similar to the WZR-1750DHP,
-> except for memory size and number of antennas.
+> switchdev gives you all of those i think. DSA does not make use of
+> them all, in particularly the fdb entries, because of the low
+> bandwidth management link to the switch. But look at the Mellanox
+> switch, it keeps its hardware fdb entries in sync with the software
+> fdb.
 > 
-> Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
-> ---
->   .../boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts | 189 ++++++++++++++++++
->   1 file changed, 189 insertions(+)
->   create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+> And you get every quick access to these, sometimes too quick in that
+> it is holding a spinlock when it calls the switchdev functions, and
+> you need to defer the handling in your driver if you want to use a
+> mutex, perform blocking IO etc.
 > 
-> diff --git a/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
-> new file mode 100644
-> index 000000000000..22e54a0a202a
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
-> @@ -0,0 +1,189 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> +/*
-> + * Broadcom BCM470X / BCM5301X ARM platform code.
-> + * DTS for Buffalo WZR-1166DHP2
-> + *
-> + * Copyright (C) 2014 Rafał Miłecki <zajec5@gmail.com>
-> + * Copyright (C) 2022 SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "bcm4708.dtsi"
-> +#include "bcm5301x-nand-cs0-bch8.dtsi"
-> +
-> +/ {
-> +	compatible = "buffalo,wzr-1166dhp2", "brcm,bcm4708";
-> +	model = "Buffalo WZR-1166DHP2 (BCM4708)";
+>> In order to implement this properly, I would also need to make more changes
+>> to mac80211. Right now, mac80211 drivers do not have access to the
+>> net_device pointer of virtual interfaces. So mac80211 itself would likely
+>> need to implement the switchdev ops and handle some of this.
+> 
+> So this again sounds like something which would be shared by IPA, and
+> any other hardware which can accelerate forwarding between WiFi and
+> some other sort of interface.
+I would really like to see an example of how this should be done.
+Is there a work in progress tree for IPA with offloading? Because the 
+code that I see upstream doesn't seem to have any of that - or did I 
+look in the wrong place?
 
-We stopped adding SoC name to the "model" value, please drop it.
+>> There are also some other issues where I don't know how this is supposed to
+>> be solved properly:
+>> On MT7622 most of the bridge ports are connected to a MT7531 switch using
+>> DSA. Offloading (lan->wlan bridging or L3/L4 NAT/routing) is not handled by
+>> the switch itself, it is handled by a packet processing engine in the SoC,
+>> which knows how to handle the DSA tags of the MT7531 switch.
+>> 
+>> So if I were to handle this through switchdev implemented on the wlan and
+>> ethernet devices, it would technically not be part of the same switch, since
+>> it's a behind a different component with a different driver.
+> 
+> What is important here is the user experience. The user is not
+> expected to know there is an accelerate being used. You setup the
+> bridge just as normal, using iproute2. You add routes in the normal
+> way, either by iproute2, or frr can add routes from OSPF, BGP, RIP or
+> whatever, via zebra. I'm not sure anybody has yet accelerated NAT, but
+> the same principle should be used, using iptables in the normal way,
+> and the accelerate is then informed and should accelerate it if
+> possible.
+Accelerated NAT on MT7622 is already present in the upstream code for a 
+while. It's there for ethernet, and with my patches it also works for 
+ethernet -> wlan.
 
+> switchdev gives you notification of when anything changes. You can
+> have multiple receivers of these notifications, so the packet
+> processor can act on them as well as the DSA switch.
+>   
+>> Also, is switchdev able to handle the situation where only parts of the
+>> traffic is offloaded and the rest (e.g. multicast) is handled through the
+>> regular software path?
+> 
+> Yes, that is not a problem. I deliberately use the term
+> accelerator. We accelerate what Linux can already do. If the
+> accelerator hardware is not capable of something, Linux still is, so
+> just pass it the frames and it will do the right thing. Multicast is a
+> good example of this, many of the DSA switch drivers don't accelerate
+> it.
+Don't get me wrong, I'm not against switchdev support at all. I just 
+don't know how to do it yet, and the code that I put in place is useful 
+for non-switchdev use cases as well.
 
-> +	chosen {
-> +		bootargs = "console=ttyS0,115200";
-> +	};
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x00000000 0x08000000>,
-> +		      <0x88000000 0x08000000>;
-> +	};
-> +
-> +	spi {
-> +		compatible = "spi-gpio";
-> +		num-chipselects = <1>;
-> +		gpio-sck = <&chipcommon 7 0>;
-> +		gpio-mosi = <&chipcommon 4 0>;
-> +		cs-gpios = <&chipcommon 6 0>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		hc595: gpio_spi@0 {
-> +			compatible = "fairchild,74hc595";
-> +			reg = <0>;
-> +			registers-number = <1>;
-> +			spi-max-frequency = <100000>;
-> +
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		usb {
-> +			label = "bcm53xx:blue:usb";
-> +			gpios = <&hc595 0 GPIO_ACTIVE_HIGH>;
-> +			trigger-sources = <&ohci_port1>, <&ehci_port1>,
-> +					  <&xhci_port1>, <&ohci_port2>,
-> +					  <&ehci_port2>;
-> +			linux,default-trigger = "usbport";
-> +		};
-> +
-> +		power0 {
-> +			label = "bcm53xx:red:power";
-> +			gpios = <&hc595 1 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		power1 {
-> +			label = "bcm53xx:white:power";
-> +			gpios = <&hc595 2 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "default-on";
-> +		};
-> +
-> +		router0 {
-> +			label = "bcm53xx:blue:router";
-> +			gpios = <&hc595 3 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "default-on";
-> +		};
-> +
-> +		router1 {
-> +			label = "bcm53xx:amber:router";
-> +			gpios = <&hc595 4 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		wan {
-> +			label = "bcm53xx:blue:wan";
-> +			gpios = <&hc595 5 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "default-on";
-> +		};
-> +
-> +		wireless0 {
-> +			label = "bcm53xx:blue:wireless";
-> +			gpios = <&hc595 6 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		wireless1 {
-> +			label = "bcm53xx:amber:wireless";
-> +			gpios = <&hc595 7 GPIO_ACTIVE_HIGH>;
-> +		};
-> +	};
+>> In my opinion, handling it through the TC offload has a number of
+>> advantages:
+>> - It's a lot simpler
+>> - It uses the same kind of offloading rules that my software fastpath
+>> already uses
+>> - It allows more fine grained control over which traffic should be offloaded
+>> (src mac -> destination MAC tuple)
+>> 
+>> I also plan on extending my software fast path code to support emulating
+>> bridging of WiFi client mode interfaces. This involves doing some MAC
+>> address translation with some IP address tracking. I want that to support
+>> hardware offload as well.
+>> 
+>> I really don't think that desire for supporting switchdev based offload
+>> should be a blocker for accepting this code now, especially since my
+>> implementation relies on existing Linux network APIs without inventing any
+>> new ones, and there are valid use cases for using it, even with switchdev
+>> support in place.
+> 
+> What we need to avoid is fragmentation of the way we do things. It has
+> been decided that switchdev is how we use accelerators, and the user
+> should not really know anything about the accelerator. No other in
+> kernel network accelerator needs a user space component listening to
+> netlink notifications and programming the accelerator from user space.
+> Do we really want two ways to do this?
+There's always some overlap in what the APIs can do. And when it comes 
+to the "client mode bridge" use case that I mentioned, I would also need 
+exactly the same API that I put in place here. And this is not something 
+that can (or even should) be done using switchdev. mac80211 prevents 
+adding client mode interfaces to bridges for a reason.
 
-I'm wondering if all new DTS files should use "function" and "color"
-instead of "label". That's preferred solution and I guess it's good idea
-to use it for new code.
+- Felix

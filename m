@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06644FE79A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236F64FE7A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357967AbiDLSH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S1358618AbiDLSLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358606AbiDLSHh (ORCPT
+        with ESMTP id S233266AbiDLSLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:07:37 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9C41A073;
-        Tue, 12 Apr 2022 11:05:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g20so23316907edw.6;
-        Tue, 12 Apr 2022 11:05:19 -0700 (PDT)
+        Tue, 12 Apr 2022 14:11:21 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E309E2DB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:09:02 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso3786697pju.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=z9NQi1ml/pNs6k8iFZmY0TUp/xSTyZP8LgV9/lOgFis=;
-        b=ibbIomvT/EBEch/llY78xJmulZ6hYp7HHP+xatYlWvfOAVZaMu1EhWY8jc0lv4Jh4g
-         GymFM0rd62Sn4GwW1d00Z62p2GB+vvAzB9Mq6tuLl/a2YImSPXlmnILZ0U/0+tsGX2C4
-         0ry5snn1VT9Ppa7YQuZ4cFMx2hcC4f8GOZ6s/P5NzUsp1Q33Zfohn1sVO3FPr2GEOgeb
-         hKHHSJOSooTO+QD883W6AEWaphQF+c4/tNqemtsf/2E9ThCJ7brKloKqE/D4qyKs+t9u
-         uwieWr2UPUwEG9X7EJ5iRD9bAZNpMl2iFqmatRoiTS4+94TWeFKiLbpEfFcQ5AcKykJQ
-         DuJA==
+         :content-disposition:in-reply-to;
+        bh=NaJfvw6r9C6/6ZgE258KkI8EH6VfRa6X6YWrh9oOleA=;
+        b=OX3eqNGbpCTJAk6dwMvyfHeuP5RqVZeaO43LUmBjMPpBFmmjd2fev0QkELsTN6iMJf
+         PQpbikonv7csqVlUvEC8FRiMhPuSAKdfV8nLSTHPPjuv4asXoDf0bHDzwqrU1ap1ZjFl
+         K1zhzcyUXwd9vbS5a19iJQwiVix2BecT29Ukkzi9gQlsgjLKvhLXLGZ3PHMYutmfLv2W
+         UDmj8uCvm7jhOj8q+5ktdJqWnya4Orq+1PviAeNt0w89uiSe23RVvYOLtVNdDR3yJklD
+         bgQzcCBflkNRTZf7uD2+FV/KpLGPPZBPIcCuoh1CfpAhRjMfYgVyXkcxhLx0ots4riYn
+         nlyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=z9NQi1ml/pNs6k8iFZmY0TUp/xSTyZP8LgV9/lOgFis=;
-        b=dahcl3BvYRChPl5PnNu5lEH2kE8sKypAMhxw3t3dEMuZAdKSW2b48G0M1aJSzm7s90
-         Qr4meI/mVXXOHZnXPDcEtQclQE3WAgJHA22SKkLVxXCwtG8AGEvYIdevlFqP1Cpw4+PD
-         vprXDql4ZSQ7uxuZ7o6/SEWpKf2/Yxj+Fvj+r5NFRPwqesYdhZNmGaOspBezLlbYt2JT
-         tJ7DvqHESofP78m2GgQuKP2TGppG5faM0tB27r/9AGt1KJhpxbLujNS76FlL7AnI2MsL
-         //m+ToM5sxRsSp7vSVaLYT2HYvDsS4AEGp6bpfdEmSXM9WmxJ4mz6bbzcNXBlTAXBkPW
-         2yzw==
-X-Gm-Message-State: AOAM533P2ik9A7sTIu8gX+YfOhXyc/GpAA5OJGiVT5hoZz/d1Itn5JQT
-        76Hh3QYSEb9i+OTfNEoZqKI=
-X-Google-Smtp-Source: ABdhPJyIABxge0CAv6F9qxtvjbzi7Tdb8OYw4iQMENg06sAb5pGDm4C5oS30mSLjHnonVoaiUhP0+w==
-X-Received: by 2002:a05:6402:644:b0:41d:77bb:d36d with SMTP id u4-20020a056402064400b0041d77bbd36dmr13842082edx.381.1649786717735;
-        Tue, 12 Apr 2022 11:05:17 -0700 (PDT)
-Received: from szeder.dev (62-165-238-123.pool.digikabel.hu. [62.165.238.123])
-        by smtp.gmail.com with ESMTPSA id bn3-20020a170906c0c300b006e50416e24bsm12673650ejb.98.2022.04.12.11.05.16
+         :mime-version:content-disposition:in-reply-to;
+        bh=NaJfvw6r9C6/6ZgE258KkI8EH6VfRa6X6YWrh9oOleA=;
+        b=aLGxv+PsS1fW2Higmmn0YUlfKs2lp6G5jV6tpj5UeMb8V6O/qSyqBDfTFnEuq/dtgD
+         MLj+3WfzZTmULGMI4Vfa9JIPbgQpJWPRwfuPqqtL5teveb40jxNQy3z/EIyQn35SaML9
+         u+z0LrGtP0KANjyWx/PL3ajfY619a39PFfh0O0kiMxfWOyubSkuS0VyiM5gmm547E5NH
+         Eg+IFKs9jwnj8OZLSRF/msE9tZnKkKtyB2f7YWTEnUxWlG/LQ7hgRlvRJ6GcNC13Lem4
+         JxAMu8C8kePXGaLTuLFRoyVgfavVjxNnhBjWQ+oPsjpdD2pihfpjPL4encyBd4JlSbqI
+         AXCw==
+X-Gm-Message-State: AOAM531IdmNae5W3LTdVfaVtFmAfoZvPEH1rhw47LpM6E72rrvMMRcxb
+        unUrZLQaVqCYL+y6YSxnUvtsYw==
+X-Google-Smtp-Source: ABdhPJxEQAVjHzb1MYHA+nWtHDUctstRHCxXpm9/b/levkniy7oeG3hEG34Teo7aaYwmaPAZGbzCNA==
+X-Received: by 2002:a17:90b:1d04:b0:1c7:b10f:e33d with SMTP id on4-20020a17090b1d0400b001c7b10fe33dmr6467766pjb.165.1649786942210;
+        Tue, 12 Apr 2022 11:09:02 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lx13-20020a17090b4b0d00b001c9989c721esm176444pjb.17.2022.04.12.11.09.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:05:17 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 20:05:10 +0200
-From:   SZEDER =?utf-8?B?R8OhYm9y?= <szeder.dev@gmail.com>
-To:     Junio C Hamano <gitster@pobox.com>
-Cc:     git@vger.kernel.org, Linux Kernel <linux-kernel@vger.kernel.org>,
-        git-packagers@googlegroups.com
-Subject: Re: [ANNOUNCE] Git v2.35.2 and below for CVE-2022-24765
-Message-ID: <20220412180510.GA2173@szeder.dev>
-References: <xmqqv8veb5i6.fsf@gitster.g>
+        Tue, 12 Apr 2022 11:09:01 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 18:08:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v4 09/10] KVM: x86/MMU: Require reboot permission to
+ disable NX hugepages
+Message-ID: <YlXAOQOMu4Unryt6@google.com>
+References: <20220411211015.3091615-1-bgardon@google.com>
+ <20220411211015.3091615-10-bgardon@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <xmqqv8veb5i6.fsf@gitster.g>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220411211015.3091615-10-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,51 +80,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:01:21AM -0700, Junio C Hamano wrote:
-> The latest maintenance release Git v2.35.2, together with releases
-> for older maintenance tracks v2.30.3, v2.31.2, v2.32.1, v2.33.2, and
-> v2.34.2, are now available at the usual places.
+On Mon, Apr 11, 2022, Ben Gardon wrote:
+> Ensure that the userspace actor attempting to disable NX hugepages has
+> permission to reboot the system. Since disabling NX hugepages would
+> allow a guest to crash the system, it is similar to reboot permissions.
 > 
-> These maintenance releases are to address the security issues
-> described in CVE-2022-24765.  Please update at your earliest
-> opportunity.
-> 
-> The tarballs are found at:
-> 
->     https://www.kernel.org/pub/software/scm/git/
-> 
-> The following public repositories all have a copy of the 'v2.35.2',
-> 'v2.34.2', 'v2.33.2', 'v2.32.1', 'v2.31.2', and 'v2.30.3' tags.
-> 
->   url = https://git.kernel.org/pub/scm/git/git
->   url = https://kernel.googlesource.com/pub/scm/git/git
->   url = https://github.com/gitster/git
-> 
-> CVE-2022-24765:
->    On multi-user machines, Git users might find themselves
->    unexpectedly in a Git worktree, e.g. when another user created a
->    repository in `C:\.git`, in a mounted network drive or in a
->    scratch space. Merely having a Git-aware prompt that runs `git
->    status` (or `git diff`) and navigating to a directory which is
->    supposedly not a Git worktree, or opening such a directory in an
->    editor or IDE such as VS Code or Atom, will potentially run
->    commands defined by that other user.
-> 
-> Credit for finding this vulnerability goes to 俞晨东; the fix was
-> authored by Johannes Schindelin.
+> This approach is the simplest permission gating, but passing a file
+> descriptor opened for write for the module parameter would also work
+> well and be more precise.
+> The latter approach was suggested by Sean Christopherson.
 
-This fix causes trouble when attempting to 'sudo make install' any
-non-tagged Git revision:
+State _why_ the latter approach wasn't chosen, vague hand waving about this
+being simpler doesn't help the reader understand how unbelievably painful it would
+be to actually get at the module param (I looked briefy, it'd be beyond ugly).
+We can still hand wave a bit, but there should at least be a hint as to why
+option A was chosen instead of option B.
 
-  $ git checkout v2.36.0-rc2 
-  HEAD is now at 11cfe55261 Git 2.36-rc2
-  $ git commit --allow-empty -m foo
-  [detached HEAD 237ee2a6ef] foo
-  $ make
-  GIT_VERSION = 2.36.0.rc2.1.g237ee2a6ef
-  [...]
-  $ sudo make install
-  GIT_VERSION = 2.36.0-rc2
-      CC version.o
+It'd also be helpful to call out what is lost by requiring CAP_SYS_BOOT, because
+again "precision" is rather vague.  The important aspect of loss of precision
+is that a userspace process can't be given access to _just_ the NX module param
+to opt out of the workaround, it needs full reboot permissions.
 
+E.g.
 
+  Ideally, KVM would require userspace to prove it has access to KVM's
+  nx_huge_pages module param, e.g. so that userspace can opt out without
+  needing full reboot permissions.  But getting access to the module param
+  file info is a mess since it's buried in layers of sysfs and module
+  glue, and requiring CAP_SYS_BOOT is sufficient for all known use cases.
+
+> Suggested-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 2 ++
+>  arch/x86/kvm/x86.c             | 9 +++++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 31fb002632bb..021452a9fa91 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -7861,6 +7861,8 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
+>  :Capability KVM_CAP_PMU_CAPABILITY
+>  :Architectures: x86
+>  :Type: vm
+> +:Returns 0 on success, -EPERM if the userspace process does not
+> +	 have CAP_SYS_BOOT
+>  
+>  This capability disables the NX huge pages mitigation for iTLB MULTIHIT.
+>  
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index de1d211f8aa3..8d3d6c48c5ec 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -6081,6 +6081,15 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		mutex_unlock(&kvm->lock);
+>  		break;
+>  	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
+> +		/*
+> +		 * Since the risk of disabling NX hugepages is a guest crashing
+> +		 * the system, ensure the userspace process has permission to
+> +		 * reboot the system.
+> +		 */
+> +		if (!capable(CAP_SYS_BOOT)) {
+> +			r = -EPERM;
+> +			break;
+> +		}
+
+This needs to go with the introduction of the cap.  There is zero reason to create
+a window where the kernel is vulnerable.

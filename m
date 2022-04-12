@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F372A4FD8CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852734FD4E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245039AbiDLIPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S1355620AbiDLIIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355309AbiDLH1Z (ORCPT
+        with ESMTP id S1355318AbiDLH1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:27:25 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA624924E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:07:27 -0700 (PDT)
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kcxbv1gXmzdZLM;
-        Tue, 12 Apr 2022 15:06:51 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E40949264
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:07:29 -0700 (PDT)
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kcxbw3Jm3zdZqC;
+        Tue, 12 Apr 2022 15:06:52 +0800 (CST)
 Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 15:07:25 +0800
+ 15.1.2375.24; Tue, 12 Apr 2022 15:07:26 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 15:07:24 +0800
+ 15.1.2375.24; Tue, 12 Apr 2022 15:07:25 +0800
 From:   Tong Tiangen <tongtiangen@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         James Morse <james.morse@arm.com>,
@@ -43,9 +43,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Xie XiuQi <xiexiuqi@huawei.com>,
         Tong Tiangen <tongtiangen@huawei.com>
-Subject: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to machine check safe
-Date:   Tue, 12 Apr 2022 07:25:50 +0000
-Message-ID: <20220412072552.2526871-5-tongtiangen@huawei.com>
+Subject: [RFC PATCH -next V3 5/6] arm64: add {get, put}_user to machine check safe
+Date:   Tue, 12 Apr 2022 07:25:51 +0000
+Message-ID: <20220412072552.2526871-6-tongtiangen@huawei.com>
 X-Mailer: git-send-email 2.18.0.huawei.25
 In-Reply-To: <20220412072552.2526871-1-tongtiangen@huawei.com>
 References: <20220412072552.2526871-1-tongtiangen@huawei.com>
@@ -64,206 +64,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add copy_{to, from}_user() to machine check safe.
+Add {get, put}_user() to machine check safe.
 
-If copy fail due to hardware memory error, only the relevant processes are
-affected, so killing the user process and isolate the user page with
-hardware memory errors is a more reasonable choice than kernel panic.
+If get/put fail due to hardware memory error, if get/put fail due to
+hardware memory error, only the relevant processes are affected, so killing
+the user process and isolate the user page with hardware memory errors is a
+more reasonable choice than kernel panic.
 
-Add new extable type EX_TYPE_UACCESS_MC which can be used for uaccess that
-can be recovered from hardware memory errors.
+Add new extable type EX_TYPE_UACCESS_MC_ERR_ZERO which can be used for
+uaccess that can be recovered from hardware memory errors. The difference
+from EX_TYPE_UACCESS_MC is that this type also sets additional two target
+register which save error code and value needs to be set zero.
 
 Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 ---
- arch/arm64/include/asm/asm-extable.h | 11 +++++++++++
- arch/arm64/include/asm/asm-uaccess.h | 16 ++++++++++++++++
- arch/arm64/lib/copy_from_user.S      | 15 ++++++++++-----
- arch/arm64/lib/copy_to_user.S        | 25 +++++++++++++++++--------
- 4 files changed, 54 insertions(+), 13 deletions(-)
+ arch/arm64/include/asm/asm-extable.h | 14 ++++++++++++++
+ arch/arm64/include/asm/uaccess.h     |  4 ++--
+ arch/arm64/mm/extable.c              |  3 +++
+ 3 files changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-index c39f2437e08e..8af4e7cc9578 100644
+index 8af4e7cc9578..62eafb651773 100644
 --- a/arch/arm64/include/asm/asm-extable.h
 +++ b/arch/arm64/include/asm/asm-extable.h
-@@ -8,6 +8,9 @@
- #define EX_TYPE_UACCESS_ERR_ZERO	3
- #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
+@@ -10,6 +10,7 @@
  
-+/* _MC indicates that can fixup from machine check errors */
-+#define EX_TYPE_UACCESS_MC		5
-+
+ /* _MC indicates that can fixup from machine check errors */
+ #define EX_TYPE_UACCESS_MC		5
++#define EX_TYPE_UACCESS_MC_ERR_ZERO	6
+ 
  #ifdef __ASSEMBLY__
  
- #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
-@@ -27,6 +30,14 @@
- 	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
- 	.endm
+@@ -75,6 +76,15 @@
+ #define EX_DATA_REG(reg, gpr)						\
+ 	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
  
-+/*
-+ * Create an exception table entry for `insn`, which will branch to `fixup`
-+ * when an unhandled fault(include sea fault) is taken.
-+ */
-+	.macro          _asm_extable_uaccess_mc, insn, fixup
-+	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
-+	.endm
++#define _ASM_EXTABLE_UACCESS_MC_ERR_ZERO(insn, fixup, err, zero)		\
++	__DEFINE_ASM_GPR_NUMS							\
++	__ASM_EXTABLE_RAW(#insn, #fixup,					\
++			  __stringify(EX_TYPE_UACCESS_MC_ERR_ZERO),		\
++			  "("							\
++			    EX_DATA_REG(ERR, err) " | "				\
++			    EX_DATA_REG(ZERO, zero)				\
++			  ")")
 +
- /*
-  * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
-  * do nothing.
-diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
-index 0557af834e03..bb17f0829042 100644
---- a/arch/arm64/include/asm/asm-uaccess.h
-+++ b/arch/arm64/include/asm/asm-uaccess.h
-@@ -92,4 +92,20 @@ alternative_else_nop_endif
+ #define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
+ 	__DEFINE_ASM_GPR_NUMS						\
+ 	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
+@@ -87,6 +97,10 @@
+ #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
+ 	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
  
- 		_asm_extable	8888b,\l;
- 	.endm
 +
-+	.macro user_ldp_mc l, reg1, reg2, addr, post_inc
-+8888:		ldtr	\reg1, [\addr];
-+8889:		ldtr	\reg2, [\addr, #8];
-+		add	\addr, \addr, \post_inc;
++#define _ASM_EXTABLE_UACCESS_MC_ERR(insn, fixup, err)			\
++	_ASM_EXTABLE_UACCESS_MC_ERR_ZERO(insn, fixup, err, wzr)
 +
-+		_asm_extable_uaccess_mc	8888b, \l;
-+		_asm_extable_uaccess_mc	8889b, \l;
-+	.endm
-+
-+	.macro user_ldst_mc l, inst, reg, addr, post_inc
-+8888:		\inst		\reg, [\addr];
-+		add		\addr, \addr, \post_inc;
-+
-+		_asm_extable_uaccess_mc	8888b, \l;
-+	.endm
- #endif
-diff --git a/arch/arm64/lib/copy_from_user.S b/arch/arm64/lib/copy_from_user.S
-index 34e317907524..e32c0747a5f1 100644
---- a/arch/arm64/lib/copy_from_user.S
-+++ b/arch/arm64/lib/copy_from_user.S
-@@ -21,7 +21,7 @@
-  */
+ #define EX_DATA_REG_DATA_SHIFT	0
+ #define EX_DATA_REG_DATA	GENMASK(4, 0)
+ #define EX_DATA_REG_ADDR_SHIFT	5
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index e8dce0cc5eaa..e41b47df48b0 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -236,7 +236,7 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+ 	asm volatile(							\
+ 	"1:	" load "	" reg "1, [%2]\n"			\
+ 	"2:\n"								\
+-	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
++	_ASM_EXTABLE_UACCESS_MC_ERR_ZERO(1b, 2b, %w0, %w1)		\
+ 	: "+r" (err), "=&r" (x)						\
+ 	: "r" (addr))
  
- 	.macro ldrb1 reg, ptr, val
--	user_ldst 9998f, ldtrb, \reg, \ptr, \val
-+	user_ldst_mc 9998f, ldtrb, \reg, \ptr, \val
- 	.endm
+@@ -325,7 +325,7 @@ do {									\
+ 	asm volatile(							\
+ 	"1:	" store "	" reg "1, [%2]\n"			\
+ 	"2:\n"								\
+-	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
++	_ASM_EXTABLE_UACCESS_MC_ERR(1b, 2b, %w0)			\
+ 	: "+r" (err)							\
+ 	: "r" (x), "r" (addr))
  
- 	.macro strb1 reg, ptr, val
-@@ -29,7 +29,7 @@
- 	.endm
+diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+index 5de256a25464..ca7388f3923b 100644
+--- a/arch/arm64/mm/extable.c
++++ b/arch/arm64/mm/extable.c
+@@ -79,6 +79,7 @@ bool fixup_exception(struct pt_regs *regs)
+ 	case EX_TYPE_BPF:
+ 		return ex_handler_bpf(ex, regs);
+ 	case EX_TYPE_UACCESS_ERR_ZERO:
++	case EX_TYPE_UACCESS_MC_ERR_ZERO:
+ 		return ex_handler_uaccess_err_zero(ex, regs);
+ 	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
+ 		return ex_handler_load_unaligned_zeropad(ex, regs);
+@@ -98,6 +99,8 @@ bool fixup_exception_mc(struct pt_regs *regs)
+ 	switch (ex->type) {
+ 	case EX_TYPE_UACCESS_MC:
+ 		return ex_handler_fixup(ex, regs);
++	case EX_TYPE_UACCESS_MC_ERR_ZERO:
++		return ex_handler_uaccess_err_zero(ex, regs);
+ 	}
  
- 	.macro ldrh1 reg, ptr, val
--	user_ldst 9997f, ldtrh, \reg, \ptr, \val
-+	user_ldst_mc 9997f, ldtrh, \reg, \ptr, \val
- 	.endm
- 
- 	.macro strh1 reg, ptr, val
-@@ -37,7 +37,7 @@
- 	.endm
- 
- 	.macro ldr1 reg, ptr, val
--	user_ldst 9997f, ldtr, \reg, \ptr, \val
-+	user_ldst_mc 9997f, ldtr, \reg, \ptr, \val
- 	.endm
- 
- 	.macro str1 reg, ptr, val
-@@ -45,7 +45,7 @@
- 	.endm
- 
- 	.macro ldp1 reg1, reg2, ptr, val
--	user_ldp 9997f, \reg1, \reg2, \ptr, \val
-+	user_ldp_mc 9997f, \reg1, \reg2, \ptr, \val
- 	.endm
- 
- 	.macro stp1 reg1, reg2, ptr, val
-@@ -54,6 +54,7 @@
- 
- end	.req	x5
- srcin	.req	x15
-+esr	.req	x16
- SYM_FUNC_START(__arch_copy_from_user)
- 	add	end, x0, x2
- 	mov	srcin, x1
-@@ -62,7 +63,11 @@ SYM_FUNC_START(__arch_copy_from_user)
- 	ret
- 
- 	// Exception fixups
--9997:	cmp	dst, dstin
-+9997:	mrs esr, esr_el1			// Check exception first
-+	and esr, esr, #ESR_ELx_FSC
-+	cmp esr, #ESR_ELx_FSC_EXTABT
-+	b.eq 9998f
-+	cmp	dst, dstin
- 	b.ne	9998f
- 	// Before being absolutely sure we couldn't copy anything, try harder
- USER(9998f, ldtrb tmp1w, [srcin])
-diff --git a/arch/arm64/lib/copy_to_user.S b/arch/arm64/lib/copy_to_user.S
-index 802231772608..afb53e45a21f 100644
---- a/arch/arm64/lib/copy_to_user.S
-+++ b/arch/arm64/lib/copy_to_user.S
-@@ -20,31 +20,35 @@
-  *	x0 - bytes not copied
-  */
- 	.macro ldrb1 reg, ptr, val
--	ldrb  \reg, [\ptr], \val
-+	1000:	ldrb  \reg, [\ptr], \val
-+	_asm_extable_uaccess_mc 1000b, 9998f;
- 	.endm
- 
- 	.macro strb1 reg, ptr, val
--	user_ldst 9998f, sttrb, \reg, \ptr, \val
-+	user_ldst_mc 9998f, sttrb, \reg, \ptr, \val
- 	.endm
- 
- 	.macro ldrh1 reg, ptr, val
--	ldrh  \reg, [\ptr], \val
-+	1001:	ldrh  \reg, [\ptr], \val
-+	_asm_extable_uaccess_mc 1001b, 9998f;
- 	.endm
- 
- 	.macro strh1 reg, ptr, val
--	user_ldst 9997f, sttrh, \reg, \ptr, \val
-+	user_ldst_mc 9997f, sttrh, \reg, \ptr, \val
- 	.endm
- 
- 	.macro ldr1 reg, ptr, val
--	ldr \reg, [\ptr], \val
-+	1002:	ldr \reg, [\ptr], \val
-+	_asm_extable_uaccess_mc 1002b, 9998f;
- 	.endm
- 
- 	.macro str1 reg, ptr, val
--	user_ldst 9997f, sttr, \reg, \ptr, \val
-+	user_ldst_mc 9997f, sttr, \reg, \ptr, \val
- 	.endm
- 
- 	.macro ldp1 reg1, reg2, ptr, val
--	ldp \reg1, \reg2, [\ptr], \val
-+	1003:	ldp \reg1, \reg2, [\ptr], \val
-+	_asm_extable_uaccess_mc 1003b, 9998f;
- 	.endm
- 
- 	.macro stp1 reg1, reg2, ptr, val
-@@ -53,6 +57,7 @@
- 
- end	.req	x5
- srcin	.req	x15
-+esr	.req	x16
- SYM_FUNC_START(__arch_copy_to_user)
- 	add	end, x0, x2
- 	mov	srcin, x1
-@@ -61,7 +66,11 @@ SYM_FUNC_START(__arch_copy_to_user)
- 	ret
- 
- 	// Exception fixups
--9997:	cmp	dst, dstin
-+9997:	mrs esr, esr_el1			// Check exception first
-+	and esr, esr, #ESR_ELx_FSC
-+	cmp esr, #ESR_ELx_FSC_EXTABT
-+	b.eq 9998f
-+	cmp	dst, dstin
- 	b.ne	9998f
- 	// Before being absolutely sure we couldn't copy anything, try harder
- 	ldrb	tmp1w, [srcin]
+ 	return false;
 -- 
 2.18.0.huawei.25
 

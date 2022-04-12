@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2794FD690
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1C04FD74D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359091AbiDLIdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S1376934AbiDLIuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353533AbiDLHZo (ORCPT
+        with ESMTP id S1358312AbiDLHlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC23D42EFF;
-        Tue, 12 Apr 2022 00:01:06 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A93B45AF0;
+        Tue, 12 Apr 2022 00:17:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 592BA615B4;
-        Tue, 12 Apr 2022 07:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66825C385A1;
-        Tue, 12 Apr 2022 07:01:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F01FD616B2;
+        Tue, 12 Apr 2022 07:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A45C385A5;
+        Tue, 12 Apr 2022 07:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746865;
-        bh=hUN9yw1tKUHXlZHF50cIZfu/c6O6GRL/XpekaWNpOQM=;
+        s=korg; t=1649747863;
+        bh=elrvW3bnbgmA8t2/Ex3dnVBXPkdDaZXV0P4AvBUOFSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oemTtePxwN2ddsEUQ3q4/cZW/GP7ZcCRkcYdoBJsZt2O4YYyYz34DM1DIhfYTVTwK
-         O+Xytdw6DB8GlHZJe/G5uvNBHJyiL/iq2+FSzZxowIjokZ8M9P/Mseq/GYoNJ62OvW
-         U6qt5Z/OPRQ0xasRBoc3EDSGXufZ2OzeyOnRnwJQ=
+        b=csHy5PLqwFSR3rp75KDz5UWKpxODg8a4zWdrtUV0UnClCYbAeRFBGnUL6BPGYUaSH
+         sfmZbY3Y0n9wGmUoZbWnE8zEcShWPCtIl2A+UUO7bCTt/Eez3/Alnq0IhOA6WE+txp
+         cbg4Neu4NhJvRzf4VhFnUNkkCGsydZ/tjTFNsfJY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Jeremy Sowden <jeremy@azazel.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 156/285] scsi: sr: Fix typo in CDROM(CLOSETRAY|EJECT) handling
-Date:   Tue, 12 Apr 2022 08:30:13 +0200
-Message-Id: <20220412062948.173744187@linuxfoundation.org>
+Subject: [PATCH 5.17 196/343] netfilter: bitwise: fix reduce comparisons
+Date:   Tue, 12 Apr 2022 08:30:14 +0200
+Message-Id: <20220412062957.013993867@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+From: Jeremy Sowden <jeremy@azazel.net>
 
-[ Upstream commit bc5519c18a32ce855bb51b9f5eceb77a9489d080 ]
+[ Upstream commit 31818213170caa51d116eb5dc1167b88523b4fe1 ]
 
-Commit 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from
-scsi_ioctl()") seems to have a typo as it is checking ret instead of cmd in
-the if statement checking for CDROMCLOSETRAY and CDROMEJECT.  This changes
-the behaviour of these ioctls as the cdrom_ioctl handling of these is more
-restrictive than the scsi_ioctl version.
+The `nft_bitwise_reduce` and `nft_bitwise_fast_reduce` functions should
+compare the bitwise operation in `expr` with the tracked operation
+associated with the destination register of `expr`.  However, instead of
+being called on `expr` and `track->regs[priv->dreg].selector`,
+`nft_expr_priv` is called on `expr` twice, so both reduce functions
+return true even when the operations differ.
 
-Link: https://lore.kernel.org/r/20220323002242.21157-1-kgroeneveld@lenbrook.com
-Fixes: 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from scsi_ioctl()")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: be5650f8f47e ("netfilter: nft_bitwise: track register operations")
+Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nft_bitwise.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index f5a2eed54345..9f683fed8f2c 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -579,7 +579,7 @@ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+diff --git a/net/netfilter/nft_bitwise.c b/net/netfilter/nft_bitwise.c
+index 7b727d3ebf9d..04bd2f89afe8 100644
+--- a/net/netfilter/nft_bitwise.c
++++ b/net/netfilter/nft_bitwise.c
+@@ -287,7 +287,7 @@ static bool nft_bitwise_reduce(struct nft_regs_track *track,
+ 	if (!track->regs[priv->sreg].selector)
+ 		return false;
  
- 	scsi_autopm_get_device(sdev);
+-	bitwise = nft_expr_priv(expr);
++	bitwise = nft_expr_priv(track->regs[priv->dreg].selector);
+ 	if (track->regs[priv->sreg].selector == track->regs[priv->dreg].selector &&
+ 	    track->regs[priv->dreg].bitwise &&
+ 	    track->regs[priv->dreg].bitwise->ops == expr->ops &&
+@@ -434,7 +434,7 @@ static bool nft_bitwise_fast_reduce(struct nft_regs_track *track,
+ 	if (!track->regs[priv->sreg].selector)
+ 		return false;
  
--	if (ret != CDROMCLOSETRAY && ret != CDROMEJECT) {
-+	if (cmd != CDROMCLOSETRAY && cmd != CDROMEJECT) {
- 		ret = cdrom_ioctl(&cd->cdi, bdev, mode, cmd, arg);
- 		if (ret != -ENOSYS)
- 			goto put;
+-	bitwise = nft_expr_priv(expr);
++	bitwise = nft_expr_priv(track->regs[priv->dreg].selector);
+ 	if (track->regs[priv->sreg].selector == track->regs[priv->dreg].selector &&
+ 	    track->regs[priv->dreg].bitwise &&
+ 	    track->regs[priv->dreg].bitwise->ops == expr->ops &&
 -- 
 2.35.1
 

@@ -2,42 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AFC4FDC49
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D5F4FDC58
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347760AbiDLKSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S1379773AbiDLKTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356814AbiDLJzS (ORCPT
+        with ESMTP id S1356807AbiDLJzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 05:55:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4ED11C08
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:58:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DAED1570;
-        Tue, 12 Apr 2022 01:58:43 -0700 (PDT)
-Received: from bogus (unknown [10.57.41.152])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EF7A3F5A1;
-        Tue, 12 Apr 2022 01:58:42 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 09:58:39 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Qing Wang <wangqing@vivo.com>, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arch_topology: Do not set llc_sibling if llc_id is
- invalid
-Message-ID: <20220412085839.hkpyookqdl6bcjbn@bogus>
-References: <1649644580-54626-1-git-send-email-wangqing@vivo.com>
- <CAHp75Vc-frdJSAMxK1YpHwmPa_-0fTpRxq=QObcux3Jt=5+9kw@mail.gmail.com>
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE2111C23
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:58:50 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c10so5567674wrb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=CPUP1Iq5fK/bmBgD1XCDK9cdQZsBkT+LUZqC6FIYBEk=;
+        b=ej+a3pcQfnw/MAwQO1KUZl+/MzVf9OjlW3toLX+V5ZSuj6Lygh+c53bbo4I0FoV8/a
+         p8vakm0Jsw3ksH8U50KlfPdIlpLfa7owB0utMqfTJJqho+MpEgpubq/ic8KcX9sig5v2
+         5PFZnLin2hJonUxw1sJ83AYtUmG9nzttIF+8MPSDAmTB6/5DoGzMePQGAzjTKjCKmU9J
+         odRpwIOgtfuS3i1OiXnWCKw2VlC28PkjI/SPSFsfqh3jtmGyxC51bDyFNAYxafhLn+Mj
+         2pgNVO1ZuF/1N3XZJETFpkBxoXbwy0LeF5SFvKQEr3ttl18GC/NavN60TWVeTDtaDrMr
+         LWfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=CPUP1Iq5fK/bmBgD1XCDK9cdQZsBkT+LUZqC6FIYBEk=;
+        b=s1YUbxV/fMlkDEFi8PVVeQZjvGZDh5RgJBOz+o3ZY2Ut7/V2YHDuz5vswsPOIyhNO7
+         B0IMdf9kmElu39B6uYBCpV/9pQMaruyWkTw/DYKxAxKmlVOlSs+bZnykS6Xy8Oqsigb+
+         mBBt8CLjaPzJE2nGHa94mRv/UrDWGxm74Xg5Whzo0ZKKZ0V16DhfBA68Mf0+zBTRpNEt
+         eWCEWIK8y+/1v15WmhFzcU3/6ZxDX2ClIGCcH3gf/yd+xL94SYEnSSlIWcer9grZsQZM
+         Zs6Tm8qEURIJ9DhsVvWIqFG/NUa4O1VUQ/WmxP909Rfsrp9TnFW65W9TkKrN5zhoML08
+         Yfrw==
+X-Gm-Message-State: AOAM531nefx0IC8Uc7LmK6nM+8hVMIQMKnZXDi8Yg72jE4zGBkYOvcH/
+        F6VIRDpXdUckWsV56snv6TIKbQ==
+X-Google-Smtp-Source: ABdhPJyoMN7KH4PRi34uNSYqnK6SmghZOUl9xoVGecU6nVJPgukZNVMMheGJqnwEunGq2o9JuaTtOw==
+X-Received: by 2002:a5d:64ae:0:b0:207:8830:fa57 with SMTP id m14-20020a5d64ae000000b002078830fa57mr19642993wrp.272.1649753928432;
+        Tue, 12 Apr 2022 01:58:48 -0700 (PDT)
+Received: from vingu-book ([2a01:e0a:f:6020:8808:91f3:6692:66dd])
+        by smtp.gmail.com with ESMTPSA id i9-20020a5d5849000000b002058631cfacsm29504199wrf.61.2022.04.12.01.58.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Apr 2022 01:58:47 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 10:58:45 +0200
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Kuyo Chang <kuyo.chang@mediatek.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/1] sched/pelt: Refine the enqueue_load_avg calculate
+ method
+Message-ID: <20220412085845.GA14088@vingu-book>
+References: <20220411061702.22978-1-kuyo.chang@mediatek.com>
+ <CAKfTPtAyhc-tAWXmXcHstmiBSMjj5GENizX__KRDab28NRum1A@mail.gmail.com>
+ <5a90b20570ecacf457f68da7a106d3b2f8c2269e.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vc-frdJSAMxK1YpHwmPa_-0fTpRxq=QObcux3Jt=5+9kw@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a90b20570ecacf457f68da7a106d3b2f8c2269e.camel@mediatek.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,46 +86,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 06:07:45PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 11, 2022 at 12:10 PM Qing Wang <wangqing@vivo.com> wrote:
-> >
-> > From: Wang Qing <wangqing@vivo.com>
-> >
-> > When ACPI is not enabled, cpuid_topo->llc_id = cpu_topo->llc_id = -1, which
-> > will set llc_sibling 0xff(...), this is misleading.
+Le mardi 12 avril 2022 à 10:51:23 (+0800), Kuyo Chang a écrit :
+> On Mon, 2022-04-11 at 10:39 +0200, Vincent Guittot wrote:
+> > On Mon, 11 Apr 2022 at 08:17, Kuyo Chang <kuyo.chang@mediatek.com>
+> > wrote:
+> > > 
+> > > From: kuyo chang <kuyo.chang@mediatek.com>
+> > > 
+> > > I meet the warning message at cfs_rq_is_decayed at below code.
+> > > 
+> > > SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+> > >                     cfs_rq->avg.util_avg ||
+> > >                     cfs_rq->avg.runnable_avg)
+> > > 
+> > > Following is the calltrace.
+> > > 
+> > > Call trace:
+> > > __update_blocked_fair
+> > > update_blocked_averages
+> > > newidle_balance
+> > > pick_next_task_fair
+> > > __schedule
+> > > schedule
+> > > pipe_read
+> > > vfs_read
+> > > ksys_read
+> > > 
+> > > After code analyzing and some debug messages, I found it exits a
+> > > corner
+> > > case at attach_entity_load_avg which will cause load_sum is zero
+> > > and
+> > > load_avg is not.
+> > > Consider se_weight is 88761 according by sched_prio_to_weight
+> > > table.
+> > > And assume the get_pelt_divider() is 47742, se->avg.load_avg is 1.
+> > > By the calculating for se->avg.load_sum as following will become
+> > > zero
+> > > as following.
+> > > se->avg.load_sum =
+> > >         div_u64(se->avg.load_avg * se->avg.load_sum,
+> > > se_weight(se));
+> > > se->avg.load_sum = 1*47742/88761 = 0.
+> > 
+> > The root problem is there, se->avg.load_sum must not be null if
+> > se->avg.load_avg is not null because the correct relation between
+> > _avg
+> > and _sum is:
+> > 
+> > load_avg = weight * load_sum / divider.
+> > 
+> > so the fix should be attach_entity_load_avg() and probably the below
+> > is enough
+> > 
+> > se->avg.load_sum = div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se)) + 1;
 > 
-> Shouldn't it be a Fixes tag then?
->
-
-I thought about that. One the file has moved and lot of refactoring before the
-move after the code was first introduced. Since no one has seen any issues as
-the mask matches all the CPUs on a single chip SoC and this is not user visible,
-I didn't push for the fixes tag.
-
-Anyways the original commit introducing the feature is
-Commit 37c3ec2d810f ("arm64: topology: divorce MC scheduling domain from core_siblings")
-which was merged in v4.18 if I read git log correctly.
-
-I am happy to backport if needed.
-
-> > Don't set llc_sibling(default 0) if we don't know the cache topology.
+> Thanks for your kindly suggestion.
+> +1 would make the calcuation for load_sum may be overestimate?
+> How about the below code make sense for fix the corner case?
 > 
-> ...
-> 
-> > -               if (cpuid_topo->llc_id == cpu_topo->llc_id) {
-> > +               if (cpu_topo->llc_id != -1 && cpuid_topo->llc_id == cpu_topo->llc_id) {
-> 
-> I'm wondering if more strict check is better here, i.e.
-> 
->                if (cpu_topo->llc_id >= 0 && cpuid_topo->llc_id ==
-> cpu_topo->llc_id) {
->
+> --- 
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3832,7 +3832,8 @@ static void attach_entity_load_avg(struct cfs_rq
+> *cfs_rq, struct sched_entity *s
+>  	se->avg.load_sum = divider;
+>  	if (se_weight(se)) {
+>  		se->avg.load_sum =
+> -			div_u64(se->avg.load_avg * se->avg.load_sum,
+> se_weight(se));
+> +			(se->avg.load_avg * se->avg.load_sum >
+> se_weight(se)) ?
+> +			div_u64(se->avg.load_avg * se->avg.load_sum,
+> se_weight(se)) : 1;
+>  	}
+>  
+>  	enqueue_load_avg(cfs_rq, se);
+> -- 
+> 2.18.0
 
-Yes I would agree. But I think Qing is just following other similar checks in
-the file. All such ids are initialised to -1 and are assigned only valid
-values >= 0. I am OK to keep it as is to keep it aligned with other similar
-checks.
+In this case, the below is easier to read
 
--- 
-Regards,
-Sudeep
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 1658a9428d96..2c685474db23 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3836,10 +3836,12 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+
+        se->avg.runnable_sum = se->avg.runnable_avg * divider;
+
+-       se->avg.load_sum = divider;
+-       if (se_weight(se)) {
++       se->avg.load_sum = se->avg.load_avg * divider;
++       if (se_weight(se) < se->avg.load_sum) {
+                se->avg.load_sum =
+-                       div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
++                       div_u64(se->avg.load_sum, se_weight(se));
++       } else {
++               se->avg.load_sum = 1;
+        }
+
+        enqueue_load_avg(cfs_rq, se);
+
+
+
+> 
+> 
+> > > 
+> > > After enqueue_load_avg code as below.
+> > > cfs_rq->avg.load_avg += se->avg.load_avg;
+> > > cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > > 
+> > > Then the load_sum for cfs_rq will be 1 while the load_sum for
+> > > cfs_rq is 0.
+> > > So it will hit the warning message.
+> > > 
+> > > After all, I refer the following commit patch to do the similar
+> > > thing at
+> > > enqueue_load_avg.
+> > > sched/pelt: Relax the sync of load_sum with load_avg
+> > > 
+> > > After long time testing, the kernel warning was gone and the system
+> > > runs
+> > > as well as before.
+> > > 
+> > > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+> > > ---
+> > >  kernel/sched/fair.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index d4bd299d67ab..30d8b6dba249 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -3074,8 +3074,10 @@ account_entity_dequeue(struct cfs_rq
+> > > *cfs_rq, struct sched_entity *se)
+> > >  static inline void
+> > >  enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> > >  {
+> > > -       cfs_rq->avg.load_avg += se->avg.load_avg;
+> > > -       cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > > +       add_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+> > > +       add_positive(&cfs_rq->avg.load_sum, se_weight(se) * se-
+> > > >avg.load_sum);
+> > > +       cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
+> > > +                                         cfs_rq->avg.load_avg *
+> > > PELT_MIN_DIVIDER);
+> > >  }
+> > > 
+> > >  static inline void
+> > > --
+> > > 2.18.0
+> > > 
+> 

@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C5F4FCBDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4773E4FCBDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244677AbiDLBZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S244800AbiDLB12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiDLBZt (ORCPT
+        with ESMTP id S232253AbiDLB10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:25:49 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0897319C31
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:23:32 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id f38so30577183ybi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:23:31 -0700 (PDT)
+        Mon, 11 Apr 2022 21:27:26 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D571A82A
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:25:10 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h5so14789373pgc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 18:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JMm7jrb08dwa4TNW9El0B969rP5rs/JZ0el348oYQhg=;
-        b=hqpTdL0QATE2nRBZcg9/sARzvk++crfDpAB0EJ8/t3kvFMRc3oOYdwDiaMQclM51yq
-         dzbn/LyreN2tZmKHjMv444GCF9WOcrieYOATDxHNqefI7RT29WEgN+rEhl6MENEbGKQx
-         aMlWfUypfPV1zRZtWmrvvbEsAq2B3dkKWWdNCHiOm1TToXulgzLplLkIFVr9QSiZ5Pgh
-         KBzIf/EjkbuUd37WBrSVsJj9g5uUe2YEu7c3dkFSqdO2H6NpCw6HnIm0TrbDp42Ty2DA
-         CRT0rr69UcO5H4E3HKJMs0thlWixD26F/vmyyApHfhJzRbLdjkviycao4CsfAiMgEDLA
-         0P/g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qLkG0TlTkLtkn7/YDi2Nz0t09sVP5EaquDCxlZc7iVE=;
+        b=qtFpfnhXLPAMO82Aps6yxmMJSr67hbNkkZXmdGS/KL8Y8KczxORah8E8wSDUtYFOZd
+         IAJGjfeySrEbHSuM15fwAqUB02UhRrzMTbEZ0JNup0o0cPQ5whA0/l6r5uJlqLUMJYG1
+         su6lWltTtv6nf/kmK6rT0z4bg8JrODCn8066McpWbQnVVMOopX5xV0KjOoFOSbd9aXMS
+         2TFmU4KP31uZqaluiZ2MYgg48UrBYipcv5WPua4VJF3j3wu4AERnN4paFhyAdATlZGCz
+         ypoFhTAwNJELuKspm1q/0GWfl/+jIDq8bJ9Dq4YDo3SJhJno/7NT5xCM1JTM62op7pDa
+         UG7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JMm7jrb08dwa4TNW9El0B969rP5rs/JZ0el348oYQhg=;
-        b=RTOBHBCJK6iBkCL6CpjVsItlLK9tTyX09j7+ecJyj7UsI+ZrMm+84RODQ7BAxPcgIe
-         x0Tp3Z2n0PAXxU2hmwZpsCi6djvUyYaRjgW51vvhPeHuwavk6zQOLSOshj1bWTgfF9iI
-         VTQ9DnVC+KpR5DR4oZVlHEujxgGFjr+yr+yf5z0t43gKxoz1wlmBNmws9jKpmJDJS/V+
-         Su3jT4vwQdXmS6T9dX23aV57o86/MgHMqgXg9MMBdwbDpfvqiqO/ZZKx430nGTZzF5EC
-         WuYUmSck64Qc8nj9Hb/U85iAiXq2Nii2BYImiwPWtYIW8dry5rMK0xxAa+rJRFTvzO3I
-         aEqA==
-X-Gm-Message-State: AOAM532URJgF/MSP3I6NTLIL64/ZeyN3zQ+tKbOBE5BwUOlM3RfZekAF
-        z6DazY4gdh3HYdoIZoQ7vF6JmU9xu/PqrD4Gyi5jpQ==
-X-Google-Smtp-Source: ABdhPJzhyGVLD2eepDvh6uu3m30+OPZpilHLd2y8VLOCgnkpfz9DZ2joQY+Mpf2bKwX0YZbTioWQ8AmeZ5BkhBp3NSI=
-X-Received: by 2002:a25:41cf:0:b0:641:1857:ac7c with SMTP id
- o198-20020a2541cf000000b006411857ac7cmr11832405yba.281.1649726610934; Mon, 11
- Apr 2022 18:23:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qLkG0TlTkLtkn7/YDi2Nz0t09sVP5EaquDCxlZc7iVE=;
+        b=fqjCxqz7R0SCYqs7RDb90KShiZrpxR9NgzleSMXwItlODPUuAZg7vkUE2j/lDB7Tka
+         O0pQuO/xt1Y1PiCTg/NkKsM0Nes8i8Cz3kd+m1WNWK6sg7cLqVTXh2txob6g636JzAo8
+         wp8nyTDtQUkQnAbvyiZUybLLStWoIUHuh3Vzvq8ZwIqRrarufgyBY+brXAxpwETwleYG
+         j6+FsJdIhalv4e5VDSqAKRioEm6Rra7yWXucoi+hTpKhY4cViRNxM700bhud3aD3POvB
+         vhSsvmgnqv4gSd570+dH4Elt+Yu/ays0zLy2Z3T1AlS5OBM42fLhpsoWF9Z3j56b6YdM
+         fRPQ==
+X-Gm-Message-State: AOAM530vm2ihNUwUvsxhf7wF5F0FksCXjiiyV9ZA0If93aZ+hieTB0Yw
+        qLX14YMYS2jzsom8AO4JHyPRxA==
+X-Google-Smtp-Source: ABdhPJx7pt1bxVJmlx1dwnHe4fO6l3jJivv3igbrMW3nFY6RPvJVoTAnmhVy0/cSdpzFZAh2BeRonA==
+X-Received: by 2002:a63:1543:0:b0:39d:9729:1992 with SMTP id 3-20020a631543000000b0039d97291992mr536239pgv.155.1649726709466;
+        Mon, 11 Apr 2022 18:25:09 -0700 (PDT)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id e14-20020a62aa0e000000b00505c05545f8sm4916521pff.108.2022.04.11.18.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 18:25:08 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 01:25:05 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v4 04/10] KVM: selftests: Read binary stat data in lib
+Message-ID: <YlTU8YXmoLED1VHC@google.com>
+References: <20220411211015.3091615-1-bgardon@google.com>
+ <20220411211015.3091615-5-bgardon@google.com>
 MIME-Version: 1.0
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com> <20220409135104.3733193-2-wuyun.abel@bytedance.com>
-In-Reply-To: <20220409135104.3733193-2-wuyun.abel@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 11 Apr 2022 18:23:20 -0700
-Message-ID: <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
-Subject: Re: [RFC v2 1/2] sched/fair: filter out overloaded cpus in SIS
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411211015.3091615-5-bgardon@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -69,149 +80,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
+On Mon, Apr 11, 2022, Ben Gardon wrote:
+> Move the code to read the binary stats data to the KVM selftests
+> library. It will be re-used by other tests to check KVM behavior.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
 
-Thanks for the patch, a few comments:
-
->  /*
-> + * It would be very unlikely to find an unoccupied cpu when system is heavily
-> + * overloaded. Even if we could, the cost might bury the benefit.
-> + */
-> +static inline bool sched_domain_overloaded(struct sched_domain *sd, int nr_overloaded)
-> +{
-> +       return nr_overloaded > sd->span_weight - (sd->span_weight >> 4);
-> +}
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |  3 +++
+>  .../selftests/kvm/kvm_binary_stats_test.c     | 20 +++++-------------
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 21 +++++++++++++++++++
+>  3 files changed, 29 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index c5f34551ff76..b2684cfc2cb1 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -405,6 +405,9 @@ struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
+>  					  struct kvm_stats_header *header);
+>  void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
+>  			struct kvm_stats_desc *stats_desc);
+> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> +		   struct kvm_stats_desc *desc, uint64_t *data,
+> +		   ssize_t max_elements);
+>  
+>  uint32_t guest_get_vcpuid(void);
+>  
+> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> index e4795bad7db6..97b180249ba0 100644
+> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> @@ -20,6 +20,8 @@
+>  #include "asm/kvm.h"
+>  #include "linux/kvm.h"
+>  
+> +#define STAT_MAX_ELEMENTS 1000
 > +
-> +/*
->   * Scan the LLC domain for idle CPUs; this is dynamically regulated by
->   * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
->   * average idle time for this rq (as found in rq->avg_idle).
-> @@ -6291,7 +6300,7 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->  static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
+>  static void stats_test(int stats_fd)
 >  {
->         struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
-> +       int i, cpu, idle_cpu = -1, nr = INT_MAX, nro;
->         struct rq *this_rq = this_rq();
->         int this = smp_processor_id();
->         struct sched_domain *this_sd;
-> @@ -6301,7 +6310,13 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->         if (!this_sd)
->                 return -1;
->
-> +       nro = atomic_read(&sd->shared->nr_overloaded);
-> +       if (sched_domain_overloaded(sd, nro))
-> +               return -1;
-
-This early bail out doesn't seem to be related to the main idea of
-your patch. Apart from deciding the exact heuristic value for what is
-considered too unlikely to find an idle cpu, this doesn't work well
-with tasks constrained by affinity; a task may have a small affinity
-mask containing idle cpus it may wake onto, even if most of the node
-is overloaded.
-
->         cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
-> +       if (nro)
-> +               cpumask_andnot(cpus, cpus, sdo_mask(sd->shared));
-
-To prevent us from exhausting our search attempts too quickly, this
-only needs to go under the sched_feat(SIS_PROP) && !has_idle_core case
-below. But by doing this unconditionally here, I guess your secondary
-goal is to reduce total search cost in both cases. Just wondering, did
-you observe significant time spent here that you are trying to
-optimize? By reducing our search space by the overload mask, it is
-important that the mask is relatively up to date, or else we could
-miss an opportunity to find an idle cpu.
-
->         if (sched_feat(SIS_PROP) && !has_idle_core) {
->                 u64 avg_cost, avg_idle, span_avg;
-> @@ -7018,6 +7033,51 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->
->         return newidle_balance(rq, rf) != 0;
+>  	ssize_t ret;
+> @@ -29,7 +31,7 @@ static void stats_test(int stats_fd)
+>  	struct kvm_stats_header header;
+>  	char *id;
+>  	struct kvm_stats_desc *stats_desc;
+> -	u64 *stats_data;
+> +	u64 stats_data[STAT_MAX_ELEMENTS];
+>  	struct kvm_stats_desc *pdesc;
+>  
+>  	/* Read kvm stats header */
+> @@ -130,25 +132,13 @@ static void stats_test(int stats_fd)
+>  			pdesc->offset, pdesc->name);
+>  	}
+>  
+> -	/* Allocate memory for stats data */
+> -	stats_data = malloc(size_data);
+> -	TEST_ASSERT(stats_data, "Allocate memory for stats data");
+> -	/* Read kvm stats data as a bulk */
+> -	ret = pread(stats_fd, stats_data, size_data, header.data_offset);
+> -	TEST_ASSERT(ret == size_data, "Read KVM stats data");
+>  	/* Read kvm stats data one by one */
+> -	size_data = 0;
+>  	for (i = 0; i < header.num_desc; ++i) {
+>  		pdesc = (void *)stats_desc + i * size_desc;
+> -		ret = pread(stats_fd, stats_data,
+> -				pdesc->size * sizeof(*stats_data),
+> -				header.data_offset + size_data);
+> -		TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
+> -				"Read data of KVM stats: %s", pdesc->name);
+> -		size_data += pdesc->size * sizeof(*stats_data);
+> +		read_stat_data(stats_fd, &header, pdesc, stats_data,
+> +			       ARRAY_SIZE(stats_data));
+>  	}
+>  
+> -	free(stats_data);
+>  	free(stats_desc);
+>  	free(id);
+>  }
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index e3ae26fbef03..64e2085f1129 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2593,3 +2593,24 @@ void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
+>  	TEST_ASSERT(ret == stats_descs_size(header),
+>  		    "Read KVM stats descriptors");
 >  }
 > +
-> +static inline bool cfs_rq_overloaded(struct rq *rq)
+> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> +		   struct kvm_stats_desc *desc, uint64_t *data,
+> +		   ssize_t max_elements)
 > +{
-> +       return rq->cfs.h_nr_running - rq->cfs.idle_h_nr_running > 1;
+> +	ssize_t ret;
+> +
+> +	TEST_ASSERT(desc->size <= max_elements,
+> +		    "Max data elements should be at least as large as stat data");
+> +
+> +	ret = pread(stats_fd, data, desc->size * sizeof(*data),
+> +		    header->data_offset + desc->offset);
+
+hmm, by checking the comments in kvm.h, I cannot infer desc->offset
+should be added with header->data_offset. So, could you add the
+following commit into your series. I feel that we need to improve
+readability a little bit. Existing comments for kvm_stats_desc is not
+quite helpful for users.
+
+From: Mingwei Zhang <mizhang@google.com>
+Date: Tue, 12 Apr 2022 01:09:10 +0000
+Subject: [PATCH] KVM: stats: improve readability of kvm_stats_header and
+ kvm_stats_desc
+
+Some comments on these data structures are not quite helpful from user
+perspective. For instance, kvm_stats_header->name_size was shared across
+all stats. This might be a little bit counter-intuitive, since each stat
+should have a different name length. So it has to be the maximum length of
+the stats string. We cannot infer that by just reading the comments without
+going through the implementation. In addition, kvm_stat_desc->offset is a
+relative offset base on kvm_stats_header->data_offset. It is better to call
+it out clearly in comments.
+
+Update the comments of the fields in these two data structures.
+
+Cc: Jing Zhang <zhangjingos@google.com>
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ include/uapi/linux/kvm.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 5c0d7c77e9bd..986728b5b3fb 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1987,7 +1987,7 @@ struct kvm_dirty_gfn {
+ /**
+  * struct kvm_stats_header - Header of per vm/vcpu binary statistics data.
+  * @flags: Some extra information for header, always 0 for now.
+- * @name_size: The size in bytes of the memory which contains statistics
++ * @name_size: The maximum size in bytes of the memory which contains statistics
+  *             name string including trailing '\0'. The memory is allocated
+  *             at the send of statistics descriptor.
+  * @num_desc: The number of statistics the vm or vcpu has.
+@@ -2042,7 +2042,8 @@ struct kvm_stats_header {
+  * @size: The number of data items for this stats.
+  *        Every data item is of type __u64.
+  * @offset: The offset of the stats to the start of stat structure in
+- *          structure kvm or kvm_vcpu.
++ *          structure kvm or kvm_vcpu. When using it, add its value with
++ *          kvm_stats_header->data_offset.
+  * @bucket_size: A parameter value used for histogram stats. It is only used
+  *		for linear histogram stats, specifying the size of the bucket;
+  * @name: The name string for the stats. Its size is indicated by the
+
+base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
+--
+2.35.1.1178.g4f1659d476-goog
+> +
+> +	/* ret from pread is in bytes. */
+> +	ret = ret / sizeof(*data);
+> +
+> +	TEST_ASSERT(ret == desc->size,
+> +		    "Read data of KVM stats: %s", desc->name);
+> +
+> +	return ret;
 > +}
-
-Why > 1 instead of > 0? If a cpu is running 1 non-idle task and any
-number of idle tasks, I'd think it is still "occupied" in the way
-you've defined. We'd want to steer wakeups to cpus running 0 non-idle
-tasks.
-
-> +static void update_overload_status(struct rq *rq)
-> +{
-> +       struct sched_domain_shared *sds;
-> +       bool overloaded = cfs_rq_overloaded(rq);
-> +       int cpu = cpu_of(rq);
-> +
-> +       lockdep_assert_rq_held(rq);
-> +
-> +       if (rq->overloaded == overloaded)
-> +               return;
-> +
-> +       rcu_read_lock();
-> +       sds = rcu_dereference(per_cpu(sd_llc_shared, cpu));
-> +       if (unlikely(!sds))
-> +               goto unlock;
-> +
-> +       if (overloaded) {
-> +               cpumask_set_cpu(cpu, sdo_mask(sds));
-> +               atomic_inc(&sds->nr_overloaded);
-> +       } else {
-> +               cpumask_clear_cpu(cpu, sdo_mask(sds));
-> +               atomic_dec(&sds->nr_overloaded);
-> +       }
-
-Why are these cpu mask writes not atomic?
-
-> +
-> +       rq->overloaded = overloaded;
-> +unlock:
-> +       rcu_read_unlock();
-> +}
-> +
-> +#else
-> +
-> +static inline void update_overload_status(struct rq *rq) { }
-> +
->  #endif /* CONFIG_SMP */
->
->  static unsigned long wakeup_gran(struct sched_entity *se)
-> @@ -7365,6 +7425,8 @@ done: __maybe_unused;
->         if (new_tasks > 0)
->                 goto again;
->
-> +       update_overload_status(rq);
-> +
->         /*
->          * rq is about to be idle, check if we need to update the
->          * lost_idle_time of clock_pelt
-> @@ -11183,6 +11245,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
->         if (static_branch_unlikely(&sched_numa_balancing))
->                 task_tick_numa(rq, curr);
->
-> +       update_overload_status(rq);
->         update_misfit_status(curr, rq);
->         update_overutilized_status(task_rq(curr));
-
-I'd caution about using task_tick and pick_next_task_fair as the
-places we set and clear overload.
-
-Some issues with task_tick:
-- ticks may be disabled in NO_HZ_FULL (an issue if we define overload
-as > 0 non-idle tasks)
-- most ticks will have the same state, so somewhat redundant checking.
-Could use an edge based trigger instead, such as enqueue/dequeue
-(somewhat similar to rq->rd->overload).
-
-With pick_next_task_fair():
-- there's a window between a thread dequeuing, and then scheduler
-running through to the end of pick_next_task_fair(), during which we
-falsely observe the cpu as overloaded
-- this breaks with core scheduling, since we may use pick_task_fair
-rather than pick_next_task_fair
-
-Thanks,
-Josh
+> -- 
+> 2.35.1.1178.g4f1659d476-goog
+> 

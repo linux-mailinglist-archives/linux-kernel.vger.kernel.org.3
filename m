@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AB74FD4C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7841E4FDA28
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiDLHax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S1353624AbiDLHeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351840AbiDLHNA (ORCPT
+        with ESMTP id S1351884AbiDLHND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5C117E1D;
-        Mon, 11 Apr 2022 23:53:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC5691570;
-        Mon, 11 Apr 2022 23:53:23 -0700 (PDT)
-Received: from [10.57.11.184] (unknown [10.57.11.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 137983F73B;
-        Mon, 11 Apr 2022 23:53:20 -0700 (PDT)
-Message-ID: <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
-Date:   Tue, 12 Apr 2022 07:53:19 +0100
+        Tue, 12 Apr 2022 03:13:03 -0400
+Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 4A2B51039
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:53:56 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1649746436; h=Content-Type: MIME-Version: Message-ID:
+ Subject: Subject: Cc: To: To: From: From: Date: Sender: Sender;
+ bh=CrnCIOfBYIadE7ysir0roGXoerEsn51pLccKc9in+ho=; b=B84pj8byG97/6sREz8dXyQmXfxoTyVEb4TUhkye9oN7xDHe4y6Io8XSMi7ck4WkLnm06pz1C
+ +zgA7A5bGiPNUCx4i7Zp3cJAAuUKxRDF/jo/bdOgMvzpBZRPuvcDhvymKUmDFyJgIzAOhIWh
+ gMojPk3ySj9G+fOiUznM+cdtMkduke3smoAwwtfD5w2FiQegpxmIKfOhZz3ZjljtyA2f31wI
+ 5IQ+FbeHKsOsZ3Tj6YWgD9+3PBRZNWVU52hd7IfhuOrfLEaz3TAOwULfMumVcTzh6ihEEB2o
+ VEsC2b01n/uAJqfFrLQFuJLFNreAcJoA4JD39biq+vLYX8EpUjf18Q==
+X-Mailgun-Sending-Ip: 159.135.228.62
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from AN5Bruno (186-250-90-1.mhnet.com.br [186.250.90.1]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 62552202225c469082002d64 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Tue, 12 Apr 2022 06:53:54 GMT
+Sender: codeagain@codeagain.dev
+Date:   Tue, 12 Apr 2022 03:53:46 -0300
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: [PATCH v2 0/3] staging: vme: Restructuring menuconfig and tree
+Message-ID: <cover.1649721450.git.codeagain@codeagain.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     rafael@kernel.org
-Cc:     dietmar.eggemann@arm.com, Pierre.Gondois@arm.com,
-        ionela.voinescu@arm.com, viresh.kumar@linaro.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
-        sudeep.holla@arm.com, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20220321095729.20655-1-lukasz.luba@arm.com>
- <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
-In-Reply-To: <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mnzhopgrmzo5kgdj"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
 
-gentle ping. If you need some help with this maintenance,
-we can help.
+--mnzhopgrmzo5kgdj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Lukasz
+This patch series modify the vme_user driver's place in
+menuconfig (1/3), fixes a missing `depends on` line in a Kconfig file
+(2/3), and rearrages the directory tree for the driver allowing a more
+straightforward comprehension of its contents (3/3).
 
-On 4/4/22 13:35, Lukasz Luba wrote:
-> Hi Rafael,
-> 
-> 
-> The patch set has been on LKML for quite a while and got one ACK,
-> for the code touching something outside the EM (thermal cooling).
-> 
-> AFAICS there is no interest and objections from others for this code.
-> 
-> Therefore, I have a question:
-> What would be be process to have merge this code?
-> (We had internally a few reviews of this code)
-> 
-> On 3/21/22 09:57, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set adds new callback and support for artificial Energy 
->> Model (EM).
->> The new EMs have artificially generated performance states.
->> Such EMs can be created from lean information sources, such
->> as the relative energy efficiency between CPUs. The ACPI based
->> platforms provide this information
->> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
->> 'Processor Power efficiency Class' field).
->>
->> Artificial EMs might require to directly provide the 'cost' of
->> the generated performance state. This patch set adds a new callback
->> .get_cost() for this. The EM framework does not force any model
->> or formula, it's up to the platform code.
->>
->> Artificial EMs aim to leverage the Energy Aware Scheduler
->> (EAS). Other frameworks relying on performance states
->> information (i.e. IPA/DTPM) must be informed of the
->> EM type and might be prevented from using it. This patch
->> sets also does this by introducing a new flag:
->> EM_PERF_DOMAIN_ARTIFICIAL.
->>
->> The patch set is based on current linux-next, where some
->> changes to OPP & EM are queuing.
->>
->> The patch set also contains (patch 7/8 and patch 8/8) logic which 
->> prevents
->> two EM's client frameworks from using this new EM type. Some other 
->> approach,
->> using 'milli-watts', has been proposed and discussed, but refused [1].
->> This new flag is more precised and should not leave space for
->> wrong interpretation.
->>
->> Shortly after this patch set you will see a patch set implementing the
->> platform code and registering this new EM.
->>
-> 
-> 
-> No one from Arm is an official maintainer of the EM code.
-> 
-> Regards,
-> Lukasz
+Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+
+Bruno Moreira-Guedes (3):
+  staging: vme: Adjusted VME_USER in Kconfig
+  staging: vme: Fix missing `depends on` at KConfig
+  staging: vme: "drivers/staging/vme" tree cleanup
+
+ MAINTAINERS                                          | 2 +-
+ drivers/staging/Kconfig                              | 2 ++
+ drivers/staging/Makefile                             | 2 +-
+ drivers/staging/vme/Makefile                         | 2 --
+ drivers/staging/{vme/devices =3D> vme_user}/Kconfig    | 2 +-
+ drivers/staging/{vme/devices =3D> vme_user}/Makefile   | 0
+ drivers/staging/{vme/devices =3D> vme_user}/vme_user.c | 0
+ drivers/staging/{vme/devices =3D> vme_user}/vme_user.h | 0
+ drivers/vme/Kconfig                                  | 2 --
+ 9 files changed, 5 insertions(+), 7 deletions(-)
+ delete mode 100644 drivers/staging/vme/Makefile
+ rename drivers/staging/{vme/devices =3D> vme_user}/Kconfig (93%)
+ rename drivers/staging/{vme/devices =3D> vme_user}/Makefile (100%)
+ rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.c (100%)
+ rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.h (100%)
+
+--=20
+2.35.1
+
+
+--mnzhopgrmzo5kgdj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYlUh+gAKCRAZtd3tyEY2
+kpMsAP9wfC+zTcnd/S0kjFyUc8rojGzBJsHhIx8Rwq6YXQIMKAD/R7hm08SbS5TE
+/RoiuhqA54lIdJKL4fT/SqEMEvMtpwo=
+=SnJU
+-----END PGP SIGNATURE-----
+
+--mnzhopgrmzo5kgdj--

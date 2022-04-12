@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF984FE796
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C064FE7AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354981AbiDLSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S1358642AbiDLSNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352428AbiDLSGp (ORCPT
+        with ESMTP id S1358646AbiDLSNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:06:45 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36C914012
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:04:25 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c23so17529683plo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Uk7HGQjUL7qBYUmyOj8OBJBQSHFN+LzVXSnG4qGNbTE=;
-        b=jFr35tndWJ0nAVVDICGQAaEYIMMXzjz9fKlaFJ8w7nhIihwifPjt1rLJuHO7qRsPaG
-         MLEJvbPP7Tuvgl3zCD1VuFPVfFJPnGpG4ktjUjMmoagMYYki7X+05OLs08wQKbsf1RfQ
-         zcCaIw/M8l9yCTPfehnrhArzHLMVr6AsJBsc5J5JKXOgWCj46cAd8dr3CBlBwYdlyOtG
-         4E1MGgUHyxL+p3looTbwHcp9rCRYQ7OXCe3PDq32Ud6WVK6P7ewbp3QcDDbr0QVw0Bmz
-         G1X2C7h2FKGUIHUQZweZyh8vcCyJQKnBZUDV5OQlVHgKkmL1LVevEtn64v5xzNys9pLU
-         5HOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Uk7HGQjUL7qBYUmyOj8OBJBQSHFN+LzVXSnG4qGNbTE=;
-        b=xPQnoLebWjVRM44dZwWHndh6AiQW3h8QN2EfB7xksUH9kMv6R5XzasO8X9t2NhzUfx
-         eldiqPu3oAAJ9XqoNwUcwhy5Naqiei+MumkiAq/LjtNE1vCkmv+G11EGpqV/XAXBvi2m
-         hhRYq0bT23hUSrh9HibhZppGy0LkRTRrRaBcpK2IQ9O7tXCwdiVvabbtoVpcyrhdAUl5
-         SWyakxLh64+1mrn4mvnlFCs+52Kigt4vgcGwI0LhbKNOEdsTcUm1HZfrFmiieBX5pELM
-         V72GU2rgz7CXvZDByrNnwIAwOYfqA1riLtHwGBNo80nLiJVzcf8DTApYQLIJhh5otHa2
-         h8UQ==
-X-Gm-Message-State: AOAM532+uo49a5G5QhBAlpS4w/ztBeFTWhs6nPUTch8ntTwpABE/YzBM
-        0ua9eNHLRnU1+rAhuANciKFAbAIfhFmKYQ==
-X-Google-Smtp-Source: ABdhPJw18lgMRgcMa0PPrG0eQ4wWbvTFhILQ4ylHJMGkTSBxH4VIo/Y9Yzc7COxYGeKXAg/XXfScbw==
-X-Received: by 2002:a17:90b:380e:b0:1c7:74f6:ae60 with SMTP id mq14-20020a17090b380e00b001c774f6ae60mr6198048pjb.5.1649786665161;
-        Tue, 12 Apr 2022 11:04:25 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb266fb186sm40276496pfw.73.2022.04.12.11.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:04:24 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Subject: Re: [PATCH V2 07/15] cpufreq: mediatek: Add opp notification for
- SVS support
-In-Reply-To: <dfe2d3e3401a6f2a7be9db4e8a0590d3dd9a6969.camel@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-8-rex-bc.chen@mediatek.com>
- <7hsfqn5nft.fsf@baylibre.com>
- <3b7bf25a3da6c8f780c87784c1f796bf1e464238.camel@mediatek.com>
- <7hzgkr4hmc.fsf@baylibre.com>
- <dfe2d3e3401a6f2a7be9db4e8a0590d3dd9a6969.camel@mediatek.com>
-Date:   Tue, 12 Apr 2022 11:04:23 -0700
-Message-ID: <7ho81641qw.fsf@baylibre.com>
+        Tue, 12 Apr 2022 14:13:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6DF4968E;
+        Tue, 12 Apr 2022 11:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649787090; x=1681323090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=e+v9atRUEsNxr7cIqFOK0n4ysOpxO9O67Ox4EDhcAKY=;
+  b=K6x0jezJZy9FPx5cQ4ZLGr4gynE/sdwhh/Kkasfny9BBzvg+crNcgyKp
+   llHRFDByU1k2dXiFDW1M10FSnBctn9t5vLTmJXjkT4VQ8HfcPTBKCXytP
+   qMpqTLHBf30gXW3l3Tm2oSHjiDKnyfGrjV+QuuqI3SNEdssuh9O2wPSFA
+   NVsANBSYW8nXagxq124jI9VS/MUf0VKxiIxOncHRpog9izl2iEbHVHysi
+   2KBZmUsyWbA7XBJ2A9Gt0nTdU7vGD925SjggpnoacUtDcnVImIC2ewq2h
+   YaBl0yASQnLbH69K6dPnkMrE+3knCqo8xLxwelY6z7gaknF8V8CoYtrT6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="261907604"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="261907604"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:04:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="559438893"
+Received: from lpfafma-mobl.amr.corp.intel.com (HELO guptapa-desk) ([10.209.17.36])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:04:54 -0700
+Date:   Tue, 12 Apr 2022 11:04:52 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH] x86/tsx: fix KVM guest live migration for tsx=on
+Message-ID: <20220412180452.ityo3o3eoxh3iul7@guptapa-desk>
+References: <20220411180131.5054-1-jon@nutanix.com>
+ <41a3ca80-d3e2-47d2-8f1c-9235c55de8d1@intel.com>
+ <AE4621FC-0947-4CEF-A1B3-87D4E00C786D@nutanix.com>
+ <e800ba74-0ff6-8d98-8978-62c02cf1f8ea@intel.com>
+ <1767A554-CC0A-412D-B70C-12DF0AF4C690@nutanix.com>
+ <90457491-1ac3-b04a-856a-25c6e04d429a@intel.com>
+ <28C45B75-7FE3-4C79-9A29-F929AF9BC5A8@nutanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <28C45B75-7FE3-4C79-9A29-F929AF9BC5A8@nutanix.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,124 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-
-> On Mon, 2022-04-11 at 11:09 -0700, Kevin Hilman wrote:
->> Hi Rex,
->> 
->> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->> 
->> > On Fri, 2022-04-08 at 13:29 -0700, Kevin Hilman wrote:
->> > > Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->> > > 
->> > > > From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
->> > > > 
->> > > > The Smart Voltage Scaling (SVS) is a hardware which calculates
->> > > > suitable
->> > > > SVS bank voltages to OPP voltage table.
->> > > > 
->> > > > When the SVS is enabled, cpufreq should listen to opp
->> > > > notification
->> > > > and do
->> > > > proper actions when receiving events of disable and voltage
->> > > > adjustment.
->> > > 
->> > > So listenting for OPP notifications should be done only when SVS
->> > > is
->> > > enabled...
->> > > 
->> > 
->> > Thanks for your review.
->> > Yes, the OPP notification is only called from MediaTek SVS.
->> > 
->> > > [...]
->> > > 
->> > > >  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info
->> > > > *info,
->> > > > int cpu)
->> > > >  {
->> > > >  	struct device *cpu_dev;
->> > > > @@ -392,6 +455,17 @@ static int mtk_cpu_dvfs_info_init(struct
->> > > > mtk_cpu_dvfs_info *info, int cpu)
->> > > >  	info->intermediate_voltage =
->> > > > dev_pm_opp_get_voltage(opp);
->> > > >  	dev_pm_opp_put(opp);
->> > > >  
->> > > > +	info->opp_cpu = cpu;
->> > > > +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
->> > > > +	ret = dev_pm_opp_register_notifier(cpu_dev, &info-
->> > > > >opp_nb);
->> > > 
->> > > ...but here youlisten to OPP notifications
->> > > unconditionally.  Seems
->> > > there
->> > > should be a check whether SVS is enabled before deciding to
->> > > register.
->> > > 
->> > > Kevin
->> > > 
->> > 
->> > Do you think it's ok that we wrap it with the SVS Kconfig define?
->> > like
->> > #ifdef CONFIG_MTK_SVS
->> > mtk_cpufreq_opp_notifier()
->> > ...
->> > dev_pm_opp_register_notifier()
->> > #endif
->> 
->> Generally, we don't like to see #ifdefs in C files[1].
->> 
->> But more importantly, compile-time check is not enough, because SVS
->> feature could be compiled into kernel, but not actually enabled for
->> an
->> SoC (e.g. DT node not enabled, etc.) so checking this at compile time
->> is
->> not enough.
->> 
->> Ideally, the SVSdriver should provide a function that allows others
->> to
->> check if it's enabled.  That function needs to know not only if it's
->> compile in, but if it's enabled/running.  If SVS is not compiled in,
->> then that function just returns false.
->> 
->> Kevin
->> 
->> [1] 
->> https://urldefense.com/v3/__https://www.kernel.org/doc/html/latest/process/4.Coding.html?highlight=ifdef*ifdef-and-preprocessor-use-in-general__;Iw!!CTRNKA9wMg0ARbw!z6SrEcQOLu2u-R1OLedrRUXHYXCzuQoK3F_h9Bhzv8jNFmjV5mdNVy41eND67CuV9uIS$
->> 
+On Tue, Apr 12, 2022 at 04:08:32PM +0000, Jon Kohler wrote:
 >
-> Hello Kevin,
 >
-> After our internal discussion, we think the register of notifier should
-> not be bound for certain module.
-> If we provide the moethod to adjust voltage/disable opp, we think if
-> anyone call dev_pm_opp_adjust_voltage and dev_pm_opp_disable, it could
-> be used.
+>> On Apr 12, 2022, at 11:54 AM, Dave Hansen <dave.hansen@intel.com> wrote:
+>>
+>> On 4/12/22 06:36, Jon Kohler wrote:
+>>> So my theory here is to extend the logical effort of the microcode driven
+>>> automatic disablement as well as the tsx=auto automatic disablement and
+>>> have tsx=on force abort all transactions on X86_BUG_TAA SKUs, but leave
+>>> the CPU features enumerated to maintain live migration.
+>>>
+>>> This would still leave TSX totally good on Ice Lake / non-buggy systems.
+>>>
+>>> If it would help, I'm working up an RFC patch, and we could discuss there?
+>>
+>> Sure.  But, it sounds like you really want a new tdx=something rather
+>> than to muck with tsx=on behavior.  Surely someone else will come along
+>> and complain that we broke their TDX setup if we change its behavior.
+>
+>Good point, there will always be a squeaky wheel. I’ll work that into the RFC,
+>I’ll do something like tsx=compat and see how it shapes up.
 
-I don't think I understand what you mean.
+FYI, the original series had tsx=fake, that would have taken care of
+this breakage.
 
-Do you mean that this OPP notifier could be registered all the time,
-even if SVS is not enabled?
+   https://lore.kernel.org/lkml/de6b97a567e273adff1f5268998692bad548aa10.1623272033.git-series.pawan.kumar.gupta@linux.intel.com/
 
-That's fine with me.  If SVS is not compiled or enabled, then the
-notifiers will never be called, so that's fine.
-
-> May I ask what is your concern?
-
-My concern was primarily that the changelog description did not match
-the code.  The changelog says "when SVS is enabled, CPUfreq should
-listen to OPP notifications."
-
-But if I understand you correctly above, I think what you mean is that
-CPUfreq should always listen to OPP notifications because there are
-other users (e.g. SVS) that could change the OPP outside of this driver.
-
-If that's what you mean, then I think the only thing to change is the
-wording of the changelog.
+For the lack of real world use-cases at that time, this patch was dropped.
 
 Thanks,
-
-Kevin
-
-
-
+Pawan

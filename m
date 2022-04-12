@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C364FE04C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216DE4FE04E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243663AbiDLMeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S236687AbiDLMeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345976AbiDLMdS (ORCPT
+        with ESMTP id S245744AbiDLMdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:33:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280A35A166;
-        Tue, 12 Apr 2022 04:51:15 -0700 (PDT)
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AA95A149;
+        Tue, 12 Apr 2022 04:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=clWjpqcbNXMt2ERvOKHn+airowA8oa8QyaIODhrUpU4=; b=qMIElK47IUljG+XEViTXyGVVfI
-        5Vml8dchDCRXOvS/GUcgWNyCSFWA6CE5g0GY2bed6VRCg080TMQNMwTHDp7sQduKzwC+2xRo5A+lJ
-        V9n6xkDRGC1MPGRVH0+WERmbQui2Ox5AxOfMxOQcRThT7xUwlsUZYwRuziwfnvAwCSZGrTzy+ZF52
-        czJsu7efxh1oVTaoFJNqJFGVntp27sbEi7ccbNJhyVZqPmRK6j+u4q7morfl4fyv8+PcpSCYFEjWZ
-        NH0PbqwUZeQ3hxOsLGr59onQKom7Y2F3lxQFjNP9rfnBakRUwk8H+HbpyntDetizZ6XgSS6uaXDSB
-        bzzin9rw==;
+        bh=YkcanMudUrrWwtCRX80sZvYWSgv9wqc6arRCEIrUa2c=; b=DowUsHVCTdJrX61F02nRZe9+b1
+        vNUfGe0yV+4Gzy1fW/WyyLmCt+3yzKOR+1G3Q/mwporGdR2QhiTPVQsbaPx2xGJx4aNxRBG+pB6mP
+        zAyi8rBTahlEne/2Q/93AccIh/eeEaAax0r5+f5dWt28KuMaVoJoRlAFE3Ox78/OfEyEDwZNKOcax
+        fuagcO9tpllfhKn3JPwfPiXWcVDJ9w8gUec2yTVDr44746nTzu3/ePQ89qUpewRnkjBbFT0hHQkPc
+        zSiO5MGuCeh7ZseCU884xHhe6M9a2VJ9/zadm27LK623qf1FaUHizlZlpPHASecxFSj4EXbW/UBas
+        v4HvTStQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neF2o-00DILD-JP; Tue, 12 Apr 2022 11:50:50 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neF2o-004JiY-Ih; Tue, 12 Apr 2022 11:50:51 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 645AB300792;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6238D3002DE;
         Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 402973017A05A; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
-Message-ID: <20220412114853.782838521@infradead.org>
+        id 4399C3017A05D; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Message-ID: <20220412114853.842942162@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 12 Apr 2022 13:44:22 +0200
+Date:   Tue, 12 Apr 2022 13:44:23 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
@@ -46,7 +46,7 @@ To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         bigeasy@linutronix.de, Will Deacon <will@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 1/5] sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
+Subject: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
 References: <20220412114421.691372568@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,200 +60,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently ptrace_stop() / do_signal_stop() rely on the special states
-TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
-state exists only in task->__state and nowhere else.
+Currently ptrace_check_attach() / ptrace_freeze_traced() rely on
+specific scheduler behaviour to freeze the task. In specific, it
+relies on there not being any blocking behaviour between:
 
-There's two spots of bother with this:
+  set_special_state(TASK_TRACED);
+  ...
+  schedule();
 
- - PREEMPT_RT has task->saved_state which complicates matters,
-   meaning task_is_{traced,stopped}() needs to check an additional
-   variable.
+specifically it relies on being able to change p->__state between
+those two points (to clear/set TASK_WAKEKILL) and relies on
+wait_task_inactive() to ensure the task has hit that schedule().
 
- - An alternative freezer implementation that itself relies on a
-   special TASK state would loose TASK_TRACED/TASK_STOPPED and will
-   result in misbehaviour.
+However, PREEMPT_RT is breaking this by introducing sleeping
+spinlocks. The consequence of sleeping spinlocks is that p->__state
+can change (also see p->saved_state) and that a task can be inactive
+(off the runqueue) and *NOT* be at the schedule() as expected.
 
-As such, add additional state to task->jobctl to track this state
-outside of task->__state.
+That is, both the p->__state and wait_task_inactive() usage are
+broken.
 
-NOTE: this doesn't actually fix anything yet, just adds extra state.
+In order to avoid having to deal with p->saved_state, flip the
+wait_task_inactive() and p->__state poking. That is, first wait for
+the victim to be in schedule() and then poke p->__state, which is in a
+known state by then.
+
+The only problem with this is that it's possible to race with a
+concurrent ptrace_detach()+pthread_attach() landing back in the same
+situation as before. To deal with this, compare the task's nvcsw
+count to make sure there is no scheduling between the initial
+quiescence and the final task state poking.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/sched.h        |    8 +++-----
- include/linux/sched/jobctl.h |    8 ++++++++
- include/linux/sched/signal.h |   15 ++++++++++++++-
- kernel/ptrace.c              |   18 ++++++++++++++----
- kernel/signal.c              |    9 ++++++---
- 5 files changed, 45 insertions(+), 13 deletions(-)
+ kernel/ptrace.c     |  175 +++++++++++++++++++++++++++++++++++++++++-----------
+ kernel/sched/core.c |    5 -
+ 2 files changed, 141 insertions(+), 39 deletions(-)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -118,11 +118,9 @@ struct task_group;
- 
- #define task_is_running(task)		(READ_ONCE((task)->__state) == TASK_RUNNING)
- 
--#define task_is_traced(task)		((READ_ONCE(task->__state) & __TASK_TRACED) != 0)
--
--#define task_is_stopped(task)		((READ_ONCE(task->__state) & __TASK_STOPPED) != 0)
--
--#define task_is_stopped_or_traced(task)	((READ_ONCE(task->__state) & (__TASK_STOPPED | __TASK_TRACED)) != 0)
-+#define task_is_traced(task)		((READ_ONCE(task->jobctl) & JOBCTL_TRACED) != 0)
-+#define task_is_stopped(task)		((READ_ONCE(task->jobctl) & JOBCTL_STOPPED) != 0)
-+#define task_is_stopped_or_traced(task)	((READ_ONCE(task->jobctl) & (JOBCTL_STOPPED | JOBCTL_TRACED)) != 0)
- 
- /*
-  * Special states are those that do not use the normal wait-loop pattern. See
---- a/include/linux/sched/jobctl.h
-+++ b/include/linux/sched/jobctl.h
-@@ -20,6 +20,10 @@ struct task_struct;
- #define JOBCTL_LISTENING_BIT	22	/* ptracer is listening for events */
- #define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
- 
-+#define JOBCTL_STOPPED_BIT	24
-+#define JOBCTL_TRACED_BIT	25
-+#define JOBCTL_TRACED_FROZEN_BIT 26
-+
- #define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
- #define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
- #define JOBCTL_STOP_CONSUME	(1UL << JOBCTL_STOP_CONSUME_BIT)
-@@ -29,6 +33,10 @@ struct task_struct;
- #define JOBCTL_LISTENING	(1UL << JOBCTL_LISTENING_BIT)
- #define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
- 
-+#define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
-+#define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
-+#define JOBCTL_TRACED_FROZEN	(1UL << JOBCTL_TRACED_FROZEN_BIT)
-+
- #define JOBCTL_TRAP_MASK	(JOBCTL_TRAP_STOP | JOBCTL_TRAP_NOTIFY)
- #define JOBCTL_PENDING_MASK	(JOBCTL_STOP_PENDING | JOBCTL_TRAP_MASK)
- 
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -294,8 +294,10 @@ static inline int kernel_dequeue_signal(
- static inline void kernel_signal_stop(void)
- {
- 	spin_lock_irq(&current->sighand->siglock);
--	if (current->jobctl & JOBCTL_STOP_DEQUEUED)
-+	if (current->jobctl & JOBCTL_STOP_DEQUEUED) {
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
-+	}
- 	spin_unlock_irq(&current->sighand->siglock);
- 
- 	schedule();
-@@ -437,10 +439,21 @@ extern void signal_wake_up_state(struct
- 
- static inline void signal_wake_up(struct task_struct *t, bool resume)
- {
-+	lockdep_assert_held(&t->sighand->siglock);
-+
-+	if (resume && !(t->jobctl & JOBCTL_TRACED_FROZEN))
-+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-+
- 	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
- }
-+
- static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
- {
-+	lockdep_assert_held(&t->sighand->siglock);
-+
-+	if (resume)
-+		t->jobctl &= ~JOBCTL_TRACED;
-+
- 	signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
- }
- 
 --- a/kernel/ptrace.c
 +++ b/kernel/ptrace.c
-@@ -185,7 +185,12 @@ static bool looks_like_a_spurious_pid(st
- 	return true;
+@@ -186,31 +186,13 @@ static bool looks_like_a_spurious_pid(st
  }
  
--/* Ensure that nothing can wake it up, even SIGKILL */
-+/*
-+ * Ensure that nothing can wake it up, even SIGKILL
-+ *
-+ * A task is switched to this state while a ptrace operation is in progress;
-+ * such that the ptrace operation is uninterruptible.
-+ */
- static bool ptrace_freeze_traced(struct task_struct *task)
+ /*
+- * Ensure that nothing can wake it up, even SIGKILL
++ * Ptrace operation is complete, re-allow TASK_WAKEKILL.
+  *
+- * A task is switched to this state while a ptrace operation is in progress;
+- * such that the ptrace operation is uninterruptible.
++ * Unfreeze is easy, since ptrace_check_attach() guarantees the task is off the
++ * runqueue and __TASK_TRACED. If it's still __TASK_TRACED holding
++ * sighand->siglock serializes against ptrace_signal_wake_up() and we can
++ * simply put TASK_WAKEKILL back (or wake because there's a pending fatal).
+  */
+-static bool ptrace_freeze_traced(struct task_struct *task)
+-{
+-	bool ret = false;
+-
+-	/* Lockless, nobody but us can set this flag */
+-	if (task->jobctl & JOBCTL_LISTENING)
+-		return ret;
+-
+-	spin_lock_irq(&task->sighand->siglock);
+-	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
+-	    !__fatal_signal_pending(task)) {
+-		task->jobctl |= JOBCTL_TRACED_FROZEN;
+-		WRITE_ONCE(task->__state, __TASK_TRACED);
+-		ret = true;
+-	}
+-	spin_unlock_irq(&task->sighand->siglock);
+-
+-	return ret;
+-}
+-
+ static void ptrace_unfreeze_traced(struct task_struct *task)
  {
- 	bool ret = false;
-@@ -197,6 +202,7 @@ static bool ptrace_freeze_traced(struct
- 	spin_lock_irq(&task->sighand->siglock);
- 	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
- 	    !__fatal_signal_pending(task)) {
-+		task->jobctl |= JOBCTL_TRACED_FROZEN;
- 		WRITE_ONCE(task->__state, __TASK_TRACED);
- 		ret = true;
- 	}
-@@ -218,9 +224,11 @@ static void ptrace_unfreeze_traced(struc
- 	 */
- 	spin_lock_irq(&task->sighand->siglock);
- 	if (READ_ONCE(task->__state) == __TASK_TRACED) {
--		if (__fatal_signal_pending(task))
-+		task->jobctl &= ~JOBCTL_TRACED_FROZEN;
-+		if (__fatal_signal_pending(task)) {
-+			task->jobctl &= ~JOBCTL_TRACED;
- 			wake_up_state(task, __TASK_TRACED);
--		else
-+		} else
- 			WRITE_ONCE(task->__state, TASK_TRACED);
- 	}
+ 	if (READ_ONCE(task->__state) != __TASK_TRACED)
+@@ -234,6 +216,94 @@ static void ptrace_unfreeze_traced(struc
  	spin_unlock_irq(&task->sighand->siglock);
-@@ -475,8 +483,10 @@ static int ptrace_attach(struct task_str
- 	 * in and out of STOPPED are protected by siglock.
- 	 */
- 	if (task_is_stopped(task) &&
--	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING))
-+	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING)) {
-+		task->jobctl &= ~JOBCTL_STOPPED;
- 		signal_wake_up_state(task, __TASK_STOPPED);
+ }
+ 
++/*
++ * In order to start a ptrace operation the victim task must be off the
++ * runqueue in state __TASK_TRACED.
++ */
++static int __ptrace_freeze_cond(struct task_struct *p)
++{
++	if (!task_is_traced(p))
++		return -ESRCH;
++
++	if (task_curr(p))
++		return -EINPROGRESS;
++
++	if (p->on_rq)
++		return -EWOULDBLOCK;
++
++	/*
++	 * Due to PREEMPT_RT it is possible the task is blocked on a spinlock
++	 * in state TASK_RTLOCK_WAIT, if so, gotta wait until that goes away.
++	 */
++	if (!(READ_ONCE(p->__state) & __TASK_TRACED))
++		return -EWOULDBLOCK;
++
++	return 0;
++}
++
++/*
++ * Returns:
++ *  0:		  task is off runqueue in TASK_TRACED
++ *  -ESRCH:	  not traced
++ *  -EINPROGRESS: still running
++ *  -EWOULDBLOCK: not running
++ */
++static int __ptrace_pre_freeze(struct task_struct *p, void *arg)
++{
++	int ret;
++
++	ret = __ptrace_freeze_cond(p);
++	if (ret)
++		return ret;
++
++	*(unsigned long *)arg = p->nvcsw;
++
++	return 0;
++}
++
++/*
++ * Returns:
++ *  0:		  task is off runqueue, now __TASK_TRACED
++ *  -ESRCH:	  not traced, or scheduled since pre_freeze
++ *  -GAIN:	  still running
++ *  -EWOULDBLOCK: not running
++ */
++static int __ptrace_freeze(struct task_struct *p, void *arg)
++{
++	int ret;
++
++	ret = __ptrace_freeze_cond(p);
++	if (ret)
++		return ret;
++
++	/*
++	 * Task scheduled between __ptrace_pre_freeze() and here, not our task
++	 * anymore.
++	 */
++	if (*(unsigned long *)arg != p->nvcsw)
++		return -ESRCH;
++
++	if (looks_like_a_spurious_pid(p))
++		return -ESRCH;
++
++	if (__fatal_signal_pending(p))
++		return -ESRCH;
++
++	/*
++	 * we hold:
++	 *
++	 *  - tasklist_lock       (avoids ptrace_detach)
++	 *  - p->sighand->siglock (avoids ptrace_signal_wake_up)
++	 *  - p->pi_lock          (avoids anything scheduler)
++	 *
++	 * task is absolutely frozen, now we can safely take out
++	 * TASK_WAKEKILL.
++	 */
++	p->jobctl |= JOBCTL_TRACED_FROZEN;
++	WRITE_ONCE(p->__state, __TASK_TRACED);
++	return 0;
++}
++
+ /**
+  * ptrace_check_attach - check whether ptracee is ready for ptrace operation
+  * @child: ptracee to check for
+@@ -253,7 +323,36 @@ static void ptrace_unfreeze_traced(struc
+  */
+ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+ {
+-	int ret = -ESRCH;
++	ktime_t to = TICK_NSEC;
++	unsigned long nvcsw;
++	int ret;
++
++	if (child == current)
++		return -ESRCH;
++
++	if (!ignore_state) for (;;) {
++		/*
++		 * Ensure this child is a quiescent TASK_TRACED task.
++		 */
++		ret = task_call_func(child, __ptrace_pre_freeze, &nvcsw);
++		switch (ret) {
++		case 0:
++			break;
++		case -ESRCH:
++			return ret;
++		case -EINPROGRESS:
++			while (task_curr(child))
++				cpu_relax();
++			continue;
++		case -EWOULDBLOCK:
++			/*
++			 * XXX horrible, randomly wait 1 tick and try again.
++			 */
++			set_current_state(TASK_UNINTERRUPTIBLE);
++			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
++			continue;
++		}
 +	}
  
- 	spin_unlock(&task->sighand->siglock);
- 
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -884,7 +884,7 @@ static int check_kill_permission(int sig
- static void ptrace_trap_notify(struct task_struct *t)
- {
- 	WARN_ON_ONCE(!(t->ptrace & PT_SEIZED));
--	assert_spin_locked(&t->sighand->siglock);
-+	lockdep_assert_held(&t->sighand->siglock);
- 
- 	task_set_jobctl_pending(t, JOBCTL_TRAP_NOTIFY);
- 	ptrace_signal_wake_up(t, t->jobctl & JOBCTL_LISTENING);
-@@ -930,9 +930,10 @@ static bool prepare_signal(int sig, stru
- 		for_each_thread(p, t) {
- 			flush_sigqueue_mask(&flush, &t->pending);
- 			task_clear_jobctl_pending(t, JOBCTL_STOP_PENDING);
--			if (likely(!(t->ptrace & PT_SEIZED)))
-+			if (likely(!(t->ptrace & PT_SEIZED))) {
-+				t->jobctl &= ~JOBCTL_STOPPED;
- 				wake_up_state(t, __TASK_STOPPED);
--			else
-+			} else
- 				ptrace_trap_notify(t);
- 		}
- 
-@@ -2219,6 +2220,7 @@ static int ptrace_stop(int exit_code, in
- 	 * schedule() will not sleep if there is a pending signal that
- 	 * can awaken the task.
+ 	/*
+ 	 * We take the read lock around doing both checks to close a
+@@ -262,29 +361,35 @@ static int ptrace_check_attach(struct ta
+ 	 * we are sure that this is our traced child and that can only
+ 	 * be changed by us so it's not changing right after this.
  	 */
-+	current->jobctl |= JOBCTL_TRACED;
- 	set_special_state(TASK_TRACED);
++	ret = -ESRCH;
+ 	read_lock(&tasklist_lock);
+ 	if (child->ptrace && child->parent == current) {
+ 		WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
++		if (ignore_state) {
++			ret = 0;
++			goto unlock;
++		}
++
++		if (child->jobctl & JOBCTL_LISTENING)
++			goto unlock;
++
+ 		/*
+ 		 * child->sighand can't be NULL, release_task()
+ 		 * does ptrace_unlink() before __exit_signal().
+ 		 */
+-		if (ignore_state || ptrace_freeze_traced(child))
+-			ret = 0;
+-	}
+-	read_unlock(&tasklist_lock);
+-
+-	if (!ret && !ignore_state) {
+-		if (!wait_task_inactive(child, __TASK_TRACED)) {
++		spin_lock_irq(&child->sighand->siglock);
++		ret = task_call_func(child, __ptrace_freeze, &nvcsw);
++		if (ret) {
+ 			/*
+-			 * This can only happen if may_ptrace_stop() fails and
+-			 * ptrace_stop() changes ->state back to TASK_RUNNING,
+-			 * so we should not worry about leaking __TASK_TRACED.
++			 * If *anything* changed since __ptrace_pre_freeze()
++			 * this fails.
+ 			 */
+-			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
+ 			ret = -ESRCH;
+ 		}
++		spin_unlock_irq(&child->sighand->siglock);
+ 	}
++unlock:
++	read_unlock(&tasklist_lock);
+ 
+ 	return ret;
+ }
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6310,10 +6310,7 @@ static void __sched notrace __schedule(u
  
  	/*
-@@ -2460,6 +2462,7 @@ static bool do_signal_stop(int signr)
- 		if (task_participate_group_stop(current))
- 			notify = CLD_STOPPED;
- 
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
- 		spin_unlock_irq(&current->sighand->siglock);
- 
+ 	 * We must load prev->state once (task_struct::state is volatile), such
+-	 * that:
+-	 *
+-	 *  - we form a control dependency vs deactivate_task() below.
+-	 *  - ptrace_{,un}freeze_traced() can change ->state underneath us.
++	 * that we form a control dependency vs deactivate_task() below.
+ 	 */
+ 	prev_state = READ_ONCE(prev->__state);
+ 	if (!(sched_mode & SM_MASK_PREEMPT) && prev_state) {
 
 

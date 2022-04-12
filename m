@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616104FD616
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FE24FD8C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358179AbiDLHlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S1352913AbiDLHOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353142AbiDLHOw (ORCPT
+        with ESMTP id S1352603AbiDLG4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59F637A3D;
-        Mon, 11 Apr 2022 23:56:35 -0700 (PDT)
+        Tue, 12 Apr 2022 02:56:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA324BC7;
+        Mon, 11 Apr 2022 23:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D59CB81B35;
-        Tue, 12 Apr 2022 06:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890CEC385AC;
-        Tue, 12 Apr 2022 06:56:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83CFF60A21;
+        Tue, 12 Apr 2022 06:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969CAC385A6;
+        Tue, 12 Apr 2022 06:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746592;
-        bh=MwWoa/QdxHvhEnP3SgwTjOX9SK3o2DSjsWpdzkPYRzc=;
+        s=korg; t=1649745973;
+        bh=bAPP0KeYlE4Rw4hQig6h+AE3aP+2SVdMxEk/gwMuZbk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TDZ8gGnniWQcKgFx1ap92QkRbZw5fSMwNM9kesklLhBOHLm4ENN7i14fuMsb2SqIU
-         9oFdhHQ5F+BccO3uT+bfb72go6SSbyllc90DMRHUWnabq3M+PNm9fGgeWaJOtI0mm1
-         PUTPXQc0p2/LCjXkYRJLsCon2JyHfA9dMP05ebc8=
+        b=g3DqxdJj9mB32ya4DGJj1oak7duRJg8oNRFPbWUhrsS4slnNADWsrdCtLPrdIR+lD
+         ZssgJfqgJkzIKHR1mAx1eq9Sw/wz2U2/rUjdv7WBUu67SCTSDFm2InSROP0/M9ozqb
+         MBR43LMXrl2iNdZZOvBdJQ3jlPWJ8wPWeosKchwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 060/285] iwlwifi: mvm: Correctly set fragmented EBS
+        stable@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 114/277] phy: amlogic: meson8b-usb2: Use dev_err_probe()
 Date:   Tue, 12 Apr 2022 08:28:37 +0200
-Message-Id: <20220412062945.402216978@linuxfoundation.org>
+Message-Id: <20220412062945.339283299@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilan Peer <ilan.peer@intel.com>
+From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-[ Upstream commit d8d4dd26b9e0469baf5017f0544d852fd4e3fb6d ]
+[ Upstream commit 6466ba1898d415b527e1013bd8551a6fdfece94c ]
 
-Currently, fragmented EBS was set for a channel only if the 'hb_type'
-was set to fragmented or balanced scan. However, 'hb_type' is set only
-in case of CDB, and thus fragmented EBS is never set for a channel for
-non-CDB devices. Fix it.
+Use the existing dev_err_probe() helper instead of open-coding the same
+operation.
 
-Signed-off-by: Ilan Peer <ilan.peer@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220204122220.a6165ac9b9d5.I654eafa62fd647030ae6d4f07f32c96c3171decb@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220111095255.176141-3-aouledameur@baylibre.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/phy/amlogic/phy-meson8b-usb2.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-index 960b21719b80..e3eefc55beaf 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-@@ -1890,7 +1890,10 @@ static u8 iwl_mvm_scan_umac_chan_flags_v2(struct iwl_mvm *mvm,
- 			IWL_SCAN_CHANNEL_FLAG_CACHE_ADD;
+diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
+index cf10bed40528..77e7e9b1428c 100644
+--- a/drivers/phy/amlogic/phy-meson8b-usb2.c
++++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
+@@ -265,8 +265,9 @@ static int phy_meson8b_usb2_probe(struct platform_device *pdev)
+ 		return PTR_ERR(priv->clk_usb);
  
- 	/* set fragmented ebs for fragmented scan on HB channels */
--	if (iwl_mvm_is_scan_fragmented(params->hb_type))
-+	if ((!iwl_mvm_is_cdb_supported(mvm) &&
-+	     iwl_mvm_is_scan_fragmented(params->type)) ||
-+	    (iwl_mvm_is_cdb_supported(mvm) &&
-+	     iwl_mvm_is_scan_fragmented(params->hb_type)))
- 		flags |= IWL_SCAN_CHANNEL_FLAG_EBS_FRAG;
+ 	priv->reset = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
+-	if (PTR_ERR(priv->reset) == -EPROBE_DEFER)
+-		return PTR_ERR(priv->reset);
++	if (IS_ERR(priv->reset))
++		return dev_err_probe(&pdev->dev, PTR_ERR(priv->reset),
++				     "Failed to get the reset line");
  
- 	return flags;
+ 	priv->dr_mode = of_usb_get_dr_mode_by_phy(pdev->dev.of_node, -1);
+ 	if (priv->dr_mode == USB_DR_MODE_UNKNOWN) {
 -- 
 2.35.1
 

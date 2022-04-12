@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF76B4FE873
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417024FE878
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358177AbiDLTH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S1348695AbiDLTKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355179AbiDLTHy (ORCPT
+        with ESMTP id S240382AbiDLTKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:07:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656C5419A0;
-        Tue, 12 Apr 2022 12:05:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC93561B5D;
-        Tue, 12 Apr 2022 19:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092A1C385A5;
-        Tue, 12 Apr 2022 19:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649790335;
-        bh=ZbSkaC5MBfF62iamJnsXlTvwu8C3ghdAlvLgcGBAFjo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=kqBrKtUiARnFtFQ4c56T+sZHxkMznV0/BHbnW0R3BzLCLsIwLkw/macH4R4XL6GGQ
-         cLSTuq75Gf0TfAXsz/nrYkfGBISUsBWa2jBuPDlhtJcWq2m4omI2LZQPnwR+wAp//r
-         VApgztD69V7jhEf1/4tUeve7dDegd1saJntevQn2zZZuOXx+is5a+sdjDJKvIRLAoS
-         nc74datHUPpbeHcgDQJuLcKpiWNPtPV+cSO+J3cOIrt3516Ke7TWMbzvzN/5NlFPFr
-         51ofQynDkxS8vMaj7x1ce/1c4l5ZK0/XG/sLysQP9eLi8PS/8yI/QJyO9RluiBtHSZ
-         CctreOpAWwA/Q==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220408224321.627126-2-bjorn.andersson@linaro.org>
-References: <20220408224321.627126-1-bjorn.andersson@linaro.org> <20220408224321.627126-2-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 2/2] clk: qcom: add sc8280xp GCC driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Tue, 12 Apr 2022 15:10:38 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C84318371;
+        Tue, 12 Apr 2022 12:08:20 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id c199so12835474qkg.4;
+        Tue, 12 Apr 2022 12:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0umzI7dcNqCPGkKM4AfkCdjqy62DU/Gn3M5wYOh27O8=;
+        b=BS9UHDc5tsLhhX7P38/FennKlpIGYY4fhtlUvZszeQQGPjjzaAsOkA9UGTBxGWqb2y
+         NFAPCwEiFRVXkPGnMo7d9WoxNdijn6lOVyEluMXxHPpDm6K8JdF9bqPs4bBK9Ar+JcnC
+         8GMMbp+WY5csg1hsZ7tmAyNfxN6E3V20a4qiHuAT384N6SROWBKIMR92vqVkSKK+8fLn
+         a0/OR83LclGGfzeRsNCMsn0S3nWDrOHZ5OqBhrVJV3GnYLJUPin3xTY3EbV/Dri8z0Kt
+         Z1ocBwg4XjUYqNw4RHUFFyJ/Eo6poELQvfy6tGn5suWphfQEqUJH3+O9HeRKKsuam44e
+         ysfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0umzI7dcNqCPGkKM4AfkCdjqy62DU/Gn3M5wYOh27O8=;
+        b=LyW/+bNe7DSLBuquBr2YuOK1XQK7Zdgi/ONnS8UA6TOQ7SZUMC9IF4JLHSYEeuv/w1
+         NfjJOCfF9FWRUOzPd1bYw3fgqOKKDHSeskcSljFx+SVk3jkLWndt3xCEh51wECjGdN8V
+         KiRJm8+kieZoxYPajZ73Lmk9C0CppYPpzTpo+EiBNznHJKvfJZECASluLpVSfUg//1S6
+         x/lSbeotTu53qxJuZhQv/xVoxxxLknbzcUFLhJwXviG1YyveHsBBFRt417tvFP0aqfbV
+         dCEC4AgmtEZ6hMTUcbAmRE8jziDgkAhHqtwxcYp/xkB5SN0FKz26ltZiP/tNMxPan7Ff
+         zdGg==
+X-Gm-Message-State: AOAM531fi39xOWOTNluLhfrFHU3ayDHg/6HayZrITMT/oKPs3N8AoDKa
+        37d62dnYOZjlrCOiYNoSQ64=
+X-Google-Smtp-Source: ABdhPJxP6Mf1uHRMVsZYVU2fInVooyZ6O5LlrdzZ+GFqe7O1/ZgwrXNug0QaCiwEMXUXXkUk20SUsA==
+X-Received: by 2002:a37:9c7:0:b0:69c:1c7b:6053 with SMTP id 190-20020a3709c7000000b0069c1c7b6053mr4478132qkj.682.1649790499567;
+        Tue, 12 Apr 2022 12:08:19 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05622a198500b002ee933faf83sm5032929qtc.73.2022.04.12.12.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 12:08:19 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Tue, 12 Apr 2022 12:05:33 -0700
-User-Agent: alot/0.10
-Message-Id: <20220412190535.092A1C385A5@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: add rk356x sfc support
+Date:   Tue, 12 Apr 2022 15:08:17 -0400
+Message-Id: <20220412190817.125886-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-04-08 15:43:21)
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc828=
-0xp.c
-> new file mode 100644
-> index 000000000000..e621a25a4a40
-> --- /dev/null
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -0,0 +1,7463 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Linaro Ltd.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-[...]
-> +
-> +static struct clk_alpha_pll gcc_gpll0 =3D {
-> +       .offset =3D 0x0,
-> +       .regs =3D clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
-> +       .clkr =3D {
-> +               .enable_reg =3D 0x52028,
-> +               .enable_mask =3D BIT(0),
-> +               .hw.init =3D &(struct clk_init_data){
+Add the sfc node to the rk356x device tree.
+The sfc node on rk356x can function as a boot device and supports four
+lanes of receive data and one lane of transmit data for supported
+SPI-NOR chips.
 
-const
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-> +                       .name =3D "gcc_gpll0",
-> +                       .parent_data =3D &(const struct clk_parent_data){
-> +                               .fw_name =3D "bi_tcxo",
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index d5131f5aaf73..b52edcdbbe7d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -812,6 +812,17 @@ sdmmc1: mmc@fe2c0000 {
+ 		status = "disabled";
+ 	};
+ 
++	sfc: spi@fe300000 {
++		compatible = "rockchip,sfc";
++		reg = <0x0 0xfe300000 0x0 0x4000>;
++		interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
++		clock-names = "clk_sfc", "hclk_sfc";
++		pinctrl-0 = <&fspi_pins>;
++		pinctrl-names = "default";
++		status = "disabled";
++	};
++
+ 	sdhci: mmc@fe310000 {
+ 		compatible = "rockchip,rk3568-dwcmshc";
+ 		reg = <0x0 0xfe310000 0x0 0x10000>;
+-- 
+2.25.1
 
-This can't be shared for multiple PLLs?
-
-> +                       },
-> +                       .num_parents =3D 1,
-> +                       .ops =3D &clk_alpha_pll_fixed_lucid_5lpe_ops,
-> +               },
-> +       },
-> +};
-> +

@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25804FCC32
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8F14FCC31
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243573AbiDLCJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S244302AbiDLCJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242780AbiDLCJY (ORCPT
+        with ESMTP id S244392AbiDLCJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:09:24 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A14E338BF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:07:08 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so10755718iox.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:07:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=rgLhKgyYYXped5y5Egl1XGVJSyw4pIOBxrcsqBBOMPM=;
-        b=3v/o5Y7oiUl8dueJnfvD9r2vgT4g1eV12bAtkvsx9F8W/xPYPFxb+QzFm3/lRcK3LA
-         6f/S+egPyiT95+zSnXfItXDtFGJClMOnicRa5dGO38Fkck1Qzp8DqIYdyoFR1FczJY1Z
-         pjTlQ51M+Atw3P4OiFWGtP7Wf8Q0pn3O+2pFVZgDkPQJAtUQDXKm8y9Pk/Mm15C4AGx5
-         1YwBC2qgwIpWtwVYsezT6k9FvxPQPx4ybkGsboxHkrS1idrdm56S1nQ1ScmrsPG1zEPB
-         +WPPgpU7uiRrTMTcD9csR9GiIOtw87XAgh5KpRpcDZoMOvd8VaX8RUwIG/F4xcw4ZVTj
-         XxjQ==
-X-Gm-Message-State: AOAM5330VGzeSGB+QArlajCRQQUdz/UDue50p6DFh8XaBP5MxTPLX20W
-        0pmCixn3fLAzmznMzHWoGi3yaiysJWaLLD7qyQ765YKNusYX
-X-Google-Smtp-Source: ABdhPJxIQgnlTG6611QNF85mk+GE0GJsYrhE1dmIPSFt+vn4RQPBc5gWboiYalgK2FPu7DY4f5GKByS9KaJbMktyCjEYOz5HhU6T
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1ba9:b0:2ca:8e77:82e1 with SMTP id
- n9-20020a056e021ba900b002ca8e7782e1mr7327019ili.311.1649729227774; Mon, 11
- Apr 2022 19:07:07 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 19:07:07 -0700
-In-Reply-To: <20220412015446.6243-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098e01a05dc6b8433@google.com>
-Subject: Re: [syzbot] possible deadlock in sco_conn_del
-From:   syzbot <syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        Mon, 11 Apr 2022 22:09:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E9133A38
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649729244; x=1681265244;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6kiwW3/nUQ5dHrFHY7pnkV2uT9+KRnLaqlbep6xwdc8=;
+  b=ModvDwpkP0+rhHpkVPlBEFw4739XzeaddNk3q9iOdvfPYNNg/2iLp8+r
+   1KfKXAmclYI0Q46tvw7AhRiCgHionPvnb3QzjQdh2+DG19N/rCeqSIywV
+   Ot9Pl0woaCZPP+GMl66tXgwFk8aQqcmTUOFU0dZCf0g4Rv4pFBIgKSkF5
+   AdzKe5BoPFz+4EAlqz67t5XypA28nvMInAhzsb7LI2gv1thFhRMopIsp+
+   rE5WQFl/cNiaD5f6FLDKb/lp57tVQBr5X/GC7TU+dRve5vH3yR7FBkYgP
+   8zm0VMoH+HFUr0Zr61HMu86lpM5I1O8+4YZRk6cHmQOe40a5ysbQBqjsX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="259853341"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="259853341"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 19:07:23 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="551486957"
+Received: from joliu-mobl2.ccr.corp.intel.com ([10.254.214.243])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 19:07:18 -0700
+Message-ID: <557be6cc7ecdee357391df3fe94e5573f9e1746d.camel@intel.com>
+Subject: Re: [PATCH 1/4] mm/migration: reduce the rcu lock duration
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     mike.kravetz@oracle.com, shy828301@gmail.com, willy@infradead.org,
+        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
+        dave.hansen@linux.intel.com, o451686892@gmail.com,
+        jhubbard@nvidia.com, peterx@redhat.com, naoya.horiguchi@nec.com,
+        mhocko@suse.com, riel@redhat.com, osalvador@suse.de,
+        david@redhat.com, sfr@canb.auug.org.au, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 12 Apr 2022 10:07:15 +0800
+In-Reply-To: <20220409073846.22286-2-linmiaohe@huawei.com>
+References: <20220409073846.22286-1-linmiaohe@huawei.com>
+         <20220409073846.22286-2-linmiaohe@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +66,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, 2022-04-09 at 15:38 +0800, Miaohe Lin wrote:
+> rcu_read_lock is required by grabbing the task refcount but it's not
+> needed for ptrace_may_access. So we could release the rcu lock after
+> task refcount is successfully grabbed to reduce the rcu holding time.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/migrate.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index a3d8c2be2631..d8aae6c75990 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1907,17 +1907,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
+>  		return ERR_PTR(-ESRCH);
+>  	}
+>  	get_task_struct(task);
+> +	rcu_read_unlock();
+>  
+> 
+>  	/*
+>  	 * Check if this process has the right to modify the specified
+>  	 * process. Use the regular "ptrace_may_access()" checks.
+>  	 */
+>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+> -		rcu_read_unlock();
+>  		mm = ERR_PTR(-EPERM);
+>  		goto out;
+>  	}
+> -	rcu_read_unlock();
+>  
+> 
+>  	mm = ERR_PTR(security_task_movememory(task));
+>  	if (IS_ERR(mm))
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Why do you ignore our discussion for the previous version?
 
-Reported-and-tested-by: syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com
+https://lore.kernel.org/linux-mm/8735ju7as9.fsf@yhuang6-desk2.ccr.corp.intel.com/
 
-Tested on:
+Best Regards,
+Huang, Ying
 
-commit:         d12d7e1c Add linux-next specific files for 20220411
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=58fcaf7d8df169a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13879aa8f00000
 
-Note: testing is done by a robot and is best-effort only.

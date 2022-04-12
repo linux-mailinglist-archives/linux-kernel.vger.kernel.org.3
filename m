@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635EA4FD95E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2254FD4F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353566AbiDLHPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S1352187AbiDLHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351193AbiDLHCm (ORCPT
+        with ESMTP id S1354343AbiDLHRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:02:42 -0400
+        Tue, 12 Apr 2022 03:17:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C4B43ECC;
-        Mon, 11 Apr 2022 23:46:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A441F4BFC5;
+        Mon, 11 Apr 2022 23:58:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB5C2B818BD;
-        Tue, 12 Apr 2022 06:46:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39703C385AA;
-        Tue, 12 Apr 2022 06:46:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF71B81B35;
+        Tue, 12 Apr 2022 06:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9595DC385A1;
+        Tue, 12 Apr 2022 06:58:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746013;
-        bh=WGH4Nk/mK73Nx2Dwc3zx9xhY+0nYNzKoDgVnbf+FosI=;
+        s=korg; t=1649746734;
+        bh=3535TF05XMwI7IlTt70GcFU3BoNH+1hFeZqaTcbTgZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1ywn4gI3FbYsWRVN76SFkirNS6jwkioF2aEIJgPeI1ejQGUEWkx4z9sW4EBuMvjfP
-         v8ASfpgcFSDbVGJO4gRr8fjTMqllB+naS3QHB6h37YWdGfrnvPR94XYLlzbr4k8zM7
-         e7YrD3Jb3xa6FcdYlejfkjT6+f2pj5I+aLaTYGF0=
+        b=SFI9YTCciT8TUHhpuWV1gDtgx4+pjiGripmR+UHUev6KjKRtzjIpD4aiWNGHuI5Rh
+         kK5mIqgaTFir/PY4+2cGloArmS82Rh3GAeUDL9lopd0e1kSI/FHe/UKbBddWRWFDhl
+         rSvCLoayXKbWT7dPqqyWb26Epw0NRvj3mNSWE/Mk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 128/277] SUNRPC/xprt: async tasks mustnt block waiting for memory
+Subject: [PATCH 5.16 074/285] scsi: pm8001: Fix memory leak in pm8001_chip_fw_flash_update_req()
 Date:   Tue, 12 Apr 2022 08:28:51 +0200
-Message-Id: <20220412062945.743633747@linuxfoundation.org>
+Message-Id: <20220412062945.802805257@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit a721035477fb5fb8abc738fbe410b07c12af3dc5 ]
+[ Upstream commit f792a3629f4c4aa4c3703d66b43ce1edcc3ec09a ]
 
-When memory is short, new worker threads cannot be created and we depend
-on the minimum one rpciod thread to be able to handle everything.  So it
-must not block waiting for memory.
+In pm8001_chip_fw_flash_update_build(), if
+pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
+allocated must be freed.
 
-xprt_dynamic_alloc_slot can block indefinitely.  This can tie up all
-workqueue threads and NFS can deadlock.  So when called from a
-workqueue, set __GFP_NORETRY.
-
-The rdma alloc_slot already does not block.  However it sets the error
-to -EAGAIN suggesting this will trigger a sleep.  It does not.  As we
-can see in call_reserveresult(), only -ENOMEM causes a sleep.  -EAGAIN
-causes immediate retry.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-23-damien.lemoal@opensource.wdc.com
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprt.c               | 5 ++++-
- net/sunrpc/xprtrdma/transport.c | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
-index d95426c0bd3a..61603c2664a6 100644
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -1686,12 +1686,15 @@ static bool xprt_throttle_congested(struct rpc_xprt *xprt, struct rpc_task *task
- static struct rpc_rqst *xprt_dynamic_alloc_slot(struct rpc_xprt *xprt)
- {
- 	struct rpc_rqst *req = ERR_PTR(-EAGAIN);
-+	gfp_t gfp_mask = GFP_KERNEL;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index e447b714df2b..1a5338917a89 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4907,8 +4907,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->ccb_tag = tag;
+ 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
+ 		tag);
+-	if (rc)
++	if (rc) {
++		kfree(fw_control_context);
+ 		pm8001_tag_free(pm8001_ha, tag);
++	}
  
- 	if (xprt->num_reqs >= xprt->max_reqs)
- 		goto out;
- 	++xprt->num_reqs;
- 	spin_unlock(&xprt->reserve_lock);
--	req = kzalloc(sizeof(struct rpc_rqst), GFP_NOFS);
-+	if (current->flags & PF_WQ_WORKER)
-+		gfp_mask |= __GFP_NORETRY | __GFP_NOWARN;
-+	req = kzalloc(sizeof(*req), gfp_mask);
- 	spin_lock(&xprt->reserve_lock);
- 	if (req != NULL)
- 		goto out;
-diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
-index a52277115500..32df23796747 100644
---- a/net/sunrpc/xprtrdma/transport.c
-+++ b/net/sunrpc/xprtrdma/transport.c
-@@ -521,7 +521,7 @@ xprt_rdma_alloc_slot(struct rpc_xprt *xprt, struct rpc_task *task)
- 	return;
- 
- out_sleep:
--	task->tk_status = -EAGAIN;
-+	task->tk_status = -ENOMEM;
- 	xprt_add_backlog(xprt, task);
+ 	return rc;
  }
- 
 -- 
 2.35.1
 

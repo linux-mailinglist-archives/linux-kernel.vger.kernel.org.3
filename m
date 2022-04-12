@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FAD4FE63B
+	by mail.lfdr.de (Postfix) with ESMTP id AA9C24FE63A
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357851AbiDLQsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S1357828AbiDLQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357874AbiDLQrp (ORCPT
+        with ESMTP id S1357903AbiDLQrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:47:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745DD41633;
-        Tue, 12 Apr 2022 09:45:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A197618E3;
-        Tue, 12 Apr 2022 16:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9ABBC385A1;
-        Tue, 12 Apr 2022 16:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649781926;
-        bh=9WqfLsITCMQXM6BzvIJqgUUTiyJhjqSLaU3vvrhppUY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EPRs9cD4B+WGLVGyn7/owde2rI1JLkCO4GeFwhlhNyrTK8tJg89r4e3vS8UwUyRh1
-         xjsdyvSayYgzzwg+nELxF7Hl/H8LDlVR1XivUJ6zd0PtLiRzeMlTunNGoB2Dv+KiZX
-         PMwfO+se/K+71qvzHp17lAcTuok75yU9D92ZH6zzz4Ksm4/WCF3urCK6OxehCI3Ib9
-         4nNKwt7r6lIOTlKMOk83Tt8ASAmAP5SO1amo/0x2uVFsn5FDgEIK42lqMNLGy8Wcny
-         zMwYD9j9I8jmBpfbLvXrLkqP32pFT4XUaguBIowlSGimo1QxNjVG6Zc+IEI0qdRW7b
-         YS+S+WaZ89rmA==
-Date:   Tue, 12 Apr 2022 09:45:24 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <alexandru.tachici@analog.com>
-Cc:     <andrew@lunn.ch>, <o.rempel@pengutronix.de>, <davem@davemloft.net>,
-        <devicetree@vger.kernel.org>, <hkallweit1@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
-        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
-Subject: Re: [PATCH v6 4/7] net: phy: Add 10BASE-T1L support in phy-c45
-Message-ID: <20220412094524.178b8785@kernel.org>
-In-Reply-To: <20220412130706.36767-5-alexandru.tachici@analog.com>
-References: <20220412130706.36767-1-alexandru.tachici@analog.com>
-        <20220412130706.36767-5-alexandru.tachici@analog.com>
+        Tue, 12 Apr 2022 12:47:53 -0400
+Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AA49930;
+        Tue, 12 Apr 2022 09:45:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09321077|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0642605-0.00489878-0.930841;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NPL4wXj_1649781929;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NPL4wXj_1649781929)
+          by smtp.aliyun-inc.com(33.37.67.126);
+          Wed, 13 Apr 2022 00:45:30 +0800
+Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, hminas@synopsys.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
+        =?UTF-8?Q?Dragan_=c4=8ce=c4=8davac?= <dragancecavac@yahoo.com>
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
+ <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
+ <8735s37slq.fsf@kernel.org>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <021ece97-5e62-c07f-bb6d-b69c93d73b31@wanyeetech.com>
+Date:   Wed, 13 Apr 2022 00:45:29 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <8735s37slq.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,23 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 16:07:03 +0300 alexandru.tachici@analog.com wrote:
-> diff --git a/include/linux/phy.h b/include/linux/phy.h
-> index 36ca2b5c2253..6c3048e2a3ce 100644
-> --- a/include/linux/phy.h
-> +++ b/include/linux/phy.h
-> @@ -698,6 +698,8 @@ struct phy_device {
->  	u8 mdix;
->  	u8 mdix_ctrl;
->  
-> +	int pma_extable;
-> +
->  	void (*phy_link_change)(struct phy_device *phydev, bool up);
->  	void (*adjust_link)(struct net_device *dev);
+Hi Felipe,
 
-kdoc warning here:
+On 2021/7/24 下午9:24, Felipe Balbi wrote:
+> Hi Zhou,
+>
+> Zhou Yanjie writes:
+>>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+>>>> index 67c5eb1..a7a1b50 100644
+>>>> --- a/drivers/usb/dwc2/params.c
+>>>> +++ b/drivers/usb/dwc2/params.c
+>>>> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct
+>>>> dwc2_hsotg *hsotg)
+>>>>       p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
+>>>>   }
+>>>>
+>>>> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+>>>> +{
+>>>> +    struct dwc2_core_params *p = &hsotg->params;
+>>>> +
+>>>> +    p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
+>>>> +    p->speed = DWC2_SPEED_PARAM_HIGH;
+>>>> +    p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
+>>>> +    p->phy_utmi_width = 16;
+>>>> +    p->deactivate_ingenic_overcurrent_detection =
+>>>> +        device_property_read_bool(hsotg->dev, "disable-over-current");
+>>> That device property was not documented in the previous patch. Also
+>>> this probably should be "ingenic,disable-over-current".
+>>>
+>> This device property already exists (it has been used in the
+>> "dwc2_get_device_properties()" function below).
+>>
+>> Under normal circumstances, after using this device attribute, it
+>> should be possible to turn off the overcurrent
+>>
+>> detection, but on the Ingenic processors, somehow it did not take
+>> effect normally, and we must operate the
+>>
+>> "VBVALOEN" bit and "VBVALOVAL" bit of "GOTGCTL" register to make it normal.
+> I believe what Paul is suggesting is that this property lacks
+> documentation under Documentation/devicetree/bindings/. If that's the
+> case, you could take the opportunity to document the property and,
+> perhaps, add the missing prefix.
 
-include/linux/phy.h:711: warning: Function parameter or member 'pma_extable' not described in 'phy_device'
 
-Please allow at least 24h between postings to collect additional
-feedback.
+Sorry for the long time delay.
+
+Looks like Krzysztof has done the job, I will send v2 soon.
+
+
+Thanks and best regards!
+
+

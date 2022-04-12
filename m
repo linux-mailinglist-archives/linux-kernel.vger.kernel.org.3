@@ -2,120 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B244A4FCBE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579084FCBE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241469AbiDLB2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S245426AbiDLBcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiDLB2n (ORCPT
+        with ESMTP id S230259AbiDLBc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:28:43 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DF21A838;
-        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id j8so15372092pll.11;
-        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
-        b=gPhy/sTiFvw/el2eqjcLE3TmNLvKNHw98liUoLS8thb8poOFSm9QDgb6iOhhapdJzg
-         mg9Pf39+pqsq6GDIdkohKFMvHKXqtprbKumJnV3K8haL06rSMJcsOBeIV2hk8EnkFVMn
-         3PyRytXFHGJZyLNYWk4sUtKxlQiTZcwygYcoQmMwaeukeTocT7K67IZNXs4PmDVcWzBn
-         /kk8ZVM32CNsJffpyVClMspjMBE/yhh3W4h6kpYMQShY4pwVjV6SmYpqazYU+3a1SwOr
-         f9jX84jqYaVdRnxNCUMzV8icUYaZHKpVnCHGTS10ToIx71Ne93GZ15kqdGkiry/aDmHQ
-         6cSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
-        b=UxklTdzcfN0AU9kFu+7twsV+sd7Hq8PAE/9vFb2JzIxfyKiGl/km6wgTeRZDJNEcHd
-         WSpQ8CWO5pPhzc7tg+eYd3iJOTsVgSbv6mTp8XWpf/+a+5V/DJzHBFdr6d/xMjH4hhvP
-         pRd+S0v3QlHqf+ntmRujE7vb69C4pyIVIx7wFMTT2nqN/rR5xK3kqS+41avON7TM9GDx
-         +eh9+WetT0VCknMe0tR32cWKkT7U+7+LLIGTzucFmqRzViqxRMpdiWWPuAKZ3zZ9bJbX
-         ixrjW7MOJwl9oaAmEX32J8lmOmDLEyevqYbVRJ1VZxbka0kczpdwe4Gq5Qr6BtlPYxOk
-         cXFQ==
-X-Gm-Message-State: AOAM5303za7nUxwmx10IiU+RZLymTQuaa2khtrknWbOApL1Rfcuvteq5
-        JF/lCZOlOSUSqxB5VyKaH04=
-X-Google-Smtp-Source: ABdhPJwhEMQKP7S6/uyBvYw37FlDMIqUEsk1tQugjoKXwy2sj+PiM58nGoeWK2Ox8uN97L91Q0uBuA==
-X-Received: by 2002:a17:902:a9c2:b0:156:1859:2d05 with SMTP id b2-20020a170902a9c200b0015618592d05mr35878669plr.86.1649726787534;
-        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm665768pjv.57.2022.04.11.18.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
-Message-ID: <992417be-97f1-09bd-f847-b279460d595b@gmail.com>
-Date:   Tue, 12 Apr 2022 09:26:21 +0800
+        Mon, 11 Apr 2022 21:32:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD113D23;
+        Mon, 11 Apr 2022 18:30:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FEA661047;
+        Tue, 12 Apr 2022 01:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 703FCC385AA;
+        Tue, 12 Apr 2022 01:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649727011;
+        bh=y0SHa5ehdasmyuILDO1pFKt4qKWN4fredmH2EEpE8XI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VuA3HDCnGKJ4u1TuBPUNVg1+BmE5AOdFSCaQSYMSuQriF3zGi6x8ZP4Y4Gi5ermLb
+         pTbeHpTTMNOLqQMU3FH8WIm5eL9Ciqh9OTeR/78Eief/QPzdVCdhldxr6ResvU88Ik
+         wMjapP3aXDAxz4RnI2yNpXXCRe4hNo+/FbEwv9VbbTWRH+rb1M25d3W7xEYd/P0gsS
+         N3xjgTqWrwmfGir4EZvl20B1IgdLE3P7OPI7jsec8fz2GzAIeb5wPgjxqQkQnGMLUu
+         Cae/kRnU2QMadxRJwKY8qPI2NpnpfvsoPhW6NDZhWKGZrpvI6C2SAC3INuNof8/T1H
+         8wXPU726a2o6g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 561D7E85B76;
+        Tue, 12 Apr 2022 01:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, khoroshilov@ispras.ru
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220407022204.10730-1-hbh25y@gmail.com>
- <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
- <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
- <91089407-cc21-ba05-5346-4f546cca7555@linuxfoundation.org>
- <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
- <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] hv_netvsc: Add support for XDP_REDIRECT
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164972701134.31190.7243820472815913361.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Apr 2022 01:30:11 +0000
+References: <1649362894-20077-1-git-send-email-haiyangz@microsoft.com>
+In-Reply-To: <1649362894-20077-1-git-send-email-haiyangz@microsoft.com>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        kys@microsoft.com, sthemmin@microsoft.com, olaf@aepfle.de,
+        vkuznets@redhat.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/12 03:38, Shuah Khan wrote:
-> On 4/10/22 11:29 PM, Hangyu Hua wrote:
->> On 2022/4/8 23:04, Shuah Khan wrote:
->>> On 4/7/22 7:59 PM, Hangyu Hua wrote:
->>>> Hi Shuah,
->>>>
->>>> I find this by code review. Do i really need to add this to commit 
->>>> log? This look like a little weird.
->>>>
->>>
->>> Great. Good find.
->>>
->>> It is important to understand how the problem is found. Please add it
->>> the change log. We usually expect dmesg or such info. that revealed
->>> refcount leak, since this one is found during code review, we would
->>> like to see that information the commit log.
->>>
->>> Also please remember to avoid top posting.
->>
->> I get what you meant now. But i don't know how to get a clear dmesg or 
->> any other log. The kernel will not crash because of this. I just used 
->> gdb to find that udev->dev->kobj->kref gets bigger and bigger whenever 
->> I call stub_probe with busid_priv->status = STUB_BUSID_REMOV.
->>
->> Thanks for telling me the rules.
->>
-> 
-> There is no need to gather dmesg etc. Just add a note that you found
-> the problem during code review. Having complete information about why
-> a change is made will be helpful for future changes to this code and
-> somebody new trying understand the changes made to this file/routine
-> and why.
-> 
-> thanks,
-> -- Shuah
+Hello:
 
-I get it. I will submit a v3.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks.
+On Thu,  7 Apr 2022 13:21:34 -0700 you wrote:
+> Handle XDP_REDIRECT action in netvsc driver.
+> Also, transparently pass ndo_xdp_xmit to VF when available.
+> 
+> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+> ---
+>  drivers/net/hyperv/hyperv_net.h |  69 ++++++++++++++-
+>  drivers/net/hyperv/netvsc.c     |   8 +-
+>  drivers/net/hyperv/netvsc_bpf.c |  95 +++++++++++++++++++-
+>  drivers/net/hyperv/netvsc_drv.c | 150 +++++++++++++-------------------
+>  4 files changed, 228 insertions(+), 94 deletions(-)
+
+Here is the summary with links:
+  - [net-next] hv_netvsc: Add support for XDP_REDIRECT
+    https://git.kernel.org/netdev/net-next/c/1cb9d3b6185b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

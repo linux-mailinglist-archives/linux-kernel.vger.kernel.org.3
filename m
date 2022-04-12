@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6324FDA2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C6F4FD477
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353096AbiDLJR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S1355852AbiDLH3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357683AbiDLHki (ORCPT
+        with ESMTP id S1351781AbiDLHM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5837A2B;
-        Tue, 12 Apr 2022 00:16:41 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E972FE9F;
+        Mon, 11 Apr 2022 23:52:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B792F6171C;
-        Tue, 12 Apr 2022 07:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45C1C385A5;
-        Tue, 12 Apr 2022 07:16:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84E8E61472;
+        Tue, 12 Apr 2022 06:52:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9845BC385A1;
+        Tue, 12 Apr 2022 06:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747800;
-        bh=5FCLa8SESKUYBJ4ATRRqzp9RiCWwoTSFcXkravvhKjg=;
+        s=korg; t=1649746356;
+        bh=3zwlakTVIipcz1ydV+u+L1C8sR5wbpROIWfDBj7mPGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zw4olPOLZrsVCcfDOlxexaW/zcADpB3nuXEOOfceycSPi1Ds7tT/XGTDEFSVuigZo
-         MjdVoRAYzanLCV5HHDTaV0WeTRS4afSro7MS75c2pd6Ic6vjBqmHwJlzDHNSb101R3
-         L8OCXe1XCYgWi9DEhWy3GDU15EhYMq1DeiiymQ2s=
+        b=DIkHzsmUpDVgVdHi1mKCdRYMOo0p8B77qonaxkgbHrCpQkz1z40xnL8U4Hm4MsVcf
+         5G1tAs+mTu1WGru3iN2tU73gDqRZKkZFR61iReV290WSU8x1EE+V69DAGtN2u+/2J/
+         Tc9ASCyBhU577GmWlI2Kv2heXR9ONvWlJY9u8/hY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matt Johnston <matt@codeconstruct.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 211/343] mctp: Fix check for dev_hard_header() result
+        stable@vger.kernel.org, Robbie Ko <robbieko@synology.com>,
+        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        Kaiwen Hu <kevinhu@synology.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 226/277] btrfs: prevent subvol with swapfile from being deleted
 Date:   Tue, 12 Apr 2022 08:30:29 +0200
-Message-Id: <20220412062957.437294374@linuxfoundation.org>
+Message-Id: <20220412062948.584408185@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Johnston <matt@codeconstruct.com.au>
+From: Kaiwen Hu <kevinhu@synology.com>
 
-[ Upstream commit 60be976ac45137657b7b505d7e0d44d0e51accb7 ]
+commit 60021bd754c6ca0addc6817994f20290a321d8d6 upstream.
 
-dev_hard_header() returns the length of the header, so
-we need to test for negative errors rather than non-zero.
+A subvolume with an active swapfile must not be deleted otherwise it
+would not be possible to deactivate it.
 
-Fixes: 889b7da23abf ("mctp: Add initial routing framework")
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+After the subvolume is deleted, we cannot swapoff the swapfile in this
+deleted subvolume because the path is unreachable.  The swapfile is
+still active and holding references, the filesystem cannot be unmounted.
+
+The test looks like this:
+
+  mkfs.btrfs -f $dev > /dev/null
+  mount $dev $mnt
+
+  btrfs sub create $mnt/subvol
+  touch $mnt/subvol/swapfile
+  chmod 600 $mnt/subvol/swapfile
+  chattr +C $mnt/subvol/swapfile
+  dd if=/dev/zero of=$mnt/subvol/swapfile bs=1K count=4096
+  mkswap $mnt/subvol/swapfile
+  swapon $mnt/subvol/swapfile
+
+  btrfs sub delete $mnt/subvol
+  swapoff $mnt/subvol/swapfile  # failed: No such file or directory
+  swapoff --all
+
+  unmount $mnt                  # target is busy.
+
+To prevent above issue, we simply check that whether the subvolume
+contains any active swapfile, and stop the deleting process.  This
+behavior is like snapshot ioctl dealing with a swapfile.
+
+CC: stable@vger.kernel.org # 5.4+
+Reviewed-by: Robbie Ko <robbieko@synology.com>
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Kaiwen Hu <kevinhu@synology.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mctp/route.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/inode.c |   24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/net/mctp/route.c b/net/mctp/route.c
-index 05fbd318eb98..d47438f5233d 100644
---- a/net/mctp/route.c
-+++ b/net/mctp/route.c
-@@ -507,7 +507,7 @@ static int mctp_route_output(struct mctp_route *route, struct sk_buff *skb)
- 
- 	rc = dev_hard_header(skb, skb->dev, ntohs(skb->protocol),
- 			     daddr, skb->dev->dev_addr, skb->len);
--	if (rc) {
-+	if (rc < 0) {
- 		kfree_skb(skb);
- 		return -EHOSTUNREACH;
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -4450,6 +4450,13 @@ int btrfs_delete_subvolume(struct inode
+ 			   dest->root_key.objectid);
+ 		return -EPERM;
  	}
--- 
-2.35.1
-
++	if (atomic_read(&dest->nr_swapfiles)) {
++		spin_unlock(&dest->root_item_lock);
++		btrfs_warn(fs_info,
++			   "attempt to delete subvolume %llu with active swapfile",
++			   root->root_key.objectid);
++		return -EPERM;
++	}
+ 	root_flags = btrfs_root_flags(&dest->root_item);
+ 	btrfs_set_root_flags(&dest->root_item,
+ 			     root_flags | BTRFS_ROOT_SUBVOL_DEAD);
+@@ -10721,8 +10728,23 @@ static int btrfs_swap_activate(struct sw
+ 	 * set. We use this counter to prevent snapshots. We must increment it
+ 	 * before walking the extents because we don't want a concurrent
+ 	 * snapshot to run after we've already checked the extents.
+-	 */
++	 *
++	 * It is possible that subvolume is marked for deletion but still not
++	 * removed yet. To prevent this race, we check the root status before
++	 * activating the swapfile.
++	 */
++	spin_lock(&root->root_item_lock);
++	if (btrfs_root_dead(root)) {
++		spin_unlock(&root->root_item_lock);
++
++		btrfs_exclop_finish(fs_info);
++		btrfs_warn(fs_info,
++		"cannot activate swapfile because subvolume %llu is being deleted",
++			root->root_key.objectid);
++		return -EPERM;
++	}
+ 	atomic_inc(&root->nr_swapfiles);
++	spin_unlock(&root->root_item_lock);
+ 
+ 	isize = ALIGN_DOWN(inode->i_size, fs_info->sectorsize);
+ 
 
 

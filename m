@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8724FD4C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C0F4FD552
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355836AbiDLH3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S1353107AbiDLIKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351782AbiDLHM4 (ORCPT
+        with ESMTP id S1353705AbiDLHZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E089910D7;
-        Mon, 11 Apr 2022 23:52:46 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C35F2610F;
+        Tue, 12 Apr 2022 00:03:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9864EB81B35;
-        Tue, 12 Apr 2022 06:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B566C385A6;
-        Tue, 12 Apr 2022 06:52:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAB2860B2B;
+        Tue, 12 Apr 2022 07:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F259EC385A1;
+        Tue, 12 Apr 2022 07:03:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746364;
-        bh=ICzSsye5q805ubTKBFXqcdGkkC3mROZ9m1grapPpb+Q=;
+        s=korg; t=1649747033;
+        bh=d99ktAmACl+jsTaV4QjDI+M78GFyfOHnTePoKIlYgB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rS+idZ7XLTrV4z/4Io9OahPE8lOR2MrFRTcpiMP2c2Iq6UJ5LA6g9gAmE+Vwhgu3A
-         IpPHtpxoPXcq7PplvQIxt4Xe3CeJLeN+X005UC87TPP2F1PERM10mb7j5TMaz8t3/v
-         PvC6dsUbJqZsUU0lZZg6+lxoT40f8WQjPQtEJY00=
+        b=QKjfjtsyHBX444m/ki5ioFlubnKoFfaL1O3fMTExUztCKs6kWzY7q1+BD9TZ9q5jP
+         pvavxb5Zx1BPcRULnAw9I/mKV+mAtpC8H6cxtzy2MpbDufPwAQ7Oaccdtlijyij4kx
+         LtJRx/TNLmQTHZ+FpmH0w/lQM0Nt9IFVelQCew8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Gabriel L. Somlo" <somlo@cmu.edu>,
-        Borislav Petkov <bp@alien8.de>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 255/277] Revert "nbd: fix possible overflow on first_minor in nbd_dev_add()"
-Date:   Tue, 12 Apr 2022 08:30:58 +0200
-Message-Id: <20220412062949.421342015@linuxfoundation.org>
+        stable@vger.kernel.org, Daejun Park <daejun7.park@samsung.com>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 202/285] scsi: ufs: ufshpb: Fix a NULL check on list iterator
+Date:   Tue, 12 Apr 2022 08:30:59 +0200
+Message-Id: <20220412062949.490739902@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 7198bfc2017644c6b92d2ecef9b8b8e0363bb5fd upstream.
+[ Upstream commit bfb7789bcbd901caead43861461bc8f334c90d3b ]
 
-This reverts commit 6d35d04a9e18990040e87d2bbf72689252669d54.
+The list iterator is always non-NULL so the check 'if (!rgn)' is always
+false and the dev_err() is never called. Move the check outside the loop
+and determine if 'victim_rgn' is NULL, to fix this bug.
 
-Both Gabriel and Borislav report that this commit casues a regression
-with nbd:
-
-sysfs: cannot create duplicate filename '/dev/block/43:0'
-
-Revert it before 5.18-rc1 and we'll investigage this separately in
-due time.
-
-Link: https://lore.kernel.org/all/YkiJTnFOt9bTv6A2@zn.tnic/
-Reported-by: Gabriel L. Somlo <somlo@cmu.edu>
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220320150733.21824-1-xiam0nd.tong@gmail.com
+Fixes: 4b5f49079c52 ("scsi: ufs: ufshpb: L2P map management for HPB read")
+Reviewed-by: Daejun Park <daejun7.park@samsung.com>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/scsi/ufs/ufshpb.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1744,6 +1744,17 @@ static struct nbd_device *nbd_dev_add(in
- 	refcount_set(&nbd->refs, 0);
- 	INIT_LIST_HEAD(&nbd->list);
- 	disk->major = NBD_MAJOR;
-+
-+	/* Too big first_minor can cause duplicate creation of
-+	 * sysfs files/links, since index << part_shift might overflow, or
-+	 * MKDEV() expect that the max bits of first_minor is 20.
-+	 */
-+	disk->first_minor = index << part_shift;
-+	if (disk->first_minor < index || disk->first_minor > MINORMASK) {
-+		err = -EINVAL;
-+		goto out_free_work;
-+	}
-+
- 	disk->minors = 1 << part_shift;
- 	disk->fops = &nbd_fops;
- 	disk->private_data = nbd;
-@@ -1848,19 +1859,8 @@ static int nbd_genl_connect(struct sk_bu
- 	if (!netlink_capable(skb, CAP_SYS_ADMIN))
- 		return -EPERM;
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index ded5ba9b1466..54c3b8f34c0a 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -870,12 +870,6 @@ static struct ufshpb_region *ufshpb_victim_lru_info(struct ufshpb_lu *hpb)
+ 	struct ufshpb_region *rgn, *victim_rgn = NULL;
  
--	if (info->attrs[NBD_ATTR_INDEX]) {
-+	if (info->attrs[NBD_ATTR_INDEX])
- 		index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
--
--		/*
--		 * Too big first_minor can cause duplicate creation of
--		 * sysfs files/links, since index << part_shift might overflow, or
--		 * MKDEV() expect that the max bits of first_minor is 20.
--		 */
--		if (index < 0 || index > MINORMASK >> part_shift) {
--			printk(KERN_ERR "nbd: illegal input index %d\n", index);
--			return -EINVAL;
+ 	list_for_each_entry(rgn, &lru_info->lh_lru_rgn, list_lru_rgn) {
+-		if (!rgn) {
+-			dev_err(&hpb->sdev_ufs_lu->sdev_dev,
+-				"%s: no region allocated\n",
+-				__func__);
+-			return NULL;
 -		}
--	}
- 	if (!info->attrs[NBD_ATTR_SOCKETS]) {
- 		printk(KERN_ERR "nbd: must specify at least one socket\n");
- 		return -EINVAL;
+ 		if (ufshpb_check_srgns_issue_state(hpb, rgn))
+ 			continue;
+ 
+@@ -891,6 +885,11 @@ static struct ufshpb_region *ufshpb_victim_lru_info(struct ufshpb_lu *hpb)
+ 		break;
+ 	}
+ 
++	if (!victim_rgn)
++		dev_err(&hpb->sdev_ufs_lu->sdev_dev,
++			"%s: no region allocated\n",
++			__func__);
++
+ 	return victim_rgn;
+ }
+ 
+-- 
+2.35.1
+
 
 

@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FBD4FE600
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B804FE601
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357734AbiDLQlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S1357735AbiDLQmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiDLQld (ORCPT
+        with ESMTP id S231586AbiDLQl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:41:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5264210FDA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:39:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6399E1424;
-        Tue, 12 Apr 2022 09:39:12 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 319403F5A1;
-        Tue, 12 Apr 2022 09:39:10 -0700 (PDT)
-Message-ID: <a58b640d-e12a-7b9d-2ab0-d95a3ae6950e@arm.com>
-Date:   Tue, 12 Apr 2022 17:39:04 +0100
+        Tue, 12 Apr 2022 12:41:59 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A814706E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:39:39 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23BNTBcJ022664;
+        Tue, 12 Apr 2022 11:39:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=OruPJRSEpxz+SS2SuZh1l9IfGObv7YDQ/pALU12P51I=;
+ b=pFNSQhTSS0a88LvD+zsAZgniqVR4Cu6PagZ9fUQjYK9eSomORE3gcHul+5mI320yDsdr
+ JLQ0vNP4UNGn/Ii6nOygZpOtORnDVFyng1nUAzHF0lLpbiLNayIrzz3lOT6hhp73QRUC
+ kkOAv0WBAyY6dH3gpaTx1+71cVsYVPD7IN9xzdqspJdiI0ScTwt9DDwEq3D0SVuCFNrH
+ 0221fBIuckVkR2HR6SuWkR3A5bTV0fBREohZ8jEbsqM7HqfK0JSvZBZB9gTfvaEv8BEq
+ hTQtDiV6Zb5491Q48hG0mXtR5jA7FzmUCHPMmYvKDhA47su4fhb/iqGfZ+Ol8aSxmnTx vQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fb7hym18n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 12 Apr 2022 11:39:32 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 12 Apr
+ 2022 17:39:30 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Tue, 12 Apr 2022 17:39:30 +0100
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.75])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 04470458;
+        Tue, 12 Apr 2022 16:39:29 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] firmware: cs_dsp: Fix overrun of unterminated control name string
+Date:   Tue, 12 Apr 2022 17:39:27 +0100
+Message-ID: <20220412163927.1303470-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH -next V3 6/6] arm64: add cow to machine check safe
-Content-Language: en-GB
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>
-References: <20220412072552.2526871-1-tongtiangen@huawei.com>
- <20220412072552.2526871-7-tongtiangen@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220412072552.2526871-7-tongtiangen@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: TpmPQ69TQXk_a1C_3XAa3qKwEZ0TFgTA
+X-Proofpoint-ORIG-GUID: TpmPQ69TQXk_a1C_3XAa3qKwEZ0TFgTA
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 8:25 am, Tong Tiangen wrote:
-[...]
-> +100:	ldp	x2, x3, [x1]
-> +101:	ldp	x4, x5, [x1, #16]
-> +102:	ldp	x6, x7, [x1, #32]
-> +103:	ldp	x8, x9, [x1, #48]
-> +104:	ldp	x10, x11, [x1, #64]
-> +105:	ldp	x12, x13, [x1, #80]
-> +106:	ldp	x14, x15, [x1, #96]
-> +107:	ldp	x16, x17, [x1, #112]
-> +
-> +	add	x0, x0, #256
-> +	add	x1, x1, #128
-> +1:
-> +	tst	x0, #(PAGE_SIZE - 1)
-> +
-> +alternative_if ARM64_HAS_NO_HW_PREFETCH
-> +	prfm	pldl1strm, [x1, #384]
-> +alternative_else_nop_endif
-> +
-> +	stnp	x2, x3, [x0, #-256]
-> +200:	ldp	x2, x3, [x1]
-> +	stnp	x4, x5, [x0, #16 - 256]
-> +201:	ldp	x4, x5, [x1, #16]
-> +	stnp	x6, x7, [x0, #32 - 256]
-> +202:	ldp	x6, x7, [x1, #32]
-> +	stnp	x8, x9, [x0, #48 - 256]
-> +203:	ldp	x8, x9, [x1, #48]
-> +	stnp	x10, x11, [x0, #64 - 256]
-> +204:	ldp	x10, x11, [x1, #64]
-> +	stnp	x12, x13, [x0, #80 - 256]
-> +205:	ldp	x12, x13, [x1, #80]
-> +	stnp	x14, x15, [x0, #96 - 256]
-> +206:	ldp	x14, x15, [x1, #96]
-> +	stnp	x16, x17, [x0, #112 - 256]
-> +207:	ldp	x16, x17, [x1, #112]
-> +
-> +	add	x0, x0, #128
-> +	add	x1, x1, #128
-> +
-> +	b.ne	1b
-> +
-> +	stnp	x2, x3, [x0, #-256]
-> +	stnp	x4, x5, [x0, #16 - 256]
-> +	stnp	x6, x7, [x0, #32 - 256]
-> +	stnp	x8, x9, [x0, #48 - 256]
-> +	stnp	x10, x11, [x0, #64 - 256]
-> +	stnp	x12, x13, [x0, #80 - 256]
-> +	stnp	x14, x15, [x0, #96 - 256]
-> +	stnp	x16, x17, [x0, #112 - 256]
-> +
-> +300:	ret
-> +
-> +_asm_extable_copy_page_mc 100b, 300b
-> +_asm_extable_copy_page_mc 101b, 300b
-> +_asm_extable_copy_page_mc 102b, 300b
-> +_asm_extable_copy_page_mc 103b, 300b
-> +_asm_extable_copy_page_mc 104b, 300b
-> +_asm_extable_copy_page_mc 105b, 300b
-> +_asm_extable_copy_page_mc 106b, 300b
-> +_asm_extable_copy_page_mc 107b, 300b
-> +_asm_extable_copy_page_mc 200b, 300b
-> +_asm_extable_copy_page_mc 201b, 300b
-> +_asm_extable_copy_page_mc 202b, 300b
-> +_asm_extable_copy_page_mc 203b, 300b
-> +_asm_extable_copy_page_mc 204b, 300b
-> +_asm_extable_copy_page_mc 205b, 300b
-> +_asm_extable_copy_page_mc 206b, 300b
-> +_asm_extable_copy_page_mc 207b, 300b
+For wmfw format v2 and later the coefficient name strings have a length
+field and are NOT null-terminated. Use kasprintf() to convert the
+unterminated string into a null-terminated string in an allocated buffer.
 
+The previous code handled this duplication incorrectly using kmemdup()
+and getting the length from a strlen() of the (unterminated) source string.
+This resulted in creating a string that continued up to the next byte in
+the firmware file that just happened to be 0x00.
 
-Please add a USER_MC() macro to parallel the existing USER() one (we can 
-worry about names and eventually consolidating things later), then use 
-that to save all the label mess here.
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Fixes: f6bc909e7673 ("firmware: cs_dsp: add driver to support firmware loading on Cirrus Logic DSPs")
+---
+ drivers/firmware/cirrus/cs_dsp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks,
-Robin.
+diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
+index e48108e694f8..7dad6f57d970 100644
+--- a/drivers/firmware/cirrus/cs_dsp.c
++++ b/drivers/firmware/cirrus/cs_dsp.c
+@@ -955,8 +955,7 @@ static int cs_dsp_create_control(struct cs_dsp *dsp,
+ 	ctl->alg_region = *alg_region;
+ 	if (subname && dsp->fw_ver >= 2) {
+ 		ctl->subname_len = subname_len;
+-		ctl->subname = kmemdup(subname,
+-				       strlen(subname) + 1, GFP_KERNEL);
++		ctl->subname = kasprintf(GFP_KERNEL, "%.*s", subname_len, subname);
+ 		if (!ctl->subname) {
+ 			ret = -ENOMEM;
+ 			goto err_ctl;
+-- 
+2.30.2
+

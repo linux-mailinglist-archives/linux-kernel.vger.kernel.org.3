@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A646A4FD549
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9174FD832
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiDLIAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S1385175AbiDLIuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353640AbiDLHZv (ORCPT
+        with ESMTP id S1358424AbiDLHlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC6E43AF8;
-        Tue, 12 Apr 2022 00:02:26 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7B14B41C;
+        Tue, 12 Apr 2022 00:18:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6665360B65;
-        Tue, 12 Apr 2022 07:02:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D08C385A6;
-        Tue, 12 Apr 2022 07:02:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E9176153F;
+        Tue, 12 Apr 2022 07:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B05C385A1;
+        Tue, 12 Apr 2022 07:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746945;
-        bh=IaRjs1aeOCE7+O1JcJOwJrEinbPZ5nBwyJji1xzLWgU=;
+        s=korg; t=1649747880;
+        bh=n5yPUWkMd95tE3x0rxoJM9innYGchDcsor/IkUmA+mk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iCRie/kicRgtELx39CJz1xWm3IvoGgaIgm45fJjGlTk+0xNqOmLPjQbjfE0GWS7Tj
-         wVxQy6Q9OxIV+yK7TKtwTu+3pkXEJZ2RiM1ShnbcmvZc63BwRocULAHy9xKrQ1lE5l
-         ioaCNH6T7usxHav1UrbR2u84PXRtwQcXjBic7rHI=
+        b=nrKBVr6nnSDMcl+bCMnvmpE9dxuribOg9sd+D7+RojZjcO4ULYo2Xzj/sSv1qtSnY
+         8zV8ZuIZGm447D41/s2AbsNkrL/8I8PKl2dsTlhoqGRfq0T8IdBptPGbaJ3sOXWmsK
+         89AcW1XBBG8TkJSaJyC1ffYD2XkprscaEIVAepJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Changhui Zhong <czhong@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tomas Henzl <thenzl@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 160/285] net: sfc: add missing xdp queue reinitialization
+Subject: [PATCH 5.17 199/343] scsi: core: scsi_logging: Fix a BUG
 Date:   Tue, 12 Apr 2022 08:30:17 +0200
-Message-Id: <20220412062948.289352160@linuxfoundation.org>
+Message-Id: <20220412062957.099091906@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,259 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Tomas Henzl <thenzl@redhat.com>
 
-[ Upstream commit 059a47f1da93811d37533556d67e72f2261b1127 ]
+[ Upstream commit f06aa52cb2723ec67e92df463827b800d6c477d1 ]
 
-After rx/tx ring buffer size is changed, kernel panic occurs when
-it acts XDP_TX or XDP_REDIRECT.
+The request_queue may be NULL in a request, for example when it comes from
+scsi_ioctl_reset(). Check it before use.
 
-When tx/rx ring buffer size is changed(ethtool -G), sfc driver
-reallocates and reinitializes rx and tx queues and their buffer
-(tx_queue->buffer).
-But it misses reinitializing xdp queues(efx->xdp_tx_queues).
-So, while it is acting XDP_TX or XDP_REDIRECT, it uses the uninitialized
-tx_queue->buffer.
-
-A new function efx_set_xdp_channels() is separated from efx_set_channels()
-to handle only xdp queues.
-
-Splat looks like:
-   BUG: kernel NULL pointer dereference, address: 000000000000002a
-   #PF: supervisor write access in kernel mode
-   #PF: error_code(0x0002) - not-present page
-   PGD 0 P4D 0
-   Oops: 0002 [#4] PREEMPT SMP NOPTI
-   RIP: 0010:efx_tx_map_chunk+0x54/0x90 [sfc]
-   CPU: 2 PID: 0 Comm: swapper/2 Tainted: G      D           5.17.0+ #55 e8beeee8289528f11357029357cf
-   Code: 48 8b 8d a8 01 00 00 48 8d 14 52 4c 8d 2c d0 44 89 e0 48 85 c9 74 0e 44 89 e2 4c 89 f6 48 80
-   RSP: 0018:ffff92f121e45c60 EFLAGS: 00010297
-   RIP: 0010:efx_tx_map_chunk+0x54/0x90 [sfc]
-   RAX: 0000000000000040 RBX: ffff92ea506895c0 RCX: ffffffffc0330870
-   RDX: 0000000000000001 RSI: 00000001139b10ce RDI: ffff92ea506895c0
-   RBP: ffffffffc0358a80 R08: 00000001139b110d R09: 0000000000000000
-   R10: 0000000000000001 R11: ffff92ea414c0088 R12: 0000000000000040
-   R13: 0000000000000018 R14: 00000001139b10ce R15: ffff92ea506895c0
-   FS:  0000000000000000(0000) GS:ffff92f121ec0000(0000) knlGS:0000000000000000
-   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   Code: 48 8b 8d a8 01 00 00 48 8d 14 52 4c 8d 2c d0 44 89 e0 48 85 c9 74 0e 44 89 e2 4c 89 f6 48 80
-   CR2: 000000000000002a CR3: 00000003e6810004 CR4: 00000000007706e0
-   RSP: 0018:ffff92f121e85c60 EFLAGS: 00010297
-   PKRU: 55555554
-   RAX: 0000000000000040 RBX: ffff92ea50689700 RCX: ffffffffc0330870
-   RDX: 0000000000000001 RSI: 00000001145a90ce RDI: ffff92ea50689700
-   RBP: ffffffffc0358a80 R08: 00000001145a910d R09: 0000000000000000
-   R10: 0000000000000001 R11: ffff92ea414c0088 R12: 0000000000000040
-   R13: 0000000000000018 R14: 00000001145a90ce R15: ffff92ea50689700
-   FS:  0000000000000000(0000) GS:ffff92f121e80000(0000) knlGS:0000000000000000
-   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   CR2: 000000000000002a CR3: 00000003e6810005 CR4: 00000000007706e0
-   PKRU: 55555554
-   Call Trace:
-    <IRQ>
-    efx_xdp_tx_buffers+0x12b/0x3d0 [sfc 84c94b8e32d44d296c17e10a634d3ad454de4ba5]
-    __efx_rx_packet+0x5c3/0x930 [sfc 84c94b8e32d44d296c17e10a634d3ad454de4ba5]
-    efx_rx_packet+0x28c/0x2e0 [sfc 84c94b8e32d44d296c17e10a634d3ad454de4ba5]
-    efx_ef10_ev_process+0x5f8/0xf40 [sfc 84c94b8e32d44d296c17e10a634d3ad454de4ba5]
-    ? enqueue_task_fair+0x95/0x550
-    efx_poll+0xc4/0x360 [sfc 84c94b8e32d44d296c17e10a634d3ad454de4ba5]
-
-Fixes: 3990a8fffbda ("sfc: allocate channels for XDP tx queues")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: f3fa33acca9f ("block: remove the ->rq_disk field in struct request")
+Link: https://lore.kernel.org/r/20220324134603.28463-1-thenzl@redhat.com
+Reported-by: Changhui Zhong <czhong@redhat.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Tomas Henzl <thenzl@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 146 +++++++++++++-----------
- 1 file changed, 81 insertions(+), 65 deletions(-)
+ drivers/scsi/scsi_logging.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index 3dbea028b325..4753c0c5af10 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -763,6 +763,85 @@ void efx_remove_channels(struct efx_nic *efx)
- 	kfree(efx->xdp_tx_queues);
- }
- 
-+static int efx_set_xdp_tx_queue(struct efx_nic *efx, int xdp_queue_number,
-+				struct efx_tx_queue *tx_queue)
-+{
-+	if (xdp_queue_number >= efx->xdp_tx_queue_count)
-+		return -EINVAL;
-+
-+	netif_dbg(efx, drv, efx->net_dev,
-+		  "Channel %u TXQ %u is XDP %u, HW %u\n",
-+		  tx_queue->channel->channel, tx_queue->label,
-+		  xdp_queue_number, tx_queue->queue);
-+	efx->xdp_tx_queues[xdp_queue_number] = tx_queue;
-+	return 0;
-+}
-+
-+static void efx_set_xdp_channels(struct efx_nic *efx)
-+{
-+	struct efx_tx_queue *tx_queue;
-+	struct efx_channel *channel;
-+	unsigned int next_queue = 0;
-+	int xdp_queue_number = 0;
-+	int rc;
-+
-+	/* We need to mark which channels really have RX and TX
-+	 * queues, and adjust the TX queue numbers if we have separate
-+	 * RX-only and TX-only channels.
-+	 */
-+	efx_for_each_channel(channel, efx) {
-+		if (channel->channel < efx->tx_channel_offset)
-+			continue;
-+
-+		if (efx_channel_is_xdp_tx(channel)) {
-+			efx_for_each_channel_tx_queue(tx_queue, channel) {
-+				tx_queue->queue = next_queue++;
-+				rc = efx_set_xdp_tx_queue(efx, xdp_queue_number,
-+							  tx_queue);
-+				if (rc == 0)
-+					xdp_queue_number++;
-+			}
-+		} else {
-+			efx_for_each_channel_tx_queue(tx_queue, channel) {
-+				tx_queue->queue = next_queue++;
-+				netif_dbg(efx, drv, efx->net_dev,
-+					  "Channel %u TXQ %u is HW %u\n",
-+					  channel->channel, tx_queue->label,
-+					  tx_queue->queue);
-+			}
-+
-+			/* If XDP is borrowing queues from net stack, it must
-+			 * use the queue with no csum offload, which is the
-+			 * first one of the channel
-+			 * (note: tx_queue_by_type is not initialized yet)
-+			 */
-+			if (efx->xdp_txq_queues_mode ==
-+			    EFX_XDP_TX_QUEUES_BORROWED) {
-+				tx_queue = &channel->tx_queue[0];
-+				rc = efx_set_xdp_tx_queue(efx, xdp_queue_number,
-+							  tx_queue);
-+				if (rc == 0)
-+					xdp_queue_number++;
-+			}
-+		}
-+	}
-+	WARN_ON(efx->xdp_txq_queues_mode == EFX_XDP_TX_QUEUES_DEDICATED &&
-+		xdp_queue_number != efx->xdp_tx_queue_count);
-+	WARN_ON(efx->xdp_txq_queues_mode != EFX_XDP_TX_QUEUES_DEDICATED &&
-+		xdp_queue_number > efx->xdp_tx_queue_count);
-+
-+	/* If we have more CPUs than assigned XDP TX queues, assign the already
-+	 * existing queues to the exceeding CPUs
-+	 */
-+	next_queue = 0;
-+	while (xdp_queue_number < efx->xdp_tx_queue_count) {
-+		tx_queue = efx->xdp_tx_queues[next_queue++];
-+		rc = efx_set_xdp_tx_queue(efx, xdp_queue_number, tx_queue);
-+		if (rc == 0)
-+			xdp_queue_number++;
-+	}
-+}
-+
- int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
+diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
+index 1f8f80b2dbfc..a9f8de5e9639 100644
+--- a/drivers/scsi/scsi_logging.c
++++ b/drivers/scsi/scsi_logging.c
+@@ -30,7 +30,7 @@ static inline const char *scmd_name(const struct scsi_cmnd *scmd)
  {
- 	struct efx_channel *other_channel[EFX_MAX_CHANNELS], *channel;
-@@ -837,6 +916,7 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
- 		efx_init_napi_channel(efx->channel[i]);
- 	}
+ 	struct request *rq = scsi_cmd_to_rq((struct scsi_cmnd *)scmd);
  
-+	efx_set_xdp_channels(efx);
- out:
- 	/* Destroy unused channel structures */
- 	for (i = 0; i < efx->n_channels; i++) {
-@@ -872,26 +952,9 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
- 	goto out;
+-	if (!rq->q->disk)
++	if (!rq->q || !rq->q->disk)
+ 		return NULL;
+ 	return rq->q->disk->disk_name;
  }
- 
--static inline int
--efx_set_xdp_tx_queue(struct efx_nic *efx, int xdp_queue_number,
--		     struct efx_tx_queue *tx_queue)
--{
--	if (xdp_queue_number >= efx->xdp_tx_queue_count)
--		return -EINVAL;
--
--	netif_dbg(efx, drv, efx->net_dev, "Channel %u TXQ %u is XDP %u, HW %u\n",
--		  tx_queue->channel->channel, tx_queue->label,
--		  xdp_queue_number, tx_queue->queue);
--	efx->xdp_tx_queues[xdp_queue_number] = tx_queue;
--	return 0;
--}
--
- int efx_set_channels(struct efx_nic *efx)
- {
--	struct efx_tx_queue *tx_queue;
- 	struct efx_channel *channel;
--	unsigned int next_queue = 0;
--	int xdp_queue_number;
- 	int rc;
- 
- 	efx->tx_channel_offset =
-@@ -909,61 +972,14 @@ int efx_set_channels(struct efx_nic *efx)
- 			return -ENOMEM;
- 	}
- 
--	/* We need to mark which channels really have RX and TX
--	 * queues, and adjust the TX queue numbers if we have separate
--	 * RX-only and TX-only channels.
--	 */
--	xdp_queue_number = 0;
- 	efx_for_each_channel(channel, efx) {
- 		if (channel->channel < efx->n_rx_channels)
- 			channel->rx_queue.core_index = channel->channel;
- 		else
- 			channel->rx_queue.core_index = -1;
--
--		if (channel->channel >= efx->tx_channel_offset) {
--			if (efx_channel_is_xdp_tx(channel)) {
--				efx_for_each_channel_tx_queue(tx_queue, channel) {
--					tx_queue->queue = next_queue++;
--					rc = efx_set_xdp_tx_queue(efx, xdp_queue_number, tx_queue);
--					if (rc == 0)
--						xdp_queue_number++;
--				}
--			} else {
--				efx_for_each_channel_tx_queue(tx_queue, channel) {
--					tx_queue->queue = next_queue++;
--					netif_dbg(efx, drv, efx->net_dev, "Channel %u TXQ %u is HW %u\n",
--						  channel->channel, tx_queue->label,
--						  tx_queue->queue);
--				}
--
--				/* If XDP is borrowing queues from net stack, it must use the queue
--				 * with no csum offload, which is the first one of the channel
--				 * (note: channel->tx_queue_by_type is not initialized yet)
--				 */
--				if (efx->xdp_txq_queues_mode == EFX_XDP_TX_QUEUES_BORROWED) {
--					tx_queue = &channel->tx_queue[0];
--					rc = efx_set_xdp_tx_queue(efx, xdp_queue_number, tx_queue);
--					if (rc == 0)
--						xdp_queue_number++;
--				}
--			}
--		}
- 	}
--	WARN_ON(efx->xdp_txq_queues_mode == EFX_XDP_TX_QUEUES_DEDICATED &&
--		xdp_queue_number != efx->xdp_tx_queue_count);
--	WARN_ON(efx->xdp_txq_queues_mode != EFX_XDP_TX_QUEUES_DEDICATED &&
--		xdp_queue_number > efx->xdp_tx_queue_count);
- 
--	/* If we have more CPUs than assigned XDP TX queues, assign the already
--	 * existing queues to the exceeding CPUs
--	 */
--	next_queue = 0;
--	while (xdp_queue_number < efx->xdp_tx_queue_count) {
--		tx_queue = efx->xdp_tx_queues[next_queue++];
--		rc = efx_set_xdp_tx_queue(efx, xdp_queue_number, tx_queue);
--		if (rc == 0)
--			xdp_queue_number++;
--	}
-+	efx_set_xdp_channels(efx);
- 
- 	rc = netif_set_real_num_tx_queues(efx->net_dev, efx->n_tx_channels);
- 	if (rc)
 -- 
 2.35.1
 

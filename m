@@ -2,101 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4384FE3F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA82C4FE3FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356683AbiDLOi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S1356708AbiDLOlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245315AbiDLOi4 (ORCPT
+        with ESMTP id S1353946AbiDLOlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:38:56 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588BF5F257
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:36:38 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id bk12so13840145qkb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:36:38 -0700 (PDT)
+        Tue, 12 Apr 2022 10:41:24 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288DBE61
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:39:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id o2so10932015lfu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=evNj2CNMoMsw5e7L6RfPQYGJFzo3TZYC7FsieHWZ5Ls=;
-        b=P4KDTA4ChNl8eFo5TaRAl/5FnI/hVHjJzJBo1xbfO6E6tcQCaqBfnBN1z5fv3DfE1u
-         iQILgHtSz7DDusNSlvJP3Z1yMP4+yKAQ2Eyz628hQVcLvQ+BxsdlwhsUbE6fvWB/Q2is
-         KJFMZcpNQuQ1kXRm/7dZww/aXDBDg6Qg87XJBXqMNal9QHP5YcfHOuo4039oAPwifclm
-         Ni6jxAqEXJAsTg1vDWd5O4322/PPXZOhWqI7cTTZAicevA8+5AkWYEBaFSAdm27ELa3S
-         niv0qlWzCgCFeZ31VkUUBPNxRCHtURSjk4RK/eF6eqwh/psh+4pwILguC3l2W1BosUlI
-         tCIg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1jW4bd/7yPSEehPFbVTpAiA6p53vC49A6nWZuDG/r3o=;
+        b=R+7xlx0FffmlF26JaLRk5I7U2ZMzLBkIwDNugQkPqgvHR3dbVGsuN5g618Ql7GwUEs
+         k2oEKEpUzgQzyS4GWBDy27jyyanEP9a0Aox9ZO+Piq1Yif2/LWhM/b5rx0Rey3LN8NBv
+         n1znTZbdaBD7K93N+/Ubqx2waufdfZTnF2CTNcMTfDo36iDb7UHLojMwkUiTJpEMIQfK
+         yawMuwJmxYIqZquOJz/fMQdLdWFOpZ8w1yL/AiVFZyPDJir8ioNtk0c7jhNnnHOg1BlS
+         xcK0lQcnpM2qZ18z+cRs+Ys2z7sBIU7Wn7M8xiFDBAeQZCuyGQ7hn7Tq/t+vn3C+EQ3T
+         X9Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=evNj2CNMoMsw5e7L6RfPQYGJFzo3TZYC7FsieHWZ5Ls=;
-        b=NbQCFCnHK3Hoj7DOAFwXxrXaWCHAnclgJcOSeiFbQSPbNX7/N8jMSSakq/8d9Zo+Pm
-         +U6LKWbAnFVffWo5AMfpaYvAz2RM5lCCDFTPXSNN6r8GTsaP+IDBmZoDpY83dHJmFkGV
-         WjPqgYThpcg1Iz9Q4gi06K1PF4kz0958mL187zY2M1r0h8L+j68kHCKFnN1oNK42qOdk
-         ZIh5yEpCoTgGXiqrqiXHVSNL+VBiQ0A1f1UcD6ygrNdWE6ZmMayHpkyJCRoUstOiNtZV
-         Xbyx97rluUKz68O3hy4ITNbV4rV8Ocg5X1VugW7inbgcXZpArTz1PvbudZ+H+ggun3Gk
-         Hg/g==
-X-Gm-Message-State: AOAM531VqGYdg06qIu3hRxKSK+P3/ucu37VI26E4M/yYkVvURFfgvUoG
-        dRZrHu/wtNfrCDWOmFY0Ypt+bg==
-X-Google-Smtp-Source: ABdhPJySHPHmQqifS2wea+F5V8gixdYIV//Jv7wOTevmOQGVNlVLMxWAFhJpJjukoZ7Xd9/fbgNIYA==
-X-Received: by 2002:a37:990:0:b0:69a:976:be4e with SMTP id 138-20020a370990000000b0069a0976be4emr3264529qkj.321.1649774197434;
-        Tue, 12 Apr 2022 07:36:37 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id n7-20020ac85a07000000b002f1421dac8csm324215qta.80.2022.04.12.07.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 07:36:36 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1neHdE-000uGn-C6; Tue, 12 Apr 2022 11:36:36 -0300
-Date:   Tue, 12 Apr 2022 11:36:36 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <20220412143636.GG64706@ziepe.ca>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
- <YlB3Z8fqJ+67a2Ck@google.com>
- <7ab689e7-e04d-5693-f899-d2d785b09892@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1jW4bd/7yPSEehPFbVTpAiA6p53vC49A6nWZuDG/r3o=;
+        b=51B9txtniKIP1Qo0yV3CFG3xzpwZPzeRiKTl/APK4ptRaxgLu2arA2vho81htvaL6o
+         bWyjWgciijZdAKfICVqp6umLdfm+MHjdMS1AGwbiWordaAG0KKkFqHZwJpNaraYHtBON
+         q4zZoOHDXSiByRZlavSldeoBl4qXqjZOrfHJaCxhMI+yT3smlpmmbb0UC3liJxPQuAq8
+         +sTsirT4G9zImuNk9n7m+PL+hELnZA/Zx8WE8SmxbAApJpDnc2mi+OXCKQOw+TepWw2H
+         Bxs+fQPw+uMtYWkQOdXVes5SvgSRSmaFbmUs/HvtRlSUFmE2c3wCBbjUn4M2DXld5OH/
+         vWwA==
+X-Gm-Message-State: AOAM532qkJfxj8eq73tIG/U2rH2Yg4R7kkN5W7pnoqD4EFieF6LZ/3E/
+        r4vM9f3DGBIN9CgpLfq1vh02+MG5yhAdSXcT/Ni2cjNvR2rwGg==
+X-Google-Smtp-Source: ABdhPJyTqqiHyWMmyXbnPNp/p5Xp2ZhfTyIjgr++ep+ra07cLmtyTcrBj9MXWwiVc5yBowR4nPuQy+3S81ngAu0lnHU=
+X-Received: by 2002:a05:6512:b19:b0:44a:b7c4:3d94 with SMTP id
+ w25-20020a0565120b1900b0044ab7c43d94mr24488580lfu.358.1649774344300; Tue, 12
+ Apr 2022 07:39:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ab689e7-e04d-5693-f899-d2d785b09892@redhat.com>
+References: <20220408124338.27090-1-a-govindraju@ti.com>
+In-Reply-To: <20220408124338.27090-1-a-govindraju@ti.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 12 Apr 2022 16:38:28 +0200
+Message-ID: <CAPDyKFqy6sEtU57-QkZeCfMtJgcoHG8siRBieOUjkBZMfPge9Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] mmc: sdhci_am654: Add support for PM suspend/resume
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -107,26 +68,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 08:54:02PM +0200, David Hildenbrand wrote:
+On Fri, 8 Apr 2022 at 14:43, Aswath Govindraju <a-govindraju@ti.com> wrote:
+>
+> Add support for suspend/resume and pm_runtime resume/suspend.
+>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>
+> Changes since v1:
+> - Removed System pm calls and used force_runtime_pm calls instead
+> - Added error handling at required places
+> - Added pm_runtime_sync call in the sdhci_am654_remove function
+> - Replaced pm_runtime_*_sync calls in probe with noidle and noresume
+>   calls
+> - Used MACRO SET_RUNTIME_PM_OPS to avoid build errors when CONFIG_PM
+>   is disabled
+>
+>  drivers/mmc/host/sdhci_am654.c | 146 +++++++++++++++++++++++++++++----
+>  1 file changed, 132 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> index e54fe24d47e7..131b2b9ae0e7 100644
+> --- a/drivers/mmc/host/sdhci_am654.c
+> +++ b/drivers/mmc/host/sdhci_am654.c
+> @@ -84,6 +84,7 @@
+>  #define DRIVER_STRENGTH_40_OHM 0x4
+>
+>  #define CLOCK_TOO_SLOW_HZ      50000000
+> +#define SDHCI_AM654_AUTOSUSPEND_DELAY  100
+>
+>  /* Command Queue Host Controller Interface Base address */
+>  #define SDHCI_AM654_CQE_BASE_ADDR 0x200
+> @@ -791,16 +792,10 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>
+>         pltfm_host->clk = clk_xin;
+>
+> -       /* Clocks are enabled using pm_runtime */
+> -       pm_runtime_enable(dev);
+> -       ret = pm_runtime_resume_and_get(dev);
+> -       if (ret)
+> -               goto pm_runtime_disable;
+> -
+>         base = devm_platform_ioremap_resource(pdev, 1);
+>         if (IS_ERR(base)) {
+>                 ret = PTR_ERR(base);
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         sdhci_am654->base = devm_regmap_init_mmio(dev, base,
+> @@ -808,31 +803,47 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>         if (IS_ERR(sdhci_am654->base)) {
+>                 dev_err(dev, "Failed to initialize regmap\n");
+>                 ret = PTR_ERR(sdhci_am654->base);
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         ret = sdhci_am654_get_of_property(pdev, sdhci_am654);
+>         if (ret)
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>
+>         ret = mmc_of_parse(host->mmc);
+>         if (ret) {
+>                 dev_err(dev, "parsing dt failed (%d)\n", ret);
+> -               goto pm_runtime_put;
+> +               goto err_pltfm_free;
+>         }
+>
+>         host->mmc_host_ops.execute_tuning = sdhci_am654_execute_tuning;
+>
+> +       pm_runtime_get_noresume(dev);
+> +       ret = pm_runtime_set_active(dev);
+> +       if (ret)
+> +               goto pm_put;
+> +       pm_runtime_enable(dev);
+> +       ret = clk_prepare_enable(pltfm_host->clk);
+> +       if (ret)
+> +               goto pm_disable;
+> +
+>         ret = sdhci_am654_init(host);
+>         if (ret)
+> -               goto pm_runtime_put;
+> +               goto clk_disable;
+>
+> +       /* Setting up autosuspend */
+> +       pm_runtime_set_autosuspend_delay(dev, SDHCI_AM654_AUTOSUSPEND_DELAY);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put_autosuspend(dev);
+>         return 0;
+>
+> -pm_runtime_put:
+> -       pm_runtime_put_sync(dev);
+> -pm_runtime_disable:
+> +clk_disable:
+> +       clk_disable_unprepare(pltfm_host->clk);
+> +pm_disable:
+>         pm_runtime_disable(dev);
+> +pm_put:
+> +       pm_runtime_put_noidle(dev);
+>  err_pltfm_free:
+>         sdhci_pltfm_free(pdev);
+>         return ret;
+> @@ -841,23 +852,130 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+>  static int sdhci_am654_remove(struct platform_device *pdev)
+>  {
+>         struct sdhci_host *host = platform_get_drvdata(pdev);
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>         int ret;
+>
+> +       ret = pm_runtime_get_sync(&pdev->dev);
 
-> RLIMIT_MEMLOCK was the obvious candidate, but as we discovered int he
-> past already with secretmem, it's not 100% that good of a fit (unmovable
-> is worth than mlocked). But it gets the job done for now at least.
+pm_runtime_resume_and_get() is better suited here, as it helps us to
+restore the usage count in the error path.
 
-No, it doesn't. There are too many different interpretations how
-MELOCK is supposed to work
+> +       if (ret < 0)
+> +               return ret;
+> +
+>         sdhci_remove_host(host, true);
+>         ret = pm_runtime_put_sync(&pdev->dev);
 
-eg VFIO accounts per-process so hostile users can just fork to go past
-it.
+We need to drop the above call to pm_runtime_put_sync(). Otherwise you
+may potentially end up gating the clock, in which case the below call
+to clk_disable_unprepare() becomes wrong.
 
-RDMA is per-process but uses a different counter, so you can double up
+>         if (ret < 0)
+>                 return ret;
+>
+> +       clk_disable_unprepare(pltfm_host->clk);
+>         pm_runtime_disable(&pdev->dev);
 
-iouring is per-user and users a 3rd counter, so it can triple up on
-the above two
+You need a call to pm_runtime_put_noidle() here to restore the RPM
+usage count to zero.
 
-> So I'm open for alternative to limit the amount of unmovable memory we
-> might allocate for user space, and then we could convert seretmem as well.
+>         sdhci_pltfm_free(pdev);
+> +       return 0;
+> +}
 
-I think it has to be cgroup based considering where we are now :\
+[...]
 
-Jason
+Other than the rather minor things above, this looks good to me!
+
+Kind regards
+Uffe

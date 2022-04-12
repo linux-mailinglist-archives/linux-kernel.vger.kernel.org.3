@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA464FD798
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFA54FD633
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384880AbiDLIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S1357842AbiDLJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357271AbiDLHjz (ORCPT
+        with ESMTP id S1357294AbiDLHj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2CDFFB;
-        Tue, 12 Apr 2022 00:14:35 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70619183B5;
+        Tue, 12 Apr 2022 00:14:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8522561045;
-        Tue, 12 Apr 2022 07:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEDFC385A1;
-        Tue, 12 Apr 2022 07:14:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB11CB81B46;
+        Tue, 12 Apr 2022 07:14:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3DDC385A1;
+        Tue, 12 Apr 2022 07:14:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747675;
-        bh=vAiDl1GwVbQ82UKpOaMdXzGgdpkyRkO6Fv8harzJaY8=;
+        s=korg; t=1649747677;
+        bh=BJU3SoYaAQU5PGAAdKA5dXjOco3AbVhPcyDIW5TSjrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJEPD98mgdrCaH7jXoTlUJrCY6SMP2Fxvpz2G+6X0891E5/JYE7ZiskqJ69qlpv3d
-         p27R8hsz0iVvvdOKso+mgVtAJzlkEDdVCk3B8ITGjEGQKAoXuz5fEjCg70UgYxOz0d
-         JqxB2kontUorx/9oihrImgD5P6OWuuirbHK9l8gg=
+        b=jJ87HZP3qf6vCWKaLP/vFWZJjR8603lPkmhyGbSpMBYyAefuvntGziNPYcnI9wz5n
+         0mJJUYfpztjXUiwHR1/gAYMKChEjuDrJVomReYEWNOvvvFhNiUL16Uw8xNRtykNsR9
+         IxFa5Xr8LInXm/g2jwjfqwvzl+zJz/Dc/HHySE40=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 166/343] staging: wfx: apply the necessary SDIO quirks for the Silabs WF200
-Date:   Tue, 12 Apr 2022 08:29:44 +0200
-Message-Id: <20220412062956.162857858@linuxfoundation.org>
+        <jerome.pouiller@silabs.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 167/343] staging: wfx: fix an error handling in wfx_init_common()
+Date:   Tue, 12 Apr 2022 08:29:45 +0200
+Message-Id: <20220412062956.191258378@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -57,58 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jérôme Pouiller <jerome.pouiller@silabs.com>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-[ Upstream commit 96e0cbca1cb96e9d3deac3051aa816e13082f3fd ]
+[ Upstream commit 60f1d3c92dc1ef1026e5b917a329a7fa947da036 ]
 
-Until now, the SDIO quirks are applied directly from the driver.
-However, it is better to apply the quirks before driver probing. So,
-this patch relocate the quirks in the MMC framework.
+One error handler of wfx_init_common() return without calling
+ieee80211_free_hw(hw), which may result in memory leak. And I add
+one err label to unify the error handler, which is useful for the
+subsequent changes.
 
-Note that the WF200 has no valid SDIO VID/PID. Therefore, we match DT
-rather than on the SDIO VID/PID.
-
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
-Link: https://lore.kernel.org/r/20220216093112.92469-3-Jerome.Pouiller@silabs.com
+Suggested-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Link: https://lore.kernel.org/r/tencent_24A24A3EFF61206ECCC4B94B1C5C1454E108@qq.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/quirks.h      | 5 +++++
- drivers/staging/wfx/bus_sdio.c | 3 ---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/staging/wfx/main.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/core/quirks.h b/drivers/mmc/core/quirks.h
-index 20f568727277..f879dc63d936 100644
---- a/drivers/mmc/core/quirks.h
-+++ b/drivers/mmc/core/quirks.h
-@@ -149,6 +149,11 @@ static const struct mmc_fixup __maybe_unused sdio_fixup_methods[] = {
- static const struct mmc_fixup __maybe_unused sdio_card_init_methods[] = {
- 	SDIO_FIXUP_COMPATIBLE("ti,wl1251", wl1251_quirk, 0),
- 
-+	SDIO_FIXUP_COMPATIBLE("silabs,wf200", add_quirk,
-+			      MMC_QUIRK_BROKEN_BYTE_MODE_512 |
-+			      MMC_QUIRK_LENIENT_FN0 |
-+			      MMC_QUIRK_BLKSZ_FOR_BYTE_MODE),
+diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+index 858d778cc589..e3999e95ce85 100644
+--- a/drivers/staging/wfx/main.c
++++ b/drivers/staging/wfx/main.c
+@@ -322,7 +322,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 	wdev->pdata.gpio_wakeup = devm_gpiod_get_optional(dev, "wakeup",
+ 							  GPIOD_OUT_LOW);
+ 	if (IS_ERR(wdev->pdata.gpio_wakeup))
+-		return NULL;
++		goto err;
 +
- 	END_FIXUP
- };
+ 	if (wdev->pdata.gpio_wakeup)
+ 		gpiod_set_consumer_name(wdev->pdata.gpio_wakeup, "wfx wakeup");
  
-diff --git a/drivers/staging/wfx/bus_sdio.c b/drivers/staging/wfx/bus_sdio.c
-index a670176ba06f..0612f8a7c085 100644
---- a/drivers/staging/wfx/bus_sdio.c
-+++ b/drivers/staging/wfx/bus_sdio.c
-@@ -207,9 +207,6 @@ static int wfx_sdio_probe(struct sdio_func *func,
+@@ -341,6 +342,10 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 		return NULL;
  
- 	bus->func = func;
- 	sdio_set_drvdata(func, bus);
--	func->card->quirks |= MMC_QUIRK_LENIENT_FN0 |
--			      MMC_QUIRK_BLKSZ_FOR_BYTE_MODE |
--			      MMC_QUIRK_BROKEN_BYTE_MODE_512;
+ 	return wdev;
++
++err:
++	ieee80211_free_hw(hw);
++	return NULL;
+ }
  
- 	sdio_claim_host(func);
- 	ret = sdio_enable_func(func);
+ int wfx_probe(struct wfx_dev *wdev)
 -- 
 2.35.1
 

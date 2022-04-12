@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104714FD5D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C194FD75A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377799AbiDLJu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S230369AbiDLJvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352184AbiDLJmd (ORCPT
+        with ESMTP id S1353613AbiDLJnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:42:33 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F51513E86
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:52:29 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id v15so11445675edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:52:29 -0700 (PDT)
+        Tue, 12 Apr 2022 05:43:50 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756360A83
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso2189965pjh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pB+1JohUx/AAEa/eALR+9ZzJFy4+pwowrpjWY0TEY6s=;
-        b=g8oMWg7WaTEuIIf7SFur7baOsKDy1aiy27S3Ckz9bAm+8KujIwQkIc97hAPh+AzqEG
-         mRg9Bfu3IHa23w/tuKemvpsGngozqjFtft+1gPnxeCG62HCahLmUnOYOVcAbH89MfTxY
-         7fHOBXbcyyY/XF+IKx9M8npbHXSzHuVJMCELMOUqW10ce4TIO3+YH4TGsuCvQBbxu68j
-         ZgS3euFwXmfjbjBEBQ7Zsk7g2xSHQBFsFPJA8PePYO2Fo6kyKrvP3z+Y00eOAIjZ9YGu
-         6So0c3+Qu1ou28750cgLq/BEK/grwoiv+BLMSNzX1J1Q3T9I+rNLqPLoXpJs5fSE2X5N
-         i9Rw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VCefrZdfoSNAmADQ4rDEGDGpMamNwlihzSsXzq1s8T8=;
+        b=p53JNlmEO3AdY9Dcfd9psNc/BECz9tDHElvzGGZfzA4B1FRN0VKefh0WsP2jNk6nyC
+         Bcgeekw4Pes1N003jaQiy2vWoXFlY/m0t2O7oZSx0JvKN2n21eZBGiFcnW/NIV1+5JbC
+         dYL3nRA/1fGrfn2sH1XT7bv97Zu+nK6XrzaIFzOV6yboyRmscCMxs70mldh7roTkDEUD
+         VekK/Jlw58pHUtrjJQ5wzU9IWIl3via84gTlJ1bv+NaqxzXhSld+rLf+j6X2Bt7lh0Z4
+         ODjdzXg2b/y/YV5sRe524vcJfu9AxSFOhBF2aWs04ZN26gIxR9Q7Jc51AVTPdP46RgU6
+         AAdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pB+1JohUx/AAEa/eALR+9ZzJFy4+pwowrpjWY0TEY6s=;
-        b=AxU9j3VZkGeENm4BCGhS/DuBvj302Y88YIulsCRx96gKAh+VqRejqXGV56rDeCnk3Y
-         5aWc/bCvHcPUl2j201bD72VbnTjnFYFQGNDy9fQT/f9SP1cK6eCLL+9v6ObJ5boAWtIn
-         1NtUnnIpx6t7r1TrQioBZRkX6Hw8fOlrs9LD57+GM6ZtP8Mg62BZWvdXOdlhlZaoEbgQ
-         +qUxsubFQ/VnboDnLwtsu+UCtPgzgKf78as27Zjtpk1Eb/tEwsnkxngTfe/5MFNtwwkP
-         Y+OBVt8/A3gVFS6pmAh5vFT8L62GRTFws6MQVAcp/uvYSrJHl5IuecY++Ze0udBY2qeU
-         wtfA==
-X-Gm-Message-State: AOAM533RfvNYU5eBuODBq67Vm+UCAF7LjywCjyDm1KgtPcyuPwHMIBP1
-        R4ggFqHysj84Zp4JyB2IJaHvzw==
-X-Google-Smtp-Source: ABdhPJxFhtwpTL4eKhml6vgwWIqP+H4DWUDHQoZAIyaHwztXfad7VbrscMEEk+gBT3gfSXKH703Byw==
-X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr37519085edc.232.1649753547814;
-        Tue, 12 Apr 2022 01:52:27 -0700 (PDT)
-Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p15-20020a170906228f00b006e86ff7db33sm3894546eja.68.2022.04.12.01.52.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 01:52:27 -0700 (PDT)
-Message-ID: <ab2252b6-a986-6f3b-0b5a-eb1cad3f28ae@linaro.org>
-Date:   Tue, 12 Apr 2022 10:52:26 +0200
+        bh=VCefrZdfoSNAmADQ4rDEGDGpMamNwlihzSsXzq1s8T8=;
+        b=Hz92TnfLfjkcbjukJ8izSv/VMtwKb8jkCGFTt602i0NWCPfB0Jl0W1XXhjXXLBYjat
+         2Mxe3OpaynLqIwiWUyZBMS7v4ASEesxzx/VZNPSlk52FmLRcUdc1cYD7uN2YKV/F1Kyl
+         GQ/YqQzAxa0jIpQcA1eFpZ4qONwoHQGfyCVM4UBV9hDKYGti+j9g1YUz7/HLw3VmCXuf
+         zJy/MAhdMnLqwVBANgWc/8bMy/t+RZA1tvjFkKCnN356YzdexgzeKOk352upgLy7oZxE
+         7K/CNfwkd9qgdI+RwcExhSzNxLEkbYcZRMRtb5mAmLgaIcAV3a7he9H4zoiTPigRyhZ5
+         pxIA==
+X-Gm-Message-State: AOAM531oi5Pdoox8lTjG7ZgAV1VbPXJhkPOqM9/BwCebK1cy23xRkT5V
+        DJPJJFitDF9Uqm5nq0D7IdDzr0J00EA=
+X-Google-Smtp-Source: ABdhPJzbmsBk4kOMnyThdwbADw3SdgTf4CORQF62zG2osZ117ScN+2nEjEN00BR+93+8bZWnYXb5vQ==
+X-Received: by 2002:a17:90a:e7c6:b0:1c7:443:3fdf with SMTP id kb6-20020a17090ae7c600b001c704433fdfmr3834381pjb.3.1649753590047;
+        Tue, 12 Apr 2022 01:53:10 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm39899515pfl.135.2022.04.12.01.53.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 01:53:09 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     lee.jones@linaro.org, gremlin@gremlin.it
+Cc:     gregkh@linuxfoundation.org, mad_soft@inbox.ru,
+        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] mfd: fix error check return value of platform_get_irq()
+Date:   Tue, 12 Apr 2022 08:53:05 +0000
+Message-Id: <20220412085305.2533030-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
- detection
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org
-Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
- <20220412085046.1110127-2-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 10:50, Vincent Whitchurch wrote:
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> index fc3dd7ec0445..960d1d5c9362 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
->  	this information to adapt power management to keep the arbitration awake
->  	all the time, for example. Can not be combined with 'single-master'.
->  
-> +- no-detect
-> +	states that no other devices are present on this bus other than the
-> +	ones listed in the devicetree.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
+platform_get_irq() return negative value on failure, so null check of
+irq is incorrect. Fix it by comparing whether it is less than zero.
 
-Looks good to me.
+Fixes: dcc21cc09e3c ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/mfd/ipaq-micro.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
+index e92eeeb67a98..4cd5ecc72211 100644
+--- a/drivers/mfd/ipaq-micro.c
++++ b/drivers/mfd/ipaq-micro.c
+@@ -403,7 +403,7 @@ static int __init micro_probe(struct platform_device *pdev)
+ 	micro_reset_comm(micro);
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (!irq)
++	if (irq < 0)
+ 		return -EINVAL;
+ 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
+ 			       IRQF_SHARED, "ipaq-micro",
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A714FD84C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E6B4FD940
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355255AbiDLIHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S1386113AbiDLIyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354889AbiDLH05 (ORCPT
+        with ESMTP id S1359418AbiDLHnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126F4473A7;
-        Tue, 12 Apr 2022 00:06:50 -0700 (PDT)
+        Tue, 12 Apr 2022 03:43:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075012CE1C;
+        Tue, 12 Apr 2022 00:23:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E28616DC;
-        Tue, 12 Apr 2022 07:06:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9029DC385AC;
-        Tue, 12 Apr 2022 07:06:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6BF0B81B13;
+        Tue, 12 Apr 2022 07:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29FDC385A5;
+        Tue, 12 Apr 2022 07:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747209;
-        bh=ntbeJfFcUf36LtQuxnH6guNMinHbq9Rd/OpBJmA0IJY=;
+        s=korg; t=1649748188;
+        bh=zfD7YjenlyUPbPHuXN1cKuXgTMmzI3+KRTFSfXHPC28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SpSq9+vG6f3NH9SCT8X4kb095Scn8IavoVN54Ug7ggZrax6RlfVMFrVQ3WDVV6uK/
-         TK8DliI8lXubBNrEx8zsLVoL+gXIWDsWC/AYoSkSUD2+zmBkir6lJTYP0CAhfuvzGH
-         g7BEAiYhxpPG+MxL46CdOT1OMF9MyA4oaRq5wsaw=
+        b=gkcxqHyULJ6GJWc5Tr+Q7h1BoOTH4HZwGD4Pvtsj05/Up+FOfpy3ztntS5FD9m++V
+         Pvnf5HtjJfyZ2n/M1ZVAwV82AelNXfsDTSswo4DHka2AplXFgHiwmgRVb5nUMbXQD0
+         FY2PK2aHcYT/7dT1i4EdLvLFtnm453Cz9lracw4I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jingyi Wang <wangjingyi11@huawei.com>,
-        Nianyao Tang <tangnianyao@huawei.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.16 281/285] irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before descheduling
-Date:   Tue, 12 Apr 2022 08:32:18 +0200
-Message-Id: <20220412062951.762096947@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.17 321/343] perf python: Fix probing for some clang command line options
+Date:   Tue, 12 Apr 2022 08:32:19 +0200
+Message-Id: <20220412063000.586123610@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,89 +63,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit af27e41612ec7e5b4783f589b753a7c31a37aac8 upstream.
+commit dd6e1fe91cdd52774ca642d1da75b58a86356b56 upstream.
 
-The way KVM drives GICv4.{0,1} is as follows:
-- vcpu_load() makes the VPE resident, instructing the RD to start
-  scanning for interrupts
-- just before entering the guest, we check that the RD has finished
-  scanning and that we can start running the vcpu
-- on preemption, we deschedule the VPE by making it invalid on
-  the RD
+The clang compiler complains about some options even without a source
+file being available, while others require one, so use the simple
+tools/build/feature/test-hello.c file.
 
-However, we are preemptible between the first two steps. If it so
-happens *and* that the RD was still scanning, we nonetheless write
-to the GICR_VPENDBASER register while Dirty is set, and bad things
-happen (we're in UNPRED land).
+Then check for the "is not supported" string in its output, in addition
+to the "unknown argument" already being looked for.
 
-This affects both the 4.0 and 4.1 implementations.
+This was noticed when building with clang-13 where -ffat-lto-objects
+isn't supported and since we were looking just for "unknown argument"
+and not providing a source code to clang, was mistakenly assumed as
+being available and not being filtered to set of command line options
+provided to clang, leading to a build failure.
 
-Make sure Dirty is cleared before performing the deschedule,
-meaning that its_clear_vpend_valid() becomes a sort of full VPE
-residency barrier.
-
-Reported-by: Jingyi Wang <wangjingyi11@huawei.com>
-Tested-by: Nianyao Tang <tangnianyao@huawei.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: 57e3cebd022f ("KVM: arm64: Delay the polling of the GICR_VPENDBASER.Dirty bit")
-Link: https://lore.kernel.org/r/4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Keeping <john@metanate.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Link: http://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3-its.c |   28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ tools/perf/util/setup.py |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3007,18 +3007,12 @@ static int __init allocate_lpi_tables(vo
- 	return 0;
- }
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -1,12 +1,14 @@
+-from os import getenv
++from os import getenv, path
+ from subprocess import Popen, PIPE
+ from re import sub
  
--static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+static u64 read_vpend_dirty_clear(void __iomem *vlpi_base)
- {
- 	u32 count = 1000000;	/* 1s! */
- 	bool clean;
- 	u64 val;
+ cc = getenv("CC")
+ cc_is_clang = b"clang version" in Popen([cc.split()[0], "-v"], stderr=PIPE).stderr.readline()
++src_feature_tests  = getenv('srctree') + '/tools/build/feature'
  
--	val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
--	val &= ~GICR_VPENDBASER_Valid;
--	val &= ~clr;
--	val |= set;
--	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
--
- 	do {
- 		val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
- 		clean = !(val & GICR_VPENDBASER_Dirty);
-@@ -3029,10 +3023,26 @@ static u64 its_clear_vpend_valid(void __
- 		}
- 	} while (!clean && count);
+ def clang_has_option(option):
+-    return [o for o in Popen([cc, option], stderr=PIPE).stderr.readlines() if b"unknown argument" in o] == [ ]
++    cc_output = Popen([cc, option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
++    return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
  
--	if (unlikely(val & GICR_VPENDBASER_Dirty)) {
-+	if (unlikely(!clean))
- 		pr_err_ratelimited("ITS virtual pending table not cleaning\n");
-+
-+	return val;
-+}
-+
-+static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+{
-+	u64 val;
-+
-+	/* Make sure we wait until the RD is done with the initial scan */
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	val &= ~GICR_VPENDBASER_Valid;
-+	val &= ~clr;
-+	val |= set;
-+	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
-+
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	if (unlikely(val & GICR_VPENDBASER_Dirty))
- 		val |= GICR_VPENDBASER_PendingLast;
--	}
- 
- 	return val;
- }
+ if cc_is_clang:
+     from distutils.sysconfig import get_config_vars
 
 

@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337824FDDEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F52A4FDDFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352297AbiDLLfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S1352388AbiDLLfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbiDLLe3 (ORCPT
+        with ESMTP id S1352820AbiDLLfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:34:29 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A14B75E48
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:12:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ks6so11680752ejb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=itN8DLSGRDfdoHiYI2K1Ahismc5l5HE7NC2jbmc/tE4=;
-        b=SoOVnulN7DU7nz2VPxkQxVIlEenouSL9YwRZBcKdr6BDxuy/CKP5tPbvhkCvBZeV4v
-         IpaSLBrSK3TuSRvfChYmaPzpwD07KXovk/HHY8qbn9SffqbKw1t2hDzkCDfHWHNTWp3t
-         XOfO+bjlQ/j7Q6BJpvBSU/xusDZ8tRuVeMW3p/RGVx+jUGbmzqqoJCgtueF1S5xfBFLO
-         MwrWiaF8kWOUlecoCLCIVAB0NgUiidAAOWHjpAHCtPCmrIjkcWbZAMAE/GW5hjmnVpoN
-         rxCfCazNocz3e4R2EKfaTl4MK6SUvHhTBdP+R+zP9bKGswnfbifBTvceCMgJzIUVL4kH
-         L43A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=itN8DLSGRDfdoHiYI2K1Ahismc5l5HE7NC2jbmc/tE4=;
-        b=g4PO4t1GluQN9tT+DdUEXQf4QGnUO6hFUM0Uo2OaN/Y3W8ERNbUMYtyR5nodjQ2LuI
-         o51AF9qqvb8gScBGKa9Ig0YbIuNB4It+FvLOF/UC/PmC+E7lbz3Y34i5Tj/YLQY4YJwP
-         bFpB5f/y8auNat1K8UK0O1JSSc95bSRlFL8FOkzNxu/LKDb1Ej5cRxwP1dmAKDiu13vO
-         8n40cWMNSsk09VRgBwTt/gTMZxVxK06CdqxhtfVeU69kyx/spml1wkK3dnUDwcpnprxG
-         9//qOXRTp/D62xmJqEGqYh40hcjBEvqw/tNQfBNtNZT+32VUJA2qH5e7QII6XiEBX23z
-         lO1w==
-X-Gm-Message-State: AOAM530ur2zWi3VEAa/W7zS9a12HbRnjbs88dkEwp/VIOsZRxrANGYpf
-        FiP7mP1LNCXpI0EamtuwO37OUA==
-X-Google-Smtp-Source: ABdhPJy8WVl1Tif6xf+AE5S8L1WUh8eggrkrv7TFbXy++NeW6uVZxUwzM2WeoDWQF12YhO5REvH/oA==
-X-Received: by 2002:a17:907:1c8c:b0:6e0:eb0c:8ee8 with SMTP id nb12-20020a1709071c8c00b006e0eb0c8ee8mr34505312ejc.265.1649758359825;
-        Tue, 12 Apr 2022 03:12:39 -0700 (PDT)
-Received: from [192.168.1.18] (hst-221-53.medicom.bg. [84.238.221.53])
-        by smtp.googlemail.com with ESMTPSA id z10-20020a170906944a00b006e8a6b20129sm1270630ejx.29.2022.04.12.03.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 03:12:39 -0700 (PDT)
-Message-ID: <587f078d-e21c-4781-58d3-7de6fc2f75fa@linaro.org>
-Date:   Tue, 12 Apr 2022 13:12:34 +0300
+        Tue, 12 Apr 2022 07:35:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C4813F78;
+        Tue, 12 Apr 2022 03:14:28 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CAENQc014341;
+        Tue, 12 Apr 2022 05:14:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649758463;
+        bh=ipQpcgHXpfbJcelLyl6HL6bFtANq2NPuGwT1Zv7GR7s=;
+        h=From:To:CC:Subject:Date;
+        b=X41862wbNGiNWnnv9sSegH48kEYfCpdGYJpO4nmuVMJLowjNNvNSyjdvAQqRO8KM+
+         Pa7P12vjmp799tGzDGmbxuqqhFPp4C0mfQCRYDA5WqfTme7dq0esZwkeaWGfEwhG4Q
+         ASAkJsuknoD+gYPxH4jhAanGw9zofsLp3XB0lE3A=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CAENLd037774
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 05:14:23 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 05:14:23 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 05:14:23 -0500
+Received: from keerthy.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CAEJmN122452;
+        Tue, 12 Apr 2022 05:14:20 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <j-keerthy@ti.com>, <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/4] thermal: k3_j72xx_bandgap: Add the bandgap driver support
+Date:   Tue, 12 Apr 2022 15:44:05 +0530
+Message-ID: <20220412101409.7980-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] media: venus: vdec: ensure venus is powered on during
- stream off
-Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1649747356-3207-1-git-send-email-quic_vgarodia@quicinc.com>
- <1649747356-3207-3-git-send-email-quic_vgarodia@quicinc.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <1649747356-3207-3-git-send-email-quic_vgarodia@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +62,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vikash,
+Add VTM thermal support. In the Voltage Thermal Management
+Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+sensor feature that are gathered in the band gap voltage and
+temperature sensor (VBGAPTS) module. The band gap provides current and
+voltage reference for its internal circuits and other analog IP
+blocks. The analog-to-digital converter (ADC) produces an output value
+that is proportional to the silicon temperature.
 
-On 4/12/22 10:09, Vikash Garodia wrote:
-> Video decoder driver auto-suspends the hardware if there is no
-> exchange of command or response for certain amount of time.
-> In auto suspended state, it becomes mandatory to power on the
-> hardware before requesting it to process a command. The fix
-> ensures the hardware is powered on during stop streaming.
-> ---
->  drivers/media/platform/qcom/venus/vdec.c | 2 ++
->  1 file changed, 2 insertions(+)
+Currently reading temperatures only is supported.  There are no
+active/passive cooling agent supported.
 
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
 
-> 
-> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index 91da3f5..4ac1132 100644
-> --- a/drivers/media/platform/qcom/venus/vdec.c
-> +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -1200,6 +1200,8 @@ static void vdec_stop_streaming(struct vb2_queue *q)
->  	struct venus_inst *inst = vb2_get_drv_priv(q);
->  	int ret = -EINVAL;
->  
-> +	vdec_pm_get_put(inst);
-> +
->  	mutex_lock(&inst->lock);
->  
->  	if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+The series also incorporates workaround for Errata i2128.
+
+Daniel,
+
+Apologies for the long silence on this!
+
+- Keerthy
+
+Changes in v5:
+
+  * Fixed all the comments on v4.
+  * Simplified the computation of the table.
+  * Removed unnecessary members in the structures.
+
+Changes in v4:
+
+  * Fixed compilation warning with W=1.
+
+Changes in v3:
+
+  * Removed static look up tables & added functions to dynamically generate them.
+
+Changes in v2:
+
+  * Fixed DT binding errors.
+
+Keerthy (4):
+  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+  arm64: dts: ti: j721e: Add VTM node
+  arm64: dts: ti: j7200: Add VTM node
+  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  62 ++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  45 ++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   4 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  73 ++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   4 +
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c            | 623 ++++++++++++++++++
+ 9 files changed, 830 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
 
 -- 
-regards,
-Stan
+2.17.1
+

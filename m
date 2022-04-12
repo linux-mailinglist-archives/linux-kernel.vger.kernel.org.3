@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FCC4FD788
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F8D4FD98F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357271AbiDLIoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S1377549AbiDLHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357288AbiDLHj4 (ORCPT
+        with ESMTP id S242334AbiDLHWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EB31EAC1;
-        Tue, 12 Apr 2022 00:14:46 -0700 (PDT)
+        Tue, 12 Apr 2022 03:22:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5752C13B;
+        Mon, 11 Apr 2022 23:59:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6961561045;
-        Tue, 12 Apr 2022 07:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C678C385A5;
-        Tue, 12 Apr 2022 07:14:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB5560B65;
+        Tue, 12 Apr 2022 06:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B12C385A8;
+        Tue, 12 Apr 2022 06:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747685;
-        bh=uiMvXbgy27rdH5+i+irTs27zufcuSMZzqR9sGKp8NmY=;
+        s=korg; t=1649746784;
+        bh=ucfA2C2SWIQgzh8yu0sdw5aNdUWtqQHKO/aIHM0aMUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hthquIilcHHmq+yE6ZIdACygfgfFbk83Pr3JFqYPuvSUn0GJLJII+58hvoNOYV5DA
-         1fk7Wi8VI1ftHKiO0PzGQ5bFpajwZzt0WOCLC7xFpHOOYX27FpKP4yxMbRfeDA617v
-         PJAIMTnUm0gh/jo5Ss4rh3EDOHtBuI42gxDIEajQ=
+        b=DFwyjwR9IVH2Ptit6GoNWZlJZHEbJjaKgcnPwOOKGP86AtQ4s3if/ZukIeXPGmJ8l
+         Jgd7g4GmoHTAuS2s4nfzV1g0MBXtBLtVGZVAJTFxE0OsnqUVqj3/aYCN98kzhXq1YM
+         t71hweJ4zAOdOHRGofqAz3kUig0WcjVkK52/Kx8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Joe Jin <joe.jin@oracle.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 169/343] NFSv4.2: fix reference count leaks in _nfs42_proc_copy_notify()
+Subject: [PATCH 5.16 130/285] xen: delay xen_hvm_init_time_ops() if kdump is boot on vcpu>=32
 Date:   Tue, 12 Apr 2022 08:29:47 +0200
-Message-Id: <20220412062956.249038129@linuxfoundation.org>
+Message-Id: <20220412062947.417506603@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,64 +56,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Dongli Zhang <dongli.zhang@oracle.com>
 
-[ Upstream commit b7f114edd54326f730a754547e7cfb197b5bc132 ]
+[ Upstream commit eed05744322da07dd7e419432dcedf3c2e017179 ]
 
-[You don't often get email from xiongx18@fudan.edu.cn. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
+The sched_clock() can be used very early since commit 857baa87b642
+("sched/clock: Enable sched clock early"). In addition, with commit
+38669ba205d1 ("x86/xen/time: Output xen sched_clock time from 0"), kdump
+kernel in Xen HVM guest may panic at very early stage when accessing
+&__this_cpu_read(xen_vcpu)->time as in below:
 
-The reference counting issue happens in two error paths in the
-function _nfs42_proc_copy_notify(). In both error paths, the function
-simply returns the error code and forgets to balance the refcount of
-object `ctx`, bumped by get_nfs_open_context() earlier, which may
-cause refcount leaks.
+setup_arch()
+ -> init_hypervisor_platform()
+     -> x86_init.hyper.init_platform = xen_hvm_guest_init()
+         -> xen_hvm_init_time_ops()
+             -> xen_clocksource_read()
+                 -> src = &__this_cpu_read(xen_vcpu)->time;
 
-Fix it by balancing refcount of the `ctx` object before the function
-returns in both error paths.
+This is because Xen HVM supports at most MAX_VIRT_CPUS=32 'vcpu_info'
+embedded inside 'shared_info' during early stage until xen_vcpu_setup() is
+used to allocate/relocate 'vcpu_info' for boot cpu at arbitrary address.
 
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+However, when Xen HVM guest panic on vcpu >= 32, since
+xen_vcpu_info_reset(0) would set per_cpu(xen_vcpu, cpu) = NULL when
+vcpu >= 32, xen_clocksource_read() on vcpu >= 32 would panic.
+
+This patch calls xen_hvm_init_time_ops() again later in
+xen_hvm_smp_prepare_boot_cpu() after the 'vcpu_info' for boot vcpu is
+registered when the boot vcpu is >= 32.
+
+This issue can be reproduced on purpose via below command at the guest
+side when kdump/kexec is enabled:
+
+"taskset -c 33 echo c > /proc/sysrq-trigger"
+
+The bugfix for PVM is not implemented due to the lack of testing
+environment.
+
+[boris: xen_hvm_init_time_ops() returns on errors instead of jumping to end]
+
+Cc: Joe Jin <joe.jin@oracle.com>
+Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/r/20220302164032.14569-3-dongli.zhang@oracle.com
+Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs42proc.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/x86/xen/smp_hvm.c |  6 ++++++
+ arch/x86/xen/time.c    | 24 +++++++++++++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/fs/nfs/nfs42proc.c b/fs/nfs/nfs42proc.c
-index 32129446beca..ca878d021fab 100644
---- a/fs/nfs/nfs42proc.c
-+++ b/fs/nfs/nfs42proc.c
-@@ -591,8 +591,10 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+diff --git a/arch/x86/xen/smp_hvm.c b/arch/x86/xen/smp_hvm.c
+index 6ff3c887e0b9..b70afdff419c 100644
+--- a/arch/x86/xen/smp_hvm.c
++++ b/arch/x86/xen/smp_hvm.c
+@@ -19,6 +19,12 @@ static void __init xen_hvm_smp_prepare_boot_cpu(void)
+ 	 */
+ 	xen_vcpu_setup(0);
  
- 	ctx = get_nfs_open_context(nfs_file_open_context(src));
- 	l_ctx = nfs_get_lock_context(ctx);
--	if (IS_ERR(l_ctx))
--		return PTR_ERR(l_ctx);
-+	if (IS_ERR(l_ctx)) {
-+		status = PTR_ERR(l_ctx);
-+		goto out;
++	/*
++	 * Called again in case the kernel boots on vcpu >= MAX_VIRT_CPUS.
++	 * Refer to comments in xen_hvm_init_time_ops().
++	 */
++	xen_hvm_init_time_ops();
++
+ 	/*
+ 	 * The alternative logic (which patches the unlock/lock) runs before
+ 	 * the smp bootup up code is activated. Hence we need to set this up
+diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+index d9c945ee1100..9ef0a5cca96e 100644
+--- a/arch/x86/xen/time.c
++++ b/arch/x86/xen/time.c
+@@ -558,6 +558,11 @@ static void xen_hvm_setup_cpu_clockevents(void)
+ 
+ void __init xen_hvm_init_time_ops(void)
+ {
++	static bool hvm_time_initialized;
++
++	if (hvm_time_initialized)
++		return;
++
+ 	/*
+ 	 * vector callback is needed otherwise we cannot receive interrupts
+ 	 * on cpu > 0 and at this point we don't know how many cpus are
+@@ -567,7 +572,22 @@ void __init xen_hvm_init_time_ops(void)
+ 		return;
+ 
+ 	if (!xen_feature(XENFEAT_hvm_safe_pvclock)) {
+-		pr_info("Xen doesn't support pvclock on HVM, disable pv timer");
++		pr_info_once("Xen doesn't support pvclock on HVM, disable pv timer");
++		return;
 +	}
- 
- 	status = nfs4_set_rw_stateid(&args->cna_src_stateid, ctx, l_ctx,
- 				     FMODE_READ);
-@@ -600,7 +602,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
- 	if (status) {
- 		if (status == -EAGAIN)
- 			status = -NFS4ERR_BAD_STATEID;
--		return status;
-+		goto out;
++
++	/*
++	 * Only MAX_VIRT_CPUS 'vcpu_info' are embedded inside 'shared_info'.
++	 * The __this_cpu_read(xen_vcpu) is still NULL when Xen HVM guest
++	 * boots on vcpu >= MAX_VIRT_CPUS (e.g., kexec), To access
++	 * __this_cpu_read(xen_vcpu) via xen_clocksource_read() will panic.
++	 *
++	 * The xen_hvm_init_time_ops() should be called again later after
++	 * __this_cpu_read(xen_vcpu) is available.
++	 */
++	if (!__this_cpu_read(xen_vcpu)) {
++		pr_info("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
++			xen_vcpu_nr(0));
+ 		return;
  	}
  
- 	status = nfs4_call_sync(src_server->client, src_server, &msg,
-@@ -609,6 +611,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
- 	if (status == -ENOTSUPP)
- 		src_server->caps &= ~NFS_CAP_COPY_NOTIFY;
+@@ -577,6 +597,8 @@ void __init xen_hvm_init_time_ops(void)
+ 	x86_cpuinit.setup_percpu_clockev = xen_hvm_setup_cpu_clockevents;
  
-+out:
- 	put_nfs_open_context(nfs_file_open_context(src));
- 	return status;
+ 	x86_platform.set_wallclock = xen_set_wallclock;
++
++	hvm_time_initialized = true;
  }
+ #endif
+ 
 -- 
 2.35.1
 

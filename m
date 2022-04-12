@@ -2,106 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1034A4FDA2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4054FD517
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383554AbiDLJCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S1384545AbiDLImA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357193AbiDLHjv (ORCPT
+        with ESMTP id S1357244AbiDLHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:51 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B06214027;
-        Tue, 12 Apr 2022 00:13:36 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id kl29so15487664qvb.2;
-        Tue, 12 Apr 2022 00:13:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b40J74AZXHQx3F3Kvksxnsm3IoWKYudmg3ktvmskBdg=;
-        b=vtRsdCbyShHPW1r/c0C6OSnkbkYgKws2dk0YIuJ2uJdeJHhuhheIRlabc3kzgejLJ1
-         4lbXwJJX4hrPPJIUnEDhXOzJv7F68g3wfZYDPdRlXPAhm5COX4YRHZVy3h9GDwIL3ieK
-         TqaLrInRLjUIK9U6eCX0SMozsIfepheIaVlx88atEcI2vs6etuIIsVrfBrJuU/u1PDHx
-         4OH3ucwfh/DCCOIs1i9Xl/ONCtboy47ER6QV7Hugkjqx5uKrdxEY1bcXCnEW5lhEwYMg
-         efQGRg65IROV1BKEt6TMK42e0nIpUfh+/CvyuJ3dQKxXOkPoL18/9CY51d/GesQXVKy+
-         vw4A==
-X-Gm-Message-State: AOAM532Q1UP8SW3/YKCBtQbbMbadf11PzDTPOMzr2KGM28Jdglgk38/r
-        FJWZjfSj9YNPbUnWRxZa9y2js9IWLJ6y9uHX
-X-Google-Smtp-Source: ABdhPJzCYVy117bkQj/DB7M6GTJOgziXwfQaUZNvnpGntUlMNL4oQyNKpLyC6dmfrLvTaoCpJKCavg==
-X-Received: by 2002:a05:6214:202a:b0:441:6a41:f710 with SMTP id 10-20020a056214202a00b004416a41f710mr30439607qvf.84.1649747615328;
-        Tue, 12 Apr 2022 00:13:35 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id i7-20020ac85e47000000b002e22bad4717sm27207165qtx.1.2022.04.12.00.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:13:35 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id e71so17006804ybf.8;
-        Tue, 12 Apr 2022 00:13:34 -0700 (PDT)
-X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
- p9-20020a259e89000000b0063cad37a5demr24883011ybq.342.1649747614630; Tue, 12
- Apr 2022 00:13:34 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:53 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2C4DFC;
+        Tue, 12 Apr 2022 00:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UtaxEETAanzEBI5ZCrBTObGqYu4eUkH/80V7BcVtCTE=; b=dn8/9vrX7GguY418rNKJLb9/N8
+        DSEK325oohvxQUlkohyA3zbONZVq22faYjHytu7U9EcG0/w5p2boa8VoGa0ygJ5UgLWdl6xFH6Ker
+        jThloXxYvrgRtNj3DNedbOCFIT5JxUyv/RT19yqtM2ydtRUQ9yWpFex1nsJ2LgQ81Wa0=;
+Received: from p57a6f1f9.dip0.t-ipconnect.de ([87.166.241.249] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1neAip-0007Yd-LZ; Tue, 12 Apr 2022 09:13:55 +0200
+Message-ID: <ece29b0d-bbbe-7c03-a6b4-60e44453ca31@nbd.name>
+Date:   Tue, 12 Apr 2022 09:13:54 +0200
 MIME-Version: 1.0
-References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-2-javierm@redhat.com>
-In-Reply-To: <20220411211243.11121-2-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 09:13:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU+ieUSv1sjOX-fks3o+J3Eicg-prCK2+roTq-MFKTHBg@mail.gmail.com>
-Message-ID: <CAMuHMdU+ieUSv1sjOX-fks3o+J3Eicg-prCK2+roTq-MFKTHBg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: display: ssd1307fb: Deprecate "-i2c"
- compatible strings
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 14/14] net: ethernet: mtk_eth_soc: support creating mac
+ address based offload entries
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-15-nbd@nbd.name> <Yk8pJRxnVCfdk8xi@lunn.ch>
+ <f25a6278-1baf-cc27-702a-5d93eedda438@nbd.name> <YlQmf7qGAnq/3nW0@lunn.ch>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <YlQmf7qGAnq/3nW0@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> The current compatible strings for SSD130x I2C controllers contain both an
-> "fb" and "-i2c" suffixes. It seems to indicate that are for a fbdev driver
-> and also that are for devices that can be accessed over an I2C bus.
->
-> But a DT is supposed to describe the hardware and not Linux implementation
-> details. So let's deprecate those compatible strings and add new ones that
-> only contain the vendor and device name, without any of these suffixes.
->
-> These will just describe the device and can be matched by both I2C and SPI
-> DRM drivers.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 11.04.22 15:00, Andrew Lunn wrote:
+> On Thu, Apr 07, 2022 at 08:21:43PM +0200, Felix Fietkau wrote:
+>> 
+>> On 07.04.22 20:10, Andrew Lunn wrote:
+>> > On Tue, Apr 05, 2022 at 09:57:55PM +0200, Felix Fietkau wrote:
+>> > > This will be used to implement a limited form of bridge offloading.
+>> > > Since the hardware does not support flow table entries with just source
+>> > > and destination MAC address, the driver has to emulate it.
+>> > > 
+>> > > The hardware automatically creates entries entries for incoming flows, even
+>> > > when they are bridged instead of routed, and reports when packets for these
+>> > > flows have reached the minimum PPS rate for offloading.
+>> > > 
+>> > > After this happens, we look up the L2 flow offload entry based on the MAC
+>> > > header and fill in the output routing information in the flow table.
+>> > > The dynamically created per-flow entries are automatically removed when
+>> > > either the hardware flowtable entry expires, is replaced, or if the offload
+>> > > rule they belong to is removed
+>> > 
+>> > > +
+>> > > +	if (found)
+>> > > +		goto out;
+>> > > +
+>> > > +	eh = eth_hdr(skb);
+>> > > +	ether_addr_copy(key.dest_mac, eh->h_dest);
+>> > > +	ether_addr_copy(key.src_mac, eh->h_source);
+>> > > +	tag = skb->data - 2;
+>> > > +	key.vlan = 0;
+>> > > +	switch (skb->protocol) {
+>> > > +#if IS_ENABLED(CONFIG_NET_DSA)
+>> > > +	case htons(ETH_P_XDSA):
+>> > > +		if (!netdev_uses_dsa(skb->dev) ||
+>> > > +		    skb->dev->dsa_ptr->tag_ops->proto != DSA_TAG_PROTO_MTK)
+>> > > +			goto out;
+>> > > +
+>> > > +		tag += 4;
+>> > > +		if (get_unaligned_be16(tag) != ETH_P_8021Q)
+>> > > +			break;
+>> > > +
+>> > > +		fallthrough;
+>> > > +#endif
+>> > > +	case htons(ETH_P_8021Q):
+>> > > +		key.vlan = get_unaligned_be16(tag + 2) & VLAN_VID_MASK;
+>> > > +		break;
+>> > > +	default:
+>> > > +		break;
+>> > > +	}
+>> > 
+>> > I'm trying to understand the architecture here.
+>> > 
+>> > We have an Ethernet interface and a Wireless interface. The slow path
+>> > is that frames ingress from one of these interfaces, Linux decides
+>> > what to do with them, either L2 or L3, and they then egress probably
+>> > out the other interface.
+>> > 
+>> > The hardware will look at the frames and try to spot flows? It will
+>> > then report any it finds. You can then add an offload, telling it for
+>> > a flow it needs to perform L2 or L3 processing, and egress out a
+>> > specific port? Linux then no longer sees the frame, the hardware
+>> > handles it, until the flow times out?
+>> Yes, the hw handles it until either the flow times out, or the corresponding
+>> offload entry is removed.
+>> 
+>> For OpenWrt I also wrote a daemon that uses tc classifier BPF to accelerate
+>> the software bridge and create hardware offload entries as well via hardware
+>> TC flower rules: https://github.com/nbd168/bridger
+>> It works in combination with these changes.
+> 
+> What about the bridge? In Linux, it is the software bridge which
+> controls all this at L2, and it should be offloading the flows, via
+> switchdev. The egress port you derive here is from the software bridge
+> FDB?
+My code uses netlink to fetch and monitor the bridge configuration, 
+including fdb, port state, vlans, etc. and it uses that for the offload 
+path - no extra configuration needed.
 
-Gr{oetje,eeting}s,
+>> > So i'm wondering what is going on here. So is this a frame which has
+>> > ingressed, either from the WiFi, or another switch port, gone to the
+>> > software bridge, bridges to a DSA slave interface, the DSA tagger has
+>> > added a tag and now it is in the master interface? Can you accelerate
+>> > such frames? What is adding the DSA tag on the fast path? And in the
+>> > opposite direction, frames which egress the switch which have a DSA
+>> > tag and are heading to the WiFi, what is removing the tag? Does the
+>> > accelerator also understand the tag and know what to do with it?WiFi ->
+>> > Ethernet is not supported by MT7622, but will be added for newer
+> 
+>> SoCs like MT7986. The PPE supports both parsing and inserting MT7530
+>> compatible DSA tags. For Ethernet->WiFi flows, the PPE will also add
+>> required metadata that is parsed by the MT7915 WiFi Firmware in order to
+>> figure out what vif/station the packets were meant for.
+> 
+> O.K. What about IGMP and multicast? Does the accelerate match on IGMP
+> and forwards it to the CPU, rather than follow the flow rules? Can you
+> set multiple egress destinations for multicast so that it can go both
+> to the switch and the host, when the host has a local interest in the
+> traffic?
+IGMP/multicast isn't handled yet at the moment. I still need to do some 
+research on what can be offloaded and how. The offload only handles 
+unicast and everything else is going through the CPU.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Felix

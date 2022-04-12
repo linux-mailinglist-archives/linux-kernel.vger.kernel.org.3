@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CBB4FE00E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7E84FDF8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbiDLMXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S1353944AbiDLMVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355413AbiDLMTK (ORCPT
+        with ESMTP id S1355417AbiDLMTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:19:10 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5215AECB;
-        Tue, 12 Apr 2022 04:21:45 -0700 (PDT)
-X-UUID: d84b7cb7c5ae461ea52bdf46078bc3e3-20220412
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b6e91718-abc4-4b9e-b242-0201a4351f46,OB:10,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.4,REQID:b6e91718-abc4-4b9e-b242-0201a4351f46,OB:10,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:100
-X-CID-META: VersionHash:faefae9,CLOUDID:9d282378-0afa-4dca-bdec-ca54c998425a,C
-        OID:19c63f3034d3,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: d84b7cb7c5ae461ea52bdf46078bc3e3-20220412
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 546475962; Tue, 12 Apr 2022 19:21:38 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 12 Apr 2022 19:21:36 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 12 Apr
- 2022 19:21:36 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 19:21:36 +0800
-From:   Tim Chang <jia-wei.chang@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>
-Subject: [PATCH 2/2] soc: mediatek: svs: add support for mt8186
-Date:   Tue, 12 Apr 2022 19:21:27 +0800
-Message-ID: <20220412112127.21570-3-jia-wei.chang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220412112127.21570-1-jia-wei.chang@mediatek.com>
-References: <20220412112127.21570-1-jia-wei.chang@mediatek.com>
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F25BD0C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:21:50 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id k23so36638668ejd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CICJfzFu5LJCinZ65ytfGl8MaNmqBDc806/TqIYFmE4=;
+        b=t0CxHk6qxRxUG3wltlf/YmWunz2ZgYolmtg7475YgERjvcWmmHNyahpEW83mH9I5Wb
+         YHabjg5dIPqsoaAmw2mbAwibWLYkxHa6vSW0KojZ16M2Cet/K3Ba8inJDxb/iZDvMMRD
+         H2ze+OtTC+Kl5gtExnIVF0BybHMv0YParQDpttPZDFmE0GROM1ZZk+1fpnJtAaalW5kq
+         q0+ZrKRN8qjY6KDj+B1UiEe7yqFNiNjnd9lFAgkkjyfSycYzUWlZWBiCdh4ynGg9fPji
+         zAZdah0a6YpidCJME+kLL9iy9558PLiEcnIl6AjVDNolqn/s79i7MxzEIhv2+Cluw8p+
+         r/hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CICJfzFu5LJCinZ65ytfGl8MaNmqBDc806/TqIYFmE4=;
+        b=UzWd1Pc4sJK0kM3s4EUWWOEJJ3RT4ZrvFi148U2GsTVvlTH2T2uIiyUtxW0MVjitbN
+         /ZQ7rtBBm0z0EDusp6g946c0maoXb1fqfQinIwPHvHM4NkYk+NkR3uIIJgo0F4vGyfID
+         zHq8HKDuYsKg0/O/cRsVoYlzXrkBjAOJcXCfMF+DgBEUwYFvbIGrauTJOdjX2ZGF0ymW
+         gkzBhm8I3eTLnDkVLmV4BCKeO44PcYVYX1PNHSo2AQ2lTyuuNKy3VpBSuMnc67fTBZkB
+         RpanMX54OI2fGM5v3cjVVPsQwmNzHm9ervGJms8SSws/NTsSrjFgefwvtBMeCnnW8JTB
+         Up8w==
+X-Gm-Message-State: AOAM533SZVAiMGxZE9okUBK4ckqM0vFWW+aSYN50g+RkzTZp+C3k0/7C
+        moQKfn/NN//GSV7MXgDByTDrIA==
+X-Google-Smtp-Source: ABdhPJznPjeApaTPet9E9iJ/1AMeuU5YvWAH3lJZ/Xq8ze46Vckwc2+EqvWt5ID9ZLuDwbNkQ1lR/w==
+X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id jx28-20020a170907761c00b006d6e5537bd1mr33821579ejc.5.1649762509294;
+        Tue, 12 Apr 2022 04:21:49 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id a22-20020a50ff16000000b00410d029ea5csm16422858edu.96.2022.04.12.04.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 04:21:48 -0700 (PDT)
+Message-ID: <0dfd0d99-3519-3e1d-0f9e-07f1fcf2e0a4@linaro.org>
+Date:   Tue, 12 Apr 2022 13:21:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] ARM: dts: qcom: sdx65: Add USB3 and PHY support
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649761414-19217-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1649761414-19217-4-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1649761414-19217-4-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,459 +78,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+On 12/04/2022 13:03, Rohit Agarwal wrote:
+> Add devicetree nodes for enabling USB3 controller, Qcom QMP PHY and
+> SNPS HS PHY on SDX65.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  arch/arm/boot/dts/qcom-sdx65.dtsi | 83 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> index 3e4dc63..e419e47 100644
+> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> @@ -130,6 +130,7 @@
+>  			reg = <0x00100000 0x001f7400>;
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>, <&rpmhcc RPMH_CXO_CLK_A>, <&sleep_clk>;
+>  			clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
+> +			#power-domain-cells = <1>;
+>  			#clock-cells = <1>;
+>  			#reset-cells = <1>;
+>  		};
+> @@ -143,6 +144,45 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		usb_hsphy: hsphy@ff4000 {
 
-MT8186 svs has a number of banks which used as optimization of opp
-voltage table for corresponding dvfs drivers.
-MT8186 svs big core uses 2-line high bank and low bank to optimize the
-voltage of opp table for higher and lower frequency respectively.
+Generic node names, so "phy".
 
-Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
----
- drivers/soc/mediatek/mtk-svs.c | 349 ++++++++++++++++++++++++++++++++-
- 1 file changed, 342 insertions(+), 7 deletions(-)
+> +			compatible = "qcom,usb-snps-hs-7nm-phy";
+> +			reg = <0xff4000 0x120>;
+> +			#phy-cells = <0>;
+> +			status = "disabled";
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
+> +			clock-names = "ref";
+> +			resets = <&gcc GCC_QUSB2PHY_BCR>;
+> +		};
+> +
+> +		usb_qmpphy: phy@ff6000 {
+> +			compatible = "qcom,sdx65-qmp-usb3-uni-phy";
+> +			reg = <0x00ff6000 0x1c8>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_USB3_PHY_AUX_CLK>,
+> +				 <&gcc GCC_USB_PHY_CFG_AHB2PHY_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_CLKREF_EN>;
+> +			clock-names = "aux", "cfg_ahb", "ref";
+> +
+> +			resets = <&gcc GCC_USB3PHY_PHY_BCR>,
+> +				 <&gcc GCC_USB3_PHY_BCR>;
+> +			reset-names = "phy", "common";
+> +
+> +			usb_ssphy: phy@ff6200 {
+> +				reg = <0x00ff6e00 0x160>,
+> +				      <0x00ff7000 0x1ec>,
+> +				      <0x00ff6200 0x1e00>;
+> +				#phy-cells = <0>;
+> +				#clock-cells = <0>;
+> +				clocks = <&gcc GCC_USB3_PHY_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +				clock-output-names = "usb3_uni_phy_pipe_clk_src";
+> +			};
+> +		};
+> +
+>  		system_noc: interconnect@1620000 {
+>  			compatible = "qcom,sdx65-system-noc";
+>  			reg = <0x1620000 0x31200>;
+> @@ -182,6 +222,49 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		usb: usb@a6f8800 {
+> +			compatible = "qcom,sdx65-dwc3", "qcom,dwc3";
+> +			reg = <0x0a6f8800 0x400>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_USB30_SLV_AHB_CLK>,
+> +				 <&gcc GCC_USB30_MASTER_CLK>,
+> +				 <&gcc GCC_USB30_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_USB30_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_USB30_SLEEP_CLK>;
+> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+> +					"sleep";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 19 IRQ_TYPE_EDGE_BOTH>,
+> +					      <&pdc 76 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 18 IRQ_TYPE_EDGE_BOTH>;
+> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> +					  "ss_phy_irq", "dm_hs_phy_irq";
+> +
+> +			power-domains = <&gcc USB30_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB30_BCR>;
+> +
+> +			usb_dwc3: dwc3@a600000 {
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 83af7ac8cafb..a44176125871 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -356,6 +356,7 @@ struct svs_platform_data {
-  * @dcbdet: svs efuse data
-  * @dcmdet: svs efuse data
-  * @turn_pt: 2-line turn point tells which opp_volt calculated by high/low bank
-+ * @vbin_turn_pt: voltage bin turn point helps to know which svsb_volt should be overridden
-  * @type: bank type to represent it is 2-line (high/low) bank or 1-line bank
-  *
-  * Svs bank will generate suitalbe voltages by below general math equation
-@@ -419,6 +420,7 @@ struct svs_bank {
- 	u32 dcbdet;
- 	u32 dcmdet;
- 	u32 turn_pt;
-+	u32 vbin_turn_pt;
- 	u32 type;
- };
- 
-@@ -694,11 +696,12 @@ static int svs_status_debug_show(struct seq_file *m, void *v)
- 
- 	ret = thermal_zone_get_temp(svsb->tzd, &tzone_temp);
- 	if (ret)
--		seq_printf(m, "%s: temperature ignore, turn_pt = %u\n",
--			   svsb->name, svsb->turn_pt);
-+		seq_printf(m, "%s: temperature ignore, vbin_turn_pt = %u, turn_pt = %u\n",
-+			   svsb->name, svsb->vbin_turn_pt, svsb->turn_pt);
- 	else
--		seq_printf(m, "%s: temperature = %d, turn_pt = %u\n",
--			   svsb->name, tzone_temp, svsb->turn_pt);
-+		seq_printf(m, "%s: temperature = %d, vbin_turn_pt = %u, turn_pt = %u\n",
-+			   svsb->name, tzone_temp, svsb->vbin_turn_pt,
-+			   svsb->turn_pt);
- 
- 	for (i = 0; i < svsb->opp_count; i++) {
- 		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
-@@ -891,9 +894,11 @@ static void svs_get_bank_volts_v3(struct svs_platform *svsp)
- 		opp_stop = svsb->opp_count;
- 	}
- 
--	for (i = opp_start; i < opp_stop; i++)
-+	for (i = opp_start; i < opp_stop; i++) {
- 		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
- 			svsb->volt[i] -= svsb->dvt_fixed;
-+		svsb->volt[i] += svsb->volt_od;
-+	}
- }
- 
- static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
-@@ -984,6 +989,10 @@ static void svs_get_bank_volts_v2(struct svs_platform *svsp)
- 	struct svs_bank *svsb = svsp->pbank;
- 	u32 temp, i;
- 
-+	if (svsb->phase == SVSB_PHASE_MON &&
-+	    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
-+		return;
-+
- 	temp = svs_readl_relaxed(svsp, VOP74);
- 	svsb->volt[14] = (temp >> 24) & GENMASK(7, 0);
- 	svsb->volt[12] = (temp >> 16) & GENMASK(7, 0);
-@@ -1009,8 +1018,34 @@ static void svs_get_bank_volts_v2(struct svs_platform *svsp)
- 				     svsb->volt[14],
- 				     svsb->freq_pct[15]);
- 
--	for (i = 0; i < svsb->opp_count; i++)
-+	for (i = 0; i < svsb->opp_count; i++) {
-+		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
-+			svsb->volt[i] -= svsb->dvt_fixed;
- 		svsb->volt[i] += svsb->volt_od;
-+	}
-+
-+	/* For voltage bin support */
-+	if (svsb->opp_dfreq[0] > svsb->freq_base) {
-+		svsb->volt[0] = svs_opp_volt_to_bank_volt(svsb->opp_dvolt[0],
-+							  svsb->volt_step,
-+							  svsb->volt_base);
-+
-+		/* Find voltage bin turn point */
-+		for (i = 0; i < svsb->opp_count; i++) {
-+			if (svsb->opp_dfreq[i] <= svsb->freq_base) {
-+				svsb->vbin_turn_pt = i;
-+				break;
-+			}
-+		}
-+
-+		/* Override svs bank voltages */
-+		for (i = 1; i < svsb->vbin_turn_pt; i++)
-+			svsb->volt[i] =	interpolate(svsb->freq_pct[0],
-+						    svsb->freq_pct[svsb->vbin_turn_pt],
-+						    svsb->volt[0],
-+						    svsb->volt[svsb->vbin_turn_pt],
-+						    svsb->freq_pct[i]);
-+	}
- }
- 
- static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
-@@ -1564,7 +1599,12 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
- 			svsb->name = "SVSB_CPU_LITTLE";
- 			break;
- 		case SVSB_CPU_BIG:
--			svsb->name = "SVSB_CPU_BIG";
-+			if (svsb->type == SVSB_HIGH)
-+				svsb->name = "SVSB_CPU_BIG_HIGH";
-+			else if (svsb->type == SVSB_LOW)
-+				svsb->name = "SVSB_CPU_BIG_LOW";
-+			else
-+				svsb->name = "SVSB_CPU_BIG";
- 			break;
- 		case SVSB_CCI:
- 			svsb->name = "SVSB_CCI";
-@@ -1726,6 +1766,102 @@ static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
- 	return true;
- }
- 
-+static bool svs_mt8186_efuse_parsing(struct svs_platform *svsp)
-+{
-+	struct svs_bank *svsb;
-+	struct nvmem_cell *cell;
-+	u32 idx, i, golden_temp;
-+
-+	for (i = 0; i < svsp->efuse_max; i++)
-+		if (svsp->efuse[i])
-+			dev_info(svsp->dev, "M_HW_RES%d: 0x%08x\n",
-+				 i, svsp->efuse[i]);
-+
-+	if (!svsp->efuse[0]) {
-+		dev_notice(svsp->dev, "svs_efuse[0] = 0x0?\n");
-+		return false;
-+	}
-+
-+	/* Svs efuse parsing */
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		switch (svsb->sw_id) {
-+		case SVSB_CPU_BIG:
-+			if (svsb->type == SVSB_HIGH) {
-+				svsb->mdes = (svsp->efuse[2] >> 24) & GENMASK(7, 0);
-+				svsb->bdes = (svsp->efuse[2] >> 16) & GENMASK(7, 0);
-+				svsb->mtdes = svsp->efuse[2] & GENMASK(7, 0);
-+				svsb->dcmdet = (svsp->efuse[13] >> 8) & GENMASK(7, 0);
-+				svsb->dcbdet = svsp->efuse[13] & GENMASK(7, 0);
-+			} else if (svsb->type == SVSB_LOW) {
-+				svsb->mdes = (svsp->efuse[3] >> 24) & GENMASK(7, 0);
-+				svsb->bdes = (svsp->efuse[3] >> 16) & GENMASK(7, 0);
-+				svsb->mtdes = svsp->efuse[3] & GENMASK(7, 0);
-+				svsb->dcmdet = (svsp->efuse[14] >> 24) & GENMASK(7, 0);
-+				svsb->dcbdet = (svsp->efuse[14] >> 16) & GENMASK(7, 0);
-+			}
-+			break;
-+		case SVSB_CPU_LITTLE:
-+			svsb->mdes = (svsp->efuse[4] >> 24) & GENMASK(7, 0);
-+			svsb->bdes = (svsp->efuse[4] >> 16) & GENMASK(7, 0);
-+			svsb->mtdes = svsp->efuse[4] & GENMASK(7, 0);
-+			svsb->dcmdet = (svsp->efuse[14] >> 8) & GENMASK(7, 0);
-+			svsb->dcbdet = svsp->efuse[14] & GENMASK(7, 0);
-+			break;
-+		case SVSB_CCI:
-+			svsb->mdes = (svsp->efuse[5] >> 24) & GENMASK(7, 0);
-+			svsb->bdes = (svsp->efuse[5] >> 16) & GENMASK(7, 0);
-+			svsb->mtdes = svsp->efuse[5] & GENMASK(7, 0);
-+			svsb->dcmdet = (svsp->efuse[15] >> 24) & GENMASK(7, 0);
-+			svsb->dcbdet = (svsp->efuse[15] >> 16) & GENMASK(7, 0);
-+			break;
-+		case SVSB_GPU:
-+			svsb->mdes = (svsp->efuse[6] >> 24) & GENMASK(7, 0);
-+			svsb->bdes = (svsp->efuse[6] >> 16) & GENMASK(7, 0);
-+			svsb->mtdes = svsp->efuse[6] & GENMASK(7, 0);
-+			svsb->dcmdet = (svsp->efuse[15] >> 8) & GENMASK(7, 0);
-+			svsb->dcbdet = svsp->efuse[15] & GENMASK(7, 0);
-+			break;
-+		default:
-+			dev_err(svsb->dev, "unknown sw_id: %u\n", svsb->sw_id);
-+			return false;
-+		}
-+
-+		svsb->vmax += svsb->dvt_fixed;
-+	}
-+
-+	/* Thermal efuse parsing */
-+	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-+	if (IS_ERR_OR_NULL(cell)) {
-+		dev_err(svsp->dev, "no thermal cell, no mon mode\n");
-+		return false;
-+	}
-+
-+	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-+	if (IS_ERR(svsp->tefuse)) {
-+		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-+			PTR_ERR(svsp->tefuse));
-+		nvmem_cell_put(cell);
-+		return false;
-+	}
-+
-+	svsp->tefuse_max /= sizeof(u32);
-+	nvmem_cell_put(cell);
-+
-+	golden_temp = (svsp->tefuse[0] >> 24) & GENMASK(7, 0);
-+	if (!golden_temp)
-+		golden_temp = 50;
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+		svsb->mts = 409;
-+		svsb->bts = (((500 * golden_temp + 204650) / 1000) - 25) * 4;
-+	}
-+
-+	return true;
-+}
-+
- static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
-@@ -2041,6 +2177,49 @@ static int svs_mt8192_platform_probe(struct svs_platform *svsp)
- 	return 0;
- }
- 
-+static int svs_mt8186_platform_probe(struct svs_platform *svsp)
-+{
-+	struct device *dev;
-+	struct svs_bank *svsb;
-+	u32 idx;
-+
-+	svsp->rst = devm_reset_control_get_optional(svsp->dev, "svs_rst");
-+	if (IS_ERR(svsp->rst)) {
-+		dev_err_probe(svsp->dev, PTR_ERR(svsp->rst),
-+			      "cannot get svs reset control\n");
-+		return PTR_ERR(svsp->rst);
-+	}
-+
-+	dev = svs_add_device_link(svsp, "lvts");
-+	if (IS_ERR(dev))
-+		return PTR_ERR(dev);
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		switch (svsb->sw_id) {
-+		case SVSB_CPU_LITTLE:
-+		case SVSB_CPU_BIG:
-+			svsb->opp_dev = get_cpu_device(svsb->cpu_id);
-+			break;
-+		case SVSB_CCI:
-+			svsb->opp_dev = svs_add_device_link(svsp, "cci");
-+			break;
-+		case SVSB_GPU:
-+			svsb->opp_dev = svs_add_device_link(svsp, "mali");
-+			break;
-+		default:
-+			dev_err(svsb->dev, "unknown sw_id: %u\n", svsb->sw_id);
-+			return -EINVAL;
-+		}
-+
-+		if (IS_ERR(svsb->opp_dev))
-+			return PTR_ERR(svsb->opp_dev);
-+	}
-+
-+	return 0;
-+}
-+
- static int svs_mt8183_platform_probe(struct svs_platform *svsp)
- {
- 	struct device *dev;
-@@ -2135,6 +2314,149 @@ static struct svs_bank svs_mt8192_banks[] = {
- 	},
- };
- 
-+static struct svs_bank svs_mt8186_banks[] = {
-+	{
-+		.sw_id			= SVSB_CPU_BIG,
-+		.type			= SVSB_LOW,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-+		.get_volts		= svs_get_bank_volts_v3,
-+		.cpu_id			= 6,
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
-+		.mode_support		= SVSB_MODE_INIT02,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 1670000000,
-+		.turn_freq_base		= 1670000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.volt_od		= 4,
-+		.vmax			= 0x59,
-+		.vmin			= 0x20,
-+		.age_config		= 0x1,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x3,
-+		.vco			= 0x10,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0100,
-+		.int_st			= BIT(0),
-+		.ctl0			= 0x00540003,
-+	},
-+	{
-+		.sw_id			= SVSB_CPU_BIG,
-+		.type			= SVSB_HIGH,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-+		.get_volts		= svs_get_bank_volts_v3,
-+		.cpu_id			= 6,
-+		.tzone_name		= "cpu_big0",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-+					  SVSB_MON_VOLT_IGNORE,
-+		.mode_support		= SVSB_MODE_INIT02 | SVSB_MODE_MON,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 2050000000,
-+		.turn_freq_base		= 1670000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.volt_od		= 4,
-+		.vmax			= 0x73,
-+		.vmin			= 0x20,
-+		.age_config		= 0x1,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x6,
-+		.vco			= 0x10,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0101,
-+		.int_st			= BIT(1),
-+		.ctl0			= 0x00540003,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 8,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 8,
-+	},
-+	{
-+		.sw_id			= SVSB_CPU_LITTLE,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-+		.get_volts		= svs_get_bank_volts_v2,
-+		.cpu_id			= 0,
-+		.tzone_name		= "cpu_zone0",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-+					  SVSB_MON_VOLT_IGNORE,
-+		.mode_support		= SVSB_MODE_INIT02 | SVSB_MODE_MON,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 2000000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.volt_od		= 3,
-+		.vmax			= 0x65,
-+		.vmin			= 0x20,
-+		.age_config		= 0x1,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x6,
-+		.vco			= 0x10,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0102,
-+		.int_st			= BIT(2),
-+		.ctl0			= 0x3210000f,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 8,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 8,
-+	},
-+	{
-+		.sw_id			= SVSB_CCI,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-+		.get_volts		= svs_get_bank_volts_v2,
-+		.tzone_name		= "cpu_zone0",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-+					  SVSB_MON_VOLT_IGNORE,
-+		.mode_support		= SVSB_MODE_INIT02 | SVSB_MODE_MON,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 1400000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.volt_od		= 3,
-+		.vmax			= 0x65,
-+		.vmin			= 0x20,
-+		.age_config		= 0x1,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x6,
-+		.vco			= 0x10,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0103,
-+		.int_st			= BIT(3),
-+		.ctl0			= 0x3210000f,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 8,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 8,
-+	},
-+	{
-+		.sw_id			= SVSB_GPU,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-+		.get_volts		= svs_get_bank_volts_v2,
-+		.tzone_name		= "mfg",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-+					  SVSB_MON_VOLT_IGNORE,
-+		.mode_support		= SVSB_MODE_INIT02 | SVSB_MODE_MON,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 850000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.vmax			= 0x58,
-+		.vmin			= 0x20,
-+		.age_config		= 0x555555,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x4,
-+		.vco			= 0x10,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0104,
-+		.int_st			= BIT(4),
-+		.ctl0			= 0x00100003,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 8,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 7,
-+	},
-+};
-+
- static struct svs_bank svs_mt8183_banks[] = {
- 	{
- 		.sw_id			= SVSB_CPU_LITTLE,
-@@ -2249,6 +2571,16 @@ static const struct svs_platform_data svs_mt8192_platform_data = {
- 	.bank_max = ARRAY_SIZE(svs_mt8192_banks),
- };
- 
-+static const struct svs_platform_data svs_mt8186_platform_data = {
-+	.name = "mt8186-svs",
-+	.banks = svs_mt8186_banks,
-+	.efuse_parsing = svs_mt8186_efuse_parsing,
-+	.probe = svs_mt8186_platform_probe,
-+	.irqflags = IRQF_TRIGGER_HIGH,
-+	.regs = svs_regs_v2,
-+	.bank_max = ARRAY_SIZE(svs_mt8186_banks),
-+};
-+
- static const struct svs_platform_data svs_mt8183_platform_data = {
- 	.name = "mt8183-svs",
- 	.banks = svs_mt8183_banks,
-@@ -2263,6 +2595,9 @@ static const struct of_device_id svs_of_match[] = {
- 	{
- 		.compatible = "mediatek,mt8192-svs",
- 		.data = &svs_mt8192_platform_data,
-+	}, {
-+		.compatible = "mediatek,mt8186-svs",
-+		.data = &svs_mt8186_platform_data,
- 	}, {
- 		.compatible = "mediatek,mt8183-svs",
- 		.data = &svs_mt8183_platform_data,
--- 
-2.18.0
+usb. Please test your changes with `make dtbs_check`. This should
+clearly fail.
 
+
+Best regards,
+Krzysztof

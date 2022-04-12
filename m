@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA594FDB03
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DE64FD5F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356272AbiDLHfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S1377590AbiDLHuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350872AbiDLHMB (ORCPT
+        with ESMTP id S1343870AbiDLHWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC164AE29;
-        Mon, 11 Apr 2022 23:50:08 -0700 (PDT)
+        Tue, 12 Apr 2022 03:22:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AF52A730;
+        Mon, 11 Apr 2022 23:59:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F24DE61045;
-        Tue, 12 Apr 2022 06:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D138C385A1;
-        Tue, 12 Apr 2022 06:50:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40142B81B4F;
+        Tue, 12 Apr 2022 06:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89643C385A1;
+        Tue, 12 Apr 2022 06:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746207;
-        bh=zZFhWFitkae8Zm3UMN7Hy6Ny2tFQ0Om1OfTnnOfRHos=;
+        s=korg; t=1649746778;
+        bh=UXOL9ozP+2qJrD/MwC8apLa02lpVVWnL6ePTyLoqf4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zSkocZlAi1jitvUuyK8F5rTa2jqZZe3kAXdk4nZoL16S/QyPrOLWzn+9ZA4buVvM4
-         p985G9J/8VXd+jKONJAy4pvtLYTVTU3vN6O1pmnl/c7EfMa8SAzB1OvEXF3yPDreUR
-         BF0m9V5tVeFn+9HEwdlGUYXt1n6jYLlL2zp9r9BE=
+        b=0mCGfmamr4y2K4Bg0BrSTlrrsQXYHPqKM+2uU99RWfq4vsOZemAkn1/u65oZCOBdP
+         WaCubTZpNmrGPwsMUIqRUexGvXz4IlvXsn649/5YcHQE7813ixiPI+M4SJEyNmGfuH
+         5mmcKaobJG8C3cblVGQxkphokN0l2xe1bMpDdY6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Alice Michael <alice.michael@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Ohad Sharabi <osharabi@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 182/277] ice: Do not skip not enabled queues in ice_vc_dis_qs_msg
+Subject: [PATCH 5.16 128/285] habanalabs: fix possible memory leak in MMU DR fini
 Date:   Tue, 12 Apr 2022 08:29:45 +0200
-Message-Id: <20220412062947.302934363@linuxfoundation.org>
+Message-Id: <20220412062947.360228418@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,77 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+From: Ohad Sharabi <osharabi@habana.ai>
 
-[ Upstream commit 05ef6813b234db3196f083b91db3963f040b65bb ]
+[ Upstream commit eb85eec858c1a5c11d3a0bff403f6440b05b40dc ]
 
-Disable check for queue being enabled in ice_vc_dis_qs_msg, because
-there could be a case when queues were created, but were not enabled.
-We still need to delete those queues.
+This patch fixes what seems to be copy paste error.
 
-Normal workflow for VF looks like:
-Enable path:
-VIRTCHNL_OP_ADD_ETH_ADDR (opcode 10)
-VIRTCHNL_OP_CONFIG_VSI_QUEUES (opcode 6)
-VIRTCHNL_OP_ENABLE_QUEUES (opcode 8)
+We will have a memory leak if the host-resident shadow is NULL (which
+will likely happen as the DR and HR are not dependent).
 
-Disable path:
-VIRTCHNL_OP_DISABLE_QUEUES (opcode 9)
-VIRTCHNL_OP_DEL_ETH_ADDR (opcode 11)
-
-The issue appears only in stress conditions when VF is enabled and
-disabled very fast.
-Eventually there will be a case, when queues are created by
-VIRTCHNL_OP_CONFIG_VSI_QUEUES, but are not enabled by
-VIRTCHNL_OP_ENABLE_QUEUES.
-In turn, these queues are not deleted by VIRTCHNL_OP_DISABLE_QUEUES,
-because there is a check whether queues are enabled in
-ice_vc_dis_qs_msg.
-
-When we bring up the VF again, we will see the "Failed to set LAN Tx queue
-context" error during VIRTCHNL_OP_CONFIG_VSI_QUEUES step. This
-happens because old 16 queues were not deleted and VF requests to create
-16 more, but ice_sched_get_free_qparent in ice_ena_vsi_txq would fail to
-find a parent node for first newly requested queue (because all nodes
-are allocated to 16 old queues).
-
-Testing Hints:
-
-Just enable and disable VF fast enough, so it would be disabled before
-reaching VIRTCHNL_OP_ENABLE_QUEUES.
-
-while true; do
-        ip link set dev ens785f0v0 up
-        sleep 0.065 # adjust delay value for you machine
-        ip link set dev ens785f0v0 down
-done
-
-Fixes: 77ca27c41705 ("ice: add support for virtchnl_queue_select.[tx|rx]_queues bitmap")
-Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Alice Michael <alice.michael@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/misc/habanalabs/common/mmu/mmu_v1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-index 4338e4ff7e85..9d4d58757e04 100644
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-@@ -3335,9 +3335,9 @@ static int ice_vc_dis_qs_msg(struct ice_vf *vf, u8 *msg)
- 				goto error_param;
- 			}
+diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+index 0f536f79dd9c..e68e9f71c546 100644
+--- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
++++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+@@ -467,7 +467,7 @@ static void hl_mmu_v1_fini(struct hl_device *hdev)
+ {
+ 	/* MMU H/W fini was already done in device hw_fini() */
  
--			/* Skip queue if not enabled */
- 			if (!test_bit(vf_q_id, vf->txq_ena))
--				continue;
-+				dev_dbg(ice_pf_to_dev(vsi->back), "Queue %u on VSI %u is not enabled, but stopping it anyway\n",
-+					vf_q_id, vsi->vsi_num);
- 
- 			ice_fill_txq_meta(vsi, ring, &txq_meta);
+-	if (!ZERO_OR_NULL_PTR(hdev->mmu_priv.hr.mmu_shadow_hop0)) {
++	if (!ZERO_OR_NULL_PTR(hdev->mmu_priv.dr.mmu_shadow_hop0)) {
+ 		kvfree(hdev->mmu_priv.dr.mmu_shadow_hop0);
+ 		gen_pool_destroy(hdev->mmu_priv.dr.mmu_pgt_pool);
  
 -- 
 2.35.1

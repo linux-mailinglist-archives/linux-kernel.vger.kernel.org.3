@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F624FD3C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9264FD3A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354317AbiDLH0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S230147AbiDLJNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351677AbiDLHMt (ORCPT
+        with ESMTP id S1358414AbiDLHlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E253013D2A;
-        Mon, 11 Apr 2022 23:51:29 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4364B1F4;
+        Tue, 12 Apr 2022 00:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9936BB81B43;
-        Tue, 12 Apr 2022 06:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6A7C385A8;
-        Tue, 12 Apr 2022 06:51:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF13E61045;
+        Tue, 12 Apr 2022 07:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D771DC385A1;
+        Tue, 12 Apr 2022 07:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746287;
-        bh=cK5XG9/wD9csGt9BDkyE+vq4CVXvZjL5MTLufJbB8FI=;
+        s=korg; t=1649747877;
+        bh=USiyarqyIUBp0MdGUmQeLSlDjG55mww0+ltDe3KOv4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wTL5LoG/4T4AfprZb72OgIq6TNBWJklQauom7k8Ti3cYjXF30ghy+FbWQd0pra7Qn
-         +2Hm7+apHOsVH4D70nZ/gb05FC4WL/imkQLQMFEBtWx7e/u8SSLUZBwpxLo2ZFcCil
-         FjteB09xFvcQHBonSExAcmoj8HLGSQ4MCZ0rta+Y=
+        b=Kq2WtdtbIQf1DOvE7YPUeRZWY3YpiXUYSbo4TEk2NtpHlCHMWrpBIx6m+uo3gPZwQ
+         tyQ0TgdCwQJUTGZOGxNnqxwbPjjfNOAY5bG4egQeFz+re8ydMuD/GoDqT1w/k5yo0p
+         vZWJ7UiqoplSPTqcz5o1H+5YtgEYZzra9SzP2QM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Aaron Conole <aconole@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 188/277] net: openvswitch: fix leak of nested actions
-Date:   Tue, 12 Apr 2022 08:29:51 +0200
-Message-Id: <20220412062947.477735964@linuxfoundation.org>
+Subject: [PATCH 5.17 198/343] NFSv4: fix open failure with O_ACCMODE flag
+Date:   Tue, 12 Apr 2022 08:30:16 +0200
+Message-Id: <20220412062957.070531019@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,180 +55,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilya Maximets <i.maximets@ovn.org>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-[ Upstream commit 1f30fb9166d4f15a1aa19449b9da871fe0ed4796 ]
+[ Upstream commit b243874f6f9568b2daf1a00e9222cacdc15e159c ]
 
-While parsing user-provided actions, openvswitch module may dynamically
-allocate memory and store pointers in the internal copy of the actions.
-So this memory has to be freed while destroying the actions.
+open() with O_ACCMODE|O_DIRECT flags secondly will fail.
 
-Currently there are only two such actions: ct() and set().  However,
-there are many actions that can hold nested lists of actions and
-ovs_nla_free_flow_actions() just jumps over them leaking the memory.
+Reproducer:
+  1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
+  2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
+  3. close(fd)
+  4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
 
-For example, removal of the flow with the following actions will lead
-to a leak of the memory allocated by nf_ct_tmpl_alloc():
+Server nfsd4_decode_share_access() will fail with error nfserr_bad_xdr when
+client use incorrect share access mode of 0.
 
-  actions:clone(ct(commit),0)
+Fix this by using NFS4_SHARE_ACCESS_BOTH share access mode in client,
+just like firstly opening.
 
-Non-freed set() action may also leak the 'dst' structure for the
-tunnel info including device references.
-
-Under certain conditions with a high rate of flow rotation that may
-cause significant memory leak problem (2MB per second in reporter's
-case).  The problem is also hard to mitigate, because the user doesn't
-have direct control over the datapath flows generated by OVS.
-
-Fix that by iterating over all the nested actions and freeing
-everything that needs to be freed recursively.
-
-New build time assertion should protect us from this problem if new
-actions will be added in the future.
-
-Unfortunately, openvswitch module doesn't use NLA_F_NESTED, so all
-attributes has to be explicitly checked.  sample() and clone() actions
-are mixing extra attributes into the user-provided action list.  That
-prevents some code generalization too.
-
-Fixes: 34ae932a4036 ("openvswitch: Make tunnel set action attach a metadata dst")
-Link: https://mail.openvswitch.org/pipermail/ovs-dev/2022-March/392922.html
-Reported-by: Stéphane Graber <stgraber@ubuntu.com>
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-Acked-by: Aaron Conole <aconole@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: ce4ef7c0a8a05 ("NFS: Split out NFS v4 file operations")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/openvswitch/flow_netlink.c | 95 ++++++++++++++++++++++++++++++++--
- 1 file changed, 90 insertions(+), 5 deletions(-)
+ fs/nfs/dir.c      | 10 ----------
+ fs/nfs/internal.h | 10 ++++++++++
+ fs/nfs/nfs4file.c |  6 ++++--
+ 3 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 2679007f8aeb..c591b923016a 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2288,6 +2288,62 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
- 	return sfa;
- }
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index 75cb1cbe4cde..911bdb35eb08 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1853,16 +1853,6 @@ const struct dentry_operations nfs4_dentry_operations = {
+ };
+ EXPORT_SYMBOL_GPL(nfs4_dentry_operations);
  
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len);
-+
-+static void ovs_nla_free_check_pkt_len_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a;
-+	int rem;
-+
-+	nla_for_each_nested(a, action, rem) {
-+		switch (nla_type(a)) {
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_LESS_EQUAL:
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_GREATER:
-+			ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
-+			break;
-+		}
-+	}
-+}
-+
-+static void ovs_nla_free_clone_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_CLONE_ATTR_EXEC:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_dec_ttl_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_DEC_TTL_ATTR_ACTION:
-+		ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_sample_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_SAMPLE_ATTR_ARG:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
- static void ovs_nla_free_set_action(const struct nlattr *a)
+-static fmode_t flags_to_mode(int flags)
+-{
+-	fmode_t res = (__force fmode_t)flags & FMODE_EXEC;
+-	if ((flags & O_ACCMODE) != O_WRONLY)
+-		res |= FMODE_READ;
+-	if ((flags & O_ACCMODE) != O_RDONLY)
+-		res |= FMODE_WRITE;
+-	return res;
+-}
+-
+ static struct nfs_open_context *create_nfs_open_context(struct dentry *dentry, int open_flags, struct file *filp)
  {
- 	const struct nlattr *ovs_key = nla_data(a);
-@@ -2301,25 +2357,54 @@ static void ovs_nla_free_set_action(const struct nlattr *a)
- 	}
+ 	return alloc_nfs_open_context(dentry, flags_to_mode(open_flags), filp);
+diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
+index db9f611e8efd..465e39ff018d 100644
+--- a/fs/nfs/internal.h
++++ b/fs/nfs/internal.h
+@@ -42,6 +42,16 @@ static inline bool nfs_lookup_is_soft_revalidate(const struct dentry *dentry)
+ 	return true;
  }
  
--void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len)
- {
- 	const struct nlattr *a;
- 	int rem;
- 
--	if (!sf_acts)
-+	/* Whenever new actions are added, the need to update this
-+	 * function should be considered.
-+	 */
-+	BUILD_BUG_ON(OVS_ACTION_ATTR_MAX != 23);
-+
-+	if (!actions)
- 		return;
- 
--	nla_for_each_attr(a, sf_acts->actions, sf_acts->actions_len, rem) {
-+	nla_for_each_attr(a, actions, len, rem) {
- 		switch (nla_type(a)) {
--		case OVS_ACTION_ATTR_SET:
--			ovs_nla_free_set_action(a);
-+		case OVS_ACTION_ATTR_CHECK_PKT_LEN:
-+			ovs_nla_free_check_pkt_len_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_CLONE:
-+			ovs_nla_free_clone_action(a);
- 			break;
-+
- 		case OVS_ACTION_ATTR_CT:
- 			ovs_ct_free_action(a);
- 			break;
-+
-+		case OVS_ACTION_ATTR_DEC_TTL:
-+			ovs_nla_free_dec_ttl_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SAMPLE:
-+			ovs_nla_free_sample_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SET:
-+			ovs_nla_free_set_action(a);
-+			break;
- 		}
- 	}
++static inline fmode_t flags_to_mode(int flags)
++{
++	fmode_t res = (__force fmode_t)flags & FMODE_EXEC;
++	if ((flags & O_ACCMODE) != O_WRONLY)
++		res |= FMODE_READ;
++	if ((flags & O_ACCMODE) != O_RDONLY)
++		res |= FMODE_WRITE;
++	return res;
 +}
 +
-+void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+{
-+	if (!sf_acts)
-+		return;
+ /*
+  * Note: RFC 1813 doesn't limit the number of auth flavors that
+  * a server can return, so make something up.
+diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
+index c178db86a6e8..e34af48fb4f4 100644
+--- a/fs/nfs/nfs4file.c
++++ b/fs/nfs/nfs4file.c
+@@ -32,6 +32,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
+ 	struct dentry *parent = NULL;
+ 	struct inode *dir;
+ 	unsigned openflags = filp->f_flags;
++	fmode_t f_mode;
+ 	struct iattr attr;
+ 	int err;
  
-+	ovs_nla_free_nested_actions(sf_acts->actions, sf_acts->actions_len);
- 	kfree(sf_acts);
- }
+@@ -50,8 +51,9 @@ nfs4_file_open(struct inode *inode, struct file *filp)
+ 	if (err)
+ 		return err;
  
++	f_mode = filp->f_mode;
+ 	if ((openflags & O_ACCMODE) == 3)
+-		openflags--;
++		f_mode |= flags_to_mode(openflags);
+ 
+ 	/* We can't create new files here */
+ 	openflags &= ~(O_CREAT|O_EXCL);
+@@ -59,7 +61,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
+ 	parent = dget_parent(dentry);
+ 	dir = d_inode(parent);
+ 
+-	ctx = alloc_nfs_open_context(file_dentry(filp), filp->f_mode, filp);
++	ctx = alloc_nfs_open_context(file_dentry(filp), f_mode, filp);
+ 	err = PTR_ERR(ctx);
+ 	if (IS_ERR(ctx))
+ 		goto out;
 -- 
 2.35.1
 

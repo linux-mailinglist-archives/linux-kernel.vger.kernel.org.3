@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3AA4FE3FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F244FE408
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356696AbiDLOl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S1354220AbiDLOo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354554AbiDLOlX (ORCPT
+        with ESMTP id S234174AbiDLOox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:41:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7467E51
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649774345; x=1681310345;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=GZj64pjcWXoZ+UWhUertM7DeZpkX/WIgVteyu9EF33A=;
-  b=IDSUsTAlQ9zt0b59jP0LV/+kgzTpNpUVrcv4R4vwjuWWqkLvIUWN6qWP
-   0X9Xst9cA+3JzUBxiV7xW+e8YTSz/je7YsVi3RE/KvcGa8dDLZ3M+jGip
-   GxfuQqAp49x+N/L0iASjUVLK+OIynSP3cvmCJ6kbiJzbV+qk0RK8IhdTr
-   FCsgRq221UNAaspkkLundKvDYQ7GCx9UO7424jbX28NRNrb3+CPBUDuP3
-   yuNJmtmESZU2UmE0hUd3tA51ty1e31xnJGkN7qhZOGlMVyz1LuWqiiWk5
-   S45mql+/HkpC5q6YIlTZIFJBtY4EyAtt5lWDtgccpkdpPlhYg9Hn1NtYJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="348826558"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="348826558"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:39:05 -0700
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="551735814"
-Received: from vtelkarx-mobl.amr.corp.intel.com (HELO [10.209.191.73]) ([10.209.191.73])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:39:04 -0700
-Message-ID: <2cd3132b-2c24-610e-1a96-591f2803404c@intel.com>
-Date:   Tue, 12 Apr 2022 07:39:10 -0700
+        Tue, 12 Apr 2022 10:44:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E481E11155;
+        Tue, 12 Apr 2022 07:42:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E9686114A;
+        Tue, 12 Apr 2022 14:42:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88B6C385A5;
+        Tue, 12 Apr 2022 14:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649774554;
+        bh=Q52tCbAaRn1P664NKV7dZwxginIy/el2s/AYgozHef4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ssTA9KpdYm40RCouhGZ+/ajNjpVuu6ytq5iM8LRk9C4kgaH5PH/dWbFO3lMVafwqx
+         5703RBhnTYQ3dzI+nekBH0j7TpqscM58jiZM8BL1ViMM0+JDRA2ybnwzEH7D1Tmv+A
+         8TDTgUm1HC9zD6rWsQeNm9rRtO2gUc+xOl1p+5xQ2VRP2ve+tncf+gMpjkePbwBZgT
+         DQOzXwGc6vSNXAC52cmh/zRpo3iMO+zKqtMJvRZnESqdO23it5Mt98PWirJAGIlrrl
+         HlhzgzM+bIbdtEjVV0YMFzi/6ZqhcXq68pdid5FaePk8yhwxvIUBzWNxWRg9m96avr
+         0D5sWbWx1z16w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, devel@driverdev.osuosl.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v10 0/1] wfx: get out from the staging area
+References: <20220226092142.10164-1-Jerome.Pouiller@silabs.com>
+        <YhojjHGp4EfsTpnG@kroah.com> <87wnhhsr9m.fsf@kernel.org>
+        <5830958.DvuYhMxLoT@pc-42> <878rslt975.fsf@tynnyri.adurom.net>
+        <20220404232247.01cc6567@kernel.org>
+        <20220404232930.05dd49cf@kernel.org> <878rskrod1.fsf@kernel.org>
+        <20220405092046.465ff7e5@kernel.org> <875ynmr8qu.fsf@kernel.org>
+        <Yk8iiZKFpYNgCbCz@kroah.com>
+Date:   Tue, 12 Apr 2022 17:42:29 +0300
+In-Reply-To: <Yk8iiZKFpYNgCbCz@kroah.com> (Greg Kroah-Hartman's message of
+        "Thu, 7 Apr 2022 19:42:33 +0200")
+Message-ID: <871qy2nz1m.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        jean-philippe <jean-philippe@linaro.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220207230254.3342514-1-fenghua.yu@intel.com>
- <20220207230254.3342514-6-fenghua.yu@intel.com> <Ygt4h0PgYzKOiB38@8bytes.org>
- <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
- <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
- <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
- <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
- <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/22 06:41, Fenghua Yu wrote:
->> master process quit, mmput ->  mm_pasid_drop->ioasid_free
->> But this ignore driver's iommu_sva_unbind_device function,
->> iommu_sva_bind_device and iommu_sva_unbind_device are not pair,  So driver
->> does not know ioasid is freed.
->>
->> Any suggestion?
-> ioasid is per process or per mm. A daemon process shouldn't share the same 
-> ioasid with any other process with even its parent process. Its parent gets
-> an ioasid and frees it on exit. The ioasid is gone and shouldn't be used
-> by its child process.
-> 
-> Each daemon process should call driver -> iommu_sva_bind_device -> ioasid_alloc
-> to get its own ioasid/PASID. On daemon quit, the ioasid is freed.
-> 
-> That means nqnix needs to be changed.
++ stephen
 
-Fenghua, please step back for a second and look at what you are saying.
- Your patch caused userspace to break.  Now, you're telling someone that
-they need to go change that userspace to work around something that your
-patch.  How, exactly, are you suggesting that nginx could change to fix
-this?  What, specifically, was it doing with *fork()* that was wrong?
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-It sounds to me like you're saying that it's OK to break userspace.
+> On Wed, Apr 06, 2022 at 10:06:33AM +0300, Kalle Valo wrote:
+>> Jakub Kicinski <kuba@kernel.org> writes:
+>> 
+>> > On Tue, 05 Apr 2022 10:16:58 +0300 Kalle Valo wrote:
+>> >> Sure, that would technically work. But I just think it's cleaner to use
+>> >> -rc1 (or later) as the baseline for an immutable branch. If the baseline
+>> >> is an arbitrary commit somewhere within merge windows commits, it's more
+>> >> work for everyone to verify the branch is suitable.
+>> >> 
+>> >> Also in general I would also prefer to base -next trees to -rc1 or newer
+>> >> to make the bisect cleaner. The less we need to test kernels from the
+>> >> merge window (ie. commits after the final release and before -rc1) the
+>> >> better.
+>> >> 
+>> >> But this is just a small wish from me, I fully understand that it might
+>> >> be too much changes to your process. Wanted to point out this anyway.
+>> >
+>> > Forwarded!
+>> 
+>> Awesome, thank you Jakub!
+>> 
+>> Greg, I now created an immutable branch for moving wfx from
+>> drivers/staging to drivers/net/wireless/silabs:
+>> 
+>> git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
+>> wfx-move-out-of-staging
+>> 
+>> The baseline for this branch is v5.18-rc1. If you think the branch is
+>> ok, please pull it to staging-next and let me know. I can then pull the
+>> branch to wireless-next and the transition should be complete. And do
+>> let me know if there are any problems.
+>
+> Looks great to me!  I've pulled it into staging-next now.  And will not
+> take any more patches to the driver (some happened before the merge but
+> git handled the move just fine.)
+
+Great, thanks Greg! I now merged the immutable branch also to
+wireless-next:
+
+79649041edc8 Merge branch 'wfx-move-out-of-staging'
+4a5fb1bbcdf1 wfx: get out from the staging area
+
+So from now on wfx patches should be submitted for wireless-next via the
+linux-wireless mailing list, instructions in the wiki link below.
+
+Stephen, I want to warn you in advance about this driver move but
+hopefully everything goes smoothly.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

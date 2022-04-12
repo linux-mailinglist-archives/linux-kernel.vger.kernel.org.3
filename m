@@ -2,172 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DFA4FD81D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A3D4FD447
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391253AbiDLJ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S1391293AbiDLJ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358678AbiDLIcB (ORCPT
+        with ESMTP id S1383021AbiDLIfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:32:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A07D5C65B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649750468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yun2BU4GEvJ6pZF2R1wwCOG8a5Yady7UA0t+GMUdSTY=;
-        b=fUpPgD/8rto0XCXD75TcNOumHT/cDF7x7SqA5qVpcA6V6A3l/h8WnZiykpHcYcZnlGZqlj
-        gw8UG7t87lMO8FxgZNPrrdVEXzAWvAbIwVUNxO9eUUyiXV22GOGwW8aJ7Hc/vKeqcpdbra
-        ByldzWmc6DUJAndMHhp/Po2YfOo+jzA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-145-YVf7wAFwM2e3g7EzCQp4jg-1; Tue, 12 Apr 2022 04:01:06 -0400
-X-MC-Unique: YVf7wAFwM2e3g7EzCQp4jg-1
-Received: by mail-wm1-f70.google.com with SMTP id h65-20020a1c2144000000b0038e9ce3b29cso945562wmh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:01:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yun2BU4GEvJ6pZF2R1wwCOG8a5Yady7UA0t+GMUdSTY=;
-        b=poUi32XbKI5pi5uFTZCl633Z25kGl5ZC6mg6IYdctK8g71PB4zo7eZfcsmsNxHJVzI
-         qP1iMAFDHkI05m1KgjDYenEqrIEWtDmycH9qsPKKyrs3ix3pGOKdfALw/V714vvNk+Hp
-         c12trJ8J4py1Qx0YotDcLr1zQeexC1tNPX0kpJDhaUUEU3cJJfg7j30w0qCGf+Lo+GkO
-         bRiBg+1rGI54wFWNJITu+1kjFRSwsrUEnr4moxBOMrK6PfpXdypIU1pfs05vCXICzzKI
-         p7jM1DlFMa/hx/464X3wPLq/kyUOQJ/EDP8P7OoL3x0IlIZ1MM47eqa6I8kjpf8KfugH
-         IVMA==
-X-Gm-Message-State: AOAM531Xq0mvsVVxRJoxtcATP8+x8YxMzGCFt9tAddkz+RvEEPbpvzvV
-        +lXsgD4E7TjL3v9JFLlX4DQ7iUQwUhV05VKlvoE9gI09p2mwQ2GV2+z5Qr2sE7fv9CEpLuu66pN
-        G5pQABylTWEHFW6bBxEgokVX0
-X-Received: by 2002:a7b:c013:0:b0:38e:9edd:a44c with SMTP id c19-20020a7bc013000000b0038e9edda44cmr2843809wmb.122.1649750465615;
-        Tue, 12 Apr 2022 01:01:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz4xyJVcMPwaSHo28mAGHjTf3te+mbmf7aS3NcBbvG5DwIb2JGi3dRKgJeBadFNt9Ppg1fEeg==
-X-Received: by 2002:a7b:c013:0:b0:38e:9edd:a44c with SMTP id c19-20020a7bc013000000b0038e9edda44cmr2843777wmb.122.1649750465293;
-        Tue, 12 Apr 2022 01:01:05 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c4f0200b0038e8fb63293sm1694298wmq.22.2022.04.12.01.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 01:01:04 -0700 (PDT)
-Message-ID: <d37de4b1-55f7-ff4d-6230-6f0b6e65799c@redhat.com>
-Date:   Tue, 12 Apr 2022 10:01:03 +0200
+        Tue, 12 Apr 2022 04:35:18 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2445D1A1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:01:26 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aef95.dynamic.kabel-deutschland.de [95.90.239.149])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 30DB661EA1923;
+        Tue, 12 Apr 2022 10:01:22 +0200 (CEST)
+Message-ID: <88760cd1-d1ed-8952-d061-15e238b2ec57@molgen.mpg.de>
+Date:   Tue, 12 Apr 2022 10:01:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Extend schema for
- SPI controllers
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/amd/amdgpu: Not request init data for MS_HYPERV with
+ vega10
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220411211243.11121-1-javierm@redhat.com>
- <20220411211243.11121-3-javierm@redhat.com>
- <CAMuHMdVuivPSRooR5CqTX6GQtxO6RQYwKUqfOK36zsiN8-v6kg@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMuHMdVuivPSRooR5CqTX6GQtxO6RQYwKUqfOK36zsiN8-v6kg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Yongqiang Sun <yongqiang.sun@amd.com>
+Cc:     Jingwen Chen <jingwen.chen2@amd.com>,
+        "Luo, Zhigang" <zhigang.luo@amd.com>,
+        amd-gfx@lists.freedesktop.org, monk.liu@amd.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220411135939.906700-1-yongqiang.sun@amd.com>
+ <f06ce5e3-158b-88a8-06f0-53b88c4fad45@molgen.mpg.de>
+ <CADnq5_PSZX+11meHYn9CR3A4LiseGo30TwbkOuPgTQsfbYxmCg@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CADnq5_PSZX+11meHYn9CR3A4LiseGo30TwbkOuPgTQsfbYxmCg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
+[Cc: +x86 folks]
 
-On 4/12/22 09:16, Geert Uytterhoeven wrote:
-> Hi Javier,
-> 
-> On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->> The Solomon SSD130x OLED displays can either have an I2C or SPI interface,
->> add to the schema the properties and examples for OLED devices under SPI.
+Dear Alex, dear x86 folks,
+
+
+x86 folks, can you think of alternatives to access `X86_HYPER_MS_HYPERV` 
+from `arch/x86/include/asm/hypervisor.h` without any preprocessor ifdef-ery?
+
+
+Am 11.04.22 um 18:28 schrieb Alex Deucher:
+> On Mon, Apr 11, 2022 at 11:28 AM Paul Menzel wrote:
+
+[…]
+
+>> Am 11.04.22 um 15:59 schrieb Yongqiang Sun:
+>>> MS_HYPERV with vega10 doesn't have the interface to process
+>>> request init data msg.
 >>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> Acked-by: Mark Brown <broonie@kernel.org>
->> ---
+>> Should some Hyper-V folks be added to the reviewers list too?
 >>
->> Changes in v2:
->> - Don't add compatible strings with an "-spi" suffix (Geert Uytterhoeven).
-> 
-> Thanks for the update!
->
-
-You are welcome and thanks for your prompt review and feedback!
- 
->> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
->> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
->> @@ -39,9 +39,14 @@ properties:
->>    reset-gpios:
->>      maxItems: 1
+>>> Check hypervisor type to not send the request for MS_HYPERV.
 >>
->> +  dc-gpios:
->> +    maxItems: 1
->> +
+>> Please add a blank line between paragraphs.
+>>
+>>> Signed-off-by: Yongqiang Sun <yongqiang.sun@amd.com>
+>>> ---
+>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c | 12 ++++++++++--
+>>>    1 file changed, 10 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+>>> index 933c41f77c92..56b130ec44a9 100644
+>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+>>> @@ -23,6 +23,10 @@
+>>>
+>>>    #include <linux/module.h>
+>>>
+>>> +#ifdef CONFIG_X86
+>>> +#include <asm/hypervisor.h>
+>>> +#endif
+>>> +
+>>>    #include <drm/drm_drv.h>
+>>>
+>>>    #include "amdgpu.h"
+>>> @@ -721,8 +725,12 @@ void amdgpu_detect_virtualization(struct amdgpu_device *adev)
+>>>                        break;
+>>>                case CHIP_VEGA10:
+>>>                        soc15_set_virt_ops(adev);
+>>> -                     /* send a dummy GPU_INIT_DATA request to host on vega10 */
+>>> -                     amdgpu_virt_request_init_data(adev);
+>>> +#ifdef CONFIG_X86
+>>> +                     /* not send GPU_INIT_DATA with MS_HYPERV*/
+>>> +                     if (hypervisor_is_type(X86_HYPER_MS_HYPERV) == false)
+>>> +#endif
+>>
+>> Why guard everything with CONFIG_X86? (If it’s needed, it should be done
+>> in C code.)
 > 
-> Perhaps add a description, and clarify this is for SPI only?
-> 
+> X86_HYPER_MS_HYPERV only available on x86.
 
-I wondered how to make it required for SPI but couldn't find another binding
-that did the same and I'm not that familiar with DT schemas to figure it out.
+Sorry, I missed the X86 dependency when quickly looking at the Hyper-V 
+stub IOMMU driver `drivers/iommu/hyperv-iommu.c`, but missed that 
+`HYPERV_IOMMU` has `depends on HYPERV && X86`.
 
-Before, when I had compatible strings just for SPI I could do the following:
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - sinowealth,sh1106-spi
-              - solomon,ssd1305-spi
-              - solomon,ssd1306-spi
-              - solomon,ssd1307-spi
-              - solomon,ssd1309-spi
-    then:
-      required:
-        - spi-max-frequency
-        - dc-gpios
+Kind regards,
 
-but now that we are using the same compatible strings for I2C and SPI, the
-compatible string can't be used anymore as an indication to make required.
+Paul
 
-Do you have any hints here on how I should enforce this in the schema ?
 
-Or if you think that a comment is enough, then I will add it in v3.
-
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-
-Thanks!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+>>> +                             /* send a dummy GPU_INIT_DATA request to host on vega10 */
+>>> +                             amdgpu_virt_request_init_data(adev);
+>>>                        break;
+>>>                case CHIP_VEGA20:
+>>>                case CHIP_ARCTURUS:
+>>
+>>
+>> Kind regards,
+>>
+>> Paul

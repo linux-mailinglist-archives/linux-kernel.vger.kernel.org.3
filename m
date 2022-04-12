@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7E84FDF8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA99B4FDF96
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353944AbiDLMVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S1352644AbiDLMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355417AbiDLMTK (ORCPT
+        with ESMTP id S1355422AbiDLMTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:19:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F25BD0C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:21:50 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id k23so36638668ejd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CICJfzFu5LJCinZ65ytfGl8MaNmqBDc806/TqIYFmE4=;
-        b=t0CxHk6qxRxUG3wltlf/YmWunz2ZgYolmtg7475YgERjvcWmmHNyahpEW83mH9I5Wb
-         YHabjg5dIPqsoaAmw2mbAwibWLYkxHa6vSW0KojZ16M2Cet/K3Ba8inJDxb/iZDvMMRD
-         H2ze+OtTC+Kl5gtExnIVF0BybHMv0YParQDpttPZDFmE0GROM1ZZk+1fpnJtAaalW5kq
-         q0+ZrKRN8qjY6KDj+B1UiEe7yqFNiNjnd9lFAgkkjyfSycYzUWlZWBiCdh4ynGg9fPji
-         zAZdah0a6YpidCJME+kLL9iy9558PLiEcnIl6AjVDNolqn/s79i7MxzEIhv2+Cluw8p+
-         r/hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CICJfzFu5LJCinZ65ytfGl8MaNmqBDc806/TqIYFmE4=;
-        b=UzWd1Pc4sJK0kM3s4EUWWOEJJ3RT4ZrvFi148U2GsTVvlTH2T2uIiyUtxW0MVjitbN
-         /ZQ7rtBBm0z0EDusp6g946c0maoXb1fqfQinIwPHvHM4NkYk+NkR3uIIJgo0F4vGyfID
-         zHq8HKDuYsKg0/O/cRsVoYlzXrkBjAOJcXCfMF+DgBEUwYFvbIGrauTJOdjX2ZGF0ymW
-         gkzBhm8I3eTLnDkVLmV4BCKeO44PcYVYX1PNHSo2AQ2lTyuuNKy3VpBSuMnc67fTBZkB
-         RpanMX54OI2fGM5v3cjVVPsQwmNzHm9ervGJms8SSws/NTsSrjFgefwvtBMeCnnW8JTB
-         Up8w==
-X-Gm-Message-State: AOAM533SZVAiMGxZE9okUBK4ckqM0vFWW+aSYN50g+RkzTZp+C3k0/7C
-        moQKfn/NN//GSV7MXgDByTDrIA==
-X-Google-Smtp-Source: ABdhPJznPjeApaTPet9E9iJ/1AMeuU5YvWAH3lJZ/Xq8ze46Vckwc2+EqvWt5ID9ZLuDwbNkQ1lR/w==
-X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id jx28-20020a170907761c00b006d6e5537bd1mr33821579ejc.5.1649762509294;
-        Tue, 12 Apr 2022 04:21:49 -0700 (PDT)
-Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a22-20020a50ff16000000b00410d029ea5csm16422858edu.96.2022.04.12.04.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 04:21:48 -0700 (PDT)
-Message-ID: <0dfd0d99-3519-3e1d-0f9e-07f1fcf2e0a4@linaro.org>
-Date:   Tue, 12 Apr 2022 13:21:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/4] ARM: dts: qcom: sdx65: Add USB3 and PHY support
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B05D5C1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:22:09 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5710C5C0269;
+        Tue, 12 Apr 2022 07:22:07 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 12 Apr 2022 07:22:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1649762527; x=1649848927; bh=KP
+        ZFl+zUr69t/646Egboka8UL5M06q8AkE3vXXNQoBs=; b=pX+4232Q9TXW4yP/a1
+        R1BxNARz4dR7D5YCwTYdaxr8INFIhb6PIbl04Xt5SNCHXNRHrZRnpT2dvlHbGwOU
+        I6AILER+nvsN0bABWf9bKj6a4yiOvXJC9a14I1RxUmCStSqRgpOTbcLdTeygZdly
+        m2pWlOMsLVsXx2AWtJKdnVkL3nZQo1yRuTLpKeKmrrFY+DZiSq0/QC6aHJ+R7aM3
+        8EwXfSAckZ7NQZrtA0cwzB912d+SriEG+XbkA4TBmmOBxVuWIr9tdnEnYoAgGk0m
+        xcNAru2x8O+lppc6f8XeJDA1R0PoFMJswevoGuDDPqAVC+828OlJGsrIR9w7DwB9
+        2/2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1649762527; x=
+        1649848927; bh=KPZFl+zUr69t/646Egboka8UL5M06q8AkE3vXXNQoBs=; b=Y
+        9uncMXn45ChqGDxw2b0yQ2I94QzNXR7JpqEVynwVDzS2+cpO+udMiLWZ/xckC/iq
+        CMXKS33zrHvkxDQuDEgphtKEI+h8rEFw+v4UTZbtic2/mmDRm+Wf9qYkbblVtP85
+        3f7uJU1cTxpM5pmTKRw72vkKFLywOGaLMhDThlUswG9nj9iCzoKJSt9muDpGALnj
+        MAZbH1oKBjF7p2gJJYXFGJ6GmtM1iIjppOGXxFWdO6CPMwAREY4/OJY9bOq3sxyd
+        yKbh4q88tMV/QVqC3Z8/4pjZyrd/JrQgWTDGmuhQVMSC068YvuxONAJsW8f13B72
+        5wMgyJQX8fdBPmArOua6A==
+X-ME-Sender: <xms:32BVYlCrjQaPzYvPv4vqKOcGH9ZCUAXn2ZN1i1bTuPVPyWj0TPhQQw>
+    <xme:32BVYjjt8aeiWoaD4luldVl5THVoqekv3B1Z__LNnnhVN0pUOFP2hCXLjJzA4q5Hk
+    ovptberySGlFxm_wOY>
+X-ME-Received: <xmr:32BVYgmpIhT0s0u6Lhz4qfmwtPwfF05PNdc0zbxz5U2-f_rgpR-a0G3V2nHix00KU6MplkTWqSNZthBLXnjyOHpaSzLV8wQA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekkedgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
+    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
+    hpqeenucggtffrrghtthgvrhhnpeelhfeugedvjefgjefgudekfedutedvtddutdeuieev
+    tddtgeetjeekvdefgeefhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:32BVYvx6z53PZlSYybX2_mafXMos7XQZvTr45aetqSXm2kUwUny-rQ>
+    <xmx:32BVYqSJab63oi5Z4eGeu2vcxLWABnZLnOhe2YJwGpT_6fSRt2pWTQ>
+    <xmx:32BVYiaPr4CXRM0Tvvlu0qw4e3ytFHvpvmbFoL9q40H4uRLISXcUxg>
+    <xmx:32BVYlenlpUsI2pcOriw7JETAvYNGXr5178WFBhJLV19DeeFR2IqiA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 Apr 2022 07:22:05 -0400 (EDT)
+Date:   Tue, 12 Apr 2022 20:22:04 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     alsa-devel@alsa-project.org, linux1394-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-References: <1649761414-19217-1-git-send-email-quic_rohiagar@quicinc.com>
- <1649761414-19217-4-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1649761414-19217-4-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [bug report] firewire: add kernel API to access CYCLE_TIME
+ register
+Message-ID: <YlVg3I8kLIcBLZAE@workstation>
+Mail-Followup-To: Dan Carpenter <dan.carpenter@oracle.com>,
+        alsa-devel@alsa-project.org, linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20220411070124.GA12881@kili>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411070124.GA12881@kili>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 13:03, Rohit Agarwal wrote:
-> Add devicetree nodes for enabling USB3 controller, Qcom QMP PHY and
-> SNPS HS PHY on SDX65.
+Hi,
+
+On Mon, Apr 11, 2022 at 10:01:25AM +0300, Dan Carpenter wrote:
+> Hello Takashi Sakamoto,
 > 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  arch/arm/boot/dts/qcom-sdx65.dtsi | 83 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
+> The patch baa914cd81f5: "firewire: add kernel API to access
+> CYCLE_TIME register" from Apr 5, 2022, leads to the following Smatch
+> static checker warning:
 > 
-> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
-> index 3e4dc63..e419e47 100644
-> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
-> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
-> @@ -130,6 +130,7 @@
->  			reg = <0x00100000 0x001f7400>;
->  			clocks = <&rpmhcc RPMH_CXO_CLK>, <&rpmhcc RPMH_CXO_CLK_A>, <&sleep_clk>;
->  			clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
-> +			#power-domain-cells = <1>;
->  			#clock-cells = <1>;
->  			#reset-cells = <1>;
->  		};
-> @@ -143,6 +144,45 @@
->  			status = "disabled";
->  		};
->  
-> +		usb_hsphy: hsphy@ff4000 {
+> 	drivers/firewire/core-cdev.c:1235 ioctl_get_cycle_timer2()
+> 	error: uninitialized symbol 'cycle_time'.
+> 
+> drivers/firewire/core-cdev.c
+>     1209 static int ioctl_get_cycle_timer2(struct client *client, union ioctl_arg *arg)
+>     1210 {
+>     1211         struct fw_cdev_get_cycle_timer2 *a = &arg->get_cycle_timer2;
+>     1212         struct fw_card *card = client->device->card;
+>     1213         struct timespec64 ts = {0, 0};
+>     1214         u32 cycle_time;
+>     1215         int ret = 0;
+>     1216 
+>     1217         local_irq_disable();
+>     1218 
+>     1219         ret = fw_card_read_cycle_time(card, &cycle_time);
+>     1220         if (ret < 0)
+>     1221                 goto end;
+>                          ^^^^^^^^
+> "cycle_time" not initialized on error path.
+> 
+>     1222 
+>     1223         switch (a->clk_id) {
+>     1224         case CLOCK_REALTIME:      ktime_get_real_ts64(&ts);        break;
+>     1225         case CLOCK_MONOTONIC:     ktime_get_ts64(&ts);                break;
+>     1226         case CLOCK_MONOTONIC_RAW: ktime_get_raw_ts64(&ts);        break;
+>     1227         default:
+>     1228                 ret = -EINVAL;
+>     1229         }
+>     1230 end:
+>     1231         local_irq_enable();
+>     1232 
+>     1233         a->tv_sec      = ts.tv_sec;
+>     1234         a->tv_nsec     = ts.tv_nsec;
+> --> 1235         a->cycle_timer = cycle_time;
+>     1236 
+>     1237         return ret;
+>     1238 }
 
-Generic node names, so "phy".
-
-> +			compatible = "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0xff4000 0x120>;
-> +			#phy-cells = <0>;
-> +			status = "disabled";
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +			resets = <&gcc GCC_QUSB2PHY_BCR>;
-> +		};
-> +
-> +		usb_qmpphy: phy@ff6000 {
-> +			compatible = "qcom,sdx65-qmp-usb3-uni-phy";
-> +			reg = <0x00ff6000 0x1c8>;
-> +			status = "disabled";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_PHY_AUX_CLK>,
-> +				 <&gcc GCC_USB_PHY_CFG_AHB2PHY_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_CLKREF_EN>;
-> +			clock-names = "aux", "cfg_ahb", "ref";
-> +
-> +			resets = <&gcc GCC_USB3PHY_PHY_BCR>,
-> +				 <&gcc GCC_USB3_PHY_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			usb_ssphy: phy@ff6200 {
-> +				reg = <0x00ff6e00 0x160>,
-> +				      <0x00ff7000 0x1ec>,
-> +				      <0x00ff6200 0x1e00>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <0>;
-> +				clocks = <&gcc GCC_USB3_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_uni_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
->  		system_noc: interconnect@1620000 {
->  			compatible = "qcom,sdx65-system-noc";
->  			reg = <0x1620000 0x31200>;
-> @@ -182,6 +222,49 @@
->  			status = "disabled";
->  		};
->  
-> +		usb: usb@a6f8800 {
-> +			compatible = "qcom,sdx65-dwc3", "qcom,dwc3";
-> +			reg = <0x0a6f8800 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB30_SLV_AHB_CLK>,
-> +				 <&gcc GCC_USB30_MASTER_CLK>,
-> +				 <&gcc GCC_USB30_MSTR_AXI_CLK>,
-> +				 <&gcc GCC_USB30_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_SLEEP_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
-> +					"sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 19 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 76 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 18 IRQ_TYPE_EDGE_BOTH>;
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "ss_phy_irq", "dm_hs_phy_irq";
-> +
-> +			power-domains = <&gcc USB30_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_BCR>;
-> +
-> +			usb_dwc3: dwc3@a600000 {
-
-usb. Please test your changes with `make dtbs_check`. This should
-clearly fail.
+Thanks for the report. Indeed, it leaks the unidentified value on kernel
+stack to userspace. I'll post fix later.
 
 
-Best regards,
-Krzysztof
+Regards
+
+Takashi Sakamoto

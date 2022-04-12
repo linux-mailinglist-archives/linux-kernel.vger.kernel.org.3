@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8174FD563
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF3F4FD578
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351068AbiDLHMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S1357504AbiDLHkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352513AbiDLGz4 (ORCPT
+        with ESMTP id S1353069AbiDLHOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A979641337;
-        Mon, 11 Apr 2022 23:45:53 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD20525291;
+        Mon, 11 Apr 2022 23:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B575DB818C8;
-        Tue, 12 Apr 2022 06:45:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F19DC385A1;
-        Tue, 12 Apr 2022 06:45:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84626B81B43;
+        Tue, 12 Apr 2022 06:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3CEC385A1;
+        Tue, 12 Apr 2022 06:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745950;
-        bh=tu0v6OA/f0IhRi7ITV468r8y59OEfqWosZdsp4d1ZN0=;
+        s=korg; t=1649746571;
+        bh=g0S1xJM0BJ86DQH0IZzY6uj6KRFPYEHUsBoXY82RMEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Ho142AK/oUWGz6aiNTl6StMgNlDqhV2zax2ZMJju5LJlvxUw/+o7JVsNAyAvr5T6
-         iC5Ii0/8VywbDwQni8OAIXZnghFzpOoZ78vlkJVMnOyuXQz4SvwKCjAc3xR2u+GhqP
-         rXhxjdJYm9j0SK6LqgnxXVPBytShErArbb86XgbI=
+        b=nT5V/OaYrgKZ8qN8smnTC2Rx1RWODfjPS6FqlzAQekC9JL6RQN9G9bBiEucH2kDb8
+         Q5qBjuu+94kGb7ZDxcxJ40y8DnIr7TuKQBUR/1VLm2Yf1bZ/KzvR2ilzF9dr5ZJRU+
+         nKneX/8/xGDeDGXkMeyuWl5Iok6SCGC9884tCYII=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Feng Tang <feng.tang@intel.com>, Guo Ren <guoren@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 107/277] lib/Kconfig.debug: add ARCH dependency for FUNCTION_ALIGN option
+Subject: [PATCH 5.16 053/285] scsi: mpi3mr: Fix reporting of actual data transfer size
 Date:   Tue, 12 Apr 2022 08:28:30 +0200
-Message-Id: <20220412062945.136856860@linuxfoundation.org>
+Message-Id: <20220412062945.202371210@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Tang <feng.tang@intel.com>
+From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-[ Upstream commit 1bf18da62106225dbc47aab41efee2aeb99caccd ]
+[ Upstream commit 9992246127246a27cc7184f05cce6f62ac48f84e ]
 
-0Day robots reported there is compiling issue for 'csky' ARCH when
-CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED is enabled [1]:
+The driver is missing to set the residual size while completing an
+I/O. Ensure proper data transfer size is reported to the kernel on I/O
+completion based on the transfer length reported by the firmware.
 
-All errors (new ones prefixed by >>):
-
-   {standard input}: Assembler messages:
->> {standard input}:2277: Error: pcrel offset for branch to .LS000B too far (0x3c)
-
-Which was discussed in [2].  And as there is no solution for csky yet, add
-some dependency for this config to limit it to several ARCHs which have no
-compiling issue so far.
-
-[1]. https://lore.kernel.org/lkml/202202271612.W32UJAj2-lkp@intel.com/
-[2]. https://www.spinics.net/lists/linux-kbuild/msg30298.html
-
-Link: https://lkml.kernel.org/r/20220304021100.GN4548@shbuild999.sh.intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Feng Tang <feng.tang@intel.com>
-Cc: Guo Ren <guoren@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20220210095817.22828-7-sreekanth.reddy@broadcom.com
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/Kconfig.debug | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2a9b6dcdac4f..55e89b237b6f 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -414,7 +414,8 @@ config SECTION_MISMATCH_WARN_ONLY
- 	  If unsure, say Y.
- 
- config DEBUG_FORCE_FUNCTION_ALIGN_64B
--	bool "Force all function address 64B aligned" if EXPERT
-+	bool "Force all function address 64B aligned"
-+	depends on EXPERT && (X86_64 || ARM64 || PPC32 || PPC64 || ARC)
- 	help
- 	  There are cases that a commit from one domain changes the function
- 	  address alignment of other domains, and cause magic performance
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+index fe10f257b5a4..224a4155d9b4 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_os.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+@@ -2204,6 +2204,8 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
+ 		scmd->result = DID_OK << 16;
+ 		goto out_success;
+ 	}
++
++	scsi_set_resid(scmd, scsi_bufflen(scmd) - xfer_count);
+ 	if (ioc_status == MPI3_IOCSTATUS_SCSI_DATA_UNDERRUN &&
+ 	    xfer_count == 0 && (scsi_status == MPI3_SCSI_STATUS_BUSY ||
+ 	    scsi_status == MPI3_SCSI_STATUS_RESERVATION_CONFLICT ||
 -- 
 2.35.1
 

@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E4F4FE0B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4344FE0BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353752AbiDLMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S1354123AbiDLMml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355484AbiDLMjN (ORCPT
+        with ESMTP id S1355690AbiDLMj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:39:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0024C32D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:02:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FDA961017
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B70BC385A5;
-        Tue, 12 Apr 2022 12:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649764941;
-        bh=RL0TS6TyTsdDUGUm/EuXSEF8ETZ+oamHhp+RILM0/YA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u3mHLMHoovRPWuJ8y8P/Vdf5aWsXfBlbwPd/Lv1CC2gAYrz46aDVuZy2dSkGLSWmE
-         hpBubU2oQjoy5rFdmrvHhehRBFD4euGUaRkf+8y/ARPVcMFqqMajIZJKh10O45Oc9C
-         VsxROyNh+ZUUyk13ISrKKT92HWZsCR8RKZeqBRIs=
-Date:   Tue, 12 Apr 2022 14:02:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Liu Junqi <liujunqi@pku.edu.cn>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: Remove D. Kershner from Unisys S-PAR
- maintainers
-Message-ID: <YlVqStHr6acHnF5o@kroah.com>
-References: <20220412103629.8029-1-fmdefrancesco@gmail.com>
- <YlVXV4J41KBzKHtm@kroah.com>
- <2976258.CbtlEUcBR6@leap>
+        Tue, 12 Apr 2022 08:39:28 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C2C3B3DB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:03:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id lc2so16289463ejb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=P9Vlzh5r939TZHzBkHT3UQX7MKUcjJtbvYInSipTD1A=;
+        b=Zi7n7mxortlyiL0ZebgNg1KMOxCTMkm+i8luXhBBfdbazgaO5ITHkwS2+aR/OMjLc8
+         CaOS00+DjZz2LZn4A6KAuLLOLfHXR32t1tyGw/hPWfYGqBVdHoVMVEq5RRTIs2HE2kl7
+         qAyt9Q8mHGgtEKNEH5MqnG9wKYqUVBQfsCve4YnKwIhTKaxdhyBHSQuCYQ97AFRD5qbw
+         tZvSK2AJ37N5eNTCQQOUQCakyNAwr7S3/M5aWWMIBacW71lYe+Dj6fjQw4CPzXViFufy
+         P2aV+QjH4gN+OUKKBUrTgRKTW+S3Nc/VpdIHeMnDuQyzBvrfJTSATpIH7lHLFjysNGF3
+         n9mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P9Vlzh5r939TZHzBkHT3UQX7MKUcjJtbvYInSipTD1A=;
+        b=1cEMdcr6Z+RPtdKMdC5fZhetvl2tp6Rk3HelnbOPSDBCOCUOY8BMbs+S7maUGvAfei
+         iPmz/0WKyl4POa3xUdHl//pcStZtYZx0frruQuRTc+GVT8LQGYweRyBWrCfUVhsEtUid
+         XTCiHZt13TS1+gheMQ8Yywy/Wmw65od0X0FT/bvYB0qX8H+JQAxTDwJUZEc8vAHm3Put
+         74p6dGz4ER90Cq5mLllTagDLLQSCz6hqOiEwDNFt8UtK2kvTGsi7iWfmCuoud/058eEl
+         /dLDCFU9AIPjR6ZqOV/EhrU+4ohgeb0gDL+zrfW9LrJNd1XUfHFhXqFZTyri52nc55Pq
+         kFJw==
+X-Gm-Message-State: AOAM531Sl23W/VuoNR6iHGVoNCZt/rmkbvxch07vUp0kcup6ti+uhmRu
+        QqNq3/GLuDMQdb9a05l7klnhrg==
+X-Google-Smtp-Source: ABdhPJx6IBrqF+ExbI0R/I+qcJ+Gg7ztEoc2OuK961yTNxuYB01w3+TeUXFoQjHQaCY2aVfG07kRbw==
+X-Received: by 2002:a17:907:9482:b0:6da:a24e:e767 with SMTP id dm2-20020a170907948200b006daa24ee767mr34671029ejc.479.1649765002200;
+        Tue, 12 Apr 2022 05:03:22 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o5-20020a50c905000000b0041d828d0c58sm2656513edh.53.2022.04.12.05.03.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 05:03:21 -0700 (PDT)
+Message-ID: <aeff85cb-45b2-c7d6-5ce8-edd6776fbfe4@linaro.org>
+Date:   Tue, 12 Apr 2022 14:03:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2976258.CbtlEUcBR6@leap>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: crypto: ti,sa2ul: Add a new compatible
+ for AM62
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, linux-crypto@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+References: <20220412073016.6014-1-j-choudhary@ti.com>
+ <20220412073016.6014-2-j-choudhary@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412073016.6014-2-j-choudhary@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 01:08:28PM +0200, Fabio M. De Francesco wrote:
-> On marted? 12 aprile 2022 12:41:27 CEST Greg Kroah-Hartman wrote:
-> > On Tue, Apr 12, 2022 at 12:36:29PM +0200, Fabio M. De Francesco wrote:
-> > > The email address of David Kershner is no more reachable. Remove his
-> > > entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS and change
-> > > the status to "Orphan".
-> > > 
-> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > ---
-> > > 
-> > > v1->v2: Change also the status of the entry to "Orphan" and rework the
-> > > commit message. (Thanks to Greg Kroah-Hartman).
-> > > 
-> > >  MAINTAINERS | 3 +--
-> > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 3ed62dcd144e..9283c63565b3 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -20184,9 +20184,8 @@ F:	include/linux/cdrom.h
-> > >  F:	include/uapi/linux/cdrom.h
-> > >  
-> > >  UNISYS S-PAR DRIVERS
-> > > -M:	David Kershner <david.kershner@unisys.com>
-> > >  L:	sparmaintainer@unisys.com (Unisys internal)
-> > 
-> > Again, please drop this "list" as it obviously is not going to anyone.
+On 12/04/2022 09:30, Jayesh Choudhary wrote:
+> Add the AM62 version of sa3ul to the compatible list.
 > 
-> OK, I'll also drop the "L:" line. I wasn't sure about it because I see 
-> that there are other entries marked as "Orphan" and the list is still
-> there. But you are right: although the "sparmaintainer" list address is
-> not bouncing, it looks like nobody care to read messages there.
->   
-> > And really, this whole code should be removed, no one seems to be using
-> > it, and if they are, we can easily revert the removal and mark them as
-> > the maintainer.
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>  Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> 1) If I remove the entire drivers/staging/unisys/ I suppose that, in 
-> MAINTAINERS I should also remove the whole entry called "UNISYS S-PAR 
-> DRIVERS", not only the "L:" line. 
+> diff --git a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> index a410d2cedde6..02f47c2e7998 100644
+> --- a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> @@ -15,6 +15,7 @@ properties:
+>        - ti,j721e-sa2ul
+>        - ti,am654-sa2ul
+>        - ti,am64-sa2ul
+> +      - ti,am62-sa3ul
+>  
 
-Yes, _AND_ you need to also remove all files that are listed for that
-entry.
+Just to be sure - dma-coherent is not required for this device (see
+final "if:" in the bindings)?
 
-> 2) Furthermore, I understand that I should also should change the relevant 
-> Kbuild files, otherwise all builds of staging would fail. 
-
-Yes.
-
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

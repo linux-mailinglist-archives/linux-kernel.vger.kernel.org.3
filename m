@@ -2,42 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4C04FD3DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3994FD3C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355958AbiDLHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S1355907AbiDLH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351780AbiDLHM4 (ORCPT
+        with ESMTP id S1351795AbiDLHM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B862EAF;
-        Mon, 11 Apr 2022 23:52:42 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050C10EB;
+        Mon, 11 Apr 2022 23:52:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BBB6146F;
-        Tue, 12 Apr 2022 06:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422ADC385A6;
-        Tue, 12 Apr 2022 06:52:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63D10B81B35;
+        Tue, 12 Apr 2022 06:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88289C385A6;
+        Tue, 12 Apr 2022 06:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746361;
-        bh=UwLcQT64WY8tcZ3k1uVQlPpot7dGbfyrsR4lgUlQiyA=;
+        s=korg; t=1649746367;
+        bh=SoCb/hdLcNc5aCFlOmgnS1sQDkhgqCLKwaaJREOg48A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1xYT7+3FBNclR2WFE8G8W4kgRo7GRUJfeuRSLBieLHZqV4kT4z+LoCIT+N/Wof1IQ
-         0nasQXusuUcx29AeMS6IJNoZoK1VlnlIeH55Y3BjE5nCwvOg8Wpjdefm0wK10FQgcz
-         N48/k5NEIVQ6u7iqlO9lK6X+Wc9XiO3jgQIQ2rYM=
+        b=PMn3qxhoRsYtMFBjpJ6vC1uACkJeIkaPKm0KICmXff3kP9h/NgEo2in6yDjGK8qq7
+         nz222yjWEr23LLV+UmdhCyw7EuI0Hfo1F4/QxnUaU8CGBGR53UYXO6+zujVieHMbXc
+         LZH4PUui8/t3zOTejuYUa+gQ8+U0uB6ZN3JnuBmc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.15 254/277] SUNRPC: Dont call connect() more than once on a TCP socket
-Date:   Tue, 12 Apr 2022 08:30:57 +0200
-Message-Id: <20220412062949.392803066@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.15 256/277] perf build: Dont use -ffat-lto-objects in the python feature test when building with clang-13
+Date:   Tue, 12 Apr 2022 08:30:59 +0200
+Message-Id: <20220412062949.449788404@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
 References: <20220412062942.022903016@linuxfoundation.org>
@@ -55,77 +63,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 89f42494f92f448747bd8a7ab1ae8b5d5520577d upstream.
+commit 3a8a0475861a443f02e3a9b57d044fe2a0a99291 upstream.
 
-Avoid socket state races due to repeated calls to ->connect() using the
-same socket. If connect() returns 0 due to the connection having
-completed, but we are in fact in a closing state, then we may leave the
-XPRT_CONNECTING flag set on the transport.
+Using -ffat-lto-objects in the python feature test when building with
+clang-13 results in:
 
-Reported-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
-Fixes: 3be232f11a3c ("SUNRPC: Prevent immediate close+reconnect")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+  clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+  error: command '/usr/sbin/clang' failed with exit code 1
+  cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
+  make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
+
+Noticed when building on a docker.io/library/archlinux:base container.
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Keeping <john@metanate.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/sunrpc/xprtsock.h |    1 +
- net/sunrpc/xprtsock.c           |   21 +++++++++++----------
- 2 files changed, 12 insertions(+), 10 deletions(-)
+ tools/perf/Makefile.config |    3 +++
+ tools/perf/util/setup.py   |    2 ++
+ 2 files changed, 5 insertions(+)
 
---- a/include/linux/sunrpc/xprtsock.h
-+++ b/include/linux/sunrpc/xprtsock.h
-@@ -89,5 +89,6 @@ struct sock_xprt {
- #define XPRT_SOCK_WAKE_WRITE	(5)
- #define XPRT_SOCK_WAKE_PENDING	(6)
- #define XPRT_SOCK_WAKE_DISCONNECT	(7)
-+#define XPRT_SOCK_CONNECT_SENT	(8)
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -270,6 +270,9 @@ ifdef PYTHON_CONFIG
+   PYTHON_EMBED_LIBADD := $(call grep-libs,$(PYTHON_EMBED_LDOPTS)) -lutil
+   PYTHON_EMBED_CCOPTS := $(shell $(PYTHON_CONFIG_SQ) --includes 2>/dev/null)
+   FLAGS_PYTHON_EMBED := $(PYTHON_EMBED_CCOPTS) $(PYTHON_EMBED_LDOPTS)
++  ifeq ($(CC_NO_CLANG), 0)
++    PYTHON_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PYTHON_EMBED_CCOPTS))
++  endif
+ endif
  
- #endif /* _LINUX_SUNRPC_XPRTSOCK_H */
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -2257,6 +2257,7 @@ static int xs_tcp_finish_connecting(stru
- 		fallthrough;
- 	case -EINPROGRESS:
- 		/* SYN_SENT! */
-+		set_bit(XPRT_SOCK_CONNECT_SENT, &transport->sock_state);
- 		if (xprt->reestablish_timeout < XS_TCP_INIT_REEST_TO)
- 			xprt->reestablish_timeout = XS_TCP_INIT_REEST_TO;
- 		break;
-@@ -2282,10 +2283,14 @@ static void xs_tcp_setup_socket(struct w
- 	struct rpc_xprt *xprt = &transport->xprt;
- 	int status = -EIO;
+ FEATURE_CHECK_CFLAGS-libpython := $(PYTHON_EMBED_CCOPTS)
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -23,6 +23,8 @@ if cc_is_clang:
+             vars[var] = sub("-fstack-protector-strong", "", vars[var])
+         if not clang_has_option("-fno-semantic-interposition"):
+             vars[var] = sub("-fno-semantic-interposition", "", vars[var])
++        if not clang_has_option("-ffat-lto-objects"):
++            vars[var] = sub("-ffat-lto-objects", "", vars[var])
  
--	if (!sock) {
--		sock = xs_create_sock(xprt, transport,
--				xs_addr(xprt)->sa_family, SOCK_STREAM,
--				IPPROTO_TCP, true);
-+	if (xprt_connected(xprt))
-+		goto out;
-+	if (test_and_clear_bit(XPRT_SOCK_CONNECT_SENT,
-+			       &transport->sock_state) ||
-+	    !sock) {
-+		xs_reset_transport(transport);
-+		sock = xs_create_sock(xprt, transport, xs_addr(xprt)->sa_family,
-+				      SOCK_STREAM, IPPROTO_TCP, true);
- 		if (IS_ERR(sock)) {
- 			status = PTR_ERR(sock);
- 			goto out;
-@@ -2365,13 +2370,9 @@ static void xs_connect(struct rpc_xprt *
+ from distutils.core import setup, Extension
  
- 	WARN_ON_ONCE(!xprt_lock_connect(xprt, task, transport));
- 
--	if (transport->sock != NULL && !xprt_connecting(xprt)) {
-+	if (transport->sock != NULL) {
- 		dprintk("RPC:       xs_connect delayed xprt %p for %lu "
--				"seconds\n",
--				xprt, xprt->reestablish_timeout / HZ);
--
--		/* Start by resetting any existing state */
--		xs_reset_transport(transport);
-+			"seconds\n", xprt, xprt->reestablish_timeout / HZ);
- 
- 		delay = xprt_reconnect_delay(xprt);
- 		xprt_reconnect_backoff(xprt, XS_TCP_INIT_REEST_TO);
 
 

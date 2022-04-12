@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8F94FD3F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240474FD37E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351831AbiDLHSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
+        id S1359689AbiDLHne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352140AbiDLHEz (ORCPT
+        with ESMTP id S1354089AbiDLHRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5040D46B37;
-        Mon, 11 Apr 2022 23:47:44 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ECD4AE22;
+        Mon, 11 Apr 2022 23:58:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A3F76103A;
-        Tue, 12 Apr 2022 06:47:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3704BC385A6;
-        Tue, 12 Apr 2022 06:47:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCE0961589;
+        Tue, 12 Apr 2022 06:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EFCC385A1;
+        Tue, 12 Apr 2022 06:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746063;
-        bh=GPMcE/Z5TPn8lD0AfTRMCJGO/tcYseOLuUzJh3fgWPQ=;
+        s=korg; t=1649746692;
+        bh=OUlAb3UGaOKkAhEIqpIsvBCTN/p5eXDozdHw2+Y4nRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sHuWzAhJvtVUejlAeCWhcVp4oEMkeSWMA+u6qK5KNN0yH1ou9Ns4CDCKG5y6RBzah
-         v27VNCYqjskC7zfddBSHtZ/WGB0grJnp+ZrmtzovyjOMyT8cPk/Cp6Hsjjb2tnKtkm
-         Q+kYG7feYsfZiS4m29g00uD2xvIcHPHdC4arZD9o=
+        b=PQEqslw67f3GguLNQfII2qrgMlds7XHFEesGtZX7JXD/lgglcmn5eatBX0K/eeSpc
+         2KICodIuEmMpaulCp3PKZw6jQdGHReHq+xwKWN6dGhSDBgL7m2cctR3UzYYLyZG9Ni
+         kSiTKQwD6TTeVh6D8O4gfSb1NxZ26SB5iW+4GkA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 148/277] Drivers: hv: vmbus: Fix potential crash on module unload
-Date:   Tue, 12 Apr 2022 08:29:11 +0200
-Message-Id: <20220412062946.319702271@linuxfoundation.org>
+        stable@vger.kernel.org, George Shuklin <george.shuklin@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 096/285] net: account alternate interface name memory
+Date:   Tue, 12 Apr 2022 08:29:13 +0200
+Message-Id: <20220412062946.436406625@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 792f232d57ff28bbd5f9c4abe0466b23d5879dc8 ]
+[ Upstream commit 5d26cff5bdbebdf98ba48217c078ff102536f134 ]
 
-The vmbus driver relies on the panic notifier infrastructure to perform
-some operations when a panic event is detected. Since vmbus can be built
-as module, it is required that the driver handles both registering and
-unregistering such panic notifier callback.
+George reports that altnames can eat up kernel memory.
+We should charge that memory appropriately.
 
-After commit 74347a99e73a ("x86/Hyper-V: Unload vmbus channel in hv panic callback")
-though, the panic notifier registration is done unconditionally in the module
-initialization routine whereas the unregistering procedure is conditionally
-guarded and executes only if HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE capability
-is set.
-
-This patch fixes that by unconditionally unregistering the panic notifier
-in the module's exit routine as well.
-
-Fixes: 74347a99e73a ("x86/Hyper-V: Unload vmbus channel in hv panic callback")
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20220315203535.682306-1-gpiccoli@igalia.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Reported-by: George Shuklin <george.shuklin@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/vmbus_drv.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ net/core/rtnetlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 44bd0b6ff505..a939ca1a8d54 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2776,10 +2776,15 @@ static void __exit vmbus_exit(void)
- 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
- 		kmsg_dump_unregister(&hv_kmsg_dumper);
- 		unregister_die_notifier(&hyperv_die_block);
--		atomic_notifier_chain_unregister(&panic_notifier_list,
--						 &hyperv_panic_block);
- 	}
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index 8b5c5703d758..6a7883ec0489 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -3637,7 +3637,7 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
+ 	if (err)
+ 		return err;
  
-+	/*
-+	 * The panic notifier is always registered, hence we should
-+	 * also unconditionally unregister it here as well.
-+	 */
-+	atomic_notifier_chain_unregister(&panic_notifier_list,
-+					 &hyperv_panic_block);
-+
- 	free_page((unsigned long)hv_panic_page);
- 	unregister_sysctl_table(hv_ctl_table_hdr);
- 	hv_ctl_table_hdr = NULL;
+-	alt_ifname = nla_strdup(attr, GFP_KERNEL);
++	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
+ 	if (!alt_ifname)
+ 		return -ENOMEM;
+ 
 -- 
 2.35.1
 

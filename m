@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E894FE4C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79B14FE4BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357062AbiDLPdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S1357079AbiDLPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357157AbiDLPc4 (ORCPT
+        with ESMTP id S1357043AbiDLPbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:32:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C0849F34;
-        Tue, 12 Apr 2022 08:30:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 4C8611F449DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649777437;
-        bh=lQ4NdSCZzsjrOwPly6smii3XDpZabMAoBkBVD0ftePQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DypMHo/iqBWeOVAIsUtbr1TgMRAo4Egs4mPvgCYZkmDXSh575Wnsh2QlOf4+zqnZ3
-         HTc+h+30pelHZrWbwZMI5mxhwWB4ip2KId8dHBa1Hdul5lrLZ03e95mkFmtWa6Lrf+
-         rwomvfA6S+IH4/wD0SLVUnRByMfS8kW8J3AGX83mzQnhbR3vb42SDAAkVrb0J7djP5
-         zh/RBmU1mEP1yWGCGFzM1LuMe2QrvVjGYOynP1YYnV9Cp72fk4DlELrtKCKkcvLgYR
-         1W/NwnhXSpzpC0pD7RFoZjPUG1x1d/zhWdLVzl1kRe0VDGNZZdUrUMIsNoF9uN/e3h
-         CGn/SyVelKLJg==
-Message-ID: <138aad1c-63d7-371a-ff41-4fd7022d365d@collabora.com>
-Date:   Tue, 12 Apr 2022 17:30:34 +0200
+        Tue, 12 Apr 2022 11:31:01 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902FD5F8D5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649777317; x=1681313317;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kk9vDsGFP6yJI3cVDAN5JAQXQldQgiHzm+K/w9A/5ho=;
+  b=nswFytGKQ1DKSGZ+ZQiJGQ0vGMhtQ6sm+E4Blfmhe2k8/TnYfZVIaKZl
+   XnwnZzft3+ZnUIxuVPwrh2DaO7Q/r+NWkaup3WRWPZS5ieqBP/PQpmR73
+   NeI7c6W81UWbbcyy+DBLQSf40h1KTLHeO+PWzAXH0byW7glzV09ijmM8X
+   jauxUKpPyz/U+VYi5PShVPC9Dhv+Wn6PVGf421/ZB8TRRbXQlpj+/QX+H
+   q1z7HUqIbeC/zqNctQHagX4Gs973fl3FzyKROQP0bB+SUccrjCM4KunEm
+   QuOe3UX2we8qQX2tmXtuWx+Yaa7WfsW5giUqf8a+hGj1OqBEveVnMJDiW
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,254,1643698800"; 
+   d="scan'208";a="159838688"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Apr 2022 08:28:17 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 12 Apr 2022 08:28:15 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 12 Apr 2022 08:28:14 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux@armlinux.org.uk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v2 0/4] ARM: at91: pm: add quirks for ethernet
+Date:   Tue, 12 Apr 2022 18:30:42 +0300
+Message-ID: <20220412153046.50014-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] soc: mediatek: svs: add support for mt8186
-Content-Language: en-US
-To:     Tim Chang <jia-wei.chang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com
-References: <20220412112127.21570-1-jia-wei.chang@mediatek.com>
- <20220412112127.21570-3-jia-wei.chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220412112127.21570-3-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/04/22 13:21, Tim Chang ha scritto:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> MT8186 svs has a number of banks which used as optimization of opp
-> voltage table for corresponding dvfs drivers.
-> MT8186 svs big core uses 2-line high bank and low bank to optimize the
-> voltage of opp table for higher and lower frequency respectively.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+Hi,
 
-For the code only, as I am unable to test:
+As described in patch 3/4 when receiving WoL packet on Ethernet
+interfaces of AT91 SoCs and being in ULP0 or ULP1 AT91 specific power
+management modes some SoCs may block other may have Ethernet interfaces
+broken after resume. Workaround for this would be to disable clocks
+for these Ethernet interfaces. As the MACB driver is common to multiple
+vendors and multiple architectures and ULP0, ULP1 PM modes are AT91
+specific the fix has been implemented in arch/arm/mach-at91 to avoid
+having AT91 specific code in MACB driver.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Along with this patches I took the chance and added few comment style
+fixups.
+
+Thank you,
+Claudiu Beznea
+
+Changes in v2:
+- in patch 4/4: use proper structure name in documentation
+
+Claudiu Beznea (4):
+  ARM: at91: pm: keep documentation inline with structure members
+  ARM: at91: pm: introduce macros for pm mode replacement
+  ARM: at91: pm: add quirks for pm
+  ARM: at91: pm: use kernel documentation style
+
+ arch/arm/mach-at91/pm.c | 367 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 334 insertions(+), 33 deletions(-)
+
+-- 
+2.32.0
 

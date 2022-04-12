@@ -2,113 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2514FD1F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C49C4FD23F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351731AbiDLHEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S1351621AbiDLHHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351540AbiDLGx5 (ORCPT
+        with ESMTP id S1351775AbiDLGyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:57 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C854186E0;
-        Mon, 11 Apr 2022 23:42:22 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id j17so15193278pfi.9;
-        Mon, 11 Apr 2022 23:42:22 -0700 (PDT)
+        Tue, 12 Apr 2022 02:54:22 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45487BFA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:44:02 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lc2so14723038ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oIBDhcdWSaE7vQbKGazUcowf2lwLjEe8FI7+3jjOTMs=;
-        b=FYGUdST2//KLw3IMPTIMx0PfdT9wSS77bKBOMhv6Nxwnr5QxDAulcTw8z1kSzzx86/
-         DWF3bZT7bCoIU6/+RPkJxK/GrDSUJI5MPwr8q5Jvw2eZu+7sqw8TdpPLkkssTitPPARr
-         zxnvphd8O1XhS1NNmEnDY3XBY2QK24svSHcMx9JuIZfLl6M9YEMtJTEhiMQK80ljGF7a
-         ccVTF5cTDjwI2hhQlXgYDJzXn66V5GH0COb2Zgfy19Iwickp4YDfgmVWWFzgLem9Q5QQ
-         WDwe83SkXys0Ms8zceDEqVBRrsH8QdKnW/HkAvyfCz4iBUyVA9+eSM1cNUGK47ab8sm2
-         ypvw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gdMXT9TzsyH4/nxmkBNQPgpVjR8VBr666pmrMpmTXZI=;
+        b=Sf9531F6U+Pwb0a1JtSz+UJf/7y7GtDmQlZZhYfSi+mfIvdBuA4l0w7/WatdjA9Ad6
+         TvV1/c+RE7sUGKS1/vUuU2MhBpzDMSR5e27v5CWt4Y1uEERO4rzy1WFE7UFOUTkys8y4
+         CrAZELDcitDaBEG070MG6AnwITJStO2p0wpebyOBC/F8c4E4tcDxGW0/DG5QxVW1sIpV
+         8p0pgBHVk3S74bwGfrfbc9v6owVXngqPs+TyhlqZ2FJ8kqVHCNvX0K4QrJKpDWlQQ4ZP
+         fgucKqXTCFSYrEFgMqiDfOIFe4mCpdCXVpFSuD1BRgEDhCuvS5dXmNhhvfMGmg+v/lcO
+         ESgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=oIBDhcdWSaE7vQbKGazUcowf2lwLjEe8FI7+3jjOTMs=;
-        b=yllyzhaOKPgy9N9N8UdHajaoawnUCHbjTief+HRF1zMB2NwIb4/EpTcNnj6upV0Tcf
-         vI7I6nMS8QitzrzCNFsPdb8yBcmHOL4dNwltGeSz9SfhNUq4Xm6hyr88MAJatM0T3oM5
-         gBJMty0J4VpVjwvS3+jqbjhWprIkE8JIHE+nG6gM/5yLG4PDR2zzIzggnj942cFjiFcf
-         C5avBBI1RWUEPtVFty9aJkJTlCA/kXXWcn0UekxOjkNaPVSCHN0COPId2ewipU7xzg8g
-         pjCi1d8Z4SO9PSmdhpebAIxT6nnH2GRXe/IgPpo/dZe4jjv5FLZYZ1DHLKww6ZxFoD5A
-         s0Xg==
-X-Gm-Message-State: AOAM531DqfiOVjcaVS5weCJe8uSsJkp1mw8zIEZ0anvt8bbiH8EX1ryB
-        H/w4TcAU9v8hfzsJms9vf+Y=
-X-Google-Smtp-Source: ABdhPJwkDNzf1gmAwCceiQIT3v9UrRANN9Vn1yUYO2C5fplpnnA2P1eiazgHb1CoPJAd0DSD6XQfBg==
-X-Received: by 2002:a63:495b:0:b0:399:8cd:81de with SMTP id y27-20020a63495b000000b0039908cd81demr28660222pgk.508.1649745741684;
-        Mon, 11 Apr 2022 23:42:21 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id j9-20020aa78009000000b004fde2dd78b0sm31712830pfi.109.2022.04.11.23.42.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 23:42:21 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ivan Drobyshevskyi <drobyshevskyi@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] iio: proximity: vl53l0x:  Fix return value check of wait_for_completion_timeout
-Date:   Tue, 12 Apr 2022 06:42:09 +0000
-Message-Id: <20220412064210.10734-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <PH0PR03MB6786F62DE142E3E2C66C937F99ED9@PH0PR03MB6786.namprd03.prod.outlook.com>
-References: <PH0PR03MB6786F62DE142E3E2C66C937F99ED9@PH0PR03MB6786.namprd03.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gdMXT9TzsyH4/nxmkBNQPgpVjR8VBr666pmrMpmTXZI=;
+        b=gi5JHKIu3yx465wxMs6Z9Kau3+libY0d5gs8p2be4OVlB4bs+dXKdbOO8A8KpZdlQ8
+         dQ5JW0F1OaoGtpjGzZJ1q8/KjmBV5aKOVJOqQpt5tvYk5ZjbLRVzZ8cQLUnZhIs/IVSb
+         C6hILhbedV2usYQ61csiSdot9eoLGLQ8jMS1qaeEdZHIesvnJuxKZZHn0qA0eLucRZh8
+         9nqC69UcCo44xoMukCiDkMhMlfAfRxeZZMcfDFemyMPGTDVax2Wg7qD0RsL1XJFZD/XA
+         5fcbBZGGEX8OWEWjbtoZ6ezVKBDvPD0iGWUgMYCrYSPtX4rTt3L+h9oNM3u9o3prUvBQ
+         mHOA==
+X-Gm-Message-State: AOAM531jzlGhb8FlMQmguoUME4z0mWmVcsbJ4ZFvLWU2KmfbMOpInd2s
+        dEzLS54/SZ1nKTYfZwUQk9GzIA==
+X-Google-Smtp-Source: ABdhPJzlMIXt07hedFNdXekcNnAvfM3k0nzYSnt57hMcEFauFmO4UC80WvnBdB/kePIRmAW6KtUX+g==
+X-Received: by 2002:a17:907:1b06:b0:6e7:f58a:9b91 with SMTP id mp6-20020a1709071b0600b006e7f58a9b91mr34377224ejc.291.1649745840798;
+        Mon, 11 Apr 2022 23:44:00 -0700 (PDT)
+Received: from [192.168.0.193] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id c1-20020a50cf01000000b0041cb7e02a5csm14566517edk.87.2022.04.11.23.43.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 23:44:00 -0700 (PDT)
+Message-ID: <8ff07720-3c52-99e6-8046-501f4ae28518@linaro.org>
+Date:   Tue, 12 Apr 2022 08:43:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
+ to json format
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+ <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
+ <20220411105810.GB33220@9a2d8922b8f1>
+ <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
+ <20220412061953.GA95928@9a2d8922b8f1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412061953.GA95928@9a2d8922b8f1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wait_for_completion_timeout() returns unsigned long not int.
-It returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case.
+On 12/04/2022 08:19, Kuldeep Singh wrote:
+> On Mon, Apr 11, 2022 at 01:38:41PM +0200, Krzysztof Kozlowski wrote:
+>> On 11/04/2022 12:58, Kuldeep Singh wrote:
+>>>> This is something new and it seems only one SoC defines it (not even one
+>>>> BAM version). I wonder whether this is actually correct or this
+>>>> particular version of BAM is slightly different. Maybe someone could
+>>>> clarify it, but if no - looks ok.
+>>>
+>>> Yes, sdm845.dtsi uses 4 entries and rest 1.
+>>
+>> Yes, I know. This does not solve my wonder.
+>>
+>>>
+>>>>
+>>>>> +
+>>>>> +  num-channels:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    description:
+>>>>> +      Indicates supported number of DMA channels in a remotely controlled bam.
+>>>>> +
+>>>>> +  qcom,controlled-remotely:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>
+>>>> type: boolean
+>>>
+>>> Boolean comes under flag in types.yaml
+>>>
+>>> definitions:
+>>>   flag:
+>>>     oneOf:
+>>>       - type: boolean
+>>>         const: true
+>>>       - type: 'null'
+>>>
+>>> I have seen other boolean properties(spi-cpol, spi-cpha and bunch of
+>>> others) using type flag. I think we should keep flag here.
+>>
+>> type:boolean is just shorter and example-schema recommends it. If you
+>> want to base on something (as a template, pattern) then the
+>> example-schema is the source, the preferred one.
+> 
+> I had seen other spec using flag and that's why kept same here.
 
-Fixes: 3cef2e31b54b ("iio: proximity: vl53l0x: Add IRQ support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Changes in v2:
-- add driver name in patch subject.
----
- drivers/iio/proximity/vl53l0x-i2c.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+I understand, you mentioned it before. However other spec is not the
+example-schema...
 
-diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
-index 661a79ea200d..a284b20529fb 100644
---- a/drivers/iio/proximity/vl53l0x-i2c.c
-+++ b/drivers/iio/proximity/vl53l0x-i2c.c
-@@ -104,6 +104,7 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	u16 tries = 20;
- 	u8 buffer[12];
- 	int ret;
-+	unsigned long time_left;
- 
- 	ret = i2c_smbus_write_byte_data(client, VL_REG_SYSRANGE_START, 1);
- 	if (ret < 0)
-@@ -112,10 +113,8 @@ static int vl53l0x_read_proximity(struct vl53l0x_data *data,
- 	if (data->client->irq) {
- 		reinit_completion(&data->completion);
- 
--		ret = wait_for_completion_timeout(&data->completion, HZ/10);
--		if (ret < 0)
--			return ret;
--		else if (ret == 0)
-+		time_left = wait_for_completion_timeout(&data->completion, HZ/10);
-+		if (time_left == 0)
- 			return -ETIMEDOUT;
- 
- 		vl53l0x_clear_irq(data);
--- 
-2.17.1
+> Which example schema are you talking about?
 
+There is only one example-schema.
+$ find ./linux -name 'example-schema*'
+
+>>>> clocks, clock-names, qcom-ee - these are required according to old bindings.
+>>>
+>>> I missed qcom,ee. Will add in v3.
+>>>
+>>> For clocks and clock-names , there are two platforms(msm8996.dtsi,
+>>> sdm845.dtsi) where these properties are missing. And I don't want to add
+>>> some random values. Shall I skip them here? and let board owners add
+>>> them later.
+>>
+>> These are required, so the SoC DTSI should be fixed. Not with random
+>> clocks but something proper. :)
+> 
+> Yes absolutely :-)
+> I have kept Srinivas in copy, who sent initial support for both the
+> dtsi. Probably he can confirm provided his email doesn't bounce.
+> 
+> Anyway Krzysztof, can you confirm the same as you have been actively
+> contributing to Qcom peripherals. I will add credit in follow-up
+> submission.
+
+Honestly not now, because I don't have access to related datasheets (I
+am working on this). You can though try to look at original (vendor)
+sources:
+https://git.codelinaro.org/clo/la/kernel/msm-4.19 (sdm845)
+https://git.codelinaro.org/clo/la/kernel/msm-3.18 (msm8996)
+
+
+Best regards,
+Krzysztof

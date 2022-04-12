@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD7B4FD728
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635EA4FD95E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353521AbiDLIka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S1353566AbiDLHPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357222AbiDLHjx (ORCPT
+        with ESMTP id S1351193AbiDLHCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF58BF6;
-        Tue, 12 Apr 2022 00:14:02 -0700 (PDT)
+        Tue, 12 Apr 2022 03:02:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C4B43ECC;
+        Mon, 11 Apr 2022 23:46:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A8F36171C;
-        Tue, 12 Apr 2022 07:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58414C385A5;
-        Tue, 12 Apr 2022 07:14:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB5C2B818BD;
+        Tue, 12 Apr 2022 06:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39703C385AA;
+        Tue, 12 Apr 2022 06:46:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747641;
-        bh=fEaYpuKnP4mDHD7HHYhCWcISb75U1FDjOghhvQZ4igY=;
+        s=korg; t=1649746013;
+        bh=WGH4Nk/mK73Nx2Dwc3zx9xhY+0nYNzKoDgVnbf+FosI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQm7l7ASfn8iEAxaUHkF2abXkFrAaqv2vVeUKnKqRRmhjuW+7fxQDVj5VLU54qLoN
-         dHvUZWnCQOXCVqmSYS5efbwb63Z95RGOYV/zoGnCd1DFVqu/K4CysUevh5UsNaaa5f
-         +bxlVM5yPyf41ivAzEWDBXbUZs453rfn/7PyQv+A=
+        b=1ywn4gI3FbYsWRVN76SFkirNS6jwkioF2aEIJgPeI1ejQGUEWkx4z9sW4EBuMvjfP
+         v8ASfpgcFSDbVGJO4gRr8fjTMqllB+naS3QHB6h37YWdGfrnvPR94XYLlzbr4k8zM7
+         e7YrD3Jb3xa6FcdYlejfkjT6+f2pj5I+aLaTYGF0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Juergen E. Fischer" <fischer@norbit.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 113/343] scsi: aha152x: Fix aha152x_setup() __setup handler return value
+Subject: [PATCH 5.15 128/277] SUNRPC/xprt: async tasks mustnt block waiting for memory
 Date:   Tue, 12 Apr 2022 08:28:51 +0200
-Message-Id: <20220412062954.652829312@linuxfoundation.org>
+Message-Id: <20220412062945.743633747@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,50 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit cc8294ec4738d25e2bb2d71f7d82a9bf7f4a157b ]
+[ Upstream commit a721035477fb5fb8abc738fbe410b07c12af3dc5 ]
 
-__setup() handlers should return 1 if the command line option is handled
-and 0 if not (or maybe never return 0; doing so just pollutes init's
-environment with strings that are not init arguments/parameters).
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.  So it
+must not block waiting for memory.
 
-Return 1 from aha152x_setup() to indicate that the boot option has been
-handled.
+xprt_dynamic_alloc_slot can block indefinitely.  This can tie up all
+workqueue threads and NFS can deadlock.  So when called from a
+workqueue, set __GFP_NORETRY.
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Link: https://lore.kernel.org/r/20220223000623.5920-1-rdunlap@infradead.org
-Cc: "Juergen E. Fischer" <fischer@norbit.de>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+The rdma alloc_slot already does not block.  However it sets the error
+to -EAGAIN suggesting this will trigger a sleep.  It does not.  As we
+can see in call_reserveresult(), only -ENOMEM causes a sleep.  -EAGAIN
+causes immediate retry.
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/aha152x.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ net/sunrpc/xprt.c               | 5 ++++-
+ net/sunrpc/xprtrdma/transport.c | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-index d17880b57d17..2449b4215b32 100644
---- a/drivers/scsi/aha152x.c
-+++ b/drivers/scsi/aha152x.c
-@@ -3375,13 +3375,11 @@ static int __init aha152x_setup(char *str)
- 	setup[setup_count].synchronous = ints[0] >= 6 ? ints[6] : 1;
- 	setup[setup_count].delay       = ints[0] >= 7 ? ints[7] : DELAY_DEFAULT;
- 	setup[setup_count].ext_trans   = ints[0] >= 8 ? ints[8] : 0;
--	if (ints[0] > 8) {                                                /*}*/
-+	if (ints[0] > 8)
- 		printk(KERN_NOTICE "aha152x: usage: aha152x=<IOBASE>[,<IRQ>[,<SCSI ID>"
- 		       "[,<RECONNECT>[,<PARITY>[,<SYNCHRONOUS>[,<DELAY>[,<EXT_TRANS>]]]]]]]\n");
--	} else {
-+	else
- 		setup_count++;
--		return 0;
--	}
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index d95426c0bd3a..61603c2664a6 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1686,12 +1686,15 @@ static bool xprt_throttle_congested(struct rpc_xprt *xprt, struct rpc_task *task
+ static struct rpc_rqst *xprt_dynamic_alloc_slot(struct rpc_xprt *xprt)
+ {
+ 	struct rpc_rqst *req = ERR_PTR(-EAGAIN);
++	gfp_t gfp_mask = GFP_KERNEL;
  
- 	return 1;
+ 	if (xprt->num_reqs >= xprt->max_reqs)
+ 		goto out;
+ 	++xprt->num_reqs;
+ 	spin_unlock(&xprt->reserve_lock);
+-	req = kzalloc(sizeof(struct rpc_rqst), GFP_NOFS);
++	if (current->flags & PF_WQ_WORKER)
++		gfp_mask |= __GFP_NORETRY | __GFP_NOWARN;
++	req = kzalloc(sizeof(*req), gfp_mask);
+ 	spin_lock(&xprt->reserve_lock);
+ 	if (req != NULL)
+ 		goto out;
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index a52277115500..32df23796747 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -521,7 +521,7 @@ xprt_rdma_alloc_slot(struct rpc_xprt *xprt, struct rpc_task *task)
+ 	return;
+ 
+ out_sleep:
+-	task->tk_status = -EAGAIN;
++	task->tk_status = -ENOMEM;
+ 	xprt_add_backlog(xprt, task);
  }
+ 
 -- 
 2.35.1
 

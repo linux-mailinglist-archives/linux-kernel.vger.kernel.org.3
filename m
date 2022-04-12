@@ -2,235 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7554FCDD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246384FCDD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345867AbiDLE3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S1345936AbiDLEab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345813AbiDLE3D (ORCPT
+        with ESMTP id S229537AbiDLEa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:29:03 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E94F32997
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:26:47 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id y6so15706629plg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UCrOTwn1Apaa4uQLVmk5UD3cOc527xiwJT4PNuBWV0U=;
-        b=qj1azZVRiLRWoOmK62O5jlUS3eBsOBIqGZrTPkVTrhXug25XR9RPlwdGNSyUk6Cn4Q
-         O2h7oNKaIwwR0F/KAXVsmKOmZQHsE4nq+VcPu6FVr2QkdlsNenKN4YVbKRVtAVD7u7b4
-         I3TXIiz7RmEJHBwtR9BUhZjSikRfkKsP2qKeq9uIwnIe5tR2LVuM+/vMUI/GaRim758K
-         qpLoQglwz9v9mBUy4ZF8OIj7vFFvKFSsACWjKZnX/zRinYHwXhHZ8rpo2gkwmxTBjBjs
-         SyNSru4EiN82wpRW3gwhJCjwubkugBNJd5Ve8Thx53DS0elOAsHJVybqbBJhleyoy6f0
-         XOqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UCrOTwn1Apaa4uQLVmk5UD3cOc527xiwJT4PNuBWV0U=;
-        b=1WNn7jSS3kwzHF9c6rnqbVwB1CWCqUcVphfdR2h4cc353n1Hn9hu5RwDSUjbPtMTwj
-         G574Mko+vM9gXJryzxCFI6SXnTcWvlK2I/N03E/XicEsHL8R6vBuGcUtz1EbENFm4zyU
-         sNoubZmZAdvzwKp0E3Wer6Kc9ZhSG09LwBkzqfLRXVqnHharoLbT/qST4iUhWs6ZNYOR
-         jJVQ/t4ywAnpm5muHPofe836cTozLk//v7t8rlIPzd2x7RRMo2XudgiB+2IbCJz9dEro
-         UnSTGFV2TSKUHktdugxHY2oLAfGXRUzhVnj9O4x0mzTbHXCwle0sGYI6rlK0vdzmNUzH
-         HlAw==
-X-Gm-Message-State: AOAM532H896gBWXcbwWIuww8ZX4CX+40e+AKnhuvg6QxY+4eaeB7PvxC
-        +lUV8BbulbjhHtV4xTgpBcdLy3DH7RnyT4QvSvVfPQ==
-X-Google-Smtp-Source: ABdhPJykgObq290XUnROGzq2QfTK7LzFthT5iMS5THy+7CybmACgJItes+F9wWuzrX+7pufyRJ0OO61OHh/NWBRaQSs=
-X-Received: by 2002:a17:90b:1804:b0:1cb:82e3:5cd0 with SMTP id
- lw4-20020a17090b180400b001cb82e35cd0mr2859224pjb.8.1649737606512; Mon, 11 Apr
- 2022 21:26:46 -0700 (PDT)
+        Tue, 12 Apr 2022 00:30:27 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7453298F;
+        Mon, 11 Apr 2022 21:28:11 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B9F023201F24;
+        Tue, 12 Apr 2022 00:28:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 12 Apr 2022 00:28:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649737689; x=1649824089; bh=mTmKnvQTGsBoRsAAqdQBjpSXL
+        YdyxkIborYacXcxMFs=; b=LHFutkbugEbkHURUMOmuhONbA29IkXpRXBTHFcpiX
+        xUFoAQx3/FaLOqUrWM5QEKh9fI6azDbrIctgcbCFu/X1GQc7vTZT9EYRYPzvwk9T
+        cV5v+sUqb5yQS5ahNlpcyN6dV76AzfctKQeZFH11bKkMCVFx+GuRnFBZ50yV/5ct
+        VQudJ95Jnv0Ie73rwUbs4H8Gnnt/5O70ROGh/EI1ksGUPfYPoT6eGGRZT0pJwRp5
+        wz6q3GShN/KtH1VMLY4Woq0/JXmpBiWpnzUg5peOst9ZpPX0tGzJqdEOp7MHiika
+        DgVcusH2JOfojpZ60DcYOog616DhZcRChdxEwcj5kDceA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1649737689; x=1649824089; bh=m
+        TmKnvQTGsBoRsAAqdQBjpSXLYdyxkIborYacXcxMFs=; b=Snn3V0pHT7h6YxgYV
+        LRwrPvhPs0ihNYeg4MQ/o9dsL216zkxvQsxLow+cdoDF5GqDG9FItyHbjO7alnlt
+        QDJ6pn4iZb8m2oDPCOz4WnXtZ0WUyTm7iQERZI2aOUQqQ8dPsPZsNC2fUdTiaATb
+        69FgmLT3DEchwX49Ki3n7HzbjYvCY5owq5SS7KXq6XcSLFLYNF38spv7C6F3xZ/o
+        eVJUp23mMgor22G6Tvj6Z7jDiln4VxV7tQfO5oQYZ8xPwZsxRg3YmCcxY1HieaiV
+        G4H67qKsS3W7OtJZmM++yydmBsDR5/RtU34bdahfxXnYPBEFS4X8CSj1uL3Qm33H
+        0XySA==
+X-ME-Sender: <xms:2P9UYpWOEW3LNea-znOyAiR84mF8UHEPlOP2_XHArO7m_2eVlKqoog>
+    <xme:2P9UYpmv5SW-OvELVMXj0VMl3zfoBXIwD-RZGSmc4vRECdCqeZK53lDnxF7GtlNPI
+    skMHbXTk4K6AcmPAw>
+X-ME-Received: <xmr:2P9UYlaS-wTB8B3ck42cTNEnTH3--wnYxCWRe_v_oTx9m3L0RmS02dgIHOXX16hufAmaBnmL4neH8kZGwMydLMVwPWaIQZ3lGzS-kM_m8nsimOAJ6NAue5k_l07OLboT7UV0tQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekjedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:2P9UYsX-weSqasTUk-8knNQlixibOm2BYp3zVTDW0dD07-5q2wIL_Q>
+    <xmx:2P9UYjk8XqFcgnNoG2S8UcuncNjEuM0_zEc6ECVVQgz6D5a13QKmPw>
+    <xmx:2P9UYpd2rdJsFd60pzUA3MaVHWQ5-mseoh0Mfs-DNhq_Yg11m-M8Vg>
+    <xmx:2f9UYhdd-nPBrA2s0X8KDjWYzy9H8IB0U4IcC06Dias0Y6ACWWN-Lg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 Apr 2022 00:28:08 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 00/14] drm/sun4i: Allwinner D1 Display Engine 2.0 Support
+Date:   Mon, 11 Apr 2022 23:27:52 -0500
+Message-Id: <20220412042807.47519-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-6-jane.chu@oracle.com>
-In-Reply-To: <20220405194747.2386619-6-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 11 Apr 2022 21:26:35 -0700
-Message-ID: <CAPcyv4h4NGa7_mTrrY0EqXdGny5p9JtQZx+CVBcHxX6_ZuO9pg@mail.gmail.com>
-Subject: Re: [PATCH v7 5/6] pmem: refactor pmem_clear_poison()
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
->
-> Refactor the pmem_clear_poison() in order to share common code
-> later.
->
+This series adds binding and driver support for Display Engine 2.0
+variant found in the Allwinner D1.
 
-I would just add a note here about why, i.e. to factor out the common
-shared code between the typical write path and the recovery write
-path.
+So far it has only been tested with HDMI. I will be sending the HDMI
+support series separately, because the hardware comes with a brand new
+custom HDMI PHY, which requires some refactoring to support cleanly.
 
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  drivers/nvdimm/pmem.c | 78 ++++++++++++++++++++++++++++---------------
->  1 file changed, 52 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 0400c5a7ba39..56596be70400 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -45,10 +45,27 @@ static struct nd_region *to_region(struct pmem_device *pmem)
->         return to_nd_region(to_dev(pmem)->parent);
->  }
->
-> -static void hwpoison_clear(struct pmem_device *pmem,
-> -               phys_addr_t phys, unsigned int len)
-> +static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
->  {
-> +       return (pmem->phys_addr + offset);
+This series was tested on A33, D1 and H3.
 
-Christoph already mentioned dropping the unnecessary parenthesis.
+Changes in v2:
+ - New patch: I/O helper portability
+ - Use Jernej's patches for mixer mode setting.
+ - Use an enumeration for the ccsc value.
 
-> +}
-> +
-> +static sector_t to_sect(struct pmem_device *pmem, phys_addr_t offset)
-> +{
-> +       return (offset - pmem->data_offset) >> SECTOR_SHIFT;
-> +}
-> +
-> +static phys_addr_t to_offset(struct pmem_device *pmem, sector_t sector)
-> +{
-> +       return ((sector << SECTOR_SHIFT) + pmem->data_offset);
-> +}
-> +
-> +static void pmem_clear_hwpoison(struct pmem_device *pmem, phys_addr_t offset,
-> +               unsigned int len)
+Jernej Skrabec (3):
+  sun4i/drm: engine: Add mode_set callback
+  sun4i/drm: backend: use mode_set engine callback
+  sun4i/drm: sun8i: use mode_set engine callback
 
-Perhaps now is a good time to rename this to something else like
-pmem_clear_mce_nospec()? Just to make it more distinct from
-pmem_clear_poison(). While "hwpoison" is the page flag name
-pmem_clear_poison() is the function that's actually clearing the
-poison in hardware ("hw") and the new pmem_clear_mce_nospec() is
-toggling the page back into service.
+Samuel Holland (11):
+  dt-bindings: display: Separate clock item lists by compatible
+  dt-bindings: display: Add D1 display engine compatibles
+  drm/sun4i: Remove obsolete references to PHYS_OFFSET
+  drm/sun4i: hdmi: Use more portable I/O helpers
+  drm/sun4i: Allow building the driver on RISC-V
+  drm/sun4i: Allow VI layers to be primary planes
+  drm/sun4i: csc: Add support for the new MMIO layout
+  drm/sun4i: Add support for D1 mixers
+  drm/sun4i: Add support for D1 TCON TOP
+  drm/sun4i: Add support for D1 TCONs
+  drm/sun4i: Add compatible for D1 display engine
 
-> +{
-> +       phys_addr_t phys = to_phys(pmem, offset);
->         unsigned long pfn_start, pfn_end, pfn;
-> +       unsigned int blks = len >> SECTOR_SHIFT;
->
->         /* only pmem in the linear map supports HWPoison */
->         if (is_vmalloc_addr(pmem->virt_addr))
-> @@ -67,35 +84,44 @@ static void hwpoison_clear(struct pmem_device *pmem,
->                 if (test_and_clear_pmem_poison(page))
->                         clear_mce_nospec(pfn);
->         }
-> +
-> +       dev_dbg(to_dev(pmem), "%#llx clear %u sector%s\n",
-> +               (unsigned long long) to_sect(pmem, offset), blks,
-> +               blks > 1 ? "s" : "");
+ .../allwinner,sun4i-a10-display-engine.yaml   |   1 +
+ .../display/allwinner,sun4i-a10-tcon.yaml     |   2 +
+ .../allwinner,sun8i-a83t-de2-mixer.yaml       |   2 +
+ .../display/allwinner,sun8i-r40-tcon-top.yaml | 145 ++++++++++++------
+ drivers/gpu/drm/sun4i/Kconfig                 |   2 +-
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |  40 ++---
+ drivers/gpu/drm/sun4i/sun4i_crtc.c            |   1 +
+ drivers/gpu/drm/sun4i/sun4i_drv.c             |   1 +
+ drivers/gpu/drm/sun4i/sun4i_frontend.c        |   3 -
+ drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c        |   4 +-
+ drivers/gpu/drm/sun4i/sun4i_tcon.c            |   8 +
+ drivers/gpu/drm/sun4i/sun8i_csc.c             |   7 +-
+ drivers/gpu/drm/sun4i/sun8i_csc.h             |   1 +
+ drivers/gpu/drm/sun4i/sun8i_mixer.c           |  74 +++++++--
+ drivers/gpu/drm/sun4i/sun8i_mixer.h           |  14 +-
+ drivers/gpu/drm/sun4i/sun8i_tcon_top.c        |  15 +-
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c        |  30 ----
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c        |   6 +-
+ drivers/gpu/drm/sun4i/sunxi_engine.h          |  27 ++++
+ 19 files changed, 263 insertions(+), 120 deletions(-)
 
-In anticipation of better tracing support and the fact that this is no
-longer called from pmem_clear_poison() let's drop it for now.
+-- 
+2.35.1
 
->  }
->
-> -static blk_status_t pmem_clear_poison(struct pmem_device *pmem,
-> +static void pmem_clear_bb(struct pmem_device *pmem, sector_t sector, long blks)
-> +{
-> +       if (blks == 0)
-> +               return;
-> +       badblocks_clear(&pmem->bb, sector, blks);
-> +       if (pmem->bb_state)
-> +               sysfs_notify_dirent(pmem->bb_state);
-> +}
-> +
-> +static long __pmem_clear_poison(struct pmem_device *pmem,
->                 phys_addr_t offset, unsigned int len)
->  {
-> -       struct device *dev = to_dev(pmem);
-> -       sector_t sector;
-> -       long cleared;
-> -       blk_status_t rc = BLK_STS_OK;
-> -
-> -       sector = (offset - pmem->data_offset) / 512;
-> -
-> -       cleared = nvdimm_clear_poison(dev, pmem->phys_addr + offset, len);
-> -       if (cleared < len)
-> -               rc = BLK_STS_IOERR;
-> -       if (cleared > 0 && cleared / 512) {
-> -               hwpoison_clear(pmem, pmem->phys_addr + offset, cleared);
-> -               cleared /= 512;
-> -               dev_dbg(dev, "%#llx clear %ld sector%s\n",
-> -                               (unsigned long long) sector, cleared,
-> -                               cleared > 1 ? "s" : "");
-> -               badblocks_clear(&pmem->bb, sector, cleared);
-> -               if (pmem->bb_state)
-> -                       sysfs_notify_dirent(pmem->bb_state);
-> +       phys_addr_t phys = to_phys(pmem, offset);
-> +       long cleared = nvdimm_clear_poison(to_dev(pmem), phys, len);
-> +
-> +       if (cleared > 0) {
-> +               pmem_clear_hwpoison(pmem, offset, cleared);
-> +               arch_invalidate_pmem(pmem->virt_addr + offset, len);
->         }
-> +       return cleared;
-> +}
->
-> -       arch_invalidate_pmem(pmem->virt_addr + offset, len);
-> +static blk_status_t pmem_clear_poison(struct pmem_device *pmem,
-> +               phys_addr_t offset, unsigned int len)
-> +{
-> +       long cleared = __pmem_clear_poison(pmem, offset, len);
->
-> -       return rc;
-> +       if (cleared < 0)
-> +               return BLK_STS_IOERR;
-> +
-> +       pmem_clear_bb(pmem, to_sect(pmem, offset), cleared >> SECTOR_SHIFT);
-> +       return (cleared < len) ? BLK_STS_IOERR : BLK_STS_OK;
-
-I prefer "if / else" syntax instead of a ternary conditional.
-
->  }
->
->  static void write_pmem(void *pmem_addr, struct page *page,
-> @@ -143,7 +169,7 @@ static blk_status_t pmem_do_read(struct pmem_device *pmem,
->                         sector_t sector, unsigned int len)
->  {
->         blk_status_t rc;
-> -       phys_addr_t pmem_off = sector * 512 + pmem->data_offset;
-> +       phys_addr_t pmem_off = to_offset(pmem, sector);
->         void *pmem_addr = pmem->virt_addr + pmem_off;
->
->         if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
-> @@ -158,7 +184,7 @@ static blk_status_t pmem_do_write(struct pmem_device *pmem,
->                         struct page *page, unsigned int page_off,
->                         sector_t sector, unsigned int len)
->  {
-> -       phys_addr_t pmem_off = sector * 512 + pmem->data_offset;
-> +       phys_addr_t pmem_off = to_offset(pmem, sector);
->         void *pmem_addr = pmem->virt_addr + pmem_off;
->
->         if (unlikely(is_bad_pmem(&pmem->bb, sector, len))) {
-
-With those small fixups you can add:
-
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>

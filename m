@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BF74FD5D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EF54FD641
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352699AbiDLHOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S1389491AbiDLJXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352548AbiDLG4A (ORCPT
+        with ESMTP id S1357087AbiDLHjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:56:00 -0400
+        Tue, 12 Apr 2022 03:39:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E26822519;
-        Mon, 11 Apr 2022 23:46:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDE565DA;
+        Tue, 12 Apr 2022 00:11:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CA4CB81B43;
-        Tue, 12 Apr 2022 06:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CC2C385A1;
-        Tue, 12 Apr 2022 06:45:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EAB1B81895;
+        Tue, 12 Apr 2022 07:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA477C385A5;
+        Tue, 12 Apr 2022 07:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745958;
-        bh=eyF2VnUNxOloLVIPfKJn9iNPrihstZvyrnDzYF9Nnbs=;
+        s=korg; t=1649747488;
+        bh=c0eHMg/vupodfFtJJT7UW8Yeq3VVqZoxDRGVYvTreuk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tnwJtzl7UpDNFxdK0ns58nNC8EykBLeQ82cFzRgw2h5CHCY5ePjROegkfO0Q1zIKi
-         GC9EtBRabrGKySU3U5/Y9nlp3g0JsdKaSy7d4nKxMUg3gP3dzhHktxYkfzV6JxHnRb
-         d+x8sTjAI8hK6dUg8gT66YUgPZXkx3ZGuZw6D6E4=
+        b=0d5g2fKQUIO70v4tpxl7NwKlQHtAHavlolyO9b3aMkhD7s1+YIp1Ihdt/LNHeaRkY
+         E2wRzjZZ6if2sCvJFtc2a7o9u+xHSJw3cCKum0ycw4QfKFKEi9XIyW8BffusmJaxEm
+         vXIJ97cSitkWU74ikRiXxBbyqDbL4NGHYMw6FPBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Wujek <dev_public@wujek.eu>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 110/277] clk: si5341: fix reported clk_rate when output divider is 2
-Date:   Tue, 12 Apr 2022 08:28:33 +0200
-Message-Id: <20220412062945.223193810@linuxfoundation.org>
+        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 096/343] rtw88: change rtw_info() to proper message level
+Date:   Tue, 12 Apr 2022 08:28:34 +0200
+Message-Id: <20220412062953.872878897@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +55,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Wujek <dev_public@wujek.eu>
+From: Ping-Ke Shih <pkshih@realtek.com>
 
-[ Upstream commit 2a8b539433e111c4de364237627ef219d2f6350a ]
+[ Upstream commit a0061be4e54b52e5e4ff179c3f817107ddbb2830 ]
 
-SI5341_OUT_CFG_RDIV_FORCE2 shall be checked first to distinguish whether
-a divider for a given output is set to 2 (SI5341_OUT_CFG_RDIV_FORCE2
-is set) or the output is disabled (SI5341_OUT_CFG_RDIV_FORCE2 not set,
-SI5341_OUT_R_REG is set 0).
-Before the change, divider set to 2 (SI5341_OUT_R_REG set to 0) was
-interpreted as output is disabled.
+Larry reported funny log entries [1] when he used rtl8821ce. These
+messages are not harmless, but not useful for users, so change them to
+rtw_dbg() level. By the way, I review all rtw_info() and change others
+to rtw_warn().
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-Link: https://lore.kernel.org/r/20211203141125.2447520-1-dev_public@wujek.eu
-Reviewed-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+[1] https://lore.kernel.org/linux-wireless/c356d5ae-a7b3-3065-1121-64c446e70333@lwfinger.net/
+
+Reported-by: Larry Finger <Larry.Finger@lwfinger.net>
+Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220218035527.9835-1-pkshih@realtek.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk-si5341.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/net/wireless/realtek/rtw88/debug.c    | 2 +-
+ drivers/net/wireless/realtek/rtw88/debug.h    | 1 +
+ drivers/net/wireless/realtek/rtw88/fw.c       | 2 +-
+ drivers/net/wireless/realtek/rtw88/mac80211.c | 8 ++++----
+ drivers/net/wireless/realtek/rtw88/main.c     | 8 ++++----
+ drivers/net/wireless/realtek/rtw88/rtw8821c.c | 2 +-
+ drivers/net/wireless/realtek/rtw88/rtw8822b.c | 4 ++--
+ drivers/net/wireless/realtek/rtw88/rtw8822c.c | 4 ++--
+ drivers/net/wireless/realtek/rtw88/sar.c      | 8 ++++----
+ 9 files changed, 20 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index f7b41366666e..4de098b6b0d4 100644
---- a/drivers/clk/clk-si5341.c
-+++ b/drivers/clk/clk-si5341.c
-@@ -798,6 +798,15 @@ static unsigned long si5341_output_clk_recalc_rate(struct clk_hw *hw,
- 	u32 r_divider;
- 	u8 r[3];
+diff --git a/drivers/net/wireless/realtek/rtw88/debug.c b/drivers/net/wireless/realtek/rtw88/debug.c
+index e429428232c1..e7e9f17df96a 100644
+--- a/drivers/net/wireless/realtek/rtw88/debug.c
++++ b/drivers/net/wireless/realtek/rtw88/debug.c
+@@ -390,7 +390,7 @@ static ssize_t rtw_debugfs_set_h2c(struct file *filp,
+ 		     &param[0], &param[1], &param[2], &param[3],
+ 		     &param[4], &param[5], &param[6], &param[7]);
+ 	if (num != 8) {
+-		rtw_info(rtwdev, "invalid H2C command format for debug\n");
++		rtw_warn(rtwdev, "invalid H2C command format for debug\n");
+ 		return -EINVAL;
+ 	}
  
-+	err = regmap_read(output->data->regmap,
-+			SI5341_OUT_CONFIG(output), &val);
-+	if (err < 0)
-+		return err;
-+
-+	/* If SI5341_OUT_CFG_RDIV_FORCE2 is set, r_divider is 2 */
-+	if (val & SI5341_OUT_CFG_RDIV_FORCE2)
-+		return parent_rate / 2;
-+
- 	err = regmap_bulk_read(output->data->regmap,
- 			SI5341_OUT_R_REG(output), r, 3);
- 	if (err < 0)
-@@ -814,13 +823,6 @@ static unsigned long si5341_output_clk_recalc_rate(struct clk_hw *hw,
- 	r_divider += 1;
- 	r_divider <<= 1;
+diff --git a/drivers/net/wireless/realtek/rtw88/debug.h b/drivers/net/wireless/realtek/rtw88/debug.h
+index 61f8369fe2d6..066792dd96af 100644
+--- a/drivers/net/wireless/realtek/rtw88/debug.h
++++ b/drivers/net/wireless/realtek/rtw88/debug.h
+@@ -23,6 +23,7 @@ enum rtw_debug_mask {
+ 	RTW_DBG_PATH_DIV	= 0x00004000,
+ 	RTW_DBG_ADAPTIVITY	= 0x00008000,
+ 	RTW_DBG_HW_SCAN		= 0x00010000,
++	RTW_DBG_STATE		= 0x00020000,
  
--	err = regmap_read(output->data->regmap,
--			SI5341_OUT_CONFIG(output), &val);
--	if (err < 0)
--		return err;
--
--	if (val & SI5341_OUT_CFG_RDIV_FORCE2)
--		r_divider = 2;
+ 	RTW_DBG_ALL		= 0xffffffff
+ };
+diff --git a/drivers/net/wireless/realtek/rtw88/fw.c b/drivers/net/wireless/realtek/rtw88/fw.c
+index 4c8e5ea5d069..db90d75a8633 100644
+--- a/drivers/net/wireless/realtek/rtw88/fw.c
++++ b/drivers/net/wireless/realtek/rtw88/fw.c
+@@ -2131,7 +2131,7 @@ void rtw_hw_scan_status_report(struct rtw_dev *rtwdev, struct sk_buff *skb)
+ 	rtw_hw_scan_complete(rtwdev, vif, aborted);
  
- 	return parent_rate / r_divider;
+ 	if (aborted)
+-		rtw_info(rtwdev, "HW scan aborted with code: %d\n", rc);
++		rtw_dbg(rtwdev, RTW_DBG_HW_SCAN, "HW scan aborted with code: %d\n", rc);
  }
+ 
+ void rtw_store_op_chan(struct rtw_dev *rtwdev)
+diff --git a/drivers/net/wireless/realtek/rtw88/mac80211.c b/drivers/net/wireless/realtek/rtw88/mac80211.c
+index 647d2662955b..5cdc54c9a9aa 100644
+--- a/drivers/net/wireless/realtek/rtw88/mac80211.c
++++ b/drivers/net/wireless/realtek/rtw88/mac80211.c
+@@ -208,7 +208,7 @@ static int rtw_ops_add_interface(struct ieee80211_hw *hw,
+ 
+ 	mutex_unlock(&rtwdev->mutex);
+ 
+-	rtw_info(rtwdev, "start vif %pM on port %d\n", vif->addr, rtwvif->port);
++	rtw_dbg(rtwdev, RTW_DBG_STATE, "start vif %pM on port %d\n", vif->addr, rtwvif->port);
+ 	return 0;
+ }
+ 
+@@ -219,7 +219,7 @@ static void rtw_ops_remove_interface(struct ieee80211_hw *hw,
+ 	struct rtw_vif *rtwvif = (struct rtw_vif *)vif->drv_priv;
+ 	u32 config = 0;
+ 
+-	rtw_info(rtwdev, "stop vif %pM on port %d\n", vif->addr, rtwvif->port);
++	rtw_dbg(rtwdev, RTW_DBG_STATE, "stop vif %pM on port %d\n", vif->addr, rtwvif->port);
+ 
+ 	mutex_lock(&rtwdev->mutex);
+ 
+@@ -245,8 +245,8 @@ static int rtw_ops_change_interface(struct ieee80211_hw *hw,
+ {
+ 	struct rtw_dev *rtwdev = hw->priv;
+ 
+-	rtw_info(rtwdev, "change vif %pM (%d)->(%d), p2p (%d)->(%d)\n",
+-		 vif->addr, vif->type, type, vif->p2p, p2p);
++	rtw_dbg(rtwdev, RTW_DBG_STATE, "change vif %pM (%d)->(%d), p2p (%d)->(%d)\n",
++		vif->addr, vif->type, type, vif->p2p, p2p);
+ 
+ 	rtw_ops_remove_interface(hw, vif);
+ 
+diff --git a/drivers/net/wireless/realtek/rtw88/main.c b/drivers/net/wireless/realtek/rtw88/main.c
+index 39c223a2e3e2..b00200f81db7 100644
+--- a/drivers/net/wireless/realtek/rtw88/main.c
++++ b/drivers/net/wireless/realtek/rtw88/main.c
+@@ -314,8 +314,8 @@ int rtw_sta_add(struct rtw_dev *rtwdev, struct ieee80211_sta *sta,
+ 
+ 	rtwdev->sta_cnt++;
+ 	rtwdev->beacon_loss = false;
+-	rtw_info(rtwdev, "sta %pM joined with macid %d\n",
+-		 sta->addr, si->mac_id);
++	rtw_dbg(rtwdev, RTW_DBG_STATE, "sta %pM joined with macid %d\n",
++		sta->addr, si->mac_id);
+ 
+ 	return 0;
+ }
+@@ -336,8 +336,8 @@ void rtw_sta_remove(struct rtw_dev *rtwdev, struct ieee80211_sta *sta,
+ 	kfree(si->mask);
+ 
+ 	rtwdev->sta_cnt--;
+-	rtw_info(rtwdev, "sta %pM with macid %d left\n",
+-		 sta->addr, si->mac_id);
++	rtw_dbg(rtwdev, RTW_DBG_STATE, "sta %pM with macid %d left\n",
++		sta->addr, si->mac_id);
+ }
+ 
+ struct rtw_fwcd_hdr {
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.c b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+index db078df63f85..80d4761796b1 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+@@ -499,7 +499,7 @@ static s8 get_cck_rx_pwr(struct rtw_dev *rtwdev, u8 lna_idx, u8 vga_idx)
+ 	}
+ 
+ 	if (lna_idx >= lna_gain_table_size) {
+-		rtw_info(rtwdev, "incorrect lna index (%d)\n", lna_idx);
++		rtw_warn(rtwdev, "incorrect lna index (%d)\n", lna_idx);
+ 		return -120;
+ 	}
+ 
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822b.c b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+index dd4fbb82750d..a23806b69b0f 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8822b.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8822b.c
+@@ -1012,12 +1012,12 @@ static int rtw8822b_set_antenna(struct rtw_dev *rtwdev,
+ 		antenna_tx, antenna_rx);
+ 
+ 	if (!rtw8822b_check_rf_path(antenna_tx)) {
+-		rtw_info(rtwdev, "unsupported tx path 0x%x\n", antenna_tx);
++		rtw_warn(rtwdev, "unsupported tx path 0x%x\n", antenna_tx);
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (!rtw8822b_check_rf_path(antenna_rx)) {
+-		rtw_info(rtwdev, "unsupported rx path 0x%x\n", antenna_rx);
++		rtw_warn(rtwdev, "unsupported rx path 0x%x\n", antenna_rx);
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8822c.c b/drivers/net/wireless/realtek/rtw88/rtw8822c.c
+index 35c46e5209de..ddf4d1a23e60 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8822c.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8822c.c
+@@ -2798,7 +2798,7 @@ static int rtw8822c_set_antenna(struct rtw_dev *rtwdev,
+ 	case BB_PATH_AB:
+ 		break;
+ 	default:
+-		rtw_info(rtwdev, "unsupported tx path 0x%x\n", antenna_tx);
++		rtw_warn(rtwdev, "unsupported tx path 0x%x\n", antenna_tx);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -2808,7 +2808,7 @@ static int rtw8822c_set_antenna(struct rtw_dev *rtwdev,
+ 	case BB_PATH_AB:
+ 		break;
+ 	default:
+-		rtw_info(rtwdev, "unsupported rx path 0x%x\n", antenna_rx);
++		rtw_warn(rtwdev, "unsupported rx path 0x%x\n", antenna_rx);
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/drivers/net/wireless/realtek/rtw88/sar.c b/drivers/net/wireless/realtek/rtw88/sar.c
+index 3383726c4d90..c472f1502b82 100644
+--- a/drivers/net/wireless/realtek/rtw88/sar.c
++++ b/drivers/net/wireless/realtek/rtw88/sar.c
+@@ -91,10 +91,10 @@ int rtw_set_sar_specs(struct rtw_dev *rtwdev,
+ 			return -EINVAL;
+ 
+ 		power = sar->sub_specs[i].power;
+-		rtw_info(rtwdev, "On freq %u to %u, set SAR %d in 1/%lu dBm\n",
+-			 rtw_common_sar_freq_ranges[idx].start_freq,
+-			 rtw_common_sar_freq_ranges[idx].end_freq,
+-			 power, BIT(RTW_COMMON_SAR_FCT));
++		rtw_dbg(rtwdev, RTW_DBG_REGD, "On freq %u to %u, set SAR %d in 1/%lu dBm\n",
++			rtw_common_sar_freq_ranges[idx].start_freq,
++			rtw_common_sar_freq_ranges[idx].end_freq,
++			power, BIT(RTW_COMMON_SAR_FCT));
+ 
+ 		for (j = 0; j < RTW_RF_PATH_MAX; j++) {
+ 			for (k = 0; k < RTW_RATE_SECTION_MAX; k++) {
 -- 
 2.35.1
 

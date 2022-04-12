@@ -2,106 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ADA4FD7BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B99B4FDAA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348726AbiDLJtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S1357435AbiDLJtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350623AbiDLJkx (ORCPT
+        with ESMTP id S238384AbiDLJm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:40:53 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F93692B3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:46:09 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C8k19Y115994;
-        Tue, 12 Apr 2022 03:46:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649753161;
-        bh=3K51sbmQ8lmy2+7Rao3B6SkJ5pZ/iOE/xz34xa/ZFW0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XIDM+pO6PvMLF2MyGFNcfrwFsAcmont47iAL1gn9vu9Z4q0rxyKNwKIF+06LjSb1g
-         +S1d8ETZd42TsAsasheGqeNpIungiVl05EV2XhEd8IKTmmgw9cuGrALeqK1b4lFUei
-         9sUriGoGvetcDLkTnvjW7+k1bv9g9oOWtOXs30uE=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C8k1Qb104814
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 03:46:01 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 03:46:01 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 03:46:01 -0500
-Received: from [10.249.96.184] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C8jwep053060;
-        Tue, 12 Apr 2022 03:45:59 -0500
-Message-ID: <48939b53-ede5-103a-ceae-9d7b9dcc4a1b@ti.com>
-Date:   Tue, 12 Apr 2022 11:46:00 +0300
+        Tue, 12 Apr 2022 05:42:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341B60DAE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:47:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6CD2C21608;
+        Tue, 12 Apr 2022 08:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649753241; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E33CS35xOqn/0jMFES+ln46MItDGxXtgyeeOFfPSYHg=;
+        b=vD1JMVqoVHrbSfjApv7zRM1vbaDtxY2qKh1Zce3DSp8pnGDyANmbL1p5hISeBHomCZVDsU
+        A7B6gQgHXbrKEyQvU+SYNmsHmEFhYfadfMIRf7KMofouj5kmeLIjTfUsZjyMwD433DfsF6
+        xUiuImzo3IiDtvuN/G+SFzdIRjD1K70=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649753241;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E33CS35xOqn/0jMFES+ln46MItDGxXtgyeeOFfPSYHg=;
+        b=ONIhPj2uzNWCfXuwgEBX74nJ9V6mJOn8ChK8q6P9aHsUH81STTHiqLpAhmqzvVhB7D5UG5
+        6DNtM4YvDXopWHDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1770F13780;
+        Tue, 12 Apr 2022 08:47:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gJPwBJk8VWKJHAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 12 Apr 2022 08:47:21 +0000
+Message-ID: <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
+Date:   Tue, 12 Apr 2022 10:47:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] soc: ti: knav_dma: using pm_runtime_resume_and_get
- instead of pm_runtime_get_sync
+Subject: Re: [PATCH v3 08/16] mm/rmap: drop "compound" parameter from
+ page_add_new_anon_rmap()
 Content-Language: en-US
-To:     <cgel.zte@gmail.com>, <nm@ti.com>
-CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220412082923.2532649-1-chi.minghao@zte.com.cn>
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-In-Reply-To: <20220412082923.2532649-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-9-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220329160440.193848-9-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/29/22 18:04, David Hildenbrand wrote:
+> New anonymous pages are always mapped natively: only THP/khugepagd code
 
+						khugepaged ^
 
-On 12/04/2022 11:29, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+> maps a new compound anonymous page and passes "true". Otherwise, we're
+> just dealing with simple, non-compound pages.
 > 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
+> Let's give the interface clearer semantics and document these.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->   drivers/soc/ti/knav_dma.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
-> index 700d8eecd8c4..061f92c8cf7d 100644
-> --- a/drivers/soc/ti/knav_dma.c
-> +++ b/drivers/soc/ti/knav_dma.c
-> @@ -747,9 +747,8 @@ static int knav_dma_probe(struct platform_device *pdev)
->   	INIT_LIST_HEAD(&kdev->list);
->   
->   	pm_runtime_enable(kdev->dev);
-> -	ret = pm_runtime_get_sync(kdev->dev);
-> +	ret = pm_runtime_resume_and_get(kdev->dev);
->   	if (ret < 0) {
-> -		pm_runtime_put_noidle(kdev->dev);
->   		dev_err(kdev->dev, "unable to enable pktdma, err %d\n", ret);
->   		goto err_pm_disable;
->   	}
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Thank you.
-Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
--- 
-Best regards,
-Grygorii, Ukraine
+Nit:
+
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1182,19 +1182,22 @@ void page_add_anon_rmap(struct page *page,
+>  }
+>  
+>  /**
+> - * page_add_new_anon_rmap - add pte mapping to a new anonymous page
+> + * page_add_new_anon_rmap - add mapping to a new anonymous page
+>   * @page:	the page to add the mapping to
+>   * @vma:	the vm area in which the mapping is added
+>   * @address:	the user virtual address mapped
+> - * @compound:	charge the page as compound or small page
+> + *
+> + * If it's a compound page, it is accounted as a compound page. As the page
+> + * is new, it's assume to get mapped exclusively by a single process.
+>   *
+>   * Same as page_add_anon_rmap but must only be called on *new* pages.
+>   * This means the inc-and-test can be bypassed.
+>   * Page does not have to be locked.
+>   */
+>  void page_add_new_anon_rmap(struct page *page,
+> -	struct vm_area_struct *vma, unsigned long address, bool compound)
+> +	struct vm_area_struct *vma, unsigned long address)
+>  {
+> +	const bool compound = PageCompound(page);
+>  	int nr = compound ? thp_nr_pages(page) : 1;
+>  
+>  	VM_BUG_ON_VMA(address < vma->vm_start || address >= vma->vm_end, vma);
+
+There's a VM_BUG_ON_PAGE(PageTransCompound(page), page); later in a
+!compound branch. Since compound is now determined by the same check, could
+be deleted.

@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89434FE52B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EA34FE56E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357381AbiDLPy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S1357556AbiDLP5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238925AbiDLPy0 (ORCPT
+        with ESMTP id S1357473AbiDLP4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:54:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCA45FF2F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso3323814pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jdoVTAOzsUTmRWyRrILsCe/CPtH8yNrfzN0Er5FKiB4=;
-        b=cpL0mFgLvc3284MRWQEYU2TjNIbJGza3TAbzfvjUJ9VLpaaeluPAPdHFE9I1D+t0c9
-         R83GKfmQgrvnqVFiQxcTtMu1nVUpEMlnXXkTyezN4RjQv5z5MRHloVn2HriGkz7EyCMS
-         XpKcTu8985NoirZnN54J360s7r5uUM036LQPmdgNEZn+yo8ecoIl/lOKgWqQ46+MBkaM
-         tBkrnZJj39wCcfblxn92dScKQSD2BiJGwn/BdQR90Oe+0DviLwb9J5D19Zo+lVZatl1X
-         oovQcwlyoE0JUHknbjaq7tTlO9SIIUhV5vDbiZb/tOaowOcEoZidSvz3W4pkL+OFduMg
-         OqgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jdoVTAOzsUTmRWyRrILsCe/CPtH8yNrfzN0Er5FKiB4=;
-        b=oFgVlbczu3Km2CJ80pL9iUhCvrf0qm7XgxyYaVRMHz4tvA9Vp/YmPepf8g0SwDVsno
-         KJXN/SbJvICUu8cWVXWF7a4FCQEn+2BlgP2cVbUm0U659j6scbhcviEV9ASihf9Jc3w2
-         ETn/A7lNeP+9vqhsJ+NlDSIRr8I0oziLhWmBqT6gOJr/aQwpT0hOFM2UwsfI5bGQeLla
-         /pAxpLox/jmY2+8cnMTOyCYy2L8aKlOqTRe3PXhc7Arl/mHqXvGjLdpffwpQ3Cv2wDui
-         Xzr6exg4ASl6ei7TUcE8xnacEiIs60c0AwUs8D8YK6i59F5jTOz5cUIcpYgy9+Jug+jn
-         MaCQ==
-X-Gm-Message-State: AOAM5317xxqFzONL+X5aXbgODylHmJRqudOMeNYBXivjLD4LnQ8HThrf
-        4lYaSJxYu0XVHJBBDrQhbd3kNw==
-X-Google-Smtp-Source: ABdhPJzKVAQ06G3dUaI/EVJi7iNndxpnOP4buUqlAiv50c9kNyF+6CfXNEIClv6w1pbMrnUCrtssmw==
-X-Received: by 2002:a17:90b:3b4d:b0:1cd:3ce7:aaec with SMTP id ot13-20020a17090b3b4d00b001cd3ce7aaecmr1784143pjb.32.1649778728270;
-        Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f14-20020a63380e000000b0038253c4d5casm3176405pga.36.2022.04.12.08.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:52:07 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 15:52:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 3/9] KVM: x86/mmu: Factor shadow_zero_check out of
- __make_spte
-Message-ID: <YlWgIw/0v+G+G8za@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <20220321224358.1305530-4-bgardon@google.com>
+        Tue, 12 Apr 2022 11:56:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC6F55A0;
+        Tue, 12 Apr 2022 08:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649778845; x=1681314845;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=S/RdM4HIQ/M3AD9TZlGFbxa+CRrzvVu2swh7M3JNMGY=;
+  b=ILEUX+8v4VG4882BVbEHem1vJlpOtnECxBHviyepVgbX+A2N7bVYGFk5
+   mCT+CROYcA7Gez61drCqLPYJaRJR1uBeJt2D0S9+2Et8HXajo22ggSXQq
+   MT1o7SegYZVAFCy1m6jtofhCFa/Dn7yHyxAQrR+6ee3+J4zmF2U8L71n1
+   qSAP6L3zzAejsF+S/OGQAEGCK5JY8zUWu/c7JuWwQPUxrgpfAH1lbtY8Z
+   zvO7wX4gPuqZI8EUIeWjaMhQRcNEj2bk3NXYZhgHg5d6fmJ/beswhIi/9
+   tJNtc/1hE37JkgowpQZYat+hDZVLntguYlutqKKFNV+9bp812j2jtThA7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="249690306"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="249690306"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:54:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="551764539"
+Received: from vtelkarx-mobl.amr.corp.intel.com (HELO [10.209.191.73]) ([10.209.191.73])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:54:04 -0700
+Message-ID: <90457491-1ac3-b04a-856a-25c6e04d429a@intel.com>
+Date:   Tue, 12 Apr 2022 08:54:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321224358.1305530-4-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>
+References: <20220411180131.5054-1-jon@nutanix.com>
+ <41a3ca80-d3e2-47d2-8f1c-9235c55de8d1@intel.com>
+ <AE4621FC-0947-4CEF-A1B3-87D4E00C786D@nutanix.com>
+ <e800ba74-0ff6-8d98-8978-62c02cf1f8ea@intel.com>
+ <1767A554-CC0A-412D-B70C-12DF0AF4C690@nutanix.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/tsx: fix KVM guest live migration for tsx=on
+In-Reply-To: <1767A554-CC0A-412D-B70C-12DF0AF4C690@nutanix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022, Ben Gardon wrote:
-> In the interest of devloping a version of __make_spte that can function
-> without a vCPU pointer, factor out the shadow_zero_mask to be an
-> additional argument to the function.
+On 4/12/22 06:36, Jon Kohler wrote:
+> So my theory here is to extend the logical effort of the microcode driven
+> automatic disablement as well as the tsx=auto automatic disablement and
+> have tsx=on force abort all transactions on X86_BUG_TAA SKUs, but leave
+> the CPU features enumerated to maintain live migration.
 > 
-> No functional change intended.
+> This would still leave TSX totally good on Ice Lake / non-buggy systems.
 > 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/kvm/mmu/spte.c | 10 ++++++----
->  arch/x86/kvm/mmu/spte.h |  2 +-
->  2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 931cf93c3b7e..ef2d85577abb 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -94,7 +94,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
->  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
->  		 bool can_unsync, bool host_writable, u64 mt_mask,
-> -		 u64 *new_spte)
-> +		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte)
+> If it would help, I'm working up an RFC patch, and we could discuss there?
 
-Can we name the new param "rsvd_bits"?  As mentioned in the other patch, it's not
-a pure "are these bits zero" check.
+Sure.  But, it sounds like you really want a new tdx=something rather
+than to muck with tsx=on behavior.  Surely someone else will come along
+and complain that we broke their TDX setup if we change its behavior.
 
->  {
->  	int level = sp->role.level;
->  	u64 spte = SPTE_MMU_PRESENT_MASK;
-> @@ -177,9 +177,9 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  	if (prefetch)
->  		spte = mark_spte_for_access_track(spte);
->  
-> -	WARN_ONCE(is_rsvd_spte(&vcpu->arch.mmu->shadow_zero_check, spte, level),
-> +	WARN_ONCE(is_rsvd_spte(shadow_zero_check, spte, level),
->  		  "spte = 0x%llx, level = %d, rsvd bits = 0x%llx", spte, level,
-> -		  get_rsvd_bits(&vcpu->arch.mmu->shadow_zero_check, spte, level));
-> +		  get_rsvd_bits(shadow_zero_check, spte, level));
->  
->  	if ((spte & PT_WRITABLE_MASK) && kvm_slot_dirty_track_enabled(slot)) {
->  		/* Enforced by kvm_mmu_hugepage_adjust. */
-> @@ -199,10 +199,12 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  {
->  	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
->  						       kvm_is_mmio_pfn(pfn));
-> +	struct rsvd_bits_validate *shadow_zero_check =
-> +			&vcpu->arch.mmu->shadow_zero_check;
->  
->  	return __make_spte(vcpu, sp, slot, pte_access, gfn, pfn, old_spte,
->  			   prefetch, can_unsync, host_writable, mt_mask,
-> -			   new_spte);
-> +			   shadow_zero_check, new_spte);
+Maybe you should just pay the one-time cost and move your whole fleet
+over to tsx=off if you truly believe nobody is using it.
 
-I don't see any reason to snapshot the reserved bits, IMO this is much more
-readable overall:
-
-	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
-						       kvm_is_mmio_pfn(pfn));
-
-	return __make_spte(vcpu->kvm, sp, slot, pte_access, gfn, pfn, old_spte,
-			   prefetch, can_unsync, host_writable, mt_mask,
-			   &vcpu->arch.mmu->shadow_zero_check, new_spte);
-
-And it avoids propagating the shadow_zero_check naming.
-
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index d051f955699e..e8a051188eb6 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -414,7 +414,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
->  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
->  		 bool can_unsync, bool host_writable, u64 mt_mask,
-> -		 u64 *new_spte);
-> +		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte);
->  bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  	       const struct kvm_memory_slot *slot,
->  	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
-> -- 
-> 2.35.1.894.gb6a874cedc-goog
-> 

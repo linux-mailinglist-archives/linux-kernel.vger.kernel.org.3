@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D94FE889
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6FF4FE899
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352098AbiDLTYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S1353128AbiDLT14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiDLTYU (ORCPT
+        with ESMTP id S1357713AbiDLT1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:24:20 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149522182C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:21:59 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CJLmCX122083;
-        Tue, 12 Apr 2022 14:21:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649791308;
-        bh=4S1RUOXcbZxG3WKNqNwLEJhycOS8MjSrjSKSjrGitrU=;
-        h=From:To:CC:Subject:Date;
-        b=jCQi/gZHfi/M98rtPW3/gstTqg4kGHqS9IlSjgOOwfH0mbCff5SOMqZd4KaZKphwh
-         3dWkv+gcLDlPShr0B7XfbBV733w8Qxz57wraD7NBqOpTX81GvWlsqeaADtjlAhZ+XX
-         5iNR7sIPct+7KI7su+c1+YP42rpYrt+cyX58SVRI=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CJLm3c091533
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 14:21:48 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 14:21:48 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 14:21:48 -0500
-Received: from uda0274052 (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CJLmqY100489;
-        Tue, 12 Apr 2022 14:21:48 -0500
-Received: from a0274052local by uda0274052 with local (Exim 4.90_1)
-        (envelope-from <d-gerlach@ti.com>)
-        id 1neM5E-00087N-4V; Tue, 12 Apr 2022 14:21:48 -0500
-From:   Dave Gerlach <d-gerlach@ti.com>
-To:     <kristo@kernel.org>, <nm@ti.com>, <ssantosh@kernel.org>
-CC:     <d-gerlach@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH v2] firmware: ti_sci: Switch transport to polled mode during system suspend
-Date:   Tue, 12 Apr 2022 14:21:38 -0500
-Message-ID: <20220412192138.31189-1-d-gerlach@ti.com>
-X-Mailer: git-send-email 2.35.0
+        Tue, 12 Apr 2022 15:27:44 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06525C60
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:25:25 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id k29so1589400pgm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mYhX4cxvNPixKiX8/O3wLDCe+0alwiuzYnrIU9ZEA4g=;
+        b=WcXC5z9iBD0s8lqEIkWuMQZUWfBIEmGdOcTDJqsddJGTc3xoDzEDte6mLkWCIDPq6H
+         YHQuTi2jz+pLaZ8K0n3h+80UsslQCJcbZCL49vv/iIQRc4MzeoUTN57u4Pk6Dtk8H9Wc
+         KDCu2a04jyUl6dKyGyJfhQgPSJPUaOxmhiyGeDPKKJPcJHNUlNymuti54JQo6/NDczvO
+         vbVuQ9W77Cy/v2QPjgtsQEF4MpP2tX3f+bHSl/ir7fHiWkRxbpG2V2V744Rx+xNFpwjR
+         XZUkPMYcqusEKPz9Uy9mX9juzRrR5tQ+Q4qiBB8T1Gj6Sx2YQ1W9au99vcD3HFtSTAwh
+         8rqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mYhX4cxvNPixKiX8/O3wLDCe+0alwiuzYnrIU9ZEA4g=;
+        b=IGVH9N0gAAKpO5FkSU7nyQPye5JQLFDg43YJBGWHBEpIHz18DyefUZHwWV49p7uCKn
+         jpO4Chs4G7fHuiughq/vGUHIq2kg2aSa7Z33opyEOR0/vYw2Kew0MXdYl0hDKbI6Heoj
+         isL+lzcdVdgkiZsE3CqZElhpVRUprLpA2UqVoB1xlAo3mkmfFHgSnasdeqIWkRa0Ok46
+         +P8xpI+oE8HoUdVFb46/wMtfp0JbW7UTVLQqmflo1jPKpavrVe1BuSFuSdn3J5FYDLT/
+         OCXaPO1NS4yucJo4I2cWuM25WZXBLZaYLXnlwGxOZaH2pCaa3TqUgQBKXWBequRSLcxb
+         8qtg==
+X-Gm-Message-State: AOAM531/ubnKTNhzPjCtqFejotGfY8hiHIzk8YgjIWJ+7MDhnEI0w+2G
+        yeKdErz+yzLslJrTCOR0horZFg==
+X-Google-Smtp-Source: ABdhPJzeMv6SyUCfIBcUkGwkpHGFXVQVcRPNb1is3QYfwJwv0AwJdiiTP5oX9DldB+gEsO0E0yWlUQ==
+X-Received: by 2002:a05:6a00:15ca:b0:505:bf6f:2b48 with SMTP id o10-20020a056a0015ca00b00505bf6f2b48mr12169006pfu.64.1649791524446;
+        Tue, 12 Apr 2022 12:25:24 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm38925670pfc.78.2022.04.12.12.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 12:25:24 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     cgroups@vger.kernel.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Subject: [PATCH] cgroup: don't queue css_release_work if one already pending
+Date:   Tue, 12 Apr 2022 12:24:59 -0700
+Message-Id: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,161 +80,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During system suspend it is completely valid for devices to invoke TISCI
-commands during the noirq phase of the suspend path. Specifically this
-will always be seen for devices that define a power-domains DT property
-and make use of the ti_sci_pm_domains genpd implementation.
-The genpd_finish_suspend call will power off devices during the noirq
-phase, which will invoke TISCI.
+Syzbot found a corrupted list bug scenario that can be triggered from
+cgroup css_create(). The reproduces writes to cgroup.subtree_control
+file, which invokes cgroup_apply_control_enable(), css_create(), and
+css_populate_dir(), which then randomly fails with a fault injected -ENOMEM.
+In such scenario the css_create() error path rcu enqueues css_free_rwork_fn
+work for an css->refcnt initialized with css_release() destructor,
+and there is a chance that the css_release() function will be invoked
+for a cgroup_subsys_state, for which a destroy_work has already been
+queued via css_create() error path. This causes a list_add corruption
+as can be seen in the syzkaller report [1].
+This can be avoided by adding a check to css_release() that checks
+if it has already been enqueued.
 
-In order to support this, the ti_sci driver must switch to not use
-wait_for_completion_timeout during suspend, but instead rely on a manual
-check for if the completion is not yet done, and proceed only if this is
-the case.
+[1] https://syzkaller.appspot.com/bug?id=e26e54d6eac9d9fb50b221ec3e4627b327465dbd
 
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: <cgroups@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+
+Reported-by: syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Fixes: 8f36aaec9c92 ("cgroup: Use rcu_work instead of explicit rcu and work item")
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 ---
-Resend to correct git send-email From address issue, sorry for the noise.
+ kernel/cgroup/cgroup.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-v1 -> v2:
- * Rebase on v5.18-rc1 now that mailbox dependency has been merged.
-
-v1: https://lore.kernel.org/lkml/20220210175858.11247-1-d-gerlach@ti.com/
-
- drivers/firmware/ti_sci.c | 61 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 55 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 4697edc125b1..ebc32bbd9b83 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -2,7 +2,7 @@
- /*
-  * Texas Instruments System Control Interface Protocol Driver
-  *
-- * Copyright (C) 2015-2016 Texas Instruments Incorporated - https://www.ti.com/
-+ * Copyright (C) 2015-2022 Texas Instruments Incorporated - https://www.ti.com/
-  *	Nishanth Menon
-  */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index adb820e98f24..9ae2de29f8c9 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5210,8 +5210,11 @@ static void css_release(struct percpu_ref *ref)
+ 	struct cgroup_subsys_state *css =
+ 		container_of(ref, struct cgroup_subsys_state, refcnt);
  
-@@ -12,6 +12,7 @@
- #include <linux/debugfs.h>
- #include <linux/export.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/mailbox_client.h>
- #include <linux/module.h>
-@@ -96,6 +97,7 @@ struct ti_sci_desc {
-  * @node:	list head
-  * @host_id:	Host ID
-  * @users:	Number of users of this instance
-+ * @is_suspending: Flag set to indicate in suspend path.
-  */
- struct ti_sci_info {
- 	struct device *dev;
-@@ -114,7 +116,7 @@ struct ti_sci_info {
- 	u8 host_id;
- 	/* protected by ti_sci_list_mutex */
- 	int users;
--
-+	bool is_suspending;
- };
- 
- #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
-@@ -349,6 +351,8 @@ static struct ti_sci_xfer *ti_sci_get_one_xfer(struct ti_sci_info *info,
- 
- 	hdr = (struct ti_sci_msg_hdr *)xfer->tx_message.buf;
- 	xfer->tx_message.len = tx_message_size;
-+	xfer->tx_message.chan_rx = info->chan_rx;
-+	xfer->tx_message.timeout_rx_ms = info->desc->max_rx_timeout_ms;
- 	xfer->rx_len = (u8)rx_message_size;
- 
- 	reinit_completion(&xfer->done);
-@@ -406,6 +410,7 @@ static inline int ti_sci_do_xfer(struct ti_sci_info *info,
- 	int ret;
- 	int timeout;
- 	struct device *dev = info->dev;
-+	bool done_state = true;
- 
- 	ret = mbox_send_message(info->chan_tx, &xfer->tx_message);
- 	if (ret < 0)
-@@ -413,13 +418,27 @@ static inline int ti_sci_do_xfer(struct ti_sci_info *info,
- 
- 	ret = 0;
- 
--	/* And we wait for the response. */
--	timeout = msecs_to_jiffies(info->desc->max_rx_timeout_ms);
--	if (!wait_for_completion_timeout(&xfer->done, timeout)) {
-+	if (!info->is_suspending) {
-+		/* And we wait for the response. */
-+		timeout = msecs_to_jiffies(info->desc->max_rx_timeout_ms);
-+		if (!wait_for_completion_timeout(&xfer->done, timeout))
-+			ret = -ETIMEDOUT;
-+	} else {
-+		/*
-+		 * If we are suspending, we cannot use wait_for_completion_timeout
-+		 * during noirq phase, so we must manually poll the completion.
-+		 */
-+		ret = read_poll_timeout_atomic(try_wait_for_completion, done_state,
-+					       true, 1,
-+					       info->desc->max_rx_timeout_ms * 1000,
-+					       false, &xfer->done);
+-	INIT_WORK(&css->destroy_work, css_release_work_fn);
+-	queue_work(cgroup_destroy_wq, &css->destroy_work);
++	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT,
++			      work_data_bits(&css->destroy_work))) {
++		INIT_WORK(&css->destroy_work, css_release_work_fn);
++		queue_work(cgroup_destroy_wq, &css->destroy_work);
 +	}
-+
-+	if (ret == -ETIMEDOUT || !done_state) {
- 		dev_err(dev, "Mbox timedout in resp(caller: %pS)\n",
- 			(void *)_RET_IP_);
--		ret = -ETIMEDOUT;
- 	}
-+
- 	/*
- 	 * NOTE: we might prefer not to need the mailbox ticker to manage the
- 	 * transfer queueing since the protocol layer queues things by itself.
-@@ -3264,6 +3283,35 @@ static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
- 	return NOTIFY_BAD;
  }
  
-+static void ti_sci_set_is_suspending(struct ti_sci_info *info, bool is_suspending)
-+{
-+	info->is_suspending = is_suspending;
-+}
-+
-+static int ti_sci_suspend(struct device *dev)
-+{
-+	struct ti_sci_info *info = dev_get_drvdata(dev);
-+	/*
-+	 * We must switch operation to polled mode now as drivers and the genpd
-+	 * layer may make late TI SCI calls to change clock and device states
-+	 * from the noirq phase of suspend.
-+	 */
-+	ti_sci_set_is_suspending(info, true);
-+
-+	return 0;
-+}
-+
-+static int ti_sci_resume(struct device *dev)
-+{
-+	struct ti_sci_info *info = dev_get_drvdata(dev);
-+
-+	ti_sci_set_is_suspending(info, false);
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
-+
- /* Description for K2G */
- static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
- 	.default_host_id = 2,
-@@ -3472,6 +3520,7 @@ static struct platform_driver ti_sci_driver = {
- 	.driver = {
- 		   .name = "ti-sci",
- 		   .of_match_table = of_match_ptr(ti_sci_of_match),
-+		   .pm = &ti_sci_pm_ops,
- 	},
- };
- module_platform_driver(ti_sci_driver);
+ static void init_and_link_css(struct cgroup_subsys_state *css,
 -- 
-2.35.0
-
+2.35.1

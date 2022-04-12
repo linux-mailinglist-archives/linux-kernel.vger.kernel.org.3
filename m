@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13BD4FD988
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767BF4FD610
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353707AbiDLHP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S1377294AbiDLHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351441AbiDLHD1 (ORCPT
+        with ESMTP id S1354451AbiDLHRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:03:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC89D4474A;
-        Mon, 11 Apr 2022 23:47:07 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7694D1123;
+        Mon, 11 Apr 2022 23:59:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32B13B81B4A;
-        Tue, 12 Apr 2022 06:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75577C385A8;
-        Tue, 12 Apr 2022 06:47:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8BFD615B9;
+        Tue, 12 Apr 2022 06:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D00C385A1;
+        Tue, 12 Apr 2022 06:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746024;
-        bh=YKg+E1rgLLe/atlLYBLJei1HwcSZ8NIm+I9CGwB5kAM=;
+        s=korg; t=1649746756;
+        bh=fEaYpuKnP4mDHD7HHYhCWcISb75U1FDjOghhvQZ4igY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eHs6Cn8Ysah9N1JiNYYQQG18GNRfjHi6LI2XQXig5HQ1cYkPwP5UOI0WGd/jYeqy0
-         rkiAfjBJFT7gSHxQPitnvTdFGhmdS/+oW6Ey4TfMKv+7yHJIb/brJFAiWQj2c1QKCC
-         Ofuzn+WZGSskhOtlsWTmImoQQ451j3ZL+ZmrSwdk=
+        b=PVKqgK+hqQ+7O7Zt9TtTfsEiga4urtC3R3rmh49GtVX14k4BUAi/DNS11BVyBeW28
+         0DzD8bXSAXKEQqnXO6z9fyTEFpM/eprvyZzWXSrqIWsaS+DREKo3jpKfe/F/Hzi0We
+         41z7fOSaFNJRZJrE9l46TGow30xRI/SxEAA8FM5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        stable@vger.kernel.org, "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 132/277] x86: Annotate call_on_stack()
+Subject: [PATCH 5.16 078/285] scsi: aha152x: Fix aha152x_setup() __setup handler return value
 Date:   Tue, 12 Apr 2022 08:28:55 +0200
-Message-Id: <20220412062945.857488242@linuxfoundation.org>
+Message-Id: <20220412062945.915854129@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit be0075951fde739f14ee2b659e2fd6e2499c46c0 ]
+[ Upstream commit cc8294ec4738d25e2bb2d71f7d82a9bf7f4a157b ]
 
-vmlinux.o: warning: objtool: page_fault_oops()+0x13c: unreachable instruction
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; doing so just pollutes init's
+environment with strings that are not init arguments/parameters).
 
-0000 000000000005b460 <page_fault_oops>:
-...
-0128    5b588:  49 89 23                mov    %rsp,(%r11)
-012b    5b58b:  4c 89 dc                mov    %r11,%rsp
-012e    5b58e:  4c 89 f2                mov    %r14,%rdx
-0131    5b591:  48 89 ee                mov    %rbp,%rsi
-0134    5b594:  4c 89 e7                mov    %r12,%rdi
-0137    5b597:  e8 00 00 00 00          call   5b59c <page_fault_oops+0x13c>    5b598: R_X86_64_PLT32   handle_stack_overflow-0x4
-013c    5b59c:  5c                      pop    %rsp
+Return 1 from aha152x_setup() to indicate that the boot option has been
+handled.
 
-vmlinux.o: warning: objtool: sysvec_reboot()+0x6d: unreachable instruction
-
-0000 00000000000033f0 <sysvec_reboot>:
-...
-005d     344d:  4c 89 dc                mov    %r11,%rsp
-0060     3450:  e8 00 00 00 00          call   3455 <sysvec_reboot+0x65>        3451: R_X86_64_PLT32    irq_enter_rcu-0x4
-0065     3455:  48 89 ef                mov    %rbp,%rdi
-0068     3458:  e8 00 00 00 00          call   345d <sysvec_reboot+0x6d>        3459: R_X86_64_PC32     .text+0x47d0c
-006d     345d:  e8 00 00 00 00          call   3462 <sysvec_reboot+0x72>        345e: R_X86_64_PLT32    irq_exit_rcu-0x4
-0072     3462:  5c                      pop    %rsp
-
-Both cases are due to a call_on_stack() calling a __noreturn function.
-Since that's an inline asm, GCC can't do anything about the
-instructions after the CALL. Therefore put in an explicit
-ASM_REACHABLE annotation to make sure objtool and gcc are consistently
-confused about control flow.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154319.468805622@infradead.org
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220223000623.5920-1-rdunlap@infradead.org
+Cc: "Juergen E. Fischer" <fischer@norbit.de>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/irq_stack.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/aha152x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_stack.h
-index 8d55bd11848c..e087cd7837c3 100644
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -99,7 +99,8 @@
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index d17880b57d17..2449b4215b32 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -3375,13 +3375,11 @@ static int __init aha152x_setup(char *str)
+ 	setup[setup_count].synchronous = ints[0] >= 6 ? ints[6] : 1;
+ 	setup[setup_count].delay       = ints[0] >= 7 ? ints[7] : DELAY_DEFAULT;
+ 	setup[setup_count].ext_trans   = ints[0] >= 8 ? ints[8] : 0;
+-	if (ints[0] > 8) {                                                /*}*/
++	if (ints[0] > 8)
+ 		printk(KERN_NOTICE "aha152x: usage: aha152x=<IOBASE>[,<IRQ>[,<SCSI ID>"
+ 		       "[,<RECONNECT>[,<PARITY>[,<SYNCHRONOUS>[,<DELAY>[,<EXT_TRANS>]]]]]]]\n");
+-	} else {
++	else
+ 		setup_count++;
+-		return 0;
+-	}
+ 
+ 	return 1;
  }
- 
- #define ASM_CALL_ARG0							\
--	"call %P[__func]				\n"
-+	"call %P[__func]				\n"		\
-+	ASM_REACHABLE
- 
- #define ASM_CALL_ARG1							\
- 	"movq	%[arg1], %%rdi				\n"		\
 -- 
 2.35.1
 

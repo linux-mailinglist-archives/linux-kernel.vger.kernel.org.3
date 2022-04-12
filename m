@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97ACA4FCD21
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5DB4FCD30
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243735AbiDLDgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 23:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S1344715AbiDLDir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 23:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbiDLDgu (ORCPT
+        with ESMTP id S1344575AbiDLDig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 23:36:50 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8000862F2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:34:32 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id w7so16290973pfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W91zGX6dxqFiUGCVRFx8D5Y3JbxYlKOB4mae7fFQFkw=;
-        b=M4te89kKfRRP3IQZ+pPD/ZCR1cnLVFC58CmRISFXb9dlt/pJ6VBLmDYjCon0jTPgjU
-         Z4H4AsJu0vsD5WUQJnFbemzZ8RnhHf0TNWVlzPi5gYTziqMZrHW5Sh/Gzpa3AOAI92jv
-         gZJ6IbZVLzNh+jSooGBtrEn5s6W+sN7BP36/GBwc4w/tLacbiaGX25Q/RbN/skMVrAjP
-         TaAxYGesrh37wLZv5Ta660NiltkYnscgilGcfakHvwh3+nQ7g+a396yokCe8T7QTNdIC
-         dorMgE6D7xsuwMo/53FiakaMVx4GrwFXb8RZO3qQGzkNJGo+sgQVIv1NEtyuDjja+Zal
-         kL1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W91zGX6dxqFiUGCVRFx8D5Y3JbxYlKOB4mae7fFQFkw=;
-        b=SILdDXQnAKTPXQHUeiIJkejiMViE2iw4BprPdpxd+K4fFW0WCEC4N1a7b5Z+wHSLKv
-         tYm0iYNifG5Xa5ldS7U8coXldYWTVE60fHE4ZUGe/SS1hFb/ovsZUc0sucjVnrbVk+mo
-         vH+nq/SIMTzmRTx48jM/WupMpXbco/Rg2vzr9Y3xfoNXSy6826hbQbjWaQTX2Z5ctLXd
-         wylPRzuUIq5o3fXJb2YdTqEJkltC3MkrXcXxqJE3h7Vn7ko5Fi/lK3kZ60LGYzguty22
-         0yhz1XrXcBuYG1+DsE6NeXn3n/viBUrWXKKfbES9l3LMm81V2/IP/umWiRN5PqHL8Rgl
-         54Jw==
-X-Gm-Message-State: AOAM531ZyAiaQw7iNThYM84OBNxxkNOATNSt63a2kNz0vszg8cJLIXno
-        u8UjlOgdpZROSeHmCWr7FwXOnA==
-X-Google-Smtp-Source: ABdhPJyNrYndvPxD87g8DNwkXldbNmo7CJejXuvSm48T9zQr26C0WvdTw2yhxfYNDDyTHGcLu5llBw==
-X-Received: by 2002:a05:6a00:1956:b0:505:c8d2:d610 with SMTP id s22-20020a056a00195600b00505c8d2d610mr7105171pfk.71.1649734471975;
-        Mon, 11 Apr 2022 20:34:31 -0700 (PDT)
-Received: from localhost.localdomain ([122.182.197.47])
-        by smtp.gmail.com with ESMTPSA id u10-20020a17090a890a00b001cb14240c4csm1178441pjn.1.2022.04.11.20.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 20:34:31 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
-Date:   Tue, 12 Apr 2022 09:03:35 +0530
-Message-Id: <20220412033335.1384230-1-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Apr 2022 23:38:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E134192B6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649734580; x=1681270580;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=USgLlHicqdKbRyScUUYgIH7kQzveCbYodWpEhoAeAus=;
+  b=ZDY/xLIRuNAEhHOaZkJZfrTzxD2kV3EudVZJ9DTcFTpYjg8LxYxxHFGY
+   wkdcM5s/1/PkWSzNVbuSXNb5SA7k4SvKcHODjN5Nv1Pr3f4J7C4KMupM0
+   27UZjZ1p8zEaWl7Sxd3wUqhdeOjR6htRXCXuglOxo7mAWF1jsoYHKsEQf
+   BeGBgDZ9ncuDBDzyn3LlOJ7Ec1NdMNF6lXPsr2TotNmgN8GBWM1084JYo
+   x43menl+WxEZZkA02Yzv9WzKCVz9mut9+CadA/Xw0l9EQAzYk4aOSvYbS
+   y2jU58F99nwkxBaXMTMqrrYcNqXCXV38iMqtMC3KAurmBoxUMHPgdAYzr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322713037"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322713037"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 20:36:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="654908588"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2022 20:36:15 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne7KA-0002U5-FR;
+        Tue, 12 Apr 2022 03:36:14 +0000
+Date:   Tue, 12 Apr 2022 11:35:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel@lists.freedesktop.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: [PATCH v3 11/15] drm/shmem-helper: Add generic memory shrinker
+Message-ID: <202204121135.zXHzC28U-lkp@intel.com>
+References: <20220411215937.281655-12-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411215937.281655-12-dmitry.osipenko@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +82,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Sv57 is not available the satp.MODE test in set_satp_mode() will
-fail and lead to pgdir re-programming for Sv48. The pgdir re-programming
-will fail as well due to pre-existing pgdir entry used for Sv57 and as
-a result kernel fails to boot on RISC-V platform not having Sv57.
+Hi Dmitry,
 
-To fix above issue, we should clear the pgdir memory in set_satp_mode()
-before re-programming.
+I love your patch! Perhaps something to improve:
 
-Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
-Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/mm/init.c | 1 +
- 1 file changed, 1 insertion(+)
+[auto build test WARNING on next-20220411]
+[cannot apply to drm/drm-next v5.18-rc2 v5.18-rc1 v5.17 v5.18-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 9535bea8688c..b0793dc0c291 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
- 		if (!check_l4) {
- 			disable_pgtable_l5();
- 			check_l4 = true;
-+			memset(early_pg_dir, 0, PAGE_SIZE);
- 			goto retry;
- 		}
- 		disable_pgtable_l4();
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220412-060325
+base:    d12d7e1cfe38e0c36d28c7a9fbbc436ad0d17c14
+config: arc-buildonly-randconfig-r002-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121135.zXHzC28U-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/683ba8a9d72ba7770a61a9266a2b33949f3874f2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220412-060325
+        git checkout 683ba8a9d72ba7770a61a9266a2b33949f3874f2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/drm_gem_shmem_helper.c: In function 'drm_gem_shmem_shrinker_run_objects_scan':
+>> drivers/gpu/drm/drm_gem_shmem_helper.c:1358:56: warning: implicit conversion from 'enum <anonymous>' to 'enum dma_resv_usage' [-Wenum-conversion]
+    1358 |                 if (!dma_resv_test_signaled(obj->resv, true))
+         |                                                        ^~~~
+
+
+vim +1358 drivers/gpu/drm/drm_gem_shmem_helper.c
+
+  1299	
+  1300	static unsigned long
+  1301	drm_gem_shmem_shrinker_run_objects_scan(struct shrinker *shrinker,
+  1302						unsigned long nr_to_scan,
+  1303						bool *lock_contention,
+  1304						bool evict)
+  1305	{
+  1306		struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
+  1307		struct drm_gem_shmem_object *shmem;
+  1308		struct list_head still_in_list;
+  1309		struct drm_gem_object *obj;
+  1310		unsigned long freed = 0;
+  1311		struct list_head *lru;
+  1312		size_t page_count;
+  1313	
+  1314		INIT_LIST_HEAD(&still_in_list);
+  1315	
+  1316		mutex_lock(&gem_shrinker->lock);
+  1317	
+  1318		if (evict)
+  1319			lru = &gem_shrinker->lru_evictable;
+  1320		else
+  1321			lru = &gem_shrinker->lru_purgeable;
+  1322	
+  1323		while (freed < nr_to_scan) {
+  1324			shmem = list_first_entry_or_null(lru, typeof(*shmem), madv_list);
+  1325			if (!shmem)
+  1326				break;
+  1327	
+  1328			obj = &shmem->base;
+  1329			page_count = obj->size >> PAGE_SHIFT;
+  1330			list_move_tail(&shmem->madv_list, &still_in_list);
+  1331	
+  1332			if (evict && get_nr_swap_pages() < page_count)
+  1333				continue;
+  1334	
+  1335			/*
+  1336			 * If it's in the process of being freed, gem_object->free()
+  1337			 * may be blocked on lock waiting to remove it.  So just
+  1338			 * skip it.
+  1339			 */
+  1340			if (!kref_get_unless_zero(&obj->refcount))
+  1341				continue;
+  1342	
+  1343			mutex_unlock(&gem_shrinker->lock);
+  1344	
+  1345			/* prevent racing with job-submission code paths */
+  1346			if (!dma_resv_trylock(obj->resv)) {
+  1347				*lock_contention |= true;
+  1348				goto shrinker_lock;
+  1349			}
+  1350	
+  1351			/* prevent racing with the dma-buf exporting */
+  1352			if (!mutex_trylock(&gem_shrinker->dev->object_name_lock)) {
+  1353				*lock_contention |= true;
+  1354				goto resv_unlock;
+  1355			}
+  1356	
+  1357			/* check whether h/w uses this object */
+> 1358			if (!dma_resv_test_signaled(obj->resv, true))
+  1359				goto object_name_unlock;
+  1360	
+  1361			/* GEM may've become unpurgeable while shrinker was unlocked */
+  1362			if (evict) {
+  1363				if (!drm_gem_shmem_is_evictable(shmem))
+  1364					goto object_name_unlock;
+  1365			} else {
+  1366				if (!drm_gem_shmem_is_purgeable(shmem))
+  1367					goto object_name_unlock;
+  1368			}
+  1369	
+  1370			if (evict)
+  1371				freed += obj->funcs->evict(obj);
+  1372			else
+  1373				freed += obj->funcs->purge(obj);
+  1374	object_name_unlock:
+  1375			mutex_unlock(&gem_shrinker->dev->object_name_lock);
+  1376	resv_unlock:
+  1377			dma_resv_unlock(obj->resv);
+  1378	shrinker_lock:
+  1379			drm_gem_object_put(&shmem->base);
+  1380			mutex_lock(&gem_shrinker->lock);
+  1381		}
+  1382	
+  1383		list_splice_tail(&still_in_list, lru);
+  1384	
+  1385		mutex_unlock(&gem_shrinker->lock);
+  1386	
+  1387		return freed;
+  1388	}
+  1389	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

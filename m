@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821D64FEB75
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE3E4FEA77
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiDLX3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S230182AbiDLX2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiDLX2Q (ORCPT
+        with ESMTP id S230416AbiDLX1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:28:16 -0400
+        Tue, 12 Apr 2022 19:27:55 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19A25E0AEC
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:34:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A266252B29
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649802841;
+        s=mimecast20190719; t=1649802927;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QA0FeCUr4bLfjKoIaw8u1rHYCmWADNz6x1PRseUplPs=;
-        b=ErJNn4OQVIBihGuNAhnL3bQp47BOECWayegniReH6ZslPNRmZKFOaHfa3MC174JGW0bnTD
-        XzDaA8AVSXSJiK7hP4RC8CxpSRvo8nuovZ5ccSrPD/cb8D6GsMtbIFUA286e32Chjyob5i
-        QJAZrY1kbJFo8lY8BOY5Hy8Tg2npZRY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/JqL0X3/KT3zDD+acZ4FetaC4TRfVdG3OQ6t4Ea+PBQ=;
+        b=eePlWty0U8cKlu7uZyMvyPgaCJU6AmRXqIhRYnH+miWnEtfHBWTrvjXsmfxZM9b2joD5NU
+        wD40F++53Tl8qvkRydJ5rezdwPonoVIW6hWeqtNXmsh+mFq4PQS+99Mkhd9AfBxZPetymt
+        JY1Jo+jLe2cRzFPctSxpEah97ksnnrk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-48-WOdkxwytPo6lkFy_EgXcbw-1; Tue, 12 Apr 2022 16:14:16 -0400
-X-MC-Unique: WOdkxwytPo6lkFy_EgXcbw-1
+ us-mta-642-TLjuljRYP7OLihIosi6tQA-1; Tue, 12 Apr 2022 16:14:12 -0400
+X-MC-Unique: TLjuljRYP7OLihIosi6tQA-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F6281C05B0C;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5049811E80;
         Tue, 12 Apr 2022 20:14:11 +0000 (UTC)
 Received: from cmirabil.remote.csb (unknown [10.22.32.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B04B2401DAC;
-        Tue, 12 Apr 2022 20:14:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4ED05416363;
+        Tue, 12 Apr 2022 20:14:11 +0000 (UTC)
 From:   Charles Mirabile <cmirabil@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Charles Mirabile <cmirabil@redhat.com>,
@@ -47,12 +47,13 @@ Cc:     Charles Mirabile <cmirabil@redhat.com>,
         Mattias Brugger <mbrugger@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        Lee Jones <lee.jones@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Daniel Bauman <dbauman@redhat.com>,
         Mwesigwa Guma <mguma@redhat.com>,
         Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH v8 1/6] drivers/mfd: sensehat: Add Raspberry Pi Sense HAT to simple_mfd_i2c
-Date:   Tue, 12 Apr 2022 16:13:38 -0400
-Message-Id: <20220412201343.8074-2-cmirabil@redhat.com>
+Subject: [PATCH v8 2/6] drivers/input/joystick: sensehat: Raspberry Pi Sense HAT joystick driver
+Date:   Tue, 12 Apr 2022 16:13:39 -0400
+Message-Id: <20220412201343.8074-3-cmirabil@redhat.com>
 In-Reply-To: <20220412201343.8074-1-cmirabil@redhat.com>
 References: <20220412201343.8074-1-cmirabil@redhat.com>
 MIME-Version: 1.0
@@ -61,38 +62,207 @@ X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the compatible string for the Sense HAT device to
-the list of compatible strings in the simple_mfd_i2c driver so that
-it can match against the device and load its children and their drivers
+This patch adds the driver for the Sense HAT joystick. It outputs BTN_DPAD
+key events when moved in any of the four directions and the BTN_SELECT
+event when depressed.
 
+Co-developed-by: Daniel Bauman <dbauman@redhat.com>
+Signed-off-by: Daniel Bauman <dbauman@redhat.com>
 Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
 Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
 Co-developed-by: Joel Savitz <jsavitz@redhat.com>
 Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
 ---
- drivers/mfd/simple-mfd-i2c.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/input/joystick/Kconfig             |  11 ++
+ drivers/input/joystick/Makefile            |   1 +
+ drivers/input/joystick/sensehat-joystick.c | 137 +++++++++++++++++++++
+ 3 files changed, 149 insertions(+)
+ create mode 100644 drivers/input/joystick/sensehat-joystick.c
 
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-index f4c8fc3ee463..c47f36581f3f 100644
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -75,6 +75,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
- static const struct of_device_id simple_mfd_i2c_of_match[] = {
- 	{ .compatible = "kontron,sl28cpld" },
- 	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
-+	{ .compatible = "raspberrypi,sensehat" },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
+diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+index 3b23078bc7b5..505a032e2786 100644
+--- a/drivers/input/joystick/Kconfig
++++ b/drivers/input/joystick/Kconfig
+@@ -399,4 +399,15 @@ config JOYSTICK_N64
+ 	  Say Y here if you want enable support for the four
+ 	  built-in controller ports on the Nintendo 64 console.
+ 
++config JOYSTICK_SENSEHAT
++	tristate "Raspberry Pi Sense HAT joystick"
++	depends on INPUT && I2C
++	select MFD_SIMPLE_MFD_I2C
++	help
++	  Say Y here if you want to enable the driver for the
++	  the Raspberry Pi Sense HAT.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called sensehat_joystick.
++
+ endif
+diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Makefile
+index 5174b8aba2dd..39c8b5c6e5ae 100644
+--- a/drivers/input/joystick/Makefile
++++ b/drivers/input/joystick/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_JOYSTICK_N64)		+= n64joy.o
+ obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+= psxpad-spi.o
+ obj-$(CONFIG_JOYSTICK_PXRC)		+= pxrc.o
+ obj-$(CONFIG_JOYSTICK_QWIIC)		+= qwiic-joystick.o
++obj-$(CONFIG_JOYSTICK_SENSEHAT)         += sensehat-joystick.o
+ obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+= sidewinder.o
+ obj-$(CONFIG_JOYSTICK_SPACEBALL)	+= spaceball.o
+ obj-$(CONFIG_JOYSTICK_SPACEORB)		+= spaceorb.o
+diff --git a/drivers/input/joystick/sensehat-joystick.c b/drivers/input/joystick/sensehat-joystick.c
+new file mode 100644
+index 000000000000..6fed6004f464
+--- /dev/null
++++ b/drivers/input/joystick/sensehat-joystick.c
+@@ -0,0 +1,137 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Raspberry Pi Sense HAT joystick driver
++ * http://raspberrypi.org
++ *
++ * Copyright (C) 2015 Raspberry Pi
++ * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
++ *
++ * Original Author: Serge Schneider
++ * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
++ */
++
++#include <linux/module.h>
++#include <linux/input.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/property.h>
++
++#define JOYSTICK_SMB_REG 0xf2
++
++struct sensehat_joystick {
++	struct platform_device *pdev;
++	struct input_dev *keys_dev;
++	unsigned long prev_states;
++	struct regmap *regmap;
++};
++
++static const unsigned int keymap[] = {
++	BTN_DPAD_DOWN, BTN_DPAD_RIGHT, BTN_DPAD_UP, BTN_SELECT, BTN_DPAD_LEFT,
++};
++
++static irqreturn_t sensehat_joystick_report(int n, void *cookie)
++{
++	int i, error, keys;
++	struct sensehat_joystick *sensehat_joystick = cookie;
++	unsigned long curr_states, changes;
++
++	error = regmap_read(sensehat_joystick->regmap, JOYSTICK_SMB_REG, &keys);
++	if (error < 0) {
++		dev_err(&sensehat_joystick->pdev->dev,
++			"Failed to read joystick state: %d", error);
++		return IRQ_NONE;
++	}
++	curr_states = keys;
++	bitmap_xor(&changes, &curr_states, &sensehat_joystick->prev_states,
++		   ARRAY_SIZE(keymap));
++
++	for_each_set_bit(i, &changes, ARRAY_SIZE(keymap)) {
++		input_report_key(sensehat_joystick->keys_dev, keymap[i],
++				 curr_states & BIT(i));
++	}
++
++	input_sync(sensehat_joystick->keys_dev);
++	sensehat_joystick->prev_states = keys;
++	return IRQ_HANDLED;
++}
++
++static int sensehat_joystick_probe(struct platform_device *pdev)
++{
++	int error, i, irq;
++	struct sensehat_joystick *sensehat_joystick = devm_kzalloc(
++		&pdev->dev, sizeof(*sensehat_joystick), GFP_KERNEL);
++	if (!sensehat_joystick)
++		return -ENOMEM;
++
++	sensehat_joystick->pdev = pdev;
++
++	sensehat_joystick->regmap = dev_get_regmap(sensehat_joystick->pdev->dev.parent, NULL);
++	if (!sensehat_joystick->regmap) {
++		dev_err(&pdev->dev,
++			"unable to get sensehat regmap");
++		return -ENODEV;
++	}
++
++
++	sensehat_joystick->keys_dev = devm_input_allocate_device(&pdev->dev);
++	if (!sensehat_joystick->keys_dev) {
++		dev_err(&pdev->dev, "Could not allocate input device.");
++		return -ENOMEM;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(keymap); i++)
++		set_bit(keymap[i], sensehat_joystick->keys_dev->keybit);
++
++	sensehat_joystick->keys_dev->name = "Raspberry Pi Sense HAT Joystick";
++	sensehat_joystick->keys_dev->phys = "sensehat-joystick/input0";
++	sensehat_joystick->keys_dev->id.bustype = BUS_I2C;
++	sensehat_joystick->keys_dev->evbit[0] =
++		BIT_MASK(EV_KEY) | BIT_MASK(EV_REP);
++
++	error = input_register_device(sensehat_joystick->keys_dev);
++	if (error) {
++		dev_err(&pdev->dev, "Could not register input device.");
++		return error;
++	}
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		dev_err(&pdev->dev, "Could not retrieve interrupt request.");
++		return irq;
++	}
++
++	error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++					  sensehat_joystick_report,
++					  IRQF_ONESHOT, "keys",
++					  sensehat_joystick);
++
++	if (error) {
++		dev_err(&pdev->dev, "IRQ request failed.");
++		return error;
++	}
++
++	return 0;
++}
++
++static const struct of_device_id sensehat_joystick_device_id[] = {
++	{ .compatible = "raspberrypi,sensehat-joystick" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, sensehat_joystick_device_id);
++
++static struct platform_driver sensehat_joystick_driver = {
++	.probe = sensehat_joystick_probe,
++	.driver = {
++		.name = "sensehat-joystick",
++		.of_match_table = sensehat_joystick_device_id,
++	},
++};
++
++module_platform_driver(sensehat_joystick_driver);
++
++MODULE_DESCRIPTION("Raspberry Pi Sense HAT joystick driver");
++MODULE_AUTHOR("Charles Mirabile <cmirabil@redhat.com>");
++MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
++MODULE_LICENSE("GPL");
 -- 
 2.31.1
 

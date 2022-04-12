@@ -2,74 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B305F4FE6CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9214FE6CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357364AbiDLR3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S1358110AbiDLR3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbiDLR3F (ORCPT
+        with ESMTP id S1358085AbiDLR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:29:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C258252B2A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:26:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 12 Apr 2022 13:29:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 515D452B2A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649784412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=s4Lt1xewNBZXG5/FcRdJnajbH6pCOsyU2JZpMOz87cw=;
+        b=EwHeX9Ug7VaLu8sUFKmWvyqh6a22QahaJ9R2EOU4a+wljWggjmVLqmsTnmkvRsUl3g81lZ
+        6qdWxvDIlgd3/R6dSAcLX/59Wn72w3rqsG5VQA/joNzXK+bO/imHqncexjd8befwMxCyB1
+        BbZxlMCTN5/pjMYQrD7xvWMKO+eqToI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-mgW3sfY1NaOkHJZKbxySFA-1; Tue, 12 Apr 2022 13:26:49 -0400
+X-MC-Unique: mgW3sfY1NaOkHJZKbxySFA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E3A3B81F5B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69718C385A1;
-        Tue, 12 Apr 2022 17:26:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649784405;
-        bh=5fBiB9n+naRmExVYTrfBR6Y0GO2FDmg4/T8dW79QLCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uybX+7vqcUMrlKabYMrKLxwaPbspd2HZmFKgjmSgNwUo5KRUgiqpc/0eVigepUKEL
-         pxGEKibtkMnxIcTFszfqT2CP7qzlIc+eA+lkZPZ45D+dNd+M54X2IqpnmMIJRMRF4B
-         7iXxsupYtPcHTnOvS324q9mMJjHUP2XTeVI4T7DfsBIZAzzqPvrrslpTU8Oq/LX/rn
-         LplL6FUmJiem1Y/kuTLA/X3MH7KkFUK/26cC0K5CgkDO7L8EeXmzk+7DSovcenZfKF
-         P5XzAX5TwfYYMpjHnOqDAE5KqKzuZGsU/fgBEYUADuxNFaoawqZUjRaS2awQvI0nNy
-         GQV+Uk8lVNMJg==
-Date:   Tue, 12 Apr 2022 20:26:36 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Faiyaz Mohammed <quic_faiyazm@quicinc.com>
-Cc:     quic_vjitta@quicinc.com, karahmed@amazon.de, qperret@google.com,
-        robh@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: memblock: avoid to create memmap for memblock nomap
- regions
-Message-ID: <YlW2TO0O8qDHpkGW@kernel.org>
-References: <1649704172-13181-1-git-send-email-quic_faiyazm@quicinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7B303C01B90;
+        Tue, 12 Apr 2022 17:26:48 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9AB6E40D0160;
+        Tue, 12 Apr 2022 17:26:48 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for 5.18-rc3
+Date:   Tue, 12 Apr 2022 13:26:48 -0400
+Message-Id: <20220412172648.1060942-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649704172-13181-1-git-send-email-quic_faiyazm@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:39:32AM +0530, Faiyaz Mohammed wrote:
-> This 'commit 86588296acbf ("fdt: Properly handle "no-map" field in the
-> memory region")' is keeping the no-map regions in memblock.memory with
-> MEMBLOCK_NOMAP flag set to use no-map memory for EFI using memblock api's,
-> but during the initialization sparse_init mark all memblock.memory as
-> present using for_each_mem_pfn_range, which is creating the memmap for
-> no-map memblock regions. To avoid it skiping the memblock.memory regions
-> set with MEMBLOCK_NOMAP set and with this change we will be able to save
-> ~11MB memory for ~612MB carve out.
+Linus,
 
-The MEMBLOCK_NOMAP is very fragile and caused a lot of issues already. I
-really don't like the idea if adding more implicit assumptions about how
-NOMAP memory may or may not be used in a generic iterator function.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
--- 
-Sincerely yours,
-Mike.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to 42dcbe7d8bac997eef4c379e61d9121a15ed4e36:
+
+  KVM: x86: hyper-v: Avoid writing to TSC page without an active vCPU (2022-04-11 13:29:51 -0400)
+
+----------------------------------------------------------------
+x86:
+
+* Miscellaneous bugfixes
+
+* A small cleanup for the new workqueue code
+
+* Documentation syntax fix
+
+RISC-V:
+
+* Remove hgatp zeroing in kvm_arch_vcpu_put()
+
+* Fix alignment of the guest_hang() in KVM selftest
+
+* Fix PTE A and D bits in KVM selftest
+
+* Missing #include in vcpu_fp.c
+
+ARM:
+
+* Some PSCI fixes after introducing PSCIv1.1 and SYSTEM_RESET2
+
+* Fix the MMU write-lock not being taken on THP split
+
+* Fix mixed-width VM handling
+
+* Fix potential UAF when debugfs registration fails
+
+* Various selftest updates for all of the above
+
+----------------------------------------------------------------
+Andrew Jones (1):
+      KVM: selftests: get-reg-list: Add KVM_REG_ARM_FW_REG(3)
+
+Anup Patel (3):
+      RISC-V: KVM: Don't clear hgatp CSR in kvm_arch_vcpu_put()
+      KVM: selftests: riscv: Set PTE A and D bits in VS-stage page table
+      KVM: selftests: riscv: Fix alignment of the guest_hang() function
+
+Bagas Sanjaya (1):
+      Documentation: kvm: Add missing line break in api.rst
+
+Heiko Stuebner (1):
+      RISC-V: KVM: include missing hwcap.h into vcpu_fp
+
+Like Xu (2):
+      selftests: kvm: add tsc_scaling_sync to .gitignore
+      Documentation: KVM: Add SPDX-License-Identifier tag
+
+Lv Ruyi (1):
+      KVM: x86/mmu: remove unnecessary flush_workqueue()
+
+Oliver Upton (7):
+      KVM: arm64: Generally disallow SMC64 for AArch32 guests
+      KVM: arm64: Actually prevent SMC64 SYSTEM_RESET2 from AArch32
+      KVM: arm64: Drop unneeded minor version check from PSCI v1.x handler
+      KVM: arm64: Don't split hugepages outside of MMU write lock
+      KVM: Don't create VM debugfs files outside of the VM directory
+      selftests: KVM: Don't leak GIC FD across dirty log test iterations
+      selftests: KVM: Free the GIC FD when cleaning up in arch_timer
+
+Paolo Bonzini (3):
+      KVM: avoid NULL pointer dereference in kvm_dirty_ring_push
+      Merge tag 'kvmarm-fixes-5.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvm-riscv-fixes-5.18-1' of https://github.com/kvm-riscv/linux into HEAD
+
+Peter Gonda (1):
+      KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
+
+Reiji Watanabe (2):
+      KVM: arm64: mixed-width check should be skipped for uninitialized vCPUs
+      KVM: arm64: selftests: Introduce vcpu_width_config
+
+Sean Christopherson (1):
+      KVM: x86/mmu: Resolve nx_huge_pages when kvm.ko is loaded
+
+Suravee Suthikulpanit (1):
+      KVM: SVM: Do not activate AVIC for SEV-enabled guest
+
+Vitaly Kuznetsov (1):
+      KVM: x86: hyper-v: Avoid writing to TSC page without an active vCPU
+
+Yu Zhe (1):
+      KVM: arm64: vgic: Remove unnecessary type castings
+
+ Documentation/virt/kvm/api.rst                     |   1 +
+ Documentation/virt/kvm/vcpu-requests.rst           |   2 +
+ .../virt/kvm/x86/amd-memory-encryption.rst         |   2 +
+ Documentation/virt/kvm/x86/errata.rst              |   2 +-
+ .../virt/kvm/x86/running-nested-guests.rst         |   2 +
+ arch/arm64/include/asm/kvm_emulate.h               |  27 +++--
+ arch/arm64/include/asm/kvm_host.h                  |  10 ++
+ arch/arm64/kvm/mmu.c                               |  11 +-
+ arch/arm64/kvm/psci.c                              |  31 +++---
+ arch/arm64/kvm/reset.c                             |  65 +++++++----
+ arch/arm64/kvm/vgic/vgic-debug.c                   |  10 +-
+ arch/arm64/kvm/vgic/vgic-its.c                     |   2 +-
+ arch/riscv/kvm/vcpu.c                              |   2 -
+ arch/riscv/kvm/vcpu_fp.c                           |   1 +
+ arch/x86/include/asm/kvm_host.h                    |  10 +-
+ arch/x86/kvm/hyperv.c                              |  40 ++-----
+ arch/x86/kvm/hyperv.h                              |   2 +-
+ arch/x86/kvm/mmu/mmu.c                             |  20 +++-
+ arch/x86/kvm/mmu/tdp_mmu.c                         |   2 +-
+ arch/x86/kvm/svm/avic.c                            |   3 +-
+ arch/x86/kvm/svm/sev.c                             |   3 +
+ arch/x86/kvm/x86.c                                 |  27 ++++-
+ tools/testing/selftests/kvm/.gitignore             |   2 +
+ tools/testing/selftests/kvm/Makefile               |   1 +
+ tools/testing/selftests/kvm/aarch64/arch_timer.c   |  15 ++-
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c |  14 ++-
+ .../selftests/kvm/aarch64/vcpu_width_config.c      | 122 +++++++++++++++++++++
+ tools/testing/selftests/kvm/dirty_log_perf_test.c  |  34 +++++-
+ .../selftests/kvm/include/riscv/processor.h        |   4 +-
+ tools/testing/selftests/kvm/lib/riscv/processor.c  |   2 +-
+ virt/kvm/kvm_main.c                                |  12 +-
+ 31 files changed, 357 insertions(+), 124 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/vcpu_width_config.c
+

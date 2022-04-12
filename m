@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A806C4FD916
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1034A4FDA2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357221AbiDLInx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S1383554AbiDLJCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357130AbiDLHjs (ORCPT
+        with ESMTP id S1357193AbiDLHjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:48 -0400
-Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 3FCABE0E6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:12:31 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
- s=smtp; t=1649747551; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=NgB4J145WK0eAdmQZ6KKPhAtsa67dfOsSoag6jWRVUs=; b=WyZ1cjrgvT+a9SnTjRln3YU/+bW/OXnDRD/YbS/+C0sMhK9jRhu+HjOy14FiUROYdNetwI6k
- q8t8GyzU6wi9pEAohN6XPQbW/BkeHjJfwoJ+v3c4tZxq3UtsxD/2OzKroJdUypqdkVShPEQ5
- 7EcjEcJfuPoDjGilvB33ll5Zo1Ef3CxF1QssEbVTFcC1U9PKaM7gUxefDalXhAA8EcI3JTO0
- lEIonQcWN3O7SIDVqiG49PeyLMjvi/olxX9EJnw7nkFcUM8wVVhL/s/JskK+gKItmf+QTCUi
- NcnZKr5f5wP0ikBSS+XudMnyR+5C55n1hdHNuf0EDZbZIDZOGPfn1A==
-X-Mailgun-Sending-Ip: 159.135.228.13
-X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
-Received: from AN5Bruno (186-250-90-1.mhnet.com.br [186.250.90.1]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6255265d77e17d301dacc649 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Tue, 12 Apr 2022 07:12:29 GMT
-Sender: codeagain@codeagain.dev
-Date:   Tue, 12 Apr 2022 04:12:19 -0300
-From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Cc:     Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH v2 0/3] staging: vme: Restructuring menuconfig and tree
-Message-ID: <20220412071219.rapvtaxvoz2yerr5@AN5Bruno>
-References: <cover.1649721450.git.codeagain@codeagain.dev>
+        Tue, 12 Apr 2022 03:39:51 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B06214027;
+        Tue, 12 Apr 2022 00:13:36 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id kl29so15487664qvb.2;
+        Tue, 12 Apr 2022 00:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b40J74AZXHQx3F3Kvksxnsm3IoWKYudmg3ktvmskBdg=;
+        b=vtRsdCbyShHPW1r/c0C6OSnkbkYgKws2dk0YIuJ2uJdeJHhuhheIRlabc3kzgejLJ1
+         4lbXwJJX4hrPPJIUnEDhXOzJv7F68g3wfZYDPdRlXPAhm5COX4YRHZVy3h9GDwIL3ieK
+         TqaLrInRLjUIK9U6eCX0SMozsIfepheIaVlx88atEcI2vs6etuIIsVrfBrJuU/u1PDHx
+         4OH3ucwfh/DCCOIs1i9Xl/ONCtboy47ER6QV7Hugkjqx5uKrdxEY1bcXCnEW5lhEwYMg
+         efQGRg65IROV1BKEt6TMK42e0nIpUfh+/CvyuJ3dQKxXOkPoL18/9CY51d/GesQXVKy+
+         vw4A==
+X-Gm-Message-State: AOAM532Q1UP8SW3/YKCBtQbbMbadf11PzDTPOMzr2KGM28Jdglgk38/r
+        FJWZjfSj9YNPbUnWRxZa9y2js9IWLJ6y9uHX
+X-Google-Smtp-Source: ABdhPJzCYVy117bkQj/DB7M6GTJOgziXwfQaUZNvnpGntUlMNL4oQyNKpLyC6dmfrLvTaoCpJKCavg==
+X-Received: by 2002:a05:6214:202a:b0:441:6a41:f710 with SMTP id 10-20020a056214202a00b004416a41f710mr30439607qvf.84.1649747615328;
+        Tue, 12 Apr 2022 00:13:35 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id i7-20020ac85e47000000b002e22bad4717sm27207165qtx.1.2022.04.12.00.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 00:13:35 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id e71so17006804ybf.8;
+        Tue, 12 Apr 2022 00:13:34 -0700 (PDT)
+X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
+ p9-20020a259e89000000b0063cad37a5demr24883011ybq.342.1649747614630; Tue, 12
+ Apr 2022 00:13:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="a4cxoghgp7wwa5tg"
-Content-Disposition: inline
-In-Reply-To: <cover.1649721450.git.codeagain@codeagain.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411211243.11121-1-javierm@redhat.com> <20220411211243.11121-2-javierm@redhat.com>
+In-Reply-To: <20220411211243.11121-2-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Apr 2022 09:13:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+ieUSv1sjOX-fks3o+J3Eicg-prCK2+roTq-MFKTHBg@mail.gmail.com>
+Message-ID: <CAMuHMdU+ieUSv1sjOX-fks3o+J3Eicg-prCK2+roTq-MFKTHBg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: display: ssd1307fb: Deprecate "-i2c"
+ compatible strings
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> The current compatible strings for SSD130x I2C controllers contain both an
+> "fb" and "-i2c" suffixes. It seems to indicate that are for a fbdev driver
+> and also that are for devices that can be accessed over an I2C bus.
+>
+> But a DT is supposed to describe the hardware and not Linux implementation
+> details. So let's deprecate those compatible strings and add new ones that
+> only contain the vendor and device name, without any of these suffixes.
+>
+> These will just describe the device and can be matched by both I2C and SPI
+> DRM drivers.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
 
---a4cxoghgp7wwa5tg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Please, disconsider some small errors in the commit message. I have sent
-the patch files generated befor updating some information, so two of the
-patches will be updated
+Gr{oetje,eeting}s,
 
-On Tue, Apr 12, 2022 at 03:53:46AM -0300, Bruno Moreira-Guedes wrote:
-> This patch series modify the vme_user driver's place in
-> menuconfig (1/3), fixes a missing `depends on` line in a Kconfig file
-> (2/3), and rearrages the directory tree for the driver allowing a more
-> straightforward comprehension of its contents (3/3).
->=20
-> Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
->=20
-> Bruno Moreira-Guedes (3):
->   staging: vme: Adjusted VME_USER in Kconfig
-This is fine as far as I noticed.
+                        Geert
 
->   staging: vme: Fix missing `depends on` at KConfig
-This one refers to VME_BRIDGE somewhere, when it's actually VME_BUS.
-I'll fix it.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->   staging: vme: "drivers/staging/vme" tree cleanup
-Some changes aren't properly mentioned in the commit message here.
-
->=20
->  MAINTAINERS                                          | 2 +-
-I missed to mention this update on MAINTAINERS, due to changes in the
-directory structure.
-
->  drivers/staging/Kconfig                              | 2 ++
->  drivers/staging/Makefile                             | 2 +-
->  drivers/staging/vme/Makefile                         | 2 --
->  drivers/staging/{vme/devices =3D> vme_user}/Kconfig    | 2 +-
->  drivers/staging/{vme/devices =3D> vme_user}/Makefile   | 0
->  drivers/staging/{vme/devices =3D> vme_user}/vme_user.c | 0
->  drivers/staging/{vme/devices =3D> vme_user}/vme_user.h | 0
->  drivers/vme/Kconfig                                  | 2 --
->  9 files changed, 5 insertions(+), 7 deletions(-)
->  delete mode 100644 drivers/staging/vme/Makefile
->  rename drivers/staging/{vme/devices =3D> vme_user}/Kconfig (93%)
->  rename drivers/staging/{vme/devices =3D> vme_user}/Makefile (100%)
->  rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.c (100%)
->  rename drivers/staging/{vme/devices =3D> vme_user}/vme_user.h (100%)
->=20
-> --=20
-> 2.35.1
->=20
-
-
---a4cxoghgp7wwa5tg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYlUmUwAKCRAZtd3tyEY2
-kpYTAP4veEOxVUWkbDbgVB46nEao+xSYla9M8a2WC697U2jzeAEAsCrz3rvRG13O
-Eg2WgitpLBPqjykBczHhrBWvpfEIVgo=
-=iBz5
------END PGP SIGNATURE-----
-
---a4cxoghgp7wwa5tg--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,346 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816FA4FE23A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89FA4FE245
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355923AbiDLNWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S1356179AbiDLNXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355873AbiDLNWR (ORCPT
+        with ESMTP id S1353308AbiDLNWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 09:22:17 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24547C4;
-        Tue, 12 Apr 2022 06:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649769094; x=1681305094;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=kT6Ot8+nfgTsQi/J+cK/x9upUdjWkz0QjcKSjUE2ecI=;
-  b=tHm1LhiDx1r8jbpPET/5qmRpcTr5B8OSEatSUy0gMhBPnd4cYQ9B8FSD
-   LjjeI7IdcxBbFdiJG1L8HHyQ/kZ1h8Q9cBbjyWq/apromE7mUeVzCuuQd
-   b+izmtV2kUNtcACLkCurHa9J4nMQuXrQRNlg5HSBmALXOin91/CvEUQMP
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Apr 2022 06:11:33 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:11:33 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 06:11:33 -0700
-Received: from [10.216.28.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Apr
- 2022 06:11:28 -0700
-Message-ID: <be8c6dae-20b1-3ba1-db3f-119da1e4ebfe@quicinc.com>
-Date:   Tue, 12 Apr 2022 18:41:25 +0530
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A03197;
+        Tue, 12 Apr 2022 06:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649769107; x=1681305107;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=1KeYAHX9pm/ikMj2hiQRjLWmiTvrzP7m01hIo3GA0o4=;
+  b=KGHDBbMLXzD9MPjEkX4buLEjDU0DefdekSPdtciqBC5tPWYIkqGEkYfV
+   w/YZX/Rr3jIofpjzOcnUQHpWxYQSq7nxpg99oHs0KSkogUOfTPaaSc0MC
+   v/15udPsm8BVy4LfrKBEXuCTQiN4hsPTcAuz91atDTR5Al/TtpX6xlsYR
+   kekgpISrPOPMt/udhH6vkTq6UAOC+ppyr9lauaTTzCrGiP+o7mtS7zk6O
+   MFLySurcDSkkSfXOaHliXJXmPB8N2SlrPTWRhafkJ7ZjOVLmBky0um3Ha
+   bTDVfQxOFHf/oHHiOQm+urrJGL9XU8ywR/XIkKTZO+EyzhcLvlFTeYmTU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325279839"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="325279839"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:11:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="699828702"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 06:11:38 -0700
+Date:   Tue, 12 Apr 2022 21:11:28 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 01/13] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220412131128.GE8013@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-2-chao.p.peng@linux.intel.com>
+ <20220411151023.4nx34pxyg5amj44m@box.shutemov.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v7 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
- controller node
-Content-Language: en-US
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
- <1649685184-8448-3-git-send-email-quic_srivasam@quicinc.com>
- <YlSCWC47tITuW/BZ@google.com>
- <9bacee6d-ab44-2975-c523-38164d016af5@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <9bacee6d-ab44-2975-c523-38164d016af5@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411151023.4nx34pxyg5amj44m@box.shutemov.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 06:10:23PM +0300, Kirill A. Shutemov wrote:
+> On Thu, Mar 10, 2022 at 10:08:59PM +0800, Chao Peng wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Introduce a new memfd_create() flag indicating the content of the
+> > created memfd is inaccessible from userspace through ordinary MMU
+> > access (e.g., read/write/mmap). However, the file content can be
+> > accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> > 
+> > It provides semantics required for KVM guest private memory support
+> > that a file descriptor with this flag set is going to be used as the
+> > source of guest memory in confidential computing environments such
+> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> > 
+> > Since page migration/swapping is not yet supported for such usages
+> > so these pages are currently marked as UNMOVABLE and UNEVICTABLE
+> > which makes them behave like long-term pinned pages.
+> > 
+> > The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
+> > also impossible for a memfd created with this flag.
+> > 
+> > At this time only shmem implements this flag.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  include/linux/shmem_fs.h   |  7 +++++
+> >  include/uapi/linux/memfd.h |  1 +
+> >  mm/memfd.c                 | 26 +++++++++++++++--
+> >  mm/shmem.c                 | 57 ++++++++++++++++++++++++++++++++++++++
+> >  4 files changed, 88 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> > index e65b80ed09e7..2dde843f28ef 100644
+> > --- a/include/linux/shmem_fs.h
+> > +++ b/include/linux/shmem_fs.h
+> > @@ -12,6 +12,9 @@
+> >  
+> >  /* inode in-kernel data */
+> >  
+> > +/* shmem extended flags */
+> > +#define SHM_F_INACCESSIBLE	0x0001  /* prevent ordinary MMU access (e.g. read/write/mmap) to file content */
+> > +
+> >  struct shmem_inode_info {
+> >  	spinlock_t		lock;
+> >  	unsigned int		seals;		/* shmem seals */
+> > @@ -24,6 +27,7 @@ struct shmem_inode_info {
+> >  	struct shared_policy	policy;		/* NUMA memory alloc policy */
+> >  	struct simple_xattrs	xattrs;		/* list of xattrs */
+> >  	atomic_t		stop_eviction;	/* hold when working on inode */
+> > +	unsigned int		xflags;		/* shmem extended flags */
+> >  	struct inode		vfs_inode;
+> >  };
+> >  
+> 
+> AFAICS, only two bits of 'flags' are used. And that's very strange that
+> VM_ flags are used for the purpose. My guess that someone was lazy to
+> introduce new constants for this.
+> 
+> I think we should fix this: introduce SHM_F_LOCKED and SHM_F_NORESERVE
+> alongside with SHM_F_INACCESSIBLE and stuff them all into info->flags.
+> It also makes shmem_file_setup_xflags() go away.
 
-On 4/12/2022 6:18 PM, Srinivasa Rao Mandadapu wrote:
->
-> On 4/12/2022 1:02 AM, Matthias Kaehlcke wrote:
-> Thanks for your time Matthias!!!
->> On Mon, Apr 11, 2022 at 07:23:04PM +0530, Srinivasa Rao Mandadapu wrote:
->>> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
->>> based platforms.
->>>
->>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>> ---
->>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84 
->>> ++++++++++++++++++++++++
->>>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 
->>> +++++++++++++++++++++++++++++++
->>>   2 files changed, 191 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi 
->>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>> index 4ba2274..ea751dc 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>> @@ -238,6 +238,90 @@
->>>       modem-init;
->>>   };
->>>   +&dmic01 {
->> Shouldn't these nodes be in the PINCTRL section at their respective
->> positions in alphabetical order?
->
-> These are not part of tlmm pin control section. These are part of 
-> lpass_tlmm section.
->
-> In your previous comment you asked to remove &lpass_tlmm. Hence 
-> brought out.
->
->>
->> nit: since you are keeping the groups the group names are a bit 
->> generic IMO.
->> e.g. it is fairly obvious that 'dmic01_clk' refers to a clock pin, 
->> however
->> just 'dmic01' is a bit vague. You could consider adding the prefix 
->> 'lpass_'
->> to the group names for more clarity.
-> as dmic01 has both clk and data section, I don't think keeping clk is 
-> appropriate here.
+Did a quick search and sounds we only use SHM_F_LOCKED/SHM_F_NORESERVE and
+that definitely don't have to be VM_ flags.
 
-As these nodes are part of SC7280, i.e. qcom specific chipset, I feel 
-lpass_ is redundant.
-
-If we add lpass_ to all dmic nodes, some node names are too lengthy.
-
->>
->>> +    clk {
->>> +        drive-strength = <8>;
->>> +    };
->>> +};
->>> +
->>> +&dmic01_sleep {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        bias-disable;
->>> +    };
->>> +
->>> +    data {
->>> +        pull-down;
->>> +    };
->>> +};
->>> +
->>> +&dmic23 {
->>> +    clk {
->>> +        drive-strength = <8>;
->>> +    };
->>> +};
->>> +
->>> +&dmic23_sleep {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        bias-disable;
->>> +    };
->>> +
->>> +    data {
->>> +        pull-down;
->>> +    };
->>> +};
->>> +
->>> +&rx_swr {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        slew-rate = <1>;
->>> +        bias-disable;
->>> +    };
->>> +
->>> +    data {
->>> +        drive-strength = <2>;
->>> +        slew-rate = <1>;
->>> +        bias-bus-hold;
->>> +    };
->>> +};
->>> +
->>> +&rx_swr_sleep {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        bias-pull-down;
->>> +    };
->>> +
->>> +    data {
->>> +        drive-strength = <2>;
->>> +        bias-pull-down;
->>> +    };
->>> +};
->>> +
->>> +&tx_swr {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        slew-rate = <1>;
->>> +        bias-disable;
->>> +    };
->>> +
->>> +    data {
->>> +        slew-rate = <1>;
->>> +        bias-bus-hold;
->>> +    };
->>> +};
->>> +
->>> +&tx_swr_sleep {
->>> +    clk {
->>> +        drive-strength = <2>;
->>> +        bias-pull-down;
->>> +    };
->>> +
->>> +    data {
->>> +        bias-bus-hold;
->>> +    };
->>> +};
->>> +
->>>   &pcie1 {
->>>       status = "okay";
->>>       perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
->>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>> index 8099c80..c692420 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->>> @@ -1987,6 +1987,113 @@
->>>               qcom,bcm-voters = <&apps_bcm_voter>;
->>>           };
->>>   +        lpass_tlmm: pinctrl@33c0000 {
->>> +            compatible = "qcom,sc7280-lpass-lpi-pinctrl";
->>> +            reg = <0 0x033c0000 0x0 0x20000>,
->>> +                <0 0x03550000 0x0 0x10000>;
->>> +            gpio-controller;
->>> +            #gpio-cells = <2>;
->>> +            gpio-ranges = <&lpass_tlmm 0 0 15>;
->>> +
->>> +            #clock-cells = <1>;
->>> +
->>> +            dmic01: dmic01 {
->>> +                clk {
->>> +                    pins = "gpio6";
->>  From the schematics I interpret that the LPASS GPIOs 0-9 are mapped 
->> to the
->> SC7280 GPIOs 144-153. Is that correct?
-> Yes. But we refer with GPIOs 0-9 in driver.
->>
->>> +                    function = "dmic1_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio7";
->>> +                    function = "dmic1_data";
->>> +                };
->>> +            };
->>> +
->>> +            dmic01_sleep: dmic01-sleep {
->>> +                clk {
->>> +                    pins = "gpio6";
->>> +                    function = "dmic1_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio7";
->>> +                    function = "dmic1_data";
->>> +                };
->>> +            };
->>> +
->>> +            dmic23: dmic23 {
->>> +                clk {
->>> +                    pins = "gpio8";
->>> +                    function = "dmic2_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio9";
->>> +                    function = "dmic2_data";
->>> +                };
->>> +            };
->>> +
->>> +            dmic23_sleep: dmic23_sleep {
->> s/dmic23_sleep/dmic23-sleep/ for the node name.
-> Okay.
->>
->>> +                clk {
->>> +                    pins = "gpio8";
->>> +                    function = "dmic2_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio9";
->>> +                    function = "dmic2_data";
->>> +                };
->>> +            };
->>> +
->>> +            rx_swr: rx-swr {
->>> +                clk {
->>> +                    pins = "gpio3";
->>> +                    function = "swr_rx_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio4", "gpio5";
->>> +                    function = "swr_rx_data";
->>> +                };
->>> +            };
->>> +
->>> +            rx_swr_sleep: rx-swr-sleep {
->>> +                clk {
->>> +                    pins = "gpio3";
->>> +                    function = "swr_rx_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio4", "gpio5";
->>> +                    function = "swr_rx_data";
->>> +                };
->>> +            };
->>> +
->>> +            tx_swr: tx-swr {
->>> +                clk {
->>> +                    pins = "gpio0";
->>> +                    function = "swr_tx_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio1", "gpio2", "gpio14";
->>> +                    function = "swr_tx_data";
->>> +                };
->>> +            };
->>> +
->>> +            tx_swr_sleep: tx-swr-sleep {
->>> +                clk {
->>> +                    pins = "gpio0";
->>> +                    function = "swr_tx_clk";
->>> +                };
->>> +
->>> +                data {
->>> +                    pins = "gpio1", "gpio2", "gpio14";
->>> +                    function = "swr_tx_data";
->>> +                };
->>> +            };
->>> +        };
->>> +
->>>           gpu: gpu@3d00000 {
->>>               compatible = "qcom,adreno-635.0", "qcom,adreno";
->>>               reg = <0 0x03d00000 0 0x40000>,
->>> -- 
->>> 2.7.4
->>>
+Chao
+> 
+> -- 
+>  Kirill A. Shutemov

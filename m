@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DF64FD605
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0A34FD482
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiDLJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S1355441AbiDLIIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359132AbiDLHmd (ORCPT
+        with ESMTP id S1355202AbiDLH1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EF355233;
-        Tue, 12 Apr 2022 00:20:19 -0700 (PDT)
+        Tue, 12 Apr 2022 03:27:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54470488A8;
+        Tue, 12 Apr 2022 00:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22AC7B81B58;
-        Tue, 12 Apr 2022 07:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A91C385A5;
-        Tue, 12 Apr 2022 07:20:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1E52B81B51;
+        Tue, 12 Apr 2022 07:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20367C385A1;
+        Tue, 12 Apr 2022 07:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748016;
-        bh=sC+yelsbh94fJQss7tqpXVH0tAA6PB+cx7LgaWENbnY=;
+        s=korg; t=1649747236;
+        bh=PfVea3cN1HFY7r4zaOvRz5SXrIqJXXWfX7D2kitc9Lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F7926cvITvgsM7pzN2cmXb5age+GG9m5FaxjF9f8r8C91Wwpdi9DaPYwaYdRbJkrP
-         7V95HDvgtDHJmm66+NsBR2/lVRvobnnw4z92w3+SvkyuGdpfmjOmz3p8+LH1zdhVg8
-         guOYYA1SZDYjo5cDrq5gQ9ZVJOyQg3xRM20Ervuk=
+        b=q+J0ZsuvuDhebdhwV/QaFaAl1Je4fJmp6dCqmRZ0dqNIAmb6a3QYXX0jST23pyFHJ
+         y5SD6nn5WyHhyKSh6rgmZEgBOhtGFMcunQk+KN6jAMLXoZ72u/oZynXj1bsymfOrhz
+         SIpWurVR3DPt3h27IOrwQLtUccNHML1UBhoMjmGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Gardner <tim.gardner@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Prabhakar Kushwaha <pkushwaha@marvell.com>,
-        Alok Prasad <palok@marvell.com>,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>
-Subject: [PATCH 5.17 290/343] qed: fix ethtool register dump
-Date:   Tue, 12 Apr 2022 08:31:48 +0200
-Message-Id: <20220412062959.698888922@linuxfoundation.org>
+        stable@vger.kernel.org,
+        CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 252/285] drm/amd/display: Fix by adding FPU protection for dcn30_internal_validate_bw
+Date:   Tue, 12 Apr 2022 08:31:49 +0200
+Message-Id: <20220412062950.933372699@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manish Chopra <manishc@marvell.com>
+From: CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>
 
-commit 20921c0c86092b4082c91bd7c88305da74e5520b upstream.
+commit ca1198849ab0e7af5efb392ef6baf1138f6fc086 upstream.
 
-To fix a coverity complain, commit d5ac07dfbd2b
-("qed: Initialize debug string array") removed "sw-platform"
-(one of the common global parameters) from the dump as this
-was used in the dump with an uninitialized string, however
-it did not reduce the number of common global parameters
-which caused the incorrect (unable to parse) register dump
+[Why]
+Below general protection fault observed when WebGL Aquarium is run for
+longer duration. If drm debug logs are enabled and set to 0x1f then the
+issue is observed within 10 minutes of run.
 
-this patch fixes it with reducing NUM_COMMON_GLOBAL_PARAMS
-bye one.
+[  100.717056] general protection fault, probably for non-canonical address 0x2d33302d32323032: 0000 [#1] PREEMPT SMP NOPTI
+[  100.727921] CPU: 3 PID: 1906 Comm: DrmThread Tainted: G        W         5.15.30 #12 d726c6a2d6ebe5cf9223931cbca6892f916fe18b
+[  100.754419] RIP: 0010:CalculateSwathWidth+0x1f7/0x44f
+[  100.767109] Code: 00 00 00 f2 42 0f 11 04 f0 48 8b 85 88 00 00 00 f2 42 0f 10 04 f0 48 8b 85 98 00 00 00 f2 42 0f 11 04 f0 48 8b 45 10 0f 57 c0 <f3> 42 0f 2a 04 b0 0f 57 c9 f3 43 0f 2a 0c b4 e8 8c e2 f3 ff 48 8b
+[  100.781269] RSP: 0018:ffffa9230079eeb0 EFLAGS: 00010246
+[  100.812528] RAX: 2d33302d32323032 RBX: 0000000000000500 RCX: 0000000000000000
+[  100.819656] RDX: 0000000000000001 RSI: ffff99deb712c49c RDI: 0000000000000000
+[  100.826781] RBP: ffffa9230079ef50 R08: ffff99deb712460c R09: ffff99deb712462c
+[  100.833907] R10: ffff99deb7124940 R11: ffff99deb7124d70 R12: ffff99deb712ae44
+[  100.841033] R13: 0000000000000001 R14: 0000000000000000 R15: ffffa9230079f0a0
+[  100.848159] FS:  00007af121212640(0000) GS:ffff99deba780000(0000) knlGS:0000000000000000
+[  100.856240] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  100.861980] CR2: 0000209000fe1000 CR3: 000000011b18c000 CR4: 0000000000350ee0
+[  100.869106] Call Trace:
+[  100.871555]  <TASK>
+[  100.873655]  ? asm_sysvec_reschedule_ipi+0x12/0x20
+[  100.878449]  CalculateSwathAndDETConfiguration+0x1a3/0x6dd
+[  100.883937]  dml31_ModeSupportAndSystemConfigurationFull+0x2ce4/0x76da
+[  100.890467]  ? kallsyms_lookup_buildid+0xc8/0x163
+[  100.895173]  ? kallsyms_lookup_buildid+0xc8/0x163
+[  100.899874]  ? __sprint_symbol+0x80/0x135
+[  100.903883]  ? dm_update_plane_state+0x3f9/0x4d2
+[  100.908500]  ? symbol_string+0xb7/0xde
+[  100.912250]  ? number+0x145/0x29b
+[  100.915566]  ? vsnprintf+0x341/0x5ff
+[  100.919141]  ? desc_read_finalized_seq+0x39/0x87
+[  100.923755]  ? update_load_avg+0x1b9/0x607
+[  100.927849]  ? compute_mst_dsc_configs_for_state+0x7d/0xd5b
+[  100.933416]  ? fetch_pipe_params+0xa4d/0xd0c
+[  100.937686]  ? dc_fpu_end+0x3d/0xa8
+[  100.941175]  dml_get_voltage_level+0x16b/0x180
+[  100.945619]  dcn30_internal_validate_bw+0x10e/0x89b
+[  100.950495]  ? dcn31_validate_bandwidth+0x68/0x1fc
+[  100.955285]  ? resource_build_scaling_params+0x98b/0xb8c
+[  100.960595]  ? dcn31_validate_bandwidth+0x68/0x1fc
+[  100.965384]  dcn31_validate_bandwidth+0x9a/0x1fc
+[  100.970001]  dc_validate_global_state+0x238/0x295
+[  100.974703]  amdgpu_dm_atomic_check+0x9c1/0xbce
+[  100.979235]  ? _printk+0x59/0x73
+[  100.982467]  drm_atomic_check_only+0x403/0x78b
+[  100.986912]  drm_mode_atomic_ioctl+0x49b/0x546
+[  100.991358]  ? drm_ioctl+0x1c1/0x3b3
+[  100.994936]  ? drm_atomic_set_property+0x92a/0x92a
+[  100.999725]  drm_ioctl_kernel+0xdc/0x149
+[  101.003648]  drm_ioctl+0x27f/0x3b3
+[  101.007051]  ? drm_atomic_set_property+0x92a/0x92a
+[  101.011842]  amdgpu_drm_ioctl+0x49/0x7d
+[  101.015679]  __se_sys_ioctl+0x7c/0xb8
+[  101.015685]  do_syscall_64+0x5f/0xb8
+[  101.015690]  ? __irq_exit_rcu+0x34/0x96
 
+[How]
+It calles populate_dml_pipes which uses doubles to initialize.
+Adding FPU protection avoids context switch and probable loss of vba context
+as there is potential contention while drm debug logs are enabled.
+
+Signed-off-by: CHANDAN VURDIGERE NATARAJ <chandan.vurdigerenataraj@amd.com>
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
-Cc: Tim Gardner <tim.gardner@canonical.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Fixes: d5ac07dfbd2b ("qed: Initialize debug string array")
-Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
-Signed-off-by: Alok Prasad <palok@marvell.com>
-Signed-off-by: Ariel Elior <aelior@marvell.com>
-Signed-off-by: Manish Chopra <manishc@marvell.com>
-Reviewed-by: Tim Gardner <tim.gardner@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qed/qed_debug.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/qlogic/qed/qed_debug.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_debug.c
-@@ -489,7 +489,7 @@ struct split_type_defs {
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -2013,7 +2013,9 @@ bool dcn31_validate_bandwidth(struct dc
  
- #define STATIC_DEBUG_LINE_DWORDS	9
+ 	BW_VAL_TRACE_COUNT();
  
--#define NUM_COMMON_GLOBAL_PARAMS	11
-+#define NUM_COMMON_GLOBAL_PARAMS	10
++	DC_FP_START();
+ 	out = dcn30_internal_validate_bw(dc, context, pipes, &pipe_cnt, &vlevel, fast_validate);
++	DC_FP_END();
  
- #define MAX_RECURSION_DEPTH		10
- 
+ 	// Disable fast_validate to set min dcfclk in alculate_wm_and_dlg
+ 	if (pipe_cnt == 0)
 
 

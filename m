@@ -2,96 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEFE4FEB82
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8C94FEB6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiDLX3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S230332AbiDLX35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiDLX2Y (ORCPT
+        with ESMTP id S231479AbiDLX20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:28:24 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097449F6D5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:32:01 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 125so18488137pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:32:01 -0700 (PDT)
+        Tue, 12 Apr 2022 19:28:26 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA5A0BDE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:32:16 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id b21so114200ljf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:32:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=UTSp/G8zwV18QcS++FuQzWULt0VtGmmOqsMfzG5ErkA=;
-        b=2u8RZR5Z/ycl0/rlZlTpBfbAQMR7bXJ9y/kQiA4x/saJN2+hoVZnRddqJRcYY7lb2v
-         Bjodb+LUw3QTYFHpteR0dVcP6+jjnQlsCS2yVTUPgAvAxhQH75k3PFMoYpY6TcXVJXKy
-         JudGJnkgu6CrhOQLuBs8YxpJVIjKnGliYLhm3kWUrWEIfz+27mq+rL0MLrS8sbQXWZrI
-         TM3hM45jKo3JLLTbPZWOzw4mttlmyYdOIXO71hIow4aJYgK5BDO+uhK9qlDEA1o4UzPc
-         MC44eMEGnQEArcYYjgJJcZcNJr56zFC6KsUykNSU1QOvOTGRE6FBdf8bZjZO/OGZ7EQ4
-         tqnQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FsJYLxOhIxt3rQLA+O/P6SUgZEOQeFz25qq7q/fcHi8=;
+        b=lTexwf1HxdZGAcVTWoD0ugTlac61PvCWW3F8HQtXKOmX3JezT10nb4HZtZdWAwyAwK
+         JAdEJHFK9RQ/adANwbDQRAaFvoWqugCSX+rmZpNxYgLLIvBDFcubPsVUTYWzT2US476a
+         Kn4Syv5auhCIo1tQNRvXnWTtVK/P4WbvG+TOUgy5Q2N1L1Wfqdfw5uxG1aLNJA2OceYV
+         8aIWX1aPlJcZRtT6uyUE55A1cT1nC1sNHsziyzGUCqvrktoKiX14f2a20EX+erSlVdie
+         Ho4JypLz4jjjI+vJwFUGBiYcsPyGkJJC2E13XFQoTGMcO9aL6gUabeo6bomqYDjTn/XL
+         MfdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=UTSp/G8zwV18QcS++FuQzWULt0VtGmmOqsMfzG5ErkA=;
-        b=iGSh2YW5kqdh58rWMKvLwKRSA3b+LNAnf56GCJTqzyJDyaF81AluhuhrEcwjb2v8SS
-         0zpI9HgLs9ueA3vX9hXcCToqnc/Dnwq5I13QCIcnhEWbnMQmwQEHs5w0f7Y+03jqK12+
-         C5EKjX9sW7btkIxlYm9TX4sZPJeURypGXWmpzDCNAfu/sy8w7izONGTBVXit6frY9wDd
-         BrxYWVxy7dWCnTrP25cjFlghdSsb3ZwhKt9kX+p80YBuKDhPVuBS4hIcO/IOLpa9l+ym
-         V1gjvDTSZumZ4Gv8Th/TJbXgNIxs1EkzqkaBtFvV1Kdeyd6W1+R2gB8vjkpKY0APGgf4
-         BUmg==
-X-Gm-Message-State: AOAM531P2/RzKbd8qhc3WsjB0jvACevDlWkSVAHpsOydl7llkZCcdhfX
-        aJ6zvf50l91eoA5YvrxlvshWYg==
-X-Google-Smtp-Source: ABdhPJxfJJwMFnMw12ISX69ykkGJykL+olL9K1M/959vnjtHTUaLHqNf2JTnUA5fym5wfUqCsaxWhQ==
-X-Received: by 2002:a65:6a07:0:b0:39d:8c35:426b with SMTP id m7-20020a656a07000000b0039d8c35426bmr5415538pgu.171.1649802720473;
-        Tue, 12 Apr 2022 15:32:00 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001ca2f87d271sm535902pjp.15.2022.04.12.15.31.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:31:59 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     alobakin@pm.me, linux-crypto@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org
-Cc:     bvanassche@acm.org, linux-kernel@vger.kernel.org, kch@nvidia.com,
-        kbusch@kernel.org, Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, martin.petersen@oracle.com,
-        Arnd Bergmann <arnd@arndb.de>
-In-Reply-To: <20220412215220.75677-1-alobakin@pm.me>
-References: <20220412215220.75677-1-alobakin@pm.me>
-Subject: Re: [PATCH RESEND] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
-Message-Id: <164980271890.301666.4533609890818235558.b4-ty@kernel.dk>
-Date:   Tue, 12 Apr 2022 16:31:58 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FsJYLxOhIxt3rQLA+O/P6SUgZEOQeFz25qq7q/fcHi8=;
+        b=6zwdPRWrWLK9+5oQRRs8IhALXvlc3PZwsZuRI+VtLuYqGMbkb3kQCY/1SEsMXc+4no
+         EVF+zZCFxwi2I+vBrUUWFzRJtl6/VAkbtDrtn2vkkppEvbNUCxn5ej2+o5PmUuonBuxa
+         pyFj2AOAouK0TPgAjnqhesVlOshxGjRaGrt3aVBvEDSP1wKevA/foQiXYpZ9audtl8pi
+         st9gOEMxGmvHeE3kY4zkmrpJSbB+7dPWCQmAGFGaQ/LVGWYVdryvZV3AYVBYZvm3eUQz
+         SCFh+Thphu70mbgKtP+L6zT+0QKnZJ+13XHKFf0dK6Ob/H+4NpSDUQtGILEzv5YaPujs
+         e1Dg==
+X-Gm-Message-State: AOAM532pGGeGuf2P7lexUTAqFuHjTMNrWuxe72Qyp/uqhkj+VMKrAcU9
+        h5DtiiupJ0MTo0zT48ViQcMkUNJYyHcbCFziXQ8=
+X-Google-Smtp-Source: ABdhPJyotQc5lx8nzjPYQvWzHV1dNOIG+D0mdNU459MdDr2om1lc6UhX9ewBqaAIaX3WVyEVwQZVknBGkIfV+hqY9gg=
+X-Received: by 2002:a05:651c:ba0:b0:24b:6046:3f24 with SMTP id
+ bg32-20020a05651c0ba000b0024b60463f24mr8499467ljb.460.1649802734687; Tue, 12
+ Apr 2022 15:32:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412043823.57037-1-harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20220412043823.57037-1-harshit.m.mogalapalli@oracle.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 12 Apr 2022 17:32:03 -0500
+Message-ID: <CAH2r5mvBH8wO9rS2UwCpgjbhcLp89-RLbr1wxK76Pj=OprKwOA@mail.gmail.com>
+Subject: Re: [PATCH] cifs: potential buffer overflow in handling symlinks
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Steve French <sfrench@samba.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 21:59:16 +0000, Alexander Lobakin wrote:
-> While testing the new macros for working with 48 bit containers,
-> I faced a weird problem:
-> 
-> 32 + 16: 0x2ef6e8da 0x79e60000
-> 48: 0xffffe8da + 0x79e60000
-> 
-> All the bits starting from the 32nd were getting 1d in 9/10 cases.
-> The debug showed:
-> 
-> [...]
+Wouldn't it be easier and clearer to do the compare vs the maximum len ie
 
-Applied, thanks!
+if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
 
-[1/1] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
-      commit: b97687527be85a55e12804c98745c5619eadcc32
+instead of
 
-Best regards,
+if (link_len > buf_len - CIFS_MF_SYMLINK_LINK_OFFSET)
+
+since buf_len is  CIFS_MF_SYMLINK_FILE_SIZE and looking at link.c line
+26 and 27 this means we can use CIFS_MF_SYMLINK_LINK_OFFSET for the
+comparison:
+
+#define CIFS_MF_SYMLINK_LINK_MAXLEN (1024)
+#define CIFS_MF_SYMLINK_FILE_SIZE \
+        (CIFS_MF_SYMLINK_LINK_OFFSET + CIFS_MF_SYMLINK_LINK_MAXLEN)
+
+On Tue, Apr 12, 2022 at 1:01 AM Harshit Mogalapalli
+<harshit.m.mogalapalli@oracle.com> wrote:
+>
+> Smatch printed a warning:
+>         arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
+>         __memcpy() 'dctx->buf' too small (16 vs u32max)
+>
+> It's caused because Smatch marks 'link_len' as untrusted since it comes
+> from sscanf(). Add a check to ensure that 'link_len' is not larger than
+> the size of the 'link_str' buffer.
+>
+> Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+>  fs/cifs/link.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/cifs/link.c b/fs/cifs/link.c
+> index 852e54e..ebfedae 100644
+> --- a/fs/cifs/link.c
+> +++ b/fs/cifs/link.c
+> @@ -85,6 +85,9 @@
+>         if (rc != 1)
+>                 return -EINVAL;
+>
+> +       if (link_len > buf_len - CIFS_MF_SYMLINK_LINK_OFFSET)
+> +               return -EINVAL;
+> +
+>         rc = symlink_hash(link_len, link_str, md5_hash);
+>         if (rc) {
+>                 cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+> --
+> 1.8.3.1
+>
+
+
 -- 
-Jens Axboe
+Thanks,
 
-
+Steve

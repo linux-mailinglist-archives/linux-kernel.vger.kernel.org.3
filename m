@@ -2,100 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67E74FE575
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491AE4FE573
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbiDLP6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S1350905AbiDLP6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357469AbiDLP5R (ORCPT
+        with ESMTP id S1349079AbiDLP6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:57:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB18388
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:54:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40D2ACE1F65
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0B4C385A1;
-        Tue, 12 Apr 2022 15:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649778889;
-        bh=dbQHjtWTndQ3IhJbJ7Bf8ue3XoQqen/tZP8psUGBdro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D0Flk52zzKTiOJtrDbgYOw3HQZfvDWYR5IKWnmBiBv05GWrNgJEFRwVa7lDxf2EDo
-         SZIZG3XhBYGNiBN8PR23PBJWk6w73PpfhJ23BSXmSq0vypF4dM+TRah0cQD6APe0xP
-         zZBeatO+KMyPwMoUvG1R1aTl//Qvq68wnbq4gPXw=
-Date:   Tue, 12 Apr 2022 17:54:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
-Cc:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: vme: Adjusted VME_USER in Kconfig
-Message-ID: <YlWgxjZk8kiwARtL@kroah.com>
-References: <20220401050045.3686663-1-codeagain@codeagain.dev>
- <YkaW0ThT8Ah3z0wW@kroah.com>
- <YkaXRpIElW1BwKGb@kroah.com>
- <37e5203d1efd310ea82cf91c18c6a07eea743ac7.camel@codeagain.dev>
- <Ykl/iBR+pDaaLImA@kroah.com>
- <20220412151432.zsdxrag7myyzgv6o@AN5Bruno>
+        Tue, 12 Apr 2022 11:58:02 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC63D26130
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:55:37 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id s18so15760666ejr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R41hcNskYvCznNDmOyxQUN5KldJzQl0F7yh3jWVjHMg=;
+        b=nM/Cqb83xekaaMw+WCaocT6vW9NU9dez6JLdVXMOsiig3P2zQkG/QAiqrUf1Wv1rMX
+         dTpfdKVFsSoRifIR/ubBGHmvVbIglUJnv55DxQnpLCJ8Pd7RaQAfzN6/N579TboBOFXC
+         YankKB127eLO/nKoV8GAsEVzIQoe32h+hFW98=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R41hcNskYvCznNDmOyxQUN5KldJzQl0F7yh3jWVjHMg=;
+        b=pw3u9THRO+8q9tBbJVcO39FtLmNXNmNofjLD/6uDR5OL9AFJhMgkxlWCfoB8c0rKSd
+         +kXP4O470bmHhqIuZDmB8wZFePCWOp1wqJnTJMwngBPpAAwiyp6OObSu7/s6v/SNYILn
+         TWQzs+jX2XFcQda5QVvmwfezd3NTBEnsGYlDOtscXTkySIU/zj0DJJBA+GnRSNTZEoJ6
+         ZA7xd8tKsL44ccyD1pGsmOWvh5YwloX1kzOafYmSdgTIiuAW5IWmXbbrwvYu3Ofy1fG6
+         EWnJWjTQmDHDYXhGwnqVyxOqrhHIyrc3a0T7JD6s4PxF9XzeOIhd5W4SOC9q6cuKomCI
+         3P7w==
+X-Gm-Message-State: AOAM532X1FqI6JqkE+MJjUc5JeOkzFG6jC64mbaW5b5GVR1bCUhcTThP
+        sN3zW7QJGpQjEJDN8zlNRMSNKw==
+X-Google-Smtp-Source: ABdhPJxIUWG9bOo8PxIdZSIbsvvUVdLtTbwRKK0JGOPVVgnNsu4G5KJyzmPQDVmYsrPKQKk8aeebAg==
+X-Received: by 2002:a17:906:730c:b0:6e6:c512:49c8 with SMTP id di12-20020a170906730c00b006e6c51249c8mr35471265ejc.405.1649778936500;
+        Tue, 12 Apr 2022 08:55:36 -0700 (PDT)
+Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id jl28-20020a17090775dc00b006e05cdf3a95sm13354161ejc.163.2022.04.12.08.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 08:55:35 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: dsa: realtek: fix Kconfig to assure consistent driver linkage
+Date:   Tue, 12 Apr 2022 17:55:27 +0200
+Message-Id: <20220412155527.1824118-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412151432.zsdxrag7myyzgv6o@AN5Bruno>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:14:32PM -0300, Bruno Moreira-Guedes wrote:
-> On Sun, Apr 03, 2022 at 01:05:44PM +0200, Greg Kroah-Hartman wrote:
-> > 
-> >On Fri, Apr 01, 2022 at 03:21:50PM -0300, Bruno wrote:
-> >> With my tests in my, I have found two other things that I think are
-> >> remarkable to mention. First one is a missing `depends on` line for
-> >> `VME_BRIDGE` in drivers/staging/vme/devices/Kconfig, not visible
-> >> because they were in the same tree, but now unveiled. I'm fixing it,
-> >> do you think it's best to add it in the same patch?
-> > 
-> > Make that a second patch, and resend it as part of a patch series since
-> > your first patch here is gone from my queue.
-> 
-> This patch is already sent, so I'll trim most of this message to avoid
-> duplicating the discussions. There's only one thing I'd like some input
-> first, if you don't mind.
-> 
-> >> Do you think it would be interesting for a future patch to provide
-> >> some output when drivers from the staging tree are present in the
-> >> running kernel image?
-> > 
-> > If you can figure out how to do so, that would be interesting to see.
-> I think I might have figured out. In "include/modules.h" and
-> "include/init.h" I happened to notice the driver initialization is
-> handled by some macros. After some inspection through gcc -E and looking
-> how they are defined, I figured out a scenario (when MODULE is not
-> defined) where the module_init() macro is defined as (among other
-> things) an inline initcall function that wraps the driver initialization
-> function.
-> 
-> So I thought about implementing it by creating a -DSTAGING flag in 
-> drivers/staging/Makefile, and then using this macro to make an #ifdef
-> STAGING to add a similar inline wrapping function, except that in this
-> case the function makes a pr_warning() before calling the initialization
-> function.
-> 
-> Do you think it would be a good way of solving that?
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Yes, that would be a possible way, try it and see!
+The kernel test robot reported a build failure:
 
-greg k-h
+or1k-linux-ld: drivers/net/dsa/realtek/realtek-smi.o:(.rodata+0x16c): undefined reference to `rtl8366rb_variant'
+
+... with the following build configuration:
+
+CONFIG_NET_DSA_REALTEK=y
+CONFIG_NET_DSA_REALTEK_SMI=y
+CONFIG_NET_DSA_REALTEK_RTL8365MB=y
+CONFIG_NET_DSA_REALTEK_RTL8366RB=m
+
+The problem here is that the realtek-smi interface driver gets built-in,
+while the rtl8366rb switch subdriver gets built as a module, hence the
+symbol rtl8366rb_variant is not reachable when defining the OF device
+table in the interface driver.
+
+The Kconfig dependencies don't help in this scenario because they just
+say that the subdriver(s) depend on at least one interface driver. In
+fact, the subdrivers don't depend on the interface drivers at all, and
+can even be built even in their absence. Somewhat strangely, the
+interface drivers can also be built in the absence of any subdriver,
+BUT, if a subdriver IS enabled, then it must be reachable according to
+the linkage of the interface driver: effectively what the IS_REACHABLE()
+macro achieves. If it is not reachable, the above kind of linker error
+will be observed.
+
+Rather than papering over the above build error by simply using
+IS_REACHABLE(), we can do a little better and admit that it is actually
+the interface drivers that have a dependency on the subdrivers. So this
+patch does exactly that. Specifically, we ensure that:
+
+1. The interface drivers' Kconfig symbols must have a value no greater
+   than the value of any subdriver Kconfig symbols.
+
+2. The subdrivers should by default enable both interface drivers, since
+   most users probably want at least one of them; those interface
+   drivers can be explicitly disabled however.
+
+What this doesn't do is prevent a user from building only a subdriver,
+without any interface driver. To that end, add an additional line of
+help in the menu to guide users in the right direction.
+
+Link: https://lore.kernel.org/all/202204110757.XIafvVnj-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: aac94001067d ("net: dsa: realtek: add new mdio interface for drivers")
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+
+Note that the Fixes: tag could arguably go back to: 
+
+765c39a4fafe ("net: dsa: realtek: convert subdrivers into modules")
+
+... but this would not help the stable branches, since the following
+commit (which is the chosen point of my Fixes: tag) changes things a
+lot. I will have to send a separate backport for stable.
+
+---
+ drivers/net/dsa/realtek/Kconfig | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/net/dsa/realtek/Kconfig b/drivers/net/dsa/realtek/Kconfig
+index 1aa79735355f..060165a85fb7 100644
+--- a/drivers/net/dsa/realtek/Kconfig
++++ b/drivers/net/dsa/realtek/Kconfig
+@@ -9,34 +9,46 @@ menuconfig NET_DSA_REALTEK
+ 	help
+ 	  Select to enable support for Realtek Ethernet switch chips.
+ 
++	  Note that at least one interface driver must be enabled for the
++	  subdrivers to be loaded. Moreover, an interface driver cannot achieve
++	  anything without at least one subdriver enabled.
++
++if NET_DSA_REALTEK
++
+ config NET_DSA_REALTEK_MDIO
+-	tristate "Realtek MDIO connected switch driver"
+-	depends on NET_DSA_REALTEK
++	tristate "Realtek MDIO interface driver"
+ 	depends on OF
++	depends on NET_DSA_REALTEK_RTL8365MB || NET_DSA_REALTEK_RTL8366RB
++	depends on NET_DSA_REALTEK_RTL8365MB || !NET_DSA_REALTEK_RTL8365MB
++	depends on NET_DSA_REALTEK_RTL8366RB || !NET_DSA_REALTEK_RTL8366RB
+ 	help
+ 	  Select to enable support for registering switches configured
+ 	  through MDIO.
+ 
+ config NET_DSA_REALTEK_SMI
+-	tristate "Realtek SMI connected switch driver"
+-	depends on NET_DSA_REALTEK
++	tristate "Realtek SMI interface driver"
+ 	depends on OF
++	depends on NET_DSA_REALTEK_RTL8365MB || NET_DSA_REALTEK_RTL8366RB
++	depends on NET_DSA_REALTEK_RTL8365MB || !NET_DSA_REALTEK_RTL8365MB
++	depends on NET_DSA_REALTEK_RTL8366RB || !NET_DSA_REALTEK_RTL8366RB
+ 	help
+ 	  Select to enable support for registering switches connected
+ 	  through SMI.
+ 
+ config NET_DSA_REALTEK_RTL8365MB
+ 	tristate "Realtek RTL8365MB switch subdriver"
+-	depends on NET_DSA_REALTEK
+-	depends on NET_DSA_REALTEK_SMI || NET_DSA_REALTEK_MDIO
++	imply NET_DSA_REALTEK_SMI
++	imply NET_DSA_REALTEK_MDIO
+ 	select NET_DSA_TAG_RTL8_4
+ 	help
+ 	  Select to enable support for Realtek RTL8365MB-VC and RTL8367S.
+ 
+ config NET_DSA_REALTEK_RTL8366RB
+ 	tristate "Realtek RTL8366RB switch subdriver"
+-	depends on NET_DSA_REALTEK
+-	depends on NET_DSA_REALTEK_SMI || NET_DSA_REALTEK_MDIO
++	imply NET_DSA_REALTEK_SMI
++	imply NET_DSA_REALTEK_MDIO
+ 	select NET_DSA_TAG_RTL4_A
+ 	help
+-	  Select to enable support for Realtek RTL8366RB
++	  Select to enable support for Realtek RTL8366RB.
++
++endif
+-- 
+2.35.1
+

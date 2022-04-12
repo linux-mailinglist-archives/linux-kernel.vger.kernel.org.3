@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA314FD56B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140E54FD5CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354569AbiDLHS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S1376746AbiDLHoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352313AbiDLHFJ (ORCPT
+        with ESMTP id S1354179AbiDLHRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C02473AC;
-        Mon, 11 Apr 2022 23:48:00 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A2E26AF0;
+        Mon, 11 Apr 2022 23:58:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDCF60A21;
-        Tue, 12 Apr 2022 06:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1975C385A6;
-        Tue, 12 Apr 2022 06:47:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34A20B81B4E;
+        Tue, 12 Apr 2022 06:58:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6FDC385A1;
+        Tue, 12 Apr 2022 06:58:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746080;
-        bh=5c7qbwUg4dhWQv9ZheJcLAo+7noBOw8SDyf2a6K/Dws=;
+        s=korg; t=1649746705;
+        bh=9xQ3uX4h9l1REPAIIrIh96bR7xnygsUSU5H1Cu9F32g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k3/rxo10Es0i6JtjuROMkO7YdX+y3JgwXchohxgJcq2Aop9JkntNk/tvYjaJ+WwYA
-         EH2ANXZR5+iX0tjekHC7mb6EZsOJt5OI5taNs/p4yfCLM+3b+mT4gfDMENDNBL49vW
-         gpt+olEEtlhLeNkcPKo9p4t4u0n80061RCsiu7Rk=
+        b=N0+8HHgZTO2TXGHDLvbqtMYBsW2LTdR/cO7GK/dkfZaMrTXqJyHqo0kkCTWU2ZlZE
+         xdq9MHmmBGhZwSwV7dZK5MfoKRMM+/wtdrh/CcULmzZjc6OX+JGdGquf5NLMJX9RZj
+         FQPPXoWq711NXX1cdMp12y8z/vVlS8vgw3TPMRvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 154/277] vdpa/mlx5: Rename control VQ workqueue to vdpa wq
+Subject: [PATCH 5.16 100/285] platform/x86: hp-wmi: Fix 0x05 error code reported by several WMI calls
 Date:   Tue, 12 Apr 2022 08:29:17 +0200
-Message-Id: <20220412062946.496512297@linuxfoundation.org>
+Message-Id: <20220412062946.552107925@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +55,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eli Cohen <elic@nvidia.com>
+From: Jorge Lopez <jorge.lopez2@hp.com>
 
-[ Upstream commit 218bdd20e56cab41a68481bc10c551ae3e0a24fb ]
+[ Upstream commit be9d73e64957bbd31ee9a0d11adc0f720974c558 ]
 
-A subesequent patch will use the same workqueue for executing other
-work not related to control VQ. Rename the workqueue and the work queue
-entry used to convey information to the workqueue.
+Several WMI queries leverage hp_wmi_read_int function to read their
+data. hp_wmi_read_int function was corrected in a previous patch.
+Now, this function invokes hp_wmi_perform_query with input parameter
+of size zero and the output buffer of size 4.
 
-Signed-off-by: Eli Cohen <elic@nvidia.com>
-Link: https://lore.kernel.org/r/20210909123635.30884-3-elic@nvidia.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+WMI commands calling hp_wmi_perform_query with input buffer size value
+of zero are listed below.
+
+HPWMI_DISPLAY_QUERY
+HPWMI_HDDTEMP_QUERY
+HPWMI_ALS_QUERY
+HPWMI_HARDWARE_QUERY
+HPWMI_WIRELESS_QUERY
+HPWMI_BIOS_QUERY
+HPWMI_FEATURE_QUERY
+HPWMI_HOTKEY_QUERY
+HPWMI_FEATURE2_QUERY
+HPWMI_WIRELESS2_QUERY
+HPWMI_POSTCODEERROR_QUERY
+HPWMI_THERMAL_PROFILE_QUERY
+HPWMI_FAN_SPEED_MAX_GET_QUERY
+
+Invoking those WMI commands with an input buffer size greater
+than zero will cause error 0x05 to be returned.
+
+All WMI commands executed by the driver were reviewed and changes
+were made to ensure the expected input and output buffer size match
+the WMI specification.
+
+Changes were validated on a HP ZBook Workstation notebook,
+HP EliteBook x360, and HP EliteBook 850 G8.  Additional
+validation was included in the test process to ensure no other
+commands were incorrectly handled.
+
+Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+Link: https://lore.kernel.org/r/20220310210853.28367-4-jorge.lopez2@hp.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vdpa/mlx5/core/mlx5_vdpa.h | 2 +-
- drivers/vdpa/mlx5/net/mlx5_vnet.c  | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/platform/x86/hp-wmi.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-index 01a848adf590..81dc3d88d3dd 100644
---- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-+++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-@@ -63,7 +63,7 @@ struct mlx5_control_vq {
- 	unsigned short head;
- };
+diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+index f822ef6eb93c..88f0bfd6ecf1 100644
+--- a/drivers/platform/x86/hp-wmi.c
++++ b/drivers/platform/x86/hp-wmi.c
+@@ -330,7 +330,7 @@ static int hp_wmi_get_fan_speed(int fan)
+ 	char fan_data[4] = { fan, 0, 0, 0 };
  
--struct mlx5_ctrl_wq_ent {
-+struct mlx5_vdpa_wq_ent {
- 	struct work_struct work;
- 	struct mlx5_vdpa_dev *mvdev;
- };
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index f77a611f592f..f769e2dc6d26 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -1573,14 +1573,14 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 	int ret = hp_wmi_perform_query(HPWMI_FAN_SPEED_GET_QUERY, HPWMI_GM,
+-				       &fan_data, sizeof(fan_data),
++				       &fan_data, sizeof(char),
+ 				       sizeof(fan_data));
+ 
+ 	if (ret != 0)
+@@ -399,7 +399,7 @@ static int omen_thermal_profile_set(int mode)
+ 		return -EINVAL;
+ 
+ 	ret = hp_wmi_perform_query(HPWMI_SET_PERFORMANCE_MODE, HPWMI_GM,
+-				   &buffer, sizeof(buffer), sizeof(buffer));
++				   &buffer, sizeof(buffer), 0);
+ 
+ 	if (ret)
+ 		return ret < 0 ? ret : -EINVAL;
+@@ -436,7 +436,7 @@ static int hp_wmi_fan_speed_max_set(int enabled)
+ 	int ret;
+ 
+ 	ret = hp_wmi_perform_query(HPWMI_FAN_SPEED_MAX_SET_QUERY, HPWMI_GM,
+-				   &enabled, sizeof(enabled), sizeof(enabled));
++				   &enabled, sizeof(enabled), 0);
+ 
+ 	if (ret)
+ 		return ret < 0 ? ret : -EINVAL;
+@@ -449,7 +449,7 @@ static int hp_wmi_fan_speed_max_get(void)
+ 	int val = 0, ret;
+ 
+ 	ret = hp_wmi_perform_query(HPWMI_FAN_SPEED_MAX_GET_QUERY, HPWMI_GM,
+-				   &val, sizeof(val), sizeof(val));
++				   &val, 0, sizeof(val));
+ 
+ 	if (ret)
+ 		return ret < 0 ? ret : -EINVAL;
+@@ -461,7 +461,7 @@ static int __init hp_wmi_bios_2008_later(void)
  {
- 	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
- 	struct virtio_net_ctrl_hdr ctrl;
--	struct mlx5_ctrl_wq_ent *wqent;
-+	struct mlx5_vdpa_wq_ent *wqent;
- 	struct mlx5_vdpa_dev *mvdev;
- 	struct mlx5_control_vq *cvq;
- 	struct mlx5_vdpa_net *ndev;
- 	size_t read, write;
- 	int err;
+ 	int state = 0;
+ 	int ret = hp_wmi_perform_query(HPWMI_FEATURE_QUERY, HPWMI_READ, &state,
+-				       sizeof(state), sizeof(state));
++				       0, sizeof(state));
+ 	if (!ret)
+ 		return 1;
  
--	wqent = container_of(work, struct mlx5_ctrl_wq_ent, work);
-+	wqent = container_of(work, struct mlx5_vdpa_wq_ent, work);
- 	mvdev = wqent->mvdev;
- 	ndev = to_mlx5_vdpa_ndev(mvdev);
- 	cvq = &mvdev->cvq;
-@@ -1632,7 +1632,7 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
- 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
- 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
- 	struct mlx5_vdpa_virtqueue *mvq;
--	struct mlx5_ctrl_wq_ent *wqent;
-+	struct mlx5_vdpa_wq_ent *wqent;
+@@ -472,7 +472,7 @@ static int __init hp_wmi_bios_2009_later(void)
+ {
+ 	u8 state[128];
+ 	int ret = hp_wmi_perform_query(HPWMI_FEATURE2_QUERY, HPWMI_READ, &state,
+-				       sizeof(state), sizeof(state));
++				       0, sizeof(state));
+ 	if (!ret)
+ 		return 1;
  
- 	if (!is_index_valid(mvdev, idx))
- 		return;
-@@ -2502,7 +2502,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name)
+@@ -550,7 +550,7 @@ static int hp_wmi_rfkill2_refresh(void)
+ 	int err, i;
+ 
+ 	err = hp_wmi_perform_query(HPWMI_WIRELESS2_QUERY, HPWMI_READ, &state,
+-				   sizeof(state), sizeof(state));
++				   0, sizeof(state));
  	if (err)
- 		goto err_mr;
+ 		return err;
  
--	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_ctrl_wq");
-+	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_wq");
- 	if (!mvdev->wq) {
- 		err = -ENOMEM;
- 		goto err_res2;
+@@ -639,7 +639,7 @@ static ssize_t als_store(struct device *dev, struct device_attribute *attr,
+ 		return ret;
+ 
+ 	ret = hp_wmi_perform_query(HPWMI_ALS_QUERY, HPWMI_WRITE, &tmp,
+-				       sizeof(tmp), sizeof(tmp));
++				       sizeof(tmp), 0);
+ 	if (ret)
+ 		return ret < 0 ? ret : -EINVAL;
+ 
+@@ -660,9 +660,9 @@ static ssize_t postcode_store(struct device *dev, struct device_attribute *attr,
+ 	if (clear == false)
+ 		return -EINVAL;
+ 
+-	/* Clear the POST error code. It is kept until until cleared. */
++	/* Clear the POST error code. It is kept until cleared. */
+ 	ret = hp_wmi_perform_query(HPWMI_POSTCODEERROR_QUERY, HPWMI_WRITE, &tmp,
+-				       sizeof(tmp), sizeof(tmp));
++				       sizeof(tmp), 0);
+ 	if (ret)
+ 		return ret < 0 ? ret : -EINVAL;
+ 
+@@ -952,7 +952,7 @@ static int __init hp_wmi_rfkill2_setup(struct platform_device *device)
+ 	int err, i;
+ 
+ 	err = hp_wmi_perform_query(HPWMI_WIRELESS2_QUERY, HPWMI_READ, &state,
+-				   sizeof(state), sizeof(state));
++				   0, sizeof(state));
+ 	if (err)
+ 		return err < 0 ? err : -EINVAL;
+ 
 -- 
 2.35.1
 

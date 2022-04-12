@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9536C4FD94B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01D44FD96D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382940AbiDLIer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S1387192AbiDLJGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354261AbiDLH0Q (ORCPT
+        with ESMTP id S1359252AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CDA4506A;
-        Tue, 12 Apr 2022 00:06:06 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855032A732;
+        Tue, 12 Apr 2022 00:21:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45B08B81B55;
-        Tue, 12 Apr 2022 07:06:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 207AAC385A1;
-        Tue, 12 Apr 2022 07:06:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 232AF616B2;
+        Tue, 12 Apr 2022 07:21:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348BAC385A1;
+        Tue, 12 Apr 2022 07:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747164;
-        bh=+KzC2is8F+hd1MCMYwzg3ElnC2qKzJPJ/WTEs6GkaaM=;
+        s=korg; t=1649748066;
+        bh=McsC9ZufxaUuzydXB9cDgdwI6fwZUeI+va5tpXteTiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIFHYBiQuh4Lqkr1jtZwaOBgDXy2vG/+7ge8kIWA1uxNa+SDDT0p+oLUwRhsCBmkr
-         HUdGx/SgeXLtQ+TEV2BFT/ife9bzJyqilYa7iS/Sx8bRBUwVPKJ8Au/ZNM54cM3eKO
-         s2/CRHawXSDN6+PlZS3MpHvfHXG/OrUmQxwF5nM4=
+        b=yOeraF9OU7MskwCcYrGjyfTmC89tk33P+8FQxxECXcLZAPy9XMo3jKa50HtFACUDP
+         zrJqeoRgAkrlX7zZSAwQDgizRRS17ayZgFMz3lCoBL8BWwwbPiT/D5vfSIs3HP6kIQ
+         qmLLTp4u5Ug6A61YHr+wSQS1WOq26Q+Hupl1JEMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.16 266/285] rtc: mc146818-lib: fix signedness bug in mc146818_get_time()
-Date:   Tue, 12 Apr 2022 08:32:03 +0200
-Message-Id: <20220412062951.335764095@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.17 307/343] drm/amdgpu/smu10: fix SoC/fclk units in auto mode
+Date:   Tue, 12 Apr 2022 08:32:05 +0200
+Message-Id: <20220412063000.184100798@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 7372971c1be5b7d4fdd8ad237798bdc1d1d54162 upstream.
+commit 2f25d8ce09b7ba5d769c132ba3d4eb84a941d2cb upstream.
 
-The mc146818_get_time() function returns zero on success or negative
-a error code on failure.  It needs to be type int.
+SMU takes clock limits in Mhz units.  socclk and fclk were
+using 10 khz units in some cases.  Switch to Mhz units.
+Fixes higher than required SoC clocks.
 
-Fixes: d35786b3a28d ("rtc: mc146818-lib: change return values of mc146818_get_time()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220111071922.GE11243@kili
+Fixes: 97cf32996c46d9 ("drm/amd/pm: Removed fixed clock in auto mode DPM")
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    2 +-
- include/linux/mc146818rtc.h    |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -33,7 +33,7 @@ bool mc146818_does_rtc_work(void)
- }
- EXPORT_SYMBOL_GPL(mc146818_does_rtc_work);
+--- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
++++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
+@@ -773,13 +773,13 @@ static int smu10_dpm_force_dpm_level(str
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinFclkByFreq,
+ 						hwmgr->display_config->num_display > 3 ?
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk :
++						(data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk / 100) :
+ 						min_mclk,
+ 						NULL);
  
--unsigned int mc146818_get_time(struct rtc_time *time)
-+int mc146818_get_time(struct rtc_time *time)
- {
- 	unsigned char ctrl;
- 	unsigned long flags;
---- a/include/linux/mc146818rtc.h
-+++ b/include/linux/mc146818rtc.h
-@@ -124,7 +124,7 @@ struct cmos_rtc_board_info {
- #endif /* ARCH_RTC_LOCATION */
- 
- bool mc146818_does_rtc_work(void);
--unsigned int mc146818_get_time(struct rtc_time *time);
-+int mc146818_get_time(struct rtc_time *time);
- int mc146818_set_time(struct rtc_time *time);
- 
- #endif /* _MC146818RTC_H */
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinVcn,
+@@ -792,11 +792,11 @@ static int smu10_dpm_force_dpm_level(str
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxFclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk,
++						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxVcn,
 
 

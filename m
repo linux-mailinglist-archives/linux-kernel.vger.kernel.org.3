@@ -2,44 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13C64FD6A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3A74FD85E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391224AbiDLJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S1391238AbiDLJ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382394AbiDLIZD (ORCPT
+        with ESMTP id S229621AbiDLI3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:25:03 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810CF38D;
-        Tue, 12 Apr 2022 00:59:04 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 12 Apr
- 2022 15:59:03 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 12 Apr
- 2022 15:59:02 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Sean Wang <sean.wang@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <dmaengine@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dmaengine: mediatek: mtk-hsdma: use NULL instead of using plain integer as pointer
-Date:   Tue, 12 Apr 2022 15:59:00 +0800
-Message-ID: <1649750340-30777-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 12 Apr 2022 04:29:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E7A57B25;
+        Tue, 12 Apr 2022 01:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB2060B2A;
+        Tue, 12 Apr 2022 08:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6BB9C385A6;
+        Tue, 12 Apr 2022 08:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649750412;
+        bh=rI1k/sfa+9a5NwVgtPTT47Bk8FOYvyqs6IMCVK25154=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CRLmDwD/+RKwsG+kXWpR2PNf3tTZRVxQKFEKsjrmK2eNW5i9jj62BhCHRY9gznJ/q
+         lrThWvCZK2U3r+8xTyJg7JGtxB/9dzNpimv5DPSaCP5LrOVMgBnKSdK+Hmh+aYAET5
+         GE11dOB/qqaauCFK4bCmjo8fsyMNdpJg0HCj1PbSQZYkeXEZ6oi9VnRKYyYYf0fPLu
+         uq8qFJcT/a7fZc8dyiLpxr+hWjWwlLezHKlD9Spnl2r0mgfelQOhIPjb9eXG2TUeML
+         vrSh3lHJoisz6Qf0PVI6jF4F1CCD54sjxNrlvMR0yDvNuELjKFU/CiTzyl506jWqC3
+         AolrbIUA+aO5g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96375E8DBD1;
+        Tue, 12 Apr 2022 08:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] sfc: Fix spelling mistake "writting" -> "writing"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164975041261.9548.15429144260111534049.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Apr 2022 08:00:12 +0000
+References: <20220411032546.2517628-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20220411032546.2517628-1-lv.ruyi@zte.com.cn>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lv.ruyi@zte.com.cn, zealci@zte.com.cn
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,28 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the following sparse warnings:
-drivers/dma/mediatek/mtk-hsdma.c:604:26: warning: Using plain integer
-as NULL pointer
+Hello:
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/dma/mediatek/mtk-hsdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
-index 6ad8afbb95f2..358894e72fba 100644
---- a/drivers/dma/mediatek/mtk-hsdma.c
-+++ b/drivers/dma/mediatek/mtk-hsdma.c
-@@ -601,7 +601,7 @@ static void mtk_hsdma_free_rooms_in_ring(struct mtk_hsdma_device *hsdma)
- 			cb->flag = 0;
- 		}
- 
--		cb->vd = 0;
-+		cb->vd = NULL;
- 
- 		/*
- 		 * Recycle the RXD with the helper WRITE_ONCE that can ensure
+On Mon, 11 Apr 2022 03:25:46 +0000 you wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> There are some spelling mistakes in the comment. Fix it.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - sfc: Fix spelling mistake "writting" -> "writing"
+    https://git.kernel.org/netdev/net-next/c/ac6bef064f71
+
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

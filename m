@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED5F4FE735
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B784FE738
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiDLRgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S1353227AbiDLRhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358356AbiDLRgq (ORCPT
+        with ESMTP id S1358377AbiDLRhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:36:46 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F53227B2D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:34:22 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id q9-20020a056e02106900b002cbc8d479eeso1021136ilj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:34:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=76SE2NB56vXH5NM9G3THUUmZ2Fv37V7kWmVL28ZuXes=;
-        b=vdosceTuCDB8jSH91zQBAo46OgGNjsbNf3GPP+9DqwRbsaLgOV/qdibsL4CCS2A2Jb
-         uyef0G5108kaH1wWbpLP0xxDSrj0JpExBMZkouNA7Q/mnXe9kEWhMLq/OU953tpBENbH
-         53x7NqOqLvDd26brPKnjGelSvM+AsEvUmYcM6picsd9Z+WldV0f2aCtJ1ba6aqd9feDd
-         Y1mANgOOPospu2XGNR6t1G8B9ZxuQCC25zV+B0OyAm+Erzh+nLf6FSJctrgoTe6Z/SiT
-         2qgoP18SQDfOrJJRYizm/a+nBKHxu2K1L6At1reb6ehACtOZXcoByDToyPNGmOb6okbA
-         K0XA==
-X-Gm-Message-State: AOAM533E4KYXoHP9p7m7x/umEqSFXWamae7ML/wNlXmmxZhVVbDB0P7R
-        3LYnYLZBq0Ac8WMbhhXaBBAw9VtNUaA9CT/a9XcwOITlCwOK
-X-Google-Smtp-Source: ABdhPJw7Ru72pObzE9Ta+Gy9/XRzJSF88PI1vo7s+/HcQl1xcbdg6NKzC7f73j9FYrS1PSgL31qv+xV4Q93w8cztjSqRNAGRc0CS
+        Tue, 12 Apr 2022 13:37:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DA347042;
+        Tue, 12 Apr 2022 10:34:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5DB861A2F;
+        Tue, 12 Apr 2022 17:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3194C385A1;
+        Tue, 12 Apr 2022 17:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649784893;
+        bh=O2kmzvOUPNo/Gzjs/O2fY687QJ+m+7OsUjR0dUhc5k8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fypyXBpjYwTXShiykqb0KVjdAhC/Y3ZyjnWI/NsZ19oCbZ35WU5fE+EIKl94sAmoW
+         wGsUG8NkZk2Ztx16kv50pInxKRH+7EyY4r1V8EfmPgAZpikGImH3XfKflDGvXJZket
+         IlugAoQv/Zc7zhyiHMzqowLENOSM+h+5Nv67oSGk=
+Date:   Tue, 12 Apr 2022 19:34:50 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
+Message-ID: <YlW4Ok8uUqitUDIl@kroah.com>
+References: <20220412062942.022903016@linuxfoundation.org>
+ <6d0ce49e-06e8-ce9b-ee8d-8bbabbe398f5@roeck-us.net>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c48:b0:2cb:cba0:f301 with SMTP id
- d8-20020a056e021c4800b002cbcba0f301mr772266ilg.156.1649784861528; Tue, 12 Apr
- 2022 10:34:21 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 10:34:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a095a405dc7878c5@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in ieee80211_tx_h_select_key
-From:   syzbot <syzbot+e550ebeb0bc610768394@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d0ce49e-06e8-ce9b-ee8d-8bbabbe398f5@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,61 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Apr 12, 2022 at 08:39:59AM -0700, Guenter Roeck wrote:
+> On 4/11/22 23:26, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.34 release.
+> > There are 277 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> > Anything received after that time might be too late.
+> > 
+> 
+> 
+> Building powerpc:skiroot_defconfig ... failed
+> --------------
+> Error log:
+> arch/powerpc/lib/code-patching.c:119:19: error: conflicting types for 'unmap_patch_area'; have 'int(long unsigned int)'
+>   119 | static inline int unmap_patch_area(unsigned long addr)
+>       |                   ^~~~~~~~~~~~~~~~
+> arch/powerpc/lib/code-patching.c:51:13: note: previous declaration of 'unmap_patch_area' with type 'void(long unsigned int)'
+>    51 | static void unmap_patch_area(unsigned long addr);
+>       |             ^~~~~~~~~~~~~~~~
+> arch/powerpc/lib/code-patching.c:51:13: error: 'unmap_patch_area' used but never defined [-Werror]
+> 
+> Commit 520c23a20890 ("powerpc/code-patching: Pre-map patch area")
+> is the last patch in a series of patches applied to the file since v5.15.
+> It is not tagged for stable, and it does not include a Fixes: tag.
+> I am not sure if it makes sense to apply it on its own. Copying
+> Michael.
 
-syzbot found the following issue on:
+Yeah, that's not right.  I'll drop it from 5.10 and 5.15 (and older),
+for some reason Sasha skipped 5.16, probably because he saw this build
+error there.
 
-HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b1ddc4f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9ac56d6828346c4e
-dashboard link: https://syzkaller.appspot.com/bug?extid=e550ebeb0bc610768394
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+thanks for the report, I'll push out a -rc2 soon.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e550ebeb0bc610768394@syzkaller.appspotmail.com
-
-=============================
-WARNING: suspicious RCU usage
-5.18.0-rc2-syzkaller #0 Not tainted
------------------------------
-net/mac80211/tx.c:604 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-3 locks held by kworker/u4:7/5407:
- #0: ffff888023e70938 ((wq_completion)phy24){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc90002fffd00 ((work_completion)(&(&data->hw_scan)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff88801c127128 (&data->mutex){+.+.}-{3:3}, at: hw_scan_work+0xbd/0xcf0 drivers/net/wireless/mac80211_hwsim.c:2431
-
-stack backtrace:
-CPU: 0 PID: 5407 Comm: kworker/u4:7 Not tainted 5.18.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: phy24 hw_scan_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- ieee80211_tx_h_select_key+0x6ba/0x14a0 net/mac80211/tx.c:604
- invoke_tx_handlers_early+0x9db/0x1cd0 net/mac80211/tx.c:1798
- invoke_tx_handlers net/mac80211/tx.c:1862 [inline]
- ieee80211_tx_prepare_skb+0x1c0/0x4d0 net/mac80211/tx.c:1885
- hw_scan_work+0x7e8/0xcf0 drivers/net/wireless/mac80211_hwsim.c:2478
- process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h

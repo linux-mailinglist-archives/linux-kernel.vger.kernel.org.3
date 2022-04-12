@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02634FE6D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1121C4FE6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353456AbiDLRaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S1356131AbiDLR2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiDLRaV (ORCPT
+        with ESMTP id S239946AbiDLR21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:30:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC8C53722;
-        Tue, 12 Apr 2022 10:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649784483; x=1681320483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MTrQUb89ytH2QRNrlqQ8N1/cVixUkR7ofVo0qRQ1nuA=;
-  b=XUv67KDU9qqY7sgjYaaWHjegL4dDeARJ6kGurTi7mah4PMF84czutf9s
-   FFrEdOxztbmvTUU8bJMvFnssN+NGOAZf+TiBn7zZyBz3GP28Vkz40xEgF
-   0kPAkwBw7iInkoDSFh5teBPQxWWiaRRR13GNK7DmM37hlm//ljnPttbfA
-   vDIpODirlqEGwUxbcdDe11SUCawmLCI8/5jiCjNa9yx/x9Wy0x+YkGXd3
-   yk4KgbRfCsyB9l7EFv0wmYPbmJV69COTxaGZTqz0bRESXbv0kGLvKYCUF
-   ZTU/TnHdrvAbMj7ikLnMIzzYLoQMoXUJCXcNgMp4pzh4XY5LZ4RhsEJ9C
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260045761"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="260045761"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:26:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="611550097"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 10:26:21 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neKGD-00031g-0G;
-        Tue, 12 Apr 2022 17:25:01 +0000
-Date:   Wed, 13 Apr 2022 01:24:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204130102.YjEnm3E0-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+        Tue, 12 Apr 2022 13:28:27 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B40252B14
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:26:07 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id v12so4422464plv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tVvKuYmXIsa9qahx409eDRhfKlF4vraPbVM4uLa0fmQ=;
+        b=hdpkAq9aJidmb9mmOq0DjZrlkjc+sWw7doSwZu3Xg9C3ghnTPwU0n5q6LG2l4gVm8h
+         PSWw8Ctere/ruqdtzP5yr+v5cPz2XIOsK78xnSWAj9fRC4zhtzswRvv8xmVrZM7BFqJb
+         Joi0QaXGiDKFhq7k4LUEbecNqvJ89Im/GSkRw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tVvKuYmXIsa9qahx409eDRhfKlF4vraPbVM4uLa0fmQ=;
+        b=S1xOl/yczxmEjP7EF+v6ysttEpNwHsNqrwvagdWvOIHKUOvFyJxr35wsOgK56RLnLc
+         h7GxYwlxcupgU3DSwcHtKBhlEnLVdmMPqe+9LbYQmmWKIhEvE0cZNmdR5i/o/B8MBKXA
+         AkNbElkMmR6hL3IYNz0HiIo6OsGJIWgM4CShYyxdS6p3HBFNk/Q6X4TfJwwgic44iaAt
+         siqg1j2/MsYLjtFZYBpJZhivTwxA+tuLGpqug56ezJwFvM2pXV0FLTmRG7M5e90xeUlq
+         0sQN3UCUPU18fRhbOmSqUTas/XqnhfFxP5XSYJbKDsaUSkORjQMlh07atkPzsF3eX2/J
+         MVYg==
+X-Gm-Message-State: AOAM530LqffqA+Z5IdzmETmFo6Pd4jv96orya4O8Kt2yLqhdTcMKrYpY
+        yUfPxPiBXInLSzkdQ7MTLsXw5g==
+X-Google-Smtp-Source: ABdhPJzZSMbWxUWddHHGVZsDw6uI2PwBLfss1TlhHC/JrPo2d6O8Fd7mX9TOQ0R5j0I3P74gCw8DAQ==
+X-Received: by 2002:a17:90b:4b01:b0:1cb:a81a:dc4c with SMTP id lx1-20020a17090b4b0100b001cba81adc4cmr6207491pjb.193.1649784366611;
+        Tue, 12 Apr 2022 10:26:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b18-20020aa78712000000b005060755f2d9sm1523639pfo.139.2022.04.12.10.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:26:06 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 10:26:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] security: don't treat structure as an array of struct
+ hlist_head
+Message-ID: <202204121025.5D16102@keescook>
+References: <20220407175930.471870-1-morbo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220407175930.471870-1-morbo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,56 +70,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On Thu, Apr 07, 2022 at 10:59:30AM -0700, Bill Wendling wrote:
+> The initialization of "security_hook_heads" is done by casting it to
+> another structure pointer type, and treating it as an array of "struct
+> hlist_head" objects. This requires an exception be made in "randstruct",
+> because otherwise it will emit an error, reducing the effectiveness of
+> the hardening technique.
+> 
+> Instead of using a cast, initialize the individual struct hlist_head
+> elements in security_hook_heads explicitly. This removes the need for
+> the cast and randstruct exception.
+> 
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> Cc: Kees Cook <keescook@chromium.org>
 
-I love your patch! Perhaps something to improve:
+Ah! Yes, thanks. This is a good solution for this. I'd rather not have
+any exceptions in the randstruct plugin. :) I'll take this via the
+hardening tree unless anyone objects.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-randconfig-a004-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130102.YjEnm3E0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
-   static const char * const cap_name[] = {
-                             ^
-   1 warning generated.
---
->> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
->> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
---
->> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
-
-
-vim +/cap_name +30 drivers/usb/typec/class.c
-
-    29	
-  > 30	static const char * const cap_name[] = {
-    31		[TYPEC_SINK]		= "sink-capabilities",
-    32		[TYPEC_SOURCE]		= "source-capabilities",
-    33	};
-    34	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook

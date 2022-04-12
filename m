@@ -2,188 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3934FE8A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6788E4FE8A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244968AbiDLTcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
+        id S1358379AbiDLTcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236926AbiDLTck (ORCPT
+        with ESMTP id S245387AbiDLTck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 15:32:40 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F562627;
-        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso3979179pjb.5;
-        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791CD3CFE2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:30:22 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n18so17669356plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Zq+spe0FdFWadyE6Z3vT48KBIBCNRdapmLCCbr+Bbss=;
-        b=X7/E3HjAxYYrn9q175XjZEGnATG+1FFuUmUx7q7Y5C7RT+WZ11r54QARCRer+AiEYZ
-         OOQZlGk4h0GSTRTfg2rFBOB6dkfyU0a2EHefCNvGvfkedBFMhjWKwqhOMkOl8b1khDiD
-         bIa+xQyp2i/tSR64qXNlMuGG0tTv0SJdx1pdMQ6UIkbb6YKOKo0keNv+t4CeP4bGtUS3
-         o52v/ekrSdsRYBbM3gHEkb/Mmgpqrhbk6nxlML1CrixLo9tSuSAYtgg+A6WPSl1Yb5xA
-         gkMozMR3DhjWBSGldxexPnJxldE6+Rn8Ya3iK+xlqomOxx4kPCaY8dvDWNZvJ1UN7WyA
-         BiNw==
+         :content-disposition:in-reply-to;
+        bh=sKmZh3PaYY26BR+B2dRs/R9LlgovoIyv4Z/3LkpHaas=;
+        b=JUDPn7fn8Rx3FHzUo35cOmXSzjdDkCl5t6mkLSekhksynwyH45KuNzU4S/KEOecSK4
+         EckijBrri7O1pTEPsDbxyPvQ1CN3SvrN65GC3o3ta+u7E0IkE/pSqbk4pf+tKmmHcUmo
+         Jj6eBrapJ9GQGnSraNNGpgG8OyZeLzZZBzb/UcQYLDSZYAWXU8+VTjqsWoBfyYIPuFCd
+         BPA6pQFyB6WluM0f1YcCaxEzvdzUYuGR3y8mfK6fyt8VuvP07i9h/X5kHLeE7xcCpniZ
+         m3NvAY2ui3PGprmqlQGwxGxlOsfA0TxvuFtbimhYg8uLGB7c2B4jLjGyAE+bFK60sZ0O
+         noWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Zq+spe0FdFWadyE6Z3vT48KBIBCNRdapmLCCbr+Bbss=;
-        b=TrC95HvFu273Vsz4LrQ5a9TrzfMZH+iTuV3bbjIYtjnG+zSCQJs2z9WYE53lqY5Baw
-         SQ0VUK447OdHvVFtW/+YA/u2pDhUVvx4V4yeKwURXbnqwsALaEmW09QMUOsFcy4UCUga
-         711eZG0CyxLvnTFisIt5QZcUIByTR16KhGqWh+xnFgq3zr0IhQolAZljngy5FZ5PqRtr
-         QfV6yaL6QYISYBgx7Wg2r8JXePdKr60FX/FuSeTua0iNtuQ1J13WBNOX43w77acxBfPq
-         zdjE/O7hiRZIaa3valvomOhZClEi0emLa5vxv66obny81aACX/xGi52hQCH+IqVTH67Y
-         O3Uw==
-X-Gm-Message-State: AOAM530eEjDvkYvs+Hhzkk2LDVlYZR3sxHOumSzSlvFmuCwHTKoJcG6G
-        h+i0kAGgSJjAZovgoBAR0P4=
-X-Google-Smtp-Source: ABdhPJwCfcn/qr9fqf8hJ+5ZLK0UqyCuAr83KlLuIzVvMEXb8PbFM2ZSCQ5KI4lhHvn0f/Z/qjN1TA==
-X-Received: by 2002:a17:903:2348:b0:154:dd0:aba8 with SMTP id c8-20020a170903234800b001540dd0aba8mr39914880plh.51.1649791820705;
-        Tue, 12 Apr 2022 12:30:20 -0700 (PDT)
-Received: from jagath-PC ([115.99.184.157])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm40690811pfw.188.2022.04.12.12.30.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Apr 2022 12:30:20 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 01:00:15 +0530
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/9] iio: accel: bma400: Add triggered buffer support
-Message-ID: <20220412193013.GA25279@jagath-PC>
-References: <20220411203133.19929-1-jagathjog1996@gmail.com>
- <20220411203133.19929-5-jagathjog1996@gmail.com>
- <CAHp75VfHa9afhSdyi8dj5GpzrYE=hLacayu58+PHjXhMxTo9eg@mail.gmail.com>
+         :mime-version:content-disposition:in-reply-to;
+        bh=sKmZh3PaYY26BR+B2dRs/R9LlgovoIyv4Z/3LkpHaas=;
+        b=L+JSRGfMkPL+a4Se9tnBF/Bmy6Hk9/WlzlmzcC/NWWmEHEEoDhLo1bCekwhmk2ueBe
+         /tPCoyQPqav9x21FSU2A2t/Xv4+Nqomd9PRCviHZQsQ6iHEDJNWvfgTdtQx5e2K3u2vK
+         1BTtXDENPMs6D89F/1gZBQoEGm1vYIHyvf9M9CyYg8i4X7hqApnAe3QQ36HFFLsbl1Kg
+         wYP3FmiZWpuCDGmph8RqvhnkxnNnFpZGuOclkG3ROFZCLTnXaOJmu9n2GIP3hztw9PuT
+         zbx/Q2b8AVMHGsS9pYH2LdFIipfga4LG3tBp+WziLsWQzHESzg+EpsgHEm7Xr0YVzdn6
+         kQMg==
+X-Gm-Message-State: AOAM533WiQmPBaVsBBZkCHjPQUq1hfMY+JA+ywCRy/xAGV8LkopPkaH6
+        LbDMlgqZuSUNJi1Nqr2svqx/TQ==
+X-Google-Smtp-Source: ABdhPJwl6pkdTRcJsFbNtPiE30Ma4FQuKKrig5lrk4zdsMcyG/04WVvZS5avSOgnQf2aam4QHX4kYA==
+X-Received: by 2002:a17:90a:4fa6:b0:1cb:1b77:c931 with SMTP id q35-20020a17090a4fa600b001cb1b77c931mr6773525pjh.63.1649791821808;
+        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004fe1a045e97sm28735604pfj.118.2022.04.12.12.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 19:30:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 7/9] KVM: x86/mmu: Add try_get_mt_mask to x86_ops
+Message-ID: <YlXTSQ1k+glvT83K@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-8-bgardon@google.com>
+ <YlSzI9ZfzPQZhPqj@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75VfHa9afhSdyi8dj5GpzrYE=hLacayu58+PHjXhMxTo9eg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlSzI9ZfzPQZhPqj@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+On Mon, Apr 11, 2022, Sean Christopherson wrote:
+> It's obviously not a hard dependency, but using a u64 for the mask here and then
+> undoing the whole thing is rather silly.  Compile tested only at this point, I'll
+> test on an actual system ASAP and let you know if I did something stupid.
+> 
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Mon, 11 Apr 2022 15:12:16 -0700
+> Subject: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
+>  KVM_X86_OP_OPTIONAL_RET0
 
-On Tue, Apr 12, 2022 at 12:12:21PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 11, 2022 at 11:31 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >
-> > Added trigger buffer support to read continuous acceleration
-> > data from device with data ready interrupt which is mapped
-> > to INT1 pin.
-> 
-> Can you explain the locking schema in this driver?
-> 
-> > +       /* Configure INT1 pin to open drain */
-> > +       ret = regmap_write(data->regmap, BMA400_INT_IO_CTRL_REG, 0x06);
-> > +       if (ret)
-> > +               return ret;
-> 
-> No locking (or regmap only locking).
-
-This is bma400_init() function which will run when probe runs so there is no
-locking in this bma400_init().
-
-> 
-> ...
-> 
-> > +static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
-> > +                                            bool state)
-> > +{
-> > +       struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
-> > +       struct bma400_data *data = iio_priv(indio_dev);
-> > +       int ret;
-> > +
-> > +       ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG,
-> > +                                BMA400_INT_DRDY_MSK,
-> > +                                FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       return regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG,
-> > +                                 BMA400_INT_DRDY_MSK,
-> > +                                 FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> > +}
-> 
-> Ditto.
-
-Sorry, I missed this.
-I will add lock and unlocking in the next patch.
-
-> 
-> ...
-> 
-> > +       mutex_lock(&data->mutex);
-> > +
-> > +       /* bulk read six registers, with the base being the LSB register */
-> > +       ret = regmap_bulk_read(data->regmap, BMA400_X_AXIS_LSB_REG,
-> > +                              &data->buffer.buff, sizeof(data->buffer.buff));
-> > +       mutex_unlock(&data->mutex);
-> > +       if (ret)
-> > +               return IRQ_NONE;
-> 
-> But here only above with locking...
-> 
-> > +       ret = regmap_read(data->regmap, BMA400_TEMP_DATA_REG, &temp);
-> > +       if (ret)
-> > +               return IRQ_NONE;
-> 
-> ...followed by no locking.
-
-Okay I will add lock in the next patch.
-
-> 
-> ...
-> 
-> > +       mutex_lock(&data->mutex);
-> > +       ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG, &status,
-> > +                              sizeof(status));
-> > +       mutex_unlock(&data->mutex);
-> > +       if (ret)
-> > +               return IRQ_NONE;
-> 
-> And again with locking.
-> 
-> ...
-> 
-> So,
-> 1) Does regmap is configured with locking? What for?
-> 2) What's the role of data->mutex?
-
-1.
-NO, regmap is not configured with locking. 
-In the regmap_config structure variable below these members are not defined
-in the driver.
-
-struct regmap_config {
-	regmap_lock lock;
-	regmap_unlock unlock;
-	void *lock_arg;
-
-2.
-data->mutex is used to protect the register read, write access from the device.
-
-Is the regmap functions handle locking and unlocking internally if these below
-struct members are not defined?
-
-regmap_lock lock;
-regmap_unlock unlock;
-void *lock_arg;
-
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Verified this works as expected when patching in RET0 on a 32-bit kernel (returning
+a u64 results in reserved bits in the upper half being set due to EDX not being cleared).

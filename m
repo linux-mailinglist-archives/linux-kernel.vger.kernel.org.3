@@ -2,404 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02D54FDC45
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2F04FDC48
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242848AbiDLKRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S245290AbiDLKSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348129AbiDLKAx (ORCPT
+        with ESMTP id S1354136AbiDLKDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:00:53 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B7C6D965
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:08:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V9twWp8_1649754476;
-Received: from j66d16353.sqa.eu95.tbsite.net(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0V9twWp8_1649754476)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 12 Apr 2022 17:08:04 +0800
-From:   Guanghui Feng <guanghuifeng@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com
-Subject: [PATCH RFC v1] arm64: mm: change mem_map to use block/section mapping with crashkernel
-Date:   Tue, 12 Apr 2022 17:07:56 +0800
-Message-Id: <1649754476-8713-1-git-send-email-guanghuifeng@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Apr 2022 06:03:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0666E55F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:09:43 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m14so2335460wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fzQL91UfqQPbfJ6ZhV1VQ1qjBggTHD9xe3spBn4t+EU=;
+        b=kEvfCIxPRa8U6nebGEh5TI0c+cY4hEmAYNogP7iXYP1uyN3oKb1IiM3WreLELmLKx+
+         Va/YTQz6ZcYYZssf5kJB/zq4HdY46jjM4dRRqBbaytP65JK7G6NE+CBo5zgkTegI/jR+
+         NGACrSU2RN7+cYN4IaARg62XIYxgWnEEKT7t7OlAxiIwgCXkJ0jMu61unN58szDi+FIc
+         iR0P5a92pJpqebrJKYHmDhD9EIrHiw/9vKvWgWTYVaintqERiVuloM3wOeNIp9rZNLqb
+         AH4RHgVF6uzJfF2bOMKhZMaFcHDjYwupCKcNRTeuFqiB5/ztMhuj6Cck1FSzi/1w5dGv
+         Z7VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fzQL91UfqQPbfJ6ZhV1VQ1qjBggTHD9xe3spBn4t+EU=;
+        b=krZ/hxxL61TfmiXzLVMFnsIUtuPQID0W+6Yc/y929rcUW+BhR9clmXfcNbP8Fcw41K
+         +T/h9ssdDiiq3VE8yH8KadT9QqUxuHukKQA5tHOm0f2lnWIOuddTi4NPRGeTD1J4Qv/k
+         YVk/XjZwquRonAc9OJ7i3kBqkSb5VgCNn7lYZjjYVLBvkzkAIFMtwlBQnxTGnCSts1OR
+         BBaKS+GFlgTIU5Jy2bqpXJfXAeA1dX+3JaEQlUILHKrfN+eST9FS+YFTnx9Mf5GVDBse
+         AI9jwMDMB7w76ggaEWLRbYYjffPw3/UCenCHvqQyzaNpjQN7CMkTYG6QjNbkydaTD8HB
+         FLqA==
+X-Gm-Message-State: AOAM532iZVQSBdx5VJEg8D6eMC5cvaloE/+c5fnvhtyfEjcP2AggkST0
+        PSOV/ZN9ZSf7u2Sb1adivUqI744a7PGlTm6kkUm2sw==
+X-Google-Smtp-Source: ABdhPJzLpMvnABfw0xK1gK7iwUBeEBPWFl6bs7XbBI4oAttMFjuF+gCYRia1s3oBQlKzuEeVTR3V9rQtEOX05Dy67JA=
+X-Received: by 2002:adf:cd87:0:b0:207:b0ad:6d8 with SMTP id
+ q7-20020adfcd87000000b00207b0ad06d8mr1035423wrj.111.1649754581637; Tue, 12
+ Apr 2022 02:09:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-8-james.clark@arm.com>
+In-Reply-To: <20220304171913.2292458-8-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Tue, 12 Apr 2022 10:09:29 +0100
+Message-ID: <CAJ9a7VhXtAKeRw2JCR54eq0eV8XKAgJZJfjpk5V9xcPfKS0r2g@mail.gmail.com>
+Subject: Re: [PATCH v3 07/15] coresight: etm4x: Cleanup TRCEVENTCTL1R register accesses
+To:     James Clark <James.Clark@arm.com>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
+        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are many changes and discussions:
-commit 031495635b46
-commit 1a8e1cef7603
-commit 8424ecdde7df
-commit 0a30c53573b0
-commit 2687275a5843
+On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
+>
+> This is a no-op change for style and consistency and has no effect on
+> the binary output by the compiler. In sysreg.h fields are defined as
+> the register name followed by the field name and then _MASK. This
+> allows for grepping for fields by name rather than using magic numbers.
+>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  .../coresight/coresight-etm4x-sysfs.c         | 25 +++++++++++--------
+>  drivers/hwtracing/coresight/coresight-etm4x.h |  8 ++++++
+>  2 files changed, 23 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> index 53f84da3fe44..2d29e9daf515 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> @@ -384,16 +384,16 @@ static ssize_t mode_store(struct device *dev,
+>         /* bit[11], AMBA Trace Bus (ATB) trigger enable bit */
+>         if ((config->mode & ETM_MODE_ATB_TRIGGER) &&
+>             (drvdata->atbtrig == true))
+> -               config->eventctrl1 |= BIT(11);
+> +               config->eventctrl1 |= TRCEVENTCTL1R_ATB;
+>         else
+> -               config->eventctrl1 &= ~BIT(11);
+> +               config->eventctrl1 &= ~TRCEVENTCTL1R_ATB;
+>
+>         /* bit[12], Low-power state behavior override bit */
+>         if ((config->mode & ETM_MODE_LPOVERRIDE) &&
+>             (drvdata->lpoverride == true))
+> -               config->eventctrl1 |= BIT(12);
+> +               config->eventctrl1 |= TRCEVENTCTL1R_LPOVERRIDE;
+>         else
+> -               config->eventctrl1 &= ~BIT(12);
+> +               config->eventctrl1 &= ~TRCEVENTCTL1R_LPOVERRIDE;
+>
+>         /* bit[8], Instruction stall bit */
+>         if ((config->mode & ETM_MODE_ISTALL_EN) && (drvdata->stallctl == true))
+> @@ -534,7 +534,7 @@ static ssize_t event_instren_show(struct device *dev,
+>         struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>         struct etmv4_config *config = &drvdata->config;
+>
+> -       val = BMVAL(config->eventctrl1, 0, 3);
+> +       val = FIELD_GET(TRCEVENTCTL1R_INSTEN_MASK, config->eventctrl1);
+>         return scnprintf(buf, PAGE_SIZE, "%#lx\n", val);
+>  }
+>
+> @@ -551,23 +551,28 @@ static ssize_t event_instren_store(struct device *dev,
+>
+>         spin_lock(&drvdata->spinlock);
+>         /* start by clearing all instruction event enable bits */
+> -       config->eventctrl1 &= ~(BIT(0) | BIT(1) | BIT(2) | BIT(3));
+> +       config->eventctrl1 &= ~TRCEVENTCTL1R_INSTEN_MASK;
+>         switch (drvdata->nr_event) {
+>         case 0x0:
+>                 /* generate Event element for event 1 */
+> -               config->eventctrl1 |= val & BIT(1);
+> +               config->eventctrl1 |= val & TRCEVENTCTL1R_INSTEN_1;
+>                 break;
+>         case 0x1:
+>                 /* generate Event element for event 1 and 2 */
+> -               config->eventctrl1 |= val & (BIT(0) | BIT(1));
+> +               config->eventctrl1 |= val & (TRCEVENTCTL1R_INSTEN_0 | TRCEVENTCTL1R_INSTEN_1);
+>                 break;
+>         case 0x2:
+>                 /* generate Event element for event 1, 2 and 3 */
+> -               config->eventctrl1 |= val & (BIT(0) | BIT(1) | BIT(2));
+> +               config->eventctrl1 |= val & (TRCEVENTCTL1R_INSTEN_0 |
+> +                                            TRCEVENTCTL1R_INSTEN_1 |
+> +                                            TRCEVENTCTL1R_INSTEN_2);
+>                 break;
+>         case 0x3:
+>                 /* generate Event element for all 4 events */
+> -               config->eventctrl1 |= val & 0xF;
+> +               config->eventctrl1 |= val & (TRCEVENTCTL1R_INSTEN_0 |
+> +                                            TRCEVENTCTL1R_INSTEN_1 |
+> +                                            TRCEVENTCTL1R_INSTEN_2 |
+> +                                            TRCEVENTCTL1R_INSTEN_3);
+>                 break;
+>         default:
+>                 break;
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+> index 4c8d7be3c159..cbba46f14ada 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+> @@ -188,6 +188,14 @@
+>  #define TRCCONFIGR_DA                          BIT(16)
+>  #define TRCCONFIGR_DV                          BIT(17)
+>
+> +#define TRCEVENTCTL1R_INSTEN_MASK              GENMASK(3, 0)
+> +#define TRCEVENTCTL1R_INSTEN_0                 BIT(0)
+> +#define TRCEVENTCTL1R_INSTEN_1                 BIT(1)
+> +#define TRCEVENTCTL1R_INSTEN_2                 BIT(2)
+> +#define TRCEVENTCTL1R_INSTEN_3                 BIT(3)
+> +#define TRCEVENTCTL1R_ATB                      BIT(11)
+> +#define TRCEVENTCTL1R_LPOVERRIDE               BIT(12)
+> +
+>  /*
+>   * System instructions to access ETM registers.
+>   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
+> --
+> 2.28.0
+>
 
-When using DMA/DMA32 zone and crashkernel, disable rodata full and kfence,
-mem_map will use non block/section mapping(for crashkernel requires to shrink
-the region in page granularity). But it will degrade performance when doing
-larging continuous mem access in kernel(memcpy/memmove, etc).
 
-This patch firstly do block/section mapping at mem_map, reserve crashkernel
-memory. And then walking pagetable to split block/section mapping
-to non block/section mapping [only] for crashkernel mem. We will accelerate
-mem access about 10-20% performance improvement, and reduce the cpu dTLB miss
-conspicuously on some platform with this optimization.
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
-Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
----
- arch/arm64/include/asm/mmu.h |   1 +
- arch/arm64/mm/init.c         |   8 +-
- arch/arm64/mm/mmu.c          | 274 +++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 253 insertions(+), 30 deletions(-)
-
-diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
-index 48f8466..df113cc 100644
---- a/arch/arm64/include/asm/mmu.h
-+++ b/arch/arm64/include/asm/mmu.h
-@@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
- extern void arm64_memblock_init(void);
- extern void paging_init(void);
- extern void bootmem_init(void);
-+extern void mapping_crashkernel(void);
- extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
- extern void init_mem_pgprot(void);
- extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 8ac25f1..02edd45 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -335,10 +335,6 @@ void __init arm64_memblock_init(void)
- 	}
- 
- 	early_init_fdt_scan_reserved_mem();
--
--	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
--		reserve_crashkernel();
--
- 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
- }
- 
-@@ -385,8 +381,8 @@ void __init bootmem_init(void)
- 	 * request_standard_resources() depends on crashkernel's memory being
- 	 * reserved, so do it here.
- 	 */
--	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
--		reserve_crashkernel();
-+	reserve_crashkernel();
-+	mapping_crashkernel();
- 
- 	memblock_dump_all();
- }
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 626ec32..0672afd 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -498,6 +498,256 @@ static int __init enable_crash_mem_map(char *arg)
- }
- early_param("crashkernel", enable_crash_mem_map);
- 
-+#ifdef CONFIG_KEXEC_CORE
-+static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
-+{
-+	phys_addr_t phys;
-+	void *ptr;
-+
-+	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
-+					 MEMBLOCK_ALLOC_NOLEAKTRACE);
-+	if (!phys)
-+		panic("Failed to allocate page table page\n");
-+
-+	ptr = (void *)__phys_to_virt(phys);
-+	memset(ptr, 0, PAGE_SIZE);
-+	return phys;
-+}
-+
-+static void init_crashkernel_pte(pmd_t *pmdp, unsigned long addr,
-+				 unsigned long end,
-+				 phys_addr_t phys, pgprot_t prot)
-+{
-+	pte_t *ptep;
-+	ptep = pte_offset_kernel(pmdp, addr);
-+	do {
-+		set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
-+		phys += PAGE_SIZE;
-+	} while (ptep++, addr += PAGE_SIZE, addr != end);
-+}
-+
-+static void alloc_crashkernel_cont_pte(pmd_t *pmdp, unsigned long addr,
-+				       unsigned long end, phys_addr_t phys,
-+				       pgprot_t prot,
-+				       phys_addr_t (*pgtable_alloc)(int),
-+				       int flags)
-+{
-+	unsigned long next;
-+	pmd_t pmd = READ_ONCE(*pmdp);
-+
-+	BUG_ON(pmd_sect(pmd));
-+	if (pmd_none(pmd)) {
-+		pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
-+		phys_addr_t pte_phys;
-+
-+		if (flags & NO_EXEC_MAPPINGS)
-+			pmdval |= PMD_TABLE_PXN;
-+		BUG_ON(!pgtable_alloc);
-+		pte_phys = pgtable_alloc(PAGE_SHIFT);
-+		__pmd_populate(pmdp, pte_phys, pmdval);
-+		pmd = READ_ONCE(*pmdp);
-+	}
-+	BUG_ON(pmd_bad(pmd));
-+
-+	do {
-+		pgprot_t __prot = prot;
-+		next = pte_cont_addr_end(addr, end);
-+		init_crashkernel_pte(pmdp, addr, next, phys, __prot);
-+		phys += next - addr;
-+	} while (addr = next, addr != end);
-+}
-+
-+static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
-+				 unsigned long end, phys_addr_t phys,
-+				 pgprot_t prot,
-+				 phys_addr_t (*pgtable_alloc)(int), int flags)
-+{
-+	phys_addr_t map_offset;
-+	unsigned long next;
-+	pmd_t *pmdp;
-+	pmdval_t pmdval;
-+
-+	pmdp = pmd_offset(pudp, addr);
-+	do {
-+		next = pmd_addr_end(addr, end);
-+		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
-+			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
-+			pmd_clear(pmdp);
-+			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
-+			if (flags & NO_EXEC_MAPPINGS)
-+				pmdval |= PMD_TABLE_PXN;
-+			__pmd_populate(pmdp, pte_phys, pmdval);
-+			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-+
-+			map_offset = addr - (addr & PMD_MASK);
-+			if (map_offset)
-+			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
-+						phys - map_offset, prot,
-+						pgtable_alloc, flags);
-+
-+			if (next < (addr & PMD_MASK) + PMD_SIZE)
-+			    alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
-+						PUD_SIZE, next - addr + phys,
-+						prot, pgtable_alloc, flags);
-+		}
-+		alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
-+					   pgtable_alloc, flags);
-+		phys += next - addr;
-+	} while (pmdp++, addr = next, addr != end);
-+}
-+
-+static void alloc_crashkernel_cont_pmd(pud_t *pudp, unsigned long addr,
-+				       unsigned long end, phys_addr_t phys,
-+				       pgprot_t prot,
-+				       phys_addr_t (*pgtable_alloc)(int),
-+				       int flags)
-+{
-+	unsigned long next;
-+	pud_t pud = READ_ONCE(*pudp);
-+
-+	/*
-+	 * Check for initial section mappings in the pgd/pud.
-+	 */
-+	BUG_ON(pud_sect(pud));
-+	if (pud_none(pud)) {
-+		pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
-+		phys_addr_t pmd_phys;
-+
-+		if (flags & NO_EXEC_MAPPINGS)
-+			pudval |= PUD_TABLE_PXN;
-+		BUG_ON(!pgtable_alloc);
-+		pmd_phys = pgtable_alloc(PMD_SHIFT);
-+		__pud_populate(pudp, pmd_phys, pudval);
-+		pud = READ_ONCE(*pudp);
-+	}
-+	BUG_ON(pud_bad(pud));
-+
-+	do {
-+		pgprot_t __prot = prot;
-+		next = pmd_cont_addr_end(addr, end);
-+		init_crashkernel_pmd(pudp, addr, next, phys, __prot,
-+				     pgtable_alloc, flags);
-+		phys += next - addr;
-+	} while (addr = next, addr != end);
-+}
-+
-+static void alloc_crashkernel_pud(pgd_t *pgdp, unsigned long addr,
-+				  unsigned long end, phys_addr_t phys,
-+				  pgprot_t prot,
-+				  phys_addr_t (*pgtable_alloc)(int),
-+				  int flags)
-+{
-+	phys_addr_t map_offset;
-+	unsigned long next;
-+	pud_t *pudp;
-+	p4d_t *p4dp = p4d_offset(pgdp, addr);
-+	p4d_t p4d = READ_ONCE(*p4dp);
-+	pudval_t pudval;
-+
-+	if (p4d_none(p4d)) {
-+		p4dval_t p4dval = P4D_TYPE_TABLE | P4D_TABLE_UXN;
-+		phys_addr_t pud_phys;
-+
-+		if (flags & NO_EXEC_MAPPINGS)
-+			p4dval |= P4D_TABLE_PXN;
-+		BUG_ON(!pgtable_alloc);
-+		pud_phys = pgtable_alloc(PUD_SHIFT);
-+		__p4d_populate(p4dp, pud_phys, p4dval);
-+		p4d = READ_ONCE(*p4dp);
-+	}
-+	BUG_ON(p4d_bad(p4d));
-+
-+	/*
-+	 * No need for locking during early boot. And it doesn't work as
-+	 * expected with KASLR enabled.
-+	 */
-+	if (system_state != SYSTEM_BOOTING)
-+		mutex_lock(&fixmap_lock);
-+	pudp = pud_offset(p4dp, addr);
-+	do {
-+		next = pud_addr_end(addr, end);
-+		if (!pud_none(*pudp) && pud_sect(*pudp)) {
-+			phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
-+			pud_clear(pudp);
-+
-+			pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
-+			if (flags & NO_EXEC_MAPPINGS)
-+				pudval |= PUD_TABLE_PXN;
-+			__pud_populate(pudp, pmd_phys, pudval);
-+			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-+
-+			map_offset = addr - (addr & PUD_MASK);
-+			if (map_offset)
-+			    alloc_init_cont_pmd(pudp, addr & PUD_MASK, addr,
-+						phys - map_offset, prot,
-+						pgtable_alloc, flags);
-+
-+			if (next < (addr & PUD_MASK) + PUD_SIZE)
-+			    alloc_init_cont_pmd(pudp, next, (addr & PUD_MASK) +
-+						PUD_SIZE, next - addr + phys,
-+						prot, pgtable_alloc, flags);
-+		}
-+		alloc_crashkernel_cont_pmd(pudp, addr, next, phys, prot,
-+					   pgtable_alloc, flags);
-+		phys += next - addr;
-+	} while (pudp++, addr = next, addr != end);
-+
-+	if (system_state != SYSTEM_BOOTING)
-+		mutex_unlock(&fixmap_lock);
-+}
-+
-+static void __create_crashkernel_mapping(pgd_t *pgdir, phys_addr_t phys,
-+					 unsigned long virt, phys_addr_t size,
-+					 pgprot_t prot,
-+					 phys_addr_t (*pgtable_alloc)(int),
-+					 int flags)
-+{
-+	unsigned long addr, end, next;
-+	pgd_t *pgdp = pgd_offset_pgd(pgdir, virt);
-+
-+	/*
-+	 * If the virtual and physical address don't have the same offset
-+	 * within a page, we cannot map the region as the caller expects.
-+	 */
-+	if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
-+		return;
-+
-+	phys &= PAGE_MASK;
-+	addr = virt & PAGE_MASK;
-+	end = PAGE_ALIGN(virt + size);
-+
-+	do {
-+		next = pgd_addr_end(addr, end);
-+		alloc_crashkernel_pud(pgdp, addr, next, phys, prot,
-+				      pgtable_alloc, flags);
-+		phys += next - addr;
-+	} while (pgdp++, addr = next, addr != end);
-+}
-+
-+static void __init map_crashkernel(pgd_t *pgdp, phys_addr_t start,
-+				   phys_addr_t end, pgprot_t prot, int flags)
-+{
-+	__create_crashkernel_mapping(pgdp, start, __phys_to_virt(start),
-+				     end - start, prot,
-+				     early_crashkernel_pgtable_alloc, flags);
-+}
-+
-+void __init mapping_crashkernel(void)
-+{
-+	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-+	    return;
-+
-+	if (!crash_mem_map || !crashk_res.end)
-+	    return;
-+
-+	map_crashkernel(swapper_pg_dir, crashk_res.start,
-+			crashk_res.end + 1, PAGE_KERNEL,
-+			NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-+}
-+#else
-+void __init mapping_crashkernel(void) {}
-+#endif
-+
- static void __init map_mem(pgd_t *pgdp)
- {
- 	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
-@@ -527,17 +777,6 @@ static void __init map_mem(pgd_t *pgdp)
- 	 */
- 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
- 
--#ifdef CONFIG_KEXEC_CORE
--	if (crash_mem_map) {
--		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
--		    IS_ENABLED(CONFIG_ZONE_DMA32))
--			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
--		else if (crashk_res.end)
--			memblock_mark_nomap(crashk_res.start,
--			    resource_size(&crashk_res));
--	}
--#endif
--
- 	/* map all the memory banks */
- 	for_each_mem_range(i, &start, &end) {
- 		if (start >= end)
-@@ -570,19 +809,6 @@ static void __init map_mem(pgd_t *pgdp)
- 	 * in page granularity and put back unused memory to buddy system
- 	 * through /sys/kernel/kexec_crash_size interface.
- 	 */
--#ifdef CONFIG_KEXEC_CORE
--	if (crash_mem_map &&
--	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
--		if (crashk_res.end) {
--			__map_memblock(pgdp, crashk_res.start,
--				       crashk_res.end + 1,
--				       PAGE_KERNEL,
--				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
--			memblock_clear_nomap(crashk_res.start,
--					     resource_size(&crashk_res));
--		}
--	}
--#endif
- }
- 
- void mark_rodata_ro(void)
 -- 
-1.8.3.1
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

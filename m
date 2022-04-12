@@ -2,123 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2804FE89E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3934FE8A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353344AbiDLT3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S244968AbiDLTcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352096AbiDLT3M (ORCPT
+        with ESMTP id S236926AbiDLTck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:29:12 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E103948E76
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:26:51 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 15so10523294ljw.8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:26:51 -0700 (PDT)
+        Tue, 12 Apr 2022 15:32:40 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F562627;
+        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso3979179pjb.5;
+        Tue, 12 Apr 2022 12:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uhp2gyxJXafqQhufiyepsQB0fVUjcBdyLXTovCl6zhk=;
-        b=5r3BqAvHHqrB2sxGTnYHVAS69nI4KU7prcQCYLC+0giVYjXTuDzbhcWunmrmixMgiI
-         l6KAoj+O6vndDV8nCt3/S5YfZKl20CFaNrJbcc41X99anlIpoxpW/y7x7Y1M8Moxl+/V
-         1/swlz2HX63Q+NBEhUfmJQEpWAJDocdiEL2YUckMfpe3C8nZcla3i0xFsf7D/9DkQ9ru
-         eAJG41WiqDv83Av6IuPIHFgdRnfdlNyaK+rskTFa67tR2m82ZCspiqGtd/RBP6s+qYm3
-         8gfkf6bS7/JwsfLxy6EmCDw65cudX7DLbyf2e7vFavB5H90QMXcKGJMnj7FuirippGU7
-         eNJQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=Zq+spe0FdFWadyE6Z3vT48KBIBCNRdapmLCCbr+Bbss=;
+        b=X7/E3HjAxYYrn9q175XjZEGnATG+1FFuUmUx7q7Y5C7RT+WZ11r54QARCRer+AiEYZ
+         OOQZlGk4h0GSTRTfg2rFBOB6dkfyU0a2EHefCNvGvfkedBFMhjWKwqhOMkOl8b1khDiD
+         bIa+xQyp2i/tSR64qXNlMuGG0tTv0SJdx1pdMQ6UIkbb6YKOKo0keNv+t4CeP4bGtUS3
+         o52v/ekrSdsRYBbM3gHEkb/Mmgpqrhbk6nxlML1CrixLo9tSuSAYtgg+A6WPSl1Yb5xA
+         gkMozMR3DhjWBSGldxexPnJxldE6+Rn8Ya3iK+xlqomOxx4kPCaY8dvDWNZvJ1UN7WyA
+         BiNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uhp2gyxJXafqQhufiyepsQB0fVUjcBdyLXTovCl6zhk=;
-        b=M4CVNCAAjgUcRjFPUh13eDsAu5XQoRpGyMa7FSMZe7/TNPR2+pK4tl52NS4ht5Bn4A
-         AlN5rQFPHCn/VulLwogyS2uh69cDlf2RPz7EjzmQpfYxM/IlNhaeuR5SjVGiBH9AiqMY
-         PHFD1XSLjFVr9T1vOvsq65IOx9Isp5Pikx0qQr8EaOF9Vl5KfT/iK2wy3N48BcV0YwGS
-         WiuXEknwaJHJP4sdfcp+355n7clpFJDMppc87JEfERD6OgJvymyNfJo4dBtFLOxDcIAc
-         UgoExyx4T4mjwjFH3AxUYxH/vR3LZ3JcNdXi30sUo7kjz2Y1zDMEO00Oc5CQBu91glAy
-         2s4g==
-X-Gm-Message-State: AOAM533MAG7rOku8VvSYT6AOxMm7xe74UrE330omR1+gr9kHpzB1NuyY
-        eUK0+ddnZSr097YWzcaFBjLF8A==
-X-Google-Smtp-Source: ABdhPJzNqQFsr22ki1Pj8rD15MClx6e4/Y9XgiO6Rr06pMklFiRq4YmMNE+KUcyBNh7zLIW+Z44IOA==
-X-Received: by 2002:a05:651c:1a09:b0:24a:c7df:339c with SMTP id by9-20020a05651c1a0900b0024ac7df339cmr25219403ljb.298.1649791610046;
-        Tue, 12 Apr 2022 12:26:50 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id h19-20020a056512055300b0046bb9a59e13sm309392lfl.56.2022.04.12.12.26.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 12:26:49 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 72EEB1030D2; Tue, 12 Apr 2022 22:28:21 +0300 (+03)
-Date:   Tue, 12 Apr 2022 22:28:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <20220412192821.xliop57sblvjx4t4@box.shutemov.name>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <20220411153233.54ljmi7zgqovhgsn@box.shutemov.name>
- <20220412133925.GG8013@chaop.bj.intel.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Zq+spe0FdFWadyE6Z3vT48KBIBCNRdapmLCCbr+Bbss=;
+        b=TrC95HvFu273Vsz4LrQ5a9TrzfMZH+iTuV3bbjIYtjnG+zSCQJs2z9WYE53lqY5Baw
+         SQ0VUK447OdHvVFtW/+YA/u2pDhUVvx4V4yeKwURXbnqwsALaEmW09QMUOsFcy4UCUga
+         711eZG0CyxLvnTFisIt5QZcUIByTR16KhGqWh+xnFgq3zr0IhQolAZljngy5FZ5PqRtr
+         QfV6yaL6QYISYBgx7Wg2r8JXePdKr60FX/FuSeTua0iNtuQ1J13WBNOX43w77acxBfPq
+         zdjE/O7hiRZIaa3valvomOhZClEi0emLa5vxv66obny81aACX/xGi52hQCH+IqVTH67Y
+         O3Uw==
+X-Gm-Message-State: AOAM530eEjDvkYvs+Hhzkk2LDVlYZR3sxHOumSzSlvFmuCwHTKoJcG6G
+        h+i0kAGgSJjAZovgoBAR0P4=
+X-Google-Smtp-Source: ABdhPJwCfcn/qr9fqf8hJ+5ZLK0UqyCuAr83KlLuIzVvMEXb8PbFM2ZSCQ5KI4lhHvn0f/Z/qjN1TA==
+X-Received: by 2002:a17:903:2348:b0:154:dd0:aba8 with SMTP id c8-20020a170903234800b001540dd0aba8mr39914880plh.51.1649791820705;
+        Tue, 12 Apr 2022 12:30:20 -0700 (PDT)
+Received: from jagath-PC ([115.99.184.157])
+        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm40690811pfw.188.2022.04.12.12.30.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Apr 2022 12:30:20 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 01:00:15 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/9] iio: accel: bma400: Add triggered buffer support
+Message-ID: <20220412193013.GA25279@jagath-PC>
+References: <20220411203133.19929-1-jagathjog1996@gmail.com>
+ <20220411203133.19929-5-jagathjog1996@gmail.com>
+ <CAHp75VfHa9afhSdyi8dj5GpzrYE=hLacayu58+PHjXhMxTo9eg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220412133925.GG8013@chaop.bj.intel.com>
+In-Reply-To: <CAHp75VfHa9afhSdyi8dj5GpzrYE=hLacayu58+PHjXhMxTo9eg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 09:39:25PM +0800, Chao Peng wrote:
-> On Mon, Apr 11, 2022 at 06:32:33PM +0300, Kirill A. Shutemov wrote:
-> > On Thu, Apr 07, 2022 at 04:05:36PM +0000, Sean Christopherson wrote:
-> > > Hmm, shmem_writepage() already handles SHM_F_INACCESSIBLE by rejecting the swap, so
-> > > maybe it's just the page migration path that needs to be updated?
-> > 
-> > My early version prevented migration with -ENOTSUPP for
-> > address_space_operations::migratepage().
-> > 
-> > What's wrong with that approach?
+Hello Andy,
+
+On Tue, Apr 12, 2022 at 12:12:21PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 11, 2022 at 11:31 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+> >
+> > Added trigger buffer support to read continuous acceleration
+> > data from device with data ready interrupt which is mapped
+> > to INT1 pin.
 > 
-> I previously thought migratepage will not be called since we already
-> marked the pages as UNMOVABLE, sounds not correct?
+> Can you explain the locking schema in this driver?
+> 
+> > +       /* Configure INT1 pin to open drain */
+> > +       ret = regmap_write(data->regmap, BMA400_INT_IO_CTRL_REG, 0x06);
+> > +       if (ret)
+> > +               return ret;
+> 
+> No locking (or regmap only locking).
 
-Do you mean missing __GFP_MOVABLE? I can be wrong, but I don't see that it
-direclty affects if the page is migratable. It is a hint to page allocator
-to group unmovable pages to separate page block and impove availablity of
-higher order pages this way. Page allocator tries to allocate unmovable
-pages from pages blocks that already have unmovable pages.
+This is bma400_init() function which will run when probe runs so there is no
+locking in this bma400_init().
 
--- 
- Kirill A. Shutemov
+> 
+> ...
+> 
+> > +static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
+> > +                                            bool state)
+> > +{
+> > +       struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
+> > +       struct bma400_data *data = iio_priv(indio_dev);
+> > +       int ret;
+> > +
+> > +       ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG,
+> > +                                BMA400_INT_DRDY_MSK,
+> > +                                FIELD_PREP(BMA400_INT_DRDY_MSK, state));
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       return regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG,
+> > +                                 BMA400_INT_DRDY_MSK,
+> > +                                 FIELD_PREP(BMA400_INT_DRDY_MSK, state));
+> > +}
+> 
+> Ditto.
+
+Sorry, I missed this.
+I will add lock and unlocking in the next patch.
+
+> 
+> ...
+> 
+> > +       mutex_lock(&data->mutex);
+> > +
+> > +       /* bulk read six registers, with the base being the LSB register */
+> > +       ret = regmap_bulk_read(data->regmap, BMA400_X_AXIS_LSB_REG,
+> > +                              &data->buffer.buff, sizeof(data->buffer.buff));
+> > +       mutex_unlock(&data->mutex);
+> > +       if (ret)
+> > +               return IRQ_NONE;
+> 
+> But here only above with locking...
+> 
+> > +       ret = regmap_read(data->regmap, BMA400_TEMP_DATA_REG, &temp);
+> > +       if (ret)
+> > +               return IRQ_NONE;
+> 
+> ...followed by no locking.
+
+Okay I will add lock in the next patch.
+
+> 
+> ...
+> 
+> > +       mutex_lock(&data->mutex);
+> > +       ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG, &status,
+> > +                              sizeof(status));
+> > +       mutex_unlock(&data->mutex);
+> > +       if (ret)
+> > +               return IRQ_NONE;
+> 
+> And again with locking.
+> 
+> ...
+> 
+> So,
+> 1) Does regmap is configured with locking? What for?
+> 2) What's the role of data->mutex?
+
+1.
+NO, regmap is not configured with locking. 
+In the regmap_config structure variable below these members are not defined
+in the driver.
+
+struct regmap_config {
+	regmap_lock lock;
+	regmap_unlock unlock;
+	void *lock_arg;
+
+2.
+data->mutex is used to protect the register read, write access from the device.
+
+Is the regmap functions handle locking and unlocking internally if these below
+struct members are not defined?
+
+regmap_lock lock;
+regmap_unlock unlock;
+void *lock_arg;
+
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

@@ -2,103 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420AC4FCF13
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA80B4FCF15
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348337AbiDLFuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S1348361AbiDLFul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347031AbiDLFuU (ORCPT
+        with ESMTP id S1344379AbiDLFuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:50:20 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566F629804
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:48:04 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h14so25196726lfl.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s/Bwip0EbgIHLBZtJM96nXGyW0WOvATodmBqZPPM7cY=;
-        b=QbvslhXIWcVihs2/1cCG1xx91Oc5mnEJqi86MopVrkAZNGNZAV9AgY1MXfnCYHJDG/
-         m/oq0mrkRpKWu2ycwX9aa+9AJjShS/4Ez4O9Wv4Q/O8K91h7u937nLuWkcKGEHGkUc4h
-         cYswC1OGPs3bbvwOqWxjKjF+4YQhZjsaSlPoQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s/Bwip0EbgIHLBZtJM96nXGyW0WOvATodmBqZPPM7cY=;
-        b=GeGHhk4aN2R9swiA8acaALv2DJvQ+ByhPae0kPKDc586uIt183uV6Q9fVJDIgsMoxS
-         H4ohorIJS5mHJ04+snxVFpN0KQsLR9I+Au7PizdH4gPKrIxAKbXPQLbjQFb5g065JejT
-         5kbHOvOjhA9EIUADE1V2ShIb5TJlnEdHPP5rJJFlAXjcjjE9baI1IfQXc2PY4jJoU1d0
-         Lq/fu/x5oceq70pdvn4V7CwAl1693PIuDJTLT0ykERNEY2Iuzsi2J/QTNH0N8GvsBu9M
-         eGxGA3rU7WRcs4SGjSqzL6Ep15zvPUJiTtaOw2ePZPzrsiR678Md2pj1y25pl+L1NgAu
-         QxVw==
-X-Gm-Message-State: AOAM532MleZerilqZWu8KZx+rL2XrNu5av2MrMfmnI/67GZSbAtii/8J
-        iUywen7yoz24G4O/s6/SkDSX5FmCw2XNszre
-X-Google-Smtp-Source: ABdhPJxLvYhboDOodonKsm+cP7XkH8SXjxbLRksYHE1E/nF2SFfyAmtXgK6kEAq5hzvt267bJxm+nA==
-X-Received: by 2002:a05:6512:401e:b0:46b:a876:3023 with SMTP id br30-20020a056512401e00b0046ba8763023mr5355480lfb.386.1649742482323;
-        Mon, 11 Apr 2022 22:48:02 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056512138c00b0044833f1cd85sm3534833lfa.62.2022.04.11.22.48.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 22:48:01 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id 17so22740273lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:48:00 -0700 (PDT)
-X-Received: by 2002:a2e:94c5:0:b0:24b:7029:75eb with SMTP id
- r5-20020a2e94c5000000b0024b702975ebmr1364165ljh.506.1649742480179; Mon, 11
- Apr 2022 22:48:00 -0700 (PDT)
+        Tue, 12 Apr 2022 01:50:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62FF28E21;
+        Mon, 11 Apr 2022 22:48:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EBDA61862;
+        Tue, 12 Apr 2022 05:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9C6C385A1;
+        Tue, 12 Apr 2022 05:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649742501;
+        bh=cgeRhs/ApvaNYGH9iK4LRCPUOGebM4VMdLU7Lqm3pX4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hz3lhBD7U6q5FzF5hZ/3QVxJefBQgc5VuY1K3mZ/TxI12pXAnzSmWMR6pJX2YHAuk
+         USjdZPoISoZD1tms2GUZVMf9pGud1uouYQ5Lbe88j4pyfdcLHEy/MwDEti3CadZCcq
+         PuMVteSKn7695NaXSUSg6ppHqhRDfIkmCleKZ3ms=
+Date:   Tue, 12 Apr 2022 07:48:18 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [stable:PATCH v4.9.309 40/43] arm64: Mitigate spectre style
+ branch history side channels
+Message-ID: <YlUSootNwoUIIOow@kroah.com>
+References: <0220406164217.1888053-1-james.morse@arm.com>
+ <20220406164546.1888528-1-james.morse@arm.com>
+ <20220406164546.1888528-40-james.morse@arm.com>
+ <82b7cb2e-825a-0efc-daae-98aa556c5086@arm.com>
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204111023230.6206@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wijDnLH2K3Rh2JJo-SmWL_ntgzQCDxPeXbJ9A-vTF3ZvA@mail.gmail.com>
- <alpine.LRH.2.02.2204111236390.31647@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wgsHK4pDDoEgCyKgGyo-AMGpy1jg2QbstaCR0G-v568yg@mail.gmail.com> <YlUQ9fnc+4eP3AE5@infradead.org>
-In-Reply-To: <YlUQ9fnc+4eP3AE5@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 11 Apr 2022 19:47:44 -1000
-X-Gmail-Original-Message-ID: <CAHk-=wjOiBc3NiMRQJC6EsVosKOWmXiskqb0up6b5MOxCKSCBQ@mail.gmail.com>
-Message-ID: <CAHk-=wjOiBc3NiMRQJC6EsVosKOWmXiskqb0up6b5MOxCKSCBQ@mail.gmail.com>
-Subject: Re: [PATCH] stat: don't fail if the major number is >= 256
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82b7cb2e-825a-0efc-daae-98aa556c5086@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 7:41 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> And that is easily fixed by using a lower major for the block dynamic
-> dev_t.  In theory userspace should be able to copy with any major for
-> it, but I fear something might break so we could make it configurable.
+On Fri, Apr 08, 2022 at 05:56:34PM +0100, James Morse wrote:
+> Hi Greg,
+> 
+> On 06/04/2022 17:45, James Morse wrote:
+> > commit 558c303c9734af5a813739cd284879227f7297d2 upstream.
+> > 
+> > Speculation attacks against some high-performance processors can
+> > make use of branch history to influence future speculation.
+> > When taking an exception from user-space, a sequence of branches
+> > or a firmware call overwrites or invalidates the branch history.
+> > 
+> > The sequence of branches is added to the vectors, and should appear
+> > before the first indirect branch. For systems using KPTI the sequence
+> > is added to the kpti trampoline where it has a free register as the exit
+> > from the trampoline is via a 'ret'. For systems not using KPTI, the same
+> > register tricks are used to free up a register in the vectors.
+> > 
+> > For the firmware call, arch-workaround-3 clobbers 4 registers, so
+> > there is no choice but to save them to the EL1 stack. This only happens
+> > for entry from EL0, so if we take an exception due to the stack access,
+> > it will not become re-entrant.
+> > 
+> > For KVM, the existing branch-predictor-hardening vectors are used.
+> > When a spectre version of these vectors is in use, the firmware call
+> > is sufficient to mitigate against Spectre-BHB. For the non-spectre
+> > versions, the sequence of branches is added to the indirect vector.
+> 
+> 
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 42719bd58046..6d12c3b78777 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -799,6 +799,16 @@ config ARM64_SSBD
+> >  
+> >  	  If unsure, say Y.
+> >  
+> > +config MITIGATE_SPECTRE_BRANCH_HISTORY
+> > +	bool "Mitigate Spectre style attacks against branch history" if EXPERT
+> > +	default y
+> > +	depends on HARDEN_BRANCH_PREDICTOR || !KVM
+> > +	help
+> > +	  Speculation attacks against some high-performance processors can
+> > +	  make use of branch history to influence future speculation.
+> > +	  When taking an exception from user-space, a sequence of branches
+> > +	  or a firmware call overwrites the branch history.
+> 
+> The build problem reported here[]0 is due to enabling CONFIG_EXPERT, and disabling
+> CONFIG_HARDEN_BRANCH_PREDICTOR and CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY: The harden_bp
+> stuff uses #ifdef all over the place, whereas the BHB bits use IS_ENABLED(). As there are
+> dependencies between the two, mixing them doesn't go well.
+> 
+> The fix is a little noisy. The reason is the 'matches' support ought to be kept even if
+> the feature is disabled so that the sysfs files still report Vulnerable on affected
+> hardware, regardless of the Kconfig.
+> 
+> ------------------------>%------------------------
+> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> index d6bc44a7d471..ae364d6b37ac 100644
+> --- a/arch/arm64/kernel/cpu_errata.c
+> +++ b/arch/arm64/kernel/cpu_errata.c
+> @@ -561,7 +561,9 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+>                 .type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+>                 .capability = ARM64_SPECTRE_BHB,
+>                 .matches = is_spectre_bhb_affected,
+> +#ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
+>                 .cpu_enable = spectre_bhb_enable_mitigation,
+> +#endif
+>         },
+>         {
+>         }
+> @@ -571,8 +573,8 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+>   * We try to ensure that the mitigation state can never change as the result of
+>   * onlining a late CPU.
+>   */
+> -static void update_mitigation_state(enum mitigation_state *oldp,
+> -                                   enum mitigation_state new)
+> +static void __maybe_unused update_mitigation_state(enum mitigation_state *oldp,
+> +                                                  enum mitigation_state new)
+>  {
+>         enum mitigation_state state;
+> 
+> @@ -708,7 +710,7 @@ static bool is_spectre_bhb_fw_affected(int scope)
+>         return false;
+>  }
+> 
+> -static bool supports_ecbhb(int scope)
+> +static bool __maybe_unused supports_ecbhb(int scope)
+>  {
+>         u64 mmfr1;
+> 
+> @@ -738,6 +740,7 @@ bool is_spectre_bhb_affected(const struct arm64_cpu_capabilities *entry,
+>         return false;
+>  }
+> 
+> +#ifdef CONFIG_HARDEN_BRANCH_PREDICTOR
+>  static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
+>  {
+>         const char *v = arm64_get_bp_hardening_vector(slot);
+> @@ -812,7 +815,7 @@ static void kvm_setup_bhb_slot(const char *hyp_vecs_start)
+>  #define __spectre_bhb_loop_k32_start NULL
+> 
+>  static void kvm_setup_bhb_slot(const char *hyp_vecs_start) { };
+> -#endif
+> +#endif /* CONFIG_KVM */
+> 
+>  static bool is_spectrev2_safe(void)
+>  {
+> @@ -891,3 +894,4 @@ void __init spectre_bhb_patch_loop_iter(struct alt_instr *alt,
+>                                          AARCH64_INSN_MOVEWIDE_ZERO);
+>         *updptr++ = cpu_to_le32(insn);
+>  }
+> +#endif /* CONFIG_HARDEN_BRANCH_PREDICTOR */
+> ------------------------>%------------------------
+> 
+> 
+> This version of the backport isn't affected by Will's report here:
+> https://lore.kernel.org/linux-arm-kernel/20220408120041.GB27685@willie-the-truck/
+> as Kconfig describes that dependency as it was too hard to unpick with the helpers v4.9 has.
 
-We actually have a ton of major numbers free, although it's not
-obvious because of the whole "they are used by character devices, not
-block devices" issue.
+Thanks for the fixup, now applied, and it passes my local testing here
+with the failed configuration.  I'll push out a release and see if it
+breaks anyone :)
 
-Ie 4-6, 12, 14, 19 are all free, afaik.
-
-But yeah, somebody might have a static /dev for some odd embedded case, I guess.
-
-That said, it really does look like we just return -EOVERFLOW much too
-eagerly, for stupid and bad reasons.
-
-Considering that BLOCK_EXT_MAJOR has been 259 since 2008, and this is
-the first time anybody has hit this, I don't think there's much reason
-to change that major number when the whole error case seems to have
-been largely a mistake to begin with.
-
-                  Linus
+greg k-h

@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C17F4FE7B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3604FE7BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358657AbiDLSPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S1358671AbiDLSTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358641AbiDLSPT (ORCPT
+        with ESMTP id S231250AbiDLSTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:15:19 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464A74EDD9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:12:58 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id j83so19868914oih.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=trsYi5w6qh10skTpwZ73S0Uy8sExgLb2AT+I9e3Rg8w=;
-        b=p1LXQmz/mUFckKbjVn/vl0bLXoDGe3q3ZPe1vIFqiVWXOPTRsAN4BoxWrU31Xo/Q6d
-         qR3mw4F/kY3ndktsAzImxC/yU/xOCqsqLpElNN0mtAoGKuWBwB8CBFttyoADqa8pVPw0
-         1BbHVO+OoxbWHlpNVl8qFmmgN0MbCxu81359H6lvak1gwO7Rxcuqnez8/ucvp08gComv
-         rVvZuVtrMdhSzs1ZtzF1Ea0AiPVOQfETwxtwBA6Gv5YFhE1kOAhDQe3uE2nN+LqdYbkl
-         fZJPVmDLEjA9UAg78V0zcNWxAng8RjoA9kjdWbSzCE6bKMvUGX0m5aLaf+AmP3FTz8X8
-         1X/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=trsYi5w6qh10skTpwZ73S0Uy8sExgLb2AT+I9e3Rg8w=;
-        b=IrEbW62wERgxN9MOd5VrBPpdBdNVweYZLQu0S3cPF5+6IFqnaskWm4s/D1jb1ddhKX
-         K82lCqx9Cv4bGr8usWKLwefLEEWUNx3TSGtHu6ZcoNqsnzrgQkD5b+xfEb/XPA+b0BuJ
-         MsWItYZ+wEUXntAifj5749ivWfIdKQ2w+spkkJupS89IRCQumL4Ru4S4L82yrdBLB/A5
-         VEYCxJolAXeObKqPgY3SAHgfQxqwMoVkckzqFRzDWbAe7TUXi6omu0DgKFmOo/mbKWyh
-         jlusziVRgXqz85e4X3flRZUFTyWZ7vAsuICJzVbudERATiLYLZh7/hiCQciRy+lEbjdi
-         I6ZQ==
-X-Gm-Message-State: AOAM533xkWSuoA6jRC1jeGcL1PDKGVPD23b59m7nrR2U3U5z38Ive/fR
-        FVCFN4H/bCs17H6Pu4m5Bd7dyw==
-X-Google-Smtp-Source: ABdhPJxqUCwVSG6toDRuLANnhni4qrPPRroAFFaDnn3278Dfz0F/AT1XfP2vNCzTq7Ze/QWg9oB5Mg==
-X-Received: by 2002:a05:6808:179e:b0:2fa:672a:275a with SMTP id bg30-20020a056808179e00b002fa672a275amr599270oib.171.1649787177514;
-        Tue, 12 Apr 2022 11:12:57 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id f44-20020a056871072c00b000e2b638a925sm3749088oap.49.2022.04.12.11.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:12:56 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 11:15:10 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 5/6] ufs: use PM OPP when scaling gears
-Message-ID: <YlXBropALLWVXcD4@ripper>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
+        Tue, 12 Apr 2022 14:19:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256085F4FD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:16:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D1B101F856;
+        Tue, 12 Apr 2022 18:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649787401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sGZnEfNUtKAg07X2wf9FRs3zXZqWF9MgHco0dMob5fM=;
+        b=qPmHjThBI4qGwOUubNl2Yld2mQ6bgzyPlSOm7o0xvLMQOHE3qCxImUj2v4waX0bAknPFur
+        e+XyPANyi8nAzc801oMFfFoh/u2iwZK937PWJI/z32QXTxcJ5RVSgbWBteRb8aREnzdEm2
+        hyzYtTz9Yq5B4jNgsyqIVW1Ch/rc/JQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649787401;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sGZnEfNUtKAg07X2wf9FRs3zXZqWF9MgHco0dMob5fM=;
+        b=Qd/SPi7ZTmN+GD2XGw0znVnZxUF4FeCGsS4Zi7YDKtC86t13KcTHcClLPnqVsKHaFkHCfv
+        gWGmEFjEUgizU7DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD50213780;
+        Tue, 12 Apr 2022 18:16:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id esxdKQnCVWKwCgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 12 Apr 2022 18:16:41 +0000
+Message-ID: <1b0b1ba2-8539-29c0-588e-948a95c79e5a@suse.de>
+Date:   Tue, 12 Apr 2022 20:16:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] dma-buf-map: remove renamed header file
+Content-Language: en-US
+To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        dri-devel@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+References: <20220411134404.524776-1-kherbst@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220411134404.524776-1-kherbst@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Unzfz16BIhSZ0gIPocs0L0KH"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,420 +74,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 11 Apr 08:43 PDT 2022, Krzysztof Kozlowski wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Unzfz16BIhSZ0gIPocs0L0KH
+Content-Type: multipart/mixed; boundary="------------nA8gTf54gyFT0vUJtalAz5A1";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+ dri-devel@lists.freedesktop.org, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Message-ID: <1b0b1ba2-8539-29c0-588e-948a95c79e5a@suse.de>
+Subject: Re: [PATCH] dma-buf-map: remove renamed header file
+References: <20220411134404.524776-1-kherbst@redhat.com>
+In-Reply-To: <20220411134404.524776-1-kherbst@redhat.com>
 
-> Scaling gears requires not only scaling clocks, but also voltage levels,
-> e.g. via performance states.
-> 
-> Use the provided OPP table, to set proper OPP frequency which through
-> required-opps will trigger performance state change.  This deprecates
-> the old freq-table-hz Devicetree property and old clock scaling method
-> in favor of PM core code.
-> 
+--------------nA8gTf54gyFT0vUJtalAz5A1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+DQoNCkFtIDExLjA0LjIyIHVtIDE1OjQ0IHNjaHJpZWIgS2Fyb2wgSGVyYnN0Og0KPiBjb21t
+aXQgNzkzOGY0MjE4MTY4ICgiZG1hLWJ1Zi1tYXA6IFJlbmFtZSB0byBpb3N5cy1tYXAiKSBh
+bHJlYWR5IHJlbmFtZWQNCj4gdGhpcyBmaWxlLCBidXQgaXQgZ290IGJyb3VnaHQgYmFjayBi
+eSBhIG1lcmdlLg0KPiANCj4gRGVsZXRlIGl0IGZvciByZWFsIHRoaXMgdGltZS4NCj4gDQo+
+IEZpeGVzOiAzMDQyNGViYWU4ZGYgKCJNZXJnZSB0YWcgJ2RybS1pbnRlbC1ndC1uZXh0LTIw
+MjItMDItMTcnIG9mIGdpdDovL2Fub25naXQuZnJlZWRlc2t0b3Aub3JnL2RybS9kcm0taW50
+ZWwgaW50byBkcm0taW50ZWwtbmV4dCIpDQo+IENjOiBSb2RyaWdvIFZpdmkgPHJvZHJpZ28u
+dml2aUBpbnRlbC5jb20+DQo+IENjOiBMdWNhcyBEZSBNYXJjaGkgPGx1Y2FzLmRlbWFyY2hp
+QGludGVsLmNvbT4NCj4gQ2M6IGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmcNCj4g
+U2lnbmVkLW9mZi1ieTogS2Fyb2wgSGVyYnN0IDxraGVyYnN0QHJlZGhhdC5jb20+DQoNClJl
+dmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0K
+PiAtLS0NCj4gICBpbmNsdWRlL2xpbnV4L2RtYS1idWYtbWFwLmggfCAyNjYgLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDI2NiBk
+ZWxldGlvbnMoLSkNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9saW51eC9kbWEt
+YnVmLW1hcC5oDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9kbWEtYnVmLW1h
+cC5oIGIvaW5jbHVkZS9saW51eC9kbWEtYnVmLW1hcC5oDQo+IGRlbGV0ZWQgZmlsZSBtb2Rl
+IDEwMDY0NA0KPiBpbmRleCAxOWZhMGI1YWU1ZWMuLjAwMDAwMDAwMDAwMA0KPiAtLS0gYS9p
+bmNsdWRlL2xpbnV4L2RtYS1idWYtbWFwLmgNCj4gKysrIC9kZXYvbnVsbA0KPiBAQCAtMSwy
+NjYgKzAsMCBAQA0KPiAtLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb25s
+eSAqLw0KPiAtLyoNCj4gLSAqIFBvaW50ZXIgdG8gZG1hLWJ1Zi1tYXBwZWQgbWVtb3J5LCBw
+bHVzIGhlbHBlcnMuDQo+IC0gKi8NCj4gLQ0KPiAtI2lmbmRlZiBfX0RNQV9CVUZfTUFQX0hf
+Xw0KPiAtI2RlZmluZSBfX0RNQV9CVUZfTUFQX0hfXw0KPiAtDQo+IC0jaW5jbHVkZSA8bGlu
+dXgvaW8uaD4NCj4gLSNpbmNsdWRlIDxsaW51eC9zdHJpbmcuaD4NCj4gLQ0KPiAtLyoqDQo+
+IC0gKiBET0M6IG92ZXJ2aWV3DQo+IC0gKg0KPiAtICogQ2FsbGluZyBkbWEtYnVmJ3Mgdm1h
+cCBvcGVyYXRpb24gcmV0dXJucyBhIHBvaW50ZXIgdG8gdGhlIGJ1ZmZlcidzIG1lbW9yeS4N
+Cj4gLSAqIERlcGVuZGluZyBvbiB0aGUgbG9jYXRpb24gb2YgdGhlIGJ1ZmZlciwgdXNlcnMg
+bWF5IGhhdmUgdG8gYWNjZXNzIGl0IHdpdGgNCj4gLSAqIEkvTyBvcGVyYXRpb25zIG9yIG1l
+bW9yeSBsb2FkL3N0b3JlIG9wZXJhdGlvbnMuIEZvciBleGFtcGxlLCBjb3B5aW5nIHRvDQo+
+IC0gKiBzeXN0ZW0gbWVtb3J5IGNvdWxkIGJlIGRvbmUgd2l0aCBtZW1jcHkoKSwgY29weWlu
+ZyB0byBJL08gbWVtb3J5IHdvdWxkIGJlDQo+IC0gKiBkb25lIHdpdGggbWVtY3B5X3RvaW8o
+KS4NCj4gLSAqDQo+IC0gKiAuLiBjb2RlLWJsb2NrOjogYw0KPiAtICoNCj4gLSAqCXZvaWQg
+KnZhZGRyID0gLi4uOyAvLyBwb2ludGVyIHRvIHN5c3RlbSBtZW1vcnkNCj4gLSAqCW1lbWNw
+eSh2YWRkciwgc3JjLCBsZW4pOw0KPiAtICoNCj4gLSAqCXZvaWQgKnZhZGRyX2lvbWVtID0g
+Li4uOyAvLyBwb2ludGVyIHRvIEkvTyBtZW1vcnkNCj4gLSAqCW1lbWNweV90b2lvKHZhZGRy
+LCBfaW9tZW0sIHNyYywgbGVuKTsNCj4gLSAqDQo+IC0gKiBXaGVuIHVzaW5nIGRtYS1idWYn
+cyB2bWFwIG9wZXJhdGlvbiwgdGhlIHJldHVybmVkIHBvaW50ZXIgaXMgZW5jb2RlZCBhcw0K
+PiAtICogOmM6dHlwZTpgc3RydWN0IGRtYV9idWZfbWFwIDxkbWFfYnVmX21hcD5gLg0KPiAt
+ICogOmM6dHlwZTpgc3RydWN0IGRtYV9idWZfbWFwIDxkbWFfYnVmX21hcD5gIHN0b3JlcyB0
+aGUgYnVmZmVyJ3MgYWRkcmVzcyBpbg0KPiAtICogc3lzdGVtIG9yIEkvTyBtZW1vcnkgYW5k
+IGEgZmxhZyB0aGF0IHNpZ25hbHMgdGhlIHJlcXVpcmVkIG1ldGhvZCBvZg0KPiAtICogYWNj
+ZXNzaW5nIHRoZSBidWZmZXIuIFVzZSB0aGUgcmV0dXJuZWQgaW5zdGFuY2UgYW5kIHRoZSBo
+ZWxwZXIgZnVuY3Rpb25zDQo+IC0gKiB0byBhY2Nlc3MgdGhlIGJ1ZmZlcidzIG1lbW9yeSBp
+biB0aGUgY29ycmVjdCB3YXkuDQo+IC0gKg0KPiAtICogVGhlIHR5cGUgOmM6dHlwZTpgc3Ry
+dWN0IGRtYV9idWZfbWFwIDxkbWFfYnVmX21hcD5gIGFuZCBpdHMgaGVscGVycyBhcmUNCj4g
+LSAqIGFjdHVhbGx5IGluZGVwZW5kZW50IGZyb20gdGhlIGRtYS1idWYgaW5mcmFzdHJ1Y3R1
+cmUuIFdoZW4gc2hhcmluZyBidWZmZXJzDQo+IC0gKiBhbW9uZyBkZXZpY2VzLCBkcml2ZXJz
+IGhhdmUgdG8ga25vdyB0aGUgbG9jYXRpb24gb2YgdGhlIG1lbW9yeSB0byBhY2Nlc3MNCj4g
+LSAqIHRoZSBidWZmZXJzIGluIGEgc2FmZSB3YXkuIDpjOnR5cGU6YHN0cnVjdCBkbWFfYnVm
+X21hcCA8ZG1hX2J1Zl9tYXA+YA0KPiAtICogc29sdmVzIHRoaXMgcHJvYmxlbSBmb3IgZG1h
+LWJ1ZiBhbmQgaXRzIHVzZXJzLiBJZiBvdGhlciBkcml2ZXJzIG9yDQo+IC0gKiBzdWItc3lz
+dGVtcyByZXF1aXJlIHNpbWlsYXIgZnVuY3Rpb25hbGl0eSwgdGhlIHR5cGUgY291bGQgYmUg
+Z2VuZXJhbGl6ZWQNCj4gLSAqIGFuZCBtb3ZlZCB0byBhIG1vcmUgcHJvbWluZW50IGhlYWRl
+ciBmaWxlLg0KPiAtICoNCj4gLSAqIE9wZW4tY29kaW5nIGFjY2VzcyB0byA6Yzp0eXBlOmBz
+dHJ1Y3QgZG1hX2J1Zl9tYXAgPGRtYV9idWZfbWFwPmAgaXMNCj4gLSAqIGNvbnNpZGVyZWQg
+YmFkIHN0eWxlLiBSYXRoZXIgdGhlbiBhY2Nlc3NpbmcgaXRzIGZpZWxkcyBkaXJlY3RseSwg
+dXNlIG9uZQ0KPiAtICogb2YgdGhlIHByb3ZpZGVkIGhlbHBlciBmdW5jdGlvbnMsIG9yIGlt
+cGxlbWVudCB5b3VyIG93bi4gRm9yIGV4YW1wbGUsDQo+IC0gKiBpbnN0YW5jZXMgb2YgOmM6
+dHlwZTpgc3RydWN0IGRtYV9idWZfbWFwIDxkbWFfYnVmX21hcD5gIGNhbiBiZSBpbml0aWFs
+aXplZA0KPiAtICogc3RhdGljYWxseSB3aXRoIERNQV9CVUZfTUFQX0lOSVRfVkFERFIoKSwg
+b3IgYXQgcnVudGltZSB3aXRoDQo+IC0gKiBkbWFfYnVmX21hcF9zZXRfdmFkZHIoKS4gVGhl
+c2UgaGVscGVycyB3aWxsIHNldCBhbiBhZGRyZXNzIGluIHN5c3RlbSBtZW1vcnkuDQo+IC0g
+Kg0KPiAtICogLi4gY29kZS1ibG9jazo6IGMNCj4gLSAqDQo+IC0gKglzdHJ1Y3QgZG1hX2J1
+Zl9tYXAgbWFwID0gRE1BX0JVRl9NQVBfSU5JVF9WQUREUigweGRlYWRiZWFmKTsNCj4gLSAq
+DQo+IC0gKglkbWFfYnVmX21hcF9zZXRfdmFkZHIoJm1hcCwgMHhkZWFkYmVhZik7DQo+IC0g
+Kg0KPiAtICogVG8gc2V0IGFuIGFkZHJlc3MgaW4gSS9PIG1lbW9yeSwgdXNlIGRtYV9idWZf
+bWFwX3NldF92YWRkcl9pb21lbSgpLg0KPiAtICoNCj4gLSAqIC4uIGNvZGUtYmxvY2s6OiBj
+DQo+IC0gKg0KPiAtICoJZG1hX2J1Zl9tYXBfc2V0X3ZhZGRyX2lvbWVtKCZtYXAsIDB4ZGVh
+ZGJlYWYpOw0KPiAtICoNCj4gLSAqIEluc3RhbmNlcyBvZiBzdHJ1Y3QgZG1hX2J1Zl9tYXAg
+ZG8gbm90IGhhdmUgdG8gYmUgY2xlYW5lZCB1cCwgYnV0DQo+IC0gKiBjYW4gYmUgY2xlYXJl
+ZCB0byBOVUxMIHdpdGggZG1hX2J1Zl9tYXBfY2xlYXIoKS4gQ2xlYXJlZCBtYXBwaW5ncw0K
+PiAtICogYWx3YXlzIHJlZmVyIHRvIHN5c3RlbSBtZW1vcnkuDQo+IC0gKg0KPiAtICogLi4g
+Y29kZS1ibG9jazo6IGMNCj4gLSAqDQo+IC0gKglkbWFfYnVmX21hcF9jbGVhcigmbWFwKTsN
+Cj4gLSAqDQo+IC0gKiBUZXN0IGlmIGEgbWFwcGluZyBpcyB2YWxpZCB3aXRoIGVpdGhlciBk
+bWFfYnVmX21hcF9pc19zZXQoKSBvcg0KPiAtICogZG1hX2J1Zl9tYXBfaXNfbnVsbCgpLg0K
+PiAtICoNCj4gLSAqIC4uIGNvZGUtYmxvY2s6OiBjDQo+IC0gKg0KPiAtICoJaWYgKGRtYV9i
+dWZfbWFwX2lzX3NldCgmbWFwKSAhPSBkbWFfYnVmX21hcF9pc19udWxsKCZtYXApKQ0KPiAt
+ICoJCS8vIGFsd2F5cyB0cnVlDQo+IC0gKg0KPiAtICogSW5zdGFuY2VzIG9mIDpjOnR5cGU6
+YHN0cnVjdCBkbWFfYnVmX21hcCA8ZG1hX2J1Zl9tYXA+YCBjYW4gYmUgY29tcGFyZWQNCj4g
+LSAqIGZvciBlcXVhbGl0eSB3aXRoIGRtYV9idWZfbWFwX2lzX2VxdWFsKCkuIE1hcHBpbmdz
+IHRoZSBwb2ludCB0byBkaWZmZXJlbnQNCj4gLSAqIG1lbW9yeSBzcGFjZXMsIHN5c3RlbSBv
+ciBJL08sIGFyZSBuZXZlciBlcXVhbC4gVGhhdCdzIGV2ZW4gdHJ1ZSBpZiBib3RoDQo+IC0g
+KiBzcGFjZXMgYXJlIGxvY2F0ZWQgaW4gdGhlIHNhbWUgYWRkcmVzcyBzcGFjZSwgYm90aCBt
+YXBwaW5ncyBjb250YWluIHRoZQ0KPiAtICogc2FtZSBhZGRyZXNzIHZhbHVlLCBvciBib3Ro
+IG1hcHBpbmdzIHJlZmVyIHRvIE5VTEwuDQo+IC0gKg0KPiAtICogLi4gY29kZS1ibG9jazo6
+IGMNCj4gLSAqDQo+IC0gKglzdHJ1Y3QgZG1hX2J1Zl9tYXAgc3lzX21hcDsgLy8gcmVmZXJz
+IHRvIHN5c3RlbSBtZW1vcnkNCj4gLSAqCXN0cnVjdCBkbWFfYnVmX21hcCBpb19tYXA7IC8v
+IHJlZmVycyB0byBJL08gbWVtb3J5DQo+IC0gKg0KPiAtICoJaWYgKGRtYV9idWZfbWFwX2lz
+X2VxdWFsKCZzeXNfbWFwLCAmaW9fbWFwKSkNCj4gLSAqCQkvLyBhbHdheXMgZmFsc2UNCj4g
+LSAqDQo+IC0gKiBBIHNldCB1cCBpbnN0YW5jZSBvZiBzdHJ1Y3QgZG1hX2J1Zl9tYXAgY2Fu
+IGJlIHVzZWQgdG8gYWNjZXNzIG9yIG1hbmlwdWxhdGUNCj4gLSAqIHRoZSBidWZmZXIgbWVt
+b3J5LiBEZXBlbmRpbmcgb24gdGhlIGxvY2F0aW9uIG9mIHRoZSBtZW1vcnksIHRoZSBwcm92
+aWRlZA0KPiAtICogaGVscGVycyB3aWxsIHBpY2sgdGhlIGNvcnJlY3Qgb3BlcmF0aW9ucy4g
+RGF0YSBjYW4gYmUgY29waWVkIGludG8gdGhlIG1lbW9yeQ0KPiAtICogd2l0aCBkbWFfYnVm
+X21hcF9tZW1jcHlfdG8oKS4gVGhlIGFkZHJlc3MgY2FuIGJlIG1hbmlwdWxhdGVkIHdpdGgN
+Cj4gLSAqIGRtYV9idWZfbWFwX2luY3IoKS4NCj4gLSAqDQo+IC0gKiAuLiBjb2RlLWJsb2Nr
+OjogYw0KPiAtICoNCj4gLSAqCWNvbnN0IHZvaWQgKnNyYyA9IC4uLjsgLy8gc291cmNlIGJ1
+ZmZlcg0KPiAtICoJc2l6ZV90IGxlbiA9IC4uLjsgLy8gbGVuZ3RoIG9mIHNyYw0KPiAtICoN
+Cj4gLSAqCWRtYV9idWZfbWFwX21lbWNweV90bygmbWFwLCBzcmMsIGxlbik7DQo+IC0gKglk
+bWFfYnVmX21hcF9pbmNyKCZtYXAsIGxlbik7IC8vIGdvIHRvIGZpcnN0IGJ5dGUgYWZ0ZXIg
+dGhlIG1lbWNweQ0KPiAtICovDQo+IC0NCj4gLS8qKg0KPiAtICogc3RydWN0IGRtYV9idWZf
+bWFwIC0gUG9pbnRlciB0byB2bWFwJ2VkIGRtYS1idWYgbWVtb3J5Lg0KPiAtICogQHZhZGRy
+X2lvbWVtOglUaGUgYnVmZmVyJ3MgYWRkcmVzcyBpZiBpbiBJL08gbWVtb3J5DQo+IC0gKiBA
+dmFkZHI6CQlUaGUgYnVmZmVyJ3MgYWRkcmVzcyBpZiBpbiBzeXN0ZW0gbWVtb3J5DQo+IC0g
+KiBAaXNfaW9tZW06CQlUcnVlIGlmIHRoZSBkbWEtYnVmIG1lbW9yeSBpcyBsb2NhdGVkIGlu
+IEkvTw0KPiAtICoJCQltZW1vcnksIG9yIGZhbHNlIG90aGVyd2lzZS4NCj4gLSAqLw0KPiAt
+c3RydWN0IGRtYV9idWZfbWFwIHsNCj4gLQl1bmlvbiB7DQo+IC0JCXZvaWQgX19pb21lbSAq
+dmFkZHJfaW9tZW07DQo+IC0JCXZvaWQgKnZhZGRyOw0KPiAtCX07DQo+IC0JYm9vbCBpc19p
+b21lbTsNCj4gLX07DQo+IC0NCj4gLS8qKg0KPiAtICogRE1BX0JVRl9NQVBfSU5JVF9WQURE
+UiAtIEluaXRpYWxpemVzIHN0cnVjdCBkbWFfYnVmX21hcCB0byBhbiBhZGRyZXNzIGluIHN5
+c3RlbSBtZW1vcnkNCj4gLSAqIEB2YWRkcl86CUEgc3lzdGVtLW1lbW9yeSBhZGRyZXNzDQo+
+IC0gKi8NCj4gLSNkZWZpbmUgRE1BX0JVRl9NQVBfSU5JVF9WQUREUih2YWRkcl8pIFwNCj4g
+LQl7IFwNCj4gLQkJLnZhZGRyID0gKHZhZGRyXyksIFwNCj4gLQkJLmlzX2lvbWVtID0gZmFs
+c2UsIFwNCj4gLQl9DQo+IC0NCj4gLS8qKg0KPiAtICogZG1hX2J1Zl9tYXBfc2V0X3ZhZGRy
+IC0gU2V0cyBhIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUgdG8gYW4gYWRkcmVzcyBpbiBz
+eXN0ZW0gbWVtb3J5DQo+IC0gKiBAbWFwOglUaGUgZG1hLWJ1ZiBtYXBwaW5nIHN0cnVjdHVy
+ZQ0KPiAtICogQHZhZGRyOglBIHN5c3RlbS1tZW1vcnkgYWRkcmVzcw0KPiAtICoNCj4gLSAq
+IFNldHMgdGhlIGFkZHJlc3MgYW5kIGNsZWFycyB0aGUgSS9PLW1lbW9yeSBmbGFnLg0KPiAt
+ICovDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQgZG1hX2J1Zl9tYXBfc2V0X3ZhZGRyKHN0cnVj
+dCBkbWFfYnVmX21hcCAqbWFwLCB2b2lkICp2YWRkcikNCj4gLXsNCj4gLQltYXAtPnZhZGRy
+ID0gdmFkZHI7DQo+IC0JbWFwLT5pc19pb21lbSA9IGZhbHNlOw0KPiAtfQ0KPiAtDQo+IC0v
+KioNCj4gLSAqIGRtYV9idWZfbWFwX3NldF92YWRkcl9pb21lbSAtIFNldHMgYSBkbWEtYnVm
+IG1hcHBpbmcgc3RydWN0dXJlIHRvIGFuIGFkZHJlc3MgaW4gSS9PIG1lbW9yeQ0KPiAtICog
+QG1hcDoJCVRoZSBkbWEtYnVmIG1hcHBpbmcgc3RydWN0dXJlDQo+IC0gKiBAdmFkZHJfaW9t
+ZW06CUFuIEkvTy1tZW1vcnkgYWRkcmVzcw0KPiAtICoNCj4gLSAqIFNldHMgdGhlIGFkZHJl
+c3MgYW5kIHRoZSBJL08tbWVtb3J5IGZsYWcuDQo+IC0gKi8NCj4gLXN0YXRpYyBpbmxpbmUg
+dm9pZCBkbWFfYnVmX21hcF9zZXRfdmFkZHJfaW9tZW0oc3RydWN0IGRtYV9idWZfbWFwICpt
+YXAsDQo+IC0JCQkJCSAgICAgICB2b2lkIF9faW9tZW0gKnZhZGRyX2lvbWVtKQ0KPiAtew0K
+PiAtCW1hcC0+dmFkZHJfaW9tZW0gPSB2YWRkcl9pb21lbTsNCj4gLQltYXAtPmlzX2lvbWVt
+ID0gdHJ1ZTsNCj4gLX0NCj4gLQ0KPiAtLyoqDQo+IC0gKiBkbWFfYnVmX21hcF9pc19lcXVh
+bCAtIENvbXBhcmVzIHR3byBkbWEtYnVmIG1hcHBpbmcgc3RydWN0dXJlcyBmb3IgZXF1YWxp
+dHkNCj4gLSAqIEBsaHM6CVRoZSBkbWEtYnVmIG1hcHBpbmcgc3RydWN0dXJlDQo+IC0gKiBA
+cmhzOglBIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUgdG8gY29tcGFyZSB3aXRoDQo+IC0g
+Kg0KPiAtICogVHdvIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmVzIGFyZSBlcXVhbCBpZiB0
+aGV5IGJvdGggcmVmZXIgdG8gdGhlIHNhbWUgdHlwZSBvZiBtZW1vcnkNCj4gLSAqIGFuZCB0
+byB0aGUgc2FtZSBhZGRyZXNzIHdpdGhpbiB0aGF0IG1lbW9yeS4NCj4gLSAqDQo+IC0gKiBS
+ZXR1cm5zOg0KPiAtICogVHJ1ZSBpcyBib3RoIHN0cnVjdHVyZXMgYXJlIGVxdWFsLCBvciBm
+YWxzZSBvdGhlcndpc2UuDQo+IC0gKi8NCj4gLXN0YXRpYyBpbmxpbmUgYm9vbCBkbWFfYnVm
+X21hcF9pc19lcXVhbChjb25zdCBzdHJ1Y3QgZG1hX2J1Zl9tYXAgKmxocywNCj4gLQkJCQkJ
+Y29uc3Qgc3RydWN0IGRtYV9idWZfbWFwICpyaHMpDQo+IC17DQo+IC0JaWYgKGxocy0+aXNf
+aW9tZW0gIT0gcmhzLT5pc19pb21lbSkNCj4gLQkJcmV0dXJuIGZhbHNlOw0KPiAtCWVsc2Ug
+aWYgKGxocy0+aXNfaW9tZW0pDQo+IC0JCXJldHVybiBsaHMtPnZhZGRyX2lvbWVtID09IHJo
+cy0+dmFkZHJfaW9tZW07DQo+IC0JZWxzZQ0KPiAtCQlyZXR1cm4gbGhzLT52YWRkciA9PSBy
+aHMtPnZhZGRyOw0KPiAtfQ0KPiAtDQo+IC0vKioNCj4gLSAqIGRtYV9idWZfbWFwX2lzX251
+bGwgLSBUZXN0cyBmb3IgYSBkbWEtYnVmIG1hcHBpbmcgdG8gYmUgTlVMTA0KPiAtICogQG1h
+cDoJVGhlIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUNCj4gLSAqDQo+IC0gKiBEZXBlbmRp
+bmcgb24gdGhlIHN0YXRlIG9mIHN0cnVjdCBkbWFfYnVmX21hcC5pc19pb21lbSwgdGVzdHMg
+aWYgdGhlDQo+IC0gKiBtYXBwaW5nIGlzIE5VTEwuDQo+IC0gKg0KPiAtICogUmV0dXJuczoN
+Cj4gLSAqIFRydWUgaWYgdGhlIG1hcHBpbmcgaXMgTlVMTCwgb3IgZmFsc2Ugb3RoZXJ3aXNl
+Lg0KPiAtICovDQo+IC1zdGF0aWMgaW5saW5lIGJvb2wgZG1hX2J1Zl9tYXBfaXNfbnVsbChj
+b25zdCBzdHJ1Y3QgZG1hX2J1Zl9tYXAgKm1hcCkNCj4gLXsNCj4gLQlpZiAobWFwLT5pc19p
+b21lbSkNCj4gLQkJcmV0dXJuICFtYXAtPnZhZGRyX2lvbWVtOw0KPiAtCXJldHVybiAhbWFw
+LT52YWRkcjsNCj4gLX0NCj4gLQ0KPiAtLyoqDQo+IC0gKiBkbWFfYnVmX21hcF9pc19zZXQg
+LSBUZXN0cyBpcyB0aGUgZG1hLWJ1ZiBtYXBwaW5nIGhhcyBiZWVuIHNldA0KPiAtICogQG1h
+cDoJVGhlIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUNCj4gLSAqDQo+IC0gKiBEZXBlbmRp
+bmcgb24gdGhlIHN0YXRlIG9mIHN0cnVjdCBkbWFfYnVmX21hcC5pc19pb21lbSwgdGVzdHMg
+aWYgdGhlDQo+IC0gKiBtYXBwaW5nIGhhcyBiZWVuIHNldC4NCj4gLSAqDQo+IC0gKiBSZXR1
+cm5zOg0KPiAtICogVHJ1ZSBpZiB0aGUgbWFwcGluZyBpcyBiZWVuIHNldCwgb3IgZmFsc2Ug
+b3RoZXJ3aXNlLg0KPiAtICovDQo+IC1zdGF0aWMgaW5saW5lIGJvb2wgZG1hX2J1Zl9tYXBf
+aXNfc2V0KGNvbnN0IHN0cnVjdCBkbWFfYnVmX21hcCAqbWFwKQ0KPiAtew0KPiAtCXJldHVy
+biAhZG1hX2J1Zl9tYXBfaXNfbnVsbChtYXApOw0KPiAtfQ0KPiAtDQo+IC0vKioNCj4gLSAq
+IGRtYV9idWZfbWFwX2NsZWFyIC0gQ2xlYXJzIGEgZG1hLWJ1ZiBtYXBwaW5nIHN0cnVjdHVy
+ZQ0KPiAtICogQG1hcDoJVGhlIGRtYS1idWYgbWFwcGluZyBzdHJ1Y3R1cmUNCj4gLSAqDQo+
+IC0gKiBDbGVhcnMgYWxsIGZpZWxkcyB0byB6ZXJvOyBpbmNsdWRpbmcgc3RydWN0IGRtYV9i
+dWZfbWFwLmlzX2lvbWVtLiBTbw0KPiAtICogbWFwcGluZyBzdHJ1Y3R1cmVzIHRoYXQgd2Vy
+ZSBzZXQgdG8gcG9pbnQgdG8gSS9PIG1lbW9yeSBhcmUgcmVzZXQgZm9yDQo+IC0gKiBzeXN0
+ZW0gbWVtb3J5LiBQb2ludGVycyBhcmUgY2xlYXJlZCB0byBOVUxMLiBUaGlzIGlzIHRoZSBk
+ZWZhdWx0Lg0KPiAtICovDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQgZG1hX2J1Zl9tYXBfY2xl
+YXIoc3RydWN0IGRtYV9idWZfbWFwICptYXApDQo+IC17DQo+IC0JaWYgKG1hcC0+aXNfaW9t
+ZW0pIHsNCj4gLQkJbWFwLT52YWRkcl9pb21lbSA9IE5VTEw7DQo+IC0JCW1hcC0+aXNfaW9t
+ZW0gPSBmYWxzZTsNCj4gLQl9IGVsc2Ugew0KPiAtCQltYXAtPnZhZGRyID0gTlVMTDsNCj4g
+LQl9DQo+IC19DQo+IC0NCj4gLS8qKg0KPiAtICogZG1hX2J1Zl9tYXBfbWVtY3B5X3RvIC0g
+TWVtY3B5IGludG8gZG1hLWJ1ZiBtYXBwaW5nDQo+IC0gKiBAZHN0OglUaGUgZG1hLWJ1ZiBt
+YXBwaW5nIHN0cnVjdHVyZQ0KPiAtICogQHNyYzoJVGhlIHNvdXJjZSBidWZmZXINCj4gLSAq
+IEBsZW46CVRoZSBudW1iZXIgb2YgYnl0ZSBpbiBzcmMNCj4gLSAqDQo+IC0gKiBDb3BpZXMg
+ZGF0YSBpbnRvIGEgZG1hLWJ1ZiBtYXBwaW5nLiBUaGUgc291cmNlIGJ1ZmZlciBpcyBpbiBz
+eXN0ZW0NCj4gLSAqIG1lbW9yeS4gRGVwZW5kaW5nIG9uIHRoZSBidWZmZXIncyBsb2NhdGlv
+biwgdGhlIGhlbHBlciBwaWNrcyB0aGUgY29ycmVjdA0KPiAtICogbWV0aG9kIG9mIGFjY2Vz
+c2luZyB0aGUgbWVtb3J5Lg0KPiAtICovDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQgZG1hX2J1
+Zl9tYXBfbWVtY3B5X3RvKHN0cnVjdCBkbWFfYnVmX21hcCAqZHN0LCBjb25zdCB2b2lkICpz
+cmMsIHNpemVfdCBsZW4pDQo+IC17DQo+IC0JaWYgKGRzdC0+aXNfaW9tZW0pDQo+IC0JCW1l
+bWNweV90b2lvKGRzdC0+dmFkZHJfaW9tZW0sIHNyYywgbGVuKTsNCj4gLQllbHNlDQo+IC0J
+CW1lbWNweShkc3QtPnZhZGRyLCBzcmMsIGxlbik7DQo+IC19DQo+IC0NCj4gLS8qKg0KPiAt
+ICogZG1hX2J1Zl9tYXBfaW5jciAtIEluY3JlbWVudHMgdGhlIGFkZHJlc3Mgc3RvcmVkIGlu
+IGEgZG1hLWJ1ZiBtYXBwaW5nDQo+IC0gKiBAbWFwOglUaGUgZG1hLWJ1ZiBtYXBwaW5nIHN0
+cnVjdHVyZQ0KPiAtICogQGluY3I6CVRoZSBudW1iZXIgb2YgYnl0ZXMgdG8gaW5jcmVtZW50
+DQo+IC0gKg0KPiAtICogSW5jcmVtZW50cyB0aGUgYWRkcmVzcyBzdG9yZWQgaW4gYSBkbWEt
+YnVmIG1hcHBpbmcuIERlcGVuZGluZyBvbiB0aGUNCj4gLSAqIGJ1ZmZlcidzIGxvY2F0aW9u
+LCB0aGUgY29ycmVjdCB2YWx1ZSB3aWxsIGJlIHVwZGF0ZWQuDQo+IC0gKi8NCj4gLXN0YXRp
+YyBpbmxpbmUgdm9pZCBkbWFfYnVmX21hcF9pbmNyKHN0cnVjdCBkbWFfYnVmX21hcCAqbWFw
+LCBzaXplX3QgaW5jcikNCj4gLXsNCj4gLQlpZiAobWFwLT5pc19pb21lbSkNCj4gLQkJbWFw
+LT52YWRkcl9pb21lbSArPSBpbmNyOw0KPiAtCWVsc2UNCj4gLQkJbWFwLT52YWRkciArPSBp
+bmNyOw0KPiAtfQ0KPiAtDQo+IC0jZW5kaWYgLyogX19ETUFfQlVGX01BUF9IX18gKi8NCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/scsi/ufs/ufshcd-pltfrm.c |  69 +++++++++++++++++++
->  drivers/scsi/ufs/ufshcd.c        | 115 +++++++++++++++++++++++--------
->  drivers/scsi/ufs/ufshcd.h        |   4 ++
->  3 files changed, 158 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> index c1d8b6f46868..edba585db0c1 100644
-> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> @@ -107,6 +107,69 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
->  	return ret;
->  }
->  
-> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
-> +{
-> +	struct device *dev = hba->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct ufs_clk_info *clki;
-> +	const char *names[16];
-> +	bool clocks_done;
-> +	int cnt, i, ret;
-> +
-> +	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
-> +		return 0;
-> +
-> +	cnt = of_property_count_strings(np, "clock-names");
-> +	if (cnt <= 0) {
-> +		dev_warn(dev, "%s: Missing clock-names\n",
-> +			 __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (cnt > ARRAY_SIZE(names)) {
-> +		dev_info(dev, "%s: Too many clock-names\n",  __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* clocks parsed by ufshcd_parse_clock_info() */
-> +	clocks_done = !!of_find_property(np, "freq-table-hz", NULL);
-> +
-> +	for (i = 0; i < cnt; i++) {
-> +		ret = of_property_read_string_index(np, "clock-names", i,
-> +						    &names[i]);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (clocks_done)
-> +			continue;
-> +
-> +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
-> +		if (!clki)
-> +			return -ENOMEM;
-> +
-> +		clki->name = devm_kstrdup(dev, names[i], GFP_KERNEL);
-> +		if (!clki->name)
-> +			return -ENOMEM;
-> +
-> +		if (!strcmp(names[i], "ref_clk"))
-> +			clki->keep_link_active = true;
-> +
-> +		list_add_tail(&clki->list, &hba->clk_list_head);
-> +	}
-> +
-> +	ret = devm_pm_opp_set_clknames(dev, names, i);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_pm_opp_of_add_table(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hba->use_pm_opp = true;
-> +
-> +	return 0;
-> +}
-> +
->  #define MAX_PROP_SIZE 32
->  static int ufshcd_populate_vreg(struct device *dev, const char *name,
->  		struct ufs_vreg **out_vreg)
-> @@ -360,6 +423,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
->  		goto dealloc_host;
->  	}
->  
-> +	err = ufshcd_parse_operating_points(hba);
-> +	if (err) {
-> +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-> +		goto dealloc_host;
-> +	}
-> +
->  	ufshcd_init_lanes_per_dir(hba);
->  
->  	err = ufshcd_init(hba, mmio_base, irq);
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 5bfa62fa288a..aec7da18a550 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1022,6 +1022,9 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
->  	int ret = 0;
->  	ktime_t start = ktime_get();
->  
-> +	if (hba->use_pm_opp)
-> +		return 0;
-> +
->  	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, PRE_CHANGE);
->  	if (ret)
->  		goto out;
-> @@ -1044,11 +1047,13 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
->  /**
->   * ufshcd_is_devfreq_scaling_required - check if scaling is required or not
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True if scaling up and false if scaling down
->   *
->   * Returns true if scaling is required, false otherwise.
->   */
->  static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
-> +					       unsigned long freq,
->  					       bool scale_up)
->  {
->  	struct ufs_clk_info *clki;
-> @@ -1057,6 +1062,9 @@ static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
->  	if (list_empty(head))
->  		return false;
->  
-> +	if (hba->use_pm_opp)
-> +		return freq != hba->clk_scaling.target_freq;
-> +
->  	list_for_each_entry(clki, head, list) {
->  		if (!IS_ERR_OR_NULL(clki->clk)) {
->  			if (scale_up && clki->max_freq) {
-> @@ -1155,13 +1163,15 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
->  /**
->   * ufshcd_scale_gear - scale up/down UFS gear
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True for scaling up gear and false for scaling down
->   *
->   * Returns 0 for success,
->   * Returns -EBUSY if scaling can't happen at this time
->   * Returns non-zero for any other errors
->   */
-> -static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
-> +static int ufshcd_scale_gear(struct ufs_hba *hba, unsigned long freq,
-> +			     bool scale_up)
->  {
->  	int ret = 0;
->  	struct ufs_pa_layer_attr new_pwr_info;
-> @@ -1186,6 +1196,12 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  		}
->  	}
->  
-> +	if (hba->use_pm_opp && scale_up) {
-> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	/* check if the power mode needs to be changed or not? */
->  	ret = ufshcd_config_pwr_mode(hba, &new_pwr_info);
->  	if (ret)
-> @@ -1194,6 +1210,11 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
->  			new_pwr_info.gear_tx, new_pwr_info.gear_rx);
->  
-> +	if (ret && hba->use_pm_opp && scale_up)
-> +		dev_pm_opp_set_rate(hba->dev, hba->devfreq->previous_freq);
-> +	else if (hba->use_pm_opp && !scale_up)
-> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
-> +
->  	return ret;
->  }
->  
-> @@ -1236,13 +1257,15 @@ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
->  /**
->   * ufshcd_devfreq_scale - scale up/down UFS clocks and gear
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True for scaling up and false for scalin down
->   *
->   * Returns 0 for success,
->   * Returns -EBUSY if scaling can't happen at this time
->   * Returns non-zero for any other errors
->   */
-> -static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
-> +static int ufshcd_devfreq_scale(struct ufs_hba *hba, unsigned long freq,
-> +				bool scale_up)
->  {
->  	int ret = 0;
->  	bool is_writelock = true;
-> @@ -1253,7 +1276,7 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
->  
->  	/* scale down the gear before scaling down clocks */
->  	if (!scale_up) {
-> -		ret = ufshcd_scale_gear(hba, false);
-> +		ret = ufshcd_scale_gear(hba, freq, false);
->  		if (ret)
->  			goto out_unprepare;
->  	}
-> @@ -1261,13 +1284,14 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
->  	ret = ufshcd_scale_clks(hba, scale_up);
->  	if (ret) {
->  		if (!scale_up)
-> -			ufshcd_scale_gear(hba, true);
-> +			ufshcd_scale_gear(hba, hba->clk_scaling.target_freq,
-> +					  true);
->  		goto out_unprepare;
->  	}
->  
->  	/* scale up the gear after scaling up clocks */
->  	if (scale_up) {
-> -		ret = ufshcd_scale_gear(hba, true);
-> +		ret = ufshcd_scale_gear(hba, freq, true);
->  		if (ret) {
->  			ufshcd_scale_clks(hba, false);
->  			goto out_unprepare;
-> @@ -1332,9 +1356,20 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	if (!ufshcd_is_clkscaling_supported(hba))
->  		return -EINVAL;
->  
-> -	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
->  	/* Override with the closest supported frequency */
-> -	*freq = (unsigned long) clk_round_rate(clki->clk, *freq);
-> +	if (hba->use_pm_opp) {
-> +		struct dev_pm_opp *opp;
-> +
-> +		opp = devfreq_recommended_opp(dev, freq, flags);
-> +		if (IS_ERR(opp))
-> +			return PTR_ERR(opp);
-> +		dev_pm_opp_put(opp);
-> +	} else {
-> +		clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info,
-> +					list);
-> +		*freq =	(unsigned long) clk_round_rate(clki->clk, *freq);
-> +	}
-> +
->  	spin_lock_irqsave(hba->host->host_lock, irq_flags);
->  	if (ufshcd_eh_in_progress(hba)) {
->  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
-> @@ -1350,11 +1385,11 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	}
->  
->  	/* Decide based on the rounded-off frequency and update */
-> -	scale_up = (*freq == clki->max_freq) ? true : false;
-> -	if (!scale_up)
-> +	scale_up = (*freq > hba->clk_scaling.target_freq) ? true : false;
-> +	if (!hba->use_pm_opp && !scale_up)
->  		*freq = clki->min_freq;
->  	/* Update the frequency */
-> -	if (!ufshcd_is_devfreq_scaling_required(hba, scale_up)) {
-> +	if (!ufshcd_is_devfreq_scaling_required(hba, *freq, scale_up)) {
->  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
->  		ret = 0;
->  		goto out; /* no state change required */
-> @@ -1362,7 +1397,9 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
->  
->  	start = ktime_get();
-> -	ret = ufshcd_devfreq_scale(hba, scale_up);
-> +	ret = ufshcd_devfreq_scale(hba, *freq, scale_up);
-> +	if (!ret)
-> +		hba->clk_scaling.target_freq = *freq;
->  
->  	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
->  		(scale_up ? "up" : "down"),
-> @@ -1382,8 +1419,6 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
->  	struct ufs_hba *hba = dev_get_drvdata(dev);
->  	struct ufs_clk_scaling *scaling = &hba->clk_scaling;
->  	unsigned long flags;
-> -	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  	ktime_t curr_t;
->  
->  	if (!ufshcd_is_clkscaling_supported(hba))
-> @@ -1396,13 +1431,20 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
->  	if (!scaling->window_start_t)
->  		goto start_window;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	/*
-> -	 * If current frequency is 0, then the ondemand governor considers
-> -	 * there's no initial frequency set. And it always requests to set
-> -	 * to max. frequency.
-> -	 */
-> -	stat->current_frequency = clki->curr_freq;
-> +	if (hba->use_pm_opp) {
-> +		stat->current_frequency = hba->clk_scaling.target_freq;
-> +	} else {
-> +		struct list_head *clk_list = &hba->clk_list_head;
-> +		struct ufs_clk_info *clki;
-> +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		/*
-> +		 * If current frequency is 0, then the ondemand governor considers
-> +		 * there's no initial frequency set. And it always requests to set
-> +		 * to max. frequency.
-> +		 */
-> +		stat->current_frequency = clki->curr_freq;
-> +	}
->  	if (scaling->is_busy_started)
->  		scaling->tot_busy_t += ktime_us_delta(curr_t,
->  				scaling->busy_start_t);
-> @@ -1435,9 +1477,11 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  	if (list_empty(clk_list))
->  		return 0;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> -	dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	if (!hba->use_pm_opp) {
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> +		dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	}
->  
->  	ufshcd_vops_config_scaling_param(hba, &hba->vps->devfreq_profile,
->  					 &hba->vps->ondemand_data);
-> @@ -1449,8 +1493,10 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  		ret = PTR_ERR(devfreq);
->  		dev_err(hba->dev, "Unable to register with devfreq %d\n", ret);
->  
-> -		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		if (!hba->use_pm_opp) {
-> +			dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +			dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		}
->  		return ret;
->  	}
->  
-> @@ -1462,7 +1508,6 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  {
->  	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  
->  	if (!hba->devfreq)
->  		return;
-> @@ -1470,9 +1515,13 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  	devfreq_remove_device(hba->devfreq);
->  	hba->devfreq = NULL;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -	dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	if (!hba->use_pm_opp) {
-> +		struct ufs_clk_info *clki;
-> +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	}
->  }
->  
->  static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
-> @@ -1556,8 +1605,14 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
->  	if (value) {
->  		ufshcd_resume_clkscaling(hba);
->  	} else {
-> +		struct dev_pm_opp *opp;
-> +		unsigned long freq = ULONG_MAX;
-> +
-> +		opp = dev_pm_opp_find_freq_floor(dev, &freq);
-> +		dev_pm_opp_put(opp);
-> +
->  		ufshcd_suspend_clkscaling(hba);
-> -		err = ufshcd_devfreq_scale(hba, true);
-> +		err = ufshcd_devfreq_scale(hba, freq, true);
->  		if (err)
->  			dev_err(hba->dev, "%s: failed to scale clocks up %d\n",
->  					__func__, err);
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 1a8f7b8977e6..c224a55fd9ee 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -443,6 +443,7 @@ struct ufs_clk_scaling {
->  	bool is_initialized;
->  	bool is_busy_started;
->  	bool is_suspended;
-> +	unsigned long target_freq;
->  };
->  
->  #define UFS_EVENT_HIST_LENGTH 8
-> @@ -776,6 +777,8 @@ struct ufs_hba_monitor {
->   * @auto_bkops_enabled: to track whether bkops is enabled in device
->   * @vreg_info: UFS device voltage regulator information
->   * @clk_list_head: UFS host controller clocks list node head
-> + * @use_pm_opp: whether OPP table is provided and scaling gears should trigger
-> + *              setting OPP
->   * @pwr_info: holds current power mode
->   * @max_pwr_info: keeps the device max valid pwm
->   * @clk_scaling_lock: used to serialize device commands and clock scaling
-> @@ -892,6 +895,7 @@ struct ufs_hba {
->  	bool auto_bkops_enabled;
->  	struct ufs_vreg_info vreg_info;
->  	struct list_head clk_list_head;
-> +	bool use_pm_opp;
->  
->  	/* Number of requests aborts */
->  	int req_abort_count;
-> -- 
-> 2.32.0
-> 
+--------------nA8gTf54gyFT0vUJtalAz5A1--
+
+--------------Unzfz16BIhSZ0gIPocs0L0KH
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJVwgkFAwAAAAAACgkQlh/E3EQov+Ac
+ag/9HQ5rwGAOmM2q5s1Fldkbf7Qeavuicx/MBPciNxu4ZT5IHMdC0DmMCLnjz1Q0tDSO4XNySIhx
+f0rqPZUzbKHc2fZH2rKJ/PxOPjI6loWcjTPWf4T0spRc8Skkbxm8sK67DGl//kDzjAGnH6zwaZQC
+A7SZbqDGLCMc+0j5mxExfBQ2R93pp/U58RaXJFopmQEkciVUMbhT48C/T0Kf676unpab+PMF10Xx
+lIc6Utg1LgMwqo6qkJYTVY1K7/YieiK8Q71ZO4Fry9VMdhLcwLtekLkVRwZi4u1OnYnKMcawoQ2q
+BqwmhC5gvxkSDJaleN0/1KWfW423SmE8PL3Z2+TUezxtDuR8JOLqOmwY7SJPMxBT8USBpa8d+FYY
+mBdyOdk4ihZx6WL3WKNnaR1okFfGlB1+3KY9tL5gSjeVLXk/VpIo/atvwKxHmSKKsY5dBpopDLGq
+Vf5MUBWoiish6mkUazuI1vyPqpfvZ5j4VJCNwQS6AN7iFCnx7umo2gtf4Si3bI8Y+mFCZ66zb3oX
+aB9YCBqFcyxBDguvYk0l50WzC2ICjVIHjDdKAK/3eRGBAny5MCEoR2hVPfe9HTIF3t0mOUIIZzxJ
+X0k80PYwnx+1DzPEWCGHqK0dGFIK5ind2yQKMfSpnMAGdZfIZpQ8QauTC1gnL5tJtaFMBXxbPwEb
+YWA=
+=1RhR
+-----END PGP SIGNATURE-----
+
+--------------Unzfz16BIhSZ0gIPocs0L0KH--

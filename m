@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6D94FEAD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBC64FEB70
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiDLXbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S229952AbiDLXY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiDLXbX (ORCPT
+        with ESMTP id S229869AbiDLXYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:31:23 -0400
-Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC5B9FCD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:16:17 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 21:59:16 +0000
-Authentication-Results: mail-4321.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="M2J2L0iK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1649800761;
-        bh=JJtIRzBfNpDrJ/fFtvW6vi1j9+8vDctIDP1NHWiTvOk=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=M2J2L0iK2Kc/JQTIjkwhDUkVqWiZJr3O/27pjBoOkV0WQ7k3QLKoWiEY4P8AO2cMT
-         OApMkeZx7jZ147jSo5zdtUJ4MYUQI3LZGgFLt5lQy2IbjAyfDr3JdfIat6WFFXrrpK
-         w6L6qXuzVppbmyai1QnXQf3zVPlwQmukLWSYtXStunKKc6w2+Je+8XmI1/jRXcuKZM
-         ugzbjMCdqaBj+SICra5VB2NALMPCUFd/dOxLuvqDVK4p7PmM55sl91uTxRYp3lYwIP
-         Wplktu5ck2NSYZL+AmRdzhMhpS9KKb3ZVDMPNH0oQPlAk2NVHCT0SYTlSBPdbNDOXO
-         jnYDIIyAsO8UQ==
-To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alobakin@pm.me>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH RESEND] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
-Message-ID: <20220412215220.75677-1-alobakin@pm.me>
+        Tue, 12 Apr 2022 19:24:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8538A5BD0D;
+        Tue, 12 Apr 2022 15:10:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8BA4FCE20CB;
+        Tue, 12 Apr 2022 22:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE27EC385AA;
+        Tue, 12 Apr 2022 22:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649800811;
+        bh=1pT1rKstnA/xfByk8gzUWt5r+vz6RbFdQNtjjloFPq4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cS+6/lgLPAuhPGp8lxPTY24+WP+3iQGjGrM0Liom18Gu0z1/WSVSEvrcupW67b7bp
+         tRGlTMwK0lTURg5Ck0gyCbWIU2tFy2i70jty6ssLU42M8uWd8IAxgEXcmyeeZLHP58
+         O6W+pwdK+4NDTvd4A2R3Rm4iZ2IrwbOBOTq/pLgIhnikrJqqdlklQWiBT4qcgeLQqk
+         hRvnIB94iBfFkc7YNL9KG0JJmF9mD3VGBeY/4bFZmDuZzmRt2pMGPs5Vcn1009EhoF
+         L4P2SwIYec6Td0Q8k7Ifv1SZfI0u7WRb1SNfX/x1Z9rOJ7nRRkFixxxWnsQmtYhNbU
+         N0rUpXlxS2VaA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8EED7E8DD5E;
+        Tue, 12 Apr 2022 22:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] fou: Remove XRFM from NET_FOU Kconfig
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164980081157.20212.8870993161912217213.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Apr 2022 22:00:11 +0000
+References: <20220411213717.3688789-1-lixiaoyan@google.com>
+In-Reply-To: <20220411213717.3688789-1-lixiaoyan@google.com>
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        willemb@google.com, edumazet@google.com, gthelen@google.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While testing the new macros for working with 48 bit containers,
-I faced a weird problem:
+Hello:
 
-32 + 16: 0x2ef6e8da 0x79e60000
-48: 0xffffe8da + 0x79e60000
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-All the bits starting from the 32nd were getting 1d in 9/10 cases.
-The debug showed:
+On Mon, 11 Apr 2022 14:37:17 -0700 you wrote:
+> XRFM is no longer needed for configuring FOU tunnels
+> (CONFIG_NET_FOU_IP_TUNNELS), remove from Kconfig.
+> 
+> Also remove the xrfm.h dependency in fou.c. It was
+> added in '23461551c006 ("fou: Support for foo-over-udp RX path")'
+> for depencies of udp_del_offload and udp_offloads, which were removed in
+> 'd92283e338f6 ("fou: change to use UDP socket GRO")'.
+> 
+> [...]
 
-p[0]: 0x00002e0000000000
-p[1]: 0x00002ef600000000
-p[2]: 0xffffffffe8000000
-p[3]: 0xffffffffe8da0000
-p[4]: 0xffffffffe8da7900
-p[5]: 0xffffffffe8da79e6
+Here is the summary with links:
+  - [net-next,v2] fou: Remove XRFM from NET_FOU Kconfig
+    https://git.kernel.org/netdev/net-next/c/753b953774b5
 
-that the value becomes a garbage after the third OR, i.e. on
-`p[2] << 24`.
-When the 31st bit is 1 and there's no explicit cast to an unsigned,
-it's being considered as a signed int and getting sign-extended on
-OR, so `e8000000` becomes `ffffffffe8000000` and messes up the
-result.
-Cast the @p[2] to u64 as well to avoid this. Now:
-
-32 + 16: 0x7ef6a490 0xddc10000
-48: 0x7ef6a490 + 0xddc10000
-
-p[0]: 0x00007e0000000000
-p[1]: 0x00007ef600000000
-p[2]: 0x00007ef6a4000000
-p[3]: 0x00007ef6a4900000
-p[4]: 0x00007ef6a490dd00
-p[5]: 0x00007ef6a490ddc1
-
-Fixes: c2ea5fcf53d5 ("asm-generic: introduce be48 unaligned accessors")
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
-Resend: target linux-block, expand Ccs a bit
-
- include/asm-generic/unaligned.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligne=
-d.h
-index 8fc637379899..df30f11b4a46 100644
---- a/include/asm-generic/unaligned.h
-+++ b/include/asm-generic/unaligned.h
-@@ -143,7 +143,7 @@ static inline void put_unaligned_be48(const u64 val, vo=
-id *p)
-
- static inline u64 __get_unaligned_be48(const u8 *p)
- {
--=09return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
-+=09return (u64)p[0] << 40 | (u64)p[1] << 32 | (u64)p[2] << 24 |
- =09=09p[3] << 16 | p[4] << 8 | p[5];
- }
-
---
-2.35.2
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

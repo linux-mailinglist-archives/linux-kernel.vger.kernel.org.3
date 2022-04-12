@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF3F4FD578
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219BB4FD9F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357504AbiDLHkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S1377193AbiDLHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353069AbiDLHOs (ORCPT
+        with ESMTP id S1353071AbiDLHOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:14:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD20525291;
-        Mon, 11 Apr 2022 23:56:13 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED99255AD;
+        Mon, 11 Apr 2022 23:56:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84626B81B43;
-        Tue, 12 Apr 2022 06:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3CEC385A1;
-        Tue, 12 Apr 2022 06:56:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B0A560B2B;
+        Tue, 12 Apr 2022 06:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5BFC385A1;
+        Tue, 12 Apr 2022 06:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746571;
-        bh=g0S1xJM0BJ86DQH0IZzY6uj6KRFPYEHUsBoXY82RMEc=;
+        s=korg; t=1649746573;
+        bh=TbRJXNLQ6oxcJqYxM+ZbMOebR23pGsGpKcEgFZC/WIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nT5V/OaYrgKZ8qN8smnTC2Rx1RWODfjPS6FqlzAQekC9JL6RQN9G9bBiEucH2kDb8
-         Q5qBjuu+94kGb7ZDxcxJ40y8DnIr7TuKQBUR/1VLm2Yf1bZ/KzvR2ilzF9dr5ZJRU+
-         nKneX/8/xGDeDGXkMeyuWl5Iok6SCGC9884tCYII=
+        b=HKY+/vLHL3CeQX+GZMlRQXSUvAMwVjFHVUnZ0yHZcXPbvkRcwpGD6f7K2OiGREnZy
+         iEwBcBtqS04AdzlUZEK22B7dPYg99MMCec1gT9oX8bp7ZuP7LjTC73jXP4/qimGP5u
+         Qh+GuDLZb2AdBo9WxU1gmW1apL5IUqFm98M0p4vU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 053/285] scsi: mpi3mr: Fix reporting of actual data transfer size
-Date:   Tue, 12 Apr 2022 08:28:30 +0200
-Message-Id: <20220412062945.202371210@linuxfoundation.org>
+Subject: [PATCH 5.16 054/285] scsi: mpi3mr: Fix memory leaks
+Date:   Tue, 12 Apr 2022 08:28:31 +0200
+Message-Id: <20220412062945.230545350@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -58,33 +58,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-[ Upstream commit 9992246127246a27cc7184f05cce6f62ac48f84e ]
+[ Upstream commit d44b5fefb22e139408ae12b864da1ecb9ad9d1d2 ]
 
-The driver is missing to set the residual size while completing an
-I/O. Ensure proper data transfer size is reported to the kernel on I/O
-completion based on the transfer length reported by the firmware.
+Fix memory leaks related to operational reply queue's memory segments which
+are not getting freed while unloading the driver.
 
-Link: https://lore.kernel.org/r/20220210095817.22828-7-sreekanth.reddy@broadcom.com
+Link: https://lore.kernel.org/r/20220210095817.22828-9-sreekanth.reddy@broadcom.com
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/mpi3mr/mpi3mr_fw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index fe10f257b5a4..224a4155d9b4 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -2204,6 +2204,8 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
- 		scmd->result = DID_OK << 16;
- 		goto out_success;
- 	}
-+
-+	scsi_set_resid(scmd, scsi_bufflen(scmd) - xfer_count);
- 	if (ioc_status == MPI3_IOCSTATUS_SCSI_DATA_UNDERRUN &&
- 	    xfer_count == 0 && (scsi_status == MPI3_SCSI_STATUS_BUSY ||
- 	    scsi_status == MPI3_SCSI_STATUS_RESERVATION_CONFLICT ||
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index 2daf633ea295..9bb64a7b2af7 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -1275,7 +1275,7 @@ static void mpi3mr_free_op_req_q_segments(struct mpi3mr_ioc *mrioc, u16 q_idx)
+ 			    MPI3MR_MAX_SEG_LIST_SIZE,
+ 			    mrioc->req_qinfo[q_idx].q_segment_list,
+ 			    mrioc->req_qinfo[q_idx].q_segment_list_dma);
+-			mrioc->op_reply_qinfo[q_idx].q_segment_list = NULL;
++			mrioc->req_qinfo[q_idx].q_segment_list = NULL;
+ 		}
+ 	} else
+ 		size = mrioc->req_qinfo[q_idx].segment_qd *
 -- 
 2.35.1
 

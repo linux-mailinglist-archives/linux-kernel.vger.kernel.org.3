@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3F14FDA60
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C701C4FD9BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240348AbiDLHbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S1353778AbiDLJPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351834AbiDLHNA (ORCPT
+        with ESMTP id S1357757AbiDLHkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492DE17E0B;
-        Mon, 11 Apr 2022 23:53:21 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A594C3917A;
+        Tue, 12 Apr 2022 00:16:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8AB461451;
-        Tue, 12 Apr 2022 06:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA341C385A1;
-        Tue, 12 Apr 2022 06:53:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0916B81A8F;
+        Tue, 12 Apr 2022 07:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58360C385A1;
+        Tue, 12 Apr 2022 07:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746400;
-        bh=U2/FILndl4co+BlYvc00C3mSRpRj6SmZahSvs4PQbsE=;
+        s=korg; t=1649747810;
+        bh=vkPmgKey2lf/3Sf8BVlNeaFbqFAGzmVNLtpEoE4dmDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iCqlllpr6VHdSbND+KY95c4E1QO+YbIaEaERB1IefuXR32vjBBUlqpw8EV+eamm01
-         OFjAgtq1JB5iKz2VBHnZBlph3AeL0OrjFcqoAINKV9gcyF9nsvbrBSh2dfh5eDE3C/
-         gCu1sLsPOTnRVXca+6U0r/DO+SZmJ8N+fc9DRXYE=
+        b=YuxhyiHeo9+mDVdza6icZAnRmAgm71zGv2OcDGjopuQ8TfF6OuG+voYqOWGqeuDvU
+         O79Zdbs3i9ryBYVft5+hQlKTS3w7W3ATfv3FSHKbLGB8u7+NbyQ6uUCPkROXGPGlA4
+         9eRuWdfcFr82WOpkNUk5VxE8mtE4Aki5M72tEF8w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 229/277] RDMA/hfi1: Fix use-after-free bug for mm struct
+        stable@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 214/343] net: stmmac: Fix unset max_speed difference between DT and non-DT platforms
 Date:   Tue, 12 Apr 2022 08:30:32 +0200
-Message-Id: <20220412062948.671402880@linuxfoundation.org>
+Message-Id: <20220412062957.522165527@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Chen-Yu Tsai <wens@csie.org>
 
-commit 2bbac98d0930e8161b1957dc0ec99de39ade1b3c upstream.
+[ Upstream commit c21cabb0fd0b54b8b54235fc1ecfe1195a23bcb2 ]
 
-Under certain conditions, such as MPI_Abort, the hfi1 cleanup code may
-represent the last reference held on the task mm.
-hfi1_mmu_rb_unregister() then drops the last reference and the mm is freed
-before the final use in hfi1_release_user_pages().  A new task may
-allocate the mm structure while it is still being used, resulting in
-problems. One manifestation is corruption of the mmap_sem counter leading
-to a hang in down_write().  Another is corruption of an mm struct that is
-in use by another task.
+In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
+property"), when DT platforms don't set "max-speed", max_speed is set to
+-1; for non-DT platforms, it stays the default 0.
 
-Fixes: 3d2a9d642512 ("IB/hfi1: Ensure correct mm is used at all times")
-Link: https://lore.kernel.org/r/20220408133523.122165.72975.stgit@awfm-01.cornelisnetworks.com
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
+the check for a valid max_speed setting was to check if it was greater
+than zero. This commit got it right, but subsequent patches just checked
+for non-zero, which is incorrect for DT platforms.
+
+In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+the conversion switched completely to checking for non-zero value as a
+valid value, which caused 1000base-T to stop getting advertised by
+default.
+
+Instead of trying to fix all the checks, simply leave max_speed alone if
+DT property parsing fails.
+
+Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
+Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220331184832.16316-1-wens@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/mmu_rb.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/infiniband/hw/hfi1/mmu_rb.c
-+++ b/drivers/infiniband/hw/hfi1/mmu_rb.c
-@@ -80,6 +80,9 @@ void hfi1_mmu_rb_unregister(struct mmu_r
- 	unsigned long flags;
- 	struct list_head del_list;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 5d29f336315b..11e1055e8260 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -431,8 +431,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+ 	plat->phylink_node = np;
  
-+	/* Prevent freeing of mm until we are completely finished. */
-+	mmgrab(handler->mn.mm);
-+
- 	/* Unregister first so we don't get any more notifications. */
- 	mmu_notifier_unregister(&handler->mn, handler->mn.mm);
+ 	/* Get max speed of operation from device tree */
+-	if (of_property_read_u32(np, "max-speed", &plat->max_speed))
+-		plat->max_speed = -1;
++	of_property_read_u32(np, "max-speed", &plat->max_speed);
  
-@@ -102,6 +105,9 @@ void hfi1_mmu_rb_unregister(struct mmu_r
- 
- 	do_remove(handler, &del_list);
- 
-+	/* Now the mm may be freed. */
-+	mmdrop(handler->mn.mm);
-+
- 	kfree(handler);
- }
- 
+ 	plat->bus_id = of_alias_get_id(np, "ethernet");
+ 	if (plat->bus_id < 0)
+-- 
+2.35.1
+
 
 

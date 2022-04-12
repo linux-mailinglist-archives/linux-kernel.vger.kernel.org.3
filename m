@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852EA4FD4AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8754FD8FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389177AbiDLJX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S1382884AbiDLIec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357315AbiDLHj6 (ORCPT
+        with ESMTP id S1352654AbiDLHY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CD223BD7;
-        Tue, 12 Apr 2022 00:14:58 -0700 (PDT)
+        Tue, 12 Apr 2022 03:24:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46A49918;
+        Tue, 12 Apr 2022 00:00:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E626176E;
-        Tue, 12 Apr 2022 07:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46E1C385A6;
-        Tue, 12 Apr 2022 07:14:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B6E615B4;
+        Tue, 12 Apr 2022 07:00:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FEEC385A1;
+        Tue, 12 Apr 2022 07:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747697;
-        bh=pTCguM5hKfS5YojLbcfsg4liUJK9KCMGfsJzuRRUdt4=;
+        s=korg; t=1649746801;
+        bh=+d4bTQ/I8oTaiY+mLxPJzu+aamdzeG1+n0tq1uBERPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iK1kTBV1asbdAzKe4tlQe92rhwRyDYza7E2Ji+uj2yxvy7u/vqWNusZCxsdEPmXsV
-         mSRTLo3zfFj556Ew1AJDyOlB3VeLErp7jcm06YeuFLS2lZ30jw9sSZaP+ah6mL9ILD
-         2FRoni85NSka/N82KofFS0b4Pkljw/wwhWMcY3pg=
+        b=wqn8plP4TJwNxajBeoA/twf6GedmvbUb4omQYWm+/vzJ1tk2SfWZEGOwCz/6tVme8
+         dYuZQDt9lrMK81JGvrOG96/jhKlr3hLTz/T/aJnAJcZgo57eszxeGVtY8ONT9sYIaS
+         N8SjCrqIv0DryByV26mRU9l9n7L8fInIABNSGPEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 173/343] habanalabs/gaudi: handle axi errors from NIC engines
-Date:   Tue, 12 Apr 2022 08:29:51 +0200
-Message-Id: <20220412062956.361016831@linuxfoundation.org>
+Subject: [PATCH 5.16 135/285] NFS: swap IO handling is slightly different for O_DIRECT IO
+Date:   Tue, 12 Apr 2022 08:29:52 +0200
+Message-Id: <20220412062947.563349789@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,93 +55,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oded Gabbay <ogabbay@kernel.org>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 26ef1c000bc21a192618c9ec651dd36ba63ca00c ]
+[ Upstream commit 64158668ac8b31626a8ce48db4cad08496eb8340 ]
 
-Various AXI errors can occur in the NIC engines and are reported to
-the driver by the f/w. Add code to print the errors and ack them to
-the f/w.
+1/ Taking the i_rwsem for swap IO triggers lockdep warnings regarding
+   possible deadlocks with "fs_reclaim".  These deadlocks could, I believe,
+   eventuate if a buffered read on the swapfile was attempted.
 
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+   We don't need coherence with the page cache for a swap file, and
+   buffered writes are forbidden anyway.  There is no other need for
+   i_rwsem during direct IO.  So never take it for swap_rw()
+
+2/ generic_write_checks() explicitly forbids writes to swap, and
+   performs checks that are not needed for swap.  So bypass it
+   for swap_rw().
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 48 +++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ fs/nfs/direct.c        | 42 ++++++++++++++++++++++++++++--------------
+ fs/nfs/file.c          |  4 ++--
+ include/linux/nfs_fs.h |  8 ++++----
+ 3 files changed, 34 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 013c6da2e3ca..b4dacea80151 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -7819,6 +7819,48 @@ static void gaudi_print_fw_alive_info(struct hl_device *hdev,
- 		fw_alive->thread_id, fw_alive->uptime_seconds);
+diff --git a/fs/nfs/direct.c b/fs/nfs/direct.c
+index 9cff8709c80a..e6f104b6f065 100644
+--- a/fs/nfs/direct.c
++++ b/fs/nfs/direct.c
+@@ -172,8 +172,8 @@ ssize_t nfs_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ 	VM_BUG_ON(iov_iter_count(iter) != PAGE_SIZE);
+ 
+ 	if (iov_iter_rw(iter) == READ)
+-		return nfs_file_direct_read(iocb, iter);
+-	return nfs_file_direct_write(iocb, iter);
++		return nfs_file_direct_read(iocb, iter, true);
++	return nfs_file_direct_write(iocb, iter, true);
  }
  
-+static void gaudi_print_nic_axi_irq_info(struct hl_device *hdev, u16 event_type,
-+						void *data)
-+{
-+	char desc[64] = "", *type;
-+	struct eq_nic_sei_event *eq_nic_sei = data;
-+	u16 nic_id = event_type - GAUDI_EVENT_NIC_SEI_0;
-+
-+	switch (eq_nic_sei->axi_error_cause) {
-+	case RXB:
-+		type = "RXB";
-+		break;
-+	case RXE:
-+		type = "RXE";
-+		break;
-+	case TXS:
-+		type = "TXS";
-+		break;
-+	case TXE:
-+		type = "TXE";
-+		break;
-+	case QPC_RESP:
-+		type = "QPC_RESP";
-+		break;
-+	case NON_AXI_ERR:
-+		type = "NON_AXI_ERR";
-+		break;
-+	case TMR:
-+		type = "TMR";
-+		break;
-+	default:
-+		dev_err(hdev->dev, "unknown NIC AXI cause %d\n",
-+			eq_nic_sei->axi_error_cause);
-+		type = "N/A";
-+		break;
-+	}
-+
-+	snprintf(desc, sizeof(desc), "NIC%d_%s%d", nic_id, type,
-+			eq_nic_sei->id);
-+	dev_err_ratelimited(hdev->dev, "Received H/W interrupt %d [\"%s\"]\n",
-+		event_type, desc);
-+}
-+
- static int gaudi_non_hard_reset_late_init(struct hl_device *hdev)
+ static void nfs_direct_release_pages(struct page **pages, unsigned int npages)
+@@ -424,6 +424,7 @@ static ssize_t nfs_direct_read_schedule_iovec(struct nfs_direct_req *dreq,
+  * nfs_file_direct_read - file direct read operation for NFS files
+  * @iocb: target I/O control block
+  * @iter: vector of user buffers into which to read data
++ * @swap: flag indicating this is swap IO, not O_DIRECT IO
+  *
+  * We use this function for direct reads instead of calling
+  * generic_file_aio_read() in order to avoid gfar's check to see if
+@@ -439,7 +440,8 @@ static ssize_t nfs_direct_read_schedule_iovec(struct nfs_direct_req *dreq,
+  * client must read the updated atime from the server back into its
+  * cache.
+  */
+-ssize_t nfs_file_direct_read(struct kiocb *iocb, struct iov_iter *iter)
++ssize_t nfs_file_direct_read(struct kiocb *iocb, struct iov_iter *iter,
++			     bool swap)
  {
- 	/* GAUDI doesn't support any reset except hard-reset */
-@@ -8066,6 +8108,7 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 				struct hl_eq_entry *eq_entry)
- {
- 	struct gaudi_device *gaudi = hdev->asic_specific;
-+	u64 data = le64_to_cpu(eq_entry->data[0]);
- 	u32 ctl = le32_to_cpu(eq_entry->hdr.ctl);
- 	u32 fw_fatal_err_flag = 0;
- 	u16 event_type = ((ctl & EQ_CTL_EVENT_TYPE_MASK)
-@@ -8263,6 +8306,11 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 		hl_fw_unmask_irq(hdev, event_type);
- 		break;
+ 	struct file *file = iocb->ki_filp;
+ 	struct address_space *mapping = file->f_mapping;
+@@ -481,12 +483,14 @@ ssize_t nfs_file_direct_read(struct kiocb *iocb, struct iov_iter *iter)
+ 	if (iter_is_iovec(iter))
+ 		dreq->flags = NFS_ODIRECT_SHOULD_DIRTY;
  
-+	case GAUDI_EVENT_NIC_SEI_0 ... GAUDI_EVENT_NIC_SEI_4:
-+		gaudi_print_nic_axi_irq_info(hdev, event_type, &data);
-+		hl_fw_unmask_irq(hdev, event_type);
-+		break;
-+
- 	case GAUDI_EVENT_DMA_IF_SEI_0 ... GAUDI_EVENT_DMA_IF_SEI_3:
- 		gaudi_print_irq_info(hdev, event_type, false);
- 		gaudi_print_sm_sei_info(hdev, event_type,
+-	nfs_start_io_direct(inode);
++	if (!swap)
++		nfs_start_io_direct(inode);
+ 
+ 	NFS_I(inode)->read_io += count;
+ 	requested = nfs_direct_read_schedule_iovec(dreq, iter, iocb->ki_pos);
+ 
+-	nfs_end_io_direct(inode);
++	if (!swap)
++		nfs_end_io_direct(inode);
+ 
+ 	if (requested > 0) {
+ 		result = nfs_direct_wait(dreq);
+@@ -875,6 +879,7 @@ static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+  * nfs_file_direct_write - file direct write operation for NFS files
+  * @iocb: target I/O control block
+  * @iter: vector of user buffers from which to write data
++ * @swap: flag indicating this is swap IO, not O_DIRECT IO
+  *
+  * We use this function for direct writes instead of calling
+  * generic_file_aio_write() in order to avoid taking the inode
+@@ -891,7 +896,8 @@ static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+  * Note that O_APPEND is not supported for NFS direct writes, as there
+  * is no atomic O_APPEND write facility in the NFS protocol.
+  */
+-ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter)
++ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter,
++			      bool swap)
+ {
+ 	ssize_t result, requested;
+ 	size_t count;
+@@ -905,7 +911,11 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter)
+ 	dfprintk(FILE, "NFS: direct write(%pD2, %zd@%Ld)\n",
+ 		file, iov_iter_count(iter), (long long) iocb->ki_pos);
+ 
+-	result = generic_write_checks(iocb, iter);
++	if (swap)
++		/* bypass generic checks */
++		result =  iov_iter_count(iter);
++	else
++		result = generic_write_checks(iocb, iter);
+ 	if (result <= 0)
+ 		return result;
+ 	count = result;
+@@ -936,16 +946,20 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter)
+ 		dreq->iocb = iocb;
+ 	pnfs_init_ds_commit_info_ops(&dreq->ds_cinfo, inode);
+ 
+-	nfs_start_io_direct(inode);
++	if (swap) {
++		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
++	} else {
++		nfs_start_io_direct(inode);
+ 
+-	requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
++		requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
+ 
+-	if (mapping->nrpages) {
+-		invalidate_inode_pages2_range(mapping,
+-					      pos >> PAGE_SHIFT, end);
+-	}
++		if (mapping->nrpages) {
++			invalidate_inode_pages2_range(mapping,
++						      pos >> PAGE_SHIFT, end);
++		}
+ 
+-	nfs_end_io_direct(inode);
++		nfs_end_io_direct(inode);
++	}
+ 
+ 	if (requested > 0) {
+ 		result = nfs_direct_wait(dreq);
+diff --git a/fs/nfs/file.c b/fs/nfs/file.c
+index 24e7dccce355..510541665219 100644
+--- a/fs/nfs/file.c
++++ b/fs/nfs/file.c
+@@ -161,7 +161,7 @@ nfs_file_read(struct kiocb *iocb, struct iov_iter *to)
+ 	ssize_t result;
+ 
+ 	if (iocb->ki_flags & IOCB_DIRECT)
+-		return nfs_file_direct_read(iocb, to);
++		return nfs_file_direct_read(iocb, to, false);
+ 
+ 	dprintk("NFS: read(%pD2, %zu@%lu)\n",
+ 		iocb->ki_filp,
+@@ -616,7 +616,7 @@ ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
+ 		return result;
+ 
+ 	if (iocb->ki_flags & IOCB_DIRECT)
+-		return nfs_file_direct_write(iocb, from);
++		return nfs_file_direct_write(iocb, from, false);
+ 
+ 	dprintk("NFS: write(%pD2, %zu@%Ld)\n",
+ 		file, iov_iter_count(from), (long long) iocb->ki_pos);
+diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
+index 29a2ab5de1da..92525222abfd 100644
+--- a/include/linux/nfs_fs.h
++++ b/include/linux/nfs_fs.h
+@@ -512,10 +512,10 @@ static inline const struct cred *nfs_file_cred(struct file *file)
+  * linux/fs/nfs/direct.c
+  */
+ extern ssize_t nfs_direct_IO(struct kiocb *, struct iov_iter *);
+-extern ssize_t nfs_file_direct_read(struct kiocb *iocb,
+-			struct iov_iter *iter);
+-extern ssize_t nfs_file_direct_write(struct kiocb *iocb,
+-			struct iov_iter *iter);
++ssize_t nfs_file_direct_read(struct kiocb *iocb,
++			     struct iov_iter *iter, bool swap);
++ssize_t nfs_file_direct_write(struct kiocb *iocb,
++			      struct iov_iter *iter, bool swap);
+ 
+ /*
+  * linux/fs/nfs/dir.c
 -- 
 2.35.1
 

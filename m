@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468D24FD630
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C605A4FD983
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343969AbiDLHSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S1377163AbiDLHrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352106AbiDLHEn (ORCPT
+        with ESMTP id S1352956AbiDLHOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3F246667;
-        Mon, 11 Apr 2022 23:47:38 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB232076;
+        Mon, 11 Apr 2022 23:55:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 742C2B818BD;
-        Tue, 12 Apr 2022 06:47:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F2FC385A1;
-        Tue, 12 Apr 2022 06:47:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AE0B61531;
+        Tue, 12 Apr 2022 06:55:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EA0C385A6;
+        Tue, 12 Apr 2022 06:55:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746055;
-        bh=RVaYlPGXRy05pVmg1yjhV4/vNvos4ZHe2Jm0XS9O1A4=;
+        s=korg; t=1649746529;
+        bh=ZlLDchbIbSnAE1sVs9zu688bMteVPT8JnbgzYlKLtSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v9eoq/PxJIlvIhyZw187MRPhB5Xu4bNTUqlRJdy26/M97ebIDR/vyLjAmPZtqwxZQ
-         fkj9+o0erm++WejtKeBk3vTYjH8wQni2A8OZju5A/exKLITd5CMtT77r8QWfuNOF88
-         axn6u853E8jxXIlemewzybFmqLntRJmMuGaVYugM=
+        b=NscTc7RHtYx4WRpa50dKLjz/NT0UIfM+shrUCYUi5Q8yrRGs2YCZvuiNp7n8VUIfl
+         PKkdWyL9cyxIFhKZnDZZ9vAhQYlT6LVUP1rsWRJuZlP0AlgIIiJRh6NoH9auh/RIQ9
+         RQCkXonx2w0WrBQeyDQ1TOc0oSXf55iTJqv3nCZ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Michael T. Kloos" <michael@michaelkloos.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        stable@vger.kernel.org, Delyan Kratunov <delyank@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 093/277] riscv: Fixed misaligned memory access. Fixed pointer comparison.
+Subject: [PATCH 5.16 039/285] libbpf: Fix build issue with llvm-readelf
 Date:   Tue, 12 Apr 2022 08:28:16 +0200
-Message-Id: <20220412062944.735774186@linuxfoundation.org>
+Message-Id: <20220412062944.804118711@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,421 +56,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael T. Kloos <michael@michaelkloos.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit 9d1f0ec9f71780e69ceb9d91697600c747d6e02e ]
+[ Upstream commit 0908a66ad1124c1634c33847ac662106f7f2c198 ]
 
-Rewrote the RISC-V memmove() assembly implementation.  The
-previous implementation did not check memory alignment and it
-compared 2 pointers with a signed comparison.  The misaligned
-memory access would cause the kernel to crash on systems that
-did not emulate it in firmware and did not support it in hardware.
-Firmware emulation is slow and may not exist.  The RISC-V spec
-does not guarantee that support for misaligned memory accesses
-will exist.  It should not be depended on.
+There are cases where clang compiler is packaged in a way
+readelf is a symbolic link to llvm-readelf. In such cases,
+llvm-readelf will be used instead of default binutils readelf,
+and the following error will appear during libbpf build:
 
-This patch now checks for XLEN granularity of co-alignment between
-the pointers.  Failing that, copying is done by loading from the 2
-contiguous and naturally aligned XLEN memory locations containing
-the overlapping XLEN sized data to be copied.  The data is shifted
-into the correct place and binary or'ed together on each
-iteration.  The result is then stored into the corresponding
-naturally aligned XLEN sized location in the destination.  For
-unaligned data at the terminations of the regions to be copied
-or for copies less than (2 * XLEN) in size, byte copy is used.
+#  Warning: Num of global symbols in
+#   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/sharedobjs/libbpf-in.o (367)
+#   does NOT match with num of versioned symbols in
+#   /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.so libbpf.map (383).
+#   Please make sure all LIBBPF_API symbols are versioned in libbpf.map.
+#  --- /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_global_syms.tmp ...
+#  +++ /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/build/libbpf/libbpf_versioned_syms.tmp ...
+#  @@ -324,6 +324,22 @@
+#   btf__str_by_offset
+#   btf__type_by_id
+#   btf__type_cnt
+#  +LIBBPF_0.0.1
+#  +LIBBPF_0.0.2
+#  +LIBBPF_0.0.3
+#  +LIBBPF_0.0.4
+#  +LIBBPF_0.0.5
+#  +LIBBPF_0.0.6
+#  +LIBBPF_0.0.7
+#  +LIBBPF_0.0.8
+#  +LIBBPF_0.0.9
+#  +LIBBPF_0.1.0
+#  +LIBBPF_0.2.0
+#  +LIBBPF_0.3.0
+#  +LIBBPF_0.4.0
+#  +LIBBPF_0.5.0
+#  +LIBBPF_0.6.0
+#  +LIBBPF_0.7.0
+#   libbpf_attach_type_by_name
+#   libbpf_find_kernel_btf
+#   libbpf_find_vmlinux_btf_id
+#  make[2]: *** [Makefile:184: check_abi] Error 1
+#  make[1]: *** [Makefile:140: all] Error 2
 
-This patch also now uses unsigned comparison for the pointers and
-migrates to the newer assembler annotations from the now deprecated
-ones.
+The above failure is due to different printouts for some ABS
+versioned symbols. For example, with the same libbpf.so,
+  $ /bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
+     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.5.0
+     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.6.0
+     ...
+  $ /opt/llvm/bin/readelf --dyn-syms --wide tools/lib/bpf/libbpf.so | grep "LIBBPF" | grep ABS
+     134: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.5.0@@LIBBPF_0.5.0
+     202: 0000000000000000     0 OBJECT  GLOBAL DEFAULT   ABS LIBBPF_0.6.0@@LIBBPF_0.6.0
+     ...
+The binutils readelf doesn't print out the symbol LIBBPF_* version and llvm-readelf does.
+Such a difference caused libbpf build failure with llvm-readelf.
 
-Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+The proposed fix filters out all ABS symbols as they are not part of the comparison.
+This works for both binutils readelf and llvm-readelf.
+
+Reported-by: Delyan Kratunov <delyank@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220204214355.502108-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/lib/memmove.S | 368 +++++++++++++++++++++++++++++++++------
- 1 file changed, 310 insertions(+), 58 deletions(-)
+ tools/lib/bpf/Makefile |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
-index 07d1d2152ba5..e0609e1f0864 100644
---- a/arch/riscv/lib/memmove.S
-+++ b/arch/riscv/lib/memmove.S
-@@ -1,64 +1,316 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
-+ */
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -129,7 +129,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --
+ 			   sort -u | wc -l)
+ VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
+ 			      sed 's/\[.*\]//' | \
+-			      awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}' | \
++			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
+ 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
  
- #include <linux/linkage.h>
- #include <asm/asm.h>
- 
--ENTRY(__memmove)
--WEAK(memmove)
--        move    t0, a0
--        move    t1, a1
--
--        beq     a0, a1, exit_memcpy
--        beqz    a2, exit_memcpy
--        srli    t2, a2, 0x2
--
--        slt     t3, a0, a1
--        beqz    t3, do_reverse
--
--        andi    a2, a2, 0x3
--        li      t4, 1
--        beqz    t2, byte_copy
--
--word_copy:
--        lw      t3, 0(a1)
--        addi    t2, t2, -1
--        addi    a1, a1, 4
--        sw      t3, 0(a0)
--        addi    a0, a0, 4
--        bnez    t2, word_copy
--        beqz    a2, exit_memcpy
--        j       byte_copy
--
--do_reverse:
--        add     a0, a0, a2
--        add     a1, a1, a2
--        andi    a2, a2, 0x3
--        li      t4, -1
--        beqz    t2, reverse_byte_copy
--
--reverse_word_copy:
--        addi    a1, a1, -4
--        addi    t2, t2, -1
--        lw      t3, 0(a1)
--        addi    a0, a0, -4
--        sw      t3, 0(a0)
--        bnez    t2, reverse_word_copy
--        beqz    a2, exit_memcpy
--
--reverse_byte_copy:
--        addi    a0, a0, -1
--        addi    a1, a1, -1
-+SYM_FUNC_START(__memmove)
-+SYM_FUNC_START_WEAK(memmove)
-+	/*
-+	 * Returns
-+	 *   a0 - dest
-+	 *
-+	 * Parameters
-+	 *   a0 - Inclusive first byte of dest
-+	 *   a1 - Inclusive first byte of src
-+	 *   a2 - Length of copy n
-+	 *
-+	 * Because the return matches the parameter register a0,
-+	 * we will not clobber or modify that register.
-+	 *
-+	 * Note: This currently only works on little-endian.
-+	 * To port to big-endian, reverse the direction of shifts
-+	 * in the 2 misaligned fixup copy loops.
-+	 */
- 
-+	/* Return if nothing to do */
-+	beq a0, a1, return_from_memmove
-+	beqz a2, return_from_memmove
-+
-+	/*
-+	 * Register Uses
-+	 *      Forward Copy: a1 - Index counter of src
-+	 *      Reverse Copy: a4 - Index counter of src
-+	 *      Forward Copy: t3 - Index counter of dest
-+	 *      Reverse Copy: t4 - Index counter of dest
-+	 *   Both Copy Modes: t5 - Inclusive first multibyte/aligned of dest
-+	 *   Both Copy Modes: t6 - Non-Inclusive last multibyte/aligned of dest
-+	 *   Both Copy Modes: t0 - Link / Temporary for load-store
-+	 *   Both Copy Modes: t1 - Temporary for load-store
-+	 *   Both Copy Modes: t2 - Temporary for load-store
-+	 *   Both Copy Modes: a5 - dest to src alignment offset
-+	 *   Both Copy Modes: a6 - Shift ammount
-+	 *   Both Copy Modes: a7 - Inverse Shift ammount
-+	 *   Both Copy Modes: a2 - Alternate breakpoint for unrolled loops
-+	 */
-+
-+	/*
-+	 * Solve for some register values now.
-+	 * Byte copy does not need t5 or t6.
-+	 */
-+	mv   t3, a0
-+	add  t4, a0, a2
-+	add  a4, a1, a2
-+
-+	/*
-+	 * Byte copy if copying less than (2 * SZREG) bytes. This can
-+	 * cause problems with the bulk copy implementation and is
-+	 * small enough not to bother.
-+	 */
-+	andi t0, a2, -(2 * SZREG)
-+	beqz t0, byte_copy
-+
-+	/*
-+	 * Now solve for t5 and t6.
-+	 */
-+	andi t5, t3, -SZREG
-+	andi t6, t4, -SZREG
-+	/*
-+	 * If dest(Register t3) rounded down to the nearest naturally
-+	 * aligned SZREG address, does not equal dest, then add SZREG
-+	 * to find the low-bound of SZREG alignment in the dest memory
-+	 * region.  Note that this could overshoot the dest memory
-+	 * region if n is less than SZREG.  This is one reason why
-+	 * we always byte copy if n is less than SZREG.
-+	 * Otherwise, dest is already naturally aligned to SZREG.
-+	 */
-+	beq  t5, t3, 1f
-+		addi t5, t5, SZREG
-+	1:
-+
-+	/*
-+	 * If the dest and src are co-aligned to SZREG, then there is
-+	 * no need for the full rigmarole of a full misaligned fixup copy.
-+	 * Instead, do a simpler co-aligned copy.
-+	 */
-+	xor  t0, a0, a1
-+	andi t1, t0, (SZREG - 1)
-+	beqz t1, coaligned_copy
-+	/* Fall through to misaligned fixup copy */
-+
-+misaligned_fixup_copy:
-+	bltu a1, a0, misaligned_fixup_copy_reverse
-+
-+misaligned_fixup_copy_forward:
-+	jal  t0, byte_copy_until_aligned_forward
-+
-+	andi a5, a1, (SZREG - 1) /* Find the alignment offset of src (a1) */
-+	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-+	sub  a5, a1, t3 /* Find the difference between src and dest */
-+	andi a1, a1, -SZREG /* Align the src pointer */
-+	addi a2, t6, SZREG /* The other breakpoint for the unrolled loop*/
-+
-+	/*
-+	 * Compute The Inverse Shift
-+	 * a7 = XLEN - a6 = XLEN + -a6
-+	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-+	 * Add that to XLEN.  XLEN = SZREG * 8.
-+	 */
-+	not  a7, a6
-+	addi a7, a7, (SZREG * 8 + 1)
-+
-+	/*
-+	 * Fix Misalignment Copy Loop - Forward
-+	 * load_val0 = load_ptr[0];
-+	 * do {
-+	 * 	load_val1 = load_ptr[1];
-+	 * 	store_ptr += 2;
-+	 * 	store_ptr[0 - 2] = (load_val0 >> {a6}) | (load_val1 << {a7});
-+	 *
-+	 * 	if (store_ptr == {a2})
-+	 * 		break;
-+	 *
-+	 * 	load_val0 = load_ptr[2];
-+	 * 	load_ptr += 2;
-+	 * 	store_ptr[1 - 2] = (load_val1 >> {a6}) | (load_val0 << {a7});
-+	 *
-+	 * } while (store_ptr != store_ptr_end);
-+	 * store_ptr = store_ptr_end;
-+	 */
-+
-+	REG_L t0, (0 * SZREG)(a1)
-+	1:
-+	REG_L t1, (1 * SZREG)(a1)
-+	addi  t3, t3, (2 * SZREG)
-+	srl   t0, t0, a6
-+	sll   t2, t1, a7
-+	or    t2, t0, t2
-+	REG_S t2, ((0 * SZREG) - (2 * SZREG))(t3)
-+
-+	beq   t3, a2, 2f
-+
-+	REG_L t0, (2 * SZREG)(a1)
-+	addi  a1, a1, (2 * SZREG)
-+	srl   t1, t1, a6
-+	sll   t2, t0, a7
-+	or    t2, t1, t2
-+	REG_S t2, ((1 * SZREG) - (2 * SZREG))(t3)
-+
-+	bne   t3, t6, 1b
-+	2:
-+	mv    t3, t6 /* Fix the dest pointer in case the loop was broken */
-+
-+	add  a1, t3, a5 /* Restore the src pointer */
-+	j byte_copy_forward /* Copy any remaining bytes */
-+
-+misaligned_fixup_copy_reverse:
-+	jal  t0, byte_copy_until_aligned_reverse
-+
-+	andi a5, a4, (SZREG - 1) /* Find the alignment offset of src (a4) */
-+	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-+	sub  a5, a4, t4 /* Find the difference between src and dest */
-+	andi a4, a4, -SZREG /* Align the src pointer */
-+	addi a2, t5, -SZREG /* The other breakpoint for the unrolled loop*/
-+
-+	/*
-+	 * Compute The Inverse Shift
-+	 * a7 = XLEN - a6 = XLEN + -a6
-+	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-+	 * Add that to XLEN.  XLEN = SZREG * 8.
-+	 */
-+	not  a7, a6
-+	addi a7, a7, (SZREG * 8 + 1)
-+
-+	/*
-+	 * Fix Misalignment Copy Loop - Reverse
-+	 * load_val1 = load_ptr[0];
-+	 * do {
-+	 * 	load_val0 = load_ptr[-1];
-+	 * 	store_ptr -= 2;
-+	 * 	store_ptr[1] = (load_val0 >> {a6}) | (load_val1 << {a7});
-+	 *
-+	 * 	if (store_ptr == {a2})
-+	 * 		break;
-+	 *
-+	 * 	load_val1 = load_ptr[-2];
-+	 * 	load_ptr -= 2;
-+	 * 	store_ptr[0] = (load_val1 >> {a6}) | (load_val0 << {a7});
-+	 *
-+	 * } while (store_ptr != store_ptr_end);
-+	 * store_ptr = store_ptr_end;
-+	 */
-+
-+	REG_L t1, ( 0 * SZREG)(a4)
-+	1:
-+	REG_L t0, (-1 * SZREG)(a4)
-+	addi  t4, t4, (-2 * SZREG)
-+	sll   t1, t1, a7
-+	srl   t2, t0, a6
-+	or    t2, t1, t2
-+	REG_S t2, ( 1 * SZREG)(t4)
-+
-+	beq   t4, a2, 2f
-+
-+	REG_L t1, (-2 * SZREG)(a4)
-+	addi  a4, a4, (-2 * SZREG)
-+	sll   t0, t0, a7
-+	srl   t2, t1, a6
-+	or    t2, t0, t2
-+	REG_S t2, ( 0 * SZREG)(t4)
-+
-+	bne   t4, t5, 1b
-+	2:
-+	mv    t4, t5 /* Fix the dest pointer in case the loop was broken */
-+
-+	add  a4, t4, a5 /* Restore the src pointer */
-+	j byte_copy_reverse /* Copy any remaining bytes */
-+
-+/*
-+ * Simple copy loops for SZREG co-aligned memory locations.
-+ * These also make calls to do byte copies for any unaligned
-+ * data at their terminations.
-+ */
-+coaligned_copy:
-+	bltu a1, a0, coaligned_copy_reverse
-+
-+coaligned_copy_forward:
-+	jal t0, byte_copy_until_aligned_forward
-+
-+	1:
-+	REG_L t1, ( 0 * SZREG)(a1)
-+	addi  a1, a1, SZREG
-+	addi  t3, t3, SZREG
-+	REG_S t1, (-1 * SZREG)(t3)
-+	bne   t3, t6, 1b
-+
-+	j byte_copy_forward /* Copy any remaining bytes */
-+
-+coaligned_copy_reverse:
-+	jal t0, byte_copy_until_aligned_reverse
-+
-+	1:
-+	REG_L t1, (-1 * SZREG)(a4)
-+	addi  a4, a4, -SZREG
-+	addi  t4, t4, -SZREG
-+	REG_S t1, ( 0 * SZREG)(t4)
-+	bne   t4, t5, 1b
-+
-+	j byte_copy_reverse /* Copy any remaining bytes */
-+
-+/*
-+ * These are basically sub-functions within the function.  They
-+ * are used to byte copy until the dest pointer is in alignment.
-+ * At which point, a bulk copy method can be used by the
-+ * calling code.  These work on the same registers as the bulk
-+ * copy loops.  Therefore, the register values can be picked
-+ * up from where they were left and we avoid code duplication
-+ * without any overhead except the call in and return jumps.
-+ */
-+byte_copy_until_aligned_forward:
-+	beq  t3, t5, 2f
-+	1:
-+	lb   t1,  0(a1)
-+	addi a1, a1, 1
-+	addi t3, t3, 1
-+	sb   t1, -1(t3)
-+	bne  t3, t5, 1b
-+	2:
-+	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
-+
-+byte_copy_until_aligned_reverse:
-+	beq  t4, t6, 2f
-+	1:
-+	lb   t1, -1(a4)
-+	addi a4, a4, -1
-+	addi t4, t4, -1
-+	sb   t1,  0(t4)
-+	bne  t4, t6, 1b
-+	2:
-+	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
-+
-+/*
-+ * Simple byte copy loops.
-+ * These will byte copy until they reach the end of data to copy.
-+ * At that point, they will call to return from memmove.
-+ */
- byte_copy:
--        lb      t3, 0(a1)
--        addi    a2, a2, -1
--        sb      t3, 0(a0)
--        add     a1, a1, t4
--        add     a0, a0, t4
--        bnez    a2, byte_copy
--
--exit_memcpy:
--        move a0, t0
--        move a1, t1
--        ret
--END(__memmove)
-+	bltu a1, a0, byte_copy_reverse
-+
-+byte_copy_forward:
-+	beq  t3, t4, 2f
-+	1:
-+	lb   t1,  0(a1)
-+	addi a1, a1, 1
-+	addi t3, t3, 1
-+	sb   t1, -1(t3)
-+	bne  t3, t4, 1b
-+	2:
-+	ret
-+
-+byte_copy_reverse:
-+	beq  t4, t3, 2f
-+	1:
-+	lb   t1, -1(a4)
-+	addi a4, a4, -1
-+	addi t4, t4, -1
-+	sb   t1,  0(t4)
-+	bne  t4, t3, 1b
-+	2:
-+
-+return_from_memmove:
-+	ret
-+
-+SYM_FUNC_END(memmove)
-+SYM_FUNC_END(__memmove)
--- 
-2.35.1
-
+ CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
+@@ -192,7 +192,7 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_
+ 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
+ 		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
+ 		    sed 's/\[.*\]//' |					 \
+-		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
++		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
+ 		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
+ 		    sort -u > $(OUTPUT)libbpf_versioned_syms.tmp; 	 \
+ 		diff -u $(OUTPUT)libbpf_global_syms.tmp			 \
 
 

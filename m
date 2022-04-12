@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7487B4FCC5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A664FCC65
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239405AbiDLCUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S238771AbiDLCXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbiDLCU0 (ORCPT
+        with ESMTP id S229921AbiDLCXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:20:26 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DBF33E26
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:18:10 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id b16so20868982ioz.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:18:10 -0700 (PDT)
+        Mon, 11 Apr 2022 22:23:08 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032202DD5D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:20:52 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id g21so20805005iom.13
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=srFoickd1zlR+kJjOTObZ61tAEx/5+zynW0TfHZUqk4=;
-        b=gCKdLNuZBSmjfleHx7DWHk2dt/R22/YnwJEkeczkHmul3xFo7Avio96a80MTlR5FdW
-         kt/AKIj/b20OuGyMzwtRhr0kR8aUMwJjLbVeO0mlQg/T8O1ENVRgwu1GbqDr+KujeX5e
-         DcjRoRCndOzZw3olTMnGOfBqE8R/iJG0zGgyjyzKwoIUFYj7FuEBRa3ozrF8MM4kzP2A
-         4VNhLmwui6p2QqLKkNEpf7iSuPz9f3iTkGrOs6mEOLqurwiOTlNACnVV0eviSWrbYEDT
-         AnzkwfJGvBvAFyYhZ9Af8Lvl16MXcv6ozhiuQTZdNBgHwCtgWKA7I7SYDMW2iibmwbAz
-         1Yug==
+        bh=XhnTklp0fQG5pWOShkm/danr9fm3RkxrfyE711IIN7k=;
+        b=U+1PDjTuoCGYknyL7HpFT/+ttl3I5qlCt/8Mw0EsMBgbZbMJ6dY9XpX0AEDK/+ckiv
+         m+cjSCPj7jOrvat0rklcSnY5jOA/wzz/ufNzlNGRXlzcn4CsWC5NEicUGTo+Rwf6F8zd
+         FRdcufcaJ38zz9IMVSNqOof4U8mVxnENoHykvzkzePsZydnb1iBTQCQr2rK7KZ65sjgL
+         UOnhFDCDAGpGXtTc5bYEWnD6avl+i3GZ65Fgo+IV2hSMaiTF1lWtcuim7/yYPKP8Rhoa
+         1+CbeQ6uCFEVCaMYFfI9CbOjoH1R91hjUfE9+ZXYCzhQYurJoO+i6e/ALGqKb0WfKU1G
+         5q2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=srFoickd1zlR+kJjOTObZ61tAEx/5+zynW0TfHZUqk4=;
-        b=AsZ+j9a/DfUe3izgDg41T8G35mTsBjuV4JPpr7TQUZBvzW/ThWBFBiUsygM2DZUiW3
-         F9EzdVW3a2/VTgo9nZg9tJFULtl/VYe1tJXZGLbkHTC03Q6EKtQRM33FPr9o09WxCQgG
-         i0Mbrg8TdxC7+xqhCvOI4faZB9zKSnczuT7QcNVCtSGNNDtd7vIlCivMWfTN8Z0Y+Bkd
-         OQaADrPX9+xv9kL8M3gaDYiBG7BHf4u1t8rhZaAkbtfcTN7o0Gel/cFPGTK+Wbn9yAWd
-         BkV/izEdXl81oTdUNIS+6UvWUPlBKM9h02QVcn4rIBEzG5hdAwqYQX5fBXEECxgfReVO
-         OBFg==
-X-Gm-Message-State: AOAM530nku5KBIPm2T9Ml5o7nrUgRofWy2PV8W9TV6bf3UvWIDWtx/GS
-        +9UIAYH7aGwYd0rmrHoKoKS4Lg==
-X-Google-Smtp-Source: ABdhPJwjczDWnC2qj4dZ+FNQIhPqqnW+3k0v+lTZ1pAXsHhT5jYps11L6QGsnu5UIkyQF0cz4I3J+A==
-X-Received: by 2002:a05:6638:22c5:b0:326:2b3a:b08b with SMTP id j5-20020a05663822c500b003262b3ab08bmr5318649jat.250.1649729889994;
-        Mon, 11 Apr 2022 19:18:09 -0700 (PDT)
+        bh=XhnTklp0fQG5pWOShkm/danr9fm3RkxrfyE711IIN7k=;
+        b=HH+hPSqupga5H0A+oEuO9IZojaoX/NVYvhitH2pr0XKDU6twFRP3JbEZ34A5RkSPNI
+         YNfWEC2YREqrREReLsND3J78LqJQeYLbofwrE3vwJ4MZVki7rVQAaHiJS6aoZpFRGm1p
+         9+RbLi4XEcBNab11zexfsSQcqhijIJuVf1+06zXtudmS34r7pPyazc2l7g6R7M4CpWLr
+         Dy5orSmHtdh6OD7l2h4vyuJuQUH2SoFvg8/pvwdSQrmiOHSiT74cTsuKkyoyQWmvqlPn
+         qpAjwxHIGKQ2MEwUBgxAkec7RTyqOs2x2+x0qp0LpK/9vZ1HsL7orLp8eU5d8NPhYPG3
+         fRSg==
+X-Gm-Message-State: AOAM532+KgvoYSaKHACZPotFzfZnL/PypEWNA6/g84zdtAIlrdmSl4u8
+        bvI5m7PQM11yjd5B2ZsuE+yrZQ==
+X-Google-Smtp-Source: ABdhPJzhpeEsiMfRJacURjg0vZNsByvJdMIjOgp3eU1Kxs8hl8gYMXtT8CDzZ9u90TPydF5CXiMnxQ==
+X-Received: by 2002:a05:6602:134f:b0:63c:a7ba:e8d with SMTP id i15-20020a056602134f00b0063ca7ba0e8dmr15081382iov.180.1649730051372;
+        Mon, 11 Apr 2022 19:20:51 -0700 (PDT)
 Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id x186-20020a6bc7c3000000b00648deae6630sm21825052iof.54.2022.04.11.19.18.08
+        by smtp.googlemail.com with ESMTPSA id a5-20020a056e020e0500b002caca72891fsm654390ilk.27.2022.04.11.19.20.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 19:18:08 -0700 (PDT)
-Message-ID: <2412ec25-37bf-fa12-6cbf-7cd697b1cf05@linaro.org>
-Date:   Mon, 11 Apr 2022 21:18:07 -0500
+        Mon, 11 Apr 2022 19:20:50 -0700 (PDT)
+Message-ID: <d39cc8a1-ca52-e902-e761-35e06a67aba9@linaro.org>
+Date:   Mon, 11 Apr 2022 21:20:49 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
@@ -82,40 +82,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 4/11/22 2:06 PM, Stephen Boyd wrote:
->> The second problem you have is exhibited by the IPA driver if
->> the "fix" commit (upstream b95b668eaaa2) is back-ported to the
->> Linux 5.10.y LTS branch (along with some other prerequisite
->> commits).  We can conclude that applying the above commit
->> makes the bandwidth for an unused interconnect (or perhaps
->> the rate for the IPA core clock) get set to zero.  And in that
->> case, an attempt to access IPA hardware leads to the crash you
->> observed.
->>
->> The IPA driver does not implement runtime power management
->> until Linux v5.15.  You later said you thought enabling that
->> might ensure the clock and interconnects were active when
->> needed by the IPA driver, and I concur (but there could be a
->> little more to it).
-> Is the runtime PM patch series necessary to enable the IPA clk and
-> interconnects? Things don't look good on 5.10.y and I'm not sure it will
-> be workable. Commit b1d681d8d324 ("interconnect: Add sync state
-> support") was introduced in v5.10 and that seems to be the commit that
-> broke suspend on Lazor.
-> 
+>> I have a hunch about what might be happening here.  There is
+>> some synchronization that must occur between the AP and modem
+>> when IPA is starting up.  Until that synchronization step has
+>> completed, we can't allow the IPA network device to be opened.
+> Is there a commit that implements this? Or how is the synchronization
+> done? I can debug more and see if that synchronization is happening.
 
-This isn't a response to your complete message but I'm going
-to respond to this part.
-
-Before runtime PM was in place, the "IPA clock" (which was a
-logical notion representing the IPA core clock and all the
-interconnects it uses) was enabled before the IPA hardware
-was first touched.  It was disabled again when system suspend
-occurred, and re-enabled again on system resume.  At one time
-we did observe the XO clock turning off.
-
-I'm not sure that answers your question.  But bottom line
-is that system suspend/resume were supported (and made
-IPA clock+interconnects get shut off and then on again),
-but not runtime PM.
+After testing today it seems maybe my hunch wasn't
+the root cause.  If you disagree and I'm missing
+something, say so.  I will take a look at that
+though--my hunch--to see if the thing I thought
+could be causing a problem can actually occur.
+If so, I'll figure out a fix.
 
 					-Alex
+

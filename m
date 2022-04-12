@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316214FD73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959C44FD8ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356180AbiDLIJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S1351903AbiDLHW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353558AbiDLHZq (ORCPT
+        with ESMTP id S1353010AbiDLHGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFB425C78;
-        Tue, 12 Apr 2022 00:01:12 -0700 (PDT)
+        Tue, 12 Apr 2022 03:06:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECD49908;
+        Mon, 11 Apr 2022 23:49:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF4F360B2E;
-        Tue, 12 Apr 2022 07:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29AFC385A1;
-        Tue, 12 Apr 2022 07:01:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0657EB81895;
+        Tue, 12 Apr 2022 06:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E36CC385A6;
+        Tue, 12 Apr 2022 06:49:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746871;
-        bh=+YTNds+8z0t2zHdYuIfAV4xXR8U6PjwOkzvV2rN7NGI=;
+        s=korg; t=1649746143;
+        bh=HEclneDs+g3YxIhF1k66IN1E4RAtEXrf9rK4SKXvqb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d11aYGUWXCaUdBts8vJwP8pcDOrDhX+xb8Pq3/xSTqK8z68xEWLc5kkhjcS8d6a0r
-         rHcpudVBgIveqxGQui+Yazzuw/hbeSPSd8/77nI+sQfnG0Wb2o/Z41/MynPY9IIKqo
-         oHMHf3RHLQA4t9mgg+Lv/6DldWgByI+aMycgyeiY=
+        b=fU1n48/alwYS1j0IeuIrCizxpYIkSmNoIBIRbk3pmGKsEWNOVE4paK++ke2Tcwqzx
+         Ri3pZZl2Yflimi378XEXZPTyJ6lZqQq8NoQgg71TpxVylBKK0ZCdMLeL4VUGH+A50P
+         ABVaqQD+xcdj02pL1xTzbxdn1sLYMgUj3KX3HvlU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 120/285] phy: amlogic: meson8b-usb2: fix shared reset control use
-Date:   Tue, 12 Apr 2022 08:29:37 +0200
-Message-Id: <20220412062947.130039106@linuxfoundation.org>
+        stable@vger.kernel.org, Aharon Landau <aharonl@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 175/277] RDMA/mlx5: Dont remove cache MRs when a delay is needed
+Date:   Tue, 12 Apr 2022 08:29:38 +0200
+Message-Id: <20220412062947.102166253@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,66 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+From: Aharon Landau <aharonl@nvidia.com>
 
-[ Upstream commit 6f1dedf089ab1a4f03ea7aadc3c4a99885b4b4a0 ]
+[ Upstream commit 84c2362fb65d69c721fec0974556378cbb36a62b ]
 
-Use reset_control_rearm() call if an error occurs in case
-phy_meson8b_usb2_power_on() fails after reset() has been called, or in
-case phy_meson8b_usb2_power_off() is called i.e the resource is no longer
-used and the reset line may be triggered again by other devices.
+Don't remove MRs from the cache if need to delay the removal.
 
-reset_control_rearm() keeps use of triggered_count sane in the reset
-framework, use of reset_control_reset() on shared reset line should
-be balanced with reset_control_rearm().
-
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220111095255.176141-4-aouledameur@baylibre.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: b9358bdbc713 ("RDMA/mlx5: Fix locking in MR cache work queue")
+Link: https://lore.kernel.org/r/c3087a90ff362c8796c7eaa2715128743ce36722.1649062436.git.leonro@nvidia.com
+Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+Reviewed-by: Shay Drory <shayd@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/amlogic/phy-meson8b-usb2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/infiniband/hw/mlx5/mr.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
-index 77e7e9b1428c..dd96763911b8 100644
---- a/drivers/phy/amlogic/phy-meson8b-usb2.c
-+++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
-@@ -154,6 +154,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	ret = clk_prepare_enable(priv->clk_usb_general);
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB general clock\n");
-+		reset_control_rearm(priv->reset);
- 		return ret;
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 7bb1b9d0941c..85289fddc2ae 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -536,8 +536,10 @@ static void __cache_work_func(struct mlx5_cache_ent *ent)
+ 		spin_lock_irq(&ent->lock);
+ 		if (ent->disabled)
+ 			goto out;
+-		if (need_delay)
++		if (need_delay) {
+ 			queue_delayed_work(cache->wq, &ent->dwork, 300 * HZ);
++			goto out;
++		}
+ 		remove_cache_mr_locked(ent);
+ 		queue_adjust_cache_locked(ent);
  	}
- 
-@@ -161,6 +162,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB DDR clock\n");
- 		clk_disable_unprepare(priv->clk_usb_general);
-+		reset_control_rearm(priv->reset);
- 		return ret;
- 	}
- 
-@@ -199,6 +201,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 				dev_warn(&phy->dev, "USB ID detect failed!\n");
- 				clk_disable_unprepare(priv->clk_usb);
- 				clk_disable_unprepare(priv->clk_usb_general);
-+				reset_control_rearm(priv->reset);
- 				return -EINVAL;
- 			}
- 		}
-@@ -218,6 +221,7 @@ static int phy_meson8b_usb2_power_off(struct phy *phy)
- 
- 	clk_disable_unprepare(priv->clk_usb);
- 	clk_disable_unprepare(priv->clk_usb_general);
-+	reset_control_rearm(priv->reset);
- 
- 	/* power off the PHY by putting it into reset mode */
- 	regmap_update_bits(priv->regmap, REG_CTRL, REG_CTRL_POWER_ON_RESET,
 -- 
 2.35.1
 

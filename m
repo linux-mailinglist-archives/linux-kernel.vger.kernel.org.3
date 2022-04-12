@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541A64FE5E5
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBC94FE5E6
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357658AbiDLQdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S1357655AbiDLQd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbiDLQd3 (ORCPT
+        with ESMTP id S1357689AbiDLQd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:33:29 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D95E16A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:02 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23CF0kP2030058
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:02 -0700
+        Tue, 12 Apr 2022 12:33:28 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812B25E168
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:05 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23CF1qip006055
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:04 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=jpJLwlCd/Lo6d9EOp1tU7k+L8lqn56Qe1VGs4ldSBt0=;
- b=lhDW+wS1PWX7Dd5U0d5//NRgork1OIGL5UlZ3DkxJHOrEGqG+gCYCAv/SvVcEgTgQX14
- S5vwRH08+ID1Yp+Qpjf9pPxN2VXUgVs+ZNZFVvbXUwIJ+abYyVPApBmOqK8GqetsPPco
- 9vESh4MnV7ZgKMqu2zzMsr+1yv428IFNEyk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fdbpj8pek-1
+ bh=baEaCrnLBHjc8dj+cmCnEDyggTYvxeftZ9u5tqzYlTQ=;
+ b=WL6IG/v+96ZbexC5BmYEsm9xxAiTaY3eamthvpYVTqKiZsXSI5a2Gi3l8YHyzrhE6DBq
+ BjvDqx39p/bCZpr5BpSh6iIL/oEjxT2ZlP/uvFK7ciIMe1eNV4Ay1EinpGHGjNrDd2Gq
+ C8g47Au16XQ3NEUuOs4fmDGmn/SHnC7GRJw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fckykgq36-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:02 -0700
-Received: from twshared14141.02.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:04 -0700
+Received: from twshared6486.05.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 12 Apr 2022 09:31:01 -0700
+ 15.1.2308.21; Tue, 12 Apr 2022 09:31:02 -0700
 Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id 398667456066; Tue, 12 Apr 2022 09:30:48 -0700 (PDT)
+        id A736C745606C; Tue, 12 Apr 2022 09:30:48 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
         <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 2/4] io_uring: verify that resv2 is 0 in io_uring_rsrc_update2
-Date:   Tue, 12 Apr 2022 09:30:40 -0700
-Message-ID: <20220412163042.2788062-3-dylany@fb.com>
+Subject: [PATCH 3/4] io_uring: verify resv is 0 in ringfd register/unregister
+Date:   Tue, 12 Apr 2022 09:30:41 -0700
+Message-ID: <20220412163042.2788062-4-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220412163042.2788062-1-dylany@fb.com>
 References: <20220412163042.2788062-1-dylany@fb.com>
@@ -50,63 +50,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: eRMg5F3rRGAyajd58Tpyi9hUQZNAk48j
-X-Proofpoint-GUID: eRMg5F3rRGAyajd58Tpyi9hUQZNAk48j
+X-Proofpoint-ORIG-GUID: NiXb3jjnq2cYYFqBsXHH-4CYl2GkYc-C
+X-Proofpoint-GUID: NiXb3jjnq2cYYFqBsXHH-4CYl2GkYc-C
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Verify that the user does not pass in anything but 0 for this field.
+Only allow resv field to be 0 in struct io_uring_rsrc_update user
+arguments.
 
-Fixes: 992da01aa932 ("io_uring: change registration/upd/rsrc tagging ABI"=
-)
+Fixes: e7a6c00dc77a ("io_uring: add support for registering ring file des=
+criptors")
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- fs/io_uring.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/io_uring.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 58bfa71fe3b6..e899192ffb77 100644
+index e899192ffb77..a84bfec97d0d 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -6839,6 +6839,7 @@ static int io_files_update(struct io_kiocb *req, un=
-signed int issue_flags)
- 	up.nr =3D 0;
- 	up.tags =3D 0;
- 	up.resv =3D 0;
-+	up.resv2 =3D 0;
+@@ -10533,6 +10533,11 @@ static int io_ringfd_register(struct io_ring_ctx=
+ *ctx, void __user *__arg,
+ 			break;
+ 		}
 =20
- 	io_ring_submit_lock(ctx, needs_lock);
- 	ret =3D __io_register_rsrc_update(ctx, IORING_RSRC_FILE,
-@@ -11423,7 +11424,7 @@ static int io_register_files_update(struct io_rin=
-g_ctx *ctx, void __user *arg,
- 	memset(&up, 0, sizeof(up));
- 	if (copy_from_user(&up, arg, sizeof(struct io_uring_rsrc_update)))
- 		return -EFAULT;
--	if (up.resv)
-+	if (up.resv || up.resv2)
- 		return -EINVAL;
- 	return __io_register_rsrc_update(ctx, IORING_RSRC_FILE, &up, nr_args);
- }
-@@ -11437,7 +11438,7 @@ static int io_register_rsrc_update(struct io_ring=
-_ctx *ctx, void __user *arg,
- 		return -EINVAL;
- 	if (copy_from_user(&up, arg, sizeof(up)))
- 		return -EFAULT;
--	if (!up.nr || up.resv)
-+	if (!up.nr || up.resv || up.resv2)
- 		return -EINVAL;
- 	return __io_register_rsrc_update(ctx, type, &up, up.nr);
- }
++		if (reg.resv) {
++			ret =3D -EINVAL;
++			break;
++		}
++
+ 		if (reg.offset =3D=3D -1U) {
+ 			start =3D 0;
+ 			end =3D IO_RINGFD_REG_MAX;
+@@ -10579,7 +10584,7 @@ static int io_ringfd_unregister(struct io_ring_ct=
+x *ctx, void __user *__arg,
+ 			ret =3D -EFAULT;
+ 			break;
+ 		}
+-		if (reg.offset >=3D IO_RINGFD_REG_MAX) {
++		if (reg.resv || reg.offset >=3D IO_RINGFD_REG_MAX) {
+ 			ret =3D -EINVAL;
+ 			break;
+ 		}
 --=20
 2.30.2
 

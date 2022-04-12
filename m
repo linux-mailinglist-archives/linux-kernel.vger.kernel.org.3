@@ -2,276 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C67C4FE0C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF9A4FE115
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354302AbiDLMrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S1351428AbiDLMw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353876AbiDLMrN (ORCPT
+        with ESMTP id S1355036AbiDLMsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:47:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFCF7EA1C;
-        Tue, 12 Apr 2022 05:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649765456; x=1681301456;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=H3y2PO8iP1I2VKt5VHY/5jS3296P+ova6WPUU37ZDYU=;
-  b=LCwSRPoD9b2KFpawNEJKy3JDmx4uDi81yNqhaHN3Gbi39hIcl12KEzr5
-   kWTSxy4bspvRwhoTa3qMoS+gY9j9AbP1rdzLipno/mdGEa5xtCH+f3jw7
-   4Ej1dsP7Uu5zkkXxHHGJ8qSf5gXHFel2I1yqPfFJdP2race8ZzhrEQubZ
-   6S8JwSso2kwQO/UcJleqqRQ5oLVqFgt6jvNzwYpXyekiwNQrgs4BqfSfY
-   KcLpmO2vW8cCg9O5dLz3kxpWM5vF/RZW1izgkWuyR+FHrhf/9BZL6/Z0v
-   rz7WulDQ6afLkl96B4gqIPq6lze4skEyxvg9aD5Hhf1iTm7PAlvEdMnKg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261798001"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="261798001"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 05:10:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="526015878"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 05:10:16 -0700
-Date:   Tue, 12 Apr 2022 20:10:05 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 09/13] KVM: Handle page fault for private memory
-Message-ID: <20220412121005.GC7309@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-10-chao.p.peng@linux.intel.com>
- <YkJbxiL/Az7olWlq@google.com>
+        Tue, 12 Apr 2022 08:48:00 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5558BBE0F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:14:54 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id c12-20020a17090a020c00b001cba1ebb20cso2058546pjc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WlhLvKY3zT5Zwc6BjY2DR6KFEYpYVNQay5CCAj2cOs4=;
+        b=BFpKjK/Z/j7bELQYt2NhSukAKBLKCs3yubgOqHCgYAHf3RJ0ZyQoGpcNF2bzkqPHxT
+         u/GnYtHYti4wn2Xh6Z8LHH8qRHwsNttAT3XuXDUG0WL7cW/enRV4PL3h8aerBy0sCdVr
+         BN+UNgyBiiomhnx6JJcKGH62tQMzn7iV5spUUhdix5wODL2qJPF92lzeqXtReGIyU+Kf
+         r+qnLRYkTmkgKQn6PkXDo1PKZSSJcnXloYRfGez2iOV7dqNYxs7yuI7yZCRHjb7+xN+V
+         SJTZbgPSRHgB9GbMGNvTymodgyzAhWqgWE5l7ZgZ6/UNkSjxPpW3E44iB2sFf0Zgs1mA
+         eLxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WlhLvKY3zT5Zwc6BjY2DR6KFEYpYVNQay5CCAj2cOs4=;
+        b=G3D3A19cADnU/vlFsltJSZpvdyClJyO3rKk14ujJdCu7BpBJqjkTuLGqNrgNFVaguE
+         7KXNcHBKfXoAoZB8u35mmESolHSNAqVxmdEs/6RYJaugcV2TjPLa84wqDYWb/wtDc0/e
+         Ckmvg7V87PyPRGcSk0eW/c5k8ZMH2Y4azewmZxwX8SqxsmxNX89/2MGgmKYMoTB5OOC/
+         L+xCwwjLBayg/AxDY3tNVSeM6BfmT+ENiqPpdu2bLJmGM1knBwpo8FLlzblOcc+x/teE
+         QP0yKs5XIYBKzRzLiwegTrPSXdouvcNpVm7R8uISk8qNSOjY9KqE3PtO4C1+a4WKNqk2
+         zdPA==
+X-Gm-Message-State: AOAM531QGPCvTxWsAvWygarKW8oEwhG3AbHxqIKFb9nBrn+YSb8SiOPY
+        iPHCFclJzLRxhSfjrqqHaFSu9D903qg=
+X-Google-Smtp-Source: ABdhPJx2pR6VS4BxQjB8Dl4fdWoxC6QU+VQHL/7oBEeqbc24hcPLhKeunYV0tH5CkL27f7vVqY+rOA==
+X-Received: by 2002:a17:902:ce0f:b0:156:5a4:926c with SMTP id k15-20020a170902ce0f00b0015605a4926cmr36849036plg.3.1649765693665;
+        Tue, 12 Apr 2022 05:14:53 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id z16-20020a056a00241000b004f3a647ae89sm40248445pfh.174.2022.04.12.05.14.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Apr 2022 05:14:53 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH V5 0/7] x86/entry: Clean up entry code
+Date:   Tue, 12 Apr 2022 20:15:34 +0800
+Message-Id: <20220412121541.4595-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkJbxiL/Az7olWlq@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 01:07:18AM +0000, Sean Christopherson wrote:
-> On Thu, Mar 10, 2022, Chao Peng wrote:
-> > @@ -3890,7 +3893,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> >  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
-> >  }
-> >  
-> > -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
-> > +static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
-> > +{
-> > +	/*
-> > +	 * At this time private gfn has not been supported yet. Other patch
-> > +	 * that enables it should change this.
-> > +	 */
-> > +	return false;
-> > +}
-> > +
-> > +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > +				    struct kvm_page_fault *fault,
-> > +				    bool *is_private_pfn, int *r)
-> 
-> @is_private_pfn should be a field in @fault, not a separate parameter, and it
-> should be a const property set by the original caller.  I would also name it
-> "is_private", because if KVM proceeds past this point, it will be a property of
-> the fault/access _and_ the pfn
-> 
-> I say it's a property of the fault because the below kvm_vcpu_is_private_gfn()
-> should instead be:
-> 
-> 	if (fault->is_private)
-> 
-> The kvm_vcpu_is_private_gfn() check is TDX centric.  For SNP, private vs. shared
-> is communicated via error code.  For software-only (I'm being optimistic ;-) ),
-> we'd probably need to track private vs. shared internally in KVM, I don't think
-> we'd want to force it to be a property of the gfn.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Make sense.
+This patchset moves the stack-switch code to the place where
+error_entry() return, unravels error_entry() from XENpv and makes
+entry_INT80_compat() uses idtentry macro.
 
-> 
-> Then you can also move the fault->is_private waiver into is_page_fault_stale(),
-> and drop the local is_private_pfn in direct_page_fault().
-> 
-> > +{
-> > +	int order;
-> > +	unsigned int flags = 0;
-> > +	struct kvm_memory_slot *slot = fault->slot;
-> > +	long pfn = kvm_memfile_get_pfn(slot, fault->gfn, &order);
-> 
-> If get_lock_pfn() and thus kvm_memfile_get_pfn() returns a pure error code instead
-> of multiplexing the pfn, then this can be:
-> 
-> 	bool is_private_pfn;
-> 
-> 	is_private_pfn = !!kvm_memfile_get_pfn(slot, fault->gfn, &fault->pfn, &order);
-> 
-> That self-documents the "pfn < 0" == shared logic.
+This patchset is highly related to XENpv, because it does the extra
+cleanup to convert SWAPGS to swapgs after major cleanup is done.
 
-Yes, agreed.
+The patches are the 5th version to pick patches from the patchset
+https://lore.kernel.org/lkml/20211126101209.8613-1-jiangshanlai@gmail.com/
+which converts ASM code to C code.  These patches are prepared for that
+purpose.  But this patchset has it own value: it simplifies the stack
+switch, avoids leaving the old stack inside a function call, and
+separates XENpv code with native code without adding new code.
 
-> 
-> > +
-> > +	if (kvm_vcpu_is_private_gfn(vcpu, fault->addr >> PAGE_SHIFT)) {
-> > +		if (pfn < 0)
-> > +			flags |= KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> > +		else {
-> > +			fault->pfn = pfn;
-> > +			if (slot->flags & KVM_MEM_READONLY)
-> > +				fault->map_writable = false;
-> > +			else
-> > +				fault->map_writable = true;
-> > +
-> > +			if (order == 0)
-> > +				fault->max_level = PG_LEVEL_4K;
-> 
-> This doesn't correctly handle order > 0, but less than the next page size, in which
-> case max_level needs to be PG_LEVEL_4k.  It also doesn't handle the case where
-> max_level > PG_LEVEL_2M.
-> 
-> That said, I think the proper fix is to have the get_lock_pfn() API return the max
-> mapping level, not the order.  KVM, and presumably any other secondary MMU that might
-> use these APIs, doesn't care about the order of the struct page, KVM cares about the
-> max size/level of page it can map into the guest.  And similar to the previous patch,
-> "order" is specific to struct page, which we are trying to avoid.
+Peter said in V3:
+>	So AFAICT these patches are indeed correct.
+>
+>	I'd love for some of the other x86 people to also look at this,
+>	but a tentative ACK on this.
 
-I remembered I suggested return max mapping level instead of order but
-Kirill reminded me that PG_LEVEL_* is x86 specific, then changed back
-to 'order'. It's just a matter of backing store or KVM to convert
-'order' to mapping level.
+[V4]: https://lore.kernel.org/lkml/20220318143016.124387-1-jiangshanlai@gmail.com/
+[V3]: https://lore.kernel.org/lkml/20220315073949.7541-1-jiangshanlai@gmail.com/
+[V2]: https://lore.kernel.org/lkml/20220303035434.20471-1-jiangshanlai@gmail.com/
+[V1]: https://lore.kernel.org/lkml/20211208110833.65366-1-jiangshanlai@gmail.com/
 
-> 
-> > +			*is_private_pfn = true;
-> 
-> This is where KVM guarantees that is_private_pfn == fault->is_private.
-> 
-> > +			*r = RET_PF_FIXED;
-> > +			return true;
-> 
-> Ewww.  This is super confusing.  Ditto for the "*r = -1" magic number.  I totally
-> understand why you took this approach, it's just hard to follow because it kinda
-> follows the kvm_faultin_pfn() semantics, but then inverts true and false in this
-> one case.
-> 
-> I think the least awful option is to forego the helper and open code everything.
-> If we ever refactor kvm_faultin_pfn() to be less weird then we can maybe move this
-> to a helper.
-> 
-> Open coding isn't too bad if you reorganize things so that the exit-to-userspace
-> path is a dedicated, early check.  IMO, it's a lot easier to read this way, open
-> coded or not.
+Changed from V4:
+	Update changelog largely of patch 1 and patch 2
+	Update changelog slightly of other patches
+	Unbreak the line of fixup_bad_iret() in patch1
 
-Yes the existing way of handling this is really awful, including the handling for 'r'
-that will be finally return to KVM_RUN as part of the uAPI. Let me try your above
-suggestion.
+	Add Reviewed-by from Juergen Gross <jgross@suse.com> in patch 6
+	since he gave the Reviewed-by in one of the squashed patches.
 
-> 
-> I think this is correct?  "is_private_pfn" and "level" are locals, everything else
-> is in @fault.
-> 
-> 	if (kvm_slot_is_private(slot)) {
-> 		is_private_pfn = !!kvm_memfile_get_pfn(slot, fault->gfn,
-> 						       &fault->pfn, &level);
-> 
-> 		if (fault->is_private != is_private_pfn) {
-> 			if (is_private_pfn)
-> 				kvm_memfile_put_pfn(slot, fault->pfn);
-> 
-> 			vcpu->run->exit_reason = KVM_EXIT_MEMORY_ERROR;
-> 			if (fault->is_private)
-> 				vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> 			else
-> 				vcpu->run->memory.flags = 0;
-> 			vcpu->run->memory.padding = 0;
-> 			vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> 			vcpu->run->memory.size = PAGE_SIZE;
-> 			*r = 0;
-> 			return true;
-> 		}
-> 
-> 		/*
-> 		 * fault->pfn is all set if the fault is for a private pfn, just
-> 		 * need to update other metadata.
-> 		 */
-> 		if (fault->is_private) {
-> 			fault->max_level = min(fault->max_level, level);
-> 			fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
-> 			return false;
-> 		}
-> 
-> 		/* Fault is shared, fallthrough to the standard path. */
-> 	}
-> 
-> 	async = false;
-> 
-> > @@ -4016,7 +4076,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  	else
-> >  		write_lock(&vcpu->kvm->mmu_lock);
-> >  
-> > -	if (is_page_fault_stale(vcpu, fault, mmu_seq))
-> > +	if (!is_private_pfn && is_page_fault_stale(vcpu, fault, mmu_seq))
-> 
-> As above, I'd prefer this check go in is_page_fault_stale().  It means shadow MMUs
-> will suffer a pointless check, but I don't think that's a big issue.  Oooh, unless
-> we support software-only, which would play nice with nested and probably even legacy
-> shadow paging.  Fun :-)
+Changed from V3:
+	Only reorder the int80 thing as the last patch to make patches
+	ordering more natural. (Both orders are correct)
 
-Sounds good.
+Other interactions in V3:
+	Peter raised several questions and I think I answered them and I
+	don't think the code need to be updated unless I missed some
+	points. (Except reordering the patches)
 
-> 
-> >  		goto out_unlock;
-> >  
-> >  	r = make_mmu_pages_available(vcpu);
-> > @@ -4033,7 +4093,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  		read_unlock(&vcpu->kvm->mmu_lock);
-> >  	else
-> >  		write_unlock(&vcpu->kvm->mmu_lock);
-> > -	kvm_release_pfn_clean(fault->pfn);
-> > +
-> > +	if (is_private_pfn)
-> 
-> And this can be
-> 
-> 	if (fault->is_private)
-> 
-> Same feedback for paging_tmpl.h.
+	Josh asked to remove UNWIND_HINT_REGS in patch5, but I think
+	UNWIND_HINT_REGS is old code before this patchset and I don't
+	want to do a cleanup that is not relate to preparing converting
+	ASM code C code in this patchset.  He also asked to remove
+	ENCODE_FRAME_POINTER in xenpv case, and I think it just
+	complicates the code for just optimizing out a single assignment
+	to %rbp.  I would not always stick to these reasons of mine,
+	but I just keep the code unchanged since he hasn't emphasized it
+	again nor other people has requested it.
 
-Agreed.
+Changed from V2:
+	Make the patch of folding int80 thing as the first patch
+	Add more changelog in "Switch the stack after error_entry() returns"
 
-Thanks,
-Chao
+Changed from V1
+	Squash cleanup patches converting SWAPGS to swapgs into one patch
+
+	Use my official email address (Ant Group).  The work is backed
+	by my company and I was incorrectly misunderstood that
+	XXX@linux.alibaba.com is the only portal for opensource work
+	in the corporate group.
+
+
+Lai Jiangshan (7):
+  x86/traps: Move pt_regs only in fixup_bad_iret()
+  x86/entry: Switch the stack after error_entry() returns
+  x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
+  x86/entry: Move cld to the start of idtentry macro
+  x86/entry: Don't call error_entry() for XENPV
+  x86/entry: Convert SWAPGS to swapgs and remove the definition of
+    SWAPGS
+  x86/entry: Use idtentry macro for entry_INT80_compat
+
+ arch/x86/entry/entry_64.S        |  61 +++++++++++++-----
+ arch/x86/entry/entry_64_compat.S | 105 +------------------------------
+ arch/x86/include/asm/idtentry.h  |  47 ++++++++++++++
+ arch/x86/include/asm/irqflags.h  |   8 ---
+ arch/x86/include/asm/proto.h     |   4 --
+ arch/x86/include/asm/traps.h     |   2 +-
+ arch/x86/kernel/traps.c          |  18 ++----
+ 7 files changed, 100 insertions(+), 145 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
+

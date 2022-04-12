@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959184FCD92
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274F54FCD97
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345668AbiDLEYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S1345770AbiDLE0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345627AbiDLEYT (ORCPT
+        with ESMTP id S234578AbiDLE0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:24:19 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310F42F39D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:22:02 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id j83so17875609oih.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:22:02 -0700 (PDT)
+        Tue, 12 Apr 2022 00:26:37 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18292140A5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:24:20 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id v75so17890311oie.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=tjT6fKt+FqeEOcNg0osLvB2083tulirjm/yjb0EMPNw=;
-        b=if+yP4Pk/q28d73RXmoK3hDDqXFu1H3qtu1L+w4XrCR45OD2hD75330dqbWLYDyMTy
-         zuohjk0ezFvJVPyEO49t8DYP7+w021vx7wAl1bCj8P803lDE+8h5KCq+gAu4rSy2E+mp
-         vdozwB+OGr/AC5hX7IBcHGLWZjwaGa8A8KSEU=
+         :subject:to:cc;
+        bh=wT1ipJ+z6nc0cV5pPdBgKr4CL6t1pZ10f3e64vOVaAk=;
+        b=IzYw+aFrZYlAA3irCMBEMNlVetWN6Cvq/bEgM3Lo/0TkezivNTRXdVhVaADc9HZagw
+         4pwlOwWufF8wBtrEoYbXfGM6mTBkfxWbVM9SgTIM6FeBIeCD/4yH/v8NP/e5h6CL/mis
+         I6N7CIwas+HFuSJTLS2XUNrOdtf1d/DFTwtuk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=tjT6fKt+FqeEOcNg0osLvB2083tulirjm/yjb0EMPNw=;
-        b=DV8QSo8pebaDPx81azpucg/nAcO3pDZA51pyN3RzfHffkRTKRDSAmb1mLrL1WV6IEb
-         AUCsr0b4HeKHH8rSrK6nB/XtVqnAVlQbs/8WtFoGoE9OTyNuVKlbyySkhgePE9nyn9i3
-         /U+W6+H78tRkQVhSd12bVS5bkfgp9lsHkFHzckeUWWU3vu55afPtxPdIF3unA0Q4rzTZ
-         yG/K880BhKIosuhWcZ7cj28s6/qMoxWLWE55UOueHlQp3BX0hqBdKQ/Jo2Fspq3WtrXO
-         3ERMJTd0v3lm1h9ribKkAGTIT2uMOdvtgXno0CWVSu3dBxD/vibm/sPZ8YKsQ2z6ATRL
-         8DUQ==
-X-Gm-Message-State: AOAM531LrbJvtQYsmjxknRo5rVFq/lH81cxB+OvRe0yNZx/HE0bMBGOd
-        PVjvTtk3z/71hxb8unVUX14lCJXNNjIGApoPvyLf0Q==
-X-Google-Smtp-Source: ABdhPJx23C8bH5PTdYl8UcvVuno+rfEBOgQ0RygYLdcavLD1pmbKLxkf8ZLS/jFBVhj+Xqp91D6yZh3UFs9TdUx3Hgc=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr975536oif.63.1649737321426; Mon, 11 Apr
- 2022 21:22:01 -0700 (PDT)
+         :user-agent:date:message-id:subject:to:cc;
+        bh=wT1ipJ+z6nc0cV5pPdBgKr4CL6t1pZ10f3e64vOVaAk=;
+        b=cdxda1J235mgk0s4iGOwzaXPGoekghIBorQXu3fjIz4n+RbFO26ZAgCj7Zh4Bc55/q
+         exFQ1wEok52iXQ8dZ5BnDSzFpr6lD63BrTV+cO7gtoprKIyQWluP411yd00ABbzD1F/7
+         KKSX/zp+Y40TmlVGFFg2bDynIXAHtTKDfaeUvRzeumqBaPb1CZI5NTTmdgCmBUeiD7Iw
+         Bm50PF57Mb78MD8oPW1FlMf/vu+U+xU5VyDz010v2m0mTE6VCyck+LQh1p3e3RAqpl7o
+         4urzaLQzntTbtsHHVwVk2PrqMyssARuTarBgTH00PeGTN95JBsE7drna1T8hlWpD5iYQ
+         L0kQ==
+X-Gm-Message-State: AOAM532N+UBUck00e0f8JNGpAhgY5qqtDyR7MmIHGs+HHIroDPQ7KxVy
+        x3mWp4DrbaQ6BAIuGdneTCzegIccec85luN3TgbnEw==
+X-Google-Smtp-Source: ABdhPJwQbxRfXrEl+yilyKFLG7gYsvTkWk6/J2NgE5ytQbVcrhyDZVAFL6sku9A05Sz3mgEknv8z6X2l0idsd9GHrnE=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr922783oie.193.1649737459493; Mon, 11
+ Apr 2022 21:24:19 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 12 Apr 2022 00:22:00 -0400
+ HTTPREST; Tue, 12 Apr 2022 00:24:19 -0400
 MIME-Version: 1.0
-In-Reply-To: <dcdae9ca-1896-e632-17f3-ffd4de7c9c1b@quicinc.com>
-References: <1649722129-12542-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53zYpqJL9GCoqZRwMptCne+4Dk4thz-7rCDac7H98dm=A@mail.gmail.com>
- <7529d921-0b12-d162-416d-3542933a0aed@linaro.org> <dcdae9ca-1896-e632-17f3-ffd4de7c9c1b@quicinc.com>
+In-Reply-To: <1649451894-554-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1649451894-554-1-git-send-email-quic_khsieh@quicinc.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Tue, 12 Apr 2022 00:22:00 -0400
-Message-ID: <CAE-0n52QWn6hZp2ty5kjJ-rrQ+VvhQuR7exTW=0k4Yu8=RobAg@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: stop event kernel thread when DP unbind
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+Date:   Tue, 12 Apr 2022 00:24:19 -0400
+Message-ID: <CAE-0n514Cv1ruTO_dN9mSBtjbYNzscty479QJ2tyXt=q8WNE-Q@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: add fail safe mode outside of event_mutex context
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
         airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,29 +71,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abhinav Kumar (2022-04-11 17:29:17)
->
->
-> On 4/11/2022 5:22 PM, Dmitry Baryshkov wrote:
-> > On 12/04/2022 03:21, Stephen Boyd wrote:
-> >> Quoting Kuogee Hsieh (2022-04-11 17:08:49)
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kthread_run(hpd_event_thread, d=
-p_priv, "dp_hpd_handler");
-> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dp_priv->ev_tsk =3D kthread_run=
-(hpd_event_thread, dp_priv,
-> >>> "dp_hpd_handler");
-> >>> +
-> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(dp_priv->ev_tsk))
-> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 DRM_ERROR("failed to create DP event thread\n");
-> >>
-> >> Why can't we error out? Why can't this kthread be started in probe?
-> >
-> > Just my 2c. I don't think starting it in probe is a good idea. The
-> > driver uses components, so, in my opinion, the thread should be started
-> > from bind and stopped in unbind.
->
-> Yes, I also agree it should be started in bind and stopped in unbind.
+Quoting Kuogee Hsieh (2022-04-08 14:04:54)
+> There is possible circular locking dependency detected on event_mutex
+> (see below logs). This is due to set fail safe mode is done at
+> dp_panel_read_sink_caps() within event_mutex scope. To break this
+> possible circular locking, this patch move setting fail safe mode
+> out of event_mutex scope.
 >
 
-Sounds good to me! I forgot that this is a component.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

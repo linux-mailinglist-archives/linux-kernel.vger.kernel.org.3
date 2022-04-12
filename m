@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D44FD38F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEF94FD422
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345783AbiDLHUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S1376869AbiDLHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352609AbiDLHFp (ORCPT
+        with ESMTP id S1354305AbiDLHRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:45 -0400
+        Tue, 12 Apr 2022 03:17:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC24831F;
-        Mon, 11 Apr 2022 23:48:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB5D4BBA6;
+        Mon, 11 Apr 2022 23:58:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72160B81B46;
-        Tue, 12 Apr 2022 06:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1CDC385A1;
-        Tue, 12 Apr 2022 06:48:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F055FB81B4F;
+        Tue, 12 Apr 2022 06:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1FDC385A1;
+        Tue, 12 Apr 2022 06:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746099;
-        bh=UYURcN/9DffPvPsnRGm814Oh0YXv3IG/fcliQiGZsJk=;
+        s=korg; t=1649746725;
+        bh=V8vgsRr3fQDz1xt+xFEVNrILEov2rb/lBYNY+bveKK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oNH05En7zT3XHeV4gdTw2zeDYFqRf/FagoWB8JkG3NcGweT8/npHITMWfZVPCHAhP
-         8jqZrQ/DaCu6CplToFhRM4SweGTw3scQfZOKZdPJJW8QzismHO96et4NQ+z26CoDU9
-         53X3fYfH9+PlVb0X7oMxk5zwkqJkLPd3ynZKeXMI=
+        b=AcqmqJmbwiMR1MTJborqNZEtUbszcdOolXNsw4kAHebnLyMkQVjJvzC8F4LL22KYF
+         J3pdcxnPY4lrrZnC1FLuZX+fOYR29f5VWAH8ef8UlZrkizr+Hit+rQyXyKmq2n8TMT
+         +om6Pd58mmnsl9n+sZY5ww3BDTRy3rnMZwYAIxXM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Karel Rericha <karel@maxtel.cz>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>,
+        Eyal Birger <eyal.birger@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 160/277] skbuff: fix coalescing for page_pool fragment recycling
-Date:   Tue, 12 Apr 2022 08:29:23 +0200
-Message-Id: <20220412062946.669390104@linuxfoundation.org>
+Subject: [PATCH 5.16 107/285] netfilter: conntrack: revisit gc autotuning
+Date:   Tue, 12 Apr 2022 08:29:24 +0200
+Message-Id: <20220412062946.752383290@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,135 +58,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 1effe8ca4e34c34cdd9318436a4232dcb582ebf4 ]
+[ Upstream commit 2cfadb761d3d0219412fd8150faea60c7e863833 ]
 
-Fix a use-after-free when using page_pool with page fragments. We
-encountered this problem during normal RX in the hns3 driver:
+as of commit 4608fdfc07e1
+("netfilter: conntrack: collect all entries in one cycle")
+conntrack gc was changed to run every 2 minutes.
 
-(1) Initially we have three descriptors in the RX queue. The first one
-    allocates PAGE1 through page_pool, and the other two allocate one
-    half of PAGE2 each. Page references look like this:
+On systems where conntrack hash table is set to large value, most evictions
+happen from gc worker rather than the packet path due to hash table
+distribution.
 
-                RX_BD1 _______ PAGE1
-                RX_BD2 _______ PAGE2
-                RX_BD3 _________/
+This causes netlink event overflows when events are collected.
 
-(2) Handle RX on the first descriptor. Allocate SKB1, eventually added
-    to the receive queue by tcp_queue_rcv().
+This change collects average expiry of scanned entries and
+reschedules to the average remaining value, within 1 to 60 second interval.
 
-(3) Handle RX on the second descriptor. Allocate SKB2 and pass it to
-    netif_receive_skb():
+To avoid event overflows, reschedule after each bucket and add a
+limit for both run time and number of evictions per run.
 
-    netif_receive_skb(SKB2)
-      ip_rcv(SKB2)
-        SKB3 = skb_clone(SKB2)
+If more entries have to be evicted, reschedule and restart 1 jiffy
+into the future.
 
-    SKB2 and SKB3 share a reference to PAGE2 through
-    skb_shinfo()->dataref. The other ref to PAGE2 is still held by
-    RX_BD3:
-
-                      SKB2 ---+- PAGE2
-                      SKB3 __/   /
-                RX_BD3 _________/
-
- (3b) Now while handling TCP, coalesce SKB3 with SKB1:
-
-      tcp_v4_rcv(SKB3)
-        tcp_try_coalesce(to=SKB1, from=SKB3)    // succeeds
-        kfree_skb_partial(SKB3)
-          skb_release_data(SKB3)                // drops one dataref
-
-                      SKB1 _____ PAGE1
-                           \____
-                      SKB2 _____ PAGE2
-                                 /
-                RX_BD3 _________/
-
-    In skb_try_coalesce(), __skb_frag_ref() takes a page reference to
-    PAGE2, where it should instead have increased the page_pool frag
-    reference, pp_frag_count. Without coalescing, when releasing both
-    SKB2 and SKB3, a single reference to PAGE2 would be dropped. Now
-    when releasing SKB1 and SKB2, two references to PAGE2 will be
-    dropped, resulting in underflow.
-
- (3c) Drop SKB2:
-
-      af_packet_rcv(SKB2)
-        consume_skb(SKB2)
-          skb_release_data(SKB2)                // drops second dataref
-            page_pool_return_skb_page(PAGE2)    // drops one pp_frag_count
-
-                      SKB1 _____ PAGE1
-                           \____
-                                 PAGE2
-                                 /
-                RX_BD3 _________/
-
-(4) Userspace calls recvmsg()
-    Copies SKB1 and releases it. Since SKB3 was coalesced with SKB1, we
-    release the SKB3 page as well:
-
-    tcp_eat_recv_skb(SKB1)
-      skb_release_data(SKB1)
-        page_pool_return_skb_page(PAGE1)
-        page_pool_return_skb_page(PAGE2)        // drops second pp_frag_count
-
-(5) PAGE2 is freed, but the third RX descriptor was still using it!
-    In our case this causes IOMMU faults, but it would silently corrupt
-    memory if the IOMMU was disabled.
-
-Change the logic that checks whether pp_recycle SKBs can be coalesced.
-We still reject differing pp_recycle between 'from' and 'to' SKBs, but
-in order to avoid the situation described above, we also reject
-coalescing when both 'from' and 'to' are pp_recycled and 'from' is
-cloned.
-
-The new logic allows coalescing a cloned pp_recycle SKB into a page
-refcounted one, because in this case the release (4) will drop the right
-reference, the one taken by skb_try_coalesce().
-
-Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
-Suggested-by: Alexander Duyck <alexanderduyck@fb.com>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Reviewed-by: Yunsheng Lin <linyunsheng@huawei.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Acked-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Karel Rericha <karel@maxtel.cz>
+Cc: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Cc: Eyal Birger <eyal.birger@gmail.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skbuff.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ net/netfilter/nf_conntrack_core.c | 85 ++++++++++++++++++++++++-------
+ 1 file changed, 68 insertions(+), 17 deletions(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 5956c84cb274..e4badc189e37 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -5390,11 +5390,18 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
- 	if (skb_cloned(to))
- 		return false;
+diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
+index 917e708a4561..3a98a1316307 100644
+--- a/net/netfilter/nf_conntrack_core.c
++++ b/net/netfilter/nf_conntrack_core.c
+@@ -66,6 +66,8 @@ EXPORT_SYMBOL_GPL(nf_conntrack_hash);
+ struct conntrack_gc_work {
+ 	struct delayed_work	dwork;
+ 	u32			next_bucket;
++	u32			avg_timeout;
++	u32			start_time;
+ 	bool			exiting;
+ 	bool			early_drop;
+ };
+@@ -77,8 +79,19 @@ static __read_mostly bool nf_conntrack_locks_all;
+ /* serialize hash resizes and nf_ct_iterate_cleanup */
+ static DEFINE_MUTEX(nf_conntrack_mutex);
  
--	/* The page pool signature of struct page will eventually figure out
--	 * which pages can be recycled or not but for now let's prohibit slab
--	 * allocated and page_pool allocated SKBs from being coalesced.
-+	/* In general, avoid mixing slab allocated and page_pool allocated
-+	 * pages within the same SKB. However when @to is not pp_recycle and
-+	 * @from is cloned, we can transition frag pages from page_pool to
-+	 * reference counted.
-+	 *
-+	 * On the other hand, don't allow coalescing two pp_recycle SKBs if
-+	 * @from is cloned, in case the SKB is using page_pool fragment
-+	 * references (PP_FLAG_PAGE_FRAG). Since we only take full page
-+	 * references for cloned SKBs at the moment that would result in
-+	 * inconsistent reference counts.
- 	 */
--	if (to->pp_recycle != from->pp_recycle)
-+	if (to->pp_recycle != (from->pp_recycle && !skb_cloned(from)))
- 		return false;
+-#define GC_SCAN_INTERVAL	(120u * HZ)
++#define GC_SCAN_INTERVAL_MAX	(60ul * HZ)
++#define GC_SCAN_INTERVAL_MIN	(1ul * HZ)
++
++/* clamp timeouts to this value (TCP unacked) */
++#define GC_SCAN_INTERVAL_CLAMP	(300ul * HZ)
++
++/* large initial bias so that we don't scan often just because we have
++ * three entries with a 1s timeout.
++ */
++#define GC_SCAN_INTERVAL_INIT	INT_MAX
++
+ #define GC_SCAN_MAX_DURATION	msecs_to_jiffies(10)
++#define GC_SCAN_EXPIRED_MAX	(64000u / HZ)
  
- 	if (len <= skb_tailroom(to)) {
+ #define MIN_CHAINLEN	8u
+ #define MAX_CHAINLEN	(32u - MIN_CHAINLEN)
+@@ -1420,16 +1433,28 @@ static bool gc_worker_can_early_drop(const struct nf_conn *ct)
+ 
+ static void gc_worker(struct work_struct *work)
+ {
+-	unsigned long end_time = jiffies + GC_SCAN_MAX_DURATION;
+ 	unsigned int i, hashsz, nf_conntrack_max95 = 0;
+-	unsigned long next_run = GC_SCAN_INTERVAL;
++	u32 end_time, start_time = nfct_time_stamp;
+ 	struct conntrack_gc_work *gc_work;
++	unsigned int expired_count = 0;
++	unsigned long next_run;
++	s32 delta_time;
++
+ 	gc_work = container_of(work, struct conntrack_gc_work, dwork.work);
+ 
+ 	i = gc_work->next_bucket;
+ 	if (gc_work->early_drop)
+ 		nf_conntrack_max95 = nf_conntrack_max / 100u * 95u;
+ 
++	if (i == 0) {
++		gc_work->avg_timeout = GC_SCAN_INTERVAL_INIT;
++		gc_work->start_time = start_time;
++	}
++
++	next_run = gc_work->avg_timeout;
++
++	end_time = start_time + GC_SCAN_MAX_DURATION;
++
+ 	do {
+ 		struct nf_conntrack_tuple_hash *h;
+ 		struct hlist_nulls_head *ct_hash;
+@@ -1446,6 +1471,7 @@ static void gc_worker(struct work_struct *work)
+ 
+ 		hlist_nulls_for_each_entry_rcu(h, n, &ct_hash[i], hnnode) {
+ 			struct nf_conntrack_net *cnet;
++			unsigned long expires;
+ 			struct net *net;
+ 
+ 			tmp = nf_ct_tuplehash_to_ctrack(h);
+@@ -1455,11 +1481,29 @@ static void gc_worker(struct work_struct *work)
+ 				continue;
+ 			}
+ 
++			if (expired_count > GC_SCAN_EXPIRED_MAX) {
++				rcu_read_unlock();
++
++				gc_work->next_bucket = i;
++				gc_work->avg_timeout = next_run;
++
++				delta_time = nfct_time_stamp - gc_work->start_time;
++
++				/* re-sched immediately if total cycle time is exceeded */
++				next_run = delta_time < (s32)GC_SCAN_INTERVAL_MAX;
++				goto early_exit;
++			}
++
+ 			if (nf_ct_is_expired(tmp)) {
+ 				nf_ct_gc_expired(tmp);
++				expired_count++;
+ 				continue;
+ 			}
+ 
++			expires = clamp(nf_ct_expires(tmp), GC_SCAN_INTERVAL_MIN, GC_SCAN_INTERVAL_CLAMP);
++			next_run += expires;
++			next_run /= 2u;
++
+ 			if (nf_conntrack_max95 == 0 || gc_worker_skip_ct(tmp))
+ 				continue;
+ 
+@@ -1477,8 +1521,10 @@ static void gc_worker(struct work_struct *work)
+ 				continue;
+ 			}
+ 
+-			if (gc_worker_can_early_drop(tmp))
++			if (gc_worker_can_early_drop(tmp)) {
+ 				nf_ct_kill(tmp);
++				expired_count++;
++			}
+ 
+ 			nf_ct_put(tmp);
+ 		}
+@@ -1491,33 +1537,38 @@ static void gc_worker(struct work_struct *work)
+ 		cond_resched();
+ 		i++;
+ 
+-		if (time_after(jiffies, end_time) && i < hashsz) {
++		delta_time = nfct_time_stamp - end_time;
++		if (delta_time > 0 && i < hashsz) {
++			gc_work->avg_timeout = next_run;
+ 			gc_work->next_bucket = i;
+ 			next_run = 0;
+-			break;
++			goto early_exit;
+ 		}
+ 	} while (i < hashsz);
+ 
++	gc_work->next_bucket = 0;
++
++	next_run = clamp(next_run, GC_SCAN_INTERVAL_MIN, GC_SCAN_INTERVAL_MAX);
++
++	delta_time = max_t(s32, nfct_time_stamp - gc_work->start_time, 1);
++	if (next_run > (unsigned long)delta_time)
++		next_run -= delta_time;
++	else
++		next_run = 1;
++
++early_exit:
+ 	if (gc_work->exiting)
+ 		return;
+ 
+-	/*
+-	 * Eviction will normally happen from the packet path, and not
+-	 * from this gc worker.
+-	 *
+-	 * This worker is only here to reap expired entries when system went
+-	 * idle after a busy period.
+-	 */
+-	if (next_run) {
++	if (next_run)
+ 		gc_work->early_drop = false;
+-		gc_work->next_bucket = 0;
+-	}
++
+ 	queue_delayed_work(system_power_efficient_wq, &gc_work->dwork, next_run);
+ }
+ 
+ static void conntrack_gc_work_init(struct conntrack_gc_work *gc_work)
+ {
+-	INIT_DEFERRABLE_WORK(&gc_work->dwork, gc_worker);
++	INIT_DELAYED_WORK(&gc_work->dwork, gc_worker);
+ 	gc_work->exiting = false;
+ }
+ 
 -- 
 2.35.1
 

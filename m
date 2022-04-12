@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9A64FD774
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0DA4FDB1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386406AbiDLI5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S1355317AbiDLIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359386AbiDLHm7 (ORCPT
+        with ESMTP id S1354958AbiDLH1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44EB2CC92;
-        Tue, 12 Apr 2022 00:22:01 -0700 (PDT)
+        Tue, 12 Apr 2022 03:27:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A672381B3;
+        Tue, 12 Apr 2022 00:06:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BF19B81B60;
-        Tue, 12 Apr 2022 07:22:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA537C385A1;
-        Tue, 12 Apr 2022 07:21:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF2C5B81B4E;
+        Tue, 12 Apr 2022 07:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBBFC385A6;
+        Tue, 12 Apr 2022 07:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748119;
-        bh=oVLVH4dSiXl6ZrohuS/jFnrjBXXcyG7ewltwzTF8/vg=;
+        s=korg; t=1649747214;
+        bh=9mAMX+W24OCA95cx699ZaYW3YeLYJ/bq7p8AxFlJT7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B4xkqMnbkuJZNxSwkicNWWjdhRWBPJseJrp3DOrT26MpLBDWM2y9Ax5BT2Tckphp6
-         +K3vOnkScPRtLz4A8Nkyfhe0SFVBo0VuNblf1WAKXRGACZ63o+THWAsDaiJHK52VVT
-         ZFu3c2yGmj53OSf9YnC3ai4HQmM3k7dYyPn6+RL4=
+        b=Hw4nl2HfAlBGKM3i1Ly0xGOEFTT/OIKs/Fn7RJivbruS6rw7v8k5Nx2IlqV53LP+w
+         SP8arTEZumjuGPxfYkkKIV2Dx0hJvmpLXPfWMipH+t+3450oz4jZlX5GOzuQoJVNsm
+         v4u49kFyX1EqsxURDwPUOtgRYWRjOerCK53xKZC0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.17 286/343] btrfs: avoid defragging extents whose next extents are not targets
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.16 247/285] perf/core: Inherit event_caps
 Date:   Tue, 12 Apr 2022 08:31:44 +0200
-Message-Id: <20220412062959.581114826@linuxfoundation.org>
+Message-Id: <20220412062950.787962308@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,107 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Namhyung Kim <namhyung@kernel.org>
 
-commit 75a36a7d3ea904cef2e5b56af0c58cc60dcf947a upstream.
+commit e3265a4386428d3d157d9565bb520aabff8b4bf0 upstream.
 
-[BUG]
-There is a report that autodefrag is defragging single sector, which
-is completely waste of IO, and no help for defragging:
+It was reported that some perf event setup can make fork failed on
+ARM64.  It was the case of a group of mixed hw and sw events and it
+failed in perf_event_init_task() due to armpmu_event_init().
 
-   btrfs-cleaner-808 defrag_one_locked_range: root=256 ino=651122 start=0 len=4096
+The ARM PMU code checks if all the events in a group belong to the
+same PMU except for software events.  But it didn't set the event_caps
+of inherited events and no longer identify them as software events.
+Therefore the test failed in a child process.
 
-[CAUSE]
-In defrag_collect_targets(), we check if the current range (A) can be merged
-with next one (B).
+A simple reproducer is:
 
-If mergeable, we will add range A into target for defrag.
+  $ perf stat -e '{cycles,cs,instructions}' perf bench sched messaging
+  # Running 'sched/messaging' benchmark:
+  perf: fork(): Invalid argument
 
-However there is a catch for autodefrag, when checking mergeability
-against range B, we intentionally pass 0 as @newer_than, hoping to get a
-higher chance to merge with the next extent.
+The perf stat was fine but the perf bench failed in fork().  Let's
+inherit the event caps from the parent.
 
-But in the next iteration, range B will looked up by defrag_lookup_extent(),
-with non-zero @newer_than.
-
-And if range B is not really newer, it will rejected directly, causing
-only range A being defragged, while we expect to defrag both range A and
-B.
-
-[FIX]
-Since the root cause is the difference in check condition of
-defrag_check_next_extent() and defrag_collect_targets(), we fix it by:
-
-1. Pass @newer_than to defrag_check_next_extent()
-2. Pass @extent_thresh to defrag_check_next_extent()
-
-This makes the check between defrag_collect_targets() and
-defrag_check_next_extent() more consistent.
-
-While there is still some minor difference, the remaining checks are
-focus on runtime flags like writeback/delalloc, which are mostly
-transient and safe to be checked only in defrag_collect_targets().
-
-Link: https://github.com/btrfs/linux/issues/423#issuecomment-1066981856
-CC: stable@vger.kernel.org # 5.16+
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20220328200112.457740-1-namhyung@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/ioctl.c |   20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ kernel/events/core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -1215,7 +1215,7 @@ static u32 get_extent_max_capacity(const
- }
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11626,6 +11626,9 @@ perf_event_alloc(struct perf_event_attr
  
- static bool defrag_check_next_extent(struct inode *inode, struct extent_map *em,
--				     bool locked)
-+				     u32 extent_thresh, u64 newer_than, bool locked)
- {
- 	struct extent_map *next;
- 	bool ret = false;
-@@ -1225,11 +1225,12 @@ static bool defrag_check_next_extent(str
- 		return false;
+ 	event->state		= PERF_EVENT_STATE_INACTIVE;
  
- 	/*
--	 * We want to check if the next extent can be merged with the current
--	 * one, which can be an extent created in a past generation, so we pass
--	 * a minimum generation of 0 to defrag_lookup_extent().
-+	 * Here we need to pass @newer_then when checking the next extent, or
-+	 * we will hit a case we mark current extent for defrag, but the next
-+	 * one will not be a target.
-+	 * This will just cause extra IO without really reducing the fragments.
- 	 */
--	next = defrag_lookup_extent(inode, em->start + em->len, 0, locked);
-+	next = defrag_lookup_extent(inode, em->start + em->len, newer_than, locked);
- 	/* No more em or hole */
- 	if (!next || next->block_start >= EXTENT_MAP_LAST_BYTE)
- 		goto out;
-@@ -1241,6 +1242,13 @@ static bool defrag_check_next_extent(str
- 	 */
- 	if (next->len >= get_extent_max_capacity(em))
- 		goto out;
-+	/* Skip older extent */
-+	if (next->generation < newer_than)
-+		goto out;
-+	/* Also check extent size */
-+	if (next->len >= extent_thresh)
-+		goto out;
++	if (parent_event)
++		event->event_caps = parent_event->event_caps;
 +
- 	ret = true;
- out:
- 	free_extent_map(next);
-@@ -1446,7 +1454,7 @@ static int defrag_collect_targets(struct
- 			goto next;
- 
- 		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
--							  locked);
-+						extent_thresh, newer_than, locked);
- 		if (!next_mergeable) {
- 			struct defrag_target_range *last;
+ 	if (event->attr.sigtrap)
+ 		atomic_set(&event->event_limit, 1);
  
 
 

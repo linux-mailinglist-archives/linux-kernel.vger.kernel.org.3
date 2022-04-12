@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404A04FD823
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174B14FD828
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384835AbiDLJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S1381277AbiDLIXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358730AbiDLHmJ (ORCPT
+        with ESMTP id S1353715AbiDLHZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C8E23A;
-        Tue, 12 Apr 2022 00:19:01 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897B4E80;
+        Tue, 12 Apr 2022 00:04:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FD5D616E7;
-        Tue, 12 Apr 2022 07:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3142CC385A1;
-        Tue, 12 Apr 2022 07:19:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CEE60B65;
+        Tue, 12 Apr 2022 07:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3038AC385A1;
+        Tue, 12 Apr 2022 07:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747940;
-        bh=hlP2sze5FnxNqcBlA5c2Y8VQGE+NWL4VnSSqf3dvcBE=;
+        s=korg; t=1649747044;
+        bh=fvIHxnnFvwmIhSD9YWqBPMFEOBPHcD8Axfxa+wT9Qgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TFN3hEfTjhQXMUUd+ZDid3P2ZWtq74u59JqQ3U6GrRDxAi8AI6VRFaQpn39/mguWz
-         5TwMKGyMfpV3Y6IURdWvbH1w1EjrJwcGnH+Zazm0OdCKEy2d2blOyixHguY3Q0fpEJ
-         GuNQyLB3v+SEbJbQTJ8b/ihy6tV3DSYFuCfJU4rY=
+        b=xZQz4gWGOexgtYZsqsuye/c2nrnOBPdV6MUYkeztifpju9f1R/imNRghv1rCgqfBA
+         r9IRpphGi2i6ShHHBcrJyx7UXFeOsik2qBQoFHjoUBLpxQTeBciZ147u89DUlCdLxF
+         F5T+ED+/OmHZPD5qysM2phU2ryM4v20sme0uaV6s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 261/343] perf tools: Fix perfs libperf_print callback
-Date:   Tue, 12 Apr 2022 08:31:19 +0200
-Message-Id: <20220412062958.858571132@linuxfoundation.org>
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Michal Hocko <mhocko@suse.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 223/285] mm/mempolicy: fix mpol_new leak in shared_policy_replace
+Date:   Tue, 12 Apr 2022 08:31:20 +0200
+Message-Id: <20220412062950.093125745@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit aeee9dc53ce405d2161f9915f553114e94e5b677 ]
+commit 4ad099559b00ac01c3726e5c95dc3108ef47d03e upstream.
 
-eprintf() does not expect va_list as the type of the 4th parameter.
+If mpol_new is allocated but not used in restart loop, mpol_new will be
+freed via mpol_put before returning to the caller.  But refcnt is not
+initialized yet, so mpol_put could not do the right things and might
+leak the unused mpol_new.  This would happen if mempolicy was updated on
+the shared shmem file while the sp->lock has been dropped during the
+memory allocation.
 
-Use veprintf() because it does.
+This issue could be triggered easily with the below code snippet if
+there are many processes doing the below work at the same time:
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Fixes: 428dab813a56ce94 ("libperf: Merge libperf_set_print() into libperf_init()")
-Cc: Jiri Olsa <jolsa@kernel.org>
-Link: https://lore.kernel.org/r/20220408132625.2451452-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+  shm = shmat(shmid, 0, 0);
+  loop many times {
+    mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+    mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
+          maxnode, 0);
+  }
+
+Link: https://lkml.kernel.org/r/20220329111416.27954-1-linmiaohe@huawei.com
+Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Cc: KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: <stable@vger.kernel.org>	[3.8]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/mempolicy.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-index 2f6b67189b42..6aae7b6c376b 100644
---- a/tools/perf/perf.c
-+++ b/tools/perf/perf.c
-@@ -434,7 +434,7 @@ void pthread__unblock_sigwinch(void)
- static int libperf_print(enum libperf_print_level level,
- 			 const char *fmt, va_list ap)
- {
--	return eprintf(level, verbose, fmt, ap);
-+	return veprintf(level, verbose, fmt, ap);
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2653,6 +2653,7 @@ alloc_new:
+ 	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+ 	if (!mpol_new)
+ 		goto err_out;
++	atomic_set(&mpol_new->refcnt, 1);
+ 	goto restart;
  }
  
- int main(int argc, const char **argv)
--- 
-2.35.1
-
 
 

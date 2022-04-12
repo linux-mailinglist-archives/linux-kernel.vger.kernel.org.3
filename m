@@ -2,178 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA804FCBAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098BB4FCBB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237703AbiDLBLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S1347293AbiDLBNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351036AbiDLBAo (ORCPT
+        with ESMTP id S1351246AbiDLBBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 21:00:44 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647A2E9D9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:55:00 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id r66so15692664pgr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZnYjR11gbYLeKCBoJXE7n0dD6k1+ZaVWjqJC494l/qo=;
-        b=OxtnOilsm55GHwDHO1IO1CmDR6liEyJYEsYxqSRci+INpvWA+EBrPe+DTaMSBC2m1z
-         nn770volbCNOSZAupt9b9igPVtXZXO58XljAHzuwRg3JCQ2fxQO2gDB87nGD4Si14mOA
-         5hT5g8RhTy8LneiuVYgZPdOEDP4hR+qh9HB47Bx54pNQqrgC2hQOtI1C7WudE7yOpHU/
-         KUX/G9Oo+OVYJJI//ScdHObW0sLduecpgNocjvMbPkcRe8omnuGeo0sAmQWENEWA+8Iu
-         YCMMnnO7QM5J7mQ2FgOitQlrxGmNxwZI2y1Hmf+bYh/3aLzvSe/Kr0wK3JOIi02rpCcv
-         CHrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZnYjR11gbYLeKCBoJXE7n0dD6k1+ZaVWjqJC494l/qo=;
-        b=jnXTjXOG5KaDtJP7EEdMUncf/tH/N9JDW6p8k/BRSmK1041L3J/YhJAfCrUarPBfB+
-         LiR/Bny/RwOA9pHckfhqQI1O93GoGp7VxB+j2LflqtVik3BEk7J73FvAd0DqZGN3S4qx
-         KfKkfw5AYiQS70W8Q9fLR3L3MkEIO34R+4qVaLEd7cfOc3ZR2YaewoTxptMW2szMslEI
-         6dvliuqVpj1tTOFeZK5ukhtJZ0fFQNj0Byon18cQIY2mBXcjs/ReC/hTd9Y4Ugv6s9k1
-         4AL77XnldqB30jNCZ5cmWdP1OYouQvaynGzA+oCAOmKCJMpzQVxLkZKpdtY9jHW8p6tg
-         UHgQ==
-X-Gm-Message-State: AOAM532T8N0GBLQa2n6l6EbOx0b6Yh08C2X0L2r1BW4fnOdCsx916sp7
-        EUc37vBVVnod9vprcY7jHZKZJBMjNTSMK4EB
-X-Google-Smtp-Source: ABdhPJzkUmD+KWnftYfsZyMv1CBfjNATM4YuEjzljSDhhekkc45DTU+jONr/2LieWgImFbtSd4VvFw==
-X-Received: by 2002:a05:6a00:f92:b0:505:c53b:2668 with SMTP id ct18-20020a056a000f9200b00505c53b2668mr7314066pfb.64.1649724899437;
-        Mon, 11 Apr 2022 17:54:59 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id n2-20020aa79042000000b005057336554bsm5863557pfo.128.2022.04.11.17.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 17:54:58 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 00:54:55 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v4 03/10] KVM: selftests: Read binary stats desc in lib
-Message-ID: <YlTN3yq1iBPkw6Aa@google.com>
-References: <20220411211015.3091615-1-bgardon@google.com>
- <20220411211015.3091615-4-bgardon@google.com>
+        Mon, 11 Apr 2022 21:01:14 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DB91C108
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649725056; x=1681261056;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Aud1C1bU0YFrT2OMMryfkkUmardBCvVa+5tOlJ4O+fg=;
+  b=O0FPf9QmgoRLJ+iTyaD4FZ5QHmlY+QozS0yCRAPl8CnxeVnP2e+LY+lc
+   9hxI+1C6bJVkvEBTs47suMB4onVIVwQP5JZDVm9owuGFMb9sVywEFwQBj
+   pLM9PRYa0tOViu4cBLkXvtlCX6KuFdBOasIaqHGches1KyteUKpyPsASg
+   nCaMviq6+bPPwrt8WKYGTZzWryvMGBjdVb+2VpawcykFjSYdh50LO3eZa
+   J5utRIE83s/v3KdTKf2fyH+fHHyQULMjoRbmCRkVS3U2BsGRAopgUH4xG
+   CvrxoDZ6AMGRKIjdbwjn83WQ+HQzxTxcsZ/DrzNgEYbZWwSVuVFEyZCQP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244132534"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="244132534"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:57:36 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="572493910"
+Received: from joliu-mobl2.ccr.corp.intel.com ([10.254.214.243])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:57:34 -0700
+Message-ID: <512fce32b8967ebc49f6fc074db408c117b510f7.camel@intel.com>
+Subject: Re: [PATCH v2 4/9] mm/vmscan: save a bit of stack space in
+ shrink_lruvec
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     songmuchun@bytedance.com, hch@infradead.org, willy@infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Apr 2022 08:57:31 +0800
+In-Reply-To: <20220409093500.10329-5-linmiaohe@huawei.com>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+         <20220409093500.10329-5-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411211015.3091615-4-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Ben Gardon wrote:
-> Move the code to read the binary stats descriptors to the KVM selftests
-> library. It will be re-used by other tests to check KVM behavior.
+On Sat, 2022-04-09 at 17:34 +0800, Miaohe Lin wrote:
+> LRU_UNEVICTABLE is not taken into account when shrink lruvec. So we can
+> save a bit of stack space by shrinking the array size of nr and targets
+> to NR_LRU_LISTS - 1. No functional change intended.
 > 
-> No functional change intended.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  .../selftests/kvm/include/kvm_util_base.h     |  4 +++
->  .../selftests/kvm/kvm_binary_stats_test.c     |  9 ++----
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++++
->  3 files changed, 35 insertions(+), 7 deletions(-)
+>  mm/vmscan.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 5ba3132f3110..c5f34551ff76 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -401,6 +401,10 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
->  int vm_get_stats_fd(struct kvm_vm *vm);
->  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
->  void read_vm_stats_header(int stats_fd, struct kvm_stats_header *header);
-> +struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
-> +					  struct kvm_stats_header *header);
-> +void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
-> +			struct kvm_stats_desc *stats_desc);
->  
->  uint32_t guest_get_vcpuid(void);
->  
-> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> index 22c22a90f15a..e4795bad7db6 100644
-> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> @@ -62,14 +62,9 @@ static void stats_test(int stats_fd)
->  							header.data_offset),
->  			"Descriptor block is overlapped with data block");
->  
-> -	/* Allocate memory for stats descriptors */
-> -	stats_desc = calloc(header.num_desc, size_desc);
-> -	TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
->  	/* Read kvm stats descriptors */
-> -	ret = pread(stats_fd, stats_desc,
-> -			size_desc * header.num_desc, header.desc_offset);
-> -	TEST_ASSERT(ret == size_desc * header.num_desc,
-> -			"Read KVM stats descriptors");
-> +	stats_desc = alloc_vm_stats_desc(stats_fd, &header);
-> +	read_vm_stats_desc(stats_fd, &header, stats_desc);
->  
->  	/* Sanity check for fields in descriptors */
->  	for (i = 0; i < header.num_desc; ++i) {
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 0caf28e324ed..e3ae26fbef03 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2564,3 +2564,32 @@ void read_vm_stats_header(int stats_fd, struct kvm_stats_header *header)
->  	ret = read(stats_fd, header, sizeof(*header));
->  	TEST_ASSERT(ret == sizeof(*header), "Read stats header");
->  }
-> +
-> +static ssize_t stats_descs_size(struct kvm_stats_header *header)
-> +{
-> +	return header->num_desc *
-> +	       (sizeof(struct kvm_stats_desc) + header->name_size);
-> +}
-I was very confused on header->name_size. So this field means the
-maximum string size of a stats name, right? Can we update the comments
-in the kvm.h to specify that? By reading the comments, I don't really
-feel this is how we should use this field.
-
-hmm, if that is true, isn't this field a compile time value? Why do we
-have to get it at runtime?
-
-> +
-> +/* Caller is responsible for freeing the returned kvm_stats_desc. */
-> +struct kvm_stats_desc *alloc_vm_stats_desc(int stats_fd,
-> +					  struct kvm_stats_header *header)
-> +{
-> +	struct kvm_stats_desc *stats_desc;
-> +
-> +	stats_desc = malloc(stats_descs_size(header));
-> +	TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-> +
-> +	return stats_desc;
-> +}
-> +
-> +void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
-> +			struct kvm_stats_desc *stats_desc)
-> +{
-> +	ssize_t ret;
-> +
-> +	ret = pread(stats_fd, stats_desc, stats_descs_size(header),
-> +		    header->desc_offset);
-> +	TEST_ASSERT(ret == stats_descs_size(header),
-> +		    "Read KVM stats descriptors");
-> +}
-> -- 
-> 2.35.1.1178.g4f1659d476-goog
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 59b96320f481..0e5818970998 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2881,8 +2881,9 @@ static bool can_age_anon_pages(struct pglist_data *pgdat,
+>  
 > 
+>  static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+>  {
+> -	unsigned long nr[NR_LRU_LISTS];
+> -	unsigned long targets[NR_LRU_LISTS];
+> +	/* LRU_UNEVICTABLE is not taken into account. */
+> +	unsigned long nr[NR_LRU_LISTS - 1];
+> +	unsigned long targets[NR_LRU_LISTS - 1];
+>  	unsigned long nr_to_scan;
+>  	enum lru_list lru;
+>  	unsigned long nr_reclaimed = 0;
+
+As Christoph pointed out, this is hacky without much benefit.  Please
+drop this patch.
+
+Best Regards,
+Huang, Ying
+

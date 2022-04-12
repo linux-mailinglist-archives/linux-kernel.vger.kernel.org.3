@@ -2,91 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972CC4FDEBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1F64FDECA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237278AbiDLL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S243777AbiDLL76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344344AbiDLL4t (ORCPT
+        with ESMTP id S1345707AbiDLL44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:56:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92CF60A9A;
-        Tue, 12 Apr 2022 03:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EDB4B81CA1;
-        Tue, 12 Apr 2022 10:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33452C385A1;
-        Tue, 12 Apr 2022 10:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649760014;
-        bh=9pk3pVVU+tzTaBuH4UHl5rYkdZrqMTBhJJtEpCzTfyo=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=eahZ62fOXAYpMrYgfr9ydE51IMiVoUgBsXQph+GuZSgcqRrtunDqIhC2jLGvvXcnA
-         ouOr1dnxr4uX2dK+0HJFnAZZUVhv1A8WnxN3jR1Atx8s868HhTy2roiTmytWKO+rJa
-         OAMxcepuKuCGfcBD+hN5vNcKJNQXs5KHPNgHGFfa4gS+rr+8deqC2nfE1tlQRIxBk1
-         Rt2BGnLctZoGv17phoi/Xk7pb1d2WnPe3inqxPXMmxtLtLBR+7dqk6ZLhd5v0u+hJk
-         1AXGRVBPtu3Cs+iBii4FtUCaPFZhoXcc8XR6ssyMJSFkVwUkpfdaf8cJLht+dxstMn
-         RJ1e1OdttNz+g==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Prasad Malisetty <quic_pmaliset@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajatja@google.com,
-        refactormyself@gmail.com, quic_vbadigan@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        linux-wireless@vger.kernel.org, ath11k@lists.infradead.org
-Subject: Re: [PATCH v4] PCI: qcom: Add system PM support
-References: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
-        <20220412060144.GA41348@thinkpad>
-Date:   Tue, 12 Apr 2022 13:40:08 +0300
-In-Reply-To: <20220412060144.GA41348@thinkpad> (Manivannan Sadhasivam's
-        message of "Tue, 12 Apr 2022 11:31:44 +0530")
-Message-ID: <87k0buoa9j.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 07:56:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B7A5F76;
+        Tue, 12 Apr 2022 03:40:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6DE3A21606;
+        Tue, 12 Apr 2022 10:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649760037; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ywTSK07/jBkbyMdlliW1M9JqJ0Jx0hOmJt1kgOVIerY=;
+        b=eHoitYL/lwYpVw3xWud/2a/2CB5Q6siJP6lmJhiVKyb1BIm/gLwiNSw0xoMgf4VXcPcsVr
+        YVs/yJfRshqFDBfW84jc6dV9bzboMh5yhVchkYTd14aV1i5SXKY+HOFiCPmXibKXCGTAjW
+        FURQxVv1yeV4p21kIuckMoJHFqRGhlM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649760037;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ywTSK07/jBkbyMdlliW1M9JqJ0Jx0hOmJt1kgOVIerY=;
+        b=2Lcifyhizd2gAQVQx/58HyPVXlqN2NJIbQ+Kk1VOJGkzWpK2ENp4AAu0xHuuumRpZGHF2w
+        R472sFEWBpuAdQDg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 55B3CA3B82;
+        Tue, 12 Apr 2022 10:40:37 +0000 (UTC)
+Date:   Tue, 12 Apr 2022 12:40:37 +0200
+Message-ID: <s5hlewaa8ka.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/16] Support external boost at CS35l41 ASoC driver
+In-Reply-To: <20220409091315.1663410-1-tanureal@opensource.cirrus.com>
+References: <20220409091315.1663410-1-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ ath11k
+On Sat, 09 Apr 2022 11:12:59 +0200,
+Lucas Tanure wrote:
+> 
+> Move the support for CS35L41 external boost to its shared library
+> for ASoC use.
+> This move resulted in cs35l41_hda_reg_sequence being removed,
+> and its steps were broken down into regmap writes or functions
+> from the library. And hardware configuration struct was unified
+> for its use in the shared lib.
+> While at it, some minor bugs were found and fixed it.
+> 
+> v6 changelog:
+>  - Rebased on top of Linux Next with community patches for CS35L41
+>  - Document patch acked by Charles Keepax
+> 
+> v5 changelog:
+>  - Fixed wrong indentation at Documentation patch
+>  - Use of consistent prefix
+> 
+> v4 changelog:
+>  - Separated GPIO 1 and 2 function enums
+> 
+> v3 changelog:
+>  - Remove patches already accepted
+>  - Improved logic in documentation patch
+>  - Documentation patch goes before its code
+>  - Fixed missing Signed-off-by
+>  - Fixed subject for HDA patches
+> 
+> v2 changelog:
+>  - Instead of removing the log, playback actions will log the last regmap access.
+>  - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
+>  provided example.
+> 
+> Previous versions:
+>  v1: https://lkml.org/lkml/2022/3/3/759
+>  v2: https://lkml.org/lkml/2022/3/4/743
+>  v3: https://lkml.org/lkml/2022/3/8/975
+>  v4: https://lkml.org/lkml/2022/3/17/267
+>  v5: https://lkml.org/lkml/2022/3/22/696
+> 
+> David Rhodes (1):
+>   ASoC: cs35l41: Document CS35l41 External Boost
+> 
+> Lucas Tanure (15):
+>   ALSA: cs35l41: Unify hardware configuration
+>   ALSA: cs35l41: Check hw_config before using it
+>   ALSA: cs35l41: Move cs35l41_gpio_config to shared lib
+>   ALSA: hda: cs35l41: Fix I2S params comments
+>   ALSA: hda: cs35l41: Always configure the DAI
+>   ALSA: hda: cs35l41: Add Boost type flag
+>   ALSA: hda: cs35l41: Put the device into safe mode for external boost
+>   ALSA: hda: cs35l41: Mute the device before shutdown
+>   ALSA: cs35l41: Enable Internal Boost in shared lib
+>   ALSA: hda: cs35l41: Move boost config to initialization code
+>   ALSA: hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+>   ALSA: hda: cs35l41: Reorganize log for playback actions
+>   ALSA: hda: cs35l41: Handle all external boost setups the same way
+>   ALSA: hda: cs35l41: Move external boost handling to lib for ASoC use
+>   ASoC: cs35l41: Support external boost
 
-Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
+If it's OK for Mark, I'm going to merge those to my tree for 5.18.
 
-> +Kalle, linux-wireless
->
-> On Tue, Mar 08, 2022 at 12:25:06AM +0530, Prasad Malisetty wrote:
->> Add suspend_noirq and resume_noirq callbacks to handle
->> system suspend and resume in dwc PCIe controller driver.
->> 
->> When system suspends, send PME turnoff message to enter
->> link into L2 state. Along with powerdown the PHY, disable
->> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
->> supported and disable the pcie clocks, regulators.
->> 
->
-> Kalle, is this behaviour appropriate for WLAN devices as well? The devices
-> will be put into poweroff state (assuming no Vaux provided in D3cold) during
-> system suspend.
 
-ath11k leaves the firmware running during suspend. I don't fully
-understand what the patch is doing, but if it cuts the power from the
-WLAN chip during suspend that will break ath11k.
+thanks,
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Takashi

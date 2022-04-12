@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A9F4FD6A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227A44FD915
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241798AbiDLHVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S243406AbiDLHpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352710AbiDLHFx (ORCPT
+        with ESMTP id S1354358AbiDLHRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128E8483AC;
-        Mon, 11 Apr 2022 23:48:36 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BAC26C;
+        Mon, 11 Apr 2022 23:59:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 76572CE1ACD;
-        Tue, 12 Apr 2022 06:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845FDC385A1;
-        Tue, 12 Apr 2022 06:48:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 879EEB81B35;
+        Tue, 12 Apr 2022 06:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017E1C385A1;
+        Tue, 12 Apr 2022 06:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746112;
-        bh=SuvFWyTnFtQ/epL3OQe/Re84AKAEgEnShrWO+DTOp0E=;
+        s=korg; t=1649746739;
+        bh=WRt7HnKTXNE8SO5Nu5oTjmtD7PiNouryP/oWaHn/zvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n0D50KfqlJ5U2M4b2z8IfioPTRCUNdd+Bh8nDzUkvJq6xbukkBEh8PC3Bh9INLO/8
-         DT3KTJe6roYmhYwOjqIqXt09DknSv8qnsQM1n6kvuGybyNH+osNJbQa6+jeuP9vB4c
-         pzRB59g4vcaAJPlmMmlJCl9GuG2XqS2Q9Z/YLg6I=
+        b=VpocLXV6chCON2pDJbmQ2cgJ+cwE0kqfyrCXdlI0K234kGXTWWmbn4zfLH4WcvCgv
+         /MihvTWWc1dONT5NXLZlHTdnQABJIuLcjxHIxaT/kJPvs3mvaCjnjpFLh0gv7IkHxu
+         sL7PqFH6L+/RjqCltVt6ShknUT1tiAar3hucGtaY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Feng Tang <feng.tang@intel.com>, Guo Ren <guoren@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 165/277] drm/imx: imx-ldb: Check for null pointer after calling kmemdup
+Subject: [PATCH 5.16 111/285] lib/Kconfig.debug: add ARCH dependency for FUNCTION_ALIGN option
 Date:   Tue, 12 Apr 2022 08:29:28 +0200
-Message-Id: <20220412062946.812350694@linuxfoundation.org>
+Message-Id: <20220412062946.869153703@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Feng Tang <feng.tang@intel.com>
 
-[ Upstream commit 8027a9ad9b3568c5eb49c968ad6c97f279d76730 ]
+[ Upstream commit 1bf18da62106225dbc47aab41efee2aeb99caccd ]
 
-As the possible failure of the allocation, kmemdup() may return NULL
-pointer.
-Therefore, it should be better to check the return value of kmemdup()
-and return error if fails.
+0Day robots reported there is compiling issue for 'csky' ARCH when
+CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED is enabled [1]:
 
-Fixes: dc80d7038883 ("drm/imx-ldb: Add support to drm-bridge")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Link: https://lore.kernel.org/r/20220105074729.2363657-1-jiasheng@iscas.ac.cn
+All errors (new ones prefixed by >>):
+
+   {standard input}: Assembler messages:
+>> {standard input}:2277: Error: pcrel offset for branch to .LS000B too far (0x3c)
+
+Which was discussed in [2].  And as there is no solution for csky yet, add
+some dependency for this config to limit it to several ARCHs which have no
+compiling issue so far.
+
+[1]. https://lore.kernel.org/lkml/202202271612.W32UJAj2-lkp@intel.com/
+[2]. https://www.spinics.net/lists/linux-kbuild/msg30298.html
+
+Link: https://lkml.kernel.org/r/20220304021100.GN4548@shbuild999.sh.intel.com
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Cc: Guo Ren <guoren@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/imx/imx-ldb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ lib/Kconfig.debug | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/imx/imx-ldb.c b/drivers/gpu/drm/imx/imx-ldb.c
-index e5078d03020d..fb0e951248f6 100644
---- a/drivers/gpu/drm/imx/imx-ldb.c
-+++ b/drivers/gpu/drm/imx/imx-ldb.c
-@@ -572,6 +572,8 @@ static int imx_ldb_panel_ddc(struct device *dev,
- 		edidp = of_get_property(child, "edid", &edid_len);
- 		if (edidp) {
- 			channel->edid = kmemdup(edidp, edid_len, GFP_KERNEL);
-+			if (!channel->edid)
-+				return -ENOMEM;
- 		} else if (!channel->panel) {
- 			/* fallback to display-timings node */
- 			ret = of_get_drm_display_mode(child,
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 5e14e32056ad..166e67b98506 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -416,7 +416,8 @@ config SECTION_MISMATCH_WARN_ONLY
+ 	  If unsure, say Y.
+ 
+ config DEBUG_FORCE_FUNCTION_ALIGN_64B
+-	bool "Force all function address 64B aligned" if EXPERT
++	bool "Force all function address 64B aligned"
++	depends on EXPERT && (X86_64 || ARM64 || PPC32 || PPC64 || ARC)
+ 	help
+ 	  There are cases that a commit from one domain changes the function
+ 	  address alignment of other domains, and cause magic performance
 -- 
 2.35.1
 

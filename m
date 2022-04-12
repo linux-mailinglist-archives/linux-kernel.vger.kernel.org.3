@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EB44FD37B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93824FD421
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353539AbiDLHPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S1376352AbiDLHn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349202AbiDLHBo (ORCPT
+        with ESMTP id S1354167AbiDLHRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:01:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E29943AC8;
-        Mon, 11 Apr 2022 23:46:51 -0700 (PDT)
+        Tue, 12 Apr 2022 03:17:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23D72657C;
+        Mon, 11 Apr 2022 23:58:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AA6B5CE1ACD;
-        Tue, 12 Apr 2022 06:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA6FC385A1;
-        Tue, 12 Apr 2022 06:46:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54CC8B81B4D;
+        Tue, 12 Apr 2022 06:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0211C385A1;
+        Tue, 12 Apr 2022 06:58:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746008;
-        bh=7IHmMLqdZHm/f+ayP8iTbx5IYzCMNs867hz03mwV7B8=;
+        s=korg; t=1649746703;
+        bh=dbfN4MEQl7EMuA/KI3E6hN5qoKSn64HMeIb6QjfALpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vNePWhKeAtn/AQO5rKAM7Q+xfcYiHiEm7Wbtd02CIEr2DmoYV4NIyaxfVJ/FGJ94w
-         1d4zUNIB802r8pDfoSdwDoUCF/cHvBXRxHx8EIF0mQkNziu5bS5Rx05qUWaa21D0QI
-         0YCCpyppn/I2hqIzGwwc5Wmys+zfcaOdqiQdHNiY=
+        b=sydSciLzQrplMzYww0uZLKQLf/0+BfTYvKVunh0e0ib3LPi9EQcdem5K6LXoFdxDp
+         SP3g5SZBgPJCCz+or247TsprdxhfT4LpicWEYvdi8rmRVEMkDMo/cMbA6NKj2p93Kf
+         XigUbuQni1uFP33YJDVC8u1818kulCew40VqWbcE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 126/277] clk: Enforce that disjoints limits are invalid
-Date:   Tue, 12 Apr 2022 08:28:49 +0200
-Message-Id: <20220412062945.686746968@linuxfoundation.org>
+Subject: [PATCH 5.16 073/285] scsi: pm8001: Fix tag leaks on error
+Date:   Tue, 12 Apr 2022 08:28:50 +0200
+Message-Id: <20220412062945.773836771@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,101 +56,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 10c46f2ea914202482d19cf80dcc9c321c9ff59b ]
+[ Upstream commit 4c8f04b1905cd4b776d0b720463c091545478ef7 ]
 
-If we were to have two users of the same clock, doing something like:
+In pm8001_chip_set_dev_state_req(), pm8001_chip_fw_flash_update_req(),
+pm80xx_chip_phy_ctl_req() and pm8001_chip_reg_dev_req() add missing calls
+to pm8001_tag_free() to free the allocated tag when pm8001_mpi_build_cmd()
+fails.
 
-clk_set_rate_range(user1, 1000, 2000);
-clk_set_rate_range(user2, 3000, 4000);
+Similarly, in pm8001_exec_internal_task_abort(), if the chip ->task_abort
+method fails, the tag allocated for the abort request task must be
+freed. Add the missing call to pm8001_tag_free().
 
-The second call would fail with -EINVAL, preventing from getting in a
-situation where we end up with impossible limits.
-
-However, this is never explicitly checked against and enforced, and
-works by relying on an undocumented behaviour of clk_set_rate().
-
-Indeed, on the first clk_set_rate_range will make sure the current clock
-rate is within the new range, so it will be between 1000 and 2000Hz. On
-the second clk_set_rate_range(), it will consider (rightfully), that our
-current clock is outside of the 3000-4000Hz range, and will call
-clk_core_set_rate_nolock() to set it to 3000Hz.
-
-clk_core_set_rate_nolock() will then call clk_calc_new_rates() that will
-eventually check that our rate 3000Hz rate is outside the min 3000Hz max
-2000Hz range, will bail out, the error will propagate and we'll
-eventually return -EINVAL.
-
-This solely relies on the fact that clk_calc_new_rates(), and in
-particular clk_core_determine_round_nolock(), won't modify the new rate
-allowing the error to be reported. That assumption won't be true for all
-drivers, and most importantly we'll break that assumption in a later
-patch.
-
-It can also be argued that we shouldn't even reach the point where we're
-calling clk_core_set_rate_nolock().
-
-Let's make an explicit check for disjoints range before we're doing
-anything.
-
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220225143534.405820-4-maxime@cerno.tech
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lore.kernel.org/r/20220220031810.738362-22-damien.lemoal@opensource.wdc.com
+Reviewed-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/scsi/pm8001/pm8001_hwi.c | 9 +++++++++
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c | 9 +++++++--
+ 3 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 5cef73a85901..d6dc58bd07b3 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -631,6 +631,24 @@ static void clk_core_get_boundaries(struct clk_core *core,
- 		*max_rate = min(*max_rate, clk_user->max_rate);
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 7351e767b68d..e447b714df2b 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4492,6 +4492,9 @@ static int pm8001_chip_reg_dev_req(struct pm8001_hba_info *pm8001_ha,
+ 		SAS_ADDR_SIZE);
+ 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+ 			sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
+ 	return rc;
  }
  
-+static bool clk_core_check_boundaries(struct clk_core *core,
-+				      unsigned long min_rate,
-+				      unsigned long max_rate)
-+{
-+	struct clk *user;
+@@ -4904,6 +4907,9 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->ccb_tag = tag;
+ 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
+ 		tag);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
 +
-+	lockdep_assert_held(&prepare_lock);
-+
-+	if (min_rate > core->max_rate || max_rate < core->min_rate)
-+		return false;
-+
-+	hlist_for_each_entry(user, &core->clks, clks_node)
-+		if (min_rate > user->max_rate || max_rate < user->min_rate)
-+			return false;
-+
-+	return true;
-+}
-+
- void clk_hw_set_rate_range(struct clk_hw *hw, unsigned long min_rate,
- 			   unsigned long max_rate)
- {
-@@ -2347,6 +2365,11 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
- 	clk->min_rate = min;
- 	clk->max_rate = max;
+ 	return rc;
+ }
  
-+	if (!clk_core_check_boundaries(clk->core, min, max)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
+@@ -5008,6 +5014,9 @@ pm8001_chip_set_dev_state_req(struct pm8001_hba_info *pm8001_ha,
+ 	payload.nds = cpu_to_le32(state);
+ 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+ 			sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
 +
- 	rate = clk_core_get_rate_nolock(clk->core);
- 	if (rate < min || rate > max) {
- 		/*
-@@ -2375,6 +2398,7 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
+ 	return rc;
+ 
+ }
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index c0b45b8a513d..2a9ea08c7fe6 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -831,10 +831,10 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
+ 
+ 		res = PM8001_CHIP_DISP->task_abort(pm8001_ha,
+ 			pm8001_dev, flag, task_tag, ccb_tag);
+-
+ 		if (res) {
+ 			del_timer(&task->slow_task->timer);
+ 			pm8001_dbg(pm8001_ha, FAIL, "Executing internal task failed\n");
++			pm8001_tag_free(pm8001_ha, ccb_tag);
+ 			goto ex_err;
  		}
- 	}
+ 		wait_for_completion(&task->slow_task->completion);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 00498e3660e1..d7c88d0f1899 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4928,8 +4928,13 @@ static int pm80xx_chip_phy_ctl_req(struct pm8001_hba_info *pm8001_ha,
+ 	payload.tag = cpu_to_le32(tag);
+ 	payload.phyop_phyid =
+ 		cpu_to_le32(((phy_op & 0xFF) << 8) | (phyId & 0xFF));
+-	return pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+-			sizeof(payload), 0);
++
++	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
++				  sizeof(payload), 0);
++	if (rc)
++		pm8001_tag_free(pm8001_ha, tag);
++
++	return rc;
+ }
  
-+out:
- 	if (clk->exclusive_count)
- 		clk_core_rate_protect(clk->core);
- 
+ static u32 pm80xx_chip_is_our_interrupt(struct pm8001_hba_info *pm8001_ha)
 -- 
 2.35.1
 

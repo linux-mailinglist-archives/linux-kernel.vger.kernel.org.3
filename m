@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED804FDD37
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAA74FDD32
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244075AbiDLLBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S241166AbiDLK7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242984AbiDLK7F (ORCPT
+        with ESMTP id S1377246AbiDLK43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:59:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC8490CEB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649757046; x=1681293046;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+ly8MdmHPLc+5oJDQTx/Jq3Qcj4r+aduCH/cUSyk+Qk=;
-  b=TNdN8x0rZJnqqmxNsu1/KlhwnLNHwFXH6Pe1Y92lXjfUeS9MfIGvhcM1
-   I4z67N9ASPcKB2HTksxrSw+gWPX9WW11bOjPZKF5G4KFFxC2kT6qUzYzE
-   B1EY19iNsz/FQWMD2VnmL+PJkPilC4x/rgxgY8+k1HB8WbFrpC2ecbIRC
-   3yEdf1JfZ+xPtlNo1H1kHECigQ9cB3QfFesLNcBXysoTV5A76RgRAC79J
-   rsNIzP/N+XruwhA0poQ+6VVHwwcAmMHIbirhUe5XGASwWA8cu7FJPVY1u
-   tC2wfQI9eEMGvv6wqTtSUy3QbXWlDl6Zz6tFK+5+AGH992ve+HRuI/Jr5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322778569"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="322778569"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 02:50:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="590263394"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2022 02:50:38 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neDAT-0002ia-SI;
-        Tue, 12 Apr 2022 09:50:37 +0000
-Date:   Tue, 12 Apr 2022 17:49:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Tue, 12 Apr 2022 06:56:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6936D8FE4B;
+        Tue, 12 Apr 2022 02:50:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03B0361864;
+        Tue, 12 Apr 2022 09:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1FDC385AB;
+        Tue, 12 Apr 2022 09:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649757030;
+        bh=big4IiYwCUrp5tFic5/ifdQ2CpsrM8sTB+lb/TU8tAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P2QjXjkTYafeccqtUTLaoYUtvLkYeVp5QaSleN+WSHm6miGw4Q6TmrfOldma4PHDa
+         9106N9V3OFyhaU7NSYvzBgUMvmmhFv54V6qRHKzVcyUCUp+2NHrUl5mTMlD1FeM4Fa
+         r/R5uyKZGHVFGJnox/Iki6u8Ob6fB8jTknKmusMRCU+oPWx7glvlhQfqxO2t2w8itw
+         AitupK+oP+zt0aD8z0RuyA/OS0YHOZ7gjnoNeCg6jcEwpWwqEEDR5eRL5vTudD1MbW
+         sRmn0bDAGeM2ycKVMJq1a+2MSMoePkMS5lUd7wwLINsG7D0XVTEEAVBRvBqEJeut+u
+         25NKDyAX0atQA==
+Received: by pali.im (Postfix)
+        id 7BB9DA75; Tue, 12 Apr 2022 11:50:27 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 3/12]
- kernel/time/timekeeping.c:2388: warning: expecting prototype for
- random_read_entropy_fallback(). Prototype was for
- random_get_entropy_fallback() instead
-Message-ID: <202204121736.FCps0gwC-lkp@intel.com>
+Subject: [PATCH v5 0/4] PCI: mvebu: Slot support
+Date:   Tue, 12 Apr 2022 11:49:42 +0200
+Message-Id: <20220412094946.27069-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
-head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
-commit: aeeed98e20910aeafd5db8c56b449810b60bad9f [3/12] timekeeping: add raw clock fallback for random_get_entropy()
-config: i386-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121736.FCps0gwC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/aeeed98e20910aeafd5db8c56b449810b60bad9f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
-        git checkout aeeed98e20910aeafd5db8c56b449810b60bad9f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/time/
+This patch series add slot support to pci-mvebu.c driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes in v5:
+* Fix compile error due to wrong patch rebasing
 
-All warnings (new ones prefixed by >>):
+Changes in v4:
+* Set 239 W when DT slot-power-limit-milliwatt is between 239 W and 250 W
+* Fix returning power limit value
 
-   kernel/time/timekeeping.c:1684: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * We have three kinds of time sources to use for sleep time
-   kernel/time/timekeeping.c:1705: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * 1) can be determined whether to use or not only when doing
->> kernel/time/timekeeping.c:2388: warning: expecting prototype for random_read_entropy_fallback(). Prototype was for random_get_entropy_fallback() instead
-   kernel/time/timekeeping.c:2396: warning: Function parameter or member 'txc' not described in 'do_adjtimex'
-   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'phase_ts' not described in 'hardpps'
-   kernel/time/timekeeping.c:2462: warning: Function parameter or member 'raw_ts' not described in 'hardpps'
+Changes in v3:
+* Set 600 W when DT slot-power-limit-milliwatt > 600 W
 
+Changes in v2:
+* Dropped patch with PCI_EXP_SLTCAP_*_SHIFT macros as it is not needed anymore
+* Dropped patch "ARM: dts: turris-omnia: Set PCIe slot-power-limit-milliwatt properties" which was applied
+* Added support for PCIe 6.0 slot power limit encodings
+* Round down slot power limit value
+* Fix handling of slot power limit with scale x1.0 (0x00 value)
+* Use FIELD_PREP instead of _SHIFT macros
+* Changed commit message to Bjorn's suggestion
+* Changed comments in the code to match PCIe spec
+* Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
 
-vim +2388 kernel/time/timekeeping.c
+Pali Rohár (4):
+  PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+  dt-bindings: Add 'slot-power-limit-milliwatt' PCIe port property
+  PCI: Add function for parsing 'slot-power-limit-milliwatt' DT property
+  PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
 
-  2382	
-  2383	/**
-  2384	 * random_read_entropy_fallback - Returns the raw clock source value,
-  2385	 * used by random.c for platforms with no valid random_get_entropy().
-  2386	 */
-  2387	unsigned long random_get_entropy_fallback(void)
-> 2388	{
-  2389		return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-  2390	}
-  2391	
+ Documentation/devicetree/bindings/pci/pci.txt |  6 ++
+ drivers/pci/controller/pci-mvebu.c            | 97 ++++++++++++++++++-
+ drivers/pci/of.c                              | 70 +++++++++++++
+ drivers/pci/pci.h                             | 15 +++
+ include/uapi/linux/pci_regs.h                 |  1 +
+ 5 files changed, 184 insertions(+), 5 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

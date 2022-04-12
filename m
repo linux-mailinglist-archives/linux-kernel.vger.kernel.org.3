@@ -2,199 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092D34FD78D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393504FD59F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377282AbiDLJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S1377379AbiDLJfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388440AbiDLJWM (ORCPT
+        with ESMTP id S1388457AbiDLJWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:22:12 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1E546676
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:28:36 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B09881C0014;
-        Tue, 12 Apr 2022 08:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649752115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wzGSuUZ52CEXpm0PjnzfqryT/AQxVArAKAFDHRtNmXY=;
-        b=hyMuocSLSq+lLIQ8M72hif0KMCKsTDDXZeOqDwiA2O+v3q/dvAS/1JbUle4m64ZC6ZGCvF
-        LpPgQQVD5SoJrrNEZbaxXjN8ZbXIkRsd1w5yXhiuswDfYieCnb06YSVeY92LMt5D+Q9qYD
-        TysR0VEHDbAEt1QE+CwwHvgaWBjAK1zJ2+35Eelc3TRDZ4cw6ucnsKTWibqcBHIhRphWRf
-        onjHrZIm6100vw631T7BiLHk8Fvf80WyfkpTe8V8RJaOXt8QrqrLj12yn33CmBGlfRKX0V
-        G3FesljFtwLtVcRAzfukTp0/b1ErKARhYxZxP4YCN7aYwxFPPQm6VBnpumZoIw==
-Date:   Tue, 12 Apr 2022 10:28:32 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bastian Hecht <hechtb@googlemail.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mtd: rawnand: Fix return value check of
- wait_for_completion_timeout
-Message-ID: <20220412102832.09957c35@xps13>
-In-Reply-To: <bf603638-cc34-b185-3001-9caeba1884d7@gmail.com>
-References: <202204121253.NcZifMQi-lkp@intel.com>
-        <20220412063703.8537-1-linmq006@gmail.com>
-        <20220412090649.33bb3f8b@xps13>
-        <61783400-4df2-47af-78a7-7acb715c3a71@gmail.com>
-        <20220412094822.3818ebc2@xps13>
-        <bf603638-cc34-b185-3001-9caeba1884d7@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 12 Apr 2022 05:22:13 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BF847070;
+        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id k29so3790pgm.12;
+        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8dj27SHCv5b3Wvo3cWAib4es//0Hr77RKSwBft96qwE=;
+        b=MvkGj8kC7BvSx/tQjd+DEgKZ3id7BVEEJPlg5EhjgkhKoKyPuN7dwigevkaC7aO3ti
+         TB+WEIQd1SWESEKgzNQ88pB9DSZfVlcmghDv+FlCjq8kLDzEZ/HN3ZO1BxyF847G/hiJ
+         Ebw8J7p+BmGJ3jSMuhUG9bp24ZE9ruXFhTJ2cN5xMDRRwPWLNtqO9EP0XqgmkDAPeGFG
+         wzVaBGkIOZ5EfEs3nIWtvZgycRZ0KlXeCPgADt8QUmhYiI1nRc4lXDIjXUoUTDN/W87y
+         ChiyWJiBtqzQLEHIvTYWb1hT9jRpsij8HmYHI55Uf2RDs8XF5nQ7bKVjYf9IRbJyavCh
+         6Ksw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8dj27SHCv5b3Wvo3cWAib4es//0Hr77RKSwBft96qwE=;
+        b=kOsZ1Au2VBHrnCaM9v5XM2BPMUdV1YJJYxHlSYWWrGPjCcTgLNGfNemJffBKP4FHOw
+         o2RfP4tcHcOlvPckO0Eyoz1VCupc+Hun564WjZUQk+meyhQFADeHkmSGZFIhKEq4PQGz
+         pfF25xFi4IUG491MBVaIszl1N/RY+cKIDxd0C0vO0MurEqijoZps4uzrtQI3xmMil7IL
+         LzM9IX9rXA2jgpa5O3Guy1Dmu/q8kKGeUc06r9EYYTZ/l4GGpqxvulfSTpYAtKsBqhDs
+         PCApAFQSHnxixWVpPueiDJgSb09GXvzmEfJ5WIBPo8BTeRnUpWALgT8pcCsYqgtfrAAh
+         xlSQ==
+X-Gm-Message-State: AOAM530ZQcYdJpx5169VL3XKPkFr2oHrmpxP/8X+xuWL9e8a0vxK2swb
+        zEgYmrU1q5cWll6+f1sPKzU=
+X-Google-Smtp-Source: ABdhPJwmL6nvNIgc2qB6277prLSlKDBoJ9rDxe+gbZfcxGjX2/wQgi65ZQMUL2G6CWQlHoa4lFSqiw==
+X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id bq20-20020a056a000e1400b004fe3cdb023fmr3450814pfb.86.1649752132287;
+        Tue, 12 Apr 2022 01:28:52 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm1981783pgn.35.2022.04.12.01.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 01:28:51 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     grygorii.strashko@ti.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] net: ethernet: ti: cpsw: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 12 Apr 2022 08:28:47 +0000
+Message-Id: <20220412082847.2532584-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-linmq006@gmail.com wrote on Tue, 12 Apr 2022 16:23:24 +0800:
+Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+pm_runtime_put_noidle. This change is just to simplify the code, no
+actual functional changes.
 
-> Hi Miquel,
->=20
-> On 2022/4/12 15:48, Miquel Raynal wrote:
-> > =20
-> >>> Hi Miaoqian,
-> >>>
-> >>> linmq006@gmail.com wrote on Tue, 12 Apr 2022 06:36:52 +0000:
-> >>>   =20
-> >>>> wait_for_completion_timeout() returns unsigned long not int.
-> >>>> It returns 0 if timed out, and positive if completed.
-> >>>> The check for <=3D 0 is ambiguous and should be =3D=3D 0 here
-> >>>> indicating timeout which is the only error case.
-> >>>>
-> >>>> Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
-> >>>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> >>>> ---
-> >>>> change in v2:
-> >>>> - initialize ret to 1.
-> >>>> ---
-> >>>>  drivers/mtd/nand/raw/sh_flctl.c | 8 +++++---
-> >>>>  1 file changed, 5 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mtd/nand/raw/sh_flctl.c b/drivers/mtd/nand/raw/=
-sh_flctl.c
-> >>>> index b85b9c6fcc42..2373251f585b 100644
-> >>>> --- a/drivers/mtd/nand/raw/sh_flctl.c
-> >>>> +++ b/drivers/mtd/nand/raw/sh_flctl.c
-> >>>> @@ -384,7 +384,8 @@ static int flctl_dma_fifo0_transfer(struct sh_fl=
-ctl *flctl, unsigned long *buf,
-> >>>>  	dma_addr_t dma_addr;
-> >>>>  	dma_cookie_t cookie;
-> >>>>  	uint32_t reg;
-> >>>> -	int ret;
-> >>>> +	int ret =3D 1;   =20
-> >>> Does not look right. I know this function returns > 0 on positive
-> >>> outcomes but this does not make any sense in the first place.   =20
-> >> Yes, I made a mistake, Now I realize that in v2, it will return 1 in e=
-rror path
-> >>
-> >> when DMA submit failed. =20
-> > Not 1, but a proper error code please (-ETIMEDOUT, -EINVAL, whatever)
-> > =20
-> >> And for patch v1, it will return 0=C2=A0 if calls wait_for_completion_=
-timeout succeeds.
-> >> =20
-> >>> This function is static and only called twice, please turn it into
-> >>> something like:
-> >>>
-> >>> if (dma_fifo_transfer())
-> >>> 	error
-> >>> else
-> >>> 	ok   =20
-> >> So I want to keep ret>0 means success.
-> >>
-> >> Or could I set ret > 0 after in wait_for_completion_timeout() success =
-path?
-> >>
-> >> like:
-> >>
-> >> =C2=A0=C2=A0=C2=A0 if(time_left =3D=3D 0)
-> >>
-> >> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D -ETIM=
-EDOUT;
-> >>
-> >> =C2=A0=C2=A0=C2=A0 else
-> >>
-> >> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0 ret =3D 1; =20
-> > You can initialize ret to zero at to top. So that anything !=3D 0 is an
-> > error (like a lot of functions in the kernel).  =20
->=20
-> Thanks for your advice, I will do this.
-> > And use:
-> >
-> > 	if (dma_fifo_transfer())
-> > 		error(); =20
-> I think keeping the original condition structure is better,
-> something like:
->=20
-> if (dma_fifo_transfer()=3D=3D0)
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/ethernet/ti/cpsw.c | 36 ++++++++++++----------------------
+ 1 file changed, 12 insertions(+), 24 deletions(-)
 
-  if (cond && cond && !dma_fifo_transfer())
+diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
+index 03575c017500..9f37b5b196a5 100644
+--- a/drivers/net/ethernet/ti/cpsw.c
++++ b/drivers/net/ethernet/ti/cpsw.c
+@@ -756,11 +756,9 @@ static int cpsw_ndo_open(struct net_device *ndev)
+ 	int ret;
+ 	u32 reg;
+ 
+-	ret = pm_runtime_get_sync(cpsw->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(cpsw->dev);
++	ret = pm_runtime_resume_and_get(cpsw->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	netif_carrier_off(ndev);
+ 
+@@ -968,11 +966,9 @@ static int cpsw_ndo_set_mac_address(struct net_device *ndev, void *p)
+ 	if (!is_valid_ether_addr(addr->sa_data))
+ 		return -EADDRNOTAVAIL;
+ 
+-	ret = pm_runtime_get_sync(cpsw->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(cpsw->dev);
++	ret = pm_runtime_resume_and_get(cpsw->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	if (cpsw->data.dual_emac) {
+ 		vid = cpsw->slaves[priv->emac_port].port_vlan;
+@@ -1052,11 +1048,9 @@ static int cpsw_ndo_vlan_rx_add_vid(struct net_device *ndev,
+ 	if (vid == cpsw->data.default_vlan)
+ 		return 0;
+ 
+-	ret = pm_runtime_get_sync(cpsw->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(cpsw->dev);
++	ret = pm_runtime_resume_and_get(cpsw->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	if (cpsw->data.dual_emac) {
+ 		/* In dual EMAC, reserved VLAN id should not be used for
+@@ -1090,11 +1084,9 @@ static int cpsw_ndo_vlan_rx_kill_vid(struct net_device *ndev,
+ 	if (vid == cpsw->data.default_vlan)
+ 		return 0;
+ 
+-	ret = pm_runtime_get_sync(cpsw->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(cpsw->dev);
++	ret = pm_runtime_resume_and_get(cpsw->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	if (cpsw->data.dual_emac) {
+ 		int i;
+@@ -1567,11 +1559,9 @@ static int cpsw_probe(struct platform_device *pdev)
+ 	/* Need to enable clocks with runtime PM api to access module
+ 	 * registers
+ 	 */
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
+ 		goto clean_runtime_disable_ret;
+-	}
+ 
+ 	ret = cpsw_probe_dt(&cpsw->data, pdev);
+ 	if (ret)
+@@ -1734,11 +1724,9 @@ static int cpsw_remove(struct platform_device *pdev)
+ 	struct cpsw_common *cpsw = platform_get_drvdata(pdev);
+ 	int i, ret;
+ 
+-	ret = pm_runtime_get_sync(&pdev->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	for (i = 0; i < cpsw->data.slaves; i++)
+ 		if (cpsw->slaves[i].ndev)
+-- 
+2.25.1
 
-> 	succeed();
->=20
-> In this way, only minor changes is needed=E2=80=94=E2=80=94only need to u=
-pdate the symbol in condition.
-> Otherwise It needs to restructure the code and be more complicated.
->=20
->=20
-> Thanks,
->=20
-> >> What do you think?
-> >>
-> >>
-> >> Thanks,
-> >> =20
-> >>>> +	unsigned long time_left;
-> >>>> =20
-> >>>>  	if (dir =3D=3D DMA_FROM_DEVICE) {
-> >>>>  		chan =3D flctl->chan_fifo0_rx;
-> >>>> @@ -425,13 +426,14 @@ static int flctl_dma_fifo0_transfer(struct sh_=
-flctl *flctl, unsigned long *buf,
-> >>>>  		goto out;
-> >>>>  	}
-> >>>> =20
-> >>>> -	ret =3D
-> >>>> +	time_left =3D
-> >>>>  	wait_for_completion_timeout(&flctl->dma_complete,
-> >>>>  				msecs_to_jiffies(3000));
-> >>>> =20
-> >>>> -	if (ret <=3D 0) {
-> >>>> +	if (time_left =3D=3D 0) {
-> >>>>  		dmaengine_terminate_all(chan);
-> >>>>  		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
-> >>>> +		ret =3D -ETIMEDOUT;
-> >>>>  	}
-> >>>> =20
-> >>>>  out:   =20
-> >>> Thanks,
-> >>> Miqu=C3=A8l   =20
-> >
-> > Thanks,
-> > Miqu=C3=A8l =20
-
-
-Thanks,
-Miqu=C3=A8l

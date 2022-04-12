@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DCC4FD768
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811EE4FDA3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353485AbiDLHP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S1377365AbiDLHt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351179AbiDLHAo (ORCPT
+        with ESMTP id S1354486AbiDLHR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:00:44 -0400
+        Tue, 12 Apr 2022 03:17:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317FC433A8;
-        Mon, 11 Apr 2022 23:46:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C727413F89;
+        Mon, 11 Apr 2022 23:59:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C4EF6112F;
-        Tue, 12 Apr 2022 06:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE21C385A8;
-        Tue, 12 Apr 2022 06:46:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7CAC615B8;
+        Tue, 12 Apr 2022 06:59:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3909C385A6;
+        Tue, 12 Apr 2022 06:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746002;
-        bh=ucfA2C2SWIQgzh8yu0sdw5aNdUWtqQHKO/aIHM0aMUo=;
+        s=korg; t=1649746762;
+        bh=yi7wTzc1JGwip0XrlP6gry2kJYuP98mfD52o/JlFv/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p/zF2H6Ti4WmV9dfZ30qQoxcXuMoD38SPRGcnxpOLQ0ok9ppSRJaUjn+e2oP7d2Lu
-         DxzuLDQnwYrLf0M/M7S1hKIUzxBzCFAI5eD3Inj6YmMJhGDxSDgtLg42wsYaLsb6WY
-         VbhWGna4ke4BHV64JyiOzjsaM7oNbwT1AML9siX8=
+        b=ZCUdaLQDf2Ru2t306cUNNJlQ6tcng05MNWuUzvzeoe+83akyp5SPUwlg400OKCFjN
+         Q3XmccJQ6mJMmRg5H8+VrS1Qrpyx99BkfF+7u/aYHCKfOD4JpLm4Igj0akKjamgPYz
+         o2sfpR0wlIwOA6pO5/1S5O6Syboj7rR6qvSB0lEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Jin <joe.jin@oracle.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 124/277] xen: delay xen_hvm_init_time_ops() if kdump is boot on vcpu>=32
+Subject: [PATCH 5.16 070/285] scsi: pm8001: Fix pm80xx_pci_mem_copy() interface
 Date:   Tue, 12 Apr 2022 08:28:47 +0200
-Message-Id: <20220412062945.629379873@linuxfoundation.org>
+Message-Id: <20220412062945.688323155@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,122 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Zhang <dongli.zhang@oracle.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit eed05744322da07dd7e419432dcedf3c2e017179 ]
+[ Upstream commit 3762d8f6edcdb03994c919f9487fd6d336c06561 ]
 
-The sched_clock() can be used very early since commit 857baa87b642
-("sched/clock: Enable sched clock early"). In addition, with commit
-38669ba205d1 ("x86/xen/time: Output xen sched_clock time from 0"), kdump
-kernel in Xen HVM guest may panic at very early stage when accessing
-&__this_cpu_read(xen_vcpu)->time as in below:
+The declaration of the local variable destination1 in pm80xx_pci_mem_copy()
+as a pointer to a u32 results in the sparse warning:
 
-setup_arch()
- -> init_hypervisor_platform()
-     -> x86_init.hyper.init_platform = xen_hvm_guest_init()
-         -> xen_hvm_init_time_ops()
-             -> xen_clocksource_read()
-                 -> src = &__this_cpu_read(xen_vcpu)->time;
+warning: incorrect type in assignment (different base types)
+    expected unsigned int [usertype]
+    got restricted __le32 [usertype]
 
-This is because Xen HVM supports at most MAX_VIRT_CPUS=32 'vcpu_info'
-embedded inside 'shared_info' during early stage until xen_vcpu_setup() is
-used to allocate/relocate 'vcpu_info' for boot cpu at arbitrary address.
+Furthermore, the destination" argument of pm80xx_pci_mem_copy() is wrongly
+declared with the const attribute.
 
-However, when Xen HVM guest panic on vcpu >= 32, since
-xen_vcpu_info_reset(0) would set per_cpu(xen_vcpu, cpu) = NULL when
-vcpu >= 32, xen_clocksource_read() on vcpu >= 32 would panic.
+Fix both problems by changing the type of the "destination" argument to
+"__le32 *" and use this argument directly inside the pm80xx_pci_mem_copy()
+function, thus removing the need for the destination1 local variable.
 
-This patch calls xen_hvm_init_time_ops() again later in
-xen_hvm_smp_prepare_boot_cpu() after the 'vcpu_info' for boot vcpu is
-registered when the boot vcpu is >= 32.
-
-This issue can be reproduced on purpose via below command at the guest
-side when kdump/kexec is enabled:
-
-"taskset -c 33 echo c > /proc/sysrq-trigger"
-
-The bugfix for PVM is not implemented due to the lack of testing
-environment.
-
-[boris: xen_hvm_init_time_ops() returns on errors instead of jumping to end]
-
-Cc: Joe Jin <joe.jin@oracle.com>
-Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/r/20220302164032.14569-3-dongli.zhang@oracle.com
-Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-6-damien.lemoal@opensource.wdc.com
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/xen/smp_hvm.c |  6 ++++++
- arch/x86/xen/time.c    | 24 +++++++++++++++++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/xen/smp_hvm.c b/arch/x86/xen/smp_hvm.c
-index 6ff3c887e0b9..b70afdff419c 100644
---- a/arch/x86/xen/smp_hvm.c
-+++ b/arch/x86/xen/smp_hvm.c
-@@ -19,6 +19,12 @@ static void __init xen_hvm_smp_prepare_boot_cpu(void)
- 	 */
- 	xen_vcpu_setup(0);
- 
-+	/*
-+	 * Called again in case the kernel boots on vcpu >= MAX_VIRT_CPUS.
-+	 * Refer to comments in xen_hvm_init_time_ops().
-+	 */
-+	xen_hvm_init_time_ops();
-+
- 	/*
- 	 * The alternative logic (which patches the unlock/lock) runs before
- 	 * the smp bootup up code is activated. Hence we need to set this up
-diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
-index d9c945ee1100..9ef0a5cca96e 100644
---- a/arch/x86/xen/time.c
-+++ b/arch/x86/xen/time.c
-@@ -558,6 +558,11 @@ static void xen_hvm_setup_cpu_clockevents(void)
- 
- void __init xen_hvm_init_time_ops(void)
- {
-+	static bool hvm_time_initialized;
-+
-+	if (hvm_time_initialized)
-+		return;
-+
- 	/*
- 	 * vector callback is needed otherwise we cannot receive interrupts
- 	 * on cpu > 0 and at this point we don't know how many cpus are
-@@ -567,7 +572,22 @@ void __init xen_hvm_init_time_ops(void)
- 		return;
- 
- 	if (!xen_feature(XENFEAT_hvm_safe_pvclock)) {
--		pr_info("Xen doesn't support pvclock on HVM, disable pv timer");
-+		pr_info_once("Xen doesn't support pvclock on HVM, disable pv timer");
-+		return;
-+	}
-+
-+	/*
-+	 * Only MAX_VIRT_CPUS 'vcpu_info' are embedded inside 'shared_info'.
-+	 * The __this_cpu_read(xen_vcpu) is still NULL when Xen HVM guest
-+	 * boots on vcpu >= MAX_VIRT_CPUS (e.g., kexec), To access
-+	 * __this_cpu_read(xen_vcpu) via xen_clocksource_read() will panic.
-+	 *
-+	 * The xen_hvm_init_time_ops() should be called again later after
-+	 * __this_cpu_read(xen_vcpu) is available.
-+	 */
-+	if (!__this_cpu_read(xen_vcpu)) {
-+		pr_info("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
-+			xen_vcpu_nr(0));
- 		return;
- 	}
- 
-@@ -577,6 +597,8 @@ void __init xen_hvm_init_time_ops(void)
- 	x86_cpuinit.setup_percpu_clockev = xen_hvm_setup_cpu_clockevents;
- 
- 	x86_platform.set_wallclock = xen_set_wallclock;
-+
-+	hvm_time_initialized = true;
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 48b0154211c7..00498e3660e1 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -66,18 +66,16 @@ int pm80xx_bar4_shift(struct pm8001_hba_info *pm8001_ha, u32 shift_value)
  }
- #endif
  
+ static void pm80xx_pci_mem_copy(struct pm8001_hba_info  *pm8001_ha, u32 soffset,
+-				const void *destination,
++				__le32 *destination,
+ 				u32 dw_count, u32 bus_base_number)
+ {
+ 	u32 index, value, offset;
+-	u32 *destination1;
+-	destination1 = (u32 *)destination;
+ 
+-	for (index = 0; index < dw_count; index += 4, destination1++) {
++	for (index = 0; index < dw_count; index += 4, destination++) {
+ 		offset = (soffset + index);
+ 		if (offset < (64 * 1024)) {
+ 			value = pm8001_cr32(pm8001_ha, bus_base_number, offset);
+-			*destination1 =  cpu_to_le32(value);
++			*destination = cpu_to_le32(value);
+ 		}
+ 	}
+ 	return;
 -- 
 2.35.1
 

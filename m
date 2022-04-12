@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2FD4FD677
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8DF4FDB0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351624AbiDLHVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S1359294AbiDLHmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352742AbiDLHFz (ORCPT
+        with ESMTP id S1353910AbiDLHQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536F148398;
-        Mon, 11 Apr 2022 23:48:39 -0700 (PDT)
+        Tue, 12 Apr 2022 03:16:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E641FAB;
+        Mon, 11 Apr 2022 23:57:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30A7E6104B;
-        Tue, 12 Apr 2022 06:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB68C385A1;
-        Tue, 12 Apr 2022 06:48:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 351A1B81B35;
+        Tue, 12 Apr 2022 06:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99577C385A1;
+        Tue, 12 Apr 2022 06:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746118;
-        bh=v1fDEVwhfSlwO4xCIZtroJVpO3dg35r8s/6pXPKkWKU=;
+        s=korg; t=1649746661;
+        bh=CV2aH48awvbFROFb5h94Dla8Uev5LAWjTvKVsxP/fSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UTLyGIMCfjuFqfZArVl8i1QdQieb2gQz/Ofjtkm/lxDw/KgiBJafkGWVZqDP0cMpQ
-         jcqQTT1SnztanS/OWTIrmPCK4ZMO7nUi4DGCxRFu2XixBAxRFBy9r3LxDfZvYsvoct
-         70PCvIv0ySLbb6Sqwgi7HDiVcTdVHB9ZmLaka3Hw=
+        b=pO2c9yErGH5yxb3Ukwwdk63W5FlItQC4vbfEBu+fEq5zyMS+j5ekqDVGQPQ3CGwrM
+         Vb5eqEq6X+hyOJjukiEsRNf101VCa2Gdbo2VF/pAvq0IsHJeHPvWG7QJ02nsaecopS
+         Lwb6AsFZGyRTnHLWNPbgosz+gUWBEjtqARwQWCEo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 140/277] selftests: net: Add tls config dependency for tls selftests
+Subject: [PATCH 5.16 086/285] Bluetooth: use memset avoid memory leaks
 Date:   Tue, 12 Apr 2022 08:29:03 +0200
-Message-Id: <20220412062946.085907479@linuxfoundation.org>
+Message-Id: <20220412062946.146360048@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,32 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-[ Upstream commit d9142e1cf3bbdaf21337767114ecab26fe702d47 ]
+[ Upstream commit d3715b2333e9a21692ba16ef8645eda584a9515d ]
 
-selftest net tls test cases need TLS=m without this the test hangs.
-Enabling config TLS solves this problem and runs to complete.
-  - CONFIG_TLS=m
+Use memset to initialize structs to prevent memory leaks
+in l2cap_ecred_connect
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/config | 1 +
+ net/bluetooth/l2cap_core.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 86ab429fe7f3..29fadd7512f7 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -43,4 +43,5 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
- CONFIG_NET_ACT_MIRRED=m
- CONFIG_BAREUDP=m
- CONFIG_IPV6_IOAM6_LWTUNNEL=y
-+CONFIG_TLS=m
- CONFIG_CRYPTO_SM4=y
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 4f8f37599962..e06baffc0dc6 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1436,6 +1436,7 @@ static void l2cap_ecred_connect(struct l2cap_chan *chan)
+ 
+ 	l2cap_ecred_init(chan, 0);
+ 
++	memset(&data, 0, sizeof(data));
+ 	data.pdu.req.psm     = chan->psm;
+ 	data.pdu.req.mtu     = cpu_to_le16(chan->imtu);
+ 	data.pdu.req.mps     = cpu_to_le16(chan->mps);
 -- 
 2.35.1
 

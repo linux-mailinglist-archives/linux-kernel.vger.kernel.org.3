@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24DA4FE939
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B660F4FE93D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiDLUFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        id S232901AbiDLUFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiDLUFZ (ORCPT
+        with ESMTP id S231586AbiDLUFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 16:05:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A373D4EDE1;
-        Tue, 12 Apr 2022 12:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649793351; x=1681329351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qpmveqwO7SyvzvBsb9MExzJEADb5MiyVxp91O/5Gxf8=;
-  b=EdFe8w8CoPxH9UAJRPDTU4Q91omFzZ4MNvklV485ddSVOIviahl03nJJ
-   HBp0V8JVr9sXaxIb5BxAU+E0sQ9Rb2RuVclttLxboNLPkP9lQ6/qqFhH9
-   HhZKtT6feYGIBYSmbmGAZXV7ESoKLQsrjT8UPfsaf5r7iZBqIXEuSwySZ
-   gp+R2c91h5rGz1nEO87hYIXfA8JTLEukR9Wnu6YtQ5mUXNyYRBbVKRad6
-   qzhdQrf565xLLamjZSVg9B/2cmVfODbw2jZbwpjYXrEEdFc9WuE911rdv
-   sVowzl7ieF9LZggDloTpRsxF3LOinaG7/9ufYdNB59CA9xpJa41iPF3KF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325397924"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="325397924"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 12:55:29 -0700
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="526640026"
-Received: from lpfafma-mobl.amr.corp.intel.com (HELO guptapa-desk) ([10.209.17.36])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 12:55:29 -0700
-Date:   Tue, 12 Apr 2022 12:55:27 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        dave.hansen@intel.com, Borislav Petkov <bp@suse.de>,
-        Neelima Krishnan <neelima.krishnan@intel.com>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>
-Subject: Re: [PATCH v2] x86/tsx: fix KVM guest live migration for tsx=on
-Message-ID: <20220412195527.xwpgk4mzyqccpqmo@guptapa-desk>
-References: <20220411180131.5054-1-jon@nutanix.com>
- <20220411200703.48654-1-jon@nutanix.com>
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB95458E70
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:55:57 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 618321F448EB;
+        Tue, 12 Apr 2022 20:55:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649793356;
+        bh=8v13VbpDfTPHFcIUff92WA/rM4Ce4zklxdlsVEskFgo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CpvT/5HWIg6oGGFy5RA4uOZ+HCrNo7pIe8W9MODaa6eFwTR6icCzJMpP7s9/fHeDD
+         iyWQZrpAeHAmtrYDuhIJJpZbG/1v5eCjQYe07/8toQjKO8zIosoZUCF35UZSmoWC8z
+         1jKMxdozcgfGNL7JxaMqk8mF/7QIpaTuO3D+g/3Muqb+KDrIp+2ov+NWGqpDKYxcIj
+         o++aVl/CSv3Tu8mqQWAQMPN4lh1a2SdJuekJf2E2+XIuISuwJ+7Pa4qx3wERkcGVbF
+         c1Jm4d1qWrlRqxzuPI2LWdExgR9c1KtOuirKx3P4NHBbFHmGyqEhlyainUOHrL7yPQ
+         ypvw/VyITheSA==
+Message-ID: <3076593e-9ff1-bb73-b05c-000a7a502caa@collabora.com>
+Date:   Tue, 12 Apr 2022 22:55:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220411200703.48654-1-jon@nutanix.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
+Content-Language: en-US
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+ <064d8958-a288-64e1-b2a4-c2302a456d5b@amd.com>
+ <a04733af-5ff1-a1b4-527d-68b28a037231@collabora.com>
+ <f6de2b9a-005f-d1f5-9818-cfbee2bdddc5@amd.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <f6de2b9a-005f-d1f5-9818-cfbee2bdddc5@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,24 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:07:01PM -0400, Jon Kohler wrote:
->Move automatic disablement for TSX microcode deprecation from tsx_init() to
->x86_get_tsx_auto_mode(), such that systems with tsx=on will continue to
->see the TSX CPU features (HLE, RTM) even on updated microcode.
+On 4/12/22 22:40, Andrey Grodzovsky wrote:
+> 
+> On 2022-04-12 14:20, Dmitry Osipenko wrote:
+>> On 4/12/22 19:51, Andrey Grodzovsky wrote:
+>>> On 2022-04-11 18:15, Dmitry Osipenko wrote:
+>>>> Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
+>>>> mutex when job is released, and thus, that code can sleep. This results
+>>>> into "BUG: scheduling while atomic" if locks are contented while job is
+>>>> freed. There is no good reason for releasing scheduler's jobs in IRQ
+>>>> context, hence use normal context to fix the trouble.
+>>>
+>>> I am not sure this is the beast Idea to leave job's sw fence signalling
+>>> to be
+>>> executed in system_wq context which is prone to delays of executing
+>>> various work items from around the system. Seems better to me to
+>>> leave the
+>>> fence signaling within the IRQ context and offload only the job
+>>> freeing or,
+>>> maybe handle rescheduling to thread context within drivers implemention
+>>> of .free_job cb. Not really sure which is the better.
+>> We're talking here about killing jobs when driver destroys context,
+>> which doesn't feel like it needs to be a fast path. I could move the
+>> signalling into drm_sched_entity_kill_jobs_cb() and use unbound wq, but
+>> do we really need this for a slow path?
+> 
+> 
+> You can't move the signaling back to drm_sched_entity_kill_jobs_cb
+> since this will bring back the lockdep splat that 'drm/sched: Avoid
+> lockdep spalt on killing a processes'
+> was fixing.
 
-This patch needs to be based on recent changes in TSX handling (due to
-Feb 2022 microcode update). These patches were recently merged in tip
-tree:
+Indeed
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+> I see your point and i guess we can go this way too. Another way would
+> be to add to
+> panfrost and msm job a  work_item and reschedule to thread context from
+> within their
+> .free_job callbacks but that probably to cumbersome to be justified here.
 
-Specifically these patches:
+Yes, there is no clear justification for doing that.
 
-   x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits [1]
-   x86/tsx: Disable TSX development mode at boot [2]
+> Andrey
+> 
+> 
+> Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
 
-Thanks,
-Pawan
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=258f3b8c3210b03386e4ad92b4bd8652b5c1beb3
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=400331f8ffa3bec5c561417e5eec6848464e9160
+Thank you!

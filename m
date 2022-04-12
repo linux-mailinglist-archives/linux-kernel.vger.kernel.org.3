@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24844FE6B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA3F4FE6B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358046AbiDLRTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S1358051AbiDLRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358024AbiDLRTZ (ORCPT
+        with ESMTP id S1350218AbiDLRTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:19:25 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E11517EE;
-        Tue, 12 Apr 2022 10:17:06 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id o2so11713819lfu.13;
-        Tue, 12 Apr 2022 10:17:06 -0700 (PDT)
+        Tue, 12 Apr 2022 13:19:37 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175D517FC;
+        Tue, 12 Apr 2022 10:17:10 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t25so33331111lfg.7;
+        Tue, 12 Apr 2022 10:17:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5V/Upaciu1rdVXXB4sSZScHsFUHEgkIrez1AIm0SE5U=;
-        b=bQXkiSJWoVjKgWuXDIoPnkrXITM+lUm9P/nH8r2bVjMU6GNqD9EBTU4mY/l/Qgngaz
-         xdSxV4sI+QtnyVa2HE7ehYdgyaHNK2WpcUhhDyybnxWsDT9vHmC5dbqAHnVexiHp0P1H
-         5QxdnfDhJziqv0HurjgJmdufcQwhohnkL13JMC5XpP+TXHq97PrRgsDfZ1sjLtUtmReZ
-         a0WBOP5tQY0XFBUoel6C54+VuQxmIp7U1IIPlfk3cHUtUeamn5+b79AYa4IBTD8+IXCW
-         p5lcFfxC4+TCqUdp7PXD4sy0SdsVYpWD+wAEIj1TLrmODUof4WimxDeX/2w1MBd8eVZM
-         6yXw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=URuYojkxV6WW5KduaZwbvyQpA/mj+9RW5XKOSq85tII=;
+        b=QYt1UC5IFgQjZ6sZdp7YECBm2g6b2CPrjGdVmz2lkTrU0xl+cv2UsXHIc8lKFFLGYw
+         HC3krv4I4D5hfLgh31O11/Twa1I0DudLbkuwGieLgQqy6Nxd2QUu5rf0IYT7jFQFI/Lr
+         zcSSIYsp5S5ugQ+NBSFDYs8MSvBiWTrjlNc8SqLTX8Mkt3jl6Ng/YNoD8s/IwpNynQvZ
+         FNWjwHR1dMq9TB5qXfhqZUdH3dKjiAgTyU5aMeEevKKJdO7mKA4Uh+cYeZjX3jdy5rc6
+         gg1vlpQ4+dnjx+tQRnf2UAtUiN+VFowZ64IlZknWiBDsRmBJndnf24Zjr5PCgVjJIWp/
+         7TbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5V/Upaciu1rdVXXB4sSZScHsFUHEgkIrez1AIm0SE5U=;
-        b=ZzwGznams4St2bHBw4zarh1KxCKds50JNqSgxQqTJNvKnMybP/9aBlOyPQ5ICMUc0Q
-         5BsHmouNkP5KdxHmMbxlxO1MQUOCvKv4sXRfkAx0xtdzwh7GtrN9BlEK6tOTHAF32BLN
-         nsYGCjW+fFfWlgw6cdYa6+PsAtcP8tRC91Ihu1Rv1Ot53gphYaCkyxFGl/XJotNF4ZGR
-         LgC+cx1qF6JzlygBCaeSTe3tERc7gH46HMCwDwTYsYrvrDt+q2XMHIYQQM31pPYB884q
-         +kzKqLYT7ayd1OnVGLxiiRCFKOyGZGuapLmQCSaq8dXcQCd4nhQBNpAK6mUaNqeNt8zt
-         DpUg==
-X-Gm-Message-State: AOAM532ivjD4yq8S9xK9f2l8JfA/M+yigyeD90yozYQ258JCEmXaZaGe
-        VfaN5HuyVuuzrn9rd+XyQ0FFT35emKYEOuNe
-X-Google-Smtp-Source: ABdhPJw/GHTfiH2lFKrIuL1p4Fi7m7wi79+u1/1ElPtvKctByA85Z8OdbXwaY0arrJ+sH9dUKJWfpA==
-X-Received: by 2002:a05:6512:402a:b0:45d:6b6a:a547 with SMTP id br42-20020a056512402a00b0045d6b6aa547mr26961226lfb.25.1649783825099;
-        Tue, 12 Apr 2022 10:17:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=URuYojkxV6WW5KduaZwbvyQpA/mj+9RW5XKOSq85tII=;
+        b=3D1fWZnUinLaB+sdEmFKbRWoo7uO6arpVHlsI2qcPs2n80az7aL8x//ZexB4to7Dcb
+         M1zGOWWFF09SSBlHVXEXaNzKWbXs26B+i1e1HBISRiNy+YsJKzNSG4CNP2zXIsNaMx5a
+         Oi7PyEFUvVYu6XfWUrRT1V1VnqQn9PUXGJwoHAQjxErmtn5k3qI+S7x/6HEYnQkQzcAZ
+         D3WKuTVqo8d+FpDs1oMhXUuENJ5HzxgyUwQt4paMDmJ7hr+DZ3lZclFF2aAdd8QyjB9e
+         EwEjtZydV+Ingsv9qbQ96dZRzJuL+wrms5EuF6vCTwgjhOpMxxAnk7+zllCPTxBfli6o
+         ikpQ==
+X-Gm-Message-State: AOAM5316wtQmVQLTq2VoqPH2bqXqnCefPZ5eBymSoctuN0k0xEamCIql
+        v8V9NX26Alb8eqi6VDbbKAo=
+X-Google-Smtp-Source: ABdhPJwh5oXNeEM8ojAPGe+8gV/lp2WDXe5fQBude/NLBc3HOVhukRH79ibF7/MEJpGMZ5ajzRsqrw==
+X-Received: by 2002:a05:6512:2214:b0:44a:348a:d6d with SMTP id h20-20020a056512221400b0044a348a0d6dmr25654107lfu.506.1649783829102;
+        Tue, 12 Apr 2022 10:17:09 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05651202e200b0046ba665cd6dsm723928lfq.141.2022.04.12.10.17.03
+        by smtp.gmail.com with ESMTPSA id m2-20020a05651202e200b0046ba665cd6dsm723928lfq.141.2022.04.12.10.17.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 10:17:04 -0700 (PDT)
+        Tue, 12 Apr 2022 10:17:08 -0700 (PDT)
 From:   Michal Orzel <michalorzel.eng@gmail.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -56,10 +56,12 @@ To:     Jens Axboe <axboe@kernel.dk>,
 Cc:     Michal Orzel <michalorzel.eng@gmail.com>,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v2 1/5] block/badblocks: Remove redundant assignments
-Date:   Tue, 12 Apr 2022 19:16:47 +0200
-Message-Id: <20220412171651.19812-1-michalorzel.eng@gmail.com>
+Subject: [PATCH v2 2/5] block/blk-map: Remove redundant assignment
+Date:   Tue, 12 Apr 2022 19:16:48 +0200
+Message-Id: <20220412171651.19812-2-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412171651.19812-1-michalorzel.eng@gmail.com>
+References: <20220412171651.19812-1-michalorzel.eng@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,10 +74,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of redundant assignments to a variable sectors from functions
-badblocks_check and badblocks_clear. This variable, that is a function
-parameter, is being assigned a value that is never read until the end of
-function.
+Get rid of redundant assignment to a variable ret from function
+bio_map_user_iov as it is being assigned a value that is never read.
+It is being re-assigned in the first instruction after the while loop
 
 Reported by clang-tidy [deadcode.DeadStores]
 
@@ -85,29 +86,26 @@ Changes since v1:
 -move the change into a separate patch
 -add analysis
 ---
- block/badblocks.c | 2 --
- 1 file changed, 2 deletions(-)
+ block/blk-map.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/block/badblocks.c b/block/badblocks.c
-index d39056630d9c..3afb550c0f7b 100644
---- a/block/badblocks.c
-+++ b/block/badblocks.c
-@@ -65,7 +65,6 @@ int badblocks_check(struct badblocks *bb, sector_t s, int sectors,
- 		s >>= bb->shift;
- 		target += (1<<bb->shift) - 1;
- 		target >>= bb->shift;
--		sectors = target - s;
- 	}
- 	/* 'target' is now the first block after the bad range */
+diff --git a/block/blk-map.c b/block/blk-map.c
+index c7f71d83eff1..fa72e63e18c2 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -260,10 +260,9 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
  
-@@ -345,7 +344,6 @@ int badblocks_clear(struct badblocks *bb, sector_t s, int sectors)
- 		s += (1<<bb->shift) - 1;
- 		s >>= bb->shift;
- 		target >>= bb->shift;
--		sectors = target - s;
- 	}
+ 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
  
- 	write_seqlock_irq(&bb->lock);
+-		if (unlikely(offs & queue_dma_alignment(rq->q))) {
+-			ret = -EINVAL;
++		if (unlikely(offs & queue_dma_alignment(rq->q)))
+ 			j = 0;
+-		} else {
++		else {
+ 			for (j = 0; j < npages; j++) {
+ 				struct page *page = pages[j];
+ 				unsigned int n = PAGE_SIZE - offs;
 -- 
 2.25.1
 

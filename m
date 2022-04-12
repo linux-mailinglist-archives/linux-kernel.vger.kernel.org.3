@@ -2,185 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F644FCE6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831054FCE73
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347381AbiDLFCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S1347434AbiDLFFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiDLFCr (ORCPT
+        with ESMTP id S231319AbiDLFEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:02:47 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F0333EBA;
-        Mon, 11 Apr 2022 22:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649739630; x=1681275630;
+        Tue, 12 Apr 2022 01:04:55 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3E344EF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649739758; x=1681275758;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=0Va5GC15+9yX0NVHlgC9BWfbjVJI29c8x4tVwgpdOCY=;
-  b=BuoUWzzTocqUtYC5TRZ6PspMcy+lKNvv2qJfXzRb2wLi3sg8Ic+WSpsL
-   bw3SATk+KSM0BtnnJFpEzJFw82yEg18gMLgtFmbT8HDKwsKC8bqs+jz9M
-   7EzFqFLqYh73hDaOcB8amJ26Qk6G8gSWINn06PyagRWVWKH+o4QBJ3LxC
-   c=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 22:00:30 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:00:29 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 22:00:28 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 22:00:22 -0700
-Date:   Tue, 12 Apr 2022 10:30:18 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-CC:     Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v13 2/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220412050018.GB2627@hu-pkondeti-hyd.qualcomm.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-3-git-send-email-quic_c_sanm@quicinc.com>
- <YlSVec5+SpdMZWCz@google.com>
- <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
+   mime-version:in-reply-to;
+  bh=15fDRfdM1HQDD3vhfb95CPUbHMkDSQ2QlfPPGarHgpc=;
+  b=bARGnJSJuTDp4AdIHlgTPM/iY/b8Slqtxw+W7WsK16PH2i7d8/+pRsPn
+   FDX7TVnFrZcRmrj5P4i+XFnYTk+3jgg1nMkhb/4xV2nyh+rC8L2O8eQul
+   2I5gkRtSLZkaQP06cJfN/zBOMlbb4XlzK7Y6Vk3p8td+CoYAbdjmjyWyJ
+   KgwQuKgRcOTe3UuelkSCEB53vurfSawkhJHM6x3QNwGCBQI1nPi2jgfbu
+   BS/g90jIQZuy7XH/EPSHaRZT7DMys00qDx8CTjkzCUkPzvbSUpo2p7D/H
+   8ImYutBXl+b+CInNo6tQmWtY+NMioaWCFAQaTASgXvzFYkTmrScB78iMt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322721825"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322721825"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:02:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="623114876"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Apr 2022 22:02:34 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne8fh-0002Wq-UY;
+        Tue, 12 Apr 2022 05:02:33 +0000
+Date:   Tue, 12 Apr 2022 13:01:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Bastian Hecht <hechtb@googlemail.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] mtd: rawnand: Fix return value check of
+ wait_for_completion_timeout
+Message-ID: <202204121253.NcZifMQi-lkp@intel.com>
+References: <20220412020834.7161-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220412020834.7161-1-linmq006@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandeep,
+Hi Miaoqian,
 
-On Tue, Apr 12, 2022 at 10:16:39AM +0530, Sandeep Maheswaram (Temp) wrote:
-> Hi Matthias,
-> 
-> On 4/12/2022 2:24 AM, Matthias Kaehlcke wrote:
-> >On Tue, Apr 12, 2022 at 12:46:50AM +0530, Sandeep Maheswaram wrote:
-> >>During suspend read the status of all port and set hs phy mode
-> >>based on current speed. Use this hs phy mode to configure wakeup
-> >>interrupts in qcom glue driver.
-> >>
-> >>Check wakep-source property for dwc3 core node to set the
-> >s/wakep/wakeup/
-> Okay. Will update in next version.
-> >
-> >>wakeup capability. Drop the device_init_wakeup call from
-> >>runtime suspend and resume.
-> >>
-> >>Also check during suspend if any wakeup capable devices are
-> >>connected to the controller (directly or through hubs), if there
-> >>are none set a flag to indicate that the PHY is powered
-> >>down during suspend.
-> >>
-> >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>---
-> >A per-patch change log would be really helpful for reviewers, even
-> >if it doesn't include older versions.
-> Okay. Will update in next version.
-> >
-> >>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> >>  drivers/usb/dwc3/core.h |  4 ++++
-> >>  drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
-> >>  3 files changed, 49 insertions(+), 13 deletions(-)
-> >>
-> >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>index 1170b80..effaa43 100644
-> >>--- a/drivers/usb/dwc3/core.c
-> >>+++ b/drivers/usb/dwc3/core.c
-> >>@@ -32,6 +32,7 @@
-> >>  #include <linux/usb/gadget.h>
-> >>  #include <linux/usb/of.h>
-> >>  #include <linux/usb/otg.h>
-> >>+#include <linux/usb/hcd.h>
-> >>  #include "core.h"
-> >>  #include "gadget.h"
-> >>@@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> >>  	platform_set_drvdata(pdev, dwc);
-> >>  	dwc3_cache_hwparams(dwc);
-> >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> >>  	spin_lock_init(&dwc->lock);
-> >>  	mutex_init(&dwc->mutex);
-> >>@@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  {
-> >>  	unsigned long	flags;
-> >>  	u32 reg;
-> >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> >>  	switch (dwc->current_dr_role) {
-> >>  	case DWC3_GCTL_PRTCAP_DEVICE:
-> >>@@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		dwc3_core_exit(dwc);
-> >>  		break;
-> >>  	case DWC3_GCTL_PRTCAP_HOST:
-> >>-		if (!PMSG_IS_AUTO(msg)) {
-> >>-			dwc3_core_exit(dwc);
-> >>-			break;
-> >>-		}
-> >>+		dwc3_check_phy_speed_mode(dwc);
-> >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> >>  		if (dwc->dis_u2_susphy_quirk ||
-> >>@@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> >>+
-> >>+		if (!PMSG_IS_AUTO(msg)) {
-> >>+			if (device_may_wakeup(dwc->dev) &&
-> >>+			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
-> >You did not answer my question on v12, reposting it:
-> >
-> >   Did you ever try whether you could use device_children_wakeup_capable() from
-> >   [1] instead of usb_wakeup_enabled_descendants()?
-> >
-> >   [1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> 
-> Sorry ..I have replied in mail yesterday but it is not showing up in
-> patchwork link.
-> 
-> Tried with  device_children_wakeup_capable(dwc->dev) instead of
-> usb_wakeup_enabled_descendants and it always returns true even
-> 
-> when no devices are connected.
-> 
+Thank you for the patch! Perhaps something to improve:
 
-What do you mean by when no devices are connected? There is always
-root hub connected and we should not power down the DWC3 here even
-when remote wakeup for root hub is enabled. Essentially
-usb_wakeup_enabled_descendants() returns true even without any
-physical devices connected.
+[auto build test WARNING on mtd/nand/next]
+[also build test WARNING on linus/master linux/master v5.18-rc2 next-20220411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-What does device_children_wakeup_capable() do? Sorry, I could not
-find this function definition.
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaoqian-Lin/mtd-rawnand-Fix-return-value-check-of-wait_for_completion_timeout/20220412-101006
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+config: hexagon-randconfig-r045-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121253.NcZifMQi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3de25b46a3f73a3e0031e5186eb4e2afa9098b46
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Miaoqian-Lin/mtd-rawnand-Fix-return-value-check-of-wait_for_completion_timeout/20220412-101006
+        git checkout 3de25b46a3f73a3e0031e5186eb4e2afa9098b46
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mtd/nand/raw/
 
-Thanks,
-Pavan
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mtd/nand/raw/sh_flctl.c:433:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (time_left == 0) {
+               ^~~~~~~~~~~~~~
+   drivers/mtd/nand/raw/sh_flctl.c:447:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/mtd/nand/raw/sh_flctl.c:433:2: note: remove the 'if' if its condition is always true
+           if (time_left == 0) {
+           ^~~~~~~~~~~~~~~~~~~~
+   drivers/mtd/nand/raw/sh_flctl.c:387:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +433 drivers/mtd/nand/raw/sh_flctl.c
+
+   377	
+   378	static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
+   379						int len, enum dma_data_direction dir)
+   380	{
+   381		struct dma_async_tx_descriptor *desc = NULL;
+   382		struct dma_chan *chan;
+   383		enum dma_transfer_direction tr_dir;
+   384		dma_addr_t dma_addr;
+   385		dma_cookie_t cookie;
+   386		uint32_t reg;
+   387		int ret;
+   388		unsigned long time_left;
+   389	
+   390		if (dir == DMA_FROM_DEVICE) {
+   391			chan = flctl->chan_fifo0_rx;
+   392			tr_dir = DMA_DEV_TO_MEM;
+   393		} else {
+   394			chan = flctl->chan_fifo0_tx;
+   395			tr_dir = DMA_MEM_TO_DEV;
+   396		}
+   397	
+   398		dma_addr = dma_map_single(chan->device->dev, buf, len, dir);
+   399	
+   400		if (!dma_mapping_error(chan->device->dev, dma_addr))
+   401			desc = dmaengine_prep_slave_single(chan, dma_addr, len,
+   402				tr_dir, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+   403	
+   404		if (desc) {
+   405			reg = readl(FLINTDMACR(flctl));
+   406			reg |= DREQ0EN;
+   407			writel(reg, FLINTDMACR(flctl));
+   408	
+   409			desc->callback = flctl_dma_complete;
+   410			desc->callback_param = flctl;
+   411			cookie = dmaengine_submit(desc);
+   412			if (dma_submit_error(cookie)) {
+   413				ret = dma_submit_error(cookie);
+   414				dev_warn(&flctl->pdev->dev,
+   415					 "DMA submit failed, falling back to PIO\n");
+   416				goto out;
+   417			}
+   418	
+   419			dma_async_issue_pending(chan);
+   420		} else {
+   421			/* DMA failed, fall back to PIO */
+   422			flctl_release_dma(flctl);
+   423			dev_warn(&flctl->pdev->dev,
+   424				 "DMA failed, falling back to PIO\n");
+   425			ret = -EIO;
+   426			goto out;
+   427		}
+   428	
+   429		time_left =
+   430		wait_for_completion_timeout(&flctl->dma_complete,
+   431					msecs_to_jiffies(3000));
+   432	
+ > 433		if (time_left == 0) {
+   434			dmaengine_terminate_all(chan);
+   435			dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
+   436			ret = -ETIMEDOUT;
+   437		}
+   438	
+   439	out:
+   440		reg = readl(FLINTDMACR(flctl));
+   441		reg &= ~DREQ0EN;
+   442		writel(reg, FLINTDMACR(flctl));
+   443	
+   444		dma_unmap_single(chan->device->dev, dma_addr, len, dir);
+   445	
+   446		/* ret > 0 is success */
+   447		return ret;
+   448	}
+   449	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

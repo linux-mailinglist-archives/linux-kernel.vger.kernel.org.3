@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513B44FDFBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025404FDF9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351973AbiDLMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S1352085AbiDLMID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352287AbiDLMC4 (ORCPT
+        with ESMTP id S1352419AbiDLMC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:02:56 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04C4F7F226;
-        Tue, 12 Apr 2022 04:00:02 -0700 (PDT)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 12 Apr 2022 18:59:49
- +0800 (GMT+08:00)
-X-Originating-IP: [10.181.215.200]
-Date:   Tue, 12 Apr 2022 18:59:49 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Paolo Abeni" <pabeni@redhat.com>
-Cc:     krzk@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, akpm@linux-foundation.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org
-Subject: Re: Re: [PATCH V2] drivers: nfc: nfcmrvl: fix double free bug in
- nfcmrvl_nci_unregister_dev()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <3daec73abc2f21809a8057b6a9729a70d2877231.camel@redhat.com>
-References: <20220410135214.74216-1-duoming@zju.edu.cn>
- <3daec73abc2f21809a8057b6a9729a70d2877231.camel@redhat.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 12 Apr 2022 08:02:58 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B18023F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:00:09 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ebf3746f87so101896377b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v2zi2giavZdO2HMDfrc7yK4A4aR/ngLsqIJD3W77LNs=;
+        b=b4v6GqYxeJjlJ1RbEQauF9GEIWimtem9DfI/ea+58BboREvflEEq0M6jErAnAoE93B
+         tYuy5mJ/r4ba02CczLRQd8TmQ7CK9KY/1RfIbv6VC/vU5FzAIsre+zMd2kHi6JeMfPOF
+         4fBT0F6bq2XsYtIaWNClXMgBpjhBJ9AS7/1/3qS47r77iP3+bY4fHCX9/uoSi8DAvTqG
+         k/jDnzm69qk4dXs/N7H146ttsPkrszUV5cVSdNFLc0OGWTX1yWcUZvfGu8L3L3E878+9
+         LZbWbMEWL706ypWKJhQXFIcNT9lcoZhbr2KfSuGPorip9ZdCMOWb/sRTFpPLw/dEIfsz
+         NCSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v2zi2giavZdO2HMDfrc7yK4A4aR/ngLsqIJD3W77LNs=;
+        b=giFUnQNUayzIX00N+ht1i8KtG3nhHpfpwHFAapeCM94gDy8nfL7FKJpuT29FfhD9cW
+         AuxHNYRi9wYOo0xC3YM1tHh+Seet3k58l6BSwYemVrKcBQWRMaiwkG2HrMTutA7/PMeC
+         iuxerKLv9Z9r3qIlNyJ6PT1SJRcd8q6NqogOLcnHQN5pjc1sNutRo1TEc4Qr7/5FGrs9
+         Qrjni4SDwdE8JGSgkmuIiEL8ItuIv3hfLJz/WdNJEdhNadFe2LuDatSMVWLAvZZ952IT
+         HtwOFFO6nW5T6LvKIHPpAB1ZdUB2AK+3APA5v4JnJrnSBEKqKygG58Hq7QT+YE6HlSRD
+         qOIw==
+X-Gm-Message-State: AOAM531cp+H5dq4vydWe4zmPSX8uKmXzRDhGSFstf0aP2Jg04soomqNH
+        nrU2yIY+Ttyblvz9M0SOqSGIeL8Mvcla5RCaZhJEKw==
+X-Google-Smtp-Source: ABdhPJwwqPNdGAbIJgV8Tw3Kjk4tMF7wq4HRILrI/52e/kefI6BLXOkH7KMdW6Q3t6UkDG+3QNDDwa3vKedsVrgXFAE=
+X-Received: by 2002:a0d:e743:0:b0:2eb:3106:9b32 with SMTP id
+ q64-20020a0de743000000b002eb31069b32mr30496791ywe.512.1649761208158; Tue, 12
+ Apr 2022 04:00:08 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <2ce990b6.a886.1801d6dfe04.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgCXDxelW1ViPcGbAQ--.34003W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4SAVZdtZJw9AABs2
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220404111204.935357-1-elver@google.com> <CACT4Y+YiDhmKokuqD3dhtj67HxZpTumiQvvRp35X-sR735qjqQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+YiDhmKokuqD3dhtj67HxZpTumiQvvRp35X-sR735qjqQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Apr 2022 13:00:00 +0200
+Message-ID: <CANpmjNPQ9DWzPRx4QWDnZatKGU96xLhb2qN-wgbD84zyZ6_Mig@mail.gmail.com>
+Subject: Re: [PATCH] signal: Deliver SIGTRAP on perf event asynchronously if blocked
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCk9uIFR1ZSwgMTIgQXByIDIwMjIgMDA6Mjg6MTYgLTA3MDAgUGFvbG8gQWJlbmkgd3Jv
-dGU6Cgo+ID4gVGhlcmUgaXMgYSBwb3RlbnRpYWwgZG91YmxlIGJ1ZyBpbiBuZmNtcnZsIHVzYiBk
-cml2ZXIgYmV0d2Vlbgo+ID4gdW5yZWdpc3RlciBhbmQgcmVzdW1lIG9wZXJhdGlvbi4KPiA+IAo+
-ID4gVGhlIHJhY2UgdGhhdCBjYXVzZSB0aGF0IGRvdWJsZSBmcmVlIGJ1ZyBjYW4gYmUgc2hvd24g
-YXMgYmVsb3c6Cj4gPiAKPiA+ICAgIChGUkVFKSAgICAgICAgICAgICAgICAgICB8ICAgICAgKFVT
-RSkKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IG5mY21ydmxfcmVzdW1lCj4gPiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgbmZjbXJ2bF9zdWJtaXRfYnVsa191cmIKPiA+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgbmZjbXJ2bF9idWxrX2NvbXBsZXRlCj4g
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICBuZmNtcnZsX25jaV9yZWN2X2ZyYW1l
-Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgbmZjbXJ2bF9md19kbmxkX3Jl
-Y3ZfZnJhbWUKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgcXVldWVfd29y
-awo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgICAgZndfZG5sZF9yeF93b3Jr
-Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgICAgZndfZG5sZF9vdmVyCj4g
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgICAgIHJlbGVhc2VfZmlybXdhcmUK
-PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgIGtmcmVlKGZ3KTsgLy8o
-MSkKPiA+IG5mY21ydmxfZGlzY29ubmVjdCAgICAgICAgICB8Cj4gPiAgbmZjbXJ2bF9uY2lfdW5y
-ZWdpc3Rlcl9kZXYgfAo+ID4gICBuZmNtcnZsX2Z3X2RubGRfYWJvcnQgICAgIHwKPiA+ICAgIGZ3
-X2RubGRfb3ZlciAgICAgICAgICAgICB8ICAgICAgICAgLi4uCj4gPiAgICAgaWYgKHByaXYtPmZ3
-X2RubGQuZncpICAgfAo+ID4gICAgIHJlbGVhc2VfZmlybXdhcmUgICAgICAgIHwKPiA+ICAgICAg
-a2ZyZWUoZncpOyAvLygyKSAgICAgICB8Cj4gPiAgICAgIC4uLiAgICAgICAgICAgICAgICAgICAg
-fCAgICAgICAgIHByaXYtPmZ3X2RubGQuZncgPSBOVUxMOwo+ID4gCj4gPiBXaGVuIG5mY21ydmwg
-dXNiIGRyaXZlciBpcyByZXN1bWluZywgd2UgZGV0YWNoIHRoZSBkZXZpY2UuCj4gPiBUaGUgcmVs
-ZWFzZV9maXJtd2FyZSgpIHdpbGwgZGVhbGxvY2F0ZSBmaXJtd2FyZSBpbiBwb3NpdGlvbiAoMSks
-Cj4gPiBidXQgZmlybXdhcmUgd2lsbCBiZSBkZWFsbG9jYXRlZCBhZ2FpbiBpbiBwb3NpdGlvbiAo
-MiksIHdoaWNoCj4gPiBsZWFkcyB0byBkb3VibGUgZnJlZS4KPiA+IAo+ID4gVGhpcyBwYXRjaCBy
-ZW9yZGVycyBuZmNtcnZsX2Z3X2RubGRfZGVpbml0KCkgYmVmb3JlIG5mY21ydmxfZndfZG5sZF9h
-Ym9ydCgpCj4gPiBpbiBvcmRlciB0byBwcmV2ZW50IGRvdWJsZSBmcmVlIGJ1Zy4gQmVjYXVzZSBk
-ZXN0cm95X3dvcmtxdWV1ZSgpIHdpbGwKPiA+IG5vdCByZXR1cm4gdW50aWwgYWxsIHdvcmsgaXRl
-bXMgYXJlIGZpbmlzaGVkLiBUaGUgcHJpdi0+ZndfZG5sZC5mdyB3aWxsCj4gPiBiZSBzZXQgdG8g
-TlVMTCBhZnRlciB3b3JrIGl0ZW1zIGFyZSBmaW5pc2hlZCBhbmQgZndfZG5sZF9vdmVyKCkgY2Fs
-bGVkIGJ5Cj4gPiBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldigpIHdpbGwgY2hlY2sgd2hldGhl
-ciBwcml2LT5md19kbmxkLmZ3IGlzIE5VTEwuCj4gPiBTbyB0aGUgZG91YmxlIGZyZWUgYnVnIGNv
-dWxkIGJlIHByZXZlbnRlZC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxk
-dW9taW5nQHpqdS5lZHUuY24+Cj4gCj4gVGhpcyBsb29rcyBsaWtlIGEgLW5ldCBjYW5kaWRhdGVz
-LCBjb3VsZCB5b3UgcGxlYXNlIGFkZCBhIHN1aXRhYmxlCj4gZml4ZXMgdGFnPwoKSSBmb3VuZCBt
-eSBwYXRjaCBpcyBub3QgYSBjb21wcmVoZW5zaXZlIGZpeCwgYmVjYXVzZSB0aGUgZndfZG5sZF90
-aW1lb3V0KCkKY291bGQgYWxzbyByZWFjaCBmd19kbmxkX292ZXIoKSwgd2hpY2ggbGVhZHMgdG8g
-ZG91YmxlIGZyZWUgYnVncyBhbW9uZyAKZndfZG5sZF9yeF93b3JrKCksIGZ3X2RubGRfdGltZW91
-dCgpIGFuZCBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldigpLgoKSSBzZW50IGEgcGF0Y2ggc2V0
-ICJGaXggZG91YmxlIGZyZWUgYnVncyBpbiBuZmNtcnZsIG1vZHVsZSIganVzdCBub3csIGFuZCBh
-ZGQKYSBmaXhlcyB0YWcgaW4gaXQuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
+On Tue, 5 Apr 2022 at 15:30, Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Mon, 4 Apr 2022 at 13:12, Marco Elver <elver@google.com> wrote:
+> > With SIGTRAP on perf events, we have encountered termination of
+> > processes due to user space attempting to block delivery of SIGTRAP.
+> > Consider this case:
+> >
+> >     <set up SIGTRAP on a perf event>
+> >     ...
+> >     sigset_t s;
+> >     sigemptyset(&s);
+> >     sigaddset(&s, SIGTRAP | <and others>);
+> >     sigprocmask(SIG_BLOCK, &s, ...);
+> >     ...
+> >     <perf event triggers>
+> >
+> > When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
+> > will force the signal, but revert back to the default handler, thus
+> > terminating the task.
+> >
+> > This makes sense for error conditions, but not so much for explicitly
+> > requested monitoring. However, the expectation is still that signals
+> > generated by perf events are synchronous, which will no longer be the
+> > case if the signal is blocked and delivered later.
+> >
+> > To give user space the ability to clearly distinguish synchronous from
+> > asynchronous signals, introduce siginfo_t::si_perf_flags and
+> > TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
+> > required in future).
+> >
+> > The resolution to the problem is then to (a) no longer force the signal
+> > (avoiding the terminations), but (b) tell user space via si_perf_flags
+> > if the signal was synchronous or not, so that such signals can be
+> > handled differently (e.g. let user space decide to ignore or consider
+> > the data imprecise).
+> >
+> > The alternative of making the kernel ignore SIGTRAP on perf events if
+> > the signal is blocked may work for some usecases, but likely causes
+> > issues in others that then have to revert back to interception of
+> > sigprocmask() (which we want to avoid). [ A concrete example: when using
+> > breakpoint perf events to track data-flow, in a region of code where
+> > signals are blocked, data-flow can no longer be tracked accurately.
+> > When a relevant asynchronous signal is received after unblocking the
+> > signal, the data-flow tracking logic needs to know its state is
+> > imprecise. ]
+> >
+> > Link: https://lore.kernel.org/all/Yjmn%2FkVblV3TdoAq@elver.google.com/
+> > Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
+> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Tested-by: Dmitry Vyukov <dvyukov@google.com>
+>
+> I've tested delivery of SIGTRAPs when it's blocked with sigprocmask,
+> it does not kill the process now.
+>
+> And tested the case where previously I was getting infinite recursion
+> and stack overflow (SIGTRAP handler causes another SIGTRAP recursively
+> before being able to detect recursion and return). With this patch it
+> can be handled by blocking recursive SIGTRAPs (!SA_NODEFER).
+
+Thanks!
+
+
+Should there be any further comments, please shout.
+
+Thanks,
+-- Marco

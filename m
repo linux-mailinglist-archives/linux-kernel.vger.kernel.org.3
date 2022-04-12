@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A944FDDD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549574FDDBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349427AbiDLL0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S241211AbiDLL0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351255AbiDLLZk (ORCPT
+        with ESMTP id S1352781AbiDLLZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:25:40 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6DA2B25A;
-        Tue, 12 Apr 2022 03:07:51 -0700 (PDT)
-Received: from zn.tnic (p200300ea97156149329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:6149:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9608C1EC04EC;
-        Tue, 12 Apr 2022 12:07:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649758065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=o3lXO1BKF/S5AzldA58rjm6HBnn56CuwTB6uiL2Y1Ag=;
-        b=MnAIT7Er8JwAM4b0GD9rgLkDQyjcarmya9EyILrxMvNLKZ0HrhcSex/LUG4qj5DimKo4xp
-        FUSPF+Ow9Iqn/lR66hENQLYudzalsAfqsYDdVNCEP3UQRqaJ97IASCFGZJ0A5WCoQftN+r
-        A6Lci8BJ2YNNbYwSUe5vjOAJqh086DM=
-Date:   Tue, 12 Apr 2022 12:07:46 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v7 3/6] mce: fix set_mce_nospec to always unmap the whole
- page
-Message-ID: <YlVPcrK4SSXyPx+Y@zn.tnic>
-References: <20220405194747.2386619-1-jane.chu@oracle.com>
- <20220405194747.2386619-4-jane.chu@oracle.com>
+        Tue, 12 Apr 2022 07:25:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52743275F5;
+        Tue, 12 Apr 2022 03:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649758109; x=1681294109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pC4oMCwiVQJHi/ouQqRKkAncvNZ0T2XkSEgopnaDXwk=;
+  b=OqL8dcoBrZnmxoe5yZIC/ltuXWtxg83ePG33r/EHXJxf8tP6EnxDekhy
+   CEqIOoaZyepPuarkxBzJcTHbNDYOCLDGOFqxe58dwJF/g2nBZKT5LZnsx
+   FzhKNTLDg1UqSHVky6EuqTEQoYEeEPbdf01chRgjxWuUR+IT4c9yPIwAM
+   cttTzqqZHru79BvdVzltwxGM9a6KGMURo8kAEMemmfJSgfWbzlGLMi4HO
+   rSKujCi3+Zaxe/hzRdNc8vYFfdv/jwRQ4onoUGMniAlYH5gPUaaFIIsX5
+   M5ZQauDlSbZesS/Tf7FbZ1ADhzsWAVTYv9nTgp1h7ujgAvkiFvTDzX5kk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262517009"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262517009"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:08:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="802174815"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:08:06 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 12 Apr 2022 13:08:04 +0300
+Date:   Tue, 12 Apr 2022 13:08:04 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH v2 0/9] PCI/PM: Improvements related to device
+ transitions into D0
+Message-ID: <YlVPhCLcFVbFPN36@lahna>
+References: <4419002.LvFx2qVVIh@kreacher>
+ <11975904.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405194747.2386619-4-jane.chu@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:47:44PM -0600, Jane Chu wrote:
-> The set_memory_uc() approach doesn't work well in all cases.
-> For example, when "The VMM unmapped the bad page from guest
-> physical space and passed the machine check to the guest."
-> "The guest gets virtual #MC on an access to that page.
->  When the guest tries to do set_memory_uc() and instructs
->  cpa_flush() to do clean caches that results in taking another
->  fault / exception perhaps because the VMM unmapped the page
->  from the guest."
+Hi Rafael,
 
-I presume this is quoting someone...
-
-> Since the driver has special knowledge to handle NP or UC,
-> let's mark the poisoned page with NP and let driver handle it
-
-s/let's mark/mark/
-
-> when it comes down to repair.
+On Mon, Apr 11, 2022 at 04:17:41PM +0200, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> Please refer to discussions here for more details.
-> https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
+> On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
+> > Hi All,
+> > 
+> > This series supersedes the one at
+> > 
+> > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
+> > 
+> > It addresses some potential issues related to PCI device transitions from
+> > low-power states into D0 and makes the related code more straightforward
+> > and so easier to follow.
+> > 
+> > Please refer to the patch changelogs for details.
 > 
-> Now since poisoned page is marked as not-present, in order to
-> avoid writing to a 'np' page and trigger kernel Oops, also fix
+> Here's a v2 of this patch series which is being sent, because I realized that
+> one of the checks in pci_power_up() added by patch [4/7] in v1 was redundant
+> and can be dropped, but that affected the last 3 patches in the series and
+> then I noticed that more improvements were possible and hence the new patches
+> [2/9].
 
-You can write it out: "non-present page..."
+I sent a few minor nits separately. The series looks good to me in
+general and certainly improves readability :)
 
-> pmem_do_write().
-> 
-> Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  arch/x86/kernel/cpu/mce/core.c |  6 +++---
->  arch/x86/mm/pat/set_memory.c   | 18 ++++++------------
->  drivers/nvdimm/pmem.c          | 31 +++++++------------------------
->  include/linux/set_memory.h     |  4 ++--
->  4 files changed, 18 insertions(+), 41 deletions(-)
-
-For such mixed subsystem patches we probably should talk about who picks
-them up, eventually...
-
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 981496e6bc0e..fa67bb9d1afe 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
->  
->  	pfn = mce->addr >> PAGE_SHIFT;
->  	if (!memory_failure(pfn, 0)) {
-> -		set_mce_nospec(pfn, whole_page(mce));
-> +		set_mce_nospec(pfn);
->  		mce->kflags |= MCE_HANDLED_UC;
->  	}
->  
-> @@ -1316,7 +1316,7 @@ static void kill_me_maybe(struct callback_head *cb)
->  
->  	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
->  	if (!ret) {
-> -		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->  		sync_core();
->  		return;
->  	}
-> @@ -1342,7 +1342,7 @@ static void kill_me_never(struct callback_head *cb)
->  	p->mce_count = 0;
->  	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
->  	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-> -		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->  }
-
-Both that ->mce_whole_page and whole_page() look unused after this.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

@@ -2,194 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80D34FCEFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A044FCF03
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348258AbiDLFfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S1348305AbiDLFkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiDLFfL (ORCPT
+        with ESMTP id S1348274AbiDLFkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:35:11 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A87034B81;
-        Mon, 11 Apr 2022 22:32:53 -0700 (PDT)
-Received: from localhost.localdomain (unknown [222.205.5.156])
-        by mail-app3 (Coremail) with SMTP id cC_KCgCn+cn2DlViAenxAQ--.60148S4;
-        Tue, 12 Apr 2022 13:32:39 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     krzk@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH] NFC: NULL out the dev->rfkill to prevent UAF
-Date:   Tue, 12 Apr 2022 13:32:08 +0800
-Message-Id: <20220412053208.28681-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        Tue, 12 Apr 2022 01:40:40 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B4B344F9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:38:23 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id p10so30229603lfa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ll/XCn4eT+mWamanV6qNk4+X9BXYFUW6oQ8MurM5uWk=;
+        b=fgDQtBam00x6nb34pezhr9TPAf1bSvMtM9E7e+7/EJFJ0nDM4iVhYJw44irfk6xwVf
+         a/rZdmHC8yHQm0YKrnUgWgtnnIIt+39mjQLGJjZI9WcmYGULNEqjt8ngp9lF9MPtXJid
+         4JXvtH94CmaNaA67XvUEW5RqzRlX4VH/u8qsY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ll/XCn4eT+mWamanV6qNk4+X9BXYFUW6oQ8MurM5uWk=;
+        b=cpTi9rnjeVVfchw622CRw89KiKPz1CdFB2WRK7qsdmkKQFiHQrKM8ZM3hzDeRFDhYJ
+         iv3QHuvRfph26XNvFXrBEyF36bBE6/59YhqbaYnaM5F0GgUoZlfQfayCdSWq0Rcy6N+g
+         mKpP4fTPuDWJnDyjcS7aTHTvwiOdwfkR3hmcIJ4hO0qCgxHQyDB8QPg33XLm5tliNfu3
+         HMpDCUE/cwIhbcI+bjiqWS8z0IJ/P10YcsqWK5ie5tR8Wh1JUejkdZKhbRtg3dwbRZ7Y
+         HElKjPv9xeTVjBW5hzeIrQTgrhuYLEwxXGOlcgIq377XqfsjfCRZSCfTbnqgI3SgkG8t
+         2rKA==
+X-Gm-Message-State: AOAM533enmS59AsYB5faaB0E+x52mPYCYh6muKIjis3BGPh1isKxNt4I
+        T97M6ScpAsiSPAwruhEAj4P9Aj8QEZklX2Uz
+X-Google-Smtp-Source: ABdhPJwLFgE+zzA0chNx5azY5TJw6VS/bLv9kADQhZTmXcHj5oaoawqqaH0X9Fh9MKR0VFmANZLmdQ==
+X-Received: by 2002:a19:8c4b:0:b0:44a:b6a4:4873 with SMTP id i11-20020a198c4b000000b0044ab6a44873mr23636723lfj.549.1649741901175;
+        Mon, 11 Apr 2022 22:38:21 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id j5-20020a196e05000000b0046ba00b5e88sm755475lfc.230.2022.04.11.22.38.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 22:38:20 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id x33so23844465lfu.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:38:19 -0700 (PDT)
+X-Received: by 2002:ac2:5483:0:b0:46b:9dc3:cdd4 with SMTP id
+ t3-20020ac25483000000b0046b9dc3cdd4mr8854787lfk.542.1649741899091; Mon, 11
+ Apr 2022 22:38:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgCn+cn2DlViAenxAQ--.60148S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4UuFy7Kry7ZryDGFWfKrg_yoWxGFW8pr
-        98KFWfCrWrX34UJw48J3WUGr4rAF4kAF1UJFs7CryUAF4DXF42yryUGrn0qF4UGr1ruFy7
-        JayDJr12yrZrAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <alpine.LRH.2.02.2204111023230.6206@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wijDnLH2K3Rh2JJo-SmWL_ntgzQCDxPeXbJ9A-vTF3ZvA@mail.gmail.com> <alpine.LRH.2.02.2204111236390.31647@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2204111236390.31647@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 11 Apr 2022 19:37:44 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wgsHK4pDDoEgCyKgGyo-AMGpy1jg2QbstaCR0G-v568yg@mail.gmail.com>
+Message-ID: <CAHk-=wgsHK4pDDoEgCyKgGyo-AMGpy1jg2QbstaCR0G-v568yg@mail.gmail.com>
+Subject: Re: [PATCH] stat: don't fail if the major number is >= 256
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device") 
-assumes the device_is_registered() in function nfc_dev_up() will help
-to check when the rfkill is unregistered. However, this check only 
-take effect when device_del(&dev->dev) is done in nfc_unregister_device().
-Hence, the rfkill object is still possible be dereferenced.
+On Mon, Apr 11, 2022 at 7:13 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+>
+> Should we perhaps hash the number, take 16 bits of the hash and hope
+> than the collision won't happen?
 
-The crash trace in latest kernel (5.18-rc2):
+That would "work", but I think it would be incredibly annoying to
+users with basically random results.
 
-[   68.760105] ==================================================================
-[   68.760330] BUG: KASAN: use-after-free in __lock_acquire+0x3ec1/0x6750
-[   68.760756] Read of size 8 at addr ffff888009c93018 by task fuzz/313
-[   68.760756]
-[   68.760756] CPU: 0 PID: 313 Comm: fuzz Not tainted 5.18.0-rc2 #4
-[   68.760756] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   68.760756] Call Trace:
-[   68.760756]  <TASK>
-[   68.760756]  dump_stack_lvl+0x57/0x7d
-[   68.760756]  print_report.cold+0x5e/0x5db
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  kasan_report+0xbe/0x1c0
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  __lock_acquire+0x3ec1/0x6750
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? register_lock_class+0x18d0/0x18d0
-[   68.760756]  lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? mutex_lock_io_nested+0x12c0/0x12c0
-[   68.760756]  ? nla_get_range_signed+0x540/0x540
-[   68.760756]  ? _raw_spin_lock_irqsave+0x4e/0x50
-[   68.760756]  _raw_spin_lock_irqsave+0x39/0x50
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  rfkill_blocked+0xe/0x60
-[   68.760756]  nfc_dev_up+0x84/0x260
-[   68.760756]  nfc_genl_dev_up+0x90/0xe0
-[   68.760756]  genl_family_rcv_msg_doit+0x1f4/0x2f0
-[   68.760756]  ? genl_family_rcv_msg_attrs_parse.constprop.0+0x230/0x230
-[   68.760756]  ? security_capable+0x51/0x90
-[   68.760756]  genl_rcv_msg+0x280/0x500
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? nfc_genl_dev_down+0xe0/0xe0
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  netlink_rcv_skb+0x11b/0x340
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? netlink_ack+0x9c0/0x9c0
-[   68.760756]  ? netlink_deliver_tap+0x136/0xb00
-[   68.760756]  genl_rcv+0x1f/0x30
-[   68.760756]  netlink_unicast+0x430/0x710
-[   68.760756]  ? memset+0x20/0x40
-[   68.760756]  ? netlink_attachskb+0x740/0x740
-[   68.760756]  ? __build_skb_around+0x1f4/0x2a0
-[   68.760756]  netlink_sendmsg+0x75d/0xc00
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  sock_sendmsg+0xdf/0x110
-[   68.760756]  __sys_sendto+0x19e/0x270
-[   68.760756]  ? __ia32_sys_getpeername+0xa0/0xa0
-[   68.760756]  ? fd_install+0x178/0x4c0
-[   68.760756]  ? fd_install+0x195/0x4c0
-[   68.760756]  ? kernel_fpu_begin_mask+0x1c0/0x1c0
-[   68.760756]  __x64_sys_sendto+0xd8/0x1b0
-[   68.760756]  ? lockdep_hardirqs_on+0xbf/0x130
-[   68.760756]  ? syscall_enter_from_user_mode+0x1d/0x50
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756] RIP: 0033:0x7f67fb50e6b3
-...
-[   68.760756] RSP: 002b:00007f67fa91fe90 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-[   68.760756] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f67fb50e6b3
-[   68.760756] RDX: 000000000000001c RSI: 0000559354603090 RDI: 0000000000000003
-[   68.760756] RBP: 00007f67fa91ff00 R08: 00007f67fa91fedc R09: 000000000000000c
-[   68.760756] R10: 0000000000000000 R11: 0000000000000293 R12: 00007ffe824d496e
-[   68.760756] R13: 00007ffe824d496f R14: 00007f67fa120000 R15: 0000000000000003
+I think the solution is to just put the bits in the high bits. Yes,
+they might be masked off if people use 'MAJOR()' to pick them out, but
+the common "compare st_dev and st_ino" model at least works. That's
+the one that wants unique numbers.
 
-[   68.760756]  </TASK>
-[   68.760756]
-[   68.760756] Allocated by task 279:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  __kasan_kmalloc+0x81/0xa0
-[   68.760756]  rfkill_alloc+0x7f/0x280
-[   68.760756]  nfc_register_device+0xa3/0x1a0
-[   68.760756]  nci_register_device+0x77a/0xad0
-[   68.760756]  nfcmrvl_nci_register_dev+0x20b/0x2c0
-[   68.760756]  nfcmrvl_nci_uart_open+0xf2/0x1dd
-[   68.760756]  nci_uart_tty_ioctl+0x2c3/0x4a0
-[   68.760756]  tty_ioctl+0x764/0x1310
-[   68.760756]  __x64_sys_ioctl+0x122/0x190
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756]
-[   68.760756] Freed by task 314:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  kasan_set_track+0x21/0x30
-[   68.760756]  kasan_set_free_info+0x20/0x30
-[   68.760756]  __kasan_slab_free+0x108/0x170
-[   68.760756]  kfree+0xb0/0x330
-[   68.760756]  device_release+0x96/0x200
-[   68.760756]  kobject_put+0xf9/0x1d0
-[   68.760756]  nfc_unregister_device+0x77/0x190
-[   68.760756]  nfcmrvl_nci_unregister_dev+0x88/0xd0
-[   68.760756]  nci_uart_tty_close+0xdf/0x180
-[   68.760756]  tty_ldisc_kill+0x73/0x110
-[   68.760756]  tty_ldisc_hangup+0x281/0x5b0
-[   68.760756]  __tty_hangup.part.0+0x431/0x890
-[   68.760756]  tty_release+0x3a8/0xc80
-[   68.760756]  __fput+0x1f0/0x8c0
-[   68.760756]  task_work_run+0xc9/0x170
-[   68.760756]  exit_to_user_mode_prepare+0x194/0x1a0
-[   68.760756]  syscall_exit_to_user_mode+0x19/0x50
-[   68.760756]  do_syscall_64+0x48/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> For me, the failure happens in cp_compat_stat (I have a 64-bit kernel). In
+> struct compat_stat in arch/x86/include/asm/compat.h, st_dev and st_rdev
+> are compat_dev_t which is 16-bit. But they are followed by 16-bit
+> paddings, so they could be extended.
 
-This patch just add the null out of dev->rfkill to make sure such
-dereference cannot happen. This is safe since the device_lock() already
-protect the check/write from data race.
+Ok, that actually looks like a bug.
 
-Fixes: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- net/nfc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+The compat structure should match the native structure.  Those "u16
+__padX" fields seem to be just a symptom of the bug.
 
-diff --git a/net/nfc/core.c b/net/nfc/core.c
-index dc7a2404efdf..67524982b89b 100644
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -1165,6 +1165,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
- 	if (dev->rfkill) {
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
-+		dev->rfkill = NULL;
- 	}
- 	device_unlock(&dev->dev);
- 
--- 
-2.35.1
+The only user of that compat_stat structure is the kernel, so that
+should just be fixed.
 
+Of course, who knows what the libraries have done, so user space could
+still have screwed up.
+
+> If you have a native 32-bit kernel, it uses 'struct stat' defined at the
+> beginning of arch/x86/include/uapi/asm/stat.h that has 32-bit st_dev and
+> st_rdev.
+
+Correct. It's literally the compat structure that has no basis in reality.
+
+Or it might be some truly ancient thing, but I really don't think so.
+
+Regardless, if we fill in the high 16 bits of that field, in the
+_worst_ case things will act as if your patch had been applied, but in
+any sane case you'll have that working "unique st_dev" thing.
+
+I'd love to actually use the better "modern" 64-bit encoding (12+20
+bits, or whatever it is we do, too lazy to look it up), but hey, that
+historical thing is what it is.
+
+Realistically, nobody uses it. Apparently your OpenWatcom use is also
+really just fairly theoretical, not some "this app is used by people
+and doesn't work with a filesystem on NVMe".
+
+                 Linus

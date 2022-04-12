@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F914FE2E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A0D4FE2E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352632AbiDLNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S1355933AbiDLNmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbiDLNlG (ORCPT
+        with ESMTP id S234919AbiDLNmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:41:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6738D2DD43
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:38:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 028E4618F7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F87AC385A1;
-        Tue, 12 Apr 2022 13:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649770728;
-        bh=If4KJxS1/AVf307xWkNZDRnv4N5rmqUpTEKgaBEdAsY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7esKDYjUXe0+ELyCyQfNazoS1s5EBVql/1k7Jpr+CgQLqu6dWGk98m30pJl1klQy
-         ON6oRW1/Eo4aCzDefZ6DUd49Y2WuuIKgbFul9C9XkctvAjZeoxxN087dlfTqM+rJ34
-         SoSxSmpIIaF4w4SAkmXbA3C9CPO9r5/Pm3PY905s=
-Date:   Tue, 12 Apr 2022 15:38:45 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] staging: r8188eu: don't set _SUCCESS again
-Message-ID: <YlWA5XkVDd9UJ81v@kroah.com>
-References: <20220409151557.207980-1-martin@kaiser.cx>
- <20220409151557.207980-3-martin@kaiser.cx>
- <20220411101834.GW3293@kadam>
- <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
+        Tue, 12 Apr 2022 09:42:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BE31528;
+        Tue, 12 Apr 2022 06:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649770784; x=1681306784;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=imgoy6oXMIaQRH/0xG58po19cKwE7PGh6Cx68gmrnn8=;
+  b=iBZgiXieIFqn0fX32cZGIlRZKFP5INhyCeNq/Q8ymNSW0mH+WdycG4FU
+   vcavCDeouziBj6M55TGlMdHePMH3jKalAP9qBS3Hhr2musuAXY0TCwyEn
+   imXRdnSsia/BfKrCbk3MWA05nkw0ox52hOBe52/v3z7vv2shdNVb+oX59
+   dnerFSBn91BLek74n7njX84RHuvnCpTsDmDyqRi2aiSD9M41xW7X57Eue
+   rkzNFaQRexm+2fygmto27bGd8U9L9YeSz99u0cWLgvPhTmk0Lg/F0hZzi
+   8HRUKQ/Cs8hKSgmar3xk4bUXcXYP5xhTqLnihwFrQ0k0YTC76hH4daMxv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242317030"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="242317030"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:39:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="590329640"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2022 06:39:36 -0700
+Date:   Tue, 12 Apr 2022 21:39:25 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
+ against RLIMIT_MEMLOCK
+Message-ID: <20220412133925.GG8013@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-5-chao.p.peng@linux.intel.com>
+ <Yk8L0CwKpTrv3Rg3@google.com>
+ <20220411153233.54ljmi7zgqovhgsn@box.shutemov.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411183918.4mw5x6tatslii7mg@viti.kaiser.cx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220411153233.54ljmi7zgqovhgsn@box.shutemov.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 08:39:18PM +0200, Martin Kaiser wrote:
-> Thus wrote Dan Carpenter (dan.carpenter@oracle.com):
+On Mon, Apr 11, 2022 at 06:32:33PM +0300, Kirill A. Shutemov wrote:
+> On Thu, Apr 07, 2022 at 04:05:36PM +0000, Sean Christopherson wrote:
+> > Hmm, shmem_writepage() already handles SHM_F_INACCESSIBLE by rejecting the swap, so
+> > maybe it's just the page migration path that needs to be updated?
 > 
-> > On Sat, Apr 09, 2022 at 05:15:51PM +0200, Martin Kaiser wrote:
-> > > ret is initialized to _SUCCESS, there's no need to set it again.
+> My early version prevented migration with -ENOTSUPP for
+> address_space_operations::migratepage().
 > 
-> > > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> 
-> > I liked the original code better.  Otherwise you wonder, is it
-> > intentional to return success on this path. 
-> 
-> You're right. The original code is easier to understand. It's not
-> obvious that this check should return _SUCCESS and the remaining ones
-> return _FAIL.
-> 
-> Greg, could you drop this patch or should I resend the series without
-> this patch?
+> What's wrong with that approach?
 
-Please resend without this one.
+I previously thought migratepage will not be called since we already
+marked the pages as UNMOVABLE, sounds not correct?
 
-thanks,
-
-greg k-h
+Thanks,
+Chao
+> 
+> -- 
+>  Kirill A. Shutemov

@@ -2,240 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE41C4FE49C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3324FE495
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356992AbiDLPXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S1346955AbiDLPXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiDLPXP (ORCPT
+        with ESMTP id S241540AbiDLPWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:23:15 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDCF193EA;
-        Tue, 12 Apr 2022 08:20:57 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bv19so15012805ejb.6;
-        Tue, 12 Apr 2022 08:20:57 -0700 (PDT)
+        Tue, 12 Apr 2022 11:22:23 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F0019C08
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:20:05 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id b17-20020a0568301df100b005ce0456a9efso13606906otj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=C8gQ8j7J3mbrIsGT3wWEzstlM9ttuL2uLWVEJNDgDtU=;
-        b=U+2B4AySb2AJW2WsQk97IM5PVdMqEYljSRFy82erPIMX3QrfKI1O2HFcCjEcuQ8H/i
-         i8lN7V9XWj2OKtHv4eIgfaAgZfDovMHl/774b/2Ola9SGfoFp1tUiocmVoga7QFRhjbR
-         49FyBgx3iiTGIw7tFkEHTRIkwTupDKn6t21lqk5FmXY9KB4H7KYSSQmttFCva51eXf3m
-         kIJt8ws/nZZt1W7AcMbDfVuhjRxUNBl31tjbogvESZqynC0A4xUDVp+bpho9EOfsGqXw
-         Awe6lgA/EYGMpeOB8NZJphejEtaCp3BETVMKyadcxAJfEAhOETHLMYOZiKJ/HnjZz9Op
-         R3+Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d+PIhawCGQKqSaXqYa/iZBL6dgcjK4qOFHlBoybLaRc=;
+        b=nBkGsJgmCNSS9IGV9Ejz9t/B5eC84S5Ir2h7JTfwxVIjXPKXhNFqWWY3C/RDP4ZWQ1
+         9LrWOl9ulQfyKZm2eTl72xbF+u5BqUyG32TzYFva4wgpBAn8/9SO4A2rbsxtRofgjR5M
+         7oXNc1wNuowc5gn+Y+uNdiUKPvB53Jrl0ZgHEMjT3ZZmOlrGxY9hU0HZvu+1+O39hndb
+         R950jUQa1n18bT8774XYDHdNoSjSpdr0wkOcZslivcyo4RXc6uzIJAHVEG+lkI+FFI3z
+         lNtV9hNKNv3mXH5uzS6b3iQ5sZV2PX9bseA4zwcCFMwuv7U1vE5jjSv1MfX0B00yshbt
+         ucyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=C8gQ8j7J3mbrIsGT3wWEzstlM9ttuL2uLWVEJNDgDtU=;
-        b=4X/fjbuSsDRddBCmPP3InYG868sOZWO/RueYAYXpD31QrABSlDYYwEufkxKx/CCnRs
-         d0B4dNyGWIv4Pz6FKTAotfF21WJwRNWXoMEtwN3ExwMbpYn1kjK7F+ur/mjZvkViKx9O
-         pysvY0Cko2rEdXYKgbNoWD82DpNAb559f/VdTmE9V8V5lSRwbqGHefmOwA/001vf4lSC
-         qDAPa0zFKNmoIG0FfrxLSug5Vx02KqBLjzFJuaowJ58FaDTgnYAyuJp/24tB1RG6Y8Ma
-         plxXjWQZK/1LfyiVKj6QPXsft+EV0yleOC34cTuV3hcyDhjPpLz3/McYZY18jcYRC6d2
-         f6wg==
-X-Gm-Message-State: AOAM533GaLiJcMPE2QsU1CKAu/wUxhW7Aor+BkI66iSlQRDKdteYphST
-        Eeundv6fTRN7Abbyl3LQLyk=
-X-Google-Smtp-Source: ABdhPJwmGQFhT5G6UCBt8KCHHVo0d5nomeF39Wy+JutCNEqwasMWoIS/uWxoC4C3MwExrMbUxxUWAA==
-X-Received: by 2002:a17:906:7947:b0:6da:892f:2503 with SMTP id l7-20020a170906794700b006da892f2503mr34135770ejo.710.1649776855747;
-        Tue, 12 Apr 2022 08:20:55 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id c4-20020a170906170400b006e87c7b8ffasm3676306eje.32.2022.04.12.08.20.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d+PIhawCGQKqSaXqYa/iZBL6dgcjK4qOFHlBoybLaRc=;
+        b=OIjBIr9MA3iOGCU7iyMCxOSXcq+Qh0I7YcUtzlTWHeuwbHuDGENUO7buOMQ+QsdhuQ
+         FWu5bKKcsF+5+g5FMY2JpW8hlL5BNk9KopVPT8Yy4WkaD3ARPpArhC5gL4TOftaLnyv2
+         K99rgv58AqiGE/7iUpXv+2LoQKS0geq9yw0bLRlS2mMieEnzfGyodxxuyHf3JrzP7n1i
+         qXYNOMiFyUqlnTGEGyQ5rj0FgCKuMJn/Gaaoy1GyP/0PO9HlNIu3MhiWsmCfo/9Q39Bw
+         KZoWIJLtmr+5FsArkTfmkNEooXSPP+YURCPQVzqjCp368PjejCDEn/HRQqXxaEuC54Et
+         80Cg==
+X-Gm-Message-State: AOAM532jSGOP23saJ9UO4JSGIq0kzeIe2wziehaKwbF2HFqVCMSUGnUE
+        c/g/c6x9DTTQF5hQ6eN4+cNhkg==
+X-Google-Smtp-Source: ABdhPJxL/d3Q0dZmV5j0Z6N1rGq3uWRPM11JQ58vEe8BmpfuWmxwJ3FaHYUM2BW476AU0Q0tFlyVIw==
+X-Received: by 2002:a05:6830:154c:b0:5e6:85c5:ed8b with SMTP id l12-20020a056830154c00b005e685c5ed8bmr13202510otp.253.1649776804685;
+        Tue, 12 Apr 2022 08:20:04 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id r17-20020a0568080ab100b002f9fef240f7sm3110364oij.50.2022.04.12.08.20.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:20:55 -0700 (PDT)
-Message-ID: <7550da4043ae45ffd58399f1ee696238a5689f25.camel@gmail.com>
-Subject: Re: [PATCH 1/1] scsi: ufs: remove redundant HPB unmap
-From:   Bean Huo <huobean@gmail.com>
-To:     Po-Wen Kao <powen.kao@mediatek.com>,
+        Tue, 12 Apr 2022 08:20:03 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 08:22:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
-        yohan.joung@sk.com, jason.li@sk.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Date:   Tue, 12 Apr 2022 17:20:54 +0200
-In-Reply-To: <781bfe33efb1e44d22f71e6711da7d15be9d3ab4.camel@gmail.com>
-References: <20220412073131.10644-1-powen.kao@mediatek.com>
-         <781bfe33efb1e44d22f71e6711da7d15be9d3ab4.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/6] dt-bindings: clock: qcom,gcc-sdm845: add
+ parent power domain
+Message-ID: <YlWZKprJuLJXd+r4@ripper>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411154347.491396-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Po-Wen,
-Previous email did not properly append the patch, this one is better
-for your review and test.
+On Mon 11 Apr 08:43 PDT 2022, Krzysztof Kozlowski wrote:
 
+> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
+> properly pass performance state from children.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-
-From: Bean Huo <beanhuo@micron.com>
-Date: Tue, 12 Apr 2022 16:56:34 +0200
-Subject: [PATCH] scsi: ufshpb: UFSHPB cleanup
-
-Remove redundant ufshpb_reset*, and merge into a single helper
-ufshbp_state_toggle().
-
-Delete the redundant Inactivation code of all HPB Regions in the cold
-boot stage,
-and add inactivating all HPB Regions when the HPP status changes from
-HPB_RESET
-to HBP_PRESENT.
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c |  4 ++--
- drivers/scsi/ufs/ufshpb.c | 38 +++++++++++++-------------------------
- drivers/scsi/ufs/ufshpb.h |  6 ++----
- 3 files changed, 17 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 0899d5b8cdad..d8b59d017ce4 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7223,7 +7223,7 @@ static int ufshcd_host_reset_and_restore(struct
-ufs_hba *hba)
- 	 * Stop the host controller and complete the requests
- 	 * cleared by h/w
- 	 */
--	ufshpb_reset_host(hba);
-+	ufshpb_state_toggle(hba, HPB_RESET);
- 	ufshcd_hba_stop(hba);
- 	hba->silence_err_logs =3D true;
- 	ufshcd_complete_requests(hba);
-@@ -8184,7 +8184,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba,
-bool init_dev_params)
- 	/* Enable Auto-Hibernate if configured */
- 	ufshcd_auto_hibern8_enable(hba);
-=20
--	ufshpb_reset(hba);
-+	ufshpb_state_toggle(hba, HPB_PRESENT);
- out:
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	if (ret)
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 3ca745ad616c..4ed156031413 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -2278,39 +2278,29 @@ static bool ufshpb_check_hpb_reset_query(struct
-ufs_hba *hba)
- 	return flag_res;
- }
-=20
--void ufshpb_reset(struct ufs_hba *hba)
-+void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE state)
- {
- 	struct ufshpb_lu *hpb;
- 	struct scsi_device *sdev;
-=20
- 	shost_for_each_device(sdev, hba->host) {
- 		hpb =3D ufshpb_get_hpb_data(sdev);
--		if (!hpb)
--			continue;
-=20
--		if (ufshpb_get_state(hpb) !=3D HPB_RESET)
-+		if (!hpb || ufshpb_get_state(hpb) !=3D state)
- 			continue;
-=20
--		ufshpb_set_state(hpb, HPB_PRESENT);
--	}
--}
--
--void ufshpb_reset_host(struct ufs_hba *hba)
--{
--	struct ufshpb_lu *hpb;
--	struct scsi_device *sdev;
--
--	shost_for_each_device(sdev, hba->host) {
--		hpb =3D ufshpb_get_hpb_data(sdev);
--		if (!hpb)
--			continue;
--
--		if (ufshpb_get_state(hpb) !=3D HPB_PRESENT)
--			continue;
--		ufshpb_set_state(hpb, HPB_RESET);
--		ufshpb_cancel_jobs(hpb);
--		ufshpb_discard_rsp_lists(hpb);
-+		ufshpb_set_state(hpb, state);
-+		if (state =3D=3D HPB_RESET) {
-+			ufshpb_cancel_jobs(hpb);
-+			ufshpb_discard_rsp_lists(hpb);
-+		}
- 	}
-+	/*
-+	 * Inactivating all HPB Region in device side in case HPB
-state changed
-+	 * from HPB_RESET to HPB_PRESENT
-+	 */
-+	if (!hpb->is_hcm && state =3D=3D HPB_PRESENT)
-+		ufshpb_issue_umap_all_req(hpb);
- }
-=20
- void ufshpb_suspend(struct ufs_hba *hba)
-@@ -2456,8 +2446,6 @@ static void ufshpb_hpb_lu_prepared(struct ufs_hba
-*hba)
- 			ufshpb_set_state(hpb, HPB_PRESENT);
- 			if ((hpb->lu_pinned_end - hpb-
->lu_pinned_start) > 0)
- 				queue_work(ufshpb_wq, &hpb->map_work);
--			if (!hpb->is_hcm)
--				ufshpb_issue_umap_all_req(hpb);
- 		} else {
- 			dev_err(hba->dev, "destroy HPB lu %d\n", hpb-
->lun);
- 			ufshpb_destroy_lu(hba, sdev);
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index b475dbd78988..a130f0b16c3e 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -288,8 +288,7 @@ static int ufshpb_prep(struct ufs_hba *hba, struct
-ufshcd_lrb *lrbp) { return 0;
- static void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb
-*lrbp) {}
- static void ufshpb_resume(struct ufs_hba *hba) {}
- static void ufshpb_suspend(struct ufs_hba *hba) {}
--static void ufshpb_reset(struct ufs_hba *hba) {}
--static void ufshpb_reset_host(struct ufs_hba *hba) {}
-+static void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE
-state) {}
- static void ufshpb_init(struct ufs_hba *hba) {}
- static void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device
-*sdev) {}
- static void ufshpb_destroy_lu(struct ufs_hba *hba, struct scsi_device
-*sdev) {}
-@@ -303,8 +302,7 @@ int ufshpb_prep(struct ufs_hba *hba, struct
-ufshcd_lrb *lrbp);
- void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
- void ufshpb_resume(struct ufs_hba *hba);
- void ufshpb_suspend(struct ufs_hba *hba);
--void ufshpb_reset(struct ufs_hba *hba);
--void ufshpb_reset_host(struct ufs_hba *hba);
-+void ufshpb_state_toggle(struct ufs_hba *hba, enum UFSHPB_STATE
-state);
- void ufshpb_init(struct ufs_hba *hba);
- void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device
-*sdev);
- void ufshpb_destroy_lu(struct ufs_hba *hba, struct scsi_device *sdev);
---=20
-2.34.1
-
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> index d902f137ab17..daf7906ebc40 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> @@ -43,6 +43,9 @@ properties:
+>    '#reset-cells':
+>      const: 1
+>  
+> +  power-domains:
+> +    maxItems: 1
+> +
+>    '#power-domain-cells':
+>      const: 1
+>  
+> -- 
+> 2.32.0
+> 

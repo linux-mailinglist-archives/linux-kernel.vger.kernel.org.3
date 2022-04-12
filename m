@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08554FD3C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D464FD3F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356119AbiDLHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S1357808AbiDLITN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351804AbiDLHM6 (ORCPT
+        with ESMTP id S1354953AbiDLH1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DBA526E5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649746374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U/dPMWGmVa2VGitxhMaMArDoPD5HmxhcdwxUBvot0a4=;
-        b=AG2FJ98LGgdmcuhQ1L4obAmn4ZxrhENYIKisiqGZs8pdd8pG2+ksiwZDFRE9bktF8mDOL7
-        au5oVg7749k26VLxbT2n3Ru6z7WySodOClK1f539jRf2r122CxIi/XoPeMQMictABqFiE+
-        XFTOlcUsKKD+ZK32R1XJLn53yXwyvDo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-IKXqwtzfNL-98Sef6oiujg-1; Tue, 12 Apr 2022 02:52:52 -0400
-X-MC-Unique: IKXqwtzfNL-98Sef6oiujg-1
-Received: by mail-wm1-f72.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so832251wmi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:52:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=U/dPMWGmVa2VGitxhMaMArDoPD5HmxhcdwxUBvot0a4=;
-        b=TR9+NzH0MSSE1HA/yD6uamWyLIH3z/genjRhaIGIY2HC/DYGN5L3dcTzn0Zwn/2gsf
-         pNDxprSLVg4EYXHEQaXbgFXOa+9rHiMmkFpSQk4MXJ9qpqtLGmnZvUEOISSauE8jHJr4
-         eWIpl1+FDiZKTFMVZmZpE/Kxl5rD3zM7AUJX/Heta0dLiu7yQShiwz3stglPqkmfkyMe
-         cMbQ4MXiSZPdqtDM2hVklm0ZMNjhjdNaF15CbpozDRe7nTc8AgQjOy8YbSp43b0Ta+8B
-         DI/6S9v8XifGSxA/r3KjxwCXx38HJghs4lporw9DaX7kLFlfWmfpEFc/LS1vFH3Sq/25
-         CtRw==
-X-Gm-Message-State: AOAM532TT6+KWOxEe3Zilxoa3N5rnDYhtSrldSKL54FirTmWR7z9PCt0
-        zdXWXYZoEevyZ+K6q/AuVtXNRmlddGjOOXvinR4kDd8E+2K2OdMYZ8oDS4XH2Qvluvhchpc309v
-        gaSW2hM/A5byqPMYOsXoH3loO
-X-Received: by 2002:a05:6000:1a85:b0:205:a4f1:dba4 with SMTP id f5-20020a0560001a8500b00205a4f1dba4mr28667631wry.381.1649746371704;
-        Mon, 11 Apr 2022 23:52:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxRdqWq4OunBlCF9pVcZ+V2AKilo/61MElc17XigOtbeWrzHJ6eV9gHe9ilgUGp8E5TVegvoQ==
-X-Received: by 2002:a05:6000:1a85:b0:205:a4f1:dba4 with SMTP id f5-20020a0560001a8500b00205a4f1dba4mr28667618wry.381.1649746371513;
-        Mon, 11 Apr 2022 23:52:51 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r17-20020a0560001b9100b00207afaa8987sm786520wru.27.2022.04.11.23.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 23:52:50 -0700 (PDT)
-Message-ID: <6e0fd8ac-5f17-44d9-97b7-285d4cbe6bcf@redhat.com>
-Date:   Tue, 12 Apr 2022 08:52:50 +0200
+        Tue, 12 Apr 2022 03:27:00 -0400
+Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D139247553
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:06:55 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1649747215; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=fvgEOeU8QI1dhGiQvK+nRA/UPCGXfJKOpsdVofoakIo=; b=NvGv8dEjAAp3+VikOfUObAxYtrnLW9QAOOGMeh/7ELD/XyzyaKSNVHMn0CATTdFo76WVcK5F
+ u9wE02pYhBY8/XWTK6F846LO3zgn7wIvmlyEZsLgctaLPYn6w9TX3TWgZS69ZaI3XrE968qv
+ 8oKDBGa99Hyrmw+lOyc8yQTX7qATSRxUX2SRLpl0AukHcM0HrRYcnOpVcoEhg+XBW9Gg8XLf
+ guUPLpQTfhqAERLhzrqrRMP2K04yuZ8UztSOAxKyxK5CWvjGRWd90eqzFaIMCW2hXqZ4TgOQ
+ rOTnEAZLAGJRtzG+Y3B+c/l+uEgFtfR/9cDyaAQYGJ27Kn/YhwB8FQ==
+X-Mailgun-Sending-Ip: 159.135.228.62
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from AN5Bruno (186-250-90-1.mhnet.com.br [186.250.90.1]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 625522b5487c9ee854845f89 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Tue, 12 Apr 2022 06:56:53 GMT
+Sender: codeagain@codeagain.dev
+Date:   Tue, 12 Apr 2022 03:56:43 -0300
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: [PATCH v2 2/3] staging: vme: Fix missing `depends on` at KConfig
+Message-ID: <aab0591ac73a54059621c722a63635d43a446fd2.1649721450.git.codeagain@codeagain.dev>
+References: <cover.1649721450.git.codeagain@codeagain.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 102/104] KVM: TDX: Add methods to ignore accesses
- to CPU state
-Content-Language: en-US
-To:     Xiaoyao Li <xiaoyao.li@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <3a278829a8617b86b36c32b68a82bc727013ace8.1646422845.git.isaku.yamahata@intel.com>
- <ec60ba8e-3ed9-1d06-d8c2-4db9529daf93@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <ec60ba8e-3ed9-1d06-d8c2-4db9529daf93@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r67e4p532boyyctc"
+Content-Disposition: inline
+In-Reply-To: <cover.1649721450.git.codeagain@codeagain.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/22 08:49, Xiaoyao Li wrote:
-> 
->> +void tdx_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
->> +{
->> +    kvm_register_mark_available(vcpu, reg);
->> +    switch (reg) {
->> +    case VCPU_REGS_RSP:
->> +    case VCPU_REGS_RIP:
->> +    case VCPU_EXREG_PDPTR:
->> +    case VCPU_EXREG_CR0:
->> +    case VCPU_EXREG_CR3:
->> +    case VCPU_EXREG_CR4:
->> +        break;
->> +    default:
->> +        KVM_BUG_ON(1, vcpu->kvm);
->> +        break;
->> +    }
->> +}
-> 
-> Isaku,
-> 
-> We missed one case that some GPRs are accessible by KVM/userspace for 
-> TDVMCALL exit.
 
-If a register is not in the VMX_REGS_LAZY_LOAD_SET it will never be 
-passed to tdx_cache_reg.  As far as I understand those TDVMCALL 
-registers do not include either RSP or RIP.
+--r67e4p532boyyctc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+Originally, the KConfig file for VME_USER
+("drivers/staging/vme/devices/Kconfig") was sourced at
+"drivers/vme/boards/KConfig". It misses a `depends on` line for VME_BUS,
+which went unnoticeable for a menuconfig user who wouldn't be able to
+select it through this interface without selecting the CONFIG_VME_BUS
+option because it was nested on its menu.
 
+A patch to move appropriately this driver to the "Staging" submenu[1],
+however, unveiled this missing `depends on` line, since it moved the
+`source` line for VME_USER's KConfig to somewhere else, allowing it to
+be compiled without the support for VME_BRIDGE. While it compiles fine
+and seems to initialize the driver fine[2], it seems to make no sense
+having VME_USER without VME_BUS.
+
+This patches addresses it by adding the VME_BUS to the `depends on` line
+at "drivers/staging/vme/devices/Kconfig".
+
+CHANGELOG:
+v2:
+- Added this patch to the patchset
+
+REFERENCES AND NOTES
+[1] First commit in this patch, originally submitted at
+https://lore.kernel.org/linux-staging/3fbc5325e94b9ae0666a1f5a56a4e5372bfce=
+a1d.camel@codeagain.dev/T/#t
+[2] Tested both as module and as built-in.
+
+Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+---
+ drivers/staging/vme/devices/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/vme/devices/Kconfig b/drivers/staging/vme/devi=
+ces/Kconfig
+index 5651bb16b28b..e8b4461bf27f 100644
+--- a/drivers/staging/vme/devices/Kconfig
++++ b/drivers/staging/vme/devices/Kconfig
+@@ -3,7 +3,7 @@ comment "VME Device Drivers"
+=20
+ config VME_USER
+ 	tristate "VME user space access driver"
+-	depends on STAGING
++	depends on STAGING && VME_BUS
+ 	help
+ 	  If you say Y here you want to be able to access a limited number of
+ 	  VME windows in a manner at least semi-compatible with the interface
+--=20
+2.35.1
+
+
+--r67e4p532boyyctc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYlUiqwAKCRAZtd3tyEY2
+kh7WAQDnPJNUjIPGKOS6iN5nijD+bLt8dlNylHDXGzcDp/x21QEAttFRYM5TnNEi
+Wn7P5NtTX55JavXFp1wmv2lUDtDWZww=
+=So4f
+-----END PGP SIGNATURE-----
+
+--r67e4p532boyyctc--

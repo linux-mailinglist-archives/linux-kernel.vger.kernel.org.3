@@ -2,124 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD34FCCA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AB34FCCB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245405AbiDLCuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S1343616AbiDLCxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiDLCuO (ORCPT
+        with ESMTP id S231991AbiDLCxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:50:14 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B5120F78
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:47:57 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KcqrT1ZZ7z1HBn2;
-        Tue, 12 Apr 2022 10:47:21 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 10:47:53 +0800
-Subject: Re: [PATCH 3/3] mm/memory-failure.c: dissolve truncated hugetlb page
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220407130352.15618-1-linmiaohe@huawei.com>
- <20220407130352.15618-4-linmiaohe@huawei.com>
- <20220411131344.GA3188122@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <bc3284a7-1e02-996e-10b5-dd7cc983134e@huawei.com>
-Date:   Tue, 12 Apr 2022 10:47:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 11 Apr 2022 22:53:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DF224940
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 19:51:29 -0700 (PDT)
+X-UUID: 319cdbb73b62483081cbc008a92fbc5f-20220412
+X-UUID: 319cdbb73b62483081cbc008a92fbc5f-20220412
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 300483693; Tue, 12 Apr 2022 10:51:25 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Apr 2022 10:51:23 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Apr 2022 10:51:23 +0800
+Message-ID: <5a90b20570ecacf457f68da7a106d3b2f8c2269e.camel@mediatek.com>
+Subject: Re: [PATCH 1/1] sched/pelt: Refine the enqueue_load_avg calculate
+ method
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 12 Apr 2022 10:51:23 +0800
+In-Reply-To: <CAKfTPtAyhc-tAWXmXcHstmiBSMjj5GENizX__KRDab28NRum1A@mail.gmail.com>
+References: <20220411061702.22978-1-kuyo.chang@mediatek.com>
+         <CAKfTPtAyhc-tAWXmXcHstmiBSMjj5GENizX__KRDab28NRum1A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <20220411131344.GA3188122@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/11 21:13, HORIGUCHI NAOYA(堀口 直也) wrote:
-> Hi Miaohe,
+On Mon, 2022-04-11 at 10:39 +0200, Vincent Guittot wrote:
+> On Mon, 11 Apr 2022 at 08:17, Kuyo Chang <kuyo.chang@mediatek.com>
+> wrote:
+> > 
+> > From: kuyo chang <kuyo.chang@mediatek.com>
+> > 
+> > I meet the warning message at cfs_rq_is_decayed at below code.
+> > 
+> > SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+> >                     cfs_rq->avg.util_avg ||
+> >                     cfs_rq->avg.runnable_avg)
+> > 
+> > Following is the calltrace.
+> > 
+> > Call trace:
+> > __update_blocked_fair
+> > update_blocked_averages
+> > newidle_balance
+> > pick_next_task_fair
+> > __schedule
+> > schedule
+> > pipe_read
+> > vfs_read
+> > ksys_read
+> > 
+> > After code analyzing and some debug messages, I found it exits a
+> > corner
+> > case at attach_entity_load_avg which will cause load_sum is zero
+> > and
+> > load_avg is not.
+> > Consider se_weight is 88761 according by sched_prio_to_weight
+> > table.
+> > And assume the get_pelt_divider() is 47742, se->avg.load_avg is 1.
+> > By the calculating for se->avg.load_sum as following will become
+> > zero
+> > as following.
+> > se->avg.load_sum =
+> >         div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se));
+> > se->avg.load_sum = 1*47742/88761 = 0.
 > 
-> On Thu, Apr 07, 2022 at 09:03:52PM +0800, Miaohe Lin wrote:
->> If me_huge_page meets a truncated huge page, hpage won't be dissolved
+> The root problem is there, se->avg.load_sum must not be null if
+> se->avg.load_avg is not null because the correct relation between
+> _avg
+> and _sum is:
 > 
-> I might not understand correctly what "truncated huge page" means.  If it
-> means the page passed to me_huge_page() and truncate_error_page() is called
-> on it, the else branch you're trying to update is not chosen, so maybe it
-> sounds irrelevant to me?  Could you elaborate it or share the procedure to
-> reproduce the case you care about?
+> load_avg = weight * load_sum / divider.
+> 
+> so the fix should be attach_entity_load_avg() and probably the below
+> is enough
+> 
+> se->avg.load_sum = div_u64(se->avg.load_avg * se->avg.load_sum,
+> se_weight(se)) + 1;
 
-Sorry for making confusing. What 'truncated hugetlb page' means is that a hugepage is
-truncated but still on the way to free. So HPageMigratable is still set and we might
-come across it here. Does this make sense for you?
+Thanks for your kindly suggestion.
++1 would make the calcuation for load_sum may be overestimate?
+How about the below code make sense for fix the corner case?
 
-> 
->> even if we hold the last refcnt. It's because the truncated huge page
->> has NULL page_mapping while it's not anonymous page too. Thus we lose
->> the last chance to dissolve it into buddy to save healthy subpages.
->> Remove PageAnon check to handle these huge pages too.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/memory-failure.c | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index bd563f47630c..3f054dbb169d 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -1046,8 +1046,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->>  		 * hugepage, so we can free and dissolve it into buddy to
->>  		 * save healthy subpages.
->>  		 */
->> -		if (PageAnon(hpage))
->> -			put_page(hpage);
-> 
-> I think that the reason of this "if (PageAnon(hpage))" is to not remove
-> hugepages for hugetlbfs files.  Unlike anonymous hugepage, it can be
-> accessed from file after error handling, so we can't simply dissolve it
-> because otherwise another process reading the hugepage sees zeroed one
-> without knowing the memory error.
+--- 
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3832,7 +3832,8 @@ static void attach_entity_load_avg(struct cfs_rq
+*cfs_rq, struct sched_entity *s
+ 	se->avg.load_sum = divider;
+ 	if (se_weight(se)) {
+ 		se->avg.load_sum =
+-			div_u64(se->avg.load_avg * se->avg.load_sum,
+se_weight(se));
++			(se->avg.load_avg * se->avg.load_sum >
+se_weight(se)) ?
++			div_u64(se->avg.load_avg * se->avg.load_sum,
+se_weight(se)) : 1;
+ 	}
+ 
+ 	enqueue_load_avg(cfs_rq, se);
+-- 
+2.18.0
 
-In this branch, we have precondition that page_mapping is NULL. So it can't be hugepages
-for hugetlbfs files. It should be anonymous hugepages in most cases. If it's not anonymous
-hugepages too, i.e. (!page_mapping(hpage) && !PageAnon(hpage)), it could be free hugepages
-or 'truncated hugetlb page'. But we have already handled the free hugepages case, it should
-be 'truncated hugetlb page' here. Since it's on the way to free, we should put the refcnt
-to increase the chance that we can free and dissolve it into buddy to save healthy subpages.
-Or am I miss something?
 
-Thanks!
-
-> 
-> Thanks,
-> Naoya Horiguchi
-> 
->> +		put_page(hpage);
->>  		if (__page_handle_poison(p)) {
->>  			page_ref_inc(p);
->>  			res = MF_RECOVERED;
->> -- 
->> 2.23.0
+> > 
+> > After enqueue_load_avg code as below.
+> > cfs_rq->avg.load_avg += se->avg.load_avg;
+> > cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > 
+> > Then the load_sum for cfs_rq will be 1 while the load_sum for
+> > cfs_rq is 0.
+> > So it will hit the warning message.
+> > 
+> > After all, I refer the following commit patch to do the similar
+> > thing at
+> > enqueue_load_avg.
+> > sched/pelt: Relax the sync of load_sum with load_avg
+> > 
+> > After long time testing, the kernel warning was gone and the system
+> > runs
+> > as well as before.
+> > 
+> > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+> > ---
+> >  kernel/sched/fair.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index d4bd299d67ab..30d8b6dba249 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -3074,8 +3074,10 @@ account_entity_dequeue(struct cfs_rq
+> > *cfs_rq, struct sched_entity *se)
+> >  static inline void
+> >  enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> >  {
+> > -       cfs_rq->avg.load_avg += se->avg.load_avg;
+> > -       cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > +       add_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+> > +       add_positive(&cfs_rq->avg.load_sum, se_weight(se) * se-
+> > >avg.load_sum);
+> > +       cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
+> > +                                         cfs_rq->avg.load_avg *
+> > PELT_MIN_DIVIDER);
+> >  }
+> > 
+> >  static inline void
+> > --
+> > 2.18.0
+> > 
 

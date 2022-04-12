@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216DE4FE04E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BB44FE05C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiDLMeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S242242AbiDLMdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245744AbiDLMdS (ORCPT
+        with ESMTP id S1347101AbiDLMdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 08:33:18 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AA95A149;
-        Tue, 12 Apr 2022 04:51:12 -0700 (PDT)
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284ED5AA56;
+        Tue, 12 Apr 2022 04:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=YkcanMudUrrWwtCRX80sZvYWSgv9wqc6arRCEIrUa2c=; b=DowUsHVCTdJrX61F02nRZe9+b1
-        vNUfGe0yV+4Gzy1fW/WyyLmCt+3yzKOR+1G3Q/mwporGdR2QhiTPVQsbaPx2xGJx4aNxRBG+pB6mP
-        zAyi8rBTahlEne/2Q/93AccIh/eeEaAax0r5+f5dWt28KuMaVoJoRlAFE3Ox78/OfEyEDwZNKOcax
-        fuagcO9tpllfhKn3JPwfPiXWcVDJ9w8gUec2yTVDr44746nTzu3/ePQ89qUpewRnkjBbFT0hHQkPc
-        zSiO5MGuCeh7ZseCU884xHhe6M9a2VJ9/zadm27LK623qf1FaUHizlZlpPHASecxFSj4EXbW/UBas
-        v4HvTStQ==;
+        bh=bZGwtg721/vos0v+4uWN1TQ12j+Iplb0bq7iDFHye/U=; b=dFPxbnB71bTRSTVuJtilE/1Cy+
+        pF3Gg/tnO5Yaa257/TYB+1PuOxGO7dXb+HiqAXOjKqGB0bE+oSkjGgOUwV80zae3LxboSniNCPLjC
+        wShzx367Wa+MXUMwD+tnH5DmS06luLsPyDhuhebcAct4LI2aiGrfqaG93rQwXEgLg+MGZXdRI/vZU
+        S1Nw2RNa+QQtcwK6RLevnd0W5UqBjbEp8bM2z9dw5K7mtNAgDveiCTCjlAbSYnaDtof8b3iaY+uq+
+        GVo6jyMCf7PbgOhA2U7psb2iA/Z8L4JlyQZd7zULW/CVqATvYUtjcGlK3KBiHp0xQuHzpLBKWpkfM
+        FdPpM4Ww==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neF2o-004JiY-Ih; Tue, 12 Apr 2022 11:50:51 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neF2o-00DILC-Jg; Tue, 12 Apr 2022 11:50:50 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6238D3002DE;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B152300C26;
         Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 4399C3017A05D; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
-Message-ID: <20220412114853.842942162@infradead.org>
+        id 46DFD3017A05F; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Message-ID: <20220412114853.904077681@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 12 Apr 2022 13:44:23 +0200
+Date:   Tue, 12 Apr 2022 13:44:24 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
@@ -46,7 +46,7 @@ To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         bigeasy@linutronix.de, Will Deacon <will@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
+Subject: [PATCH 3/5] freezer: Have {,un}lock_system_sleep() save/restore flags
 References: <20220412114421.691372568@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,275 +60,438 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently ptrace_check_attach() / ptrace_freeze_traced() rely on
-specific scheduler behaviour to freeze the task. In specific, it
-relies on there not being any blocking behaviour between:
+Rafael explained that the reason for having both PF_NOFREEZE and
+PF_FREEZER_SKIP is that {,un}lock_system_sleep() is callable from
+kthread context that has previously called set_freezable().
 
-  set_special_state(TASK_TRACED);
-  ...
-  schedule();
-
-specifically it relies on being able to change p->__state between
-those two points (to clear/set TASK_WAKEKILL) and relies on
-wait_task_inactive() to ensure the task has hit that schedule().
-
-However, PREEMPT_RT is breaking this by introducing sleeping
-spinlocks. The consequence of sleeping spinlocks is that p->__state
-can change (also see p->saved_state) and that a task can be inactive
-(off the runqueue) and *NOT* be at the schedule() as expected.
-
-That is, both the p->__state and wait_task_inactive() usage are
-broken.
-
-In order to avoid having to deal with p->saved_state, flip the
-wait_task_inactive() and p->__state poking. That is, first wait for
-the victim to be in schedule() and then poke p->__state, which is in a
-known state by then.
-
-The only problem with this is that it's possible to race with a
-concurrent ptrace_detach()+pthread_attach() landing back in the same
-situation as before. To deal with this, compare the task's nvcsw
-count to make sure there is no scheduling between the initial
-quiescence and the final task state poking.
+In preparation of merging the flags, have {,un}lock_system_slee() save
+and restore current->flags.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/ptrace.c     |  175 +++++++++++++++++++++++++++++++++++++++++-----------
- kernel/sched/core.c |    5 -
- 2 files changed, 141 insertions(+), 39 deletions(-)
+ drivers/acpi/x86/s2idle.c         |   12 ++++++++----
+ drivers/scsi/scsi_transport_spi.c |    7 ++++---
+ include/linux/suspend.h           |    8 ++++----
+ kernel/power/hibernate.c          |   35 ++++++++++++++++++++++-------------
+ kernel/power/main.c               |   16 ++++++++++------
+ kernel/power/suspend.c            |   12 ++++++++----
+ kernel/power/user.c               |   24 ++++++++++++++----------
+ 7 files changed, 70 insertions(+), 44 deletions(-)
 
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -186,31 +186,13 @@ static bool looks_like_a_spurious_pid(st
- }
+--- a/drivers/acpi/x86/s2idle.c
++++ b/drivers/acpi/x86/s2idle.c
+@@ -538,12 +538,14 @@ void acpi_s2idle_setup(void)
  
- /*
-- * Ensure that nothing can wake it up, even SIGKILL
-+ * Ptrace operation is complete, re-allow TASK_WAKEKILL.
-  *
-- * A task is switched to this state while a ptrace operation is in progress;
-- * such that the ptrace operation is uninterruptible.
-+ * Unfreeze is easy, since ptrace_check_attach() guarantees the task is off the
-+ * runqueue and __TASK_TRACED. If it's still __TASK_TRACED holding
-+ * sighand->siglock serializes against ptrace_signal_wake_up() and we can
-+ * simply put TASK_WAKEKILL back (or wake because there's a pending fatal).
-  */
--static bool ptrace_freeze_traced(struct task_struct *task)
--{
--	bool ret = false;
--
--	/* Lockless, nobody but us can set this flag */
--	if (task->jobctl & JOBCTL_LISTENING)
--		return ret;
--
--	spin_lock_irq(&task->sighand->siglock);
--	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
--	    !__fatal_signal_pending(task)) {
--		task->jobctl |= JOBCTL_TRACED_FROZEN;
--		WRITE_ONCE(task->__state, __TASK_TRACED);
--		ret = true;
--	}
--	spin_unlock_irq(&task->sighand->siglock);
--
--	return ret;
--}
--
- static void ptrace_unfreeze_traced(struct task_struct *task)
+ int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
  {
- 	if (READ_ONCE(task->__state) != __TASK_TRACED)
-@@ -234,6 +216,94 @@ static void ptrace_unfreeze_traced(struc
- 	spin_unlock_irq(&task->sighand->siglock);
- }
++	unsigned int sleep_flags;
++
+ 	if (!lps0_device_handle || sleep_no_lps0)
+ 		return -ENODEV;
  
-+/*
-+ * In order to start a ptrace operation the victim task must be off the
-+ * runqueue in state __TASK_TRACED.
-+ */
-+static int __ptrace_freeze_cond(struct task_struct *p)
-+{
-+	if (!task_is_traced(p))
-+		return -ESRCH;
-+
-+	if (task_curr(p))
-+		return -EINPROGRESS;
-+
-+	if (p->on_rq)
-+		return -EWOULDBLOCK;
-+
-+	/*
-+	 * Due to PREEMPT_RT it is possible the task is blocked on a spinlock
-+	 * in state TASK_RTLOCK_WAIT, if so, gotta wait until that goes away.
-+	 */
-+	if (!(READ_ONCE(p->__state) & __TASK_TRACED))
-+		return -EWOULDBLOCK;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Returns:
-+ *  0:		  task is off runqueue in TASK_TRACED
-+ *  -ESRCH:	  not traced
-+ *  -EINPROGRESS: still running
-+ *  -EWOULDBLOCK: not running
-+ */
-+static int __ptrace_pre_freeze(struct task_struct *p, void *arg)
-+{
-+	int ret;
-+
-+	ret = __ptrace_freeze_cond(p);
-+	if (ret)
-+		return ret;
-+
-+	*(unsigned long *)arg = p->nvcsw;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Returns:
-+ *  0:		  task is off runqueue, now __TASK_TRACED
-+ *  -ESRCH:	  not traced, or scheduled since pre_freeze
-+ *  -GAIN:	  still running
-+ *  -EWOULDBLOCK: not running
-+ */
-+static int __ptrace_freeze(struct task_struct *p, void *arg)
-+{
-+	int ret;
-+
-+	ret = __ptrace_freeze_cond(p);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Task scheduled between __ptrace_pre_freeze() and here, not our task
-+	 * anymore.
-+	 */
-+	if (*(unsigned long *)arg != p->nvcsw)
-+		return -ESRCH;
-+
-+	if (looks_like_a_spurious_pid(p))
-+		return -ESRCH;
-+
-+	if (__fatal_signal_pending(p))
-+		return -ESRCH;
-+
-+	/*
-+	 * we hold:
-+	 *
-+	 *  - tasklist_lock       (avoids ptrace_detach)
-+	 *  - p->sighand->siglock (avoids ptrace_signal_wake_up)
-+	 *  - p->pi_lock          (avoids anything scheduler)
-+	 *
-+	 * task is absolutely frozen, now we can safely take out
-+	 * TASK_WAKEKILL.
-+	 */
-+	p->jobctl |= JOBCTL_TRACED_FROZEN;
-+	WRITE_ONCE(p->__state, __TASK_TRACED);
-+	return 0;
-+}
-+
- /**
-  * ptrace_check_attach - check whether ptracee is ready for ptrace operation
-  * @child: ptracee to check for
-@@ -253,7 +323,36 @@ static void ptrace_unfreeze_traced(struc
-  */
- static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 	list_add(&arg->list_node, &lps0_s2idle_devops_head);
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return 0;
+ }
+@@ -551,12 +553,14 @@ EXPORT_SYMBOL_GPL(acpi_register_lps0_dev
+ 
+ void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
  {
--	int ret = -ESRCH;
-+	ktime_t to = TICK_NSEC;
-+	unsigned long nvcsw;
-+	int ret;
++	unsigned int sleep_flags;
 +
-+	if (child == current)
-+		return -ESRCH;
-+
-+	if (!ignore_state) for (;;) {
-+		/*
-+		 * Ensure this child is a quiescent TASK_TRACED task.
-+		 */
-+		ret = task_call_func(child, __ptrace_pre_freeze, &nvcsw);
-+		switch (ret) {
-+		case 0:
-+			break;
-+		case -ESRCH:
-+			return ret;
-+		case -EINPROGRESS:
-+			while (task_curr(child))
-+				cpu_relax();
-+			continue;
-+		case -EWOULDBLOCK:
-+			/*
-+			 * XXX horrible, randomly wait 1 tick and try again.
-+			 */
-+			set_current_state(TASK_UNINTERRUPTIBLE);
-+			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
-+			continue;
-+		}
-+	}
+ 	if (!lps0_device_handle || sleep_no_lps0)
+ 		return;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 	list_del(&arg->list_node);
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ }
+ EXPORT_SYMBOL_GPL(acpi_unregister_lps0_dev);
+ 
+--- a/drivers/scsi/scsi_transport_spi.c
++++ b/drivers/scsi/scsi_transport_spi.c
+@@ -998,8 +998,9 @@ void
+ spi_dv_device(struct scsi_device *sdev)
+ {
+ 	struct scsi_target *starget = sdev->sdev_target;
+-	u8 *buffer;
+ 	const int len = SPI_MAX_ECHO_BUFFER_SIZE*2;
++	unsigned int sleep_flags;
++	u8 *buffer;
  
  	/*
- 	 * We take the read lock around doing both checks to close a
-@@ -262,29 +361,35 @@ static int ptrace_check_attach(struct ta
- 	 * we are sure that this is our traced child and that can only
- 	 * be changed by us so it's not changing right after this.
+ 	 * Because this function and the power management code both call
+@@ -1007,7 +1008,7 @@ spi_dv_device(struct scsi_device *sdev)
+ 	 * while suspend or resume is in progress. Hence the
+ 	 * lock/unlock_system_sleep() calls.
  	 */
-+	ret = -ESRCH;
- 	read_lock(&tasklist_lock);
- 	if (child->ptrace && child->parent == current) {
- 		WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-+		if (ignore_state) {
-+			ret = 0;
-+			goto unlock;
-+		}
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	if (scsi_autopm_get_device(sdev))
+ 		goto unlock_system_sleep;
+@@ -1058,7 +1059,7 @@ spi_dv_device(struct scsi_device *sdev)
+ 	scsi_autopm_put_device(sdev);
+ 
+ unlock_system_sleep:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ }
+ EXPORT_SYMBOL(spi_dv_device);
+ 
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -510,8 +510,8 @@ extern bool pm_save_wakeup_count(unsigne
+ extern void pm_wakep_autosleep_enabled(bool set);
+ extern void pm_print_active_wakeup_sources(void);
+ 
+-extern void lock_system_sleep(void);
+-extern void unlock_system_sleep(void);
++extern unsigned int lock_system_sleep(void);
++extern void unlock_system_sleep(unsigned int);
+ 
+ #else /* !CONFIG_PM_SLEEP */
+ 
+@@ -534,8 +534,8 @@ static inline void pm_system_wakeup(void
+ static inline void pm_wakeup_clear(bool reset) {}
+ static inline void pm_system_irq_wakeup(unsigned int irq_number) {}
+ 
+-static inline void lock_system_sleep(void) {}
+-static inline void unlock_system_sleep(void) {}
++static inline unsigned int lock_system_sleep(void) { return 0; }
++static inline void unlock_system_sleep(unsigned int flags) {}
+ 
+ #endif /* !CONFIG_PM_SLEEP */
+ 
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -92,20 +92,24 @@ bool hibernation_available(void)
+  */
+ void hibernation_set_ops(const struct platform_hibernation_ops *ops)
+ {
++	unsigned int sleep_flags;
 +
-+		if (child->jobctl & JOBCTL_LISTENING)
-+			goto unlock;
-+
- 		/*
- 		 * child->sighand can't be NULL, release_task()
- 		 * does ptrace_unlink() before __exit_signal().
- 		 */
--		if (ignore_state || ptrace_freeze_traced(child))
--			ret = 0;
--	}
--	read_unlock(&tasklist_lock);
--
--	if (!ret && !ignore_state) {
--		if (!wait_task_inactive(child, __TASK_TRACED)) {
-+		spin_lock_irq(&child->sighand->siglock);
-+		ret = task_call_func(child, __ptrace_freeze, &nvcsw);
-+		if (ret) {
- 			/*
--			 * This can only happen if may_ptrace_stop() fails and
--			 * ptrace_stop() changes ->state back to TASK_RUNNING,
--			 * so we should not worry about leaking __TASK_TRACED.
-+			 * If *anything* changed since __ptrace_pre_freeze()
-+			 * this fails.
- 			 */
--			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
- 			ret = -ESRCH;
- 		}
-+		spin_unlock_irq(&child->sighand->siglock);
+ 	if (ops && !(ops->begin && ops->end &&  ops->pre_snapshot
+ 	    && ops->prepare && ops->finish && ops->enter && ops->pre_restore
+ 	    && ops->restore_cleanup && ops->leave)) {
+ 		WARN_ON(1);
+ 		return;
  	}
-+unlock:
-+	read_unlock(&tasklist_lock);
+-	lock_system_sleep();
++
++	sleep_flags = lock_system_sleep();
++
+ 	hibernation_ops = ops;
+ 	if (ops)
+ 		hibernation_mode = HIBERNATION_PLATFORM;
+ 	else if (hibernation_mode == HIBERNATION_PLATFORM)
+ 		hibernation_mode = HIBERNATION_SHUTDOWN;
  
- 	return ret;
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
  }
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6310,10 +6310,7 @@ static void __sched notrace __schedule(u
+ EXPORT_SYMBOL_GPL(hibernation_set_ops);
  
+@@ -713,6 +717,7 @@ static int load_image_and_restore(void)
+ int hibernate(void)
+ {
+ 	bool snapshot_test = false;
++	unsigned int sleep_flags;
+ 	int error;
+ 
+ 	if (!hibernation_available()) {
+@@ -720,7 +725,7 @@ int hibernate(void)
+ 		return -EPERM;
+ 	}
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 	/* The snapshot device should not be opened while we're running */
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+@@ -794,7 +799,7 @@ int hibernate(void)
+ 	pm_restore_console();
+ 	hibernate_release();
+  Unlock:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 	pr_info("hibernation exit\n");
+ 
+ 	return error;
+@@ -809,9 +814,10 @@ int hibernate(void)
+  */
+ int hibernate_quiet_exec(int (*func)(void *data), void *data)
+ {
++	unsigned int sleep_flags;
+ 	int error;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+@@ -891,7 +897,7 @@ int hibernate_quiet_exec(int (*func)(voi
+ 	hibernate_release();
+ 
+ unlock:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return error;
+ }
+@@ -1100,11 +1106,12 @@ static ssize_t disk_show(struct kobject
+ static ssize_t disk_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 			  const char *buf, size_t n)
+ {
++	int mode = HIBERNATION_INVALID;
++	unsigned int sleep_flags;
+ 	int error = 0;
+-	int i;
+ 	int len;
+ 	char *p;
+-	int mode = HIBERNATION_INVALID;
++	int i;
+ 
+ 	if (!hibernation_available())
+ 		return -EPERM;
+@@ -1112,7 +1119,7 @@ static ssize_t disk_store(struct kobject
+ 	p = memchr(buf, '\n', n);
+ 	len = p ? p - buf : n;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 	for (i = HIBERNATION_FIRST; i <= HIBERNATION_MAX; i++) {
+ 		if (len == strlen(hibernation_modes[i])
+ 		    && !strncmp(buf, hibernation_modes[i], len)) {
+@@ -1142,7 +1149,7 @@ static ssize_t disk_store(struct kobject
+ 	if (!error)
+ 		pm_pr_dbg("Hibernation mode set to '%s'\n",
+ 			       hibernation_modes[mode]);
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 	return error ? error : n;
+ }
+ 
+@@ -1158,9 +1165,10 @@ static ssize_t resume_show(struct kobjec
+ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 			    const char *buf, size_t n)
+ {
+-	dev_t res;
++	unsigned int sleep_flags;
+ 	int len = n;
+ 	char *name;
++	dev_t res;
+ 
+ 	if (len && buf[len-1] == '\n')
+ 		len--;
+@@ -1173,9 +1181,10 @@ static ssize_t resume_store(struct kobje
+ 	if (!res)
+ 		return -EINVAL;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 	swsusp_resume_device = res;
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
++
+ 	pm_pr_dbg("Configured hibernation resume from disk to %u\n",
+ 		  swsusp_resume_device);
+ 	noresume = 0;
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -21,14 +21,16 @@
+ 
+ #ifdef CONFIG_PM_SLEEP
+ 
+-void lock_system_sleep(void)
++unsigned int lock_system_sleep(void)
+ {
++	unsigned int flags = current->flags;
+ 	current->flags |= PF_FREEZER_SKIP;
+ 	mutex_lock(&system_transition_mutex);
++	return flags;
+ }
+ EXPORT_SYMBOL_GPL(lock_system_sleep);
+ 
+-void unlock_system_sleep(void)
++void unlock_system_sleep(unsigned int flags)
+ {
  	/*
- 	 * We must load prev->state once (task_struct::state is volatile), such
--	 * that:
--	 *
--	 *  - we form a control dependency vs deactivate_task() below.
--	 *  - ptrace_{,un}freeze_traced() can change ->state underneath us.
-+	 * that we form a control dependency vs deactivate_task() below.
+ 	 * Don't use freezer_count() because we don't want the call to
+@@ -46,7 +48,8 @@ void unlock_system_sleep(void)
+ 	 * Which means, if we use try_to_freeze() here, it would make them
+ 	 * enter the refrigerator, thus causing hibernation to lockup.
  	 */
- 	prev_state = READ_ONCE(prev->__state);
- 	if (!(sched_mode & SM_MASK_PREEMPT) && prev_state) {
+-	current->flags &= ~PF_FREEZER_SKIP;
++	if (!(flags & PF_FREEZER_SKIP))
++		current->flags &= ~PF_FREEZER_SKIP;
+ 	mutex_unlock(&system_transition_mutex);
+ }
+ EXPORT_SYMBOL_GPL(unlock_system_sleep);
+@@ -260,16 +263,17 @@ static ssize_t pm_test_show(struct kobje
+ static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 				const char *buf, size_t n)
+ {
++	unsigned int sleep_flags;
+ 	const char * const *s;
++	int error = -EINVAL;
+ 	int level;
+ 	char *p;
+ 	int len;
+-	int error = -EINVAL;
+ 
+ 	p = memchr(buf, '\n', n);
+ 	len = p ? p - buf : n;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	level = TEST_FIRST;
+ 	for (s = &pm_tests[level]; level <= TEST_MAX; s++, level++)
+@@ -279,7 +283,7 @@ static ssize_t pm_test_store(struct kobj
+ 			break;
+ 		}
+ 
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return error ? error : n;
+ }
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -75,9 +75,11 @@ EXPORT_SYMBOL_GPL(pm_suspend_default_s2i
+ 
+ void s2idle_set_ops(const struct platform_s2idle_ops *ops)
+ {
+-	lock_system_sleep();
++	unsigned int sleep_flags;
++
++	sleep_flags = lock_system_sleep();
+ 	s2idle_ops = ops;
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ }
+ 
+ static void s2idle_begin(void)
+@@ -200,7 +202,9 @@ __setup("mem_sleep_default=", mem_sleep_
+  */
+ void suspend_set_ops(const struct platform_suspend_ops *ops)
+ {
+-	lock_system_sleep();
++	unsigned int sleep_flags;
++
++	sleep_flags = lock_system_sleep();
+ 
+ 	suspend_ops = ops;
+ 
+@@ -216,7 +220,7 @@ void suspend_set_ops(const struct platfo
+ 			mem_sleep_current = PM_SUSPEND_MEM;
+ 	}
+ 
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ }
+ EXPORT_SYMBOL_GPL(suspend_set_ops);
+ 
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -46,12 +46,13 @@ int is_hibernate_resume_dev(dev_t dev)
+ static int snapshot_open(struct inode *inode, struct file *filp)
+ {
+ 	struct snapshot_data *data;
++	unsigned int sleep_flags;
+ 	int error;
+ 
+ 	if (!hibernation_available())
+ 		return -EPERM;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+@@ -97,7 +98,7 @@ static int snapshot_open(struct inode *i
+ 	data->dev = 0;
+ 
+  Unlock:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return error;
+ }
+@@ -105,8 +106,9 @@ static int snapshot_open(struct inode *i
+ static int snapshot_release(struct inode *inode, struct file *filp)
+ {
+ 	struct snapshot_data *data;
++	unsigned int sleep_flags;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	swsusp_free();
+ 	data = filp->private_data;
+@@ -123,7 +125,7 @@ static int snapshot_release(struct inode
+ 			PM_POST_HIBERNATION : PM_POST_RESTORE);
+ 	hibernate_release();
+ 
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return 0;
+ }
+@@ -131,11 +133,12 @@ static int snapshot_release(struct inode
+ static ssize_t snapshot_read(struct file *filp, char __user *buf,
+                              size_t count, loff_t *offp)
+ {
++	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 	struct snapshot_data *data;
++	unsigned int sleep_flags;
+ 	ssize_t res;
+-	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	data = filp->private_data;
+ 	if (!data->ready) {
+@@ -156,7 +159,7 @@ static ssize_t snapshot_read(struct file
+ 		*offp += res;
+ 
+  Unlock:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return res;
+ }
+@@ -164,11 +167,12 @@ static ssize_t snapshot_read(struct file
+ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+                               size_t count, loff_t *offp)
+ {
++	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 	struct snapshot_data *data;
++	unsigned int sleep_flags;
+ 	ssize_t res;
+-	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 
+-	lock_system_sleep();
++	sleep_flags = lock_system_sleep();
+ 
+ 	data = filp->private_data;
+ 
+@@ -190,7 +194,7 @@ static ssize_t snapshot_write(struct fil
+ 	if (res > 0)
+ 		*offp += res;
+ unlock:
+-	unlock_system_sleep();
++	unlock_system_sleep(sleep_flags);
+ 
+ 	return res;
+ }
 
 

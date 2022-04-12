@@ -2,144 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF6A4FE230
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C514FE243
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355832AbiDLNU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S1355722AbiDLNWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357498AbiDLNTc (ORCPT
+        with ESMTP id S1355838AbiDLNWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:19:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581783DDCD;
-        Tue, 12 Apr 2022 06:08:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F9DC619A9;
-        Tue, 12 Apr 2022 13:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD37EC385B1;
-        Tue, 12 Apr 2022 13:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649768917;
-        bh=YcaQr1zTfjSLiNUXAkZxfTTaYuHy1HUaeyyk2AqglB8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n2OtpAQoq+qrG0TzI0l8iMD7eTq2ktrCDTJaTsthrBjJGpRfw0n36ACC43KhSFYu8
-         elNas01Yi2U5Rv8K+NDjzfQsCkpaDm77HkjCagq6lPDc9ljaAa3VRIq/wuZTG3SLBq
-         K7L/rzQhQeMNykf6ALNmVK9+I+bT0i9qH3heMPIZjOpkXxcDKPEL2igyK8nH1YkotE
-         k0pLawXRBkjoL5TAeKQDM3ZdZonfp7BASJv33whnsUke9OFr+MLeQ4nNX7LQ/6N3I+
-         eSObTl3WDbkHxia2LPOQrWj4htFdaDqp4WD21mFStupsAe913FSkyp8rOXmwGRZUFK
-         ITzadpcQeC75g==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e2afb80550so8768559fac.1;
-        Tue, 12 Apr 2022 06:08:37 -0700 (PDT)
-X-Gm-Message-State: AOAM531KKDPijTrWIKlklNdnZfUCNfkm01fYmHXwMOFi60T7OBoNC79/
-        kU7SDWp/ZaMImrPabAl9PENdw7iX2Vs2Tcc5Vdo=
-X-Google-Smtp-Source: ABdhPJwsT60EZGzvKxLvuDXi5RTXFmmCpZlzEo7mi7tnDG3CFikUWPsyoP9BI1LgcHDyPOnKWDH0WJEtwRAPvF8XgIc=
-X-Received: by 2002:a05:6870:b027:b0:de:7fcd:fabf with SMTP id
- y39-20020a056870b02700b000de7fcdfabfmr2016587oae.126.1649768916454; Tue, 12
- Apr 2022 06:08:36 -0700 (PDT)
+        Tue, 12 Apr 2022 09:22:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACC752B30
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649769015; x=1681305015;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FtOtwsR/6/Gleg8tQpLT6Wl9kjWox0FUNsf+RY7PPeY=;
+  b=WUJLf1ltwwJzaQQkzAikTNtqpJ/irEJaoNnzBEQl1l/ZMIAUBHg6peuM
+   qPeMPQn56mshbiXrW2HfGswdSuk49qy3B/hCqPhhexC371tNGLY3Elhai
+   Clml1HDW3TbAo6+BptoG53N8dsMNTkPYP1bKDUtptTRxOXK07yZjGnknI
+   r454F1g+ZhvrJkV8Pk6aiZgLzHUB8Ny46z9yGPkPBiamV2Z8ciW9wGg6j
+   o6VK4vBG9kkCHmro4BbjfsgiF746wuT1PLjmXsNMU7oHkt99I5yWvZtjf
+   7l0LgekAm6Tg6asIebV9qYVpEON3Ia5fctMlOEjnbnS1JMBRMzwVF2iC7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="249654246"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="249654246"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:10:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="572758885"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.174]) ([10.254.210.174])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:10:05 -0700
+Message-ID: <06240213-dbc6-ea1c-ca49-28663387ac70@linux.intel.com>
+Date:   Tue, 12 Apr 2022 21:10:03 +0800
 MIME-Version: 1.0
-References: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
- <20220228114254.1099945-4-dovmurik@linux.ibm.com> <CAMj1kXFybkGtxH2U6oAi_Qeqe-i_kH-hZjUZKY3-UzPHUg55vg@mail.gmail.com>
- <f3de6cd9-9f58-7db3-e367-a6a5a5d826e2@linux.ibm.com> <CAMj1kXEKh-Ve3iPDnNTxi10=hcARN4ntpyQOrmb=B+4DpC24vQ@mail.gmail.com>
- <38daffb6-a72a-87f4-d927-0b857b7b6833@linux.ibm.com>
-In-Reply-To: <38daffb6-a72a-87f4-d927-0b857b7b6833@linux.ibm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 12 Apr 2022 15:08:25 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHfeS9WzHkOyM3JGfgVLK8GQ78KBArD19NxcCMn-SDPKg@mail.gmail.com>
-Message-ID: <CAMj1kXHfeS9WzHkOyM3JGfgVLK8GQ78KBArD19NxcCMn-SDPKg@mail.gmail.com>
-Subject: Re: [PATCH v8 3/4] efi: Load efi_secret module if EFI secret area is populated
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v3 02/12] iommu: Add a flag to indicate immutable
+ singleton group
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
+ <20220410102443.294128-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB527689614CBD807A113493B48CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB527689614CBD807A113493B48CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 at 11:05, Dov Murik <dovmurik@linux.ibm.com> wrote:
->
-> Hello Ard,
->
-> On 28/02/2022 15:15, Ard Biesheuvel wrote:
-> > On Mon, 28 Feb 2022 at 14:07, Dov Murik <dovmurik@linux.ibm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 28/02/2022 14:49, Ard Biesheuvel wrote:
-> >>> On Mon, 28 Feb 2022 at 12:43, Dov Murik <dovmurik@linux.ibm.com> wrote:
-> >>>>
-> >>>> If the efi_secret module is built, register a late_initcall in the EFI
-> >>>> driver which checks whether the EFI secret area is available and
-> >>>> populated, and then requests to load the efi_secret module.
-> >>>>
-> >>>> This will cause the <securityfs>/secrets/coco directory to appear in
-> >>>> guests into which secrets were injected; in other cases, the module is
-> >>>> not loaded.
-> >>>>
-> >>>> Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
-> >>>> Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
-> >>>
-> >>> It would be better to simply expose a platform device and associated
-> >>> driver, instead of hooking into the module machinery directly.
-> >>>
-> >>> We already do something similar for the EFI rtc and the efivars
-> >>> subsystem, using platform_device_register_simple()
-> >>>
-> >>
-> >> Thanks Ard, I'll look into this.
-> >>
-> >> I hope the mechanism you suggest allows me to perform complex check to
-> >> see if the device is really there (in this case: check for an efi
-> >> variable, map memory as encrypted, verify it starts with a specific GUID
-> >> -- everything before request_module() in the code below).
-> >>
-> >
-> > There is the device part and the driver part. Some of this belongs in
-> > the core code that registers the platform device, and some of it
-> > belongs in the driver. At this point, it probably does not matter that
-> > much which side does what, as the platform driver simply probes and
-> > can perform whatever check it needs, as long as it can back out
-> > gracefully (although I understand that, in this particular case, there
-> > are reasons why the driver may decide to wipe the secret)
->
-> I finally got to implement this, it seems like it makes the code simple.
-> Thanks for the advice.
->
-> Just making sure I understand correctly: in this approach this we rely
-> on udev to load the efi_secret module (aliased as "platform:efi_secret")
-> and call its .probe() function?  If there's no udev, the module will not
-> be loaded automatically.  Did I understand that correctly?
->
+On 2022/4/12 15:39, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Sunday, April 10, 2022 6:25 PM
+>> @@ -898,6 +941,20 @@ int iommu_group_add_device(struct iommu_group
+>> *group, struct device *dev)
+>>   	list_add_tail(&device->list, &group->devices);
+>>   	if (group->domain  && !iommu_is_attach_deferred(dev))
+>>   		ret = __iommu_attach_device(group->domain, dev);
+>> +
+>> +	/*
+>> +	 * Use standard PCI bus topology, isolation features, and DMA
+>> +	 * alias quirks to set the immutable singleton attribute. If
+>> +	 * the device came from DT, assume it is static and then
+>> +	 * singleton can know from the device count in the group.
+>> +	 */
+>> +	if (dev_is_pci(dev))
+>> +		group->immutable_singleton =
+>> +				pci_immutably_isolated(to_pci_dev(dev));
+>> +	else if (is_of_node(dev_fwnode(dev)))
+>> +		group->immutable_singleton =
+>> +				(iommu_group_device_count(group) == 1);
+>> +
+> 
+> btw probably we also want to check when a 2nd device is added
+> to a group marked as singleton, just in case some weird thing happens?
 
-Apologies, I am swamped in email and only spotted this now.
+It depends on how we judge whether the group to which a DT device
+belongs is a singleton. As I explained in another thread, current trick
+doesn't support doing this.
 
-This looks good to me: is this what you implemented in the end?
+Best regards,
+baolu

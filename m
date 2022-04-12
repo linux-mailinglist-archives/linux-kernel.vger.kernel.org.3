@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941C4FDB0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455FB4FD8E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359172AbiDLHmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S1352124AbiDLHX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353778AbiDLHQG (ORCPT
+        with ESMTP id S1351678AbiDLHDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:16:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4526E40E66;
-        Mon, 11 Apr 2022 23:57:28 -0700 (PDT)
+        Tue, 12 Apr 2022 03:03:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB3944763;
+        Mon, 11 Apr 2022 23:47:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B2E760B65;
-        Tue, 12 Apr 2022 06:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA7BC385A6;
-        Tue, 12 Apr 2022 06:57:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20F75B81B46;
+        Tue, 12 Apr 2022 06:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8627DC385A1;
+        Tue, 12 Apr 2022 06:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746647;
-        bh=S1JpHXcstvf/wIY68z+iJa5VKb3wCNcZh2Yggi2ZzwY=;
+        s=korg; t=1649746035;
+        bh=c/FQuSp0WYgo83djFo9gf3z2mIfroc8NZWvLZypCStU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WmdicV20vYn21Mrx8AScb3U5o6VxXNd9ylU5YTDPMD8w242fcoS5unY078PeG53Yg
-         VrZtBlQ6cOdDxpu2GkIlgkMr/ixhBhudy6+bYG1J65wiZ8eNYS92jXax+JnNTRMpBp
-         HLkqpfDF1wso+Pp3XMOgLFsPYbuyPdSDdbKTZbJI=
+        b=0+9c9xDExPyTjcpr4vKJ00DQGVtEKc5aqv1pGAHzIap6ixdUorkfCF5OoR88+OL/R
+         MXubqDApMZeLWspcSHq2sxPEcXr8b3IcDNejgAoYJY67VMNSb+2tWDqnEh2aOu2ejg
+         BB9kn5QrQd1Jt1+gIAg6vvmgWKmqDpDVRxNcZygg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 081/285] net/smc: correct settings of RMB window update limit
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Amit Shah <amit@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 135/277] virtio_console: eliminate anonymous module_init & module_exit
 Date:   Tue, 12 Apr 2022 08:28:58 +0200
-Message-Id: <20220412062946.002223758@linuxfoundation.org>
+Message-Id: <20220412062945.943513195@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dust Li <dust.li@linux.alibaba.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 6bf536eb5c8ca011d1ff57b5c5f7c57ceac06a37 ]
+[ Upstream commit fefb8a2a941338d871e2d83fbd65fbfa068857bd ]
 
-rmbe_update_limit is used to limit announcing receive
-window updating too frequently. RFC7609 request a minimal
-increase in the window size of 10% of the receive buffer
-space. But current implementation used:
+Eliminate anonymous module_init() and module_exit(), which can lead to
+confusion or ambiguity when reading System.map, crashes/oops/bugs,
+or an initcall_debug log.
 
-  min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2)
+Give each of these init and exit functions unique driver-specific
+names to eliminate the anonymous names.
 
-and SOCK_MIN_SNDBUF / 2 == 2304 Bytes, which is almost
-always less then 10% of the receive buffer space.
+Example 1: (System.map)
+ ffffffff832fc78c t init
+ ffffffff832fc79e t init
+ ffffffff832fc8f8 t init
 
-This causes the receiver always sending CDC message to
-update its consumer cursor when it consumes more then 2K
-of data. And as a result, we may encounter something like
-"TCP silly window syndrome" when sending 2.5~8K message.
+Example 2: (initcall_debug log)
+ calling  init+0x0/0x12 @ 1
+ initcall init+0x0/0x12 returned 0 after 15 usecs
+ calling  init+0x0/0x60 @ 1
+ initcall init+0x0/0x60 returned 0 after 2 usecs
+ calling  init+0x0/0x9a @ 1
+ initcall init+0x0/0x9a returned 0 after 74 usecs
 
-This patch fixes this using max(rmbe_size / 10, SOCK_MIN_SNDBUF / 2).
-
-With this patch and SMC autocorking enabled, qperf 2K/4K/8K
-tcp_bw test shows 45%/75%/40% increase in throughput respectively.
-
-Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Amit Shah <amit@kernel.org>
+Cc: virtualization@lists.linux-foundation.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20220316192010.19001-3-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/virtio_console.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index d1cdc891c211..f1dc5b914771 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -1904,7 +1904,7 @@ static struct smc_buf_desc *smc_buf_get_slot(int compressed_bufsize,
-  */
- static inline int smc_rmb_wnd_update_limit(int rmbe_size)
+diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+index 3adf04766e98..77bc993d7513 100644
+--- a/drivers/char/virtio_console.c
++++ b/drivers/char/virtio_console.c
+@@ -2236,7 +2236,7 @@ static struct virtio_driver virtio_rproc_serial = {
+ 	.remove =	virtcons_remove,
+ };
+ 
+-static int __init init(void)
++static int __init virtio_console_init(void)
  {
--	return min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
-+	return max_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
+ 	int err;
+ 
+@@ -2271,7 +2271,7 @@ static int __init init(void)
+ 	return err;
  }
  
- /* map an rmb buf to a link */
+-static void __exit fini(void)
++static void __exit virtio_console_fini(void)
+ {
+ 	reclaim_dma_bufs();
+ 
+@@ -2281,8 +2281,8 @@ static void __exit fini(void)
+ 	class_destroy(pdrvdata.class);
+ 	debugfs_remove_recursive(pdrvdata.debugfs_dir);
+ }
+-module_init(init);
+-module_exit(fini);
++module_init(virtio_console_init);
++module_exit(virtio_console_fini);
+ 
+ MODULE_DESCRIPTION("Virtio console driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.35.1
 

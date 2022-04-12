@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402394FCF64
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299964FCF69
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348834AbiDLGYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S1348825AbiDLGYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348756AbiDLGYI (ORCPT
+        with ESMTP id S1348812AbiDLGYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:24:08 -0400
+        Tue, 12 Apr 2022 02:24:11 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6313527D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:21:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e642be1a51so149733387b3.21
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:21:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61933527D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:21:53 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso151626807b3.19
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=wfRPDDLqzPUCOkuSnhqNwDomZ7gQgHK/WkZWhxyfSpI=;
-        b=Gm774vIkvSewmHfi4pheFtAkt/KHS01zJ0qDB/NJ3HRte+KdZcCaSbtvcghIvWn0Vi
-         wAqsiWt0VEnAiIPPunjulYtp0G5S+Zz33XqsBif7bdVQeqWpPRQzKF8MtyiuCc8dhrl2
-         PTEc8MPev5UHpD5zxU8BRNckIIcZFCdl6AQQ6tAHJDxHn1Dj6818tgxegwD1flGwd2eO
-         3Q1iarRBeM54vA9zwVpnXJq4GdBtPjY33X1hDJzq7yJaqVWlbkjqUbavmELZdkEoq+nK
-         1toT0+vUirvSvHGNuHHz3EjOeApYLKsdkEa6QX5W1s0z7OvmfFQ6+s4Ej4J2xm2Q0ppW
-         utmQ==
+        bh=HzomVY0olxlcRBNiMB5SwP5ngXXVoIPEfEro53+54ZQ=;
+        b=SEyq9ho4qtyAgW+mk2g98z38qAKJ6HQIWpDEYkiWnICB1BxbuMWhCkUUr0rv+SpocO
+         XQBL9XC9gjwufJwJSASAW7yYVJCnKj9ljVvPDs5IV/nyBRof+y5BMXPeOSjSQLXg6tDI
+         f3g13iT4aw6qrNAq21r4TWjdDNMjmJsabhUGV5KcFNbRSwkbbWG01pKtaSU1vw2DW2d/
+         sZOhqy5uNB5lzijRkpbalr/lkFN/FJzfhIZypHTxLfWqu2WwD0K9YzBz0ap8P6mcDN22
+         VwxWhls0eTW4VLCdFNTPCCT3LkWTU0ozj5wJ31QIT5X6//opc7FwMLaAOMROqkegBGLM
+         hSiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=wfRPDDLqzPUCOkuSnhqNwDomZ7gQgHK/WkZWhxyfSpI=;
-        b=AW3pj55sDjB5LVdCINPL4IDGldgRexA10MAdFPWRmUGrUQSb5+rnWuaq0/QmM2z4oq
-         lHQr8W5BjsuMpKxQpKum2VZCirG/2fo4vzReQrOJzIRQ9RFKkphofY6ccAv53P40YsZi
-         awzlsBgUnWN+IjUqQEBm/ZaMp4f07Ro0155z5h77lrgDF3bmQdo8mJPdBQnmA1v0Ugd4
-         L5RElBMFoMNFxepMgl786dRyt1fyeSXPQGoV8EYvITTQytykiUmPfLVMnpulLxISjLMK
-         KJS1dimameoCMBMXGf0IOTT00qvLFhx4DVkA//qucEerP2680xQvRpqDNxpysBrM+2zq
-         mLCg==
-X-Gm-Message-State: AOAM533O+tAbH2pmwOHNRDP54sTehcivg9MjhXjZjDQtGFE4P8U7qMtg
-        UoZf9r+7IcJvtG+7j8pyR/vGGAQHTzn+
-X-Google-Smtp-Source: ABdhPJyYqTKl78khznbum9Hs2Ey76CSpP9NhpKS+qj4Qxf9BruQR9ORhxlOE7zg/FVTdkXpukv+L1vHaba39
+        bh=HzomVY0olxlcRBNiMB5SwP5ngXXVoIPEfEro53+54ZQ=;
+        b=y/mRvuG57V5LEU7WMBr8AZWLEH//3u3zA2RuYxENBowwpnXNYXJLLccyVEGAStbsq3
+         CwZMksWHxbjV+X4+x9LZkZQWgDT7N7KloTXJEyQYM6cYo2n1feL7RhOjtFA4XNHv17ts
+         W49XVyqyf0KJWd0inP+VkBlpF69QI884eRadbQHfdQN7vW9Gj11cyVK6fnXSOdP3R+qM
+         KEXx3pkK35D+eHPjs26/UmbP4uBsqooypESdS/rlEAAjRtDrRjY38w/t/IblwY4wYKMK
+         IsMGOqKW7yt8Re4k8QaZTJGyv+5g2VpWjqO3ZOLABPSnH1sbOHUtk6dmVnRRGWfOjhEJ
+         ibCg==
+X-Gm-Message-State: AOAM5338Npg0AiIx8LieEVrK0vJx4dACahklDUOw+y/jUmu09cid7/IW
+        dMKnELfE+j2nV48Xk7DiITNzOWJPIzmp
+X-Google-Smtp-Source: ABdhPJyOArb9eQdHrqf/7roL1sLSn1N5NiksCkxSmd1GeFjfDvdKab7zSPrk8yU94iF3JAqSSvRxYc2f0Nzq
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:5f6f:a698:92a:5d45])
- (user=irogers job=sendgmr) by 2002:a81:ec5:0:b0:2ec:4a58:4bf1 with SMTP id
- 188-20020a810ec5000000b002ec4a584bf1mr4262223ywo.262.1649744511035; Mon, 11
- Apr 2022 23:21:51 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 23:21:32 -0700
+ (user=irogers job=sendgmr) by 2002:a25:94a:0:b0:615:7cf4:e2cd with SMTP id
+ u10-20020a25094a000000b006157cf4e2cdmr26355407ybm.227.1649744513096; Mon, 11
+ Apr 2022 23:21:53 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 23:21:33 -0700
 In-Reply-To: <20220412062133.2546080-1-irogers@google.com>
-Message-Id: <20220412062133.2546080-2-irogers@google.com>
+Message-Id: <20220412062133.2546080-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220412062133.2546080-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH 2/3] perf cpumap: Switch to using perf_cpu_map API
+Subject: [PATCH 3/3] perf test: Add basic perf record tests
 From:   Ian Rogers <irogers@google.com>
 To:     Alexey Bayduraev <alexey.bayduraev@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -72,148 +72,65 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch some raw accesses to the cpu map to using the library API. This
-can help with reference count checking.
+Test the --per-thread flag.
+Test Intel machine state capturing.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-record.c          | 13 ++++++------
- tools/perf/util/bpf_counter_cgroup.c | 31 ++++++++++++++--------------
- 2 files changed, 22 insertions(+), 22 deletions(-)
+ tools/perf/tests/shell/record.sh | 37 ++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100755 tools/perf/tests/shell/record.sh
 
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 069825c48d40..a5cf6a99d67f 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -1011,7 +1011,7 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
- 
- 	for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
- 		if (cpu_map__is_dummy(cpus) ||
--		    test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
-+		    test_bit(perf_cpu_map__cpu(cpus, m).cpu, thread_data->mask->maps.bits)) {
- 			if (thread_data->maps) {
- 				thread_data->maps[tm] = &mmap[m];
- 				pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
-@@ -3331,13 +3331,14 @@ struct option *record_options = __record_options;
- 
- static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
- {
--	int c;
-+	struct perf_cpu cpu;
-+	int idx;
- 
- 	if (cpu_map__is_dummy(cpus))
- 		return;
- 
--	for (c = 0; c < cpus->nr; c++)
--		set_bit(cpus->map[c].cpu, mask->bits);
-+	perf_cpu_map__for_each_cpu(cpu, idx, cpus)
-+		set_bit(cpu.cpu, mask->bits);
- }
- 
- static int record__mmap_cpu_mask_init_spec(struct mmap_cpu_mask *mask, const char *mask_spec)
-@@ -3404,8 +3405,8 @@ static int record__init_thread_cpu_masks(struct record *rec, struct perf_cpu_map
- 	pr_debug("nr_threads: %d\n", rec->nr_threads);
- 
- 	for (t = 0; t < rec->nr_threads; t++) {
--		set_bit(cpus->map[t].cpu, rec->thread_masks[t].maps.bits);
--		set_bit(cpus->map[t].cpu, rec->thread_masks[t].affinity.bits);
-+		set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].maps.bits);
-+		set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].affinity.bits);
- 		if (verbose) {
- 			pr_debug("thread_masks[%d]: ", t);
- 			mmap_cpu_mask__scnprintf(&rec->thread_masks[t].maps, "maps");
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index ac60c08e8e2a..a4b676920da0 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -47,7 +47,7 @@ static int bperf_load_program(struct evlist *evlist)
- 	struct evsel *evsel;
- 	struct cgroup *cgrp, *leader_cgrp;
- 	__u32 i, cpu;
--	__u32 nr_cpus = evlist->core.all_cpus->nr;
-+	__u32 nr_cpus = perf_cpu_map__nr(evlist->core.all_cpus);
- 	int total_cpus = cpu__max_cpu().cpu;
- 	int map_size, map_fd;
- 	int prog_fd, err;
-@@ -125,7 +125,7 @@ static int bperf_load_program(struct evlist *evlist)
- 			for (cpu = 0; cpu < nr_cpus; cpu++) {
- 				int fd = FD(evsel, cpu);
- 				__u32 idx = evsel->core.idx * total_cpus +
--					evlist->core.all_cpus->map[cpu].cpu;
-+					perf_cpu_map__cpu(evlist->core.all_cpus, cpu).cpu;
- 
- 				err = bpf_map_update_elem(map_fd, &idx, &fd,
- 							  BPF_ANY);
-@@ -207,13 +207,13 @@ static int bperf_cgrp__install_pe(struct evsel *evsel __maybe_unused,
-  */
- static int bperf_cgrp__sync_counters(struct evlist *evlist)
- {
--	int i, cpu;
--	int nr_cpus = evlist->core.all_cpus->nr;
-+	struct perf_cpu cpu;
-+	int idx;
- 	int prog_fd = bpf_program__fd(skel->progs.trigger_read);
- 
--	for (i = 0; i < nr_cpus; i++) {
--		cpu = evlist->core.all_cpus->map[i].cpu;
--		bperf_trigger_reading(prog_fd, cpu);
-+	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
-+		cpu = perf_cpu_map__cpu(evlist->core.all_cpus, i);
-+		bperf_trigger_reading(prog_fd, cpu.cpu);
- 	}
- 
- 	return 0;
-@@ -244,12 +244,10 @@ static int bperf_cgrp__disable(struct evsel *evsel)
- static int bperf_cgrp__read(struct evsel *evsel)
- {
- 	struct evlist *evlist = evsel->evlist;
--	int i, cpu, nr_cpus = evlist->core.all_cpus->nr;
- 	int total_cpus = cpu__max_cpu().cpu;
- 	struct perf_counts_values *counts;
- 	struct bpf_perf_event_value *values;
- 	int reading_map_fd, err = 0;
--	__u32 idx;
- 
- 	if (evsel->core.idx)
- 		return 0;
-@@ -263,7 +261,10 @@ static int bperf_cgrp__read(struct evsel *evsel)
- 	reading_map_fd = bpf_map__fd(skel->maps.cgrp_readings);
- 
- 	evlist__for_each_entry(evlist, evsel) {
--		idx = evsel->core.idx;
-+		__u32 idx = evsel->core.idx;
-+		int i;
-+		struct perf_cpu_map cpu;
+diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+new file mode 100755
+index 000000000000..2c85e73a0af4
+--- /dev/null
++++ b/tools/perf/tests/shell/record.sh
+@@ -0,0 +1,37 @@
++#!/bin/sh
++# perf record tests
++# SPDX-License-Identifier: GPL-2.0
 +
- 		err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
- 		if (err) {
- 			pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
-@@ -271,13 +272,11 @@ static int bperf_cgrp__read(struct evsel *evsel)
- 			goto out;
- 		}
- 
--		for (i = 0; i < nr_cpus; i++) {
--			cpu = evlist->core.all_cpus->map[i].cpu;
--
-+		perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpu) {
- 			counts = perf_counts(evsel->counts, i, 0);
--			counts->val = values[cpu].counter;
--			counts->ena = values[cpu].enabled;
--			counts->run = values[cpu].running;
-+			counts->val = values[cpu.cpu].counter;
-+			counts->ena = values[cpu.cpu].enabled;
-+			counts->run = values[cpu.cpu].running;
- 		}
- 	}
- 
++set -e
++
++err=0
++test_per_thread() {
++  echo "Basic --per-thread mode test"
++  perf record -o - --per-thread true | perf report -i - > /dev/null
++  echo "Basic --per-thread mode test [Success]"
++}
++
++test_register_capture() {
++  echo "Register capture test"
++  if ! perf list | egrep -q 'br_inst_retired.near_call'
++  then
++    echo "Register capture test [Skipped missing instruction]"
++    return
++  fi
++  if ! perf record --intr-regs=\? 2>&1 | egrep -q 'available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10 R11 R12 R13 R14 R15'
++  then
++    echo "Register capture test [Skipped missing registers]"
++    return
++  fi
++  if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p -c 1000 --per-thread true | perf script -F ip,sym,iregs  -i - | egrep -q "DI:"
++  then
++    echo "Register capture test [Failed missing output]"
++    err=1
++    return
++  fi
++  echo "Register capture test [Success]"
++}
++
++test_per_thread
++test_register_capture
++exit $err
 -- 
 2.35.1.1178.g4f1659d476-goog
 

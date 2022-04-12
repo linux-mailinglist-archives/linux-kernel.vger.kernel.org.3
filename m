@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4884FE851
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CBD4FE859
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358816AbiDLTAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
+        id S1358836AbiDLTAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346239AbiDLTAS (ORCPT
+        with ESMTP id S1358803AbiDLTAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:00:18 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93551CFEE;
-        Tue, 12 Apr 2022 11:58:00 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id j6so14508741qkp.9;
-        Tue, 12 Apr 2022 11:58:00 -0700 (PDT)
+        Tue, 12 Apr 2022 15:00:22 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F540E48
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z99so14885353ede.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TuwBH94C0n6aA7QlxhA8EuWZbFghowwSP20mti+OFE0=;
-        b=ESPesL+ha/VDC3WrnqhfHAxmVJd6vyaeXQYrIEbyIgkDHHSFzvSSRG6aHsHf54kpC1
-         haUrOukpFRo2T1pTEo9TFmO5OJOCaIt2fmsEjaDBHUnhnZBGZUR2FHgwkjeqUifabIT+
-         SWL9dkwmdYbt6f1OmxymQDv/LVutahk9EbMqCbQv9Hd7+zxvIBujpnYRbdLmVOjX/+1J
-         nHpXIz0tL9J/ZPfdnj6au8YmN3L0tdLyoYqqzwxDJe5lhTSnjfL5oV0ch8Kcs+4B5ouf
-         wZGB7/Nfva344S2fz8Ycq+cjww060hnnVNuNds9E7+p4tXJ8Shyg2rYix7F03qY8Ei+Q
-         hHYA==
+        bh=+Uu00i8lAMXsKvesfMLYBDGeZkoj5cycOV9pwempbMQ=;
+        b=flrRPRmssxmiyBRsMihagETbQ5IQp2gPA4gEFufe1qAdW9CfT3iMEf0izj2bPtvIwD
+         7dV/Uwge7CJJJSVsvqCy4pc7NJKPOQ5zuwehRI1JE/o3+LyMPDvncur3lUt+o8Uhj3ur
+         /+/btWwc0ZnhdneH5sN1Tj6D8JXcZ7+uibX6RFzPbGe/S++6ySJuwKPxoFfpvzD8cSRP
+         xO3JEkKBX+Mdce0uWqff5/nhCizlz/mFMxAt2Bz+LiEAku4xSKAinHU27ubz7yNeX9od
+         s6reYEyrzPaC84iy7f7azmULwA1Kplk/xFzd6xEOpzSYNWicQsxRR82xFSn5s2RZOoaR
+         0SZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TuwBH94C0n6aA7QlxhA8EuWZbFghowwSP20mti+OFE0=;
-        b=bRqO6H975N51eXLkjEakWtJuvId0ju/vY8WYQG1E1bssoBVHIrJpOLUwZ2QWwfxrEC
-         rycFs2h49AMGTeacbKdmAswAVAFB3yjKv6AbjGUXOqSVt/hvSKBJpSVU/0P9kajn6v8P
-         ZAKsjQMSpMbHFLFnVVE6UKVMMUk+pmdNRSW6NjW6smE7RADXYNo9W+wmVN1OaQbn3oCw
-         x9FQDCwzlxzdLfHQ77AwGIHiqY+gam0M4ecf0PDpZgG3Yo22ukxkNC0flF0y7rJYw5Vg
-         FFvXrZoI7Dmy6QWQwNuGChRERRCDZAIpwLz1nFPfLvChdXQUT2Fr+Pt0ZtfdgbjqR6aN
-         zn1A==
-X-Gm-Message-State: AOAM533658kk2wBU7Y6oMb6yd/MqNygZ2vE9frROE8K4PF+uv17kCLt+
-        1zIyEnoI17poHArEGwZ5avc=
-X-Google-Smtp-Source: ABdhPJyXUdC+5P5g3zdNWZC3j13Lm90y+xiyQ1BBV27wd2BAygeNwg1QX7qc/UHSRd88hpinwbmSYw==
-X-Received: by 2002:a37:9f55:0:b0:69b:f262:bace with SMTP id i82-20020a379f55000000b0069bf262bacemr4228890qke.236.1649789879757;
-        Tue, 12 Apr 2022 11:57:59 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05622a05d200b002f07ed88a54sm1820610qtb.46.2022.04.12.11.57.59
+        bh=+Uu00i8lAMXsKvesfMLYBDGeZkoj5cycOV9pwempbMQ=;
+        b=NOxl6iYNbGmV1W7jXFs3cF9zDUb6rdTRKfdx3eLlmt+EGs6huDY7Yi+S6+1459z1ra
+         rfPiZblZl6TUden7E8TyF2bKyQOg2MJOY45XVJr98yg6Xlt8ytfgGXiPjt8Onn2rwgLL
+         YboSR58uxOKuAWI14Mo8EUm+Euk5eJ+B09mvFX/ugHzg9uTMfoU/wFf3iNv/gGludXyq
+         O3+s3Sds+1MkyquSTfn49WJ0RbrW5OlPJ5F3ovPaWUyRNGlEGAVxIypHZweaHEAuTqRS
+         T+mEW8ldWt6c8sLWt6G4pgNCmx4JRyqnNdrB73DG5Em1lY5k/oYImEzSFhDHszVFHyRf
+         o+2w==
+X-Gm-Message-State: AOAM530dA2ruEBoLYXQDVL5bPmT/F2YQjIek3x9dJFi1HhXWrvEb2Ctp
+        ddfPxKD149Mf5C/zzqGFoCo=
+X-Google-Smtp-Source: ABdhPJwzOH8HQiS7B9jA/636/d+uBVP2t2Ne/rfK1YrAlDDueuZAcCxImPriEOQjXBAanafUf2wvdw==
+X-Received: by 2002:a05:6402:26c7:b0:41b:7aef:bdf6 with SMTP id x7-20020a05640226c700b0041b7aefbdf6mr40683004edd.210.1649789881649;
+        Tue, 12 Apr 2022 11:58:01 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm13443482ejm.103.2022.04.12.11.58.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:57:59 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
-        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/4] Enable rk356x PCIe controller
-Date:   Tue, 12 Apr 2022 14:57:47 -0400
-Message-Id: <20220412185751.124783-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Apr 2022 11:58:01 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/6] staging: r8188eu: clean up block_write() in rtw_fw.c
+Date:   Tue, 12 Apr 2022 20:57:48 +0200
+Message-Id: <20220412185754.8695-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,36 +65,29 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series enables the DesignWare based PCIe controller on the rk356x
-series of chips.
-We drop the fallback to the core driver due to compatibility issues.
-We add support for legacy interrupts for cards that lack MSI support
-(which is partially broken currently).
-We then add the device tree nodes to enable PCIe on the Quartz64 Model
-A.
+This series cleans up the block_write() function in rtw_fw.c.
 
-Patch 1 drops the snps,dw,pcie fallback from the dt-binding
-Patch 2 adds legacy interrupt support to the driver
-Patch 3 adds the device tree binding to the rk356x.dtsi
-Patch 4 enables the PCIe controller on the Quartz64-A
+I wondered if removing the part that writes 8-byte blocks makes any
+notable difference. On my system it took about two seconds longer to
+init the device. So I left that as is.
 
-Peter Geis (4):
-  dt-bindings: pci: remove fallback from Rockchip DesignWare binding
-  PCI: dwc: rockchip: add legacy interrupt support
-  arm64: dts: rockchip: add rk3568 pcie2x1 controller
-  arm64: dts: rockchip: enable pcie controller on quartz64-a
+Tested on x86_64 with Inter-Tech DMG-02.
 
- .../bindings/pci/rockchip-dw-pcie.yaml        |  3 +-
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++
- arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 68 +++++++++++++-
- drivers/pci/controller/dwc/pcie-dw-rockchip.c | 92 ++++++++++++++++++-
- 4 files changed, 189 insertions(+), 8 deletions(-)
+Michael Straube (6):
+  staging: r8188eu: correct macro spelling mistake
+  staging: r8188eu: rename parameter of block_write()
+  staging: r8188eu: change void parameters to u8
+  staging: r8188eu: reduce variables in block_write()
+  staging: r8188eu: remove unneeded initializations
+  staging: r8188eu: clean up long lines in block_write()
+
+ drivers/staging/r8188eu/core/rtw_fw.c | 73 ++++++++++++++-------------
+ 1 file changed, 37 insertions(+), 36 deletions(-)
 
 -- 
-2.25.1
+2.35.1
 

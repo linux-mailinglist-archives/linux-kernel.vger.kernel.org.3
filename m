@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B07A4FD5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2F4FDB3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383124AbiDLIft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S1356337AbiDLHfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356345AbiDLHfS (ORCPT
+        with ESMTP id S1352068AbiDLHN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:35:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB88F50E2E;
-        Tue, 12 Apr 2022 00:09:22 -0700 (PDT)
+        Tue, 12 Apr 2022 03:13:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DCE0ED;
+        Mon, 11 Apr 2022 23:54:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B978616E3;
-        Tue, 12 Apr 2022 07:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A961EC385A5;
-        Tue, 12 Apr 2022 07:09:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F17A9B81B35;
+        Tue, 12 Apr 2022 06:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413BCC385A6;
+        Tue, 12 Apr 2022 06:54:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747361;
-        bh=ml72iPm2ujhvVrlOqTzu2cWjMgaiiwbonFftTOGfFDo=;
+        s=korg; t=1649746455;
+        bh=Jc8pgUnbZ/NjC/Hkh90e39VVKCwDKbAPR4E0Lwf2MiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hlVC9e2XmEh927T042mUJOUbm5p/5D2pagEdHpCaJ9C5TJHcfFKebNEbykHc9qfys
-         bIfcMPcps75ZCC+heaUdX2gk+dmtce7GBEZMF/yu60qeHcD2KkhcFiLmJscn0sw0m9
-         5UMaCWGezafkDKIAXyFw1UQvYMhKQoRzOh5ERHO4=
+        b=ZYM5maUp7JGF1N98P1N7nuX/bLvb6Sfl3aDejGk3L7O/unxZqJsq8Komzgz0PKEj5
+         ZjhXLAqqBOFzXg/5zqvabf20lCnRUQEPYGNf1EjuqepqbsxAeAgMnhX/E0ym7fnrRb
+         eZpWn/RyetMXjGAnSTJm9QNt05QmeINRs5mVAuc4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Witold Fijalkowski <witoldx.fijalkowski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Philipp Zabel <philipp.zabel@gmail.com>,
+        Jani Nikula <jani.nikula@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 050/343] i40e: Add sending commands in atomic context
-Date:   Tue, 12 Apr 2022 08:27:48 +0200
-Message-Id: <20220412062952.550900069@linuxfoundation.org>
+Subject: [PATCH 5.16 012/285] drm/edid: remove non_desktop quirk for HPN-3515 and LEN-B800.
+Date:   Tue, 12 Apr 2022 08:27:49 +0200
+Message-Id: <20220412062944.031549172@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,91 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+From: Philipp Zabel <philipp.zabel@gmail.com>
 
-[ Upstream commit 59b3d7350ff35c939b8e173eb2eecac80a5ee046 ]
+[ Upstream commit 50dc95d561a2552b0d76a9f91b38005195bf2974 ]
 
-Change functions:
-- i40e_aq_add_macvlan
-- i40e_aq_remove_macvlan
-- i40e_aq_delete_element
-- i40e_aq_add_vsi
-- i40e_aq_update_vsi_params
-to explicitly use i40e_asq_send_command_atomic(..., true)
-instead of i40e_asq_send_command, as they use mutexes and do some
-work in an atomic context.
-Without this change setting vlan via netdev will fail with
-call trace cased by bug "BUG: scheduling while atomic".
+Now that there is support for the Microsoft VSDB for HMDs, remove the
+non-desktop quirk for two devices that are verified to contain it in
+their EDID: HPN-3515 and LEN-B800.
+Presumably most of the other Windows Mixed Reality headsets contain it
+as well, but there are ACR-7FCE and SEC-5194 devices without it.
 
-Signed-off-by: Witold Fijalkowski <witoldx.fijalkowski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Tested with LEN-B800.
+
+Signed-off-by: Philipp Zabel <philipp.zabel@gmail.com>
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220123101653.147333-2-philipp.zabel@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_common.c | 21 +++++++++++--------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/drm_edid.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_common.c b/drivers/net/ethernet/intel/i40e/i40e_common.c
-index 9ddeb015eb7e..e830987a8c6d 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_common.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_common.c
-@@ -1899,8 +1899,9 @@ i40e_status i40e_aq_add_vsi(struct i40e_hw *hw,
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index b8f5419e514a..a71b82668a98 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -212,9 +212,7 @@ static const struct edid_quirk {
  
- 	desc.flags |= cpu_to_le16((u16)(I40E_AQ_FLAG_BUF | I40E_AQ_FLAG_RD));
- 
--	status = i40e_asq_send_command(hw, &desc, &vsi_ctx->info,
--				    sizeof(vsi_ctx->info), cmd_details);
-+	status = i40e_asq_send_command_atomic(hw, &desc, &vsi_ctx->info,
-+					      sizeof(vsi_ctx->info),
-+					      cmd_details, true);
- 
- 	if (status)
- 		goto aq_add_vsi_exit;
-@@ -2287,8 +2288,9 @@ i40e_status i40e_aq_update_vsi_params(struct i40e_hw *hw,
- 
- 	desc.flags |= cpu_to_le16((u16)(I40E_AQ_FLAG_BUF | I40E_AQ_FLAG_RD));
- 
--	status = i40e_asq_send_command(hw, &desc, &vsi_ctx->info,
--				    sizeof(vsi_ctx->info), cmd_details);
-+	status = i40e_asq_send_command_atomic(hw, &desc, &vsi_ctx->info,
-+					      sizeof(vsi_ctx->info),
-+					      cmd_details, true);
- 
- 	vsi_ctx->vsis_allocated = le16_to_cpu(resp->vsi_used);
- 	vsi_ctx->vsis_unallocated = le16_to_cpu(resp->vsi_free);
-@@ -2673,8 +2675,8 @@ i40e_status i40e_aq_add_macvlan(struct i40e_hw *hw, u16 seid,
- 	if (buf_size > I40E_AQ_LARGE_BUF)
- 		desc.flags |= cpu_to_le16((u16)I40E_AQ_FLAG_LB);
- 
--	status = i40e_asq_send_command(hw, &desc, mv_list, buf_size,
--				       cmd_details);
-+	status = i40e_asq_send_command_atomic(hw, &desc, mv_list, buf_size,
-+					      cmd_details, true);
- 
- 	return status;
- }
-@@ -2715,8 +2717,8 @@ i40e_status i40e_aq_remove_macvlan(struct i40e_hw *hw, u16 seid,
- 	if (buf_size > I40E_AQ_LARGE_BUF)
- 		desc.flags |= cpu_to_le16((u16)I40E_AQ_FLAG_LB);
- 
--	status = i40e_asq_send_command(hw, &desc, mv_list, buf_size,
--				       cmd_details);
-+	status = i40e_asq_send_command_atomic(hw, &desc, mv_list, buf_size,
-+					      cmd_details, true);
- 
- 	return status;
- }
-@@ -3868,7 +3870,8 @@ i40e_status i40e_aq_delete_element(struct i40e_hw *hw, u16 seid,
- 
- 	cmd->seid = cpu_to_le16(seid);
- 
--	status = i40e_asq_send_command(hw, &desc, NULL, 0, cmd_details);
-+	status = i40e_asq_send_command_atomic(hw, &desc, NULL, 0,
-+					      cmd_details, true);
- 
- 	return status;
- }
+ 	/* Windows Mixed Reality Headsets */
+ 	EDID_QUIRK('A', 'C', 'R', 0x7fce, EDID_QUIRK_NON_DESKTOP),
+-	EDID_QUIRK('H', 'P', 'N', 0x3515, EDID_QUIRK_NON_DESKTOP),
+ 	EDID_QUIRK('L', 'E', 'N', 0x0408, EDID_QUIRK_NON_DESKTOP),
+-	EDID_QUIRK('L', 'E', 'N', 0xb800, EDID_QUIRK_NON_DESKTOP),
+ 	EDID_QUIRK('F', 'U', 'J', 0x1970, EDID_QUIRK_NON_DESKTOP),
+ 	EDID_QUIRK('D', 'E', 'L', 0x7fce, EDID_QUIRK_NON_DESKTOP),
+ 	EDID_QUIRK('S', 'E', 'C', 0x144a, EDID_QUIRK_NON_DESKTOP),
 -- 
 2.35.1
 

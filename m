@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3874FDD8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8872E4FDD80
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345883AbiDLLLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S1344662AbiDLLKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349086AbiDLLIC (ORCPT
+        with ESMTP id S1356423AbiDLLGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:08:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0F6D861;
-        Tue, 12 Apr 2022 03:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649757654; x=1681293654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7tP6Hmh57tdYk/XI1EXwttwZcLinGHP54ZjZICaf18M=;
-  b=IP4f0St3HE7L2DS7hFIdTuebHeYZiuc6JfnnlMxXwmubZqUHOtNVKNWM
-   artZ7LqNw8WFU6JHXkn9iPI21FPpOyJXAjtRe/1HzZ4V82CahukFxbE9Z
-   u2Ci12dNKjgV2/jRdCcLUncWxxVOMdtAWVRtHQ2ABbP8AhcBGPQ8r8H0f
-   Ebqd6OBAUyqPnHPlOMIPGxtTmMRJlOwdnUlIy5/6eRGJZSG/+GUv5knlm
-   tmpQTePvY/bRyGMaXbQq2znJUit+L2B4LPZ2Z2F/LtKaRPKj8vBfvedKJ
-   RwW93wHjbh9Tb877TyjkJHT6aARn5Jh61+A76TiQFesSoLtcDEwff36T+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261183851"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="261183851"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:00:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="525976363"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 03:00:47 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neDKJ-0002jQ-1f;
-        Tue, 12 Apr 2022 10:00:47 +0000
-Date:   Tue, 12 Apr 2022 18:00:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 04/10] drm/sun4i: Allow building the driver on RISC-V
-Message-ID: <202204121758.QeUxJKUh-lkp@intel.com>
-References: <20220411043423.37333-5-samuel@sholland.org>
+        Tue, 12 Apr 2022 07:06:47 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5DC6AA40
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:00:12 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 7E8761F444E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649757611;
+        bh=q0ltO9jPgC2ENTqqGFru2UPens5pv58VO6KgGl1a8cY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KohamFiaBuk0jv4Y0OpQx57PPloK2w3if1pkZ+xv0YQH+HYH/UeC9gmBPFObifoDw
+         30q4AvCXFZvK4MokuW57HMQpw/MXO7juDwXhf14MNJmRMtDRC7honsL2ZUXv4I5Lxx
+         lyptiT02bmMRJkCOpJvFLtfRWGPMuDQ9QB3wrVXV1K9EUBaNLisIOxsDJkY7T0RNbO
+         hn42+PL7EXT97XZlj7HphTnmaX7hFbL0cqeiXQgTxXR4x1npE5Tmq3MX23NrPsBVWo
+         ZKK0niAw+xpEFURyKCaKo+1NPCqTbNZaRhZIXD5uCFjHQ06xiE/NeBS/sCNoyUHqMc
+         KeV82kvqvfHZg==
+Received: by mercury (Postfix, from userid 1000)
+        id 509511060340; Tue, 12 Apr 2022 12:00:09 +0200 (CEST)
+Date:   Tue, 12 Apr 2022 12:00:09 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hsi: clients: remove duplicate assignment
+Message-ID: <20220412100009.nd5akezypy5lycdm@mercury.elektranox.org>
+References: <1648728460-37288-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hnaftqma46pljnb6"
 Content-Disposition: inline
-In-Reply-To: <20220411043423.37333-5-samuel@sholland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1648728460-37288-1-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,102 +52,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
 
-I love your patch! Yet something to improve:
+--hnaftqma46pljnb6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on sunxi/sunxi/for-next]
-[also build test ERROR on drm/drm-next linus/master v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204121758.QeUxJKUh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
-        git checkout 829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Thu, Mar 31, 2022 at 05:07:38AM -0700, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>=20
+> netdev_alloc_skb() has assigned ssi->netdev to skb->dev if successed,
+> no need to repeat assignment.
+>=20
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks, queued.
 
-All errors (new ones prefixed by >>):
+-- Sebastian
 
->> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: error: implicit declaration of function 'readsb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-                   ^
-   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: note: did you mean 'readb'?
-   arch/hexagon/include/asm/io.h:83:18: note: 'readb' declared here
-   static inline u8 readb(const volatile void __iomem *addr)
-                    ^
->> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: error: implicit declaration of function 'writesb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-                   ^
-   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: note: did you mean 'writeb'?
-   arch/hexagon/include/asm/io.h:122:20: note: 'writeb' declared here
-   static inline void writeb(u8 data, volatile void __iomem *addr)
-                      ^
-   2 errors generated.
+>  drivers/hsi/clients/ssi_protocol.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/hsi/clients/ssi_protocol.c b/drivers/hsi/clients/ssi=
+_protocol.c
+> index 21f11a5..7aacb19
+> --- a/drivers/hsi/clients/ssi_protocol.c
+> +++ b/drivers/hsi/clients/ssi_protocol.c
+> @@ -796,7 +796,6 @@ static void ssip_rx_strans(struct hsi_client *cl, u32=
+ cmd)
+>  		dev_err(&cl->device, "No memory for rx skb\n");
+>  		goto out1;
+>  	}
+> -	skb->dev =3D ssi->netdev;
+>  	skb_put(skb, len * 4);
+>  	msg =3D ssip_alloc_data(ssi, skb, GFP_ATOMIC);
+>  	if (unlikely(!msg)) {
+> --=20
+> 2.7.4
+>=20
 
+--hnaftqma46pljnb6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +/readsb +59 drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
+-----BEGIN PGP SIGNATURE-----
 
-f0a3dd33ba685b Jonathan Liu 2017-07-02  24  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  25  static int fifo_transfer(struct sun4i_hdmi *hdmi, u8 *buf, int len, bool read)
-f0a3dd33ba685b Jonathan Liu 2017-07-02  26  {
-f0a3dd33ba685b Jonathan Liu 2017-07-02  27  	/*
-f0a3dd33ba685b Jonathan Liu 2017-07-02  28  	 * 1 byte takes 9 clock cycles (8 bits + 1 ACK) = 90 us for 100 kHz
-f0a3dd33ba685b Jonathan Liu 2017-07-02  29  	 * clock. As clock rate is fixed, just round it up to 100 us.
-f0a3dd33ba685b Jonathan Liu 2017-07-02  30  	 */
-f0a3dd33ba685b Jonathan Liu 2017-07-02  31  	const unsigned long byte_time_ns = 100;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  32  	const u32 mask = SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK |
-f0a3dd33ba685b Jonathan Liu 2017-07-02  33  			 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST |
-f0a3dd33ba685b Jonathan Liu 2017-07-02  34  			 SUN4I_HDMI_DDC_INT_STATUS_TRANSFER_COMPLETE;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  35  	u32 reg;
-939d749ad6649c Chen-Yu Tsai 2017-10-10  36  	/*
-939d749ad6649c Chen-Yu Tsai 2017-10-10  37  	 * If threshold is inclusive, then the FIFO may only have
-939d749ad6649c Chen-Yu Tsai 2017-10-10  38  	 * RX_THRESHOLD number of bytes, instead of RX_THRESHOLD + 1.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  39  	 */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  40  	int read_len = RX_THRESHOLD +
-939d749ad6649c Chen-Yu Tsai 2017-10-10  41  		(hdmi->variant->ddc_fifo_thres_incl ? 0 : 1);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  42  
-939d749ad6649c Chen-Yu Tsai 2017-10-10  43  	/*
-939d749ad6649c Chen-Yu Tsai 2017-10-10  44  	 * Limit transfer length by FIFO threshold or FIFO size.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  45  	 * For TX the threshold is for an empty FIFO.
-939d749ad6649c Chen-Yu Tsai 2017-10-10  46  	 */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  47  	len = min_t(int, len, read ? read_len : SUN4I_HDMI_DDC_FIFO_SIZE);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  48  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  49  	/* Wait until error, FIFO request bit set or transfer complete */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  50  	if (regmap_field_read_poll_timeout(hdmi->field_ddc_int_status, reg,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  51  					   reg & mask, len * byte_time_ns,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  52  					   100000))
-f0a3dd33ba685b Jonathan Liu 2017-07-02  53  		return -ETIMEDOUT;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  54  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  55  	if (reg & SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK)
-f0a3dd33ba685b Jonathan Liu 2017-07-02  56  		return -EIO;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  57  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  58  	if (read)
-939d749ad6649c Chen-Yu Tsai 2017-10-10 @59  		readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  60  	else
-939d749ad6649c Chen-Yu Tsai 2017-10-10 @61  		writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  62  
-939d749ad6649c Chen-Yu Tsai 2017-10-10  63  	/* Clear FIFO request bit by forcing a write to that bit */
-939d749ad6649c Chen-Yu Tsai 2017-10-10  64  	regmap_field_force_write(hdmi->field_ddc_int_status,
-939d749ad6649c Chen-Yu Tsai 2017-10-10  65  				 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST);
-f0a3dd33ba685b Jonathan Liu 2017-07-02  66  
-f0a3dd33ba685b Jonathan Liu 2017-07-02  67  	return len;
-f0a3dd33ba685b Jonathan Liu 2017-07-02  68  }
-f0a3dd33ba685b Jonathan Liu 2017-07-02  69  
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJVTZwACgkQ2O7X88g7
++pqFmQ//Tk7WimaocfFMEigICLkJ9XDeWiK8siEAL2Ent2o2HOyGYtlLVAB81cyr
+xTGyTKvxbnSJ2yyt7qXsgwOFV2U7wlloE9l8PXuBLYFMjtC34nPlKUvOBbVlJX7u
+Z2+3aAJeCjyL9lXesqCmCwJEsY/ObHWTVKLnbvvS/IwQQ9GEpWJKAELauvaWu2y0
+wWcuUubIC1ssTXwVSClTFl4WV+pVg6ZiDJJo/PKYR7AIwnFPit8AVl/oUbTN4VmW
+pNZSDU8uhTcEsoGncd0AEn1rxYjzuwiQajOhd63X/X6s43G4z6/2v77bKYQJZ3c7
+u7b3TyfxCZytJwq9LbDYRPYFgjTJ5egWRZIm6vf3UqIdSPMzZsy4mrWm5lV4Rxta
+wTyW0seYrmorOZdLLvtRRkxfc40zcKw4sQzjp8Jhh0Pc1BII/WzuYI/NkBlL5XB5
+i6g412uOFvU67DWICs03+v5i3zwCHy3RyyzstDWFp9mxhaCdtmwnu7I8oWDnj2QT
+cfJsTC0c2Zf2EohwOtniCdFLYCLaqA+xRg2MMYSy3/MgIEeewWOqy+lTTDqvXTrw
+HBG5TGwUq8/JLdXBGG9rrwxR5pb2IyJexrJ9QB8wlPtxhhbV7u3Wduv/bc5Se916
+yn1JdUB1VE2fR1mMgiK3EDYc9wdaXRpv8USQSv9wtlq61ZkXyAI=
+=uU61
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--hnaftqma46pljnb6--

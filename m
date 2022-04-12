@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A9D4FDF92
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7EC4FDFB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiDLMXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S1354386AbiDLMV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357416AbiDLMUx (ORCPT
+        with ESMTP id S1356661AbiDLMUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:20:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B06527D5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:28:10 -0700 (PDT)
+        Tue, 12 Apr 2022 08:20:06 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA3FEC
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649762890; x=1681298890;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A8L7F1aXAv1zmc7BrwX0jr9a4044fPUJAWnmDOdYuoU=;
-  b=aNim5OCnVxpV05oKnkg0xEWTaBQ+9RzMhXgOgEBTHGjx35jBOaUhjwBt
-   iYyD8fHW4mNxp56s0MgZ29lbHT22Noto2TPO/a9nLwbPvk7p0INOHoOrc
-   wq7EqRyvvzzyWoXi3EYgRwyesQkeEXQnv7YLRtbeyUu150C3VIjFXgghw
-   ONSrPelGXuwfKL/2MmnHEiwhzN0pGK72in/ibgEryYltzrAbL8hpZaLdQ
-   Z5dXrHBjPS+yGtxEp60fJC1DVz60QVjsaRYGcUT7aB+2U/Ix3xaArzqRw
-   msbRz09I9fF8Ztp64l/zyG5MviXPKUF6fF7I723rHGPKoxU6n48UAYLPF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="348790950"
+  t=1649762717; x=1681298717;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Vrtyg0fI9hlwODxSv/wgu1mOgXTv7MtKj6UCryh/WTE=;
+  b=TSyue/v4UZMsg9+WOgHaW3kdC/SXf9UVpPGVYtwuc+9PVScKu8zRyS4g
+   8ZRlkiRHmlUmRzRppt7RRyqPa2Xct95joj07pl7/QvUH7Hd26bsXo3TyC
+   8ZnnkpTtuonLDR6FoSgBHfKFZn6jWPE/IwnPpC4BFU9ZodyP+g7fzL93V
+   IrYr+Igg2Iki8KbHEJS5qDLlhKsk7PCAlvYUrzWo3kM/1JAI6rbD4688U
+   JWLhEey9/8g5sbztWIATGcbX1QROfXhK7SCj9vk64SGcBPh6YTZ9dygOd
+   Rkozf1LIwnYIZUHq9HB8JJjymeBXyGJk7J/sV/lcORPwE40Xe8lg1BIi8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262532659"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="348790950"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:26:06 -0700
+   d="scan'208";a="262532659"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:23:31 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="526002248"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:26:03 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1neEbI-001Yl0-8d;
-        Tue, 12 Apr 2022 14:22:24 +0300
-Date:   Tue, 12 Apr 2022 14:22:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v2 4/5] drm/solomon: Move device info from ssd130x-i2c to
- the core driver
-Message-ID: <YlVg8PE6SBzhmqjI@smile.fi.intel.com>
-References: <20220411211243.11121-1-javierm@redhat.com>
- <20220411211243.11121-5-javierm@redhat.com>
- <CAMuHMdVSsAtRLob5fLoBMNu-DRXJOaBrEHYEwG5iCA03XR5JSw@mail.gmail.com>
- <4128b288-2b9a-f9cd-01f3-a1d50d3e10bb@redhat.com>
- <YlVgpHqqqFy43L37@smile.fi.intel.com>
+   d="scan'208";a="623229113"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Apr 2022 04:23:29 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neEcL-0002oC-4N;
+        Tue, 12 Apr 2022 11:23:29 +0000
+Date:   Tue, 12 Apr 2022 19:22:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 3/12] ERROR:
+ modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko]
+ undefined!
+Message-ID: <202204121935.rH2YGQsx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlVgpHqqqFy43L37@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 02:21:08PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 12, 2022 at 10:07:02AM +0200, Javier Martinez Canillas wrote:
-> > On 4/12/22 09:23, Geert Uytterhoeven wrote:
-> > > On Mon, Apr 11, 2022 at 11:12 PM Javier Martinez Canillas
-> > > <javierm@redhat.com> wrote:
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
+head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
+commit: aeeed98e20910aeafd5db8c56b449810b60bad9f [3/12] timekeeping: add raw clock fallback for random_get_entropy()
+config: parisc-defconfig (https://download.01.org/0day-ci/archive/20220412/202204121935.rH2YGQsx-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/aeeed98e20910aeafd5db8c56b449810b60bad9f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
+        git checkout aeeed98e20910aeafd5db8c56b449810b60bad9f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > >> -       ssd130x->device_info = device_get_match_data(dev);
-> > >> +
-> > >> +       variant = (enum ssd130x_variants)device_get_match_data(dev);
-> > > 
-> > > (uintptr_t), to avoid a cast from pointer to integer of different
-> > > size warning.
-> > >
-> > 
-> > Indeed. The kernel test robot reported the same.
-> 
-> Not only because of this, but also with the non-NULL pointers I prefer the old
-> style without ugly castings.
-> 
-> Instead, you may export the array (in the driver's namespace) and use
-> &info[ID] pointer for the specific device info.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Note that device_get_match_data() has no clue if the data is absent or
-data == (void *)0.
+>> ERROR: modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko] undefined!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

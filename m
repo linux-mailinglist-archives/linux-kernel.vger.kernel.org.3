@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AEF4FD80F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93DE4FD63E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383527AbiDLIhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S1357188AbiDLIRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356750AbiDLHjS (ORCPT
+        with ESMTP id S1355717AbiDLH3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D352B12;
-        Tue, 12 Apr 2022 00:10:08 -0700 (PDT)
+        Tue, 12 Apr 2022 03:29:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B6A4F470;
+        Tue, 12 Apr 2022 00:08:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73991616B2;
-        Tue, 12 Apr 2022 07:10:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DFBC385A5;
-        Tue, 12 Apr 2022 07:10:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8361B81A8F;
+        Tue, 12 Apr 2022 07:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27397C385A1;
+        Tue, 12 Apr 2022 07:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747407;
-        bh=smfjITSV1YHK4/bfAMDR+H6NLc2WvBO/3LmrqMnJXJ4=;
+        s=korg; t=1649747292;
+        bh=uow/9Fxm7VelvSN98UYvC4nbs7sPXNUk8zotZfIsCTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bbSTray6srJJXYmltFOYyt55lObJ/qypjDtiR2R5nLxIrbtKz6uGE9ElSkXdNEp2Z
-         9G46+ZKdrypFxf3VlEDWeIjKQuW32/U5phcUw0EpwUKft96aqlex3ZXWSmrFI4PLYK
-         Fz1LvSFZDC6ys4y4TIx5kl2e7zuT6K2ypVgsKP9k=
+        b=qnhExByO+jtlRvjz6TsPKgEk+JIRwHcyEkqCtBvmsDrlOxfHQ8K7b/3yyM1DYzQU1
+         JdQLTDY/GCCGQvbzLNN2J+DRcDi2jia8cGt4dD6AXAUw4dgVqAqEPK2UmEfn2mtmAu
+         W9gwEE6Xtb70ImTaS4GNGLNSdI3nw1xZP878rt3I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <philipp.zabel@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Soenke Huster <soenke.huster@eknoes.de>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 018/343] drm/edid: improve non-desktop quirk logging
-Date:   Tue, 12 Apr 2022 08:27:16 +0200
-Message-Id: <20220412062951.631036259@linuxfoundation.org>
+Subject: [PATCH 5.17 019/343] Bluetooth: hci_event: Ignore multiple conn complete events
+Date:   Tue, 12 Apr 2022 08:27:17 +0200
+Message-Id: <20220412062951.659122282@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -55,71 +55,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Soenke Huster <soenke.huster@eknoes.de>
 
-[ Upstream commit ce99534e978d4a36787dbe5e5c57749d12e6bf4a ]
+[ Upstream commit d5ebaa7c5f6f688959e8d40840b2249ede63b8ed ]
 
-Improve non-desktop quirk logging if the EDID indicates non-desktop. If
-both are set, note about redundant quirk. If there's no quirk but the
-EDID indicates non-desktop, don't log non-desktop is set to 0.
+When one of the three connection complete events is received multiple
+times for the same handle, the device is registered multiple times which
+leads to memory corruptions. Therefore, consequent events for a single
+connection are ignored.
 
-Cc: Philipp Zabel <philipp.zabel@gmail.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Philipp Zabel <philipp.zabel@gmail.com>
-Tested-by: Philipp Zabel <philipp.zabel@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211228101051.317989-1-jani.nikula@intel.com
+The conn->state can hold different values, therefore HCI_CONN_HANDLE_UNSET
+is introduced to identify new connections. To make sure the events do not
+contain this or another invalid handle HCI_CONN_HANDLE_MAX and checks
+are introduced.
+
+Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=215497
+Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ include/net/bluetooth/hci_core.h |  3 ++
+ net/bluetooth/hci_conn.c         |  1 +
+ net/bluetooth/hci_event.c        | 63 ++++++++++++++++++++++++--------
+ 3 files changed, 52 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index a71b82668a98..83e5c115e754 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -5325,17 +5325,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
- 	info->width_mm = edid->width_cm * 10;
- 	info->height_mm = edid->height_cm * 10;
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index e336e9c1dda4..36d727f94ac2 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -294,6 +294,9 @@ struct adv_monitor {
  
--	info->non_desktop = !!(quirks & EDID_QUIRK_NON_DESKTOP);
--
- 	drm_get_monitor_range(connector, edid);
+ #define HCI_MAX_SHORT_NAME_LENGTH	10
  
--	DRM_DEBUG_KMS("non_desktop set to %d\n", info->non_desktop);
--
- 	if (edid->revision < 3)
--		return quirks;
-+		goto out;
++#define HCI_CONN_HANDLE_UNSET		0xffff
++#define HCI_CONN_HANDLE_MAX		0x0eff
++
+ /* Min encryption key size to match with SMP */
+ #define HCI_MIN_ENC_KEY_SIZE		7
  
- 	if (!(edid->input & DRM_EDID_INPUT_DIGITAL))
--		return quirks;
-+		goto out;
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index 3bb2b3b6a1c9..84312c836549 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -691,6 +691,7 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type, bdaddr_t *dst,
  
- 	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
- 	drm_parse_cea_ext(connector, edid);
-@@ -5356,7 +5352,7 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 	bacpy(&conn->dst, dst);
+ 	bacpy(&conn->src, &hdev->bdaddr);
++	conn->handle = HCI_CONN_HANDLE_UNSET;
+ 	conn->hdev  = hdev;
+ 	conn->type  = type;
+ 	conn->role  = role;
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index 519f5906ee98..63b925921c87 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -3068,6 +3068,11 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 	struct hci_ev_conn_complete *ev = data;
+ 	struct hci_conn *conn;
  
- 	/* Only defined for 1.4 with digital displays */
- 	if (edid->revision < 4)
--		return quirks;
-+		goto out;
- 
- 	switch (edid->input & DRM_EDID_DIGITAL_DEPTH_MASK) {
- 	case DRM_EDID_DIGITAL_DEPTH_6:
-@@ -5393,6 +5389,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
- 
- 	drm_update_mso(connector, edid);
- 
-+out:
-+	if (quirks & EDID_QUIRK_NON_DESKTOP) {
-+		drm_dbg_kms(connector->dev, "Non-desktop display%s\n",
-+			    info->non_desktop ? " (redundant quirk)" : "");
-+		info->non_desktop = true;
++	if (__le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for invalid handle");
++		return;
 +	}
 +
- 	return quirks;
- }
+ 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
  
+ 	hci_dev_lock(hdev);
+@@ -3106,6 +3111,17 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 		}
+ 	}
+ 
++	/* The HCI_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
++		goto unlock;
++	}
++
+ 	if (!ev->status) {
+ 		conn->handle = __le16_to_cpu(ev->handle);
+ 
+@@ -4674,6 +4690,11 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 		return;
+ 	}
+ 
++	if (__le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_Sync_Conn_Complete for invalid handle");
++		return;
++	}
++
+ 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+ 
+ 	hci_dev_lock(hdev);
+@@ -4697,23 +4718,19 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 			goto unlock;
+ 	}
+ 
++	/* The HCI_Synchronous_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Sync_Conn_Complete event for existing connection");
++		goto unlock;
++	}
++
+ 	switch (ev->status) {
+ 	case 0x00:
+-		/* The synchronous connection complete event should only be
+-		 * sent once per new connection. Receiving a successful
+-		 * complete event when the connection status is already
+-		 * BT_CONNECTED means that the device is misbehaving and sent
+-		 * multiple complete event packets for the same new connection.
+-		 *
+-		 * Registering the device more than once can corrupt kernel
+-		 * memory, hence upon detecting this invalid event, we report
+-		 * an error and ignore the packet.
+-		 */
+-		if (conn->state == BT_CONNECTED) {
+-			bt_dev_err(hdev, "Ignoring connect complete event for existing connection");
+-			goto unlock;
+-		}
+-
+ 		conn->handle = __le16_to_cpu(ev->handle);
+ 		conn->state  = BT_CONNECTED;
+ 		conn->type   = ev->link_type;
+@@ -5509,6 +5526,11 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 	struct smp_irk *irk;
+ 	u8 addr_type;
+ 
++	if (handle > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_LE_Connection_Complete for invalid handle");
++		return;
++	}
++
+ 	hci_dev_lock(hdev);
+ 
+ 	/* All controllers implicitly stop advertising in the event of a
+@@ -5550,6 +5572,17 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 		cancel_delayed_work(&conn->le_conn_timeout);
+ 	}
+ 
++	/* The HCI_LE_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
++		goto unlock;
++	}
++
+ 	le_conn_update_addr(conn, bdaddr, bdaddr_type, local_rpa);
+ 
+ 	/* Lookup the identity address from the stored connection
 -- 
 2.35.1
 

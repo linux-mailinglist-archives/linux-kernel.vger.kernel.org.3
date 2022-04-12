@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02704FD870
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241194FD704
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiDLHVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
+        id S1357512AbiDLIsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352780AbiDLHF7 (ORCPT
+        with ESMTP id S1357503AbiDLHkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:59 -0400
+        Tue, 12 Apr 2022 03:40:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445A827B22;
-        Mon, 11 Apr 2022 23:48:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C212E0BE;
+        Tue, 12 Apr 2022 00:15:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C42B660A21;
-        Tue, 12 Apr 2022 06:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10A6C385A6;
-        Tue, 12 Apr 2022 06:48:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B63161708;
+        Tue, 12 Apr 2022 07:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68225C385A6;
+        Tue, 12 Apr 2022 07:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746124;
-        bh=QglxR7xqTgao+Mu3n8Nk9NbuD0NuJMjSZJ6+4whERrI=;
+        s=korg; t=1649747755;
+        bh=LbsWdC+mLgfWbAbtREdt53kY3KupLyZQyMuQajWJW3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=souES1R19WgJdTr+PgpTcMhSnUZsmoM8S+U59rkQFuy6bCGVKyk32yX0f13MH8bmq
-         XV6RjIgQ2UqtxgSX+BCD8ByhorrxTsQL1OcQrkIwD69YI0QGBDpt9Kgd0gj7wf/LSs
-         86JQiRbMGDTECSTCTRuKU61LGKRJPoK0zoj/6zOM=
+        b=Sk+o+Rzha8yQ8mjbETEbYu5XHtc1UVIByWCmXHydK/Ag1mIX9n/mueOnXU+2Z4EOb
+         eMd/usiiW0PkhTpuu8M98+di+nCPDiRnu51un1ipDvYydE8o4+wxWkqOOFULcg5COO
+         0JS3TQ4qjkwn0Sp0315LsJdG2CsQtY4qpkhS00wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Axel Lin <axel.lin@ingics.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Feng Tang <feng.tang@intel.com>, Guo Ren <guoren@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 168/277] regulator: rtq2134: Fix missing active_discharge_on setting
+Subject: [PATCH 5.17 153/343] lib/Kconfig.debug: add ARCH dependency for FUNCTION_ALIGN option
 Date:   Tue, 12 Apr 2022 08:29:31 +0200
-Message-Id: <20220412062946.899149569@linuxfoundation.org>
+Message-Id: <20220412062955.794651182@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Axel Lin <axel.lin@ingics.com>
+From: Feng Tang <feng.tang@intel.com>
 
-[ Upstream commit 17049bf9de55a42ee96fd34520aff8a484677675 ]
+[ Upstream commit 1bf18da62106225dbc47aab41efee2aeb99caccd ]
 
-The active_discharge_on setting was missed, so output discharge resistor
-is always disabled. Fix it.
+0Day robots reported there is compiling issue for 'csky' ARCH when
+CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED is enabled [1]:
 
-Fixes: 0555d41497de ("regulator: rtq2134: Add support for Richtek RTQ2134 SubPMIC")
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Link: https://lore.kernel.org/r/20220404022514.449231-1-axel.lin@ingics.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+All errors (new ones prefixed by >>):
+
+   {standard input}: Assembler messages:
+>> {standard input}:2277: Error: pcrel offset for branch to .LS000B too far (0x3c)
+
+Which was discussed in [2].  And as there is no solution for csky yet, add
+some dependency for this config to limit it to several ARCHs which have no
+compiling issue so far.
+
+[1]. https://lore.kernel.org/lkml/202202271612.W32UJAj2-lkp@intel.com/
+[2]. https://www.spinics.net/lists/linux-kbuild/msg30298.html
+
+Link: https://lkml.kernel.org/r/20220304021100.GN4548@shbuild999.sh.intel.com
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Cc: Guo Ren <guoren@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/rtq2134-regulator.c | 1 +
- 1 file changed, 1 insertion(+)
+ lib/Kconfig.debug | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/rtq2134-regulator.c b/drivers/regulator/rtq2134-regulator.c
-index f21e3f8b21f2..8e13dea354a2 100644
---- a/drivers/regulator/rtq2134-regulator.c
-+++ b/drivers/regulator/rtq2134-regulator.c
-@@ -285,6 +285,7 @@ static const unsigned int rtq2134_buck_ramp_delay_table[] = {
- 		.enable_mask = RTQ2134_VOUTEN_MASK, \
- 		.active_discharge_reg = RTQ2134_REG_BUCK##_id##_CFG0, \
- 		.active_discharge_mask = RTQ2134_ACTDISCHG_MASK, \
-+		.active_discharge_on = RTQ2134_ACTDISCHG_MASK, \
- 		.ramp_reg = RTQ2134_REG_BUCK##_id##_RSPCFG, \
- 		.ramp_mask = RTQ2134_RSPUP_MASK, \
- 		.ramp_delay_table = rtq2134_buck_ramp_delay_table, \
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14b89aa37c5c..440fd666c16d 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -416,7 +416,8 @@ config SECTION_MISMATCH_WARN_ONLY
+ 	  If unsure, say Y.
+ 
+ config DEBUG_FORCE_FUNCTION_ALIGN_64B
+-	bool "Force all function address 64B aligned" if EXPERT
++	bool "Force all function address 64B aligned"
++	depends on EXPERT && (X86_64 || ARM64 || PPC32 || PPC64 || ARC)
+ 	help
+ 	  There are cases that a commit from one domain changes the function
+ 	  address alignment of other domains, and cause magic performance
 -- 
 2.35.1
 

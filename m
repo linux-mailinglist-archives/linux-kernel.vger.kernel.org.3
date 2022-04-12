@@ -2,160 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFA14FE913
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8044FE91C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiDLTuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S229640AbiDLTxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiDLTti (ORCPT
+        with ESMTP id S230315AbiDLTvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:49:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D19366C8E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649792721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WpG5ULDIWtR6MAD2NZ7Y0GsTIabSBZ3X6PEQkqyZxBI=;
-        b=D8c08brRT73HVKkzCUdNgqwgxTFbPbt76GBalgmj0MgjdT5ViKqzEAEPoASxSCu89qfm2k
-        j5wh65KDz72WoUDIqPGYUu8ocXP5ftTKVVJwz7JUVVrGS15fllbVna11xuVU5D2u7kpENJ
-        RPkW7tryhAS6EkKPE/9kQzx69Oh57p0=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-Huai4W5bNAeQv8Y0AnYZTQ-1; Tue, 12 Apr 2022 15:45:20 -0400
-X-MC-Unique: Huai4W5bNAeQv8Y0AnYZTQ-1
-Received: by mail-il1-f199.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so13341324ilu.14
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:45:19 -0700 (PDT)
+        Tue, 12 Apr 2022 15:51:08 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD265484
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:46:43 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-dacc470e03so21867777fac.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OcCFOIbabGMt8R4R5kmD+nWqw4w/utia9Z9PYHvplQc=;
+        b=m2dzcglSF6AgD3X8N5HTbv7KqJkmZFNOirfaSAEFEihSuceCvzNa5HXcUilyiXZXDy
+         zURF3W6b44+rgOeL6/HQbB0OtbxFI3RC/Ki+t3a/wqa7hVnoqfyr9YRBEkD+yq1lUEWj
+         zwdILpqgAqWpRm5gOip9LPDtQLEjw62N8TC3+ky2m+gDdbL6K+RCAv7n0jWRLbPffnH6
+         F+s6nlz49Bg5JvpXEGQgiiZcwblXBthrdI2HbB5NZv5014L21pubsa880JYyZyPmneHT
+         uAyBYzyhxsaLjqNLNV0Etk4V3ZghSjqklGG+MD8UXxkCRPPWlzM2wYqUjMLUsPpunpK3
+         5fhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WpG5ULDIWtR6MAD2NZ7Y0GsTIabSBZ3X6PEQkqyZxBI=;
-        b=6DDGFTUWKKtvyxBaYCUDlWRtji6Tn6ujXPvHK7Gglyl5Crw5k3uL13o7L7T0hvcugG
-         vJPb6JVNb4n/5eOZWApCLAnSjqLRTV19ZrxkEI01LMqNYEolb69Z2WqQy2GDzrAZ2ZZV
-         Kb3pMQWJBsm+H4HUyrF2XrqBS097jCjpsEqTVbbdi5z8MFIPMOLDIwPJfD36qrlMlM1L
-         8CiKePM304+Qpc/e/To87x9R/XsSnk99o5yG20l8+2GO/YgZbhHUdXqCcf0wseERfKA1
-         3l9GbdQHY8xmrTF0IJqWgLNmiYS6dcCQPhw9L8nCqGnVRNtxsz6b1c2y0ctnZd95yko+
-         2JDw==
-X-Gm-Message-State: AOAM531wHHlX321LWis2mZBkIJqAp6IZOGk/nAVcOYSCbhSnQHfRwRbn
-        tRBGGC8fjy8dSjfksaipw3qwO7nW0DdLK1d/JOh3/GiXII4auisMl7mI1fvslyOXB0KXdfLC8En
-        67fz4+lqewys9mJmbu5uMRIVz
-X-Received: by 2002:a05:6638:2041:b0:323:b749:f52d with SMTP id t1-20020a056638204100b00323b749f52dmr17008227jaj.306.1649792719346;
-        Tue, 12 Apr 2022 12:45:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwcjlWXnaygTtgjP1hPyx4RLhLUfitY3W7bEerI41T+XUGE4bcRNUUxW1dD8cXewiOn0M3SEA==
-X-Received: by 2002:a05:6638:2041:b0:323:b749:f52d with SMTP id t1-20020a056638204100b00323b749f52dmr17008209jaj.306.1649792719089;
-        Tue, 12 Apr 2022 12:45:19 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id w1-20020a056e021a6100b002caa71d8d98sm5359586ilv.49.2022.04.12.12.45.17
+        bh=OcCFOIbabGMt8R4R5kmD+nWqw4w/utia9Z9PYHvplQc=;
+        b=YUk+BurPnEFX1i0Z6JaxmgP6X2OwPLJ55GuPMU3HDorcOM+6s4NVU/aHZUGtwFRvD4
+         B53L0UA6u35ldkjy//vdu3YxqLS/oa0MZTTCBnmiaFSzBZ89TdqCjnUMrcEFKZGk67dW
+         S1EcyMbG3fzAGLUPxapCwQUSOV0D1ftHgc0s3oWfJlHikSwvuvck/o5Uvwy5/YBjaqCA
+         b0jToK/t/VP84mTVCPz9ObtXvC/W60/q8Xu3yxFvyZEOa8REqvj/xq3zeU+SZPThEhIc
+         CR6NfzkZKsXUSiqpdFX4EdU8TYmlDI3NBv/wqTqJvHBUhZEjpPWluLTyBb3PwUmotqpQ
+         ovAQ==
+X-Gm-Message-State: AOAM533sP6sdN02G9zMWI/64upIh9F2VlD1D5lN3DPXXsckJIFG9qT+q
+        ZXD0JWhzVcviUKdIc4MVimTiVA==
+X-Google-Smtp-Source: ABdhPJz57YhmO0GbH2IOg8zrRjFf+Vn8T4DxIDvA1pCWwG5XZAcc5n87X0xNf2O1Lp1voPFA3bWVUg==
+X-Received: by 2002:a05:6870:e303:b0:e2:e9fc:2fbe with SMTP id z3-20020a056870e30300b000e2e9fc2fbemr2863838oad.74.1649792802346;
+        Tue, 12 Apr 2022 12:46:42 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id r205-20020acadad6000000b002ef824213c9sm12964798oig.55.2022.04.12.12.46.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 12:45:18 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 15:45:17 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-Subject: Re: [PATCH v8 01/23] mm: Introduce PTE_MARKER swap entry
-Message-ID: <YlXWzf3nF+lGA5fn@xz-m1.local>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405014646.13522-2-peterx@redhat.com>
- <87bkx7ayfs.fsf@nvdebian.thelocal>
+        Tue, 12 Apr 2022 12:46:41 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 14:46:39 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH v3 03/18] ARM: dts: qcom: add missing rpm regulators and
+ cells for ipq8064
+Message-ID: <YlXXH3ikA5Tcdx9R@builder.lan>
+References: <20220309190152.7998-1-ansuelsmth@gmail.com>
+ <20220309190152.7998-4-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bkx7ayfs.fsf@nvdebian.thelocal>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220309190152.7998-4-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 11:07:56AM +1000, Alistair Popple wrote:
-> Hi Peter,
+On Wed 09 Mar 13:01 CST 2022, Ansuel Smith wrote:
 
-Hi, Alistair,
+> Add cells definition for rpm node
 
+Why do we need the cells?
+
+> and add missing regulators for the 4
+> regulator present on ipq8064. There regulators are controlled by rpm and
+> to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
+
+Are you saying "...to correctly work, gsbi4_i2c must NEVER be disabled..."?
+
+If so, that's good information, but how does it relate to this
+particular change?
+
+Regards,
+Bjorn
+
+> reject any regulator change request.
 > 
-> I noticed this while reviewing the next patch in the series. I think you need to
-> add CONFIG_PTE_MARKER to the below as well:
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Tested-by: Jonathan McDowell <noodles@earth.li>
+> ---
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi | 36 +++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> #if defined(CONFIG_MEMORY_FAILURE) || defined(CONFIG_MIGRATION) || \
->     defined(CONFIG_DEVICE_PRIVATE)
-> static inline int non_swap_entry(swp_entry_t entry)
-> {
-> 	return swp_type(entry) >= MAX_SWAPFILES;
-> }
-> #else
-> static inline int non_swap_entry(swp_entry_t entry)
-> {
-> 	return 0;
-> }
-> #endif
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index b309bc0fbbcd..0938838a4af8 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -842,10 +842,46 @@ rpm: rpm@108000 {
+>  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
+>  			clock-names = "ram";
+>  
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+>  			rpmcc: clock-controller {
+>  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
+>  				#clock-cells = <1>;
+>  			};
+> +
+> +			smb208_regulators: regulators {
+> +				compatible = "qcom,rpm-smb208-regulators";
+> +				status = "okay";
+> +
+> +				smb208_s1a: s1a {
+> +					regulator-min-microvolt = <1050000>;
+> +					regulator-max-microvolt = <1150000>;
+> +
+> +					qcom,switch-mode-frequency = <1200000>;
+> +				};
+> +
+> +				smb208_s1b: s1b {
+> +					regulator-min-microvolt = <1050000>;
+> +					regulator-max-microvolt = <1150000>;
+> +
+> +					qcom,switch-mode-frequency = <1200000>;
+> +				};
+> +
+> +				smb208_s2a: s2a {
+> +					regulator-min-microvolt = < 800000>;
+> +					regulator-max-microvolt = <1250000>;
+> +
+> +					qcom,switch-mode-frequency = <1200000>;
+> +				};
+> +
+> +				smb208_s2b: s2b {
+> +					regulator-min-microvolt = < 800000>;
+> +					regulator-max-microvolt = <1250000>;
+> +
+> +					qcom,switch-mode-frequency = <1200000>;
+> +				};
+> +			};
+>  		};
+>  
+>  		tcsr: syscon@1a400000 {
+> -- 
+> 2.34.1
 > 
-> Otherwise marker entries will be treated as swap entries, which is wrong for
-> example in swapin_walk_pmd_entry() as marker entries are no longer considered
-> pte_none().
-
-Thanks for the comment, that makes sense.
-
-Instead of adding PTE_MARKER into this equation, I'm going backward and
-wondering purely on why we need to bother with non_swap_entry() at all if
-MAX_SWAPFILES is already defined with proper knowledges of all these bits.
-
-#define MAX_SWAPFILES \
-	((1 << MAX_SWAPFILES_SHIFT) - SWP_DEVICE_NUM - \
-	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM)
-
-So, I agree with your analysis, but instead of adding PTE_MARKER, what do
-you think about we dropping that complexity as a whole (possibly with a
-standalone patch)?
-
----8<---
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index d356ab4047f7..5af852b68805 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -387,18 +387,10 @@ static inline void num_poisoned_pages_inc(void)
- }
- #endif
- 
--#if defined(CONFIG_MEMORY_FAILURE) || defined(CONFIG_MIGRATION) || \
--    defined(CONFIG_DEVICE_PRIVATE)
- static inline int non_swap_entry(swp_entry_t entry)
- {
-        return swp_type(entry) >= MAX_SWAPFILES;
- }
--#else
--static inline int non_swap_entry(swp_entry_t entry)
--{
--       return 0;
--}
--#endif
- 
- #endif /* CONFIG_MMU */
- #endif /* _LINUX_SWAPOPS_H */
----8<---
-
-Thanks,
-
--- 
-Peter Xu
-

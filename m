@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007024FF76A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C88B4FF771
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiDMNMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S235720AbiDMNN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiDMNMC (ORCPT
+        with ESMTP id S233614AbiDMNNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:12:02 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7433636B49;
-        Wed, 13 Apr 2022 06:09:40 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id z6-20020a17090a398600b001cb9fca3210so2136356pjb.1;
-        Wed, 13 Apr 2022 06:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=OmdGyzNAeRxm3nkDHt1WCAV+MzEwG75Y0ksewbX+MF4=;
-        b=PAOM8WIfUZW45BC2wg57HYBsBtUv0BVv3ho9de5zzfBGpQcV6dc+dv8zglA2PNG0TM
-         5Rq3N98WLNH/UgggAEoq11zI1cWyX9OGI1tINPc0Lz5+EYhkXmpDvfYozaT+65d/ZZhp
-         NtWg/2ngoAva0x1K3o0GAkZxlVMWlzAPalDK6JsjyE5vzvzz/VNVoQaWE37Js6wLpwXX
-         657YJGsQj8kRKNyDHLuQCl86qjMX+P3TwoS+CVqqlPOUytcql1pDJnkuNyJKWaG/FEZC
-         onwHaBuMHTSiur9x7RRrMP1mJlD4cQjN6V7FhF73pmPl9msEMnnWn9yAYsOMt77zLeyi
-         fIUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=OmdGyzNAeRxm3nkDHt1WCAV+MzEwG75Y0ksewbX+MF4=;
-        b=iQHQ+nhQODh2lObSxsdZRCwkqj9vDB3jofBcgYHhq+s2diTZrDnYVMbDzX70s7W5eN
-         eJN6PFuHYeehQ6hLZrP5b92tSEaE9P1pc/rcnj1UHVKBScnTglxyJ/M5ENh2YINaWkdY
-         S01yE4eLRJLextYXCzp9bmvB9p557gh8pn4JikyQkXCAIknDGON5ry0VcbwZSChGszfA
-         d2VUpjnKzZG6KKIxA2WqbmoezffbmPiAmCa11uVw/U4hHPt5hvniTIppsk1xj2o5Ong3
-         ZQ9TJ0oublsKSkBql48tnnp7Zn9+08HPMEkj+79ercEclj5VN5smL3GFqS7VZoPssZ6I
-         k7+g==
-X-Gm-Message-State: AOAM533p7bluuHIUNKOyoNe6cnvZYU4wnteH3QZglWkGJ9GcHHqotr1k
-        TALAWYWWo9vh2zxEVeSGzC4=
-X-Google-Smtp-Source: ABdhPJxZ3lc5i6nvGo31seZiu+YtpLNfRWuJ6SkCtAfWac6phK2piMZLcrwDr4ywT/xF+5hk0GwYOg==
-X-Received: by 2002:a17:90a:4fa6:b0:1cb:1b77:c931 with SMTP id q35-20020a17090a4fa600b001cb1b77c931mr10849472pjh.63.1649855379956;
-        Wed, 13 Apr 2022 06:09:39 -0700 (PDT)
-Received: from ?IPV6:240b:11:ea00:8f10:1cbd:f3fd:b9f6:da2b? ([240b:11:ea00:8f10:1cbd:f3fd:b9f6:da2b])
-        by smtp.gmail.com with ESMTPSA id w7-20020a63a747000000b003991d7d3728sm6445338pgo.74.2022.04.13.06.09.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 06:09:39 -0700 (PDT)
-Message-ID: <52225285-3b64-f709-81ff-0c26a9b13c02@gmail.com>
-Date:   Wed, 13 Apr 2022 22:09:32 +0900
+        Wed, 13 Apr 2022 09:13:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6E7A3981F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:11:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6446A12FC;
+        Wed, 13 Apr 2022 06:11:02 -0700 (PDT)
+Received: from [10.57.41.19] (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23AB13F73B;
+        Wed, 13 Apr 2022 06:11:01 -0700 (PDT)
+Message-ID: <4a993382-6a29-a0f4-4600-90ab60ad982a@arm.com>
+Date:   Wed, 13 Apr 2022 14:10:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-From:   SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
-Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for Buffalo WZR-1166DHP2
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
- <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
-Content-Language: en-US
-In-Reply-To: <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
+Subject: Re: [PATCH] dma-direct: avoid redundant memory sync for swiotlb
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@lst.de>, Chao Gao <chao.gao@intel.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        m.szyprowski@samsung.com,
+        Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
+        Gao Liang <liang.gao@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>
+References: <20220412113805.3210-1-chao.gao@intel.com>
+ <e25fbb7e-a67e-5421-b7be-700fd0209b0d@arm.com>
+ <20220413010157.GA10502@gao-cwp> <20220413045958.GA31209@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220413045958.GA31209@lst.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Thank you for the replies.
-
-On 2022/04/13 2:49, Rafał Miłecki wrote:
->>   - 4x 10/100M ethernet switch
+On 2022-04-13 05:59, Christoph Hellwig wrote:
+> On Wed, Apr 13, 2022 at 09:02:02AM +0800, Chao Gao wrote:
+>> dma_direct_sync_single_for_cpu() also calls arch_sync_dma_for_cpu_all()
+>> and arch_dma_mark_clean() in some cases. if SWIOTLB does sync internally,
+>> should these two functions be called by SWIOTLB?
+>>
+>> Personally, it might be better if swiotlb can just focus on bounce buffer
+>> alloc/free. Adding more DMA coherence logic into swiotlb will make it
+>> a little complicated.
+>>
+>> How about an open-coded version of dma_direct_sync_single_for_cpu
+>> in dma_direct_unmap_page with swiotlb_sync_single_for_cpu replaced by
+>> swiotlb_tbl_unmap_single?
 > 
-> Isn't that 10/100/1000?
+> I don't think the swiotlb and non-coherent case ever fully worked.
+> Before the merge of swiotlb into dma-direct they obviously were
+> mutally exclusive, and even now all the cache maintainance is done
+> on the physical address of the original data, not the swiotlb buffer.
 
-You are right.
-It supports 10/100/1000Mbps.
+Are you sure? AFAICS swiotlb_map() does the right thing, and 
+dma_direct_{sync,unmap} are working off the DMA address, which is that 
+of the bounce slot when SWIOTLB is involved (not least, how would the 
+is_swiotlb_buffer() checks work otherwise?)
 
->> +    model = "Buffalo WZR-1166DHP2 (BCM4708)";
+> If we want to fix that properly all the arch dma calls will need to
+> move into swiotlb, but that is a much bigger patch.
 > 
-> We stopped adding SoC name to the "model" value, please drop it.
+> So for now I'd be happy with the one liner presented here, but
+> eventually the whole area could use an overhaul.
 
-Understood.
+Sure, whoever gets round to tackling DMA_ATTR_NO_SNOOP first will need 
+to go through all the cache maintenance hooks anyway, so happy to kick 
+the can down the road until then.
 
-I will fix it as follows
-model = "Buffalo WZR-1166DHP2";
-
->> +
->> +        wireless1 {
->> +            label = "bcm53xx:amber:wireless";
->> +            gpios = <&hc595 7 GPIO_ACTIVE_HIGH>;
->> +        };
->> +    };
-> 
-> I'm wondering if all new DTS files should use "function" and "color"
-> instead of "label". That's preferred solution and I guess it's good idea
-> to use it for new code.
-
-Understood.
-
-I will rewrite it with "function" and "color."
-
-I will post the patch again after testing.
-
-Best regards
+Thanks,
+Robin.

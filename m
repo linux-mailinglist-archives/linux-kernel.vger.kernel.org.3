@@ -2,358 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E854FF3D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CB44FF3E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiDMJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S234635AbiDMJnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiDMJmo (ORCPT
+        with ESMTP id S234645AbiDMJnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:42:44 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9393586F;
-        Wed, 13 Apr 2022 02:40:23 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id c6so1645361edn.8;
-        Wed, 13 Apr 2022 02:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QV2H8Zpc3cQYjchDu8RYw5gWfW1y7hY5+ft9F48s9lg=;
-        b=qPQtL4dx5UsyjmfJN1u2zFmTxY9nARpLmPh3SIwgOeAl6LunvZ77eTTgWZkXe1Db2n
-         5dgiV02CRGnQXBnQ2kbmEnt7wvHMlZb1Dx49BbrzoICLWJuF+iDqQlI5MoWKryXGBO0N
-         uLWkc+kTAWpUSgC0qylQGE4aRCXDqZUWoSBtaJY1GVbKf6HsjhPZb1DRHjfsgNqzuHJa
-         UusJTCm/Sci4jSYGYk7OpRcgBVxkK7ggF0N88v88nL13GxAIQ3IzqGf79bYmLpr9E0Z8
-         JaDAxI9jf1xBqzomjPy16HrmpRhH9mf+nlruximkz8tmRp5HimoB7fVl5cvXPNvD3B6c
-         0Vkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QV2H8Zpc3cQYjchDu8RYw5gWfW1y7hY5+ft9F48s9lg=;
-        b=6kTEXOvNEche1e3F0fir6CyvvyaAyfctj22npkPtRV7WJ5moGqOmk8/qB5R7K7e2EQ
-         nmJgvSjLu5StKCFcYMJ8vyGy6wa/Qu15mnLSzhz586uiXh9A5nwE1XipjqD2OyMIfLyl
-         i8PNGKmmBL5XAXRDKf6ElRTz5p37pEoW84VyILf+KZZwjqMQzqUXmY2E4ZUojOeRYDA+
-         Y2ZYQRCQkAYfJIqQKuKlCZihbBew5kz9mrqXtgFUF8Ob2RW2zA10o9AetW7s2rf2cwhD
-         6/GiROiUd96cMFUwWVgkzWE3gWu/F5QWADphI1Mi91WzM9R6eYUiLyKnz8S0420sVv9/
-         JIZg==
-X-Gm-Message-State: AOAM530yUelcsbMeoVwSB0WVdhvKJaCrew9Z8j81VrNMIV48GK/Y66zw
-        OlRrlR6PyZ7H8YLdAabRGz8=
-X-Google-Smtp-Source: ABdhPJwQTDqwvRxq+U5T7h87eKFZua1Dz6/aJbupJ6rps5B27cxrMfXpWPKTvZmoPdRkG6trWPSZJQ==
-X-Received: by 2002:a05:6402:2881:b0:41d:8c32:917 with SMTP id eg1-20020a056402288100b0041d8c320917mr9355516edb.328.1649842822325;
-        Wed, 13 Apr 2022 02:40:22 -0700 (PDT)
-Received: from demon-pc.localdomain ([188.24.22.234])
-        by smtp.gmail.com with ESMTPSA id t1-20020a170906178100b006e7edb2c0bdsm11403265eje.15.2022.04.13.02.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 02:40:21 -0700 (PDT)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v1 1/3] dt-bindings: iio: adc: add AD4130
-Date:   Wed, 13 Apr 2022 12:40:09 +0300
-Message-Id: <20220413094011.185269-1-cosmin.tanislav@analog.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 13 Apr 2022 05:43:00 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C3C3630F;
+        Wed, 13 Apr 2022 02:40:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b+Y/wHJg8qjBTOQ6aJ3vj7mXuFaKAw0Jdcff2XJwI8Zw5k01Yrq1J60dJdA2kWPQ6J/KXEc76iZgsHXzit7Vz32xX5P1GSdQqjasFPaOyqUu9XGc1vSXBYZNZ4Tqn2e1gdRymATzr57k7lweginneHk17sPQjFfENj1ySMt4k+bp7QRqQvikgBRyUniTY6pyGJN9HQayAirYpOplUIuWc1t5QFKvpNJYd44ES4fWdVOSUDT+1PKVT9bDIxUS3Qw0MJQvUnybHeuSV8truVlAKyumOsSuH3btLDExfaBA1Ywe81cHCckuaORPEl1ebvL1iitZh+DwccwP40sekT24Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M7r4Q0L/4V7oUSMS5KDB3Z8fj0kJ8uJ8u1GZplrGXRo=;
+ b=Y67YwSFdYVBGTVKmiuUl6VwfJCMOh+iaJEKqTT8Mv3Nvw0Uc7wAwgesm76jJo6T5y0+Ar+IRjjuWyuaAc9iEoNct6flzLHEBAweYu7BereFmMXArt3sKiDuzYVRMspUfAXoujl8R8THmaoxZjxiWvV2NjybD2H8s43aQSeYOpZWGpS4Gl5pSp4OBsVJFXXBRgPpc14StXHqhONII6SEvELjx5HzTsinDFMTGwhKFlXtXcC2P5OEmjUxGPi3Nt8QlORuegWS9FvtvgfKVDeZb/rH6GYX72oku0dwibuXEik2lphzUv1EqYYo/FJRtwRH26z2Fl16woZcjxyYJmGQ4sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M7r4Q0L/4V7oUSMS5KDB3Z8fj0kJ8uJ8u1GZplrGXRo=;
+ b=QcFtdlKvzTRKIcpJw0K424lwLoZ1dJycBhAV9YHGl1YHnqziuDh4BSXOvj2XQi7BUscx3iNB4LhgMj6XswGsKPV0GL4MUQ8k6UOlUSgxi+KUL0p7/yxhnF+/2qHSTmbW+xATF/emmcOpAhvfoyDq5t5O/er/9O2GZglAXzE4qcL/CMAN0utRnwCnP7dCiiIqBR4t0PLBRruKlp4KkGvqv99WEWmBukb2aLsnvJPE8rRRhr8FdQQtOLttk3BPcG5nZmJiqaNoxRDKUpCK3HSNc97ZHi6fqku3bcGA/IJz5HQU161b/ZuGCRx+RxTQvjbyif4EejjrL4RlHy6yDXVCVg==
+Received: from BN1PR12CA0029.namprd12.prod.outlook.com (2603:10b6:408:e1::34)
+ by DM6PR12MB4959.namprd12.prod.outlook.com (2603:10b6:5:208::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 09:40:35 +0000
+Received: from BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e1:cafe::34) by BN1PR12CA0029.outlook.office365.com
+ (2603:10b6:408:e1::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
+ Transport; Wed, 13 Apr 2022 09:40:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT009.mail.protection.outlook.com (10.13.176.65) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5164.19 via Frontend Transport; Wed, 13 Apr 2022 09:40:35 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 13 Apr
+ 2022 09:40:34 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
+ 2022 02:40:33 -0700
+Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Wed, 13 Apr 2022 02:40:30 -0700
+From:   Ashish Mhetre <amhetre@nvidia.com>
+To:     <dmitry.osipenko@collabora.com>, <digetx@gmail.com>,
+        <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>
+Subject: [Patch v7 1/4] memory: tegra: Add memory controller channels support
+Date:   Wed, 13 Apr 2022 15:10:09 +0530
+Message-ID: <20220413094012.13589-2-amhetre@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220413094012.13589-1-amhetre@nvidia.com>
+References: <20220413094012.13589-1-amhetre@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 82e15140-21e1-49ac-3098-08da1d31a902
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4959:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB49592AD785D7509678EA163ACAEC9@DM6PR12MB4959.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7rGlhDLQRfjsU9oPU52TXb4hgMtSRC6gsqdtYjR/fRZfWB5Tpo6nlshRUkQZYkliRlUhxRSgpI/J+W3zUfYPxql94v7Y0ilxKdnolnsf0RQWf3gvAxunOJR3coldkaa/Pn0xV33D0kLPrabgl/XiIMLYh3bFMusLNqqAkzodZfI3+jXRL/5tMCzGRSYq6hjC7rRnbman1KYI2wcc1r7OMqsK1Y1/jKBGuedGWn+//HhjXtfZhE+JIGdMUAB8TGwwKLYE0bPPTf4sZ8TV+I2gCILJgfAjXk1vrHaSsyv+sSzm+ibxUHuGm9gPzPZzIe5JaY+AnhK501H0VCRIVWdRKa4npvLGjL+3tsovv4j8Gmv+3beMhLWO8BWMttNebiKydj74BYmr/V3C+In0PmuAQ4V4Z47Qs1MwV/UCMLJLBSDA6FCs+6QleJiom+wNqUlZXe0PAIJ15bXTRml98wQkSKJWAhj+qI7qjO4RGOvNQOeCnjDlhNUPnG6W/vVqYcTOWCU1N/EIGe8f9smeXqCaEId4RCDbdQhzenhTIxihmRJkl8U0s7DjvpvzhHDvm2SuuTmq08+PWrID9Dex3S79EOKshYoXYFN1IiaW6IhtnWKxprxY/K9Aa9TmdeQDGiCHZaR3Lw8Bs1ThcfCVMGXRDHkTBO2eKusURSQ9GJwAZjU/o8enJhB3T0URJigwkS4VLU1QnBh6GI42EQRQRs8qNA4Q8+AF6jf+HpBdmPmMc+jGQmbQiCvSyqY61LJGWaxzDju65v9pcTRxj1rQ97TkqA==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(336012)(110136005)(81166007)(86362001)(107886003)(2906002)(54906003)(8676002)(6666004)(26005)(2616005)(356005)(1076003)(36756003)(921005)(7696005)(426003)(47076005)(316002)(82310400005)(40460700003)(70206006)(4326008)(70586007)(186003)(83380400001)(5660300002)(36860700001)(508600001)(8936002)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 09:40:35.0880
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82e15140-21e1-49ac-3098-08da1d31a902
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4959
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AD4130-8 is an ultra-low power, high precision,
-measurement solution for low bandwidth battery
-operated applications.
+From tegra186 onwards, memory controller support multiple channels.
+Add support for mapping address spaces of these channels.
+Make sure that number of channels are as expected on each SOC.
+During error interrupts from memory controller, appropriate registers
+from these channels need to be accessed for logging error info.
 
-The fully integrated AFE (Analog Front-End)
-includes a multiplexer for up to 16 single-ended
-or 8 differential inputs, PGA (Programmable Gain
-Amplifier), 24-bit Sigma-Delta ADC, on-chip
-reference and oscillator, selectable filter
-options, smart sequencer, sensor biasing and
-excitation options, diagnostics, and a FIFO
-buffer.
-
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
 ---
- .../bindings/iio/adc/adi,ad4130.yaml          | 255 ++++++++++++++++++
- 1 file changed, 255 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+ drivers/memory/tegra/mc.c       |  6 ++++++
+ drivers/memory/tegra/tegra186.c | 33 +++++++++++++++++++++++++++++++++
+ drivers/memory/tegra/tegra194.c |  1 +
+ drivers/memory/tegra/tegra234.c |  1 +
+ include/soc/tegra/mc.h          |  4 ++++
+ 5 files changed, 45 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-new file mode 100644
-index 000000000000..e9dce54e9802
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-@@ -0,0 +1,255 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2022 Analog Devices Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+index bf3abb6d8354..c1dd24542093 100644
+--- a/drivers/memory/tegra/mc.c
++++ b/drivers/memory/tegra/mc.c
+@@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mc->regs))
+ 		return PTR_ERR(mc->regs);
+ 
++	if (mc->soc->ops && mc->soc->ops->map_regs) {
++		err = mc->soc->ops->map_regs(mc);
++		if (err < 0)
++			return err;
++	}
 +
-+title: Analog Devices AD4130 ADC device driver
+ 	mc->debugfs.root = debugfs_create_dir("mc", NULL);
+ 
+ 	if (mc->soc->ops && mc->soc->ops->probe) {
+diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
+index 3d153881abc1..9b151b98362b 100644
+--- a/drivers/memory/tegra/tegra186.c
++++ b/drivers/memory/tegra/tegra186.c
+@@ -139,11 +139,43 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
+ 	return 0;
+ }
+ 
++static int tegra186_mc_map_regs(struct tegra_mc *mc)
++{
++	struct platform_device *pdev = to_platform_device(mc->dev);
++	int i;
 +
-+maintainers:
-+  - Cosmin Tanislav <cosmin.tanislav@analog.com>
++	mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev, "broadcast");
++	if (IS_ERR(mc->bcast_ch_regs)) {
++		if (PTR_ERR(mc->bcast_ch_regs) == -EINVAL) {
++			dev_warn(&pdev->dev, "Broadcast channel is missing, please update your device-tree\n");
++			return 0;
++		}
++		return PTR_ERR(mc->bcast_ch_regs);
++	}
 +
-+description: |
-+  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found here:
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/AD4130-8.pdf
++	mc->ch_regs = devm_kcalloc(mc->dev, mc->soc->num_channels,
++				   sizeof(void __iomem *), GFP_KERNEL);
++	if (!mc->ch_regs)
++		return -ENOMEM;
 +
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ad4130-8-16-lfcsp
-+      - adi,ad4130-8-16-wlcsp
-+      - adi,ad4130-8-24-lfcsp
-+      - adi,ad4130-8-24-wlcsp
++	for (i = 0; i < mc->soc->num_channels; i++) {
++		char name[4];
 +
-+  reg:
-+    maxItems: 1
++		sprintf(name, "ch%u", i);
++		mc->ch_regs[i] = devm_platform_ioremap_resource_byname(pdev, name);
++		if (IS_ERR(mc->ch_regs[i]))
++			return PTR_ERR(mc->ch_regs[i]);
++	}
 +
-+  clocks:
-+    maxItems: 1
-+    description: phandle to the master clock (mclk)
++	return 0;
++}
 +
-+  clock-names:
-+    items:
-+      - const: mclk
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 1
-+
-+  interrupt-names:
-+    minItems: 1
-+    maxItems: 1
-+    description:
-+      Default if not supplied is dout-int.
-+    items:
-+      enum:
-+        - dout-int
-+        - clk
-+        - p1
-+        - dout
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  refin1-supply:
-+    description: refin1 supply. Can be used as reference for conversion.
-+
-+  refin2-supply:
-+    description: refin2 supply. Can be used as reference for conversion.
-+
-+  avdd-supply:
-+    description: AVDD voltage supply. Can be used as reference for conversion.
-+
-+  iovdd-supply:
-+    description: IOVDD voltage supply. Used for the chip interface.
-+
-+  spi-max-frequency:
-+    maximum: 5000000
-+
-+  adi,mclk-sel:
-+    description: |
-+      Select the clock.
-+      0: Internal 76.8kHz clock.
-+      1: Internal 76.8kHz clock, output to the CLK pin.
-+      2: External 76.8kHz clock.
-+      3. External 153.6kHz clock.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1, 2, 3]
-+    default: 0
-+
-+  adi,int-ref-en:
-+    description: |
-+      Specify if internal reference should be enabled.
-+    type: boolean
-+    default: true
-+
-+  adi,bipolar:
-+    description: Specify if the device should be used in bipolar mode.
-+    type: boolean
-+    default: false
-+
-+  adi,vbias-pins:
-+    description: Analog inputs to apply a voltage bias of (AVDD − AVSS) / 2 to.
-+    items:
-+      minimum: 0
-+      maximum: 15
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+patternProperties:
-+  "^channel@([0-9]|1[0-5])$":
-+    type: object
-+    $ref: adc.yaml
-+
-+    properties:
-+      reg:
-+        description: |
-+          The channel number.
-+        items:
-+          minimum: 0
-+          maximum: 15
-+
-+      diff-channels:
-+        description: |
-+          Besides the analog inputs available, internal inputs can be used.
-+          16: Internal temperature sensor.
-+          17: AVss
-+          18: Internal reference.
-+          19: DGND.
-+          20: (AVDD − AVSS)/6+
-+          21: (AVDD − AVSS)/6-
-+          22: (IOVDD − DGND)/6+
-+          23: (IOVDD − DGND)/6-
-+          24: (ALDO − AVSS)/6+
-+          25: (ALDO − AVSS)/6-
-+          26: (DLDO − DGND)/6+
-+          27: (DLDO − DGND)/6-
-+          28: V_MV_P
-+          29: V_MV_M
-+        $ref: adc.yaml
-+        items:
-+          minimum: 0
-+          maximum: 29
-+
-+      adi,reference-select:
-+        description: |
-+          Select the reference source to use when converting on the
-+          specific channel. Valid values are:
-+          0: REFIN1(+)/REFIN1(−).
-+          1: REFIN2(+)/REFIN2(−).
-+          2: REFOUT/AVSS (Internal reference)
-+          3: AVDD/AVSS
-+          If not specified, internal reference is used.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [0, 1, 2, 3]
-+        default: 2
-+
-+      adi,excitation-pin-0:
-+        description: |
-+          Analog input to apply excitation current to while the channel
-+          is active.
-+        minimum: 0
-+        maximum: 15
-+        default: 0
-+
-+      adi,excitation-pin-1:
-+        description: |
-+          Analog input to apply excitation current to while this channel
-+          is active.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        minimum: 0
-+        maximum: 15
-+        default: 0
-+
-+      adi,excitation-current-0-nanoamps:
-+        description: |
-+          Excitation current in nanoamps to be applied to pin specified in
-+          adi,excitation-pin-0 while this channel is active.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
-+        default: 0
-+
-+      adi,excitation-current-1-nanoamps:
-+        description: |
-+          Excitation current in nanoamps to be applied to pin specified in
-+          adi,excitation-pin-1 while this channel is active.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
-+        default: 0
-+
-+      adi,burnout-current-nanoamps:
-+        description: |
-+          Burnout current in nanoamps to be applied for this channel.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [0, 500, 2000, 4000]
-+        default: 0
-+
-+      adi,buffered-positive:
-+        description: Enable buffered mode for positive input.
-+        type: boolean
-+
-+      adi,buffered-negative:
-+        description: Enable buffered mode for negative input.
-+        type: boolean
-+
-+    required:
-+      - reg
-+      - diff-channels
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      adc@0 {
-+        compatible = "adi,ad4130-8-24-wlcsp";
-+        reg = <0>;
-+
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        spi-max-frequency = <5000000>;
-+        interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
-+        interrupt-parent = <&gpio>;
-+
-+        channel@0 {
-+          reg = <0>;
-+          /* AIN8, AIN9 */
-+          diff-channels = <8 9>;
-+        };
-+
-+        channel@1 {
-+          reg = <1>;
-+          /* AIN10, AIN11 */
-+          diff-channels = <10 11>;
-+        };
-+
-+        channel@2 {
-+          reg = <2>;
-+          /* Temperature Sensor, DGND */
-+          diff-channels = <16 19>;
-+        };
-+
-+        channel@3 {
-+          reg = <3>;
-+          /* Internal reference, DGND */
-+          diff-channels = <18 19>;
-+        };
-+
-+        channel@4 {
-+          reg = <4>;
-+          /* DGND, DGND */
-+          diff-channels = <19 19>;
-+        };
-+      };
-+    };
+ const struct tegra_mc_ops tegra186_mc_ops = {
+ 	.probe = tegra186_mc_probe,
+ 	.remove = tegra186_mc_remove,
+ 	.resume = tegra186_mc_resume,
+ 	.probe_device = tegra186_mc_probe_device,
++	.map_regs = tegra186_mc_map_regs,
+ };
+ 
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+@@ -875,6 +907,7 @@ const struct tegra_mc_soc tegra186_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra186_mc_clients),
+ 	.clients = tegra186_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 4,
+ 	.ops = &tegra186_mc_ops,
+ };
+ #endif
+diff --git a/drivers/memory/tegra/tegra194.c b/drivers/memory/tegra/tegra194.c
+index cab998b8bd5c..94001174deaf 100644
+--- a/drivers/memory/tegra/tegra194.c
++++ b/drivers/memory/tegra/tegra194.c
+@@ -1347,5 +1347,6 @@ const struct tegra_mc_soc tegra194_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra194_mc_clients),
+ 	.clients = tegra194_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 16,
+ 	.ops = &tegra186_mc_ops,
+ };
+diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
+index e22824a79f45..6335a132be2d 100644
+--- a/drivers/memory/tegra/tegra234.c
++++ b/drivers/memory/tegra/tegra234.c
+@@ -97,5 +97,6 @@ const struct tegra_mc_soc tegra234_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra234_mc_clients),
+ 	.clients = tegra234_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 16,
+ 	.ops = &tegra186_mc_ops,
+ };
+diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
+index 1066b1194a5a..42b9c509773e 100644
+--- a/include/soc/tegra/mc.h
++++ b/include/soc/tegra/mc.h
+@@ -181,6 +181,7 @@ struct tegra_mc_ops {
+ 	int (*resume)(struct tegra_mc *mc);
+ 	irqreturn_t (*handle_irq)(int irq, void *data);
+ 	int (*probe_device)(struct tegra_mc *mc, struct device *dev);
++	int (*map_regs)(struct tegra_mc *mc);
+ };
+ 
+ struct tegra_mc_soc {
+@@ -194,6 +195,7 @@ struct tegra_mc_soc {
+ 	unsigned int atom_size;
+ 
+ 	u8 client_id_mask;
++	u8 num_channels;
+ 
+ 	const struct tegra_smmu_soc *smmu;
+ 
+@@ -212,6 +214,8 @@ struct tegra_mc {
+ 	struct tegra_smmu *smmu;
+ 	struct gart_device *gart;
+ 	void __iomem *regs;
++	void __iomem *bcast_ch_regs;
++	void __iomem **ch_regs;
+ 	struct clk *clk;
+ 	int irq;
+ 
 -- 
-2.35.1
+2.17.1
 

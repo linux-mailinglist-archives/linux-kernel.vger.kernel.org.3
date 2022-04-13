@@ -2,389 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51F34FEEAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CE34FEEAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiDMFrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
+        id S232544AbiDMFsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiDMFrQ (ORCPT
+        with ESMTP id S232739AbiDMFry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:47:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED0224591;
-        Tue, 12 Apr 2022 22:44:44 -0700 (PDT)
-X-UUID: 7f570b11644f46179f58f5b890772c35-20220413
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:5b207847-8f80-4971-a077-2bb5c2bc1d0a,OB:10,L
-        OB:10,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham
-        ,ACTION:release,TS:83
-X-CID-INFO: VERSION:1.1.4,REQID:5b207847-8f80-4971-a077-2bb5c2bc1d0a,OB:10,LOB
-        :10,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D
-        ,ACTION:quarantine,TS:83
-X-CID-META: VersionHash:faefae9,CLOUDID:a3833878-0afa-4dca-bdec-ca54c998425a,C
-        OID:f47502fb5ea1,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 7f570b11644f46179f58f5b890772c35-20220413
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1656199588; Wed, 13 Apr 2022 13:44:37 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 13 Apr 2022 13:44:36 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Apr
- 2022 13:44:35 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Apr 2022 13:44:33 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH] media: mediatek: vcodec: add vp9 decoder driver for mt8186
-Date:   Wed, 13 Apr 2022 13:44:31 +0800
-Message-ID: <20220413054431.29917-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 01:47:54 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46B941605
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:45:32 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23D1Q9vh012649;
+        Wed, 13 Apr 2022 05:45:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
+ b=UIrgv3ZqdgMTv5cEtr1oSNTw1UptBkmfp2nfHei5eS2ujW6WDL/LF0S8Mv4Fc1SJEVkJ
+ k6rS/VsKOucOZ7EgZ4xeaxJZkdQmybzBDbr/ByyBgUDK+v6EIA4HRjW8cSnrr+l/hJYa
+ fTCw9paISN7Kfz/ph+GE9Lox3xZh/+3gpHaG7Ak7I0m6yKeWcAcDL8NsKgzUUkuhwEWG
+ f7fl+3e93pMwEHfFF/3zp+9eH5RnoEAYhRzRK7LQD/UGv0aeGtAYB1Bz3UWTaGnMHjLk
+ hlQ3c1xKxlh7pFLPzdKgDILTKO7p8VZZTMlvyq1MZMiRVNYAVmkR5MVVkNIewevWAOFa oA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2pu101t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 05:45:19 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23D5gPwm001890;
+        Wed, 13 Apr 2022 05:45:17 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fck13j8gc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 05:45:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=chOR7EZRMLn5edc2cbuL2apf906tGvOLkB3ZiZE8zUhdqeCs1t2MKge3agNJuGhOS3slPoW/8hwQ2Fh/DlxFWhFrvK31etOBwOYAG2gNDzQyjJ1Pj63sqoo+50YmMoU74t+EUcx1w10apKqdTz5fociXVedG5KFL/y55pQXQGE/E7YfBDIGrbJewhRgI3CuOc8+1VAKTcfBVsS30qBZe7jQDbIWxItOVBBbtTyCJ0KZQRDb90oWw80ajDXR87KWvKhpxaF9ALH4VM2b2kVG0VkV2lY0apyptCtWUREG/UZpFbt5K3iZ+Fi2yJs0l00HfdhpbuS65OBph0E85+KHrRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
+ b=ekx0UtcNNF5vaZm+CWs97TH1LxzrAtjBrZ5vwktmZMS60x9URl3FnHbrVPmyiSNT0ik/jH1YpTBqBRKFXwazERv3nU1hdEsWPMkhBxCejIAVZf9vAhhv7o+Qx6sYIRcPJ11GQzBmfKbGu/O9eRkd00nQN/8JQBmCrYyRChlwLhZXbTn0reQeShySiNHSnhFLtzPUMbvSy/aWuGDfAejZqoLT8i+hpyqwSF+bPWEaMutY+nWRRA81Zm/FLiWh7iDixN85luh3ednIpIR5Pi6SE6MpXXHcwB2GbQA9IvrAjIK8Sbg6CPvJ8r9+ESCEJveYQb708MoTPiNVZdnwFlcYJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
+ b=L4cQFLL7zDHgITWjSf/By5EEKj7RbuLp1cpK/2DLy+DEglgsEmQTBVbk8uDo7msvS9V+ZbJ2iVLnAxSGeoeR5JhyeeS55hqGvkpW7C/a1IIPSQOLDMqADI+I1M1zeBWPdLizuMd8OuOzOfSRa+aSnGHRoIK/V7w+GZV6EEDYJCY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BLAPR10MB5345.namprd10.prod.outlook.com
+ (2603:10b6:208:331::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
+ 2022 05:45:09 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
+ 05:45:08 +0000
+Date:   Wed, 13 Apr 2022 08:44:58 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] staging: greybus: remove empty callback function
+Message-ID: <20220413054458.GS12805@kadam>
+References: <cover.1649824370.git.jhpark1013@gmail.com>
+ <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR1P264CA0028.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:2f::15) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca823467-8175-4756-1931-08da1d10c4d7
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5345:EE_
+X-Microsoft-Antispam-PRVS: <BLAPR10MB53450AFF28C85F13DE34EE8D8EEC9@BLAPR10MB5345.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YzvLeqGZyXQ1gwCUNc8ECVmuzcXRphd6w27CU/YUiSDxkGJwDet+I+b6h5dYIkgGRCLblqs308by1hYQbPuhbdPsUWNpx543ViNQPYM8qETtesD2SSqPEtqTvlJR9ScAtQhydXAWhyGYZSOyfDkFg7pN3NPpNS258wwNhppCrpDgCwR1WpiBpbM1g3HsleA7boBd02Gh7C98h1mEYuFlyDQqLXJZbcd/zlGg3G9ypDY5UXPA/7T4RGyyJziiWt6sXF14TGjpSt7fghjGO/aqk5i4L4/Gr9DaMaU3ixTIiuEiIlJznRV9Emq8lG5n3VWaRkjKOzk9O2haCpIV0CQ0tGq+BtpMrl8CFXHJwDM/q9BOP44BlTZ/wLDvMuPpYJ+zBtO+4hmogtfBZv7sQfVYZmvSPVThEtUKDECusq2p+aREmWCfCUc5biyNFPtohxQ7SLeFDYZ8JVbzS/Xo0mGmSuPItrVLuLrax47ndhitC2GPRfFPV990FU6b0cjPiAdFKsqmcEv8KUQvUN2DLE7A3+NX+sqnV8qq0cLschQqIcxPb+z1a9rfPAn75BnAdLimUngIQmxrLaVfTabmWPx2uSOLLOp6Q3o4uriaSq+QrfA7BXWnAprNhd1OyON4kYsRyWtXof1LzyHKZDVcBN6hkEA4wpZXeApxHqqsmeRNn3Ms6GB+r0c9K2gNHQ05LCNYGPh4PCHPcUFVzjFW+g6XJw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33656002)(508600001)(5660300002)(8936002)(44832011)(4744005)(38100700002)(38350700002)(6486002)(186003)(26005)(2906002)(52116002)(1076003)(6666004)(86362001)(9686003)(6512007)(316002)(6916009)(66476007)(4326008)(66556008)(8676002)(66946007)(33716001)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6d2aLllDU5jXH2NhK/1ArHCVlZJIZfiGNdXsLpC7GhnJxh9rGYyN8YdxtzgY?=
+ =?us-ascii?Q?3KIDi0Nrxutf9CA/37IedfXzroD5jdAPw3/jLDUH12zDnSxC51oS83+jLaxC?=
+ =?us-ascii?Q?3LI2zsClu4qwNpIon9Kxkc7kS0gahSbrm858rJVqoSh7Oaqyf6X4mOGvP/nj?=
+ =?us-ascii?Q?wUE5Vbvq/SsKqcEI9kD3jWK6EV/CAzqUKlaBf9SQmTSIF+y29clTLiiEtl5B?=
+ =?us-ascii?Q?arGfOELkUhvqF1qwmPAWgEDH30EiEyxjRoBem6RLzcJVZs8npUYr2tlGhXBu?=
+ =?us-ascii?Q?7Js437u9v7pMokHUNPbW6b0DGhOP4EOqdScKGuR67G0FcKm8R9v0puC55emZ?=
+ =?us-ascii?Q?Ru09wFORA5ujFd9AsoXy2jxZ39RlCV1HqHtnzkKvYfW9n5pa/EgBAhA4nHNF?=
+ =?us-ascii?Q?exxCa+gfUCIJ8jvBQJIdOZlNxDDjlBexm/cDQJXrYMw6WvVtI6EWEi11XjKq?=
+ =?us-ascii?Q?Dq9JYeqMzv9sjHqYBaK36IERa0U/9PfYZp91r9YBw7YvzZg6ZmODIY/fT5Oy?=
+ =?us-ascii?Q?PHgWBTz/yXJ3vULkUiVU4e2xMVPukLReie+VJno3aa0fKSfPvH5YhyNHj1cs?=
+ =?us-ascii?Q?V/qHfJIA7IMOAjZGMYx5E5Hy5p8qcQH3s7J6epsmRtOPkGP0KDCJQGLSe3xB?=
+ =?us-ascii?Q?uGQTTITZxFXH6cS6+eet76Gyfl/EiLyRlOPEnRoFNCZ++JVJW8GAFASuqqLy?=
+ =?us-ascii?Q?NHEDFVB7QAjtF+0GdEHXw+xvJSdKSBR2RAANuVrR7DmtxAZim+DgAr8uJPa5?=
+ =?us-ascii?Q?RO+JfhUKDvknJl6iP2oc1jeTD+DtHuD8MqpDxYkuV8NO0upDRXtor+ZTDYNR?=
+ =?us-ascii?Q?f4UN3Y2o1qE9MBZIOWceyrg/VoaXVyOch8M6S+3lXqFihLDwVRLqHEvJ3r4a?=
+ =?us-ascii?Q?gXAbWuoXtRrRovy+JO4vMd5+3YUJLaFNkgkMaaTCv4biXLU6FyxijORXYHSN?=
+ =?us-ascii?Q?6E6MlraOrh0+nSNSTLx83IDNAVK/lHLKGsGBW8aAZgkrRsiRCUkTvpSMmMwJ?=
+ =?us-ascii?Q?9OZG0fN9p17cLOCpPRq2jt50iEN6+XtT2voFZugUxC5K36yYpA9KfAF8uuQ+?=
+ =?us-ascii?Q?gjISOKlk7ne25XqqMZVa54EtFIce9/nP1m5rInvexXtI2j2af5uO51l7pbWM?=
+ =?us-ascii?Q?AYlk+sj+XWUi/geO1qZmgCXjCLdnVJgILrJSFONg81ailBsyJS49JvihlEhz?=
+ =?us-ascii?Q?qb1UCTnUEZamuX0k1mmjmoVS4sSH3A2MM0XAjvvs30QK1vlJfTBUC+pdY84t?=
+ =?us-ascii?Q?j8m+4a9QAERPIW48zBCizv1VH0Fx+yCNXJMkKk4j5UIDWquv1SQFQlrSmYVY?=
+ =?us-ascii?Q?cejmxE8R+/H7olLOhwkxRMBdvELWTPSIuWU2GbKljieaInPr3RumtbQvT3Qq?=
+ =?us-ascii?Q?uzGE64eHPXRKpl6rXTTWPG0lFJgV43RbqBh07ObKSo5kXBpjmqUy7B79IGiE?=
+ =?us-ascii?Q?IMErhB/E8n0LuEhvo2tC7I2TNVwRK/Bui0VvFUFoVery5RJPPclMIsGZfxr3?=
+ =?us-ascii?Q?CEFkD/D4vpDSIR8V9t/qZOQUl88b2+OZGnrW7uFCVnYEMcM8MXbUtx+qicg6?=
+ =?us-ascii?Q?W0qYdhzGHE5Q+WS8cYDMHfhsyMZkXzBca6djrzxrVHi9Tze13cSR86jv80nq?=
+ =?us-ascii?Q?ZKna4QZ76+ZqyJ7tx9skIsrdoX8bSO8YjvaNwIASQLrT1uSImkwLzhr3cApz?=
+ =?us-ascii?Q?2DJFb8Knr2Bpx10b15j6NOWToZssHSTlqSWJvAzh/xJ3W4XZY/FRrZhpuk9B?=
+ =?us-ascii?Q?N7C+dB1OqD/Zu479grBdMMnWDmXmKGg=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca823467-8175-4756-1931-08da1d10c4d7
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 05:45:08.6865
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JVC8QQ2GuQpW2r2Ld/3IbOeqIIuj7yGpIa9XIQs+M7AduMA9yrzfRp38YmkXDf3hyZLfwjV0ZQI3bOQCawsWbplQHzd8kM2ajpyHgp0SsbQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5345
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-12_06:2022-04-11,2022-04-12 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ phishscore=0 mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204130033
+X-Proofpoint-ORIG-GUID: us1Xd9VyUtw0qvAT_JicBpduaTzF93UU
+X-Proofpoint-GUID: us1Xd9VyUtw0qvAT_JicBpduaTzF93UU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
+On Wed, Apr 13, 2022 at 12:38:52AM -0400, Jaehee Park wrote:
+> Remove the optional remove callback for the soc_codec_dev_gbaudio
+> structure. The only place it is referenced is
+> snd_soc_component_remove() which is only called if the sound_component
+> pointer is non-null. The null function pointers here can be optionally
+> ommitted. When a sound component is registered this way, the remove
+> callback is optional. We can safely remove the whole gbcodec_remove
+> function, which used to be an empty function with a void return type.
+> 
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
 
-Add vp9 single core decode driver to support mt8186.
+Thanks!
 
-Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
-Signed-off-by: Xiaoyong Lu <xiaoyong.lu@mediatek.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-This patch depends on "support mt8195 decoder"[1]
-
-[1] https://patchwork.kernel.org/project/linux-mediatek/cover/20220413035410.29568-1-yunfei.dong@mediatek.com/
----
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 197 +++++++++++++++++-
- .../platform/mediatek/vcodec/vdec_drv_if.c    |   2 +-
- 2 files changed, 195 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index 4b20d6e09809..8373b7ea3d44 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -439,6 +439,8 @@ struct vdec_vp9_slice_ref {
-  * @init_vsi:		vsi used for initialized VP9 instance
-  * @vsi:		vsi used for decoding/flush ...
-  * @core_vsi:		vsi used for Core stage
-+ *
-+ * @sc_pfc:		per frame context single core
-  * @counts_map:	used map to counts_helper
-  * @counts_helper:	counts table according to newest kernel spec
-  */
-@@ -487,6 +489,7 @@ struct vdec_vp9_slice_instance {
- 	};
- 	struct vdec_vp9_slice_vsi *core_vsi;
- 
-+	struct vdec_vp9_slice_pfc sc_pfc;
- 	struct vdec_vp9_slice_counts_map counts_map;
- 	struct v4l2_vp9_frame_symbol_counts counts_helper;
- };
-@@ -692,6 +695,25 @@ static int vdec_vp9_slice_tile_offset(int idx, int mi_num, int tile_log2)
- 	return offset < mi_num ? offset : mi_num;
- }
- 
-+static
-+int vdec_vp9_slice_setup_single_from_src_to_dst(struct vdec_vp9_slice_instance *instance)
-+{
-+	struct vb2_v4l2_buffer *src;
-+	struct vb2_v4l2_buffer *dst;
-+
-+	src = v4l2_m2m_next_src_buf(instance->ctx->m2m_ctx);
-+	if (!src)
-+		return -EINVAL;
-+
-+	dst = v4l2_m2m_next_dst_buf(instance->ctx->m2m_ctx);
-+	if (!dst)
-+		return -EINVAL;
-+
-+	v4l2_m2m_buf_copy_metadata(src, dst, true);
-+
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_setup_lat_from_src_buf(struct vdec_vp9_slice_instance *instance,
- 						 struct vdec_lat_buf *lat_buf)
- {
-@@ -1568,6 +1590,33 @@ static int vdec_vp9_slice_update_prob(struct vdec_vp9_slice_instance *instance,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance,
-+				        struct vdec_vp9_slice_pfc *pfc)
-+{
-+	struct vdec_vp9_slice_vsi *vsi;
-+
-+	vsi = &pfc->vsi;
-+	memcpy(&pfc->state[0], &vsi->state, sizeof(vsi->state));
-+
-+	mtk_vcodec_debug(instance, "Frame %u Y_CRC %08x %08x %08x %08x\n",
-+			 pfc->seq,
-+			 vsi->state.crc[0], vsi->state.crc[1],
-+			 vsi->state.crc[2], vsi->state.crc[3]);
-+	mtk_vcodec_debug(instance, "Frame %u C_CRC %08x %08x %08x %08x\n",
-+			 pfc->seq,
-+			 vsi->state.crc[4], vsi->state.crc[5],
-+			 vsi->state.crc[6], vsi->state.crc[7]);
-+
-+	vdec_vp9_slice_update_prob(instance, vsi);
-+
-+	instance->width = vsi->frame.uh.frame_width;
-+	instance->height = vsi->frame.uh.frame_height;
-+	instance->frame_type = vsi->frame.uh.frame_type;
-+	instance->show_frame = vsi->frame.uh.show_frame;
-+
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
- 				     struct vdec_lat_buf *lat_buf,
- 				     struct vdec_vp9_slice_pfc *pfc)
-@@ -1691,6 +1740,40 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 	return 0;
- }
- 
-+static void vdec_vp9_slice_setup_single_buffer(struct vdec_vp9_slice_instance *instance,
-+					       struct vdec_vp9_slice_pfc *pfc,
-+					       struct vdec_vp9_slice_vsi *vsi,
-+					       struct mtk_vcodec_mem *bs,
-+					       struct vdec_fb *fb)
-+{
-+	int i;
-+
-+	vsi->bs.buf.dma_addr = bs->dma_addr;
-+	vsi->bs.buf.size = bs->size;
-+	vsi->bs.frame.dma_addr = bs->dma_addr;
-+	vsi->bs.frame.size = bs->size;
-+
-+	for (i = 0; i < 2; i++) {
-+		vsi->mv[i].dma_addr = instance->mv[i].dma_addr;
-+		vsi->mv[i].size = instance->mv[i].size;
-+	}
-+	for (i = 0; i < 2; i++) {
-+		vsi->seg[i].dma_addr = instance->seg[i].dma_addr;
-+		vsi->seg[i].size = instance->seg[i].size;
-+	}
-+	vsi->tile.dma_addr = instance->tile.dma_addr;
-+	vsi->tile.size = instance->tile.size;
-+	vsi->prob.dma_addr = instance->prob.dma_addr;
-+	vsi->prob.size = instance->prob.size;
-+	vsi->counts.dma_addr = instance->counts.dma_addr;
-+	vsi->counts.size = instance->counts.size;
-+
-+	vsi->row_info.buf = 0;
-+	vsi->row_info.size = 0;
-+
-+	vdec_vp9_slice_setup_core_buffer(instance, pfc, vsi, fb, NULL);
-+}
-+
- static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
- 				     struct vdec_fb *fb,
- 				     struct vdec_lat_buf *lat_buf,
-@@ -1717,6 +1800,43 @@ static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
- 	return ret;
- }
- 
-+static int vdec_vp9_slice_setup_single(struct vdec_vp9_slice_instance *instance,
-+				       struct mtk_vcodec_mem *bs,
-+				       struct vdec_fb *fb,
-+				       struct vdec_vp9_slice_pfc *pfc)
-+{
-+	struct vdec_vp9_slice_vsi *vsi = &pfc->vsi;
-+	int ret;
-+
-+	ret = vdec_vp9_slice_setup_single_from_src_to_dst(instance);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_setup_pfc(instance, pfc);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_alloc_working_buffer(instance, vsi);
-+	if (ret)
-+		goto err;
-+
-+	vdec_vp9_slice_setup_single_buffer(instance, pfc, vsi, bs, fb);
-+	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[0]);
-+
-+	ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
-+	if (ret)
-+		goto err;
-+
-+	return 0;
-+
-+err:
-+	return ret;
-+}
-+
- static int vdec_vp9_slice_update_core(struct vdec_vp9_slice_instance *instance,
- 				      struct vdec_lat_buf *lat_buf,
- 				      struct vdec_vp9_slice_pfc *pfc)
-@@ -1814,8 +1934,8 @@ static int vdec_vp9_slice_flush(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	struct vdec_vp9_slice_instance *instance = h_vdec;
- 
- 	mtk_vcodec_debug(instance, "flush ...\n");
--
--	vdec_msg_queue_wait_lat_buf_full(&instance->ctx->msg_queue);
-+	if (instance->ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-+		vdec_msg_queue_wait_lat_buf_full(&instance->ctx->msg_queue);
- 	return vpu_dec_reset(&instance->vpu);
- }
- 
-@@ -1868,6 +1988,63 @@ static int vdec_vp9_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				        struct vdec_fb *fb, bool *res_chg)
-+{
-+	struct vdec_vp9_slice_instance *instance = h_vdec;
-+	struct vdec_vp9_slice_pfc *pfc = &(instance->sc_pfc);
-+	struct vdec_vp9_slice_vsi *vsi;
-+	struct mtk_vcodec_ctx *ctx;
-+	int ret;
-+
-+	if (!instance || !instance->ctx)
-+		return -EINVAL;
-+	ctx = instance->ctx;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs)
-+		return vdec_vp9_slice_flush(h_vdec, bs, fb, res_chg);
-+
-+	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
-+	if (!fb)
-+		return -EBUSY;
-+
-+	vsi = &pfc->vsi;
-+
-+	ret = vdec_vp9_slice_setup_single(instance, bs, fb, pfc);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "Failed to setup VP9 single ret %d\n", ret);
-+		return ret;
-+	}
-+	vdec_vp9_slice_vsi_to_remote(vsi, instance->vsi);
-+
-+	ret = vpu_dec_start(&instance->vpu, 0, 0);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "Failed to dec VP9 ret %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mtk_vcodec_wait_for_done_ctx(ctx,	MTK_INST_IRQ_RECEIVED,
-+					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	/* update remote vsi if decode timeout */
-+	if (ret) {
-+		mtk_vcodec_err(instance, "VP9 decode timeout %d\n", ret);
-+		writel(1, &instance->vsi->state.timeout);
-+	}
-+
-+	vpu_dec_end(&instance->vpu);
-+
-+	vdec_vp9_slice_vsi_from_remote(vsi, instance->vsi, 0);
-+	ret = vdec_vp9_slice_update_single(instance, pfc);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "VP9 decode error: %d\n", ret);
-+		return ret;
-+	}
-+
-+	instance->ctx->decoded_frame_cnt++;
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 				     struct vdec_fb *fb, bool *res_chg)
- {
-@@ -1947,6 +2124,20 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				 struct vdec_fb *fb, bool *res_chg)
-+{
-+	struct vdec_vp9_slice_instance *instance = h_vdec;
-+	int ret;
-+
-+	if (instance->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		ret = vdec_vp9_slice_single_decode(h_vdec, bs, fb, res_chg);
-+	else
-+		ret = vdec_vp9_slice_lat_decode(h_vdec, bs, fb, res_chg);
-+
-+	return ret;
-+}
-+
- static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- {
- 	struct vdec_vp9_slice_instance *instance;
-@@ -2025,7 +2216,7 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- 
- const struct vdec_common_if vdec_vp9_slice_lat_if = {
- 	.init		= vdec_vp9_slice_init,
--	.decode		= vdec_vp9_slice_lat_decode,
-+	.decode		= vdec_vp9_slice_decode,
- 	.get_param	= vdec_vp9_slice_get_param,
- 	.deinit		= vdec_vp9_slice_deinit,
- };
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-index 27b4b35039cf..f3807f03d880 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-@@ -47,7 +47,7 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- 		break;
- 	case V4L2_PIX_FMT_VP9_FRAME:
- 		ctx->dec_if = &vdec_vp9_slice_lat_if;
--		ctx->hw_id = MTK_VDEC_LAT0;
-+		ctx->hw_id = IS_VDEC_LAT_ARCH(hw_arch) ? MTK_VDEC_LAT0 : MTK_VDEC_CORE;
- 		break;
- 	default:
- 		return -EINVAL;
--- 
-2.18.0
+regards,
+dan carpenter
 

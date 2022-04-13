@@ -2,129 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0194FFC16
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA92C4FFC15
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237192AbiDMRL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S235671AbiDMRLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235648AbiDMRLx (ORCPT
+        with ESMTP id S229521AbiDMRLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:11:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC3F2DC6;
-        Wed, 13 Apr 2022 10:09:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA718B82651;
-        Wed, 13 Apr 2022 17:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E59DC385A9;
-        Wed, 13 Apr 2022 17:09:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649869768;
-        bh=3u9ubt29kWBfeoohBhUaZtYjynoSHsWckWYS1SxrLGI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JK9l9xdpE9RXp5q6IKefJNSq94TlF8c8ZbbkoCEl3DfmKQX/u/Y5eHHfZiWqaCkHl
-         vNMYHB60l1zE/NTHt+YX4u9UJy1Hohq9Y9uIiyZS0UesNdQY9IuDFVuXv+GZc0iSy9
-         GOxJ5asWJXr46Jl7+bHKYTVBraKaKN3ELoVmWvnFKDF/qAdCvQpe01T1MOX+G+8PEJ
-         W/nEdLA0FUZQtBoE+nbE/OooaTUeIGR6ZPfoVGUX75S9WmoEg6lIQExuStxle9jApw
-         WsywUJ9AAHpBnPUjz1AGg6Du3ExvItn++nnt7nMp8PvIKGKyYcfGQWfcLCNvane7NZ
-         0/pwBOTaVo4Ng==
-Received: by mail-oo1-f50.google.com with SMTP id e7-20020a4aaac7000000b00330e3ddfd4bso449128oon.8;
-        Wed, 13 Apr 2022 10:09:28 -0700 (PDT)
-X-Gm-Message-State: AOAM530pyoVU2H/48WxmiYIBD4uxf7yfFA40Sa65Qpk+SFffb/NOJm06
-        /y6H3VkXAcugDGxOQVBcG3K5aID+xQfh4MFowF4=
-X-Google-Smtp-Source: ABdhPJy4fqCnnOJ0yVJ/sVE7NuBrsvkq3j08z26BO8f364+N+vDYbVb1R94XalEEtFRF7OhM79TTQ8/8j/SKXbF4NXU=
-X-Received: by 2002:a4a:e6c2:0:b0:329:1863:6c3a with SMTP id
- v2-20020a4ae6c2000000b0032918636c3amr13572681oot.98.1649869767546; Wed, 13
+        Wed, 13 Apr 2022 13:11:51 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D1FEA6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q3so2927526wrj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sCLiXto+N+uwNvwTzKfo+TPPGQjP4GFjpgB4ZdDzCwA=;
+        b=MkZiwQvVjG36q8ePnIhm0w66YSzngKvc5oJJvnJmsCef4T9vJ6aWRANmip/0NJLen6
+         Aia72rjrqEleWdmX6pp3m/yfvg73D3lay36uWX/HHWfiSGnP+w8muJCzanM0t1Qh3jXZ
+         B7t3CTpV0YGIj9DrkuSuoRO0bE8j0ISFDKY2BTME0vbFx7WaCjTtyA86PjVSCxdzkgsz
+         9OhxuHhJ4K0VnzzNd8GGbWSycQfaVMqKzkVa5HH8lzy3QWHJijb997UNs4tHZkCg28gm
+         gsiRN9GK5c5CV84U6usdPEGTUBYyFth1FY3xE7NHbPPRnFHJG03oKTQZoRA7eUea2rnF
+         YxQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sCLiXto+N+uwNvwTzKfo+TPPGQjP4GFjpgB4ZdDzCwA=;
+        b=RzboyY1gHV6P3J6NZfiinbqLYulnosnK/p7bmjRpqNxRWEj3/od0hXmUc6bIC2+EyO
+         72sHlRLZL5TJWqNyY7StrHxoRm4yPePfkBbKpcrQvxv7Hvlou/Tvx/KrV0t1gS0Dej4Y
+         8JbFVN76nhJmvnMm36HHXaVfK32wEMQdXX44rbdrAwcYkol02zx03b+H/89wJahBZSlZ
+         xwOcJZJdLJq31B2B6ulM24TE+a6rUOqNz/PELgZIwU65Djaor0+TeykTuXLhHqcaKv6S
+         wIiY9VQ646lvSc3gOu6b6JZxBzWuQT48UqWtaa+c6phRyCwyrGbKDZHhaR82zoEFdY21
+         YBTg==
+X-Gm-Message-State: AOAM531T+XWWHWCnHtgX37/l5c1eYih+Db+EkATQi1/JlT65vOoA2sae
+        EICQvSNy1bcvmNCLuC51jKADMq84qSjxiPO+9zja7w==
+X-Google-Smtp-Source: ABdhPJyli41f+i1rwTLIV2MJwxxgzzWw7Zz26GHsP9cvbLAt8rnThx1uAQV/lOxtF/JQ0NQPCAtI5c8ohWYReiCK+hU=
+X-Received: by 2002:a5d:6241:0:b0:207:ac0e:3549 with SMTP id
+ m1-20020a5d6241000000b00207ac0e3549mr9032063wrv.343.1649869767586; Wed, 13
  Apr 2022 10:09:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220331221030.889718-1-jakobkoschel@gmail.com> <20220331221030.889718-2-jakobkoschel@gmail.com>
-In-Reply-To: <20220331221030.889718-2-jakobkoschel@gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 13 Apr 2022 19:09:14 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGqttOSOmYg1pkHOLTmVkrNVmLD5ngRLAPHiwv3j14wZg@mail.gmail.com>
-Message-ID: <CAMj1kXGqttOSOmYg1pkHOLTmVkrNVmLD5ngRLAPHiwv3j14wZg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] efi: replace usage of found with dedicated list
- iterator variable
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220304083329.GC20556@xsang-OptiPlex-9020> <CAP-5=fVz=arWo19PQR_4UKY_PyywyXoyp+MUnfAJxCFZy5rhWg@mail.gmail.com>
+ <20220413070529.GA1320@linux.intel.com> <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
+ <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
+In-Reply-To: <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 13 Apr 2022 10:09:15 -0700
+Message-ID: <CAP-5=fXj+WT3ExNo-fL4d9b_Wm5swnKaCWd67rU85Q=QFg5KUw@mail.gmail.com>
+Subject: Re: [LKP] Re: [perf vendor events] 3f5f0df7bf: perf-sanity-tests.perf_all_metrics_test.fail
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Carel Si <beibei.si@intel.com>, acme@redhat.com,
+        alexander.shishkin@linux.intel.com, alexandre.torgue@foss.st.com,
+        ak@linux.intel.com, mingo@redhat.com, james.clark@arm.com,
+        jolsa@kernel.org, john.garry@huawei.com, mark.rutland@arm.com,
+        mcoquelin.stm32@gmail.com, namhyung@kernel.org,
+        peterz@infradead.org, eranian@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, lkp@lists.01.org,
+        lkp@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 00:11, Jakob Koschel <jakobkoschel@gmail.com> wrote:
+On Wed, Apr 13, 2022 at 9:37 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
 >
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
 >
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
 >
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
+> On 4/13/2022 12:03 PM, Ian Rogers wrote:
+> > 3) Weak group doesn't fall back to no group:
 >
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> That's because the group validation code doesn't take pinned events,
+> such as the NMI watchdog, into account.
+>
+> I proposed a kernel patch to fix it, but it's rejected. It should be
+> hard to find a generic way to fix it from the kernel side.
+> https://lore.kernel.org/lkml/1565977750-76693-1-git-send-email-kan.liang@linux.intel.com/
+>
+> Maybe we can workaround it from the perf tool side?
+> For example, for each weak group with cycles event and NMI watchdog is
+> enabled, add an extra cycles event when opening the group. If the open
+> fails with the extra cycles event, fall back to no group. After the
+> extra cycles event check, remove the extra cycles.
+>
+> What do you think?
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Thanks Kan, it is a shame the kernel support is lacking here. I'm not
+sure what you are proposing for the perf tool to do. So:
 
-I'll queue this up once we converge on a solution for the other patch.
+> for each weak group with cycles event and NMI watchdog
 
-> ---
->  drivers/firmware/efi/vars.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index 3994aad38661..e4e1cc593441 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -809,22 +809,21 @@ EXPORT_SYMBOL_GPL(efivar_entry_set_safe);
->  struct efivar_entry *efivar_entry_find(efi_char16_t *name, efi_guid_t guid,
->                                        struct list_head *head, bool remove)
->  {
-> -       struct efivar_entry *entry, *n;
-> +       struct efivar_entry *entry = NULL, *iter, *n;
->         int strsize1, strsize2;
-> -       bool found = false;
->
-> -       list_for_each_entry_safe(entry, n, head, list) {
-> +       list_for_each_entry_safe(iter, n, head, list) {
->                 strsize1 = ucs2_strsize(name, 1024);
-> -               strsize2 = ucs2_strsize(entry->var.VariableName, 1024);
-> +               strsize2 = ucs2_strsize(iter->var.VariableName, 1024);
->                 if (strsize1 == strsize2 &&
-> -                   !memcmp(name, &(entry->var.VariableName), strsize1) &&
-> -                   !efi_guidcmp(guid, entry->var.VendorGuid)) {
-> -                       found = true;
-> +                   !memcmp(name, &(iter->var.VariableName), strsize1) &&
-> +                   !efi_guidcmp(guid, iter->var.VendorGuid)) {
-> +                       entry = iter;
->                         break;
->                 }
->         }
->
-> -       if (!found)
-> +       if (!entry)
->                 return NULL;
->
->         if (remove) {
-> --
-> 2.25.1
->
+Okay, let's try Branching_Overhead as mentioned in this report - but
+the event is CPU_CLK_UNHALTED.THREAD here :-/
+
+> add an extra cycles event when opening the group
+
+So the perf_event_open doesn't fail here for me:
+$ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD},cycles'
+-a sleep 1
+
+ Performance counter stats for 'system wide':
+
+     <not counted>      BR_INST_RETIRED.NEAR_CALL
+               (0.00%)
+     <not counted>      BR_INST_RETIRED.NEAR_TAKEN
+                (0.00%)
+     <not counted>      BR_INST_RETIRED.NOT_TAKEN
+               (0.00%)
+     <not counted>      BR_INST_RETIRED.CONDITIONAL
+                 (0.00%)
+     <not counted>      CPU_CLK_UNHALTED.THREAD
+               (0.00%)
+     4,071,908,022      cycles
+               (49.97%)
+
+       0.998134717 seconds time elapsed
+
+Some events weren't counted. Try disabling the NMI watchdog:
+echo 0 > /proc/sys/kernel/nmi_watchdog
+perf stat ...
+echo 1 > /proc/sys/kernel/nmi_watchdog
+The events in group usually have to be from the same PMU. Try
+reorganizing the group.
+
+I'm not sure what the cycles event is achieving here, but it seems the
+behavior will need a kernel change. I think I'm misunderstanding your
+proposal :-)
+
+Thanks,
+Ian
+
+> Thanks,
+> Kan
+> > $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD}:W'
+> > -a sleep 1
+> >
+> >   Performance counter stats for 'system wide':
+> >
+> >       <not counted>      BR_INST_RETIRED.NEAR_CALL
+> >                 (0.00%)
+> >       <not counted>      BR_INST_RETIRED.NEAR_TAKEN
+> >                  (0.00%)
+> >       <not counted>      BR_INST_RETIRED.NOT_TAKEN
+> >                 (0.00%)
+> >       <not counted>      BR_INST_RETIRED.CONDITIONAL
+> >                   (0.00%)
+> >       <not counted>      CPU_CLK_UNHALTED.THREAD
+> >                 (0.00%)
+> >
+> >         1.001690318 seconds time elapsed
+> >
+> > Some events weren't counted. Try disabling the NMI watchdog:
+> > echo 0 > /proc/sys/kernel/nmi_watchdog
+> > perf stat ...
+> > echo 1 > /proc/sys/kernel/nmi_watchdog

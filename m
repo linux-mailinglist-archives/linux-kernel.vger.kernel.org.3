@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CA94FF833
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76A84FF838
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiDMNxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
+        id S236133AbiDMNx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235977AbiDMNwa (ORCPT
+        with ESMTP id S236012AbiDMNwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:52:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2101FCFF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:50:07 -0700 (PDT)
+        Wed, 13 Apr 2022 09:52:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7560E1FCFF;
+        Wed, 13 Apr 2022 06:50:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62B31B824E7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17378C385A3;
-        Wed, 13 Apr 2022 13:50:01 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-Cc:     Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net
-Subject: [PATCH RFC 4/4] arm64: Select ARCH_ENABLE_DENY_WRITE_EXEC
-Date:   Wed, 13 Apr 2022 14:49:46 +0100
-Message-Id: <20220413134946.2732468-5-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220413134946.2732468-1-catalin.marinas@arm.com>
-References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D19DB824E7;
+        Wed, 13 Apr 2022 13:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B492EC385A8;
+        Wed, 13 Apr 2022 13:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649857811;
+        bh=DCTDHXeYXtY6CD6rXE7A7+cVtUZihsD7A9lv2ehyoSg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cBQ8cgCAux2+t1dSuJ2P0jMwVsi5frnUVHRQAjA2BIk2yULXAP+L5BhUvcpv3BA8E
+         XKnblPvNQXyu5/RhpZT+0OTjxoLL/Xh0fgG3CFJxodrGCzPxXYVbwu5yw/GcCL/2kd
+         fF7Yfs3WSPLOpe1wnI9cz0SWTm0P2/DSernSwjuMWCRyuSyB0ZlKjM/nfDyT0Zc6il
+         7GHNheWZBP+003n0eUwVlrnmvbu5SmjoIV0lQy2zCa4Hqxr+wefAejaUdoKMjHkSLz
+         6ke9jNnGkOlbh70ZpmlmZYJwQx1QN6J7mjSLsK8q6u+RQ3yDdKC2xN/RZV8j5LsihT
+         d5NpijsST2vfA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94721E73CC8;
+        Wed, 13 Apr 2022 13:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: dsa: realtek: don't parse compatible string for
+ RTL8366S
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164985781159.18805.15294686114984287368.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Apr 2022 13:50:11 +0000
+References: <20220412155749.1835519-1-alvin@pqrs.dk>
+In-Reply-To: <20220412155749.1835519-1-alvin@pqrs.dk>
+To:     =?utf-8?b?QWx2aW4gxaBpcHJhZ2EgPGFsdmluQHBxcnMuZGs+?=@ci.codeaurora.org
+Cc:     linus.walleij@linaro.org, alsi@bang-olufsen.dk, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will allow the DENY_WRITE_EXEC personality flag to prevent creating
-a PROT_EXEC mapping that is or was also PROT_WRITE.
+Hello:
 
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
----
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..6cbdc8294337 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -13,6 +13,7 @@ config ARM64
- 	select ARCH_BINFMT_ELF_EXTRA_PHDRS
- 	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+	select ARCH_ENABLE_DENY_WRITE_EXEC
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
+On Tue, 12 Apr 2022 17:57:49 +0200 you wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> This switch is not even supported, but if someone were to actually put
+> this compatible string "realtek,rtl8366s" in their device tree, they
+> would be greeted with a kernel panic because the probe function would
+> dereference NULL. So let's just remove it.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: dsa: realtek: don't parse compatible string for RTL8366S
+    https://git.kernel.org/netdev/net/c/8e925de60dda
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

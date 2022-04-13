@@ -2,276 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB644FF6ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2675E4FF6FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiDMMkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S235600AbiDMMm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiDMMkW (ORCPT
+        with ESMTP id S234423AbiDMMmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:40:22 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037834BB87
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:38:01 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DCGvZ5008564;
-        Wed, 13 Apr 2022 12:37:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=f9PM2FURfeMWJ5QldHb2vWDTWbaYLLDcOsnQzoamVfY=;
- b=ddbg8axOWtVIKsBfhiNvVbyNemEQbi5U4ov+GWkvhoPCWsFR2+2ZFmr9Egy2cD4xT9ZB
- yblTK+uh8tGO+t1aDu5hNKQa/oVWn5NYrDLkONWzSu0DQJm2OfdevKb7Z0BXPh1ze0G1
- dC8GSSQmslUmsPqlKVv0/tWSguctGO18YvPUBYKqYwEwjeH5vXmOQUpXzoA/xpCT9vbZ
- 3iD++W4rG7ztmgXYT730KnnM7mbX/96UXemwyzglX7amz7nxXk+ZwC22w8SvmwoNU6to
- 3VqsxtbqcTkSQfUgF5Vv5KzzDKzgcUx4kwXNAJNmek6PmREdYrmc2I65JiUxPZ1SWRMj kQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0x2hsg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 12:37:26 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DCaJm9013043;
-        Wed, 13 Apr 2022 12:37:25 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9jnkjf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 12:37:25 +0000
+        Wed, 13 Apr 2022 08:42:21 -0400
+Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40046.outbound.protection.outlook.com [40.107.4.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2C85FD7;
+        Wed, 13 Apr 2022 05:39:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SPMtdNeoPMkHCg9x099t+LhxZ2e8+blQlD2mYNQetIwbb3+vzoHJFN+Cz2UqQtYSbgS5QaLcRsYRe9cR3N9cNTQshIhdYpILp2PdeG06tYrquunxfLiBFHabi58Y7tE6/CEOFGcDVB1IRKf2hcvTEuP2LtyD8DoMVgEmLCNZj4I3Zf+9Jk9cqqBPpr0oT6OtG4WMckbclW0BYD7YLMKjwbSA5GKiDyfFTVMx/q2TU4CAYgAfaFFhvZbHXAh+U8wWE2Gx3beV+KElTY4xjMi6spk6/g+0ImobjFStxV3DGz7pnrFoCv+0Vn5Y1mwOwoKppQzlOISlqwJP48xQtbuMSg==
+ b=Zw0FnIXtfNFNQAKXqK9eso9YQf0ux0Lrh3aCymjAj0XlQ2VMCtRRW3ewH35hqcbH3Gs0uz73ntfluzgYMgGM201WZlxAakIzq7iKL0vOmJNwkMhaPbxjQYZ8yLs46LKMNXYjKqahfJa6MBbq42ANfWCpz7FbLyNiDojf6p708gs7zRnh4FMhIdLOeMp+F+bQnzHBDRiaJ3axWlvobkGWCoiHG+7II39w3l7w1cd6CzaWl4x5KES6j3Qr6o2gDpWqXX+5FNmXkL7s3OT2vE61DmI3bm4Tf0Uhs3IrDmc0ROeE6u8g7LYkGgU4+s2QISJ2nXBuyXCfo2mei8RT5QRvlg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f9PM2FURfeMWJ5QldHb2vWDTWbaYLLDcOsnQzoamVfY=;
- b=ZCTurCXfGGw+EjaZt+J43HhlMgC63KZalBu+foOgi591sBUXCCXI2xLxuF1BR8iyloZVY67VqtAIC4CCQ1Jjf87RvGqX+MQMbwxSxoRDYuqPCAUCcj+/xTq2dP07yZUhwKn6SpAp9xnIk5umzKwG3HTJSqer+WFAMdl9Ozu8xat4iqNJU3+E+yqrcmyk4IJXlY8F8LguVefaMRgBb+hZTO4fe9NVySsbgrbtyAVv668j1aLvnBWBoCh6vYE53og1xiK6GIMjQ3iINodV0b+MMQKyQs705+kwZdW/EMdfbCaJO4KrtxbH23+DU4MtDXIHQrlOugq5o+Bos+aDtEGa7A==
+ bh=5yPmxtQroAmndBeIUj30xlduBu0PQHu8UuZRj7HGYLw=;
+ b=Xlkud9rCXXj5hrI4W5Cqhb9mXSS+UAR6HuNq/2NVrNAVN4r2IavX5nvk8+de7Un3dCB4dMipvS88dNTG6dkfI7+oJJ71bvHu3yLZDjHF/Jp95WAeTuPV+l0gJlBZXz1/H2qzqVC/nyRq2lBWuChKdgsqOc+JlmeTl+bUiSZI+XQH3zyRMkwec/sLecL1likUTGXzXCN2ZhEZUEfvHNJBPdkuF3h1OgkZHqfXBJN/fkCwbOiUy0NTGaBwb5w/ARmHKEH/ojldbCZfso1j0o8jxGc8E2x1P2LNRWEAgCRjAzUArPJ/qFdzX0wMoXFYXE8XlDF3Ii4vAo8oza2rxNEU4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f9PM2FURfeMWJ5QldHb2vWDTWbaYLLDcOsnQzoamVfY=;
- b=fLca3uLb82UA21rEbRiaqEHoK3ufJD1/CLEnyNqvhmnPmNrhCtvMNCMMa9Piz/3L26T+C2fd/cpyIfWT4Z/ihzFZa4vgskuHTRIVpcvA3KoMEshznPSBMaLFVEqNk35Lh1KvOYUXGntKVkw/pq/rTILd6BcZCj1zkEBB0JucJ6U=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by DM8PR10MB5429.namprd10.prod.outlook.com (2603:10b6:8:38::10) with
+ bh=5yPmxtQroAmndBeIUj30xlduBu0PQHu8UuZRj7HGYLw=;
+ b=h+Xot62jz+SQ4jEOP4zqkl5uiLctnO6H0QM0tgVj6GTc7Yyl4WOxfrsgSQG4ygxgfz6ZziuKqOYkLvoRm1V6iFL0Kbx9+cEGPKHP/BPQ37Hwo9kYsm+Qe2OyqDpgA0pT0/Fe0nYrkFqLiiQJCuCczKTkFTVm3irE1CNMcJIhqx8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM0PR04MB6065.eurprd04.prod.outlook.com (2603:10a6:208:139::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 12:37:23 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::65fa:78de:f4d:1a5c]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::65fa:78de:f4d:1a5c%3]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
- 12:37:23 +0000
-Message-ID: <d3ae80cd-7e1f-50e3-d90d-becf779788c0@oracle.com>
-Date:   Wed, 13 Apr 2022 07:37:16 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v6 4/8] crash: add generic infrastructure for crash
- hotplug support
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220401183040.1624-1-eric.devolder@oracle.com>
- <20220401183040.1624-5-eric.devolder@oracle.com>
- <YlPy8CKU4zHsx6Bc@MiWiFi-R3L-srv>
- <821b3c62-eedf-c1a3-4aba-671c90d83288@oracle.com>
- <YlY4SlF07iH08Qnj@MiWiFi-R3L-srv>
-From:   Eric DeVolder <eric.devolder@oracle.com>
-In-Reply-To: <YlY4SlF07iH08Qnj@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.30; Wed, 13 Apr
+ 2022 12:39:57 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::b09c:8ffe:8e02:7387]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::b09c:8ffe:8e02:7387%9]) with mapi id 15.20.5164.018; Wed, 13 Apr 2022
+ 12:39:57 +0000
+Message-ID: <a2731b2d77f9bf2adf36f0c05cb5e3b14a5a91a9.camel@nxp.com>
+Subject: Re: [PATCH v6 resend 2/5] phy: Add LVDS configuration options
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        robh+dt@kernel.org, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        agx@sigxcpu.org, robert.chiras@nxp.com, martin.kepplinger@puri.sm,
+        robert.foss@linaro.org
+Date:   Wed, 13 Apr 2022 20:39:41 +0800
+In-Reply-To: <YlaqwoFCfusFgIIe@matsya>
+References: <20220402052451.2517469-1-victor.liu@nxp.com>
+         <20220402052451.2517469-3-victor.liu@nxp.com> <YlZpnrKt9NbHZv26@matsya>
+         <d77b41d911e126331138ddaca146a581d316bd09.camel@nxp.com>
+         <YlaqwoFCfusFgIIe@matsya>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0148.namprd11.prod.outlook.com
- (2603:10b6:806:131::33) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
+X-ClientProxiedBy: HK2PR03CA0060.apcprd03.prod.outlook.com
+ (2603:1096:202:17::30) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 765a9992-99d3-4710-df10-08da1d4a5be6
-X-MS-TrafficTypeDiagnostic: DM8PR10MB5429:EE_
-X-Microsoft-Antispam-PRVS: <DM8PR10MB542960492ECBE143ED9D671297EC9@DM8PR10MB5429.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b3768b46-dd34-4c21-9c7b-08da1d4ab7d6
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6065:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB60652B5C54DF6607A706C2CD98EC9@AM0PR04MB6065.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xT4hnBUcwd3q2lSSOVwvWe/TBM9v/Czw/toS1NcoyTzv5kMZIdKFa+/3Bi7Ikv0pSsMfWTveFJgSY/gKOMgwLaQNZrpnwpo7dnTcpw+rc4lB48IXUrpWrod80qdNTVonHR2qvxxLYfMGuNX8itYDRceOo0OxGEzMQpsNPwjDHdYFmQVIizC15usxLVAT5Z5LkYEHIic0y0SwoRLQSkQXYlJxozcgC62DazcdEMbq5s5YtiPJqnfbaGgjl4ePxvFSrw091vxKSTsESn7lBmzG6XMV8IQlslK5NODp9M25aXaD8ZHyNJSWYYbqenzim8AnX3ObYhDdNgrU/Xs6VxtkXGTVo0DIorhKs//Mdju+vG/nq7DvRa7TtxtjqqJ2nmDRtrFAapjJHumh8jANaeLHxBG3Yi2pGLzmnY3CH/750vmOyJv14DgUw+7n+j/LhSr4AqGjBeajhJxev6opkn4Kb/q737GGT8II/pdVIvB5tWejfvSAQB8I59CPzsGmAhPuhg3V6QoCYR9JXyxUQBgAKw6j0GrpF9qI6ItL9a312U9IIV9bbENvTwVdtdjXoS6DTBB01EoSIH7BMBweKhhCFV9Ya06d+9BLeSM5vGYzpio1Vh96f0PGKkOXY13oyrWBXSkDxmEwIEh1rp8zwH4oNltzcg+E+smahRQpXzV7z20Sxu7KwL9GPtcm+yhdrWVMRCnIqYzj3E32ZUtBwxboF5u3nltHjSnfmiGkzEnzLJJJurrz1go6O3r08ZylXuXGTKlq3Ey2u4AnH9+tSL4bGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(107886003)(6512007)(5660300002)(186003)(38100700002)(2616005)(4326008)(8676002)(66946007)(66556008)(66476007)(6916009)(316002)(86362001)(31696002)(6506007)(6666004)(6486002)(508600001)(53546011)(31686004)(2906002)(36756003)(7416002)(83380400001)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jaiR/H6zsFmBVmHYV/dxnuYNSrALWA1DxfNWXRv9z9jJBBBalBK7KQkZ98hkiTUpvWADKaeZqH/r/fiNjofBgLamxvsIJbRPAFrlZNocdj3VZYhhW9PoqwEO95mbq8KSS/fznncjiD7LezJi7U56OcP0YWiSumBZWLQqs7IAvLADBIMLU7EmnRVwFWooFUEj5WNTmMtkVC+qrTWKEbvMeZPEr1QkbdORpG2O1Axg3gLX4wZ/7Cqhp9wLnWVP4WqQLyxpkhHc+MIsSDiJ41XXwJUei1vgDxONdO3Hb49D+U9pGbWz+voeur++2XBuVvsIu1HzjECtgPs7u74ceDpBQ80BaC8ZUJY//Ou/NddnJfNRZvaraJLnUmNtdVDedVGsMB65mzvd/ybzhayR9bhmXc/VLaHiM0lDP/UytHg9eGTJxa/m8HMUfDtj9NhHQsB3sUtIbjhJt4Rw+4A5yjFJqwvY1WPIiVhAGHdB0IbdudQvKS2TUX/4IAHXT2kxjjieNslOGb3y3EUXj78USbqZOqXiZlF9u9SnaGh/dBGr+U2u/yIVHqUWswXtDrVRAX1afiZSBIH7zksTccswMpTTPhB3pz/YW0Xbvms48KXqOYCbacHl+yYTRC30ScPWbbAL2LyZWqx6yaHCmyanvTaYLbUN7rb6X47A4d3ARR6lOQ46JMpyxcE/kSSul+iVAr1If4XH9nCQsGTf3azZ+cxtjYppc6a50/sl57N9xfA3i6E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(186003)(38100700002)(38350700002)(4326008)(66946007)(66556008)(8676002)(66476007)(5660300002)(6666004)(6512007)(6506007)(36756003)(6916009)(316002)(52116002)(2616005)(83380400001)(7416002)(86362001)(2906002)(8936002)(26005)(53546011)(6486002)(99106002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R242ODdTRVFlL2lJdm9LaHR0bUkwZzl4L1lEYityQTBWZVAraWd6M0YvKytI?=
- =?utf-8?B?cEFLMS9tME5URllCTmZMWDZqWEZrRUk3dllFbGYvQ0F4SkRYSnE3dm9DMWVq?=
- =?utf-8?B?MCtER1hZdXVwVEVhdHBydWRBdG5Pc1BQMXRpRnZUQVhMYm5PTzF5aVRuOUZi?=
- =?utf-8?B?VW9PZE5ZNlFMM20xYzNITjRxSXYyS0FFRFhLMjlKYlVZTzJkRS9qQllqd2xj?=
- =?utf-8?B?RlpMZ3lBTDlCTG9RalNjTnR6bHBWb1pQWi9vSHRONXhzRkVwNWxaNGdGTjFH?=
- =?utf-8?B?YVZkWFFpWHBwS3hSb2tXTmlSNFk5dzRhQlZFbFdneEw5UlNwckFpOFFnZTVj?=
- =?utf-8?B?cXp0dVRFdFowYVh4WHl3VTZMZWJ5OWRwQS9wWjEzYTZudllPUzdVR3lFOFRs?=
- =?utf-8?B?MWZ3R3hJV1lEUDk1dHFNUllUeWZGYU8rZUZkVlhqeWsrRzJqNjcxVVoyV2pZ?=
- =?utf-8?B?M1B4cEZmR0Z3Sk4rV2NpU3NGQ0NVMG5rMGVlS0pkTmt1TFN3TW5rNmVLMzVz?=
- =?utf-8?B?T01vTnJ6MXFkMVRuemhrdENCdlZoYXA1TDFYajNCUEozaEF6anFrOXdyaGI4?=
- =?utf-8?B?RGwrd043RTFQY0FJSHlBNkEzTVc1TWZTdnlPaW5wcElkYzJmWDVJeDl2MTVi?=
- =?utf-8?B?M0RoWnUyL0s2VXJmVFVzdS92SVVQMFNvcHdnL2ZmdVM1Zit0aTRSUVROMWds?=
- =?utf-8?B?bVdtMldnU3lUQkQ1NnkzSmszVmVNaG9vWXF1ZWgvbmRvbUswZHNSVldpZFRY?=
- =?utf-8?B?L01zbFNtTVpoRndIVVRlUVh6a0doODdCTjl0VHQxenVEUUZ1dDBUUEdQL1Ar?=
- =?utf-8?B?TTN0SXZLOEU0dVZlblVwUTN3KzVWaWpyQlB2NnFFUmptZXBSWDFzT0pTaVk1?=
- =?utf-8?B?T1JISWE0NE1MWVRXMVVJQkxrclJPcjQrNGpObnh4MVFSL1krd09NbnV4OTJw?=
- =?utf-8?B?MGswSVNzaUxVSm0yNHRzdVZDSk81RG15ZVNKZllXdEVtZ0dEVVJTcHdSVSsz?=
- =?utf-8?B?bnZNelN2ZUQ0ZDl2b1BCM005bzdPdDlCK042eGhhRjdOVVFMRzdUWHNxd2xO?=
- =?utf-8?B?ZjJRb3pLWEM2REh6cm5YLzFoVDhTOWxWdHdwem0vNUQ5dGlOOXRKR1E2R2lp?=
- =?utf-8?B?ZmpiZ2FDa2graFljVUp4SVZZK3dzbzRZb1BkNk4wOEM5WUExNHh0ZE1MWUQ0?=
- =?utf-8?B?VEp5Z3FjaHJWdzY4aElaNmVhVDZ4WXoyM2Irb3ppeE1GU2lBcFVJcHB0bzBi?=
- =?utf-8?B?bDVibm4rSXh4TzlHYWpwT092THR4cTZPNjFiVlNnN0M0RXo5S1BFWEdEdncw?=
- =?utf-8?B?ZTBMT2M0bENzWnNYN25pTXkwSmlCMVFLMVkwVE1hWmppTWhjelZMS0RSZDFh?=
- =?utf-8?B?a0lkVG1GYmRjd2FidDNlY0F2MFJzdVBQaUUvOVhoRTVVeGcva3JwZ1FKdnlz?=
- =?utf-8?B?cFpGdCtEd2d3NlgvTU1QYytCWGRpSWVPbDBlaTRZQmVjR21uK2wzSitaVGxP?=
- =?utf-8?B?TFFyWGp0TkV6cVJtelRGSVBEb2NndzJqdDgyM2RzOFFETk9FaldnOXQzSzJX?=
- =?utf-8?B?Y3NLVklFSnZtaVFhWWs1VGJFYVlKSDMxditnTm5hd0JaV3NSTVMwOHI5Skkz?=
- =?utf-8?B?V21mZE00anROOGQwbFdqYm9nRFNRSlFFWHlOY05tbEhVWklqRmtCd2ZwVGF5?=
- =?utf-8?B?c0Q4bFdXVEJxVXkxZUdjR0trOHJ1aTh6dUdoZnhOdFdiZ3p2a2hzdWs0aEV0?=
- =?utf-8?B?dm5IVGN4SmI2QnVLVGZhSCs4cExXWEhsUEM5dHVYdFpuYVViS1VyWnhDaDg5?=
- =?utf-8?B?K0RWMGFlSnZvdWRvSGJCNmhpRWJ2cGRybFNnK2VrTG8rZGVJS2xGYlRaVEty?=
- =?utf-8?B?ckNkZHNqYldrWDFoVXRmZGhuQmdkUGpReTRYMnRoU3VWQmpHd1pCbExwTGk1?=
- =?utf-8?B?SG9YNUFkM1BBREw2SmU1VGtVNlczVjBvb2EzQlJkU21LN3llU2tmeTVQdE5v?=
- =?utf-8?B?Vm1iYVFSeGRBb1dCaWlTUXFjN2h1akE3OFZkcHE3WDNKMmg5V1MyNlYrT3R2?=
- =?utf-8?B?Q3pYM0dXV2owOC81aGpPTkdKeVdWdWJCT0p5YVhxRVVTNlgwWVFXc25RVHFx?=
- =?utf-8?B?RnRidXNybjU5eG53OTg3M3dIS1dEUFZ4ektXeG8zUFg2NVZQb0tyZXZTd1hv?=
- =?utf-8?B?SWRNcVdFTTdkRW5FcDBCUHV3TmFhMThWSDgvaXE0WUZ2b3VhazNWNWQvY1Fw?=
- =?utf-8?B?M3hxQTlhSzVlWGlkTUxQTUdSVXU1UTh4dG4zeXpEbXlJeld5elF3b0EwRklP?=
- =?utf-8?B?NzZSaTBUUzFxV2V4RlJHanBtckhWVVlUK2drWXBVQ2EyWFV1ZG96elpqeE5n?=
- =?utf-8?Q?05gGwGWfIhwuana//lF1s0SrvAPr0+alnrKqK?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 765a9992-99d3-4710-df10-08da1d4a5be6
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cFJkOGpxWU4yQ2hGRHpvNVZoTlNVNDhzNzdZcGVhWS9PYjdDeEVCdmg5dW5o?=
+ =?utf-8?B?ZDFPYWdtY1ZxRkV0YWhBbzNrTk9Ba2wxR0pPUlgvRG1pRDVVZkg4bWNVb3Ri?=
+ =?utf-8?B?MWpzMlJGNDJ1QVY0T21NVHRaV3FIOUJmUWhleklNRzZYK0VPcitmTEROM25m?=
+ =?utf-8?B?R09lNFFyNmN5dU5NZ0xWUXI0bm1XUEtZZk1UK0hQM1lEM05ZZDhVbGpPSVEr?=
+ =?utf-8?B?M1NiRnVWd3luNUFHOGRiRVJnaFR1MFhYaEd0K0NPUUl3WWRlNEMwUXdzSnY1?=
+ =?utf-8?B?OHF2YmhUS0FYLzJOdS9GSUF1NjR4d0ZlQXBOdjdPNHpIRUp0dE1hN0VMdzBI?=
+ =?utf-8?B?OFJrWDhERGJaazNVRnE0czZ4emZEUUw0NGFsYnpGeEJmTTBnblJIaWFrd2RN?=
+ =?utf-8?B?Qmw4ekNrK3R2TTg3TEpyS0NvNElXa2NKOU0yWGQwamZpeG14N01OcmljN1JB?=
+ =?utf-8?B?aFRmT3ZxRlMzd1Z6eUlCdmcraUUyNDNRNko1M1pEdG1veEt2eGhuL0xuQnA2?=
+ =?utf-8?B?b3Via0hyVE9YdUlQS1IzTXVObGdENEE3OWM1U0I5TlNZTzlrWktSWTI5MkJr?=
+ =?utf-8?B?S2RiU21XRlI5Z3hEUWx5RDRDOElkUGU3b0dmdkp6V3prL0Z2WkdaN3p0dlN2?=
+ =?utf-8?B?ak5ZOUlIbFVkc3JKbUlWZTdqT1JGQzJRNEFNcmNScWpsVFBRdjNjUTZHa3Bm?=
+ =?utf-8?B?c0ZaaC9rL0tVYi9VNDdaKzlJd0NjUW1Oc1kxU1VlZjJhNENLWG90NGQxMnQ4?=
+ =?utf-8?B?bGdlWnhiWlRqa2w5R0VSNlZYQ0NBdGszSlh0dGZZaldWeHdIK0Z0TlRBaG1l?=
+ =?utf-8?B?cXVLSUsvczlGamFrME9SMStWQUl3MmNFbkYrWnRjbDRROENzMFRpSU4zd20v?=
+ =?utf-8?B?WW5ISE9JM25ydWoyRFFOME5qa3hCdHNvM1gxbFpncTI1YWJLVTRINlRCT1FN?=
+ =?utf-8?B?cmhKa3ByVExCVTU2Rmk0QlozS2tJUEZtWW8reGt5enNwWFp5UHY4ZWpnQU15?=
+ =?utf-8?B?cWhkbFRmdkgyS3dQazhxSmxBV0ZlOU1zZ2xYc1VIMDFtZjc5Y1ZGUVk0aWta?=
+ =?utf-8?B?NHJtOHE5VGZQbUE4QWtiV3FpVTZnZ0hqeVdqblBEdTd3bUxMTTFnaGhNV0FT?=
+ =?utf-8?B?Y0VjdFQrcXNsazMzVUxab1JOWlNiTCtOa3lzVGlBUTRBS0E0ZlUzUVdmWHR2?=
+ =?utf-8?B?Z3JrNnFsZERhL3l4MUZSLzFyb2VuS0lVQkFGNUhwMEdsMm5pNGlVZlM1OEpX?=
+ =?utf-8?B?U0oyU1IyZUswczBTNHdGTzNxdm1wNi83U2o3YktDT0tFTzBnU2x4UDhUOG1K?=
+ =?utf-8?B?RmJiWkQwVU9rV3Jlc1RSNnpCRkdSWVYwSGNmbEtOekZvNERmL0lCdXhKNXVD?=
+ =?utf-8?B?VmMreEsvNGdQTTR1MFRsOHNmbXZEQk40SXZEa295QmlEZWN5dzdPTjJ5Ynpm?=
+ =?utf-8?B?RnpIaC9oZ1gyTlRBRVVTQXdNNHN4dEltdnRvUU9lZ3dMWU1Rc3ZDQWJhcWpv?=
+ =?utf-8?B?WkdqSkF6QTl6b1J6WGdZbmJWNmsrd2tMRCs0WmNFZmZGU1UwRTZ1MTBxd0dz?=
+ =?utf-8?B?aWhyVjBqSlcvenBnOWxuNStmcmoxU3RFZzMxSnNnUEtPS0I0aTM1R1cvYm1p?=
+ =?utf-8?B?S2ZJVXRFRUdrSFFkMXFJWExLRlltZ3lVSXVaTXJvZ0NZMDBKVktXbk9RZWJw?=
+ =?utf-8?B?SWhEMHBBaFZBejlpREU4dlg0KzlhTkV5d0xVWFRKQXQ0TUFrUkswV3RHcHB4?=
+ =?utf-8?B?RkhmYUNPaTR0em84c3g4bFRlcDJkQWlUbnd1WVllRndPRDhHaHhKeEpOMmt1?=
+ =?utf-8?B?RkpxUXBoQkFnNFU0WDVYZ25XbmVXTVBEQWVTVnRVUFpFeThiZ2RiS3ZzZzFV?=
+ =?utf-8?B?K0ZQZEVxVXg5Q1ZJYktMVlROM3lYaUlJaER0SHpsbDNnL2syVlpuSld2MHJy?=
+ =?utf-8?B?VHFHR0pWSkhYTTdneEZzVXZrdnBBRmJqQTRmenZNakxRZ0l6ODN5RzlZSXMv?=
+ =?utf-8?B?Mjgybms1V2hrQ0RWR2xJSDIzeEIvVEVybnliVk1Qb24xWG9uSCs1bW1ZU1Zr?=
+ =?utf-8?B?WkoxRlg0SDZyemhXaXhxZDB3OEc0Q29GWXlPdmxqQVZ2ZW0yMElXSDIrUEVM?=
+ =?utf-8?B?KytacFBxSmc1T2pmQWlIVmo3Q3JpYzdwQlAwemh6QzV6K3VZV1g0Kzcya3BT?=
+ =?utf-8?B?dk9GVlZYc0hPanZQQzBOUU81OVNwUjR6ZVRJdGtqQzZ2RHpRT29DajRRQ0Zx?=
+ =?utf-8?B?dFlhVTJnK21IYXRlTTlwVE5ZSTNUbDM0Nmk5VzVVOU5DS0M4aHRjRUR4NUpj?=
+ =?utf-8?B?eFR6TFhER1UwdUZidnJtNEZIWmlUT04zYzMrbnN2elZnRStWSkczZz09?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3768b46-dd34-4c21-9c7b-08da1d4ab7d6
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 12:37:23.5489
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 12:39:57.6676
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5Nbfn7qQubnIu11uUUOC06hhD8yuPFQ4R4++WkitAqIpfLKd4U391VT1gpC6pNqCIXs8MR04YcWBq/LbeIZ1rg6/rhMjS1QCmfnya0rLD0M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR10MB5429
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-13_01:2022-04-13,2022-04-13 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=962
- spamscore=0 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204130067
-X-Proofpoint-ORIG-GUID: O19bCs8GF4XePGmyw1AKW2-rZVtrxlrr
-X-Proofpoint-GUID: O19bCs8GF4XePGmyw1AKW2-rZVtrxlrr
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: VCTTW0z1QLClJL9tbZlQmpHVjGLUA4C+Q/0RYlPPTUZTSvKOv6XYUzEyS7S43YOxwpHXMLs3gfNP5fTBG90MIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6065
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2022-04-13 at 16:19 +0530, Vinod Koul wrote:
+> On 13-04-22, 18:04, Liu Ying wrote:
+> > Hi Vinod,
+> > 
+> > On Wed, 2022-04-13 at 11:41 +0530, Vinod Koul wrote:
+> > > On 02-04-22, 13:24, Liu Ying wrote:
+> > > > This patch allows LVDS PHYs to be configured through
+> > > > the generic functions and through a custom structure
+> > > > added to the generic union.
+> > > > 
+> > > > The parameters added here are based on common LVDS PHY
+> > > > implementation practices.  The set of parameters
+> > > > should cover all potential users.
+> > > > 
+> > > > Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> > > > Cc: Vinod Koul <vkoul@kernel.org>
+> > > > Cc: NXP Linux Team <linux-imx@nxp.com>
+> > > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > > > ---
 
+[...]
 
-On 4/12/22 21:41, Baoquan He wrote:
-> On 04/11/22 at 08:54am, Eric DeVolder wrote:
->>
->>
->> On 4/11/22 04:20, Baoquan He wrote:
->>> Hi Eric,
->>>
->>> On 04/01/22 at 02:30pm, Eric DeVolder wrote:
->>> ... ...
->>>
->>>> +static void crash_hotplug_handler(unsigned int hp_action,
->>>> +	unsigned long a, unsigned long b)
->>>
->>> I am still struggling to consider if these unused parameters should be
->>> kept or removed. Do you foresee or feel on which ARCH they could be used?
->>>
->>> Considering our elfcorehdr updating method, once memory or cpu changed,
->>> we will update elfcorehdr and cpu notes to reflect all existing memory
->>> regions and cpu in the current system. We could end up with having them
->>> but never being used. Then we may finally need to clean them up.
->>>
->>> If you have investigated and foresee or feel they could be used on a
->>> certain architecture, we can keep them for the time being.
->>
->> So 'hp_action' and 'a' are used within the existing patch series.
->> In crash_core.c, there is this bit of code:
->>
->> +       kexec_crash_image->offlinecpu =
->> +           (hp_action == KEXEC_CRASH_HP_REMOVE_CPU) ?
->> +               (unsigned int)a : ~0U;
->>
->> which is referencing both 'hp_action' and using 'a' from the cpu notifier handler.
->> I looked into removing 'a' and setting offlinecpu directly, but I thought
->> it better that offlinecpu be set within the safety of the kexec_mutex.
->> Also, Sourabh Jain's work with PowerPC utilizing this framework directly
->> references hp_action in the arch-specific handler.
->>
->> The cpu and memory notifier handlers set hp_action accordingly. For cpu handler,
->> the 'a' is set with the impacted cpu. For memory handler, 'a' and 'b' form the
->> impacted memory range. I agree it looks like the memory range is currently
->> not useful.
+> > > > + */
+> > > > +
+> > > > +#ifndef __PHY_LVDS_H_
+> > > > +#define __PHY_LVDS_H_
+> > > > +
+> > > > +/**
+> > > > + * struct phy_configure_opts_lvds - LVDS configuration set
+> > > > + * @bits_per_lane_and_dclk_cycle:	Number of bits per data
+> > > > lane
+> > > > and
+> > > > + *					differential clock
+> > > > cycle.
+> > > 
+> > > What does it mean by bits per data lane and differential clock
+> > > cycle?
+> > 
+> > Please check
+> > Documentation/devicetree/bindings/display/panel/lvds.yaml.
+> > lvds.yaml metions slot.  'bits_per_lane_and_dclk_cycle' means the
+> > number of slots.  But, I don't find the word 'slot' in my lvds
+> > relevant
+> > specs which mentioned in lvds.yaml, so 'slots' is probably not a
+> > generic name(lvds.yaml is for display panel).  So, I use
+> > 'bits_per_lane_and_dclk_cycle' as the name tells what it means.
 > 
-> OK, memory handler doesn't need the action, memory regions. While cpu
-> handler needs it to exclude the hot plugged cpu.
-> 
-> We could have two ways to acheive this as below. How do you think about
-> them?
-> 
-> static void crash_hotplug_handler(unsigned int hp_action,
->          unsigned long cpu)
-> 
-> static int crash_memhp_notifier(struct notifier_block *nb,
->          unsigned long val, void *v)
-> {
-> ......
->          switch (val) {
->          case MEM_ONLINE:
->                  crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY,
->                          -1UL);
->                  break;
-> 
->          case MEM_OFFLINE:
->                  crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_MEMORY,
->                          -1UL);
->                  break;
->          }
->          return NOTIFY_OK;
-> }
-> 
-> static int crash_cpuhp_online(unsigned int cpu)
-> {
->          crash_hotplug_handler(KEXEC_CRASH_HP_ADD_CPU, cpu);
->          return 0;
-> }
-> 
-> static int crash_cpuhp_offline(unsigned int cpu)
-> {
->          crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
->          return 0;
-> }
+> variable name is fine, explanation for bit per lane and differential
+> clock cycle didnt help, maybe add better explanation of what this
+> variable means
 
-I'm OK with the above. Shall I post v7 or are you still looking at patches 7 and 8?
-Thanks!
-Eric
+I may add an example diagram as below...
 
 > 
-> OR,
-> 
-> static void crash_hotplug_handler(unsigned int hp_action,
->          int* cpu)
-> 
-> static int crash_cpuhp_online(unsigned int cpu)
-> {
->          crash_hotplug_handler(KEXEC_CRASH_HP_ADD_CPU, NULL);
->          return 0;
-> }
-> 
-> static int crash_cpuhp_offline(unsigned int cpu)
-> {
-> 	int dead_cpu = cpu;
->          crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_CPU, &cpu);
->          return 0;
-> }
-> 
+> > 
+> > > 
+> > > > + * @differential_clk_rate:		Clock rate, in Hertz,
+> > > > of the
+> > > > LVDS
+> > > > + *					differential clock.
+> > > > + * @lanes:				Number of active,
+> > > > consecutive,
+> > > > + *					data lanes, starting
+> > > > from lane
+> > > > 0,
+> > > > + *					used for the
+> > > > transmissions.
+> > > > + * @is_slave:				Boolean, true if the
+> > > > phy is a slave
+> > > > + *					which works together
+> > > > with a
+> > > > master
+> > > > + *					phy to support dual
+> > > > link
+> > > > transmission,
+> > > > + *					otherwise a regular phy
+> > > > or a
+> > > > master phy.
+
+---------------------------------8<------------------------------------
++ * This is an example with 4 lanes and 7 bits per data lane and
+differential
++ * clock cycle:
++ *
++ * ::
++ *               |<------------- one differential clock cycle --------
+----->|
++
+*                ________________                         ____________
+_____
++ *      Clock                     \_______________________/
++
+*                  ______  ______  ______  ______  ______  ______  ____
+__
++
+*      Lane0     ><_bit0_><_bit1_><_bit2_><_bit3_><_bit4_><_bit5_><_bit
+6_><
++
+*      Lane1     ><_bit0_><_bit1_><_bit2_><_bit3_><_bit4_><_bit5_><_bit
+6_><
++
+*      Lane2     ><_bit0_><_bit1_><_bit2_><_bit3_><_bit4_><_bit5_><_bit
+6_><
++
+*      Lane3     ><_bit0_><_bit1_><_bit2_><_bit3_><_bit4_><_bit5_><_bit
+6_><
+---------------------------------8<------------------------------------
+
+What do you think?
+
+Regards,
+Liu Ying
+

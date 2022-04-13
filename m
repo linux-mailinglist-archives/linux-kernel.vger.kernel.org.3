@@ -2,138 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651F84FF5CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F554FF605
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbiDMLha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S235281AbiDMLtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiDMLh1 (ORCPT
+        with ESMTP id S229726AbiDMLtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:37:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C092E237F8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:35:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7B2F71F38D;
-        Wed, 13 Apr 2022 11:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649849704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fFqfiFiCx2hMGSLHkHBmN5BfJizyHy0EGQZ4MjVsO7g=;
-        b=XtWQOfFS03MuJAoFKw1G6tY/N1VE3kpuCtr0LmuGD4fnq65kIvngZSl5T++LA3Mq3rRCYS
-        a67zEvFqPSLazUTz+DgtckdMscYtdBliJwJZuDpE5232BPC3skv3uDE7PA4+yiP124+Cqr
-        13h6mfA6/zXRPY9JdvtF2uuA7If9DBQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 13 Apr 2022 07:49:32 -0400
+X-Greylist: delayed 566 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 04:47:11 PDT
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0C853B42;
+        Wed, 13 Apr 2022 04:47:11 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 1FA2F454CF;
+        Wed, 13 Apr 2022 11:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1649849861; x=
+        1651664262; bh=nt+H8nVF77Sn8FWBw2z4vHK5Yf8N/vEddSQZADOz7cI=; b=g
+        wSfw8944Ohmpty+OhSWeCRQ00owtwkGboucBHqPVydB2BEGYwfi/nhj1j9GxFPTE
+        m53YgW3+0BH3ZivTH8WxxC/1Y7wiQsvxBby0vZt696ZWrT0UfB0dIAv4T5DYgsmg
+        mDcSSNURm6C4T3U/n6aPfdcfh3x5K2gBNuiInR66jQ=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WC27he5aZ9y8; Wed, 13 Apr 2022 14:37:41 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3C5E4A3B87;
-        Wed, 13 Apr 2022 11:35:03 +0000 (UTC)
-Date:   Wed, 13 Apr 2022 13:35:03 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Wu Yan <wu-yan@tcl.com>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, tang.ding@tcl.com
-Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
-Message-ID: <Yla1Z8Ze0iJvXRFT@dhcp22.suse.cz>
-References: <181ce21548da652d9a14eebc684fe75c@sslemail.net>
- <Ylab+Tz4d8kZYjef@dhcp22.suse.cz>
- <ff186d65-2103-b796-79b9-3eb4a3e04380@tcl.com>
+        by mta-01.yadro.com (Postfix) with ESMTPS id 3B3E645490;
+        Wed, 13 Apr 2022 14:37:41 +0300 (MSK)
+Received: from ubuntu.yadro.com (10.199.0.41) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 13
+ Apr 2022 14:37:39 +0300
+From:   <i.m.novikov@yadro.com>
+To:     <sanju.mehta@amd.com>
+CC:     <i.m.novikov@yadro.com>, <vkoul@kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@yadro.com>
+Subject: [PATCH] dmaengine: PTDMA: support polled mode
+Date:   Wed, 13 Apr 2022 14:37:33 +0300
+Message-ID: <20220413113733.59041-1-i.m.novikov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff186d65-2103-b796-79b9-3eb4a3e04380@tcl.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.41]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 13-04-22 19:20:06, Wu Yan wrote:
-> On 4/13/22 17:46, Michal Hocko wrote:
-> > On Wed 13-04-22 16:44:32, Rokudo Yan wrote:
-> > > There is a potential deadlock in gc thread may happen
-> > > under low memory as below:
-> > > 
-> > > gc_thread_func
-> > >   -f2fs_gc
-> > >    -do_garbage_collect
-> > >     -gc_data_segment
-> > >      -move_data_block
-> > >       -set_page_writeback(fio.encrypted_page);
-> > >       -f2fs_submit_page_write
-> > > as f2fs_submit_page_write try to do io merge when possible, so the
-> > > encrypted_page is marked PG_writeback but may not submit to block
-> > > layer immediately, if system enter low memory when gc thread try
-> > > to move next data block, it may do direct reclaim and enter fs layer
-> > > as below:
-> > >     -move_data_block
-> > >      -f2fs_grab_cache_page(index=?, for_write=false)
-> > >       -grab_cache_page
-> > >        -find_or_create_page
-> > >         -pagecache_get_page
-> > >          -__page_cache_alloc --  __GFP_FS is set
-> > >           -alloc_pages_node
-> > >            -__alloc_pages
-> > >             -__alloc_pages_slowpath
-> > >              -__alloc_pages_direct_reclaim
-> > >               -__perform_reclaim
-> > >                -try_to_free_pages
-> > >                 -do_try_to_free_pages
-> > >                  -shrink_zones
-> > >                   -mem_cgroup_soft_limit_reclaim
-> > >                    -mem_cgroup_soft_reclaim
-> > >                     -mem_cgroup_shrink_node
-> > >                      -shrink_node_memcg
-> > >                       -shrink_list
-> > >                        -shrink_inactive_list
-> > >                         -shrink_page_list
-> > >                          -wait_on_page_writeback -- the page is marked
-> > >                         writeback during previous move_data_block call
-> > 
-> > This is a memcg reclaim path and you would have to have __GFP_ACCOUNT in
-> > the gfp mask to hit it from the page allocator. I am not really familiar
-> > with f2fs but I doubt it is using this flag.
-> > 
-> > On the other hand the memory is charged to a memcg when the newly
-> > allocated page is added to the page cache. That wouldn't trigger the
-> > soft reclaim path but that is not really necessary because even the
-> > regular memcg reclaim would trigger wait_on_page_writeback for cgroup
-> > v1.
-> > 
-> > Also are you sure that the mapping's gfp mask has __GFP_FS set for this
-> > allocation? f2fs_iget uses GFP_NOFS like mask for some inode types.
-> > 
-> > All that being said, you will need to change the above call chain but it
-> > would be worth double checking the dead lock is real.
-> 
-> Hi, Michal
-> 
-> 1. The issue is occur when do monkey test in Android Device with 4GB RAM +
-> 3GB zram, and memory cgroup v1 enabled.
-> 
-> 2. full memory dump has caught when the issue occur and the dead lock has
-> confirmed from dump. We can see the mapping->gfp_mask is 0x14200ca,
-> so both __GFP_ACCOUNT(0x1000000) and __GFP_FS(0x80) set
+From: Ilya Novikov <i.m.novikov@yadro.com>
 
-This is rather surprising, I have to say because page cache is charged
-explicitly (__filemap_add_folio). Are you testing with the upstream
-kernel or could this be a non-upstream change possibly?
+If the DMA_PREP_INTERRUPT flag is not provided, run in polled mode,
+which significantly improves IOPS: more than twice on chunks < 4K.
 
-> crash-arm64> struct inode.i_mapping 0xFFFFFFDFD578EEA0
->   i_mapping = 0xffffffdfd578f028,
-> crash-arm64> struct address_space.host,gfp_mask -x 0xffffffdfd578f028
->   host = 0xffffffdfd578eea0,
->   gfp_mask = 0x14200ca,
+Signed-off-by: Ilya Novikov <i.m.novikov@yadro.com>
+---
+ drivers/dma/ptdma/ptdma-dev.c       | 36 +++++++++++++++--------------
+ drivers/dma/ptdma/ptdma-dmaengine.c | 16 ++++++++++++-
+ drivers/dma/ptdma/ptdma.h           | 13 +++++++++++
+ 3 files changed, 47 insertions(+), 18 deletions(-)
 
-Anyway, if the __GFP_FS is set then the deadlock is possible even
-without __GFP_ACCOUNT.
+diff --git a/drivers/dma/ptdma/ptdma-dev.c b/drivers/dma/ptdma/ptdma-dev.c
+index daafea5bc35d..377da23012ac 100644
+--- a/drivers/dma/ptdma/ptdma-dev.c
++++ b/drivers/dma/ptdma/ptdma-dev.c
+@@ -100,6 +100,7 @@ int pt_core_perform_passthru(struct pt_cmd_queue *cmd_q,
+ 			     struct pt_passthru_engine *pt_engine)
+ {
+ 	struct ptdma_desc desc;
++	struct pt_device *pt = container_of(cmd_q, struct pt_device, cmd_q);
+ 
+ 	cmd_q->cmd_error = 0;
+ 	cmd_q->total_pt_ops++;
+@@ -111,17 +112,12 @@ int pt_core_perform_passthru(struct pt_cmd_queue *cmd_q,
+ 	desc.dst_lo = lower_32_bits(pt_engine->dst_dma);
+ 	desc.dw5.dst_hi = upper_32_bits(pt_engine->dst_dma);
+ 
+-	return pt_core_execute_cmd(&desc, cmd_q);
+-}
+-
+-static inline void pt_core_disable_queue_interrupts(struct pt_device *pt)
+-{
+-	iowrite32(0, pt->cmd_q.reg_control + 0x000C);
+-}
++	if (cmd_q->int_en)
++		pt_core_enable_queue_interrupts(pt);
++	else
++		pt_core_disable_queue_interrupts(pt);
+ 
+-static inline void pt_core_enable_queue_interrupts(struct pt_device *pt)
+-{
+-	iowrite32(SUPPORTED_INTERRUPTS, pt->cmd_q.reg_control + 0x000C);
++	return pt_core_execute_cmd(&desc, cmd_q);
+ }
+ 
+ static void pt_do_cmd_complete(unsigned long data)
+@@ -144,14 +140,10 @@ static void pt_do_cmd_complete(unsigned long data)
+ 	cmd->pt_cmd_callback(cmd->data, cmd->ret);
+ }
+ 
+-static irqreturn_t pt_core_irq_handler(int irq, void *data)
++void pt_check_status_trans(struct pt_device *pt, struct pt_cmd_queue *cmd_q)
+ {
+-	struct pt_device *pt = data;
+-	struct pt_cmd_queue *cmd_q = &pt->cmd_q;
+ 	u32 status;
+ 
+-	pt_core_disable_queue_interrupts(pt);
+-	pt->total_interrupts++;
+ 	status = ioread32(cmd_q->reg_control + 0x0010);
+ 	if (status) {
+ 		cmd_q->int_status = status;
+@@ -162,11 +154,21 @@ static irqreturn_t pt_core_irq_handler(int irq, void *data)
+ 		if ((status & INT_ERROR) && !cmd_q->cmd_error)
+ 			cmd_q->cmd_error = CMD_Q_ERROR(cmd_q->q_status);
+ 
+-		/* Acknowledge the interrupt */
++		/* Acknowledge the completion */
+ 		iowrite32(status, cmd_q->reg_control + 0x0010);
+-		pt_core_enable_queue_interrupts(pt);
+ 		pt_do_cmd_complete((ulong)&pt->tdata);
+ 	}
++}
++
++static irqreturn_t pt_core_irq_handler(int irq, void *data)
++{
++	struct pt_device *pt = data;
++	struct pt_cmd_queue *cmd_q = &pt->cmd_q;
++
++	pt_core_disable_queue_interrupts(pt);
++	pt->total_interrupts++;
++	pt_check_status_trans(pt, cmd_q);
++	pt_core_enable_queue_interrupts(pt);
+ 	return IRQ_HANDLED;
+ }
+ 
+diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
+index 91b93e8d9779..ea07cc42f4d0 100644
+--- a/drivers/dma/ptdma/ptdma-dmaengine.c
++++ b/drivers/dma/ptdma/ptdma-dmaengine.c
+@@ -171,6 +171,7 @@ static struct pt_dma_desc *pt_alloc_dma_desc(struct pt_dma_chan *chan,
+ 	vchan_tx_prep(&chan->vc, &desc->vd, flags);
+ 
+ 	desc->pt = chan->pt;
++	desc->pt->cmd_q.int_en = !!(flags & DMA_PREP_INTERRUPT);
+ 	desc->issued_to_hw = 0;
+ 	desc->status = DMA_IN_PROGRESS;
+ 
+@@ -257,6 +258,17 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+ 		pt_cmd_callback(desc, 0);
+ }
+ 
++enum dma_status
++pt_tx_status(struct dma_chan *c, dma_cookie_t cookie,
++		struct dma_tx_state *txstate)
++{
++	struct pt_device *pt = to_pt_chan(c)->pt;
++	struct pt_cmd_queue *cmd_q = &pt->cmd_q;
++
++	pt_check_status_trans(pt, cmd_q);
++	return dma_cookie_status(c, cookie, txstate);
++}
++
+ static int pt_pause(struct dma_chan *dma_chan)
+ {
+ 	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
+@@ -291,8 +303,10 @@ static int pt_terminate_all(struct dma_chan *dma_chan)
+ {
+ 	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
+ 	unsigned long flags;
++	struct pt_cmd_queue *cmd_q = &chan->pt->cmd_q;
+ 	LIST_HEAD(head);
+ 
++	iowrite32(SUPPORTED_INTERRUPTS, cmd_q->reg_control + 0x0010);
+ 	spin_lock_irqsave(&chan->vc.lock, flags);
+ 	vchan_get_all_descriptors(&chan->vc, &head);
+ 	spin_unlock_irqrestore(&chan->vc.lock, flags);
+@@ -362,7 +376,7 @@ int pt_dmaengine_register(struct pt_device *pt)
+ 	dma_dev->device_prep_dma_memcpy = pt_prep_dma_memcpy;
+ 	dma_dev->device_prep_dma_interrupt = pt_prep_dma_interrupt;
+ 	dma_dev->device_issue_pending = pt_issue_pending;
+-	dma_dev->device_tx_status = dma_cookie_status;
++	dma_dev->device_tx_status = pt_tx_status;
+ 	dma_dev->device_pause = pt_pause;
+ 	dma_dev->device_resume = pt_resume;
+ 	dma_dev->device_terminate_all = pt_terminate_all;
+diff --git a/drivers/dma/ptdma/ptdma.h b/drivers/dma/ptdma/ptdma.h
+index afbf192c9230..d093c43b7d13 100644
+--- a/drivers/dma/ptdma/ptdma.h
++++ b/drivers/dma/ptdma/ptdma.h
+@@ -206,6 +206,9 @@ struct pt_cmd_queue {
+ 	unsigned int active;
+ 	unsigned int suspended;
+ 
++	/* Interrupt flag */
++	bool int_en;
++
+ 	/* Register addresses for queue */
+ 	void __iomem *reg_control;
+ 	u32 qcontrol; /* Cached control register */
+@@ -318,7 +321,17 @@ void pt_core_destroy(struct pt_device *pt);
+ int pt_core_perform_passthru(struct pt_cmd_queue *cmd_q,
+ 			     struct pt_passthru_engine *pt_engine);
+ 
++void pt_check_status_trans(struct pt_device *pt, struct pt_cmd_queue *cmd_q);
+ void pt_start_queue(struct pt_cmd_queue *cmd_q);
+ void pt_stop_queue(struct pt_cmd_queue *cmd_q);
+ 
++static inline void pt_core_disable_queue_interrupts(struct pt_device *pt)
++{
++	iowrite32(0, pt->cmd_q.reg_control + 0x000C);
++}
++
++static inline void pt_core_enable_queue_interrupts(struct pt_device *pt)
++{
++	iowrite32(SUPPORTED_INTERRUPTS, pt->cmd_q.reg_control + 0x000C);
++}
+ #endif
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+

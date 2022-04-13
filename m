@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32C64FF981
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB8A4FF97B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbiDMO6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S236322AbiDMO4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbiDMO6M (ORCPT
+        with ESMTP id S235915AbiDMO4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:58:12 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD37E0DD;
-        Wed, 13 Apr 2022 07:55:49 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id C6935CE5A8;
-        Wed, 13 Apr 2022 14:50:05 +0000 (UTC)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 716D240009;
-        Wed, 13 Apr 2022 14:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649861397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l7gqjjhj0XbhASsT9yx1167D/NkqUVY3vj/OxIB/ROU=;
-        b=nhhCNspC0kHQKc6yGBP+mIyCoLG+cWyi075dvuNNmJpNn0lfozq6KB5nskGwe5Gi5QlQ+n
-        Unaeh9evR+5dHfSfUUrakEV1DZSrmcPDliXM4RF0pysUogHcq55xIPO+TD+48mJoii0RvE
-        vSb6C6jC3Di1zsaw31MZPHh0or52spHX8ICd0XYqd1CAZc4qphhWIrryj4udfFeFtEuSTv
-        KRq8EgccyQtQyViaPjWMA8UBDAj6zHrtdj12XHJDLXR35VU2kDHxp1lSc1i5iq/fuu5lr5
-        nLCU7DbxLoKBhNe+YlrLIDC06rxVDQDaqT6mqcONpqpFWY2J+7wiI5k9k9DzEg==
-Date:   Wed, 13 Apr 2022 16:49:54 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRz?= =?UTF-8?B?a2k=?= 
-        <kw@linux.com>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 1/6] PCI: rcar-gen2: Add support for clocks
-Message-ID: <20220413164954.32365292@bootlin.com>
-In-Reply-To: <YlWfslEOdrf62KiP@robh.at.kernel.org>
-References: <20220412094029.287562-1-herve.codina@bootlin.com>
-        <20220412094029.287562-2-herve.codina@bootlin.com>
-        <YlWfslEOdrf62KiP@robh.at.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Wed, 13 Apr 2022 10:56:37 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C8435853;
+        Wed, 13 Apr 2022 07:54:15 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id v4so2686088edl.7;
+        Wed, 13 Apr 2022 07:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MsuM3bWxLpM0X8gDoogn/CmcOLdvtiIpUqO+59cr1LA=;
+        b=cVIvzMZK3+X9w8Y8SlSIQ/kSqVSvwVRLF4mCx/phZOopUu2JsH/DrNh09pl99rMSgW
+         yF81A9Xo7Azt7dIih2sHI0iazTfboB1e4dKZ8PqTjrWvoG7xz3AJTu4p/gEVO2UJELlP
+         37rctWcVIbgJGk9rJ2hEzd36cktyy6aEjPvKGzFea9S3D0kyI3a3s2RJ3jE+KwJH7yG9
+         QbyA1Ka/IM6OKHp244AUjPHT6ZB52t/IzFGHKCIcsI1xiSU8Zok4CefKf3g76xKIV+TS
+         UKxY8GHCuDv24tRqX2ABPbbV1EDLFTBvBQ9WaspjdwmaASfOTF/rOfUKDKH1qKTqRFas
+         bH7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MsuM3bWxLpM0X8gDoogn/CmcOLdvtiIpUqO+59cr1LA=;
+        b=gDEF1U/leYgGmHYKyVJcY9fA12Fo0ebL1Og0EQTaDz1p0rb7z0qMcx25x8WJ5tpDM3
+         Vq5goxL4gBdcVmTevWd4e1LhDALwYO08kTRymxRburqM7aN7razZLnVLiSdneN/6K9vo
+         XP57ObOHWwS4gBZAtLwlht2ly/+tr++EGlMeIhd2N3tNCaMPFHWbNg26OSbwytNLM1Kp
+         9GXgnT5xhfAkIaGDpwtljq7fAK8Ms+sDYJDYG2i0Oumnhb2TQMHliyJ+HTfPals7dobZ
+         bFnqgX3ObApDsiysbsBZ74BXxPbCntmHLA1XZQBrOc3BklPDJSyku7vpHEUFl+eROvV2
+         og5Q==
+X-Gm-Message-State: AOAM5334fZ90+LNZJrNVGmZNvJfkiRMUrk1zrqism39bY/QyFPYXfMsf
+        uEzLwbUXvtBjL6eTFfCzBRIz7LWhUi6jSnDZL4U=
+X-Google-Smtp-Source: ABdhPJxPoCxL9183qcM2JHaUk1J7xZA0AhCa/tILcvARmu0cjoFPH48I3A5IVHobbtiSKzTzkZ/GOZzCOCjs2xAvWD4=
+X-Received: by 2002:a50:cc9e:0:b0:41d:7123:d3ba with SMTP id
+ q30-20020a50cc9e000000b0041d7123d3bamr21071739edi.296.1649861653819; Wed, 13
+ Apr 2022 07:54:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
+In-Reply-To: <20220413094011.185269-1-cosmin.tanislav@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Apr 2022 17:50:01 +0300
+Message-ID: <CAHp75VfjexQG_y5XkQWUd_aWwTyDBcwJ2-As+casajBH1ns6aQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: iio: adc: add AD4130
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Wed, Apr 13, 2022 at 2:08 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+>
+> AD4130-8 is an ultra-low power, high precision,
+> measurement solution for low bandwidth battery
+> operated applications.
+>
+> The fully integrated AFE (Analog Front-End)
+> includes a multiplexer for up to 16 single-ended
+> or 8 differential inputs, PGA (Programmable Gain
+> Amplifier), 24-bit Sigma-Delta ADC, on-chip
+> reference and oscillator, selectable filter
+> options, smart sequencer, sensor biasing and
+> excitation options, diagnostics, and a FIFO
+> buffer.
 
-On Tue, 12 Apr 2022 10:50:10 -0500
-Rob Herring <robh@kernel.org> wrote:
+Something is wrong about the indentation above. It may be reconfigured
+to fit more characters per line.
 
-> On Tue, Apr 12, 2022 at 11:40:24AM +0200, Herve Codina wrote:
-> > The PCI rcar-gen2 does not call any clk_prepare_enable().
-> > This lead to an access failure when the driver tries to access
-> > the IP (at least on a RZ/N1D platform).
-> >=20
-> > Prepare and enable clocks using the bulk version of
-> > clk_prepare_enable() in order to prepare and enable all clocks
-> > attached to this device. =20
->=20
-> The binding says there is only a single clock, so it needs an update if=20
-> there are multiple clocks. (And ideally converted to DT schema format.)
-
-Indeed, I will convert to DT schema format and update the clocks property
-description.
-
-Regards,
-Herv=C3=A9
+-- 
+With Best Regards,
+Andy Shevchenko

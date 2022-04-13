@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BE94FFA75
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58CF4FFA7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiDMPls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S236637AbiDMPmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236617AbiDMPln (ORCPT
+        with ESMTP id S229732AbiDMPmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:41:43 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB72DA6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:39:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z12so2891197edl.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X9hKp3Y2zMwZgy3YpyTWq8d0i7RnkuDLtpEpok8446A=;
-        b=owXOYmJ1qaFLaC+Sa4OOMEFbc7CITeVzef7eB4mZeIN4NwmuozoX/Xk0zG4jCEFGx3
-         85BxQFrIeadN+7Pobfn8LuqZ9XA1q0oxGI8VeZPlsmnHuuAqgMpokFQYIHCq1Zu5N9uv
-         BBdtYQqdtnKkA5iBxI7JZSPvKzjn6vZuQzD6aiW4esXRSSgph91BlTKgZH3xxTCqGE9x
-         czdbDvnGIdn+xGdL8zn7NhTBxFl+q8kY1q92CstLQ2aDEpzEHTSN1BSO4NJe12uQm7t6
-         dLblsPPAoIoQ9fMIu8UWVKwpWV5rabUwGKgqq5Jx2CpsKGxEHwELM7+yIekP2afeBUCK
-         mnVQ==
+        Wed, 13 Apr 2022 11:42:10 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826AF3E0DD;
+        Wed, 13 Apr 2022 08:39:48 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id p65so4432834ybp.9;
+        Wed, 13 Apr 2022 08:39:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X9hKp3Y2zMwZgy3YpyTWq8d0i7RnkuDLtpEpok8446A=;
-        b=06xEtODkElaJua63YG3jL+daR6evjxtNYjpxvVUW76p+x9ObzJ6E1xkCa5f2lzW8DI
-         6XXYsvr3aTI5dCwIlej184fP9GnX/wPXmfBS5BLO00Mv5JDYT0VXwv4ovBbAC8rXKfyv
-         dQ4LD6gwCGbD5Sfbq/vKZp96oE1P08ldNdn0+pFFz22hOlObKseQOiSBb2TZwaEpGP0H
-         80PYtFcrVMlZ5WX+XilxCITBC3X+C9R3Arq0p2a7Jb2dhemRQmR3cod0wXRwPOz56wsn
-         dzpMm6Xrhq8BPG2ad2xPeLTvdOn4cC1Yz6xPe+D9KXyU2QK2tqJiqefjbrq1/W08IKHF
-         NuuA==
-X-Gm-Message-State: AOAM530P55LC1vykmrxfNcj+1KPKA6fg2UshclMJ8l0RSDHeKHEQQxIi
-        4Rz6Fh7KAT4cUyTMhP1jYPV3MQ==
-X-Google-Smtp-Source: ABdhPJzIGkKaUTPpciLe0PPwKf0l7G1vuQhtJBWbomF92oUQp0hsUbfNZiKNgS5HEYVmfixJI8mMcQ==
-X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr45238172edc.86.1649864357797;
-        Wed, 13 Apr 2022 08:39:17 -0700 (PDT)
-Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t19-20020a056402525300b0041952a1a764sm1380150edd.33.2022.04.13.08.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 08:39:17 -0700 (PDT)
-Message-ID: <e6424c41-fadd-d326-49af-28db51606c2d@linaro.org>
-Date:   Wed, 13 Apr 2022 17:39:16 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ilj9o7n3l/1aK2gZGkvAu8R7H4z8gknEBb05cWzjfsQ=;
+        b=AnmvA+SZjt3/kCY+oKn6By7ac9WAlu7rTX+EmOPyqewm0yZNb5gu6/cE11lS44egtJ
+         XgMjAh9V8szWszCrQY0w2lxYvCsbX1/VzdYITZ9+Foo/Xbtx2EbyDw35KqsTzZTQMtYb
+         ZvBHA3Uu+VRK5LLtn6VWrQbksTRrFtX5e+1jRxNucKGqe9nLx5Sk3whN+bTQ4tu5jaeQ
+         XnLSOmeelxtPiIjMTENqGzcB0qcJGOnhrGsKzA2hozggGlgt/Z2t1nRTbayXJ+s5MDz5
+         f3jPm/rcaShJhuDLP6Jnl3LSDYPkrobeqSKS4+tzu/6VaL7DhGi6jLMU6mySSM0fP43z
+         EByw==
+X-Gm-Message-State: AOAM532n/NCMbVCo+ctMQZn+AD1r7t2t85GDj40X+IzCyCW5wXOFzyoc
+        td+UY9mdvonCP8PjKgZtxi7G7ZKcE1pSqJ/d5e8=
+X-Google-Smtp-Source: ABdhPJy3rSywWLlrRlA3i0ucuEuO0ZcncIrCyV73ZSRe9Ts/0QwHSnh1HJvj1FuMIrBCY+Rt6g7eu8+0KxXy+qOP0cw=
+X-Received: by 2002:a25:e082:0:b0:641:cf5:b91f with SMTP id
+ x124-20020a25e082000000b006410cf5b91fmr18196837ybg.482.1649864387664; Wed, 13
+ Apr 2022 08:39:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        erkin.bozoglu@xeront.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <CAMhs-H_oRzpeqJY8Oe+7Su5v-4B1WPwzOfhrvBC08FVi-O6fVA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H_oRzpeqJY8Oe+7Su5v-4B1WPwzOfhrvBC08FVi-O6fVA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220407234258.569681-1-yu.c.chen@intel.com> <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
+In-Reply-To: <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 17:39:36 +0200
+Message-ID: <CAJZ5v0jNGYP8zT6_96J6+bxx1p-ngf56GdvXMmscyUCNMMQeSg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency invariance
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Chen Yu <yu.c.chen@intel.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <len.brown@intel.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 08:36, Sergio Paracuellos wrote:
-> I think you cannot change compatible strings because you have to be
-> compatible with previous stuff. That is the reason why when I
-> refactored all of this stuff from 'arch/mips/ralink' into
-> 'drivers/pinctrl' I maintained the same for all of them and only
-> created one binding for all. I know that these SoCs are mostly used in
-> openWRT and the way of doing things there is that when a new version
-> is released a new dtb is also compiled so I understand the motivation
-> of the change itself. In any case, Rob has the last word here, not me
-> :).
+On Fri, Apr 8, 2022 at 4:22 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+>
+> On Fri, 2022-04-08 at 07:42 +0800, Chen Yu wrote:
+> > Problem statement:
+> > Once the user has disabled turbo frequency by
+> > echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
+> > the cfs_rq's util_avg becomes quite small when compared with
+> > CPU capacity.
+> >
+> > Step to reproduce:
+> >
+> > echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+> >
+> > ./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
+> > would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
+> > with a CPU utilization of 99%. [1]
+> >
+> > top result:
+> > %Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+> >
+> > check util_avg:
+> > cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
+> >   .util_avg                      : 611
+> >
+> > So the util_avg/cpu capacity is 611/1024, which is much smaller than
+> > 98.4% shown in the top result.
+> >
+> > This might impact some logic in the scheduler. For example, group_is_overloaded()
+> > would compare the group_capacity and group_util in the sched group, to
+> > check if this sched group is overloaded or not. With this gap, even
+> > when there is a nearly 100% workload, the sched group will not be regarded
+> > as overloaded. Besides group_is_overloaded(), there are also other victims.
+> > There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
+> > The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
+> > This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
+> > domain is overloaded.
+> >
+> > Analysis:
+> > CPU frequency invariance has caused this difference. In summary,
+> > the util_sum of cfs rq would decay quite fast when the CPU is in
+> > idle, when the CPU frequency invariance is enabled.
+> >
+> > The detail is as followed:
+> >
+> > As depicted in update_rq_clock_pelt(), when the frequency invariance
+> > is enabled, there would be two clock variables on each rq, clock_task
+> > and clock_pelt:
+> >
+> >    The clock_pelt scales the time to reflect the effective amount of
+> >    computation done during the running delta time but then syncs back to
+> >    clock_task when rq is idle.
+> >
+> >    absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
+> >    @ max frequency  ------******---------------******---------------
+> >    @ half frequency ------************---------************---------
+> >    clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
+> >
+> > The fast decay of util_sum during idle is due to:
+> > 1. rq->clock_pelt is always behind rq->clock_task
+> > 2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
+> > 3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
+> >    a lot to rq->clock_task
+> > 4. Enters ___update_load_sum() again, the idle period is calculated by
+> >    rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
+> >    The lower the CPU frequency is, the larger the delta =
+> >    rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
+> >    used to decay the util_sum only, the util_sum drops significantly during
+> >    idle period.
+> >
+> > Proposal:
+> > This symptom is not only caused by disabling turbo frequency, but it
+> > would also appear if the user limits the max frequency at runtime. Because
+> > if the frequency is always lower than the max frequency,
+> > CPU frequency invariance would decay the util_sum quite fast during idle.
+> >
+> > As some end users would disable turbo after boot up, this patch aims to
+> > present this symptom and deals with turbo scenarios for now. It might
+> > be ideal if CPU frequency invariance is aware of the max CPU frequency
+> > (user specified) at runtime in the future.
+> >
+> > [Previous patch seems to be lost on LKML, this is a resend, sorry for any
+> > inconvenience]
+> >
+> > Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
+> > Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
+> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+>
+> Reviewed-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+>
+> You're right, when turbo is disabled, the frequency invariance code needs to
+> know about it; it calculates freq_curr/freq_max and thinks that freq_max is
+> some turbo level. For example commit 918229cdd5ab ("x86/intel_pstate: Handle
+> runtime turbo disablement/enablement in frequency invariance") takes care of
+> this when global.turbo_disabled changes, but before your patch nothing checks
+> if the user disabled turbo from sysfs. Thanks for the fix!
+>
+> Giovanni
 
-Breaking other users is usually not accepted, so some good reason would
-be needed here...
-
-
-Best regards,
-Krzysztof
+Applied as 5.19 material, thanks!

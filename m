@@ -2,170 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AC350016C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A2150016E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234618AbiDMVy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S234574AbiDMV5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiDMVyw (ORCPT
+        with ESMTP id S233711AbiDMV5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:54:52 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4792656A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:52:29 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t12so3070287pll.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:52:29 -0700 (PDT)
+        Wed, 13 Apr 2022 17:57:15 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0750126AF6;
+        Wed, 13 Apr 2022 14:54:50 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id c15so3823760ljr.9;
+        Wed, 13 Apr 2022 14:54:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5II3n/+h3pivxbaF4Zlsk6J/11Tk5zgxZni781mRMks=;
-        b=vfNOMQF23PUUYhslMTsPc88fGqI/w/7RwE3Y+rQbjASYPl1JRZYkjCyiqvR+MlNzjz
-         fs2BJzp2MtxsYq0rjo9jR3eolql9ISfdEKQYRfPMxgEdaE4ykzR81x9JJxc3ZmQVfTy/
-         +Kl+ROe0ehO9bvmvKH6Z7EmRt1BzTnkuD+jte2bv9VSUZ3h/KYJMKSG8njJfZtK2WdeG
-         z8+4B2CWJ+qjrPf8He1vdE9f0rTayzBgPLWqKP4Iem19hdierTtX1G45FwqOcebVuZhw
-         NvMGsTlw3Ihv93OUD9UtUxgKAeb4QgFul2h4JTVPIdfoJ6c+uU1bWQvj2Au486LKCU1+
-         Eqng==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1kMh4YUyjgmaA6xR5EVvkr9mVKwV1Jly9n0RiGjprkA=;
+        b=PuZ+u5+UjLU+b2e154C6+uVvtX/M7qfwzVbWB5xDAvwGMLXQ+LTjNeL28573lUsZWa
+         cAfL5kf+o07FSjqD4DmBVYCCO0sEbp56B80rKfchc4BLjXdbdF57fWW3mLueWAa4ZyCb
+         lzeuanxTyFrl5p/lNPnUd80HtKJ5qU2iXeBXcrLPzVkEklPkWTX9C8srY2FoMkRJSwV6
+         8j/F/U40dyH1fkoLpEbxVE4/kLi8DbtRw/6/DTTdGsRAI9Kfvq3pjboq6FbDuK4eZkiY
+         tr7+0IYwmmdnLPMJHrRUzBc4+u/hWHV9QY1FXeRinPE5WwX3xr/cVMt42JMJOQ0p010K
+         YzdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=5II3n/+h3pivxbaF4Zlsk6J/11Tk5zgxZni781mRMks=;
-        b=Npxz4NOSBZu2jGC5HX/laBq1cx3nlA3QInGYeRjeBpwp/dzIJt1s63YJ0S6dxXH9kt
-         Ysbr5iHQB5sorOpScRXipNF5jqWpNTEVicTF9JySwEFen7RlKBLfN/sDHy3yyfzkI9qx
-         GtuzChmjMUfDYusmLRvtSpWDrgB5VwHwT1/TmMxFGOwzw/IqE1sMxLIPtVvrhi9c8/hw
-         9DE8FrmlTNdTbI1e+Fph/4RS9WzBOgntR0F33u6dMbMDZDIjqURpllhNLLE6V9PJPEVZ
-         UwPkXn34JeKcu477Ym3mB2HJWu6gahYiZNpepwmPBJR17CkK3r/X5EaCbhjClJ9LHvyd
-         pZSA==
-X-Gm-Message-State: AOAM531M4skIhRB+SCc6HhyB3vXpImdC7zOVmj8ZAVcmEaqYcHe3CSED
-        As3yR7PTH/byLu9HefTJAxALXw==
-X-Google-Smtp-Source: ABdhPJzH9INoE7i/6xgm6BLOYIKln7WffJZnT0GLl47dO+VUcGZI8dfFW0KpRsmGzjOhjaom6Cr93Q==
-X-Received: by 2002:a17:902:7006:b0:156:3cbe:6b04 with SMTP id y6-20020a170902700600b001563cbe6b04mr43467020plk.68.1649886748497;
-        Wed, 13 Apr 2022 14:52:28 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id k6-20020a056a00134600b004faba67f9d4sm37928pfu.197.2022.04.13.14.52.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1kMh4YUyjgmaA6xR5EVvkr9mVKwV1Jly9n0RiGjprkA=;
+        b=6L1G+72Vfi6AEK0SU5Hc9LMnA+UeXx6VBRiGdu8tuw/NY7NDgSDRn6Tq5ZBKqAFMbd
+         llBsGHlabssdPl2I234f2ub6YhyQouLRzqjZfn5IuTcoN+gPXOJXKnUXA6/2qnvGLHEB
+         Mq1vseUqhj9uQ21DY9gMDPhkUNdNicmfTXWBrW/a+HT5inZplk7sMNl4AxS0N1o+PylV
+         hRpR2jkcs7Q4FV/Rsh7jTy5ISxxK9FKEt+wSpehBS2ijp/ht99JqiHC1U1BM/qhcMa+c
+         Am8SHP52rZ2+ko4e9+WQKcO+DYktCelWyhGld8TSXpqQDc/JSq86JDi6YNwNxqncq7r/
+         FuvQ==
+X-Gm-Message-State: AOAM532gGzkaTzAk4qepiprOFy1E+7JEqtoEPmUdh17BE/vE3iezr8Gr
+        4vTRv+fE16xXbve229MoIHA=
+X-Google-Smtp-Source: ABdhPJwtCrJTdzUA5xEeahpxhvpvkrdY5xnRyuWZnv1BJAhvTBZC6SvuYWDdMgqex/VtHtIExWHZIQ==
+X-Received: by 2002:a2e:a7c1:0:b0:24b:63a5:2fc1 with SMTP id x1-20020a2ea7c1000000b0024b63a52fc1mr10413073ljp.13.1649886888234;
+        Wed, 13 Apr 2022 14:54:48 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id bu39-20020a05651216a700b004484a8cf5f8sm17127lfb.302.2022.04.13.14.54.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:52:27 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 14:52:27 -0700 (PDT)
-X-Google-Original-Date: Wed, 13 Apr 2022 14:52:19 PDT (-0700)
-Subject:     Re: [PATCH 00/12] Initial support for Nuclei DemoSoC w/ UX600
-In-Reply-To: <mhng-b11934a9-100f-457b-a35e-46bdcd7f43f4@palmer-ri-x1c9>
-CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     icenowy@nucleisys.com
-Message-ID: <mhng-aeb81250-47b1-4189-a668-695c410d2450@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 13 Apr 2022 14:54:47 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 00:54:45 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Shradha Todi <shradha.t@samsung.com>,
+        Pankaj Dubey <pankaj.dubey@samsung.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/12] PCI: dwc: Set INCREASE_REGION_SIZE flag based on
+ limit address
+Message-ID: <20220413215445.ndcfv3o5qzdrvgoj@mobilestation>
+References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324012524.16784-6-Sergey.Semin@baikalelectronics.ru>
+ <20220324120540.GE2854@thinkpad>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324120540.GE2854@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 17:05:45 PDT (-0700), Palmer Dabbelt wrote:
-> On Tue, 22 Feb 2022 08:56:42 PST (-0800), Palmer Dabbelt wrote:
->> On Sat, 19 Feb 2022 06:45:43 PST (-0800), icenowy@nucleisys.com wrote:
->>> 在 2022-01-27星期四的 23:16 +0800，Icenowy Zheng写道：
->>>> This patchset adds support for Nuclei DemoSoC (which is an evaluation
->>>> platform made with Nuclei CPU cores and mainly peripherals in
->>>> original
->>>> Hummingbird E203 project, running on FPGA) with UX600 CPU cores.
->>>>
->>>> Most patches are for DT bindings, the remaining ones are adding a
->>>> Kconfig option and some DTS/DTSI files. The last one is a workaround
->>>> for
->>>> a severe bug in currently released versions of UX600, which is found
->>>> in 5.17 kernel, in which Sv48 support is added to Linux.
->>>>
->>>> Two non-technical patches are in this patchset too, for MAINTAINERS
->>>> and .mailmap items.
->>>
->>> Ping, could any RISC-V maintainers review these patches, especially the
->>> SATP workaround one?
->>
->> Sorry, I remember having written this but I guess it got lost.  IIRC my
->> main worry here was that, at least as far as I can tell, DemoSOC is an
->> FPGA development board.  If this is actually in production somewhere
->> then it's a different story, but IIUC the general rule is not to accept
->> code for development hardware that can be updated.
->>
->> Assuming DemoSOC can be updated, I'd also argue that we should have some
->> sort of version attached to it in DT entries.  Without some versioning
->> we'll end up lost when trying to later determine what we're actually
->> running on.
->>
->> As far as the errata goes: it looks fine to me, but I'd like to see some
->> sort of description of what the errata actually is (ie, some
->> documentation from the manufacturer).  I know that's not always
->> possible, but without some desciption of what the bug is it gets tricky
->> to mainain this sort of stuff.  For example: we've got sv57 patches
->> now, so how do I know what to do with them on this target?
->
-> Just following up on this one.  Not sure if I missed it, but I can't
-> find a reply.
+On Thu, Mar 24, 2022 at 05:35:40PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:25:16AM +0300, Serge Semin wrote:
+> > It was wrong to use the region size parameter in order to determine
+> > whether the INCREASE_REGION_SIZE flag needs to be set for the outbound
+> > iATU entry because in general there are cases when combining a region base
+> > address and size together produces the out of bounds upper range limit
+> > while upper_32_bits(size) still returns zero. So having a region size
+> > within the permitted values doesn't mean the region limit address will fit
+> > to the corresponding CSR. Here is the way iATU calculates the in- and
+> > outbound untranslated regions if the INCREASE_REGION_SIZE flag is cleared
+> > [1]:
+> > 
+> >   Start address:                     End address:
+> > 63              31              0   63              31              0
+> > +---------------+---------------+   +---------------+---------------+
+> > |               |         |  0s |   |               |         |  Fs |
+> > +---------------+---------------+   +---------------+---------------+
+> >    upper base   |   lower base       !upper! base   | limit address
+> >      address          address           address
+> > 
+> > So the region start address is determined by the iATU lower and upper base
+> > address registers, while the region upper boundary is calculated based on
+> > the 32-bits limit address register and the upper part of the base address.
+> > In accordance with that logic for instance the range
+> > 0xf0000000 @ 0x20000000 does have the size smaller than 4GB, but the
+> > actual limit address turns to be invalid forming the untranslated address
+> > map as [0xf0000000; 0x0000FFFF], which isn't what the original range was.
+> 
 
-Checking up on this one more time, I still can't find any replies.  It's 
-at the top of my queue, but I'm going to drop it until the questions get 
-resolved.
+> I find the example confusing:
+> 
+> If the start address is 0x0-0xf0000000 and size is 0x20000000. Then the end
+> address without the INCREASE_REGION_SIZE is going to be:
+> 
+> 0x0-0x1000FFFF and this is wrong.
+> 
+> If the INCREASE_REGION_SIZE is set, then the end address will be:
+> 
+> 0x1-0x1000FFFF and this is correct.
 
->
->>
->>>
->>>>
->>>> Icenowy Zheng (12):
->>>>   dt-bindings: vendor-prefixes: add Nuclei
->>>>   RISC-V: add Nuclei SoC Kconfig option
->>>>   dt-bindings: riscv: add compatible strings for Nuclei UX600 series
->>>>   dt-bindings: timer: add compatible for Nuclei UX600 CLINT-compat
->>>> timer
->>>>   dt-bindings: interrupt-controller: add compatible string for UX600
->>>>     PLIC
->>>>   dt-bindings: serial: add compatible string for Nuclei DemoSoC UART
->>>>   dt-bindings: spi: add compatible string for Nuclei DemoSoC SPI
->>>>   dt-bindings: riscv: add binding for Nuclei platform boards
->>>>   riscv: dts: add device tree for Nuclei DemoSoC w/ UX600 on DDR200T
->>>>   RISC-V: workaround Nuclei UX600 cores with broken SATP CSR
->>>>   MAINTAINERS: add myself as Nuclei SoCs/CPUs supporter
->>>>   mailmap: add Icenowy Zheng's Nuclei mail addresses
->>>>
->>>>  .mailmap                                      |  1 +
->>>>  .../sifive,plic-1.0.0.yaml                    |  1 +
->>>>  .../devicetree/bindings/riscv/cpus.yaml       |  7 ++
->>>>  .../devicetree/bindings/riscv/nuclei.yaml     | 27 ++++++++
->>>>  .../bindings/serial/sifive-serial.yaml        |  1 +
->>>>  .../devicetree/bindings/spi/spi-sifive.yaml   |  1 +
->>>>  .../bindings/timer/sifive,clint.yaml          |  1 +
->>>>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->>>>  MAINTAINERS                                   |  7 ++
->>>>  arch/riscv/Kconfig.socs                       |  6 ++
->>>>  arch/riscv/boot/dts/Makefile                  |  1 +
->>>>  arch/riscv/boot/dts/nuclei/Makefile           |  2 +
->>>>  .../dts/nuclei/nuclei-demosoc-ddr200t.dtsi    | 41 ++++++++++++
->>>>  .../nuclei/nuclei-demosoc-ux600-ddr200t.dts   | 13 ++++
->>>>  .../boot/dts/nuclei/nuclei-demosoc-ux600.dtsi | 49 ++++++++++++++
->>>>  .../riscv/boot/dts/nuclei/nuclei-demosoc.dtsi | 67
->>>> +++++++++++++++++++
->>>>  arch/riscv/include/asm/vendorid_list.h        |  1 +
->>>>  arch/riscv/mm/init.c                          | 17 +++++
->>>>  18 files changed, 245 insertions(+)
->>>>  create mode 100644
->>>> Documentation/devicetree/bindings/riscv/nuclei.yaml
->>>>  create mode 100644 arch/riscv/boot/dts/nuclei/Makefile
->>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
->>>> ddr200t.dtsi
->>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-ux600-
->>>> ddr200t.dts
->>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
->>>> ux600.dtsi
->>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc.dtsi
->>>>
+Not only confusing but indeed being wrong in the end address part.
+Thanks for noticing that. I'll fix it in v2.
+
+> 
+> > In order to fix that we need to check whether the size being added to the
+> > lower part of the base address causes the 4GB range overflow. If it does
+> > then we need to set the INCREASE_REGION_SIZE flag thus activating the
+> > extended limit address by means of an additional iATU CSR (upper limit
+> > address register) [2]:
+> > 
+> >   Start address:                     End address:
+> > 63              31              0   63      x       31              0
+> > +---------------+---------------+   +---------------+---------------+
+> > |               |         |  0s |   |       |       |         |  Fs |
+> > +---------------+---------------+   +---------------+---------------+
+> >   upper base   |   lower base         upper | upper | limit address
+> >     address          address          base  | limit |
+> >                                      address|address|
+> > 
+> > Otherwise there is enough room in the 32-bits wide limit address register,
+> > and the flag can be left unset.
+> > 
+> > Note the case when the size-based flag setting approach is correct implies
+> > requiring to have the size-aligned base addresses only. But that
+> > restriction isn't relevant to the PCIe ranges accepted by the kernel.
+> > There is also no point in implementing it either seeing the problem can be
+> > easily fixed by checking the whole limit address instead of the region
+> > size.
+> > 
+> > [1] DesignWare Cores PCI Express Controller Databook - DWC PCIe Root Port,
+> >     v5.40a, March 2019, fig.3-36, p.175
+> > [2] DesignWare Cores PCI Express Controller Databook - DWC PCIe Root Port,
+> >     v5.40a, March 2019, fig.3-37, p.176
+> > 
+> > Fixes: 5b4cf0f65324 ("PCI: dwc: Add upper limit address for outbound iATU")
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+
+> With the example fixed,
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Ok. Thanks.
+
+-Sergey
+
+> 
+> Thanks,
+> Mani
+> 
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware.c | 16 ++++++++++------
+> >  1 file changed, 10 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > index 7dc8c360a0d4..d737af058903 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > @@ -287,8 +287,8 @@ static void dw_pcie_prog_outbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
+> >  	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_UPPER_TARGET,
+> >  				 upper_32_bits(pci_addr));
+> >  	val = type | PCIE_ATU_FUNC_NUM(func_no);
+> > -	val = upper_32_bits(size - 1) ?
+> > -		val | PCIE_ATU_INCREASE_REGION_SIZE : val;
+> > +	if (upper_32_bits(limit_addr) > upper_32_bits(cpu_addr))
+> > +		val |= PCIE_ATU_INCREASE_REGION_SIZE;
+> >  	if (pci->version == 0x490A)
+> >  		val = dw_pcie_enable_ecrc(val);
+> >  	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL1, val);
+> > @@ -315,6 +315,7 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+> >  					u64 pci_addr, u64 size)
+> >  {
+> >  	u32 retries, val;
+> > +	u64 limit_addr;
+> >  
+> >  	if (pci->ops && pci->ops->cpu_addr_fixup)
+> >  		cpu_addr = pci->ops->cpu_addr_fixup(pci, cpu_addr);
+> > @@ -325,6 +326,8 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+> >  		return;
+> >  	}
+> >  
+> > +	limit_addr = cpu_addr + size - 1;
+> > +
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT,
+> >  			   PCIE_ATU_REGION_OUTBOUND | index);
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_BASE,
+> > @@ -332,17 +335,18 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_BASE,
+> >  			   upper_32_bits(cpu_addr));
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_LIMIT,
+> > -			   lower_32_bits(cpu_addr + size - 1));
+> > +			   lower_32_bits(limit_addr));
+> >  	if (pci->version >= 0x460A)
+> >  		dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_LIMIT,
+> > -				   upper_32_bits(cpu_addr + size - 1));
+> > +				   upper_32_bits(limit_addr));
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET,
+> >  			   lower_32_bits(pci_addr));
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_TARGET,
+> >  			   upper_32_bits(pci_addr));
+> >  	val = type | PCIE_ATU_FUNC_NUM(func_no);
+> > -	val = ((upper_32_bits(size - 1)) && (pci->version >= 0x460A)) ?
+> > -		val | PCIE_ATU_INCREASE_REGION_SIZE : val;
+> > +	if (upper_32_bits(limit_addr) > upper_32_bits(cpu_addr) &&
+> > +	    pci->version >= 0x460A)
+> > +		val |= PCIE_ATU_INCREASE_REGION_SIZE;
+> >  	if (pci->version == 0x490A)
+> >  		val = dw_pcie_enable_ecrc(val);
+> >  	dw_pcie_writel_dbi(pci, PCIE_ATU_CR1, val);
+> > -- 
+> > 2.35.1
+> > 

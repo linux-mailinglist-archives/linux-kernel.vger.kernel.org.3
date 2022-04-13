@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E30D4FFE56
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102B34FFE5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237859AbiDMTDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S237890AbiDMTE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiDMTDn (ORCPT
+        with ESMTP id S235870AbiDMTE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:03:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202C73A194;
-        Wed, 13 Apr 2022 12:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649876481; x=1681412481;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kJDKIrd2cNiQgQ9NWri7ZGfjzDAloFANWXt7WDfGDaA=;
-  b=PukJfIPeFR+ssmCUY5I3VXr2hG+GKwNlAEbf/t/BgFHS6CLTf0aHpuNa
-   3sYOXXLSIWH2EFsA3Q90WlngaYL2fWgOx65GBipQC8sj3gqRI/8S4AbYF
-   XgrYVnz4AR26U1kECsRXvicNWUdr3OVC34xvMtUJyrx/+h/ow+qHzo/OB
-   iJSuXUFKVMVwMqA6QHbSUKZrFoxr2H7I9dDT9Vi15M6Hr+TqANMgUrRJS
-   O/5tazVPIvjbb4sZd7g7Pc3s9WJQPx56+9geHus/EIYQ0Q84nsyMY+Ivh
-   4KSKuFN16x+F+YI2D7jwAZJubg2pUAPy8wRBiOhvqBvntHsLZ175b8vUa
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262928584"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="262928584"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:01:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="559864107"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2022 12:01:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8C6C012C; Wed, 13 Apr 2022 22:01:18 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v1 1/1] iio: afe: rescale: Make use of device properties
-Date:   Wed, 13 Apr 2022 22:01:17 +0300
-Message-Id: <20220413190117.29814-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 13 Apr 2022 15:04:56 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5297E3AA54;
+        Wed, 13 Apr 2022 12:02:34 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id q11so2973588iod.6;
+        Wed, 13 Apr 2022 12:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T6JBHLaRp43fUH1pYwkxzxzf65MlchD3sRrszybzOkc=;
+        b=H46B3T4GmtvtRPKjAK5YgWvKtDxBv3aGmQPMgT7NpGK5ue1g+RK90/8js64F+NBuNN
+         Y+DkeoOJ4vp87A6HeVp1J27qGcuTqkiAnOFrAyjwUw00IGfEK36s5rg/kwJLp+vsZ24p
+         5FBPlPmMTE6JoPut3fXJ4WFqgtms2egMM7EGsL0qvRPpvWQGqWgjM2QbZifgoo+KxO7/
+         vk6s61oL8ki7AShLN3lfrgfKPkCi4hX71Y9Sl3rwRHk8Ap3DWvS3CgVXkMyiS7UGc7BP
+         az8O9OValgCsAqVqrpPfbOYGvvUN6qcLfw1wcJEXYIVlb+DXEtgJT8ZDSK95jp9jUZgx
+         1V4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T6JBHLaRp43fUH1pYwkxzxzf65MlchD3sRrszybzOkc=;
+        b=170nUIQLyHXdCDTkw3qE9jj1fR4A5vVJnjW+mIQFyFtfdZ1wGh4wOSfL/QakOl5WHk
+         htWYIYMzCefyfGJjK2eVh+0SZvKPspWPSbbpwZIQqjscpvqKImCass0FLUh4PlIUq2md
+         kHGIcYKhRRQBF5heKm5VNOXH2hyt72VVLgl/MehW4SAa1Xo6XP5h1RUw9W4/phwelI9O
+         fLMq9ar09u2OpT0jpde90d+ScuQXbPv8vBrvlaKIznTvFn8T2OUjegciCABcsNQSbZ51
+         QoSp/L497Qs3Jxzjj4HkR9XwY7BV1FPpjXkdfKUiIj/Bx5gEpbQVgggheXoEnUbRLdGo
+         fdqg==
+X-Gm-Message-State: AOAM531hqkpc1cE49N/ZFuxaReSsAYBhL0XxQJ9WsIOPtsI0vPQSe08g
+        oAzgFqFHUb1Q9p+5+k2xaSqz1NkuC8RupF8paps=
+X-Google-Smtp-Source: ABdhPJzTZRsB/jnz6Ppm+ksntTMFxjWE/fGG9w4L3FDRmI4tqWAMZAWvFv1c78nN3Fdfv9k2JL2xdcmKS5T6bOjkihM=
+X-Received: by 2002:a05:6638:2642:b0:323:756f:42a7 with SMTP id
+ n2-20020a056638264200b00323756f42a7mr21893821jat.145.1649876553767; Wed, 13
+ Apr 2022 12:02:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220407125224.310255-1-jolsa@kernel.org> <20220407125224.310255-5-jolsa@kernel.org>
+ <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+ <20220412094923.0abe90955e5db486b7bca279@kernel.org> <20220413124419.002abd87@rorschach.local.home>
+ <CAEf4BzaA+vr6V24dG7JCHHmedp2TcJv4ZnuKB=zXzuOpi-QYFg@mail.gmail.com> <20220413125906.1689c3e2@rorschach.local.home>
+In-Reply-To: <20220413125906.1689c3e2@rorschach.local.home>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 13 Apr 2022 12:02:22 -0700
+Message-ID: <CAEf4BzY0_39BMyFWH1VdqLAWUSuy4GSWPogqUNi-F0YkrhQ5=w@mail.gmail.com>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+On Wed, Apr 13, 2022 at 9:59 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 13 Apr 2022 09:45:52 -0700
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> > > Did you only use the "notrace" on the prototype? I see the semicolon at
+> > > the end of your comment. It only affects the actual function itself,
+> > > not the prototype.
+> >
+> > notrace is both on declaration and on definition, see kernel/bpf/trampoline.c:
+>
+> OK. Note, it only needs to be on the function, the prototype doesn't do
+> anything. But that shouldn't be the issue.
+>
+> >
+> > void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr)
+> > {
+> >         percpu_ref_put(&tr->pcref);
+> > }
+> >
+>
+> What compiler are you using? as this seems to be a compiler bug.
+> Because it's not ftrace that picks what functions to trace, but the
+> compiler itself.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/afe/Kconfig       | 1 -
- drivers/iio/afe/iio-rescale.c | 5 ++---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+I build my local kernel with
 
-diff --git a/drivers/iio/afe/Kconfig b/drivers/iio/afe/Kconfig
-index 4fa397822cff..9a1d95c1c7ed 100644
---- a/drivers/iio/afe/Kconfig
-+++ b/drivers/iio/afe/Kconfig
-@@ -8,7 +8,6 @@ menu "Analog Front Ends"
- 
- config IIO_RESCALE
- 	tristate "IIO rescale"
--	depends on OF || COMPILE_TEST
- 	help
- 	  Say yes here to build support for the IIO rescaling
- 	  that handles voltage dividers, current sense shunts and
-diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
-index 7e511293d6d1..c6cf709f0f05 100644
---- a/drivers/iio/afe/iio-rescale.c
-+++ b/drivers/iio/afe/iio-rescale.c
-@@ -10,9 +10,8 @@
- 
- #include <linux/err.h>
- #include <linux/gcd.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
- 
-@@ -536,7 +535,7 @@ static int rescale_probe(struct platform_device *pdev)
- 
- 	rescale = iio_priv(indio_dev);
- 
--	rescale->cfg = of_device_get_match_data(dev);
-+	rescale->cfg = device_get_match_data(dev);
- 	rescale->numerator = 1;
- 	rescale->denominator = 1;
- 	rescale->offset = 0;
--- 
-2.35.1
+$ gcc --version
+gcc (GCC) 11.1.1 20210623 (Red Hat 11.1.1-6)
 
+
+But we have the same issue in our production kernels which are most
+probably built with some other version of GCC, but I don't know which
+one.
+
+
+>
+> -- Steve
+>
+>

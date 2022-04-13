@@ -2,133 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A764FF398
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95044FF3AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiDMJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S234513AbiDMJix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbiDMJg1 (ORCPT
+        with ESMTP id S230140AbiDMJiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:36:27 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B1C54199;
-        Wed, 13 Apr 2022 02:34:01 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id b15so1496613pfm.5;
-        Wed, 13 Apr 2022 02:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wJyC9faBxeD5dt69fcdS3xPg12cvBbSXq5CLmwRGfIQ=;
-        b=Rxj6JbXGfpQYRiebK8FO12yU3ffiQCC4vmHHJAXIXJ1+lvKqRm2FQj56sxka1YNoJt
-         Rbg6NAdZa/OjsMW2KXfx/u/eCEWGcJha56b+f0o1R607RDiGmnBpnwK7cHpcT8picWcW
-         67Ly+SxIRs7hsSj8jrz+UAY7xps4jZRWuDrqvh48slHaeUwt7YKn5GJluwV8BN8mNM/J
-         +LYwIqOUBezMJzmozUUkzl2NnImW0/yWIna6Ck8gQ6jG1UQzq8NX3YojFycCKThL+7B/
-         IFTtf5xlm+6TVFg4Zz8QyuY7zGdI4RHPKfiPWT5LAlipxwxdwhJy6dWuJOcY/CxSDspG
-         z19g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wJyC9faBxeD5dt69fcdS3xPg12cvBbSXq5CLmwRGfIQ=;
-        b=Oe3agULkOwWXH1QX9K0SDTkx/IamNSgBBEEddIKxPRDCVYZiFX36w0mmWKp7VD3Op/
-         ZZMzRyLDq0K9KKQsGmdK3JLTY2CyyHPI+MwI3WmBshAKXCWJ9ZemLULx9t1GGQNVy/fR
-         dQslifJ4t+8nVf6ULxau3jjyfGEh9WcUCtkyDw5UMN1CBtHbhjFGFy12PSidybN/zCs2
-         h64ziJt3iemTpHey9KjQpmgsaVOR5ff0eAHETFxJNHNgtcsOlCkQ1LxhqMaESvcW5gjl
-         zd/WTgc429nxdls9yUa+Alm5oJuq0R/fzAUt1bRKXIUQg38OHcl39VXjy6hb0RE3niaY
-         hw8Q==
-X-Gm-Message-State: AOAM533L6QyI/NtMKy2FnmypvpT1ilAJKyVMJbtcAOdVEu/TPcQpxxJq
-        VnhAZAWTMW8n7sHx5D300hg=
-X-Google-Smtp-Source: ABdhPJyUGAiiEI9PqBPTbXZTU5A73S9WybFNDAAPL+x+O3xTRujlPFK0WSWU52Y2IqkhU1LQPxWdkw==
-X-Received: by 2002:a63:e20:0:b0:385:fe08:52f9 with SMTP id d32-20020a630e20000000b00385fe0852f9mr34376466pgl.99.1649842440615;
-        Wed, 13 Apr 2022 02:34:00 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 197-20020a6305ce000000b0039da7039aa6sm3328607pgf.25.2022.04.13.02.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 02:34:00 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] wl18xx: debugfs: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Wed, 13 Apr 2022 09:33:56 +0000
-Message-Id: <20220413093356.2538192-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 05:38:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3439E541B0;
+        Wed, 13 Apr 2022 02:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649842589; x=1681378589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sFkwTjYPsZTYIArW/zDQp2kcJ0QgVfA1Zo0sUjhJ8rA=;
+  b=BnGOv2T74+I2OYECMy98kkroUOAuLS6Bew6vg7HXCvG4ajWODZNaCdLy
+   hchOmmUa3pAGyUdxw0Y5eNM+MX/LYuugGFSIrjUZ6VnZ/T3AcxQKa0NUi
+   RTGYvdy8dkkDsa+i+Dvwu/Vtr/5uli1Z1f1HEfYJcO+n4bECRoxqur9vg
+   HiHYK88IayW6GXgyntAlt7JjuVqaF56Vr1avCCwBar6yor4Lh2sTg/3YY
+   dRcCmpmagDEk3yKhibWXkw2UoPCfwbaXPBrL7YvxW2k2N3gHetiQbh0MA
+   mPKrGv42eFq3IrTC53tF2EKRjXzvn/i6sgceIufEgzt7QeEGIAEoLESlP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="323067643"
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="323067643"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 02:34:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="700182471"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 13 Apr 2022 02:34:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Apr 2022 12:34:26 +0300
+Date:   Wed, 13 Apr 2022 12:34:26 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Saranya Gopal <saranya.gopal@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] usb: typec: tipd: Add support for polling interrupts
+ status when interrupt line is not connected
+Message-ID: <YlaZIual4Fa/a81I@kuha.fi.intel.com>
+References: <20220412145059.4717-1-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412145059.4717-1-a-govindraju@ti.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Aswath,
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+On Tue, Apr 12, 2022 at 08:20:58PM +0530, Aswath Govindraju wrote:
+> In some cases the interrupt line from the pd controller may not be
+> connected. In these cases, poll the status of various events.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/net/wireless/ti/wl18xx/debugfs.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+Well, if the alert/interrupt line is not connected anywhere, then
+polling is the only way to go. I'm fine with that, but the driver
+really should be told that there is no interrupt. Using polling
+whenever request_threaded_irq() returns -EINVAL is wrong. We really
+should not even attempt to request the interrupt if there is no
+interrupt for the device.
 
-diff --git a/drivers/net/wireless/ti/wl18xx/debugfs.c b/drivers/net/wireless/ti/wl18xx/debugfs.c
-index 2f921a44f1e2..80fbf740fe6d 100644
---- a/drivers/net/wireless/ti/wl18xx/debugfs.c
-+++ b/drivers/net/wireless/ti/wl18xx/debugfs.c
-@@ -264,11 +264,9 @@ static ssize_t radar_detection_write(struct file *file,
- 	if (unlikely(wl->state != WLCORE_STATE_ON))
- 		goto out;
- 
--	ret = pm_runtime_get_sync(wl->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(wl->dev);
-+	ret = pm_runtime_resume_and_get(wl->dev);
-+	if (ret < 0)
- 		goto out;
--	}
- 
- 	ret = wl18xx_cmd_radar_detection_debug(wl, channel);
- 	if (ret < 0)
-@@ -306,11 +304,9 @@ static ssize_t dynamic_fw_traces_write(struct file *file,
- 	if (unlikely(wl->state != WLCORE_STATE_ON))
- 		goto out;
- 
--	ret = pm_runtime_get_sync(wl->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(wl->dev);
-+	ret = pm_runtime_resume_and_get(wl->dev);
-+	if (ret < 0)
- 		goto out;
--	}
- 
- 	ret = wl18xx_acx_dynamic_fw_traces(wl);
- 	if (ret < 0)
-@@ -368,11 +364,9 @@ static ssize_t radar_debug_mode_write(struct file *file,
- 	if (unlikely(wl->state != WLCORE_STATE_ON))
- 		goto out;
- 
--	ret = pm_runtime_get_sync(wl->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(wl->dev);
-+	ret = pm_runtime_resume_and_get(wl->dev);
-+	if (ret < 0)
- 		goto out;
--	}
- 
- 	wl12xx_for_each_wlvif_ap(wl, wlvif) {
- 		wlcore_cmd_generic_cfg(wl, wlvif,
+Isn't there any way you can get that information from DT? Or how is
+the device enumerated in your case?
+
+> Suggested-by: Roger Quadros <rogerq@kernel.org>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  drivers/usb/typec/tipd/core.c | 90 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 83 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 16b4560216ba..fa52d2067d6d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -15,6 +15,8 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/usb/typec.h>
+>  #include <linux/usb/role.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/devm-helpers.h>
+>  
+>  #include "tps6598x.h"
+>  #include "trace.h"
+> @@ -93,6 +95,8 @@ struct tps6598x {
+>  	struct power_supply *psy;
+>  	struct power_supply_desc psy_desc;
+>  	enum power_supply_usb_type usb_type;
+> +
+> +	struct delayed_work wq_poll;
+>  };
+>  
+>  static enum power_supply_property tps6598x_psy_props[] = {
+> @@ -473,9 +477,8 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
+>  	}
+>  }
+>  
+> -static irqreturn_t cd321x_interrupt(int irq, void *data)
+> +static int cd321x_handle_interrupt_status(struct tps6598x *tps)
+>  {
+> -	struct tps6598x *tps = data;
+>  	u64 event;
+>  	u32 status;
+>  	int ret;
+> @@ -513,14 +516,45 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  err_unlock:
+>  	mutex_unlock(&tps->lock);
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (event)
+> -		return IRQ_HANDLED;
+> -	return IRQ_NONE;
+> +		return 0;
+> +	return 1;
+>  }
+>  
+> -static irqreturn_t tps6598x_interrupt(int irq, void *data)
+> +static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  {
+>  	struct tps6598x *tps = data;
+> +	int ret;
+> +
+> +	ret = cd321x_handle_interrupt_status(tps);
+> +	if (ret)
+> +		return IRQ_NONE;
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +/* Time interval for Polling */
+> +#define POLL_INTERVAL   500 /* msecs */
+> +static void cd321x_poll_work(struct work_struct *work)
+> +{
+> +	struct tps6598x *tps = container_of(to_delayed_work(work),
+> +					    struct tps6598x, wq_poll);
+> +	int ret;
+> +
+> +	ret = cd321x_handle_interrupt_status(tps);
+> +	/*
+> +	 * If there is an error while reading the interrupt registers
+> +	 * then stop polling else, schedule another poll work item
+> +	 */
+> +	if (!(ret < 0))
+> +		queue_delayed_work(system_power_efficient_wq,
+> +				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
+> +}
+> +
+> +static int tps6598x_handle_interrupt_status(struct tps6598x *tps)
+> +{
+>  	u64 event1;
+>  	u64 event2;
+>  	u32 status;
+> @@ -561,9 +595,39 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+>  err_unlock:
+>  	mutex_unlock(&tps->lock);
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (event1 | event2)
+> -		return IRQ_HANDLED;
+> -	return IRQ_NONE;
+> +		return 0;
+> +	return 1;
+> +}
+> +
+> +static irqreturn_t tps6598x_interrupt(int irq, void *data)
+> +{
+> +	struct tps6598x *tps = data;
+> +	int ret;
+> +
+> +	ret = tps6598x_handle_interrupt_status(tps);
+> +	if (ret)
+> +		return IRQ_NONE;
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void tps6598x_poll_work(struct work_struct *work)
+> +{
+> +	struct tps6598x *tps = container_of(to_delayed_work(work),
+> +					    struct tps6598x, wq_poll);
+> +	int ret;
+> +
+> +	ret = tps6598x_handle_interrupt_status(tps);
+> +	/*
+> +	 * If there is an error while reading the interrupt registers
+> +	 * then stop polling else, schedule another poll work item
+> +	 */
+> +	if (!(ret < 0))
+> +		queue_delayed_work(system_power_efficient_wq,
+> +				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
+>  }
+>  
+>  static int tps6598x_check_mode(struct tps6598x *tps)
+> @@ -704,6 +768,7 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
+>  static int tps6598x_probe(struct i2c_client *client)
+>  {
+>  	irq_handler_t irq_handler = tps6598x_interrupt;
+> +	work_func_t work_poll_handler = tps6598x_poll_work;
+>  	struct device_node *np = client->dev.of_node;
+>  	struct typec_capability typec_cap = { };
+>  	struct tps6598x *tps;
+> @@ -748,6 +813,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  			APPLE_CD_REG_INT_PLUG_EVENT;
+>  
+>  		irq_handler = cd321x_interrupt;
+> +		work_poll_handler = cd321x_poll_work;
+>  	} else {
+>  		/* Enable power status, data status and plug event interrupts */
+>  		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+> @@ -846,6 +912,16 @@ static int tps6598x_probe(struct i2c_client *client)
+>  					irq_handler,
+>  					IRQF_SHARED | IRQF_ONESHOT,
+>  					dev_name(&client->dev), tps);
+> +	if (ret == -EINVAL) {
+> +		dev_warn(&client->dev, "Unable to find the interrupt, switching to polling\n");
+> +		ret = devm_delayed_work_autocancel(tps->dev, &tps->wq_poll, work_poll_handler);
+> +		if (ret)
+> +			dev_err(&client->dev, "error while initializing workqueue\n");
+> +		else
+> +			queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
+> +					   msecs_to_jiffies(POLL_INTERVAL));
+> +	}
+> +
+>  	if (ret) {
+>  		tps6598x_disconnect(tps, 0);
+>  		typec_unregister_port(tps->port);
+
+thanks,
+
 -- 
-2.25.1
-
-
+heikki

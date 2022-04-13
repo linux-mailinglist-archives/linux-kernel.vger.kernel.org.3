@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6EB5002C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C77C5002CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbiDMXts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S238901AbiDMXwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiDMXtq (ORCPT
+        with ESMTP id S229450AbiDMXwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:49:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95904496BD;
-        Wed, 13 Apr 2022 16:47:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kdzln3Dtgz4xL3;
-        Thu, 14 Apr 2022 09:47:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649893641;
-        bh=qH/xSM14cxvQij1hFLVu+kiAPdsZvEdmpAYyPixvxek=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZfwxXHhRF2TT05px+iytAli/nFmDCzJld8e/jro6DGDbdc0Qr6kgvPb1nOoQXie0i
-         dekLtpC4yeJkOmjmDd2P86yM66vTe91YO5YMD5yzLyVilD8ymvTcD3q1wdgalRjbRP
-         MjVhSRwKCYmkAJrG6AoHMvGOY/qeYRHWauuXEgh1C3SNfZ1nS7c+DLLV5Ahexe84wH
-         vtf9oGXZ99zuGyPbivBLj3BvmVXirSsgsoymu300/NFCe5Ma4kkO5fZ1RVVekpdYOC
-         QVt/iz7liVhHO37DtuRP6oevZrLaAf0Z94n44URBv+ELZLvMxY2VAafyrs+PrASGzH
-         MK0nyvXnSSQ3g==
-Date:   Thu, 14 Apr 2022 09:47:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-misc tree with the
- drm-misc-fixes tree
-Message-ID: <20220414094715.4c2e0127@canb.auug.org.au>
+        Wed, 13 Apr 2022 19:52:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7104C3CFCB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:49:46 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id bg24so3551667pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2D/qBXdrk7ZXIoBr7a89aPIY20fw/HMXa9aQEJud9fA=;
+        b=B7ESQlFRcLSjm8ncxhQggA9eJW5n7dvus1LsemSYq3h/tA9JxUM1Cx1h0ey5iqPVCI
+         ZsZCrosRxaOY+V59K161xjtvovm6aGW3EiGFEWhxkY5Y6XLqOaZtJPSsK4HobbJxhGdt
+         iyleaYOVVFHkevCL1Yju5RVzS6AYe3T1v9g5hY8kltHmgq8zKWsLE5vuEJbAXdWb44pa
+         maDHPgfb68vMVKEBHNnAerhnt2lpqF6d2tN0j7XYCujfIirsjqCSVjRxtLr8KBk5d1OO
+         EaEZ20LCJN9aTS55PmhJnsHnq+jG2VppDayu9XrUPDxrvfTx7IUwcRMukUTOajp41QS5
+         UyWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2D/qBXdrk7ZXIoBr7a89aPIY20fw/HMXa9aQEJud9fA=;
+        b=Oqe66Oqt8LQjMoZNgZfskOdohik50s/40zd6HCOKhS4PxDWz20gQ4+sDomR/wy14ut
+         9+eft9Zb6TlIJQyLE6iNK3s1duLcfzxX2qhHKCPzlhVQcmITVNpOAduf+U/M+J7MPdwT
+         jN926cVfbhVdW8FPBHeysZmPK6Rv6dyChKGDsgXNqMHcTsl95kf6B88LFx0K/Mf8sgI9
+         iWw5DWLtMGK1GTdY9H0vgWcrf2eeBUi117QM/vvbtph7lgL6qhHtKwPJBIe8VHfbRddb
+         ByaYTJOeyZ2JqTgf5kaYWjotf+xtyR6x+Y85kkkI+ZnPSBSTo/Z496kB77DhobhIwpMD
+         6+8g==
+X-Gm-Message-State: AOAM530Bkti7mDuGNBbNkDOWj63xRn9ip0JuKkX8l2fWbcqlr/3NS3pe
+        ZjWZloaeCuhZc+HLG8l9D4Q=
+X-Google-Smtp-Source: ABdhPJw2/u+79k8T6MV5jVby/X54BZPOWhnaBZkt9mTSf5shL9wGn4GDop9TwgAt5kPH+f8l8MvdFg==
+X-Received: by 2002:a17:90b:4c43:b0:1cb:bc2c:ad4a with SMTP id np3-20020a17090b4c4300b001cbbc2cad4amr675144pjb.230.1649893785961;
+        Wed, 13 Apr 2022 16:49:45 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:400:e00:389b:6ba3:7cbd:d8d])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056a00199400b005060849909esm197075pfl.176.2022.04.13.16.49.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 16:49:45 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 0/3] xtensa: allow handling protection faults in noMMU
+Date:   Wed, 13 Apr 2022 16:49:27 -0700
+Message-Id: <20220413234930.1212335-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Xpe14MVmARdV4iD3t4pUP/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/1Xpe14MVmARdV4iD3t4pUP/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+most xtensa cores have some sort of memory protection mechanism, even
+those without full MMU. This series separates protection fault handling
+from the CONFIG_MMU setting and allows noMMU configurations to also
+do it. This improves userspace behavior in case of errors such as
+passing NULL pointer to a syscall that expects a valid memory pointer:
+instead of killing the process the kernel is now able to return -EINVAL
+from a syscall.
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+Max Filippov (3):
+  xtensa: move asid_cache from fault.c to mmu.c
+  xtensa: extract vmalloc_fault code into a function
+  xtensa: noMMU: allow handling protection faults
 
-  drivers/gpu/drm/radeon/radeon_sync.c
+ arch/xtensa/Kconfig        |  11 ++++
+ arch/xtensa/kernel/traps.c |  20 +++----
+ arch/xtensa/mm/Makefile    |   3 +-
+ arch/xtensa/mm/fault.c     | 112 +++++++++++++++++++------------------
+ arch/xtensa/mm/mmu.c       |   2 +
+ 5 files changed, 83 insertions(+), 65 deletions(-)
 
-between commit:
+-- 
+2.30.2
 
-  022074918042 ("drm/radeon: fix logic inversion in radeon_sync_resv")
-
-from the drm-misc-fixes tree and commit:
-
-  7bc80a5462c3 ("dma-buf: add enum dma_resv_usage v4")
-
-from the drm-misc tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/1Xpe14MVmARdV4iD3t4pUP/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJXYQMACgkQAVBC80lX
-0GzMoAf9FKTF9iImNzKRO3UdcLsXrWTGX3GJJBDJXQvppCSODDFibUtrrx7Nh6PQ
-zWUHK0TWdkUMAtFR2R+hUHdzZp2hkTbNVQzU7DsZIJtP6V2/r122Hy2AVNT3u14/
-RBe8R/UflsTfvbnXmqTtCWQsvfw+TdHKHbtnDlOCAzxD7V7T7Q2mRMZL1R3/MhBa
-Vn4c9ml9AjN3glIETxv4b14zpzEtc7R11wbekjZ/Hjok0erw3RfBcO9g9nFLzTW/
-ao0t05QhF+TejMJTTbJfufbTw81FQZ6h/cqfTDRVrTkkJm84VMWBen6QlyhJ62DK
-xr/6oDOdXwKfegVRzBHrCUn939gqeA==
-=b4G8
------END PGP SIGNATURE-----
-
---Sig_/1Xpe14MVmARdV4iD3t4pUP/--

@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B8C4FF6CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11C4FF73F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiDMM3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S235682AbiDMM7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiDMM31 (ORCPT
+        with ESMTP id S233390AbiDMM7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:29:27 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BB45DA4E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:27:03 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g20so2148324edw.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UWf3WD8etSo1FUiV/Va7759QYZ2hF4d/jpBeQeYNuh0=;
-        b=V1YebfM3uL4q1jK8/PspIru7Nkbh7M2BcwDi8WKctQcIrkCwf4tddAevvUJ7NJX9th
-         NhUhIzyxqZ4HdW6OlwRxDPZFiTYztI9/qL97vT/L5AQmRyuUyUt27IAH/kBY0L7AcrGv
-         5oJNVQdIPIZtkLwHWZMG2ZVRqAI7o+ffiPYPNFL7GKqPdroRvFIdsyPXuRi0f4eTjC9S
-         ojoCIuHQnE20+96uU/aud0d6tlxB7+rbNJjg5yK46MAIcJRTXG1KZSSvmiMm6BG6KL5+
-         jE7T+kRwq+ZjSc23P1MhTe4AMzDn2Bw0EXwbiCs5C3vhtcXmdKfYO5I3mlRQNHq/Mc0f
-         ZiZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UWf3WD8etSo1FUiV/Va7759QYZ2hF4d/jpBeQeYNuh0=;
-        b=T7no2yAOFezQPRF7K5Ef17CLBvnypssMTJ2TUEWcmjktz5jtl5BrxBTeXyuaI+dWJ7
-         E+ucGOx22vZ9anLre8cbcJ3MKPzpRTqX/y25kliQawwbQfExYJux2zUQ7YKQTIP4cjVH
-         yGW5a6vsKCCioV8f8PmwjOATOez3r1iIKmc5q0kGJOjhps3VRjXlielU8yo5Sf8eNpnn
-         S1cNAQVAkrptg8ZDWXSvaMgvF6BFBLhYxeVb8hdhQ4/X2MFE4f61daUyycJ3Q1sriepy
-         hEFcqjMaqIK1WvP1MFbHLHW6RvjKU/2euH/uWSWLT4Guohle09slTXJK3aLwO9QoayZX
-         Zmew==
-X-Gm-Message-State: AOAM533AvhGWeuOpsl80fgLlK197JOwbR/GfYepLBDwq8gA6fptOoiZa
-        OsGU7GG1lDBeZ0feMsxJRzC02A==
-X-Google-Smtp-Source: ABdhPJxFkgSsSbyre3Mhq9/5vpL/TcAtBritChJHV6hHs0Thrw4NNs9uIjp2WHOlI6cLIlMu4LSdIg==
-X-Received: by 2002:a05:6402:1941:b0:413:2b5f:9074 with SMTP id f1-20020a056402194100b004132b5f9074mr42989674edz.414.1649852821599;
-        Wed, 13 Apr 2022 05:27:01 -0700 (PDT)
-Received: from [192.168.0.204] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b006db0a78bde8sm14177221ejy.87.2022.04.13.05.27.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 05:27:01 -0700 (PDT)
-Message-ID: <a4b6c158-da56-7879-04a4-558f751cb372@linaro.org>
-Date:   Wed, 13 Apr 2022 14:27:00 +0200
+        Wed, 13 Apr 2022 08:59:47 -0400
+X-Greylist: delayed 1809 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 05:57:25 PDT
+Received: from bjm7-spam01.kuaishou.com (smtpcn03.kuaishou.com [103.107.217.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C8250E33
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:57:24 -0700 (PDT)
+Received: from bjm7-spam01.kuaishou.com (localhost [127.0.0.2] (may be forged))
+        by bjm7-spam01.kuaishou.com with ESMTP id 23DCRHxc089299
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:27:17 +0800 (GMT-8)
+        (envelope-from tianzichen@kuaishou.com)
+Received: from bjm7-pm-mail26.kuaishou.com ([172.28.1.62])
+        by bjm7-spam01.kuaishou.com with ESMTPS id 23DCR75u089255
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Apr 2022 20:27:07 +0800 (GMT-8)
+        (envelope-from tianzichen@kuaishou.com)
+Content-Language: zh-CN
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F41F2052051878449E4DC01E52BCB8A1@kuaishou.com>
+Content-Transfer-Encoding: base64
+DKIM-Signature: v=1; a=rsa-sha256; d=kuaishou.com; s=dkim; c=relaxed/relaxed;
+        t=1649852827; h=from:subject:to:date:message-id;
+        bh=TnyptApGhZYqd8SJSRCUR+JWQamR+5AGe393lfj5Tao=;
+        b=ldsJrdMBrlcT9XZ2RBqOwGwnfTmsUQsL0PBjbpPq+xmgDQOPhNUEA1QGZh+K0MiQFFK/vXwSd/Y
+        Y9wxMF7xDL/ec/MrTw4w8pdR6/bUuapp/z46yqGsQxJpWXrP0vS82FNHAOhUW4qx+g+UTLEyPEan5
+        nUEHM0FTGUkeD7tnk50=
+Received: from bjfk-pm-mail30.kuaishou.com (172.29.5.62) by
+ bjm7-pm-mail26.kuaishou.com (172.28.1.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Wed, 13 Apr 2022 20:27:07 +0800
+Received: from bjfk-pm-mail30.kuaishou.com ([fe80::2534:b256:58c3:b20]) by
+ bjfk-pm-mail30.kuaishou.com ([fe80::2534:b256:58c3:b20%17]) with mapi id
+ 15.01.2176.014; Wed, 13 Apr 2022 20:27:07 +0800
+From:   =?utf-8?B?55Sw5a2Q5pmo?= <tianzichen@kuaishou.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>
+CC:     Jeffle Xu <jefflexu@linux.alibaba.com>,
+        "linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
+        "fannaihao@baidu.com" <fannaihao@baidu.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "joseph.qi@linux.alibaba.com" <joseph.qi@linux.alibaba.com>,
+        "linux-cachefs@redhat.com" <linux-cachefs@redhat.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "luodaowen.backend@bytedance.com" <luodaowen.backend@bytedance.com>,
+        "gerry@linux.alibaba.com" <gerry@linux.alibaba.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read
+ semantics
+Thread-Topic: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read
+ semantics
+Thread-Index: AQHYTzHKf6eBDuhir0CXwRoLEUpF1A==
+Date:   Wed, 13 Apr 2022 12:27:06 +0000
+Message-ID: <B58D56BF-4456-4AD4-A25F-0C9779355DEA@kuaishou.com>
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+ <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
+In-Reply-To: <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
+Accept-Language: zh-CN, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.20.112.61]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: dts: imx8mm-evk: add pwm1/backlight support
-Content-Language: en-US
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220413102052.20207-1-tommaso.merciai@amarulasolutions.com>
- <c6fe3895-29b2-a371-ccae-c5a12c45d4f1@linaro.org>
- <20220413115810.GA4713@tom-ThinkPad-T14s-Gen-2i>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413115810.GA4713@tom-ThinkPad-T14s-Gen-2i>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-DNSRBL: 
+X-MAIL: bjm7-spam01.kuaishou.com 23DCRHxc089299
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 13:58, Tommaso Merciai wrote:
->>> +	backlight: backlight {
->>> +		status = "disabled";
->>
->> Why disabled?
->>
->>> +		compatible = "pwm-backlight";
->>> +		pwms = <&pwm1 0 5000000>;
->>> +		brightness-levels = <0 255>;
->>> +		num-interpolated-steps = <255>;
->>> +		default-brightness-level = <250>;
->>> +	};
->>> +
->>>  	ir-receiver {
->>>  		compatible = "gpio-ir-receiver";
->>>  		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
->>> @@ -395,6 +404,12 @@ &wdog1 {
->>>  	status = "okay";
->>>  };
->>>  
->>> +&pwm1 {
->>> +	pinctrl-names = "default";
->>> +	pinctrl-0 = <&pinctrl_backlight>;
->>> +	status = "disabled";
->>
->> Same here.
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> Hi Krzysztof,
-> I think is better to keep disable into .dtsi and enable it at .dts
-> level.
-> What do you think about?
-
-Why better? This is already board DTSI, not a SoC DTSI. All boards using
-it are supposed to have it available, aren't they?
-
-Usually nodes should be disabled in a DTSI if they need some resources
-not available in that DTSI. For example if they need some supply. It's
-not the case here, right?
-
-
-Best regards,
-Krzysztof
+DQoNCj4gMjAyMuW5tDTmnIgxMOaXpSDkuIvljYg4OjUx77yMR2FvIFhpYW5nIDxoc2lhbmdrYW9A
+bGludXguYWxpYmFiYS5jb20+IOWGmemBk++8mg0KPiANCj4gT24gV2VkLCBBcHIgMDYsIDIwMjIg
+YXQgMDM6NTU6NTJQTSArMDgwMCwgSmVmZmxlIFh1IHdyb3RlOg0KPj4gY2hhbmdlcyBzaW5jZSB2
+NzoNCj4+IC0gcmViYXNlZCB0byA1LjE4LXJjMQ0KPj4gLSBpbmNsdWRlICJjYWNoZWZpbGVzOiB1
+bm1hcmsgaW5vZGUgaW4gdXNlIGluIGVycm9yIHBhdGgiIHBhdGNoIGludG8NCj4+ICB0aGlzIHBh
+dGNoc2V0IHRvIGF2b2lkIHdhcm5pbmcgZnJvbSB0ZXN0IHJvYm90IChwYXRjaCAxKQ0KPj4gLSBj
+YWNoZWZpbGVzOiByZW5hbWUgW2Nvb2tpZXx2b2x1bWVdX2tleV9sZW4gZmllbGQgb2Ygc3RydWN0
+DQo+PiAgY2FjaGVmaWxlc19vcGVuIHRvIFtjb29raWV8dm9sdW1lXV9rZXlfc2l6ZSB0byBhdm9p
+ZCBwb3RlbnRpYWwNCj4+ICBtaXN1bmRlcnN0YW5kaW5nLiBBbHNvIGFkZCBtb3JlIGRvY3VtZW50
+YXRpb24gdG8NCj4+ICBpbmNsdWRlL3VhcGkvbGludXgvY2FjaGVmaWxlcy5oLiAocGF0Y2ggMykN
+Cj4+IC0gY2FjaGVmaWxlczogdmFsaWQgY2hlY2sgZm9yIGVycm9yIGNvZGUgcmV0dXJuZWQgZnJv
+bSB1c2VyIGRhZW1vbg0KPj4gIChwYXRjaCAzKQ0KPj4gLSBjYWNoZWZpbGVzOiBjaGFuZ2UgV0FS
+Tl9PTl9PTkNFKCkgdG8gcHJfaW5mb19vbmNlKCkgd2hlbiB1c2VyIGRhZW1vbg0KPj4gIGNsb3Nl
+cyBhbm9uX2ZkIHByZW1hdHVyZWx5IChwYXRjaCA0LzUpDQo+PiAtIHJlYWR5IGZvciBjb21wbGV0
+ZSByZXZpZXcNCj4+IA0KPj4gDQo+PiBLZXJuZWwgUGF0Y2hzZXQNCj4+IC0tLS0tLS0tLS0tLS0t
+LQ0KPj4gR2l0IHRyZWU6DQo+PiANCj4+ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sb3N0amVmZmxl
+L2xpbnV4LmdpdCBqaW5nYm8vZGV2LWVyb2ZzLWZzY2FjaGUtdjgNCj4+IA0KPj4gR2l0d2ViOg0K
+Pj4gDQo+PiAgICBodHRwczovL2dpdGh1Yi5jb20vbG9zdGplZmZsZS9saW51eC9jb21taXRzL2pp
+bmdiby9kZXYtZXJvZnMtZnNjYWNoZS12OA0KPj4gDQo+PiANCj4+IFVzZXIgRGFlbW9uIGZvciBR
+dWljayBUZXN0DQo+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4gR2l0IHRyZWU6DQo+
+PiANCj4+ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sb3N0amVmZmxlL2RlbWFuZC1yZWFkLWNhY2hl
+ZmlsZXNkLmdpdCBtYWluDQo+PiANCj4+IEdpdHdlYjoNCj4+IA0KPj4gICAgaHR0cHM6Ly9naXRo
+dWIuY29tL2xvc3RqZWZmbGUvZGVtYW5kLXJlYWQtY2FjaGVmaWxlc2QNCj4+IA0KPiANCj4gQnR3
+LCB3ZSd2ZSBhbHNvIGZpbmlzaGVkIGEgcHJlbGltaW5hcnkgZW5kLXRvLWVuZCBvbi1kZW1hbmQg
+ZG93bmxvYWQNCj4gZGFlbW9uIGluIG9yZGVyIHRvIHRlc3QgdGhlIGZzY2FjaGUgb24tZGVtYW5k
+IGtlcm5lbCBjb2RlIGFzIGEgcmVhbA0KPiBlbmQtdG8tZW5kIHdvcmtsb2FkIGZvciBjb250YWlu
+ZXIgdXNlIGNhc2VzOg0KPiANCj4gVXNlciBndWlkZTogaHR0cHM6Ly9naXRodWIuY29tL2RyYWdv
+bmZseW9zcy9pbWFnZS1zZXJ2aWNlL2Jsb2IvZnNjYWNoZS9kb2NzL255ZHVzLWZzY2FjaGUubWQN
+Cj4gVmlkZW86IGh0dHBzOi8veW91dHUuYmUvRjRJRjJfREVOWG8NCg0KVGVzdGVkLWJ5OiBaaWNo
+ZW4gVGlhbiA8dGlhbnppY2hlbkBrdWFpc2hvdS5jb20+DQoNCj4gVGhhbmtzLA0KPiBHYW8gWGlh
+bmcNCj4gDQoNCg==

@@ -2,140 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39F54FF98C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695BE4FF98F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbiDMPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S236266AbiDMPBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiDMPBF (ORCPT
+        with ESMTP id S234367AbiDMPBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:01:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE464702;
-        Wed, 13 Apr 2022 07:58:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4E7DB2160F;
-        Wed, 13 Apr 2022 14:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649861922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+GxKh4jt1u41zQwY9fFHOMk5qmURUsLIVA8mQOYyxDU=;
-        b=O6hVIo50wvWHDzF2F5mxM/evBWX1ys7K4C3M3vCUT2/eLnQPfFweYZx95LplidWNT9oCQb
-        RYGWdMnxCHlJEv7H9ZLPkRwecQX5aKb1syXbVucHysYiEIqxoQNSONpHRS+LrS/5askTWF
-        AIBvmRYRknoHncWQPEAHiGVUB5yAxxk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CBA0113A91;
-        Wed, 13 Apr 2022 14:58:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GDquLiHlVmIsJgAAMHmgww
-        (envelope-from <nborisov@suse.com>); Wed, 13 Apr 2022 14:58:41 +0000
-Message-ID: <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
-Date:   Wed, 13 Apr 2022 17:58:41 +0300
+        Wed, 13 Apr 2022 11:01:19 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0CFE0DD;
+        Wed, 13 Apr 2022 07:58:58 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id m132so4250374ybm.4;
+        Wed, 13 Apr 2022 07:58:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ICXFv2vFTWA/EfToNSXNFej0aDLg/UzwH2y+FUBsnf8=;
+        b=ucIfUPnhBBucUyxJsRIMkWlhPT+08Y0+VrishMUN8nPab1K9E9FNLRfMIZL4UmA9NI
+         UpqDWU9M/AlkR+8F96trf371dMVK5zVRxHfs1Y2fjvdHZ3lE/sBDhvXPTRUCdO0B3+HV
+         vc7b7w9RAv8JeNj/kNpSO4swPPKqPjvcRYj3ZaK2sVp5g5egMtUqLIrtPqrygGwNHwq3
+         XMvlcWHCXtmTUk4KDOa91Zuo5Vw+XVwySf8MdNj5HqUrEGjQ5PoxUb2bzZlRoRZEFgXy
+         wlYrkIO+O07Bqlw78P+15UAUMZL85x1OYIfAg9T5nM4AqGpqSmdNnxUaHgqwOmsnFQt3
+         9ZkA==
+X-Gm-Message-State: AOAM531qWG859WEmlLFuR84KWzdhPM9EjqK0uHkx9FrAcfqQfYyZXJKx
+        Y8BqGVxXtsf/G/zDO9UBlxv0q8pIAsn2lG5FDG4=
+X-Google-Smtp-Source: ABdhPJwhNhjILTyonCwIgTOvkt4W+DqQjlYGmtX7ajI4SbcsIQhtTDyxJTnK5iHWVJydm2nWxnq4HLeNnvFojeev2io=
+X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
+ e18-20020a056902035200b0063e094c883cmr28647821ybs.365.1649861937643; Wed, 13
+ Apr 2022 07:58:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
-Content-Language: en-US
-To:     Schspa Shi <schspa@gmail.com>, dsterba@suse.cz
-Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        terrelln@fb.com
-References: <20220411135136.GG15609@suse.cz>
- <20220411155540.36853-1-schspa@gmail.com>
-From:   Nikolay Borisov <nborisov@suse.com>
-In-Reply-To: <20220411155540.36853-1-schspa@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220325073030.91919-1-kant@allwinnertech.com> <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
+In-Reply-To: <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 16:58:46 +0200
+Message-ID: <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: use local ops instead of
+ global ops
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Kant Fan <kant@allwinnertech.com>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        allwinner-opensource-support@allwinnertech.com,
+        Stable <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 25, 2022 at 10:02 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Kant,
+>
+> On 3/25/22 07:30, Kant Fan wrote:
+> > Fix access illegal address problem in following condition:
+> > There are muti devfreq cooling devices in system, some of them has
+> > em model but other does not, energy model ops such as state2power will
+> > append to global devfreq_cooling_ops when the cooling device with
+> > em model register. It makes the cooling device without em model
+> > also use devfreq_cooling_ops after appending when register later by
+> > of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+> >
+> > IPA governor regards the cooling devices without em model as a power actor
+> > because they also have energy model ops, and will access illegal address
+> > at dfc->em_pd when execute cdev->ops->get_requested_power,
+> > cdev->ops->state2power or cdev->ops->power2state.
+> >
+> > Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
+> > Cc: stable@vger.kernel.org # 5.13+
+> > Signed-off-by: Kant Fan <kant@allwinnertech.com>
+> > ---
+> >   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+> >   1 file changed, 18 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+> > index 4310cb342a9f..d38a80adec73 100644
+> > --- a/drivers/thermal/devfreq_cooling.c
+> > +++ b/drivers/thermal/devfreq_cooling.c
+> > @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+> >       struct thermal_cooling_device *cdev;
+> >       struct device *dev = df->dev.parent;
+> >       struct devfreq_cooling_device *dfc;
+> > +     struct thermal_cooling_device_ops *ops;
+> >       char *name;
+> >       int err, num_opps;
+> >
+> > -     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> > -     if (!dfc)
+> > +     ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+> > +     if (!ops)
+> >               return ERR_PTR(-ENOMEM);
+> >
+> > +     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> > +     if (!dfc) {
+> > +             err = -ENOMEM;
+> > +             goto free_ops;
+> > +     }
+> > +
+> >       dfc->devfreq = df;
+> >
+> >       dfc->em_pd = em_pd_get(dev);
+> >       if (dfc->em_pd) {
+> > -             devfreq_cooling_ops.get_requested_power =
+> > +             ops->get_requested_power =
+> >                       devfreq_cooling_get_requested_power;
+> > -             devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+> > -             devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
+> > +             ops->state2power = devfreq_cooling_state2power;
+> > +             ops->power2state = devfreq_cooling_power2state;
+> >
+> >               dfc->power_ops = dfc_power;
+> >
+> > @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+> >       if (!name)
+> >               goto remove_qos_req;
+> >
+> > -     cdev = thermal_of_cooling_device_register(np, name, dfc,
+> > -                                               &devfreq_cooling_ops);
+> > +     cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+> >       kfree(name);
+> >
+> >       if (IS_ERR(cdev)) {
+> > @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+> >       kfree(dfc->freq_table);
+> >   free_dfc:
+> >       kfree(dfc);
+> > +free_ops:
+> > +     kfree(ops);
+> >
+> >       return ERR_PTR(err);
+> >   }
+> > @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+> >   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+> >   {
+> >       struct devfreq_cooling_device *dfc;
+> > +     const struct thermal_cooling_device_ops *ops;
+> >       struct device *dev;
+> >
+> >       if (IS_ERR_OR_NULL(cdev))
+> >               return;
+> >
+> > +     ops = cdev->ops;
+> >       dfc = cdev->devdata;
+> >       dev = dfc->devfreq->dev.parent;
+> >
+> > @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+> >
+> >       kfree(dfc->freq_table);
+> >       kfree(dfc);
+> > +     kfree(ops);
+> >   }
+> >   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+>
+>
+> Thank you for updating it, LGTM
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
+Applied as 5.19 material.
 
-On 11.04.22 г. 18:55 ч., Schspa Shi wrote:
-> This is an optimization for fix fee13fe96529 ("btrfs:
-> correct zstd workspace manager lock to use spin_lock_bh()")
-> 
-> The critical region for wsm.lock is only accessed by the process context and
-> the softirq context.
-> 
-> Because in the soft interrupt, the critical section will not be preempted by the
-> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock) to turn
-> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situation.
-> 
-> Changelog:
-> v1 -> v2:
-> 	- Change the commit message to make it more readable.
-> 
-> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.com/
-> 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
+Lukasz, this had a conflict with your EM series, please double check
+if my resolution in the bleeding-edge branch is correct.
 
-Has there been any measurable impact by this change? While it's correct it does mean that
-  someone looking at the code would see that in one call site we use plain spinlock and in
-another a _bh version and this is somewhat inconsistent.
-
-What's more I believe this is a noop since when softirqs are executing preemptible() would
-be false due to preempt_count() being non-0 and in the bh-disabling code
-in the spinlock we have:
-
-  /* First entry of a task into a BH disabled section? */
-     1         if (!current->softirq_disable_cnt) {
-   167                 if (preemptible()) {
-     1                         local_lock(&softirq_ctrl.lock);
-     2                         /* Required to meet the RCU bottomhalf requirements. */
-     3                         rcu_read_lock();
-     4                 } else {
-     5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softirq_ctrl.cnt));
-     6                 }
-     7         }
-
-
-In this case we'd hit the else branch.
-> ---
->   fs/btrfs/zstd.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
-> index fc42dd0badd7..faa74306f0b7 100644
-> --- a/fs/btrfs/zstd.c
-> +++ b/fs/btrfs/zstd.c
-> @@ -105,10 +105,10 @@ static void zstd_reclaim_timer_fn(struct timer_list *timer)
->   	unsigned long reclaim_threshold = jiffies - ZSTD_BTRFS_RECLAIM_JIFFIES;
->   	struct list_head *pos, *next;
->   
-> -	spin_lock_bh(&wsm.lock);
-> +	spin_lock(&wsm.lock);
->   
->   	if (list_empty(&wsm.lru_list)) {
-> -		spin_unlock_bh(&wsm.lock);
-> +		spin_unlock(&wsm.lock);
->   		return;
->   	}
->   
-> @@ -137,7 +137,7 @@ static void zstd_reclaim_timer_fn(struct timer_list *timer)
->   	if (!list_empty(&wsm.lru_list))
->   		mod_timer(&wsm.timer, jiffies + ZSTD_BTRFS_RECLAIM_JIFFIES);
->   
-> -	spin_unlock_bh(&wsm.lock);
-> +	spin_unlock(&wsm.lock);
->   }
->   
->   /*
+Thanks!

@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AC94FEBF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B454FEC02
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 03:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiDMAhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S229890AbiDMBEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 21:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiDMAhu (ORCPT
+        with ESMTP id S229463AbiDMBE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:37:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1C5FD2;
-        Tue, 12 Apr 2022 17:35:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98D4EB82072;
-        Wed, 13 Apr 2022 00:35:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3886CC385B1;
-        Wed, 13 Apr 2022 00:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649810128;
-        bh=AmfvMR6B8qWiar02K5X7Z8KIhMvVMGBK0eqEnVrFYpI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TxSzzlCOKE01p9I9UE5gYaWOCURLBMQJmIDI63cp2ILPaM5AZ/T9SPl3gGt7Pe99H
-         SoxXtP59LPHy1mdvTMTOEvEJbeTILyT0GJeTK9C42LX5qkNHjbiXLa7/KzmBGfEJAw
-         zUnY8CksJ6rKwIctIDPek8FU/OIXKLt2XZePPHzZlCIyZW5C9OuNVkZq9QO+9u30IR
-         srLq82ZNl4Ijrnf1nB0oEdZlrb0o6i2CGiCjoUiW3y+BsbNd20R726D/TTXZmpFYeT
-         6YFqnCAvixY4GGkla4N/uspLDXyzEmItxAyroL0wQkZ171htOphChzjaWOvy/OvwJ9
-         F6QUnERcd4aBg==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ebdf6ebd29so6039987b3.2;
-        Tue, 12 Apr 2022 17:35:28 -0700 (PDT)
-X-Gm-Message-State: AOAM532XN0L5G/YM+16Vvb0dVjg+HseOZTzrADneCwzLt3R+v/fd//g5
-        4wCI7NQ4eJH/Bu05KdqBOYack2PItqI73/24OKY=
-X-Google-Smtp-Source: ABdhPJxdJyCJBgAjK0m6B/QRCZoAaYow/4ZgPbqC+fgtzHksYWemDjn3nzAKx2oczPg0w5rKoB7gHE62aESus4w1jLQ=
-X-Received: by 2002:a0d:f6c6:0:b0:2e5:bf17:4dce with SMTP id
- g189-20020a0df6c6000000b002e5bf174dcemr33657904ywf.130.1649810127216; Tue, 12
- Apr 2022 17:35:27 -0700 (PDT)
+        Tue, 12 Apr 2022 21:04:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918B8220D9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 18:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649811729; x=1681347729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jCOzTEFGDySWdZhcnJIZg2QMTm3MGx0Arwq3UD8MWIw=;
+  b=JkRaaZbfVBiX8b1Q4PZp5M2JN1Sr9Hcn4bck8e/U/L3ky1lmIBR+SUnW
+   5gKCD9BdCS98qWXDjFK3idoCpTOuklgHwA/h9ALNJ1i1+DG1wvJnPB19f
+   QDN5XiZHJs+rCSioiJZnVCmSkaFfFedCc98e8qkqYAij8Nm9t2F1i8BxH
+   /3Jeo3GLgLkiiDZZWrd8m6vwZwnfOl1GTgYVEJatf8OcvaaAGLjKK2f8V
+   ebKrTc76Q0DeRQv4OWn1sQ5XnbsQ/pp108m1xGt3cEI27fMc6DytaWmOe
+   0S0DFbtWuPVs1PbruaQzgZJZ6I7esSsPeUhf1i/kiXhdUNklE1c2lseXm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="348979605"
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="348979605"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 18:02:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="551987361"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 18:02:07 -0700
+Date:   Wed, 13 Apr 2022 09:02:02 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        m.szyprowski@samsung.com, hch@lst.de,
+        Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
+        Gao Liang <liang.gao@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Subject: Re: [PATCH] dma-direct: avoid redundant memory sync for swiotlb
+Message-ID: <20220413010157.GA10502@gao-cwp>
+References: <20220412113805.3210-1-chao.gao@intel.com>
+ <e25fbb7e-a67e-5421-b7be-700fd0209b0d@arm.com>
 MIME-Version: 1.0
-References: <20220411231808.667073-1-song@kernel.org> <YlWc/yDjWbeSuVP4@bombadil.infradead.org>
-In-Reply-To: <YlWc/yDjWbeSuVP4@bombadil.infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 12 Apr 2022 17:35:14 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW46YEP=uSvG3rgE4qfS8vJ3e-ZoSRYdCPLyEPmqugEXxA@mail.gmail.com>
-Message-ID: <CAPhsuW46YEP=uSvG3rgE4qfS8vJ3e-ZoSRYdCPLyEPmqugEXxA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 0/3] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>, imbrenda@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e25fbb7e-a67e-5421-b7be-700fd0209b0d@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,52 +64,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis,
-
-On Tue, Apr 12, 2022 at 8:38 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Tue, Apr 12, 2022 at 02:33:05PM +0100, Robin Murphy wrote:
+>On 12/04/2022 12:38 pm, Chao Gao wrote:
+>> When we looked into FIO performance with swiotlb enabled in VM, we found
+>> swiotlb_bounce() is always called one more time than expected for each DMA
+>> read request.
+>> 
+>> It turns out that the bounce buffer is copied to original DMA buffer twice
+>> after the completion of a DMA request (one is done by in
+>> dma_direct_sync_single_for_cpu(), the other by swiotlb_tbl_unmap_single()).
+>> But the content in bounce buffer actually doesn't change between the two
+>> rounds of copy. So, one round of copy is redundant.
+>> 
+>> Pass DMA_ATTR_SKIP_CPU_SYNC flag to swiotlb_tbl_unmap_single() to
+>> skip the memory copy in it.
 >
-> On Mon, Apr 11, 2022 at 04:18:05PM -0700, Song Liu wrote:
-> > Changes v1 => v2:
-> > 1. Add vmalloc_huge(). (Christoph Hellwig)
-> > 2. Add module_alloc_huge(). (Christoph Hellwig)
-> > 3. Add Fixes tag and Link tag. (Thorsten Leemhuis)
-> >
-> > Enabling HAVE_ARCH_HUGE_VMALLOC on x86_64 and use it for bpf_prog_pack has
-> > caused some issues [1], as many users of vmalloc are not yet ready to
-> > handle huge pages. To enable a more smooth transition to use huge page
-> > backed vmalloc memory, this set replaces VM_NO_HUGE_VMAP flag with an new
-> > opt-in flag, VM_ALLOW_HUGE_VMAP. More discussions about this topic can be
-> > found at [2].
-> >
-> > Patch 1 removes VM_NO_HUGE_VMAP and adds VM_ALLOW_HUGE_VMAP.
-> > Patch 2 uses VM_ALLOW_HUGE_VMAP in bpf_prog_pack.
-> >
-> > [1] https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
-> > [2] https://lore.kernel.org/linux-mm/20220330225642.1163897-1-song@kernel.org/
-> >
-> > Song Liu (3):
-> >   vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP
-> >   module: introduce module_alloc_huge
-> >   bpf: use vmalloc with VM_ALLOW_HUGE_VMAP for bpf_prog_pack
-> >
-> >  arch/Kconfig                 |  6 ++----
-> >  arch/powerpc/kernel/module.c |  2 +-
-> >  arch/s390/kvm/pv.c           |  2 +-
-> >  arch/x86/kernel/module.c     | 21 +++++++++++++++++++
-> >  include/linux/moduleloader.h |  5 +++++
-> >  include/linux/vmalloc.h      |  4 ++--
-> >  kernel/bpf/core.c            |  9 +++++----
-> >  kernel/module.c              |  8 ++++++++
->
-> Please use modules-next [0] as that has queued up changes which change
-> kernel/module.c quite a bit.
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+>It's still a little suboptimal and non-obvious to call into SWIOTLB twice
+>though - even better might be for SWIOTLB to call arch_sync_dma_for_cpu() at
+>the appropriate place internally,
 
-We are hoping to ship this set to fix some issues with 5.18. So I guess it
-shouldn't go through modules-next branch? Would this work for you?
-We are adding a new API module_alloc_huge(), so it shouldn't break
-existing features.
+Hi Robin,
 
-Thanks,
-Song
+dma_direct_sync_single_for_cpu() also calls arch_sync_dma_for_cpu_all()
+and arch_dma_mark_clean() in some cases. if SWIOTLB does sync internally,
+should these two functions be called by SWIOTLB?
+
+Personally, it might be better if swiotlb can just focus on bounce buffer
+alloc/free. Adding more DMA coherence logic into swiotlb will make it
+a little complicated.
+
+How about an open-coded version of dma_direct_sync_single_for_cpu
+in dma_direct_unmap_page with swiotlb_sync_single_for_cpu replaced by
+swiotlb_tbl_unmap_single?

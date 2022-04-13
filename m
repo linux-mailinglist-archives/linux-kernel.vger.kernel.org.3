@@ -2,195 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920F54FFA89
+	by mail.lfdr.de (Postfix) with ESMTP id BA29E4FFA8A
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiDMPo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S236654AbiDMPoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236644AbiDMPoS (ORCPT
+        with ESMTP id S236646AbiDMPoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Apr 2022 11:44:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCA4A3D0;
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F17F4A93D;
         Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=0yWcD2SXEiL1FSCIHyph+R1LsmAft7nq95dBjryG2Sc=; b=bKst/k9HeRVIhWFbd9lRaPJoyq
-        66vq7lbhnKOP9sAn6HtGswUaaHR7KXplyM/d0UPR0zGU4HBiwFNstDyArZyGwq7l1zV9A891StTCA
-        duFW0qJpTvwesBNKozLQ+y2USTpDy/poe3lxcWehcroBLrTg4REC/mbp9H2Pf3po3jqU0SIDbG++o
-        Hl0Sbgj356r3uxLqNNpFk31gL0mIDN/T6wUEAqG6E+bo3f9P1YusNUmxDpMVLNFppO44m3TJkD+F0
-        DjXY2GtlfLs6O/xGSSTATovhc8JnYvkjVJuiTkuSB5TSbeQWmFU+240khvW9NR2cdwsvb9+/hRSpI
-        zi2C/DQw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nef7n-00EMtk-Qt; Wed, 13 Apr 2022 15:41:44 +0000
-Message-ID: <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org>
-Date:   Wed, 13 Apr 2022 08:41:39 -0700
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eafabbc80aso26634217b3.11;
+        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SHFzz4Adk6Spcagd3aayb+Zwmj10ffSyTl1fyLat03Y=;
+        b=0hM4BBnQj8mKRciCIxsYmRXevg7mX/vZc41s6r7iMVB35m4VqK9y9ACQsO43BjagJE
+         Ng5yLYZjL/JtLDmDzPIoox/whb7CzsdfpVeezuRHOksp9xTjPiBNBipE9aXiHTGP+pGu
+         JMPLfSpskjeh9bLyJysr/j1q6tqXpnGNZWtIs3mm+tRlZbBPZDFzMv064ZO+vTMz0v/a
+         zqStqFSvdMovx1c/c+JZpguGkWqZM2KIUdEAUgNjpD1xji95qY5MYmwaj0r+gl27YrnC
+         /6SLBZuMadCRk/QOIeB/Dx48LqWzBWG0fybt51XhYdd7quKKzsfWiiosLr1xr5dhIZ0U
+         fXqg==
+X-Gm-Message-State: AOAM530hpxRgEXG8jQZ1BO2ZbWSE10ANPeOkZ91/UdiOlX0mS7Z5sfkw
+        PgE4aTTIcf/LP7Uw9VL8GxcI7z6d85iD0bL/w4c=
+X-Google-Smtp-Source: ABdhPJz7T/J691Cv/mz1W3q3MZT3b4qfkZuWp3RXQM50EElAZhvyBpcUCEMrPY4T2qJ0YYjoOjsVKL3iXD/skfMzYlc=
+X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
+ y136-20020a814b8e000000b002ef524069fcmr1407551ywa.19.1649864515666; Wed, 13
+ Apr 2022 08:41:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-Content-Language: en-US
-To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
-        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
-        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-References: <20220412231508.32629-1-libo.chen@oracle.com>
- <20220412231508.32629-2-libo.chen@oracle.com>
- <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
- <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
- <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
- <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
- <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org>
- <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220413090510.4039589-1-li.meng@amd.com>
+In-Reply-To: <20220413090510.4039589-1-li.meng@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 17:41:44 +0200
+Message-ID: <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Add unit test module for AMD P-State driver
+To:     Meng Li <li.meng@amd.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 13, 2022 at 11:06 AM Meng Li <li.meng@amd.com> wrote:
+>
+> Hi all:
+>
+> AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
+> the functions of amd-pstate driver.
+> It could import as a module to launch some test tasks.
+>
+> We upstream out AMD P-state driver into Linux kernel and use this unit
+> test module to verify the required conditions and basic functions of
+> amd-pstate before integration test.
+>
+> We use test module in the kselftest frameworks to implement it.
+> We create amd_pstate_testmod module and tie it into kselftest.
+>
+> For exmaple: The test case aput_acpi_cpc is used to check whether the
+> _CPC object is exist in SBIOS.
+> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
+> not existed at the detected processor, so it is a necessary condition.
+>
+> At present, its test cases are very simple, and the corresponding test
+> cases will continue to be added later to improve the test coverage.
+>
+> See patch series in below git repo:
+> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+>
+> Changes from V1 -> V2:
+> - cpufreq: amd-pstate:
+> - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
+> - selftests: cpufreq
+> - - add a wrapper shell script for the amd_pstate_testmod module
+> - selftests: cpufreq:
+> - - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
+> - Documentation: amd-pstate:
+> - - amd_pstate_testmod rst document is not provided at present.
+>
+> Thanks,
+> Jasmine
+>
+> Meng Li (3):
+>   cpufreq: amd-pstate: Expose struct amd_cpudata
 
+Please collect an ACK from Ray for this one as per MAINTAINERS and I
+will leave the series to Shuah as it is selftests mostly.
 
-On 4/12/22 23:56, Libo Chen wrote:
-> Hi Randy
-> 
-> On 4/12/22 22:54, Randy Dunlap wrote:
->> Hi Libo,
->>
->> On 4/12/22 19:34, Libo Chen wrote:
->>>
->>> On 4/12/22 19:13, Randy Dunlap wrote:
->>>> Hi,
->>>>
->>>> On 4/12/22 18:35, Libo Chen wrote:
->>>>> Hi Randy,
->>>>>
->>>>> On 4/12/22 17:18, Randy Dunlap wrote:
->>>>>> Hi--
->>>>>>
->>>>>> On 4/12/22 16:15, Libo Chen wrote:
->>>>>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
->>>>>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
->>>>>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
->>>>>>> rationale for such dependency.
->>>>>>>
->>>>>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
->>>>>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
->>>>>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
->>>>>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
->>>>>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
->>>>>>> There is no reason other architectures cannot given the fact that they
->>>>>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
->>>>>>> x86.
->>>>>>>
->>>>>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
->>>>>>> ---
->>>>>>>     lib/Kconfig | 2 +-
->>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/lib/Kconfig b/lib/Kconfig
->>>>>>> index 087e06b4cdfd..7209039dfb59 100644
->>>>>>> --- a/lib/Kconfig
->>>>>>> +++ b/lib/Kconfig
->>>>>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
->>>>>>>         bool
->>>>>>>       config CPUMASK_OFFSTACK
->>>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
->>>>>> This "if" dependency only controls whether the Kconfig symbol's prompt is
->>>>>> displayed (presented) in kconfig tools. Removing it makes the prompt always
->>>>>> be displayed.
->>>>>>
->>>>>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
->>>>>> of DEBUG_PER_CPU_MAPS.
->>>>> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
->>>>> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
->>>> I'm just talking about the Kconfig change below.  Not talking about whatever else
->>>> it might require per architecture.
->>>>
->>>> But you say you have tried that and it doesn't work. What part of it doesn't work?
->>>> The Kconfig part or some code execution?
->>> oh the Kconfig part. For example, make olddefconfig on a config file with CPUMASK_OFFSTACK=y only turns off CPUMASK_OFFSTACK unless I explicitly set DEBUG_PER_CPU_MAPS=y
->> I can enable CPUMASK_OFFSTACK for arm64 without having DEBUG_PER_CPU_MAPS enabled.
->> (with a patch, of course.)
->> It builds OK. I don't know if it will run OK.
-> 
-> I am a little confused, did you succeed with your patch (replacing "if" with "depends on") or my patch (removing "if")? Because I definitely cannot enable CPUMASK_OFFSTACK for arm64 without DEBUG_PER_CPUMAPS enabled using your change.
+Thanks!
 
-This patch builds cleanly for me:
-
----
- arch/arm64/Kconfig |    1 +
- lib/Kconfig        |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -511,7 +511,7 @@ config CHECK_SIGNATURE
- 	bool
- 
- config CPUMASK_OFFSTACK
--	bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-+	bool "Force CPU masks off stack"
- 	help
- 	  Use dynamic allocation for cpumask_var_t, instead of putting
- 	  them on the stack.  This is a bit more expensive, but avoids
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -316,6 +316,7 @@ config ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
- 
- config SMP
- 	def_bool y
-+	select CPUMASK_OFFSTACK
- 
- config KERNEL_MODE_NEON
- 	def_bool y
-
-along with:
-# CONFIG_DEBUG_PER_CPU_MAPS is not set
-
-
->> I think that you are arguing for a patch like this:
-> 
-> I am actually arguing for the opposite, I don't think CPUMASK_OFFSTACK should require DEBUG_PER_CPU_MAPS. They should be separate and independent to each other. So removing "if ..." should be enough in my opinion.
-
-I agree.
-
->> --- a/lib/Kconfig
->> +++ b/lib/Kconfig
->> @@ -511,7 +511,8 @@ config CHECK_SIGNATURE
->>       bool
->>     config CPUMASK_OFFSTACK
->> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
->> +    bool "Force CPU masks off stack"
->> +    depends on DEBUG_PER_CPU_MAPS
-> 
-> This forces every arch to enable DEBUG_PER_CPU_MAPS if they want to enable CPUMASK_OFFSTACK, it's even stronger than "if". My whole argument is CPUMASK_OFFSTACK should be enable/disabled independent of DEBUG_PER_CPU_MASK
->>       help
->>         Use dynamic allocation for cpumask_var_t, instead of putting
->>         them on the stack.  This is a bit more expensive, but avoids
->>
->>
->> As I said earlier, the "if" on the "bool" line just controls the prompt message.
->> This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
->>
-> 
-> Okay I understand now "if" on the "boot" is not a dependency and it only controls the prompt message, then the question is why we cannot enable CPUMASK_OFFSTACK without DEBUG_PER_CPU_MAPS if it only controls prompt message? Is it not the behavior we expect?
-
-Yes, it is. I don't know that the problem is...
-
--- 
-~Randy
+>   selftests: cpufreq: Add wapper script for test AMD P-State
+>   selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
+>
+>  MAINTAINERS                                   |   1 +
+>  drivers/cpufreq/amd-pstate.c                  |  60 +---
+>  include/linux/amd-pstate.h                    |  74 +++++
+>  tools/testing/selftests/cpufreq/Makefile      |   2 +-
+>  .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
+>  .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
+>  .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
+>  tools/testing/selftests/cpufreq/config        |   1 +
+>  8 files changed, 404 insertions(+), 60 deletions(-)
+>  create mode 100644 include/linux/amd-pstate.h
+>  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+>  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
+>  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
+>
+> --
+> 2.25.1
+>

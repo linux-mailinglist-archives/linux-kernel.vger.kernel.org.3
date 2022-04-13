@@ -2,96 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DA14FF403
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D0D4FF40F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbiDMJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S234739AbiDMJrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiDMJqw (ORCPT
+        with ESMTP id S234707AbiDMJrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:46:52 -0400
+        Wed, 13 Apr 2022 05:47:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49A103B3C0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:44:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DA0C3BBE7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649843069;
+        s=mimecast20190719; t=1649843079;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bRkyB4PbFZ1fbO3XHovGn6TsXRtRWyjrzEzQotyYPuQ=;
-        b=RN9/xp7NKXl+BIiYQRNM9R7Z5bS7VzWKgqd896qnp8zdVmjmZW+PCQLezKF28FgO2340jL
-        kCXJqu+0zwLkN9+wj07zdpdLWrNJqKhFnSE9mxyTHKbn2xOIQkJkFk5c1Hpc9VkcmkyopB
-        l/Nw6Aiu2vFioeKfgNvMVpKtDTMqj5Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=foBzhikXuCLjtC6Ari8RZkx+1wS4aS+fCUlhb35KDqw=;
+        b=gZpluGCWJZK3LHHwsiFT9cwJwhTeZscyEoEWO52Kt64QV15jUtVqSfrphi2GbaWyPLeU0E
+        jx1Ent/KoGGqJMlTKDsztsu6C/podWLih8LST3T3sTm+txpGrhVBRcup7x3wPTNvR8OBhs
+        NKBSid9zbHCgjG7h8fW+tUm0OzuOfLs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-425-0QdxnFSqMUCOK2gBg7-BEA-1; Wed, 13 Apr 2022 05:44:26 -0400
-X-MC-Unique: 0QdxnFSqMUCOK2gBg7-BEA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF4F11C01700;
-        Wed, 13 Apr 2022 09:44:25 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.193.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D05EE53CD;
-        Wed, 13 Apr 2022 09:44:23 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     Harald Freudenberger <freude@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] s390: vfio-ap: Remove the superfluous MODULE_DEVICE_TABLE declaration
-Date:   Wed, 13 Apr 2022 11:44:16 +0200
-Message-Id: <20220413094416.412114-1-thuth@redhat.com>
+ us-mta-209--xIIS360PYa_FsWy7V197A-1; Wed, 13 Apr 2022 05:44:37 -0400
+X-MC-Unique: -xIIS360PYa_FsWy7V197A-1
+Received: by mail-wm1-f72.google.com with SMTP id n17-20020a05600c501100b0038e731cf5e1so616818wmr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:44:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=foBzhikXuCLjtC6Ari8RZkx+1wS4aS+fCUlhb35KDqw=;
+        b=SKLFHScVD7kbq+vmFCyvpuOFjjnPZ6lvFhbsXjVjNYSJIEHhKUKD1gUXnF5EyxY30i
+         U65quEitjlA2AcQZO638/X6j0jyC5VSJulIl0WGg/Hke1jhm/hJ0v1PAJL8sWlsHvKVr
+         6JPsZ62dAwMtBqmsVT7nDrdAxZQuN3wiwew5F5SvCZJUvKBHMIcy5kOhCfQwimYEwHRR
+         JPK7NpQqXMjyShBBLfE340Ad9nuEDHtxBOApJaAvHus2I7ayEPr1WdyMKOqVAeio0tHj
+         lD+vHLwds7qjuhAsmlBFOvsV3ONXGClr8smQt+8nui25hBR0JHixyHO3MC0lnD5hRXyi
+         Zs+A==
+X-Gm-Message-State: AOAM530UW2c6q39naCk7vTQ7tqEzHQdxhwlhdG8+Rye5oDdq21BZin7v
+        bSmV75xyN8Smq0QcPnmNIqscfxqAu/WAw1hj2yku1AgTdSlTeb1NyZlLTqlCevAio/NErMObJxJ
+        ixihPujdQoyhWisKTbtNPkujV
+X-Received: by 2002:a05:600c:3ca4:b0:38e:54d0:406d with SMTP id bg36-20020a05600c3ca400b0038e54d0406dmr7706533wmb.199.1649843076509;
+        Wed, 13 Apr 2022 02:44:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw0HXRzJbUNXpEFfAtNGvrG9B9JzK/eHK2ZSXSccHuCPbF3oaO1WosnYsBkWkBzF47eXcT4NQ==
+X-Received: by 2002:a05:600c:3ca4:b0:38e:54d0:406d with SMTP id bg36-20020a05600c3ca400b0038e54d0406dmr7706513wmb.199.1649843076247;
+        Wed, 13 Apr 2022 02:44:36 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b00203fb25165esm37150569wrc.6.2022.04.13.02.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 02:44:35 -0700 (PDT)
+Message-ID: <ddf107c7-5108-f366-45a8-e7244cdcd209@redhat.com>
+Date:   Wed, 13 Apr 2022 11:44:34 +0200
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: display: ssd1307fb: Extend schema for
+ SPI controllers
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Mark Brown <broonie@kernel.org>,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20220412162729.184783-1-javierm@redhat.com>
+ <20220412162729.184783-3-javierm@redhat.com>
+ <CAMuHMdUDxexqsGjb3B37jW_xZU1TBLq8gK5hctA+PKjL+LhQGQ@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAMuHMdUDxexqsGjb3B37jW_xZU1TBLq8gK5hctA+PKjL+LhQGQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vfio_ap module tries to register for the vfio_ap bus - but that's
-the interface that it provides itself, so this does not make much sense,
-thus let's simply drop this statement now.
+Hello Geert,
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- See also my previous patch to register it for the "ap" bus instead:
- https://lore.kernel.org/linux-s390/20211201141110.94636-1-thuth@redhat.com/
- ... but since it has been decided to not auto-load the module uncondi-
- tionally, I'd like to suggest to rather drop this line now instead.
+On 4/13/22 10:04, Geert Uytterhoeven wrote:
+> Hi Javier,
+> 
+> On Tue, Apr 12, 2022 at 6:27 PM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+>> The Solomon SSD130x OLED displays can either have an I2C or SPI interface,
+>> add to the schema the properties and examples for OLED devices under SPI.
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> Acked-by: Mark Brown <broonie@kernel.org>
+>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> ---
+>>
+>> Changes in v3:
+>> - Add a comment to the properties required for SPI (Geert Uytterhoeven)
+> 
+> Thanks for the update!
+> 
+>> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+>> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+>> @@ -38,9 +38,16 @@ properties:
+>>    reset-gpios:
+>>      maxItems: 1
+>>
+>> +  # Only required for SPI
+>> +  dc-gpios:
+>> +    maxItems: 1
+> 
+> Actually I meant to also add a description, like for vbat-supply below,
+> to explain the meaning of "dc".
+>
 
- drivers/s390/crypto/vfio_ap_drv.c | 2 --
- 1 file changed, 2 deletions(-)
+Ahh, sorry for misunderstanding you! Something like the following looks good ?
 
-diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
-index 29ebd54f8919..4ac9c6521ec1 100644
---- a/drivers/s390/crypto/vfio_ap_drv.c
-+++ b/drivers/s390/crypto/vfio_ap_drv.c
-@@ -46,8 +46,6 @@ static struct ap_device_id ap_queue_ids[] = {
- 	{ /* end of sibling */ },
- };
- 
--MODULE_DEVICE_TABLE(vfio_ap, ap_queue_ids);
--
- static struct ap_matrix_mdev *vfio_ap_mdev_for_queue(struct vfio_ap_queue *q)
- {
- 	struct ap_matrix_mdev *matrix_mdev;
+  # Only required for SPI
+  dc-gpios:
+    description:
+      GPIO connected to the controller's D/C# (Data/Command) pin,
+      that is needed for 4-wire SPI to tell the controller if the
+      data sent is for a command register or the display data RAM
+    maxItems: 1
+
+If you agree with that, then can squash before pushing or add it to a v4
+if another revision is needed.
+
 -- 
-2.27.0
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

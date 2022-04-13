@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776614FFEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4A04FFEEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238003AbiDMTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S238072AbiDMTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238288AbiDMTMw (ORCPT
+        with ESMTP id S238328AbiDMTM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:12:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D126E8DC;
-        Wed, 13 Apr 2022 12:08:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FCBDB82760;
-        Wed, 13 Apr 2022 19:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7C7C385A3;
-        Wed, 13 Apr 2022 19:08:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649876887;
-        bh=HS2szbOJxe7C3PIkz+onUkqYqx0zj5ZuzRc1VOGk0IM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DD5eWZ+7y7wEUnMyatZWxirBYZvREPY7llxtxRnNTa36xQjeWepf5jUk7HQvhTzkM
-         vcb10gqp4plEO0lSUDjx0bwDBE1yl4O6/OjlwSS1E2eqjTF3/YRuCqRQ0oe1KRdPbI
-         hy9guWV8Z+7Yo9UAghXSkCglT+RBOroKfE96qpO4=
-Date:   Wed, 13 Apr 2022 12:08:04 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v8 1/4] mm: hugetlb_vmemmap: introduce
- CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP
-Message-Id: <20220413120804.3570dc230a958f4923e3f3c3@linux-foundation.org>
-In-Reply-To: <20220413144748.84106-2-songmuchun@bytedance.com>
-References: <20220413144748.84106-1-songmuchun@bytedance.com>
-        <20220413144748.84106-2-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 15:12:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0042A72446;
+        Wed, 13 Apr 2022 12:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649876903; x=1681412903;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/NRCMCz/oyRtVdmOgQk/fJ76afo2WGVrCiTYNHVE2xg=;
+  b=jp1BTGQnqg6om4h3RVprXPx8foex2/AFlEgBn9uIgdsusvqtOC+ANY7b
+   JwaDJMv105ChXwZjTwAB5UK7wtymp51mqnnF+nTUiXc4SKjMO1+YeOxXp
+   Ofg4B/Mz+Hf1qSAwXKUi7sYaZPyysors26lvFQ6LmKXPKHR1uTSEAR447
+   VTj0bctodH+fRDMnJZvL8stADFVRpp7rt9z07Do1AWqE35nAfWRzqSHw+
+   fS5E+ZVqMflRZ3AkVL5E98iAkcDfEfZzh32gz+69kMWOFfxQcVZsvHcak
+   FOk7Wzy/qib7kx44SEXAcsuf1IBmkHR7dqkqMfPv7rtjMXbGf8ZsHG856
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="242686450"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="242686450"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:08:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="526590986"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 13 Apr 2022 12:08:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6E66412C; Wed, 13 Apr 2022 22:08:20 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] iio: dac: lpc18xx: Drop dependency on OF
+Date:   Wed, 13 Apr 2022 22:08:19 +0300
+Message-Id: <20220413190819.38206-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 22:47:45 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+Nothing in this driver depends on OF firmware so drop the dependency
+and update the headers to remove the false impression such a dependency
+exists.
 
-> If the size of "struct page" is not the power of two but with the feature
-> of minimizing overhead of struct page associated with each HugeTLB is
-> enabled, then the vmemmap pages of HugeTLB will be corrupted after
-> remapping (panic is about to happen in theory).  But this only exists when
-> !CONFIG_MEMCG && !CONFIG_SLUB on x86_64.  However, it is not a conventional
-> configuration nowadays.  So it is not a real word issue, just the result
-> of a code review.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/dac/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The patch does add a whole bunch of tricky junk to address something
-which won't happen.  How about we simply disable
-CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP if (!CONFIG_MEMCG &&
-!CONFIG_SLUB)?
+diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+index 8d5b3bad75ad..d578e242d74d 100644
+--- a/drivers/iio/dac/Kconfig
++++ b/drivers/iio/dac/Kconfig
+@@ -304,7 +304,7 @@ config DS4424
+ config LPC18XX_DAC
+ 	tristate "NXP LPC18xx DAC driver"
+ 	depends on ARCH_LPC18XX || COMPILE_TEST
+-	depends on OF && HAS_IOMEM
++	depends on HAS_IOMEM
+ 	help
+ 	  Say yes here to build support for NXP LPC18XX DAC.
+ 
+-- 
+2.35.1
 

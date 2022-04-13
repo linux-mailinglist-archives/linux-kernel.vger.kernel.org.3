@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0464FF5C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651F84FF5CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbiDMLgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S235199AbiDMLha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiDMLfz (ORCPT
+        with ESMTP id S229667AbiDMLh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:35:55 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C422635A9C;
-        Wed, 13 Apr 2022 04:33:32 -0700 (PDT)
-Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KdgN83X5gzBs1B;
-        Wed, 13 Apr 2022 19:29:12 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 19:33:30 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 19:33:29 +0800
-Subject: Re: [PATCH -next 00/11] support concurrent sync io for bfq on a
- specail occasion
-To:     Jan Kara <jack@suse.cz>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220305091205.4188398-1-yukuai3@huawei.com>
- <20220413111216.npgrdzaubsvjsmy3@quack3.lan>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <36f0923c-bb9b-12f1-b3bc-cdbe0bbcca55@huawei.com>
-Date:   Wed, 13 Apr 2022 19:33:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 13 Apr 2022 07:37:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C092E237F8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:35:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7B2F71F38D;
+        Wed, 13 Apr 2022 11:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649849704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fFqfiFiCx2hMGSLHkHBmN5BfJizyHy0EGQZ4MjVsO7g=;
+        b=XtWQOfFS03MuJAoFKw1G6tY/N1VE3kpuCtr0LmuGD4fnq65kIvngZSl5T++LA3Mq3rRCYS
+        a67zEvFqPSLazUTz+DgtckdMscYtdBliJwJZuDpE5232BPC3skv3uDE7PA4+yiP124+Cqr
+        13h6mfA6/zXRPY9JdvtF2uuA7If9DBQ=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3C5E4A3B87;
+        Wed, 13 Apr 2022 11:35:03 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 13:35:03 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Wu Yan <wu-yan@tcl.com>
+Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, tang.ding@tcl.com
+Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
+Message-ID: <Yla1Z8Ze0iJvXRFT@dhcp22.suse.cz>
+References: <181ce21548da652d9a14eebc684fe75c@sslemail.net>
+ <Ylab+Tz4d8kZYjef@dhcp22.suse.cz>
+ <ff186d65-2103-b796-79b9-3eb4a3e04380@tcl.com>
 MIME-Version: 1.0
-In-Reply-To: <20220413111216.npgrdzaubsvjsmy3@quack3.lan>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff186d65-2103-b796-79b9-3eb4a3e04380@tcl.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,33 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/04/13 19:12, Jan Kara Ð´µÀ:
-> On Sat 05-03-22 17:11:54, Yu Kuai wrote:
->> Currently, bfq can't handle sync io concurrently as long as they
->> are not issued from root group. This is because
->> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->> bfq_asymmetric_scenario().
->>
->> This patchset tries to support concurrent sync io if all the sync ios
->> are issued from the same cgroup:
->>
->> 1) Count root_group into 'num_groups_with_pending_reqs', patch 1-5;
+On Wed 13-04-22 19:20:06, Wu Yan wrote:
+> On 4/13/22 17:46, Michal Hocko wrote:
+> > On Wed 13-04-22 16:44:32, Rokudo Yan wrote:
+> > > There is a potential deadlock in gc thread may happen
+> > > under low memory as below:
+> > > 
+> > > gc_thread_func
+> > >   -f2fs_gc
+> > >    -do_garbage_collect
+> > >     -gc_data_segment
+> > >      -move_data_block
+> > >       -set_page_writeback(fio.encrypted_page);
+> > >       -f2fs_submit_page_write
+> > > as f2fs_submit_page_write try to do io merge when possible, so the
+> > > encrypted_page is marked PG_writeback but may not submit to block
+> > > layer immediately, if system enter low memory when gc thread try
+> > > to move next data block, it may do direct reclaim and enter fs layer
+> > > as below:
+> > >     -move_data_block
+> > >      -f2fs_grab_cache_page(index=?, for_write=false)
+> > >       -grab_cache_page
+> > >        -find_or_create_page
+> > >         -pagecache_get_page
+> > >          -__page_cache_alloc --  __GFP_FS is set
+> > >           -alloc_pages_node
+> > >            -__alloc_pages
+> > >             -__alloc_pages_slowpath
+> > >              -__alloc_pages_direct_reclaim
+> > >               -__perform_reclaim
+> > >                -try_to_free_pages
+> > >                 -do_try_to_free_pages
+> > >                  -shrink_zones
+> > >                   -mem_cgroup_soft_limit_reclaim
+> > >                    -mem_cgroup_soft_reclaim
+> > >                     -mem_cgroup_shrink_node
+> > >                      -shrink_node_memcg
+> > >                       -shrink_list
+> > >                        -shrink_inactive_list
+> > >                         -shrink_page_list
+> > >                          -wait_on_page_writeback -- the page is marked
+> > >                         writeback during previous move_data_block call
+> > 
+> > This is a memcg reclaim path and you would have to have __GFP_ACCOUNT in
+> > the gfp mask to hit it from the page allocator. I am not really familiar
+> > with f2fs but I doubt it is using this flag.
+> > 
+> > On the other hand the memory is charged to a memcg when the newly
+> > allocated page is added to the page cache. That wouldn't trigger the
+> > soft reclaim path but that is not really necessary because even the
+> > regular memcg reclaim would trigger wait_on_page_writeback for cgroup
+> > v1.
+> > 
+> > Also are you sure that the mapping's gfp mask has __GFP_FS set for this
+> > allocation? f2fs_iget uses GFP_NOFS like mask for some inode types.
+> > 
+> > All that being said, you will need to change the above call chain but it
+> > would be worth double checking the dead lock is real.
 > 
-> Seeing the complications and special casing for root_group I wonder: Won't
-> we be better off to create fake bfq_sched_data in bfq_data and point
-> root_group->sched_data there? AFAICS it would simplify the code
-
-Hi,
-
-That sounds an good idel, in this case we only need to make sure the
-fake service tree will always be empty, which means we only need to
-special casing bfq_active/idle_insert to the fake service tree.
-
-Thanks,
-Kuai
-> considerably as root_group would be just another bfq_group, no need to
-> special case it in various places, no games with bfqg->my_entity, etc.
-> Paolo, do you see any problem with that?
+> Hi, Michal
 > 
-> 								Honza
+> 1. The issue is occur when do monkey test in Android Device with 4GB RAM +
+> 3GB zram, and memory cgroup v1 enabled.
 > 
+> 2. full memory dump has caught when the issue occur and the dead lock has
+> confirmed from dump. We can see the mapping->gfp_mask is 0x14200ca,
+> so both __GFP_ACCOUNT(0x1000000) and __GFP_FS(0x80) set
+
+This is rather surprising, I have to say because page cache is charged
+explicitly (__filemap_add_folio). Are you testing with the upstream
+kernel or could this be a non-upstream change possibly?
+
+> crash-arm64> struct inode.i_mapping 0xFFFFFFDFD578EEA0
+>   i_mapping = 0xffffffdfd578f028,
+> crash-arm64> struct address_space.host,gfp_mask -x 0xffffffdfd578f028
+>   host = 0xffffffdfd578eea0,
+>   gfp_mask = 0x14200ca,
+
+Anyway, if the __GFP_FS is set then the deadlock is possible even
+without __GFP_ACCOUNT.
+-- 
+Michal Hocko
+SUSE Labs

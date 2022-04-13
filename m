@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924104FFC06
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39CB4FFBEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237183AbiDMRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S237128AbiDMRBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbiDMRF1 (ORCPT
+        with ESMTP id S233651AbiDMRBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:05:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC117674FA;
-        Wed, 13 Apr 2022 10:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649869386; x=1681405386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3sLJ+uyAKa3UrdllPSpp3zBHMlm7dcdDzaDGCF4r4Ts=;
-  b=CL+t1ik9fqBLjojWU3b96wU0539otnM2E3WxHAWlZS+WBy1yokPmz6TI
-   K95NaTcpMe7/lk/13jqr+p1Lo1xzyR1iGboCarYKC0enW9tBk5/y3l+L9
-   GmqfztucJA3nSltRLnVfDFEh4RgfTyZv5pLo0hf4rRAuVKhxDuTR6oI7H
-   QL6KrzED1O4FcDrWk/0ZcHJyTo2jb0IbbND2hvRo2U7Mdtrd+pkLVf9xu
-   vv+8FbbZQumdA1FAm+T2fDrbZ7rq3bhj7KegoZY9g7bTCVdYqLRSxzA8P
-   x8QQGtP4NAeQkjEH4/WrAaSrYl1UOUWiMx7piJpfNz4AJHG+u0zOMoJsE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244606126"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="244606126"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:02:34 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="527018619"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:02:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1negKT-001w6X-Qi;
-        Wed, 13 Apr 2022 19:58:53 +0300
-Date:   Wed, 13 Apr 2022 19:58:53 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v1 1/3] iio: imu: adis16480: Make use of device properties
-Message-ID: <YlcBTfVdtp7nUhjR@smile.fi.intel.com>
-References: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
- <PH0PR03MB67867FD2A0043F5331D1C5E399EC9@PH0PR03MB6786.namprd03.prod.outlook.com>
+        Wed, 13 Apr 2022 13:01:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F916A047;
+        Wed, 13 Apr 2022 09:59:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5690EB825F0;
+        Wed, 13 Apr 2022 16:59:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B12C385A3;
+        Wed, 13 Apr 2022 16:59:07 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 12:59:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+Message-ID: <20220413125906.1689c3e2@rorschach.local.home>
+In-Reply-To: <CAEf4BzaA+vr6V24dG7JCHHmedp2TcJv4ZnuKB=zXzuOpi-QYFg@mail.gmail.com>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+        <20220407125224.310255-5-jolsa@kernel.org>
+        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+        <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+        <20220413124419.002abd87@rorschach.local.home>
+        <CAEf4BzaA+vr6V24dG7JCHHmedp2TcJv4ZnuKB=zXzuOpi-QYFg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <PH0PR03MB67867FD2A0043F5331D1C5E399EC9@PH0PR03MB6786.namprd03.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,24 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 03:25:49PM +0000, Sa, Nuno wrote:
-> > -----Original Message-----
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Wednesday, April 13, 2022 4:41 PM
+On Wed, 13 Apr 2022 09:45:52 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-...
-
-> You beat me to do this. I actually had planned to do this next week
-> once I saw we already have fwnode_irq_get_byname(). Anyways...
+> > Did you only use the "notrace" on the prototype? I see the semicolon at
+> > the end of your comment. It only affects the actual function itself,
+> > not the prototype.  
 > 
-> Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+> notrace is both on declaration and on definition, see kernel/bpf/trampoline.c:
+
+OK. Note, it only needs to be on the function, the prototype doesn't do
+anything. But that shouldn't be the issue.
+
 > 
-> (I will still give this a test next week)
+> void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr)
+> {
+>         percpu_ref_put(&tr->pcref);
+> }
+> 
 
-Thanks!
+What compiler are you using? as this seems to be a compiler bug.
+Because it's not ftrace that picks what functions to trace, but the
+compiler itself.
 
--- 
-With Best Regards,
-Andy Shevchenko
+-- Steve
 
 

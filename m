@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1F64FF32F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F854FF32B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbiDMJSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
+        id S232829AbiDMJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiDMJSM (ORCPT
+        with ESMTP id S234349AbiDMJSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:18:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D34A245B6;
-        Wed, 13 Apr 2022 02:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649841351; x=1681377351;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Qyg9qkfEOmRnd7ecWKODTY6fNCX00KNJAm/6F+S5OvQ=;
-  b=I8ypfzxbm0qwuSXuFG30iRhXH9mb0FjfoKFFb/P3h0hxXkAWUKgsUU9P
-   Jfi9yb+ddRDoH5iZ3QnhFkHB9Uz3zzYxETClclLkGdUF2/6QzFXpjxTZL
-   glOtAp9hTQ3C/cnMaKnMup0faGNBjbG25qU/KDFC/yhfDswniV1D2hlDm
-   OI4nxbp7vW/7iQmk4DkGTbmejeeRpvKCdwgiLGHeaVcC82SLInFiXoG98
-   4XaGa1yZ+tA0mjriZzJk10W88znaXn4bP7lFIfRhUmYvoflZN1RMfYsmW
-   u5qgqOoMd0WwqaJsam7d/JO3Cvrmv1tcFCR3wEpT435we3DXKyEc6wiea
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260213830"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="260213830"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 02:15:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="700175232"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Apr 2022 02:15:43 -0700
-Date:   Wed, 13 Apr 2022 17:15:33 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <20220413091533.GC10041@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <20220411153233.54ljmi7zgqovhgsn@box.shutemov.name>
- <20220412133925.GG8013@chaop.bj.intel.com>
- <20220412192821.xliop57sblvjx4t4@box.shutemov.name>
+        Wed, 13 Apr 2022 05:18:33 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6EA51E66
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:16:11 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bh17so2614574ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hblV92aPuej0p7ID1pULy+QJqaua2alXaevi7dvbrUU=;
+        b=WIKXHBwkh+EhYN8jqtAXZe/Tyt8mlkW3bASrYOTKf1/6ge/9WE1nIcoqoLkLWZkPr+
+         FuERh7yZiwLbnv26+FajLXbbB75K2YiEWujiEgeWrDPIHmfIk8Ax23RC5q3WlZotvyTH
+         ZpUT2qdGpTeLuIP41ve4yDKHzRrKtA2+OmLRM/YD4Ae18UQh0LFx79dI3RociC1gS1MV
+         0GWLpcliTgiZZqqLFa3ItfdN0QMJhgbdBPT17kSAQJ3IPDziLjdvBNnmc/KVxUQ0y9T1
+         girU0IDsD5jSag+T+B44HWzEzy4TZ6vL8lA/M2EitPrzeX1Kg+Xh/zsoXobUjvPHLE3P
+         21ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hblV92aPuej0p7ID1pULy+QJqaua2alXaevi7dvbrUU=;
+        b=ifWP9486xu4jSM+AEtjdWVY4heqI1YOOcI4nNeLkljIMkFEXJA3XPQ5/IBvsam+Qw/
+         MNlZjEsdvJC1ujr+whH6ZBmZ4N1wfab02WdAhOIROfmDzCQ5WM/yXJeWZeO43BrRZJFe
+         W/nC3IksDhINOcIZStts5appmKGoSJZv956iETJe7Cz1qehHuIzMQxwoD5HnjpiedJ3K
+         nRv6Xg9uBOT2vi6Lam5UyQXDI8OlCRQHuX4i99dQUQMJQOpb0IEIZBfOwLMF8t62nCYS
+         rpvFN6LY1tB/tWHCqUtJBhscoCoyeTPj7FLF8oFn0N2A5LXGxpNVE5c8+kDBeaQtrk2c
+         P3pA==
+X-Gm-Message-State: AOAM531c8ZQiDZiNejHVvp+wlnshjEy2FspGNBms2yAZBdoy30tZg7vK
+        Sda7fhSqQZIuy5wwXxs4ocE+Gg==
+X-Google-Smtp-Source: ABdhPJzxWtxkUmiepBnlWMtTjViNplCdRi9hB0wNwbQbHSHOc/I9rRLkD4QZgJDJkLGQcI1wZksGyw==
+X-Received: by 2002:a17:906:7111:b0:6e8:973a:1515 with SMTP id x17-20020a170906711100b006e8973a1515mr11383665ejj.308.1649841369670;
+        Wed, 13 Apr 2022 02:16:09 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170906c00c00b006e66eff7584sm12637990ejz.102.2022.04.13.02.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 02:16:09 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 17:16:04 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
+ event
+Message-ID: <20220413091604.GD521036@leoy-ThinkPad-X240s>
+References: <20220413075124.635589-1-leo.yan@linaro.org>
+ <c21b3409-a8a0-aae7-7634-5e648f0a49b1@arm.com>
+ <20220413084941.GB521036@leoy-ThinkPad-X240s>
+ <38078438-dbce-690b-ba79-5c3713f97816@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412192821.xliop57sblvjx4t4@box.shutemov.name>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <38078438-dbce-690b-ba79-5c3713f97816@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:28:21PM +0300, Kirill A. Shutemov wrote:
-> On Tue, Apr 12, 2022 at 09:39:25PM +0800, Chao Peng wrote:
-> > On Mon, Apr 11, 2022 at 06:32:33PM +0300, Kirill A. Shutemov wrote:
-> > > On Thu, Apr 07, 2022 at 04:05:36PM +0000, Sean Christopherson wrote:
-> > > > Hmm, shmem_writepage() already handles SHM_F_INACCESSIBLE by rejecting the swap, so
-> > > > maybe it's just the page migration path that needs to be updated?
-> > > 
-> > > My early version prevented migration with -ENOTSUPP for
-> > > address_space_operations::migratepage().
-> > > 
-> > > What's wrong with that approach?
-> > 
-> > I previously thought migratepage will not be called since we already
-> > marked the pages as UNMOVABLE, sounds not correct?
+On Wed, Apr 13, 2022 at 10:14:00AM +0100, German Gomez wrote:
 > 
-> Do you mean missing __GFP_MOVABLE?
-
-Yes.
-
-> I can be wrong, but I don't see that it
-> direclty affects if the page is migratable. It is a hint to page allocator
-> to group unmovable pages to separate page block and impove availablity of
-> higher order pages this way. Page allocator tries to allocate unmovable
-> pages from pages blocks that already have unmovable pages.
-
-OK, thanks.
-
-Chao
+> On 13/04/2022 09:49, Leo Yan wrote:
+> > On Wed, Apr 13, 2022 at 09:15:40AM +0100, German Gomez wrote:
+> >
+> > [...]
+> >
+> >>>  	if (sort__mode == SORT_MODE__MEMORY) {
+> >>> +		/*
+> >>> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
+> >>> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
+> >>> +		 * compatibility, set the bit if it's an old perf data file.
+> >>> +		 */
+> >>> +		evlist__for_each_entry(session->evlist, evsel) {
+> >>> +			if (strstr(evsel->name, "arm_spe_") &&
+> >> This didn't work for me when the file recorded "-e arm_spe//" instead of
+> >> "-e arm_spe_0//". Could you remove the trailing _? With that:
+> > Sure, will change to "arm_spe".  Just curious, if there any local
+> > change at your side so we have the different event name?
 > 
-> -- 
->  Kirill A. Shutemov
+> No local changes. I've always used "arm_spe//" and it always defaults to
+> "arm_spe_0//". But it's still stored as the former in the data file. I
+> haven't checked where this default happens though. Isn't it the same for
+> you?
+
+Yeah, this is same with me.  Thanks for explanation.
+
+Leo

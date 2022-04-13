@@ -2,81 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41CB4FF894
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14D84FF888
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiDMOIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S234143AbiDMOIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236032AbiDMOIL (ORCPT
+        with ESMTP id S231740AbiDMOID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:08:11 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ACF9606D8;
-        Wed, 13 Apr 2022 07:05:49 -0700 (PDT)
-Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AB40620C34D6;
-        Wed, 13 Apr 2022 07:05:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AB40620C34D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649858749;
-        bh=8+0+tmm79ZrOnS9Zex8wU0cF214m6bSiOKEXuw55Khc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Pw/QzKvPDTcghlquUWShrj8eWjhVvq+I6/fEsHWC7vHYZj3fZi5gHMm1Eu4Bhioh1
-         jL2NcGP4CU7Av09C35RGurajGnUFZXPW2rgAChufHAM9pdhrbEUclP1kZEsVXFBZkC
-         5+KYLZz1GWTmC80X0mkhryl4YonZFe8f/AHvuYgg=
-From:   madvenka@linux.microsoft.com
-To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
-Date:   Wed, 13 Apr 2022 09:05:28 -0500
-Message-Id: <20220413140528.3815-8-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220413140528.3815-1-madvenka@linux.microsoft.com>
-References: <f460a35f88195413bcf7305e5083480aab3ca858>
- <20220413140528.3815-1-madvenka@linux.microsoft.com>
+        Wed, 13 Apr 2022 10:08:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3051925E8C;
+        Wed, 13 Apr 2022 07:05:41 -0700 (PDT)
+Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdkpY1KPQzgY8Z;
+        Wed, 13 Apr 2022 22:03:49 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 22:05:38 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 22:05:38 +0800
+Message-ID: <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
+Date:   Wed, 13 Apr 2022 22:05:37 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+To:     Lyu Tao <tao.lyu@epfl.ch>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "bjschuma@netapp.com" <bjschuma@netapp.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
+ <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
+ <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
+ <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
+In-Reply-To: <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+在 2022/4/13 21:42, chenxiaosong (A) 写道:
+> 
+> 在 2022/4/13 20:07, Lyu Tao 写道:
+>>
+>> Hi Xiaosong,
+>>
+>>
+>> Thanks for keeping focusing on this bug.
+>>
+>>
+>> I applied this CVE for the NULL dereference bug at 
+>> nfs4_valid_open_stateid() and added the following description to this 
+>> CVE due to the NFS maintainers replied that to me.
+>>
+>> "An issue was discovered in fs/nfs/dir.c in the Linux kernel before 
+>> 5.16.5. If an application sets the O_DIRECTORY flag, and tries to open 
+>> a regular file, nfs_atomic_open() performs a regular lookup. If a 
+>> regular file is found, ENOTDIR should occur, but the server instead 
+>> returns uninitialized data in the file descriptor.
+>>
+>>
+>> Actually I'm still confused with the root cause of this bug. In the 
+>> original PoC, there is no O_DIRECTORY flag but commit ac795161c936 
+>> mentioned.
+>>
+>> Moreover, in your latest commit ab0fc21bc710, it said "After secondly 
+>> opening a file with O_ACCMODE|O_DIRECT flags, 
+>> nfs4_valid_open_stateid() will dereference NULL nfs4_state when 
+>> lseek()." However, the original PoC opens the file only with 
+>> O_RDWR|O_CREAT for the first time.
+>>
+>>
+>> Original PoC:
+>>
+>> fd = openat("./file1", o_RDWR|O_CREAT, 000);
+>>
+>> open("./file1", 
+>> O_ACCMODE|O_CREAT|O_DIRECT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008, 
+>> 001);
+>>
+>> lseek(fd, 9, SEEK_HOLE);
+>>
+>>
+>> I'll update this CVE's description after I figure out these.
+>>
+>>
+>> Best Regards,
+>>
+>> Tao
+>>
+> 
+> Hi Tao:
+> 
+> Yes, O_ACCEMODE is _not_ necessary when fistly open() file.
+> 
+> When open() the file secondly, O_ACCEMODE is necessary if we want to 
+> reproduce the bug.
+> 
+> Waiting for your modification of the CVE's description.
+> 
+> Best Regards.
+> .
 
-Select HAVE_RELIABLE_STACKTRACE in arm64/Kconfig to allow
-arch_stack_walk_reliable() to be used.
+My reproducer:
+   1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
+   2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
+   3. close(fd)
+   4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
+   5. lseek(fd)
 
-Note that this is conditional upon STACK_VALIDATION which will be added
-when frame pointer validation is implemented (say via objtool).
+When firstly open() file, O_ACCMODE|O_DIRECT is _not_ necessary, we just 
+use O_CREAT to create new file.
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..f7b9d0fecf95 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -225,6 +225,7 @@ config ARM64
- 	select THREAD_INFO_IN_TASK
- 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
- 	select TRACE_IRQFLAGS_SUPPORT
-+	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && STACK_VALIDATION
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
--- 
-2.25.1
-
+When secondly open() file, only O_ACCMODE|O_DIRECT is necessary, 
+O_CREAT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008 in 
+your original PoC is not necessary (however, they are harmless).

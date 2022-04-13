@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2100A4FF939
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A4B4FF93C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbiDMOqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S236241AbiDMOq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbiDMOqr (ORCPT
+        with ESMTP id S234503AbiDMOqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:46:47 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F892FE46;
-        Wed, 13 Apr 2022 07:44:26 -0700 (PDT)
+        Wed, 13 Apr 2022 10:46:54 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0331913EB1;
+        Wed, 13 Apr 2022 07:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649861066; x=1681397066;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=9/iljYYaTUc5T2GyURSpJX+UK4UCfapsneASdKEHPXA=;
-  b=qO/DA7ygb/zW+GpwM0gTa0toiivJbMMyb2KIhsGxXb1lF3ZHXxOAbNN4
-   1h3rtpkHi2wv9J1ToP2kmApP5s5vFpVVWsJn7LjWJCR+IkD8XGA/feS1A
-   VaQzG4P8uSWLld+vIi7fYK9frXetyrIHEWfEmvGhHJ4xynmdhkYFoQucX
+  t=1649861071; x=1681397071;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=DxS3ZyjzkyOPLu53HmEj7fHH/b4qI5+E/iryReh3D7M=;
+  b=qmFT8OJBBK3DmUtufYUFfWkHfhB+iJqyGhFPbYSDno+R8+ValBQSyPbZ
+   Cd1dm8WNBPgoP+GD+r5J/wI5FotO7IjRhNHGripo5XnGdXJn7hglzfkA2
+   Nh96T1kSJXsgWvka8wnvtwPAGZgwG4n9/FbhaSCC3DrGPHbx6DJwv7R+X
    Q=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 07:44:26 -0700
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 07:44:30 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:44:25 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:44:30 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 07:44:25 -0700
+ 15.2.986.22; Wed, 13 Apr 2022 07:44:29 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 07:44:21 -0700
+ 15.2.986.22; Wed, 13 Apr 2022 07:44:25 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -44,18 +45,21 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
         <dianders@chromium.org>, <swboyd@chromium.org>,
         <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v9 0/2] Add lpass pin control support for audio on sc7280 based targets
-Date:   Wed, 13 Apr 2022 20:14:05 +0530
-Message-ID: <1649861047-7811-1-git-send-email-quic_srivasam@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH v9 1/2] arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
+Date:   Wed, 13 Apr 2022 20:14:06 +0530
+Message-ID: <1649861047-7811-2-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1649861047-7811-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1649861047-7811-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,54 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set is to add lpass pin control support for Audio over I2S,
-wcd codec and digital mics.
-This patch set depends on:
-	-- Lpass-lpi pinctrl patches [https://patchwork.kernel.org/project/alsa-devel/list/?series=623951&archive=both&state=*]
+Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
 
-Changes Since V8:
-    -- Modify label and node names to lpass specific.
-    -- Sort nodes as per node names and kind of nodes like pinctrl and device nodes.
-Changes Since V7:
-    -- Sort mi2s pincontrol nodes as per node name.
-    -- Fix typo errors.
-Changes Since V6:
-    -- Move amp_en node to corresponding consumer patch.
-    -- Update label and node names.
-    -- Remove redundant drive-strengths.
-    -- Remove herobrine crd specific mi2s configuration.
-Changes Since V5:
-    -- Remove redundant function property in amp_en node.
-    -- Move board specific properties of lpass pin control node to board specific file.
-    -- Remove redundant properties in pin control nodes.
-    -- Move wcd938x codec reset and CTIA/OMTP pin control patches to other series.
-Changes Since V4:
-    -- Add primary and secondary I2S pinmux nodes for herobrine specific targets.
-Changes Since V3:
-    -- Add pinctrl nodes for wcd codec reset and CTIA/OMTP headset selection.
-Changes Since V2:
-    -- Move lpass pin control node to main dtsi file.
-    -- Sort nodes alphabetically.
-    -- Remove redundant wcd reset gpio nodes.
-    -- Remove redundant input-enable field in dmic pin control nodes.
-    -- Update amp_en node. 
-    -- Fix typo errors.
-    -- Modify node names.
-    -- Create patches on latest kernel.    
-Changes Since V1:
-    -- Merge pinmux and pinconf properties in amp_en and wcd pin reset node.
-    -- Split common i2s pin control nodes to functionality specific nodes.
-    -- Move board specific properties to board specific dtsi file.
-    -- Update dmic pin control node name.
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 14 +++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 40 ++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
-Srinivasa Rao Mandadapu (2):
-  arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
-  arm64: dts: qcom: sc7280: add lpass lpi pin controller node
-
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  98 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 147 +++++++++++++++++++++++++++++++
- 2 files changed, 245 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index ecbf2b8..1fc94b5 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -359,6 +359,20 @@
+ 	bias-disable;
+ };
+ 
++&mi2s1_data0 {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_sclk {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_ws {
++	drive-strength = <6>;
++};
++
+ &pm7325_gpios {
+ 	key_vol_up_default: key-vol-up-default {
+ 		pins = "gpio6";
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index f0b64be..6e6cfeda 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -3522,6 +3522,46 @@
+ 				function = "edp_hot";
+ 			};
+ 
++			mi2s0_data0: mi2s0-data0 {
++				pins = "gpio98";
++				function = "mi2s0_data0";
++			};
++
++			mi2s0_data1: mi2s0-data1 {
++				pins = "gpio99";
++				function = "mi2s0_data1";
++			};
++
++			mi2s0_mclk: mi2s0-mclk {
++				pins = "gpio96";
++				function = "pri_mi2s";
++			};
++
++			mi2s0_sclk: mi2s0-sclk {
++				pins = "gpio97";
++				function = "mi2s0_sck";
++			};
++
++			mi2s0_ws: mi2s0-ws {
++				pins = "gpio100";
++				function = "mi2s0_ws";
++			};
++
++			mi2s1_data0: mi2s1-data0 {
++				pins = "gpio107";
++				function = "mi2s1_data0";
++			};
++
++			mi2s1_sclk: mi2s1-sclk {
++				pins = "gpio106";
++				function = "mi2s1_sck";
++			};
++
++			mi2s1_ws: mi2s1-ws {
++				pins = "gpio108";
++				function = "mi2s1_ws";
++			};
++
+ 			pcie1_clkreq_n: pcie1-clkreq-n {
+ 				pins = "gpio79";
+ 				function = "pcie1_clkreqn";
 -- 
 2.7.4
 

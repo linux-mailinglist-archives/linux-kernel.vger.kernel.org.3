@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6644FF829
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BBC4FF82C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbiDMNvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S235944AbiDMNwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiDMNvv (ORCPT
+        with ESMTP id S230358AbiDMNwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:51:51 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF8DF34
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:49:27 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:c9b8:20d3:ee2b:1cda])
-        by andre.telenet-ops.be with bizsmtp
-        id JDpP2700S2t8Arn01DpP2a; Wed, 13 Apr 2022 15:49:25 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nedN4-000Seb-Up; Wed, 13 Apr 2022 15:49:22 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nedN4-00AjDf-Fl; Wed, 13 Apr 2022 15:49:22 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] memory: renesas-rpc-if: Simplify single/double data register access
-Date:   Wed, 13 Apr 2022 15:49:21 +0200
-Message-Id: <c3b2a8d1a69f1b1e8d1a460148406cfb83e52eb4.1649857740.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 09:52:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEA91FCFB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:49:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 181A6B824C8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09E9C385A3;
+        Wed, 13 Apr 2022 13:49:48 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Cc:     Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net
+Subject: [PATCH RFC 0/4] mm, arm64: In-kernel support for memory-deny-write-execute (MDWE)
+Date:   Wed, 13 Apr 2022 14:49:42 +0100
+Message-Id: <20220413134946.2732468-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,80 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For manual write and read, factor out the common access to the first
-data register by keeping track of the current data pointer.
+Hi,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-v2:
-  - Add Tested-by, Reviewed-by,
-  - Remove unneeded pointer post-increments from final dereferences.
----
- drivers/memory/renesas-rpc-if.c | 28 ++++++++--------------------
- 1 file changed, 8 insertions(+), 20 deletions(-)
+The background to this is that systemd has a configuration option called
+MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
+is to prevent a user task from inadvertently creating an executable
+mapping that is (or was) writeable. Since such BPF filter is stateless,
+it cannot detect mappings that were previously writeable but
+subsequently changed to read-only. Therefore the filter simply rejects
+any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
+support (Branch Target Identification), the dynamic loader cannot change
+an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
+For libraries, it can resort to unmapping and re-mapping but for the
+main executable it does not have a file descriptor. The original bug
+report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
+for libraries - [3].
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 019a0822bde0e413..ba9c526833c0f4da 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -488,7 +488,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 	case RPCIF_DATA_OUT:
- 		while (pos < rpc->xferlen) {
- 			u32 bytes_left = rpc->xferlen - pos;
--			u32 nbytes, data[2];
-+			u32 nbytes, data[2], *p = data;
- 
- 			smcr = rpc->smcr | RPCIF_SMCR_SPIE;
- 
-@@ -502,15 +502,9 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 			rpc->xfer_size = nbytes;
- 
- 			memcpy(data, rpc->buffer + pos, nbytes);
--			if (nbytes == 8) {
--				regmap_write(rpc->regmap, RPCIF_SMWDR1,
--					     data[0]);
--				regmap_write(rpc->regmap, RPCIF_SMWDR0,
--					     data[1]);
--			} else {
--				regmap_write(rpc->regmap, RPCIF_SMWDR0,
--					     data[0]);
--			}
-+			if (nbytes == 8)
-+				regmap_write(rpc->regmap, RPCIF_SMWDR1, *p++);
-+			regmap_write(rpc->regmap, RPCIF_SMWDR0, *p);
- 
- 			regmap_write(rpc->regmap, RPCIF_SMCR, smcr);
- 			ret = wait_msg_xfer_end(rpc);
-@@ -552,7 +546,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 		}
- 		while (pos < rpc->xferlen) {
- 			u32 bytes_left = rpc->xferlen - pos;
--			u32 nbytes, data[2];
-+			u32 nbytes, data[2], *p = data;
- 
- 			/* nbytes may only be 1, 2, 4, or 8 */
- 			nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
-@@ -569,15 +563,9 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 			if (ret)
- 				goto err_out;
- 
--			if (nbytes == 8) {
--				regmap_read(rpc->regmap, RPCIF_SMRDR1,
--					    &data[0]);
--				regmap_read(rpc->regmap, RPCIF_SMRDR0,
--					    &data[1]);
--			} else {
--				regmap_read(rpc->regmap, RPCIF_SMRDR0,
--					    &data[0]);
--			}
-+			if (nbytes == 8)
-+				regmap_read(rpc->regmap, RPCIF_SMRDR1, p++);
-+			regmap_read(rpc->regmap, RPCIF_SMRDR0, p);
- 			memcpy(rpc->buffer + pos, data, nbytes);
- 
- 			pos += nbytes;
--- 
-2.25.1
+Add in-kernel support for such feature as a DENY_WRITE_EXEC personality
+flag, inherited on fork() and execve(). The kernel tracks a previously
+writeable mapping via a new VM_WAS_WRITE flag (64-bit only
+architectures). I went for a personality flag by analogy with the
+READ_IMPLIES_EXEC one. However, I'm happy to change it to a prctl() if
+we don't want more personality flags. A minor downside with the
+personality flag is that there is no way for the user to query which
+flags are supported, so in patch 3 I added an AT_FLAGS bit to advertise
+this.
+
+Posting this as an RFC to start a discussion and cc'ing some of the
+systemd guys and those involved in the earlier thread around the glibc
+workaround for dynamic libraries [4]. Before thinking of upstreaming
+this we'd need the systemd folk to buy into replacing the MDWE SECCOMP
+BPF filter with the in-kernel one.
+
+Thanks,
+
+Catalin
+
+[1] https://www.freedesktop.org/software/systemd/man/systemd.exec.html#MemoryDenyWriteExecute=
+[2] https://bugzilla.redhat.com/show_bug.cgi?id=1888842
+[3] https://sourceware.org/bugzilla/show_bug.cgi?id=26831
+[3] https://lore.kernel.org/r/cover.1604393169.git.szabolcs.nagy@arm.com
+
+Catalin Marinas (4):
+  mm: Track previously writeable vma permission
+  mm, personality: Implement memory-deny-write-execute as a personality
+    flag
+  fs/binfmt_elf: Tell user-space about the DENY_WRITE_EXEC personality
+    flag
+  arm64: Select ARCH_ENABLE_DENY_WRITE_EXEC
+
+ arch/arm64/Kconfig               |  1 +
+ fs/binfmt_elf.c                  |  2 ++
+ include/linux/mm.h               |  6 ++++++
+ include/linux/mman.h             | 18 +++++++++++++++++-
+ include/uapi/linux/binfmts.h     |  4 ++++
+ include/uapi/linux/personality.h |  1 +
+ mm/Kconfig                       |  4 ++++
+ mm/mmap.c                        |  3 +++
+ mm/mprotect.c                    |  5 +++++
+ 9 files changed, 43 insertions(+), 1 deletion(-)
 

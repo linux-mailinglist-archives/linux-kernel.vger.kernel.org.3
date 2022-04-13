@@ -2,251 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650D44FEF94
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BD54FEF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiDMGND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S231232AbiDMGOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiDMGMg (ORCPT
+        with ESMTP id S233172AbiDMGMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:12:36 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468BD33E15
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:10:14 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ebf4b91212so11004327b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:10:14 -0700 (PDT)
+        Wed, 13 Apr 2022 02:12:31 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309F7369F3;
+        Tue, 12 Apr 2022 23:10:08 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1066958pjh.3;
+        Tue, 12 Apr 2022 23:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5fgVChRRApKlBIxVlW1f3hD3updGvqv5yvWmNDhjdtM=;
-        b=sI58AZkwnV0PCwyvFIbzfa5QQOD2KOa4/arl6YdzEnwXWAhOnYuzFBRM7LS9aH+/Bx
-         lZ5qzStf0i7jmdVP+bD2gt4luZx+SYboLf8Z0boKiZnt2/Y1XqjdMMMAgBOnwWT1nwOd
-         /+3y6q0sg6fTMSJv3/ieKe4oSjz27TUBC0bz5Idccf64BemXK7Zz4WVqLBU/4AngPlkq
-         rVrGNebOihUvSCCiugDQz8ahIhi5UJbqzb8Z3WIWItzxQBVyH6gLuxH0gypY35v7j5P+
-         C+ALokXhuan4JZ+3M5C09TpgU0kN8IIWje2bnLnT3+0BwZhunY4BdFvvXYxyNxuXBdDe
-         R+cg==
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=0g9UcE2zL5w+G01NTjUcugLriSQ8wpxoQjCrz2R0018=;
+        b=I2VW7T5lmrxE21qiKPO9lndJB6OgiCBkcMN5noH755MjocM5a4fiUTmOIIm2TkCFK+
+         0dPWv4t4FK9A+A2QucvMbMDu4RgXm9Wqj53zCnwCtHb+LXNhrRdhMqexatsIJc2BYQEK
+         n/vhUydLYp8dwRFLlT++nQpMFc2+AuV0L6TusfGFeckcFvnb3KIt4gs1ZaDovrtx9y20
+         qaiB6n9fI9Ypixj6f8nRwHMFW8WaNK4Yr9y/IBbyEnUF57x2iLURIHkp6vLJX4tVKU92
+         S5pbE89v3RQIc8669YQwHiuEpWdhHh0hlUVzfp8f4KfKvwCY0IiAtunVRb59uUJR1Os+
+         k9gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5fgVChRRApKlBIxVlW1f3hD3updGvqv5yvWmNDhjdtM=;
-        b=JZl0AwRMGlUh+MLLH0xbWaK0cYO+F4pd9xNx29BFcpULbqr8yfC2YBVx3VxiMsxWzU
-         WHfYL6g+Zb9qkG8BdxOpbNWGmItn7MyixmXGWXAYh2Kwl6BY9KsOhOweqklOWnHweROE
-         le9Hh7B2+fRe4xgvXRBJrWPycfBB2FUxxAhvsq0mfU8RMR0JkdWys1kw6nVui+43CSky
-         J147uc7jOnEMQ1JcPFaLpVp//KDEDl7XyyRYRlJxgIMyZolzuxxGHuJ/PYA3py2RBOhb
-         IlvZCoeluNzLydv/mEl7NA/JrytK8DqZGUv+uSJIti6Qfnl7kzbYUrHI2yp9Sv48AVbn
-         1KwQ==
-X-Gm-Message-State: AOAM533HJjLPns++WcVOu5IIb9acTcdXV6ryzEllz/9oEw45pLIo9a2f
-        dsWwQRz/oD/Eyx3B5LqCQ3/BwwZ8gt4NcX3/b06XWQ==
-X-Google-Smtp-Source: ABdhPJyL+jMiw5z7EODt9P0QXbBXCN/kSj7h9Iv6Dz1aDHs5FhCsk1IdpCBf2tyRfFSkdgqquVySeXxYu3HczxYW3aI=
-X-Received: by 2002:a81:bf51:0:b0:2ef:414a:f03b with SMTP id
- s17-20020a81bf51000000b002ef414af03bmr2551046ywk.199.1649830213341; Tue, 12
- Apr 2022 23:10:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=0g9UcE2zL5w+G01NTjUcugLriSQ8wpxoQjCrz2R0018=;
+        b=EVgLsIPfKv2H+BlXEJ3CJuFpkg1oLIfoWKv0uH8Gsi/lkWwR/jC2yH2eX9IRG/uZ5E
+         0VnMTfM1AOFjD9vmn9QysMKxYycPx72vaJn8ROEitHrsNy3F9WvltNLg4HTkMidBCDQ9
+         AVDrFB6C/UVStbDzD6g6vj7YgZOTvI42RjYrYesFF9zxpMLkKN7Sx0Q08AqQG9wPvfGR
+         Mv3Wwu869+Gnu0s7rRu6IrLamUy7eaS6Ez8Mcr/G0OrYALHkP+vrh592LOZF9nq9dUdE
+         W/JHO7sDH1emCREvjuWOzDf0Wg8vPCSdkJrR6qL4qCat1tq6M6XA/gGMkGV641sUGC0w
+         1fPw==
+X-Gm-Message-State: AOAM5319DFuf623K/3lGlHlP6ZCaygFUtpnmXcBF3SbvhgBnhEy3Ky1F
+        TDYE9i+dv+FabgG6dnCg6oo=
+X-Google-Smtp-Source: ABdhPJwZGUY1wE3FwLT56wfTkox589sv0KFwbe72PnNBrsjgcyxpDTyj5tceVyPohBuu8hSyRW7Qag==
+X-Received: by 2002:a17:90b:1bc4:b0:1cb:c3db:5f4c with SMTP id oa4-20020a17090b1bc400b001cbc3db5f4cmr7738423pjb.125.1649830207617;
+        Tue, 12 Apr 2022 23:10:07 -0700 (PDT)
+Received: from localhost (220-235-208-104.tpgi.com.au. [220.235.208.104])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm41452636pfh.83.2022.04.12.23.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 23:10:07 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 16:10:02 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Low-res tick handler device not going to ONESHOT_STOPPED when tick is
+ stopped (was: rcu_sched self-detected stall on CPU)
+To:     Michael Ellerman <mpe@ellerman.id.au>, paulmck@kernel.org,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <CANiq72k+5Rdj7i3Df2dcE6_OPYPXK3z5EWLKnY56sSMz4G3OvA@mail.gmail.com>
+        <CAABZP2z64aYWfVSdXHaQopWc+BAbJJUGqtrju2iWER3DDTDFWg@mail.gmail.com>
+        <20220406170012.GO4285@paulmck-ThinkPad-P17-Gen-1>
+        <87pmls6nt7.fsf@mpe.ellerman.id.au> <87k0bz7i1s.fsf@mpe.ellerman.id.au>
+        <1649818529.j46672mh2p.astroid@bobo.none>
+In-Reply-To: <1649818529.j46672mh2p.astroid@bobo.none>
 MIME-Version: 1.0
-References: <20220412173836.126811734@linuxfoundation.org>
-In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 13 Apr 2022 11:40:02 +0530
-Message-ID: <CA+G9fYvwjKoO4TmPDgZ8pZfuv3b9_3V9keR7rR6aiH2_n4a6cw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1649829917.xni78o33uo.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 at 23:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.34 release.
-> There are 277 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.34-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Oops, fixed subject...
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.34-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: 1ad810a5a764358347407720dd6ea61e771cfe36
-* git describe: v5.15.33-278-g1ad810a5a764
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.33-278-g1ad810a5a764
-
-## Test Regressions (compared to v5.15.33-277-g059c7c9bf722)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.33-277-g059c7c9bf722)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.33-277-g059c7c9bf722)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.33-277-g059c7c9bf722)
-No metric fixes found.
-
-## Test result summary
-total: 100224, pass: 84238, fail: 999, skip: 13860, xfail: 1127
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm6[
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* prep-inline
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Excerpts from Nicholas Piggin's message of April 13, 2022 3:11 pm:
+> +Daniel, Thomas, Viresh
+>=20
+> Subject: Re: rcu_sched self-detected stall on CPU
+>=20
+> Excerpts from Michael Ellerman's message of April 9, 2022 12:42 am:
+>> Michael Ellerman <mpe@ellerman.id.au> writes:
+>>> "Paul E. McKenney" <paulmck@kernel.org> writes:
+>>>> On Wed, Apr 06, 2022 at 05:31:10PM +0800, Zhouyi Zhou wrote:
+>>>>> Hi
+>>>>>=20
+>>>>> I can reproduce it in a ppc virtual cloud server provided by Oregon
+>>>>> State University.  Following is what I do:
+>>>>> 1) curl -l https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/l=
+inux.git/snapshot/linux-5.18-rc1.tar.gz
+>>>>> -o linux-5.18-rc1.tar.gz
+>>>>> 2) tar zxf linux-5.18-rc1.tar.gz
+>>>>> 3) cp config linux-5.18-rc1/.config
+>>>>> 4) cd linux-5.18-rc1
+>>>>> 5) make vmlinux -j 8
+>>>>> 6) qemu-system-ppc64 -kernel vmlinux -nographic -vga none -no-reboot
+>>>>> -smp 2 (QEMU 4.2.1)
+>>>>> 7) after 12 rounds, the bug got reproduced:
+>>>>> (http://154.223.142.244/logs/20220406/qemu.log.txt)
+>>>>
+>>>> Just to make sure, are you both seeing the same thing?  Last I knew,
+>>>> Zhouyi was chasing an RCU-tasks issue that appears only in kernels
+>>>> built with CONFIG_PROVE_RCU=3Dy, which Miguel does not have set.  Or d=
+id
+>>>> I miss something?
+>>>>
+>>>> Miguel is instead seeing an RCU CPU stall warning where RCU's grace-pe=
+riod
+>>>> kthread slept for three milliseconds, but did not wake up for more tha=
+n
+>>>> 20 seconds.  This kthread would normally have awakened on CPU 1, but
+>>>> CPU 1 looks to me to be very unhealthy, as can be seen in your console
+>>>> output below (but maybe my idea of what is healthy for powerpc systems
+>>>> is outdated).  Please see also the inline annotations.
+>>>>
+>>>> Thoughts from the PPC guys?
+>>>
+>>> I haven't seen it in my testing. But using Miguel's config I can
+>>> reproduce it seemingly on every boot.
+>>>
+>>> For me it bisects to:
+>>>
+>>>   35de589cb879 ("powerpc/time: improve decrementer clockevent processin=
+g")
+>>>
+>>> Which seems plausible.
+>>>
+>>> Reverting that on mainline makes the bug go away.
+>>>
+>>> I don't see an obvious bug in the diff, but I could be wrong, or the ol=
+d
+>>> code was papering over an existing bug?
+>>>
+>>> I'll try and work out what it is about Miguel's config that exposes
+>>> this vs our defconfig, that might give us a clue.
+>>=20
+>> It's CONFIG_HIGH_RES_TIMERS=3Dn which triggers the stall.
+>>=20
+>> I can reproduce just with:
+>>=20
+>>   $ make ppc64le_guest_defconfig
+>>   $ ./scripts/config -d HIGH_RES_TIMERS
+>>=20
+>> We have no defconfigs that disable HIGH_RES_TIMERS, I didn't even
+>> realise you could disable it TBH :)
+>>=20
+>> The Rust CI has it disabled because I copied that from the x86 defconfig
+>> they were using back when I added the Rust support. I think that was
+>> meant to be a stripped down fast config for CI, but the result is it's
+>> just using a badly tested combination which is not helpful.
+>>=20
+>> So I'll send a patch to turn HIGH_RES_TIMERS on for the Rust CI, and we
+>> can debug this further without blocking them.
+>=20
+> So we traced the problem down to possibly a misunderstanding between=20
+> decrementer clock event device and core code.
+>=20
+> The decrementer is only oneshot*ish*. It actually needs to either be=20
+> reprogrammed or shut down otherwise it just continues to cause=20
+> interrupts.
+>=20
+> Before commit 35de589cb879, it was sort of two-shot. The initial=20
+> interrupt at the programmed time would set its internal next_tb variable=20
+> to ~0 and call the ->event_handler(). If that did not set_next_event or=20
+> stop the timer, the interrupt will fire again immediately, notice=20
+> next_tb is ~0, and only then stop the decrementer interrupt.
+>=20
+> So that was already kind of ugly, this patch just turned it into a hang.
+>=20
+> The problem happens when the tick is stopped with an event still=20
+> pending, then tick_nohz_handler() is called, but it bails out because=20
+> tick_stopped =3D=3D 1 so the device never gets programmed again, and so i=
+t=20
+> keeps firing.
+>=20
+> How to fix it? Before commit a7cba02deced, powerpc's decrementer was=20
+> really oneshot, but we would like to avoid doing that because it requires=
+=20
+> additional programming of the hardware on each timer interrupt. We have=20
+> the ONESHOT_STOPPED state which seems to be just about what we want.
+>=20
+> Did the ONESHOT_STOPPED patch just miss this case, or is there a reason=20
+> we don't stop it here? This patch seems to fix the hang (not heavily
+> tested though).
+> =20
+> Thanks,
+> Nick
+>=20
+> ---
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index 2d76c91b85de..7e13a55b6b71 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -1364,9 +1364,11 @@ static void tick_nohz_handler(struct clock_event_d=
+evice *dev)
+>  	tick_sched_do_timer(ts, now);
+>  	tick_sched_handle(ts, regs);
+> =20
+> -	/* No need to reprogram if we are running tickless  */
+> -	if (unlikely(ts->tick_stopped))
+> +	if (unlikely(ts->tick_stopped)) {
+> +		/* If we are tickless, change the clock event to stopped */
+> +		tick_program_event(KTIME_MAX, 1);
+>  		return;
+> +	}
+> =20
+>  	hrtimer_forward(&ts->sched_timer, now, TICK_NSEC);
+>  	tick_program_event(hrtimer_get_expires(&ts->sched_timer), 1);
+>=20

@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E59150007D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D42500080
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiDMVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S236614AbiDMVE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237013AbiDMVD5 (ORCPT
+        with ESMTP id S231548AbiDMVE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:03:57 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DC849276
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id ay4so2266447qtb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
+        Wed, 13 Apr 2022 17:04:26 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D040A71A24
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id p21so3327355ioj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=53xZC/O9UyqpGImr9R1mlpH431NIXU6bLsXMAgQ60tY=;
-        b=Cb7jS5srlil3xnNArsgvM8sfvSyjPGnrhCGF92oDFb1+bHORvFUi0J9X/jfdaqOxIf
-         zmi6P47O8jDmKPMFVcY5xAHO4l2ztEgF4S/7i2lqpD6korUL+2hT2l0rK/mCkJYULRFO
-         L6TJJgXBemM+/agjkBlrmMgHwrVK80bLXmaZo=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/qUIJWUYp0OgGPrDZUu+q7DE+3dlNWkqw9Br15Nf3Qo=;
+        b=OFkr8OF7baDSWlxCIRyQaETk6E21TEaTMW5FVY+5KHmdECRnIAsakMkZ/xCkZXz4ac
+         PdZqm6T77fdP7wYKyifi5RY9/SKqzc9ibPhBZrX838SKGG22M6CycSrHR9Ju/Op7WzvQ
+         QwZNjVRy6QjsZ59/TF2V3TjHUZ7PfedKp5pDfUZDzX9qKsYuyjQkbbgQP79z5ZV1tFdO
+         vTpckEpdgg4UwHcW2gktfOivWYC86kxRnF50FdeNeCrMtNsqb/kDTmVJh3bh8F+mnam9
+         tSxzUURicv6wWp9KxpmEx71w2UA03ns+iN3HUGcsuiXiK0xbt9C7+tasx/OuDNLNR19x
+         1lOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=53xZC/O9UyqpGImr9R1mlpH431NIXU6bLsXMAgQ60tY=;
-        b=1eO8S5/97ahVgr4Vmef0JJNZhR2PACSlV1JowmlExe79CIpCduRuAOi+SxOFxsA75K
-         tTbAVq/coTtVZ5ETU/KlNiC5u+Tj6D/dPeoF1J69p0Im/iWi9yukMPBqhyMBYHxxvurE
-         PwCSnfLeTaZyHGATv0IXNeUsdUeb8GHwn92FznXGCO7zv1Rv9fxXct9Uc5nfuYx4YlpH
-         CD/YFTn/xFo/pI7HHafaDAPbyvBWlGChj7Bs58jFx3mNSy3zEW06f3C/Hj0malI2d3bq
-         ePO1kkpZ8tyBWdhyKTZ6h6j56JjzgBM0h40SAHI/40As9TBVXs2n6FovbNhY8uh9HAEa
-         uVJA==
-X-Gm-Message-State: AOAM532JVvSYQuwYDFXCNNr3gn7IcIUFF+nsNb+oYhlHWgifUNt8NIpe
-        8XVriWaQD+jvG8Vy7JXH4BhROg==
-X-Google-Smtp-Source: ABdhPJy7rSpT7n33E9TTMvSaYR4b6eBYooLu9g9j0Ll9iQPouUjI51f4nPMp8cyI+6tlbAT+4kAzcA==
-X-Received: by 2002:a05:622a:1e07:b0:2ef:b1ef:850c with SMTP id br7-20020a05622a1e0700b002efb1ef850cmr8593542qtb.292.1649883693008;
-        Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05622a054e00b002e2072cffe6sm30985qtx.5.2022.04.13.14.01.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:01:32 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 17:01:31 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] lkdtm/bugs: Don't expect thread termination without
- CONFIG_UBSAN_TRAP
-Message-ID: <20220413210131.46tqfxlkwtcayurs@meerkat.local>
-References: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
- <202204121440.FEE123D7@keescook>
- <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/qUIJWUYp0OgGPrDZUu+q7DE+3dlNWkqw9Br15Nf3Qo=;
+        b=e3DHwL/45iQgHj24gA/ipE6OCdmuvENvJWT+g3KNZMJrg4/YrtdEu1QYhcuRRaS1fG
+         zvmiqxDp3QYUb135BD+DTRzJXxb728V8YKaQx52O7s92BJRYDvKobi2wMv5yF6ae2bKs
+         7P/logOhLSl5RB8h21lRH4fGonZlDJ66+nSmJsWmlOhsTs2+8SZGPmlspU4Tsopl9cRF
+         wtlbFQNUYQK9rJTsJbcw/98UDfYa5MXrcDnwjOHer3p7bKPWrDcHFHDuifwv8Azo1OVG
+         FTb70SFieYwvJs3Ywxesnbg7ROp6e9RRJfcer7MKec1E+o7WemL0yauqQk1mQwYtGlQm
+         Pr9w==
+X-Gm-Message-State: AOAM533yeVSuubIxg2QAkg4uEJQpfZ1uHsyBOW++xtF0ms2XJMpbWt0u
+        L2966WLlAi4gQm5OgPg9aJXom0KpNgllRg==
+X-Google-Smtp-Source: ABdhPJxBqzKWs5v+J9djfCdod9R40p3p0DgaokqZxmyWAB6vqPwMBob/hkA2/LTw8bOWzbrl4sSpQQ==
+X-Received: by 2002:a05:6638:25c2:b0:326:223d:4494 with SMTP id u2-20020a05663825c200b00326223d4494mr9784815jat.162.1649883722145;
+        Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id i5-20020a6bf405000000b00645be60c31csm21576iog.23.2022.04.13.14.02.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 14:02:01 -0700 (PDT)
+Message-ID: <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
+Date:   Wed, 13 Apr 2022 16:02:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] interconnect: qcom: sc7180: Drop IP0 interconnects
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Georgi Djakov <djakov@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220412220033.1273607-2-swboyd@chromium.org>
+ <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,36 +82,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 06:29:36AM +0000, Christophe Leroy wrote:
-> I have a [patatt] section in .gitconfig which contains:
-> 	signingkey  = ed25519:xxxxxxxx
-> 	selector = xxxxxxxx (the same value as above)
+On 4/13/22 3:55 PM, Doug Anderson wrote:
+> Hi,
 > 
-> What should I do now for you to get the key ? I don't even know where 
-> the key is stored in my computer.
+> On Tue, Apr 12, 2022 at 4:20 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>>
+>> @@ -519,8 +500,6 @@ static const struct of_device_id qnoc_of_match[] = {
+>>            .data = &sc7180_dc_noc},
+>>          { .compatible = "qcom,sc7180-gem-noc",
+>>            .data = &sc7180_gem_noc},
+>> -       { .compatible = "qcom,sc7180-ipa-virt",
+>> -         .data = &sc7180_ipa_virt},
+>>          { .compatible = "qcom,sc7180-mc-virt",
+>>            .data = &sc7180_mc_virt},
+>>          { .compatible = "qcom,sc7180-mmss-noc",
+> 
+> I have no objection to ${SUBJECT} change landing and based on all your
+> research and Alex's review/testing I think it's good to go.
+> 
+> However, now that you're removed the driver that cared about
+> "qcom,sc7180-ipa-virt", should we also be removing it from the
+> `bindings/interconnect/qcom,rpmh.yaml` file and the `sc7180.dtsi`
+> file? I think that removing it from _either_ the driver (like your
+> patch here does) _or_ the sc7180.dtsi file would fix the bug, right?
+> ...and then removing it from the yaml would just be cleanup...
 
-Your key is stored in ~/.local/share/patatt, but you don't really need to do
-anything, Kees can do the following:
+That's a good point, I hadn't thought about that but you're right.
 
-    b4 kr --show-keys 363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
+I think we were too pleased about identifying the problem and
+proving it could happen (and cause a crash), so we didn't think
+hard enough about this other piece.
 
-For now, this just provides instructions on what to do with the key:
+Stephen, I think you should re-spin the series and add the
+proper change to the binding.  You can keep the tags I gave
+before.
 
-	christophe.leroy@csgroup.eu: (unknown)
-		keytype: ed25519
-		 pubkey: HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-		 krpath: ed25519/csgroup.eu/christophe.leroy/20211009
-	   fullpath: /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
-	---
-	For ed25519 keys:
-		echo [pubkey] > [fullpath]
+I've got a note to follow up with similar changes to other
+platforms where the interconnect driver includes resource "IP0"
+and will plan to do what Doug suggests there too.
 
-So, for Kees to start being aware of your key, he needs to do:
+					-Alex
 
-	mkdir -p /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy
-	echo HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0= > /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
+> -Doug
 
-I know this is awkward and clunky right now. Future versions of b4 will
-streamline keyring management to make it a lot easier, I promise.
-
--K

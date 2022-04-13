@@ -2,168 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771ED4FF7AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B69D4FF7B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbiDMNdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S235772AbiDMNhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbiDMNd3 (ORCPT
+        with ESMTP id S233601AbiDMNhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:33:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260145D5E7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:31:07 -0700 (PDT)
-Message-ID: <20220413133024.356509586@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649856665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=hndER118dmw7kYMFXyYuvsxJ9ycP9/DqyDamURXJ4cA=;
-        b=nToUJbUjDp19tCC34fQsnLD80e9uEBpO6zMUv2CRiM2HdiUcrw6ShlgSs0RR8zYhBtZM7I
-        XoTBDDcW2ZjEI94wQCnCc3V2oksdyEOz6lSaLbQJbRyhPEuuBDsDySfaDJtXA0r+89HD6P
-        8AHc51vIafk+7BjKQAdtV+lFhwP6BdrkvdEsq8CwdAxgRDEBJWQ5GKIKAZhLyD4hMS0pTP
-        wTcanuYI8LKoYa5yHp6avlOz/TNQ90Z6i1OiMC5HAOWauJONZeirom5YaIBt6Dyyse9Gcj
-        CofXuJjtUlvaUyGI9ljjspjT/7mWAIE/zYYrTNVc3QqhNbmHXsa1nCgIq9ncRA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649856665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=hndER118dmw7kYMFXyYuvsxJ9ycP9/DqyDamURXJ4cA=;
-        b=mLHAnQn7pfVUUdyiJeOfFeqs6VtT74Sa7alLmxpMHxKolNUfcSJeQWITHXz1Q3c8Ommqha
-        WD+dTyHgejoZYgCw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [patch V5 3/3] smp: Make softirq handling RT safe in
- flush_smp_call_function_queue()
-References: <20220413132836.099363044@linutronix.de>
+        Wed, 13 Apr 2022 09:37:07 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A15D40A31;
+        Wed, 13 Apr 2022 06:34:46 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so1190312otj.1;
+        Wed, 13 Apr 2022 06:34:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3y1tBH0uZHiWcDFM/FP1qr/+fsEsYbd599zXEVsCG6c=;
+        b=AjaFty2yypILRWw4RiKgUHPUHSeds+4qRjdywvndYd4KuHTlQtuiOgY8ico7tUIvUu
+         WQ5GhGh9VuX9Qtuhz9ytPL8VItSL/V2+j90xP6xhXlVW4ENW9iYqCUM2ytjKrjo+HP+D
+         0/lUBXRBVs/bNByE0GK8pGpnutWbRS98cnSoH+Mk4rBCdrSN4YBu5imrK2O7GlJPA1Jl
+         J7iORViT4Y6E9lDpBQm5bsS37JIPHoLQMg4eBaU1/ZaPyMc2Ji8EjXE8TmVOhYRvvD3Z
+         uobat7z/jx6TWMCeoT2Z1m27kP6sd/d51xCCCkcZsXoV/o4cdFLqvSR5zMo7kM6YOoVr
+         sOlA==
+X-Gm-Message-State: AOAM53070MeYqu33SE+vxVvuzcl4rr7c0ZvgFBBDfRev2UKgfa9Sa2pa
+        /FOyc1t88kaWNGY9tupJwA==
+X-Google-Smtp-Source: ABdhPJw53nT25tjldjHfake5qVTorjpi6v6nDrY+wLnWDO2+imbSaw5Eo7N2GerPH4nRugMInKmh+w==
+X-Received: by 2002:a05:6830:2081:b0:5ce:ae9:2711 with SMTP id y1-20020a056830208100b005ce0ae92711mr14712746otq.215.1649856885224;
+        Wed, 13 Apr 2022 06:34:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y15-20020a056830208f00b005e6bf82e0b6sm6685084otq.46.2022.04.13.06.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 06:34:44 -0700 (PDT)
+Received: (nullmailer pid 3093338 invoked by uid 1000);
+        Wed, 13 Apr 2022 13:34:44 -0000
+Date:   Wed, 13 Apr 2022 08:34:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Camel Guo <Camel.Guo@axis.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
+Message-ID: <YlbRdCXnPPurC2wC@robh.at.kernel.org>
+References: <20220412135232.1943677-1-camel.guo@axis.com>
+ <20220412135232.1943677-2-camel.guo@axis.com>
+ <YlXwyKkkC1VoPpjU@robh.at.kernel.org>
+ <77167ffd-5674-9f6f-df51-3233e67fe9a7@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 13 Apr 2022 15:31:05 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <77167ffd-5674-9f6f-df51-3233e67fe9a7@axis.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+On Wed, Apr 13, 2022 at 09:13:39AM +0000, Camel Guo wrote:
+> On 4/12/22 23:36, Rob Herring wrote:
+> > On Tue, Apr 12, 2022 at 03:52:31PM +0200, Camel Guo wrote:
+> >> Document the TMP401, TMP411 and TMP43x device devicetree bindings
+> >> 
+> >> Signed-off-by: Camel Guo <camel.guo@axis.com>
+> >> ---
+> >> 
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - ti,tmp401
+> >> +      - ti,tmp411
+> >> +      - ti,tmp431
+> >> +      - ti,tmp432
+> >> +      - ti,tmp435
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> > 
+> >> +  '#address-cells':
+> >> +    const: 1
+> >> +
+> >> +  '#size-cells':
+> >> +    const: 0
+> > 
+> > You don't have any child nodes and these are for child nodes with 'reg'.
+> 
+> Ack! I will fix it in v3.
+> > 
+> >> +
+> >> +  ti,extended-range-enable:
+> >> +    description:
+> >> +      When set, this sensor measures over extended temperature range.
+> >> +    type: boolean
+> >> +
+> >> +  ti,n-factor:
+> > 
+> > Funny, I just ran across this property today for tmp421...
+> > 
+> > Can the schema be shared?
+> 
+> Yes, this property is in ti,tmp421.yaml and ti,tmp464.yaml as well. But 
+> I guess maybe it is better to separate tmp401 from them.
+> 
+> That is because the chips supported in ti,tmp421,yaml has three channels 
+> and the chips supported in ti,tmp464.yaml has eight channels and this 
+> property n-factor is for each channel/child node. But the chips 
+> supported in ti,tmp401.yaml only has one channel. n-factor is for this 
+> chip.
 
-flush_smp_call_function_queue() invokes do_softirq() which is not available
-on PREEMPT_RT. flush_smp_call_function_queue() is invoked from the idle
-task and the migration task with preemption or interrupts disabled.
+Okay, that makes sense to keep them separate.
 
-So RT kernels cannot process soft interrupts in that context as that has to
-acquire 'sleeping spinlocks' which is not possible with preemption or
-interrupts disabled and forbidden from the idle task anyway.
+> >> +    description:
+> >> +      value to be used for converting remote channel measurements to
+> >> +      temperature.
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    items:
+> >> +      minimum: 0
+> >> +      maximum: 255
+> > 
+> > Isn't this property signed and should be -128 to -127? The code treats
+> > the existing cases as signed. One schema is correct and one is like you
+> > have it.
+> 
+> Ack! will fix it in v3
+> 
+> > 
+> >> +
+> >> +  ti,beta-compensation:
+> >> +    description:
+> >> +      value to select beta correction range.
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    items:
+> >> +      minimum: 0
+> >> +      maximum: 15
+> > 
+> > Drop 'items'. It is not an array.
+> 
+> Not sure if I understand correctly. Do you means it should be like this? 
+> If so, I guess ti,n-factor should also be changed like this. Am I right?
+> 
+>    ti,beta-compensation:
+>     description:
+>       value to select beta correction range.
+>       $ref: /schemas/types.yaml#/definitions/uint32
+>       minimum: 0
+>       maximum: 15
 
-The currently known SMP function call which raises a soft interrupt is in
-the block layer, but this functionality is not enabled on RT kernels due to
-latency and performance reasons.
+Yes, except your indentation is off. As-is, it's all 'description'. It 
+should be like this:
 
-RT could wake up ksoftirqd unconditionally, but this wants to be avoided if
-there were soft interrupts pending already when this is invoked in the
-context of the migration task. The migration task might have preempted a
-threaded interrupt handler which raised a soft interrupt, but did not reach
-the local_bh_enable() to process it. The "running" ksoftirqd might prevent
-the handling in the interrupt thread context which is causing latency
-issues.
+  ti,beta-compensation:
+    description:
+      value to select beta correction range.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 0
+    maximum: 15
 
-Add a new function which handles this case explicitely for RT and falls
-back to do_softirq() on !RT kernels. In the RT case this warns when one of
-the flushed SMP function calls raised a soft interrupt so this can be
-investigated.
-
-[ tglx: Moved the RT part out of SMP code ]
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/YgKgL6aPj8aBES6G@linutronix.de
----
-v4:
-  - Move the RT logic into softirq.c which also avoids the wakeup
-    when softinterrupts are disabled. The enable will handle
-    them anyway.
-v3:
-   - Only wake ksoftirqd if the softirqs were raised wthin
-     flush_smp_call_function_queue().
-   - Add a warning in the wake case.
-v2: Drop an empty line.
-
- include/linux/interrupt.h |    9 +++++++++
- kernel/smp.c              |    5 ++++-
- kernel/softirq.c          |   13 +++++++++++++
- 3 files changed, 26 insertions(+), 1 deletion(-)
----
-
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -607,6 +607,15 @@ struct softirq_action
- asmlinkage void do_softirq(void);
- asmlinkage void __do_softirq(void);
- 
-+#ifdef CONFIG_PREEMPT_RT
-+extern void do_softirq_post_smp_call_flush(unsigned int was_pending);
-+#else
-+static inline void do_softirq_post_smp_call_flush(unsigned int unused)
-+{
-+	do_softirq();
-+}
-+#endif
-+
- extern void open_softirq(int nr, void (*action)(struct softirq_action *));
- extern void softirq_init(void);
- extern void __raise_softirq_irqoff(unsigned int nr);
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -696,6 +696,7 @@ static void __flush_smp_call_function_qu
-  */
- void flush_smp_call_function_queue(void)
- {
-+	unsigned int was_pending;
- 	unsigned long flags;
- 
- 	if (llist_empty(this_cpu_ptr(&call_single_queue)))
-@@ -704,9 +705,11 @@ void flush_smp_call_function_queue(void)
- 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
- 		      smp_processor_id(), CFD_SEQ_IDLE);
- 	local_irq_save(flags);
-+	/* Get the already pending soft interrupts for RT enabled kernels */
-+	was_pending = local_softirq_pending();
- 	__flush_smp_call_function_queue(true);
- 	if (local_softirq_pending())
--		do_softirq();
-+		do_softirq_post_smp_call_flush(was_pending);
- 
- 	local_irq_restore(flags);
- }
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -294,6 +294,19 @@ static inline void invoke_softirq(void)
- 		wakeup_softirqd();
- }
- 
-+/*
-+ * flush_smp_call_function_queue() can raise a soft interrupt in a function
-+ * call. On RT kernels this is undesired and the only known functionality
-+ * in the block layer which does this is disabled on RT. If soft interrupts
-+ * get raised which haven't been raised before the flush, warn so it can be
-+ * investigated.
-+ */
-+void softirq_post_smp_call_flush(unsigned int was_pending)
-+{
-+	if (WARN_ON_ONCE(was_pending != local_softirq_pending()))
-+		invoke_softirq();
-+}
-+
- #else /* CONFIG_PREEMPT_RT */
- 
- /*
-
+Rob

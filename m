@@ -2,151 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8A44FFA4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED9C4FFA58
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiDMPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S236583AbiDMPh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiDMPfk (ORCPT
+        with ESMTP id S231339AbiDMPhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:35:40 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEB638BD4;
-        Wed, 13 Apr 2022 08:33:18 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DFNb43003034;
-        Wed, 13 Apr 2022 15:33:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=Ay7GuMRrdr9vysZ+OQ3fFzjn5On7M/Kdk/SO+OZ55x8ScoxR+R57Z7zNt+v+RQR+PbQ+
- Uu/nxtJj4uDPcrvE5cbCVR2qayN4aAGvLOEuSOfmxppraCOT8TMrW4Ct9Jsdf1fJ8JOZ
- hgNYiq13gOs+oVsJ63jYto9EvvPtkEPuK+C/sFh2ioiTA1gz9Za1timKcOQ2e+g1uu5Y
- Ib85pWUJ+OD75a7v9lZcy8FNp95cVSmFoOjo/001OuVw+ihYSpWWWcc87SOlGzawqs/c
- /E+XQ0SBJQEA4F/a9i9tVcgHyGIhPM4PvY33bf9WLDKoWI9f+BPp2KL4t6e/+mLLA4wq Xw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0x2jaue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 15:33:05 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DFFnmO006520;
-        Wed, 13 Apr 2022 15:33:05 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k49rjv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 15:33:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kjhlIh6bnN9s34Lxk71HbGR2odY7ZUZWyNOG8adsbFt/Kegy/b3zgDBq+waLdRbdr3BfsGsJfUSnsvzy14Gx7VMfi65TROFdzPtlDkq8qyx7WERqpIZeK1Ddn59w/ipA+T42vK6+HhHpo5SDJcgagiDXIdXIMzsXLhOHHn14Qm4nyoDH7NExzcs7pXs9XsJJr5k0RO08LAOc5J59PNfNZ6dsfTebG4sFtcSOutEDjnkmoVdVys24hpK9MpYzCWlSeEur/wltBuV9fnm15TrihuNJrPEDmEjY3CbNhV9Zx6wmU4eMY+PQsX02lCBmFPar9XzkwP9SMH4M1MhO5xrUow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=ZqegNSMKPSI8W0XM4qVYADsjzYkgDPJdLj1dfBZ08QDZgmCByET9Ycj3GnYqLU0vkLSKiOSww23CFynAdXVclIIL+zaAeBXeoSjCHZAxU6VVfSddVFQSud5J4+24M/2YfbXYxUcmNPgsNntLTq8gtswPWa48Zg7Z05k7Wvmkfl8ruxLXdTFPcwYQNYSCwvmhgH3SengiPSeiEwwX/zKDhcgfaQ9QnYMknl9a59iUHisv93bSr3x7JstGag+zePPWVhFfKO5zNud/XoqD7U50r91N1ddI/W7zBan83TgFYaAEiATpZl6/cbbtRzYz/yZZqfTMjfz7+QYxX1JJ5XWg5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=An/2h1VseMJ2sSnzKP94XkuQS/au5cqg1L54fRYE4c0t5Rj4WGzEBFA/36mXRPoXhx5WOLPYQ8DiFC04nOiVTuNV9qgbHEw37TMiyiCwYvkRypnShreAJdlilViwKE5wCs3GRKSxqUlLITsyw6/iqgmB2EkRJ4SIJAU59d3n6IM=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB5507.namprd10.prod.outlook.com
- (2603:10b6:303:162::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 15:33:03 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
- 15:33:02 +0000
-Date:   Wed, 13 Apr 2022 18:32:49 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     David Kahurani <k.kahurani@gmail.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
-        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-Message-ID: <20220413153249.GZ12805@kadam>
-References: <20220404151036.265901-1-k.kahurani@gmail.com>
- <20220404153151.GF3293@kadam>
- <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0136.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:30::28) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Wed, 13 Apr 2022 11:37:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C06D4BFF7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649864102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sk1v32UTIyZH37LdAUzNEF5obtPm583SsWSiAI9jtSE=;
+        b=T47WVfK+S/0reqSNxLcifYv3PqD72x0HzVI/o/5p7TyXqHWsijt9+gFfEZM4/8+NbJrqAq
+        7dG1jc9u5tf4ty7kX5nvcabYE+ubtT9aMP6qlhCiyOtlce4H81UQ4GkGUsITFoPqz+Vzdr
+        hH5cUaDwZZJfp1xkBGtH4kEgA2C4tz8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-490-LhXBCQdeMm2JQunRUBAsEg-1; Wed, 13 Apr 2022 11:35:00 -0400
+X-MC-Unique: LhXBCQdeMm2JQunRUBAsEg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5040585A5BC;
+        Wed, 13 Apr 2022 15:35:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8ED7AC27E9D;
+        Wed, 13 Apr 2022 15:34:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+cc:     dhowells@redhat.com, Dave Wysochanski <dwysocha@redhat.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>, Jeff Layton <jlayton@kernel.org>,
+        linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fscache: Miscellaneous fixes
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
-X-MS-TrafficTypeDiagnostic: CO1PR10MB5507:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR10MB5507C88CCCF21FFCAE99E8948EEC9@CO1PR10MB5507.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ShitkBKOAwmKMqSgjZkTYIk2BmheBu2CyTxJHcpbF23ed7YnWMSXroCrHqy/TIUKYfw+m3jgxZn2IXfeXrN2+l8I8V3+kR3GBBMN4R1T6j5iHEJtIhsj0wfufNQeLCSAwWL1HsH+SJ3SIodSOatZJvfsTDofP+UnwhFz/jKXKiVeiQw0/imyV/sKRSZurdLdHnH0TXmlXllpvFnoDsPvMa2tP1XdUIApNmh6n2WROkjw5nMo1nHE1hCn2jEJpImT68INi3lWB312/dIDTDC9kID3O1fOs2bzVF5hNPfdSzfS+BZ3HMXq4vvspjxGohKNsvEcrnNjfhA9E85E4++RlSlpCW5szY6efMXl582rrmaaEgOvOY+iH4/bdtbvRxmhLaldbCf4tlI+CEtRwerl4w6KiymaxZ8GJiHP6j0Ba65s8veWYyDTbkBdohft5mAeln52n8XhKnUT7fkCu4tO186+HUpxLXx3WstywZw20B6uohL13mgoq7kgZiVQGM8cYaRvBdsm8gt1gOjIjValy0zqtdn3myWbvJwN9Xa+CkOAUrAFYkIaMXOW/zBCyJj69I7YxKeDTti9rqpzwylOrr9mWvJUtl5KWM/Bo99IeIL36LjQjQd2VzZ40QVfwHRQPwuelzj6iAgtD1qHU3TUeIEZOLOEufd/q4nHSjz7/ai5F3SPmNHauxomp4O56xnF2JoLczHRZwPEXUGye2UAjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66946007)(186003)(8676002)(4326008)(33716001)(2906002)(5660300002)(7416002)(38100700002)(44832011)(38350700002)(316002)(33656002)(508600001)(1076003)(8936002)(26005)(6512007)(86362001)(6506007)(6666004)(52116002)(53546011)(6486002)(54906003)(6916009)(66476007)(9686003)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6hbg0AMMfcfbGrIzPGU3CYjKg5K9RD9FT1VZkcOgNG+7QLWedt4jERXEhSpz?=
- =?us-ascii?Q?9hpqxYL0QgXU16bw9vsZiDqjH7TA8WU0pB9F/Ib0prLFFpjcv+uahRE5qdas?=
- =?us-ascii?Q?/XTF2GA1Fm5VeoyxP0o19v3BRgofA0WvZSVSUVWqtkmx362A0SwZSPwY3s7I?=
- =?us-ascii?Q?yEq4tuHntdOH10mSq0/rvFhNpAreUqRoYaHx1VwReB5ndqA0I/Coidi2KjdR?=
- =?us-ascii?Q?Mg5NjfPR+eDx3oEgNzJzG/e/e7lZY6uRetYOdMI1z28d9y0/Rx4ThqTm82ow?=
- =?us-ascii?Q?uFisaLhCFYeAfAxqFXtqHVyAice+RhSJpx57sPtpCRFRf2s9NZdc8o6wfLnQ?=
- =?us-ascii?Q?GEI8j5RzwfWQo4WHqRwBLG0dZqTjvNpD98HxXKN3hUPT76rrtRfOT/N0FqGV?=
- =?us-ascii?Q?BlV3FfoD+jPH5QB3OSaidycHdLA0+0WQli/+XPmYq6Fw+0FMm+cEL7UUybRT?=
- =?us-ascii?Q?SQ5yJfyFfq5QJrfh0CXLxfcSAe0KPVRL6x3KIDnun3qG++DmqER6Q8PQ2K2p?=
- =?us-ascii?Q?pzpPnCHXDGgAweNprep3PIN4WZDeAOZcobamUzOaKSqnHy5RHLWqxRhi415G?=
- =?us-ascii?Q?BTzgl+s7z8jAbvLtwjpR8Bf6Yk8uFVccOKhwlBuV+oNmFcxe1hDGY29WF4WE?=
- =?us-ascii?Q?6wTZBP5iwK+7Ffcgy6b2ITIRhtzoe59dNTDocmKq6IE3T/FR2paiT5qkffoK?=
- =?us-ascii?Q?wnb9fbpkDI6Gw0HP/EpxhVGsTQZImxg0/zYPanjc2H4DMnQqGd6sIcmg97eP?=
- =?us-ascii?Q?evEfSWqtIoKALARuwMfvSiuxJphr7zF+ymVKmafSIvybG3e0XnkgPK7CVclg?=
- =?us-ascii?Q?YzccXO6KYd6KzDm/N5wf62CTpIlFpplGWVYyc5DUQUOEcuzQXRLMjrOCEpm5?=
- =?us-ascii?Q?IoM+WfjbX5Cd2T2ga3tNr5a5xYJx1D+2qY92gYkUOVJd+k3CU+CIJHSw0deS?=
- =?us-ascii?Q?a68Y3ABzCrX2RcUdzYP4B7wbpPHuYV8bu9SVSj4ZqJea3MEqV22xx+z2OgPn?=
- =?us-ascii?Q?XXvNuUZ0dcPEYWcs2G68Ss8Z0k9pwu3xNoyRlUvFIXY8lMW2PO1c0jL0TPom?=
- =?us-ascii?Q?4r0Sb4U8ZT70TBq6dxUxBRJrZ9UyhDghmy4K2YPZmB6fGqMVylLg3eju90OB?=
- =?us-ascii?Q?IfmYab3/6YggH+56EzrFUb0WxUvKLYFPG82oVCAXEjjHx+c/8uK+Yt0vPcSL?=
- =?us-ascii?Q?R2LQuRLAta+W576GlRO9ep9Ugl6+sO2yxfGYw4bOThyB7oSwlL/wnDNEo38s?=
- =?us-ascii?Q?+vRmRh/E0/MhYcB1w/zTBMqFkQye4ww3EKYslXaGh8NDojPygKPqrhvlurdN?=
- =?us-ascii?Q?zejh5tM13u5C43pMxWAHqhlYN2DF35ONgXSJDvM+WlRlmRnxvsItBcI2q0Jx?=
- =?us-ascii?Q?bBVcXmWjs8NUFDj3QOgBmZGoBkbLhGo50NXyGKahtFwpp96LweY3xoVwrSgq?=
- =?us-ascii?Q?ff3minDc43MuFc5jShUDDrRuunM9MfCchN/ZWALH4/vFOszAkLI8GmcEuYyH?=
- =?us-ascii?Q?zr6CtTYyspEQl0CHDlAgXK02NgXRPygcbFkE0RkrcHOpnLX6N4SC1wlz8GFZ?=
- =?us-ascii?Q?d8hlebSzeSp+fSvZzA7gqXNkwjkm4s/36Uqz/+XtXnSlYOzfz/W1zOlb5VAM?=
- =?us-ascii?Q?6jXxo6cmF8jxqenLlKxkK1NW4NbAxb09W6KnAySwM/8VgvWfOjxhV+EfW4Ha?=
- =?us-ascii?Q?ZqmEcx6TlBWL1ZTLhIRM2DoK/A7ERJrva2HvMfZ1VooBsQ/++Q5ZbzOc+qxg?=
- =?us-ascii?Q?WamB32K2Yq0qJ//zxQa6HxetqPqzh3c=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 15:33:02.9103
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ymlfWWOHnqyJf973DGkg+3X9TpOxkO2eabSXrGATOOps+o1oO6gSaJ2RXRfqwniJws3mK022DK89H5X1X7w5GNfZcRs+risGBoJiUWaU2dQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB5507
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-13_02:2022-04-13,2022-04-13 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=967 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204130082
-X-Proofpoint-ORIG-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
-X-Proofpoint-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2266867.1649864097.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 13 Apr 2022 16:34:57 +0100
+Message-ID: <2266868.1649864097@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -155,86 +67,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 03:36:57PM +0300, David Kahurani wrote:
-> On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> 
-> Hi Dan
-> 
-> > >       int ret;
-> > >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> > > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> > >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-> > >                value, index, data, size);
-> > >
-> > > -     if (unlikely(ret < 0))
-> > > +     if (unlikely(ret < size)) {
-> > > +             ret = ret < 0 ? ret : -ENODATA;
-> > > +
-> > >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> > >                           index, ret);
-> > > +     }
-> > >
-> > >       return ret;
-> >
-> > It would be better to make __ax88179_read_cmd() return 0 on success
-> > instead of returning size on success.  Non-standard returns lead to bugs.
-> >
-> 
-> I don't suppose this would have much effect on the structure of the
-> code and indeed plan to do this but just some minor clarification.
-> 
-> Isn't it standard for reader functions to return the number of bytes read?
-> 
+Hi Linus,
 
-Not really.
+Here's a collection of fscache and cachefiles fixes and misc small
+cleanups.  The two main fixes are:
 
-There are some functions that do it, but it has historically lead to bug
-after bug.  For example, see commit 719b8f2850d3 ("USB: add
-usb_control_msg_send() and usb_control_msg_recv()") where USB is moving
-away from that to avoid bugs.
+ (1) Add a missing unmark of the inode in-use mark in an error path.
 
-If you return zero on success then it's simple:
+ (2) Fix a KASAN slab-out-of-bounds error when setting the xattr on a
+     cachefiles volume due to the wrong length being given to memcpy().
 
-	if (ret)
-		return ret;
+In addition, there's the removal of an unused parameter, removal of an
+unused Kconfig option, conditionalising a bit of procfs-related stuff and
+some doc fixes.
 
-If you return the bytes people will try call kinds of things:
+David
 
-	if (ret)
-		return ret;
+Link: https://lore.kernel.org/r/164945915630.773423.14655306154231712324.s=
+tgit@warthog.procyon.org.uk/
 
-Bug: Now the driver is broken.  (Not everyone can test the hardware).
+---
+The following changes since commit 42e7a03d3badebd4e70aea5362d6914dfc7c220=
+b:
 
-	if (ret != size)
-		return ret;
+  Merge tag 'hyperv-fixes-signed-20220407' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/hyperv/linux (2022-04-07 06:35:34 -1000)
 
-Bug: returns a positive.
+are available in the Git repository at:
 
-	if (ret != size)
-		return -EIO;
+  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
+/fscache-fixes-20220413
 
-Bug: forgot to propagate the error code.
+for you to fetch changes up to 61132ceeda723d2c48cbc2610ca3213a7fcb083b:
 
-	if (ret < sizeof(foo))
-		return -EIO;
+  fscache: remove FSCACHE_OLD_API Kconfig option (2022-04-08 23:54:37 +010=
+0)
 
-Bug: because of type promotion negative error codes are treated as
-     success.
+----------------------------------------------------------------
+fscache fixes
 
-	if (ret < 0)
-		return ret;
+----------------------------------------------------------------
+Dave Wysochanski (1):
+      cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xa=
+ttr
 
-Bug: buffer partially filled.  Information leak.
+Jeffle Xu (1):
+      cachefiles: unmark inode in use in error path
 
-If you return the bytes then the only correct way to write error
-handling is:
+Yue Hu (6):
+      docs: filesystems: caching/backend-api.rst: correct two relinquish A=
+PIs use
+      docs: filesystems: caching/backend-api.rst: fix an object withdrawn =
+API
+      fscache: Remove the cookie parameter from fscache_clear_page_bits()
+      fscache: Move fscache_cookies_seq_ops specific code under CONFIG_PRO=
+C_FS
+      fscache: Use wrapper fscache_set_cache_state() directly when relinqu=
+ishing
+      fscache: remove FSCACHE_OLD_API Kconfig option
 
-	if (ret < 0)
-		return ret;
-	if (ret != size)
-		return -EIO;
-
-regards,
-dan carpenter
-
+ Documentation/filesystems/caching/backend-api.rst |  8 +++---
+ Documentation/filesystems/caching/netfs-api.rst   | 25 +++++++++--------
+ fs/afs/write.c                                    |  3 +--
+ fs/cachefiles/namei.c                             | 33 ++++++++++++++++--=
+-----
+ fs/cachefiles/xattr.c                             |  2 +-
+ fs/fscache/Kconfig                                |  3 ---
+ fs/fscache/cache.c                                |  2 +-
+ fs/fscache/cookie.c                               |  4 ++-
+ fs/fscache/internal.h                             |  4 +++
+ fs/fscache/io.c                                   |  5 ++--
+ include/linux/fscache.h                           |  4 +--
+ 11 files changed, 53 insertions(+), 40 deletions(-)
 

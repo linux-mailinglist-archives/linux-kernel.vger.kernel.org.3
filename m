@@ -2,221 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57A54FF7C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B47D4FF7D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbiDMNjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
+        id S235831AbiDMNk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbiDMNjv (ORCPT
+        with ESMTP id S231741AbiDMNkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:39:51 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210EA5F240;
-        Wed, 13 Apr 2022 06:37:30 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso1165458otf.12;
-        Wed, 13 Apr 2022 06:37:30 -0700 (PDT)
+        Wed, 13 Apr 2022 09:40:21 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B065F240;
+        Wed, 13 Apr 2022 06:38:00 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id y23so1069990qtv.4;
+        Wed, 13 Apr 2022 06:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kQeNukA9v0sAIjhr8IxlYmsIPikuBlNT7ZSLuaA7VkQ=;
+        b=Mq+7g8tDrDPA6Y/smYyEuWeRwuMTPNbg3IMRnuvDOosjH8z0Zf+X7Gkaehqfa9AmZ1
+         8516oOb/LDbE259AqGWP5+8lPidr+YSZG5WUkDPrdv5sgJgxW7UG6CBrB89ammJc5uRm
+         Y5WN/HHXs/Opp7EHbPCi5nF3VhS7JMxEDuiKTf4yaTT1m2KFTDiKC/DsKDkLnBt0iHC6
+         QQFpuubKKXo3WXIp3cPhWTxo0+yw936ltO8p23CHKgMrnQtHBvlFv1NfAARppwFAr8jL
+         eJSqLI5YPmDL8+OcOZv1wDsJ2gr+eUa1/m6iODUV6e9sHgQet5IyQ3AezWTIME28KItg
+         2AKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vVwMNhUUHsY7dc6d0f9n1lAM7yT9lwBnJKe7WLSKID0=;
-        b=x/FHyw0rE/htNaw3RQlQCoPAzoDMtxpVc5uAjzxUIQiOTXqoHujV0vSnZYK8ztgJr2
-         klWAZcitRCJy2WBdlPT4DjwMGicqxI80O/z++Yk9p2JCvpwAw1BptZtnwcbaJnLl020a
-         xxXwTRJfsP7cP3u2CwOWfkIPbxGUKAxwdVSXRVperDSboNqMnF0otbgB+zoGFQ7uuY2Y
-         9p/W4VOn08ovMO2e+Dd6HsQFsC+CcrTvvKdFuTHqxQGWeau5K835Li1MDFSu7Kszq1fy
-         55DIfnxPGlIEy608ca/v1MtMXzsB5+n0HvswMP3DKyryMuPVIkBJvYNRqDaeUKWAQORz
-         iZ4Q==
-X-Gm-Message-State: AOAM531m007qZPzwZR65lFPp9fE59oAylJeqVqhYSIL/Xap0qPyJ6MXY
-        aDXofbVpjQ7CDC2FLvOBAA==
-X-Google-Smtp-Source: ABdhPJzRayVPW0NrvFDebGFBcCiJJloeTKmG0BgRIxF3CbY/VeL30ky6BKkSiYuxU0EUXIqIZeSAWA==
-X-Received: by 2002:a05:6830:2055:b0:5b2:5659:542f with SMTP id f21-20020a056830205500b005b25659542fmr15031191otp.189.1649857049323;
-        Wed, 13 Apr 2022 06:37:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm14584614ots.66.2022.04.13.06.37.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kQeNukA9v0sAIjhr8IxlYmsIPikuBlNT7ZSLuaA7VkQ=;
+        b=JJoROrPGUP2f/G/QOwC9h0O4HQnYviKYdhJLy77+ATMeqts5FPXPk0b8+Bj+hNajGM
+         vIbDINBTsAScqlJBzq68mwAdik7UU/thaUIqIOk1b9qppehBrhMZHHwTFrAbWWpWrdU8
+         ky//ZhvQrY1zt/XGpqYHy+aZX/5YbPCvN74pqEqbmmrUqsFUh2N9U78GjWy+4S9n5hUe
+         2/yds3/XVdhU0WqIElKFQhamzzYctT1fthbqU9GtEUFwoE1pC4cu+IFrbp1gdvzqUIwg
+         FQlaS0o8NLFZLt/e4j7kjGnLQeFuloxVa0vmOukA+mmTXXlUZK0WlGPq4QmbGlMGOCeN
+         R5aA==
+X-Gm-Message-State: AOAM530U1S0GJvJZmcRHVauZVR3Gwl9mgGlI6KnxVrhxJeNWIZ9AgoYe
+        zgLFwJ9P/w5/53H/P6ORHieqSXzw99yR45Qd
+X-Google-Smtp-Source: ABdhPJztXwfsW7BO3NnHC4u35LCaJUWDbkRdjMvL4IMH4HQyGKDsbj3JDw6N+KqRSIddpXjLqjkv9w==
+X-Received: by 2002:ac8:6903:0:b0:2f1:af14:a01c with SMTP id bt3-20020ac86903000000b002f1af14a01cmr2954735qtb.45.1649857079608;
+        Wed, 13 Apr 2022 06:37:59 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id 143-20020a370795000000b0069c59e1b8eesm790584qkh.10.2022.04.13.06.37.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 06:37:29 -0700 (PDT)
-Received: (nullmailer pid 3097465 invoked by uid 1000);
-        Wed, 13 Apr 2022 13:37:28 -0000
-Date:   Wed, 13 Apr 2022 08:37:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ashish Mhetre <amhetre@nvidia.com>
-Cc:     dmitry.osipenko@collabora.com, digetx@gmail.com,
-        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vdumpa@nvidia.com,
-        Snikam@nvidia.com
-Subject: Re: [Patch v7 3/4] dt-bindings: memory: Update reg/reg-names
- validation
-Message-ID: <YlbSGEBKgpVC51dZ@robh.at.kernel.org>
-References: <20220413094012.13589-1-amhetre@nvidia.com>
- <20220413094012.13589-4-amhetre@nvidia.com>
+        Wed, 13 Apr 2022 06:37:59 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Simon Xue <xxm@rock-chips.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: pci: remove fallback from Rockchip DesignWare binding
+Date:   Wed, 13 Apr 2022 09:37:28 -0400
+Message-Id: <20220413133731.242870-2-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220413133731.242870-1-pgwipeout@gmail.com>
+References: <20220413133731.242870-1-pgwipeout@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413094012.13589-4-amhetre@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 03:10:11PM +0530, Ashish Mhetre wrote:
-> From tegra186 onwards, memory controller support multiple channels.
-> Reg items are updated with address and size of these channels.
-> Tegra186 has overall 5 memory controller channels. Tegra194 and tegra234
-> have overall 17 memory controller channels each.
-> There is 1 reg item for memory controller stream-id registers.
-> So update the reg maxItems to 18 in tegra186 devicetree documentation.
-> Also update validation for reg-names added for these corresponding reg
-> items.
+The snps,dw-pcie binds to a standalone driver.
+It is not fully compatible with the Rockchip implementation and causes a
+hang if it binds to the device.
 
-Somehow your subject should indicate this is for Tegra.
+Remove this binding as a valid fallback.
 
-> 
-> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
-> ---
->  .../nvidia,tegra186-mc.yaml                   | 80 +++++++++++++++++--
->  1 file changed, 74 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> index 13c4c82fd0d3..c7cfa6c2cd81 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> @@ -34,8 +34,12 @@ properties:
->            - nvidia,tegra234-mc
->  
->    reg:
-> -    minItems: 1
-> -    maxItems: 3
-> +    minItems: 6
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+---
+ Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-You just broke current users.
+diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+index 142bbe577763..8dc11fed8a3c 100644
+--- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+@@ -32,7 +32,6 @@ properties:
+   compatible:
+     items:
+       - const: rockchip,rk3568-pcie
+-      - const: snps,dw-pcie
+ 
+   reg:
+     items:
+@@ -110,7 +109,7 @@ examples:
+         #size-cells = <2>;
+ 
+         pcie3x2: pcie@fe280000 {
+-            compatible = "rockchip,rk3568-pcie", "snps,dw-pcie";
++            compatible = "rockchip,rk3568-pcie";
+             reg = <0x3 0xc0800000 0x0 0x390000>,
+                   <0x0 0xfe280000 0x0 0x10000>,
+                   <0x3 0x80000000 0x0 0x100000>;
+-- 
+2.25.1
 
-> +    maxItems: 18
-> +
-> +  reg-names:
-> +    minItems: 6
-> +    maxItems: 18
->  
->    interrupts:
->      items:
-> @@ -142,7 +146,18 @@ allOf:
->      then:
->        properties:
->          reg:
-> -          maxItems: 1
-> +          maxItems: 6
-> +          description: 5 memory controller channels and 1 for stream-id registers
-> +
-> +        reg-names:
-> +          maxItems: 6
-> +          items:
-> +            - const: sid
-> +            - const: broadcast
-> +            - const: ch0
-> +            - const: ch1
-> +            - const: ch2
-> +            - const: ch3
->  
->    - if:
->        properties:
-> @@ -151,7 +166,30 @@ allOf:
->      then:
->        properties:
->          reg:
-> -          minItems: 3
-> +          minItems: 18
-> +          description: 17 memory controller channels and 1 for stream-id registers
-> +
-> +        reg-names:
-> +          minItems: 18
-> +          items:
-> +            - const: sid
-> +            - const: broadcast
-> +            - const: ch0
-> +            - const: ch1
-> +            - const: ch2
-> +            - const: ch3
-> +            - const: ch4
-> +            - const: ch5
-> +            - const: ch6
-> +            - const: ch7
-> +            - const: ch8
-> +            - const: ch9
-> +            - const: ch10
-> +            - const: ch11
-> +            - const: ch12
-> +            - const: ch13
-> +            - const: ch14
-> +            - const: ch15
->  
->    - if:
->        properties:
-> @@ -160,13 +198,37 @@ allOf:
->      then:
->        properties:
->          reg:
-> -          minItems: 3
-> +          minItems: 18
-> +          description: 17 memory controller channels and 1 for stream-id registers
-> +
-> +        reg-names:
-> +          minItems: 18
-> +          items:
-> +            - const: sid
-> +            - const: broadcast
-> +            - const: ch0
-> +            - const: ch1
-> +            - const: ch2
-> +            - const: ch3
-> +            - const: ch4
-> +            - const: ch5
-> +            - const: ch6
-> +            - const: ch7
-> +            - const: ch8
-> +            - const: ch9
-> +            - const: ch10
-> +            - const: ch11
-> +            - const: ch12
-> +            - const: ch13
-> +            - const: ch14
-> +            - const: ch15
->  
->  additionalProperties: false
->  
->  required:
->    - compatible
->    - reg
-> +  - reg-names
-
-New, added properties cannot be required. That's an ABI break.
-
->    - interrupts
->    - "#address-cells"
->    - "#size-cells"
-> @@ -182,7 +244,13 @@ examples:
->  
->          memory-controller@2c00000 {
->              compatible = "nvidia,tegra186-mc";
-> -            reg = <0x0 0x02c00000 0x0 0xb0000>;
-> +            reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
-> +                  <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast channel */
-> +                  <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
-> +                  <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
-> +                  <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
-> +                  <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
-> +            reg-names = "sid", "broadcast", "ch0", "ch1", "ch2", "ch3";
->              interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
->  
->              #address-cells = <2>;
-> -- 
-> 2.17.1
-> 

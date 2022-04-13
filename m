@@ -2,92 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D20B4FFE02
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732414FFE09
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237778AbiDMSlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S236379AbiDMSmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237772AbiDMSl2 (ORCPT
+        with ESMTP id S234793AbiDMSmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:41:28 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544276578F;
-        Wed, 13 Apr 2022 11:39:06 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ebd70a4cf5so32567807b3.3;
-        Wed, 13 Apr 2022 11:39:06 -0700 (PDT)
+        Wed, 13 Apr 2022 14:42:05 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5612E21D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:39:42 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id m8so3284805ljc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=v0uxIEiOGXAVbrPGMXz16+Yl9VteQ3InKsyKHHrbkhY=;
+        b=h2OmjY4+49Tg6IGmmKVnS46h0KMF5nJCrpra12ygtmpweIVAW4C9qzxr0IhwZZEkU6
+         r7BQKw12FLOi3dtraqvutf6t94HSeOzMa9EC7/DPsC/VPbyvc4sbTONsqSKXVwJrk4NQ
+         9/8kCNc4U140teNFFauidckx5eHVIC+7LLlV/7gGC2mz3w9RkSL0OqGvASOKJcj5UyaI
+         4EuWcsiT2laec06NvgBB72OnYzCUNr5H31jPErL91bBqJi21Vc3TQnxvmvGILKPbQb8z
+         CpXxPbcoe11SYDJsRjyQeXOl3DgYvLfyR0E9zp/So6Uh7gtb5DHrsl/Ybq49TZk4J1sD
+         8tzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s7ZiirljygamRSXBd9pz2rQ/gtAwBPQ328d/UpiDcQk=;
-        b=FOMlHiyWj4sQyIFASiXqZKyZOuvVueXr6nOq9qQnIWqLF5fXjei/4B6VKVB5LPoBpk
-         MRqiEUw7kcn6MVgGGMmyaxj7PL+OhhgvSHt17MhMdRkMBoL4VUBwxg469CQUKfHo1ewg
-         SQrns6jK59aQ99UqTVOxC1S9R4cEf/4D7EaTXq/GRYlFvr3YQWl6hGRYFppjT3orL02e
-         EJ3jAT5+SyVO6ayYJuHm0NdtcgQ+fQ0AlU2DYEE2/jZXbCJr0j03h8Ty5mypKe4DIXh9
-         dhyQq3rrkgkMZVesW24AWKXJNKAgTnrPd0HDNa8nBwY+h/n4d08F/UQDlWKrcaEdnh0d
-         yiYg==
-X-Gm-Message-State: AOAM530+rvfd5XoefBjALucpUugx+SfkIvzO9H3Czrqj2EXbcyw9aJBW
-        /JWyj8pvj0bDhM9Ni4F6qoqv5fJQ4lUV1+uc2h4=
-X-Google-Smtp-Source: ABdhPJzerlKsX6NRbuO3Q4fgePtDL4OjlO5J8pZ9jSyz7BXPmML0SiSLAi7G2QTkYTxRuL0BV5dQUpjXBuI8mYEnzmY=
-X-Received: by 2002:a81:1096:0:b0:2ec:4a46:7e5a with SMTP id
- 144-20020a811096000000b002ec4a467e5amr255495ywq.196.1649875145609; Wed, 13
- Apr 2022 11:39:05 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v0uxIEiOGXAVbrPGMXz16+Yl9VteQ3InKsyKHHrbkhY=;
+        b=JcRz2pxntlFPG/8F+qz8sLLOOy22PlDIaL4ai7Khv+fZtL7ESdJT4chZ7RSGCWR81C
+         6onpTh9vt+9OI8dy1lEz715T4U9e7HvVlji8deGrFbKaW7NYrEDWF3/F2zfrhF5bZwOt
+         fLVfSjBQg3bEQki/my9XYAEW3tUbYdDXAoIxBEpJKiyDn72fpRT8al+iflOncFHsMA4+
+         xMMngzOiuo3kPi4OoyqW6wIfcbedhcuOALtOC+Mehy9bRlMaeFFkWe9VazJ4IN9zG32K
+         TW1BAGF96cQ9kHmfcdW7hm5Q9vTkEKCmxoOrFu4x7A+GWH45GfkSAl7nC5fR2ACgWZu7
+         8tXA==
+X-Gm-Message-State: AOAM532Uuy4uaX7IncWoBP0RkWC576g8brYLL6aMOZu+TyA06WtRDDK1
+        D65QBbRbeZpSOI9RFME+jwY=
+X-Google-Smtp-Source: ABdhPJzhbs3dT23xzQ3oXIyWAhtY4I0DTwhniFJB67OwXphv4OtRYr1uWo06bpQLykfliFtF418d6Q==
+X-Received: by 2002:a05:651c:a0e:b0:249:90c8:453d with SMTP id k14-20020a05651c0a0e00b0024990c8453dmr26505188ljq.399.1649875180430;
+        Wed, 13 Apr 2022 11:39:40 -0700 (PDT)
+Received: from [192.168.1.38] (91-159-150-194.elisa-laajakaista.fi. [91.159.150.194])
+        by smtp.gmail.com with ESMTPSA id u3-20020a197903000000b00464f4c76ebbsm2256852lfc.94.2022.04.13.11.39.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 11:39:39 -0700 (PDT)
+Message-ID: <2a2becf1-fc19-a7da-deb7-1c12781d503d@gmail.com>
+Date:   Wed, 13 Apr 2022 21:39:37 +0300
 MIME-Version: 1.0
-References: <20220311165310.60418-1-jonathanh@nvidia.com> <db1e0d18-8a6a-02a2-a663-386987cc7df8@nvidia.com>
-In-Reply-To: <db1e0d18-8a6a-02a2-a663-386987cc7df8@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 20:38:54 +0200
-Message-ID: <CAJZ5v0g3feazLCz1GZB_c=qziu8uqFr9J+mWKME1NEggsaSM7g@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: SPCR: Add support for NVIDIA 16550-compatible port subtype
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jeff Brasen <jbrasen@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        =?UTF-8?Q?Zbigniew_J=c4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Cc:     Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+From:   Topi Miettinen <toiwoton@gmail.com>
+In-Reply-To: <20220413134946.2732468-1-catalin.marinas@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 5:54 PM Jon Hunter <jonathanh@nvidia.com> wrote:
->
-> Adding linux-tegra ...
->
-> On 11/03/2022 16:53, Jon Hunter wrote:
-> > From: Jeff Brasen <jbrasen@nvidia.com>
-> >
-> > Add support for the NVIDIA specific 16550 subtype to SPCR table parsing
-> > routine.
-> >
-> > Signed-off-by: Jeff Brasen <jbrasen@nvidia.com>
-> > Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> > ---
-> >   drivers/acpi/spcr.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/acpi/spcr.c b/drivers/acpi/spcr.c
-> > index d589543875b8..1eabfcd122ee 100644
-> > --- a/drivers/acpi/spcr.c
-> > +++ b/drivers/acpi/spcr.c
-> > @@ -142,6 +142,7 @@ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
-> >       case ACPI_DBG2_16550_COMPATIBLE:
-> >       case ACPI_DBG2_16550_SUBSET:
-> >       case ACPI_DBG2_16550_WITH_GAS:
-> > +     case ACPI_DBG2_16550_NVIDIA:
-> >               uart = "uart";
-> >               break;
-> >       default:
->
-> --
+On 13.4.2022 16.49, Catalin Marinas wrote:
+> Hi,
+> 
+> The background to this is that systemd has a configuration option called
+> MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
+> is to prevent a user task from inadvertently creating an executable
+> mapping that is (or was) writeable. Since such BPF filter is stateless,
+> it cannot detect mappings that were previously writeable but
+> subsequently changed to read-only. Therefore the filter simply rejects
+> any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
+> support (Branch Target Identification), the dynamic loader cannot change
+> an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
+> For libraries, it can resort to unmapping and re-mapping but for the
+> main executable it does not have a file descriptor. The original bug
+> report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
+> for libraries - [3].
+> 
+> Add in-kernel support for such feature as a DENY_WRITE_EXEC personality
+> flag, inherited on fork() and execve(). The kernel tracks a previously
+> writeable mapping via a new VM_WAS_WRITE flag (64-bit only
+> architectures). I went for a personality flag by analogy with the
+> READ_IMPLIES_EXEC one. However, I'm happy to change it to a prctl() if
+> we don't want more personality flags. A minor downside with the
+> personality flag is that there is no way for the user to query which
+> flags are supported, so in patch 3 I added an AT_FLAGS bit to advertise
+> this.
 
-So seeing no objections or concerns, I've queued up this one for 5.19
-now, thanks!
+With systemd there's a BPF construct to block personality changes 
+(LockPersonality=yes) but I think prctl() would be easier to lock down 
+irrevocably.
+
+Requiring or implying NoNewPrivileges could prevent nasty surprises from 
+set-uid Python programs which happen to use FFI.
+
+> Posting this as an RFC to start a discussion and cc'ing some of the
+> systemd guys and those involved in the earlier thread around the glibc
+> workaround for dynamic libraries [4]. Before thinking of upstreaming
+> this we'd need the systemd folk to buy into replacing the MDWE SECCOMP
+> BPF filter with the in-kernel one.
+
+As the author of this feature in systemd (also similar feature in 
+Firejail), I'd highly prefer in-kernel version to BPF protection. I'd 
+definitely also want to use this in place of BPF on x86_64 and other 
+arches too.
+
+In-kernel version would probably allow covering pretty easily this case 
+(maybe it already does):
+
+	fd = memfd_create(...);
+	write(fd, malicious_code, sizeof(malicious_code));
+	mmap(..., PROT_EXEC, ..., fd);
+
+Other memory W^X implementations include S.A.R.A [1] and SELinux 
+EXECMEM/EXECSTACK/EXECHEAP protections [2], [3]. SELinux checks 
+IS_PRIVATE(file_inode(file)) and vma->anon_vma != NULL, which might be 
+useful additions here too (or future extensions if you prefer).
+
+-Topi
+
+[1] https://smeso.it/sara/
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3708
+[3] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3787

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393334FFE79
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59CC4FFE88
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237934AbiDMTJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S237999AbiDMTKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiDMTJq (ORCPT
+        with ESMTP id S236677AbiDMTJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:09:46 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5E06E4FA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:07:24 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id k22so4006773wrd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:07:24 -0700 (PDT)
+        Wed, 13 Apr 2022 15:09:47 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234946E564
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:07:25 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id x3so1681126wmj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6k9bKJA41frCR0pmOk9SA+9AKNxBSbRS1tpgQTa/e4I=;
-        b=VYNvVfTkDsS2GrZecgJ4GpodMXD4vwGRpH5f6fSEdCuOongHsWNf84yDBtLMfZpCh/
-         bP/TUsh0Q4kp2FgAq1vxWG8dYmA5buAK9Bg3fehnNA3oI0F/SBENezK39wwQD04oKScC
-         j2wf+dGY8pzeVQe/CungYvO95ijHs+X1EwbGHZLyXNi6ja4lwh2vCN3REwR60vJey/Ql
-         llTjFB5wnjf4SQ3m8/Mm5oPJm/CsXvGqWgVOIoeu4BUZmuUYKUu+z/kiSyxz2at8nCsx
-         eKm/1okCDZUsEjkQPL1p7RKhjElkzqlXXMKPQULRiNSzh9V+pKAuGw2ZScnfcKA8HQvS
-         Hd4A==
+        bh=yV669w6ThAcunb2ptGEHL08NqOMgexsX7UsYGNNFxgw=;
+        b=0+C6Qtec0B3cxtI8hQ7+5AaUwzZpKeedDIxHRwF6kg26C6z5E0gQg5fzxViZaXWWr0
+         LpKCYiZx9zOnCr073zRxmkE9adjWpuBQUT3gFIoOFljLl7uwaTd2u5qVi1uhD4dve56I
+         XFpmauVUwU0ui+/bi1s26wYA/KKin38UZO1pca6AYJlesBKqq9LeZLLtx7u/c1e+Ve4V
+         3r73e52rOJ9RRfEXzhHTV9vGNCVOy0/bzpNhSRqg5gxQZMtSvBNPDpy8S5YkD2AZqWeJ
+         zZVxrxDU37WfINUNkiCvOJHaoR824Ta6zLOQbiWLzCOfO5BDMOgdDBdRaGfVg10SosMZ
+         XkCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6k9bKJA41frCR0pmOk9SA+9AKNxBSbRS1tpgQTa/e4I=;
-        b=BQPRTQ/69d+K1xlUvIoul1IoTt55C7pGJTmcrHN6wknCOTTNKX6fJVLGQWnKVdBLjs
-         pMovL5Blp6BEMEUVv4e4TjkiSb0DbQNw6UmdDLWb9iDKj9xzGsJhV7bjxR1N4rIVKNAY
-         32SjZVkMmd8bkNvQWKnrFQT1oPUb8wK3Z7Urs7F2EcFQfv1wi1vIgHO1QRSVwqB0Mj20
-         MeFJQQzmUxuRJtJrIexxDejdcgR5YPp6Q7mGnoqV87FsRIuzc80zXWKfixvJlPtVxeYV
-         Bqj2TGcoXSm8Yl98TsKGy2kjdjYyJCd01lBg/hDSBXHHrRRgYK62B6v1SyPwaGEGyvsQ
-         WRGw==
-X-Gm-Message-State: AOAM530m9JC0ONveqGkRlge1RawUE8kWuXc1s4C7cd9pZvSNSO9C/uPO
-        xrnyetl58J/1+qRSvMxKIQPvNg==
-X-Google-Smtp-Source: ABdhPJyII1J5W8VWBLKAspEHoqtylYWUh8tT0Az0Bc4V8OU2/VVFPwdptvVPdB1L4uaAVEEjl9swvg==
-X-Received: by 2002:a05:6000:70a:b0:207:a120:bfbd with SMTP id bs10-20020a056000070a00b00207a120bfbdmr258416wrb.142.1649876842619;
-        Wed, 13 Apr 2022 12:07:22 -0700 (PDT)
+        bh=yV669w6ThAcunb2ptGEHL08NqOMgexsX7UsYGNNFxgw=;
+        b=OMkE4YHdIwVkWQeWcHhmg6PnznqsWsIo7+gA4J/JV541h3lnd6ucD6b3OmAr4yFFtt
+         +sO+iF8yhcwNf60i15ijzhPwTgiKHWohPK9XCaB+o5gGRodQUx2avWDPQD/ofqiNl5Bk
+         VgPnaTQsvktkqxdBs+TxDDjensrBXbftZmL9HSOLyqpMa6SPwcuKcczk1etY2kJZKYI/
+         y3bWWGHZ2j76299bi+U2YOf7P9W6cfb5IXqEcvD1HDKltcuvpqSFDd/YsACQx3gNcTUO
+         QTY0R3jQxVv1AvcfT3UcBh3cErSUJBvze4ccGL07ksJUEqbRZy3NbR5Bo6n+bobhX3e7
+         5fzg==
+X-Gm-Message-State: AOAM532k9GinsAjhyD9LE9FDzPG/VWUprzyquMNlRiKjdlDuO38JMYpY
+        lvJpA3QO1AAwj34bD2B5gdNHAA==
+X-Google-Smtp-Source: ABdhPJx1Gjtc8izayGqu0sc2TncLxcVz1bg9m/bNlpID/7ijNYiFAxDc3MO/z1/WPyNVBlTUDwaRUQ==
+X-Received: by 2002:a05:600c:3493:b0:38e:bbbb:26f7 with SMTP id a19-20020a05600c349300b0038ebbbb26f7mr167635wmq.114.1649876843673;
+        Wed, 13 Apr 2022 12:07:23 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o29-20020a05600c511d00b0038e3532b23csm3551852wms.15.2022.04.13.12.07.21
+        by smtp.googlemail.com with ESMTPSA id o29-20020a05600c511d00b0038e3532b23csm3551852wms.15.2022.04.13.12.07.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 12:07:22 -0700 (PDT)
+        Wed, 13 Apr 2022 12:07:23 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     heiko@sntech.de, herbert@gondor.apana.org.au,
         krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v5 01/33] crypto: rockchip: use dev_err for error message about interrupt
-Date:   Wed, 13 Apr 2022 19:06:41 +0000
-Message-Id: <20220413190713.1427956-2-clabbe@baylibre.com>
+Subject: [PATCH v5 02/33] crypto: rockchip: do not use uninitialized variable
+Date:   Wed, 13 Apr 2022 19:06:42 +0000
+Message-Id: <20220413190713.1427956-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220413190713.1427956-1-clabbe@baylibre.com>
 References: <20220413190713.1427956-1-clabbe@baylibre.com>
@@ -64,34 +64,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interrupt is mandatory so the message should be printed as error.
+crypto_info->dev is not yet set, so use pdev->dev instead.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/crypto/rockchip/rk3288_crypto.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/crypto/rockchip/rk3288_crypto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-index 35d73061d156..45cc5f766788 100644
+index 45cc5f766788..21d3f1458584 100644
 --- a/drivers/crypto/rockchip/rk3288_crypto.c
 +++ b/drivers/crypto/rockchip/rk3288_crypto.c
-@@ -371,8 +371,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
+@@ -381,7 +381,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
+ 			       "rk-crypto", pdev);
  
- 	crypto_info->irq = platform_get_irq(pdev, 0);
- 	if (crypto_info->irq < 0) {
--		dev_warn(crypto_info->dev,
--			 "control Interrupt is not available.\n");
-+		dev_err(&pdev->dev, "control Interrupt is not available.\n");
- 		err = crypto_info->irq;
+ 	if (err) {
+-		dev_err(crypto_info->dev, "irq request failed.\n");
++		dev_err(&pdev->dev, "irq request failed.\n");
  		goto err_crypto;
  	}
+ 
 -- 
 2.35.1
 

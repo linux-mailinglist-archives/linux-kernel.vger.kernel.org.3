@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64FB4FF320
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5310A4FF326
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiDMJQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S234317AbiDMJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiDMJQ3 (ORCPT
+        with ESMTP id S234313AbiDMJQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:16:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C027A286D5;
-        Wed, 13 Apr 2022 02:14:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8783F13D5;
-        Wed, 13 Apr 2022 02:14:08 -0700 (PDT)
-Received: from [10.1.33.136] (e127744.cambridge.arm.com [10.1.33.136])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BFE93F5A1;
-        Wed, 13 Apr 2022 02:14:06 -0700 (PDT)
-Subject: Re: [PATCH] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
- event
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220413075124.635589-1-leo.yan@linaro.org>
- <c21b3409-a8a0-aae7-7634-5e648f0a49b1@arm.com>
- <20220413084941.GB521036@leoy-ThinkPad-X240s>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <38078438-dbce-690b-ba79-5c3713f97816@arm.com>
-Date:   Wed, 13 Apr 2022 10:14:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 13 Apr 2022 05:16:59 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C62A237EF;
+        Wed, 13 Apr 2022 02:14:20 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23D8ZUZ3023705;
+        Wed, 13 Apr 2022 04:14:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=V3w7OsZXrFneyHUnLK1Ci1c4WOnspWrTkpaaeM+/9lk=;
+ b=FYY90fiFFrsSsYG5bsleo3WwLkG00GvRjtaK9bYNzh2PqaBL/1shpBge8QHkiDMQkI0O
+ i5gzZef7vEVLp+CWo9joj9Cdv95At+wYxuo/wRahpOo+5ZTk8vmea44AyAOlDW6FkB4g
+ +p5xToU3aWGrroRN2VE812iIR+Ows/UAOYoOdtgTmu+p3gmjA9FvDzdvRTIRxLauSSFU
+ DWcVx8mW4v/be6DK1uCM8Yh8st4iH3XW+3Npwn10umSEHu3mUqGR0urJUzMmv5+ouqFI
+ LQi+lTwSaKae3Uajw8jGA6+dIiM+5pl5qrUl0cnS7L4/XFZyaIHfQk3YLpRSGmc+K4bP ig== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fb7hymxbk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 13 Apr 2022 04:14:14 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 10:14:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 13 Apr 2022 10:14:12 +0100
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.152])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D7E95475;
+        Wed, 13 Apr 2022 09:14:11 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v2 RESEND] i2c: cadence: Increase timeout per message if necessary
+Date:   Wed, 13 Apr 2022 10:14:10 +0100
+Message-ID: <20220413091410.17970-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-In-Reply-To: <20220413084941.GB521036@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
+X-Proofpoint-ORIG-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Timeout as 1 second sets an upper limit on the length
+of the transfer executed, but there is no maximum length
+of a write or read message set in i2c_adapter_quirks for
+this controller.
 
-On 13/04/2022 09:49, Leo Yan wrote:
-> On Wed, Apr 13, 2022 at 09:15:40AM +0100, German Gomez wrote:
->
-> [...]
->
->>>  	if (sort__mode == SORT_MODE__MEMORY) {
->>> +		/*
->>> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
->>> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
->>> +		 * compatibility, set the bit if it's an old perf data file.
->>> +		 */
->>> +		evlist__for_each_entry(session->evlist, evsel) {
->>> +			if (strstr(evsel->name, "arm_spe_") &&
->> This didn't work for me when the file recorded "-e arm_spe//" instead of
->> "-e arm_spe_0//". Could you remove the trailing _? With that:
-> Sure, will change to "arm_spe".  Just curious, if there any local
-> change at your side so we have the different event name?
+This upper limit affects devices that require sending
+large firmware blobs over I2C.
 
-No local changes. I've always used "arm_spe//" and it always defaults to
-"arm_spe_0//". But it's still stored as the former in the data file. I
-haven't checked where this default happens though. Isn't it the same for
-you?
+To remove that limitation, calculate the minimal time
+necessary, plus some wiggle room, for every message and
+use it instead of the default one second, if more than
+one second.
 
-Thanks,
-German
->
->> Tested-by: German Gomez <german.gomez@arm.com>
-> Thanks a lot, German!
->
-> Leo
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+---
+ drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 805c77143a0f..b4c1ad19cdae 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
+ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 		struct i2c_adapter *adap)
+ {
+-	unsigned long time_left;
++	unsigned long time_left, msg_timeout;
+ 	u32 reg;
+ 
+ 	id->p_msg = msg;
+@@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	else
+ 		cdns_i2c_msend(id);
+ 
++	/* Minimal time to execute this message */
++	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
++	/* Plus some wiggle room */
++	msg_timeout += msecs_to_jiffies(500);
++
++	if (msg_timeout < adap->timeout)
++		msg_timeout = adap->timeout;
++
+ 	/* Wait for the signal of completion */
+-	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
++	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+ 	if (time_left == 0) {
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
+-- 
+2.35.2
+

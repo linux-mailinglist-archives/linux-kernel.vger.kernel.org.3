@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0BC500279
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C186500274
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiDMXWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S239246AbiDMXWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiDMXWY (ORCPT
+        with ESMTP id S239045AbiDMXWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:22:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E2421B7B0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:01 -0700 (PDT)
+        Wed, 13 Apr 2022 19:22:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8A8623BC5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649892000;
+        s=mimecast20190719; t=1649892002;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WHwtgBFXaVRPDxpgXVknAcXgf6im9N3NqhP05P8+ItY=;
-        b=JYw2gmlRdeRG6UTAZMoS7O8h5yLAhTW3AaXS03i0WQKWTr2BdKEMoFBf9qndjOMqPS4Gek
-        9QmRNLZloAK1gs9gpIQ4KXSodNfTLCjYfcmGNTM0Y58ZT1V4n/XIv38c9ewlK9t2GRYIgK
-        yvhAeNgynancLXGWWMmRIiFLYw+RSj0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=442epl1h4yre5UcCgCdD+uGW52QoSWlok9Dl9A8mhpY=;
+        b=EcXZvyxV4rj0nbLNQLuJ/UaVhQeIsP/vFat6dmPZGPpZ95GRpAKU4gtcP09jjSIRAcH8rm
+        nsLqcwS/fqdnRWC0jki9QYHa2rW8wXjN2b8chpMk3CZZde6m0wvIiwWNOcUAo1uClqkiw7
+        CO9YdlhwUuszF+FWB0+SnYxJuRdisuA=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-MAMQ73tMOnOzHf_BF5kjyg-1; Wed, 13 Apr 2022 19:19:59 -0400
-X-MC-Unique: MAMQ73tMOnOzHf_BF5kjyg-1
-Received: by mail-qk1-f200.google.com with SMTP id h8-20020a05620a244800b00699fb28d5e4so2135163qkn.22
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:19:59 -0700 (PDT)
+ us-mta-498-NuYlwR1aNVKhDnrzPkU10A-1; Wed, 13 Apr 2022 19:20:01 -0400
+X-MC-Unique: NuYlwR1aNVKhDnrzPkU10A-1
+Received: by mail-qk1-f198.google.com with SMTP id bp31-20020a05620a459f00b00699fabcc554so2155404qkb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WHwtgBFXaVRPDxpgXVknAcXgf6im9N3NqhP05P8+ItY=;
-        b=fjxtI5O8L/pZsvyIxrc4d7GuMi3iSohJpB9GXuZMU1DU6sdcbv0BkgRcQ2f3n4OQ9M
-         llyzJZL7n1WPHiRjMQCyS80UeDOS0Na/InyaTcW4MuHn2/SOhZQQMyXmI1/dtKD07SEk
-         q/hNOYbqS6r+kUM0R8LG2J2MEi4FhOf3UpHgcmIuFSb7Jcw/M0JdCCX+8h/guRgbmvSf
-         8emtTi5dRNpPUTXVTF9u2aDdKrzEaln/RDuYv3osRQRhrZgcVATApwFT8vwdFvwT9re/
-         32Hn4YMSO6HXkT+T+V8IGGMA1g92FBdmv8FsSJHmOJnO+ZryrJ1a6K+QhgycVMkRpEPy
-         fPOA==
-X-Gm-Message-State: AOAM533O1c1tw+D/NrJ7yLBpIs78tVh6dqiVN28etBGGKab0PHdDb0/L
-        iTcdiQCzS9FUwvZ2PMghdb4E80FgUObcjrkh3w/+BaVBaGsUCqhddoQkqpGWtjQ1v8zOroZV4ID
-        YS+L+21i7cr0MepfOScfKZhnY
-X-Received: by 2002:a05:6214:c83:b0:441:51c7:9dc9 with SMTP id r3-20020a0562140c8300b0044151c79dc9mr1032427qvr.83.1649891998739;
-        Wed, 13 Apr 2022 16:19:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxK9G/2dn/UjZoKpRBN8/k1+sDOKT3FCsijjvf4/H/VFtzXaH6mAb5/vczmxNrXcN0x6fTE6A==
-X-Received: by 2002:a05:6214:c83:b0:441:51c7:9dc9 with SMTP id r3-20020a0562140c8300b0044151c79dc9mr1032419qvr.83.1649891998552;
-        Wed, 13 Apr 2022 16:19:58 -0700 (PDT)
+        bh=442epl1h4yre5UcCgCdD+uGW52QoSWlok9Dl9A8mhpY=;
+        b=tgg14FLq+hWN+eclUaux1NGcx4yN0mT8SX9XA0M6D+IcvPxhDOVKFe1BMjGkZtE+2I
+         BkBJJwz5I4sdxAVDKF2AXnh+wEujjpax+gcYmzeb6mqT0eZyZJBic/xj6QLesRCOmbwu
+         6tFVnDkZSjYzYwcwGx8FwAXuyzxTsGgeEY9B2zZaKaaRgXRoGnr5nskJ/aDDw6YgxjU8
+         HIzNOcMnqFZghm/aUYzzxEdvhiqTdMkxyUoGxlnnWcLVLiIQjEnm+SsGo95YfXBdBq3+
+         K9o4ehLjbf2/23NZ+bVfS1gMMxvwSdcB1iqtCfxggWq4MUafDRtBQUko9UpB/EtpdzMS
+         KcZQ==
+X-Gm-Message-State: AOAM532S1RRy4MuGRbwGVBVrVP5tcn3L00eU2Uazrwx2/CCbA8uAXoAo
+        w7u5AIpfJtqdbSSC5sNU/bC9nwmvzsQ8NI0gxcpBl9wpsOZgrD1H0Ml4sv13dAUwU0mIpdqT2Ni
+        7pquelQC7PGJzVnDo+TuNXR21
+X-Received: by 2002:a05:620a:1906:b0:67b:3ac1:8f72 with SMTP id bj6-20020a05620a190600b0067b3ac18f72mr8605945qkb.478.1649892000370;
+        Wed, 13 Apr 2022 16:20:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzVjaX8Z+d6CpU3KR7d7sRB46cwStUMLaVCHg9wMRz1XpHcd0PgUrCUc2AXRS7im+ErFl3HZw==
+X-Received: by 2002:a05:620a:1906:b0:67b:3ac1:8f72 with SMTP id bj6-20020a05620a190600b0067b3ac18f72mr8605933qkb.478.1649892000134;
+        Wed, 13 Apr 2022 16:20:00 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.19.57
+        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.19.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 16:19:58 -0700 (PDT)
+        Wed, 13 Apr 2022 16:19:59 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 01/18] objtool: Enable unreachable warnings for CLANG LTO
-Date:   Wed, 13 Apr 2022 16:19:36 -0700
-Message-Id: <7b12df54bceeb0761fe9fc8269ea0c00501214a9.1649891421.git.jpoimboe@redhat.com>
+Subject: [PATCH 02/18] objtool: Support data symbol printing
+Date:   Wed, 13 Apr 2022 16:19:37 -0700
+Message-Id: <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1649891421.git.jpoimboe@redhat.com>
 References: <cover.1649891421.git.jpoimboe@redhat.com>
@@ -70,7 +70,7 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With IBT support in, objtool is now fully capable of following vmlinux
-code flow in LTO mode.  Start reporting unreachable warnings for Clang
-LTO as well.
+For data relocations to missing ENDBR, it will be useful in some cases
+to print the data symbol + offset.  Add support for that.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- scripts/Makefile.build  | 2 +-
- scripts/link-vmlinux.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/objtool/include/objtool/warn.h | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 9717e6f6fb31..33c1ed581522 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -231,7 +231,7 @@ objtool_args =								\
- 	$(if $(part-of-module), --module)				\
- 	$(if $(CONFIG_X86_KERNEL_IBT), --lto --ibt)			\
- 	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
--	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
-+	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable)			\
- 	$(if $(CONFIG_RETPOLINE), --retpoline)				\
- 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
- 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 20f44504a644..9361a1ef02c9 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -140,7 +140,7 @@ objtool_link()
- 		if ! is_enabled CONFIG_FRAME_POINTER; then
- 			objtoolopt="${objtoolopt} --no-fp"
- 		fi
--		if is_enabled CONFIG_GCOV_KERNEL || is_enabled CONFIG_LTO_CLANG; then
-+		if is_enabled CONFIG_GCOV_KERNEL; then
- 			objtoolopt="${objtoolopt} --no-unreachable"
- 		fi
- 		if is_enabled CONFIG_RETPOLINE; then
+diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
+index 802cfda0a6f6..dab0dda7c617 100644
+--- a/tools/objtool/include/objtool/warn.h
++++ b/tools/objtool/include/objtool/warn.h
+@@ -17,16 +17,19 @@ extern const char *objname;
+ 
+ static inline char *offstr(struct section *sec, unsigned long offset)
+ {
+-	struct symbol *func;
+-	char *name, *str;
++	bool is_text = (sec->sh.sh_flags & SHF_EXECINSTR);
++	struct symbol *sym = NULL;
+ 	unsigned long name_off;
++	char *name, *str;
++
++	if (is_text)
++		sym = find_func_containing(sec, offset);
++	if (!sym)
++		sym = find_symbol_containing(sec, offset);
+ 
+-	func = find_func_containing(sec, offset);
+-	if (!func)
+-		func = find_symbol_containing(sec, offset);
+-	if (func) {
+-		name = func->name;
+-		name_off = offset - func->offset;
++	if (sym) {
++		name = sym->name;
++		name_off = offset - sym->offset;
+ 	} else {
+ 		name = sec->name;
+ 		name_off = offset;
+@@ -34,8 +37,8 @@ static inline char *offstr(struct section *sec, unsigned long offset)
+ 
+ 	str = malloc(strlen(name) + 20);
+ 
+-	if (func)
+-		sprintf(str, "%s()+0x%lx", name, name_off);
++	if (sym)
++		sprintf(str, "%s%s+0x%lx", name, is_text ? "()" : "", name_off);
+ 	else
+ 		sprintf(str, "%s+0x%lx", name, name_off);
+ 
 -- 
 2.34.1
 

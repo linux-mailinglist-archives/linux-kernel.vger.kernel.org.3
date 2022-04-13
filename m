@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706B44FFB5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1554F4FFB5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbiDMQeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S235379AbiDMQep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiDMQeD (ORCPT
+        with ESMTP id S236816AbiDMQee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:34:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4CC58E7B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:31:41 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nefu5-0004wI-4P; Wed, 13 Apr 2022 18:31:37 +0200
-Message-ID: <11f8bf43-d6f7-12fe-f5da-1f7a397c4317@pengutronix.de>
-Date:   Wed, 13 Apr 2022 18:31:34 +0200
+        Wed, 13 Apr 2022 12:34:34 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B979606C1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:32:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bv19so5071510ejb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hpkFzuW5ZiUt687dE3hlxD0FI2i1NvKAD8xsfqrgLtM=;
+        b=NUWKTyVT0CdvFJn8a5jpAf4eu0sJt8Pz+IDD17j25FzDxi00VPYP0/pg50QYMjSRAj
+         F5YHC5plOd/SEqGVKOWRPBvQ0c9+E0hhFXYKmZPnySQhQ8MlEhGNgv+PXFTbLpY6IWU6
+         FXVeceMT/+TR4rAFatGR7Ie3zYBZCwi5mDUdl2yT+P6dd+JcOgdeq7QXPv1FGLt/sNZv
+         yFu2e+1HuUR+KO4k/eitViiEr+UyhAUfKgmOr5yd2TqadrbkS+MBpBwa2V/360FBPpPj
+         Z8//jVKKCB2U6xQb/1ruagjry5EyzcLSDcemGIOeouHsOZYElgWfrWc5zkqxs7awJndN
+         xz8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hpkFzuW5ZiUt687dE3hlxD0FI2i1NvKAD8xsfqrgLtM=;
+        b=XhYehqMjyNaw26D4fDDdaKqiVu5PB5MoRR7WC3qMitSGpjVxRD4tOVBlUBle8rV4jm
+         tM5NuWcdMenifjiaCvyUQS2Vcko7sBkF/BibVLla9Lfm9/wgMtHikXfmHW0WgnUIIGCg
+         lYCa706rD5E9QoDP9aj3xhCpwrdVeq7ozVasEiUSdknZutVVSElIaUbJsrpicTJVmUrW
+         +gCR5EpZU3lrF5fDdU5ZZDtO8XU4setMsA8pLzrGk6zYfqnnGxdpfqX1dv9ikGlXWZQ6
+         eoD9I2yvbBgccYtm/Y9+qCluP+Bcn/eaGLLT0oIBHP2mg2snB6JY5L8kICPTXqPOB/b+
+         JXPQ==
+X-Gm-Message-State: AOAM530MLrxGNS058F6zT5RpX9dJow+6VCs88GCF628gAFwurXV5F4yf
+        XL0zO6a8nxTrqKFEfgIKLi04keEcq+I=
+X-Google-Smtp-Source: ABdhPJzDOSFxIFYAwRX7x1djspP/2mQSQuaxumyoE1HJCWAoRGgQTZTigrUQJyJV21sSxb9QNlgjzA==
+X-Received: by 2002:a17:906:d7a2:b0:6e8:9a34:c954 with SMTP id pk2-20020a170906d7a200b006e89a34c954mr11914101ejb.697.1649867530984;
+        Wed, 13 Apr 2022 09:32:10 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id l3-20020a509dc3000000b00420195722c7sm437399edk.6.2022.04.13.09.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 09:32:10 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 19:32:09 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xiaowei Bao <xiaowei.bao@nxp.com>
+Subject: Re: [PATCH v3 1/8] arm64: dts: ls1028a: Add PCIe EP nodes
+Message-ID: <20220413163209.4pqqpyqdklhlzp5p@skbuf>
+References: <20211214093240.23320-1-leoyang.li@nxp.com>
+ <20211214093240.23320-2-leoyang.li@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] arm64: dts: imx8mm-evk: add pwm1/backlight support
-Content-Language: en-US
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
-References: <20220413160900.36271-1-tommaso.merciai@amarulasolutions.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220413160900.36271-1-tommaso.merciai@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214093240.23320-2-leoyang.li@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tomasso,
-
-On 13.04.22 18:08, Tommaso Merciai wrote:
-> Add pwm1/backlight support nodes for imx8mm_evk board.
-> Align with u-boot dts
-> 
-> References:
->  - https://patchwork.ozlabs.org/project/uboot/patch/20220326111911.13720-9-tommaso.merciai@amarulasolutions.com/
-> 
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+On Tue, Dec 14, 2021 at 03:32:33AM -0600, Li Yang wrote:
+> From: Xiaowei Bao <xiaowei.bao@nxp.com>
+>
+> Add PCIe EP nodes for ls1028a to support EP mode.
+>
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
 > ---
-> Changes since v1:
->  - Fix commit body
->  - Enable pwm, backlight
-> 
-> Changes since v2:
->  - Remove status okay from pwm1,backlight (enable as default)
-> 
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index 6d67df7692f1..c50d2cc3ca71 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -59,6 +59,14 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  		enable-active-high;
->  	};
->  
-> +	backlight: backlight {
-> +		compatible = "pwm-backlight";
-> +		pwms = <&pwm1 0 5000000>;
-> +		brightness-levels = <0 255>;
-> +		num-interpolated-steps = <255>;
-> +		default-brightness-level = <250>;
-> +	};
+>  .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> index fd3f3e8bb6ce..9010c535252a 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> @@ -637,6 +637,18 @@ pcie1: pcie@3400000 {
+>  			status = "disabled";
+>  		};
+>
+> +		pcie_ep1: pcie-ep@3400000 {
+> +			compatible = "fsl,ls1028a-pcie-ep","fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03400000 0x0 0x00100000
+> +			       0x80 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>; /* PME interrupt */
+> +			interrupt-names = "pme";
+> +			num-ib-windows = <6>;
+> +			num-ob-windows = <8>;
+> +			status = "disabled";
+> +		};
 > +
->  	ir-receiver {
->  		compatible = "gpio-ir-receiver";
->  		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-> @@ -395,6 +403,11 @@ &wdog1 {
->  	status = "okay";
->  };
->  
-> +&pwm1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_backlight>;
-
-imx8mm.dtsi has &pwm1 { status = "disabled" };
-Where is it enabled?
-
-> +};
+>  		pcie2: pcie@3500000 {
+>  			compatible = "fsl,ls1028a-pcie";
+>  			reg = <0x00 0x03500000 0x0 0x00100000>, /* controller registers */
+> @@ -664,6 +676,18 @@ pcie2: pcie@3500000 {
+>  			status = "disabled";
+>  		};
+>
+> +		pcie_ep2: pcie-ep@3500000 {
+> +			compatible = "fsl,ls1028a-pcie-ep","fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03500000 0x0 0x00100000
+> +			       0x88 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>; /* PME interrupt */
+> +			interrupt-names = "pme";
+> +			num-ib-windows = <6>;
+> +			num-ob-windows = <8>;
+> +			status = "disabled";
+> +		};
 > +
->  &iomuxc {
->  	pinctrl_fec1: fec1grp {
->  		fsl,pins = <
-> @@ -549,4 +562,10 @@ pinctrl_wdog: wdoggrp {
->  			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0x166
->  		>;
->  	};
-> +
-> +	pinctrl_backlight: backlightgrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO01_PWM1_OUT	0x06
-> +		>;
-> +	};
->  };
+>  		smmu: iommu@5000000 {
+>  			compatible = "arm,mmu-500";
+>  			reg = <0 0x5000000 0 0x800000>;
+> --
+> 2.25.1
+>
 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:631.23-656.5: Warning (unique_unit_address): /soc/pcie@3400000: duplicate unit-address (also used in node /soc/pcie-ep@3400000)
+arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:670.23-695.5: Warning (unique_unit_address): /soc/pcie@3500000: duplicate unit-address (also used in node /soc/pcie-ep@3500000)

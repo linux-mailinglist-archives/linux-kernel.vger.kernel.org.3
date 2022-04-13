@@ -2,144 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB1A4FF375
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C85A4FF37F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234486AbiDMJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S234442AbiDMJ3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiDMJ2F (ORCPT
+        with ESMTP id S229927AbiDMJ3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:28:05 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA7525C5E;
-        Wed, 13 Apr 2022 02:25:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V9z3Zrl_1649841940;
-Received: from 30.225.28.93(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V9z3Zrl_1649841940)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 13 Apr 2022 17:25:41 +0800
-Message-ID: <ebd1b238-6e48-6561-93ab-f562096b1c05@linux.alibaba.com>
-Date:   Wed, 13 Apr 2022 17:25:40 +0800
+        Wed, 13 Apr 2022 05:29:37 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75A853B69;
+        Wed, 13 Apr 2022 02:27:16 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 2so1408038pjw.2;
+        Wed, 13 Apr 2022 02:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aWHwuVM56mGn8hBqdvVQF2h0/hgZKGEUzuVUodXvntM=;
+        b=aB5TwnS2HFOxmF1b4l/z53MXkVL/ul/v+PNiOchygCcKgXValBvZeliRKQJV9gj+Vc
+         slXEpmzWh4+qwCgizBHHcwatvJK+yGMbDQVlcKamI7mLLHsWbqqaGCoNgwgU7NkvhjjN
+         4anPrku0hGi4Gnx1ceAqVwoBcAoPsQJ5bCKeR0q6lvogtnEtu7A0CelRpz9PRQsQvCq/
+         C4cpmbhO+PVUMP+LHcAPLZBkYd2uRpGA2RfWNySq9ltXftbkhX5Z4qfOk05h/WmjCH4T
+         R8pQWKToUbzigm26AAkQkemT3Oi6+vTYyaPdt0Q686WhH4YfAwo3EFk51RineGqM/R5e
+         xVlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aWHwuVM56mGn8hBqdvVQF2h0/hgZKGEUzuVUodXvntM=;
+        b=35rz8bpTb+Yr94p9BF5Qx6Bqn/OmueOiirla1K8uyBD9joZ8/T7acyMS7FhPyYZcLN
+         Q/CsyyLbChLaFbOaMzke3118DOBPQ171h+jJDEVkKbGtgpq6PAtPCHn5Gs0+X1/0l9gt
+         qITHiLKzD0eKLUQN4CA84f1YZAWrf8PHR41BuLHem9IvrO9DyNNOZVO7NepkCb10Ciym
+         JHAUsqj6M7QPDAH2IxlGeXtSNc7s32yyRlmQgKsiJWmmCbBAM5gw/s99dnZBAHZo23NM
+         qvB4s6tOVOS8lyFk5r1GAh+Kq0NuN4uqMdM6yJgEZoTXrnDjc7ndwKgx7DEog7D1XuXq
+         fMEg==
+X-Gm-Message-State: AOAM530O6iu/KxGqKwAVlA/WpBpKm9iskQcd+aXqP1UePDjjHAJtmIDn
+        Po7ycAGtP7jwcAAzqJcmZw/5Tg5QuQ/+y6q4Sw==
+X-Google-Smtp-Source: ABdhPJz9O5s6O8Bzb1wJFWqKHLGPLctQp79wNjlG9K87jHZwVNQ1wY2A1CSv2mriOcsbvGMVcNcMLrNXE9xUX/PJAU4=
+X-Received: by 2002:a17:90a:fb97:b0:1cb:adf9:88ba with SMTP id
+ cp23-20020a17090afb9700b001cbadf988bamr9766014pjb.46.1649842036480; Wed, 13
+ Apr 2022 02:27:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     alikernel-developer@linux.alibaba.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
- <YlZ8vZ9RX5i7mWNk@kroah.com> <20220413044246-mutt-send-email-mst@kernel.org>
-From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
-In-Reply-To: <20220413044246-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220409134926.331728-1-zheyuma97@gmail.com> <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
+In-Reply-To: <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Wed, 13 Apr 2022 17:27:04 +0800
+Message-ID: <CAMhUBj=EG8UrFoLp34F2aSTAoM8jY+Agg_PQypn6zjZ_dkUyoA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: mpi3mr: Fix an error code when probing the driver
+To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        mpi3mr-drvr-developers <mpi3mr-linuxdrv.pdl@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/4/13 下午4:51, Michael S. Tsirkin 写道:
-> On Wed, Apr 13, 2022 at 09:33:17AM +0200, Greg KH wrote:
->> On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
->>> If two userspace programs both open the PCI UIO fd, when one
->>> of the program exits uncleanly, the other will cause IO hang
->>> due to bus-mastering disabled.
->>>
->>> It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
->>> to avoid such problems.
->> Why do you have multiple userspace programs opening the same device?
->> Shouldn't they coordinate?
-> Or to restate, I think the question is, why not open the device
-> once and pass the FD around?
-
-Hmm, it will have the same result, no matter  whether opening the same 
-device or pass the FD around.
-
-Our expectation is that even if the primary process exits abnormally,  
-the second process can still send
-
-or receive data.
-
-The impact of disabling pci bus-master is relatively large, and we 
-should make some restrictions on
-
-this behavior.
-
+On Wed, Apr 13, 2022 at 1:58 AM Sathya Prakash Veerichetty
+<sathya.prakash@broadcom.com> wrote:
 >
->>> Fixes: 865a11f987ab("uio/uio_pci_generic: Disable bus-mastering on release")
->
-> space missing before ( here .
->
->>> Reported-by: Xiu Yang <yangxiu.yx@alibaba-inc.com>
->>> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
->>> ---
->>> Changes for v2:
->>> 	Use refcount_t instead of atomic_t to catch overflow/underflows.
->>> ---
->>>   drivers/uio/uio_pci_generic.c | 16 +++++++++++++++-
->>>   1 file changed, 15 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
->>> index e03f9b5..1a5e1fd 100644
->>> --- a/drivers/uio/uio_pci_generic.c
->>> +++ b/drivers/uio/uio_pci_generic.c
->>> @@ -31,6 +31,7 @@
->>>   struct uio_pci_generic_dev {
->>>   	struct uio_info info;
->>>   	struct pci_dev *pdev;
->>> +	refcount_t refcnt;
->>>   };
->>>   
->>>   static inline struct uio_pci_generic_dev *
->>> @@ -39,6 +40,14 @@ struct uio_pci_generic_dev {
->>>   	return container_of(info, struct uio_pci_generic_dev, info);
->>>   }
->>>   
->>> +static int open(struct uio_info *info, struct inode *inode)
->>> +{
->>> +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
->>> +
->>> +	refcount_inc(&gdev->refcnt);
->>> +	return 0;
->>> +}
->>> +
->>>   static int release(struct uio_info *info, struct inode *inode)
->>>   {
->>>   	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
->>> @@ -51,7 +60,9 @@ static int release(struct uio_info *info, struct inode *inode)
->>>   	 * Note that there's a non-zero chance doing this will wedge the device
->>>   	 * at least until reset.
->>>   	 */
->>> -	pci_clear_master(gdev->pdev);
->>> +	if (refcount_dec_and_test(&gdev->refcnt))
->>> +		pci_clear_master(gdev->pdev);
->> The goal here is to flush things when userspace closes the device, as
->> the comment says.  So don't you want that to happen for when userspace
->> closes the file handle no matter who opened it?
->>
->> As this is a functional change, how is userspace going to "know" this
->> functionality is now changed or not?
->>
->> And if userspace really wants to open this multiple times, then properly
->> switch the code to only create the device-specific structures when open
->> is called.  Otherwise you are sharing structures here that are not
->> intended to be shared, shouldn't you have your own private one?
->>
->> this feels odd.
->>
->> thanks,
->>
->> greg k-h
-> Sigh. Maybe it was a mistake to do 865a11f987ab to begin with.
-> Anyone doing DMA with UIO is already on very thin ice.
-> But oh well.
->
+> On Sat, Apr 9, 2022 at 7:49 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
+> >
+> > During the process of driver probing, probe function should return < 0
+> > for failure, otherwise kernel will treat value >= 0 as success.
+> >
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > ---
+> >  drivers/scsi/mpi3mr/mpi3mr_os.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+> > index f7cd70a15ea6..240bfdf9788b 100644
+> > --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
+> > +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+> > @@ -4222,9 +4222,10 @@ mpi3mr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> >         struct Scsi_Host *shost = NULL;
+> >         int retval = 0, i;
+> >
+> > -       if (osintfc_mrioc_security_status(pdev)) {
+> > +       retval = osintfc_mrioc_security_status(pdev);
+> > +       if (retval) {
+> >                 warn_non_secure_ctlr = 1;
+> > -               return 1; /* For Invalid and Tampered device */
+> > +               return retval; /* For Invalid and Tampered device */
+> >         }
+> NAK. The driver has to return 1 when invalid/tampered controllers are
+> detected just to say the controller is held by the mpi3mr driver
+> without any actual operation.
+
+Thanks for your explanation, I will drop this patch.
+
+Zheyu Ma

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22E94FFFD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5556B4FFFD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238662AbiDMUOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S238695AbiDMUO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238027AbiDMUOK (ORCPT
+        with ESMTP id S238343AbiDMUOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:14:10 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ACA7EB1E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:11:48 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id o18so2191900qtk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:11:48 -0700 (PDT)
+        Wed, 13 Apr 2022 16:14:11 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289727EA33
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:11:49 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id z16so2196842qtq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RsvCyHjEEdexsUzersCRTZshhGaPsOo9bh7mou5OagQ=;
-        b=WBa6NhY5yXEgT+Gqpg+Z7tCpNTFJgemPs7PlszxJc+y7RgCQdhK3PHMpWMCOk4HXxv
-         szv9jgCdUdjpfOHPHmysqL8OCRpRqphSnFGz4ckaxREtKkGKS18cIvQTrf8R1oOS1Pr7
-         w5ZJFzSotN/sRNntDULkFrstvVE2nyyFM080AYpX+qDRp72nu3WE+/DsTgvFIPoAWpvN
-         s2X87tdyLY4Nzi4ADA0uS5TNH29UGIEiOZxe1ciYtRVkUpeiem+yzwh5Z//7xg+g78/X
-         PARTVv5/SHKxHUGsvkGJnhpSakxSd20oenlW0nN2juDh/dbHchU2IH89ebTAdWYXp/qR
-         4EVA==
+        bh=ul9FGVJ1sqTdARK0mUZLH5+vAqXgfv1Osb8Y+BayvnA=;
+        b=g3gjqqtdqKQE5IGicT5Wjd9h3ncG7DVCNTkMIk04qmTIFPfSPARDB83o4ujZ/aj4BW
+         1Ziuz0voyvAICrIB0yVPtQMS5aEEyJsViQkfhCuBv2rFF2P6KAlcUpGIfSQuwOjSAg9+
+         PoyxmZghi/DZFjwjf7KINxaxqWt02zgrnI4bz5GtcJTQ2iAz7Z/lAgVks8UJPzzGp0vR
+         O6YdTukXugvGAKbCAJHdei/PAAX9L0dr+/v6acnR6iuk3/kdXqHLFmvmZ9yE1Uc4KKgE
+         wO4qkmrufxD+mJhNQenzel3OKXg57IvUXg536Dgbh6dnNlQDSPstmwjlENL4fSy59SlU
+         UO0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RsvCyHjEEdexsUzersCRTZshhGaPsOo9bh7mou5OagQ=;
-        b=BxWODsv8fqCUDcXCZVZg2sPoIzzBvr8k1oNGcCRzSkdFQvM6sXLMz5VhOTXenU4etl
-         nG4i+CVd366HIlIPILBMEPMkZaZN7gq+x1oWDJv9ZUu2/kzCFBd85cm4Wv07PPHCVdpC
-         R6y9lMAsh/DyXUNZfgAKsZ1GgLI1JnvjR8KGrdwkfDtzm3K1L4aCqLazW1oYWuDorJ0+
-         LkOyJZ2dTYLacAx4tHr2AvW8sey5EUZLPtSFLe554uyMN+j6o56oEUuCXdJzHg59TN+k
-         142bk2jxBRr4rG6b7eBWKIsU18aJxzzNRQQUetwFd9p9N6/yg4uhjdwSFAu594oe1DKm
-         uKlw==
-X-Gm-Message-State: AOAM5321TJ/JzFbCtpheT6HoksSAgPKF6xT4YhZ/4iSI8QVyTbVQK3Fc
-        XVkhfhlVvsMmvtHFJqD+qLQ=
-X-Google-Smtp-Source: ABdhPJxaQNRyxc9Zpj6FjipuAcabNJxruD2Sgxd4BAP+w78VhMt55IcS0VntKwyV96blPz/x50H1eg==
-X-Received: by 2002:ac8:698a:0:b0:2ed:260f:b751 with SMTP id o10-20020ac8698a000000b002ed260fb751mr8403327qtq.89.1649880707276;
-        Wed, 13 Apr 2022 13:11:47 -0700 (PDT)
+        bh=ul9FGVJ1sqTdARK0mUZLH5+vAqXgfv1Osb8Y+BayvnA=;
+        b=iXwgx+GNrqaRnjb0kDBKnOpnb3Fz9P+Ke5IM451pWa/wyzssff/7v/PtskaCGVgOAQ
+         7xQ9ukEhaPmJX4q2uMFJcoEPhVDi/pB8IlXit9ox/pn1u5zkWbxNnicXwgs0P1Oj5nxF
+         aKkvc6NDpJEY2gKO2FGDUr7W8BcUpNv8FmJQbbcKF3GkhrGw5ok6pzQra60pqXSSuZZa
+         J2uTnSusrXienqeLrLqdcH9cGrXX5tNOTZh5oDSiq0HSHTCR+fTnhwX1CzIvUCWzWeAh
+         tfwR3BuZJI6/QPSW3jXNVtOvayBSQMFOIJJpNECHXFCL+g3+Q/0RXPWocAidVdh9inu6
+         Lyhw==
+X-Gm-Message-State: AOAM532CirMeNnLJEFyIOuKnhxrpE9UpFvlF0iaUTa0N4uFR0aKV6bI8
+        W7H4VV6wGTje6X+1B4v4Ay8=
+X-Google-Smtp-Source: ABdhPJzfi6bbVPouWPiwjX4RCv+GQvPEnn27rrOjadz/T8qn0tC/JtVXXDXSE2vWCCCbYKdHSZ36SA==
+X-Received: by 2002:a05:622a:408f:b0:2ed:12b7:2e9c with SMTP id cg15-20020a05622a408f00b002ed12b72e9cmr8351994qtb.309.1649880708326;
+        Wed, 13 Apr 2022 13:11:48 -0700 (PDT)
 Received: from jaehee-ThinkPad-X1-Extreme.wework.com ([4.34.18.218])
-        by smtp.gmail.com with ESMTPSA id 7-20020a370907000000b0069c5598584esm1469827qkj.105.2022.04.13.13.11.46
+        by smtp.gmail.com with ESMTPSA id 7-20020a370907000000b0069c5598584esm1469827qkj.105.2022.04.13.13.11.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 13:11:46 -0700 (PDT)
+        Wed, 13 Apr 2022 13:11:47 -0700 (PDT)
 From:   Jaehee Park <jhpark1013@gmail.com>
 To:     Larry.Finger@lwfinger.net
 Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         outreachy@lists.linux.dev, jhpark1013@gmail.com
-Subject: [PATCH 4/6] staging: r8188eu: place constants on the right side of tests
-Date:   Wed, 13 Apr 2022 16:11:32 -0400
-Message-Id: <d2469155c37b8677a8dcbed28bc0840745d46f76.1649880454.git.jhpark1013@gmail.com>
+Subject: [PATCH 5/6] staging: r8188eu: replace spaces with tabs
+Date:   Wed, 13 Apr 2022 16:11:33 -0400
+Message-Id: <c2d719eba2a374be573034022218a098e4db9e77.1649880454.git.jhpark1013@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1649880454.git.jhpark1013@gmail.com>
 References: <cover.1649880454.git.jhpark1013@gmail.com>
@@ -71,71 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To comply with the linux coding style, place constants on the right
-side of the test in comparisons. Issue found with checkpatch.
-WARNING: Comparisons should place the constant on the right side of
-the test.
+Use tabs instead of spaces. Issue found with checkpatch.
+WARNING: suspect code indent for conditional statements
 
 Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 5adef9b9108d..b943fb190e4c 100644
+index b943fb190e4c..7a90fe826d1d 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -721,7 +721,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
+@@ -722,7 +722,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
  			pmlmepriv->to_join = false;
  			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
--			if (_SUCCESS == s_ret) {
-+			if (s_ret == _SUCCESS) {
- 			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
+ 			if (s_ret == _SUCCESS) {
+-			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
++				_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
  			} else if (s_ret == 2) { /* there is no need to wait for join */
  				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-@@ -729,7 +729,8 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 			} else {
- 				if (rtw_to_roaming(adapter) != 0) {
- 					if (--pmlmepriv->to_roaming == 0 ||
--					    _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) {
-+					    rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid,
-+							       1, NULL, 0) != _SUCCESS) {
- 						rtw_set_roaming(adapter, 0);
- 						rtw_free_assoc_resources(adapter, 1);
- 						rtw_indicate_disconnect(adapter);
-@@ -1970,7 +1971,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
- 		issued = (phtpriv->agg_enable_bitmap >> priority) & 0x1;
- 		issued |= (phtpriv->candidate_tid_bitmap >> priority) & 0x1;
- 
--		if (0 == issued) {
-+		if (issued == 0) {
- 			psta->htpriv.candidate_tid_bitmap |= BIT((u8)priority);
- 			rtw_addbareq_cmd(padapter, (u8)priority, pattrib->ra);
- 		}
-@@ -1997,19 +1998,19 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
- 	else
- 		pnetwork = &pmlmepriv->cur_network;
- 
--	if (0 < rtw_to_roaming(padapter)) {
-+	if (rtw_to_roaming(padapter) > 0) {
- 		memcpy(&pmlmepriv->assoc_ssid, &pnetwork->network.Ssid, sizeof(struct ndis_802_11_ssid));
- 
- 		pmlmepriv->assoc_by_bssid = false;
- 
- 		while (1) {
- 			do_join_r = rtw_do_join(padapter);
--			if (_SUCCESS == do_join_r) {
-+			if (do_join_r == _SUCCESS) {
- 				break;
- 			} else {
- 				pmlmepriv->to_roaming--;
- 
--				if (0 < pmlmepriv->to_roaming) {
-+				if (pmlmepriv->to_roaming > 0) {
- 					continue;
- 				} else {
- 					rtw_indicate_disconnect(padapter);
+ 				rtw_indicate_connect(adapter);
 -- 
 2.25.1
 

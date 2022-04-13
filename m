@@ -2,44 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E374FF1DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C9D4FF1DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbiDMIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S233783AbiDMIaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiDMIaY (ORCPT
+        with ESMTP id S229668AbiDMIae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:30:24 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C73344F9;
-        Wed, 13 Apr 2022 01:28:03 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 13 Apr
- 2022 16:28:02 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 13 Apr
- 2022 16:28:01 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] clk: renesas: Fix memory leak of 'cpg'
-Date:   Wed, 13 Apr 2022 16:27:59 +0800
-Message-ID: <1649838479-4893-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 13 Apr 2022 04:30:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3363F344F9;
+        Wed, 13 Apr 2022 01:28:14 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 6696A1F44F0E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649838493;
+        bh=4Vsn1aejkGeE8Y8/vxFrCuw1ZIGPg0ZCck+uLh9HLCE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ETExv/OWpWWJ0YGn0PuMmlTHavSLhE5Q/BNJFC6Zh3E0TssffX6/DK0TAPz3ugrpc
+         m6bsEAfN4KeCFByoQoH2peSDhnhVEMolAA0cgSqGbLd1P2gMzFO7+Cvl04zjBJAi6n
+         NsHNy1mMvcMm1qXFCDHgwn+wrq1VZ2pFhzu+UFNMkKq32HQoISHJ238HIozt2PCbkX
+         HZJXWjaMNsfTmRPuXlIhq+GkcKa86kxGdjrpfCRzKfWAolOc7J6kRXt93ZBw/8DUcV
+         Zvmtz6o3ZE6tkZH2WBHRFXFxnSCdTkjshm2DO+LN2FvWgc/hVLYtdjwX2fUkCWbSGN
+         OJDLQTradvQHA==
+Message-ID: <08985897-d732-366d-fddb-5c622b732726@collabora.com>
+Date:   Wed, 13 Apr 2022 10:28:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v14 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD settings
+ for MDP
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220411072403.24016-1-moudy.ho@mediatek.com>
+ <20220411072403.24016-3-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220411072403.24016-3-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,37 +76,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix this issue by freeing the cpg when exiting the function in the
-error/normal path.
+Il 11/04/22 09:23, Moudy Ho ha scritto:
+> For the purpose of module independence, related settings should be moved
+> from MDP to the corresponding driver.
+> This patch adds 8183 MUTEX MOD settings for MDP.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/clk/renesas/clk-r8a73a4.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/renesas/clk-r8a73a4.c b/drivers/clk/renesas/clk-r8a73a4.c
-index cfed11c659d9..5a8d976f49e0 100644
---- a/drivers/clk/renesas/clk-r8a73a4.c
-+++ b/drivers/clk/renesas/clk-r8a73a4.c
-@@ -215,7 +215,7 @@ static void __init r8a73a4_cpg_clocks_init(struct device_node *np)
- 
- 	cpg->reg = of_iomap(np, 0);
- 	if (WARN_ON(cpg->reg == NULL))
--		return;
-+		goto out_free_cpg;
- 
- 	for (i = 0; i < num_clks; ++i) {
- 		const char *name;
-@@ -233,6 +233,9 @@ static void __init r8a73a4_cpg_clocks_init(struct device_node *np)
- 	}
- 
- 	of_clk_add_provider(np, of_clk_src_onecell_get, &cpg->data);
-+out_free_cpg:
-+	kfree(cpg);
-+	kfree(clks);
- }
- CLK_OF_DECLARE(r8a73a4_cpg_clks, "renesas,r8a73a4-cpg-clocks",
- 	       r8a73a4_cpg_clocks_init);
--- 
-2.7.4
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

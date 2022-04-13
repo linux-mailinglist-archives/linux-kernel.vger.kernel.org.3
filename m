@@ -2,179 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB524FF0AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7994FF0AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiDMHj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S233414AbiDMHjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiDMHjX (ORCPT
+        with ESMTP id S233413AbiDMHjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:39:23 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2075.outbound.protection.outlook.com [40.107.20.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9754B6334;
-        Wed, 13 Apr 2022 00:37:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ic02qnISjS35wwyOhDMcTTF+r1iJr4aGUXa39wBQQAlwDh0SIVRetUAeU6UatsMoh1WPL7cfyhXL7S1X5Bj5Og3wdQc/CkM7bRF0prBYuazPffWlmEzylis98LX2eAoNNuhxHl9UC7+3/0LXom/ERIQ5Xq73a0qM3jx0n9aRy9dmVH0U++sg9wTXSFoZ8b6lBpQ3/ZX9XO/E/xdf0AzG3RmW+dbcCd/sjYnz2goJMR3bTIfXIRlr8DDcLbCenundBm4GYnvxUfEZs53d6Ug9M7n+PQzTbXv5QRdGvBdHXkP27mNbWXp3NbObg0wZIzuOW9Ht9h7o1lIHjGRDcg/bmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2LdZFt2J5tAkBuSwrov77gmOkOz1PArYQ9nJ7qMaHGs=;
- b=lM2+Qy1cQcGm3fOymR/mgVdbyLI/k276yNGCeGmxaqAlD8DYAb5GP9xLnqzWSX3ddU4LvqsfvRN8CfHU+Tb8vVofVcNbgRGHO8MialXdoqiefyIJ4tNj36M3mw6ME9/LVikzZsWRGtwwOZajpr3+tWrTbWT08nzuLF6cM4HLAmAn1TetyU3gIfNVA8dsq603VzDQy6hnaKokiG0fejZvoqeGdvVSkRpkqHyn+A9PmNiYTbHjTCVYXB2roTGRMgg6/bytbDyrku3cfXsiv4+Ohn3Cyj+zHqN9MPDJhT0elsr87BpKqoSHTvLIWBO0i7tdOxxvyU5g0bVK28xgkaJkWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2LdZFt2J5tAkBuSwrov77gmOkOz1PArYQ9nJ7qMaHGs=;
- b=W6EWWVq0BLtmAWfUI5OyCLio3eYF2bWvE0wJ69a1flgPX5jwwRGaQp9ReGcB1IpGkfiERo3tHffENh7nG+HCPGFK7BPme4VPuw3aAvL8sxAtrF3qe2jbgIe5yveIewAWqOnIkLV8N5sVqqxB852/pO+24NYbae0qbHprMyGr+pY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM8PR04MB7794.eurprd04.prod.outlook.com (2603:10a6:20b:247::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.30; Wed, 13 Apr
- 2022 07:36:58 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f%6]) with mapi id 15.20.5144.029; Wed, 13 Apr 2022
- 07:36:58 +0000
-Date:   Wed, 13 Apr 2022 10:36:55 +0300
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v5 8/8] dt-bindings: net: dwmac-imx: Document clk_csr
- property
-Message-ID: <YlZ9lyniw+4p5RsT@abelvesa>
-References: <20220404134609.2676793-1-abel.vesa@nxp.com>
- <20220404134609.2676793-9-abel.vesa@nxp.com>
- <Yk3WHSr+OGRxYCg0@robh.at.kernel.org>
+        Wed, 13 Apr 2022 03:39:43 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B994D9E4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:37:21 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t4so1058769pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OvBmCpMD4WvNs2TV4Iwfm3Q6UCY8XLO8lhnqvUzlfmQ=;
+        b=ezJpMnFtqu6SYjGyO6z0ZdpbRiSRqktyw1m72XPH9PlGKSl2LprXy8/1Pz8PJz+y7J
+         55d+C6ovQycXEwAvRyl9Vxd/EsrGYh9T6fdGtMCYHMXNvGm+vWyY8mV6Yj2XaHvm7mb/
+         zYvZMw4rGxX1orG19Y+xpbJNUXgio3ar/LU7G9Dg9QUBXyiAl4U6a+yutd0vkGhqhzxR
+         0RFMnLfSle57raxIV9hsCpdJT0LQT6XwRz7Q19RsrZj5D1EftyyOA7VrWeVpXe/RKhGT
+         q4FdIr+UbG7Irm/62lul+P3uYR1kcx5lQUgskC5PrBxhevRft7dzpXAgl8OVTTAzW1M3
+         zZUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OvBmCpMD4WvNs2TV4Iwfm3Q6UCY8XLO8lhnqvUzlfmQ=;
+        b=v0BleKGUyziXzBXdPnPEWK90iTz7EYhgVpIbsX9WPgkeSM8T+OeMtizfCVpQDDeL/E
+         VuILLxKKnx2f6oeGBM9S61+MVaMwuUQBNJtJnPli6DO+OLyzI95OUHWrCKvlTsGGjvhM
+         p+UQqZKn5ra3SHt4pMSaobptRoIWuxiLjq6K19uaUaalnIIRYgdbDxhzinkJ5BApE+/9
+         VRsjGympiVgpuZYJUByd6QFlVVvj0Vb9bjdbiUoZDh8M4qNZkfoVZMm4S6097RWksE5O
+         /kO3ZXwc4Etmg4ErUqqllFofBxjskFLFYTTmCLUHEbLAfFzQN+7THzYv4JCKM6+GVoBa
+         leFw==
+X-Gm-Message-State: AOAM532l4JZa391q1s/NPGUsqcMEKZwnbfwg8JDv6VWxeC9fvM93kZG8
+        uP8H5RWycKbZwLb34D23Ymdf
+X-Google-Smtp-Source: ABdhPJy1Grt5MukdtrnClnqOOCFNj2cd7iE0NgSPKDA6mAkOQjYH6907VLEA5DWJ0xydgaibP94ngA==
+X-Received: by 2002:a63:5710:0:b0:399:365e:5dde with SMTP id l16-20020a635710000000b00399365e5ddemr34937381pgb.192.1649835441312;
+        Wed, 13 Apr 2022 00:37:21 -0700 (PDT)
+Received: from thinkpad ([117.207.28.99])
+        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm1977714pjb.23.2022.04.13.00.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 00:37:20 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 13:07:15 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Georgi Djakov <djakov@kernel.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: Re: [PATCH 2/2] interconnect: qcom: sdx55: Drop IP0 interconnects
+Message-ID: <20220413073715.GD2015@thinkpad>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220412220033.1273607-3-swboyd@chromium.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk3WHSr+OGRxYCg0@robh.at.kernel.org>
-X-ClientProxiedBy: VI1PR04CA0073.eurprd04.prod.outlook.com
- (2603:10a6:802:2::44) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a66f7bb8-ff8d-4873-59cb-08da1d2063c9
-X-MS-TrafficTypeDiagnostic: AM8PR04MB7794:EE_
-X-Microsoft-Antispam-PRVS: <AM8PR04MB77945AFDA4110522E1681570F6EC9@AM8PR04MB7794.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7B4QyQsadHod9851XHUfamLTOFYFVPJUQurx9VKSRa6YRwELtybTeEwQ4c7/GD7k5uN+LSVVIEh4JlK2TmwOWzlP2cmeyhuoDRY58omp+YEuONBlL6sG7138GG6AhH41AAxrWq1Hai0uZxUNIQtl3ALrUw6T6RXig4NnSIp/DRDUF7oK1o618TrIK18LZKfEEF9o1fbIfk3y3WUUuYlgSXJ9LzYwY6wuPTXEYeGDWWnqsW9OCF4EEbEFdZZBB5CRtHWuq0prItHNZP7Dqmvn6i9wq6DIm+UjLRJ3/6hQ7HAiVJZvvRDpCGa1uyfTHOIt8lZ4cp8XcIkglHBTIIogQ8OzcxWbMrNh4ZfWog6SXv5++QmY1QVSg6q1Mqb+kGQNnVjLAAdP/xtT60X9q26hbS2c8MB2dxRIRoQYtLUJYEPs4RumMvKG1XdrhqZfwxKFe/nfCtuQGnXZhN5erBmHAXmuSSXSz+UCSBmlSdOVbWnmTKwHMenrx1LA6dx8sbpZt1s4C08LjiKiLyrnC81r7ktsh7Puevw9qYRoclIvst/xSKVVxXLLDwX9sLP5g9i/9DJY4ZEL9w6sjyZaUySiYUI4rnged6/2X2yTInCUjLxXL4sILhet8j1/Ctxl+uba/GirAob1YpsbplNWRuSO8hwO9XVRPymehwNcpeBd29Lqol6l5HfC5XQV5VMVhVHcHVSjmAv7d4xp9ojSzdgfz5fuFqVIqdGs9LVVG/abvUQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(508600001)(5660300002)(186003)(26005)(4326008)(6486002)(83380400001)(33716001)(38350700002)(38100700002)(86362001)(7416002)(8936002)(44832011)(6512007)(53546011)(52116002)(8676002)(6916009)(6666004)(6506007)(2906002)(316002)(66946007)(66476007)(66556008)(9686003)(54906003)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cA5n3LQOzicqHdBthahkkYwYgmQaGz5ATvr0XQjLbrVXjl72Y5Mtp9I1CWv8?=
- =?us-ascii?Q?GS0x1nN6D462Pjx+YZSme856MSzoNTc9e8Q4N5lcUKA9TBTtEl1Ppcno1fV1?=
- =?us-ascii?Q?qK1VEFry4diy20ESQju9rW/oR2hyD1Alvr8KdcXv+Ntw5Bd0fe/MgbB9j0e5?=
- =?us-ascii?Q?moS+rJDbbZvsA7g8RGFaslp5ujBZUGhiY1KNODosmSYfiMRUuuxH17jU2mcY?=
- =?us-ascii?Q?G3JSpE3uBm/iuIbvNolZ4WzsMmE1uXuSkOJjtg5+Nw5Vyfz4YJxlIM0EeokV?=
- =?us-ascii?Q?EarnMiAszelwDPUjTZR/qMWDaq8Up+k0FEuaRbqEkE19yyIgpBOCXWZy4p2w?=
- =?us-ascii?Q?io+XdIo4wC/PUlZkpHTOm0uU9bGmeyPX6mRksR6L25TTDZ8jLujYaOmdTXRl?=
- =?us-ascii?Q?eRBZYYJQ67uzzdZxCS1sIig8A667PAa09GlE0VnUBjDe7qrcYKFMlgAURe8n?=
- =?us-ascii?Q?HFmhFpKz7nrNi2jLTdB8IQBu1Xoig1XUoHDL86yrpU+WGsmN8Tv07eq3dx7z?=
- =?us-ascii?Q?vK15b3T4XkR0fuFdkWWGjYtkXe+geHpxybP3izjSHpx7xmVdjvQ4r4jeCWL7?=
- =?us-ascii?Q?uGJC9MlBcixbc8LSMKk4JKfbV7/4vVHOAifsVzEui50CDvLfM7Oz8QZzFyAg?=
- =?us-ascii?Q?ZxMUsPZiZS113qgZM5yZFWectM7rB0ubhzg8TpVhvCf42JKDzzQ1z4LJEfeT?=
- =?us-ascii?Q?2EgiiUHWr1PB0Lkdhs4Q+cw/vK7ok9oxHD3ehF+YMTAJvgAkwWRG9W23Qf+F?=
- =?us-ascii?Q?cxvEzOLt4by/5J6XwdDDXzkACyEg7zTJiM/J+8pAehtkvJQubY5XW52W/mTA?=
- =?us-ascii?Q?0sIqMY46Jpl9WoXx+j7wNwUEXf+uIRd0oon8D2kNCQQ2u0DNWBvtFahfXwz2?=
- =?us-ascii?Q?OxNuOhGJTj5GFOpuEj2XBGw7TpA7bMcVn9yr1HSqkUjOy+mC+GoUw5rqaoYk?=
- =?us-ascii?Q?EUZ1xOFIqMOXHFl+16Y9Fjd0Xxdyg3yeyW1En853jjomwb2Hvvquqzjyy6Vh?=
- =?us-ascii?Q?3JvRhH7Chfojwg8mEc2E297nPtFa9qxma3FcHh2TxMtlr5d//JxF7/gEAf+i?=
- =?us-ascii?Q?v/m7U8K/Cw1pRnkGw9CajNtigR9A5mU27SsG9rqCtIleElmBojoyWYjhweni?=
- =?us-ascii?Q?Kt4e2gqQQ8Gjl890MpEUWFT2HjtMWPVIj69NAj8L6KkMzpcch7Il8rYHx50V?=
- =?us-ascii?Q?55vCAKaPdckvdiDWQL6ttCuNZ17fjGfLEmMzeviE2hrAFL2mRkz108VtjJE3?=
- =?us-ascii?Q?/eyS6O/uTLhC9NpxdwT5qCbD6ZvId3KlrNiucsfzIA34vOUVsK6HU9uXdpK5?=
- =?us-ascii?Q?NUsH8lrQyaStHrdU8pGa28KMKc3LYAwPiHA12x3DFXtCz6Jd52gjs2av5UwV?=
- =?us-ascii?Q?bsjE6UKsl5g0Wrd11/L9R5ehEw0k42ixHyYB/Z37opXSdlY8sS8DX4ddoh3x?=
- =?us-ascii?Q?n5ufCL3eoc8VjCCGBeflcP+cJ0r62rTfjccrFfSbasyt2aRAa18ww1FUH883?=
- =?us-ascii?Q?NEG8w39dX4CimSsXvG0TkISVoiyr7ctrlbJJSSLpBDJ/0VaxBOEsQjbUcBeC?=
- =?us-ascii?Q?NRp7V+MkyNDKzj+TWWYcRhoePUEp8iuqCaDFZ6v05wjV3pdWDPDS4DNT5jM0?=
- =?us-ascii?Q?dR/vnQ8r2UJ2/WoGLEXIyotaYJV/DVQLQ9vDmiMc9C6gPnwRomRBmI8PaTaK?=
- =?us-ascii?Q?zxH+dwYHI5qYDFFF2jyQ5Low/5uWCl/EwNqa7ZBJSi87ZQZtj0GdWxdQzC3B?=
- =?us-ascii?Q?6O9h4TYubA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a66f7bb8-ff8d-4873-59cb-08da1d2063c9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 07:36:58.0864
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UJzN/yqvAHsbUCMlPlslMJ4VCccWV33Hvwxw3t+0TXxajzCSPSFSUd5RhOx718EJQ0eBuxIZQlNJ6z+XPEfiWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7794
+In-Reply-To: <20220412220033.1273607-3-swboyd@chromium.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-04-06 13:04:13, Rob Herring wrote:
-> On Mon, Apr 04, 2022 at 04:46:09PM +0300, Abel Vesa wrote:
-> > The clk_csr property is used for CSR clock range selection.
->
-> Why?
+On Tue, Apr 12, 2022 at 03:00:33PM -0700, Stephen Boyd wrote:
+> Similar to the sc7180 commit, let's drop the IP0 interconnects here
+> because the IP0 resource is also used in the clk-rpmh driver on sdx55.
+> It's bad to have the clk framework and interconnect framework control
+> the same RPMh resource without any coordination. The rpmh driver in the
+> kernel doesn't aggregate resources between clients either, so leaving
+> control to clk-rpmh avoids any issues with unused interconnects turning
+> off IP0 behind the back of the clk framework.
+> 
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Fixes: b2150cab9a97 ("clk: qcom: rpmh: add support for SDX55 rpmh IPA clock")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Well, this actually documented in
-Documentation/networking/device_drivers/ethernet/stmicro/stmmac.rst.
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-But I think I'll just drop this one and remove the property from the
-devicetree node for now. We'll figure it out later when the ethernet
-support will be upstreamed.
+Thanks,
+Mani
 
->
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > ---
-> >  Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml b/Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml
-> > index 011363166789..1556d95943f6 100644
-> > --- a/Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml
-> > +++ b/Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml
-> > @@ -32,6 +32,10 @@ properties:
-> >                - nxp,imx8dxl-dwmac-eqos
-> >            - const: snps,dwmac-5.10a
-> >
-> > +  clk_csr:
->
-> s/_/-/
->
-> vendor prefix needed.
->
-> And a type is needed.
->
-> > +    description: |
-> > +      Fixed CSR Clock Range selection
->
-> What? Explain all this to someone that doesn't know your h/w.
->
-> > +
-> >    clocks:
-> >      minItems: 3
-> >      items:
-> > --
-> > 2.34.1
-> >
-> >
+> ---
+>  drivers/interconnect/qcom/sdx55.c | 21 ---------------------
+>  1 file changed, 21 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/sdx55.c b/drivers/interconnect/qcom/sdx55.c
+> index 03d604f84cc5..e3ac25a997b7 100644
+> --- a/drivers/interconnect/qcom/sdx55.c
+> +++ b/drivers/interconnect/qcom/sdx55.c
+> @@ -18,7 +18,6 @@
+>  #include "icc-rpmh.h"
+>  #include "sdx55.h"
+>  
+> -DEFINE_QNODE(ipa_core_master, SDX55_MASTER_IPA_CORE, 1, 8, SDX55_SLAVE_IPA_CORE);
+>  DEFINE_QNODE(llcc_mc, SDX55_MASTER_LLCC, 4, 4, SDX55_SLAVE_EBI_CH0);
+>  DEFINE_QNODE(acm_tcu, SDX55_MASTER_TCU_0, 1, 8, SDX55_SLAVE_LLCC, SDX55_SLAVE_MEM_NOC_SNOC, SDX55_SLAVE_MEM_NOC_PCIE_SNOC);
+>  DEFINE_QNODE(qnm_snoc_gc, SDX55_MASTER_SNOC_GC_MEM_NOC, 1, 8, SDX55_SLAVE_LLCC);
+> @@ -40,7 +39,6 @@ DEFINE_QNODE(xm_pcie, SDX55_MASTER_PCIE, 1, 8, SDX55_SLAVE_ANOC_SNOC);
+>  DEFINE_QNODE(xm_qdss_etr, SDX55_MASTER_QDSS_ETR, 1, 8, SDX55_SLAVE_SNOC_CFG, SDX55_SLAVE_EMAC_CFG, SDX55_SLAVE_USB3, SDX55_SLAVE_AOSS, SDX55_SLAVE_SPMI_FETCHER, SDX55_SLAVE_QDSS_CFG, SDX55_SLAVE_PDM, SDX55_SLAVE_SNOC_MEM_NOC_GC, SDX55_SLAVE_TCSR, SDX55_SLAVE_CNOC_DDRSS, SDX55_SLAVE_SPMI_VGI_COEX, SDX55_SLAVE_QPIC, SDX55_SLAVE_OCIMEM, SDX55_SLAVE_IPA_CFG, SDX55_SLAVE_USB3_PHY_CFG, SDX55_SLAVE_AOP, SDX55_SLAVE_BLSP_1, SDX55_SLAVE_SDCC_1, SDX55_SLAVE_CNOC_MSS, SDX55_SLAVE_PCIE_PARF, SDX55_SLAVE_ECC_CFG, SDX55_SLAVE_AUDIO, SDX55_SLAVE_AOSS, SDX55_SLAVE_PRNG, SDX55_SLAVE_CRYPTO_0_CFG, SDX55_SLAVE_TCU, SDX55_SLAVE_CLK_CTL, SDX55_SLAVE_IMEM_CFG);
+>  DEFINE_QNODE(xm_sdc1, SDX55_MASTER_SDCC_1, 1, 8, SDX55_SLAVE_AOSS, SDX55_SLAVE_IPA_CFG, SDX55_SLAVE_ANOC_SNOC, SDX55_SLAVE_AOP, SDX55_SLAVE_AUDIO);
+>  DEFINE_QNODE(xm_usb3, SDX55_MASTER_USB3, 1, 8, SDX55_SLAVE_ANOC_SNOC);
+> -DEFINE_QNODE(ipa_core_slave, SDX55_SLAVE_IPA_CORE, 1, 8);
+>  DEFINE_QNODE(ebi, SDX55_SLAVE_EBI_CH0, 1, 4);
+>  DEFINE_QNODE(qns_llcc, SDX55_SLAVE_LLCC, 1, 16, SDX55_SLAVE_EBI_CH0);
+>  DEFINE_QNODE(qns_memnoc_snoc, SDX55_SLAVE_MEM_NOC_SNOC, 1, 8, SDX55_MASTER_MEM_NOC_SNOC);
+> @@ -82,7 +80,6 @@ DEFINE_QNODE(xs_sys_tcu_cfg, SDX55_SLAVE_TCU, 1, 8);
+>  DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
+>  DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
+>  DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
+> -DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
+>  DEFINE_QBCM(bcm_pn0, "PN0", false, &qhm_snoc_cfg);
+>  DEFINE_QBCM(bcm_sh3, "SH3", false, &xm_apps_rdwr);
+>  DEFINE_QBCM(bcm_sh4, "SH4", false, &qns_memnoc_snoc, &qns_sys_pcie);
+> @@ -219,22 +216,6 @@ static const struct qcom_icc_desc sdx55_system_noc = {
+>  	.num_bcms = ARRAY_SIZE(system_noc_bcms),
+>  };
+>  
+> -static struct qcom_icc_bcm *ipa_virt_bcms[] = {
+> -	&bcm_ip0,
+> -};
+> -
+> -static struct qcom_icc_node *ipa_virt_nodes[] = {
+> -	[MASTER_IPA_CORE] = &ipa_core_master,
+> -	[SLAVE_IPA_CORE] = &ipa_core_slave,
+> -};
+> -
+> -static const struct qcom_icc_desc sdx55_ipa_virt = {
+> -	.nodes = ipa_virt_nodes,
+> -	.num_nodes = ARRAY_SIZE(ipa_virt_nodes),
+> -	.bcms = ipa_virt_bcms,
+> -	.num_bcms = ARRAY_SIZE(ipa_virt_bcms),
+> -};
+> -
+>  static const struct of_device_id qnoc_of_match[] = {
+>  	{ .compatible = "qcom,sdx55-mc-virt",
+>  	  .data = &sdx55_mc_virt},
+> @@ -242,8 +223,6 @@ static const struct of_device_id qnoc_of_match[] = {
+>  	  .data = &sdx55_mem_noc},
+>  	{ .compatible = "qcom,sdx55-system-noc",
+>  	  .data = &sdx55_system_noc},
+> -	{ .compatible = "qcom,sdx55-ipa-virt",
+> -	  .data = &sdx55_ipa_virt},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, qnoc_of_match);
+> -- 
+> https://chromeos.dev
+> 

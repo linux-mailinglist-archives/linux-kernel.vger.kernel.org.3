@@ -2,113 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53194FFF3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACFC4FFF4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbiDMT3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
+        id S237654AbiDMTag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238317AbiDMT3k (ORCPT
+        with ESMTP id S235254AbiDMTae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:29:40 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A5B72E1D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:17 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n18so2792806plg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:17 -0700 (PDT)
+        Wed, 13 Apr 2022 15:30:34 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CB972E24
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:28:12 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id r2so3032846iod.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ulZD6zNnI3E2tVgbP2ay2zB6j2x9YR9+l3/69/Ua3pA=;
-        b=JLd5puMQf6492ML/dyNY6TKWLx7/9ZIuCpo4/MdsTOmTLArTtUAHSBUUksMMpNsbUg
-         JKoMefN2Xhc4AQ40Oj/ty6rADytP+hgT6kUGvT/+DME34D1YFAeq1NkGOZwC2LD/nH7A
-         UROiFTo0esSJrW/PMu2+jyzk+RilmC4re7wIb6Zj+9vn95TEcRuBhlxaxDMhY3k2FK9Z
-         JF9sAJzfofpZ9TQMjkyuueU/pkYZfnd4WssWZzBXW8PLxVwodjar5qU85Jw0zbjCixvV
-         UNSLduY+bWJgbHcYb6l5xShpVPyjY5c/TLwd1mNzgdN8nvRmYBPxs/1Sb65pSM4TrGJT
-         8Ahw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hGxcoipwWUtIXq1n/IgG8Z+lNTNMbXErzkobqsYlE2I=;
+        b=ZL69/ZorDhoyGCgh2Jl2LpYu9wdzJZuKqXtq1AduuuzTrWaviPzsVClwbPvrv7uCTd
+         Wy5ca+NuwOlsqg+aYU1IESzQE3G37dKVWlkYY9Ly6sDjrly4XzFrSiyORmXjNmjQ4mI1
+         RcSmvLdaR/zIMaP0QB8/RK6BZO1/spPT8pjuIXy6Hbsxim0tIpI11wzgX4bE9Xwa0LXE
+         dGo46fLmaWgUM1asirSzWUse+H+7wDLnZUlc47SzwRHakMzOg/CEpIBjjdRdTKsKFNyh
+         HWwjeVsqd6UISleKatfeF1L5GL3JbMixLX8TYefO5mUvfOT+ryc9Fzkb+FBjn1UI+4cj
+         WEGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ulZD6zNnI3E2tVgbP2ay2zB6j2x9YR9+l3/69/Ua3pA=;
-        b=Dk6gT9e/NWuxbT3lb7PECFN4lnzx5RUJnh+avYSWvKuTiVgLrmBTf2Pp6B2l2moeIo
-         r4fRh52ZPsGR6HjP7AFkkMWwp8vh5KFszIRWJI8astt36zdLoBFqP6eCKD1+ovtfqtUE
-         615Imp4WIMMcVVr5je4N6bBQptUnhH0E5yppxtO+XDbE9GvEeUcuMfqEegAESzudJURm
-         MRKp/TlX8DTf9nxNBOME9i4soyx+43JqJiL4qSE1QYYUm1JJbloi5zzze5lG+gfJTHmD
-         xwsL+69NSNZqzLYQO78AXAjdgwd2MSM8694xy/VQ7iqDiu2fHxUMm96inJNXArG/AjEK
-         7xxA==
-X-Gm-Message-State: AOAM530GTQ20lodR3annYOTOgdYzUNwJdGDrtRO1CIZp6wn6UnZ+RlsF
-        AtFwjwwVzTBTdxoYsezQQhxwlA==
-X-Google-Smtp-Source: ABdhPJy2l1eOffJSFsfUgH2fvADP0aGuwJ8njCIdXBZ9pzOEzXCNNM+Oyp4lX76nDUJdDBeupVp7HA==
-X-Received: by 2002:a17:90a:454a:b0:1ca:91c7:df66 with SMTP id r10-20020a17090a454a00b001ca91c7df66mr288235pjm.186.1649878036766;
-        Wed, 13 Apr 2022 12:27:16 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id v16-20020aa78090000000b0050583cb0adbsm18978259pff.196.2022.04.13.12.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 12:27:16 -0700 (PDT)
-Message-ID: <bb29d766-f837-195e-63cc-15d02f155f2c@linaro.org>
-Date:   Wed, 13 Apr 2022 12:27:15 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hGxcoipwWUtIXq1n/IgG8Z+lNTNMbXErzkobqsYlE2I=;
+        b=4Yf7KtL/3kpDGT/JNoe3ly68cbsv3y1vrvU02ui9cxVo4Ds2/mq44VS+0QFFW+5O9e
+         1bCO71JZj3pOxfWeb402qHv+6iY97eyETCvZ467vjw2ZAuHG2/LEkq03Hd7WPndCRXKi
+         bAkqxk6NM1s7Ow/TnDneSWyOaAczMq4ZvLdPvtspzoDV/OKr0Ai2VKj7yqG/fC6UJYET
+         ApBST1GXURmJgKx7LDt9BUOPUsxKvYy9SeWSKfCC+QeUGQcbrmqCkNmReDrArQ15uL64
+         3TAIZ3j1LxSrb+MS0bKjyHHxyznnl2JF6kXVNlkAyqxwQHDqQ4EF8DbIIWS/DBBUq6Ft
+         8KzQ==
+X-Gm-Message-State: AOAM530lz3G44g/C6amgrHBMkl/Xobpmy6tjAso8KU1e0YXFPslQWVnl
+        OFIXyd6GdLlWFV7A+cX04Y8NzpyqDs+f4nBLxbw=
+X-Google-Smtp-Source: ABdhPJxDLmrDgN9dtgESqgY2iKUAgV+F+PFUJT9r2kvBTNB7UCTm3ZWMqb2uVl7rs9oHR5y83T6q39jD8xIUTXxNtkk=
+X-Received: by 2002:a05:6602:2b8e:b0:5e9:74e7:6b01 with SMTP id
+ r14-20020a0566022b8e00b005e974e76b01mr19051650iov.127.1649878091766; Wed, 13
+ Apr 2022 12:28:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] bpf: Fix KASAN use-after-free Read in
- compute_effective_progs
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-References: <20220405170356.43128-1-tadeusz.struk@linaro.org>
- <CAEf4BzaPmp5TzNM8U=SSyEp30wv335_ZxuAL-LLPQUZJ9OS74g@mail.gmail.com>
- <e7692d0b-e495-8d3e-4905-c4109bf5caa4@linaro.org>
- <CAEf4Bzbb+AmuABH2cw=48uuznz7bT=eEMc1V9mS3GSqgU664Tw@mail.gmail.com>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <CAEf4Bzbb+AmuABH2cw=48uuznz7bT=eEMc1V9mS3GSqgU664Tw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1648049113.git.andreyknvl@google.com> <YkV6QG+VtO7b0H7g@FVFF77S0Q05N>
+ <YkWg5dCulxknhyZn@FVFF77S0Q05N> <CA+fCnZeQ6UnpM9qEQ4q5Y95U3XVwrsD-g7OX=Qxr1U1OR_KCsQ@mail.gmail.com>
+ <Yk8wbx7/4+9pMLGE@FVFF77S0Q05N>
+In-Reply-To: <Yk8wbx7/4+9pMLGE@FVFF77S0Q05N>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 13 Apr 2022 21:28:00 +0200
+Message-ID: <CA+fCnZcv6PtR5eT-hbJ54hkH7Kr+CUM4DU2S5nbU4Lp2OnG8dQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] kasan, arm64, scs, stacktrace: collect stack
+ traces from Shadow Call Stack
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 12:07, Andrii Nakryiko wrote:
->> it would be ideal if detach would never fail, but it would require some kind of
->> prealloc, on attach maybe? Another option would be to minimize the probability
-> We allocate new arrays in update_effective_progs() under assumption
-> that we might need to grow the array because we use
-> update_effective_progs() for attachment. But for detachment we know
-> that we definitely don't need to increase the size, we need to remove
-> existing element only, thus shrinking the size.
-> 
-> Normally we'd reallocate the array to shrink it (and that's why we use
-> update_effective_progs() and allocate memory), but we can also have a
-> fallback path for detachment only to reuse existing effective arrays
-> and just shift all the elements to the right from the element that's
-> being removed. We'll leave NULL at the end, but that's much better
-> than error out. Subsequent attachment or detachment will attempt to
-> properly size and reallocate everything.
-> 
-> So I think that should be the fix, if you'd be willing to work on it.
+On Thu, Apr 7, 2022 at 8:42 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> I'm afraid from local testing (atop v5.18-rc1), with your config, I still can't
+> get anywhere near your figures. I've tried to match toolchain versions with
+> what was in your .config file, so I'm using clang 12.0.0 from the llvm.org
+> binary releases, and binutils from the kernel.org crosstool 11.1.0 release.
+>
+> I took baselines with defconfig and defconfig + SHADOW_CALL_STACK, with console
+> output completely suppressed with 'quiet loglevel=0':
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-defconfig/Image
+> |
+> |  Performance counter stats for
+> |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-defconfig/Image -append
+> |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
+> |
+> |        0.512626031 seconds time elapsed                                          ( +-  0.26% )
+> |
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-defconfig+scs/Image
+> |
+> |  Performance counter stats for
+> |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-defconfig+scs/Image -append
+> |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
+> |
+> |        0.523245952 seconds time elapsed                                          ( +-  0.18% )
+>
+> Then I tried the same with your config, without your patches:
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image
+> |
+> |  Performance counter stats for
+> |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image -append
+> |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
+> |
+> |        1.994692366 seconds time elapsed                                          ( +-  0.05% )
+>
+> Then with your config, without your patches, with the stacktrace hacked out:
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
+> |
+> |  Performance counter stats for
+> | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> | /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
+> | -append loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
+> |
+> |        1.861823869 seconds time elapsed                                          ( +-  0.05% )
+>
+> If I use those number to estimate the proportion of time spent stacktracing,
+> with the baseline SCS number discounted to remove the hypervisor+VMM overheads,
+> I get:
+>
+>         (1.994692366 - 0.523245952) - (1.861823869 - 0.523245952)
+>         ---------------------------------------------------------  = 0.09029788358
+>         (1.994692366 - 0.523245952)
+>
+> So roughly 9% when I try to maximize that figure. When actually poking hardware
+> and doing real work, that figure goes down. For example, if just using "quiet":
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image > /dev/null
+> |
+> |  Performance counter stats for
+> | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> | /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image -append
+> | loglevel=9 earlycon panic=-1 quiet' (50 runs):
+> |
+> |        4.653286475 seconds time elapsed                                          ( +-  0.06% )
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image > /dev/null
+> |
+> |  Performance counter stats for
+> |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
+> |  -append loglevel=9 earlycon panic=-1 quiet' (50 runs):
+> |
+> |        4.585750154 seconds time elapsed                                          ( +-  0.05% )
+>
+> Which gives an estimate of:
+>
+>         (4.653286475 - 0.523245952) - (4.585750154 - 0.523245952)
+>         ---------------------------------------------------------  = 0.01635245964
+>         (4.653286475 - 0.523245952)
+>
+> ... or ~1.6% time spent backtracing:
+>
+> FWIW, applying your patches do show some benefit, but not as drastic as I was
+> expecting:
+>
+> With console output suprressed:
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
+> |
+> |  Performance counter stats for
+> | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> | /home/mark/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
+> | -append loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
+> |
+> |        1.920300410 seconds time elapsed                                          ( +-  0.05% )
+>
+> ... down from ~9% to ~4%
+>
+> With console output merely reduced:
+>
+> | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image > /dev/null
+> |
+> |  Performance counter stats for
+> | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
+> | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
+> | /home/mark/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
+> | -append loglevel=9 earlycon panic=-1 quiet' (50 runs):
+> |
+> |        4.611277833 seconds time elapsed                                          ( +-  0.04% )
+>
+> ... down from 1.6% to 0.6%
+>
+> Given the above I still think we need to understand this a bit better before we
+> consider pursuing the SCS unwinder, given the issues I laid out in my prior mails.
+>
+> My hope is that we can improve the regular unwinder or other code such that
+> this becomes moot. I'm aware of a few things we could try, but given it's very
+> easy to sink a lot of time and effort into this, I'd like to first get some
+> more details, as above.
 
-That makes it much easier then. I will change it so that there is no
-alloc needed on the detach path. Thanks for the clarification.
+Hi Mark,
 
--- 
-Thanks,
-Tadeusz
+I'm about to publish v3, where I'll include a detailed description of
+how I measured the performance.
+
+Perhaps we see different performance numbers because you're using
+KVM-enabled VM on an Arm host and I'm using QEMU on x86-64 host.
+Although, it's suspicious that the difference is so drastic. I'll try
+to get my hands on some Arm hardware in the next few days and do the
+measurements there.
+
+This new version also will not be making any changes to the entry
+code, as these changes add unwanted additional slowdown. That would be
+great, if you could check the performance impact of v3 with your
+setup.
+
+Thanks!

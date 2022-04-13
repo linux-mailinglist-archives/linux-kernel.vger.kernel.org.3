@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4B04FEFEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9074FEFF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbiDMGjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S232887AbiDMGjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiDMGjD (ORCPT
+        with ESMTP id S233060AbiDMGjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:39:03 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553A34F443
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:36:42 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id 3so705357qkj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:36:42 -0700 (PDT)
+        Wed, 13 Apr 2022 02:39:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF48B527E0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:37:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k23so1918874ejd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zaz1xfBZfBkVTLKo10m31VgYs16dDCH+Ct0mFM06kiY=;
-        b=lBnJxscIgHEjYkuM/OcTyqMvrWMSOz+SY1eRCBWRpWKj2jw4MEJ9xexfDy0dWA/xLS
-         5LxVMQW4erWV4JkdSejm+dyvDKx9hOgsyey9F+MXkgWAs4Lvl2c1qYeoDJd7JS6cuVpx
-         M5WIdhUgo7FXxqD0QyB+NC+4DNJqj/SxsF577JBW2EIaYm1qwSuiapSZI7j/sNTSo2ub
-         j+AX6qiB8R5+9b3SqzXzfVQ0NZnv4ZydBLBNg1IVdzp5KRuuhtL68yHphZIHXvE5/bCi
-         yeWK0Du7rfR3RTXKX6uoOh8qVslXy21MsMSaL6rn+QgXmN08JHLEGFEmRC3DYeXFfho1
-         DlXg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L2+K9dFepGLkCzuE8Vegw2gTnmbd7yYcc2wcM+3tE6M=;
+        b=TMWlkGyDuqZPBlzzAUi0m0kmdT5srlS9slVSloQvgv5BjHG2OdUUF0qlHHQ0+VfAZx
+         tBsIXiOvuAmhaEL9Ezrq8hog2fP/n6rQn9JMBJprPOOzCWIeznXyaZAxLGLtmhjZ8wm+
+         DObenLbe+4CZ2ulGU65S8g7iixGQEtRFF/HtLDTEVyPXryuCY/v2OtnZO86xBPjyKRLu
+         mSbIKLr3dLZv1CEfyVKGZ7IZXRLA1MDLfwaWFfDYpJyBwnBKB4/XCyuM5+N1w4w9TMb8
+         TxO5j+Vtb8rd4eSU10an66HKJ2GBCxIU3ajXe2PL6FIkQlFfCcNzA+fCHuASm9ZO7yHm
+         6fFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zaz1xfBZfBkVTLKo10m31VgYs16dDCH+Ct0mFM06kiY=;
-        b=g3dkfrYiW5fdvRTz5nQd/Z73xi6iaURLUxC6r6pTiqF67VzzSj/6bC6i69TRheR/LT
-         hN5Qd95IkLcZFwxO6XFQLDg9tT+4y72jIeTJ8HFUN4nPCD8i9ZukoFg5uxSZlgUWgMBn
-         z1X09KLeEmwFJPXWhZdrpr5d6mFfiwmaPZvwtgPppjGPIoBKYMiCJDiXubJzjhcPBDLO
-         HFMIqPpNUJkcFn+vJAwpbLe4t2LznWslCNAI1RcQMthYeSjrCoRK/G3sprjvV4n4aZ/U
-         eh2v7PuRIPIDBzCgfB5efYSgmovYkDBH0RUzH//EtBtlxNO2mFm3V4dPr4dyWFwUSWBH
-         SlBg==
-X-Gm-Message-State: AOAM530KEYZA1seqtKHSEYzvsqSshxrBAzKSMBuldOvmWpwy3Y6vZdUm
-        cDUlfXb1AS9a6SRncawZTvo4qIdNNJaKY20BQlwzkg==
-X-Google-Smtp-Source: ABdhPJxKpHYZQhn8YwZgnRtEI+zJIEYZVP2lfiqFqrqmNGpTycVlUkRzIL6ePAKUpRFurT7uweDBqP3mKRxSle7M+1Y=
-X-Received: by 2002:a05:620a:170e:b0:69c:3721:b8e6 with SMTP id
- az14-20020a05620a170e00b0069c3721b8e6mr5697661qkb.593.1649831801497; Tue, 12
- Apr 2022 23:36:41 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L2+K9dFepGLkCzuE8Vegw2gTnmbd7yYcc2wcM+3tE6M=;
+        b=U/TfOdusOr/wpvO1P99gshtyHXw8tYlxpMloJ4fy9Gh4FFuoJ5AsKdXOuqwBuBpinw
+         QxQDp3qJ/hINTKnheVddkxgZAxit9wBNSGon3rctYUA3LmKSgsvScT6U+cD9/+Xly/08
+         bnMBrxrpgSDHdTRDDmbjSI6PMugC96Um6CyWG8qYGvWPEFphW1ScLheTXrnfWJsaFthB
+         /BBh94XtacVet/0w7jt+v8nZ7XIrj2uLxX2ogXO1sJRNZeBYYkRuGBXjgY5oaeDvHXw1
+         YfRX7nKFVj2c25rn54gKCU7OG2+ijn35vg0XbCz821FOZoPzCDnmETc/2lhG9Ws85fAG
+         zPCQ==
+X-Gm-Message-State: AOAM5315ezuR2f9M0j9xR+umLg4G5IYlPCNoycceDHTtuY/O+fnGIVPS
+        XCBSaALcLLRTJUpA0dxf83VIsA==
+X-Google-Smtp-Source: ABdhPJxxfRfaX+I00TqE1PWHzu+5jBnSTb9E9ARm5cWpaGhCyvb0c2Wf2r6TMuae4ZkJn+WeWD7+bQ==
+X-Received: by 2002:a17:907:96a9:b0:6e0:db4a:ba8d with SMTP id hd41-20020a17090796a900b006e0db4aba8dmr38877725ejc.87.1649831845519;
+        Tue, 12 Apr 2022 23:37:25 -0700 (PDT)
+Received: from [192.168.0.201] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05640251d200b0041d1600ab09sm802488edd.54.2022.04.12.23.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 23:37:25 -0700 (PDT)
+Message-ID: <c2a7f2e0-1a21-bb0c-9221-c184cfaa3626@linaro.org>
+Date:   Wed, 13 Apr 2022 08:37:23 +0200
 MIME-Version: 1.0
-References: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
- <20220412060144.GA41348@thinkpad> <87k0buoa9j.fsf@kernel.org> <20220413054904.GA2015@thinkpad>
-In-Reply-To: <20220413054904.GA2015@thinkpad>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 13 Apr 2022 09:36:30 +0300
-Message-ID: <CAA8EJprcQtVFvjL_WsMoDxvPSAqaRMS90ZuTsD_cDuujtr83Xw@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: qcom: Add system PM support
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatja@google.com, refactormyself@gmail.com,
-        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org, linux-wireless@vger.kernel.org,
-        ath11k@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v13 4/9] dt-bindings: clock: Add bindings for SP7021 clock
+ driver
+Content-Language: en-US
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1649659095.git.qinjian@cqplus1.com>
+ <f8d5675d1bc32962af6379f78a171ed35b181ebc.1649659095.git.qinjian@cqplus1.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f8d5675d1bc32962af6379f78a171ed35b181ebc.1649659095.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,46 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 at 08:49, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Tue, Apr 12, 2022 at 01:40:08PM +0300, Kalle Valo wrote:
-> > + ath11k
-> >
-> > Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
-> >
-> > > +Kalle, linux-wireless
-> > >
-> > > On Tue, Mar 08, 2022 at 12:25:06AM +0530, Prasad Malisetty wrote:
-> > >> Add suspend_noirq and resume_noirq callbacks to handle
-> > >> system suspend and resume in dwc PCIe controller driver.
-> > >>
-> > >> When system suspends, send PME turnoff message to enter
-> > >> link into L2 state. Along with powerdown the PHY, disable
-> > >> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
-> > >> supported and disable the pcie clocks, regulators.
-> > >>
-> > >
-> > > Kalle, is this behaviour appropriate for WLAN devices as well? The devices
-> > > will be put into poweroff state (assuming no Vaux provided in D3cold) during
-> > > system suspend.
-> >
-> > ath11k leaves the firmware running during suspend. I don't fully
-> > understand what the patch is doing, but if it cuts the power from the
-> > WLAN chip during suspend that will break ath11k.
-> >
->
-> Thanks Kalle for the confirmation. Yes the device will be put into D3cold state
-> and that will most likely equal to poweroff state.
+On 11/04/2022 08:49, Qin Jian wrote:
+> Add documentation to describe Sunplus SP7021 clock driver bindings.
 
-Just to remind that ath11k on Qualcomm boards has a separate power
-supply, not directly tied to the PCIe power supply.
+(...)
 
-> Prasad, you should try to just turn off the host resources like clocks and
-> regulators (not refclk) and let the device be in the default state
-> (D3hot/L{0/1}?) during suspend.
+> diff --git a/include/dt-bindings/clock/sp-sp7021.h b/include/dt-bindings/clock/sp-sp7021.h
+> new file mode 100644
+> index 000000000..de8ef5601
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/sp-sp7021.h
+> @@ -0,0 +1,90 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (C) Sunplus Technology Co., Ltd.
+> + *       All rights reserved.
+> + */
+> +#ifndef _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> +#define _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> +
+> +#define XTAL            27000000
+
+This looks like frequency which usually does not belong to bindings. Why
+do you need it here?
 
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

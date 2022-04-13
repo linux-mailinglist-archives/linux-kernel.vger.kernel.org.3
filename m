@@ -2,95 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8630A4FF076
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F3C4FF07C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbiDMHXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S233299AbiDMHYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiDMHXQ (ORCPT
+        with ESMTP id S232967AbiDMHYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:23:16 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD8E192BA;
-        Wed, 13 Apr 2022 00:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SsucQ7nmn7o3XX8IffWSB3JEjgB0jcdkwzAiY6kF2ec=; b=unmLUqce1/2h2GtG3P5xPxfgMb
-        29bBzJeutu7zmgnSMoVqlQWV6kgI5O884c8KbUyvzK0Ph6dmKwpmdFfkGlUwcEmZ5MlnenC0SYa2z
-        W/P3w9Mv5e9u0AMjsEa626MkRji6gmSWNyfuZGfoseqpd6YQ1NHJZRLNFxSb1avF8C+A45OePxGKZ
-        Uw+YgiemDJFU5bfT/tYMFtyA8hjf+db5udHAn1H+hR/Aco5HIaV4jYYQbeJxMEDDGnQKeekoFCXe4
-        jaqWy77xXJYfodv7AuLSlfPO60dKorZnEy7X/CC5iUed8vNwQXIFWBJRNmAQtJny0ORZdkq5DfADH
-        CBlg7Frg==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1neXIv-0007di-Gw; Wed, 13 Apr 2022 10:20:41 +0300
-Message-ID: <6afbd04c-9847-a62c-12bf-f49314ae2664@kapsi.fi>
-Date:   Wed, 13 Apr 2022 10:20:41 +0300
+        Wed, 13 Apr 2022 03:24:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB7C41639
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:22:17 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1neXK8-0002PA-B8; Wed, 13 Apr 2022 09:21:56 +0200
+Message-ID: <b112c517d5ee86ef09088ed3cc00291417101a6e.camel@pengutronix.de>
+Subject: Re: [PATCH v2 0/7] Add the iMX8MP PCIe support
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Wed, 13 Apr 2022 09:21:53 +0200
+In-Reply-To: <AS8PR04MB867606A1E2E45A0C0A1525A48CEA9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
+         <CAJ+vNU0McZxj_74DC0wCUyHq-NaT14URnvUP+kvudz7YLQq7fg@mail.gmail.com>
+         <AS8PR04MB86766041887E97E22B0AC8C48CE99@AS8PR04MB8676.eurprd04.prod.outlook.com>
+         <4f8f93c51fedc84d94534e962bc7c68c4a4e5616.camel@pengutronix.de>
+         <AS8PR04MB867606A1E2E45A0C0A1525A48CEA9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] gpu/host1x: remove useless if(ptr) check to kfree
-Content-Language: en-US
-To:     Bernard Zhao <zhaojunkui2008@126.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     bernard@vivo.com
-References: <20220413063934.23571-1-zhaojunkui2008@126.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <20220413063934.23571-1-zhaojunkui2008@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 09:39, Bernard Zhao wrote:
-> This patch remove useless if(ptr) check to kfree.
-> 
-> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
-> ---
->   drivers/gpu/host1x/fence.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/host1x/fence.c b/drivers/gpu/host1x/fence.c
-> index ecab72882192..05b36bfc8b74 100644
-> --- a/drivers/gpu/host1x/fence.c
-> +++ b/drivers/gpu/host1x/fence.c
-> @@ -93,8 +93,7 @@ static void host1x_syncpt_fence_release(struct dma_fence *f)
->   {
->   	struct host1x_syncpt_fence *sf = to_host1x_fence(f);
->   
-> -	if (sf->waiter)
-> -		kfree(sf->waiter);
-> +	kfree(sf->waiter);
->   
->   	dma_fence_free(f);
->   }
+Hi Richard,
 
-I personally dislike leaving the NULL checks off with calls to kfree. 
-With the NULL check there, while reading the code it is obvious that the 
-intention is that the value can be either a valid pointer or NULL. IMHO 
-with C's type system/conventions we need this kind of contextual 
-information to understand the code easily and avoid bugs.
+Am Montag, dem 11.04.2022 um 03:32 +0000 schrieb Hongxing Zhu:
+> > -----Original Message-----
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> > Sent: 2022年4月8日 16:13
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; tharvey@gateworks.com;
+> > Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>; bhelgaas@google.com;
+> > Lorenzo
+> > Pieralisi <lorenzo.pieralisi@arm.com>; Rob Herring
+> > <robh@kernel.org>; Shawn
+> > Guo <shawnguo@kernel.org>; Vinod Koul <vkoul@kernel.org>;
+> > linux-phy@lists.infradead.org; Device Tree Mailing List
+> > <devicetree@vger.kernel.org>; linux-pci@vger.kernel.org; Linux ARM
+> > Mailing
+> > List <linux-arm-kernel@lists.infradead.org>; open list
+> > <linux-kernel@vger.kernel.org>; Sascha Hauer
+> > <kernel@pengutronix.de>;
+> > dl-linux-imx <linux-imx@nxp.com>
+> > Subject: Re: [PATCH v2 0/7] Add the iMX8MP PCIe support
+> > 
+> > Am Freitag, dem 08.04.2022 um 03:14 +0000 schrieb Hongxing Zhu:
+> > > > 
+> > [...]
+> > > > Richard,
+> > > > 
+> > > > Thanks for working on this!
+> > > > 
+> > > > Do you plan on submitting another version soon? I've tried to
+> > > > test
+> > > > this with an imx8mp board I'm bringing up and while the host
+> > > > controller enumerates I fail to get a link to a device. It's
+> > > > very
+> > > > likely I am missing something as this series depends on the
+> > > > IMX8MP blk-ctrl
+> > and gpc series which I also can't cleanly apply.
+> > > > Lucas just submitted a 'consolidated i.MX8MP HSIO/MEDIA/HDMI
+> > > > blk-ctrl series' [1] yet I can't find a repo/branch that
+> > > > applies to either.
+> > > > 
+> > > > Perhaps you have a git repo somewhere I can look at while we
+> > > > wait
+> > > > for imx8mp blk-ctl/gpc to settle and you to submit a v3?
+> > > Hi Tim:
+> > > Thanks for your kindly help to do the tests.
+> > > I had listed the dependencies in the cover-letter log.
+> > > Alexander and I used to test this series commits based on the
+> > > V5.17 kernel.
+> > > 
+> > > Lucas had provided some review comments and suggestions about the
+> > > PLL
+> > > bits
+> > >  manipulations of HSIOMIX in i.MX8MP PCIe PHY driver #3 of this
+> > > series.
+> > > And he suggested to let the HSIOMIX blk-ctrl make this PLL as a
+> > > real
+> > > clock,
+> > >  and used by i.MX8MP PCIe PHY driver later.
+> > > 
+> > > Although I have some confusions, it's better let's wating for the
+> > > blk-ctrl settle down and get clear discussion with Lucas later.
+> > > How do you think about that?
+> > 
+> > Just to let you know my plans: I was quite busy with getting the
+> > i.MX8MP
+> > HDMI part to work. Now that this is at least in a state where it
+> > can collect
+> > some feedback from upstream I have some time to circle back to this
+> > topic. I
+> > can't commit to do it immediately, but I'll get around to looking
+> > at the PCIe
+> > series a bit more in-depth and apply my HSIO PLL suggestion to the
+> > blk-ctrl
+> > driver during the next week.
+> 
+> Hi Lucas:
+> Thanks for your helpful reply.
+> I know that you're busy with the blk-ctrl settle down now, and had
+> explained to
+> Tim.
 
-Mikko
+Yesterday I tried to get this series working on my 8MP-EVK board, but
+was unsuccessful for now. The PCIe link does not come up. PCIe REF_CLK
+is present and PERST de-asserted. I'm not sure if this is due to a
+faulty EP device (I don't have another M.2 KeyE device around to check)
+or if this may be due to the old revision of my 8MP-EVK, as I'm still
+working with a RevA board. The schematic revision log doesn't show
+anything that would obviously influence PCIe operation, but I have also
+not found any schematics for RevA.
+
+Do you know if there have been any PCIe related changes/fixes in the
+later EVK board revisions?
+
+For now I'll try to get this working on a custom i.MX8MP board, where I
+can use a different EP device. Maybe I'll have a bit more luck there.
+
+Regards,
+Lucas
+

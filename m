@@ -2,144 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169544FF933
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F604FF932
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiDMOox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S236240AbiDMOpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbiDMOou (ORCPT
+        with ESMTP id S236223AbiDMOpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:44:50 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B823862BE5;
-        Wed, 13 Apr 2022 07:42:28 -0700 (PDT)
+        Wed, 13 Apr 2022 10:45:00 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2561A62BEE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:42:35 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id bd13so1499657pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649860949; x=1681396949;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/WQofjNq2TS+ZBTx8OaoW/RzTpZcHfSOiBcFEhOVikw=;
-  b=Y0aa5jQWBLkQn6hDxuOKnV4lLfoYoog1Wd8s/wYYS8rMyBAXWjVmqBIy
-   69ZeVj+t1peM50ieLkX2vqCjx2Q9ixszjORxZhPMh4Phr7Uo53DTyrJQS
-   LFWsyg0pDsC4g1D4UUxkrPJan+7+KlTkuzMGMCguaKCmNxk0A/DcKCKVf
-   c=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 07:42:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:42:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 07:42:27 -0700
-Received: from [10.216.55.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
- 2022 07:42:23 -0700
-Message-ID: <478125e6-7b8f-a69d-4ffb-00344611229d@quicinc.com>
-Date:   Wed, 13 Apr 2022 20:12:20 +0530
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/JYEDIWYyCmXfCvpDqWCkJLdtO8UQhf0VFm9gLSvtws=;
+        b=pceu2zUDQVxybZHIpx8ZRmoZzDQIwrGKZgmWOMMzB7VAntXi50Pl0f8pqyxIEWPI+5
+         pL8meqwPaGS963019NumUkybXx5CAsYMfc9veKm5KQ+oJV7CHLpP0E2YE2ceNlg24Awv
+         Xiemy6d/d+QzFJP4AyTUBvn9E10N6yw7xHZAlMF5b+RdO7301qDFVWFwUPYHcOEZEQst
+         hdyDSfjQBEYHj3aM7s6VfQjTsXUs7pBHuWqIWAdpu45F1CvjpGaMW4cUXBfpwME0fQNW
+         ATa+Av8J7FZi20cBDzMQDd2QAB2m/kLbg2cdN+dvirzLbuU7eYsx1Ld8zBtlLaLNLR02
+         zZ9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/JYEDIWYyCmXfCvpDqWCkJLdtO8UQhf0VFm9gLSvtws=;
+        b=yUw1bEESkJdEK+SxP+cNkmPjEdE0Kbnt5TY/pkJIsEZbR/HK3UKEXcBinf80zmoHIl
+         fURJIy+54GMpWIrmtgS4dHmRljcPFkICz0vQc3rpbA0p8MDah9V9eHbOvHUITC4RimuN
+         15j/Ey/P1WjicOxNAm9J6g2X3ChlMnHtU1/LmVX4YB1n2gYGmBh3sEsCBnJenirTp5Jy
+         G7OXWZARSAPP8ol9owxlkKUCBLDByrLApK5G7NL3PZiNfVUb84lpjv8sFOQrA5KFZZMa
+         DCR6fsTkVNFh8Pwln63PzniHpGOMUOiBfVDuU5V9ppcwSiQAbimchnwgLjYmpzAPf0yT
+         TOpQ==
+X-Gm-Message-State: AOAM5326IvNZYvYv2SqH2Gc1j/4ohaOCrLJffU/y0zoXW926CtLNNpmo
+        Kgz5lyYI6T1HWO7r7f9/WzsJ8w==
+X-Google-Smtp-Source: ABdhPJyND0vLloxs8A3tKDdJhHhujGT9+mvw3w0rxORb0WCXA5Nj8ZZclC8so/j+m0ds/Ow5E6mDWg==
+X-Received: by 2002:a63:1024:0:b0:39d:1172:b8e0 with SMTP id f36-20020a631024000000b0039d1172b8e0mr20123646pgl.423.1649860954468;
+        Wed, 13 Apr 2022 07:42:34 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090a058f00b001cd50a6ec5csm2934080pji.16.2022.04.13.07.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 07:42:33 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:42:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH V3 2/4] KVM: X86: Introduce role.glevel for level
+ expanded pagetable
+Message-ID: <YlbhVov4cvM26FnC@google.com>
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-3-jiangshanlai@gmail.com>
+ <YlXvtMqWpyM9Bjox@google.com>
+ <caffa434-5644-ee73-1636-45a87517bae2@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v7 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
- controller node
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
- <1649685184-8448-3-git-send-email-quic_srivasam@quicinc.com>
- <YlSCWC47tITuW/BZ@google.com>
- <9bacee6d-ab44-2975-c523-38164d016af5@quicinc.com>
- <be8c6dae-20b1-3ba1-db3f-119da1e4ebfe@quicinc.com>
- <YlYSe5/wm06oTJej@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YlYSe5/wm06oTJej@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <caffa434-5644-ee73-1636-45a87517bae2@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 13, 2022, Paolo Bonzini wrote:
+> On 4/12/22 23:31, Sean Christopherson wrote:
+> > > +		unsigned glevel:4;
+> > We don't need 4 bits for this.  Crossing our fingers that we never had to shadow
+> > a 2-level guest with a 6-level host, we can do:
+> > 
+> > 		unsigned passthrough_delta:2;
+> > 
+> > Where the field is ignored if direct=1, '0' for non-passthrough, and 1-3 to handle
+> > shadow_root_level - guest_root_level.  Basically the same idea as Paolo's smushing
+> > of direct+passthrough into mapping_level, just dressed up differently.
+> 
+> Basically, your passthrough_delta is level - glevel in Jiangshan's patches.
+> You'll need 3 bits anyway when we remove direct later (that would be
+> passthrough_delta == level).
 
-On 4/13/2022 5:29 AM, Matthias Kaehlcke wrote:
-Thanks for your time and valuable suggestions Matthias!!!
-> On Tue, Apr 12, 2022 at 06:41:25PM +0530, Srinivasa Rao Mandadapu wrote:
->> On 4/12/2022 6:18 PM, Srinivasa Rao Mandadapu wrote:
->>> On 4/12/2022 1:02 AM, Matthias Kaehlcke wrote:
->>> Thanks for your time Matthias!!!
->>>> On Mon, Apr 11, 2022 at 07:23:04PM +0530, Srinivasa Rao Mandadapu wrote:
->>>>> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
->>>>> based platforms.
->>>>>
->>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>>> ---
->>>>>    arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84
->>>>> ++++++++++++++++++++++++
->>>>>    arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107
->>>>> +++++++++++++++++++++++++++++++
->>>>>    2 files changed, 191 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> index 4ba2274..ea751dc 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> @@ -238,6 +238,90 @@
->>>>>        modem-init;
->>>>>    };
->>>>>    +&dmic01 {
->>>> Shouldn't these nodes be in the PINCTRL section at their respective
->>>> positions in alphabetical order?
->>> These are not part of tlmm pin control section. These are part of
->>> lpass_tlmm section.
->>>
->>> In your previous comment you asked to remove &lpass_tlmm. Hence brought
->>> out.
->>>
->>>> nit: since you are keeping the groups the group names are a bit
->>>> generic IMO.
->>>> e.g. it is fairly obvious that 'dmic01_clk' refers to a clock pin,
->>>> however
->>>> just 'dmic01' is a bit vague. You could consider adding the prefix
->>>> 'lpass_'
->>>> to the group names for more clarity.
->>> as dmic01 has both clk and data section, I don't think keeping clk is
->>> appropriate here.
->> As these nodes are part of SC7280, i.e. qcom specific chipset, I feel lpass_
->> is redundant.
-> It helps to provide some context about the pins which might not be evident
-> from their short names like 'dmic01' or 'rx_swr'. A nice side effect is that
-> the pins/groups would grouped automatically together in alphabetic ordering.
->
-> In terms of 'redundancy' it is similar to 'qup_' prefix for the I2C/SPI/UART
-> pins.
-Agree. Will change accordingly. similarly will append lpass_ torx/tx/va 
-mcro device node names.
->
->> If we add lpass_ to all dmic nodes, some node names are too lengthy.
-> The longest would be like 'lpass_dmic01_sleep' or 'lpass_rx_swr_sleep', which
-> doesn't seem outrageous.
->
-> In any case it's not super important. If it bothers someone enough later
-> on they can always send a patch that changes it.
-Okay.
+Are we planning on removing direct?
+
+> Regarding the naming:
+> 
+> * If we keep Jiangshan's logic, I don't like the glevel name very much, any
+> of mapping_level, target_level or direct_level would be clearer?
+
+I don't love any of these names, especially glevel, because the field doesn't
+strictly track the guest/mapping/target/direct level.  That could obviously be
+remedied by making it valid at all times, but then the role would truly need 3
+bits (on top of direct) to track 5-level guest paging.
+
+> * If we go with yours, I would call the field "passthrough_levels".
+
+Hmm, it's not a raw level though.

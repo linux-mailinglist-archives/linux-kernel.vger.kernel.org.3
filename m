@@ -2,580 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BA14FF8B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687154FF8BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbiDMOOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S236055AbiDMOS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiDMOOX (ORCPT
+        with ESMTP id S234248AbiDMOS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:14:23 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2C825EDEA;
-        Wed, 13 Apr 2022 07:12:01 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8959120C34C7;
-        Wed, 13 Apr 2022 07:12:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8959120C34C7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649859121;
-        bh=XZXXW70cgIEBhAepmvPYlAu2n1MJ5t+aIQxRmKQJUnQ=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=qTi2RiZHKvGWujuUjByYuTLqoMJdRMwFhiorS5IXmzQcP1vD27MD1PQ+2fiJJDEMW
-         KkXPDJtU52n/CGAhHs8theCiL79fqKu9AlIQChB3grorMEpJ/HMWuVxMPvVdwtdaT1
-         dlZhOfFBiIg6LWn11ejIOnmiiZIph1YQWQsg7WSU=
-Message-ID: <fda1887f-340f-d3fd-78d7-f88d3850190b@linux.microsoft.com>
-Date:   Wed, 13 Apr 2022 09:11:59 -0500
-MIME-Version: 1.0
+        Wed, 13 Apr 2022 10:18:56 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0261A24;
+        Wed, 13 Apr 2022 07:16:29 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DDfRS9028018;
+        Wed, 13 Apr 2022 14:15:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
+ b=aRBwej2b1fmx7auTzZZjpDlz6zGVvT0z1ZVX4T2VybhDazVMV4qIPbFrGo5mAZ4xsz8P
+ qzUBPm5tPv/SvwAMI2u7HwCsX6+g1Dj0GaTlhRYER8ALEBVLT5b4rhP39ANojpyaNgSD
+ RQseK7p9odtVjQuclNz1eIpEmnESRRIF3p+dLk951XXlGd1/uA7Eqbrg7/vfI7ZsKT99
+ defwsLLAIma5rH6EIUVcUn4ldSU5999NyMf7g5Fs8s+lejREfyGdlvXoHL2Vz6j9sayf
+ Q7jVmoXj75smAbqUMGw4iFVjFvvYAsshvsT6MYunfg2MDSOvX+yDqK+/4uFHpimDEfyA qA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb21a1p44-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 14:15:54 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DEBpsm040387;
+        Wed, 13 Apr 2022 14:15:54 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k47ae7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 14:15:53 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aGj+PfS0h1hQa5Z8s9dHuZOvS7s8hUHhIMnULTYdAWftT3+VR3BS/HiujNQllYgGw8wMqKL0NoPAdhGZBUszNwu7xnHoVGvnJcORY7MilldH2VQHjHfpuJGFxVwePgns6S5Sjq7REwxh+/PSwt2D538On7aKKaHrAp0CYTc4Z2iOHJ8o5GYpwh0oVc17LbTzFShe2Tgxb1/Cgti6w8bRzjalgR3qULfg/3hUdFBgluIMkgqKmpDm1z9F1weTYnF4ntGjUD0CSj9zl1ZBsYjbgmjv5QAy0eCcZjwQ38/NAYD93sar+vWXImkH6mvAq5LWeCiLeQ6PGNtRZtUCvMzA8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
+ b=cfh1KNpGaRo6UOZSVIxi5jTjHN9OgflXAxGGXcU90xWHOoyrsBVZqeQC0uo97xJBBcKv/z2WWl3Ww6JvTfa972R/k8ed3e1fA0u3zo1o3pSBNWp0PDUTs/45VdWFYKNUuuBcAv4l6wdok4rO9fnCyUXQUIrfw+bpWx6qH6vNa5pVr9EaH4yTG0Q8Mu2O6uUTwN3E2kKVYzlbQYrLtHPQuHZfR1MYwIohaM+tj1zgMbav11nSITqA59cxedU8mHTm/0sUiNHUe61NMrIk5+GAA9LeB2x51hgZFrSSVqAn89wlNlfOnqfQrwRQ9wtQEusMbALQIndVkP1fph5NMUHx7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
+ b=orGfqqvvG7dxkgnOzw6fd2rdlZLCSf2Ya9lv1DlAKIB4Ib9l3KFHYl5ydhhluHYVbU39dHKA7Oy9do8Evl2MLd9jtH95aWeVJNfwyDQSbYD5DAwkC9k+j6l5N0+w4Ty/GHLT1Zt+754vPuLlLz+1i4fLq9w278REj83yzC2Anr4=
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
+ by DM6PR10MB3691.namprd10.prod.outlook.com (2603:10b6:5:157::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 14:15:51 +0000
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::41da:48ff:402:1a40]) by BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::41da:48ff:402:1a40%6]) with mapi id 15.20.5164.020; Wed, 13 Apr 2022
+ 14:15:51 +0000
+Message-ID: <c9a95b2d-9628-6c0d-5da9-c8164ff93a05@oracle.com>
+Date:   Wed, 13 Apr 2022 08:15:53 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v14 0/7] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
+Subject: Re: [PATCH V6 4/7] sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
 Content-Language: en-US
-To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <f460a35f88195413bcf7305e5083480aab3ca858>
- <20220413140528.3815-1-madvenka@linux.microsoft.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <20220413140528.3815-1-madvenka@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-21.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220413055840.392628-1-anshuman.khandual@arm.com>
+ <20220413055840.392628-5-anshuman.khandual@arm.com>
+ <c3619877-32db-aaa3-5dd9-4917c067bc42@csgroup.eu>
+ <e0efde60-625c-fa58-79c4-5e8a86ddf203@arm.com>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+In-Reply-To: <e0efde60-625c-fa58-79c4-5e8a86ddf203@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR21CA0014.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::24) To BN8PR10MB3220.namprd10.prod.outlook.com
+ (2603:10b6:408:c8::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 506ef692-5d45-4ed8-c05a-08da1d581d85
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3691:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3691CD5F8E657F52CF8FBFE986EC9@DM6PR10MB3691.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AF/sauRK4DO/zM7uJD1VDDU0ACF3mGJZvmazjgLfOgcv/vsCvkJ6kqc+WttkpdqJzJo+gDRCLINnTmHZt7pfKcFztzasItfuqVAFRln1aDwmLIqYqNw3qt1MSJRTwFQmGEgTXPxUSCybqDGMSbW3mnI5pVxZS+eE90zANRjirorVbIRJFZ1ZVOfoDlMeIKlzhq9vs6mf0ZR6zIoz6k08o/4Cbxs5NSyH9OaiS8g8sFnd8q/mrl7LIuOFLMmdkWXyoA45SqVjJlGkR70AWdoaADePC+VIC60ZVx090+v6P2cOr2u/arw4ea+8ijDiemClIptHpVlKeBceMTw5oqDnvjR/bj4wst6eq14rt2sKL53D4Rg0kprwKDh2gbQIb+Ns/XQhEvHvq3ryafbIdFjTs+rCyM2ZtRc4En3lneplvGbQib42SNysTjGYF/6XWqItCkpvxxzZb/EEgmuFKsKOq+O7B1UhuVLalzd58ZchEE6dDWqsucL877b7xY2N8MA4r+dj7RhkxZMvKb6XtLeCrscQBrsIbYcZkZeV7DS9bLlIO2WT2/0F+QPZfj+jpvV4Jpe1TeIs71KqVwWeWwbJMwQjtCyrIvKt9mQ0Tzo831SpM1/+zFy6Jlhkp/3KucEx65dVAwwukHVJcIRWxonQiF7MoIbzPZcngwFH/ZnbO+gsB2h1Je/8lMj2pMIMhoNkgcpCQjgSuhij6avQRTZtspjlpX25M5UzuNVxMhgf8Zg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(31696002)(316002)(31686004)(110136005)(5660300002)(186003)(36756003)(26005)(66574015)(38100700002)(54906003)(7416002)(44832011)(86362001)(4326008)(53546011)(8676002)(83380400001)(6512007)(66946007)(66556008)(66476007)(2906002)(2616005)(508600001)(8936002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Vm9pcEVGbCtKZDJUOUwxVUprdVNpM3pPMm8rTXNyR3ViUHNTY21oYkpZS3oy?=
+ =?utf-8?B?WlZxUTVaZlhFVENnVUEwbGNxT0wwbk9JQTVYMDVvak1oU21EdXo1Y0RyMEQx?=
+ =?utf-8?B?c3JaZ1hVTGE2RUNaelFaUEs5K0R5Vy8wcHlqSjkyZ1M0MzVyVmZWOFpKYWxD?=
+ =?utf-8?B?aWJpRW5yMThmK0p0Ti80ZFg5c0R0NHNUSE5TRDNiUXQ0TWgrZWRxaXlUR3Rm?=
+ =?utf-8?B?VXNjWHk3eUV1Uk9FbmFyUy9hbUMzMlJrdkw3Qjc4OW1USllSc1Yvc0V5Ylpw?=
+ =?utf-8?B?U2U0Rjk0bW5kUEtKcFZDSzdmejhrZldyY1dNaEcwQ2VMZm1JSXJFZUxyS2Ez?=
+ =?utf-8?B?QmFxd3lBbVpQcmVTNWxMSTBnRVVxN3pQRjh3RHZIY0M3Z2xZRVFyTzN2Qmtx?=
+ =?utf-8?B?UTIyMGdHd1RKRktFR25nRk5zRlFBb1FobzBjZW5mdXFOQU9hSHY3K2ErRXV5?=
+ =?utf-8?B?M052aHNHOGFXYnhvbUtpdmpBSWE5bjJaWFlRTndheUFSTmhqTnRscUJOQUJZ?=
+ =?utf-8?B?Wjd6eWxGYU5vM3pod25JTm5nT09zeFVZQWc1U0RUR1dkcDRRSWJXTUw3Ym5q?=
+ =?utf-8?B?K2lqWHpwL0dRcHNyRExiYmhjSUdFN3ExazR5ajZLQ0tJOFpYdGZSNUJyTDQx?=
+ =?utf-8?B?WjZoUGFLTXFsRU5CT3NnWVBnVTdra0kvRGdVYVZrV0VIY2h1Y01PbG9TYWUw?=
+ =?utf-8?B?dWxsaU5KbHVzRkJKd1o2TzNQSkhTQUZxOW9wckNwb3hvSkhOa1FOazNlMEhp?=
+ =?utf-8?B?Z29GcFAwMjFPaHRDL2hJRTV5cW14RlU3SzVqcEpXbDA1dnRzOEhiaHR3aCtw?=
+ =?utf-8?B?aUl2dFphVXNPTURBc1U3VTNqVUIyaVZDWlFQL1kzOFBNMTkvMXBzMXFhRDND?=
+ =?utf-8?B?TCtWSUlKcTVGZ3BVQ3p1c1pwcHRQR203MHJucE5iRDEyN0RFY29EUUFJRVha?=
+ =?utf-8?B?VEttS1dDWXpaQWlwU3pxYUdQSUtXYU9CZlROUVE5UG9pNEk3NlFnY0w5NnNG?=
+ =?utf-8?B?TklVUmUrdU0ycC8wdnlmVkt3REZwQ3QwSEMvMm16Wm1jSWpEdklReDl1cE9q?=
+ =?utf-8?B?SzJhSzRQUGtqenNYRXJGcHM5OUNReS9HVTltVFJxYWJyN3kvbmVlSlpzL0cr?=
+ =?utf-8?B?OXBoUEFZM2lSamx3Tk5TcTlVb0F2SmptTTJiUjRWYitMWnhKRXNMYUh1SlF5?=
+ =?utf-8?B?ODlCTWY3Z2V0cmRvQTB1emo1VkwvVVZqS2c0a09wclZzcnR1d2p0WVF1THpE?=
+ =?utf-8?B?aC9Tdmphek1QM0ttdzNkSjBrTjRsS3NCVkNTVHl1R05VcHNKOUNmMForNnpr?=
+ =?utf-8?B?NUxQaHVRbWF5V0NIWERuVElJTVcyVnp0cS9MV1pKY0JGT3VVZUdDTjl1bzB2?=
+ =?utf-8?B?TThyTjVhNkJXYXZIUmJXcityRmo0MjNhYy9lMHp2UWVkalVNVHdpcS9nRVgx?=
+ =?utf-8?B?QVRWb3RyeTYvbUx1RnJzaXhBTTNDTzdCU3RSa2NqY2VMcC9wNkhIZEFGSTFm?=
+ =?utf-8?B?YWgrcEhpd01INkc3TFlTWlpxakFNeGw2cDlkdkdJNjV2bGdlaFh5N09JQmFa?=
+ =?utf-8?B?cGE1TGxnanZNM3dxeHF2NnVQRXlXQTh5a29sTkFVY2oxWk0rTUNqby9yc09o?=
+ =?utf-8?B?K2JSZmxSdDV5L1VLN2pOandGbFByRnN1YVVjbjdTUEVBK0dHeVJMTGxtRUtl?=
+ =?utf-8?B?RTZrS05BVGpUcDJDbElwMXJPL0huVkdKWGFIc2NYc1ZMOG1ISzRMY0pPVjFm?=
+ =?utf-8?B?UDZWYW5Ndm02TDRQTUlDTmpCYkJrRHdLUGdwMk1DdjhLS0NORmg4WXVVdDQv?=
+ =?utf-8?B?RVBvNTZCSy9TdTNOUkVXYWgxbTFaT1BIVDQybE1YWktSeXNiQlFvcVhMRm8y?=
+ =?utf-8?B?Y1FKS1ArMmpFRmprd2Z5MkloalF1aEdyK2ZWSnJtdGg0ZVlJS1RNWTFDckVx?=
+ =?utf-8?B?eHBoT1lOQzZRSHIyaVhMNWxqKy9lRWI3RzVJWmNkNEdpRFo5anBqby83ZDJi?=
+ =?utf-8?B?azVPbFRCTG8vZlFXTVk5RjJFZFZwbzhaUTkwTW1sYnNHaHh3NjFPMkJiNmRR?=
+ =?utf-8?B?M08vK1RSdUtPVWU2Qk5zWXFISVVrVExJemI4ZnhhV2d5Ky9VU2VGQi9KZEFC?=
+ =?utf-8?B?SVd5Wnk4VnluV0JHK3hvaFdQVlVueVVaQTRrMFh5ekFyQ0ZwQzZiWDlNekxs?=
+ =?utf-8?B?a2c2UlpoaW9VeVpkM0xraldjcHliMFFhQjJmaEl6dW9GR1EwbU9DblFDQnBh?=
+ =?utf-8?B?Vk5GL2xGSnBHQjVHOGxmZU1NWEc0ZThzYmhnd05yRHpkYnUwY2RXOElKNWlI?=
+ =?utf-8?B?MnF3TVFUTDVobEZKNStmZTlnQnNxWjRyTXNCeTZFVVlLZDEzRHBUZz09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 506ef692-5d45-4ed8-c05a-08da1d581d85
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 14:15:51.8009
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8ZUsDkf163W+j054lgF9RFKDKmn2GZk3LexnN1G5txM8Id1rqTkYrtvpLUqj8JMfWM/cXe/f7G/GFzbNuSK6+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3691
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-13_02:2022-04-13,2022-04-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204130076
+X-Proofpoint-GUID: iBbKMebAFKxn6SQC2Cc9RY6b4TFPWHHV
+X-Proofpoint-ORIG-GUID: iBbKMebAFKxn6SQC2Cc9RY6b4TFPWHHV
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark Rutland,
+On 4/13/22 00:22, Anshuman Khandual wrote:
+> 
+> 
+> On 4/13/22 11:43, Christophe Leroy wrote:
+>>
+>>
+>> Le 13/04/2022 à 07:58, Anshuman Khandual a écrit :
+>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. It localizes arch_vm_get_page_prot()
+>>> as sparc_vm_get_page_prot() and moves near vm_get_page_prot().
+>>>
+>>> Cc: "David S. Miller" <davem@davemloft.net>
+>>> Cc: Khalid Aziz <khalid.aziz@oracle.com>
+>>> Cc: sparclinux@vger.kernel.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> ---
+>>>    arch/sparc/Kconfig            |  1 +
+>>>    arch/sparc/include/asm/mman.h |  6 ------
+>>>    arch/sparc/mm/init_64.c       | 13 +++++++++++++
+>>>    3 files changed, 14 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+>>> index 9200bc04701c..85b573643af6 100644
+>>> --- a/arch/sparc/Kconfig
+>>> +++ b/arch/sparc/Kconfig
+>>> @@ -84,6 +84,7 @@ config SPARC64
+>>>    	select PERF_USE_VMALLOC
+>>>    	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>>    	select HAVE_C_RECORDMCOUNT
+>>> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>>>    	select HAVE_ARCH_AUDITSYSCALL
+>>>    	select ARCH_SUPPORTS_ATOMIC_RMW
+>>>    	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+>>> diff --git a/arch/sparc/include/asm/mman.h b/arch/sparc/include/asm/mman.h
+>>> index 274217e7ed70..af9c10c83dc5 100644
+>>> --- a/arch/sparc/include/asm/mman.h
+>>> +++ b/arch/sparc/include/asm/mman.h
+>>> @@ -46,12 +46,6 @@ static inline unsigned long sparc_calc_vm_prot_bits(unsigned long prot)
+>>>    	}
+>>>    }
+>>>    
+>>> -#define arch_vm_get_page_prot(vm_flags) sparc_vm_get_page_prot(vm_flags)
+>>> -static inline pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
+>>> -{
+>>> -	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
+>>> -}
+>>> -
+>>>    #define arch_validate_prot(prot, addr) sparc_validate_prot(prot, addr)
+>>>    static inline int sparc_validate_prot(unsigned long prot, unsigned long addr)
+>>>    {
+>>> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+>>> index 8b1911591581..dcb17763c1f2 100644
+>>> --- a/arch/sparc/mm/init_64.c
+>>> +++ b/arch/sparc/mm/init_64.c
+>>> @@ -3184,3 +3184,16 @@ void copy_highpage(struct page *to, struct page *from)
+>>>    	}
+>>>    }
+>>>    EXPORT_SYMBOL(copy_highpage);
+>>> +
+>>> +static pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
+>>> +{
+>>> +	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
+>>> +}
+>>> +
+>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>> +{
+>>> +	return __pgprot(pgprot_val(protection_map[vm_flags &
+>>> +			(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
+>>> +			pgprot_val(sparc_vm_get_page_prot(vm_flags)));
+>>> +}
+>>> +EXPORT_SYMBOL(vm_get_page_prot);
+>>
+>>
+>> sparc is now the only one with two functions. You can most likely do
+>> like you did for ARM and POWERPC: merge into a single function:
+> 
+> I was almost about to do this one as well but as this patch has already been
+> reviewed with a tag, just skipped it. I will respin the series once more :)
+> 
+> Khalid,
+> 
+> Could I keep your review tag after the following change ?
 
-I have addressed all of your comments and Mark Brown's comments so far. Could you pick up the ones you and Mark Brown have already OKed except for the comments that had to be addressed? If they look good, please include them
-with the other patches in your branch:
+Hi Anshuman,
 
-	arm64/stacktrace/cleanups
+Yes, this change makes sense.
 
-Thanks!
+--
+Khalid
 
-Madhavan
+> 
+>>
+>> pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>> {
+>> 	unsigned long prot = pgprot_val(protection_map[vm_flags &
+>> 		(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
+>>
+>> 	if (vm_flags & VM_SPARC_ADI)
+>> 		prot |= _PAGE_MCD_4V;
+>>
+>> 	return __pgprot(prot);
+>> }
+>> EXPORT_SYMBOL(vm_get_page_prot);
+> 
+> - Anshuman
 
-On 4/13/22 09:05, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> 
-> I have rebased this patch series on top of this branch:
-> 
-> 	arm64/stacktrace/cleanups
-> 
-> in Mark Rutland's fork of Linux. The branch contains a set of patches
-> from Mark and me for reliable stack trace.
-> 
-> Split unwind_init()
-> ===================
-> 
-> Unwind initialization has 3 cases. Accordingly, define 3 separate init
-> functions as follows:
-> 
-> 	- unwind_init_from_regs()
-> 	- unwind_init_from_current()
-> 	- unwind_init_from_task()
-> 
-> This makes it easier to understand and add specialized code to each case
-> in the future.
-> 
-> Copy task argument
-> ==================
-> 
-> Copy the task argument passed to arch_stack_walk() to unwind_state so that
-> it can be passed to unwind functions via unwind_state rather than as a
-> separate argument. The task is a fundamental part of the unwind state.
-> 
-> Redefine the unwinder loop
-> ==========================
-> 
-> Redefine the unwinder loop and make it simple and somewhat similar to other
-> architectures. Define the following:
-> 
-> 	while (unwind_continue(&state, consume_entry, cookie))
-> 		unwind_next(&state);
-> 
-> unwind_continue()
-> 	This new function implements checks to determine whether the
-> 	unwind should continue or terminate.
-> 
-> Reliability checks
-> ==================
-> 
-> There are some kernel features and conditions that make a stack trace
-> unreliable. Callers may require the unwinder to detect these cases.
-> E.g., livepatch.
-> 
-> Introduce a new function called unwind_check_reliability() that will detect
-> these cases and set a boolean "reliable" in the stackframe. Call
-> unwind_check_reliability() for every frame.
-> 
-> Introduce the first reliability check in unwind_check_reliability() - If
-> a return PC is not a valid kernel text address, consider the stack
-> trace unreliable. It could be some generated code.
-> 
-> Other reliability checks will be added in the future.
-> 
-> Make unwind() return a boolean to indicate reliability of the stack trace.
-> 
-> SYM_CODE check
-> ==============
-> 
-> This is the second reliability check implemented.
-> 
-> SYM_CODE functions do not follow normal calling conventions. They cannot
-> be unwound reliably using the frame pointer. Collect the address ranges
-> of these functions in a special section called "sym_code_functions".
-> 
-> In unwind_check_reliability(), check the return PC against these ranges. If
-> a match is found, then mark the stack trace unreliable.
-> 
-> Last stack frame
-> ================
-> 
-> If a SYM_CODE function occurs in the very last frame in the stack trace,
-> then the stack trace is not considered unreliable. This is because there
-> is no more unwinding to do. Examples:
-> 
-> 	- EL0 exception stack traces end in the top level EL0 exception
-> 	  handlers.
-> 
-> 	- All kernel thread stack traces end in ret_from_fork().
-> 
-> arch_stack_walk_reliable()
-> ==========================
-> 
-> Introduce arch_stack_walk_reliable() for ARM64. This works like
-> arch_stack_walk() except that it returns an error if the stack trace is
-> found to be unreliable.
-> 
-> Until all of the reliability checks are in place in
-> unwind_check_reliability(), arch_stack_walk_reliable() may not be used by
-> livepatch. But it may be used by debug and test code.
-> 
-> HAVE_RELIABLE_STACKTRACE
-> ========================
-> 
-> Select this config for arm64. However, make it conditional on
-> STACK_VALIDATION. When objtool is enhanced to implement stack
-> validation for arm64, STACK_VALIDATION will be defined.
-> 
-> ---
-> Changelog:
-> v14:
-> 	- Some of the patches from v13 have been added to the branch:
-> 
-> 		arm64/stacktrace/cleanups
-> 
-> 	  in Mark Rutland's fork of Linux.
-> 
-> 	  I have rebased the rest of the patches on top of that.
-> 
-> 	From Mark Rutland, Mark Brown:
-> 
-> 	- Add requirements for the three helper functions that init a stack
-> 	  trace.
-> 
-> 	From Mark Rutland:
-> 
-> 	- Change the comment for the task field in struct stackframe.
-> 
-> 	- Hard code the task to current in unwind_init_from_regs(). Add a
-> 	  sanity check task == current.
-> 
-> 	- Rename unwind_init_from_current() to unwind_init_from_caller().
-> 
-> 	- Remove task argument from unwind_init_from_caller().
-> 
-> 	From Mark Brown:
-> 
-> 	- Reviewed-By: for:
-> 
-> 	[PATCH v13 05/11] arm64: Copy the task argument to unwind_state
-> v13:
-> 	From Mark Brown:
-> 
-> 	- Reviewed-by for the following:
-> 
-> 	[PATCH v12 03/10] arm64: Rename stackframe to unwind_state
-> 	[PATCH v11 05/10] arm64: Copy unwind arguments to unwind_state
-> 	[PATCH v11 07/10] arm64: Introduce stack trace reliability checks
-> 	                  in the unwinder
-> 	[PATCH v11 5/5] arm64: Create a list of SYM_CODE functions, check
-> 	                return PC against list
-> 
-> 	From Mark Rutland:
-> 
-> 	- Reviewed-by for the following:
-> 
-> 	[PATCH v12 01/10] arm64: Remove NULL task check from unwind_frame()
-> 	[PATCH v12 02/10] arm64: Rename unwinder functions
-> 	[PATCH v12 03/10] arm64: Rename stackframe to unwind_state
-> 
-> 	- For each of the 3 cases of unwind initialization, have a separate
-> 	  init function. Call the common init from each of these init
-> 	  functions rather than call it separately.
-> 
-> 	- Only copy the task argument to arch_stack_walk() into
-> 	  unwind state. Pass the rest of the arguments as arguments to
-> 	  unwind functions.
-> 
-> v12:
-> 	From Mark Brown:
-> 
-> 	- Reviewed-by for the following:
-> 
-> 	[PATCH v11 1/5] arm64: Call stack_backtrace() only from within
-> 	                walk_stackframe()
-> 	[PATCH v11 2/5] arm64: Rename unwinder functions
-> 	[PATCH v11 3/5] arm64: Make the unwind loop in unwind() similar to
-> 	                other architectures
-> 	[PATCH v11 5/5] arm64: Create a list of SYM_CODE functions, check
-> 	                return PC against list
-> 
-> 	- Add an extra patch at the end to select HAVE_RELIABLE_STACKTRACE
-> 	  just as a place holder for the review. I have added it and made
-> 	  it conditional on STACK_VALIDATION which has not yet been
-> 	  implemented.
-> 
-> 	- Mark had a concern about the code for the check for the final
-> 	  frame being repeated in two places. I have now added a new
-> 	  field called "final_fp" in struct stackframe which I compute
-> 	  once in stacktrace initialization. I have added an explicit
-> 	  comment that the stacktrace must terminate at the final_fp.
-> 
-> 	- Place the implementation of arch_stack_walk_reliable() in a
-> 	  separate patch after all the reliability checks have been
-> 	  implemented.
-> 
-> 	From Mark Rutland:
-> 
-> 	- Place the removal of the NULL task check in unwind_frame() in
-> 	  a separate patch.
-> 
-> 	- Add a task field to struct stackframe so the task pointer can be
-> 	  passed around via the frame instead of as a separate argument. I have
-> 	  taken this a step further by copying all of the arguments to
-> 	  arch_stack_walk() into struct stackframe so that only that
-> 	  struct needs to be passed to unwind functions.
-> 
-> 	- Rename start_backtrace() to unwind_init() instead of unwind_start().
-> 
-> 	- Acked-by for the following:
-> 
-> 	[PATCH v11 2/5] arm64: Rename unwinder functions
-> 
-> 	- Rename "struct stackframe" to "struct unwind_state".
-> 
-> 	- Define separate inline functions for initializing the starting
-> 	  FP and PC from regs, or caller, or blocked task. Don't merge
-> 	  unwind_init() into unwind().
-> 
-> v11:
-> 	From Mark Rutland:
-> 
-> 	- Peter Zijlstra has submitted patches that make ARCH_STACKWALK
-> 	  independent of STACKTRACE. Mark Rutland extracted some of the
-> 	  patches from my v10 series and added his own patches and comments,
-> 	  rebased it on top of Peter's changes and submitted the series.
-> 	  
-> 	  So, I have rebased the rest of the patches from v10 on top of
-> 	  Mark Rutland's changes.
-> 
-> 	- Split the renaming of the unwinder functions and annotating them
-> 	  with notrace and NOKPROBE_SYMBOL(). Also, there is currently no
-> 	  need to annotate unwind_start() as its caller is already annotated
-> 	  properly. So, I am removing the annotation patch from the series.
-> 	  This can be done separately later if deemed necessary. Similarly,
-> 	  I have removed the annotations from unwind_check_reliability() and
-> 	  unwind_continue().
-> 
-> 	From Nobuta Keiya:
-> 
-> 	- unwind_start() should check for final frame and not mark the
-> 	  final frame unreliable.
-> 
-> v9, v10:
-> 	- v9 had a threading problem. So, I resent it as v10.
-> 
-> 	From me:
-> 
-> 	- Removed the word "RFC" from the subject line as I believe this
-> 	  is mature enough to be a regular patch.
-> 
-> 	From Mark Brown, Mark Rutland:
-> 
-> 	- Split the patches into smaller, self-contained ones.
-> 
-> 	- Always enable STACKTRACE so that arch_stack_walk() is always
-> 	  defined.
-> 
-> 	From Mark Rutland:
-> 
-> 	- Update callchain_trace() take the return value of
-> 	  perf_callchain_store() into acount.
-> 
-> 	- Restore get_wchan() behavior to the original code.
-> 
-> 	- Simplify an if statement in dump_backtrace().
-> 
-> 	From Mark Brown:
-> 
-> 	- Do not abort the stack trace on the first unreliable frame.
-> 
-> 	
-> v8:
-> 	- Synced to v5.14-rc5.
-> 
-> 	From Mark Rutland:
-> 
-> 	- Make the unwinder loop similar to other architectures.
-> 
-> 	- Keep details to within the unwinder functions and return a simple
-> 	  boolean to the caller.
-> 
-> 	- Convert some of the current code that contains unwinder logic to
-> 	  simply use arch_stack_walk(). I have converted all of them.
-> 
-> 	- Do not copy sym_code_functions[]. Just place it in rodata for now.
-> 
-> 	- Have the main loop check for termination conditions rather than
-> 	  having unwind_frame() check for them. In other words, let
-> 	  unwind_frame() assume that the fp is valid.
-> 
-> 	- Replace the big comment for SYM_CODE functions with a shorter
-> 	  comment.
-> 
-> 		/*
-> 		 * As SYM_CODE functions don't follow the usual calling
-> 		 * conventions, we assume by default that any SYM_CODE function
-> 		 * cannot be unwound reliably.
-> 		 *
-> 		 * Note that this includes:
-> 		 *
-> 		 * - Exception handlers and entry assembly
-> 		 * - Trampoline assembly (e.g., ftrace, kprobes)
-> 		 * - Hypervisor-related assembly
-> 		 * - Hibernation-related assembly
-> 		 * - CPU start-stop, suspend-resume assembly
-> 		 * - Kernel relocation assembly
-> 		 */
-> 
-> v7:
-> 	The Mailer screwed up the threading on this. So, I have resent this
-> 	same series as version 8 with proper threading to avoid confusion.
-> v6:
-> 	From Mark Rutland:
-> 
-> 	- The per-frame reliability concept and flag are acceptable. But more
-> 	  work is needed to make the per-frame checks more accurate and more
-> 	  complete. E.g., some code reorg is being worked on that will help.
-> 
-> 	  I have now removed the frame->reliable flag and deleted the whole
-> 	  concept of per-frame status. This is orthogonal to this patch series.
-> 	  Instead, I have improved the unwinder to return proper return codes
-> 	  so a caller can take appropriate action without needing per-frame
-> 	  status.
-> 
-> 	- Remove the mention of PLTs and update the comment.
-> 
-> 	  I have replaced the comment above the call to __kernel_text_address()
-> 	  with the comment suggested by Mark Rutland.
-> 
-> 	Other comments:
-> 
-> 	- Other comments on the per-frame stuff are not relevant because
-> 	  that approach is not there anymore.
-> 
-> v5:
-> 	From Keiya Nobuta:
-> 	
-> 	- The term blacklist(ed) is not to be used anymore. I have changed it
-> 	  to unreliable. So, the function unwinder_blacklisted() has been
-> 	  changed to unwinder_is_unreliable().
-> 
-> 	From Mark Brown:
-> 
-> 	- Add a comment for the "reliable" flag in struct stackframe. The
-> 	  reliability attribute is not complete until all the checks are
-> 	  in place. Added a comment above struct stackframe.
-> 
-> 	- Include some of the comments in the cover letter in the actual
-> 	  code so that we can compare it with the reliable stack trace
-> 	  requirements document for completeness. I have added a comment:
-> 
-> 	  	- above unwinder_is_unreliable() that lists the requirements
-> 		  that are addressed by the function.
-> 
-> 		- above the __kernel_text_address() call about all the cases
-> 		  the call covers.
-> 
-> v4:
-> 	From Mark Brown:
-> 
-> 	- I was checking the return PC with __kernel_text_address() before
-> 	  the Function Graph trace handling. Mark Brown felt that all the
-> 	  reliability checks should be performed on the original return PC
-> 	  once that is obtained. So, I have moved all the reliability checks
-> 	  to after the Function Graph Trace handling code in the unwinder.
-> 	  Basically, the unwinder should perform PC translations first (for
-> 	  rhe return trampoline for Function Graph Tracing, Kretprobes, etc).
-> 	  Then, the reliability checks should be applied to the resulting
-> 	  PC.
-> 
-> 	- Mark said to improve the naming of the new functions so they don't
-> 	  collide with existing ones. I have used a prefix "unwinder_" for
-> 	  all the new functions.
-> 
-> 	From Josh Poimboeuf:
-> 
-> 	- In the error scenarios in the unwinder, the reliable flag in the
-> 	  stack frame should be set. Implemented this.
-> 
-> 	- Some of the other comments are not relevant to the new code as
-> 	  I have taken a different approach in the new code. That is why
-> 	  I have not made those changes. E.g., Ard wanted me to add the
-> 	  "const" keyword to the global section array. That array does not
-> 	  exist in v4. Similarly, Mark Brown said to use ARRAY_SIZE() for
-> 	  the same array in a for loop.
-> 
-> 	Other changes:
-> 
-> 	- Add a new definition for SYM_CODE_END() that adds the address
-> 	  range of the function to a special section called
-> 	  "sym_code_functions".
-> 
-> 	- Include the new section under initdata in vmlinux.lds.S.
-> 
-> 	- Define an early_initcall() to copy the contents of the
-> 	  "sym_code_functions" section to an array by the same name.
-> 
-> 	- Define a function unwinder_blacklisted() that compares a return
-> 	  PC against sym_code_sections[]. If there is a match, mark the
-> 	  stack trace unreliable. Call this from unwind_frame().
-> 
-> v3:
-> 	- Implemented a sym_code_ranges[] array to contains sections bounds
-> 	  for text sections that contain SYM_CODE_*() functions. The unwinder
-> 	  checks each return PC against the sections. If it falls in any of
-> 	  the sections, the stack trace is marked unreliable.
-> 
-> 	- Moved SYM_CODE functions from .text and .init.text into a new
-> 	  text section called ".code.text". Added this section to
-> 	  vmlinux.lds.S and sym_code_ranges[].
-> 
-> 	- Fixed the logic in the unwinder that handles Function Graph
-> 	  Tracer return trampoline.
-> 
-> 	- Removed all the previous code that handles:
-> 		- ftrace entry code for traced function
-> 		- special_functions[] array that lists individual functions
-> 		- kretprobe_trampoline() special case
-> 
-> v2
-> 	- Removed the terminating entry { 0, 0 } in special_functions[]
-> 	  and replaced it with the idiom { /* sentinel */ }.
-> 
-> 	- Change the ftrace trampoline entry ftrace_graph_call in
-> 	  special_functions[] to ftrace_call + 4 and added explanatory
-> 	  comments.
-> 
-> 	- Unnested #ifdefs in special_functions[] for FTRACE.
-> 
-> v1
-> 	- Define a bool field in struct stackframe. This will indicate if
-> 	  a stack trace is reliable.
-> 
-> 	- Implement a special_functions[] array that will be populated
-> 	  with special functions in which the stack trace is considered
-> 	  unreliable.
-> 	
-> 	- Using kallsyms_lookup(), get the address ranges for the special
-> 	  functions and record them.
-> 
-> 	- Implement an is_reliable_function(pc). This function will check
-> 	  if a given return PC falls in any of the special functions. If
-> 	  it does, the stack trace is unreliable.
-> 
-> 	- Implement check_reliability() function that will check if a
-> 	  stack frame is reliable. Call is_reliable_function() from
-> 	  check_reliability().
-> 
-> 	- Before a return PC is checked against special_funtions[], it
-> 	  must be validates as a proper kernel text address. Call
-> 	  __kernel_text_address() from check_reliability().
-> 
-> 	- Finally, call check_reliability() from unwind_frame() for
-> 	  each stack frame.
-> 
-> 	- Add EL1 exception handlers to special_functions[].
-> 
-> 		el1_sync();
-> 		el1_irq();
-> 		el1_error();
-> 		el1_sync_invalid();
-> 		el1_irq_invalid();
-> 		el1_fiq_invalid();
-> 		el1_error_invalid();
-> 
-> 	- The above functions are currently defined as LOCAL symbols.
-> 	  Make them global so that they can be referenced from the
-> 	  unwinder code.
-> 
-> 	- Add FTRACE trampolines to special_functions[]:
-> 
-> 		ftrace_graph_call()
-> 		ftrace_graph_caller()
-> 		return_to_handler()
-> 
-> 	- Add the kretprobe trampoline to special functions[]:
-> 
-> 		kretprobe_trampoline()
-> 
-> Previous versions and discussion
-> ================================
-> 
-> v13: https://lore.kernel.org/linux-arm-kernel/20220117145608.6781-1-madvenka@linux.microsoft.com/T/#t
-> v12: https://lore.kernel.org/linux-arm-kernel/20220103165212.9303-1-madvenka@linux.microsoft.com/T/#m21e86eecb9b8f0831196568f0bf62c3b56f65bf0
-> v11: https://lore.kernel.org/linux-arm-kernel/20211123193723.12112-1-madvenka@linux.microsoft.com/T/#t
-> v10: https://lore.kernel.org/linux-arm-kernel/4b3d5552-590c-e6a0-866b-9bc51da7bebf@linux.microsoft.com/T/#t
-> v9: Mailer screwed up the threading. Sent the same as v10 with proper threading.
-> v8: https://lore.kernel.org/linux-arm-kernel/20210812190603.25326-1-madvenka@linux.microsoft.com/
-> v7: Mailer screwed up the threading. Sent the same as v8 with proper threading.
-> v6: https://lore.kernel.org/linux-arm-kernel/20210630223356.58714-1-madvenka@linux.microsoft.com/
-> v5: https://lore.kernel.org/linux-arm-kernel/20210526214917.20099-1-madvenka@linux.microsoft.com/
-> v4: https://lore.kernel.org/linux-arm-kernel/20210516040018.128105-1-madvenka@linux.microsoft.com/
-> v3: https://lore.kernel.org/linux-arm-kernel/20210503173615.21576-1-madvenka@linux.microsoft.com/
-> v2: https://lore.kernel.org/linux-arm-kernel/20210405204313.21346-1-madvenka@linux.microsoft.com/
-> v1: https://lore.kernel.org/linux-arm-kernel/20210330190955.13707-1-madvenka@linux.microsoft.com/
-> 
-> Madhavan T. Venkataraman (7):
->   arm64: Split unwind_init()
->   arm64: Copy the task argument to unwind_state
->   arm64: Make the unwind loop in unwind() similar to other architectures
->   arm64: Introduce stack trace reliability checks in the unwinder
->   arm64: Create a list of SYM_CODE functions, check return PC against
->     list
->   arm64: Introduce arch_stack_walk_reliable()
->   arm64: Select HAVE_RELIABLE_STACKTRACE
-> 
->  arch/arm64/Kconfig                |   1 +
->  arch/arm64/include/asm/linkage.h  |  11 ++
->  arch/arm64/include/asm/sections.h |   1 +
->  arch/arm64/kernel/stacktrace.c    | 266 +++++++++++++++++++++++++-----
->  arch/arm64/kernel/vmlinux.lds.S   |  10 ++
->  5 files changed, 247 insertions(+), 42 deletions(-)
-> 
-> 
-> base-commit: 5ec58b607fab3cb6f6519103f663731b7bb749f3

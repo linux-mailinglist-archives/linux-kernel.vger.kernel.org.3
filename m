@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A4B4FF305
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7334FF30C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbiDMJLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S234306AbiDMJMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiDMJLm (ORCPT
+        with ESMTP id S234279AbiDMJMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:11:42 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA7FC3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:20 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id i20so1609329wrb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:20 -0700 (PDT)
+        Wed, 13 Apr 2022 05:12:05 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752EB186C2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:44 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so767774wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=vrull.eu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n2RfiU2yQ6Q5lZlNdTxAqM838LrNlHbSns2UR/xnZyg=;
-        b=Bv9hcFImSBg1Wy9cSJnbpSHCywcPKdXI4iis2Lx7CwApVkjO4RXQVhuhKO8Vm5Yv2D
-         0ziSbEulKjoblVYKI4v00wh69NZC4DAkXpL+oizYx61S3MRO6TmfUCfDpg/p4DbJB1Cz
-         n3xK6ap0qp/GdBPdhznXce1Lkba/bQOSfLPQeS15qf0aYBgu6zz80qCoYI8St/DhjbM5
-         hXZawCoOCGnMyoivcSIGTbHcrQsPAwbslEIZaQj2CTmm/UG2/gQtl2/aYFo8Oti43GVX
-         HgkgDF9HtPhMRUvZHFnDSfonwNp4GXhEjUaSMwsEfrxBEnKMB5h3fvzRqnJ9Ks0K6Yrt
-         0ypQ==
+        bh=gwwGHu/kUMtzWbNVENzqf/cbed0N54Cas9skXOt024o=;
+        b=XPnqVjG6h0UqhmNIPxikuceAuDekilIJ8T7vPpT4es4yah+70QMaFq1ZJgjKjC0ysb
+         /OOCXveVq7AxK8PP3+X9/cJWZSEhjvknXaHwbtZWvECzXTwhiz8RvRR9n9gJ8JKJq0ij
+         Ec4lCA0rRcVHxI2+LlU9084ORpwvoSfBzhz+dC/h5+ytDlWeihmcpiEA8WjcO63Uc7LX
+         MQULtqO6+f51msdsVyPA9QpbR8k+PVyG5EPW48DOs6jbZTNSM060mNbJNLi8pJ9f4z5q
+         8KuSwphoN8QK5WZFEYW3bK62hb9rf7Mdg/7gJPj6I5/4xN7hrNKKNgl7C5cyUuj4hTPS
+         B3vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n2RfiU2yQ6Q5lZlNdTxAqM838LrNlHbSns2UR/xnZyg=;
-        b=WzyVHFMpmUoJZSYmOerV77uTMzqUG/LJpiLaGyC2HoPft26lu5nPu/ApdHJslmCTI/
-         NPl6YAPV1t99Nl1TUXoPZ+3v7Y1Gb7j0GkGd5WW1LUhKTltSSBOTQ58VfNIW9rSwlGHQ
-         wP3MFWbjjoNtuSnSHyNhQKeJe6JTqbDez0Xig0A5NykRTLtqoE0nbPmwiB2yujZMtCLS
-         mQHZSsqGFCCWTeeTNBzR7b56xL7SynVqq3Lz65vpwTlhW8qMnd7xTZTeHMae3fDNZ/T6
-         IfsIoM6LU5XR84OByIga5jYrk2RzcUQiggrTmoEWKn9TjPbldzJo+TyDzv/smgdl1xHO
-         nFuQ==
-X-Gm-Message-State: AOAM5325UCmIFnpDd2OHeApCOdBaugOomx24OpG8MolivUvS+63QcUAU
-        IXnRObadRe3kDSHWgX825RSgpeVorA5Kq6BxXE/IPw==
-X-Google-Smtp-Source: ABdhPJzJWfeDgw9z8zOfbk5VeVHE1qpmguwgSezKzsXwCVMGKLhcOhgFUMawAcm9xUFFN0C4OvgnSkf7iyasGSnP80M=
-X-Received: by 2002:adf:de81:0:b0:207:a65c:d895 with SMTP id
- w1-20020adfde81000000b00207a65cd895mr11352594wrl.647.1649840959334; Wed, 13
- Apr 2022 02:09:19 -0700 (PDT)
+        bh=gwwGHu/kUMtzWbNVENzqf/cbed0N54Cas9skXOt024o=;
+        b=HkqRHSDgSX/SZebAKRwzMn1b/9wv3vGwSHab1lAj1HJ+Xg/91hdlVcFy2mRCW/ARFC
+         34iATlqnXQ6cjtBjO48pM3VfwLCNoEksAf5aynhyCYBognf37J3XUSXOwsuRT+4/7E4W
+         6gdGjlu7I+4kiseA5FRuUv8jDT+c6MAs5SnwULOgH0Mcs6AeHxNAY+CrLlkr9olVA6hF
+         I4F9WzNYDTpeD0+XK2sJQbBW9Uz+WasDE4voXGrn/W0qG/vOYhOLXEp9hDkBMBTH4NFp
+         deaBtpQtn+EfnhrEWyyWvFJlQxsR52vOWs0QQPpE6h4+hsOUig9HCyHOkG8Fn2wvjgIx
+         mmGQ==
+X-Gm-Message-State: AOAM533xclljCi0JWPEu1xUwNYMqMDBA1BnQ7zDgET5qFCbgKEUETpL5
+        It630Bn9vWqhggYp1XCVjRAvvbCmzD1O1MRk00cgMA==
+X-Google-Smtp-Source: ABdhPJxxa6HPTIn07pYdJ/EeVtDrpC/qaoIRKLB3HdORWATBXFu5XeDq8MFROb7IVg/gNg3daadJJezwX0cOlwNnhsM=
+X-Received: by 2002:a05:600c:35d4:b0:38f:6799:a386 with SMTP id
+ r20-20020a05600c35d400b0038f6799a386mr664904wmq.196.1649840982912; Wed, 13
+ Apr 2022 02:09:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-7-heiko@sntech.de>
-In-Reply-To: <20220413030307.133807-7-heiko@sntech.de>
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-9-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-9-heiko@sntech.de>
 From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
-Date:   Wed, 13 Apr 2022 11:09:07 +0200
-Message-ID: <CAAeLtUCTpfnVM_e4vgYwpBDjbN24Vj-iZY8Nne6qLNTy9UeAEA@mail.gmail.com>
-Subject: Re: [PATCH v9 06/12] riscv: prevent compressed instructions in alternatives
+Date:   Wed, 13 Apr 2022 11:09:31 +0200
+Message-ID: <CAAeLtUDdRTuehHFi576tpzEo0QV9=qQtU8BOarAb4OF-Bizdow@mail.gmail.com>
+Subject: Re: [PATCH v9 08/12] riscv: Fix accessing pfn bits in PTEs for
+ non-32bit variants
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
@@ -74,22 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 at 05:03, Heiko Stuebner <heiko@sntech.de> wrote:
+On Wed, 13 Apr 2022 at 05:04, Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> Instructions are opportunistically compressed by the RISC-V assembler
-> when possible, but in alternatives-blocks both the old and new content
-> need to be the same size, so having the toolchain do somewhat random
-> optimizations will cause strange side-effects like
-> "attempt to move .org backwards" compile-time errors.
+> On rv32 the PFN part of PTEs is defined to use bits [xlen-1:10]
+> while on rv64 it is defined to use bits [53:10], leaving [63:54]
+> as reserved.
 >
-> Already a simple "and" used in alternatives assembly will cause these
-> mismatched code sizes.
+> With upcoming optional extensions like svpbmt these previously
+> reserved bits will get used so simply right-shifting the PTE
+> to get the PFN won't be enough.
 >
-> So prevent compressed instructions to be generated in alternatives-
-> code and use option-push and -pop to only limit this to the relevant
-> code blocks
+> So introduce a _PAGE_PFN_MASK constant to mask the correct bits
+> for both rv32 and rv64 before shifting.
 >
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
 Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>

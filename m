@@ -2,225 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455C54FF233
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567914FF230
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiDMImB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S232099AbiDMIk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbiDMIlB (ORCPT
+        with ESMTP id S233745AbiDMIkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:41:01 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C874EA27;
-        Wed, 13 Apr 2022 01:38:33 -0700 (PDT)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 23D8cIC5004168;
-        Wed, 13 Apr 2022 17:38:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23D8cIC5004168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649839098;
-        bh=tD5ScFHal8it/8NYvNokdNwdBCS6nYo2z9fLwt69gtM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=V0cAa14iNtjtI2uwJtCAI3bNp0AhpEn0j8odLrA3XDqiGNjNRKBp/AOVncco+AT7A
-         TwsALgATn3x786OXaDeqUvwb3By7zT20lVr70Kd+msoaqA0hkU4jLD4mm3rSpgZY2f
-         HkzUkhldPJTudEUMvYxhsNwXSvyro4yEnYO7n9IXrV41m42rPgyK9I7ABuzY4XMCUZ
-         JaxOHu9c98LYFPeLQ1CVg+iANFiddSpAouJoCqKMwiNnMiA47gbpd3kwOkeFJe5z0C
-         rQlrTaplxNzISRbwgF/gUFCQNtQ3/TE2mD8bB+36O7eYCIOy+H685FVvmumGBI8pwO
-         n3/rgaAg6inZw==
-X-Nifty-SrcIP: [209.85.216.52]
-Received: by mail-pj1-f52.google.com with SMTP id bg24so1306431pjb.1;
-        Wed, 13 Apr 2022 01:38:18 -0700 (PDT)
-X-Gm-Message-State: AOAM532Xpd2DVumc0r/WA5T+924fwG7/7gQJeLQ6n9GvFvPZVq6dnIBo
-        +fBClcVFAvZAB9aYDfk9o9sA0sZqQWGhgLkjo3I=
-X-Google-Smtp-Source: ABdhPJxHW6zTiVnXDm+dMerKl21YroSREGhl4mFnymHGRgnvYYSox/WDDG+/CKbn23ZwzvdMYvCb75NxDuCvPzB2pqE=
-X-Received: by 2002:a17:902:7083:b0:158:41f2:3a83 with SMTP id
- z3-20020a170902708300b0015841f23a83mr19095045plk.99.1649839097492; Wed, 13
- Apr 2022 01:38:17 -0700 (PDT)
+        Wed, 13 Apr 2022 04:40:13 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73203D1D5;
+        Wed, 13 Apr 2022 01:37:52 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23D8Z6Rn011523;
+        Wed, 13 Apr 2022 03:37:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=XfjGvTfc5FFRH+I3vn3obm+FHsmjUJJWCkOCO75VMvM=;
+ b=dH4+U9VYicX6AYBJEIsHbs2Xo/R3kCapX1L/4mpw9GsfodpM74o+kfkVDC3+24tJnJBL
+ O5gMdjiJ4MJg261YvHuIR0/X89vjz59YTGBavwUIvLxNnzHzWtyhL8PtNpgOzmi9JgKr
+ MkGTyU3zgAH4phO4i3vrFyIbd55+dVBv+ocROyQttG/V3Wkhu9xGstZMu/8b3K/Hdydu
+ F+/mxwaF5oRRk6X+OrJvqk4ZW8cczt3O7I0oA3LTaoHRMRvkMAEKxjh8dW0K8qBoYMTN
+ Pxz6oITk1T+/zSE1xnz9FDIWGLSpxdkDNRXi7TAqohFzrgv0B3y1dtKbKZuAhhBHCLET /A== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fb6pycvcv-9
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 13 Apr 2022 03:37:37 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 09:37:33 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 13 Apr 2022 09:37:33 +0100
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.152])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3508B475;
+        Wed, 13 Apr 2022 08:37:33 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v7 11/16] ALSA: hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+Date:   Wed, 13 Apr 2022 09:37:23 +0100
+Message-ID: <20220413083728.10730-12-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
+References: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <20220412231508.32629-1-libo.chen@oracle.com> <20220412231508.32629-2-libo.chen@oracle.com>
- <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org> <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
- <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org> <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
- <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org> <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-In-Reply-To: <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 13 Apr 2022 17:37:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATxMjMV2m+ycs6rVwEgHzL_7zUP+H4W_xr2xEZ1e3cFVg@mail.gmail.com>
-Message-ID: <CAK7LNATxMjMV2m+ycs6rVwEgHzL_7zUP+H4W_xr2xEZ1e3cFVg@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-To:     Libo Chen <libo.chen@oracle.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 3TRwK98DHxi-VG03FVqrkK4-2C05BZHR
+X-Proofpoint-GUID: 3TRwK98DHxi-VG03FVqrkK4-2C05BZHR
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 3:56 PM Libo Chen <libo.chen@oracle.com> wrote:
->
-> Hi Randy
->
-> On 4/12/22 22:54, Randy Dunlap wrote:
-> > Hi Libo,
-> >
-> > On 4/12/22 19:34, Libo Chen wrote:
-> >>
-> >> On 4/12/22 19:13, Randy Dunlap wrote:
-> >>> Hi,
-> >>>
-> >>> On 4/12/22 18:35, Libo Chen wrote:
-> >>>> Hi Randy,
-> >>>>
-> >>>> On 4/12/22 17:18, Randy Dunlap wrote:
-> >>>>> Hi--
-> >>>>>
-> >>>>> On 4/12/22 16:15, Libo Chen wrote:
-> >>>>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
-> >>>>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
-> >>>>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
-> >>>>>> rationale for such dependency.
-> >>>>>>
-> >>>>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
-> >>>>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
-> >>>>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
-> >>>>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
-> >>>>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
-> >>>>>> There is no reason other architectures cannot given the fact that they
-> >>>>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
-> >>>>>> x86.
-> >>>>>>
-> >>>>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
-> >>>>>> ---
-> >>>>>>     lib/Kconfig | 2 +-
-> >>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>>>
-> >>>>>> diff --git a/lib/Kconfig b/lib/Kconfig
-> >>>>>> index 087e06b4cdfd..7209039dfb59 100644
-> >>>>>> --- a/lib/Kconfig
-> >>>>>> +++ b/lib/Kconfig
-> >>>>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
-> >>>>>>         bool
-> >>>>>>       config CPUMASK_OFFSTACK
-> >>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-> >>>>> This "if" dependency only controls whether the Kconfig symbol's prompt is
-> >>>>> displayed (presented) in kconfig tools. Removing it makes the prompt always
-> >>>>> be displayed.
-> >>>>>
-> >>>>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
-> >>>>> of DEBUG_PER_CPU_MAPS.
-> >>>> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
-> >>>> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
-> >>> I'm just talking about the Kconfig change below.  Not talking about whatever else
-> >>> it might require per architecture.
-> >>>
-> >>> But you say you have tried that and it doesn't work. What part of it doesn't work?
-> >>> The Kconfig part or some code execution?
-> >> oh the Kconfig part. For example, make olddefconfig on a config file with CPUMASK_OFFSTACK=y only turns off CPUMASK_OFFSTACK unless I explicitly set DEBUG_PER_CPU_MAPS=y
-> > I can enable CPUMASK_OFFSTACK for arm64 without having DEBUG_PER_CPU_MAPS enabled.
-> > (with a patch, of course.)
-> > It builds OK. I don't know if it will run OK.
->
-> I am a little confused, did you succeed with your patch (replacing "if"
-> with "depends on") or my patch (removing "if")? Because I definitely
-> cannot enable CPUMASK_OFFSTACK for arm64 without DEBUG_PER_CPUMAPS
-> enabled using your change.
-> > I think that you are arguing for a patch like this:
->
-> I am actually arguing for the opposite, I don't think CPUMASK_OFFSTACK
-> should require DEBUG_PER_CPU_MAPS. They should be separate and
-> independent to each other. So removing "if ..." should be enough in my
-> opinion.
-> > --- a/lib/Kconfig
-> > +++ b/lib/Kconfig
-> > @@ -511,7 +511,8 @@ config CHECK_SIGNATURE
-> >       bool
-> >
-> >   config CPUMASK_OFFSTACK
-> > -     bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-> > +     bool "Force CPU masks off stack"
-> > +     depends on DEBUG_PER_CPU_MAPS
->
-> This forces every arch to enable DEBUG_PER_CPU_MAPS if they want to
-> enable CPUMASK_OFFSTACK, it's even stronger than "if". My whole argument
-> is CPUMASK_OFFSTACK should be enable/disabled independent of
-> DEBUG_PER_CPU_MASK
-> >       help
-> >         Use dynamic allocation for cpumask_var_t, instead of putting
-> >         them on the stack.  This is a bit more expensive, but avoids
-> >
-> >
-> > As I said earlier, the "if" on the "bool" line just controls the prompt message.
-> > This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
-> >
->
-> Okay I understand now "if" on the "boot" is not a dependency and it only
-> controls the prompt message, then the question is why we cannot enable
-> CPUMASK_OFFSTACK without DEBUG_PER_CPU_MAPS if it only controls prompt
-> message? Is it not the behavior we expect?
->
+Remove cs35l41_hd_reg_sequence as it adds a layer of flexibility not needed.
+As cs35l41_hda_(start/stop)_bst is a single register, it can be replaced by
+regmap_update_bits with usleep_range to wait for the same 3000us that
+reg_sequence had.
 
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+---
+ sound/pci/hda/cs35l41_hda.c | 79 ++++++++++++++++---------------------
+ sound/pci/hda/cs35l41_hda.h | 14 -------
+ 2 files changed, 33 insertions(+), 60 deletions(-)
 
-    config CPUMASK_OFFSTACK
-            bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-
-... is equivalent to this:
-
-    config CPUMASK_OFFSTACK
-            bool
-            prompt "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-
-
-
-When DEBUG_PER_CPU_MAPS is disabled, the prompt line is ignored,
-and CPUMASK_OFFSTACK becomes a user-unconfigurable option.
-
-
-Other options still can select it,
-but users cannot enable it directly from the prompt.
-
-I see x86 and powerpc do this.
-
-$ kgrep 'select CPUMASK_OFFSTACK'
-./arch/x86/Kconfig:946: select CPUMASK_OFFSTACK
-./arch/powerpc/Kconfig:164: select CPUMASK_OFFSTACK if NR_CPUS >= 8192
-
-
-
-
-
-
-
-> Libo
->
-> >> Libo
-> >>> I'll test the Kconfig part of it later (in a few hours).
-> >>>
-> >>>> Libo
-> >>>>> Is there another problem here?
-> >>>>>
-> >>>>>> +    bool "Force CPU masks off stack"
-> >>>>>>         help
-> >>>>>>           Use dynamic allocation for cpumask_var_t, instead of putting
-> >>>>>>           them on the stack.  This is a bit more expensive, but avoids
->
-
-
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 6e82ab9517f0..ece784662dbd 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -32,14 +32,6 @@ static const struct reg_sequence cs35l41_hda_mute[] = {
+ 	{ CS35L41_AMP_DIG_VOL_CTRL,	0x0000A678 }, // AMP_VOL_PCM Mute
+ };
+ 
+-static const struct reg_sequence cs35l41_hda_start_bst[] = {
+-	{ CS35L41_PWR_CTRL1,		0x00000001, 3000}, // set GLOBAL_EN = 1
+-};
+-
+-static const struct reg_sequence cs35l41_hda_stop_bst[] = {
+-	{ CS35L41_PWR_CTRL1,		0x00000000, 3000}, // set GLOBAL_EN = 0
+-};
+-
+ // only on amps where GPIO1 is used to control ext. VSPK switch
+ static const struct reg_sequence cs35l41_start_ext_vspk[] = {
+ 	{ 0x00000040,			0x00000055 },
+@@ -109,31 +101,44 @@ static const struct reg_sequence cs35l41_reset_to_safe[] = {
+ 	{ 0x00000040,			0x00000033 },
+ };
+ 
+-static const struct cs35l41_hda_reg_sequence cs35l41_hda_reg_seq_no_bst = {
+-	.prepare	= cs35l41_safe_to_active,
+-	.num_prepare	= ARRAY_SIZE(cs35l41_safe_to_active),
+-	.cleanup	= cs35l41_active_to_safe,
+-	.num_cleanup	= ARRAY_SIZE(cs35l41_active_to_safe),
+-};
++static int cs35l41_hda_global_enable(struct cs35l41_hda *cs35l41, int enable)
++{
++	int ret;
+ 
+-static const struct cs35l41_hda_reg_sequence cs35l41_hda_reg_seq_ext_bst = {
+-	.prepare	= cs35l41_start_ext_vspk,
+-	.num_prepare	= ARRAY_SIZE(cs35l41_start_ext_vspk),
+-	.cleanup	= cs35l41_stop_ext_vspk,
+-	.num_cleanup	= ARRAY_SIZE(cs35l41_stop_ext_vspk),
+-};
++	switch (cs35l41->hw_cfg.bst_type) {
++	case CS35L41_INT_BOOST:
++		ret = regmap_update_bits(cs35l41->regmap, CS35L41_PWR_CTRL1,
++					 CS35L41_GLOBAL_EN_MASK,
++					 enable << CS35L41_GLOBAL_EN_SHIFT);
++		usleep_range(3000, 3100);
++		break;
++	case CS35L41_EXT_BOOST:
++		if (enable)
++			ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41_start_ext_vspk,
++						     ARRAY_SIZE(cs35l41_start_ext_vspk));
++		else
++			ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41_stop_ext_vspk,
++						     ARRAY_SIZE(cs35l41_stop_ext_vspk));
++		break;
++	case CS35L41_EXT_BOOST_NO_VSPK_SWITCH:
++		if (enable)
++			ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41_safe_to_active,
++						     ARRAY_SIZE(cs35l41_safe_to_active));
++		else
++			ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41_active_to_safe,
++						     ARRAY_SIZE(cs35l41_active_to_safe));
++		break;
++	default:
++		ret = -EINVAL;
++		break;
++	}
+ 
+-static const struct cs35l41_hda_reg_sequence cs35l41_hda_reg_seq_int_bst = {
+-	.prepare	= cs35l41_hda_start_bst,
+-	.num_prepare	= ARRAY_SIZE(cs35l41_hda_start_bst),
+-	.cleanup	= cs35l41_hda_stop_bst,
+-	.num_cleanup	= ARRAY_SIZE(cs35l41_hda_stop_bst),
++	return ret;
+ };
+ 
+ static void cs35l41_hda_playback_hook(struct device *dev, int action)
+ {
+ 	struct cs35l41_hda *cs35l41 = dev_get_drvdata(dev);
+-	const struct cs35l41_hda_reg_sequence *reg_seq = cs35l41->reg_seq;
+ 	struct regmap *reg = cs35l41->regmap;
+ 	int ret = 0;
+ 
+@@ -145,19 +150,15 @@ static void cs35l41_hda_playback_hook(struct device *dev, int action)
+ 				   CS35L41_AMP_EN_MASK, 1 << CS35L41_AMP_EN_SHIFT);
+ 		break;
+ 	case HDA_GEN_PCM_ACT_PREPARE:
+-		if (reg_seq->prepare)
+-			ret = regmap_multi_reg_write(reg, reg_seq->prepare, reg_seq->num_prepare);
++		ret = cs35l41_hda_global_enable(cs35l41, 1);
+ 		break;
+ 	case HDA_GEN_PCM_ACT_CLEANUP:
+ 		regmap_multi_reg_write(reg, cs35l41_hda_mute, ARRAY_SIZE(cs35l41_hda_mute));
+-		if (reg_seq->cleanup)
+-			ret = regmap_multi_reg_write(reg, reg_seq->cleanup, reg_seq->num_cleanup);
++		ret = cs35l41_hda_global_enable(cs35l41, 0);
+ 		break;
+ 	case HDA_GEN_PCM_ACT_CLOSE:
+ 		regmap_update_bits(reg, CS35L41_PWR_CTRL2,
+ 				   CS35L41_AMP_EN_MASK, 0 << CS35L41_AMP_EN_SHIFT);
+-		if (reg_seq->close)
+-			ret = regmap_multi_reg_write(reg, reg_seq->close, reg_seq->num_close);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -221,7 +222,6 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
+ 
+ 	switch (hw_cfg->bst_type) {
+ 	case CS35L41_INT_BOOST:
+-		cs35l41->reg_seq = &cs35l41_hda_reg_seq_int_bst;
+ 		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
+ 					   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
+ 		if (ret)
+@@ -229,10 +229,6 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
+ 		break;
+ 	case CS35L41_EXT_BOOST:
+ 	case CS35L41_EXT_BOOST_NO_VSPK_SWITCH:
+-		if (hw_cfg->bst_type == CS35L41_EXT_BOOST)
+-			cs35l41->reg_seq = &cs35l41_hda_reg_seq_ext_bst;
+-		else
+-			cs35l41->reg_seq = &cs35l41_hda_reg_seq_no_bst;
+ 		regmap_multi_reg_write(cs35l41->regmap, cs35l41_reset_to_safe,
+ 				       ARRAY_SIZE(cs35l41_reset_to_safe));
+ 		ret = regmap_update_bits(cs35l41->regmap, CS35L41_PWR_CTRL2, CS35L41_BST_EN_MASK,
+@@ -511,15 +507,6 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
+ 	if (ret)
+ 		goto err;
+ 
+-	if (cs35l41->reg_seq->probe) {
+-		ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41->reg_seq->probe,
+-					     cs35l41->reg_seq->num_probe);
+-		if (ret) {
+-			dev_err(cs35l41->dev, "Fail to apply probe reg patch: %d\n", ret);
+-			goto err;
+-		}
+-	}
+-
+ 	ret = component_add(cs35l41->dev, &cs35l41_hda_comp_ops);
+ 	if (ret) {
+ 		dev_err(cs35l41->dev, "Register component failed: %d\n", ret);
+diff --git a/sound/pci/hda/cs35l41_hda.h b/sound/pci/hda/cs35l41_hda.h
+index 17f10764f174..44d9204ffdf1 100644
+--- a/sound/pci/hda/cs35l41_hda.h
++++ b/sound/pci/hda/cs35l41_hda.h
+@@ -27,24 +27,10 @@ enum cs35l41_hda_gpio_function {
+ 	CS35l41_SYNC,
+ };
+ 
+-struct cs35l41_hda_reg_sequence {
+-	const struct reg_sequence *probe;
+-	unsigned int num_probe;
+-	const struct reg_sequence *open;
+-	unsigned int num_open;
+-	const struct reg_sequence *prepare;
+-	unsigned int num_prepare;
+-	const struct reg_sequence *cleanup;
+-	unsigned int num_cleanup;
+-	const struct reg_sequence *close;
+-	unsigned int num_close;
+-};
+-
+ struct cs35l41_hda {
+ 	struct device *dev;
+ 	struct regmap *regmap;
+ 	struct gpio_desc *reset_gpio;
+-	const struct cs35l41_hda_reg_sequence *reg_seq;
+ 	struct cs35l41_hw_cfg hw_cfg;
+ 
+ 	int irq;
 -- 
-Best Regards
-Masahiro Yamada
+2.35.2
+

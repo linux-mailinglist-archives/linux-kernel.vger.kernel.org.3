@@ -2,251 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E5B4FEDC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 05:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C334FEDC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 05:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiDMDt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 23:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S231672AbiDMDuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 23:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiDMDtT (ORCPT
+        with ESMTP id S231159AbiDMDuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 23:49:19 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D56366B6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:46:58 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ec05db3dfbso8800627b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:46:58 -0700 (PDT)
+        Tue, 12 Apr 2022 23:50:54 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C046C1B798
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:48:33 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2ec0bb4b715so8935477b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:48:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cqaAPEMX7LYW6wg5ZfwQLTI8+xvUDectbkA1gAskbOw=;
-        b=nvveBPlHiygWMrmuD+JYJ8gKsLnG6urrHeGrSt9Lt+BK4uwpMw7fqsC6eg1hEDY/eC
-         7pAwppHWjNptm6l8jtsgrJtzCteM87WmpRp9/GRB+JZoyodsTOG3DfeAwlaHMdKNWSUj
-         96pTQD5JlefglpsdnRNTokJNErGlhFK3HH6fEweA6hgc05QSKfAOnv+4kyXBwqwEWyXf
-         LbBwQupTyPKVn6OGDEXrBqwXCqx24jDyv7QAzCPTP2sriTpqad5V3YdVCsjNHU3dP71K
-         Te19LfVpvynk5KWUR2uTxJtz3SAaLyrNBcwILf8LQCpnyTZRvpkKt6MZupiOgwme9LeD
-         VlPg==
+         :cc;
+        bh=FZqgQXxBgWU0mvFoVSH2bn5fANhNNX+WKD7Wa2BWca8=;
+        b=qhUymfZ9qnz+gcjlM20Ake0P5AmB8Nejcb61XoOe411V45Ek0HgHfDiMsGeuHCGOzI
+         OFiiMnHacvaTLcClkD9M0QvgQcSowuiTMj4D3YVa4iwBW6vZw/Zpjc0YIxApmQyNtXl5
+         FnXCA8JSPqJrqIk2wJWU23SHq/vQJQpXy5nrLBS8S6BEBGdzneE5RPaej6nAQuWBIhsS
+         I9mbJCwvapcdfKC3H9n9NHN3843M2HlQI4TAphtio3Y88XD4jOWZk3aW8gKRxlH00Ras
+         4tJ5SQA1c0Kqfpr/Q05mE5SEyFfLIvC2+nVNA9fKGhPAYzY01CKmmQK/Byw6y6alSlsp
+         9txw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cqaAPEMX7LYW6wg5ZfwQLTI8+xvUDectbkA1gAskbOw=;
-        b=I2a66kSC5AhoGBZ1Km/w859XoGcvNDyEKUHAgfEqJK5LVyE5gJMP0YGerkwadhG7co
-         6DnpusH9VUb8ybd8KDMHoKHsvuB+LTV5gQHsL4MP+MEfCKL+t30cuzyBuCFZECrcJ7Z8
-         DgtHfOxs3yHUSosv0qM0p0NUtf6MZY+FwRH+agUFjMO8oA2J/YJxPuybMiRlzkzdkvpH
-         1YiWv0Acw/QY/vgYDAt50Znjn7xaklR9vC14+3B9LzXCcL6IX9aqiCNIQnj8JMSNvulx
-         UeVc3ap712+hgt7x+uiYFSjEw6EMJq4QCZRdAdZEMtQgx2l8DSMD+7Ujvs2eh0oXvG71
-         wG2Q==
-X-Gm-Message-State: AOAM530rZ7qKD1U6jZjzWQ0b9l/aCzPsF5OtNjg5RAArRY0vnHrNttJP
-        VW81gEw9m2/Br8JC48ir+P7qZiPga62vcEhJg8zHaQ==
-X-Google-Smtp-Source: ABdhPJy7+cF/HmAxm+sJ/582idxx0wjCJIqCVhknhj4LI9bhT556p0NrH7O3Y16Jmqp+fIL2PgsKbwZaeKHll1cvz4s=
-X-Received: by 2002:a81:bf51:0:b0:2ef:414a:f03b with SMTP id
- s17-20020a81bf51000000b002ef414af03bmr2271421ywk.199.1649821617761; Tue, 12
- Apr 2022 20:46:57 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=FZqgQXxBgWU0mvFoVSH2bn5fANhNNX+WKD7Wa2BWca8=;
+        b=y+xhpvCQ4ghmfUULFOtEU6S6dEJvmCnMDlsbIsbUIogyUkzpaso+YZliwiH9+ieGe7
+         m2TjRC0pQaUL77YgwtQD4c8ngbmLlFRl5o4pE+SGXi3plBBkyOAdhrsgF3n8P2Yfj6W0
+         UyQBN3K+igOgmAr+kI23Naa30F1c38FUL5qZNaBuZV3zMM0FgC1Snbdu8ZytWhiyVgzb
+         DkU68J56R/ii8WeFZjBRfyqaygZNJYpBN7gqVOPymlPSNjQGRWOfw3jRLTs07ZOAvKWW
+         wi61PD3CtufIM6qzQQPNmX673Bc2eAIUP0RWL4R8zJ3eDviU/hZxOknz/8L4OfPUbvPE
+         bvug==
+X-Gm-Message-State: AOAM5317Z+Ln4qopmlP5hUEOJqoF9VssGRqnVVOnKPHgW3yyuLG+DXex
+        99LmP+rds2J4skDXKfO12qbyUZ1LOntbdDFgLdE=
+X-Google-Smtp-Source: ABdhPJwT2u2/ZosYYT5NMzWxD53yjBDaGvHtC9GLUG1Iq3s4KB8fbW4f6BYFP0YUjkKjug6Tttd+WQraMuRsfIg2IWc=
+X-Received: by 2002:a81:1a49:0:b0:2eb:f4cd:b3f1 with SMTP id
+ a70-20020a811a49000000b002ebf4cdb3f1mr16634235ywa.231.1649821712980; Tue, 12
+ Apr 2022 20:48:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220412062951.095765152@linuxfoundation.org>
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 13 Apr 2022 09:16:46 +0530
-Message-ID: <CA+G9fYvOaEoq6tR5O4rLW=dfPv5MDOK-Qgy+H3cJSPsBWMwaWQ@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/343] 5.17.3-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220412121541.4595-1-jiangshanlai@gmail.com> <20220412121541.4595-4-jiangshanlai@gmail.com>
+ <YlV+B8faRD2lDoO3@zn.tnic> <CAJhGHyAsPZAeXUoOa5LJ5bxuMOWzg=cvYNYPVT9kpBM7Tsf3xA@mail.gmail.com>
+ <YlWNIj198mKM3hMG@zn.tnic>
+In-Reply-To: <YlWNIj198mKM3hMG@zn.tnic>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 13 Apr 2022 11:48:21 +0800
+Message-ID: <CAJhGHyC7KUj=s+w+isBewdL7iyUyEm4h++rWRoz2zBc0zAD2gw@mail.gmail.com>
+Subject: Re: [PATCH V5 3/7] x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 at 12:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Apr 12, 2022 at 10:31 PM Borislav Petkov <bp@alien8.de> wrote:
 >
-> This is the start of the stable review cycle for the 5.17.3 release.
-> There are 343 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On Tue, Apr 12, 2022 at 09:52:44PM +0800, Lai Jiangshan wrote:
+> > The mapped size for the text is always 2M when the kernel is booted
+> > since it is 2M-aligned.  So I don't think the size is a concern.
 >
-> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
-> Anything received after that time might be too late.
+> This is not how this argumentation works: you add 0.01% size increase
+> here, 0.01% slowdown there and it all soon adds up into a bloated
+> kernel. Besides, nowadays the kernel runs a lot as a guest and guest
+> kernel size does matter.
+
+I agree with you.
+
+I meant the real .entry.text size is unchanged.  No matter what
+the complied .entry.text size is, 5.5k before the patch, or 8.2k
+after the patch, the size of .entry.text in the kernel is always 2M.
+
+But the overall size is enlarged which is a concern.
+
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.3-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
+> So no, just because you want to turn error_entry() into C code and for
+> that you'll add some bloat doesn't justify it in my book. All changes to
+> core code need to be absolutely needed and justifiable.
 >
-> thanks,
+> > For example, a heavy page fault and IPI or timer at the same time.
+> > I'm not sure if it is a real case.
 >
-> greg k-h
+> I wouldn't be surprised if it shows in some perf profiles.
+>
+> > I'm Okay with asm_error_entry().  And also we can use an ASM function
+> > containing PUSH_AND_CLEAR_REGS only.
+>
+> Just do the necessary and minimal thing - this is core code and in asm
+> for that matter, so be conservative pls. This is not some random driver.
+>
 
+I will follow your instructions and add an extra ASM function.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+And maybe add this to the changelog:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+A function call is added for every interrupt or exception, but it
+is a low-level asm function call and actually, only a "call" and a
+"ret" instructions are added.  It will enable error_entry() to be
+C code that can use inlined sync_regs() and save a C function call
+which will reduce more instructions in return.
 
-## Build
-* kernel: 5.17.3-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.17.y
-* git commit: 66349d151ef98c411fbfe080a4e9c646dc41eca8
-* git describe: v5.17.2-344-g66349d151ef9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.2-344-g66349d151ef9
+I'm also waiting for reviews for other patches and I'm not going to
+send this new code too soon since I don't want to send a new revision
+with only this patch updated.
 
-## Test Regressions (compared to v5.17.2-340-ge5a51d774e89)
-No test regressions found.
-
-## Metric Regressions (compared to v5.17.2-340-ge5a51d774e89)
-No metric regressions found.
-
-## Test Fixes (compared to v5.17.2-340-ge5a51d774e89)
-No test fixes found.
-
-## Metric Fixes (compared to v5.17.2-340-ge5a51d774e89)
-No metric fixes found.
-
-## Test result summary
-total: 100152, pass: 85962, fail: 732, skip: 12550, xfail: 908
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 46 passed, 1 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 45 total, 41 passed, 4 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 26 passed, 6 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 47 total, 46 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks
+Lai

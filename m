@@ -2,141 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE94FECFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4E84FECFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiDMCgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S231393AbiDMCgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiDMCgk (ORCPT
+        with ESMTP id S229497AbiDMCgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:36:40 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C691828E09;
-        Tue, 12 Apr 2022 19:34:20 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id 3so422149qkj.5;
-        Tue, 12 Apr 2022 19:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MqB+e2xT6Yv8MpPTnOJ+2E7n6YyjIMzpIJ4iHfGOxzQ=;
-        b=MiGg6bcAs91xkbp2RAUHsNccXGOyhvPuMSn82Wa1gSKILPMKoQG5P3Nl6kIPR+N5J+
-         zVXOLkNpjaDHn+waq32rztY1uH6Ltt+sjAJ0nV2d/w1hp6PgqHrypZf+6wnGN6+VoZhA
-         Gqm9ac5gX/HqIda6RlWEEWZA5aB3xxReNhoT8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MqB+e2xT6Yv8MpPTnOJ+2E7n6YyjIMzpIJ4iHfGOxzQ=;
-        b=t7fBsECdTn7A+wWRmrPxbNn52y/e/rvmTo4iyTOJAOMhiEGdM0QBSgjnDqYpVKBp2q
-         uuOyUOnzUgNNZ39xdcWuvW2IVezSFQFUFTRMDGy30x9jIG2tSyqD+5dAvuE7xoKz2KsZ
-         3znyBWE8H+5fU7kijyFqRUDb+vcEyQSmYUOAsOUZ6U0dGhksUiJPzFshnEtf+3FOBBMo
-         Ryd8juNhX01VC7Qwzdpim0dwEafUeVUn/k6+kJtl5FMITimGd2XKh9OK0inx7ujbJFFK
-         6rEDSL/FZsXtCTe/GIBHxXAq6N8rg0kSBOCySPqom8//9Tpix57wX5uU88l9f9O67IrX
-         B7bA==
-X-Gm-Message-State: AOAM531/UGpyveGOSjyQHSpXkK5Drkq1WOLQ9yGlq9jXe3XBuyw3DtAo
-        4ptVkW+NWEM3y7hQmyxSA+WWf3yXX8lqB3xVCSd14xzDK3Q=
-X-Google-Smtp-Source: ABdhPJywZYFb5Kxa0f4hpEMdUjYMwcNEQCHYq0m2mmEOdorMP1FM/4Q5J9SAQdd/0fyvytzb+Axet0s98+c5ArMZPco=
-X-Received: by 2002:a37:f903:0:b0:648:ca74:b7dc with SMTP id
- l3-20020a37f903000000b00648ca74b7dcmr5261283qkj.666.1649817259877; Tue, 12
- Apr 2022 19:34:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220412065611.8930-1-dylan_hung@aspeedtech.com> <20220412065611.8930-2-dylan_hung@aspeedtech.com>
-In-Reply-To: <20220412065611.8930-2-dylan_hung@aspeedtech.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 13 Apr 2022 02:34:08 +0000
-Message-ID: <CACPK8Xd0gh5pDafP3ysu7odhnP=YPNSYPV9u36CEoMPDtQxEJw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: net: add reset property for aspeed,
- ast2600-mdio binding
-To:     Dylan Hung <dylan_hung@aspeedtech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Tue, 12 Apr 2022 22:36:36 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D89DC6;
+        Tue, 12 Apr 2022 19:34:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdRVv0DDjz4xLQ;
+        Wed, 13 Apr 2022 12:34:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649817255;
+        bh=Gg/b6OBoVPLkyC8Zt70CWjXEHj+DMMNe3GomLkFFDrA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=csIkXQc7BuexSkhqpvxKQBeIJJf5EP7cKPsfoKwdmWEcTbQYEmQsaS/ThabpHzNee
+         S3HD7jmhf2fbybxoC2Z17w6Bc1ZL9OC3bMlXDn2KHnFhldzgfn2ey1k4o8otQfgO3O
+         moqC+Gb9H/RV5epQTJzohx4pCoYt7QYiAVeqN6ZyiYmjSf30yqyZinGSWpk8o0wO7D
+         fNYA81bHPJ2FQCxwA8kS0bC0lg+NMUJtRMduHb2riR4mPlL5Vq8YCM9el+EKcmgGI5
+         AaPvn+2oiG9gWa36MwJMFN+gUnhJNCBpWiY8DXs0loHpD1ZEuWbd1IJgYx0wNb5Roi
+         pndXp05NWa6/A==
+Date:   Wed, 13 Apr 2022 12:34:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: linux-next: manual merge of the kvm tree with the kvm-fixes tree
+Message-ID: <20220413123414.01119890@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/jThhaPy3QoHXwP_vypFKGdn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 at 06:55, Dylan Hung <dylan_hung@aspeedtech.com> wrote:
->
-> The AST2600 MDIO bus controller has a reset control bit and must be
-> deasserted before manipulating the MDIO controller. By default, the
-> hardware asserts the reset so the driver only need to deassert it.
->
-> Regarding to the old DT blobs which don't have reset property in them,
-> the reset deassertion is usually done by the bootloader so the reset
-> property is optional to work with them.
->
-> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml         | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> index 1c88820cbcdf..1174c14898e1 100644
-> --- a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> +++ b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> @@ -20,10 +20,14 @@ allOf:
->  properties:
->    compatible:
->      const: aspeed,ast2600-mdio
-> +
->    reg:
->      maxItems: 1
->      description: The register range of the MDIO controller instance
->
-> +  resets:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> @@ -39,6 +43,7 @@ examples:
->              reg = <0x1e650000 0x8>;
->              #address-cells = <1>;
->              #size-cells = <0>;
-> +            resets = <&syscon ASPEED_RESET_MII>;
+--Sig_/jThhaPy3QoHXwP_vypFKGdn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You will need to include the definition for ASPEED_RESET_MII at the
-start of the example:
+Hi all,
 
-#include <dt-bindings/clock/ast2600-clock.h>
+Today's linux-next merge of the kvm tree got a conflict in:
 
-You can test the bindings example by doing this:
+  arch/x86/kvm/x86.c
 
-pip install dtschema
+between commit:
 
-make dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+  42dcbe7d8bac ("KVM: x86: hyper-v: Avoid writing to TSC page without an ac=
+tive vCPU")
 
+from the kvm-fixes tree and commits:
+
+  916d3608df82 ("KVM: x86: Use gfn_to_pfn_cache for pv_time")
+  7caf9571563e ("KVM: x86/xen: Use gfn_to_pfn_cache for vcpu_info")
+  69d413cfcf77 ("KVM: x86/xen: Use gfn_to_pfn_cache for vcpu_time_info")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+diff --cc arch/x86/kvm/x86.c
+index 547ba00ef64f,7a066cf92692..000000000000
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@@ -3106,14 -3101,15 +3101,14 @@@ static int kvm_guest_time_update(struc
+ =20
+  	vcpu->hv_clock.flags =3D pvclock_flags;
+ =20
+- 	if (vcpu->pv_time_enabled)
+- 		kvm_setup_pvclock_page(v, &vcpu->pv_time, 0);
+- 	if (vcpu->xen.vcpu_info_set)
+- 		kvm_setup_pvclock_page(v, &vcpu->xen.vcpu_info_cache,
+- 				       offsetof(struct compat_vcpu_info, time));
+- 	if (vcpu->xen.vcpu_time_info_set)
+- 		kvm_setup_pvclock_page(v, &vcpu->xen.vcpu_time_info_cache, 0);
++ 	if (vcpu->pv_time.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->pv_time, 0);
++ 	if (vcpu->xen.vcpu_info_cache.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_info_cache,
++ 					offsetof(struct compat_vcpu_info, time));
++ 	if (vcpu->xen.vcpu_time_info_cache.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_info_cache, 0);
+ -	if (!v->vcpu_idx)
+ -		kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+ +	kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+  	return 0;
+  }
+ =20
 
->
->              ethphy0: ethernet-phy@0 {
->                      compatible = "ethernet-phy-ieee802.3-c22";
-> --
-> 2.25.1
->
+--Sig_/jThhaPy3QoHXwP_vypFKGdn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJWNqYACgkQAVBC80lX
+0GwE7Qf+Nl9w7aAKNeI+dWE09Es9ZGiwiDSvWVLDaweE3mPzVFIXTgHW5znqTAxi
+f98rAecJh+yJckl3mFILF/SBmU04GximtU2xkAEvJnAyN0RTqJXHxRQfjcTA2uo1
+NonkIWMHzwrPNgyjP8FU9EKJRqZ2mLBT6imtJOdO7dDpfjoTUheh2xDZPzzw4R1Z
+KFHfe2o55G39SmZdm2o/BcINaRNFpyKPjbG2EnGfqI9l8pVxFQioeacz0LVw3gCB
+NXcPJNw9vO0MKPJV8+wN9Mv4d12lUv5MM76aeZVMx3qwZ9HRsSDZiVJeRFLHPf2z
+Soym1YcwVXynueHo8gjSJu5V4Pdf5g==
+=4B8S
+-----END PGP SIGNATURE-----
+
+--Sig_/jThhaPy3QoHXwP_vypFKGdn--

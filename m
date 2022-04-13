@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA594FFF57
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9824FFF60
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiDMTdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S236868AbiDMTfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbiDMTcU (ORCPT
+        with ESMTP id S233005AbiDMTe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:32:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBED263A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649878198; x=1681414198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UBmMG/Y1pzjOMY+f80C2PIXPYSoEJlNzIOTHjCL4Elg=;
-  b=SKMvbpUv0MQMIRP7B34dEp/nV0VCRpPqrQm+JAEq1+sxGdwMCR5e3rAS
-   jy82FWm3FPjXeRb6H11nM+dohoH2QZiuJpw8Jb99hBFV4SqInd+eQR6lB
-   toEY4VVf+eR3WiMRhHRpYEwUPxqsXb4TWMosjyrGU8ryjwZcbhJnn6898
-   zgwj/Wn81+5V7KfBvkOC/HnZKqad4W4a9/huTeDaZVSe/yb2NnAhkylRd
-   NP92NJb0Nt1K7l6H3GJ1Qjo6In1NGwGUpMbrJcpXHLPdZFgGWvRIfg+dJ
-   4Fun4Ik8k7QbjMMY+mpMVOleAW19O1C6yP6vTgNDASchVKgCLwgPIKU6b
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244641606"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="244641606"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:29:58 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="552337805"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:29:57 -0700
-Date:   Wed, 13 Apr 2022 12:31:52 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>
-Subject: Re: [PATCH] staging: Remove the drivers for the Unisys s-Par
-Message-ID: <20220413193152.GA1242449@alison-desk>
-References: <20220412215901.31046-1-fmdefrancesco@gmail.com>
- <3988824.6PsWsQAL7t@leap>
- <20220413153824.GA1241369@alison-desk>
- <7390243.EvYhyI6sBW@leap>
+        Wed, 13 Apr 2022 15:34:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788EB76585;
+        Wed, 13 Apr 2022 12:32:36 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 19:32:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649878355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0iorNaHWnmbP15mgEIAifHH7Nvn7KVWv7GrX/fT9Fhg=;
+        b=SDjahuni5frp/d8eGi7NGXhKJJgca52DhTGRqJghvjGuWV+Z9wy6fjQ6agd/Bqrw8Xhr3A
+        hDny/qzNpK2/EtHkDWOldghdoA1IPw8H6glb1XlwGZsaVSGncLRCHEebRpxuuJk8CvBTAQ
+        26f+k6FOotwkeIyx/R2O0k2wsoYUHLSNgNitI7MAxcT3p3qU1TinmCWZqE5v3wJp0IWuiO
+        eaKZn2y7OzAztjY5HYDnZW3XXumylhoYbNSAsGMzQevTx56TE4HJr5uCrmPjBlFIv1pSO+
+        r4yx+of3qDHQhiI677H7IToPzYoJ2lojcGgm/FDLM0loFCDWcVJ+4JlDnHChZQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649878355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0iorNaHWnmbP15mgEIAifHH7Nvn7KVWv7GrX/fT9Fhg=;
+        b=ZyTrxx0hkn5OjKVf4CJbN55grN1ixO4TyvBSLWRc1MgWVLGZYaZWk21rFyXa6CGCoZ4Y45
+        4KnGQmf4FIutOQCg==
+From:   "tip-bot2 for Steven Price" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: smp/core] cpu/hotplug: Initialise all cpuhp_cpu_state structs earlier
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Steven Price <steven.price@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220411152233.474129-3-steven.price@arm.com>
+References: <20220411152233.474129-3-steven.price@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7390243.EvYhyI6sBW@leap>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Message-ID: <164987835389.4207.2665456331757900114.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,76 +65,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:57:20AM -0700, Fabio M. De Francesco wrote:
-> On mercoled? 13 aprile 2022 17:38:24 CEST Alison Schofield wrote:
-> > On Wed, Apr 13, 2022 at 09:35:53AM +0200, Fabio M. De Francesco wrote:
-> > > On mercoled? 13 aprile 2022 08:52:47 CEST Greg Kroah-Hartman wrote:
-> > > > On Tue, Apr 12, 2022 at 11:59:01PM +0200, Fabio M. De Francesco 
-> wrote:
-> > > > > The Unisys sub-tree contains three drivers for the "Unisys Secure 
-> > > Partition"
-> > > > > (s-Par(R)): visorhba, visorinput, visornic.
-> > > > > 
-> > > > > They have no maintainers, in fact the only one that is listed in 
-> > > MAINTAINERS
-> > > > > has an unreacheable email address. During 2021 and 2022 several 
-> patches 
-> > > have
-> > > > > been submitted to these drivers but nobody at Unisys cared of 
-> reviewing 
-> > > the
-> > > > > changes. Probably, also the "sparmaintainer" internal list of 
-> > > unisys.com is
-> > > > > not anymore read by interested Unisys' engineers.
-> > > > > 
-> > > > > Therefore, remove the ./unisys subdirectory of staging and delete 
-> the 
-> > > related
-> > > > > entries in the MAINTAINERS, Kconfig, Makefile files.
-> > > > > 
-> > > > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > > > ---
-> > > > >  MAINTAINERS                                   |    8 -
-> > > > 
-> > > > You forgot to at least cc: the people/list on the MAINTAINERS entry 
-> that
-> > > > you are removing here, to give them a hint that this is happening in
-> > > > case they want to speak up here (and to give us the ability to point 
-> to
-> > > > that years later when they complain they were never notified...)
-> > > 
-> > > Yes, this is a good idea. I'll submit a v2 and add two "Cc:" lines, one 
-> to 
-> > > David Kershner and the other to the "sparmaintainer" list at 
-> unisys.com.
-> > 
-> > There is another contact in the TODO file (last updated 2015 though ;))
-> > Ken Cox <jkc@redhat.com>
-> 
-> Hi Alison, Greg,
-> 
-> Thank you very much for noticing that other contact :) 
-> 
-> In the last 12 months I have sent several patches for Unisys s-Par drivers 
-> but I never noticed that other contact simply because I only ever use 
-> scripts / get_maintainer.pl to find out who and to which lists to send my 
-> works.
-> 
-> @Greg: 
-> 
-> Do you think that we should care of a contact that is no more active since 
-> 2015 and resubmit a v3 with one more "Cc:" line? I have no problems to 
-> resubmit, I just want to be sure that this is the right thing to do.
+The following commit has been merged into the smp/core branch of tip:
 
-I didn't see a v2, so confused about a v3. You could simply do a group
-reply and add the contact, that'll put a trail in lore. Not my call.
-Guessing Greg has a protocol for such removals. 
+Commit-ID:     d308077e5e4dc8c93f97f5ebc70274e7c7a92d49
+Gitweb:        https://git.kernel.org/tip/d308077e5e4dc8c93f97f5ebc70274e7c7a92d49
+Author:        Steven Price <steven.price@arm.com>
+AuthorDate:    Mon, 11 Apr 2022 16:22:33 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 13 Apr 2022 21:27:41 +02:00
 
-> 
-> Thanks,
-> 
-> Fabio M. De Francesco
->  
-> 
-> 
+cpu/hotplug: Initialise all cpuhp_cpu_state structs earlier
+
+Rather than waiting until a CPU is first brought online, do the
+initialisation of the cpuhp_cpu_state structure for each CPU during the
+__init phase. This saves a (small) amount of non-__init memory and
+avoids potential confusion about when the cpuhp_cpu_state struct is
+valid.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220411152233.474129-3-steven.price@arm.com
+
+---
+ kernel/cpu.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index d0a9aa0..02a77ac 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -716,14 +716,6 @@ static int cpuhp_up_callbacks(unsigned int cpu, struct cpuhp_cpu_state *st,
+ /*
+  * The cpu hotplug threads manage the bringup and teardown of the cpus
+  */
+-static void cpuhp_create(unsigned int cpu)
+-{
+-	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+-
+-	init_completion(&st->done_up);
+-	init_completion(&st->done_down);
+-}
+-
+ static int cpuhp_should_run(unsigned int cpu)
+ {
+ 	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
+@@ -883,15 +875,27 @@ static int cpuhp_kick_ap_work(unsigned int cpu)
+ 
+ static struct smp_hotplug_thread cpuhp_threads = {
+ 	.store			= &cpuhp_state.thread,
+-	.create			= &cpuhp_create,
+ 	.thread_should_run	= cpuhp_should_run,
+ 	.thread_fn		= cpuhp_thread_fun,
+ 	.thread_comm		= "cpuhp/%u",
+ 	.selfparking		= true,
+ };
+ 
++static __init void cpuhp_init_state(void)
++{
++	struct cpuhp_cpu_state *st;
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		st = per_cpu_ptr(&cpuhp_state, cpu);
++		init_completion(&st->done_up);
++		init_completion(&st->done_down);
++	}
++}
++
+ void __init cpuhp_threads_init(void)
+ {
++	cpuhp_init_state();
+ 	BUG_ON(smpboot_register_percpu_thread(&cpuhp_threads));
+ 	kthread_unpark(this_cpu_read(cpuhp_state.thread));
+ }

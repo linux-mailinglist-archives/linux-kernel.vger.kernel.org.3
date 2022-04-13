@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8652C4FF452
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B0E4FF455
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiDMKCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 06:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S234825AbiDMKCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 06:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiDMKBw (ORCPT
+        with ESMTP id S234821AbiDMKCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 06:01:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFBB25E1;
-        Wed, 13 Apr 2022 02:59:26 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b584e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:584e:329c:23ff:fea6:a903])
+        Wed, 13 Apr 2022 06:02:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20968220C8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:00:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5A3651EC0541;
-        Wed, 13 Apr 2022 11:59:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649843961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Dzm9Q8xBuRXK4mGHHOX6fanOLpLEt+HqmgdG3ufabDI=;
-        b=kH4m8hby7lSr/nMjW8zktpQlA5REnvZ5SauP0KqRlKsBQmvZycCStBD+i0x1w0MNO3FcVE
-        heBC7WWUJoYOLsqKKZ9EHpGKiA/+a8NcKpj76cq7Rh59uWDhIM+8QBrghXme/2ZhybIA/O
-        8j+GVlgmmD0cxpv7CmiaWxrlWyNuLic=
-Date:   Wed, 13 Apr 2022 11:59:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 2/8] efi/x86: Get full memory map in allocate_e820()
-Message-ID: <Ylae+bejPzRMPrDw@zn.tnic>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-3-kirill.shutemov@linux.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D28EFB821C6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4975FC385A3;
+        Wed, 13 Apr 2022 10:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649844006;
+        bh=bFHLd2on4EXVWdfSMTSSo6pgffdVcKne9F5/ux58zCI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=knp9y3l34Jtwnj3uW4sH03VRLSK+6L5dK8UYSnUp+jGgYXNc0tCe7IthmpOVod9Iq
+         ol8597b1wpABiLepJqHMOXH1/UidF230xZ00U/afrZlorK+4zH1L8RH+KMkwr3e1yC
+         sCxGE78c4ZXIVBFePGw5LmghURzQzyFZDzBxyPNY=
+Date:   Wed, 13 Apr 2022 12:00:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alessandro Astone <ales.astone@gmail.com>
+Cc:     tkjos@android.com, brauner@kernel.org, arve@android.com,
+        linux-kernel@vger.kernel.org, maco@android.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH] binder: Address corner cases in deferred copy and fixup
+Message-ID: <YlafI74E/5HttdeB@kroah.com>
+References: <20220413085428.20367-1-ales.astone@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405234343.74045-3-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220413085428.20367-1-ales.astone@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 02:43:37AM +0300, Kirill A. Shutemov wrote:
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 01ddd4502e28..d18cac8ab436 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -569,30 +569,28 @@ static efi_status_t alloc_e820ext(u32 nr_desc, struct setup_data **e820ext,
->  }
->  
->  static efi_status_t allocate_e820(struct boot_params *params,
-> +				  struct efi_boot_memmap *map,
->  				  struct setup_data **e820ext,
->  				  u32 *e820ext_size)
+On Wed, Apr 13, 2022 at 10:54:27AM +0200, Alessandro Astone wrote:
+> When handling BINDER_TYPE_FDA object we are pushing a parent fixup
+> with a certain skip_size but no scatter-gather copy object, since
+> the copy is handled standalone.
+> If BINDER_TYPE_FDA is the last children the scatter-gather copy
+> loop will never stop to skip it, thus we are left with an item in
+> the parent fixup list. This will trigger the BUG_ON().
+> 
+> Furthermore, it is possible to receive BINDER_TYPE_FDA object
+> with num_fds=0 which will confuse the scatter-gather code.
+> 
+> In the android userspace I could only find these usecases in the
+> libstagefright OMX implementation, so it might be that they're
+> doing something very weird, but nonetheless the kernel should not
+> panic about it.
+> 
+> Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
+> Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
+> ---
+>  drivers/android/binder.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 8351c5638880..18ad6825ba30 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2295,7 +2295,7 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
 >  {
-> -	unsigned long map_size, desc_size, map_key;
->  	efi_status_t status;
-> -	__u32 nr_desc, desc_version;
-> +	__u32 nr_desc;
+>  	int ret = 0;
+>  	struct binder_sg_copy *sgc, *tmpsgc;
+> -	struct binder_ptr_fixup *pf =
+> +	struct binder_ptr_fixup *tmppf, *pf =
+
+Just make this a new line:
+	struct binder_ptr_fixup *tmppf;
+above the existing line.
+
+>  		list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
+>  					 node);
 >  
-> -	/* Only need the size of the mem map and size of each mem descriptor */
-> -	map_size = 0;
-> -	status = efi_bs_call(get_memory_map, &map_size, NULL, &map_key,
-> -			     &desc_size, &desc_version);
-> -	if (status != EFI_BUFFER_TOO_SMALL)
-> -		return (status != EFI_SUCCESS) ? status : EFI_UNSUPPORTED;
-> -
-> -	nr_desc = map_size / desc_size + EFI_MMAP_NR_SLACK_SLOTS;
-> +	status = efi_get_memory_map(map);
-> +	if (status != EFI_SUCCESS)
-> +		return status;
+> @@ -2349,7 +2349,11 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+>  		list_del(&sgc->node);
+>  		kfree(sgc);
+>  	}
+> -	BUG_ON(!list_empty(pf_head));
+
+So you are hitting this BUG_ON() today?
+
+> +	list_for_each_entry_safe(pf, tmppf, pf_head, node) {
+> +		BUG_ON(pf->skip_size == 0);
+> +		list_del(&pf->node);
+> +		kfree(pf);
+> +	}
+>  	BUG_ON(!list_empty(sgc_head));
 >  
-> -	if (nr_desc > ARRAY_SIZE(params->e820_table)) {
-> -		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table);
-> +	nr_desc = *map->map_size / *map->desc_size;
-> +	if (nr_desc > ARRAY_SIZE(params->e820_table) - EFI_MMAP_NR_SLACK_SLOTS) {
-> +		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table) +
-> +			EFI_MMAP_NR_SLACK_SLOTS;
+>  	return ret > 0 ? -EINVAL : ret;
+> @@ -2486,6 +2490,9 @@ static int binder_translate_fd_array(struct list_head *pf_head,
+>  	struct binder_proc *proc = thread->proc;
+>  	int ret;
 >  
->  		status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
->  		if (status != EFI_SUCCESS)
-> -			return status;
-> +			goto out;
+> +	if (fda->num_fds == 0)
+> +		return 0;
 
-This looks weird. With the goto out of the way, this code turns into:
+Why return 0?
 
-  		status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
-		if (status != EFI_SUCCESS) {
-			efi_bs_call(free_pool, *map->map);
-			return EFI_SUCCESS;
-		}
+This feels like a separate issue from above, should this be 2 different
+commits?
 
-I think you want to return status as above after having called
+thanks,
 
-	efi_bs_call(free_pool, *map->map);
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

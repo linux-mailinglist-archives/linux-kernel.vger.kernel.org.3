@@ -2,111 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5904F4FEBDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F1F4FEBE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiDMATM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S230471AbiDMAV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 20:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiDMATJ (ORCPT
+        with ESMTP id S230298AbiDMAVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:19:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208D92CC80
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:16:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC0D8B82072
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:16:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD88C385A8;
-        Wed, 13 Apr 2022 00:16:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649809007;
-        bh=LsvXF38xQCO8La91LyrjAYgL05TyufkNgdo7W09hGzs=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=NdrpcPRgttmDEIiOULxAq9RkR1xc9VEIlHGlU+wlc7m2cIZWGpSsriaVGjiN/vrxA
-         jxPFjXVwxfomL8ApsC9+QOioNWfqU4CpBDdNEy8kQALfrisKfaoOSWQVneXpPzkQU3
-         P4YnOJiio1ZoLzke47TtI1H9aiKeJ5DxhmaqLXkHdrCKYjKdES2dhPiWEsVYOEDKGa
-         pi4rZFPKWZMlBi/bZ4RDIQ8oSGdDikHwhsddFsq7Lt9qLR6A77/q3MVwjjfftPvLeT
-         TdPISKiITkbWEvDH1VXIkrXxb3Om0CO5AfHr9X26OOUAx0OdeYTuBDSKibxWBjcEW3
-         Fs0ApMD6P+k1Q==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id E8E8F27C0054;
-        Tue, 12 Apr 2022 20:16:44 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Tue, 12 Apr 2022 20:16:44 -0400
-X-ME-Sender: <xms:axZWYnj7OqhgrOuOQb_focEAH603gVwsLo_WRAuxfDFax7u1YhbeBQ>
-    <xme:axZWYkD-oMlxF5GxLS44QEvF9BxVwdGeWdpXCPK_waJbhym2JaKHm78DZ1hB5LkEK
-    VFYdEn6ICChCECf7ao>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekledgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpefhlefhudegtedvhfefueevvedtgeeukefhffehtefftdelvedthedt
-    iedvueevudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnugihodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqddvieefudeiiedtkedqlhhuth
-    hopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:axZWYnEZWliGFAb1pW0k2PJcDOBmZsYieDxqmtjGypyPm0YlKQ5Jmg>
-    <xmx:axZWYkTHR0jprS1nrl00uoM44v3jI2o3zbBb6K7v9woqiDDNbwrphA>
-    <xmx:axZWYky0iioqaGWKASkdTZwq22cAp01cfHCtUzDIWsFlWwXkAPq3BQ>
-    <xmx:bBZWYsjOXuatluKYk95sJdmdseOl9MtVFotRTKte1juf0_HZpZuLKpSSR28>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 92CEB21E006E; Tue, 12 Apr 2022 20:16:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-386-g4174665229-fm-20220406.001-g41746652
-Mime-Version: 1.0
-Message-Id: <e8a4cac5-bc5a-4483-9443-c0e5b9f707d1@www.fastmail.com>
-In-Reply-To: <20220408210545.3915712-1-vannapurve@google.com>
-References: <20220408210545.3915712-1-vannapurve@google.com>
-Date:   Tue, 12 Apr 2022 17:16:22 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Vishal Annapurve" <vannapurve@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "kvm list" <kvm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Cc:     "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        "Wanpeng Li" <wanpengli@tencent.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, shauh@kernel.org,
-        yang.zhong@intel.com, drjones@redhat.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Hugh Dickins" <hughd@google.com>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Chao Peng" <chao.p.peng@linux.intel.com>,
-        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Michael Roth" <michael.roth@amd.com>,
-        "Quentin Perret" <qperret@google.com>,
-        "Steven Price" <steven.price@arm.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "David Hildenbrand" <david@redhat.com>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Marc Orr" <marcorr@google.com>,
-        "Erdem Aktas" <erdemaktas@google.com>,
-        "Peter Gonda" <pgonda@google.com>,
-        "Sean Christopherson" <seanjc@google.com>, diviness@google.com,
-        "Quentin Perret" <qperret@google.com>
-Subject: Re: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based approach of
- supporting private memory
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 12 Apr 2022 20:21:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636D33D4B1;
+        Tue, 12 Apr 2022 17:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=1Cz3pjY7YWGZgp7PC+MmjSwo+jq8i41FSV3VLd7PWmA=; b=jKoueA3vIBVbIMNC4paBBsssl8
+        vRnbKfpWRA6IhPh4mPGpbcSRKafA3BtV3cydmjb+3FUPiC/iQBc97+jV8GzffjT5Xu3WyUg2A64vO
+        8RND7/DnVRAPics7QTspLje8T9hD8OK6/LYe0r5t2F4qOqofrtR+/ynC8s1b8JpzlbPUbEVWY6wH/
+        m1IO82IZuAFnWU4aeWOig+BpWErpUlUcI4PIYpDNJ8V7yCKv5JosVRpW9+nuRHHx2AWE3jfF1KDkP
+        D7iYUeHCY25etWJ841FmCYOXLVFv/W1uyN2kS/g3DvGEr66+4GMvf7ZGiiHkSjTqeUuwvp1V/iGSZ
+        zIfC3DmQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neQih-00Do0t-8D; Wed, 13 Apr 2022 00:18:51 +0000
+Message-ID: <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
+Date:   Tue, 12 Apr 2022 17:18:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+Content-Language: en-US
+To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
+        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
+        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+References: <20220412231508.32629-1-libo.chen@oracle.com>
+ <20220412231508.32629-2-libo.chen@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220412231508.32629-2-libo.chen@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,34 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022, at 2:05 PM, Vishal Annapurve wrote:
-> This series implements selftests targeting the feature floated by Chao
-> via:
-> https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
->
-> Below changes aim to test the fd based approach for guest private memory
-> in context of normal (non-confidential) VMs executing on non-confidential
-> platforms.
->
-> Confidential platforms along with the confidentiality aware software
-> stack support a notion of private/shared accesses from the confidential
-> VMs.
-> Generally, a bit in the GPA conveys the shared/private-ness of the
-> access. Non-confidential platforms don't have a notion of private or
-> shared accesses from the guest VMs. To support this notion,
-> KVM_HC_MAP_GPA_RANGE
-> is modified to allow marking an access from a VM within a GPA range as
-> always shared or private. Any suggestions regarding implementing this ioctl
-> alternatively/cleanly are appreciated.
+Hi--
 
-This is fantastic.  I do think we need to decide how this should work in general.  We have a few platforms with somewhat different properties:
+On 4/12/22 16:15, Libo Chen wrote:
+> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
+> make a lot of sense nowaday. Even the original patch dating back to 2008,
+> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
+> rationale for such dependency.
+> 
+> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
+> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
+> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
+> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
+> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
+> There is no reason other architectures cannot given the fact that they
+> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
+> x86.
+> 
+> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+> ---
+>  lib/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 087e06b4cdfd..7209039dfb59 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
+>  	bool
+>  
+>  config CPUMASK_OFFSTACK
+> -	bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
 
-TDX: The guest decides, per memory access (using a GPA bit), whether an access is private or shared.  In principle, the same address could be *both* and be distinguished by only that bit, and the two addresses would refer to different pages.
+This "if" dependency only controls whether the Kconfig symbol's prompt is
+displayed (presented) in kconfig tools. Removing it makes the prompt always
+be displayed.
 
-SEV: The guest decides, per memory access (using a GPA bit), whether an access is private or shared.  At any given time, a physical address (with that bit masked off) can be private, shared, or invalid, but it can't be valid as private and shared at the same time.
+Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
+of DEBUG_PER_CPU_MAPS.
 
-pKVM (currently, as I understand it): the guest decides by hypercall, in advance of an access, which addresses are private and which are shared.
+Is there another problem here?
 
-This series, if I understood it correctly, is like TDX except with no hardware security.
+> +	bool "Force CPU masks off stack"
+>  	help
+>  	  Use dynamic allocation for cpumask_var_t, instead of putting
+>  	  them on the stack.  This is a bit more expensive, but avoids
 
-Sean or Chao, do you have a clear sense of whether the current fd-based private memory proposal can cleanly support SEV and pKVM?  What, if anything, needs to be done on the API side to get that working well?  I don't think we need to support SEV or pKVM right away to get this merged, but I do think we should understand how the API can map to them.
+-- 
+~Randy

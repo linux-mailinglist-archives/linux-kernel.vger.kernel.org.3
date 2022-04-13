@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8154FF8A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9CD4FF8A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236082AbiDMOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S236083AbiDMOKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiDMOJx (ORCPT
+        with ESMTP id S229605AbiDMOKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:09:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745D060AB6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:07:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0069261B16
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C594C385A4;
-        Wed, 13 Apr 2022 14:07:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649858850;
-        bh=tpnTO7ifhPyjScygUAYWKtoTBApBszAm9vZ8/m0rpwI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nHhG27wYTs7bWZi6v0dVsVL9a8EKB3vaMEybk+PKP2cLItIg61MfjJQ+/CatpUPrj
-         Bd5q9Mxa5+Re0xcbny0G8Fp6szFH1h2FUpD4TNk/fbh+itfdENUUWkJY7S+MTefk89
-         CQJyUueVzf0EmW8QSLxO+/KOGzceXfXfpLWvCEBgewzp5ZKBRktIlaFDa2SXuWuKI+
-         1fHFAID6yEv8jmgoUPBadZzCBmyUkn59Nt+RMcK/VHKLVCjP93DlYRHdw4Fbk0XtYy
-         zd/kgG/FmwNH9mR8mxtSvZAJMxvtJcRBLm2ZjbuyKcsTFC8YVS42TI0Vi6C9WXlous
-         SG7UT/+MwRziA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EC0D15C0134; Wed, 13 Apr 2022 07:07:29 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 07:07:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT
- kthread_worker
-Message-ID: <20220413140729.GL4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220408045734.1158817-1-kaleshsingh@google.com>
- <CAEXW_YQ6_VpneJnBfhTOMr6DwJhNmvMAKDRMnpr8LxB9Gtt=Xg@mail.gmail.com>
- <20220408143444.GC4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSrGKXh5DiJyrNvmbssSXbWBkA-XUjGRdS8HtGvW1r6hw@mail.gmail.com>
- <20220408153447.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YT-vJmXgWPQ_1J34iTb+ZhrAgN7c-HPz7kW17HmvKzJ3A@mail.gmail.com>
- <20220408173908.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <20220409071740.6024-1-hdanton@sina.com>
- <20220413113711.1263-1-hdanton@sina.com>
+        Wed, 13 Apr 2022 10:10:07 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5647A60DA9;
+        Wed, 13 Apr 2022 07:07:43 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-dacc470e03so2112806fac.5;
+        Wed, 13 Apr 2022 07:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UKzLfLfCt+WEluwz1wwvwPHsxgQjyqwG3A6e5VnilNk=;
+        b=PzIgDBSNpY29BfEn2Jt4AehRJWAUZfDVzo+fLXfH2nSMZxu7hfHmmMIjqjAX5KaaZO
+         5oexS3cHLB2gDecnzlgzwSRZwjYQxxH5MKxAytuUUes3K4RXa/O468cuMyhT/Jk3yNpg
+         IzbG0dn61J7zETQDEg9Fv+YlqnSWWEyKBR19jNpbiLeQlD1WajGNKgaQ0siH91qQEkAO
+         Goe1tFMvjggDJ0Tch1V7uVVlYHJkytt48rtg3BzCea96EY/9UTwfhWTYnO/QNBvajSM1
+         lcsa0FiFLiJC5zq/IykfknRJChdCSbRhSH2Z6+KJTQYJD/vnv/j+ReyTcnqn5JNKK6wU
+         evIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=UKzLfLfCt+WEluwz1wwvwPHsxgQjyqwG3A6e5VnilNk=;
+        b=7poaNks1TT9az5hRtrznR8sEKFuZBz0JusGpIbdgi+DoFLIthTh1AjmeSPMpq4AoQh
+         rgdb/OrAo00sIipffabrI567yiTJ/nXsgt3QoIKcZFp90bOBQtLDECnbAPqEAipK45G3
+         lYQ9Ek1lgIQY/m6CSWL61ttPhDB36hNcWO2XZEudwp0lIfAP1WbcZxYLpf7OaoXUq679
+         J5WZKkm84Pmgf/KXyou6PoQXnKX4wz8Uo3e0xzZvL48GiYOl9B/KPSM9paUhhYY7QQQq
+         t7v4o/IpLwwScNYqKUaQP1z/fFTiZ0tSRgcXbztaVObjQMACWQPe2OnlxSJVEvh//uMB
+         fcxQ==
+X-Gm-Message-State: AOAM533fMiPvqRYsxLuOC6FZqEB8SG1+GuLEN8L64YTvI3vf9bcb+Exg
+        ZojyfO17+t7yf7QqzTWMFa7+kdn5vV8=
+X-Google-Smtp-Source: ABdhPJw9FFIkkq+nUj4Pexdf0R6SMNRw5hbJ+xmfidoUdIkE07z7l/MQKwoHPp025QPIDVns1PkQYQ==
+X-Received: by 2002:a05:6870:f713:b0:d2:8adb:aaeb with SMTP id ej19-20020a056870f71300b000d28adbaaebmr4343119oab.111.1649858862709;
+        Wed, 13 Apr 2022 07:07:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g105-20020a9d12f2000000b005c961f9e119sm14583006otg.35.2022.04.13.07.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 07:07:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Apr 2022 07:07:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
+Message-ID: <20220413140740.GA2398442@roeck-us.net>
+References: <20220413134729.3112190-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220413113711.1263-1-hdanton@sina.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220413134729.3112190-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 07:37:11PM +0800, Hillf Danton wrote:
-> On Sat, 9 Apr 2022 08:56:12 -0700 Paul E. McKenney wrote:
-> > On Sat, Apr 09, 2022 at 03:17:40PM +0800, Hillf Danton wrote:
-> > > On Fri, 8 Apr 2022 10:53:53 -0700 Kalesh Singh wrote
-> > > > Thanks for the discussion everyone.
-> > > > 
-> > > > We didn't fully switch to kthread workers to avoid changing the
-> > > > behavior for users that dont need this low latency exp GPs. Another
-> > > > (and perhaps more important) reason is because kthread_worker offers
-> > > > reduced concurrency than workqueues which Pual reported can pose
-> > > > issues on systems with a large number of CPUs.
-> > > 
-> > > A second ... what issues were reported wrt concurrency, given the output
-> > > of grep -nr workqueue block mm drivers.
-> > > 
-> > > Feel free to post a URL link to the issues.
-> > 
-> > The issues can be easily seen by inspecting kthread_queue_work() and
-> > the functions that it invokes.  In contrast, normal workqueues uses
-> > per-CPU mechanisms to avoid contention, as can equally easily be seen
-> > by inspecting queue_work_on() and the functions that it invokes.
+On Wed, Apr 13, 2022 at 08:47:29AM -0500, Rob Herring wrote:
+> 'ti,n-factor' is read as a 32-bit signed value, so the type and constraints
+> are wrong. The same property is also defined for ti,tmp464 and is correct.
 > 
-> The worker from kthread_create_worker() roughly matches unbound workqueue
-> that can get every CPU overloaded, thus the difference in implementation
-> details between kthread worker and WQ worker (either bound or unbound) can
-> be safely ignored if the kthread method works, given that prioirty is barely
-> a cure to concurrency issues.
+> The constraints should also not be under 'items' as this property is not an
+> array.
+> 
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Please look again, this time taking lock contention in to account,
-keeping in mind that systems with several hundred CPUs are reasonably
-common and that systems with more than a thousand CPUs are not unheard of.
+Applied.
 
-							Thanx, Paul
+Thanks,
+Guenter
 
-> Hillf
-> > 
-> > Please do feel free to take a look.
-> > 
-> > If taking a look does not convince you, please construct some in-kernel
-> > benchmarks to test the scalability of these two mechanisms.  Please note
-> > that some care will be required to make sure that you are doing a valid
-> > apples-to-apples comparison.
-> > 
-> > 							Thanx, Paul
-> > 
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> index 36f649938fb7..a6f1fa75a67c 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp421.yaml
+> @@ -58,10 +58,9 @@ patternProperties:
+>          description: |
+>            The value (two's complement) to be programmed in the channel specific N correction register.
+>            For remote channels only.
+> -        $ref: /schemas/types.yaml#/definitions/uint32
+> -        items:
+> -          minimum: 0
+> -          maximum: 255
+> +        $ref: /schemas/types.yaml#/definitions/int32
+> +        minimum: -128
+> +        maximum: 127
+>  
+>      required:
+>        - reg

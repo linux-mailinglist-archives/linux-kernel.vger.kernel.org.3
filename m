@@ -2,190 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672674FF6C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B8C4FF6CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiDMM2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S232809AbiDMM3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiDMM2b (ORCPT
+        with ESMTP id S230146AbiDMM31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:28:31 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5835651E4E;
-        Wed, 13 Apr 2022 05:26:10 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id v19-20020a056820101300b0032488bb70f5so314708oor.5;
-        Wed, 13 Apr 2022 05:26:10 -0700 (PDT)
+        Wed, 13 Apr 2022 08:29:27 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BB45DA4E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:27:03 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g20so2148324edw.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UWf3WD8etSo1FUiV/Va7759QYZ2hF4d/jpBeQeYNuh0=;
+        b=V1YebfM3uL4q1jK8/PspIru7Nkbh7M2BcwDi8WKctQcIrkCwf4tddAevvUJ7NJX9th
+         NhUhIzyxqZ4HdW6OlwRxDPZFiTYztI9/qL97vT/L5AQmRyuUyUt27IAH/kBY0L7AcrGv
+         5oJNVQdIPIZtkLwHWZMG2ZVRqAI7o+ffiPYPNFL7GKqPdroRvFIdsyPXuRi0f4eTjC9S
+         ojoCIuHQnE20+96uU/aud0d6tlxB7+rbNJjg5yK46MAIcJRTXG1KZSSvmiMm6BG6KL5+
+         jE7T+kRwq+ZjSc23P1MhTe4AMzDn2Bw0EXwbiCs5C3vhtcXmdKfYO5I3mlRQNHq/Mc0f
+         ZiZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=S0aRwqpDS6rngBma2Gi2fYH+8a0XLfJUHOogpLlyjvo=;
-        b=WPhDIfyP9Y4CXIhZi4w4xrd09ygGj4PJBZUCAMkuzibI7un6T2XKKt5GLEHsHAB9Kv
-         ngn/bT1KgJemi74HbjWhelw/ZDO58+3N4SAKR9bfLp5N6Xia+KcyfsiRhkOrFrfS3Ys6
-         ickxABNBkLMPlHBIiJInKEreG1x83K6PFK7xWXhgU2e3HXZkvKmt9NO0I9VOolokPSlr
-         gDepAATlH5VJEzakrjQoOhrx/TcBjWqsJ0gp7eood2Ya9/svK0UcnMIgubUu8e8Mjpfn
-         dk5fcGTgKKcIH/0eP7uLw/x26PEHLhJqdUIGx413bUHVP7wzisOin0FZAliiKwvQ23Ux
-         0oyg==
-X-Gm-Message-State: AOAM530wT9pSDcd2BNbm91ixwvnGO1G9PyQNSDvUo4fxcEHMWR/yt348
-        iYJnTtI8Q2dEw8v9VoBuOQ==
-X-Google-Smtp-Source: ABdhPJwjTGH/YI3AnbUmwp0jGCq97XHBV6V+VIGoHJBjqXE2giohj0FVKXscDDlXZZA+hK5t+vWQqQ==
-X-Received: by 2002:a4a:de16:0:b0:321:3be1:803e with SMTP id y22-20020a4ade16000000b003213be1803emr13102003oot.71.1649852769255;
-        Wed, 13 Apr 2022 05:26:09 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r6-20020a0568301ac600b005cdbc6e62a9sm14257731otc.39.2022.04.13.05.26.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 05:26:08 -0700 (PDT)
-Received: (nullmailer pid 2930031 invoked by uid 1000);
-        Wed, 13 Apr 2022 12:26:08 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-In-Reply-To: <20220413094011.185269-1-cosmin.tanislav@analog.com>
-References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v1 1/3] dt-bindings: iio: adc: add AD4130
-Date:   Wed, 13 Apr 2022 07:26:08 -0500
-Message-Id: <1649852768.314703.2930030.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UWf3WD8etSo1FUiV/Va7759QYZ2hF4d/jpBeQeYNuh0=;
+        b=T7no2yAOFezQPRF7K5Ef17CLBvnypssMTJ2TUEWcmjktz5jtl5BrxBTeXyuaI+dWJ7
+         E+ucGOx22vZ9anLre8cbcJ3MKPzpRTqX/y25kliQawwbQfExYJux2zUQ7YKQTIP4cjVH
+         yGW5a6vsKCCioV8f8PmwjOATOez3r1iIKmc5q0kGJOjhps3VRjXlielU8yo5Sf8eNpnn
+         S1cNAQVAkrptg8ZDWXSvaMgvF6BFBLhYxeVb8hdhQ4/X2MFE4f61daUyycJ3Q1sriepy
+         hEFcqjMaqIK1WvP1MFbHLHW6RvjKU/2euH/uWSWLT4Guohle09slTXJK3aLwO9QoayZX
+         Zmew==
+X-Gm-Message-State: AOAM533AvhGWeuOpsl80fgLlK197JOwbR/GfYepLBDwq8gA6fptOoiZa
+        OsGU7GG1lDBeZ0feMsxJRzC02A==
+X-Google-Smtp-Source: ABdhPJxFkgSsSbyre3Mhq9/5vpL/TcAtBritChJHV6hHs0Thrw4NNs9uIjp2WHOlI6cLIlMu4LSdIg==
+X-Received: by 2002:a05:6402:1941:b0:413:2b5f:9074 with SMTP id f1-20020a056402194100b004132b5f9074mr42989674edz.414.1649852821599;
+        Wed, 13 Apr 2022 05:27:01 -0700 (PDT)
+Received: from [192.168.0.204] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b006db0a78bde8sm14177221ejy.87.2022.04.13.05.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 05:27:01 -0700 (PDT)
+Message-ID: <a4b6c158-da56-7879-04a4-558f751cb372@linaro.org>
+Date:   Wed, 13 Apr 2022 14:27:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: dts: imx8mm-evk: add pwm1/backlight support
+Content-Language: en-US
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220413102052.20207-1-tommaso.merciai@amarulasolutions.com>
+ <c6fe3895-29b2-a371-ccae-c5a12c45d4f1@linaro.org>
+ <20220413115810.GA4713@tom-ThinkPad-T14s-Gen-2i>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220413115810.GA4713@tom-ThinkPad-T14s-Gen-2i>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 12:40:09 +0300, Cosmin Tanislav wrote:
-> AD4130-8 is an ultra-low power, high precision,
-> measurement solution for low bandwidth battery
-> operated applications.
+On 13/04/2022 13:58, Tommaso Merciai wrote:
+>>> +	backlight: backlight {
+>>> +		status = "disabled";
+>>
+>> Why disabled?
+>>
+>>> +		compatible = "pwm-backlight";
+>>> +		pwms = <&pwm1 0 5000000>;
+>>> +		brightness-levels = <0 255>;
+>>> +		num-interpolated-steps = <255>;
+>>> +		default-brightness-level = <250>;
+>>> +	};
+>>> +
+>>>  	ir-receiver {
+>>>  		compatible = "gpio-ir-receiver";
+>>>  		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+>>> @@ -395,6 +404,12 @@ &wdog1 {
+>>>  	status = "okay";
+>>>  };
+>>>  
+>>> +&pwm1 {
+>>> +	pinctrl-names = "default";
+>>> +	pinctrl-0 = <&pinctrl_backlight>;
+>>> +	status = "disabled";
+>>
+>> Same here.
+>>
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> The fully integrated AFE (Analog Front-End)
-> includes a multiplexer for up to 16 single-ended
-> or 8 differential inputs, PGA (Programmable Gain
-> Amplifier), 24-bit Sigma-Delta ADC, on-chip
-> reference and oscillator, selectable filter
-> options, smart sequencer, sensor biasing and
-> excitation options, diagnostics, and a FIFO
-> buffer.
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> ---
->  .../bindings/iio/adc/adi,ad4130.yaml          | 255 ++++++++++++++++++
->  1 file changed, 255 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> 
+> Hi Krzysztof,
+> I think is better to keep disable into .dtsi and enable it at .dts
+> level.
+> What do you think about?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Why better? This is already board DTSI, not a SoC DTSI. All boards using
+it are supposed to have it available, aren't they?
 
-yamllint warnings/errors:
+Usually nodes should be disabled in a DTSI if they need some resources
+not available in that DTSI. For example if they need some supply. It's
+not the case here, right?
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: patternProperties:^channel@([0-9]|1[0-5])$:properties:adi,excitation-pin-0: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('minimum', 'maximum', 'default' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: patternProperties:^channel@([0-9]|1[0-5])$:properties:adi,excitation-pin-0: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: patternProperties:^channel@([0-9]|1[0-5])$:properties:adi,excitation-pin-0: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:interrupts: 'anyOf' conditional failed, one must be fixed:
-	'minItems' is not one of ['maxItems', 'description', 'deprecated']
-		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
-	'minItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
-	'maxItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
-	1 is less than the minimum of 2
-		hint: Arrays must be described with a combination of minItems/maxItems/items
-	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
-	from schema $id: http://devicetree.org/meta-schemas/interrupts.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,int-ref-en: 'oneOf' conditional failed, one must be fixed:
-	Additional properties are not allowed ('default' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,int-ref-en: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	Additional properties are not allowed ('type', 'default' were unexpected)
-		hint: A vendor string property with exact values has an implicit type
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,int-ref-en: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,vbias-pins: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('items' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,vbias-pins: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,vbias-pins: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,bipolar: 'oneOf' conditional failed, one must be fixed:
-	Additional properties are not allowed ('default' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,bipolar: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	Additional properties are not allowed ('type', 'default' were unexpected)
-		hint: A vendor string property with exact values has an implicit type
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: properties:adi,bipolar: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: ignoring, error in schema: patternProperties: ^channel@([0-9]|1[0-5])$: properties: adi,excitation-pin-0
-Error: Documentation/devicetree/bindings/iio/adc/adi,ad4130.example.dts:35.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/iio/adc/adi,ad4130.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof

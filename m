@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A624FEBE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B944FEBEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiDMAWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S230489AbiDMA0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 20:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiDMAWC (ORCPT
+        with ESMTP id S231136AbiDMA0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:22:02 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9722242ED1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:19:43 -0700 (PDT)
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 775523F6FD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1649809180;
-        bh=Av2vidYT+scYaugnqXMT68dvLkZMawKIoL93FWxX1Aw=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=a4n9gNLkVuKLgIiJhf06YNCCX7asFTx00SiVj+ju9Fm8co+CgfQMpRUGQbjIF4yyq
-         DMvrdoP+yLfnGoluulMeV8c0zUdYWU4ZalXClq45VkKR+2s5fq6zo/baKdq0Z3MiMs
-         IPO74Jn3Xxa57Eq9Hgf369Ia3PCC19tSxAzCoW6hB31Cn97K6k6R2rbCVZYzIYEK1W
-         lKCqrAt5KWuGVZz1h97u5wrbsbPgMjC4pc8VMZiJSMFRFGfy4/n40I7XKSjaOuKV5g
-         Z4QJyXq91yj1qH82UCGKl53sAkIe4Qr/Zi2RthyCkjcst43UWAvy1sSNBvaCxKPl4I
-         TAOPDT7RdpYrw==
-Received: by mail-oo1-f71.google.com with SMTP id z4-20020a4a9c84000000b00329c324ddb7so268962ooj.22
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:19:40 -0700 (PDT)
+        Tue, 12 Apr 2022 20:26:38 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42642237
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:24:11 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h5so214917pgc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FgyYp5VcoidQ5XbfndPuDkccCsmpD6ZwuN3H0CutGCY=;
+        b=ldUuYwzP3gD/rj7ALLtG+rGst+MSW0eFQKuy35D0bSdRsQBpS//HqjbyviqsQHhkvA
+         fs0ojuosBvGohhltxkgUUvr6kv7EuIjYUAFaJpmR9VP43JRS7qY7Vg83HR6QMHVZfHno
+         6Nw1CHQV1PtyjJZCd4cPCdaXzqEoaf9KgR8Xs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Av2vidYT+scYaugnqXMT68dvLkZMawKIoL93FWxX1Aw=;
-        b=buyec4pqlK8tyNCyp6HMzZ+tR/MFjXOxduGZyqyHr/Gw7H928r8rwA8zkVF/Mk7Xn2
-         Bj0HDMHozPjk6X/0yy6bZepWklqpFHsEeGoJzFjNt7bMnPGwRIVAaItZbI01F5Tmr4Kh
-         uTyF86riIVeAuIRuQFS5FNVPTzbTi8IFSEUYTpdxjW6hU12cC9VohtOlX6lVnvlAtD4H
-         5bd4D7tolhkhsL2TWgw/GF4mqCOzylhzL6ZRfxidOCU2llfa/PLX+hbqVcvbQJrK1Jro
-         tfy9u5yiR1suC9pz7T3eroQsH8wE1yIqizQXmFiruoZMy/BFrDHSIQsx6mykr1LdmJH+
-         rSgQ==
-X-Gm-Message-State: AOAM5311T2305GEQM3AXyLEquCJlaMY3Mjjqy9VYNgvCH0GpDgxq5DdY
-        gU1GgqH6AeVl3bEQShaWnn4X2eplr8MUTEo/UwMNLq/0OTbXUVqx+9YBosjLXlrluRoA0aIVzNJ
-        OVv89wi+IN1WLfqZ5LVSIPbUIV+aqiQYcMZlx62EkYjj6CKaykD8KcFh27Q==
-X-Received: by 2002:aca:2b0d:0:b0:2d9:dc99:38a2 with SMTP id i13-20020aca2b0d000000b002d9dc9938a2mr2815421oik.198.1649809179141;
-        Tue, 12 Apr 2022 17:19:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsF5IH7sAR4VoxIIVUUP1QoENI3Xj6hxHJCDmxv5qwsYdCK85Gr2XEbOINsjnAOr7vSlvpFgwBGbvnnfQUWXU=
-X-Received: by 2002:aca:2b0d:0:b0:2d9:dc99:38a2 with SMTP id
- i13-20020aca2b0d000000b002d9dc9938a2mr2815409oik.198.1649809178769; Tue, 12
- Apr 2022 17:19:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FgyYp5VcoidQ5XbfndPuDkccCsmpD6ZwuN3H0CutGCY=;
+        b=EXA3ZgQrE4gCpBl3dkphCnTbziTtuUEtCkf/afI+jefmK2PtE3g0HP759avfKZ6TOk
+         9FsBLVNIp67CTAVbgwKRok8CIoZpW/oqyfGTocANQtFxEbYEq0xSloA75zwbktUZFoXs
+         fz/N99JbzgRhGEBsn+giXUTECbTlap8WnS8agsqhPt54395bLiqp48qCMNhmuLLOMn0A
+         7qj6zWGWSRwS/f59//agAsnhkve2/IHMrVTptPXtGwxX+VLgIfOshtOHrArezo7tZsGx
+         wLabwMmW+U9apsn1LpMA2eGYNzI5bxN3zXubLk0QkN283+UJ+6BeW9GxCf4Z6YUZJ7XG
+         o6FA==
+X-Gm-Message-State: AOAM533DFbc1+kVLD+aTl11Xmfb1qaYEbMrkMGvG5ghl08jnAY1tDPmW
+        sv8yLdN5GueuBKdDalvsFaQoMA==
+X-Google-Smtp-Source: ABdhPJy5FJY6Q6VWd+fk6QfKqME9E6j1FuWrwXXcbGKZvBz/6FWlvHnd3hcZqchTrqP3gllEJGM/cg==
+X-Received: by 2002:a05:6a00:1c63:b0:505:cc7f:a21b with SMTP id s35-20020a056a001c6300b00505cc7fa21bmr10818937pfw.9.1649809450783;
+        Tue, 12 Apr 2022 17:24:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm42471329pfj.146.2022.04.12.17.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 17:24:10 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 17:24:09 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     luciano.coelho@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, emmanuel.grumbach@intel.com,
+        ayala.beker@intel.com, johannes.berg@intel.com,
+        colin.i.king@googlemail.com, gustavoars@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iwlwifi: mei: clean up comments
+Message-ID: <202204121724.6EB95414@keescook>
+References: <20220410142733.1454873-1-trix@redhat.com>
 MIME-Version: 1.0
-References: <0d8cc8c0-31a1-0290-5aa5-0c7b16db1edb@nvidia.com> <20220412225047.GA627910@bhelgaas>
-In-Reply-To: <20220412225047.GA627910@bhelgaas>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 13 Apr 2022 08:19:26 +0800
-Message-ID: <CAAd53p4r1v_sN=8kv_fOx_VEb3k=4rU9iw52LfmEHO1crnms=g@mail.gmail.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
-        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220410142733.1454873-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,126 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:50 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Ricky for rtsx_pci ASPM behavior, Rajat, Prasad for L1 SS stuff,
-> Victor for interest in disabling ASPM during save/restore]
->
-> On Wed, Feb 16, 2022 at 06:41:39PM +0530, Vidya Sagar wrote:
-> > On 2/16/2022 11:30 AM, Kenneth R. Crudup wrote:
-> > > On Wed, 16 Feb 2022, Vidya Sagar wrote:
-> > >
-> > > > I see that the ASPM-L1 state of Realtek NIC which was in
-> > > > disabled state before hibernate got enabled after hibernate.
-> > >
-> > > That's actually my SD-Card reader; there's a good chance the BIOS
-> > > does "something" to it at boot time, as it's possible to boot from
-> > > SD-Card on my laptop.
-> > >
-> > > > This patch doesn't do anything to LnkCtl register which has
-> > > > control for ASPM L1 state.
-> > >
-> > > > Could you please check why ASPM L1 got enabled post hibernation?
-> > >
-> > > I wouldn't know how to do that; if you're still interested in that
-> > > let me know what to do to determine that.
->
-> > I would like Bjorn to take a call on it.
-> > At this point, there are contradictions in observations.
->
-> Remind me what contradictions you see?  I know Kenny saw NVMe errors
-> on a kernel that included 4257f7e008ea ("PCI/ASPM: Save/restore L1SS
-> Capability for suspend/resume") in December 2020 [1], and that he did
-> *not* see those errors on 4257f7e008ea in February 2022 [2].  Is that
-> what you mean?
->
-> > Just to summarize,
-> > - The root ports in your laptop don't have support for L1SS
-> > - With the same old code base with which the errors were observed plus my
-> > patch on top of it, I see that ASPM-L1 state getting enabled for one of the
-> > endpoints (Realtek SD-Card reader) after system comes out of hibernation
-> > even though ASPM-L1 was disabled before the system enter into hibernation.
-> > No errors are reported now.
->
-> I assume you refer to [2], where on 4257f7e008ea ("PCI/ASPM:
-> Save/restore L1SS Capability for suspend/resume"), Kenny saw ASPM L1
-> disabled before hibernate and enabled afterwards:
->
->   --- pre-hibernate
->   +++ post-hibernate
->     00:1d.7 PCI bridge [0604]: Intel [8086:34b7]
->       Bus: primary=00, secondary=58, subordinate=58
->         LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
->     58:00.0 RTS525A PCI Express Card Reader [10ec:525a]
->   -     LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
->   -             ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
->   +     LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk-
->   +             ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
->
-> Per PCIe r6.0, sec 7.5.3.7, "ASPM L1 must be enabled by software in
-> the Upstream component on a Link prior to enabling ASPM L1 in the
-> Downstream component on that Link," so this definitely seems broken,
-> but wouldn't explain the NVMe issue.
->
-> The PCI core (pcie_config_aspm_link()) always enables L1 in the
-> upstream component before the downstream one, but 58:00.0 uses the
-> rtsx_pci driver, which does a lot of its own ASPM fiddling, so my
-> guess is that it's doing something wrong here.
->
-> > - With the linux-next top of the tree plus my patch, no change in the ASPM
-> > states and no errors also reported.
->
-> I don't know which report this refers to.
->
-> > This points to BIOS being buggy (both old and new with new one being less
-> > problematic)
->
-> I agree that a BIOS change between [1] and [2] seems plausible, but I
-> don't think we can prove that yet.  I'm slightly queasy because while
-> Kenny may have updated his BIOS, most people will not have.
->
-> I think we should try this patch again with some changes and maybe
-> some debug logging:
->
->   - I wonder if we should integrate the LTR, L1 SS, and Link Control
->     ASPM restore instead of having them spread around through
->     pci_restore_ltr_state(), pci_restore_aspm_l1ss_state(), and
->     pci_restore_pcie_state().  Maybe a new pci_restore_aspm() that
->     would be called from pci_restore_pcie_state()?
->
->   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
->     must be configured while ASPM L1 is disabled, but I don't think we
->     currently guarantee this: we restore all the upstream component
->     state first, and we don't know the ASPM state of the downstream
->     one.  Maybe we need to:
->
->       * When restoring upstream component,
->           + disable its ASPM
->
->       * When restoring downstream component,
->           + disable its ASPM
->           + restore upstream component's LTR, L1SS
->           + restore downstream component's LTR, L1SS
->           + restore upstream component's ASPM
->           + restore downstream component's ASPM
+On Sun, Apr 10, 2022 at 10:27:33AM -0400, Tom Rix wrote:
+> SPDX
+> *.h use /* */ style comments
+> 
+> Spelling replacements
+> commnunication to communication
+> adsress to address
+> procotol to protocol
+> addtional to additional
+> kown to know
+> negotiaion to negotiation
+> mssage to message
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Right now L1SS isn't reprogrammed after S3, and that causes WD NVMe
-starts to spew lots of AER errors.
-So yes please restore L1SS upon resume. Meanwhile I am asking vendor
-_why_ restoring L1SS is crucial for it to work.
+Looks good; thanks!
 
-I also wonder what's the purpose of pcie_aspm_pm_state_change()? Can't
-we just restore ASPM bits like other configs?
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Kai-Heng
-
->
->       This seems pretty messy, but seems like what the spec requires.
->
->     - Add some pci_dbg() logging of all these save/restore values to
->       help debug any issues.
->
-> Bjorn
->
-> [1] https://lore.kernel.org/r/20201228040513.GA611645@bjorn-Precision-5520
-> [2] https://lore.kernel.org/r/3ca14a7-b726-8430-fe61-a3ac183a1088@panix.com
+-- 
+Kees Cook

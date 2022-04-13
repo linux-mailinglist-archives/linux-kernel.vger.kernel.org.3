@@ -2,89 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201A94FFAD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBF94FFAD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235849AbiDMQEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S236742AbiDMQFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiDMQEv (ORCPT
+        with ESMTP id S229528AbiDMQFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:04:51 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9826556
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649865749; x=1681401749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vEfGCLciTRVozTL9o246yJ/aR9lha4XWlq8MjHNUi0k=;
-  b=FXSo1CSECTa+y3wdYY3hDbHWbOuBp6IS9Lmye+1NfdDp/ImAhoXJu5Tn
-   HeOdkXT3m1zqcZpVA1Ro3HvABIW4f6ezJ+IWPcF/3Q68sWVUfiKBA4Wus
-   RQwWcEA98KkYCjHnYAMt4dhwEyS9IbNQ44g9kFuDGiE4ixB+ju8ctZgax
-   2LbpbH0t8/H+btBV90daUcOp3WJJUpf5a6LUSgMSTOMlhSxlG9d//51LX
-   9fWcmwk6mJFMkqlGVoBwJ3sqk0N2Cc1zL566RCpDfEM6tio3B0y625RV7
-   P+Y6zZBBFk7awmbe27osftBWtghlNr0gI2OCH6YzVOovkHSWUljvQQrtj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323148801"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323148801"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:02:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="573331211"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 Apr 2022 09:02:26 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nefRp-0000Qr-BA;
-        Wed, 13 Apr 2022 16:02:25 +0000
-Date:   Thu, 14 Apr 2022 00:02:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH linux-next] mm/shmem: vma_needs_copy can be static
-Message-ID: <Ylb0CGeFJlc4EzLk@7ec4ff11d4ae>
-References: <202204140043.Tx7BIBvI-lkp@intel.com>
+        Wed, 13 Apr 2022 12:05:39 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38ED580EF;
+        Wed, 13 Apr 2022 09:03:17 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id i34so1022804vsv.6;
+        Wed, 13 Apr 2022 09:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AfVBOcs8TbWmDB0JA6H2aLSdPzU05jThWpLa6v2Z6KI=;
+        b=Ck/2Ng2+EQritbp1vgGqN5aG+YGHPGy3A5Z9PvraSx669ZdalePtKkEv6aCHMi0SJo
+         1h4aCwm7tzYMQOHHq/qAh9d1Qa13Aio/3mktyCdYZgAZmTUEMO6knyDxWtlFpeduuUPO
+         sWhmLXcfFHt7dS9ZamX9lmws9V8rGZL9b07z+cRxxk3Ervw6RPnQwTS5DMw/3313qa5k
+         pvEwSz+vq1NeCPuqrN83KgqrQk7BuI4XKZJo3Nca/Mp/xJKxma5fLSb4AlrZ+7Wo+bCb
+         F9K1O/UaVyG9NJ5NBi0O1RQpos4ip3FN6McGtLxbIeVv3pZokC5Eml36f1gznCa2/JVv
+         qVIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AfVBOcs8TbWmDB0JA6H2aLSdPzU05jThWpLa6v2Z6KI=;
+        b=3kQeyXO3I5RW0o+9KdoV93YrOjWRuooYZi2m0vu0vMffGPcHOX9KUzGjOyflfz93TG
+         k8r3RSPgZaKmpYJP7QEQAW69q4yJjKChgkkbAp+jmPaEd/xErthGGxgHBBe4rG7nsbb+
+         omRGAIERLvN8vThmT/PontWIB5xLIiwnR4ytQOIgKsGM61wFMXI05hl/tREbuZ6RRTBE
+         Gopu3SMO3nIVb3SEt06ssnP1YkCir38eW+VAaPzJLIqSg3eRv7gPfnXCfg5O0PPjwMsp
+         gmiuRTZSKwvDagN4Ugoi1+v4rtyCuH/a4/od9Kc6BT/D6BYeKdz0qYFEsdl8CPaCfLPw
+         ehFg==
+X-Gm-Message-State: AOAM533QSf6MEbIOqIrrFl9z5AwDD7J6K1puY3GA+5A33quymYsIyPwz
+        Ved6mK1qu75clF0j8D6tB7gU+9+hDBuCFa9XqbAtrHFW0wBhfg==
+X-Google-Smtp-Source: ABdhPJwMbHZ6SDpA+RhfmpicqxV0i4BNxl7r/8BKma92g74kjhX6w46FuCPd62AbR3+pGoWXuCLC5AbD/RgdVN9hV3E=
+X-Received: by 2002:a67:a44d:0:b0:320:601b:2a08 with SMTP id
+ p13-20020a67a44d000000b00320601b2a08mr13581695vsh.70.1649865796922; Wed, 13
+ Apr 2022 09:03:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204140043.Tx7BIBvI-lkp@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411135136.GG15609@suse.cz> <20220411155540.36853-1-schspa@gmail.com>
+ <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
+In-Reply-To: <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Thu, 14 Apr 2022 00:03:05 +0800
+Message-ID: <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
+Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
+To:     Nikolay Borisov <nborisov@suse.com>
+Cc:     dsterba@suse.cz, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, terrelln@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mm/memory.c:1238:1: warning: symbol 'vma_needs_copy' was not declared. Should it be static?
+Nikolay Borisov <nborisov@suse.com> writes:
 
-Fixes: 729c63ce2bbd ("mm/shmem: handle uffd-wp during fork()")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- mm/memory.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On 11.04.22 =D0=B3. 18:55 =D1=87., Schspa Shi wrote:
+>> This is an optimization for fix fee13fe96529 ("btrfs:
+>> correct zstd workspace manager lock to use spin_lock_bh()")
+>> The critical region for wsm.lock is only accessed by the process context=
+ and
+>> the softirq context.
+>> Because in the soft interrupt, the critical section will not be preempte=
+d by
+>> the
+>> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock) t=
+o turn
+>> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situatio=
+n.
+>> Changelog:
+>> v1 -> v2:
+>>      - Change the commit message to make it more readable.
+>> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.com/
+>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>
+> Has there been any measurable impact by this change? While it's correct i=
+t does mean that
+>  someone looking at the code would see that in one call site we use plain=
+ spinlock and in
+> another a _bh version and this is somewhat inconsistent.
+>
+Yes, it may seem a little confused. but it's allowed to save some
+little peace of CPU times.
+and "static inline void red_adaptative_timer(struct timer_list *t) in
+net/sched/sch_red.c"
+have similar usage.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index a426c46dd6f68..92cca76bcd3ee 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1234,7 +1234,7 @@ copy_p4d_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
-  * false when we can speed up fork() by allowing lazy page faults later until
-  * when the child accesses the memory range.
-  */
--bool
-+static bool
- vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- {
- 	/*
+> What's more I believe this is a noop since when softirqs are executing pr=
+eemptible() would
+> be false due to preempt_count() being non-0 and in the bh-disabling code
+> in the spinlock we have:
+>
+>  /* First entry of a task into a BH disabled section? */
+>     1         if (!current->softirq_disable_cnt) {
+>   167                 if (preemptible()) {
+>     1                         local_lock(&softirq_ctrl.lock);
+>     2                         /* Required to meet the RCU bottomhalf requ=
+irements. */
+>     3                         rcu_read_lock();
+>     4                 } else {
+>     5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softirq_c=
+trl.cnt));
+>     6                 }
+>     7         }
+>
+>
+> In this case we'd hit the else branch.
+
+We won't hit the else branch. because current->softirq_disable_cnt
+won't be zero in the origin case.
+
+__do_softirq(void)
+        softirq_handle_begin(void)
+        __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
+                        current->softirq_disable_cnt will be > 0 at this ti=
+me.
+    ......
+        zstd_reclaim_timer_fn(struct timer_list *timer)
+                        spin_lock_bh(&wsm.lock);
+                        __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
+                        if (!current->softirq_disable_cnt) {
+                                                // this if branch won't hit
+                                        }
+
+        softirq_handle_end();
+
+In this case, the "__local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);"
+won't do anything useful it only
+increase softirq disable depth and decrease it in
+"__local_bh_enable_ip(_RET_IP_, SOFTIRQ_LOCK_OFFSET);".
+
+So it's safe to replace spin_lock_bh with spin_lock in a timer
+callback function.
+
+
+For the ksoftirqd, it's all the same.

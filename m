@@ -2,84 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F4B4FF2DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851044FF2DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiDMJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S234181AbiDMJHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiDMJGF (ORCPT
+        with ESMTP id S229960AbiDMJHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:06:05 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F71A27FC3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:03:42 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id ADC7632C;
-        Wed, 13 Apr 2022 02:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1649840621;
-        bh=B8/+Q5Rg/0rSicwts1SK29yG4QDu+01MQufsM4qsUdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gClOCyeGYs96fwgpgp/j4LHwum1IXq+xCwwHsdprimUV+ysN+vskRlxDkC25IC4sp
-         rhuDkYP4D5qT1GJngfu2TMMc6Ebd7tiE5mqMGtSb1B4CVkWLJkJ0Sa7p17jfhtqXjc
-         j4WncKKTp1sK6LrzY2/12WaYCsHBVAX7c1T4qyhQ=
-Date:   Wed, 13 Apr 2022 02:03:38 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v2 2/2] misc: Add power-efuse driver
-Message-ID: <YlaR6kfhQHd3b8Ay@hatter.bewilderbeest.net>
-References: <20220308011811.10353-1-zev@bewilderbeest.net>
- <20220308011811.10353-3-zev@bewilderbeest.net>
- <YicAzSara5Sr3LQ7@kroah.com>
- <YicSj3ZuetRkYxH1@hatter.bewilderbeest.net>
- <YlSnMVVE63xqGSGa@hatter.bewilderbeest.net>
- <YlUFuoFPveAYRQDm@kroah.com>
+        Wed, 13 Apr 2022 05:07:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B90729830
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:04:48 -0700 (PDT)
+X-UUID: bc5a4bb3d7a44c7285c44bf8a3cf1c40-20220413
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:9ae15bd7-0097-4408-9083-81255e80a1fb,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:9ae15bd7-0097-4408-9083-81255e80a1fb,OB:0,LOB:
+        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:f9a63f78-0afa-4dca-bdec-ca54c998425a,C
+        OID:216b4a1e69a2,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: bc5a4bb3d7a44c7285c44bf8a3cf1c40-20220413
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 766100894; Wed, 13 Apr 2022 17:04:42 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 13 Apr 2022 17:04:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Apr
+ 2022 17:04:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Apr 2022 17:04:40 +0800
+Message-ID: <720c5ede369357fb40152588c441614456b0f96f.camel@mediatek.com>
+Subject: Re: [PATCH v4, 4/4] drm/mediatek: Add pull-down MIPI operation in
+ mtk_dsi_poweroff function
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>
+CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 13 Apr 2022 17:04:40 +0800
+In-Reply-To: <1649644308-8455-5-git-send-email-xinlei.lee@mediatek.com>
+References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
+         <1649644308-8455-5-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YlUFuoFPveAYRQDm@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 09:53:14PM PDT, Greg Kroah-Hartman wrote:
->On Mon, Apr 11, 2022 at 03:09:53PM -0700, Zev Weiss wrote:
->>
->> Ping...Mark (or Liam?), any thoughts on an appropriate path forward on this?
->
->Make it a regular regulator driver please.
->
+Hi, Xinlei:
 
-The existing userspace-consumer regulator driver does provide some of 
-the functionality I'm looking for (the on/off switch), and I think would 
-be pretty easy to extend to provide the rest of it as well.  When I 
-previously proposed using it as such though, Mark stated quite firmly 
-that that wasn't going to fly [0]; this approach was my attempt at 
-implementing a generic, abstracted mechanism as he had suggested later 
-in that thread, though I haven't gotten any further feedback from him on 
-what he thought of it.
+On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> In the dsi_enable function, mtk_dsi_rxtx_control is to
+> pull up the MIPI signal operation. Before dsi_disable,
+> MIPI should also be pulled down by writing a register 
+> instead of disabling dsi.
+> 
+> If disable dsi without pulling the mipi signal low, the value of
+> the register will still maintain the setting of the mipi signal being
+> pulled high.
+> After resume, even if the mipi signal is not pulled high, it will
+> still
+> be in the high state.
 
-If he's had a change of heart and would be open to the 
-userspace-consumer driver taking on a bit of new functionality I'd be 
-happy to go that route though.
+After add Fixes tag for [1], then
 
-[0] https://lore.kernel.org/openbmc/20210330174221.GJ4976@sirena.org.uk/
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dsi.c?h=v5.18-rc2&id=2e54c14e310f655bb0915413e8e4a3da67c78a66
 
-Thanks,
-Zev
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 9ad6f08c8bfe..e35343357f90 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -676,6 +676,8 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+>  	mtk_dsi_reset_engine(dsi);
+>  	mtk_dsi_lane0_ulp_mode_enter(dsi);
+>  	mtk_dsi_clk_ulp_mode_enter(dsi);
+> +	/* set the lane number as 0 to pull down mipi */
+> +	writel(0, dsi->regs + DSI_TXRX_CTRL);
+>  
+>  	mtk_dsi_disable(dsi);
+>  
 

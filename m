@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8EA4FF2DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F4B4FF2DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbiDMJFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S233960AbiDMJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiDMJFW (ORCPT
+        with ESMTP id S229492AbiDMJGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:05:22 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ECE252AA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=p/6FirwSCVCMNaAVTS0/mDOUExThkpxHbP69SQ0S5jU=;
-  b=VzIQa38KpX96o+1RammxR9SDSFZDUFP47BCa+2MS+H+VPV56tFM69xeY
-   PgEibEMyMNZBalDWNgtdsQ9UMMWU50dKlAcb6V4TD1kgfSRVnTPO3qMNc
-   X9M7i4QtnORkBG1tiq0vA1jQcGWNe31hAseyi8jRtb7IoNqcFcAPjoDjA
-   M=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,256,1643670000"; 
-   d="scan'208";a="31479824"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:02:59 +0200
-Date:   Wed, 13 Apr 2022 11:02:58 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Pavel Skripkin <paskripkin@gmail.com>
-cc:     Mahak Gupta <mahak_g@cs.iitr.ac.in>, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: remove else after return and break
- statements
-In-Reply-To: <4946ce95-8692-b765-b5ea-ab4b521182fc@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204131102300.3470@hadrien>
-References: <20220413052759.4859-1-mahak_g@cs.iitr.ac.in> <4946ce95-8692-b765-b5ea-ab4b521182fc@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 13 Apr 2022 05:06:05 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F71A27FC3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:03:42 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id ADC7632C;
+        Wed, 13 Apr 2022 02:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1649840621;
+        bh=B8/+Q5Rg/0rSicwts1SK29yG4QDu+01MQufsM4qsUdw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gClOCyeGYs96fwgpgp/j4LHwum1IXq+xCwwHsdprimUV+ysN+vskRlxDkC25IC4sp
+         rhuDkYP4D5qT1GJngfu2TMMc6Ebd7tiE5mqMGtSb1B4CVkWLJkJ0Sa7p17jfhtqXjc
+         j4WncKKTp1sK6LrzY2/12WaYCsHBVAX7c1T4qyhQ=
+Date:   Wed, 13 Apr 2022 02:03:38 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 2/2] misc: Add power-efuse driver
+Message-ID: <YlaR6kfhQHd3b8Ay@hatter.bewilderbeest.net>
+References: <20220308011811.10353-1-zev@bewilderbeest.net>
+ <20220308011811.10353-3-zev@bewilderbeest.net>
+ <YicAzSara5Sr3LQ7@kroah.com>
+ <YicSj3ZuetRkYxH1@hatter.bewilderbeest.net>
+ <YlSnMVVE63xqGSGa@hatter.bewilderbeest.net>
+ <YlUFuoFPveAYRQDm@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YlUFuoFPveAYRQDm@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 13 Apr 2022, Pavel Skripkin wrote:
-
-> Hi Mahak,
+On Mon, Apr 11, 2022 at 09:53:14PM PDT, Greg Kroah-Hartman wrote:
+>On Mon, Apr 11, 2022 at 03:09:53PM -0700, Zev Weiss wrote:
+>>
+>> Ping...Mark (or Liam?), any thoughts on an appropriate path forward on this?
 >
-> On 4/13/22 08:27, Mahak Gupta wrote:
-> > Else is not necessary after return and break statements, hence remove
-> > it.
-> >
-> > Reported by checkpatch:
-> >
-> > WARNING: else is not generally useful after a break or return
-> >
-> > Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
+>Make it a regular regulator driver please.
 >
-> [snip]
->
-> > -	}
-> > +	/*  could be pure B, pure G, or B/G */
-> > +	if (rtw_is_cckratesonly_included(rate))
-> > +		return WIRELESS_11B;
-> > +	else if (rtw_is_cckrates_included(rate))
-> > +		return	WIRELESS_11BG;
-> > +	else
-> > +		return WIRELESS_11G;
->
-> This 'else' is after 'return' as well, isn't it? Just wondering what's the
-> difference between this one and others in this patch
 
-Maybe it's nice to have the three options lined up?
+The existing userspace-consumer regulator driver does provide some of 
+the functionality I'm looking for (the on/off switch), and I think would 
+be pretty easy to extend to provide the rest of it as well.  When I 
+previously proposed using it as such though, Mark stated quite firmly 
+that that wasn't going to fly [0]; this approach was my attempt at 
+implementing a generic, abstracted mechanism as he had suggested later 
+in that thread, though I haven't gotten any further feedback from him on 
+what he thought of it.
 
-julia
+If he's had a change of heart and would be open to the 
+userspace-consumer driver taking on a bit of new functionality I'd be 
+happy to go that route though.
+
+[0] https://lore.kernel.org/openbmc/20210330174221.GJ4976@sirena.org.uk/
+
+
+Thanks,
+Zev
+

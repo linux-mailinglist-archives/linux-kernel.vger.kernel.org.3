@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CEE4FFFA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7604FFFAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbiDMT44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S236756AbiDMUDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237447AbiDMT4i (ORCPT
+        with ESMTP id S230141AbiDMUDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:56:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCF35D64D;
-        Wed, 13 Apr 2022 12:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649879650; x=1681415650;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ywh3+h3uP3qVZckj1zw7OyZyfOYOqj/A4ypO6SPBREQ=;
-  b=Z69EQVfjKplCq4/2agQdcyZP2raNi3Mc04kBnf+n7OcGMQ8awFRKKlE1
-   3fgBr33IxG3Cf4aAyFfcV6jxdaXIHIP+acbvBv654LhaWKmsnrsXexomc
-   wOU1bgZ9JmLQVCiXFWchaG2Iac6sfFygQqhZZtn8EOPCeHmLiS7S/VkTz
-   Sv6WQMeH9OqT/ZMEcQHTtW+Yb2eXBm4Y8K7MNUJdRh389QEbXp5w5Lqpb
-   GyG6midTzUzrXJ36ijuMDg7uUR/RAi5lHoIhzXySVN4/VKms9II/zr65b
-   V9fM4376+1qLwfy6kO9z6WQJ0vGwEAdrlr5OwMdAQvDZH/5MCTDEFJH4X
+        Wed, 13 Apr 2022 16:03:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF99A56220
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649880038; x=1681416038;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0tkUvXJR37PdPMdtjyIHWr7quKwefrxZE2fM/eHBDvo=;
+  b=DcYpbx+mn3ZJGUKtndC3QTn6lYhk1BXftL1nvT4i/LRIC08AV6eWmVxk
+   rVJocFJw4eWgraDiQOGA5oJDTU+XGQ+E9vz8YpeGA1pMssOEYE3ATu2DY
+   WIbcUa0afaIAO7uUTUYUn0othvwCk2OckProgRfAaBV47OF5sZi8Pqn8d
+   7uqGGxK0oLwXE0b2DJTHR2enlNZR8QS280M11Us50b+Cx6n/cYTodYLyu
+   4ZRqkR+Ide7l4LqQcxHzq9BLQ+5xVrIlVVWwvAjRO+e73caakpIVq6eEn
+   SVBkmgDxYSuE3l7tg5tdlt35OKMhoBVj6kosn4fAycvzP109rY1d8B+Tn
    Q==;
-X-IronPort-AV: E=Sophos;i="5.90,257,1643698800"; 
-   d="scan'208";a="152570440"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 12:54:09 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Apr 2022 12:54:08 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 13 Apr 2022 12:54:06 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net] net: lan966x: Make sure to release ptp interrupt
-Date:   Wed, 13 Apr 2022 21:57:16 +0200
-Message-ID: <20220413195716.3796467-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244646244"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="244646244"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 13:00:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="612018573"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Apr 2022 13:00:34 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nejAI-0000ZA-9n;
+        Wed, 13 Apr 2022 20:00:34 +0000
+Date:   Thu, 14 Apr 2022 03:59:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:djwong-wtf 399/400] hppa-linux-ld:
+ fs/xfs/xfs_trace.o(.text+0x3fee8): cannot reach
+ 00005b1d___trace_trigger_soft_disabled+0, recompile with -ffunction-sections
+Message-ID: <202204140330.biy5ckQP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the lan966x driver is removed make sure to remove also the ptp_irq
-IRQ.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git djwong-wtf
+head:   4b24106233a017435a70bc0e8ff7afbaddd479d6
+commit: ff88d33413f541442f302e44b95dfdc08a52e415 [399/400] xfs: fallocate free space into a file
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220414/202204140330.biy5ckQP-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=ff88d33413f541442f302e44b95dfdc08a52e415
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs djwong-wtf
+        git checkout ff88d33413f541442f302e44b95dfdc08a52e415
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Fixes: e85a96e48e3309 ("net: lan966x: Add support for ptp interrupts")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 958e55596b82..95830e3e2b1f 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -671,6 +671,9 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
- 		disable_irq(lan966x->ana_irq);
- 		lan966x->ana_irq = -ENXIO;
- 	}
-+
-+	if (lan966x->ptp_irq)
-+		devm_free_irq(lan966x->dev, lan966x->ptp_irq, lan966x);
- }
- 
- static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
+All errors (new ones prefixed by >>):
+
+>> hppa-linux-ld: fs/xfs/xfs_trace.o(.text+0x3fee8): cannot reach 00005b1d___trace_trigger_soft_disabled+0, recompile with -ffunction-sections
+>> hppa-linux-ld: fs/xfs/xfs_trace.o(.text+0x3fee8): cannot handle R_PARISC_PCREL17F for __trace_trigger_soft_disabled
+   hppa-linux-ld: final link failed: bad value
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

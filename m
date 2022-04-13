@@ -2,118 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CB84FF458
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4B14FF45D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiDMKDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 06:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S234679AbiDMKEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 06:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiDMKC7 (ORCPT
+        with ESMTP id S231304AbiDMKET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 06:02:59 -0400
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6C955BEC;
-        Wed, 13 Apr 2022 03:00:38 -0700 (PDT)
-X-UUID: 7e369ba3cd4b4409b5dbbafebcf55522-20220413
-X-UUID: 7e369ba3cd4b4409b5dbbafebcf55522-20220413
-Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
-        (envelope-from <lienze@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 2093469296; Wed, 13 Apr 2022 17:59:13 +0800
-X-ns-mid: postfix-62569F37-9672088311
-Received: from localhost.localdomain (unknown [172.30.60.63])
-        by cs2c.com.cn (NSMail) with ESMTPSA id E5A9C383C64D;
-        Wed, 13 Apr 2022 10:00:23 +0000 (UTC)
-From:   Enze Li <lienze@kylinos.cn>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: sr: add handling of memory allocation failure in get_capabilities
-Date:   Wed, 13 Apr 2022 18:00:08 +0800
-Message-Id: <20220413100008.522912-1-lienze@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 06:04:19 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B7D220C8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:01:53 -0700 (PDT)
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0766D3F34E;
+        Wed, 13 Apr 2022 12:01:49 +0200 (CEST)
+Message-ID: <61b6a862-ad69-ba3f-92fe-40999b9bde0f@somainline.org>
+Date:   Wed, 13 Apr 2022 12:01:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v5 10/10] ARM: dts: msm: Add tpdm mm/prng for sm8250
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+References: <20220412125035.40312-1-quic_jinlmao@quicinc.com>
+ <20220412125035.40312-11-quic_jinlmao@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220412125035.40312-11-quic_jinlmao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function get_capabilities() has the possibility of failing to
-allocate transfer buffer, but it does not currently handle this, which
-can lead to exceptions when accessing the buffer.
 
-This patch adds handling when memory allocation fails.
+On 12/04/2022 14:50, Mao Jinlong wrote:
+> Add tpdm mm and tpdm prng for sm8250.
+>
+> +---------------+                +-------------+
+> |  tpdm@6c08000 |                |tpdm@684C000 |
+> +-------|-------+                +------|------+
+>          |                               |
+> +-------|-------+                       |
+> | funnel@6c0b000|                       |
+> +-------|-------+                       |
+>          |                               |
+> +-------|-------+                       |
+> |funnel@6c2d000 |                       |
+> +-------|-------+                       |
+>          |                               |
+>          |    +---------------+          |
+>          +----- tpda@6004000  -----------+
+>               +-------|-------+
+>                       |
+>               +-------|-------+
+>               |funnel@6005000 |
+>               +---------------+
+>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>   .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 182 ++++++++++++++++++
+>   1 file changed, 182 insertions(+)
 
-Signed-off-by: Enze Li <lienze@kylinos.cn>
----
- drivers/scsi/sr.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Same comments as in 9/10: title, sorting, status=disabled, line breaks..
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index cbd92891a762..868f88b1f4d4 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -113,7 +113,7 @@ static int sr_open(struct cdrom_device_info *, int);
- static void sr_release(struct cdrom_device_info *);
- 
- static void get_sectorsize(struct scsi_cd *);
--static void get_capabilities(struct scsi_cd *);
-+static int get_capabilities(struct scsi_cd *);
- 
- static unsigned int sr_check_events(struct cdrom_device_info *cdi,
- 				    unsigned int clearing, int slot);
-@@ -669,8 +669,9 @@ static int sr_probe(struct device *dev)
- 
- 	sdev->sector_size = 2048;	/* A guess, just in case */
- 
--	/* FIXME: need to handle a get_capabilities failure properly ?? */
--	get_capabilities(cd);
-+	error = -ENOMEM;
-+	if (get_capabilities(cd))
-+		goto fail_put;
- 	sr_vendor_init(cd);
- 
- 	set_capacity(disk, cd->capacity);
-@@ -794,7 +795,7 @@ static void get_sectorsize(struct scsi_cd *cd)
- 	return;
- }
- 
--static void get_capabilities(struct scsi_cd *cd)
-+static int get_capabilities(struct scsi_cd *cd)
- {
- 	unsigned char *buffer;
- 	struct scsi_mode_data data;
-@@ -819,7 +820,7 @@ static void get_capabilities(struct scsi_cd *cd)
- 	buffer = kmalloc(512, GFP_KERNEL);
- 	if (!buffer) {
- 		sr_printk(KERN_ERR, cd, "out of memory.\n");
--		return;
-+		return -ENOMEM;
- 	}
- 
- 	/* eat unit attentions */
-@@ -839,7 +840,7 @@ static void get_capabilities(struct scsi_cd *cd)
- 				 CDC_MRW | CDC_MRW_W | CDC_RAM);
- 		kfree(buffer);
- 		sr_printk(KERN_INFO, cd, "scsi-1 drive");
--		return;
-+		return 0;
- 	}
- 
- 	n = data.header_length + data.block_descriptor_length;
-@@ -898,6 +899,7 @@ static void get_capabilities(struct scsi_cd *cd)
- 	}
- 
- 	kfree(buffer);
-+	return 0;
- }
- 
- /*
--- 
-2.25.1
 
+Also, please make sure to use lowercase hex throughout the file (i.e. 
+0x684c000 not 0x684C000).
+
+
+Konrad
+
+
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> index 1de42fd39248..9c710b69a804 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> @@ -44,6 +44,14 @@
+>   			#address-cells = <1>;
+>   			#size-cells = <0>;
+>   
+> +			port@6 {
+> +				reg = <6>;
+> +				funnel_in0_in_funnel_qatb: endpoint {
+> +					remote-endpoint =
+> +						<&funnel_qatb_out_funnel_in0>;
+> +				};
+> +			};
+> +
+>   			port@7 {
+>   				reg = <7>;
+>   				funnel0_in7: endpoint {
+> @@ -523,4 +531,178 @@
+>   			};
+>   		};
+>   	};
+> +
+> +	tpdm@6c08000 {
+> +		compatible = "arm,primecell";
+> +		reg = <0 0x6c08000 0 0x1000>;
+> +		reg-names = "tpdm-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			port {
+> +				tpdm_mm_out_funnel_dl_mm: endpoint {
+> +					remote-endpoint =
+> +						<&funnel_dl_mm_in_tpdm_mm>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	funnel@6c0b000 {
+> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> +
+> +		reg = <0 0x6c0b000 0 0x1000>;
+> +		reg-names = "funnel-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			port {
+> +				funnel_dl_mm_out_funnel_dl_center: endpoint {
+> +					remote-endpoint =
+> +					  <&funnel_dl_center_in_funnel_dl_mm>;
+> +				};
+> +			};
+> +		};
+> +
+> +		in-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@3 {
+> +				reg = <3>;
+> +				funnel_dl_mm_in_tpdm_mm: endpoint {
+> +					remote-endpoint =
+> +					    <&tpdm_mm_out_funnel_dl_mm>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	funnel@6c2d000 {
+> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> +
+> +		reg = <0 0x6c2d000 0 0x1000>;
+> +		reg-names = "funnel-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			port {
+> +				tpdm_mm_out_tpda9: endpoint {
+> +					remote-endpoint =
+> +					    <&tpda_9_in_tpdm_mm>;
+> +				};
+> +			};
+> +		};
+> +
+> +		in-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@2 {
+> +				reg = <2>;
+> +				funnel_dl_center_in_funnel_dl_mm: endpoint {
+> +					remote-endpoint =
+> +					<&funnel_dl_mm_out_funnel_dl_center>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	tpdm@684C000 {
+> +		compatible = "arm,primecell";
+> +		reg = <0 0x684C000 0 0x1000>;
+> +		reg-names = "tpdm-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			port {
+> +				tpdm_prng_out_tpda_23: endpoint {
+> +					remote-endpoint =
+> +						<&tpda_23_in_tpdm_prng>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	tpda@6004000 {
+> +		compatible = "arm,primecell";
+> +		reg = <0 0x6004000 0 0x1000>;
+> +		reg-names = "tpda-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			port {
+> +				reg = <0>;
+> +				tpda_out_funnel_qatb: endpoint {
+> +					remote-endpoint =
+> +						<&funnel_qatb_in_tpda>;
+> +				};
+> +			};
+> +		};
+> +
+> +		in-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@9 {
+> +				reg = <9>;
+> +				tpda_9_in_tpdm_mm: endpoint {
+> +					remote-endpoint =
+> +						<&tpdm_mm_out_tpda9>;
+> +				};
+> +			};
+> +
+> +			port@23 {
+> +				reg = <23>;
+> +				tpda_23_in_tpdm_prng: endpoint {
+> +					remote-endpoint =
+> +						<&tpdm_prng_out_tpda_23>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	funnel@6005000 {
+> +		compatible = "arm,primecell";
+> +
+> +		reg = <0 0x6005000 0 0x1000>;
+> +		reg-names = "funnel-base";
+> +
+> +		clocks = <&aoss_qmp>;
+> +		clock-names = "apb_pclk";
+> +
+> +		out-ports {
+> +			port {
+> +				funnel_qatb_out_funnel_in0: endpoint {
+> +					remote-endpoint =
+> +						<&funnel_in0_in_funnel_qatb>;
+> +				};
+> +			};
+> +		};
+> +
+> +		in-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +				funnel_qatb_in_tpda: endpoint {
+> +					remote-endpoint =
+> +						<&tpda_out_funnel_qatb>;
+> +				};
+> +			};
+> +		};
+> +	};
+>   };
+>

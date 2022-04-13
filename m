@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BBF4FFDA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ADE4FFDA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiDMSYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S236950AbiDMSYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiDMSYS (ORCPT
+        with ESMTP id S236232AbiDMSYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:24:18 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098DD1EC69;
-        Wed, 13 Apr 2022 11:21:53 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ebd70a4cf5so32081327b3.3;
-        Wed, 13 Apr 2022 11:21:53 -0700 (PDT)
+        Wed, 13 Apr 2022 14:24:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B8396B5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:22:10 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ks6so5705532ejb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M8MM9hNtlsb/0mGDP5Eh6d8xwozIxiEbRd1Lk53Q2x8=;
+        b=AfZ4ojV7fGDgQo6baXqWP9xdlkYefBtN6ONQTTRuj8YW5P2oU0QyTcPPmn+Qxq0ZaR
+         TeTnw1PMzTpBgAImuYmnFPpMiKL27rUSGi4C1ILlwrq1DJDDhrhwTB8XUkvAPNIV/4rr
+         3NBCZpZ0baJ4dl5uLGHLzbuEVqwo6i07CLCYI0KDsrJNbTdBTB2DOpbJZ2aaLAF4Jcul
+         mHKHI/wwctHmTYeN7OB0gqAFtNik2gp7zxAHtdodVor1kh1t8Je3eTVwBL+w1DYL5Eii
+         xdb5BObNy4KVYMXF+HCCjEBgLiDEkuUxazh0123t0A+Uf1tTJHP2Ya2HzwhGZJ8ddjEV
+         llcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Loh92sh7gXXIMM+xZlFKvmQrGTMosnWDw8l4bYatwi4=;
-        b=MwZ27xmwaA6Pddjb51TOWoKalJXTfY7u4eZZ12Gx1/pUzLloequcx39RE/6kIyBZAn
-         KrM1rV8W/bT7SjWxjDS7T/8pOmnhpRtBjP2sd9A+qBjxHqFMMJF9bijadHn43VZ8RPDN
-         Vaoz+6IlsHueKZxa54CBs+f/jOqsrE/akXXfEXCwCqviq77HyBtEp/LHlJmS+ibpSxVc
-         EdlmsMKikrNCrmCpB7VGi0VgB7KhbyO0i1McirT+5F1xBh2mLxH5un3Y8HYMwrjP37TI
-         eC2f+e31J38qNRu/9lunnBTWljCK13jGrXeMxlr09dhPYDJa2Y+a0ANbbFk1Nj0nKhP6
-         ifCQ==
-X-Gm-Message-State: AOAM531i96Ent0eoA75sj+l9aqOku8nPXZyiFl5ufzES+sUjt1ai0xrH
-        xaZ3nds7K4RipDlZq7tNIkSeKtIGSjX5wAdfZfg=
-X-Google-Smtp-Source: ABdhPJy0QfC7cfF9K+H0ZNCn7FaTuWEXk3t/NydqhNkNaQqbHedbuHrlNSZApLdviurLxeWz0TiBOt/IaTXl2hhEWMo=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr165747ywa.19.1649874112323; Wed, 13
- Apr 2022 11:21:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M8MM9hNtlsb/0mGDP5Eh6d8xwozIxiEbRd1Lk53Q2x8=;
+        b=YkTiDcZMwjhIo+4FoPjjEmxKlLo1VqKIsRwzl1YBJ/fCnlF5uThyca90erjGFoMgcj
+         YOHNoPtty7ZA8mjp6hy5dspNvcwWt4Tji6xbuRMV7geSUXCtxlgAoOWnpS0uec1FyDHs
+         Pwc7D2JUnmo4EYtNo9UhaafNOHS6kIqzMmFxapUr9Rf8n/c9m8a27GuadspG5MyCTeBI
+         84XLY9xxahT1QByMpYLsyqbcl/OirXb4rL70crYqwrADkZ2KBsp+YaGZgjmVPmwbGzjB
+         XFEEQy89vwuzvCmYcwspyAM3Q74AWeNRQvUGLKu0NkCtaViA4jk18grODsQlQFFKXz/m
+         8low==
+X-Gm-Message-State: AOAM530YdaUgbAULOqI/h0mWFRQvWnMeYUVF5+gRDJaN+/Nv89yR2bsb
+        z0VU8Hp3sZfoh38wLMIzgrLMKmVSz5c=
+X-Google-Smtp-Source: ABdhPJwcJwJXD3ZxALW/ZXITseVCZhS4IB+VdRINSiXel6dSLaZhXSnfpbAaUOm0d7snfmaUQfhUQg==
+X-Received: by 2002:a17:907:7ea1:b0:6e8:9325:c9ce with SMTP id qb33-20020a1709077ea100b006e89325c9cemr14756806ejc.368.1649874129175;
+        Wed, 13 Apr 2022 11:22:09 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm222798ejb.179.2022.04.13.11.22.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 11:22:08 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 21:22:07 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>
+Subject: Re: [PATCH v3 1/8] arm64: dts: ls1028a: Add PCIe EP nodes
+Message-ID: <20220413182207.chvdbqnmmm5vbz2b@skbuf>
+References: <20211214093240.23320-1-leoyang.li@nxp.com>
+ <20211214093240.23320-2-leoyang.li@nxp.com>
+ <20220413163209.4pqqpyqdklhlzp5p@skbuf>
+ <DU2PR04MB894975813DAC1043AAA23C5B8FEC9@DU2PR04MB8949.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
- <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
- <YlCq79KveByePxe9@paasikivi.fi.intel.com> <CAHp75Ve-5=6bsF1mMQ4RceobV=OsR6VwZeP==iFGQJLEbt0-yg@mail.gmail.com>
- <YlbfwjQcxj6fK7re@paasikivi.fi.intel.com> <YlcAYpZ0yB6wh1uA@smile.fi.intel.com>
-In-Reply-To: <YlcAYpZ0yB6wh1uA@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 20:21:41 +0200
-Message-ID: <CAJZ5v0jcDztpR4rn0JqksCDwbFzq8VD8nZG-9QypQo63y-h1Sg@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU2PR04MB894975813DAC1043AAA23C5B8FEC9@DU2PR04MB8949.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:58 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Apr 13, 2022 at 05:35:46PM +0300, Sakari Ailus wrote:
-> > On Sun, Apr 10, 2022 at 05:10:23PM +0300, Andy Shevchenko wrote:
-> > > On Sat, Apr 9, 2022 at 2:35 AM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > > On Fri, Apr 08, 2022 at 09:48:43PM +0300, Andy Shevchenko wrote:
-> > > > > As to_of_node() suggests and the way the code in the OF and software node
-> > > > > back ends actually uses the fwnode handle, it may be constified. Do this
-> > > > > for good.
-> > > >
-> > > > How?
-> > > >
-> > > > If the fwnode is const, then the struct it contains must be presumed to be
-> > > > const, too.
-> > >
-> > > Why? The idea is that we are not updating the fwnode, but the container.
-> > > The container may or may not be const. It's orthogonal, no?
-> >
-> > As you wrote: may or may not. The stricter requirement, i.e. const, must be
-> > thus followed. I think it would be fine (after adding a comment on what is
-> > being done) if you *know* the container struct is not const. But that is
-> > not the case here.
->
-> But even with the original code one may not guarantee that. How the original
-> code works or prevents of using a const container against non-const fwnode
-> pointer?
+On Wed, Apr 13, 2022 at 06:03:37PM +0000, Leo Li wrote:
+> > arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:631.23-656.5: Warning
+> > (unique_unit_address): /soc/pcie@3400000: duplicate unit-address (also
+> > used in node /soc/pcie-ep@3400000)
+> > arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:670.23-695.5: Warning
+> > (unique_unit_address): /soc/pcie@3500000: duplicate unit-address (also
+> > used in node /soc/pcie-ep@3500000)
+> 
+> This would be a common problem for all the layerscape PCIe controller.
+> The controller can either work in RC mode or EP mode.  The current
+> binding of the controller defined two compatibles, one for RC and one
+> for EP.  Therefore the SoC dtsi will have two nodes with the same unit
+> address one for EP one for RC.  Fixing this probably requires
+> comprehensive updates to the binding which breaks backward
+> compatibility.
 
-I don't think that this is the point here.
+So we have to live with these warnings forever now?
 
-If const struct fwnode_handle *fwnode is passed to the ->get()
-callback, the callback itself (and any function called by it)
-shouldn't attempt to update the memory pointed to by fwnode.  It need
-not be the memory starting at the fwnode address IIUC, so that would
-cover the whole object the fwnode is embedded in.
+How are the PCIe controllers configured for RC or EP mode? Via RCW?
+Is dynamic configuration possible?
 
-This way the caller of ->get() can assume the immutability of the
-memory passed to it for read access.
-
-The question is whether or not ->get() needs to update the memory in
-question.  If it doesn't, making fwnode const is correct.
+Can't U-Boot detect the operating mode from the RCW and fix up the
+compatible string in case the controller is in endpoint mode?

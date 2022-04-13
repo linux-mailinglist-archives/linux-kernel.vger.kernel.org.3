@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE3E4FEEB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D0F4FEEB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiDMFt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S232405AbiDMFvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiDMFtX (ORCPT
+        with ESMTP id S231737AbiDMFve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:49:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7950051
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:47:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9D37B82101
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB90C385AA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649828820;
-        bh=HDKik8QF3OtnxnBSdiMFywaH7pAjKSH73aE+xYfjwA0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eIUg5nGiYGotfBgo8RxQz4+LyghtaVqFkBnLdhVPxYY7akTr4OCQ0qdvly8M0D79S
-         v0+MxRjCkViWbtPsqyIun9qISL4E8ike+U4MWhUsrMoXSnztORxCK/sMHIILwHuprB
-         xv7Vv+LTN5dRjvGWGTzVWNQv4WHqpGe515bYOOAcZlc2yDmlZU1u+EC9ivd64p0Wri
-         efCASxI23Mu6zRMcTrQshhN8gXWAbhbbAieaROJAMlrqqM0dGaxWTMePr04AJbKtYB
-         t944UHn10ij7ms1lOuAtD7We5taCXFnDQj4TYNyzofhux53DrU+MDhyLxc8sQbi0m2
-         Fboo/kG9QkrGg==
-Received: by mail-vk1-f177.google.com with SMTP id w67so371587vkw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:47:00 -0700 (PDT)
-X-Gm-Message-State: AOAM531hVInFa9msaZBetKPEDOnS7Cv+Q+tw5M1ru3waBmQOnNPBWfca
-        4tMFAiNpKSJByo4ZNBLsfw2X/4pZesaUGU16Znw=
-X-Google-Smtp-Source: ABdhPJzxdy1DgTdwkI5mBFUoZAa1bIFYSMWm6GZIzpP6qxRS7suwlxoA4eehs1H37b+vIAsfZDceddRYN0OimyFQs/o=
-X-Received: by 2002:a05:6122:16a2:b0:345:62c8:2321 with SMTP id
- 34-20020a05612216a200b0034562c82321mr5788236vkl.8.1649828819427; Tue, 12 Apr
- 2022 22:46:59 -0700 (PDT)
+        Wed, 13 Apr 2022 01:51:34 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837185006C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:49:13 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id md4so950465pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=++WYL6Zt9T+pjnxfNGqRWUGNrfCfPTVdR2mFPpgsHyM=;
+        b=cdrKuK+h/K6zHzr8fXTUAaQxO4P5qOJnyxchmmC453ZSXHQynpsHIPiyhBLk4oGpaO
+         Eh1rpq2E7uZCV0NpRM+qLsYHQsXEs4jf9s9LRT5D1rkdC43N/W1JWNo7B6eEK+W+vV/C
+         J6qkXgFWLXWMh0a9I82vVTbCR0zOgvafJAUPOzu4Nip4s4fsooQ5ym3bdOb7O5IaUSPT
+         UyErhx8P4wiy018SH/Poslyy7cwZOWz1Wa1shwoFeh1S+lRB8fl6g92BCJrU6cgaluns
+         d5YdLIIrxxkyHPp2fT0QU3bVXxSShjt1E4LvwvR0l2zzApgHN/XEBwEo0QD/ZbMAaByF
+         SQlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=++WYL6Zt9T+pjnxfNGqRWUGNrfCfPTVdR2mFPpgsHyM=;
+        b=YT/cMGJjLwiiZBBVFwY6oXHqjSVQp1IqoTXBD08e1sQM4xerWyccBe6nCsxtYu6HeE
+         9ciQ+Vt/1zhGFZClxsTuDBDO05tw9vexdprxpnUJnrOfyoNQeI+xsWhUzY1crlM0VZjt
+         K4rWPmtaJEUkbSosrrYd6zIGRXU0tKlkz0+fmAi2T7Mk7upyaZSvIhy6dbFPswxdmQLF
+         Bj646M9033qOKe8XWDMYCgqpNyPP09w/lNObC8PJMUgESrUTU7rjCLpCe1oygjXBxIzW
+         kn5ZHcmnrvEPNKHXfv1d1995X35Z9MWzclv2L3WYE9TvshYrYEDZkucMZr2eJN0ZCwaG
+         J5Ng==
+X-Gm-Message-State: AOAM530hBAQzYQ8oLzno4u0jDItuTQMB0flXRSH1R3wFeJA2ch/EMjce
+        1i5Ktmqg/WtOrHJt6LKhlOSm
+X-Google-Smtp-Source: ABdhPJwcc3PlIFBt3ZP5T+VE0u3r8B82BGVZ12UY01gRML95BVEK1gq3N81z6R3ZtvV9UGa5GBPwRg==
+X-Received: by 2002:a17:90a:9313:b0:1cd:4053:9cf3 with SMTP id p19-20020a17090a931300b001cd40539cf3mr4621694pjo.182.1649828952972;
+        Tue, 12 Apr 2022 22:49:12 -0700 (PDT)
+Received: from thinkpad ([117.207.28.49])
+        by smtp.gmail.com with ESMTPSA id r76-20020a632b4f000000b003820643e1c2sm4776893pgr.59.2022.04.12.22.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 22:49:12 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 11:19:04 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Prasad Malisetty <quic_pmaliset@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatja@google.com,
+        refactormyself@gmail.com, quic_vbadigan@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        linux-wireless@vger.kernel.org, ath11k@lists.infradead.org
+Subject: Re: [PATCH v4] PCI: qcom: Add system PM support
+Message-ID: <20220413054904.GA2015@thinkpad>
+References: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
+ <20220412060144.GA41348@thinkpad>
+ <87k0buoa9j.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-8-heiko@sntech.de>
-In-Reply-To: <20220413030307.133807-8-heiko@sntech.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 13 Apr 2022 13:46:48 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRj_Lwz_krceR+8UzttsCoJgB5w1ng1cVf5J=5cUbdZ=Q@mail.gmail.com>
-Message-ID: <CAJF2gTRj_Lwz_krceR+8UzttsCoJgB5w1ng1cVf5J=5cUbdZ=Q@mail.gmail.com>
-Subject: Re: [PATCH v9 07/12] riscv: move boot alternatives to after fill_hwcap
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, liush <liush@allwinnertech.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        "Xinhaoqu (Freddie)" <xinhaoqu@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0buoa9j.fsf@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,69 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On Tue, Apr 12, 2022 at 01:40:08PM +0300, Kalle Valo wrote:
+> + ath11k
+> 
+> Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
+> 
+> > +Kalle, linux-wireless
+> >
+> > On Tue, Mar 08, 2022 at 12:25:06AM +0530, Prasad Malisetty wrote:
+> >> Add suspend_noirq and resume_noirq callbacks to handle
+> >> system suspend and resume in dwc PCIe controller driver.
+> >> 
+> >> When system suspends, send PME turnoff message to enter
+> >> link into L2 state. Along with powerdown the PHY, disable
+> >> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
+> >> supported and disable the pcie clocks, regulators.
+> >> 
+> >
+> > Kalle, is this behaviour appropriate for WLAN devices as well? The devices
+> > will be put into poweroff state (assuming no Vaux provided in D3cold) during
+> > system suspend.
+> 
+> ath11k leaves the firmware running during suspend. I don't fully
+> understand what the patch is doing, but if it cuts the power from the
+> WLAN chip during suspend that will break ath11k.
+> 
 
-On Wed, Apr 13, 2022 at 11:03 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Move the application of boot alternatives to after the hw-capabilities
-> are populated. This allows to check for available extensions when
-> determining which alternatives to apply and also makes it actually
-> work if CONFIG_SMP is disabled for whatever reason.
->
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/riscv/kernel/setup.c   | 2 ++
->  arch/riscv/kernel/smpboot.c | 2 --
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index f4f4a64bc3a0..9162e9a824d2 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -21,6 +21,7 @@
->  #include <linux/efi.h>
->  #include <linux/crash_dump.h>
->
-> +#include <asm/alternative.h>
->  #include <asm/cpu_ops.h>
->  #include <asm/early_ioremap.h>
->  #include <asm/pgtable.h>
-> @@ -295,6 +296,7 @@ void __init setup_arch(char **cmdline_p)
->  #endif
->
->         riscv_fill_hwcap();
-> +       apply_boot_alternatives();
->  }
->
->  static int __init topology_init(void)
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index a6d13dca1403..f1e4948a4b52 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -32,7 +32,6 @@
->  #include <asm/sections.h>
->  #include <asm/sbi.h>
->  #include <asm/smp.h>
-> -#include <asm/alternative.h>
->
->  #include "head.h"
->
-> @@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
->  void __init smp_prepare_boot_cpu(void)
->  {
->         init_cpu_topology();
-> -       apply_boot_alternatives();
->  }
->
->  void __init smp_prepare_cpus(unsigned int max_cpus)
-> --
-> 2.35.1
->
+Thanks Kalle for the confirmation. Yes the device will be put into D3cold state
+and that will most likely equal to poweroff state.
 
+Prasad, you should try to just turn off the host resources like clocks and
+regulators (not refclk) and let the device be in the default state
+(D3hot/L{0/1}?) during suspend.
 
--- 
-Best Regards
- Guo Ren
+Thanks,
+Mani
 
-ML: https://lore.kernel.org/linux-csky/
+> -- 
+> https://patchwork.kernel.org/project/linux-wireless/list/
+> 
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7304FFA6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512A74FFA5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbiDMPkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S234998AbiDMPiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbiDMPkR (ORCPT
+        with ESMTP id S231842AbiDMPiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:40:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF590654BE
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649864275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sLekYFBHk6vmdPrvSejYiiFxxEyq7KZDxaB/jClyyLg=;
-        b=U1rp9SRehMSqtuEyE9+YpEohnsJ7lrcXVUrvfTfVz/QSPysQOLk/RMnAwIrHJxBYvFkbSj
-        69fsDC64R7Llz5xgl9nvYVJhi0uvQlJeUzfmcculFcjma2Mf0FRuVH8RYGyjc54ro5Oj13
-        4GUF1v45rCdq8WBQLgEGGKKK+pBTxAo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-HI2ChDyCPO-K0g7Y-EmT8A-1; Wed, 13 Apr 2022 11:37:50 -0400
-X-MC-Unique: HI2ChDyCPO-K0g7Y-EmT8A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0ECAB1014A6A;
-        Wed, 13 Apr 2022 15:37:50 +0000 (UTC)
-Received: from horn.redhat.com (unknown [10.40.193.222])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 524AC40D1B98;
-        Wed, 13 Apr 2022 15:37:47 +0000 (UTC)
-From:   Petr Oros <poros@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        jacob.e.keller@intel.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, ivecera@redhat.com,
-        pmenzel@molgen.mpg.de, alexandr.lobakin@intel.com
-Subject: [PATCH v2] ice: wait 5 s for EMP reset after firmware flash
-Date:   Wed, 13 Apr 2022 17:37:45 +0200
-Message-Id: <20220413153745.1125674-1-poros@redhat.com>
-In-Reply-To: <20220412102753.670867-1-poros@redhat.com>
-References: <20220412102753.670867-1-poros@redhat.com>
+        Wed, 13 Apr 2022 11:38:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B2964713
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649864189; x=1681400189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Iq4ltTTN69V9QzH/TlL8lL1lwJpSTAOC+133meFHn4o=;
+  b=Q7xtkVCk0onK6/n8+cL4NIOvuzowSgD9wNSEpLxnq1wECfRfA19TaoML
+   yE6Vp2mLAHeppJYPj+UoFsR0bAdzvUaMJ5ZJb39t2JDhgFVCsVw1JQCh9
+   yFtRRnAVGSELHtFqmSmT2S4wACqzht/x8urUD/+Wy0Mgq1CEu8KCbdM8v
+   sh5k3l8nB72lvKSAW+VGRtllwOE/adl583+t8V2eikSI+QTM9JwVnAPLo
+   J8DrRlNGRbwcruvFsD9T8FomeHAvfq1INSkkGz0GpVnkMfW5WrhZov3Zf
+   +9vYmnRH5CSewzlwKwUxp614CDKEnNBCZYW04RG9VSz3p+tUVWM14c5wB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="249988009"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="249988009"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:36:28 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="526518653"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:36:28 -0700
+Date:   Wed, 13 Apr 2022 08:38:24 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: Remove the drivers for the Unisys s-Par
+Message-ID: <20220413153824.GA1241369@alison-desk>
+References: <20220412215901.31046-1-fmdefrancesco@gmail.com>
+ <YlZzP5ghZeR1AtIg@kroah.com>
+ <3988824.6PsWsQAL7t@leap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3988824.6PsWsQAL7t@leap>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,109 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to wait 5 s for EMP reset after firmware flash. Code was extracted
-from OOT driver (ice v1.8.3 downloaded from sourceforge). Without this
-wait, fw_activate let card in inconsistent state and recoverable only
-by second flash/activate. Flash was tested on these fw's:
-From -> To
- 3.00 -> 3.10/3.20
- 3.10 -> 3.00/3.20
- 3.20 -> 3.00/3.10
+On Wed, Apr 13, 2022 at 09:35:53AM +0200, Fabio M. De Francesco wrote:
+> On mercoled? 13 aprile 2022 08:52:47 CEST Greg Kroah-Hartman wrote:
+> > On Tue, Apr 12, 2022 at 11:59:01PM +0200, Fabio M. De Francesco wrote:
+> > > The Unisys sub-tree contains three drivers for the "Unisys Secure 
+> Partition"
+> > > (s-Par(R)): visorhba, visorinput, visornic.
+> > > 
+> > > They have no maintainers, in fact the only one that is listed in 
+> MAINTAINERS
+> > > has an unreacheable email address. During 2021 and 2022 several patches 
+> have
+> > > been submitted to these drivers but nobody at Unisys cared of reviewing 
+> the
+> > > changes. Probably, also the "sparmaintainer" internal list of 
+> unisys.com is
+> > > not anymore read by interested Unisys' engineers.
+> > > 
+> > > Therefore, remove the ./unisys subdirectory of staging and delete the 
+> related
+> > > entries in the MAINTAINERS, Kconfig, Makefile files.
+> > > 
+> > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > >  MAINTAINERS                                   |    8 -
+> > 
+> > You forgot to at least cc: the people/list on the MAINTAINERS entry that
+> > you are removing here, to give them a hint that this is happening in
+> > case they want to speak up here (and to give us the ability to point to
+> > that years later when they complain they were never notified...)
+> 
+> Yes, this is a good idea. I'll submit a v2 and add two "Cc:" lines, one to 
+> David Kershner and the other to the "sparmaintainer" list at unisys.com.
 
-Reproducer:
-[root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
-Preparing to flash
-[fw.mgmt] Erasing
-[fw.mgmt] Erasing done
-[fw.mgmt] Flashing 100%
-[fw.mgmt] Flashing done 100%
-[fw.undi] Erasing
-[fw.undi] Erasing done
-[fw.undi] Flashing 100%
-[fw.undi] Flashing done 100%
-[fw.netlist] Erasing
-[fw.netlist] Erasing done
-[fw.netlist] Flashing 100%
-[fw.netlist] Flashing done 100%
-Activate new firmware by devlink reload
-[root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
-reload_actions_performed:
-    fw_activate
-[root@host ~]# ip link show ens7f0
-71: ens7f0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
-    link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
-    altname enp202s0f0
+There is another contact in the TODO file (last updated 2015 though ;))
+Ken Cox <jkc@redhat.com>
 
-dmesg after flash:
-[   55.120788] ice: Copyright (c) 2018, Intel Corporation.
-[   55.274734] ice 0000:ca:00.0: Get PHY capabilities failed status = -5, continuing anyway
-[   55.569797] ice 0000:ca:00.0: The DDP package was successfully loaded: ICE OS Default Package version 1.3.28.0
-[   55.603629] ice 0000:ca:00.0: Get PHY capability failed.
-[   55.608951] ice 0000:ca:00.0: ice_init_nvm_phy_type failed: -5
-[   55.647348] ice 0000:ca:00.0: PTP init successful
-[   55.675536] ice 0000:ca:00.0: DCB is enabled in the hardware, max number of TCs supported on this port are 8
-[   55.685365] ice 0000:ca:00.0: FW LLDP is disabled, DCBx/LLDP in SW mode.
-[   55.692179] ice 0000:ca:00.0: Commit DCB Configuration to the hardware
-[   55.701382] ice 0000:ca:00.0: 126.024 Gb/s available PCIe bandwidth, limited by 16.0 GT/s PCIe x8 link at 0000:c9:02.0 (capable of 252.048 Gb/s with 16.0 GT/s PCIe x16 link)
-Reboot doesn’t help, only second flash/activate with OOT or patched
-driver put card back in consistent state.
-
-After patch:
-[root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
-Preparing to flash
-[fw.mgmt] Erasing
-[fw.mgmt] Erasing done
-[fw.mgmt] Flashing 100%
-[fw.mgmt] Flashing done 100%
-[fw.undi] Erasing
-[fw.undi] Erasing done
-[fw.undi] Flashing 100%
-[fw.undi] Flashing done 100%
-[fw.netlist] Erasing
-[fw.netlist] Erasing done
-[fw.netlist] Flashing 100%
-[fw.netlist] Flashing done 100%
-Activate new firmware by devlink reload
-[root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
-reload_actions_performed:
-    fw_activate
-[root@host ~]# ip link show ens7f0
-19: ens7f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
-    link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
-    altname enp202s0f0
-
-v2 changes:
-- fixed format issues
-- added info about fw and OOT driver versions
-- added time in the commit message summary
-- appended the unit to the macro name
-
-Fixes: 399e27dbbd9e94 ("ice: support immediate firmware activation via devlink reload")
-Signed-off-by: Petr Oros <poros@redhat.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index d768925785ca79..38825ed2ecd1de 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -6931,12 +6931,15 @@ static void ice_rebuild(struct ice_pf *pf, enum ice_reset_req reset_type)
- 
- 	dev_dbg(dev, "rebuilding PF after reset_type=%d\n", reset_type);
- 
-+#define ICE_EMP_RESET_SLEEP_MS 5000
- 	if (reset_type == ICE_RESET_EMPR) {
- 		/* If an EMP reset has occurred, any previously pending flash
- 		 * update will have completed. We no longer know whether or
- 		 * not the NVM update EMP reset is restricted.
- 		 */
- 		pf->fw_emp_reset_disabled = false;
-+
-+		msleep(ICE_EMP_RESET_SLEEP_MS);
- 	}
- 
- 	err = ice_init_all_ctrlq(hw);
--- 
-2.35.1
-
+> 
+> > Also, if you are in the "delete code" mood, I think drivers/staging/vme/
+> > and drivers/vme/ can probably also be deleted given that the maintainer
+> > for that has moved on to other jobs.  Ask them and see!
+> 
+> I can and will do exactly as you just suggested, but only after April 22nd 
+> (unless others want to do these tasks sooner, and in that case they are 
+> welcome :)).
+> 
+> Thanks,
+> 
+> Fabio M. De Francesco
+> 
+> 
+> 

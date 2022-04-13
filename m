@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1034FFF5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA594FFF57
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238235AbiDMTdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S235996AbiDMTdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236864AbiDMTdj (ORCPT
+        with ESMTP id S234082AbiDMTcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:33:39 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AB876295
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:31:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id v4so3660011edl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=frTEyC0/+CfTIF4PYPNiHQ4Gsfm5fIkYJSxFNrCEuso=;
-        b=USSnSZtoD5qwvH/yvxHC79p7rIcFBfYSAwCS/8l+UAOQVYZUKJ+vDuBaAJB/nJmEPx
-         g7xJs94b53G9SqzrTEyV7LiPRqY0+FlEUHXsFaG0byJs5XO9935tw+7S/EMAJuTtQhFu
-         VjfWoAx3Fgh06C/08DWnLONaqlnuWzNwZGJHbJI9za5M55H9pRP/jioGj6z6SD5mSuf5
-         OhqjpbUnqQeW/s2ZVSve+5lCImK8h2qDomy0YIMCtTsk3zqfpMMDy2LoFmTLoUjvNvp4
-         WpBvZbIOz7I46fmHuumVjEpqpu1SEQkwedZ3gusL5+0cPXdh1QTDfn/NzBsWi6w2TCm3
-         pPRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=frTEyC0/+CfTIF4PYPNiHQ4Gsfm5fIkYJSxFNrCEuso=;
-        b=ZxKL2J+GvfiVktlxMZOGCLL26Y5IyTJQD0GjyLtaQz8Fr+I1gKtdpGywe4tV5Be8F1
-         srmWgsSAcX8p5nZQfmxYVG4U4hMMHUO/8J6UMks0nCWszOO/vgxiDCN7E/tv0HzYs9hr
-         3LoJ9+67KaBOCpdXk/joKgQKwF1wRUWPhIAXzsMxy+1YFeIfcnv0RY6xdLTUSHiOa+5Q
-         gKKIu6RM/yNI7s4PVz/EkoG2OfhnF//Govf7Z0JlDCZdMGducI5XZENzVkIfuv4fnIBY
-         Sz3V2jbbrmwmXRJDI3QVHeMn0ZOkIA8Tsiz1BXccbenLpcHUgbaGChJIjZD9uOxcbOeu
-         goJw==
-X-Gm-Message-State: AOAM531e8F0qn12b47c89AjqlmBsI3xxYzliyi5h4nD7WPIn1ewh+W/Q
-        oWoCxEB8DXZD7Nac1Rl1KE5NfQ==
-X-Google-Smtp-Source: ABdhPJxCWuXB+xuTb6sKG9nbhRjhHzVASERrwIqlT8IubgeDh/aIhOShiVtJmLn6LiaKB+HEOkgWow==
-X-Received: by 2002:a05:6402:5250:b0:41d:8556:4191 with SMTP id t16-20020a056402525000b0041d85564191mr14027035edd.269.1649878275612;
-        Wed, 13 Apr 2022 12:31:15 -0700 (PDT)
-Received: from [192.168.0.207] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id e26-20020a50ec9a000000b004193fe50151sm1584782edr.9.2022.04.13.12.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 12:31:15 -0700 (PDT)
-Message-ID: <44efe8b6-1712-5b87-f030-2f1328533ee8@linaro.org>
-Date:   Wed, 13 Apr 2022 21:31:13 +0200
+        Wed, 13 Apr 2022 15:32:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBED263A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649878198; x=1681414198;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UBmMG/Y1pzjOMY+f80C2PIXPYSoEJlNzIOTHjCL4Elg=;
+  b=SKMvbpUv0MQMIRP7B34dEp/nV0VCRpPqrQm+JAEq1+sxGdwMCR5e3rAS
+   jy82FWm3FPjXeRb6H11nM+dohoH2QZiuJpw8Jb99hBFV4SqInd+eQR6lB
+   toEY4VVf+eR3WiMRhHRpYEwUPxqsXb4TWMosjyrGU8ryjwZcbhJnn6898
+   zgwj/Wn81+5V7KfBvkOC/HnZKqad4W4a9/huTeDaZVSe/yb2NnAhkylRd
+   NP92NJb0Nt1K7l6H3GJ1Qjo6In1NGwGUpMbrJcpXHLPdZFgGWvRIfg+dJ
+   4Fun4Ik8k7QbjMMY+mpMVOleAW19O1C6yP6vTgNDASchVKgCLwgPIKU6b
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244641606"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="244641606"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:29:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="552337805"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:29:57 -0700
+Date:   Wed, 13 Apr 2022 12:31:52 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>
+Subject: Re: [PATCH] staging: Remove the drivers for the Unisys s-Par
+Message-ID: <20220413193152.GA1242449@alison-desk>
+References: <20220412215901.31046-1-fmdefrancesco@gmail.com>
+ <3988824.6PsWsQAL7t@leap>
+ <20220413153824.GA1241369@alison-desk>
+ <7390243.EvYhyI6sBW@leap>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 24/33] dt-bindings: crypto: convert rockchip-crypto to
- YAML
-Content-Language: en-US
-To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
-        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220413190713.1427956-1-clabbe@baylibre.com>
- <20220413190713.1427956-25-clabbe@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413190713.1427956-25-clabbe@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7390243.EvYhyI6sBW@leap>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 21:07, Corentin Labbe wrote:
-> Convert rockchip-crypto to YAML.
+On Wed, Apr 13, 2022 at 11:57:20AM -0700, Fabio M. De Francesco wrote:
+> On mercoled? 13 aprile 2022 17:38:24 CEST Alison Schofield wrote:
+> > On Wed, Apr 13, 2022 at 09:35:53AM +0200, Fabio M. De Francesco wrote:
+> > > On mercoled? 13 aprile 2022 08:52:47 CEST Greg Kroah-Hartman wrote:
+> > > > On Tue, Apr 12, 2022 at 11:59:01PM +0200, Fabio M. De Francesco 
+> wrote:
+> > > > > The Unisys sub-tree contains three drivers for the "Unisys Secure 
+> > > Partition"
+> > > > > (s-Par(R)): visorhba, visorinput, visornic.
+> > > > > 
+> > > > > They have no maintainers, in fact the only one that is listed in 
+> > > MAINTAINERS
+> > > > > has an unreacheable email address. During 2021 and 2022 several 
+> patches 
+> > > have
+> > > > > been submitted to these drivers but nobody at Unisys cared of 
+> reviewing 
+> > > the
+> > > > > changes. Probably, also the "sparmaintainer" internal list of 
+> > > unisys.com is
+> > > > > not anymore read by interested Unisys' engineers.
+> > > > > 
+> > > > > Therefore, remove the ./unisys subdirectory of staging and delete 
+> the 
+> > > related
+> > > > > entries in the MAINTAINERS, Kconfig, Makefile files.
+> > > > > 
+> > > > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > > > ---
+> > > > >  MAINTAINERS                                   |    8 -
+> > > > 
+> > > > You forgot to at least cc: the people/list on the MAINTAINERS entry 
+> that
+> > > > you are removing here, to give them a hint that this is happening in
+> > > > case they want to speak up here (and to give us the ability to point 
+> to
+> > > > that years later when they complain they were never notified...)
+> > > 
+> > > Yes, this is a good idea. I'll submit a v2 and add two "Cc:" lines, one 
+> to 
+> > > David Kershner and the other to the "sparmaintainer" list at 
+> unisys.com.
+> > 
+> > There is another contact in the TODO file (last updated 2015 though ;))
+> > Ken Cox <jkc@redhat.com>
+> 
+> Hi Alison, Greg,
+> 
+> Thank you very much for noticing that other contact :) 
+> 
+> In the last 12 months I have sent several patches for Unisys s-Par drivers 
+> but I never noticed that other contact simply because I only ever use 
+> scripts / get_maintainer.pl to find out who and to which lists to send my 
+> works.
+> 
+> @Greg: 
+> 
+> Do you think that we should care of a contact that is no more active since 
+> 2015 and resubmit a v3 with one more "Cc:" line? I have no problems to 
+> resubmit, I just want to be sure that this is the right thing to do.
 
-Thank you for your patch. There is something to discuss/improve.
+I didn't see a v2, so confused about a v3. You could simply do a group
+reply and add the contact, that'll put a trail in lore. Not my call.
+Guessing Greg has a protocol for such removals. 
 
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3288-crypto
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 4
-> +
-> +  clock-names:
-> +    maxItems: 4
-
-This is not needed and dt_bindings_check should complain.
-
-> +    items:
-> +      const: aclk
-> +      const: hclk
-> +      const: sclk
-> +      const: apb_pclk
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    maxItems: 1
-
-The same.
-
-
-Best regards,
-Krzysztof
+> 
+> Thanks,
+> 
+> Fabio M. De Francesco
+>  
+> 
+> 

@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A388D4FF745
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AC64FF749
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiDMNBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        id S235613AbiDMNBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiDMNBM (ORCPT
+        with ESMTP id S231727AbiDMNBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:01:12 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064AC5B3D3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:58:47 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 79759200012;
-        Wed, 13 Apr 2022 12:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649854726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/lt5mlGJZcuBVHxRss/04dHWoVmPgHYi8/JWSHvb6Dk=;
-        b=Px+SIUNwXGbqpReLs2RRDVD+hDL8TDHEUwFW5MVebHhxM4E5YWiVny3r5i81UC3drFpHmX
-        E07RVeqIKlSfYAABvYULm/UftBS1eaVN6Slwg8G8HDnarnpiBp2y8f3I8yJM1ByfVo2Dw5
-        eo4HIQB1iIeH7Qds3q0jVTCPjXy9TPoxOHxf5y5dd4MMvtDIjZ/FrTal95izOwP4lnMJ2u
-        jXPBv0yDW+KReaDFOSUlFmoRnnJOSsW92/WxheuyGc8nFDRJwPZqTjDtFmCIlDNnzYBjro
-        Df10JWWGIWKqLNhUFdVS9U0oaRWZAhBBB8bReMNjZLUSF/XuNsG4Nt2VM1vH8A==
-Date:   Wed, 13 Apr 2022 14:58:43 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH v2] mtd: spinand: add support for ESMT F50x1G41LB
-Message-ID: <20220413145843.46a3d9b5@xps13>
-In-Reply-To: <20220413083824.247136-1-gch981213@gmail.com>
-References: <20220413083824.247136-1-gch981213@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 13 Apr 2022 09:01:42 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE30303;
+        Wed, 13 Apr 2022 05:59:20 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id x3so1017301wmj.5;
+        Wed, 13 Apr 2022 05:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tLvIKnCsgwq0Fk81VHoLGLNWgDzppdl1EGVsnwIiwWk=;
+        b=J+TeCd/41OhdiO9FUGEfBABaBHyh/+x7sT23BLdtYO5M/x78pQgF4HUNKv9pzckLvE
+         MxPd2HtNgkI6X7aRD/PgoHW6pVhDxI8euAS9xxP6mmaE1kusyaJ0y+ZjzUz6BMYa5ozG
+         9uinPwymgXMcz+Gg+OuQDeTD5Y8mH6LmuNMUDP/r/iZ6ncTL2KniEyeWwa8admD2JJxh
+         55468CiYjZUtegpegbpzGpHqZ2PuQ9QJf08kGj4VNjg0PuJiBgKjEWPP6vJNz5uLeKJS
+         pPiToZDXWjoFGkMUuKIofSm8bW4zIWYbuSBz6fEuW6Ccl8EM9Nmw4ioblOFhaO1IvD9d
+         ZBkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tLvIKnCsgwq0Fk81VHoLGLNWgDzppdl1EGVsnwIiwWk=;
+        b=WX/tvb6yVCz0T6oV6WZN9+6cGtZhttzYuuK5nSYV09C9Nf/8nT8nUC27ygpJ6dyW2M
+         tw4WVyuhWOsbAs5rRRxi+A8YXNIaJjfzYueLHOTK7PuHS1kRAA6HhrNb9lZf+9I+3efh
+         q5aP3vEfB4QJZfH9dKO3jgemiFzZrUpLBt0nMYlnlLGPYMPvRtsKm9bGQrIZYB4cgXlD
+         yZ8gg7MQ8JmPXOTqdATmbeBPPxC4+mmYKb6QO+8ieUL6qBFLvzTqdjjLyB0Ix3GE+ur0
+         BbVl9LErdE+CUZ9DvyXMyCao/qXJ3XmkWJbhPhuUeNMF7mFkdemSZdR4Uhytm5ofLP/l
+         PIzQ==
+X-Gm-Message-State: AOAM530Y88/NxUFQi4GGkUdRWW2wfznoyTrFW2Z52bKjMeNg5nlLdW0A
+        zaZgs1M/kX/38/5e/2ssP1o=
+X-Google-Smtp-Source: ABdhPJzHDsOyWeJ1XYw5H42kbzi5IU99y9X4kNsBdhZkSZSUb/AfGgMpOXsUKWaFNT0R/LhnDJ9bFw==
+X-Received: by 2002:a05:600c:5128:b0:38e:bcdd:53bf with SMTP id o40-20020a05600c512800b0038ebcdd53bfmr8352243wms.109.1649854759438;
+        Wed, 13 Apr 2022 05:59:19 -0700 (PDT)
+Received: from hoboy.vegasvil.org (195-70-108-137.stat.salzburg-online.at. [195.70.108.137])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c4e8900b0038cc29bb0e1sm2873992wmq.4.2022.04.13.05.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 05:59:18 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 05:59:15 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Tan Tee Min <tee.min.tan@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: Re: [PATCH net 1/1] net: stmmac: add fsleep() in HW Rx timestamp
+ checking loop
+Message-ID: <20220413125915.GA667752@hoboy.vegasvil.org>
+References: <20220413040115.2351987-1-tee.min.tan@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413040115.2351987-1-tee.min.tan@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Apr 13, 2022 at 12:01:15PM +0800, Tan Tee Min wrote:
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> index d3b4765c1a5b..289bf26a6105 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> @@ -279,10 +279,11 @@ static int dwmac4_wrback_get_rx_timestamp_status(void *desc, void *next_desc,
+>  			/* Check if timestamp is OK from context descriptor */
+>  			do {
+>  				ret = dwmac4_rx_check_timestamp(next_desc);
+> -				if (ret < 0)
+> +				if (ret <= 0)
+>  					goto exit;
+>  				i++;
+>  
+> +				fsleep(1);
 
-gch981213@gmail.com wrote on Wed, 13 Apr 2022 16:38:19 +0800:
+This is nutty.  Why isn't this code using proper deferral mechanisms
+like work or kthread?
 
-> This patch adds support for ESMT F50L1G41LB and F50D1G41LB.
-> It seems that ESMT likes to use random JEDEC ID from other vendors.
-> Their 1G chips uses 0xc8 from GigaDevice and 2G/4G chips uses 0x2c from
-> Micron. For this reason, the ESMT entry is named esmt_c8 with explicit
-> JEDEC ID in variable name.
->=20
-> Datasheets:
-> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50L1G41LB(2M).pdf
-> https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50D1G41LB(2M).pdf
->=20
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
-> This patch is made purely based on datasheet info without testing
-> on any actual chips.
-
-Do you plan to get one of these any time soon?
-
-I am not really confident merging a 100% non-tested driver :)
-
-> Change since v1: drop 0x7f padding from SPINAND_ID.
->=20
->  drivers/mtd/nand/spi/Makefile |  2 +-
->  drivers/mtd/nand/spi/core.c   |  1 +
->  drivers/mtd/nand/spi/esmt.c   | 94 +++++++++++++++++++++++++++++++++++
->  include/linux/mtd/spinand.h   |  1 +
->  4 files changed, 97 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/mtd/nand/spi/esmt.c
->=20
-> diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefile
-> index 9662b9c1d5a9..7e3ab8a9aec7 100644
-> --- a/drivers/mtd/nand/spi/Makefile
-> +++ b/drivers/mtd/nand/spi/Makefile
-> @@ -1,3 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -spinand-objs :=3D core.o gigadevice.o macronix.o micron.o paragon.o tosh=
-iba.o winbond.o
-> +spinand-objs :=3D core.o esmt.o gigadevice.o macronix.o micron.o paragon=
-.o toshiba.o winbond.o
->  obj-$(CONFIG_MTD_SPI_NAND) +=3D spinand.o
-> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> index ff8336870bc0..6c5d79ec3501 100644
-> --- a/drivers/mtd/nand/spi/core.c
-> +++ b/drivers/mtd/nand/spi/core.c
-> @@ -927,6 +927,7 @@ static const struct nand_ops spinand_ops =3D {
->  };
-> =20
->  static const struct spinand_manufacturer *spinand_manufacturers[] =3D {
-> +	&esmt_c8_spinand_manufacturer,
->  	&gigadevice_spinand_manufacturer,
->  	&macronix_spinand_manufacturer,
->  	&micron_spinand_manufacturer,
-> diff --git a/drivers/mtd/nand/spi/esmt.c b/drivers/mtd/nand/spi/esmt.c
-> new file mode 100644
-> index 000000000000..f86716332893
-> --- /dev/null
-> +++ b/drivers/mtd/nand/spi/esmt.c
-> @@ -0,0 +1,94 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Author:
-> + *	Chuanhong Guo <gch981213@gmail.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mtd/spinand.h>
-> +
-> +/* ESMT uses GigaDevice 0xc8 JECDEC ID on some SPI NANDs */
-> +#define SPINAND_MFR_ESMT_C8			0xc8
-
-What happens if the gigadevice driver probes first?
-
-> +
-> +#define F50L2G41XA_ECC_STATUS_MASK		GENMASK(6, 4)
-> +#define F50L2G41XA_STATUS_ECC_1_3_BITFLIPS	(1 << 4)
-> +#define F50L2G41XA_STATUS_ECC_4_6_BITFLIPS	(3 << 4)
-> +#define F50L2G41XA_STATUS_ECC_7_8_BITFLIPS	(5 << 4)
-> +
-
+>  			} while ((ret == 1) && (i < 10));
+>  
+>  			if (i == 10)
+> -- 
+> 2.25.1
+> 
 
 Thanks,
-Miqu=C3=A8l
+Richard

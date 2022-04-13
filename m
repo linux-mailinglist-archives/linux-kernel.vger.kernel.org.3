@@ -2,237 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED7F4FF22F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A379B4FF244
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiDMIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S229578AbiDMIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbiDMIlC (ORCPT
+        with ESMTP id S233939AbiDMIk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:41:02 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FD34F9F2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:35 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id be5so1332045plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bva40hCaLIr1ELmfegrLbKYUXjrya+QMIfJXoLptDZI=;
-        b=jn1H2G9sQRsFHuUbkWKDzp3rUKyRZFL8LjPfrbX7OybYyveACo8Xvz4oLMOAwfeR7x
-         79RVwbzhxpXAaXfuiN45aswMQWM1WNheQOZlXYoVDuBvo9ge/hsoH1ekLaxy8ym2Hge6
-         wGinY+Nw6s83uNwl+WQxEtpS5Wmn1RdO5fyahxh7SQ4+RdiRtGqTV6EMqVF0Ww/03Msk
-         sPrS4gz8lNs8d0ko3lCRlHoaz8yPr6aSJ9dWX+zHuCt3U80BD9gBmycXJl01PMksY1go
-         jdp7hDpfU9cyIWWaVtyTBbMOWhMdBd1Bhg8PlD46xEbcjs/O8usO+tQ6LU8kpYef5REN
-         fUlQ==
+        Wed, 13 Apr 2022 04:40:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 893B94EA2E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649839111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FoMMC2LMJaH+wT3SQsP3VkYrWPiF7nKkDApGo/gOh/Y=;
+        b=APiRH5OgfhMB+ZAGufL02NrhBgbbS2Q3pBioJha639sp8IAvdiMA9/FNnRH3BzYPR5/UMi
+        giApsmmCOC8UgcwF8pG1NS2aKYc7PQSzL0fF487vyTmcYYkk+EYTa6kcJ7E1sI47A2IIn5
+        9WoUtZA/xnKEmsnemDBjspViwdscibI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-WflL0aeTOcuPN0ksAeNbQg-1; Wed, 13 Apr 2022 04:38:30 -0400
+X-MC-Unique: WflL0aeTOcuPN0ksAeNbQg-1
+Received: by mail-wm1-f70.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so545587wmi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=bva40hCaLIr1ELmfegrLbKYUXjrya+QMIfJXoLptDZI=;
-        b=pIrLNOPUSo1DypfV4xOCKV7CYJCPvNGn13a+qxPwnsXdlBBdPh/UtyTRRT9PxNdEhf
-         sYkxMxaE4fv/evIARnd1n2EkUDvnYtzN5q8pz8GZ9dXjBSvwzZ4BmKu+rsI8jhuI+QAe
-         Ni2O1Cp2Uo+wK5w/C6MTG4YoITRBWBHX5Dle3MAAo5ExALfNQkkrfkU9xF9SdhTTed3T
-         zt+GHLgGcLLiOhYYeaGVJIB3PulTcGXJAWqPc6/C6SfAKLSQng1AVj4iX/ujK1FT4/5W
-         hEdkQgfI1bmpOldbS85PiXWMNpNfmLyOipZlEKpGloQBfhVtiRT7vgtJj3NR6Gp8ZC48
-         TBTQ==
-X-Gm-Message-State: AOAM532yytqax/3NiSMlcqyVQSKuwXB2Ho2z8+Q/lUIrYUv33vqoz8DD
-        gsiaD6SWMFi3r2btE7gvEX8=
-X-Google-Smtp-Source: ABdhPJygofRLBPQWqf/xEplmXkc3AZ+4Noe2MlSvLi9WIlCn0DN5W6rn2iR1hT4EygX5R1aiMPR4VQ==
-X-Received: by 2002:a17:902:e9d3:b0:158:8521:1e8f with SMTP id 19-20020a170902e9d300b0015885211e8fmr8071136plk.82.1649839114331;
-        Wed, 13 Apr 2022 01:38:34 -0700 (PDT)
-Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa79286000000b004fdf02851eesm33776264pfa.4.2022.04.13.01.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 01:38:33 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-mtd@lists.infradead.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] mtd: spinand: add support for ESMT F50x1G41LB
-Date:   Wed, 13 Apr 2022 16:38:19 +0800
-Message-Id: <20220413083824.247136-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=FoMMC2LMJaH+wT3SQsP3VkYrWPiF7nKkDApGo/gOh/Y=;
+        b=OeFQrDsJS8fV8zWY5jeQXSq2c/srddxlIdb0LjMfDlhXUznNe6o6wQOLBaIn+mHEMo
+         293xWmz+/cZDKAs7PV+e1fu2BorxDWSmveHgvHAfHjxH+fZX/3Hbi7tBc+8lnvobswSM
+         dwHPWDnMcZIiQMwSC19mUrsG+8zvypGBDjb+bAE6TDIpEC3AuQhAaGx7BR342VgMlamB
+         rNaCyirM9WFVnsvCE3WsgpobHCg0uQhGMkS81uDavXpmywjxst3td9nNvf0DbIF3DIN1
+         1mHYcgGTjisxOj4oNQGxmwP3/FwgT2Ox0wFJIubQmFPEwyFJaASCHrvu/1RP96rtfM+E
+         kC0Q==
+X-Gm-Message-State: AOAM532PJELkXeAexD+bSxSolQE4Re2r7CB2hEyGp5gsNJDgMJmBeSQo
+        vhOXxztAOpcGXdV9oG6fXJmwLO8IKSEGdHVImBVoTm50wniTJuODM6YsGIwKVoNGcBqP3DJhqfe
+        JXfFF/qGupH5myiY9XZpE4kW1
+X-Received: by 2002:a05:6000:1549:b0:207:aadd:87ae with SMTP id 9-20020a056000154900b00207aadd87aemr8781988wry.282.1649839109211;
+        Wed, 13 Apr 2022 01:38:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzVgucUFVic2dUsqqIHD+2DGQQJnfgxTbKjYB7CmhPL/uRKi1K0epJjliff4gFJ1qw5xdURjA==
+X-Received: by 2002:a05:6000:1549:b0:207:aadd:87ae with SMTP id 9-20020a056000154900b00207aadd87aemr8781969wry.282.1649839108965;
+        Wed, 13 Apr 2022 01:38:28 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id x4-20020adfdd84000000b00207b60ed68esm1474940wrl.100.2022.04.13.01.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 01:38:28 -0700 (PDT)
+Message-ID: <caffa434-5644-ee73-1636-45a87517bae2@redhat.com>
+Date:   Wed, 13 Apr 2022 10:38:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH V3 2/4] KVM: X86: Introduce role.glevel for level
+ expanded pagetable
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-3-jiangshanlai@gmail.com> <YlXvtMqWpyM9Bjox@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YlXvtMqWpyM9Bjox@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for ESMT F50L1G41LB and F50D1G41LB.
-It seems that ESMT likes to use random JEDEC ID from other vendors.
-Their 1G chips uses 0xc8 from GigaDevice and 2G/4G chips uses 0x2c from
-Micron. For this reason, the ESMT entry is named esmt_c8 with explicit
-JEDEC ID in variable name.
+On 4/12/22 23:31, Sean Christopherson wrote:
+>> +		unsigned glevel:4;
+> We don't need 4 bits for this.  Crossing our fingers that we never had to shadow
+> a 2-level guest with a 6-level host, we can do:
+> 
+> 		unsigned passthrough_delta:2;
+> 
+> Where the field is ignored if direct=1, '0' for non-passthrough, and 1-3 to handle
+> shadow_root_level - guest_root_level.  Basically the same idea as Paolo's smushing
+> of direct+passthrough into mapping_level, just dressed up differently.
 
-Datasheets:
-https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50L1G41LB(2M).pdf
-https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50D1G41LB(2M).pdf
+Basically, your passthrough_delta is level - glevel in Jiangshan's 
+patches.  You'll need 3 bits anyway when we remove direct later (that 
+would be passthrough_delta == level).
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
-This patch is made purely based on datasheet info without testing
-on any actual chips.
+Regarding the naming:
 
-Change since v1: drop 0x7f padding from SPINAND_ID.
+* If we keep Jiangshan's logic, I don't like the glevel name very much, 
+any of mapping_level, target_level or direct_level would be clearer?
 
- drivers/mtd/nand/spi/Makefile |  2 +-
- drivers/mtd/nand/spi/core.c   |  1 +
- drivers/mtd/nand/spi/esmt.c   | 94 +++++++++++++++++++++++++++++++++++
- include/linux/mtd/spinand.h   |  1 +
- 4 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100644 drivers/mtd/nand/spi/esmt.c
+* If we go with yours, I would call the field "passthrough_levels".
 
-diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefile
-index 9662b9c1d5a9..7e3ab8a9aec7 100644
---- a/drivers/mtd/nand/spi/Makefile
-+++ b/drivers/mtd/nand/spi/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
--spinand-objs := core.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o
-+spinand-objs := core.o esmt.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o
- obj-$(CONFIG_MTD_SPI_NAND) += spinand.o
-diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index ff8336870bc0..6c5d79ec3501 100644
---- a/drivers/mtd/nand/spi/core.c
-+++ b/drivers/mtd/nand/spi/core.c
-@@ -927,6 +927,7 @@ static const struct nand_ops spinand_ops = {
- };
- 
- static const struct spinand_manufacturer *spinand_manufacturers[] = {
-+	&esmt_c8_spinand_manufacturer,
- 	&gigadevice_spinand_manufacturer,
- 	&macronix_spinand_manufacturer,
- 	&micron_spinand_manufacturer,
-diff --git a/drivers/mtd/nand/spi/esmt.c b/drivers/mtd/nand/spi/esmt.c
-new file mode 100644
-index 000000000000..f86716332893
---- /dev/null
-+++ b/drivers/mtd/nand/spi/esmt.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author:
-+ *	Chuanhong Guo <gch981213@gmail.com>
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/mtd/spinand.h>
-+
-+/* ESMT uses GigaDevice 0xc8 JECDEC ID on some SPI NANDs */
-+#define SPINAND_MFR_ESMT_C8			0xc8
-+
-+#define F50L2G41XA_ECC_STATUS_MASK		GENMASK(6, 4)
-+#define F50L2G41XA_STATUS_ECC_1_3_BITFLIPS	(1 << 4)
-+#define F50L2G41XA_STATUS_ECC_4_6_BITFLIPS	(3 << 4)
-+#define F50L2G41XA_STATUS_ECC_7_8_BITFLIPS	(5 << 4)
-+
-+static SPINAND_OP_VARIANTS(read_cache_variants,
-+			   SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
-+			   SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
-+			   SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(0, 1, NULL, 0),
-+			   SPINAND_PAGE_READ_FROM_CACHE_X2_OP(0, 1, NULL, 0),
-+			   SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
-+			   SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, 0));
-+
-+static SPINAND_OP_VARIANTS(write_cache_variants,
-+			   SPINAND_PROG_LOAD_X4(true, 0, NULL, 0),
-+			   SPINAND_PROG_LOAD(true, 0, NULL, 0));
-+
-+static SPINAND_OP_VARIANTS(update_cache_variants,
-+			   SPINAND_PROG_LOAD_X4(false, 0, NULL, 0),
-+			   SPINAND_PROG_LOAD(false, 0, NULL, 0));
-+
-+static int f50l1g41lb_ooblayout_ecc(struct mtd_info *mtd, int section,
-+				    struct mtd_oob_region *region)
-+{
-+	if (section > 3)
-+		return -ERANGE;
-+
-+	region->offset = 16 * section + 8;
-+	region->length = 8;
-+
-+	return 0;
-+}
-+
-+static int f50l1g41lb_ooblayout_free(struct mtd_info *mtd, int section,
-+				     struct mtd_oob_region *region)
-+{
-+	if (section > 3)
-+		return -ERANGE;
-+
-+	region->offset = 16 * section + 2;
-+	region->length = 6;
-+
-+	return 0;
-+}
-+
-+static const struct mtd_ooblayout_ops f50l1g41lb_ooblayout = {
-+	.ecc = f50l1g41lb_ooblayout_ecc,
-+	.free = f50l1g41lb_ooblayout_free,
-+};
-+
-+static const struct spinand_info esmt_c8_spinand_table[] = {
-+	SPINAND_INFO("F50L1G41LB",
-+		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x01),
-+		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
-+		     NAND_ECCREQ(1, 512),
-+		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
-+					      &write_cache_variants,
-+					      &update_cache_variants),
-+		     0,
-+		     SPINAND_ECCINFO(&f50l1g41lb_ooblayout, NULL)),
-+	SPINAND_INFO("F50D1G41LB",
-+		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x11),
-+		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
-+		     NAND_ECCREQ(1, 512),
-+		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
-+					      &write_cache_variants,
-+					      &update_cache_variants),
-+		     0,
-+		     SPINAND_ECCINFO(&f50l1g41lb_ooblayout, NULL)),
-+};
-+
-+static const struct spinand_manufacturer_ops esmt_spinand_manuf_ops = {
-+};
-+
-+const struct spinand_manufacturer esmt_c8_spinand_manufacturer = {
-+	.id = SPINAND_MFR_ESMT_C8,
-+	.name = "ESMT",
-+	.chips = esmt_c8_spinand_table,
-+	.nchips = ARRAY_SIZE(esmt_c8_spinand_table),
-+	.ops = &esmt_spinand_manuf_ops,
-+};
-diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-index 3aa28240a77f..e19a1554a1e9 100644
---- a/include/linux/mtd/spinand.h
-+++ b/include/linux/mtd/spinand.h
-@@ -260,6 +260,7 @@ struct spinand_manufacturer {
- };
- 
- /* SPI NAND manufacturers */
-+extern const struct spinand_manufacturer esmt_c8_spinand_manufacturer;
- extern const struct spinand_manufacturer gigadevice_spinand_manufacturer;
- extern const struct spinand_manufacturer macronix_spinand_manufacturer;
- extern const struct spinand_manufacturer micron_spinand_manufacturer;
--- 
-2.35.1
+Paolo
 

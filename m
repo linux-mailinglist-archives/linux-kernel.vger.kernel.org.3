@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2154FEFE7
+	by mail.lfdr.de (Postfix) with ESMTP id 728C64FEFE6
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiDMGiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S232781AbiDMGia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiDMGiU (ORCPT
+        with ESMTP id S231949AbiDMGi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:38:20 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7324D9EB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id i27so1864119ejd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Xj3NkHVQDUDdPGRvpYOra85n0Y6fiRtoa7goWufEXwA=;
-        b=IipliNokdRI0CsxMkUB9sqMWtAmv4DupWgoqxkLCSQ74xweyTK8fAwpOQVUumnb/Ps
-         RbAND6snNPJ7LjU/cKI5mR1LHnBUScPIBtY1b9LdXQZr8nXcWSAg0bah4x94O0YrRguF
-         BlgBtqBl147T4yDft3Oi7PchBTm7tXtUXSSa5S/jJTyk1L5nTAxYZT8i7KWkdZjqe6k1
-         b7FxseDFhrdniTXrMTxGi/M0yuAxT5BJf4vhhg0uuqugoY/e/ExjL0moavcwzT9WBD+R
-         0gAON8z7M3iIoccFr1CaYoVF89IfYGaExxy0PMKlakNuyAA2u35aswmnNaQ3TLB3YkpD
-         9N8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Xj3NkHVQDUDdPGRvpYOra85n0Y6fiRtoa7goWufEXwA=;
-        b=KREFPxmTF7be6s/Ld8+fSmmYVg6srQNh2RHYsuAvfbOQky+NrdnqTD34mOrAsoY6qr
-         1BAyKgRzGyKRS9by9YqRvJER1rPoFUmpuGGznmVxN5tulML75xHqcmoQ2VRj5inJOBOX
-         o9DHjZ99WSUqc4WSbs5VxskB+z1unWyef5YR+BaXDTm2MT7igiKlouObGjvdM0KQsWf7
-         k+2ag40oMGSaft6nWAz4c/A6ts2bKcqoUQIRW+YtTPOGcLRcMTGcJkC5oxeGTS/KJ2oV
-         Hiso23BBa5EOWsHlGalQTysc+FUlAQlvHkRTBLqST0eWM46mv/UO/fWgC3dHl4aENXNQ
-         eN+g==
-X-Gm-Message-State: AOAM531RXgEBnThDx7N38doYQAs7AheUZeemFArnEfHzCAu5h57Y1DvC
-        tUBy6N5FPIfbjh6l9gntcNM=
-X-Google-Smtp-Source: ABdhPJx/w+TNTuJBwku63yNpMxP+dSA7e5/ZFjDNFqRpJ4GmK5rwDjIRug4tZCtYGSnIImjhTWm1dw==
-X-Received: by 2002:a17:906:1f11:b0:685:d50e:3bf9 with SMTP id w17-20020a1709061f1100b00685d50e3bf9mr39244987ejj.275.1649831758439;
-        Tue, 12 Apr 2022 23:35:58 -0700 (PDT)
-Received: from leap.localnet (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
-        by smtp.gmail.com with ESMTPSA id s2-20020a1709066c8200b006e4e1b1f875sm13226169ejr.199.2022.04.12.23.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 23:35:57 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     johan@kernel.org, Jaehee Park <jhpark1013@gmail.com>,
-        elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] staging: greybus: remove unneeded return
-Date:   Wed, 13 Apr 2022 08:35:55 +0200
-Message-ID: <6300782.K2JlShyGXD@leap>
-In-Reply-To: <alpine.DEB.2.22.394.2204130815020.3470@hadrien>
-References: <cover.1649793138.git.jhpark1013@gmail.com> <5792471.alqRGMn8q6@leap> <alpine.DEB.2.22.394.2204130815020.3470@hadrien>
+        Wed, 13 Apr 2022 02:38:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADA24EDCF
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:36:06 -0700 (PDT)
+Received: from kwepemi100017.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdXq727WyzFpq1;
+        Wed, 13 Apr 2022 14:33:39 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100017.china.huawei.com (7.221.188.163) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 14:36:03 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 14:36:02 +0800
+Message-ID: <eb3ab2e5-781f-9e46-60c1-8af157b0f9a5@huawei.com>
+Date:   Wed, 13 Apr 2022 14:36:01 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to
+ machine check safe
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>
+References: <20220412072552.2526871-1-tongtiangen@huawei.com>
+ <20220412072552.2526871-5-tongtiangen@huawei.com>
+ <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,68 +69,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 13 aprile 2022 08:16:20 CEST Julia Lawall wrote:
->=20
-> On Tue, 12 Apr 2022, Fabio M. De Francesco wrote:
->=20
-> > On marted=EC 12 aprile 2022 21:59:15 CEST Jaehee Park wrote:
-> > > An empty function with void return type does not need an explicit
-> > > return. Issue found by checkpatch.
-> > >
-> > > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> > > ---
-> > >  drivers/staging/greybus/audio_codec.c | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/
-> > greybus/audio_codec.c
-> > > index 0f50d1e51e2c..3e3a16568def 100644
-> > > --- a/drivers/staging/greybus/audio_codec.c
-> > > +++ b/drivers/staging/greybus/audio_codec.c
-> > > @@ -1032,7 +1032,6 @@ static int gbcodec_probe(struct=20
-snd_soc_component
-> > *comp)
-> > >  static void gbcodec_remove(struct snd_soc_component *comp)
-> > >  {
-> > >  	/* Empty function for now */
-> > > -	return;
-> > >  }
-> > >
-> > >  static int gbcodec_write(struct snd_soc_component *comp, unsigned=20
-int
-> > reg,
-> > > --
-> > > 2.25.1
-> > >
-> > Hi Jaehee,
-> >
-> > If I recall it correctly, Dan Carpenter suggested to remove this empty
-> > function.
-> >
-> > When developers remove lines of code from a function which becomes=20
-empty
-> > after the removals, they also remove the resulting empty function and
-> > delete all the calls (if there are any left) at the same time.
->=20
-> It's probably not relevant in this case,=20
-
-No, it's relevant :)
-I should have been more exhaustive :(
-
-> but the function could be needed
-> if it is a branch of an ifdef.  Also if it is stored in a structure field
-> and the user of the structure does not check for NULL.
-
-Here we have one of special cases you've mentioned. The pointer to the=20
-function is stored in a structure field _but_ we know that the user does=20
-check for NULL.
-
-Thanks,
-
-=46abio
-
-> julia
 
 
+在 2022/4/13 1:08, Robin Murphy 写道:
+> On 12/04/2022 8:25 am, Tong Tiangen wrote:
+> [...]
+>> diff --git a/arch/arm64/include/asm/asm-uaccess.h 
+>> b/arch/arm64/include/asm/asm-uaccess.h
+>> index 0557af834e03..bb17f0829042 100644
+>> --- a/arch/arm64/include/asm/asm-uaccess.h
+>> +++ b/arch/arm64/include/asm/asm-uaccess.h
+>> @@ -92,4 +92,20 @@ alternative_else_nop_endif
+>>           _asm_extable    8888b,\l;
+>>       .endm
+>> +
+>> +    .macro user_ldp_mc l, reg1, reg2, addr, post_inc
+>> +8888:        ldtr    \reg1, [\addr];
+>> +8889:        ldtr    \reg2, [\addr, #8];
+>> +        add    \addr, \addr, \post_inc;
+>> +
+>> +        _asm_extable_uaccess_mc    8888b, \l;
+>> +        _asm_extable_uaccess_mc    8889b, \l;
+>> +    .endm
+> 
+> You're replacing the only user of this, so please just 
+> s/_asm_extable/_asm_extable_uaccess_mc/ in the existing macro and save 
+> the rest of the churn.
 
+Agreed, *user_ldp* -- This name has clearly explained the scences where 
+this macro is used. It is more appropriate to modify it directly.
 
+> 
+> Furthermore, how come you're not similarly updating user_stp, given that 
+> you *are* updating the other stores in copy_to_user?
+> 
+>> +
+>> +    .macro user_ldst_mc l, inst, reg, addr, post_inc
+>> +8888:        \inst        \reg, [\addr];
+>> +        add        \addr, \addr, \post_inc;
+>> +
+>> +        _asm_extable_uaccess_mc    8888b, \l;
+>> +    .endm
+> 
+> Similarly, I think we can just update user_ldst itself. The two 
+> instances that you're not replacing here are bogus anyway, and deserve 
+> to be fixed with the patch below first.
+
+OK, great thanks. will do next version.
+
+> 
+> [...]
+>> @@ -62,7 +63,11 @@ SYM_FUNC_START(__arch_copy_from_user)
+>>       ret
+>>       // Exception fixups
+>> -9997:    cmp    dst, dstin
+>> +9997:    mrs esr, esr_el1            // Check exception first
+>> +    and esr, esr, #ESR_ELx_FSC
+>> +    cmp esr, #ESR_ELx_FSC_EXTABT
+> 
+> Should we be checking EC to make sure it's a data abort - and thus FSC 
+> is valid - in the first place? I'm a little fuzzy on all the possible 
+> paths into fixup_exception(), and it's not entirely obvious whether this 
+> is actually safe or not.
+> 
+> Thanks,
+> Robin.
+
+I think checking EC here is more rigorous in code logic and it's doesn't 
+appear to be harmful.
+
+It is really not appropriate to check the ESR at this stage (it has been 
+checked where the exception processing starts). At present, I haven't 
+thought of a better way. If anyone has a better way, please reply to me :)
+
+Thanks Robin.
+Tong.
+
+> 
+> ----->8-----
+> Subject: [PATCH] arm64: mte: Clean up user tag accessors
+> 
+> Invoking user_ldst to explicitly add a post-increment of 0 is silly.
+> Just use a normal USER() annotation and save the redundant instruction.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>   arch/arm64/lib/mte.S | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
+> index 8590af3c98c0..eeb9e45bcce8 100644
+> --- a/arch/arm64/lib/mte.S
+> +++ b/arch/arm64/lib/mte.S
+> @@ -93,7 +93,7 @@ SYM_FUNC_START(mte_copy_tags_from_user)
+>       mov    x3, x1
+>       cbz    x2, 2f
+>   1:
+> -    user_ldst 2f, ldtrb, w4, x1, 0
+> +USER(2f, ldtrb    w4, [x1])
+>       lsl    x4, x4, #MTE_TAG_SHIFT
+>       stg    x4, [x0], #MTE_GRANULE_SIZE
+>       add    x1, x1, #1
+> @@ -120,7 +120,7 @@ SYM_FUNC_START(mte_copy_tags_to_user)
+>   1:
+>       ldg    x4, [x1]
+>       ubfx    x4, x4, #MTE_TAG_SHIFT, #MTE_TAG_SIZE
+> -    user_ldst 2f, sttrb, w4, x0, 0
+> +USER(2f, sttrb    w4, [x0])
+>       add    x0, x0, #1
+>       add    x1, x1, #MTE_GRANULE_SIZE
+>       subs    x2, x2, #1

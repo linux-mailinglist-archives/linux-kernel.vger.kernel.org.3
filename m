@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A11C4FF73F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBC44FF6D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiDMM7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        id S233084AbiDMMbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbiDMM7r (ORCPT
+        with ESMTP id S230224AbiDMMbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:59:47 -0400
-X-Greylist: delayed 1809 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 05:57:25 PDT
-Received: from bjm7-spam01.kuaishou.com (smtpcn03.kuaishou.com [103.107.217.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C8250E33
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:57:24 -0700 (PDT)
-Received: from bjm7-spam01.kuaishou.com (localhost [127.0.0.2] (may be forged))
-        by bjm7-spam01.kuaishou.com with ESMTP id 23DCRHxc089299
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:27:17 +0800 (GMT-8)
-        (envelope-from tianzichen@kuaishou.com)
-Received: from bjm7-pm-mail26.kuaishou.com ([172.28.1.62])
-        by bjm7-spam01.kuaishou.com with ESMTPS id 23DCR75u089255
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Apr 2022 20:27:07 +0800 (GMT-8)
-        (envelope-from tianzichen@kuaishou.com)
-Content-Language: zh-CN
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F41F2052051878449E4DC01E52BCB8A1@kuaishou.com>
-Content-Transfer-Encoding: base64
-DKIM-Signature: v=1; a=rsa-sha256; d=kuaishou.com; s=dkim; c=relaxed/relaxed;
-        t=1649852827; h=from:subject:to:date:message-id;
-        bh=TnyptApGhZYqd8SJSRCUR+JWQamR+5AGe393lfj5Tao=;
-        b=ldsJrdMBrlcT9XZ2RBqOwGwnfTmsUQsL0PBjbpPq+xmgDQOPhNUEA1QGZh+K0MiQFFK/vXwSd/Y
-        Y9wxMF7xDL/ec/MrTw4w8pdR6/bUuapp/z46yqGsQxJpWXrP0vS82FNHAOhUW4qx+g+UTLEyPEan5
-        nUEHM0FTGUkeD7tnk50=
-Received: from bjfk-pm-mail30.kuaishou.com (172.29.5.62) by
- bjm7-pm-mail26.kuaishou.com (172.28.1.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Wed, 13 Apr 2022 20:27:07 +0800
-Received: from bjfk-pm-mail30.kuaishou.com ([fe80::2534:b256:58c3:b20]) by
- bjfk-pm-mail30.kuaishou.com ([fe80::2534:b256:58c3:b20%17]) with mapi id
- 15.01.2176.014; Wed, 13 Apr 2022 20:27:07 +0800
-From:   =?utf-8?B?55Sw5a2Q5pmo?= <tianzichen@kuaishou.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>
-CC:     Jeffle Xu <jefflexu@linux.alibaba.com>,
-        "linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
-        "fannaihao@baidu.com" <fannaihao@baidu.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "joseph.qi@linux.alibaba.com" <joseph.qi@linux.alibaba.com>,
-        "linux-cachefs@redhat.com" <linux-cachefs@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "luodaowen.backend@bytedance.com" <luodaowen.backend@bytedance.com>,
-        "gerry@linux.alibaba.com" <gerry@linux.alibaba.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read
- semantics
-Thread-Topic: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read
- semantics
-Thread-Index: AQHYTzHKf6eBDuhir0CXwRoLEUpF1A==
-Date:   Wed, 13 Apr 2022 12:27:06 +0000
-Message-ID: <B58D56BF-4456-4AD4-A25F-0C9779355DEA@kuaishou.com>
-References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
- <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
-In-Reply-To: <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
-Accept-Language: zh-CN, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.20.112.61]
+        Wed, 13 Apr 2022 08:31:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B1E5DA67
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649852923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsU6DS5U2wkJ+v5NrpLhGhWiJHM31d3LlhPBq0tETIc=;
+        b=WI8MS9lbFyuD4ykqzV028RJ+Fo5boIGtxxsLP7p2kwtT6Akzf/JKiAMyGSsKOa84QcJSv8
+        FmcQfuLpm/RW/JCsWIYpluqZcFJEshn48kwczev54YKa6yLnBpCm8dRsH7of+l4pG30mMc
+        CBkVSFcVrv15ej9VrZSay7npj+EhQOM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-mSqJtagSMWmjI1bSTQgMow-1; Wed, 13 Apr 2022 08:28:42 -0400
+X-MC-Unique: mSqJtagSMWmjI1bSTQgMow-1
+Received: by mail-wr1-f72.google.com with SMTP id s13-20020adfa28d000000b00205e049cff2so326607wra.17
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:28:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=qsU6DS5U2wkJ+v5NrpLhGhWiJHM31d3LlhPBq0tETIc=;
+        b=ocJXYEgvqpICcZVcURPqFj3bUpHp0gDuuJwzbHoodWEaHVHvsEC0bAZlnZdaoe+6Gj
+         oH/hWyVT65Y0/LzavF/MosC8LQbSPGIvZnQhUdzvF53kPcftmvCN0OnUkCeI0GCSURMu
+         JwF8tBzo6WB3NsGD/CBBuGEbQvshaM2jIG3sE2zFkC4CkeCPOhAlddSuyIREiK9vs7JG
+         NS8DzW9f1NSm3PlhEtkJvBMdEzrf2lVrBuCb8QuGAWru/SvosPkKJgO+D0GYUWjTQW0X
+         0Z4rSiMxsOGeDvmfWpINcUPCXJGoRxmi2hT7nkwkKMms1atieW2mBYZ0Hbvpn7svFoNU
+         a+sQ==
+X-Gm-Message-State: AOAM530wabDsS3NYPENjpgkdE+heBCra/aWpyKq4b3sDJShG0AZUkfto
+        yYqF2TMef8wia4c3JyeKXrOZRxgRxb3jSfRf6YrJ9v2Q4DB38bGQPT6FIjRSys0pJ+G/yNYHs91
+        mLNoRemSZ1JoMRfrI46xbXLuC
+X-Received: by 2002:adf:e74a:0:b0:1f0:25cb:3ad5 with SMTP id c10-20020adfe74a000000b001f025cb3ad5mr32825365wrn.231.1649852920940;
+        Wed, 13 Apr 2022 05:28:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBPuGiBkWKAv4X+Gv+AZ8tuTHo5epBTh7Wu31/gbzLstA9OS8Bqszv+EEp4CdiHPVziWNY7g==
+X-Received: by 2002:adf:e74a:0:b0:1f0:25cb:3ad5 with SMTP id c10-20020adfe74a000000b001f025cb3ad5mr32825329wrn.231.1649852920699;
+        Wed, 13 Apr 2022 05:28:40 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5800:1078:ebb9:e2c3:ea8c? (p200300cbc70458001078ebb9e2c3ea8c.dip0.t-ipconnect.de. [2003:cb:c704:5800:1078:ebb9:e2c3:ea8c])
+        by smtp.gmail.com with ESMTPSA id r12-20020a5d6c6c000000b00203ec2b1255sm39631983wrz.60.2022.04.13.05.28.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 05:28:40 -0700 (PDT)
+Message-ID: <0c9d2c39-5080-a855-8ecd-e2c1bd1179fa@redhat.com>
+Date:   Wed, 13 Apr 2022 14:28:38 +0200
 MIME-Version: 1.0
-X-DNSRBL: 
-X-MAIL: bjm7-spam01.kuaishou.com 23DCRHxc089299
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 08/16] mm/rmap: drop "compound" parameter from
+ page_add_new_anon_rmap()
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-9-david@redhat.com>
+ <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
+ <368902ab-8d3f-5d62-581e-1ff930bcefa0@redhat.com>
+ <YlbBXiVezzVw+NZZ@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YlbBXiVezzVw+NZZ@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gMjAyMuW5tDTmnIgxMOaXpSDkuIvljYg4OjUx77yMR2FvIFhpYW5nIDxoc2lhbmdrYW9A
-bGludXguYWxpYmFiYS5jb20+IOWGmemBk++8mg0KPiANCj4gT24gV2VkLCBBcHIgMDYsIDIwMjIg
-YXQgMDM6NTU6NTJQTSArMDgwMCwgSmVmZmxlIFh1IHdyb3RlOg0KPj4gY2hhbmdlcyBzaW5jZSB2
-NzoNCj4+IC0gcmViYXNlZCB0byA1LjE4LXJjMQ0KPj4gLSBpbmNsdWRlICJjYWNoZWZpbGVzOiB1
-bm1hcmsgaW5vZGUgaW4gdXNlIGluIGVycm9yIHBhdGgiIHBhdGNoIGludG8NCj4+ICB0aGlzIHBh
-dGNoc2V0IHRvIGF2b2lkIHdhcm5pbmcgZnJvbSB0ZXN0IHJvYm90IChwYXRjaCAxKQ0KPj4gLSBj
-YWNoZWZpbGVzOiByZW5hbWUgW2Nvb2tpZXx2b2x1bWVdX2tleV9sZW4gZmllbGQgb2Ygc3RydWN0
-DQo+PiAgY2FjaGVmaWxlc19vcGVuIHRvIFtjb29raWV8dm9sdW1lXV9rZXlfc2l6ZSB0byBhdm9p
-ZCBwb3RlbnRpYWwNCj4+ICBtaXN1bmRlcnN0YW5kaW5nLiBBbHNvIGFkZCBtb3JlIGRvY3VtZW50
-YXRpb24gdG8NCj4+ICBpbmNsdWRlL3VhcGkvbGludXgvY2FjaGVmaWxlcy5oLiAocGF0Y2ggMykN
-Cj4+IC0gY2FjaGVmaWxlczogdmFsaWQgY2hlY2sgZm9yIGVycm9yIGNvZGUgcmV0dXJuZWQgZnJv
-bSB1c2VyIGRhZW1vbg0KPj4gIChwYXRjaCAzKQ0KPj4gLSBjYWNoZWZpbGVzOiBjaGFuZ2UgV0FS
-Tl9PTl9PTkNFKCkgdG8gcHJfaW5mb19vbmNlKCkgd2hlbiB1c2VyIGRhZW1vbg0KPj4gIGNsb3Nl
-cyBhbm9uX2ZkIHByZW1hdHVyZWx5IChwYXRjaCA0LzUpDQo+PiAtIHJlYWR5IGZvciBjb21wbGV0
-ZSByZXZpZXcNCj4+IA0KPj4gDQo+PiBLZXJuZWwgUGF0Y2hzZXQNCj4+IC0tLS0tLS0tLS0tLS0t
-LQ0KPj4gR2l0IHRyZWU6DQo+PiANCj4+ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sb3N0amVmZmxl
-L2xpbnV4LmdpdCBqaW5nYm8vZGV2LWVyb2ZzLWZzY2FjaGUtdjgNCj4+IA0KPj4gR2l0d2ViOg0K
-Pj4gDQo+PiAgICBodHRwczovL2dpdGh1Yi5jb20vbG9zdGplZmZsZS9saW51eC9jb21taXRzL2pp
-bmdiby9kZXYtZXJvZnMtZnNjYWNoZS12OA0KPj4gDQo+PiANCj4+IFVzZXIgRGFlbW9uIGZvciBR
-dWljayBUZXN0DQo+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4gR2l0IHRyZWU6DQo+
-PiANCj4+ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sb3N0amVmZmxlL2RlbWFuZC1yZWFkLWNhY2hl
-ZmlsZXNkLmdpdCBtYWluDQo+PiANCj4+IEdpdHdlYjoNCj4+IA0KPj4gICAgaHR0cHM6Ly9naXRo
-dWIuY29tL2xvc3RqZWZmbGUvZGVtYW5kLXJlYWQtY2FjaGVmaWxlc2QNCj4+IA0KPiANCj4gQnR3
-LCB3ZSd2ZSBhbHNvIGZpbmlzaGVkIGEgcHJlbGltaW5hcnkgZW5kLXRvLWVuZCBvbi1kZW1hbmQg
-ZG93bmxvYWQNCj4gZGFlbW9uIGluIG9yZGVyIHRvIHRlc3QgdGhlIGZzY2FjaGUgb24tZGVtYW5k
-IGtlcm5lbCBjb2RlIGFzIGEgcmVhbA0KPiBlbmQtdG8tZW5kIHdvcmtsb2FkIGZvciBjb250YWlu
-ZXIgdXNlIGNhc2VzOg0KPiANCj4gVXNlciBndWlkZTogaHR0cHM6Ly9naXRodWIuY29tL2RyYWdv
-bmZseW9zcy9pbWFnZS1zZXJ2aWNlL2Jsb2IvZnNjYWNoZS9kb2NzL255ZHVzLWZzY2FjaGUubWQN
-Cj4gVmlkZW86IGh0dHBzOi8veW91dHUuYmUvRjRJRjJfREVOWG8NCg0KVGVzdGVkLWJ5OiBaaWNo
-ZW4gVGlhbiA8dGlhbnppY2hlbkBrdWFpc2hvdS5jb20+DQoNCj4gVGhhbmtzLA0KPiBHYW8gWGlh
-bmcNCj4gDQoNCg==
+On 13.04.22 14:26, Matthew Wilcox wrote:
+> On Tue, Apr 12, 2022 at 11:37:09AM +0200, David Hildenbrand wrote:
+>> On 12.04.22 10:47, Vlastimil Babka wrote:
+>>> There's a VM_BUG_ON_PAGE(PageTransCompound(page), page); later in a
+>>> !compound branch. Since compound is now determined by the same check, could
+>>> be deleted.
+>>
+>> Yes, eventually we could get rid of both VM_BUG_ON_PAGE() on both
+>> branches and add a single VM_BUG_ON_PAGE(PageTail(page), page) check on
+>> the compound branch. (we could also make sure that we're not given a
+>> hugetlb page)
+> 
+> As a rule of thumb, if you find yourself wanting to add
+> VM_BUG_ON_PAGE(PageTail(page), page), you probably want to change the
+> interface to take a folio.
+
+Yeah, I had the same in mind. Might be a reasonable addon on top --
+although it would stick out in the rmap code a bit because most
+functions deal with both, folios and subpages.
+
+-- 
+Thanks,
+
+David / dhildenb
+

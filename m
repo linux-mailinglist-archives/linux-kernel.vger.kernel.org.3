@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A634FED0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363F44FED1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiDMCkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
+        id S231797AbiDMClC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiDMCj7 (ORCPT
+        with ESMTP id S229978AbiDMCk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:39:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C48F289A5;
-        Tue, 12 Apr 2022 19:37:39 -0700 (PDT)
-X-UUID: a0f3cbe8811c475eb05eb35344298732-20220413
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:54ef5d47-2b1f-4752-8970-6073c675dae7,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:75
-X-CID-INFO: VERSION:1.1.4,REQID:54ef5d47-2b1f-4752-8970-6073c675dae7,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:75
-X-CID-META: VersionHash:faefae9,CLOUDID:b6373278-0afa-4dca-bdec-ca54c998425a,C
-        OID:a844d427e8a7,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: a0f3cbe8811c475eb05eb35344298732-20220413
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1189912167; Wed, 13 Apr 2022 10:37:34 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 13 Apr 2022 10:37:32 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Apr 2022 10:37:30 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2, 3/3] media: mediatek: vcodec: add h264 decoder driver for mt8186
-Date:   Wed, 13 Apr 2022 10:37:20 +0800
-Message-ID: <20220413023720.29297-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220413023720.29297-1-yunfei.dong@mediatek.com>
-References: <20220413023720.29297-1-yunfei.dong@mediatek.com>
+        Tue, 12 Apr 2022 22:40:58 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156FC5FCB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:38:39 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so287681otq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:38:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ykH6KjEFb1Bm4V2s69ZXD8+HWFP0pZr0KuSwAdAfJFs=;
+        b=MIM5AITEbAxJIKnda6Ow2jOK+K8CJyBIxSEXwQULbONBe8sRDY6sSEWUB8POXS3ulh
+         aip1nYsCBx7quPjwL7asOjwP1jfJTjR0ctMIQL3ypW9ZEj7oUIAbuUthGt8zoauGpO2S
+         MTDwXTR6AkNbiqp1Jeo4Q8/gAHfqnzIil8+kMjtdPONzp9SGQ+dd7Yy380rOkP5vIIIx
+         UIGpK+EKA4a3xyg8/eJzUA/0LA4HgRFa1W6CJJpZMeNYQ5R8bZ88jvokfFKsfdMWSC51
+         h2173RDdjH5xrh83dHszReZwTjX4nf1j6ErXcZ+BdMJem+RfWDrDh2Lm0lQ92aPV+RrK
+         e+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ykH6KjEFb1Bm4V2s69ZXD8+HWFP0pZr0KuSwAdAfJFs=;
+        b=IC/iq2cjSdLmGntrL8Ol+ImX8H7iwArDN7RKWLXhcdoEtwTN35On71LjgjA4WqTIrm
+         ccoWsTvGa7gbBYtGbnWZBDjgAdqVp2oJoibLsXqRhsedpZVdVd8sBkpt+YPcJ1Sf+0/N
+         akn87DLVFUQfmtfhysVJw08887r08SiFz+TVPILalDqqMjVNmfhes8L+zrpYj0I/3Xbl
+         fyoKq2xDdrHlNoxhKMv+Ga6EH9vMWaupey9lU40ikxBYFGPubZxY0GPkOQIVzS3HHvJf
+         EtAnOwcRvH5vDMT4JbyRZlkBRpxfKH5tdl5caYTQoFQ6aZ5VlrMPs5GRyjWm/hO967We
+         NA2w==
+X-Gm-Message-State: AOAM533VoBJT7FJSwAkk3TTyxywUfvO22Wzvn3DQgn0sGz7Sf0S5btNI
+        auYdb3GbKZV35FUgj3F0yUgyjQ==
+X-Google-Smtp-Source: ABdhPJz3IxfURlRgXYZUzriJi1wMm2dDOWPLzxK8mkdVWqkZqiuqlH3bhXG2PQFYmiJ5tkwFq5dYIQ==
+X-Received: by 2002:a05:6830:1deb:b0:5b2:308f:e5b7 with SMTP id b11-20020a0568301deb00b005b2308fe5b7mr13681405otj.332.1649817518423;
+        Tue, 12 Apr 2022 19:38:38 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id o7-20020a056871078700b000e29ff467dcsm5435867oap.50.2022.04.12.19.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 19:38:37 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 21:38:36 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: qcom_scm: Add compatible for ipq806x
+Message-ID: <YlY3rPpYvclK8L3z@builder.lan>
+References: <20220310220723.3772-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310220723.3772-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,230 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add h264 decode driver to support mt8186. For the architecture
-is single core, need to add new interface to decode.
+On Thu 10 Mar 16:07 CST 2022, Ansuel Smith wrote:
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
- 1 file changed, 176 insertions(+), 1 deletion(-)
+> Add compatible for ipq806x. Just like ipq4019, ipq806x doesn't require
+> Core, Iface or Bus clock.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  drivers/firmware/qcom_scm.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 7db8066b19fd..7348c5894821 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1338,6 +1338,7 @@ static const struct of_device_id qcom_scm_dt_match[] = {
+>  							     SCM_HAS_IFACE_CLK |
+>  							     SCM_HAS_BUS_CLK)
+>  	},
+> +	{ .compatible = "qcom,scm-ipq806x" },
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index 757443dbbbf5..e199620b076d 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -140,6 +140,9 @@ struct vdec_h264_slice_share_info {
-  * @vsi:		vsi used for lat
-  * @vsi_core:		vsi used for core
-  *
-+ * @vsi_ctx:		Local VSI data for this decoding context
-+ * @h264_slice_param:	the parameters that hardware use to decode
-+ *
-  * @resolution_changed:resolution changed
-  * @realloc_mv_buf:	reallocate mv buffer
-  * @cap_num_planes:	number of capture queue plane
-@@ -157,6 +160,9 @@ struct vdec_h264_slice_inst {
- 	struct vdec_h264_slice_vsi *vsi;
- 	struct vdec_h264_slice_vsi *vsi_core;
- 
-+	struct vdec_h264_slice_vsi vsi_ctx;
-+	struct vdec_h264_slice_lat_dec_param h264_slice_param;
-+
- 	unsigned int resolution_changed;
- 	unsigned int realloc_mv_buf;
- 	unsigned int cap_num_planes;
-@@ -208,6 +214,61 @@ static int vdec_h264_slice_fill_decode_parameters(struct vdec_h264_slice_inst *i
- 	return 0;
- }
- 
-+static int get_vdec_sig_decode_parameters(struct vdec_h264_slice_inst *inst)
-+{
-+	const struct v4l2_ctrl_h264_decode_params *dec_params;
-+	const struct v4l2_ctrl_h264_sps *sps;
-+	const struct v4l2_ctrl_h264_pps *pps;
-+	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-+	struct vdec_h264_slice_lat_dec_param *slice_param = &inst->h264_slice_param;
-+	struct v4l2_h264_reflist_builder reflist_builder;
-+	u8 *p0_reflist = slice_param->decode_params.ref_pic_list_p0;
-+	u8 *b0_reflist = slice_param->decode_params.ref_pic_list_b0;
-+	u8 *b1_reflist = slice_param->decode_params.ref_pic_list_b1;
-+
-+	dec_params =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_DECODE_PARAMS);
-+	if (IS_ERR(dec_params))
-+		return PTR_ERR(dec_params);
-+
-+	sps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SPS);
-+	if (IS_ERR(sps))
-+		return PTR_ERR(sps);
-+
-+	pps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_PPS);
-+	if (IS_ERR(pps))
-+		return PTR_ERR(pps);
-+
-+	scaling_matrix =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SCALING_MATRIX);
-+	if (IS_ERR(scaling_matrix))
-+		return PTR_ERR(scaling_matrix);
-+
-+	mtk_vdec_h264_update_dpb(dec_params, inst->dpb);
-+
-+	mtk_vdec_h264_copy_sps_params(&slice_param->sps, sps);
-+	mtk_vdec_h264_copy_pps_params(&slice_param->pps, pps);
-+	mtk_vdec_h264_copy_scaling_matrix(&slice_param->scaling_matrix, scaling_matrix);
-+
-+	mtk_vdec_h264_copy_decode_params(&slice_param->decode_params, dec_params, inst->dpb);
-+	mtk_vdec_h264_fill_dpb_info(inst->ctx, &slice_param->decode_params,
-+				    slice_param->h264_dpb_info);
-+
-+	/* Build the reference lists */
-+	v4l2_h264_init_reflist_builder(&reflist_builder, dec_params, sps, inst->dpb);
-+	v4l2_h264_build_p_ref_list(&reflist_builder, p0_reflist);
-+
-+	v4l2_h264_build_b_ref_lists(&reflist_builder, b0_reflist, b1_reflist);
-+	/* Adapt the built lists to the firmware's expectations */
-+	mtk_vdec_h264_fixup_ref_list(p0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b1_reflist, reflist_builder.num_valid);
-+	memcpy(&inst->vsi_ctx.h264_slice_params, slice_param,
-+	       sizeof(inst->vsi_ctx.h264_slice_params));
-+
-+	return 0;
-+}
-+
- static void vdec_h264_slice_fill_decode_reflist(struct vdec_h264_slice_inst *inst,
- 						struct vdec_h264_slice_lat_dec_param *slice_param,
- 						struct vdec_h264_slice_share_info *share_info)
-@@ -596,6 +657,120 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	return err;
- }
- 
-+static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+					 struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	struct vdec_vpu_inst *vpu = &inst->vpu;
-+	struct mtk_video_dec_buf *src_buf_info, *dst_buf_info;
-+	struct vdec_fb *fb;
-+	unsigned char *buf;
-+	unsigned int nal_start_idx, data[2], i;
-+	u64 y_fb_dma, c_fb_dma;
-+	struct mtk_vcodec_mem *mem;
-+	int err;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs)
-+		return vpu_dec_reset(vpu);
-+
-+	fb = inst->ctx->dev->vdec_pdata->get_cap_buffer(inst->ctx);
-+	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-+	dst_buf_info = container_of(fb, struct mtk_video_dec_buf, frame_buffer);
-+
-+	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
-+	c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
-+	mtk_vcodec_debug(inst, "+ [%d] FB y_dma=%llx c_dma=%llx va=0x%llx",
-+			 inst->ctx->decoded_frame_cnt, y_fb_dma, c_fb_dma, (u64)fb);
-+
-+	inst->vsi_ctx.dec.bs_buf_addr = (u64)bs->dma_addr;
-+	inst->vsi_ctx.dec.bs_buf_size = bs->size;
-+	inst->vsi_ctx.dec.y_fb_dma = y_fb_dma;
-+	inst->vsi_ctx.dec.c_fb_dma = c_fb_dma;
-+	inst->vsi_ctx.dec.vdec_fb_va = (u64)(uintptr_t)fb;
-+
-+	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
-+				   &dst_buf_info->m2m_buf.vb, true);
-+	err = get_vdec_sig_decode_parameters(inst);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	buf = (unsigned char *)bs->va;
-+	nal_start_idx = mtk_vdec_h264_find_start_code(buf, bs->size);
-+	if (nal_start_idx < 0) {
-+		err = -EINVAL;
-+		goto err_free_fb_out;
-+	}
-+	inst->vsi_ctx.dec.nal_info = buf[nal_start_idx];
-+
-+	*res_chg = inst->resolution_changed;
-+	if (inst->resolution_changed) {
-+		mtk_vcodec_debug(inst, "- resolution changed -");
-+		if (inst->realloc_mv_buf) {
-+			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
-+			inst->realloc_mv_buf = false;
-+			if (err)
-+				goto err_free_fb_out;
-+		}
-+		inst->resolution_changed = false;
-+
-+		for (i = 0; i < H264_MAX_MV_NUM; i++) {
-+			mem = &inst->mv_buf[i];
-+			inst->vsi_ctx.mv_buf_dma[i] = mem->dma_addr;
-+		}
-+	}
-+
-+	memcpy_toio(inst->vpu.vsi, &inst->vsi_ctx, sizeof(inst->vsi_ctx));
-+	err = vpu_dec_start(vpu, data, 2);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	/* wait decoder done interrupt */
-+	err = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
-+					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	if (err)
-+		mtk_vcodec_err(inst, "decode timeout: pic_%d",
-+			       inst->ctx->decoded_frame_cnt);
-+
-+	inst->vsi->dec.timeout = !!err;
-+	err = vpu_dec_end(vpu);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	memcpy_fromio(&inst->vsi_ctx, inst->vpu.vsi, sizeof(inst->vsi_ctx));
-+	mtk_vcodec_debug(inst, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
-+			 inst->ctx->decoded_frame_cnt,
-+			 inst->vsi_ctx.dec.crc[0], inst->vsi_ctx.dec.crc[1],
-+			 inst->vsi_ctx.dec.crc[2], inst->vsi_ctx.dec.crc[3],
-+			 inst->vsi_ctx.dec.crc[4], inst->vsi_ctx.dec.crc[5],
-+			 inst->vsi_ctx.dec.crc[6], inst->vsi_ctx.dec.crc[7]);
-+
-+	inst->ctx->decoded_frame_cnt++;
-+	return 0;
-+
-+err_free_fb_out:
-+	mtk_vcodec_err(inst, "dec frame number: %d err: %d",
-+		       inst->ctx->decoded_frame_cnt, err);
-+	return err;
-+}
-+
-+static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				  struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	int ret;
-+
-+	if (!h_vdec)
-+		return -EINVAL;
-+
-+	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		ret = vdec_h264_slice_single_decode(h_vdec, bs, unused, res_chg);
-+	else
-+		ret = vdec_h264_slice_lat_decode(h_vdec, bs, unused, res_chg);
-+
-+	return ret;
-+}
-+
- static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
- 				     void *out)
- {
-@@ -620,7 +795,7 @@ static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type
- 
- const struct vdec_common_if vdec_h264_slice_multi_if = {
- 	.init		= vdec_h264_slice_init,
--	.decode		= vdec_h264_slice_lat_decode,
-+	.decode		= vdec_h264_slice_decode,
- 	.get_param	= vdec_h264_slice_get_param,
- 	.deinit		= vdec_h264_slice_deinit,
- };
--- 
-2.18.0
+If you in your dt do:
 
+	compatible = "qcom,scm-ipq806x", "qcom,scm";
+
+Then we don't need to update the driver for each platform, only the DT
+binding.
+
+And if we some day need to quirk something off qcom,scm-ipq806x we have
+that option.
+
+Thanks,
+Bjorn
+
+>  	{ .compatible = "qcom,scm-ipq4019" },
+>  	{ .compatible = "qcom,scm-mdm9607", .data = (void *)(SCM_HAS_CORE_CLK |
+>  							     SCM_HAS_IFACE_CLK |
+> -- 
+> 2.34.1
+> 

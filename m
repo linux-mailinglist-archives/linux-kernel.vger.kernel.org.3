@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828F54FF109
+	by mail.lfdr.de (Postfix) with ESMTP id CB4F74FF10A
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbiDMH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S233593AbiDMH5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiDMH5d (ORCPT
+        with ESMTP id S233576AbiDMH5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:57:33 -0400
-Received: from mail.meizu.com (edge01.meizu.com [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8872B269;
-        Wed, 13 Apr 2022 00:55:11 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 13 Apr
- 2022 15:55:07 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 13 Apr
- 2022 15:55:06 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] clk: renesas: Fix memory leak of 'cpg'
-Date:   Wed, 13 Apr 2022 15:55:04 +0800
-Message-ID: <1649836504-31381-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 13 Apr 2022 03:57:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CB722BE4;
+        Wed, 13 Apr 2022 00:55:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46C40616DE;
+        Wed, 13 Apr 2022 07:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3ACC385A4;
+        Wed, 13 Apr 2022 07:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649836513;
+        bh=1f4mcJkQt1lTjW13r8eX0mTCdHXvLFxIhJXVjQ6xG/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gDzRpSw9RoegUV+FlhIx87nLVc9FcoPmGnlAyqNHhN7gCAgnWihbcoIgUXRxQ90NA
+         1a19XVozvZvi9wJ/DfNDpJLFtYBi4Xmfj/qoBMGXNXIgXWs5t4jblAlpVNxFCQ8oGy
+         cCWHNlMjgP4ASUkXyQaYdY63nsvl9vWYILROyR6cBU+rNbfZcUG3Vi6G7wUwNyOZIm
+         I60RyVaCWqttaLqAIoIujs0aGmWetneUfAUo55dN0GSDyoHHy+KlDIN0gwZgTUqK7I
+         wXLMW+kcnjVD9NJwauUmIbC/02OU+TFf0KVAbobftNnzLbhfSVIqnRn7qY0mflEttK
+         ZMYvzKzTYkY8w==
+Date:   Wed, 13 Apr 2022 13:25:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, kishon@ti.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org,
+        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Add support for USB3 PHY on SDX65
+Message-ID: <YlaB3WBb8Dz3RLNC@matsya>
+References: <1649740652-17515-1-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649740652-17515-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,36 +57,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix this issue by freeing the cpg when exiting the function in the
-error/normal path.
+On 12-04-22, 10:47, Rohit Agarwal wrote:
+> This series adds USB3 PHY support for SDX65 platform. The USB3 PHY is of
+> type QMP and revision 5.0.0.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/clk/renesas/clk-r8a7740.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Applied, thanks
 
-diff --git a/drivers/clk/renesas/clk-r8a7740.c b/drivers/clk/renesas/clk-r8a7740.c
-index d8190f007a81..f3ddae554fcd 100644
---- a/drivers/clk/renesas/clk-r8a7740.c
-+++ b/drivers/clk/renesas/clk-r8a7740.c
-@@ -174,7 +174,7 @@ static void __init r8a7740_cpg_clocks_init(struct device_node *np)
- 
- 	cpg->reg = of_iomap(np, 0);
- 	if (WARN_ON(cpg->reg == NULL))
--		return;
-+		goto out_free_cpg;
- 
- 	for (i = 0; i < num_clks; ++i) {
- 		const char *name;
-@@ -192,6 +192,8 @@ static void __init r8a7740_cpg_clocks_init(struct device_node *np)
- 	}
- 
- 	of_clk_add_provider(np, of_clk_src_onecell_get, &cpg->data);
-+out_free_cpg:
-+	kfree(cpg);
- }
- CLK_OF_DECLARE(r8a7740_cpg_clks, "renesas,r8a7740-cpg-clocks",
- 	       r8a7740_cpg_clocks_init);
 -- 
-2.7.4
-
+~Vinod

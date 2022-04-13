@@ -2,152 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FAC500208
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5106450020B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237875AbiDMWul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S238205AbiDMWuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiDMWui (ORCPT
+        with ESMTP id S229541AbiDMWuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:50:38 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72862580FB
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:48:15 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id w19so6046942lfu.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:48:15 -0700 (PDT)
+        Wed, 13 Apr 2022 18:50:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D0E580FB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:48:22 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id md4so3413048pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Rjljh0Ck2s5oy15NuHhlHI64zRd9D7mmJO/ww9jh6KI=;
-        b=JWPPH9IH9OWhM3mr2yzedKc+0F9KJv9p7R8apF2V7A2kjsZ2XZjLnG7U+Erq4JMcRx
-         j2aZMzjF3EF7sBHG7wuRccxwqgQNYhJG2OA0/8d2o+R2yGaG0xoo5pvUnEK1PZuSQQP/
-         AyW5hTUWVYZtAj7V484d8mdQ9j0uPbLOCvGahkS47sUhfOoFCGP3FqhrVEnL7JSRowIp
-         RtZnVrR/KSP5kqhTlXNlp/gsIzFfDR+pLFTCTcw8/UzMBDKm+T/mk7PcHJ7NiBZcINFb
-         3p0MHtLW7uU+S0GMER/TNzg6r4fSv9A/7HnaUwX8zWdgS0A+iIoaMMrWi+GkBc4jU2m+
-         ywbw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BWDcRvlcACWbh4dLrXlVIAQiZ0iwUy3CwzcBurn6W5k=;
+        b=GLB/dZeXcK9x0+8IJh6XpIAyQ4Jy+6QuCDLBae2fwpu3/6UxR9BDzB/Mt3reRbQH5O
+         hT1q3Mxf+18dfJZqG8yv4dPR1a0wlGSIRHA99ykan7WPx4XqZbGmi4+W//d1W0Ke93uH
+         BTDmMOxswZ3hR4UQgT/zF18Y/lkmhNApAVHuOYrGtW9H1lgUcNboV65jbfQhRinxmcjR
+         yNbme2jxX5myTnrU64Ni16FgeG46b50uR3oHbMggUhEClTMN4hTbGYv20EVq03ok2p5k
+         RPwydPkkx4VFaXG1wZpbZx26aU0TWPPlV0szbYfjbu0xLU2EsdpccfPfMLW2hfiyuS9r
+         4qZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Rjljh0Ck2s5oy15NuHhlHI64zRd9D7mmJO/ww9jh6KI=;
-        b=inn/lObwXyhRywcIliKeCsU7pcO6qeQGIhFCaxF0mZkAMIbJMPMgvdG8lhzAGXbnxB
-         e7UDkB/OwvWVjcxDi7SBGijjAooaOxtcr/A/kj6lr4N4U6behBp+dhOoR4QBc4U51kCM
-         vFlfEWrzhJz6mcY8b8Us6lIMrtDta3l4T022KUxQA9fwFhwnZsJNWaSoOVFqfHoc3eo0
-         Gnb5X6G4+I42tRwstxTf/RsnE6ICQ6B0S0rvBEvPA5VE6zA/K7aE5+iHd3AaWkVf1/J3
-         l4n4GF7bsegkO3ZjIYxh6xTvvzm13Vz1KEL+o/kWI5wZn/82/BokPo7XnXh3ei3XEUjY
-         W4hQ==
-X-Gm-Message-State: AOAM532ud+GOXGX/++GFjU/03CgyCRV0RuuHSRVEPZoUckbu9PBGzO3k
-        +njYejV2fUgmcWdviwc6DGCw/Q==
-X-Google-Smtp-Source: ABdhPJwLGOXVgRQRnW/vis5ArNXs3GbeL5yfyHkCoVwhOuEEu/oGx5gTPf1dorzul0P6MeWE+j+AqQ==
-X-Received: by 2002:ac2:4c53:0:b0:44a:4357:c285 with SMTP id o19-20020ac24c53000000b0044a4357c285mr29062315lfk.99.1649890093755;
-        Wed, 13 Apr 2022 15:48:13 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k16-20020a192d10000000b0046ba99878a6sm31873lfj.17.2022.04.13.15.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 15:48:13 -0700 (PDT)
-Message-ID: <d39dca75-4f0c-6a8a-8bb3-fb745116c6f8@linaro.org>
-Date:   Thu, 14 Apr 2022 01:48:12 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BWDcRvlcACWbh4dLrXlVIAQiZ0iwUy3CwzcBurn6W5k=;
+        b=Anjokrrpl96QULnjjcbCr5KWZGfpCpjxwBEViIObVzSsANhj2/z26p5rubJUoagtgP
+         hhWHQnjq1EsLjdUS7PKRr5zQF0CnzU7Bi9dBI2SNWvlPQdXekWYt6LaNVUJPFoDzf2vg
+         YCAVOyFlE2mgwNmhHBiUeXMZmyxWAAAFAln/aet3dHL6il2dWEbOGjaZERZGpS1xmUYU
+         QSu96ZZ+faobvr4ZQPC7iSsOa0N73tVfZDUHLQsCD6co7tUjDjIpXkALe1QrWZx6e31A
+         BEpWzg6mQOH52SXSC1ejjF8qbsuFeyaxx7mYsWhrXyjstHxUdhrg23tMxOKI0MCvFhtp
+         WRhw==
+X-Gm-Message-State: AOAM531zo+o83cETGbAWQtdENKZGEaW4f8TCgQcgETA807CjMEDEEk1f
+        2dcnAdeqrd6D2IxKy4Zls/ZJdw==
+X-Google-Smtp-Source: ABdhPJxqvRe3fCUY5+aIDspm3J9J5wiKSYq0d2ut+7oZsZ1vO+LGoKXG3p3k4LB2+u49l38ISdK+RQ==
+X-Received: by 2002:a17:90a:5298:b0:1ca:7fb3:145 with SMTP id w24-20020a17090a529800b001ca7fb30145mr442363pjh.200.1649890101837;
+        Wed, 13 Apr 2022 15:48:21 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090a3fc500b001cb3fec230bsm97047pjm.14.2022.04.13.15.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 15:48:21 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 22:48:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v5 10/10] KVM: selftests: Test disabling NX hugepages on
+ a VM
+Message-ID: <YldTMfNEzsweKi1V@google.com>
+References: <20220413175944.71705-1-bgardon@google.com>
+ <20220413175944.71705-11-bgardon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v8 1/2] drm/msm/disp/dpu1: add inline function to validate
- format support
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, quic_kalyant@quicinc.com
-References: <1649695021-19132-1-git-send-email-quic_vpolimer@quicinc.com>
- <1649695021-19132-2-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1649695021-19132-2-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413175944.71705-11-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 19:37, Vinod Polimera wrote:
-> Check if the dpu format is supported or not using dpu_find_format.
-> 
-> Co-developed-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+On Wed, Apr 13, 2022, Ben Gardon wrote:
+> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> index 7f80e48781fd..21c31e1d567e 100644
+> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> @@ -13,6 +13,8 @@
+>  #include <fcntl.h>
+>  #include <stdint.h>
+>  #include <time.h>
+> +#include <linux/reboot.h>
+> +#include <sys/syscall.h>
+>  
+>  #include <test_util.h>
+>  #include "kvm_util.h"
+> @@ -80,13 +82,45 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
+>  		    expected_splits, actual_splits);
+>  }
+>  
+> -int main(int argc, char **argv)
+> +void run_test(bool disable_nx)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Probably worth naming this disable_nx_workaround or disable_nx_mitigation, it's
+quite easy to think this means "disable EFER.NX".
 
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h | 22 ++++++++++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c   | 10 +++-------
->   2 files changed, 25 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
-> index 418f5ae..84b8b32 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
-> @@ -21,6 +21,28 @@ const struct dpu_format *dpu_get_dpu_format_ext(
->   #define dpu_get_dpu_format(f) dpu_get_dpu_format_ext(f, 0)
->   
->   /**
-> + * dpu_find_format - validate if the pixel format is supported
-> + * @format:		dpu format
-> + * @supported_formats:	supported formats by dpu HW
-> + * @num_formatss:	total number of formats
-> + *
-> + * Return: false if not valid format, true on success
-> + */
-> +static inline bool dpu_find_format(u32 format, const u32 *supported_formats,
-> +					size_t num_formats)
-> +{
-> +	int i;
+>  {
+>  	struct kvm_vm *vm;
+>  	struct timespec ts;
+> +	uint64_t pages;
+>  	void *hva;
+> -
+> -	vm = vm_create_default(0, 0, guest_code);
+> +	int r;
 > +
-> +	for (i = 0; i < num_formats; i++) {
-> +		/* check for valid formats supported */
-> +		if (format == supported_formats[i])
-> +			return true;
+> +	pages = vm_pages_needed(VM_MODE_DEFAULT, 1, DEFAULT_GUEST_PHY_PAGES,
+> +				0, 0);
+> +	vm = vm_create_without_vcpus(VM_MODE_DEFAULT, pages);
+> +
+> +	if (disable_nx) {
+> +		kvm_check_cap(KVM_CAP_VM_DISABLE_NX_HUGE_PAGES);
+> +
+> +		/*
+> +		 * Check if this process has the reboot permissions needed to
+> +		 * disable NX huge pages on a VM.
+> +		 *
+> +		 * The reboot call below will never have any effect because
+> +		 * the magic values are not set correctly, however the
+> +		 * permission check is done before the magic value check.
+> +		 */
+> +		r = syscall(SYS_reboot, 0, 0, 0, NULL);
+> +		if (r && errno == EPERM) {
+> +			r = vm_disable_nx_huge_pages(vm);
+> +			TEST_ASSERT(r == EPERM,
+> +				    "This process should not have permission to disable NX huge pages");
+
+First off, huge kudos for negative testing!  But, it's going to provide poor coverage
+if we teach everyone to use the runner script, because that'll likely require root on
+most hosts, e.g. to futz with the module param.
+
+Aha!  Idea.  And it should eliminate the SYS_reboot shenanigans, which while hilarious,
+are mildy scary.
+
+In the runner script, wrap all the modification of sysfs knobs with sudo, and then
+(again with sudo) do:
+
+	setcap cap_sys_boot+ep path/to/nx_huge_pages_test
+	path/to/nx_huge_pages_test MAGIC_NUMBER -b
+
+where "-b" means "has CAP_SYS_BOOT".  And then 
+
+	setcap cap_sys_boot-ep path/to/nx_huge_pages_test
+	path/to/nx_huge_pages_test MAGIC_NUMBER
+
+Hmm, and I guess if the script is run as root, just skip the second invocation.
+
+> +			return;
+> +		}
+> +
+> +		TEST_ASSERT(r && errno == EINVAL,
+> +			    "Reboot syscall should fail with -EINVAL");
+> +
+> +		r = vm_disable_nx_huge_pages(vm);
+> +		TEST_ASSERT(!r, "Disabling NX huge pages should succeed if process has reboot permissions");
 > +	}
 > +
-> +	return false;
-> +}
-> +
-> +/**
->    * dpu_get_msm_format - get an dpu_format by its msm_format base
->    *                     callback function registers with the msm_kms layer
->    * @kms:             kms driver
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> index 6565682..3216cda 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> @@ -1411,13 +1411,9 @@ static bool dpu_plane_format_mod_supported(struct drm_plane *plane,
->   	if (modifier == DRM_FORMAT_MOD_LINEAR)
->   		return true;
->   
-> -	if (modifier == DRM_FORMAT_MOD_QCOM_COMPRESSED) {
-> -		int i;
-> -		for (i = 0; i < ARRAY_SIZE(qcom_compressed_supported_formats); i++) {
-> -			if (format == qcom_compressed_supported_formats[i])
-> -				return true;
-> -		}
-> -	}
-> +	if (modifier == DRM_FORMAT_MOD_QCOM_COMPRESSED)
-> +		return dpu_find_format(format, qcom_compressed_supported_formats,
-> +				ARRAY_SIZE(qcom_compressed_supported_formats));
->   
->   	return false;
->   }
+> +	vm_vcpu_add_default(vm, 0, guest_code);
+>  
+>  	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+>  				    HPAGE_GPA, HPAGE_SLOT,
+> @@ -121,21 +155,21 @@ int main(int argc, char **argv)
+>  	 * to be remapped at 4k.
+>  	 */
+>  	vcpu_run(vm, 0);
+> -	check_2m_page_count(vm, 1);
+> -	check_split_count(vm, 1);
+> +	check_2m_page_count(vm, disable_nx ? 2 : 1);
+> +	check_split_count(vm, disable_nx ? 0 : 1);
 
-
--- 
-With best wishes
-Dmitry
+Can you update the comments to explain why these magic number of pages are
+expected for NX enabled/disabled?  As Jim has pointed out, just because KVM and
+selftests might agree that 1==2, doesn't mean that their math is correct :-)

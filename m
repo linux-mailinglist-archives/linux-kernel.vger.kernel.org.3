@@ -2,86 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7284FF8F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1402E4FF8FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbiDMOcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S236055AbiDMOfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiDMOcR (ORCPT
+        with ESMTP id S233994AbiDMOfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:32:17 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8083EF19;
-        Wed, 13 Apr 2022 07:29:55 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id t67so4099235ybi.2;
-        Wed, 13 Apr 2022 07:29:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P6HqlanCyPSwncb4shZm76Hg2UdOq2aV2/+OAl9p+/g=;
-        b=NMP0IWxZfJse6iT27NVOPoj7/t3UtTKGwibRMRnREJaHei+/pHWm+yJtJL7toiqir9
-         R5r1CVqeaPKvUsTc2SyDEjob3iyvdkqz7HnCnwTIlEdtKDgsR5f2/omdsM7Gak4XIZVr
-         M8PNAf9gAt1nF2SZ5GfPqM2oWKn6Ycp5AfSoRGDjRLhBloyFtIrDQq/6KNf0fHHWRCr2
-         YARgSD8a6pAkgfMecLyl5sLp7sKtqzOSEZx+tIQ4dCfGsbv6LT/RQZ2kDbeeTOTQe1YC
-         ysk7VsozITI6ug1X9T6aSLN06Mmc96putFFCvOMCpLLcQO/GX885GZFE2o7Ny7Eq2Pee
-         EmoA==
-X-Gm-Message-State: AOAM531pZY1V4I+jhnPf5stobmqkpuXxxF19/Vq/hos5fngWtc5dNNLC
-        siiPNh+HX13x6OSaADnk1KeH7Xvf/P7DTqljX+4=
-X-Google-Smtp-Source: ABdhPJyIEe6g/M5R+wfhGO1Tn2f6GQ9LY3zIVdu915DAN1BxmCSF3smK/dPKs7NrgvevM6qmuH0nezgz/sviDNUop8I=
-X-Received: by 2002:a05:6902:1544:b0:63d:d3a7:8cc4 with SMTP id
- r4-20020a056902154400b0063dd3a78cc4mr31215822ybu.622.1649860195288; Wed, 13
- Apr 2022 07:29:55 -0700 (PDT)
+        Wed, 13 Apr 2022 10:35:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE895676A;
+        Wed, 13 Apr 2022 07:32:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CA661BA6;
+        Wed, 13 Apr 2022 14:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA83C385A6;
+        Wed, 13 Apr 2022 14:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649860366;
+        bh=y/gFQs+hgHZ3/vvOq41ylGPCtjhP53O/JBKcPRIcQfg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c6zZdWDOUnHSGNHfBTXEBVZObxER3VgBA/8QflX/jfQ5RRQ8Bxgqk2eFNQ2MXzEuy
+         jSkpa6Jwc1N4IvWLMHH+Zt0+XCE7tpnn8KFoIgvwAN4tQB93mzX7TE3tlvhL6XG/Fr
+         WTnRTPKLKs7TxKy144wJ8pe88A68vmmh5K4rknhCaZes7AxMngvMVG8iLOIfcPhXiw
+         fEpxXUDgzsVLgt2eQn6aeFnaL7eLX0DZMkr1aWcOFtdc0XWBwsSNtD31Y7tfNtZO5t
+         Xo068bQO4+veX4gUup6qM1r8ayg9R8rjAguYKzFRRu+kP9M7+oBWwfwk7CyrX1OCiG
+         araLq0MFphDFg==
+Received: by mail-io1-f43.google.com with SMTP id 9so2089173iou.5;
+        Wed, 13 Apr 2022 07:32:46 -0700 (PDT)
+X-Gm-Message-State: AOAM532oM5Vh0Qd7XdCfuH6CoK5N2MVtuwPHjv6/LRkBqhWrj1MlUJYp
+        QYh7hTQdm4Tcv698Oz3OhrZSVXTfqwcWDWchxg==
+X-Google-Smtp-Source: ABdhPJztV5+8KEJ74WCQvEE2mueV1uP9FdDpJontci3NKw8uFVcyU1+ScsVCAwrzKj/88xIwClDnzYiNbkHkece/VFk=
+X-Received: by 2002:a05:6638:24d0:b0:326:34d2:5c22 with SMTP id
+ y16-20020a05663824d000b0032634d25c22mr6761858jat.91.1649860365852; Wed, 13
+ Apr 2022 07:32:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321095729.20655-1-lukasz.luba@arm.com> <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
- <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
-In-Reply-To: <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 16:29:44 +0200
-Message-ID: <CAJZ5v0g5vcC7aS4KS-uN+fHmbrKCmA-MVbJEKOnPgEyDDfqSRw@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-2-Jason@zx2c4.com>
+In-Reply-To: <20220413115411.21489-2-Jason@zx2c4.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 13 Apr 2022 09:32:34 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
+Message-ID: <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
+Subject: Re: [PATCH v4 01/11] timekeeping: add raw clock fallback for random_get_entropy()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
+        linux-xtensa@linux-xtensa.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 12, 2022 at 8:53 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Wed, Apr 13, 2022 at 6:55 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> Hi Rafael,
+> The addition of random_get_entropy_fallback() provides access to
+> whichever time source has the highest frequency, which is useful for
+> gathering entropy on platforms without available cycle counters. It's
+> not necessarily as good as being able to quickly access a cycle counter
+> that the CPU has, but it's still something, even when it falls back to
+> being jiffies-based.
 >
-> gentle ping. If you need some help with this maintenance,
-> we can help.
+> In the event that a given arch does not define get_cycles(), falling
+> back to the get_cycles() default implementation that returns 0 is really
+> not the best we can do. Instead, at least calling
+> random_get_entropy_fallback() would be preferable, because that always
+> needs to return _something_, even falling back to jiffies eventually.
+> It's not as though random_get_entropy_fallback() is super high precision
+> or guaranteed to be entropic, but basically anything that's not zero all
+> the time is better than returning zero all the time.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  include/linux/timex.h     |  8 ++++++++
+>  kernel/time/timekeeping.c | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>
+> diff --git a/include/linux/timex.h b/include/linux/timex.h
+> index 5745c90c8800..fbbe34226044 100644
+> --- a/include/linux/timex.h
+> +++ b/include/linux/timex.h
+> @@ -62,6 +62,8 @@
+>  #include <linux/types.h>
+>  #include <linux/param.h>
+>
+> +extern unsigned long random_get_entropy_fallback(void);
+> +
+>  #include <asm/timex.h>
+>
+>  #ifndef random_get_entropy
+> @@ -74,8 +76,14 @@
+>   *
+>   * By default we use get_cycles() for this purpose, but individual
+>   * architectures may override this in their asm/timex.h header file.
+> + * If a given arch does not have get_cycles(), then we fallback to
 
-Sorry for the delay.
+'does not have a usable get_cycles(), ...' as clearly some arches have
+get_cycles() and yet still need a fallback.
 
-Given the lack of objections or concerns, I've applied the whole
-series as 5.19 material.
+Why not handle the 'if get_cycles() returns 0 do the fallback' within
+a weak random_get_entropy() function? Then more arches don't need any
+random_get_entropy() implementation.
 
-Thanks!
+Rob

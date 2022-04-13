@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51194FF7A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E8E4FF7A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiDMNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S235593AbiDMNcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiDMNbz (ORCPT
+        with ESMTP id S235794AbiDMNck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:31:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E2D13D50
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649856572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jVR0xl04hcA0VacEWvnMSieahQrpEf55RjhFHPhdvDg=;
-        b=cQBPk+f+u4IGlBfWWD2W31dwmoJSgrpAnVBZJ9G2enyan3oEvm0ZtBIRWvDhgjpPOnaf9m
-        usQ6vvf8iLrA/oHtLocJZFtZNgIMHL4UVsTDQBEHTgUd9EnoVDs9PZr0REQLgM3lVAUrez
-        y+WyjwbHbTeaIuC5RdySWJbT0Ke5pD0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-XIU68xWAMwayjNqMiYJaHA-1; Wed, 13 Apr 2022 09:29:27 -0400
-X-MC-Unique: XIU68xWAMwayjNqMiYJaHA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 13 Apr 2022 09:32:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CDF1B786;
+        Wed, 13 Apr 2022 06:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26BEA86B8A3;
-        Wed, 13 Apr 2022 13:29:27 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.165])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 115A2403151;
-        Wed, 13 Apr 2022 13:29:23 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 13 Apr 2022 15:29:26 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 15:29:22 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/5] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <20220413132922.GB27281@redhat.com>
-References: <20220412114421.691372568@infradead.org>
- <20220412114853.782838521@infradead.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BA84B824AF;
+        Wed, 13 Apr 2022 13:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC7DFC385A8;
+        Wed, 13 Apr 2022 13:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649856616;
+        bh=85lID7Y8b/51FkWR0s29xGJVseeMIQt5vDZECBrzLy4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AAsb8InHwtqgg6vNgBUIAYWq8UQE3mExKtGlt5tSJ/CWECeF6ZB1h+jJeaik4xk5S
+         06SFsgz+4q3qRspsApWN1DQ1uv+7lXHZQn6ikaXMbE637OGssEFpouAAilcohYvWOu
+         0s5ERTyol+pvljKf0M/qvHiOwvvXPmm/YAj/gMLUI51RwWxOc/jg1fWSCqwdlQZhfT
+         u6e3vCs8wx/iJwrtIZgWd+YTVAB0Fs0aA+JMv52OibMDU0TMtMx6aUR0KrbHdX7+Kd
+         OPWnwb+NoACSzmBObWJ82WfWQXkInY6PhW7854KhyzWDTnz6S3VSz6vtlbV/JrhLWE
+         0263kB3W4LZrQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3B62E8DD5E;
+        Wed, 13 Apr 2022 13:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412114853.782838521@infradead.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/9] net: ip: add skb drop reasons to ip ingress
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164985661586.7515.1894293980770406853.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Apr 2022 13:30:15 +0000
+References: <20220413081600.187339-1-imagedong@tencent.com>
+In-Reply-To: <20220413081600.187339-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        pabeni@redhat.com, benbjiang@tencent.com, flyingpeng@tencent.com,
+        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
+        talalahmad@google.com, keescook@chromium.org,
+        mengensun@tencent.com, dongli.zhang@oracle.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/12, Peter Zijlstra wrote:
->
-> @@ -475,8 +483,10 @@ static int ptrace_attach(struct task_str
->  	 * in and out of STOPPED are protected by siglock.
->  	 */
->  	if (task_is_stopped(task) &&
-> -	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING))
-> +	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING)) {
-> +		task->jobctl &= ~JOBCTL_STOPPED;
->  		signal_wake_up_state(task, __TASK_STOPPED);
+Hello:
 
-OK, but just for record before I forget...
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-It seems that we can s/JOBCTL_STOPPED/JOBCTL_TRACED/ instead, and kill the
-nasty wait_on_bit(JOBCTL_TRAPPING_BIT) along with JOBCTL_TRAPPING_BIT. Sure,
-this doesn't belong to this series.
+On Wed, 13 Apr 2022 16:15:51 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> In the series "net: use kfree_skb_reason() for ip/udp packet receive",
+> skb drop reasons are added to the basic ingress path of IPv4. And in
+> the series "net: use kfree_skb_reason() for ip/neighbour", the egress
+> paths of IPv4 and IPv6 are handled. Related links:
+> 
+> [...]
 
-Oleg.
+Here is the summary with links:
+  - [net-next,1/9] skb: add some helpers for skb drop reasons
+    https://git.kernel.org/netdev/net-next/c/d6d3146ce532
+  - [net-next,2/9] net: ipv4: add skb drop reasons to ip_error()
+    https://git.kernel.org/netdev/net-next/c/c4eb664191b4
+  - [net-next,3/9] net: ipv6: add skb drop reasons to ip6_pkt_drop()
+    https://git.kernel.org/netdev/net-next/c/3ae42cc8092b
+  - [net-next,4/9] net: ip: add skb drop reasons to ip forwarding
+    https://git.kernel.org/netdev/net-next/c/2edc1a383fda
+  - [net-next,5/9] net: icmp: introduce function icmpv6_param_prob_reason()
+    https://git.kernel.org/netdev/net-next/c/1ad6d548e2a4
+  - [net-next,6/9] net: ipv6: remove redundant statistics in ipv6_hop_jumbo()
+    https://git.kernel.org/netdev/net-next/c/bba98083499f
+  - [net-next,7/9] net: ipv6: add skb drop reasons to TLV parse
+    https://git.kernel.org/netdev/net-next/c/7d9dbdfbfdc5
+  - [net-next,8/9] net: ipv6: add skb drop reasons to ip6_rcv_core()
+    https://git.kernel.org/netdev/net-next/c/4daf841a2ef3
+  - [net-next,9/9] net: ipv6: add skb drop reasons to ip6_protocol_deliver_rcu()
+    https://git.kernel.org/netdev/net-next/c/eeab7e7ff43e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

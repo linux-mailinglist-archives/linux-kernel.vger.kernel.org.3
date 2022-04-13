@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E6D4FFBE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F404FFBCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbiDMQ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S235554AbiDMQ4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbiDMQ7u (ORCPT
+        with ESMTP id S229495AbiDMQ4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:59:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129AE6A036;
-        Wed, 13 Apr 2022 09:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649869048; x=1681405048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J/06hLI56n+UwECnp0EG6XOIuTP/83n8TeWwphjmSp8=;
-  b=kW/LagHcPCJaOI9h28kgoIi2daCBgPqJ7xO7gOfQkYjeKzqZYMplKlbl
-   3IIqGn57KVKRWvu7z2hJNNCsdKyiAr/kZ9CrS/b7g78BGy4dowhmHWr/e
-   t9x0vIk0rWahtABes9gQxsBZ/38I1r9ODxGfMZBG1PQIseT+iKDAF7v07
-   El+oHvIEeYslnIocY6i7DiWMN2FMo/uDQLWwc1AuFU8TtLahU0CwXZxex
-   W8egbONnrCXwMO4+i0H4JKi517cydjKPvALSs6Z8Z4/fgusMAIt6PxuyK
-   1v3UECtMh8xoy5bJcyiL9Nc+U7+z2ZTPoJb21D79J8Zeq7kMhMjT1gNJA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261566264"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="261566264"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:57:17 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="611958900"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:57:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1negFM-001vxB-Lb;
-        Wed, 13 Apr 2022 19:53:36 +0300
-Date:   Wed, 13 Apr 2022 19:53:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] gpio: sim: fix setting and getting multiple lines
-Message-ID: <YlcAEPYOBHk+NAD8@smile.fi.intel.com>
-References: <20220413140132.286848-1-brgl@bgdev.pl>
+        Wed, 13 Apr 2022 12:56:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C5D68301
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:53:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D70D61E71
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77CBC385A3;
+        Wed, 13 Apr 2022 16:53:41 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 17:53:38 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Guanghui Feng <guanghuifeng@linux.alibaba.com>
+Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com
+Subject: Re: [PATCH RFC v1] arm64: mm: change mem_map to use block/section
+ mapping with crashkernel
+Message-ID: <YlcAEo3lpKJg8HJf@arm.com>
+References: <1649754476-8713-1-git-send-email-guanghuifeng@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220413140132.286848-1-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1649754476-8713-1-git-send-email-guanghuifeng@linux.alibaba.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:01:32PM +0200, Bartosz Golaszewski wrote:
-> We need to take mask into account in the set/get_multiple() callbacks.
-> Use bitmap_replace() instead of bitmap_copy().
-
-Good catch!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: cb8c474e79be ("gpio: sim: new testing module")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  drivers/gpio/gpio-sim.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, Apr 12, 2022 at 05:07:56PM +0800, Guanghui Feng wrote:
+> There are many changes and discussions:
+> commit 031495635b46
+> commit 1a8e1cef7603
+> commit 8424ecdde7df
+> commit 0a30c53573b0
+> commit 2687275a5843
 > 
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index 8e5d87984a48..41c31b10ae84 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -134,7 +134,7 @@ static int gpio_sim_get_multiple(struct gpio_chip *gc,
->  	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
->  
->  	mutex_lock(&chip->lock);
-> -	bitmap_copy(bits, chip->value_map, gc->ngpio);
-> +	bitmap_replace(bits, bits, chip->value_map, mask, gc->ngpio);
->  	mutex_unlock(&chip->lock);
->  
->  	return 0;
-> @@ -146,7 +146,7 @@ static void gpio_sim_set_multiple(struct gpio_chip *gc,
->  	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
->  
->  	mutex_lock(&chip->lock);
-> -	bitmap_copy(chip->value_map, bits, gc->ngpio);
-> +	bitmap_replace(chip->value_map, chip->value_map, bits, mask, gc->ngpio);
->  	mutex_unlock(&chip->lock);
->  }
->  
-> -- 
-> 2.32.0
+> When using DMA/DMA32 zone and crashkernel, disable rodata full and kfence,
+> mem_map will use non block/section mapping(for crashkernel requires to shrink
+> the region in page granularity). But it will degrade performance when doing
+> larging continuous mem access in kernel(memcpy/memmove, etc).
 > 
+> This patch firstly do block/section mapping at mem_map, reserve crashkernel
+> memory. And then walking pagetable to split block/section mapping
+> to non block/section mapping [only] for crashkernel mem. We will accelerate
+> mem access about 10-20% performance improvement, and reduce the cpu dTLB miss
+> conspicuously on some platform with this optimization.
+
+Do you actually have some real world use-cases where this improvement
+matters? I don't deny that large memcpy over the kernel linear map may
+be slightly faster but where does this really matter?
+
+> +static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
+> +				 unsigned long end, phys_addr_t phys,
+> +				 pgprot_t prot,
+> +				 phys_addr_t (*pgtable_alloc)(int), int flags)
+> +{
+> +	phys_addr_t map_offset;
+> +	unsigned long next;
+> +	pmd_t *pmdp;
+> +	pmdval_t pmdval;
+> +
+> +	pmdp = pmd_offset(pudp, addr);
+> +	do {
+> +		next = pmd_addr_end(addr, end);
+> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+> +			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
+> +			pmd_clear(pmdp);
+> +			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+> +			if (flags & NO_EXEC_MAPPINGS)
+> +				pmdval |= PMD_TABLE_PXN;
+> +			__pmd_populate(pmdp, pte_phys, pmdval);
+> +			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+
+The architecture requires us to do a break-before-make here, so
+pmd_clear(), TLBI, __pmd_populate() - in this order. And that's where it
+gets tricky, if the kernel happens to access this pmd range while it is
+unmapped, you'd get a translation fault.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Catalin

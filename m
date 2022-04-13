@@ -2,98 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A76C4FF07B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296E54FF084
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbiDMHYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S233318AbiDMHZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiDMHYn (ORCPT
+        with ESMTP id S233319AbiDMHZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:24:43 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21614BFC4;
-        Wed, 13 Apr 2022 00:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5u/yJFbxRgW2t+B3rx9C6wEYQQxVaCgfZ+ICC6Wpw7E=; b=F1JGwIlAUcDS//hyyFKjW7a6oE
-        ARlYyQI3b9lAthrqyVgcEO/nk/zZNj+f/qgifQHe6Q7DfOdBI0NFygwfHo2jByyqYIfXn6KRSy5Vr
-        b6uV8Rhf3MEtq8D7FpDJ5ZW8EVgizdUCTp7vM8TCjnyrDNJcoYbVJYo6VepK6oBrrVCGfokQahrkT
-        1CAfQVQcO7h3r8IOiVm8lf37UsxZTpnqjDZSlAUh4zI57klIahz0ucgu8+eJ6hamXnuv+90JmWFgZ
-        hl1oNcv/KJyHp5Ix9Yfu4JwoghGpVmO42PWiRfloNFGfef2zTB2cFV67uwD32wAt46C0VYhMhHkXj
-        eXpE95YA==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1neXKL-00083b-5h; Wed, 13 Apr 2022 10:22:09 +0300
-Message-ID: <f403d196-352f-ee04-8568-d6600924af0f@kapsi.fi>
-Date:   Wed, 13 Apr 2022 10:22:08 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] drm/tegra: remove useless if check before kfree
-Content-Language: en-US
-To:     Bernard Zhao <zhaojunkui2008@126.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     bernard@vivo.com
-References: <20220413064618.23974-1-zhaojunkui2008@126.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <20220413064618.23974-1-zhaojunkui2008@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 13 Apr 2022 03:25:44 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F864EF5B;
+        Wed, 13 Apr 2022 00:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649834576;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=jSef++PqlCRC5a4E7G9ko+rR3cG0lpZnUPx+3xD3i7k=;
+    b=MiFx7X19KcZviO8N1lBrrnZQxFqdpVnskMF7uzqQgRP/aJm+jDz2EM+ReZG3FMkR5v
+    JdYIVJZzej7TkIId6fWcDIni7CLtCBG9UGi0/kPPjn4TZ6CeqPKlF9q9iqr3wv6s4+k7
+    Tz0eSNte16z2hyyaXk0SB3UP4ym/Jdr5XGXjLP2mMS2fJqvMe+OrN32QNsghhrpo2WBe
+    R60work5jkLFacohwDMRmCtDdfPWaSS4E56DF762marMk6BUmQpfVSd+n+KkoPYLoC7L
+    Jc+D0HRXsRjoRhFKBPZjttEZZGcvs7R6zY9G0Mi6skCLwoZtATU6BlU9mAGFD0BkLI6b
+    slsw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4nvnQ=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy3D7Mt7tg
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 13 Apr 2022 09:22:55 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+Date:   Wed, 13 Apr 2022 09:22:54 +0200
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dragancecavac@yahoo.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
+References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+To:     =?utf-8?B?IuWRqOeQsOadsCAoWmhvdSBZYW5qaWUpIg==?= 
+        <zhouyanjie@wanyeetech.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 09:46, Bernard Zhao wrote:
-> This patch remove useless if check before kfree.
-> 
-> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+Hi,
+
+> Am 12.04.2022 um 20:30 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
+Yanjie) <zhouyanjie@wanyeetech.com>:
+>=20
+> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
+> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
+> from Ingenic.
+>=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) =
+<zhouyanjie@wanyeetech.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/gpu/drm/tegra/submit.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
-> index 6d6dd8c35475..54ac31bc80f6 100644
-> --- a/drivers/gpu/drm/tegra/submit.c
-> +++ b/drivers/gpu/drm/tegra/submit.c
-> @@ -639,8 +639,7 @@ int tegra_drm_ioctl_channel_submit(struct drm_device *drm, void *data,
->   		kfree(job_data->used_mappings);
->   	}
->   
-> -	if (job_data)
-> -		kfree(job_data);
-> +	kfree(job_data);
->   put_bo:
->   	gather_bo_put(&bo->base);
->   unlock:
+>=20
+> Notes:
+>    v1->v2:
+>    Add Rob Herring's Acked-by.
+>=20
+> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+> 1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml =
+b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 4cebce6..c6e8c0b 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -17,6 +17,13 @@ properties:
+>     oneOf:
+>       - const: brcm,bcm2835-usb
+>       - const: hisilicon,hi6220-usb
+> +      - const: ingenic,jz4775-otg
+> +      - const: ingenic,jz4780-otg
+> +      - const: ingenic,x1000-otg
+> +      - const: ingenic,x1600-otg
+> +      - const: ingenic,x1700-otg
+> +      - const: ingenic,x1830-otg
+> +      - const: ingenic,x2000-otg
 
-(Same comment as for other patch.)
+I have merged it with my recently proposed removal of
+ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
+complaint about missing snps,dwc2.
 
-I personally dislike leaving the NULL checks off with calls to kfree. 
-With the NULL check there, while reading the code it is obvious that the 
-intention is that the value can be either a valid pointer or NULL. IMHO 
-with C's type system/conventions we need this kind of contextual 
-information to understand the code easily and avoid bugs.
+So I think should it be:
 
-Mikko
+      - items:
+          - enum:
+              - const: ingenic,jz4775-otg
+              - const: ingenic,jz4780-otg
+              - const: ingenic,x1000-otg
+              - const: ingenic,x1600-otg
+              - const: ingenic,x1700-otg
+              - const: ingenic,x1830-otg
+              - const: ingenic,x2000-otg
+          - const: snps,dwc2
+
+similar to the entry for amlogic?
+
+>       - items:
+>           - const: rockchip,rk3066-usb
+>           - const: snps,dwc2
+> --=20
+> 2.7.4
+>=20
+
+BR and thanks,
+Nikolaus=

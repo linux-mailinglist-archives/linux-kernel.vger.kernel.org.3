@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8558E4FFBF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59CC4FFBF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237139AbiDMRDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S237154AbiDMRDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237147AbiDMRCc (ORCPT
+        with ESMTP id S237147AbiDMRDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:02:32 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31F91BEA7;
-        Wed, 13 Apr 2022 10:00:09 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 21so3207479edv.1;
-        Wed, 13 Apr 2022 10:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DlQ+pyRwe7qHszIiHVeIqVG2GBzeusjMOdi25t/1dbg=;
-        b=BDvmBiS2gYedfQA2KXmxPJAL1lMWmhK6f8oQN6Kz/fvX4fDJSe5yGvVMvDjhKRjV31
-         QHnRJ96yYht1eMZIw87RIcDWQnRtH1paF67z7mYeyQyINTEtxPMvDmoqbZSpH3C1tnLx
-         qmw1tKv7O4cnKoD2+oSgIPgu+GDmoGoXB8SAQosGbT0nt9vTmctp/gPpahD4PUt/CarL
-         L0EDaKyBTvIpTM9Ja2exmQsDC2o7n65ZcrKCWQ56Z3uBmhL2gSf7SmdZhGFGhHLV1JFw
-         POgmf6NIs+6BQvgAQDCN8nVGJBn2so7VEJ7nShnBq1YYUzLKB69+z3f59N8MyVZGhx1K
-         1sOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DlQ+pyRwe7qHszIiHVeIqVG2GBzeusjMOdi25t/1dbg=;
-        b=f5gQdh/AF/8GNVeqMyjDzzKbCuAe1TMzoQf5n+9svW8wdABpg71w9wrq2x+KOx85h9
-         AdzHCfgYoU3owiezNw0eG8QvoSllerqHsOm8NYNyuUYelzi2H0co/8CQEiGV5MzLrg7m
-         vxajaICQKkBx9qe9szeHsF7rDMuIHDeNQMLGEJ6KPE5OrPAsoAf0ybLnoM+ZCKmOtmGW
-         dj+8OqbRgwycGWKKn8zZzjgMnIhvZi5CC0cGDvX0NwuQ/Vb+ai+u60SS46USKkCwdPbX
-         5E3fHsAcsHpibZDNFz1wYM53riGoT5I1bk2joBszdBvEbtdVoF6YR2TpY2Z2qRYyjJi0
-         7TtA==
-X-Gm-Message-State: AOAM533ZkowOc2BfHno64c75AdYxkgk65ElO8kN2QrK6WxEB+gm9lsOG
-        laaRlAVDQRKtQlxLM1DHAos=
-X-Google-Smtp-Source: ABdhPJwy+Dys3iMoOhXVWrnmlUQTYocjmBYLYWmiTaWOy2UFycV6wC/zhJ6z3ewvvfPNHNXno43nAQ==
-X-Received: by 2002:aa7:cb93:0:b0:415:d57a:4603 with SMTP id r19-20020aa7cb93000000b00415d57a4603mr44262449edt.62.1649869208260;
-        Wed, 13 Apr 2022 10:00:08 -0700 (PDT)
-Received: from Ansuel-xps. (host-80-182-176-248.retail.telecomitalia.it. [80.182.176.248])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm1425800edz.35.2022.04.13.10.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 10:00:07 -0700 (PDT)
-Message-ID: <62570197.1c69fb81.c3de2.7b70@mx.google.com>
-X-Google-Original-Message-ID: <YlcBlmQHjwylg8XX@Ansuel-xps.>
-Date:   Wed, 13 Apr 2022 19:00:06 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 03/18] clk: qcom: gcc-ipq806x: add PXO_SRC in clk table
-References: <20220321231548.14276-1-ansuelsmth@gmail.com>
- <20220321231548.14276-4-ansuelsmth@gmail.com>
- <20220325011037.03173C340EC@smtp.kernel.org>
- <Yj0XTYgoMScoiUHP@Ansuel-xps.localdomain>
- <20220325012231.899FBC340EC@smtp.kernel.org>
+        Wed, 13 Apr 2022 13:03:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA88739801
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:00:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C6A61E84
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 17:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8143C385A4;
+        Wed, 13 Apr 2022 17:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649869254;
+        bh=wo3Wo9GrccRUNVNFdx4h+0W9/sxWbdIkUAXNTds8zzo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LiH2UC/zXex0HeGiA9EV5VGeZ+86nnNRaHVKQHN0dhG22QaE5kgi+8s6YBJhfdawQ
+         k5v2Y4YF4dIuPu/JlI1jEiSE3gUhDdgMKf+PXTmgaAcKiPH8oN+pTPlSfAT4082pxK
+         Bdz+CDOFxhZ6T9ggxCD5DZ8gKQCde8dqXLUkH0tqwWGNhlMw+jl/KTGrK1oy8l6YHz
+         j5eQ0o5h7gjPtE8L8aLIkZaKpGcXruhkUR+OK1Mig8/5RN88RFcs1pIK7Cp3uw/YKf
+         V3S1Ha8NH4ouExHOwsYRheyZfqu0uyL728O+42/WTISlHfevoGSh76IjqqzqF3SXSM
+         p7dMicmAElWxw==
+Date:   Wed, 13 Apr 2022 10:00:53 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Rokudo Yan <wu-yan@tcl.com>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, tang.ding@tcl.com
+Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
+Message-ID: <YlcBxSA5qYN4z1ia@google.com>
+References: <20220413084432.1312900-1-wu-yan@tcl.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325012231.899FBC340EC@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220413084432.1312900-1-wu-yan@tcl.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 06:22:29PM -0700, Stephen Boyd wrote:
-> Quoting Ansuel Smith (2022-03-24 18:13:49)
-> > On Thu, Mar 24, 2022 at 06:10:35PM -0700, Stephen Boyd wrote:
-> > > Quoting Ansuel Smith (2022-03-21 16:15:33)
-> > > > PXO_SRC is currently defined in the gcc include and referenced in the
-> > > > ipq8064 DTSI. Correctly provide a clk after gcc probe to fix kernel
-> > > > panic if a driver starts to actually use it.
-> > > > 
-> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > > ---
-> > > 
-> > > What is this patch about? clk providers shouldn't be calling clk_get().
-> > >
-> > 
-> > If pxo is passed as a clock in dts and defined as a fixed clock, what
-> > should be used? 
+On 04/13, Rokudo Yan wrote:
+> There is a potential deadlock in gc thread may happen
+> under low memory as below:
 > 
-> clk_parent_data
+> gc_thread_func
+>  -f2fs_gc
+>   -do_garbage_collect
+>    -gc_data_segment
+>     -move_data_block
+>      -set_page_writeback(fio.encrypted_page);
+>      -f2fs_submit_page_write
+> as f2fs_submit_page_write try to do io merge when possible, so the
+> encrypted_page is marked PG_writeback but may not submit to block
+> layer immediately, if system enter low memory when gc thread try
+> to move next data block, it may do direct reclaim and enter fs layer
+> as below:
+>    -move_data_block
+>     -f2fs_grab_cache_page(index=?, for_write=false)
+>      -grab_cache_page
+>       -find_or_create_page
+>        -pagecache_get_page
+>         -__page_cache_alloc --  __GFP_FS is set
+>          -alloc_pages_node
+>           -__alloc_pages
+>            -__alloc_pages_slowpath
+>             -__alloc_pages_direct_reclaim
+>              -__perform_reclaim
+>               -try_to_free_pages
+>                -do_try_to_free_pages
+>                 -shrink_zones
+>                  -mem_cgroup_soft_limit_reclaim
+>                   -mem_cgroup_soft_reclaim
+>                    -mem_cgroup_shrink_node
+>                     -shrink_node_memcg
+>                      -shrink_list
+>                       -shrink_inactive_list
+>                        -shrink_page_list
+>                         -wait_on_page_writeback -- the page is marked
+>                        writeback during previous move_data_block call
+> 
+> the gc thread wait for the encrypted_page writeback complete,
+> but as gc thread held sbi->gc_lock, the writeback & sync thread
+> may blocked waiting for sbi->gc_lock, so the bio contain the
+> encrypted_page may nerver submit to block layer and complete the
+> writeback, which cause deadlock. To avoid this deadlock condition,
+> we mark the gc thread with PF_MEMALLOC_NOFS flag, then it will nerver
+> enter fs layer when try to alloc cache page during move_data_block.
+> 
+> Signed-off-by: Rokudo Yan <wu-yan@tcl.com>
+> ---
+>  fs/f2fs/gc.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index e020804f7b07..cc71f77b98c8 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -38,6 +38,12 @@ static int gc_thread_func(void *data)
+>  
+>  	wait_ms = gc_th->min_sleep_time;
+>  
+> +	/*
+> +	 * Make sure that no allocations from gc thread will ever
+> +	 * recurse to the fs layer to avoid deadlock as it will
+> +	 * hold sbi->gc_lock during garbage collection
+> +	 */
+> +	memalloc_nofs_save();
 
-Sorry but I'm not following you. No idea if you missed the cover letter
-where i describe the problem with PXO_SRC.
+I think this cannot cover all the f2fs_gc() call cases. Can we just avoid by:
 
-The problem here is that
-- In DTS we have node that reference <&gcc PXO_SRC>
-But
-- gcc driver NEVER defined PXO_SRC
-As
-- PXO_SRC is actually pxo_board that should be defined as a fixed-clock
-  in dts or is defined using qcom_cc_register_board_clk.
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1233,7 +1233,7 @@ static int move_data_block(struct inode *inode, block_t bidx,
+                                CURSEG_ALL_DATA_ATGC : CURSEG_COLD_DATA;
 
-So in theory we should just put in PXO_SRC the clk hw of the
-fixed-clock. That is why I'm using clk_get(). I can use __clk_lookup()
-as an alternative but I really can't find a way to get the clock defined
-from DTS or qcom_cc_register_board_clk.
+        /* do not read out */
+-       page = f2fs_grab_cache_page(inode->i_mapping, bidx, false);
++       page = f2fs_grab_cache_page(inode->i_mapping, bidx, true);
+        if (!page)
+                return -ENOMEM;
 
-(I have the same exact problem with the cpu qsb clock where is defined
-using fixed-clock API but can also defined directly in DTS and I have to
-use clk_get())
+Thanks,
 
-I'm totally missing something so I would love some hint on how to solve
-this.
-
--- 
-	Ansuel
+>  	set_freezable();
+>  	do {
+>  		bool sync_mode, foreground = false;
+> -- 
+> 2.25.1

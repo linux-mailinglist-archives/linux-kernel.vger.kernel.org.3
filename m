@@ -2,283 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2151F4FF376
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5E94FF365
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiDMJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S234438AbiDMJ0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234442AbiDMJ1C (ORCPT
+        with ESMTP id S234423AbiDMJ0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:27:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4090BDF8E;
-        Wed, 13 Apr 2022 02:24:41 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdcZK6jz6zgYl0;
-        Wed, 13 Apr 2022 17:22:49 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        Wed, 13 Apr 2022 05:26:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05415EB1;
+        Wed, 13 Apr 2022 02:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649841866; x=1681377866;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iJ/xgMUsoWxS3qzs1bazZodjJFxPye2UndoiQmDFNgk=;
+  b=YZ0xj9q3kz2P3yVYq4RB3rom0+3xAvUVkvJhL1dhPXSMcFEoDywwGvG0
+   K31xu99nYlFdfPv6NPEn8oCPLorFVQw2NLk5bZTMFFP3mCyebtVYllOpv
+   UAdq2m9Xn+FgO/+YzyqfX2dtKYZCWVt6Z81O13vVI2GBMx0Vn4AuY6bbX
+   DE5tS/8Y+m1ageBkeuWG6S5DwoC8yS2HLfjV7r+a58EgFkOr4kgKrnv4t
+   Ffr3ApPVrRr827JJnGJIUye8V7HUMlcwJWs4lIc/COQvhOKOjUabnjWUt
+   UDczxqPsGChM0H6UklCfx7ItMK3C+tAHagdS/AzRgyGwiYPGLue9vqK92
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,256,1643698800"; 
+   d="scan'208";a="92238440"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 02:24:24 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 17:24:39 +0800
-Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
- (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 17:24:39 +0800
-From:   Chen Lifu <chenlifu@huawei.com>
-To:     <masahiroy@kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <chenlifu@huawei.com>
-Subject: [PATCH v3 -next] scripts: add compare-config utility
-Date:   Wed, 13 Apr 2022 17:23:31 +0800
-Message-ID: <20220413092331.203284-1-chenlifu@huawei.com>
-X-Mailer: git-send-email 2.35.1
+ 15.1.2375.17; Wed, 13 Apr 2022 02:24:23 -0700
+Received: from [10.12.72.146] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 13 Apr 2022 02:24:21 -0700
+Message-ID: <a68ee2e3-0af7-1076-df0f-64acf731fd97@microchip.com>
+Date:   Wed, 13 Apr 2022 11:24:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ARM: dts: at91: use generic node name for dataflash
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>
+References: <20220412105013.249793-1-krzysztof.kozlowski@linaro.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220412105013.249793-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an alternative utility to compare two .config files. Unlike
-existing utilities "diffconfig" in the kernel tree, it prints detailed
-results in table style, and support config name prefix so that it can be
-used elsewhere. It is useful sometimes, for example, to analyze .config
-files through tables, or to compare Buildroot .config.
+On 12/04/2022 at 12:50, Krzysztof Kozlowski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> The node names should be generic, so use "flash" for dataflash nodes and
+> for cfi-flash.
+> 
+> Suggested-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-With grep and awk, it can print similar results like "diffconfg" as well.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Signed-off-by: Chen Lifu <chenlifu@huawei.com>
----
-Changes in v3:
-- Add -D option, a combination of -C -O -N, and set it as default mode
+and queued in "fixes" branch for 5.18 as it can save us some error while 
+checking DT.
 
-Changes in v2:
-- Add config name prefix support
+Best regards,
+   Nicolas
 
- scripts/compare-config | 203 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 203 insertions(+)
- create mode 100755 scripts/compare-config
+> ---
+>   Documentation/devicetree/bindings/mfd/atmel-flexcom.txt | 2 +-
+>   arch/arm/boot/dts/at91rm9200ek.dts                      | 4 ++--
+>   arch/arm/boot/dts/at91sam9260ek.dts                     | 2 +-
+>   arch/arm/boot/dts/at91sam9261ek.dts                     | 2 +-
+>   arch/arm/boot/dts/at91sam9263ek.dts                     | 2 +-
+>   arch/arm/boot/dts/at91sam9g20ek_common.dtsi             | 2 +-
+>   arch/arm/boot/dts/at91sam9m10g45ek.dts                  | 2 +-
+>   arch/arm/boot/dts/at91sam9rlek.dts                      | 2 +-
+>   arch/arm/boot/dts/usb_a9263.dts                         | 2 +-
+>   9 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt b/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> index 692300117c64..9d837535637b 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> +++ b/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> @@ -54,7 +54,7 @@ flexcom@f8034000 {
+>                  clock-names = "spi_clk";
+>                  atmel,fifo-size = <32>;
+> 
+> -               mtd_dataflash@0 {
+> +               flash@0 {
+>                          compatible = "atmel,at25f512b";
+>                          reg = <0>;
+>                          spi-max-frequency = <20000000>;
+> diff --git a/arch/arm/boot/dts/at91rm9200ek.dts b/arch/arm/boot/dts/at91rm9200ek.dts
+> index e1ef4e44e663..4624a6f076f8 100644
+> --- a/arch/arm/boot/dts/at91rm9200ek.dts
+> +++ b/arch/arm/boot/dts/at91rm9200ek.dts
+> @@ -73,7 +73,7 @@ &pinctrl_uart1_dcd
+>                          spi0: spi@fffe0000 {
+>                                  status = "okay";
+>                                  cs-gpios = <&pioA 3 0>, <0>, <0>, <0>;
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <15000000>;
+>                                          reg = <0>;
+> @@ -94,7 +94,7 @@ usb0: ohci@300000 {
+>                          status = "okay";
+>                  };
+> 
+> -               nor_flash@10000000 {
+> +               flash@10000000 {
+>                          compatible = "cfi-flash";
+>                          reg = <0x10000000 0x800000>;
+>                          linux,mtd-name = "physmap-flash.0";
+> diff --git a/arch/arm/boot/dts/at91sam9260ek.dts b/arch/arm/boot/dts/at91sam9260ek.dts
+> index ce96345d28a3..6381088ba24f 100644
+> --- a/arch/arm/boot/dts/at91sam9260ek.dts
+> +++ b/arch/arm/boot/dts/at91sam9260ek.dts
+> @@ -92,7 +92,7 @@ macb0: ethernet@fffc4000 {
+> 
+>                          spi0: spi@fffc8000 {
+>                                  cs-gpios = <0>, <&pioC 11 0>, <0>, <0>;
+> -                               mtd_dataflash@1 {
+> +                               flash@1 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <50000000>;
+>                                          reg = <1>;
+> diff --git a/arch/arm/boot/dts/at91sam9261ek.dts b/arch/arm/boot/dts/at91sam9261ek.dts
+> index beed819609e8..8f11c0b7d76d 100644
+> --- a/arch/arm/boot/dts/at91sam9261ek.dts
+> +++ b/arch/arm/boot/dts/at91sam9261ek.dts
+> @@ -145,7 +145,7 @@ spi0: spi@fffc8000 {
+>                                  cs-gpios = <&pioA 3 0>, <0>, <&pioA 28 0>, <0>;
+>                                  status = "okay";
+> 
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          reg = <0>;
+>                                          spi-max-frequency = <15000000>;
+> diff --git a/arch/arm/boot/dts/at91sam9263ek.dts b/arch/arm/boot/dts/at91sam9263ek.dts
+> index 71f60576761a..42e734020235 100644
+> --- a/arch/arm/boot/dts/at91sam9263ek.dts
+> +++ b/arch/arm/boot/dts/at91sam9263ek.dts
+> @@ -95,7 +95,7 @@ pinctrl_board_mmc0: mmc0-board {
+>                          spi0: spi@fffa4000 {
+>                                  status = "okay";
+>                                  cs-gpios = <&pioA 5 0>, <0>, <0>, <0>;
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <50000000>;
+>                                          reg = <0>;
+> diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+> index 87bb39060e8b..74b90dc58cbf 100644
+> --- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+> +++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+> @@ -110,7 +110,7 @@ ssc0: ssc@fffbc000 {
+> 
+>                          spi0: spi@fffc8000 {
+>                                  cs-gpios = <0>, <&pioC 11 0>, <0>, <0>;
+> -                               mtd_dataflash@1 {
+> +                               flash@1 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <50000000>;
+>                                          reg = <1>;
+> diff --git a/arch/arm/boot/dts/at91sam9m10g45ek.dts b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+> index b6256a20fbc7..e5db198a87a8 100644
+> --- a/arch/arm/boot/dts/at91sam9m10g45ek.dts
+> +++ b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+> @@ -167,7 +167,7 @@ pinctrl_pwm_leds: pwm-led {
+>                          spi0: spi@fffa4000{
+>                                  status = "okay";
+>                                  cs-gpios = <&pioB 3 0>, <0>, <0>, <0>;
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <13000000>;
+>                                          reg = <0>;
+> diff --git a/arch/arm/boot/dts/at91sam9rlek.dts b/arch/arm/boot/dts/at91sam9rlek.dts
+> index 62981b39c815..d74b8d9d84aa 100644
+> --- a/arch/arm/boot/dts/at91sam9rlek.dts
+> +++ b/arch/arm/boot/dts/at91sam9rlek.dts
+> @@ -180,7 +180,7 @@ usb0: gadget@fffd4000 {
+>                          spi0: spi@fffcc000 {
+>                                  status = "okay";
+>                                  cs-gpios = <&pioA 28 0>, <0>, <0>, <0>;
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          spi-max-frequency = <15000000>;
+>                                          reg = <0>;
+> diff --git a/arch/arm/boot/dts/usb_a9263.dts b/arch/arm/boot/dts/usb_a9263.dts
+> index 8a0cfbfd0c45..b6cb9cdf8197 100644
+> --- a/arch/arm/boot/dts/usb_a9263.dts
+> +++ b/arch/arm/boot/dts/usb_a9263.dts
+> @@ -60,7 +60,7 @@ usb1: gadget@fff78000 {
+>                          spi0: spi@fffa4000 {
+>                                  cs-gpios = <&pioB 15 GPIO_ACTIVE_HIGH>;
+>                                  status = "okay";
+> -                               mtd_dataflash@0 {
+> +                               flash@0 {
+>                                          compatible = "atmel,at45", "atmel,dataflash";
+>                                          reg = <0>;
+>                                          spi-max-frequency = <15000000>;
+> --
+> 2.32.0
+> 
 
-diff --git a/scripts/compare-config b/scripts/compare-config
-new file mode 100755
-index 000000000000..f770a1b02170
---- /dev/null
-+++ b/scripts/compare-config
-@@ -0,0 +1,203 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# An utility to compare two .config files and print the results in table style.
-+#
-+
-+import sys
-+import argparse
-+import traceback
-+
-+def args_parser():
-+    comment = ("An utility to compare two .config files and "
-+               "print the results in table style.")
-+    parser = argparse.ArgumentParser(description = comment,
-+                                     formatter_class =
-+                                         argparse.RawTextHelpFormatter)
-+    parser.add_argument(dest = "old_file", nargs = "?",
-+                        metavar = "old-file",
-+                        default = ".config.old",
-+                        help = "specify old .config file "
-+                               "(default: .config.old)")
-+    parser.add_argument(dest = "new_file", nargs = "?",
-+                        metavar = "new-file",
-+                        default = ".config",
-+                        help = "specify new .config file "
-+                               "(default: .config)")
-+    parser.add_argument("-S", dest = "S", action = "store_true",
-+                        help = "print configs that exist in both files "
-+                               "and are equal")
-+    parser.add_argument("-C", dest = "C", action = "store_true",
-+                        help = "print configs that exist in both files "
-+                               "but are not equal")
-+    parser.add_argument("-O", dest = "O", action = "store_true",
-+                        help = "print configs that only exist in old-file")
-+    parser.add_argument("-N", dest = "N", action = "store_true",
-+                        help = "print configs that only exist in new-file")
-+    parser.add_argument("-D", dest = "D", action = "store_true",
-+                        help = "a combination of -C -O -N, it's the default mode")
-+    parser.add_argument("-y", dest = "y", action = "store_true",
-+                        help = "print configs that are y")
-+    parser.add_argument("-n", dest = "n", action = "store_true",
-+                        help = "print configs that are n (not set)")
-+    parser.add_argument("-m", dest = "m", action = "store_true",
-+                        help = "print configs that are m")
-+    parser.add_argument("-v", dest = "v", action = "store_true",
-+                        help = "print configs that are "
-+                               "string/hex/int value")
-+    parser.add_argument("--old", dest = "old", action = "store_true",
-+                        help = "filter configs base on old-file")
-+    parser.add_argument("--new", dest = "new", action = "store_true",
-+                        help = "filter configs base on new-file")
-+    parser.add_argument("-p", "--prefix", dest = "prefix",
-+                        action = "store", default = "CONFIG_",
-+                        help = "config name prefix (default: CONFIG_)")
-+    return parser
-+
-+def usage():
-+    args_parser().parse_args(["-h"])
-+
-+def parse_args():
-+    args = args_parser().parse_args()
-+    setattr(args, "doptions", diff_options(args))
-+    setattr(args, "voptions", value_options(args))
-+    old = args.old or not args.new
-+    new = args.new or not args.old
-+    args.old = old
-+    args.new = new
-+    return args
-+
-+def diff_options(args):
-+    doptions = []
-+    if args.S: doptions.append("S")
-+    if args.C or args.D: doptions.append("C")
-+    if args.O or args.D: doptions.append("O")
-+    if args.N or args.D: doptions.append("N")
-+    if len(doptions) == 0:
-+        doptions = ["C", "O", "N"]
-+    return doptions
-+
-+def value_options(args):
-+    voptions = set()
-+    if args.y: voptions.add("y")
-+    if args.n: voptions.add("n")
-+    if args.m: voptions.add("m")
-+    if args.v: voptions.add("v")
-+    if len(voptions) == 0:
-+        voptions = {"y", "n", "m", "v"}
-+    return voptions
-+
-+def test_value(val, voptions):
-+    if val is None: return False
-+    if val in voptions: return True
-+    return (not val in {"y", "n", "m"}) and ("v" in voptions)
-+
-+def format_exception():
-+    es = ""
-+    exc_type, exc_value, exc_traceback = sys.exc_info()
-+    exc_str = traceback.format_exception(exc_type, exc_value, exc_traceback)
-+    for s in exc_str:
-+        es += s
-+    return es
-+
-+def read_line(line, prefix):
-+    line = line.strip()
-+    if line.endswith(" is not set"):
-+        beg = line.find(prefix)
-+        if beg == -1: return None, None
-+        name, val = line[beg:-10].rsplit(" ", 1)
-+        return name.strip(), "n"
-+    if line.startswith(prefix):
-+        if line.find("=") == -1: return None, None
-+        name, val = line.split("=", 1)
-+        return name.strip(), val.strip()
-+    return None, None
-+
-+def read_file(filename, prefix):
-+    configs = {}
-+    with open(filename, "r", encoding = "utf-8") as f:
-+        for line in f:
-+            name, val = read_line(line, prefix)
-+            if not name is None: configs[name] = val
-+    return configs
-+
-+def compare_config(args):
-+    result = {"S": {}, "C": {}, "O": {}, "N": {}}
-+    try:
-+        old_configs = read_file(args.old_file, args.prefix)
-+        new_configs = read_file(args.new_file, args.prefix)
-+        while len(old_configs) > 0:
-+            name, old_val = old_configs.popitem()
-+            new_val = new_configs.pop(name, None)
-+            if new_val is None:
-+                result["O"][name] = (old_val, None)
-+            elif old_val == new_val:
-+                result["S"][name] = (old_val, new_val)
-+            else:
-+                result["C"][name] = (old_val, new_val)
-+        while len(new_configs) > 0:
-+            name, new_val = new_configs.popitem()
-+            result["N"][name] = (None, new_val)
-+    except:
-+        print(format_exception())
-+        usage()
-+    return result
-+
-+def filter_output(result, args):
-+    output = {"S": {}, "C": {}, "O": {}, "N": {}}
-+    for opt in args.doptions:
-+        for name, val in result[opt].items():
-+            if (args.old and test_value(val[0], args.voptions) or
-+                args.new and test_value(val[1], args.voptions)):
-+                old_val = "-" if val[0] is None else val[0]
-+                new_val = "-" if val[1] is None else val[1]
-+                output[opt][name] = (old_val, new_val)
-+    return output
-+
-+def print_table(output, args):
-+    name_max_len = 8
-+    old_max_len  = 8
-+    new_max_len  = 8
-+    name_list = sum([list(output[opt].keys()) for opt in args.doptions], [])
-+    if len(name_list) > 0:
-+        name_max_len = len(max(name_list, key = len))
-+    val_list = sum([list(output[opt].values()) for opt in args.doptions], [])
-+    if len(val_list) > 0:
-+        old_max_len = len(max([val[0] for val in val_list], key = len))
-+        new_max_len = len(max([val[1] for val in val_list], key = len))
-+    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
-+    header = ["NAME", "DIFF", "OLD", "NEW"]
-+    # table row format
-+    row = ("{{:{}}}\t{{:{}}}\t{{:{}}}\t{{:{}}}"
-+           .format(min(max(name_max_len, len(header[0])), 40),
-+                   min(max(diff_max_len, len(header[1])), 40),
-+                   min(max(old_max_len,  len(header[2])), 40),
-+                   min(max(new_max_len,  len(header[3])), 40)))
-+    print(row.format(header[0], header[1], header[2], header[3]))
-+    for opt in args.doptions:
-+        for name, val in sorted(output[opt].items()):
-+            print(row.format(name, diff_types[opt], val[0], val[1]))
-+
-+def print_summary(output, args):
-+    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
-+    # summary line format
-+    line = "{{:{}}}: {{}}".format(max(diff_max_len, 8))
-+    print("\nSummary:")
-+    print(line.format("Old-file", args.old_file))
-+    print(line.format("New-file", args.new_file))
-+    total = 0
-+    for opt in args.doptions:
-+        count = len(output[opt])
-+        print(line.format(diff_types[opt], count))
-+        total += count
-+    print(line.format("Total", total))
-+
-+def print_result(result, args):
-+    output = filter_output(result, args)
-+    print_table(output, args)
-+    print_summary(output, args)
-+
-+diff_types = {"S": "Same", "C": "Changed", "O": "Old-only", "N": "New-only"}
-+args = parse_args()
-+result = compare_config(args)
-+print_result(result, args)
+
 -- 
-2.35.1
-
+Nicolas Ferre

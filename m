@@ -2,187 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F764FFFFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BA04FFFFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238044AbiDMUbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S238669AbiDMUbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237426AbiDMUa5 (ORCPT
+        with ESMTP id S237266AbiDMUa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Apr 2022 16:30:57 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1095C83B0B;
-        Wed, 13 Apr 2022 13:28:34 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id o2so5539167lfu.13;
-        Wed, 13 Apr 2022 13:28:33 -0700 (PDT)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F14F83B0F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:28:34 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id o2so5539179lfu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YogmsT3U/7IiGgtRupJ7l2JCvP07NCmlPwoFX7KDPtY=;
+        b=BPo2dFn3g3Gh2JwBI11FdGs4x3mRiOExHJeQ0r5erW9MSIGbZjN8Th2c967Kx/7qf0
+         5OXeYO3hDq6ZNvj20Gn+M66UP5whLZ7SNR3PT65RWwnPevdzMu8a4w12cMx99fkiyn86
+         c86oP1HLwUiOvcm0css861ol8AmuTSxmsvPXd5tnG5VaFF720ge3kMgxvcvyXbVyLC2g
+         AB9k2hJg6PAr5dKeHZybm1kcabwcp+wLYNh/hJzN6yTiUeLjNKrttW5A2KVS0E/7eiF+
+         nH3hdggmgHb4XfAU0BEPLAwmvhXclpiHl+ex4n5v3iAjbJ5z6ZUmQfywc3dd7fCBEzaf
+         lkog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CujCbp/sw+khaMiFxer85R28JC7xz+rn3pwqBuSA5a8=;
-        b=wVcKQz7+i2gNvbzEiVQkU2NOM4klnbSiX/bfk5JhEKW3CCdAjlbMyjjMP+iqL5JcsV
-         YRx/BNBxpMmvxgUR9CMfeeWnKk65RQyv/lt7nLolMeLNt4u0DU2Jhsfb3TIhs2j/wUZS
-         VY1L6ToAHG7szUuMereHc1ReEUiosX+UlermqwsGC6QTtcdiPlYuAip11Y94PNeDNyQ0
-         EbLrdy/MekVoxTUIIdR2K6gRpv3ZlNaK8sUQoIys9a21x4+7Y/5sgTsf3pzYsu8ysIdr
-         Bgur+Jh9KetwPJTTVocX9zcqgX+5OKy0VYzezyjjWMTDN3/Gon06f5+Ccn0HQ6pvutLl
-         CLww==
-X-Gm-Message-State: AOAM532ezeD7xv8vENRk3k0AFPaa6wR+ZNk7VWCGg8lJrlnVcwUw9uoU
-        EnMR+Hq9bZF+/VsuH7Bbe1LDpPXDsKwyb2BMBkQ=
-X-Google-Smtp-Source: ABdhPJyluSBAO6ZKxyhld5cSe7DUtYi1Hm4e/CMZd5/P8jWPcPR/Cuaw+fCb884KrHifRVnNq0S/qBHAxM+PV/u7Eh8=
-X-Received: by 2002:a05:6512:3404:b0:44a:310f:72f7 with SMTP id
- i4-20020a056512340400b0044a310f72f7mr31031455lfr.47.1649881712413; Wed, 13
- Apr 2022 13:28:32 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YogmsT3U/7IiGgtRupJ7l2JCvP07NCmlPwoFX7KDPtY=;
+        b=NJH7IDUfQJWJQIP/raof3vb3vYJ9++Ij26eiPfyFFLKY7kNYj8jdvDC5yeKvluKuWv
+         XKCFyOqN8jagqTl4glCnvI0kqdJWIDBr2dLkGa+ELGwc0BTkL+RBjXq1vbderwLQX7tl
+         Mky0OzA6wUx9XWrsoBFLz8jmFBKtfFKJPwFm/v52IfPEueXHuzVrUTS+A4IRhOklMduy
+         b0Xw8pz48GoPHWRkEoyuDSalZIAYIzQzOzzYlritqBCihrv3VaxIw0r34aiB/C1y4n/y
+         y2Wh4/ffd0poHM7Osi5SyYHBr2sOnRJyr8kiXzTfXgLb1RzyRc+An4IvTPNAXpSNoKP1
+         1u2g==
+X-Gm-Message-State: AOAM532QdjrnqVY3lS3kuebMKWhjAEkeAqsEXZyG8iVHqjXrowaocwEU
+        hpXiDQX7NlsJWBVCs4vpoGs=
+X-Google-Smtp-Source: ABdhPJx0JXqvqpQqiCaSHmJ/9FmujTfxUUTysOB33UP0zQiaykp3WYA8RUFbyQijMt5X0AQ8Snm2IQ==
+X-Received: by 2002:a05:6512:131d:b0:464:f4f7:1b2d with SMTP id x29-20020a056512131d00b00464f4f71b2dmr21530767lfu.143.1649881712569;
+        Wed, 13 Apr 2022 13:28:32 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.225.17])
+        by smtp.gmail.com with ESMTPSA id 26-20020ac24d5a000000b0046ba2c20d79sm1405438lfp.206.2022.04.13.13.28.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 13:28:32 -0700 (PDT)
+Message-ID: <2eab9c9e-7e56-9920-de4d-2e53b3d7e6a1@gmail.com>
+Date:   Wed, 13 Apr 2022 23:28:31 +0300
 MIME-Version: 1.0
-References: <20220412154817.2728324-1-irogers@google.com> <YlX5U+Qelf/rBdau@google.com>
- <CAP-5=fUDQGtNn39xDSxagwVzN95dohNrfiU_a3pU8zkiv2-6tw@mail.gmail.com>
-In-Reply-To: <CAP-5=fUDQGtNn39xDSxagwVzN95dohNrfiU_a3pU8zkiv2-6tw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 13 Apr 2022 13:28:21 -0700
-Message-ID: <CAM9d7chuo033D8016uFq_idYjDusTKtndxV1VyZ-nCrdy0qU_A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Tidy up symbol end fixup
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        William Cohen <wcohen@redhat.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Denis Nikitin <denik@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/6] staging: r8188eu: remove 'added by' author comments
+Content-Language: en-US
+To:     Jaehee Park <jhpark1013@gmail.com>, Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Alison Schofield <alison.schofield@intel.com>
+References: <cover.1649880454.git.jhpark1013@gmail.com>
+ <c0c0a0e748ad85585b65e73841d431adefe86a59.1649880454.git.jhpark1013@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <c0c0a0e748ad85585b65e73841d431adefe86a59.1649880454.git.jhpark1013@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 4:48 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Apr 12, 2022 at 3:12 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Tue, Apr 12, 2022 at 08:48:13AM -0700, Ian Rogers wrote:
-> > > Fixing up more symbol ends as introduced in:
-> > > https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
-> > > caused perf annotate to run into memory limits - every symbol holds
-> > > all the disassembled code in the annotation, and so making symbols
-> > > ends further away dramatically increased memory usage (40MB to
-> > >  >1GB). Modify the symbol end logic so that special kernel cases aren't
-> > > applied in the common case.
-> > >
-> > > v2. Drops a merged patch. Fixes a build issue with libbfd enabled.
-> >
-> > How about just like this?  We can get rid of arch functions as they
-> > mostly do the same thing (kernel vs module boundary check).
-> >
-> > Not tested. ;-)
-> >
-> > Thanks,
-> > Namhyung
-> >
-> > --------------8<-------------
-> >
-> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> > index dea0fc495185..df41d7266d91 100644
-> > --- a/tools/perf/util/symbol.c
-> > +++ b/tools/perf/util/symbol.c
-> > @@ -35,6 +35,7 @@
-> >  #include "path.h"
-> >  #include <linux/ctype.h>
-> >  #include <linux/zalloc.h>
-> > +#include <internal/lib.h>  // page_size
-> >
-> >  #include <elf.h>
-> >  #include <limits.h>
-> > @@ -231,8 +226,16 @@ void symbols__fixup_end(struct rb_root_cached *symbols)
-> >                 prev = curr;
-> >                 curr = rb_entry(nd, struct symbol, rb_node);
-> >
-> > -               if (prev->end == prev->start || prev->end != curr->start)
-> > -                       arch__symbols__fixup_end(prev, curr);
-> > +               if (prev->end == prev->start) {
-> > +                       /* Last kernel symbol mapped to end of page */
->
-> I like the simpler logic but don't like applying this in symbol-elf
-> given the comment says it is kernel specific - so we could keep the
-> is_kernel change.
+Hi Jaehee,
 
-I'm fine with the change. :)
+On 4/13/22 23:11, Jaehee Park wrote:
+> Author comments "Added by Albert" and "Added by Annie" are sprinkled
+> through the file. Git will keep history so these comments can be
+> removed from the code.
+> 
 
->
-> > +                       if (!strchr(prev->name, '[') != !strchr(curr->name, '['))
->
-> I find this condition not to be intention revealing. On ARM there is
-> also an || for the condition reversed. When this is in an is_kernel
-> block then I think it is clear this is kernel hack, so I think it is
-> good to comment on what the condition is for.
+these people are not in the git log, since this driver was added in 
+2021. I am afraid they are not even in Larry's GH repo log.
 
-Yeah, usually modules are loaded after the kernel image but
-it seems ARM could load them before the kernel.
-So I made the change not to call strchr() again.
+Anyway these comments are not so useful, so patch is OK.
 
-But we might need to consider the special "[__builtin_kprobes]"
-symbols.
-
->
-> > +                               prev->end = roundup(prev->end + 1, page_size);
->
-> Currently the roundup varies per architecture, but it is not clear to
-> me that it matters.
-
-Yeah, it would be the same as the logic for the last entry to be
-more conservative.
-
->
-> > +                       else
->
-> I think we should comment here that we're extending zero sized symbols
-> to the start of the next symbol.
-
-Sounds good.
-
-Thanks,
-Namhyung
-
-
->
-> > +                               prev->end = curr->start;
-> > +
-> > +                       pr_debug4("%s sym:%s end:%#" PRIx64 "\n",
-> > +                                 __func__, prev->name, prev->end);
-> > +               }
->
-> Thanks,
-> Ian
->
-> >         }
-> >
-> >         /* Last entry */
+With regards,
+Pavel Skripkin

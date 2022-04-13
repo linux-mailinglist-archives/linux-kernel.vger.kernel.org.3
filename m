@@ -2,191 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1224FFF37
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76184FFF47
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237378AbiDMT35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S238326AbiDMTao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238333AbiDMT3m (ORCPT
+        with ESMTP id S238349AbiDMTal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:29:42 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D348A7247A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:19 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id y6so2803264plg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GcEdHYgZtjXXc1esEWSVqsrT36nMB8qsPyHeyxwC0VU=;
-        b=NMB7rzcCI7/HrN7wDUVA+U3BhJgqHP1mmLJAuo1SHLjgakraV7xu2W0CIwlYd8wGl8
-         uDieHBLZJffRfP9q+QtW6HYtb6x+vUeepBRB+5Gm/twBXUHthpVcUS7jAexOIyX4qY5j
-         /TCboXM+xN/knt4yEBghPu/ZDTQkgLkuW2biw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=GcEdHYgZtjXXc1esEWSVqsrT36nMB8qsPyHeyxwC0VU=;
-        b=6U43Y33s88Nd5rc22I70wMtiT4GoJCnhgu4lbMbvEV8ghLkQVmLrrL0Hq5aJ37Izp7
-         xflmYInU72+qvAdRziE/Ah9Zv5yk+DFYwcqM63mpAx769ja7vHu2mklwPxmlmv/A0JM/
-         Hbg3e57UsgjKk8Z5pXmdns+TIt177KVd341MoBbRib++8p5on3PmdPlU7wAT+Pf+QUBx
-         phj17mwFXCaKsmVi5cpcKah6p6c3ynbmo4mqn6hi7TeZDjSU6YTnzKhYqqyddvReeSa1
-         WLvHcRw2ZvwoeSftAom5R/zT+64q4x9fDiscDvKAGyTqt3ZV5EfrYkPm5ofy2jB8B6Yf
-         Y+1w==
-X-Gm-Message-State: AOAM5326XoIon9Zo5TlA4oZuC3a+ml4jImQDYyvgDlyZeC1ZOWuOZAWr
-        zX6f8jlLSDwG5KTlvOjZLspwKQ==
-X-Google-Smtp-Source: ABdhPJyeQrHIXqSUpz1jPgLYg9znlP0OubWG+w7VFYMEmTg1I5BvFT3JB2ptJoxNHL7GlVUNpR4AEw==
-X-Received: by 2002:a17:90b:3b8f:b0:1c7:b62e:8e87 with SMTP id pc15-20020a17090b3b8f00b001c7b62e8e87mr294362pjb.156.1649878039154;
-        Wed, 13 Apr 2022 12:27:19 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u7-20020aa78487000000b00505d9277cb3sm8624906pfn.38.2022.04.13.12.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 12:27:18 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Dan Beygelman <dan.beygelman@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Russell King <linux@armlinux.org.uk>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] ARM: multi_v7_defconfig: enable CONFIG_ARCH_BCMBCA in armv7 defconfig
-Date:   Wed, 13 Apr 2022 12:26:45 -0700
-Message-Id: <20220413192645.7067-6-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220413192645.7067-1-william.zhang@broadcom.com>
-References: <20220413192645.7067-1-william.zhang@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007983bb05dc8e2abc"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 15:30:41 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B5F73071
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:28:19 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649878096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1W/iPGxZZe0dTxtRIT/L4inWkaCNOxDFyHeQ0vhNfa0=;
+        b=gnwkJMKPPygIVkZ/9Wh1mh3OT1cMRRjuS5qS8IK6a6j48F8Mu3vVEr6wfetKEVn+G0kwVH
+        VpnSFOGe6lHZ16nJIfVYj83+P9+IFGSaJ9oP5g4LZ79gI0ZQ4hAcFfPGXw47pP2GkGazjs
+        X7uQvydkAJIrVzsEfjwJGtTH9md0qaI=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH v3 2/3] kasan, arm64: implement stack_trace_save_shadow
+Date:   Wed, 13 Apr 2022 21:26:45 +0200
+Message-Id: <78cd352296ceb14da1d0136ff7d0a6818e594ab7.1649877511.git.andreyknvl@google.com>
+In-Reply-To: <cover.1649877511.git.andreyknvl@google.com>
+References: <cover.1649877511.git.andreyknvl@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007983bb05dc8e2abc
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Enable CONFIG_ARCH_BCMBCA in multi_v7_defconfig. This config can be
-used to build a basic kernel for BCM47622 booting to console.
+Implement stack_trace_save_shadow() that collects stack traces based on
+the Shadow Call Stack (SCS) for arm64 by copiing the frames from SCS.
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+The implementation is best-effort and thus has limitations.
 
+stack_trace_save_shadow() fully handles task and softirq contexts, which
+are both processed on the per-task SCS.
+
+For hardirqs, the support is limited: stack_trace_save_shadow() does not
+collect the task part of the stack trace. For KASAN, this is not a problem,
+as stack depot only saves the interrupt part of the stack anyway.
+
+Otherwise, stack_trace_save_shadow() also takes a best-effort approach
+with a focus on performance. Thus, it:
+
+- Does not try to collect stack traces from other exceptions like SDEI.
+- Does not try to recover frames modified by KRETPROBES or by FTRACE.
+
+However, stack_trace_save_shadow() does strip PTR_AUTH tags to avoid
+leaking them in stack traces.
+
+The -ENOSYS return value is deliberatly used to match
+stack_trace_save_tsk_reliable().
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
+ mm/kasan/common.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 6e0c8c19b35c..8d333560bbca 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -29,6 +29,7 @@ CONFIG_ARCH_BCM2835=y
- CONFIG_ARCH_BCM_53573=y
- CONFIG_ARCH_BCM_63XX=y
- CONFIG_ARCH_BRCMSTB=y
-+CONFIG_ARCH_BCMBCA=y
- CONFIG_ARCH_BERLIN=y
- CONFIG_MACH_BERLIN_BG2=y
- CONFIG_MACH_BERLIN_BG2CD=y
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index d9079ec11f31..23b30fa6e270 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -30,6 +30,68 @@
+ #include "kasan.h"
+ #include "../slab.h"
+ 
++#ifdef CONFIG_SHADOW_CALL_STACK
++#include <linux/scs.h>
++#include <asm/scs.h>
++
++/*
++ * Collect the stack trace from the Shadow Call Stack in a best-effort manner:
++ *
++ * - Do not collect the task part of the stack trace when in a hardirq.
++ * - Do not collect stack traces from other exception levels like SDEI.
++ * - Do not recover frames modified by KRETPROBES or by FTRACE.
++ *
++ * Note that marking the function with __noscs leads to unnacceptable
++ * performance impact, as helper functions stop being inlined.
++ */
++static inline int stack_trace_save_shadow(unsigned long *store,
++					  unsigned int size)
++{
++	unsigned long *scs_top, *scs_base, *frame;
++	unsigned int len = 0;
++
++	/* Get the SCS base. */
++	if (in_task() || in_serving_softirq()) {
++		/* Softirqs reuse the task SCS area. */
++		scs_base = task_scs(current);
++	} else if (in_hardirq()) {
++		/* Hardirqs use a per-CPU SCS area. */
++		scs_base = *this_cpu_ptr(&irq_shadow_call_stack_ptr);
++	} else {
++		/* Ignore other exception levels. */
++		return 0;
++	}
++
++	/*
++	 * Get the SCS pointer.
++	 *
++	 * Note that this assembly might be placed before the function's
++	 * prologue. In this case, the last stack frame will be lost. This is
++	 * acceptable: the lost frame will correspond to an internal KASAN
++	 * function, which is not relevant to identify the external call site.
++	 */
++	asm volatile("mov %0, x18" : "=&r" (scs_top));
++
++	/* The top SCS slot is empty. */
++	scs_top -= 1;
++
++	for (frame = scs_top; frame >= scs_base; frame--) {
++		if (len >= size)
++			break;
++		/* Do not leak PTR_AUTH tags in stack traces. */
++		store[len++] = ptrauth_strip_insn_pac(*frame);
++	}
++
++	return len;
++}
++#else /* CONFIG_SHADOW_CALL_STACK */
++static inline int stack_trace_save_shadow(unsigned long *store,
++					  unsigned int size)
++{
++	return -ENOSYS;
++}
++#endif /* CONFIG_SHADOW_CALL_STACK */
++
+ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+ {
+ 	unsigned long entries[KASAN_STACK_DEPTH];
 -- 
-2.17.1
+2.25.1
 
-
---0000000000007983bb05dc8e2abc
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOD6dU3AfHYQQVMa3sQdhG5z4m6o
-5tQ1KFU5EE4rI9SrMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDQxMzE5MjcxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAR5aKF68YsjlvGbcdmzkEEPjPllC5/dMBzP/2cigxoVWGn
-3430XfpAaZhip23qEQpWEi38gKfy8HOwfjV9RJSwQUvCWKJZTsjKvG3V92kxOxzBliyjEIlZbKG3
-tG9UbU0ZeOibffPBSaI6uLDB0PLLA61xo9Bs69NO87bMb3MMxg5AdNLUatzFaF1v4QokEwKPJCBV
-j2k6L0T5y70GuEtoHsDY40xezvr5p/ZKMvD7iNGX7HSfJzreawduEiFWrPuNZy9xSNAvXFO4mGnj
-jbQ1WW3d2KciORc57rB1/GbUKL7DoKo+vuEJ/XwDvCDPMuS7KBJnyn3fGKksFc7KqdoI
---0000000000007983bb05dc8e2abc--

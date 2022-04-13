@@ -2,59 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D314FEEBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6EB4FEE99
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbiDMFwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S232507AbiDMFkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiDMFv5 (ORCPT
+        with ESMTP id S231567AbiDMFkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:51:57 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AD51160
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:49:37 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id AD46968B05; Wed, 13 Apr 2022 07:49:33 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 07:49:33 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        m.szyprowski@samsung.com,
-        Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
-        Gao Liang <liang.gao@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: Re: [PATCH] dma-direct: avoid redundant memory sync for swiotlb
-Message-ID: <20220413054933.GA32020@lst.de>
-References: <20220412113805.3210-1-chao.gao@intel.com> <e25fbb7e-a67e-5421-b7be-700fd0209b0d@arm.com> <20220413010157.GA10502@gao-cwp> <20220413045958.GA31209@lst.de> <20220413054600.GA23023@gao-cwp>
+        Wed, 13 Apr 2022 01:40:01 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2310731226;
+        Tue, 12 Apr 2022 22:37:39 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KdWYX5q7pz1HBpK;
+        Wed, 13 Apr 2022 13:36:48 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 13:37:23 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Subject: [PATCH bpf-next 0/5] bpf trampoline for arm64
+Date:   Wed, 13 Apr 2022 01:49:54 -0400
+Message-ID: <20220413054959.1053668-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413054600.GA23023@gao-cwp>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 01:46:06PM +0800, Chao Gao wrote:
-> On Wed, Apr 13, 2022 at 06:59:58AM +0200, Christoph Hellwig wrote:
-> >So for now I'd be happy with the one liner presented here, but
-> >eventually the whole area could use an overhaul.
-> 
-> Thanks. Do you want me to post a new version with the Fixes tag or you
-> will take care of it?
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
-I can add the fixes tag.  I'll wait another day or two for more feedback,
-though.
+Tested on qemu, result:
+ #55 fentry_fexit:OK
+ #56 fentry_test:OK
+ #58 fexit_sleep:OK
+ #59 fexit_stress:OK
+ #60 fexit_test:OK
+ #67 get_func_args_test:OK
+ #68 get_func_ip_test:OK
+ #101 modify_return:OK
 
-> 
-> Fixes: 55897af63091 ("dma-direct: merge swiotlb_dma_ops into the dma_direct code")
----end quoted text---
+Xu Kuohai (5):
+  arm64: ftrace: Add ftrace direct call support
+  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  10 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  18 +-
+ arch/arm64/net/bpf_jit.h                      |  14 +-
+ arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ include/linux/bpf.h                           |   5 +
+ kernel/bpf/bpf_struct_ops.c                   |   4 +-
+ kernel/bpf/trampoline.c                       |  36 +-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 11 files changed, 470 insertions(+), 34 deletions(-)
+
+-- 
+2.30.2
+

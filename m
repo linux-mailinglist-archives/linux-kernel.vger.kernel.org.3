@@ -2,142 +2,5449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E5C4FF121
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FE84FF133
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiDMIAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S233630AbiDMIDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiDMIAW (ORCPT
+        with ESMTP id S233646AbiDMIDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:00:22 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662DD4E39E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:58:01 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id l7so2290786ejn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:58:01 -0700 (PDT)
+        Wed, 13 Apr 2022 04:03:49 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF4B205F3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:01:19 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id p18so572396wru.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oBruQmr4XB2N3FiWi5orHbgqzrYhRN078PvjlV3/G00=;
-        b=Kd5ZK/WY7yr62gHt3kL6X4lGCWF27s2oIs6H206iPkS1fR0nFW2IdW4zJ6TFNxmAKK
-         5Z6bKf8hr17Hc7G34kYFBsPvbsLtK4H51Z6l6Tx1ZiOh9NaFCoBHuPEXZ+kClfSXV7jc
-         BvkWVBssOek7/E//kyrWnI3SZTIZm3cYC5QIg=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QWauJ47lnthQ17uUoTHZMvSRI0zNenKPrYKcKOc1pe4=;
+        b=EHa7Od3pKVhyUMtYwX/HRavafFnAR8TQ4au4yp/RO9qEDsujFGskjbUGDi7gRhfg5A
+         ohtm4xSG9DIHR30aIpI7NsxLw5sfA7kKTgrNLNiriSg1X/g4GZUVdJDp9kDtUX3qVmTu
+         mJLI6oIm61vR+7/fsSmno0TzByXFA4xe74/UDOzjWWtaE2cdIkzIVvDtScAdCzNxgRt8
+         fyItkJKrlnSR4k3VfwSRpXzp/gvb88CxHIS7uiiDkGGX0F0RzsxiyR+J+uCwzDF8EfGz
+         R7I1uIedz1lNV4Khr5OdAwit9RlFNlRcZxkJLaLYE+DclH6XrT+0iaIln1VGEpcH6AYM
+         52Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=oBruQmr4XB2N3FiWi5orHbgqzrYhRN078PvjlV3/G00=;
-        b=nHPW7nYUu5wneVeJDo++r8aziC6BBvBQ0zbsHTpwqwx4wRUNVCVQfdbQJz52WZR/m/
-         wKZiuIj5r84ikGmMRPktNsxwMEEPCcHsayLs2rdKIAeGwkNP6bLVHON/vxXyRB7CUUgg
-         U6epZOZR7UkNE2QhNH5dKGyBgjB9OufL3ATxz5GrV/JdPzxizG/ssp3gdtw/cMBFvaHD
-         T/j78PAMSokRal+V4oYfWN4r6P1QtpLizo239UNOKx8l1pTE8RK7/yRKfmR6MTrDID9O
-         67fTcHxFbiB0U28oR0mUWbJpIT+o79f+5n/WaLNYk82Mo8HvenOaCL+Y8+j2prNSeHDB
-         3vmg==
-X-Gm-Message-State: AOAM532IiGemZqPakPN9Ouj+/8CtfRiR+lET37hEG9GEhL5eE2RlVcKP
-        p/2hyNcHdDrwh+tChWkvOEszO9ilFA/vo0F3
-X-Google-Smtp-Source: ABdhPJxfCXq5SUOUEARKiNbrHpD9ygaSNc0m4X9dNdhHp3sUrOgU4gZSMZLQ6/qjFA9BHmgEvdDeag==
-X-Received: by 2002:a17:907:7f87:b0:6e8:354c:d440 with SMTP id qk7-20020a1709077f8700b006e8354cd440mr26948261ejc.761.1649836679957;
-        Wed, 13 Apr 2022 00:57:59 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id lo15-20020a170906fa0f00b006e8a81cb623sm2118263ejb.224.2022.04.13.00.57.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QWauJ47lnthQ17uUoTHZMvSRI0zNenKPrYKcKOc1pe4=;
+        b=36iOey8JRaY11NxygXtShsCfT53C+HbPp0UTye1OkrC+7nOM+OKOKZoT5Unkfuuc6Q
+         4LKYc8HheS7sWVp+nmwzhJJsuENp2as4e4Jd5+y4Bm5+f6T9t98TQLKgmW+656JdndxR
+         VK92N3N2i60Yr6Z413WIaeaZyeM6ti42IygAkgNyG6kg+XJYBVnCdL3ceJ+gGl//FxPA
+         kFsKoe8kVUCTObIQLcBH6/k71IpgyFCm7dqbAHZV5dqt/U1SuKXKhAab/qaZm7L8EAr/
+         Kj3XEoIKlMrKsVsBToMCs0pQI3yuyfbAiRlsiqW5USOIzz37c1tCquxnb/xoEMrQCzcc
+         RR7Q==
+X-Gm-Message-State: AOAM533LYuVfOVUiHXh7Kmg8ibS0D5aVH3HMfISkpq1qex9joIbKrHTp
+        H7oLMnfF9cLP58uYvO7sQys=
+X-Google-Smtp-Source: ABdhPJz6VYWKSeI2voR6Olfe+IHiMTklkHzXSToCwm2BKkwajyxJmeRAWYBwHulTcRhT2WjSKQeQ1A==
+X-Received: by 2002:a5d:5601:0:b0:207:a6a6:468c with SMTP id l1-20020a5d5601000000b00207a6a6468cmr10464557wrv.127.1649836876205;
+        Wed, 13 Apr 2022 01:01:16 -0700 (PDT)
+Received: from localhost.localdomain (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm1643499wmq.46.2022.04.13.01.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 00:57:59 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 09:57:57 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH -next] drm/solomon: Make DRM_SSD130X depends on MMU
-Message-ID: <YlaChZAd66pNPMEF@phenom.ffwll.local>
-Mail-Followup-To: Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        YueHaibing <yuehaibing@huawei.com>, David Airlie <airlied@linux.ie>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-References: <20220312063437.19160-1-yuehaibing@huawei.com>
- <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
- <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
+        Wed, 13 Apr 2022 01:01:14 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        David Kershner <david.kershner@unisys.com>,
+        sparmaintainer@unisys.com
+Subject: [PATCH v2] staging: Remove the drivers for the Unisys s-Par
+Date:   Wed, 13 Apr 2022 10:01:11 +0200
+Message-Id: <20220413080111.13861-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 03:49:38PM +0200, Geert Uytterhoeven wrote:
-> Hi Javier,
-> 
-> On Tue, Mar 15, 2022 at 12:28 PM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
-> > On 3/12/22 07:34, YueHaibing wrote:
-> > > WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-> > >   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
-> > >   Selected by [m]:
-> > >   - DRM_SSD130X [=m] && HAS_IOMEM [=y] && DRM [=m]
-> > >
-> > > DRM_GEM_SHMEM_HELPER depends on MMU, DRM_SSD130X should also depends on MMU.
-> > >
-> > > Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
-> > > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> > > ---
-> >
-> > Indeed. All the DRM drivers that select DRM_GEM_SHMEM_HELPER depend on MMU.
-> 
-> That's very unfortunate. Is there no way around this?
-> 
-> Else fbdev can never be deprecated in favor of DRM.
+The Unisys sub-tree contains three drivers for the "Unisys Secure Partition"
+(s-Par(R)): visorhba, visorinput, visornic.
 
-I guess we could transparently replace shmem helpers by cma helpers on
-!MMU platforms - like if you have CONFIG_MMU you get the current shmem
-helpers, but if you don't have that, we do a dummy shmem helper
-implementation which uses cma helpers internally. The problem is that the
-interfaces have co-evolved and aren't a perfect match, so some surgery is
-probably required. Also we embed the structs into driver buffer object
-sturcts generally, and I'm not sure how to best solve that.
+They have no maintainers, in fact the only one that is listed in MAINTAINERS
+has an unreacheable email address. During 2021 and 2022 several patches have
+been submitted to these drivers but nobody at Unisys cared of reviewing the
+changes. Probably, also the "sparmaintainer" internal list of unisys.com is
+not anymore read by interested Unisys' engineers.
 
-Maybe the simplest approach would be to add a pointer to cma_gem_object to
-shmem_gem_object for the !MMU case and do a bit of forwarding as
-necessary.
+Therefore, remove the ./unisys subdirectory and delete the relevant entries
+in the MAINTAINERS, Kconfig, Makefile files.
 
-It might also be possible to wire through !MMU mmap support for shmem, but
-I'm not sure how well that will work in practice since that path would go
-to page_alloc and not through CMA (or maybe I'm just wrong about how mmap
-works on !MMU, definitely not my area of expertise).
+Cc: David Kershner <david.kershner@unisys.com>
+Cc: sparmaintainer@unisys.com
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-Anyway should be fixable.
--Daniel
+v1->v2: Add two "Cc:" lines, one to David Kershner and the second to the
+"sparmaintainer" list at unisys.com, as requested by Greg Kroah-Hartman.
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+ MAINTAINERS                                   |    8 -
+ drivers/staging/Kconfig                       |    2 -
+ drivers/staging/Makefile                      |    1 -
+ .../ABI/sysfs-platform-visorchipset           |   89 -
+ .../staging/unisys/Documentation/overview.txt |  337 ---
+ drivers/staging/unisys/Kconfig                |   16 -
+ drivers/staging/unisys/MAINTAINERS            |    5 -
+ drivers/staging/unisys/Makefile               |    7 -
+ drivers/staging/unisys/TODO                   |   16 -
+ drivers/staging/unisys/include/iochannel.h    |  571 -----
+ drivers/staging/unisys/visorhba/Kconfig       |   15 -
+ drivers/staging/unisys/visorhba/Makefile      |   10 -
+ .../staging/unisys/visorhba/visorhba_main.c   | 1142 ---------
+ drivers/staging/unisys/visorinput/Kconfig     |   16 -
+ drivers/staging/unisys/visorinput/Makefile    |    7 -
+ .../staging/unisys/visorinput/visorinput.c    |  788 ------
+ drivers/staging/unisys/visornic/Kconfig       |   16 -
+ drivers/staging/unisys/visornic/Makefile      |   10 -
+ .../staging/unisys/visornic/visornic_main.c   | 2131 -----------------
+ 19 files changed, 5187 deletions(-)
+ delete mode 100644 drivers/staging/unisys/Documentation/ABI/sysfs-platform-visorchipset
+ delete mode 100644 drivers/staging/unisys/Documentation/overview.txt
+ delete mode 100644 drivers/staging/unisys/Kconfig
+ delete mode 100644 drivers/staging/unisys/MAINTAINERS
+ delete mode 100644 drivers/staging/unisys/Makefile
+ delete mode 100644 drivers/staging/unisys/TODO
+ delete mode 100644 drivers/staging/unisys/include/iochannel.h
+ delete mode 100644 drivers/staging/unisys/visorhba/Kconfig
+ delete mode 100644 drivers/staging/unisys/visorhba/Makefile
+ delete mode 100644 drivers/staging/unisys/visorhba/visorhba_main.c
+ delete mode 100644 drivers/staging/unisys/visorinput/Kconfig
+ delete mode 100644 drivers/staging/unisys/visorinput/Makefile
+ delete mode 100644 drivers/staging/unisys/visorinput/visorinput.c
+ delete mode 100644 drivers/staging/unisys/visornic/Kconfig
+ delete mode 100644 drivers/staging/unisys/visornic/Makefile
+ delete mode 100644 drivers/staging/unisys/visornic/visornic_main.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3ed62dcd144e..a62da6d0f943 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20183,14 +20183,6 @@ F:	drivers/cdrom/cdrom.c
+ F:	include/linux/cdrom.h
+ F:	include/uapi/linux/cdrom.h
+ 
+-UNISYS S-PAR DRIVERS
+-M:	David Kershner <david.kershner@unisys.com>
+-L:	sparmaintainer@unisys.com (Unisys internal)
+-S:	Supported
+-F:	drivers/staging/unisys/
+-F:	drivers/visorbus/
+-F:	include/linux/visorbus.h
+-
+ UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER
+ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ R:	Avri Altman <avri.altman@wdc.com>
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index fc274737053d..a4d9f39dde90 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -64,8 +64,6 @@ source "drivers/staging/gdm724x/Kconfig"
+ 
+ source "drivers/staging/fwserial/Kconfig"
+ 
+-source "drivers/staging/unisys/Kconfig"
+-
+ source "drivers/staging/clocking-wizard/Kconfig"
+ 
+ source "drivers/staging/fbtft/Kconfig"
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index 65e317922e3f..a17a2aeaceba 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -22,7 +22,6 @@ obj-$(CONFIG_MFD_NVEC)		+= nvec/
+ obj-$(CONFIG_STAGING_BOARD)	+= board/
+ obj-$(CONFIG_LTE_GDM724X)	+= gdm724x/
+ obj-$(CONFIG_FIREWIRE_SERIAL)	+= fwserial/
+-obj-$(CONFIG_UNISYSSPAR)	+= unisys/
+ obj-$(CONFIG_COMMON_CLK_XLNX_CLKWZRD)	+= clocking-wizard/
+ obj-$(CONFIG_FB_TFT)		+= fbtft/
+ obj-$(CONFIG_MOST)		+= most/
+diff --git a/drivers/staging/unisys/Documentation/ABI/sysfs-platform-visorchipset b/drivers/staging/unisys/Documentation/ABI/sysfs-platform-visorchipset
+deleted file mode 100644
+index c2359de17eaf..000000000000
+--- a/drivers/staging/unisys/Documentation/ABI/sysfs-platform-visorchipset
++++ /dev/null
+@@ -1,89 +0,0 @@
+-This file describes sysfs entries beneath /devices/platform/visorchipset.
+-
+-What:		install/error
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	used to send the ID of a string that should be displayed on
+-		s-Par's automatic installation progress screen when an error
+-		is encountered during installation. This field has no effect
+-		if not in installation mode.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		install/remainingsteps
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	used to set the value of the progress bar on the s-Par automatic
+-		installation progress screen. This field has no effect if not in
+-		installation mode.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		install/textid
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	used to send the ID of a string that should be displayed on
+-		s-Par's automatic installation progress screen. Setting this
+-		field when not in installation mode (boottotool was set on
+-		the previous guest boot) has no effect.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		install/boottotool
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	The boottotool flag controls s-Par behavior on the next boot of
+-		this guest. Setting the flag will cause the guest to boot from
+-		the utility and installation image, which will use the value in
+-		the toolaction field to determine what operation is being
+-		requested.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		install/toolaction
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	This field is used to tell s-Par which type of recovery tool
+-		action to perform on the next guest boot-up. The meaning of the
+-		value is dependent on the type of installation software used to
+-		commission the guest.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		parahotplug/deviceenabled
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	This entry is used by a Unisys support script installed on the
+-		guest, and triggered by a udev event. The support script is
+-		responsible for enabling and disabling SR-IOV devices when the
+-		PF device is being recovered in another guest.
+-
+-		Some SR-IOV devices have problems when the PF is reset without
+-		first disabling all VFs attached to that PF. s-Par handles this
+-		situation by sending a message to guests using these VFs, and
+-		the script will disable the device. When the PF is recovered,
+-		another message is sent to the guests to re-enable the VFs.
+-
+-		The parahotplug/deviceenabled interface is used to acknowledge
+-		the recovery message.
+-Users:		sparmaintainer@unisys.com
+-
+-What:		parahotplug/devicedisabled
+-Date:		7/18/2014
+-KernelVersion: 	TBD
+-Contact:	sparmaintainer@unisys.com
+-Description:	This entry is used by a Unisys support script installed on the
+-		guest, and triggered by a udev event. The support script is
+-		responsible for enabling and disabling SR-IOV devices when the
+-		PF device is being recovered in another guest.
+-
+-		Some SR-IOV devices have problems when the PF is reset without
+-		first disabling all VFs attached to that PF. s-Par handles this
+-		situation by sending a message to guests using these VFs, and
+-		the script will disable the device. When the PF is recovered,
+-		another message is sent to the guests to re-enable the VFs.
+-
+-		The parahotplug/devicedisaabled interface is used to acknowledge
+-		the initial recovery message.
+-Users:		sparmaintainer@unisys.com
+diff --git a/drivers/staging/unisys/Documentation/overview.txt b/drivers/staging/unisys/Documentation/overview.txt
+deleted file mode 100644
+index cf29f884cbe0..000000000000
+--- a/drivers/staging/unisys/Documentation/overview.txt
++++ /dev/null
+@@ -1,337 +0,0 @@
+-1. Overview
+------------
+-
+-This document describes the driver set for Unisys Secure Partitioning
+-(s-Par(R)).
+-
+-s-Par is firmware that provides hardware partitioning capabilities for
+-splitting large-scale Intel x86 servers into multiple isolated
+-partitions. s-Par provides a set of para-virtualized device drivers to
+-allow guest partitions on the same server to share devices that would
+-normally be unsharable, specifically:
+-
+-* visornic - network interface
+-* visorhba - scsi disk adapter
+-* visorinput - keyboard and mouse
+-
+-These drivers conform to the standard Linux bus/device model described
+-within Documentation/driver-api/driver-model/, and utilize a driver named
+-visorbus to present the virtual busses involved. Drivers in the 'visor*'
+-driver set are commonly referred to as "guest drivers" or "client drivers".
+-All drivers except visorbus expose a device of a specific usable class to the
+-Linux guest environment (e.g., block, network, or input), and are collectively
+-referred to as "function drivers".
+-
+-The back-end for each device is owned and managed by a small,
+-single-purpose service partition in the s-Par firmware, which communicates
+-with each guest partition sharing that device through an area of shared memory
+-called a "channel". In s-Par nomenclature, the back-end is often referred to
+-as the "service partition", "IO partition" (for virtual network and scsi disk
+-devices), or "console partition" (for virtual keyboard and mouse devices).
+-
+-Each virtual device requires exactly 1 dedicated channel, which the guest
+-driver and back-end use to communicate.  The hypervisor need not intervene
+-(other than normal interrupt handling) in the interactions that occur across
+-this channel.
+-
+-NOT covered in this document:
+-
+-* s-Par also supports sharing physical PCI adapters via SR-IOV, but
+-  because this requires no specific support in the guest partitions, it will
+-  not be discussed in this document.  Shared SR-IOV devices should be used
+-  wherever possible for highest performance.
+-
+-* Because the s-Par back-end provides a standard EFI framebuffer to each
+-  guest, the already-existing efifb Linux driver is used to provide guest
+-  video access. Thus, the only s-Par-unique support that is necessary to
+-  provide a guest graphics console are for keyboard and mouse (via visorinput).
+-
+-
+-2. Driver Descriptions
+-----------------------
+-
+-2.1. visorbus
+--------------
+-
+-2.1.1. Overview
+----------------
+-
+-The visorbus driver handles the virtual busses on which all of the virtual
+-devices reside. It provides a registration function named
+-visorbus_register_visor_driver() that is called by each of the function
+-drivers at initialization time, which the function driver uses to tell
+-visorbus about the device classes (via specifying a list of device type
+-GUIDs) it wants to handle. For use by function drivers, visorbus provides
+-implementation for struct visor_driver and struct visor_device, as well
+-as utility functions for communicating with the back-end.
+-
+-visorbus is associated with ACPI id "PNP0A07" in modules.alias, so if built
+-as a module it will typically be loaded automatically via standard udev or
+-systemd (God help us) configurations.
+-
+-visorbus can similarly force auto-loading of function drivers for virtual
+-devices it discovers, as it includes a MODALIAS environment variable of this
+-form in the hotplug uevent environment when each virtual device is
+-discovered:
+-
+-    visorbus:<device type GUID>
+-
+-visorbus notifies each function driver when a device of its registered class
+-arrives and departs, by calling the function driver's probe() and remove()
+-methods.
+-
+-The actual struct device objects that correspond to each virtual bus and
+-each virtual device are created and owned by visorbus.  These device objects
+-are created in response to messages from the s-Par back-end received on a
+-special control channel called the "controlvm channel" (each guest partition
+-has access to exactly 1 controlvm channel), and have a lifetime that is
+-independent of the function drivers that control them.
+-
+-2.1.2. "struct visor device" Function Driver Interfaces
+--------------------------------------------------------
+-
+-The interface between visorbus and its function drivers is defined in
+-visorbus.h, and described below.
+-
+-When a visor function driver loads, it calls visorbus_register_visor_driver()
+-to register itself with visorbus. The significant information passed in this
+-exchange is as follows:
+-
+-* the GUID(s) of the channel type(s) that are handled by this driver, as
+-  well as a "friendly name" identifying each (this will be published under
+-  /sys/devices/visorbus<x>/dev<y>)
+-
+-* the addresses of callback functions to be called whenever a virtual
+-  device/channel with the appropriate channel-type GUID(s) appears or
+-  disappears
+-
+-* the address of a "channel_interrupt" function, which will be automatically
+-  called at specific intervals to enable the driver to poll the device
+-  channel for activity
+-
+-The following functions implemented within each function driver will be
+-called automatically by the visorbus driver at appropriate times:
+-
+-* The probe() function notifies about the creation of each new virtual
+-  device/channel instance.
+-
+-* The remove() function notifies about the destruction of a virtual
+-  device/channel instance.
+-
+-* The channel_interrupt() function is called at frequent intervals to
+-  give the function driver an opportunity to poll the virtual device channel
+-  for requests.  Information is passed to this function to enable the
+-  function driver to use the visorchannel_signalinsert() and
+-  visorchannel_signalremove() functions to respond to and initiate activity
+-  over the channel.  (Note that since it is the visorbus driver that
+-  determines when this is called, it is very easy to switch to
+-  interrupt-driven mechanisms when available for particular virtual device
+-  types.)
+-
+-* The pause() function is called should it ever be necessary to direct the
+-  function driver to temporarily stop accessing the device channel.  An
+-  example of when this is needed is when the service partition implementing
+-  the back-end of the virtual device needs to be recovered.  After a
+-  successful return of pause(), the function driver must not access the
+-  device channel until a subsequent resume() occurs.
+-
+-* The resume() function is the "book-end" to pause(), and is described above.
+-
+-2.1.3. sysfs Advertised Information
+------------------------------------
+-
+-Because visorbus is a standard Linux bus driver in the model described in
+-Documentation/driver-api/driver-model/, the hierarchy of s-Par virtual devices is
+-published in the sysfs tree beneath /bus/visorbus/, e.g.,
+-/sys/bus/visorbus/devices/ might look like:
+-
+-    vbus1:dev1 -> ../../../devices/visorbus1/vbus1:dev1
+-    vbus1:dev2 -> ../../../devices/visorbus1/vbus1:dev2
+-    vbus1:dev3 -> ../../../devices/visorbus1/vbus1:dev3
+-    vbus2:dev0 -> ../../../devices/visorbus2/vbus2:dev0
+-    vbus2:dev1 -> ../../../devices/visorbus2/vbus2:dev1
+-    vbus2:dev2 -> ../../../devices/visorbus2/vbus2:dev2
+-    visorbus1 -> ../../../devices/visorbus1
+-    visorbus2 -> ../../../devices/visorbus2
+-
+-visor_device notes:
+-
+-* Each visorbus<n> entry denotes the existence of a struct visor_device
+-  denoting virtual bus #<n>.  A unique s-Par channel exists for each such
+-  virtual bus.
+-
+-* Virtual bus numbers uniquely identify s-Par back-end service partitions.
+-  In this example, bus 1 corresponds to the s-Par console partition
+-  (controls keyboard, video, and mouse), whereas bus 2 corresponds to the
+-  s-Par IO partition (controls network and disk).
+-
+-* Each vbus<x>:dev<y> entry denotes the existence of a struct visor_device
+-  denoting virtual device #<y> outboard of virtual bus #<x>.  A unique s-Par
+-  channel exists for each such virtual device.
+-
+-* If a function driver has loaded and claimed a particular device, the
+-  bus/visorbus/devices/vbus<x>:dev<y>/driver symlink will indicate that
+-  function driver.
+-
+-Every active visorbus device will have a sysfs subtree under:
+-
+-    /sys/devices/visorbus<x>/vbus<x>:dev<y>/
+-
+-The following files exist under /sys/devices/visorbus<x>/vbus<x>:dev<y>:
+-
+-    subsystem                 link to sysfs tree that describes the
+-                              visorbus bus type; e.g.:
+-                                  ../../../bus/visorbus
+-
+-    driver                    link to sysfs tree that describes the
+-                              function driver controlling this device;
+-                              e.g.:
+-                                  ../../../bus/visorbus/drivers/visorhba
+-                              Note that this "driver" link will not exist
+-                              if the appropriate function driver has not
+-                              been loaded yet.
+-
+-    channel                   properties of the device channel (all in
+-                              ascii text format)
+-
+-        clientpartition       handle identifying the guest (client) side
+-                              of this channel, e.g. 0x10000000.
+-
+-        nbytes                total size of this channel in bytes
+-
+-        physaddr              the guest physical address for the base of
+-                              the channel
+-
+-        typeguid              a GUID identifying the channel type, in
+-                              xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx notation
+-
+-        typename              a "friendly name" for this channel type, e.g.,
+-                              "keyboard".  Note that this name is provided by
+-                              a particular function driver, so "typename"
+-                              will return an empty string until AFTER the
+-                              appropriate function driver controlling this
+-                              channel type is loaded
+-
+-        zoneguid              a GUID identifying the channel zone, in
+-                              xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx notation
+-
+-
+-2.2. visorhba
+--------------
+-
+-The visorhba driver registers with visorbus as the function driver to
+-handle virtual scsi disk devices, specified using the
+-VISOR_VHBA_CHANNEL_GUID type in the visorbus_register_visor_driver()
+-call. visorhba uses scsi_add_host() to expose a Linux block device
+-(e.g., /sys/block/) in the guest environment for each s-Par virtual device.
+-
+-visorhba provides access to a shared SCSI host bus adapter and one or more
+-disk devices, by proxying SCSI commands between the guest and the service
+-partition that owns the shared SCSI adapter, using a channel between the
+-guest and the service partition. The disks that appear on the shared bus
+-are defined by the s-Par configuration and enforced by the service partition,
+-while the guest driver handles sending commands and handling responses. Each
+-disk is shared as a whole to a guest. Sharing the bus adapter in this way
+-provides resiliency; should the device encounter an error, only the service
+-partition is rebooted, and the device is reinitialized. This allows
+-guests to continue running and to recover from the error.
+-
+-When compiled as a module, visorhba can be autoloaded by visorbus in
+-standard udev/systemd environments, as it includes the modules.alias
+-definition:
+-
+-    "visorbus:"+VISOR_VHBA_CHANNEL_GUID_STR
+-
+-i.e.:
+-
+-    alias visorbus:414815ed-c58c-11da-95a9-00e08161165f visorhba
+-
+-
+-2.3. visornic
+--------------
+-
+-The visornic driver registers with visorbus as the function driver to
+-handle virtual network devices, specified using the
+-VISOR_VNIC_CHANNEL_GUID type in the visorbus_register_visor_driver()
+-call. visornic uses register_netdev() to expose a Linux device of class net
+-(e.g., /sys/class/net/) in the guest environment for each s-Par virtual
+-device.
+-
+-visornic provides a paravirtualized network interface to a
+-guest by proxying buffer information between the guest and the service
+-partition that owns the shared network interface, using a channel
+-between the guest and the service partition. The connectivity of this
+-interface with the shared interface and possibly other guest
+-partitions is defined by the s-Par configuration and enforced by the
+-service partition; the guest driver handles communication and link
+-status.
+-
+-When compiled as a module, visornic can be autoloaded by visorbus in
+-standard udev/systemd environments, as it includes the modules.alias
+-definition:
+-
+-    "visorbus:"+VISOR_VNIC_CHANNEL_GUID_STR
+-
+-i.e.:
+-
+-    alias visorbus:8cd5994d-c58e-11da-95a9-00e08161165f visornic
+-
+-
+-2.4. visorinput
+----------------
+-
+-The visorinput driver registers with visorbus as the function driver to
+-handle human input devices, specified using the
+-VISOR_KEYBOARD_CHANNEL_GUID and VISOR_MOUSE_CHANNEL_GUID
+-types in the visorbus_register_visor_driver() call. visorinput uses
+-input_register_device() to expose devices of class input
+-(e.g., /sys/class/input/) for virtual keyboard and virtual mouse devices.
+-A s-Par virtual keyboard device maps 1-to-1 with a Linux input device
+-named "visor Keyboard", while a s-Par virtual mouse device has 2 Linux input
+-devices created for it: 1 named "visor Wheel", and 1 named "visor Mouse".
+-
+-By registering as input class devices, modern versions of X will
+-automatically find and properly use s-Par virtual keyboard and mouse devices.
+-As the s-Par back-end reports keyboard and mouse activity via events on the
+-virtual device channel, the visorinput driver delivers the activity to the
+-Linux environment by calling input_report_key() and input_report_abs().
+-
+-You can interact with the guest console using the usyscon Partition Desktop
+-(a.k.a., "pd") application, provided as part of s-Par.  After installing the
+-usyscon Partition Desktop into a Linux environment via the
+-usyscon_partitiondesktop-*.rpm, or into a Windows environment via
+-PartitionDesktop.msi, you will be able to launch a console for your guest
+-Linux environment by clicking the console icon in the s-Par web UI.
+-
+-When compiled as a module, visorinput can be autoloaded by visorbus in
+-standard udev/systemd environments, as it includes the modules.alias
+-definition:
+-
+-    "visorbus:"+VISOR_MOUSE_CHANNEL_GUID_STR
+-    "visorbus:"+VISOR_KEYBOARD_CHANNEL_GUID_STR
+-
+-i.e.:
+-
+-    alias visorbus:c73416d0-b0b8-44af-b304-9d2ae99f1b3d visorinput
+-    alias visorbus:addf07d4-94a9-46e2-81c3-61abcdbdbd87 visorinput
+-
+-
+-3. Minimum Required Driver Set
+-------------------------------
+-
+-visorbus is required for every Linux guest running under s-Par.
+-
+-visorhba is typically required for a Linux guest running under s-Par, as it
+-is required if your guest boot disk is a virtual device provided by the s-Par
+-back-end, which is the default configuration.  However, for advanced
+-configurations where the Linux guest boots via an SR-IOV-provided HBA or
+-SAN disk for example, visorhba is not technically required.
+-
+-visornic is typically required for a Linux guest running under s-Par, as it
+-is required if your guest network interface is a virtual device provided by
+-the s-Par back-end, which is the default configuration.  However, for
+-configurations where the Linux guest is provided with an SR-IOV NIC
+-for example, visornic is not technically required.
+-
+-visorinput is only required for a Linux guest running under s-Par if you
+-require graphics-mode access to your guest console.
+diff --git a/drivers/staging/unisys/Kconfig b/drivers/staging/unisys/Kconfig
+deleted file mode 100644
+index 43fe1ce538e1..000000000000
+--- a/drivers/staging/unisys/Kconfig
++++ /dev/null
+@@ -1,16 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Unisys SPAR driver configuration
+-#
+-menuconfig UNISYSSPAR
+-	bool "Unisys SPAR driver support"
+-	help
+-	  Support for the Unisys SPAR drivers
+-
+-if UNISYSSPAR
+-
+-source "drivers/staging/unisys/visornic/Kconfig"
+-source "drivers/staging/unisys/visorinput/Kconfig"
+-source "drivers/staging/unisys/visorhba/Kconfig"
+-
+-endif # UNISYSSPAR
+diff --git a/drivers/staging/unisys/MAINTAINERS b/drivers/staging/unisys/MAINTAINERS
+deleted file mode 100644
+index aaddc619c329..000000000000
+--- a/drivers/staging/unisys/MAINTAINERS
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Unisys s-Par drivers
+-M:	David Kershner <sparmaintainer@unisys.com>
+-S:	Maintained
+-F:	drivers/staging/unisys/Documentation/overview.txt
+-F:	drivers/staging/unisys/
+diff --git a/drivers/staging/unisys/Makefile b/drivers/staging/unisys/Makefile
+deleted file mode 100644
+index c0f76cc196a6..000000000000
+--- a/drivers/staging/unisys/Makefile
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for Unisys SPAR drivers
+-#
+-obj-$(CONFIG_UNISYS_VISORNIC)		+= visornic/
+-obj-$(CONFIG_UNISYS_VISORINPUT)		+= visorinput/
+-obj-$(CONFIG_UNISYS_VISORHBA)		+= visorhba/
+diff --git a/drivers/staging/unisys/TODO b/drivers/staging/unisys/TODO
+deleted file mode 100644
+index d863f266bf76..000000000000
+--- a/drivers/staging/unisys/TODO
++++ /dev/null
+@@ -1,16 +0,0 @@
+-TODO:
+-	- enhance visornic to use channel_interrupt() hook instead of a
+-	  kernel thread
+-	- enhance visorhba to use channel_interrupt() hook instead of a
+-	  kernel thread
+-	- teach visorbus to handle virtual interrupts triggered by s-Par
+-	  back-end, and call function driver's channel_interrupt() function
+-	  when they occur
+-	- enhance debugfs interfaces (e.g., per device, etc.)
+-	- upgrade/remove deprecated workqueue operations
+-	- move individual drivers into proper driver subsystems
+-
+-Patches to:
+-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+-	Ken Cox <jkc@redhat.com>
+-	Unisys s-Par maintainer mailing list <sparmaintainer@unisys.com>
+diff --git a/drivers/staging/unisys/include/iochannel.h b/drivers/staging/unisys/include/iochannel.h
+deleted file mode 100644
+index 9ef812c0bc42..000000000000
+--- a/drivers/staging/unisys/include/iochannel.h
++++ /dev/null
+@@ -1,571 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0+ */
+-/*
+- * Copyright (C) 2010 - 2016 UNISYS CORPORATION
+- * All rights reserved.
+- */
+-
+-#ifndef __IOCHANNEL_H__
+-#define __IOCHANNEL_H__
+-
+-/*
+- * Everything needed for IOPart-GuestPart communication is define in
+- * this file. Note: Everything is OS-independent because this file is
+- * used by Windows, Linux and possible EFI drivers.
+- *
+- * Communication flow between the IOPart and GuestPart uses the channel headers
+- * channel state. The following states are currently being used:
+- *       UNINIT(All Zeroes), CHANNEL_ATTACHING, CHANNEL_ATTACHED, CHANNEL_OPENED
+- *
+- * Additional states will be used later. No locking is needed to switch between
+- * states due to the following rules:
+- *
+- *      1.  IOPart is only the only partition allowed to change from UNIT
+- *      2.  IOPart is only the only partition allowed to change from
+- *		CHANNEL_ATTACHING
+- *      3.  GuestPart is only the only partition allowed to change from
+- *		CHANNEL_ATTACHED
+- *
+- * The state changes are the following: IOPart sees the channel is in UNINIT,
+- *        UNINIT -> CHANNEL_ATTACHING (performed only by IOPart)
+- *        CHANNEL_ATTACHING -> CHANNEL_ATTACHED (performed only by IOPart)
+- *        CHANNEL_ATTACHED -> CHANNEL_OPENED (performed only by GuestPart)
+- */
+-
+-#include <linux/uuid.h>
+-#include <linux/skbuff.h>
+-#include <linux/visorbus.h>
+-
+-/*
+- * Must increment these whenever you insert or delete fields within this channel
+- * struct. Also increment whenever you change the meaning of fields within this
+- * channel struct so as to break pre-existing software. Note that you can
+- * usually add fields to the END of the channel struct without needing to
+- * increment this.
+- */
+-#define VISOR_VHBA_CHANNEL_VERSIONID 2
+-#define VISOR_VNIC_CHANNEL_VERSIONID 2
+-
+-/*
+- * Everything necessary to handle SCSI & NIC traffic between Guest Partition and
+- * IO Partition is defined below.
+- */
+-
+-/*
+- * Define the two queues per data channel between iopart and ioguestparts.
+- *	IOCHAN_TO_IOPART -- used by guest to 'insert' signals to iopart.
+- *	IOCHAN_FROM_IOPART -- used by guest to 'remove' signals from IO part.
+- */
+-#define IOCHAN_TO_IOPART 0
+-#define IOCHAN_FROM_IOPART 1
+-
+-/* Size of cdb - i.e., SCSI cmnd */
+-#define MAX_CMND_SIZE 16
+-
+-/* Unisys-specific DMA direction values */
+-enum uis_dma_data_direction {
+-	UIS_DMA_BIDIRECTIONAL = 0,
+-	UIS_DMA_TO_DEVICE = 1,
+-	UIS_DMA_FROM_DEVICE = 2,
+-	UIS_DMA_NONE = 3
+-};
+-
+-#define MAX_SENSE_SIZE 64
+-#define MAX_PHYS_INFO 64
+-
+-/*
+- * enum net_types - Various types of network packets that can be sent in cmdrsp.
+- * @NET_RCV_POST:	Submit buffer to hold receiving incoming packet.
+- * @NET_RCV:		visornic -> uisnic. Incoming packet received.
+- * @NET_XMIT:		uisnic -> visornic. For outgoing packet.
+- * @NET_XMIT_DONE:	visornic -> uisnic. Outgoing packet xmitted.
+- * @NET_RCV_ENBDIS:	uisnic -> visornic. Enable/Disable packet reception.
+- * @NET_RCV_ENBDIS_ACK:	visornic -> uisnic. Acknowledge enable/disable packet.
+- * @NET_RCV_PROMISC:	uisnic -> visornic. Enable/Disable promiscuous mode.
+- * @NET_CONNECT_STATUS:	visornic -> uisnic. Indicate the loss or restoration of
+- *			a network connection.
+- * @NET_MACADDR:	uisnic -> visornic. Indicates the client has requested
+- *			to update it's MAC address.
+- * @NET_MACADDR_ACK:	MAC address acknowledge.
+- */
+-enum net_types {
+-	NET_RCV_POST = 0,
+-	NET_RCV,
+-	NET_XMIT,
+-	NET_XMIT_DONE,
+-	NET_RCV_ENBDIS,
+-	NET_RCV_ENBDIS_ACK,
+-	/* Reception */
+-	NET_RCV_PROMISC,
+-	NET_CONNECT_STATUS,
+-	NET_MACADDR,
+-	NET_MACADDR_ACK,
+-};
+-
+-/* Minimum eth data size */
+-#define ETH_MIN_DATA_SIZE 46
+-#define ETH_MIN_PACKET_SIZE (ETH_HLEN + ETH_MIN_DATA_SIZE)
+-
+-/* Maximum data size */
+-#define VISOR_ETH_MAX_MTU 16384
+-
+-#ifndef MAX_MACADDR_LEN
+-/* Number of bytes in MAC address */
+-#define MAX_MACADDR_LEN 6
+-#endif
+-
+-/* Various types of scsi task mgmt commands. */
+-enum task_mgmt_types {
+-	TASK_MGMT_ABORT_TASK = 1,
+-	TASK_MGMT_BUS_RESET,
+-	TASK_MGMT_LUN_RESET,
+-	TASK_MGMT_TARGET_RESET,
+-};
+-
+-/* Various types of vdisk mgmt commands. */
+-enum vdisk_mgmt_types {
+-	VDISK_MGMT_ACQUIRE = 1,
+-	VDISK_MGMT_RELEASE,
+-};
+-
+-struct phys_info {
+-	u64 pi_pfn;
+-	u16 pi_off;
+-	u16 pi_len;
+-} __packed;
+-
+-#define MIN_NUMSIGNALS 64
+-
+-/* Structs with pragma pack. */
+-
+-struct guest_phys_info {
+-	u64 address;
+-	u64 length;
+-} __packed;
+-
+-/*
+- * struct uisscsi_dest
+- * @channel: Bus number.
+- * @id:      Target number.
+- * @lun:     Logical unit number.
+- */
+-struct uisscsi_dest {
+-	u32 channel;
+-	u32 id;
+-	u32 lun;
+-} __packed;
+-
+-struct vhba_wwnn {
+-	u32 wwnn1;
+-	u32 wwnn2;
+-} __packed;
+-
+-/*
+- * struct vhba_config_max
+- * @max_channel: Maximum channel for devices attached to this bus.
+- * @max_id:	 Maximum SCSI ID for devices attached to bus.
+- * @max_lun:	 Maximum SCSI LUN for devices attached to bus.
+- * @cmd_per_lun: Maximum number of outstanding commands per LUN.
+- * @max_io_size: Maximum io size for devices attached to this bus. Max io size
+- *		 is often determined by the resource of the hba.
+- *		 e.g Max scatter gather list length * page size / sector size.
+- *
+- * WARNING: Values stored in this structure must contain maximum counts (not
+- * maximum values).
+- *
+- * 20 bytes
+- */
+-struct vhba_config_max {
+-	u32 max_channel;
+-	u32 max_id;
+-	u32 max_lun;
+-	u32 cmd_per_lun;
+-	u32 max_io_size;
+-} __packed;
+-
+-/*
+- * struct uiscmdrsp_scsi
+- *
+- * @handle:		The handle to the cmd that was received. Send it back as
+- *			is in the rsp packet.
+- * @cmnd:		The cdb for the command.
+- * @bufflen:		Length of data to be transferred out or in.
+- * @guest_phys_entries:	Number of entries in scatter-gather list.
+- * @struct gpi_list:	Physical address information for each fragment.
+- * @data_dir:		Direction of the data, if any.
+- * @struct vdest:	Identifies the virtual hba, id, channel, lun to which
+- *			cmd was sent.
+- * @linuxstat:		Original Linux status used by Linux vdisk.
+- * @scsistat:		The scsi status.
+- * @addlstat:		Non-scsi status.
+- * @sensebuf:		Sense info in case cmd failed. sensebuf holds the
+- *			sense_data struct. See sense_data struct for more
+- *			details.
+- * @*vdisk:		Pointer to the vdisk to clean up when IO completes.
+- * @no_disk_result:	Used to return no disk inquiry result when
+- *			no_disk_result is set to 1
+- *			scsi.scsistat is SAM_STAT_GOOD
+- *			scsi.addlstat is 0
+- *			scsi.linuxstat is SAM_STAT_GOOD
+- *			That is, there is NO error.
+- */
+-struct uiscmdrsp_scsi {
+-	u64 handle;
+-	u8 cmnd[MAX_CMND_SIZE];
+-	u32 bufflen;
+-	u16 guest_phys_entries;
+-	struct guest_phys_info gpi_list[MAX_PHYS_INFO];
+-	u32 data_dir;
+-	struct uisscsi_dest vdest;
+-	/* Needed to queue the rsp back to cmd originator. */
+-	int linuxstat;
+-	u8 scsistat;
+-	u8 addlstat;
+-#define ADDL_SEL_TIMEOUT 4
+-	/* The following fields are need to determine the result of command. */
+-	u8 sensebuf[MAX_SENSE_SIZE];
+-	void *vdisk;
+-	int no_disk_result;
+-} __packed;
+-
+-/*
+- * Defines to support sending correct inquiry result when no disk is
+- * configured.
+- *
+- * From SCSI SPC2 -
+- *
+- * If the target is not capable of supporting a device on this logical unit, the
+- * device server shall set this field to 7Fh (PERIPHERAL QUALIFIER set to 011b
+- * and PERIPHERAL DEVICE TYPE set to 1Fh).
+- *
+- * The device server is capable of supporting the specified peripheral device
+- * type on this logical unit. However, the physical device is not currently
+- * connected to this logical unit.
+- */
+-
+-/*
+- * Peripheral qualifier of 0x3
+- * Peripheral type of 0x1f
+- * Specifies no device but target present
+- */
+-#define DEV_NOT_CAPABLE 0x7f
+-/*
+- * Peripheral qualifier of 0x1
+- * Peripheral type of 0 - disk
+- * Specifies device capable, but not present
+- */
+-#define DEV_DISK_CAPABLE_NOT_PRESENT 0x20
+-/* HiSup = 1; shows support for report luns must be returned for lun 0. */
+-#define DEV_HISUPPORT 0x10
+-
+-/*
+- * Peripheral qualifier of 0x3
+- * Peripheral type of 0x1f
+- * Specifies no device but target present
+- */
+-#define DEV_NOT_CAPABLE 0x7f
+-/*
+- * Peripheral qualifier of 0x1
+- * Peripheral type of 0 - disk
+- * Specifies device capable, but not present
+- */
+-#define DEV_DISK_CAPABLE_NOT_PRESENT 0x20
+-/* HiSup = 1; shows support for report luns must be returned for lun 0. */
+-#define DEV_HISUPPORT 0x10
+-
+-/*
+- * NOTE: Linux code assumes inquiry contains 36 bytes. Without checking length
+- * in buf[4] some Linux code accesses bytes beyond 5 to retrieve vendor, product
+- * and revision. Yikes! So let us always send back 36 bytes, the minimum for
+- * inquiry result.
+- */
+-#define NO_DISK_INQUIRY_RESULT_LEN 36
+-/* 5 bytes minimum for inquiry result */
+-#define MIN_INQUIRY_RESULT_LEN 5
+-
+-/* SCSI device version for no disk inquiry result */
+-/* indicates SCSI SPC2 (SPC3 is 5) */
+-#define SCSI_SPC2_VER 4
+-
+-/* Struct and Defines to support sense information. */
+-
+-/*
+- * The following struct is returned in sensebuf field in uiscmdrsp_scsi. It is
+- * initialized in exactly the manner that is recommended in Windows (hence the
+- * odd values).
+- * When set, these fields will have the following values:
+- * ErrorCode = 0x70		indicates current error
+- * Valid = 1			indicates sense info is valid
+- * SenseKey			contains sense key as defined by SCSI specs.
+- * AdditionalSenseCode		contains sense key as defined by SCSI specs.
+- * AdditionalSenseCodeQualifier	contains qualifier to sense code as defined by
+- *				scsi docs.
+- * AdditionalSenseLength	contains will be sizeof(sense_data)-8=10.
+- */
+-struct sense_data {
+-	u8 errorcode:7;
+-	u8 valid:1;
+-	u8 segment_number;
+-	u8 sense_key:4;
+-	u8 reserved:1;
+-	u8 incorrect_length:1;
+-	u8 end_of_media:1;
+-	u8 file_mark:1;
+-	u8 information[4];
+-	u8 additional_sense_length;
+-	u8 command_specific_information[4];
+-	u8 additional_sense_code;
+-	u8 additional_sense_code_qualifier;
+-	u8 fru_code;
+-	u8 sense_key_specific[3];
+-} __packed;
+-
+-/*
+- * struct net_pkt_xmt
+- * @len:		    Full length of data in the packet.
+- * @num_frags:		    Number of fragments in frags containing data.
+- * @struct phys_info frags: Physical page information.
+- * @ethhdr:		    The ethernet header.
+- * @struct lincsum:	    These are needed for csum at uisnic end.
+- *      @valid:	    1 = struct is valid - else ignore.
+- *      @hrawoffv:  1 = hwrafoff is valid.
+- *      @nhrawoffv: 1 = nhwrafoff is valid.
+- *      @protocol:  Specifies packet protocol.
+- *      @csum:	    Value used to set skb->csum at IOPart.
+- *      @hrawoff:   Value used to set skb->h.raw at IOPart. hrawoff points to
+- *		    the start of the TRANSPORT LAYER HEADER.
+- *      @nhrawoff:  Value used to set skb->nh.raw at IOPart. nhrawoff points to
+- *		    the start of the NETWORK LAYER HEADER.
+- *
+- * NOTE:
+- * The full packet is described in frags but the ethernet header is separately
+- * kept in ethhdr so that uisnic doesn't have "MAP" the guest memory to get to
+- * the header. uisnic needs ethhdr to determine how to route the packet.
+- */
+-struct net_pkt_xmt {
+-	int len;
+-	int num_frags;
+-	struct phys_info frags[MAX_PHYS_INFO];
+-	char ethhdr[ETH_HLEN];
+-	struct {
+-		u8 valid;
+-		u8 hrawoffv;
+-		u8 nhrawoffv;
+-		__be16 protocol;
+-		__wsum csum;
+-		u32 hrawoff;
+-		u32 nhrawoff;
+-	} lincsum;
+-} __packed;
+-
+-struct net_pkt_xmtdone {
+-	/* Result of NET_XMIT */
+-	u32 xmt_done_result;
+-} __packed;
+-
+-/*
+- * RCVPOST_BUF_SIZE must be at most page_size(4096) - cache_line_size (64) The
+- * reason is because dev_skb_alloc which is used to generate RCV_POST skbs in
+- * visornic requires that there is "overhead" in the buffer, and pads 16 bytes.
+- * Use 1 full cache line size for "overhead" so that transfers are optimized.
+- * IOVM requires that a buffer be represented by 1 phys_info structure
+- * which can only cover page_size.
+- */
+-#define RCVPOST_BUF_SIZE 4032
+-#define MAX_NET_RCV_CHAIN \
+-	((VISOR_ETH_MAX_MTU + ETH_HLEN + RCVPOST_BUF_SIZE - 1) \
+-	 / RCVPOST_BUF_SIZE)
+-
+-/* rcv buf size must be large enough to include ethernet data len + ethernet
+- * header len - we are choosing 2K because it is guaranteed to be describable.
+- */
+-struct net_pkt_rcvpost {
+-	/* Physical page information for the single fragment 2K rcv buf */
+-	struct phys_info frag;
+-	/*
+-	 * Ensures that receive posts are returned to the adapter which we sent
+-	 * them from originally.
+-	 */
+-	u64 unique_num;
+-
+-} __packed;
+-
+-/*
+- * struct net_pkt_rcv
+- * @rcv_done_len:	Length of the received data.
+- * @numrcvbufs:		Contains the incoming data. Guest side MUST chain these
+- *			together.
+- * @*rcvbuf:		List of chained rcvbufa. Each entry is a receive buffer
+- *			provided by NET_RCV_POST. NOTE: First rcvbuf in the
+- *			chain will also be provided in net.buf.
+- * @unique_num:
+- * @rcvs_dropped_delta:
+- *
+- * The number of rcvbuf that can be chained is based on max mtu and size of each
+- * rcvbuf.
+- */
+-struct net_pkt_rcv {
+-	u32 rcv_done_len;
+-	u8 numrcvbufs;
+-	void *rcvbuf[MAX_NET_RCV_CHAIN];
+-	u64 unique_num;
+-	u32 rcvs_dropped_delta;
+-} __packed;
+-
+-struct net_pkt_enbdis {
+-	void *context;
+-	/* 1 = enable, 0 = disable */
+-	u16 enable;
+-} __packed;
+-
+-struct net_pkt_macaddr {
+-	void *context;
+-	/* 6 bytes */
+-	u8 macaddr[MAX_MACADDR_LEN];
+-} __packed;
+-
+-/*
+- * struct uiscmdrsp_net - cmd rsp packet used for VNIC network traffic.
+- * @enum type:
+- * @*buf:
+- * @union:
+- *	@struct xmt:	 Used for NET_XMIT.
+- *	@struct xmtdone: Used for NET_XMIT_DONE.
+- *	@struct rcvpost: Used for NET_RCV_POST.
+- *	@struct rcv:	 Used for NET_RCV.
+- *	@struct enbdis:	 Used for NET_RCV_ENBDIS, NET_RCV_ENBDIS_ACK,
+- *			 NET_RCV_PROMSIC, and NET_CONNECT_STATUS.
+- *	@struct macaddr:
+- */
+-struct uiscmdrsp_net {
+-	enum net_types type;
+-	void *buf;
+-	union {
+-		struct net_pkt_xmt xmt;
+-		struct net_pkt_xmtdone xmtdone;
+-		struct net_pkt_rcvpost rcvpost;
+-		struct net_pkt_rcv rcv;
+-		struct net_pkt_enbdis enbdis;
+-		struct net_pkt_macaddr macaddr;
+-	};
+-} __packed;
+-
+-/*
+- * struct uiscmdrsp_scsitaskmgmt
+- * @enum tasktype:	 The type of task.
+- * @struct vdest:	 The vdisk for which this task mgmt is generated.
+- * @handle:		 This is a handle that the guest has saved off for its
+- *			 own use. The handle value is preserved by iopart and
+- *			 returned as in task mgmt rsp.
+- * @notify_handle:	 For Linux guests, this is a pointer to wait_queue_head
+- *			 that a thread is waiting on to see if the taskmgmt
+- *			 command has completed. When the rsp is received by
+- *			 guest, the thread receiving the response uses this to
+- *			 notify the thread waiting for taskmgmt command
+- *			 completion. It's value is preserved by iopart and
+- *			 returned as in the task mgmt rsp.
+- * @notifyresult_handle: This is a handle to the location in the guest where
+- *			 the result of the taskmgmt command (result field) is
+- *			 saved to when the response is handled. It's value is
+- *			 preserved by iopart and returned as is in the task mgmt
+- *			 rsp.
+- * @result:		 Result of taskmgmt command - set by IOPart.
+- */
+-struct uiscmdrsp_scsitaskmgmt {
+-	enum task_mgmt_types tasktype;
+-	struct uisscsi_dest vdest;
+-	u64 handle;
+-	u64 notify_handle;
+-	u64 notifyresult_handle;
+-	char result;
+-
+-#define TASK_MGMT_FAILED 0
+-} __packed;
+-
+-/*
+- * struct uiscmdrsp_disknotify - Used by uissd to send disk add/remove
+- *				 notifications to Guest.
+- * @add:     0-remove, 1-add.
+- * @*v_hba:  Channel info to route msg.
+- * @channel: SCSI Path of Disk to added or removed.
+- * @id:	     SCSI Path of Disk to added or removed.
+- * @lun:     SCSI Path of Disk to added or removed.
+- *
+- * Note that the vHba pointer is not used by the Client/Guest side.
+- */
+-struct uiscmdrsp_disknotify {
+-	u8 add;
+-	void *v_hba;
+-	u32 channel, id, lun;
+-} __packed;
+-
+-/* Keeping cmd and rsp info in one structure for now cmd rsp packet for SCSI */
+-struct uiscmdrsp {
+-	char cmdtype;
+-	/* Describes what type of information is in the struct */
+-#define CMD_SCSI_TYPE	      1
+-#define CMD_NET_TYPE	      2
+-#define CMD_SCSITASKMGMT_TYPE 3
+-#define CMD_NOTIFYGUEST_TYPE  4
+-	union {
+-		struct uiscmdrsp_scsi scsi;
+-		struct uiscmdrsp_net net;
+-		struct uiscmdrsp_scsitaskmgmt scsitaskmgmt;
+-		struct uiscmdrsp_disknotify disknotify;
+-	};
+-	/* Send the response when the cmd is done (scsi and scsittaskmgmt). */
+-	void *private_data;
+-	/* General Purpose Queue Link */
+-	struct uiscmdrsp *next;
+-	/* Pointer to the nextactive commands */
+-	struct uiscmdrsp *activeQ_next;
+-	/* Pointer to the prevactive commands */
+-	struct uiscmdrsp *activeQ_prev;
+-} __packed;
+-
+-/* total = 28 bytes */
+-struct iochannel_vhba {
+-	/* 8 bytes */
+-	struct vhba_wwnn wwnn;
+-	/* 20 bytes */
+-	struct vhba_config_max max;
+-} __packed;
+-
+-struct iochannel_vnic {
+-	/* 6 bytes */
+-	u8 macaddr[6];
+-	/* 4 bytes */
+-	u32 num_rcv_bufs;
+-	/* 4 bytes */
+-	u32 mtu;
+-	/* 16 bytes */
+-	guid_t zone_guid;
+-} __packed;
+-
+-/*
+- * This is just the header of the IO channel. It is assumed that directly after
+- * this header there is a large region of memory which contains the command and
+- * response queues as specified in cmd_q and rsp_q SIGNAL_QUEUE_HEADERS.
+- */
+-struct visor_io_channel {
+-	struct channel_header channel_header;
+-	struct signal_queue_header cmd_q;
+-	struct signal_queue_header rsp_q;
+-	union {
+-		struct iochannel_vhba vhba;
+-		struct iochannel_vnic vnic;
+-	} __packed;
+-
+-#define MAX_CLIENTSTRING_LEN 1024
+-	/* client_string is NULL termimated so holds max-1 bytes */
+-	 u8 client_string[MAX_CLIENTSTRING_LEN];
+-} __packed;
+-
+-/* INLINE functions for initializing and accessing I/O data channels. */
+-#define SIZEOF_CMDRSP (64 * DIV_ROUND_UP(sizeof(struct uiscmdrsp), 64))
+-
+-/* Use 4K page sizes when passing page info between Guest and IOPartition. */
+-#define PI_PAGE_SIZE 0x1000
+-#define PI_PAGE_MASK 0x0FFF
+-
+-/* __IOCHANNEL_H__ */
+-#endif
+diff --git a/drivers/staging/unisys/visorhba/Kconfig b/drivers/staging/unisys/visorhba/Kconfig
+deleted file mode 100644
+index ed59ac11c322..000000000000
+--- a/drivers/staging/unisys/visorhba/Kconfig
++++ /dev/null
+@@ -1,15 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Unisys visorhba configuration
+-#
+-
+-config UNISYS_VISORHBA
+-	tristate "Unisys visorhba driver"
+-	depends on UNISYSSPAR && UNISYS_VISORBUS && SCSI
+-	help
+-		The Unisys visorhba driver provides support for s-Par HBA
+-		devices exposed on the s-Par visorbus. When a message is sent
+-		to visorbus to create a HBA device, the probe function of
+-		visorhba is called to create the scsi device.
+-		If you say Y here, you will enable the Unisys visorhba driver.
+-
+diff --git a/drivers/staging/unisys/visorhba/Makefile b/drivers/staging/unisys/visorhba/Makefile
+deleted file mode 100644
+index b613a7dcdae9..000000000000
+--- a/drivers/staging/unisys/visorhba/Makefile
++++ /dev/null
+@@ -1,10 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for Unisys channel
+-#
+-
+-obj-$(CONFIG_UNISYS_VISORHBA)	+= visorhba.o
+-
+-visorhba-y := visorhba_main.o
+-
+-ccflags-y += -I $(srctree)/$(src)/../include
+diff --git a/drivers/staging/unisys/visorhba/visorhba_main.c b/drivers/staging/unisys/visorhba/visorhba_main.c
+deleted file mode 100644
+index 48aa18f8b984..000000000000
+--- a/drivers/staging/unisys/visorhba/visorhba_main.c
++++ /dev/null
+@@ -1,1142 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- * Copyright (c) 2012 - 2015 UNISYS CORPORATION
+- * All rights reserved.
+- */
+-
+-#include <linux/debugfs.h>
+-#include <linux/kthread.h>
+-#include <linux/module.h>
+-#include <linux/seq_file.h>
+-#include <linux/visorbus.h>
+-#include <linux/xarray.h>
+-#include <scsi/scsi.h>
+-#include <scsi/scsi_host.h>
+-#include <scsi/scsi_cmnd.h>
+-#include <scsi/scsi_device.h>
+-
+-#include "iochannel.h"
+-
+-/* The Send and Receive Buffers of the IO Queue may both be full */
+-
+-#define IOS_ERROR_THRESHOLD  1000
+-#define MAX_PENDING_REQUESTS (MIN_NUMSIGNALS * 2)
+-#define VISORHBA_ERROR_COUNT 30
+-
+-static struct dentry *visorhba_debugfs_dir;
+-
+-/* GUIDS for HBA channel type supported by this driver */
+-static struct visor_channeltype_descriptor visorhba_channel_types[] = {
+-	/* Note that the only channel type we expect to be reported by the
+-	 * bus driver is the VISOR_VHBA channel.
+-	 */
+-	{ VISOR_VHBA_CHANNEL_GUID, "sparvhba", sizeof(struct channel_header),
+-	  VISOR_VHBA_CHANNEL_VERSIONID },
+-	{}
+-};
+-
+-MODULE_DEVICE_TABLE(visorbus, visorhba_channel_types);
+-MODULE_ALIAS("visorbus:" VISOR_VHBA_CHANNEL_GUID_STR);
+-
+-struct visordisk_info {
+-	struct scsi_device *sdev;
+-	u32 valid;
+-	atomic_t ios_threshold;
+-	atomic_t error_count;
+-	struct visordisk_info *next;
+-};
+-
+-struct scsipending {
+-	struct uiscmdrsp cmdrsp;
+-	/* The Data being tracked */
+-	void *sent;
+-	/* Type of pointer that is being stored */
+-	char cmdtype;
+-};
+-
+-/* Each scsi_host has a host_data area that contains this struct. */
+-struct visorhba_devdata {
+-	struct Scsi_Host *scsihost;
+-	struct visor_device *dev;
+-	struct list_head dev_info_list;
+-	/* Tracks the requests that have been forwarded to
+-	 * the IOVM and haven't returned yet
+-	 */
+-	struct scsipending pending[MAX_PENDING_REQUESTS];
+-	/* Start search for next pending free slot here */
+-	unsigned int nextinsert;
+-	/* lock to protect data in devdata */
+-	spinlock_t privlock;
+-	bool serverdown;
+-	bool serverchangingstate;
+-	unsigned long long acquire_failed_cnt;
+-	unsigned long long interrupts_rcvd;
+-	unsigned long long interrupts_notme;
+-	unsigned long long interrupts_disabled;
+-	u64 __iomem *flags_addr;
+-	struct visordisk_info head;
+-	unsigned int max_buff_len;
+-	int devnum;
+-	struct uiscmdrsp *cmdrsp;
+-	/*
+-	 * allows us to pass int handles back-and-forth between us and
+-	 * iovm, instead of raw pointers
+-	 */
+-	struct xarray xa;
+-	struct dentry *debugfs_dir;
+-	struct dentry *debugfs_info;
+-};
+-
+-struct visorhba_devices_open {
+-	struct visorhba_devdata *devdata;
+-};
+-
+-/*
+- * add_scsipending_entry - Save off io command that is pending in
+- *			   Service Partition
+- * @devdata: Pointer to devdata
+- * @cmdtype: Specifies the type of command pending
+- * @new:     The command to be saved
+- *
+- * Saves off the io command that is being handled by the Service
+- * Partition so that it can be handled when it completes. If new is
+- * NULL it is assumed the entry refers only to the cmdrsp.
+- *
+- * Return: Insert_location where entry was added on success,
+- *	   -EBUSY if it can't
+- */
+-static int add_scsipending_entry(struct visorhba_devdata *devdata,
+-				 char cmdtype, void *new)
+-{
+-	unsigned long flags;
+-	struct scsipending *entry;
+-	int insert_location;
+-
+-	spin_lock_irqsave(&devdata->privlock, flags);
+-	insert_location = devdata->nextinsert;
+-	while (devdata->pending[insert_location].sent) {
+-		insert_location = (insert_location + 1) % MAX_PENDING_REQUESTS;
+-		if (insert_location == (int)devdata->nextinsert) {
+-			spin_unlock_irqrestore(&devdata->privlock, flags);
+-			return -EBUSY;
+-		}
+-	}
+-
+-	entry = &devdata->pending[insert_location];
+-	memset(&entry->cmdrsp, 0, sizeof(entry->cmdrsp));
+-	entry->cmdtype = cmdtype;
+-	if (new)
+-		entry->sent = new;
+-	/* wants to send cmdrsp */
+-	else
+-		entry->sent = &entry->cmdrsp;
+-	devdata->nextinsert = (insert_location + 1) % MAX_PENDING_REQUESTS;
+-	spin_unlock_irqrestore(&devdata->privlock, flags);
+-
+-	return insert_location;
+-}
+-
+-/*
+- * del_scsipending_ent - Removes an entry from the pending array
+- * @devdata: Device holding the pending array
+- * @del:     Entry to remove
+- *
+- * Removes the entry pointed at by del and returns it.
+- *
+- * Return: The scsipending entry pointed to on success, NULL on failure
+- */
+-static void *del_scsipending_ent(struct visorhba_devdata *devdata, int del)
+-{
+-	unsigned long flags;
+-	void *sent;
+-
+-	if (del >= MAX_PENDING_REQUESTS)
+-		return NULL;
+-
+-	spin_lock_irqsave(&devdata->privlock, flags);
+-	sent = devdata->pending[del].sent;
+-	devdata->pending[del].cmdtype = 0;
+-	devdata->pending[del].sent = NULL;
+-	spin_unlock_irqrestore(&devdata->privlock, flags);
+-
+-	return sent;
+-}
+-
+-/*
+- * get_scsipending_cmdrsp - Return the cmdrsp stored in a pending entry
+- * @ddata: Device holding the pending array
+- * @ent:   Entry that stores the cmdrsp
+- *
+- * Each scsipending entry has a cmdrsp in it. The cmdrsp is only valid
+- * if the "sent" field is not NULL.
+- *
+- * Return: A pointer to the cmdrsp, NULL on failure
+- */
+-static struct uiscmdrsp *get_scsipending_cmdrsp(struct visorhba_devdata *ddata,
+-						int ent)
+-{
+-	if (ddata->pending[ent].sent)
+-		return &ddata->pending[ent].cmdrsp;
+-
+-	return NULL;
+-}
+-
+-/*
+- * setup_scsitaskmgmt_handles - Stash the necessary handles so that the
+- *				completion processing logic for a taskmgmt
+- *				cmd will be able to find who to wake up
+- *				and where to stash the result
+- * @xa:       The data object maintaining the pointer<-->int mappings
+- * @cmdrsp:   Response from the IOVM
+- * @event:    The event handle to associate with an id
+- * @result:   The location to place the result of the event handle into
+- */
+-static int setup_scsitaskmgmt_handles(struct xarray *xa, struct uiscmdrsp *cmdrsp,
+-				      wait_queue_head_t *event, int *result)
+-{
+-	int ret;
+-	u32 id;
+-
+-	/* specify the event that has to be triggered when this cmd is complete */
+-	ret = xa_alloc_irq(xa, &id, event, xa_limit_32b, GFP_KERNEL);
+-	if (ret)
+-		return ret;
+-	cmdrsp->scsitaskmgmt.notify_handle = id;
+-	ret = xa_alloc_irq(xa, &id, result, xa_limit_32b, GFP_KERNEL);
+-	if (ret) {
+-		xa_erase_irq(xa, cmdrsp->scsitaskmgmt.notify_handle);
+-		return ret;
+-	}
+-	cmdrsp->scsitaskmgmt.notifyresult_handle = id;
+-
+-	return 0;
+-}
+-
+-/*
+- * cleanup_scsitaskmgmt_handles - Forget handles created by
+- *				  setup_scsitaskmgmt_handles()
+- * @xa: The data object maintaining the pointer<-->int mappings
+- * @cmdrsp:   Response from the IOVM
+- */
+-static void cleanup_scsitaskmgmt_handles(struct xarray *xa,
+-					 struct uiscmdrsp *cmdrsp)
+-{
+-	xa_erase_irq(xa, cmdrsp->scsitaskmgmt.notify_handle);
+-	xa_erase_irq(xa, cmdrsp->scsitaskmgmt.notifyresult_handle);
+-}
+-
+-/*
+- * forward_taskmgmt_command - Send taskmegmt command to the Service
+- *			      Partition
+- * @tasktype: Type of taskmgmt command
+- * @scsidev:  Scsidev that issued command
+- *
+- * Create a cmdrsp packet and send it to the Service Partition
+- * that will service this request.
+- *
+- * Return: Int representing whether command was queued successfully or not
+- */
+-static int forward_taskmgmt_command(enum task_mgmt_types tasktype,
+-				    struct scsi_device *scsidev)
+-{
+-	struct uiscmdrsp *cmdrsp;
+-	struct visorhba_devdata *devdata =
+-		(struct visorhba_devdata *)scsidev->host->hostdata;
+-	int notifyresult = 0xffff;
+-	wait_queue_head_t notifyevent;
+-	int scsicmd_id;
+-	int ret;
+-
+-	if (devdata->serverdown || devdata->serverchangingstate)
+-		return FAILED;
+-
+-	scsicmd_id = add_scsipending_entry(devdata, CMD_SCSITASKMGMT_TYPE,
+-					   NULL);
+-	if (scsicmd_id < 0)
+-		return FAILED;
+-
+-	cmdrsp = get_scsipending_cmdrsp(devdata, scsicmd_id);
+-
+-	init_waitqueue_head(&notifyevent);
+-
+-	/* issue TASK_MGMT_ABORT_TASK */
+-	cmdrsp->cmdtype = CMD_SCSITASKMGMT_TYPE;
+-
+-	ret = setup_scsitaskmgmt_handles(&devdata->xa, cmdrsp,
+-					 &notifyevent, &notifyresult);
+-	if (ret) {
+-		dev_dbg(&scsidev->sdev_gendev,
+-			"visorhba: setup_scsitaskmgmt_handles returned %d\n", ret);
+-		return FAILED;
+-	}
+-
+-	/* save destination */
+-	cmdrsp->scsitaskmgmt.tasktype = tasktype;
+-	cmdrsp->scsitaskmgmt.vdest.channel = scsidev->channel;
+-	cmdrsp->scsitaskmgmt.vdest.id = scsidev->id;
+-	cmdrsp->scsitaskmgmt.vdest.lun = scsidev->lun;
+-	cmdrsp->scsitaskmgmt.handle = scsicmd_id;
+-
+-	dev_dbg(&scsidev->sdev_gendev,
+-		"visorhba: initiating type=%d taskmgmt command\n", tasktype);
+-	if (visorchannel_signalinsert(devdata->dev->visorchannel,
+-				      IOCHAN_TO_IOPART,
+-				      cmdrsp))
+-		goto err_del_scsipending_ent;
+-
+-	/* It can take the Service Partition up to 35 seconds to complete
+-	 * an IO in some cases, so wait 45 seconds and error out
+-	 */
+-	if (!wait_event_timeout(notifyevent, notifyresult != 0xffff,
+-				msecs_to_jiffies(45000)))
+-		goto err_del_scsipending_ent;
+-
+-	dev_dbg(&scsidev->sdev_gendev,
+-		"visorhba: taskmgmt type=%d success; result=0x%x\n",
+-		 tasktype, notifyresult);
+-	cleanup_scsitaskmgmt_handles(&devdata->xa, cmdrsp);
+-	return SUCCESS;
+-
+-err_del_scsipending_ent:
+-	dev_dbg(&scsidev->sdev_gendev,
+-		"visorhba: taskmgmt type=%d not executed\n", tasktype);
+-	del_scsipending_ent(devdata, scsicmd_id);
+-	cleanup_scsitaskmgmt_handles(&devdata->xa, cmdrsp);
+-	return FAILED;
+-}
+-
+-/*
+- * visorhba_abort_handler - Send TASK_MGMT_ABORT_TASK
+- * @scsicmd: The scsicmd that needs aborted
+- *
+- * Return: SUCCESS if inserted, FAILED otherwise
+- */
+-static int visorhba_abort_handler(struct scsi_cmnd *scsicmd)
+-{
+-	/* issue TASK_MGMT_ABORT_TASK */
+-	struct scsi_device *scsidev;
+-	struct visordisk_info *vdisk;
+-	int rtn;
+-
+-	scsidev = scsicmd->device;
+-	vdisk = scsidev->hostdata;
+-	if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT)
+-		atomic_inc(&vdisk->error_count);
+-	else
+-		atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
+-	rtn = forward_taskmgmt_command(TASK_MGMT_ABORT_TASK, scsidev);
+-	if (rtn == SUCCESS) {
+-		scsicmd->result = DID_ABORT << 16;
+-		scsi_done(scsicmd);
+-	}
+-	return rtn;
+-}
+-
+-/*
+- * visorhba_device_reset_handler - Send TASK_MGMT_LUN_RESET
+- * @scsicmd: The scsicmd that needs aborted
+- *
+- * Return: SUCCESS if inserted, FAILED otherwise
+- */
+-static int visorhba_device_reset_handler(struct scsi_cmnd *scsicmd)
+-{
+-	/* issue TASK_MGMT_LUN_RESET */
+-	struct scsi_device *scsidev;
+-	struct visordisk_info *vdisk;
+-	int rtn;
+-
+-	scsidev = scsicmd->device;
+-	vdisk = scsidev->hostdata;
+-	if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT)
+-		atomic_inc(&vdisk->error_count);
+-	else
+-		atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
+-	rtn = forward_taskmgmt_command(TASK_MGMT_LUN_RESET, scsidev);
+-	if (rtn == SUCCESS) {
+-		scsicmd->result = DID_RESET << 16;
+-		scsi_done(scsicmd);
+-	}
+-	return rtn;
+-}
+-
+-/*
+- * visorhba_bus_reset_handler - Send TASK_MGMT_TARGET_RESET for each
+- *				target on the bus
+- * @scsicmd: The scsicmd that needs aborted
+- *
+- * Return: SUCCESS if inserted, FAILED otherwise
+- */
+-static int visorhba_bus_reset_handler(struct scsi_cmnd *scsicmd)
+-{
+-	struct scsi_device *scsidev;
+-	struct visordisk_info *vdisk;
+-	int rtn;
+-
+-	scsidev = scsicmd->device;
+-	shost_for_each_device(scsidev, scsidev->host) {
+-		vdisk = scsidev->hostdata;
+-		if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT)
+-			atomic_inc(&vdisk->error_count);
+-		else
+-			atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
+-	}
+-	rtn = forward_taskmgmt_command(TASK_MGMT_BUS_RESET, scsidev);
+-	if (rtn == SUCCESS) {
+-		scsicmd->result = DID_RESET << 16;
+-		scsi_done(scsicmd);
+-	}
+-	return rtn;
+-}
+-
+-/*
+- * visorhba_host_reset_handler - Not supported
+- * @scsicmd: The scsicmd that needs to be aborted
+- *
+- * Return: Not supported, return SUCCESS
+- */
+-static int visorhba_host_reset_handler(struct scsi_cmnd *scsicmd)
+-{
+-	/* issue TASK_MGMT_TARGET_RESET for each target on each bus for host */
+-	return SUCCESS;
+-}
+-
+-/*
+- * visorhba_get_info - Get information about SCSI device
+- * @shp: Scsi host that is requesting information
+- *
+- * Return: String with visorhba information
+- */
+-static const char *visorhba_get_info(struct Scsi_Host *shp)
+-{
+-	/* Return version string */
+-	return "visorhba";
+-}
+-
+-/*
+- * dma_data_dir_linux_to_spar - convert dma_data_direction value to
+- *				Unisys-specific equivalent
+- * @d: dma direction value to convert
+- *
+- * Returns the Unisys-specific dma direction value corresponding to @d
+- */
+-static u32 dma_data_dir_linux_to_spar(enum dma_data_direction d)
+-{
+-	switch (d) {
+-	case DMA_BIDIRECTIONAL:
+-		return UIS_DMA_BIDIRECTIONAL;
+-	case DMA_TO_DEVICE:
+-		return UIS_DMA_TO_DEVICE;
+-	case DMA_FROM_DEVICE:
+-		return UIS_DMA_FROM_DEVICE;
+-	case DMA_NONE:
+-		return UIS_DMA_NONE;
+-	default:
+-		return UIS_DMA_NONE;
+-	}
+-}
+-
+-/*
+- * visorhba_queue_command_lck - Queues command to the Service Partition
+- * @scsicmd:		Command to be queued
+- * @vsiorhba_cmnd_done: Done command to call when scsicmd is returned
+- *
+- * Queues to scsicmd to the ServicePartition after converting it to a
+- * uiscmdrsp structure.
+- *
+- * Return: 0 if successfully queued to the Service Partition, otherwise
+- *	   error code
+- */
+-static int visorhba_queue_command_lck(struct scsi_cmnd *scsicmd)
+-{
+-	void (*visorhba_cmnd_done)(struct scsi_cmnd *) = scsi_done;
+-	struct uiscmdrsp *cmdrsp;
+-	struct scsi_device *scsidev = scsicmd->device;
+-	int insert_location;
+-	unsigned char *cdb = scsicmd->cmnd;
+-	struct Scsi_Host *scsihost = scsidev->host;
+-	unsigned int i;
+-	struct visorhba_devdata *devdata =
+-		(struct visorhba_devdata *)scsihost->hostdata;
+-	struct scatterlist *sg = NULL;
+-	struct scatterlist *sglist = NULL;
+-
+-	if (devdata->serverdown || devdata->serverchangingstate)
+-		return SCSI_MLQUEUE_DEVICE_BUSY;
+-
+-	insert_location = add_scsipending_entry(devdata, CMD_SCSI_TYPE,
+-						(void *)scsicmd);
+-	if (insert_location < 0)
+-		return SCSI_MLQUEUE_DEVICE_BUSY;
+-
+-	cmdrsp = get_scsipending_cmdrsp(devdata, insert_location);
+-	cmdrsp->cmdtype = CMD_SCSI_TYPE;
+-	/* save the pending insertion location. Deletion from pending
+-	 * will return the scsicmd pointer for completion
+-	 */
+-	cmdrsp->scsi.handle = insert_location;
+-
+-	WARN_ON_ONCE(visorhba_cmnd_done != scsi_done);
+-	/* save destination */
+-	cmdrsp->scsi.vdest.channel = scsidev->channel;
+-	cmdrsp->scsi.vdest.id = scsidev->id;
+-	cmdrsp->scsi.vdest.lun = scsidev->lun;
+-	/* save datadir */
+-	cmdrsp->scsi.data_dir =
+-		dma_data_dir_linux_to_spar(scsicmd->sc_data_direction);
+-	memcpy(cmdrsp->scsi.cmnd, cdb, MAX_CMND_SIZE);
+-	cmdrsp->scsi.bufflen = scsi_bufflen(scsicmd);
+-
+-	/* keep track of the max buffer length so far. */
+-	if (cmdrsp->scsi.bufflen > devdata->max_buff_len)
+-		devdata->max_buff_len = cmdrsp->scsi.bufflen;
+-
+-	if (scsi_sg_count(scsicmd) > MAX_PHYS_INFO)
+-		goto err_del_scsipending_ent;
+-
+-	/* convert buffer to phys information  */
+-	/* buffer is scatterlist - copy it out */
+-	sglist = scsi_sglist(scsicmd);
+-
+-	for_each_sg(sglist, sg, scsi_sg_count(scsicmd), i) {
+-		cmdrsp->scsi.gpi_list[i].address = sg_phys(sg);
+-		cmdrsp->scsi.gpi_list[i].length = sg->length;
+-	}
+-	cmdrsp->scsi.guest_phys_entries = scsi_sg_count(scsicmd);
+-
+-	if (visorchannel_signalinsert(devdata->dev->visorchannel,
+-				      IOCHAN_TO_IOPART,
+-				      cmdrsp))
+-		/* queue must be full and we aren't going to wait */
+-		goto err_del_scsipending_ent;
+-
+-	return 0;
+-
+-err_del_scsipending_ent:
+-	del_scsipending_ent(devdata, insert_location);
+-	return SCSI_MLQUEUE_DEVICE_BUSY;
+-}
+-
+-#ifdef DEF_SCSI_QCMD
+-static DEF_SCSI_QCMD(visorhba_queue_command)
+-#else
+-#define visorhba_queue_command visorhba_queue_command_lck
+-#endif
+-
+-/*
+- * visorhba_slave_alloc - Called when new disk is discovered
+- * @scsidev: New disk
+- *
+- * Create a new visordisk_info structure and add it to our
+- * list of vdisks.
+- *
+- * Return: 0 on success, -ENOMEM on failure.
+- */
+-static int visorhba_slave_alloc(struct scsi_device *scsidev)
+-{
+-	/* this is called by the midlayer before scan for new devices --
+-	 * LLD can alloc any struct & do init if needed.
+-	 */
+-	struct visordisk_info *vdisk;
+-	struct visorhba_devdata *devdata;
+-	struct Scsi_Host *scsihost = (struct Scsi_Host *)scsidev->host;
+-
+-	/* already allocated return success */
+-	if (scsidev->hostdata)
+-		return 0;
+-
+-	/* even though we errored, treat as success */
+-	devdata = (struct visorhba_devdata *)scsihost->hostdata;
+-	if (!devdata)
+-		return 0;
+-
+-	vdisk = kzalloc(sizeof(*vdisk), GFP_ATOMIC);
+-	if (!vdisk)
+-		return -ENOMEM;
+-
+-	vdisk->sdev = scsidev;
+-	scsidev->hostdata = vdisk;
+-	return 0;
+-}
+-
+-/*
+- * visorhba_slave_destroy - Disk is going away, clean up resources.
+- * @scsidev: Scsi device to destroy
+- */
+-static void visorhba_slave_destroy(struct scsi_device *scsidev)
+-{
+-	/* midlevel calls this after device has been quiesced and
+-	 * before it is to be deleted.
+-	 */
+-	struct visordisk_info *vdisk;
+-
+-	vdisk = scsidev->hostdata;
+-	scsidev->hostdata = NULL;
+-	kfree(vdisk);
+-}
+-
+-static struct scsi_host_template visorhba_driver_template = {
+-	.name = "Unisys Visor HBA",
+-	.info = visorhba_get_info,
+-	.queuecommand = visorhba_queue_command,
+-	.eh_abort_handler = visorhba_abort_handler,
+-	.eh_device_reset_handler = visorhba_device_reset_handler,
+-	.eh_bus_reset_handler = visorhba_bus_reset_handler,
+-	.eh_host_reset_handler = visorhba_host_reset_handler,
+-#define visorhba_MAX_CMNDS 128
+-	.can_queue = visorhba_MAX_CMNDS,
+-	.sg_tablesize = 64,
+-	.this_id = -1,
+-	.slave_alloc = visorhba_slave_alloc,
+-	.slave_destroy = visorhba_slave_destroy,
+-};
+-
+-/*
+- * info_debugfs_show - Debugfs interface to dump visorhba states
+- * @seq: The sequence file to write information to
+- * @v:   Unused, but needed for use with seq file single_open invocation
+- *
+- * Presents a file in the debugfs tree named: /visorhba/vbus<x>:dev<y>/info.
+- *
+- * Return: SUCCESS
+- */
+-static int info_debugfs_show(struct seq_file *seq, void *v)
+-{
+-	struct visorhba_devdata *devdata = seq->private;
+-
+-	seq_printf(seq, "max_buff_len = %u\n", devdata->max_buff_len);
+-	seq_printf(seq, "interrupts_rcvd = %llu\n", devdata->interrupts_rcvd);
+-	seq_printf(seq, "interrupts_disabled = %llu\n",
+-		   devdata->interrupts_disabled);
+-	seq_printf(seq, "interrupts_notme = %llu\n",
+-		   devdata->interrupts_notme);
+-	seq_printf(seq, "flags_addr = %p\n", devdata->flags_addr);
+-	if (devdata->flags_addr) {
+-		u64 phys_flags_addr =
+-			virt_to_phys((__force  void *)devdata->flags_addr);
+-		seq_printf(seq, "phys_flags_addr = 0x%016llx\n",
+-			   phys_flags_addr);
+-		seq_printf(seq, "FeatureFlags = %llu\n",
+-			   (u64)readq(devdata->flags_addr));
+-	}
+-	seq_printf(seq, "acquire_failed_cnt = %llu\n",
+-		   devdata->acquire_failed_cnt);
+-
+-	return 0;
+-}
+-DEFINE_SHOW_ATTRIBUTE(info_debugfs);
+-
+-/*
+- * complete_taskmgmt_command - Complete task management
+- * @idrtable: The data object maintaining the pointer<-->int mappings
+- * @cmdrsp:   Response from the IOVM
+- * @result:   The result of the task management command
+- *
+- * Service Partition returned the result of the task management
+- * command. Wake up anyone waiting for it.
+- */
+-static void complete_taskmgmt_command(struct xarray *xa,
+-				      struct uiscmdrsp *cmdrsp, int result)
+-{
+-	wait_queue_head_t *wq =
+-		xa_load(xa, cmdrsp->scsitaskmgmt.notify_handle);
+-	int *scsi_result_ptr =
+-		xa_load(xa, cmdrsp->scsitaskmgmt.notifyresult_handle);
+-	if (unlikely(!(wq && scsi_result_ptr))) {
+-		pr_err("visorhba: no completion context; cmd will time out\n");
+-		return;
+-	}
+-
+-	/* copy the result of the taskmgmt and
+-	 * wake up the error handler that is waiting for this
+-	 */
+-	pr_debug("visorhba: notifying initiator with result=0x%x\n", result);
+-	*scsi_result_ptr = result;
+-	wake_up_all(wq);
+-}
+-
+-/*
+- * visorhba_serverdown_complete - Called when we are done cleaning up
+- *				  from serverdown
+- * @devdata: Visorhba instance on which to complete serverdown
+- *
+- * Called when we are done cleanning up from serverdown, stop processing
+- * queue, fail pending IOs.
+- */
+-static void visorhba_serverdown_complete(struct visorhba_devdata *devdata)
+-{
+-	int i;
+-	struct scsipending *pendingdel = NULL;
+-	struct scsi_cmnd *scsicmd = NULL;
+-	struct uiscmdrsp *cmdrsp;
+-	unsigned long flags;
+-
+-	/* Stop using the IOVM response queue (queue should be drained
+-	 * by the end)
+-	 */
+-	visorbus_disable_channel_interrupts(devdata->dev);
+-
+-	/* Fail commands that weren't completed */
+-	spin_lock_irqsave(&devdata->privlock, flags);
+-	for (i = 0; i < MAX_PENDING_REQUESTS; i++) {
+-		pendingdel = &devdata->pending[i];
+-		switch (pendingdel->cmdtype) {
+-		case CMD_SCSI_TYPE:
+-			scsicmd = pendingdel->sent;
+-			scsicmd->result = DID_RESET << 16;
+-			scsi_done(scsicmd);
+-			break;
+-		case CMD_SCSITASKMGMT_TYPE:
+-			cmdrsp = pendingdel->sent;
+-			complete_taskmgmt_command(&devdata->xa, cmdrsp,
+-						  TASK_MGMT_FAILED);
+-			break;
+-		default:
+-			break;
+-		}
+-		pendingdel->cmdtype = 0;
+-		pendingdel->sent = NULL;
+-	}
+-	spin_unlock_irqrestore(&devdata->privlock, flags);
+-
+-	devdata->serverdown = true;
+-	devdata->serverchangingstate = false;
+-}
+-
+-/*
+- * visorhba_serverdown - Got notified that the IOVM is down
+- * @devdata: Visorhba that is being serviced by downed IOVM
+- *
+- * Something happened to the IOVM, return immediately and
+- * schedule cleanup work.
+- *
+- * Return: 0 on success, -EINVAL on failure
+- */
+-static int visorhba_serverdown(struct visorhba_devdata *devdata)
+-{
+-	if (!devdata->serverdown && !devdata->serverchangingstate) {
+-		devdata->serverchangingstate = true;
+-		visorhba_serverdown_complete(devdata);
+-	} else if (devdata->serverchangingstate) {
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * do_scsi_linuxstat - Scsi command returned linuxstat
+- * @cmdrsp:  Response from IOVM
+- * @scsicmd: Command issued
+- *
+- * Don't log errors for disk-not-present inquiries.
+- */
+-static void do_scsi_linuxstat(struct uiscmdrsp *cmdrsp,
+-			      struct scsi_cmnd *scsicmd)
+-{
+-	struct visordisk_info *vdisk;
+-	struct scsi_device *scsidev;
+-
+-	scsidev = scsicmd->device;
+-	memcpy(scsicmd->sense_buffer, cmdrsp->scsi.sensebuf, MAX_SENSE_SIZE);
+-
+-	/* Do not log errors for disk-not-present inquiries */
+-	if (cmdrsp->scsi.cmnd[0] == INQUIRY &&
+-	    (host_byte(cmdrsp->scsi.linuxstat) == DID_NO_CONNECT) &&
+-	    cmdrsp->scsi.addlstat == ADDL_SEL_TIMEOUT)
+-		return;
+-	/* Okay see what our error_count is here.... */
+-	vdisk = scsidev->hostdata;
+-	if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT) {
+-		atomic_inc(&vdisk->error_count);
+-		atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
+-	}
+-}
+-
+-static int set_no_disk_inquiry_result(unsigned char *buf, size_t len,
+-				      bool is_lun0)
+-{
+-	if (len < NO_DISK_INQUIRY_RESULT_LEN)
+-		return -EINVAL;
+-	memset(buf, 0, NO_DISK_INQUIRY_RESULT_LEN);
+-	buf[2] = SCSI_SPC2_VER;
+-	if (is_lun0) {
+-		buf[0] = DEV_DISK_CAPABLE_NOT_PRESENT;
+-		buf[3] = DEV_HISUPPORT;
+-	} else {
+-		buf[0] = DEV_NOT_CAPABLE;
+-	}
+-	buf[4] = NO_DISK_INQUIRY_RESULT_LEN - 5;
+-	strncpy(buf + 8, "DELLPSEUDO DEVICE .", NO_DISK_INQUIRY_RESULT_LEN - 8);
+-	return 0;
+-}
+-
+-/*
+- * do_scsi_nolinuxstat - Scsi command didn't have linuxstat
+- * @cmdrsp:  Response from IOVM
+- * @scsicmd: Command issued
+- *
+- * Handle response when no linuxstat was returned.
+- */
+-static void do_scsi_nolinuxstat(struct uiscmdrsp *cmdrsp,
+-				struct scsi_cmnd *scsicmd)
+-{
+-	struct scsi_device *scsidev;
+-	unsigned char *buf;
+-	struct scatterlist *sg;
+-	unsigned int i;
+-	char *this_page;
+-	char *this_page_orig;
+-	int bufind = 0;
+-	struct visordisk_info *vdisk;
+-
+-	scsidev = scsicmd->device;
+-	if (cmdrsp->scsi.cmnd[0] == INQUIRY &&
+-	    cmdrsp->scsi.bufflen >= MIN_INQUIRY_RESULT_LEN) {
+-		if (cmdrsp->scsi.no_disk_result == 0)
+-			return;
+-
+-		buf = kzalloc(36, GFP_KERNEL);
+-		if (!buf)
+-			return;
+-
+-		/* Linux scsi code wants a device at Lun 0
+-		 * to issue report luns, but we don't want
+-		 * a disk there so we'll present a processor
+-		 * there.
+-		 */
+-		set_no_disk_inquiry_result(buf, (size_t)cmdrsp->scsi.bufflen,
+-					   scsidev->lun == 0);
+-
+-		if (scsi_sg_count(scsicmd) == 0) {
+-			memcpy(scsi_sglist(scsicmd), buf,
+-			       cmdrsp->scsi.bufflen);
+-			kfree(buf);
+-			return;
+-		}
+-
+-		scsi_for_each_sg(scsicmd, sg, scsi_sg_count(scsicmd), i) {
+-			this_page_orig = kmap_atomic(sg_page(sg));
+-			this_page = (void *)((unsigned long)this_page_orig |
+-					     sg->offset);
+-			memcpy(this_page, buf + bufind, sg->length);
+-			kunmap_atomic(this_page_orig);
+-		}
+-		kfree(buf);
+-	} else {
+-		vdisk = scsidev->hostdata;
+-		if (atomic_read(&vdisk->ios_threshold) > 0) {
+-			atomic_dec(&vdisk->ios_threshold);
+-			if (atomic_read(&vdisk->ios_threshold) == 0)
+-				atomic_set(&vdisk->error_count, 0);
+-		}
+-	}
+-}
+-
+-/*
+- * complete_scsi_command - Complete a scsi command
+- * @uiscmdrsp: Response from Service Partition
+- * @scsicmd:   The scsi command
+- *
+- * Response was returned by the Service Partition. Finish it and send
+- * completion to the scsi midlayer.
+- */
+-static void complete_scsi_command(struct uiscmdrsp *cmdrsp,
+-				  struct scsi_cmnd *scsicmd)
+-{
+-	/* take what we need out of cmdrsp and complete the scsicmd */
+-	scsicmd->result = cmdrsp->scsi.linuxstat;
+-	if (cmdrsp->scsi.linuxstat)
+-		do_scsi_linuxstat(cmdrsp, scsicmd);
+-	else
+-		do_scsi_nolinuxstat(cmdrsp, scsicmd);
+-
+-	scsi_done(scsicmd);
+-}
+-
+-/*
+- * drain_queue - Pull responses out of iochannel
+- * @cmdrsp:  Response from the IOSP
+- * @devdata: Device that owns this iochannel
+- *
+- * Pulls responses out of the iochannel and process the responses.
+- */
+-static void drain_queue(struct uiscmdrsp *cmdrsp,
+-			struct visorhba_devdata *devdata)
+-{
+-	struct scsi_cmnd *scsicmd;
+-
+-	while (1) {
+-		/* queue empty */
+-		if (visorchannel_signalremove(devdata->dev->visorchannel,
+-					      IOCHAN_FROM_IOPART,
+-					      cmdrsp))
+-			break;
+-		if (cmdrsp->cmdtype == CMD_SCSI_TYPE) {
+-			/* scsicmd location is returned by the
+-			 * deletion
+-			 */
+-			scsicmd = del_scsipending_ent(devdata,
+-						      cmdrsp->scsi.handle);
+-			if (!scsicmd)
+-				break;
+-			/* complete the orig cmd */
+-			complete_scsi_command(cmdrsp, scsicmd);
+-		} else if (cmdrsp->cmdtype == CMD_SCSITASKMGMT_TYPE) {
+-			if (!del_scsipending_ent(devdata,
+-						 cmdrsp->scsitaskmgmt.handle))
+-				break;
+-			complete_taskmgmt_command(&devdata->xa, cmdrsp,
+-						  cmdrsp->scsitaskmgmt.result);
+-		} else if (cmdrsp->cmdtype == CMD_NOTIFYGUEST_TYPE)
+-			dev_err_once(&devdata->dev->device,
+-				     "ignoring unsupported NOTIFYGUEST\n");
+-		/* cmdrsp is now available for re-use */
+-	}
+-}
+-
+-/*
+- * This is used only when this driver is active as an hba driver in the
+- * client guest partition.  It is called periodically so we can obtain
+- * and process the command respond from the IO Service Partition periodically.
+- */
+-static void visorhba_channel_interrupt(struct visor_device *dev)
+-{
+-	struct visorhba_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata)
+-		return;
+-
+-	drain_queue(devdata->cmdrsp, devdata);
+-}
+-
+-/*
+- * visorhba_pause - Function to handle visorbus pause messages
+- * @dev:	   Device that is pausing
+- * @complete_func: Function to call when finished
+- *
+- * Something has happened to the IO Service Partition that is
+- * handling this device. Quiet this device and reset commands
+- * so that the Service Partition can be corrected.
+- *
+- * Return: SUCCESS
+- */
+-static int visorhba_pause(struct visor_device *dev,
+-			  visorbus_state_complete_func complete_func)
+-{
+-	struct visorhba_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	visorhba_serverdown(devdata);
+-	complete_func(dev, 0);
+-	return 0;
+-}
+-
+-/*
+- * visorhba_resume - Function called when the IO Service Partition is back
+- * @dev:	   Device that is pausing
+- * @complete_func: Function to call when finished
+- *
+- * Yay! The IO Service Partition is back, the channel has been wiped
+- * so lets re-establish connection and start processing responses.
+- *
+- * Return: 0 on success, -EINVAL on failure
+- */
+-static int visorhba_resume(struct visor_device *dev,
+-			   visorbus_state_complete_func complete_func)
+-{
+-	struct visorhba_devdata *devdata;
+-
+-	devdata = dev_get_drvdata(&dev->device);
+-	if (!devdata)
+-		return -EINVAL;
+-
+-	if (devdata->serverdown && !devdata->serverchangingstate)
+-		devdata->serverchangingstate = true;
+-
+-	visorbus_enable_channel_interrupts(dev);
+-	devdata->serverdown = false;
+-	devdata->serverchangingstate = false;
+-
+-	return 0;
+-}
+-
+-/*
+- * visorhba_probe - Device has been discovered; do acquire
+- * @dev: visor_device that was discovered
+- *
+- * A new HBA was discovered; do the initial connections of it.
+- *
+- * Return: 0 on success, otherwise error code
+- */
+-static int visorhba_probe(struct visor_device *dev)
+-{
+-	struct Scsi_Host *scsihost;
+-	struct vhba_config_max max;
+-	struct visorhba_devdata *devdata = NULL;
+-	int err, channel_offset;
+-	u64 features;
+-
+-	scsihost = scsi_host_alloc(&visorhba_driver_template,
+-				   sizeof(*devdata));
+-	if (!scsihost)
+-		return -ENODEV;
+-
+-	channel_offset = offsetof(struct visor_io_channel, vhba.max);
+-	err = visorbus_read_channel(dev, channel_offset, &max,
+-				    sizeof(struct vhba_config_max));
+-	if (err < 0)
+-		goto err_scsi_host_put;
+-
+-	scsihost->max_id = (unsigned int)max.max_id;
+-	scsihost->max_lun = (unsigned int)max.max_lun;
+-	scsihost->cmd_per_lun = (unsigned int)max.cmd_per_lun;
+-	scsihost->max_sectors =
+-	    (unsigned short)(max.max_io_size >> 9);
+-	scsihost->sg_tablesize =
+-	    (unsigned short)(max.max_io_size / PAGE_SIZE);
+-	if (scsihost->sg_tablesize > MAX_PHYS_INFO)
+-		scsihost->sg_tablesize = MAX_PHYS_INFO;
+-	err = scsi_add_host(scsihost, &dev->device);
+-	if (err < 0)
+-		goto err_scsi_host_put;
+-
+-	devdata = (struct visorhba_devdata *)scsihost->hostdata;
+-	devdata->dev = dev;
+-	dev_set_drvdata(&dev->device, devdata);
+-
+-	devdata->debugfs_dir = debugfs_create_dir(dev_name(&dev->device),
+-						  visorhba_debugfs_dir);
+-	if (!devdata->debugfs_dir) {
+-		err = -ENOMEM;
+-		goto err_scsi_remove_host;
+-	}
+-	devdata->debugfs_info =
+-		debugfs_create_file("info", 0440,
+-				    devdata->debugfs_dir, devdata,
+-				    &info_debugfs_fops);
+-	if (!devdata->debugfs_info) {
+-		err = -ENOMEM;
+-		goto err_debugfs_dir;
+-	}
+-
+-	spin_lock_init(&devdata->privlock);
+-	devdata->serverdown = false;
+-	devdata->serverchangingstate = false;
+-	devdata->scsihost = scsihost;
+-
+-	channel_offset = offsetof(struct visor_io_channel,
+-				  channel_header.features);
+-	err = visorbus_read_channel(dev, channel_offset, &features, 8);
+-	if (err)
+-		goto err_debugfs_info;
+-	features |= VISOR_CHANNEL_IS_POLLING;
+-	err = visorbus_write_channel(dev, channel_offset, &features, 8);
+-	if (err)
+-		goto err_debugfs_info;
+-
+-	xa_init(&devdata->xa);
+-
+-	devdata->cmdrsp = kmalloc(sizeof(*devdata->cmdrsp), GFP_ATOMIC);
+-	visorbus_enable_channel_interrupts(dev);
+-
+-	scsi_scan_host(scsihost);
+-
+-	return 0;
+-
+-err_debugfs_info:
+-	debugfs_remove(devdata->debugfs_info);
+-
+-err_debugfs_dir:
+-	debugfs_remove_recursive(devdata->debugfs_dir);
+-
+-err_scsi_remove_host:
+-	scsi_remove_host(scsihost);
+-
+-err_scsi_host_put:
+-	scsi_host_put(scsihost);
+-	return err;
+-}
+-
+-/*
+- * visorhba_remove - Remove a visorhba device
+- * @dev: Device to remove
+- *
+- * Removes the visorhba device.
+- */
+-static void visorhba_remove(struct visor_device *dev)
+-{
+-	struct visorhba_devdata *devdata = dev_get_drvdata(&dev->device);
+-	struct Scsi_Host *scsihost = NULL;
+-
+-	if (!devdata)
+-		return;
+-
+-	scsihost = devdata->scsihost;
+-	kfree(devdata->cmdrsp);
+-	visorbus_disable_channel_interrupts(dev);
+-	scsi_remove_host(scsihost);
+-	scsi_host_put(scsihost);
+-
+-	dev_set_drvdata(&dev->device, NULL);
+-	debugfs_remove(devdata->debugfs_info);
+-	debugfs_remove_recursive(devdata->debugfs_dir);
+-}
+-
+-/* This is used to tell the visorbus driver which types of visor devices
+- * we support, and what functions to call when a visor device that we support
+- * is attached or removed.
+- */
+-static struct visor_driver visorhba_driver = {
+-	.name = "visorhba",
+-	.owner = THIS_MODULE,
+-	.channel_types = visorhba_channel_types,
+-	.probe = visorhba_probe,
+-	.remove = visorhba_remove,
+-	.pause = visorhba_pause,
+-	.resume = visorhba_resume,
+-	.channel_interrupt = visorhba_channel_interrupt,
+-};
+-
+-/*
+- * visorhba_init - Driver init routine
+- *
+- * Initialize the visorhba driver and register it with visorbus
+- * to handle s-Par virtual host bus adapter.
+- *
+- * Return: 0 on success, error code otherwise
+- */
+-static int visorhba_init(void)
+-{
+-	int rc;
+-
+-	visorhba_debugfs_dir = debugfs_create_dir("visorhba", NULL);
+-	if (!visorhba_debugfs_dir)
+-		return -ENOMEM;
+-
+-	rc = visorbus_register_visor_driver(&visorhba_driver);
+-	if (rc)
+-		goto cleanup_debugfs;
+-
+-	return 0;
+-
+-cleanup_debugfs:
+-	debugfs_remove_recursive(visorhba_debugfs_dir);
+-
+-	return rc;
+-}
+-
+-/*
+- * visorhba_exit - Driver exit routine
+- *
+- * Unregister driver from the bus and free up memory.
+- */
+-static void visorhba_exit(void)
+-{
+-	visorbus_unregister_visor_driver(&visorhba_driver);
+-	debugfs_remove_recursive(visorhba_debugfs_dir);
+-}
+-
+-module_init(visorhba_init);
+-module_exit(visorhba_exit);
+-
+-MODULE_AUTHOR("Unisys");
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("s-Par HBA driver for virtual SCSI host busses");
+diff --git a/drivers/staging/unisys/visorinput/Kconfig b/drivers/staging/unisys/visorinput/Kconfig
+deleted file mode 100644
+index 5f036393aee9..000000000000
+--- a/drivers/staging/unisys/visorinput/Kconfig
++++ /dev/null
+@@ -1,16 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Unisys visorinput configuration
+-#
+-
+-config UNISYS_VISORINPUT
+-	tristate "Unisys visorinput driver"
+-	depends on UNISYSSPAR && UNISYS_VISORBUS && INPUT
+-	help
+-		The Unisys s-Par visorinput driver provides a virtualized system
+-		console (keyboard and mouse) that is accessible through the
+-		s-Par firmware's user interface. s-Par provides video using the EFI
+-		GOP protocol, so If this driver is not present, the Linux guest should
+-		still boot with visible output in the partition desktop, but keyboard
+-		and mouse interaction will not be available.
+-
+diff --git a/drivers/staging/unisys/visorinput/Makefile b/drivers/staging/unisys/visorinput/Makefile
+deleted file mode 100644
+index 68ced7c8a65f..000000000000
+--- a/drivers/staging/unisys/visorinput/Makefile
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for Unisys visorinput
+-#
+-
+-obj-$(CONFIG_UNISYS_VISORINPUT)	+= visorinput.o
+-
+diff --git a/drivers/staging/unisys/visorinput/visorinput.c b/drivers/staging/unisys/visorinput/visorinput.c
+deleted file mode 100644
+index dffa71ac3cc5..000000000000
+--- a/drivers/staging/unisys/visorinput/visorinput.c
++++ /dev/null
+@@ -1,788 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (C) 2011 - 2015 UNISYS CORPORATION
+- * All rights reserved.
+- */
+-
+-/*
+- * This driver lives in a generic guest Linux partition, and registers to
+- * receive keyboard and mouse channels from the visorbus driver.  It reads
+- * inputs from such channels, and delivers it to the Linux OS in the
+- * standard way the Linux expects for input drivers.
+- */
+-
+-#include <linux/fb.h>
+-#include <linux/input.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/uuid.h>
+-#include <linux/visorbus.h>
+-
+-/* These defines identify mouse and keyboard activity which is specified by the
+- * firmware to the host using the cmsimpleinput protocol.  @ingroup coretypes
+- */
+-/* only motion; arg1=x, arg2=y */
+-#define INPUTACTION_XY_MOTION 1
+-
+-/* arg1: 1=left,2=center,3=right */
+-#define INPUTACTION_MOUSE_BUTTON_DOWN 2
+-#define INPUTACTION_MOUSE_BUTTON_UP 3
+-#define INPUTACTION_MOUSE_BUTTON_CLICK 4
+-#define INPUTACTION_MOUSE_BUTTON_DCLICK 5
+-
+-/* arg1: wheel rotation away from/toward user */
+-#define INPUTACTION_WHEEL_ROTATE_AWAY 6
+-#define INPUTACTION_WHEEL_ROTATE_TOWARD 7
+-
+-/* arg1: scancode, as follows: If arg1 <= 0xff, it's a 1-byte scancode and arg1
+- *	 is that scancode. If arg1 > 0xff, it's a 2-byte scanecode, with the 1st
+- *	 byte in the low 8 bits, and the 2nd byte in the high 8 bits.
+- *	 E.g., the right ALT key would appear as x'38e0'.
+- */
+-#define INPUTACTION_KEY_DOWN 64
+-#define INPUTACTION_KEY_UP 65
+-#define INPUTACTION_KEY_DOWN_UP 67
+-
+-/* arg1: scancode (in same format as inputaction_keyDown); MUST refer to one of
+- *	 the locking keys, like capslock, numlock, or scrolllock.
+- * arg2: 1 iff locking key should be in the LOCKED position (e.g., light is ON)
+- */
+-#define INPUTACTION_SET_LOCKING_KEY_STATE 66
+-
+-/* Keyboard channel {c73416d0-b0b8-44af-b304-9d2ae99f1b3d} */
+-#define VISOR_KEYBOARD_CHANNEL_GUID \
+-	GUID_INIT(0xc73416d0, 0xb0b8, 0x44af, \
+-		  0xb3, 0x4, 0x9d, 0x2a, 0xe9, 0x9f, 0x1b, 0x3d)
+-#define VISOR_KEYBOARD_CHANNEL_GUID_STR "c73416d0-b0b8-44af-b304-9d2ae99f1b3d"
+-
+-/* Mouse channel {addf07d4-94a9-46e2-81c3-61abcdbdbd87} */
+-#define VISOR_MOUSE_CHANNEL_GUID \
+-	GUID_INIT(0xaddf07d4, 0x94a9, 0x46e2, \
+-		  0x81, 0xc3, 0x61, 0xab, 0xcd, 0xbd, 0xbd, 0x87)
+-#define VISOR_MOUSE_CHANNEL_GUID_STR "addf07d4-94a9-46e2-81c3-61abcdbdbd87"
+-
+-#define PIXELS_ACROSS_DEFAULT 1024
+-#define PIXELS_DOWN_DEFAULT   768
+-#define KEYCODE_TABLE_BYTES   256
+-
+-struct visor_inputactivity {
+-	u16 action;
+-	u16 arg1;
+-	u16 arg2;
+-	u16 arg3;
+-} __packed;
+-
+-struct visor_inputreport {
+-	u64 seq_no;
+-	struct visor_inputactivity activity;
+-} __packed;
+-
+-/* header of keyboard/mouse channels */
+-struct visor_input_channel_data {
+-	u32 n_input_reports;
+-	union {
+-		struct {
+-			u16 x_res;
+-			u16 y_res;
+-		} mouse;
+-		struct {
+-			u32 flags;
+-		} keyboard;
+-	};
+-} __packed;
+-
+-enum visorinput_dev_type {
+-	visorinput_keyboard,
+-	visorinput_mouse,
+-};
+-
+-/*
+- * This is the private data that we store for each device. A pointer to this
+- * struct is maintained via dev_get_drvdata() / dev_set_drvdata() for each
+- * struct device.
+- */
+-struct visorinput_devdata {
+-	struct visor_device *dev;
+-	/* lock for dev */
+-	struct mutex lock_visor_dev;
+-	struct input_dev *visorinput_dev;
+-	bool paused;
+-	bool interrupts_enabled;
+-	/* size of following array */
+-	unsigned int keycode_table_bytes;
+-	/* for keyboard devices: visorkbd_keycode[] + visorkbd_ext_keycode[] */
+-	unsigned char keycode_table[];
+-};
+-
+-static const guid_t visor_keyboard_channel_guid = VISOR_KEYBOARD_CHANNEL_GUID;
+-static const guid_t visor_mouse_channel_guid = VISOR_MOUSE_CHANNEL_GUID;
+-
+-/*
+- * Borrowed from drivers/input/keyboard/atakbd.c
+- * This maps 1-byte scancodes to keycodes.
+- */
+-static const unsigned char visorkbd_keycode[KEYCODE_TABLE_BYTES] = {
+-	/* American layout */
+-	[0] = KEY_GRAVE,
+-	[1] = KEY_ESC,
+-	[2] = KEY_1,
+-	[3] = KEY_2,
+-	[4] = KEY_3,
+-	[5] = KEY_4,
+-	[6] = KEY_5,
+-	[7] = KEY_6,
+-	[8] = KEY_7,
+-	[9] = KEY_8,
+-	[10] = KEY_9,
+-	[11] = KEY_0,
+-	[12] = KEY_MINUS,
+-	[13] = KEY_EQUAL,
+-	[14] = KEY_BACKSPACE,
+-	[15] = KEY_TAB,
+-	[16] = KEY_Q,
+-	[17] = KEY_W,
+-	[18] = KEY_E,
+-	[19] = KEY_R,
+-	[20] = KEY_T,
+-	[21] = KEY_Y,
+-	[22] = KEY_U,
+-	[23] = KEY_I,
+-	[24] = KEY_O,
+-	[25] = KEY_P,
+-	[26] = KEY_LEFTBRACE,
+-	[27] = KEY_RIGHTBRACE,
+-	[28] = KEY_ENTER,
+-	[29] = KEY_LEFTCTRL,
+-	[30] = KEY_A,
+-	[31] = KEY_S,
+-	[32] = KEY_D,
+-	[33] = KEY_F,
+-	[34] = KEY_G,
+-	[35] = KEY_H,
+-	[36] = KEY_J,
+-	[37] = KEY_K,
+-	[38] = KEY_L,
+-	[39] = KEY_SEMICOLON,
+-	[40] = KEY_APOSTROPHE,
+-	[41] = KEY_GRAVE,
+-	[42] = KEY_LEFTSHIFT,
+-	[43] = KEY_BACKSLASH,
+-	[44] = KEY_Z,
+-	[45] = KEY_X,
+-	[46] = KEY_C,
+-	[47] = KEY_V,
+-	[48] = KEY_B,
+-	[49] = KEY_N,
+-	[50] = KEY_M,
+-	[51] = KEY_COMMA,
+-	[52] = KEY_DOT,
+-	[53] = KEY_SLASH,
+-	[54] = KEY_RIGHTSHIFT,
+-	[55] = KEY_KPASTERISK,
+-	[56] = KEY_LEFTALT,
+-	[57] = KEY_SPACE,
+-	[58] = KEY_CAPSLOCK,
+-	[59] = KEY_F1,
+-	[60] = KEY_F2,
+-	[61] = KEY_F3,
+-	[62] = KEY_F4,
+-	[63] = KEY_F5,
+-	[64] = KEY_F6,
+-	[65] = KEY_F7,
+-	[66] = KEY_F8,
+-	[67] = KEY_F9,
+-	[68] = KEY_F10,
+-	[69] = KEY_NUMLOCK,
+-	[70] = KEY_SCROLLLOCK,
+-	[71] = KEY_KP7,
+-	[72] = KEY_KP8,
+-	[73] = KEY_KP9,
+-	[74] = KEY_KPMINUS,
+-	[75] = KEY_KP4,
+-	[76] = KEY_KP5,
+-	[77] = KEY_KP6,
+-	[78] = KEY_KPPLUS,
+-	[79] = KEY_KP1,
+-	[80] = KEY_KP2,
+-	[81] = KEY_KP3,
+-	[82] = KEY_KP0,
+-	[83] = KEY_KPDOT,
+-	/* enables UK backslash+pipe key and FR lessthan+greaterthan key */
+-	[86] = KEY_102ND,
+-	[87] = KEY_F11,
+-	[88] = KEY_F12,
+-	[90] = KEY_KPLEFTPAREN,
+-	[91] = KEY_KPRIGHTPAREN,
+-	[92] = KEY_KPASTERISK,
+-	[93] = KEY_KPASTERISK,
+-	[94] = KEY_KPPLUS,
+-	[95] = KEY_HELP,
+-	[96] = KEY_KPENTER,
+-	[97] = KEY_RIGHTCTRL,
+-	[98] = KEY_KPSLASH,
+-	[99] = KEY_KPLEFTPAREN,
+-	[100] = KEY_KPRIGHTPAREN,
+-	[101] = KEY_KPSLASH,
+-	[102] = KEY_HOME,
+-	[103] = KEY_UP,
+-	[104] = KEY_PAGEUP,
+-	[105] = KEY_LEFT,
+-	[106] = KEY_RIGHT,
+-	[107] = KEY_END,
+-	[108] = KEY_DOWN,
+-	[109] = KEY_PAGEDOWN,
+-	[110] = KEY_INSERT,
+-	[111] = KEY_DELETE,
+-	[112] = KEY_MACRO,
+-	[113] = KEY_MUTE
+-};
+-
+-/*
+- * This maps the <xx> in extended scancodes of the form "0xE0 <xx>" into
+- * keycodes.
+- */
+-static const unsigned char visorkbd_ext_keycode[KEYCODE_TABLE_BYTES] = {
+-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,		    /* 0x00 */
+-	0, 0, 0, 0, 0, 0, 0, 0,					    /* 0x10 */
+-	0, 0, 0, 0, KEY_KPENTER, KEY_RIGHTCTRL, 0, 0,		    /* 0x18 */
+-	0, 0, 0, 0, 0, 0, 0, 0,					    /* 0x20 */
+-	KEY_RIGHTALT, 0, 0, 0, 0, 0, 0, 0,			    /* 0x28 */
+-	0, 0, 0, 0, 0, 0, 0, 0,					    /* 0x30 */
+-	KEY_RIGHTALT /* AltGr */, 0, 0, 0, 0, 0, 0, 0,		    /* 0x38 */
+-	0, 0, 0, 0, 0, 0, 0, KEY_HOME,				    /* 0x40 */
+-	KEY_UP, KEY_PAGEUP, 0, KEY_LEFT, 0, KEY_RIGHT, 0, KEY_END,  /* 0x48 */
+-	KEY_DOWN, KEY_PAGEDOWN, KEY_INSERT, KEY_DELETE, 0, 0, 0, 0, /* 0x50 */
+-	0, 0, 0, 0, 0, 0, 0, 0,					    /* 0x58 */
+-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,		    /* 0x60 */
+-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,		    /* 0x70 */
+-};
+-
+-static int visorinput_open(struct input_dev *visorinput_dev)
+-{
+-	struct visorinput_devdata *devdata = input_get_drvdata(visorinput_dev);
+-
+-	if (!devdata) {
+-		dev_err(&visorinput_dev->dev,
+-			"%s input_get_drvdata(%p) returned NULL\n",
+-			__func__, visorinput_dev);
+-		return -EINVAL;
+-	}
+-	dev_dbg(&visorinput_dev->dev, "%s opened\n", __func__);
+-
+-	/*
+-	 * If we're not paused, really enable interrupts. Regardless of whether
+-	 * we are paused, set a flag indicating interrupts should be enabled so
+-	 * when we resume, interrupts will really be enabled.
+-	 */
+-	mutex_lock(&devdata->lock_visor_dev);
+-	devdata->interrupts_enabled = true;
+-	if (devdata->paused)
+-		goto out_unlock;
+-	visorbus_enable_channel_interrupts(devdata->dev);
+-
+-out_unlock:
+-	mutex_unlock(&devdata->lock_visor_dev);
+-	return 0;
+-}
+-
+-static void visorinput_close(struct input_dev *visorinput_dev)
+-{
+-	struct visorinput_devdata *devdata = input_get_drvdata(visorinput_dev);
+-
+-	if (!devdata) {
+-		dev_err(&visorinput_dev->dev,
+-			"%s input_get_drvdata(%p) returned NULL\n",
+-			__func__, visorinput_dev);
+-		return;
+-	}
+-	dev_dbg(&visorinput_dev->dev, "%s closed\n", __func__);
+-
+-	/*
+-	 * If we're not paused, really disable interrupts. Regardless of
+-	 * whether we are paused, set a flag indicating interrupts should be
+-	 * disabled so when we resume we will not re-enable them.
+-	 */
+-	mutex_lock(&devdata->lock_visor_dev);
+-	devdata->interrupts_enabled = false;
+-	if (devdata->paused)
+-		goto out_unlock;
+-	visorbus_disable_channel_interrupts(devdata->dev);
+-
+-out_unlock:
+-	mutex_unlock(&devdata->lock_visor_dev);
+-}
+-
+-/*
+- * setup_client_keyboard() initializes and returns a Linux input node that we
+- * can use to deliver keyboard inputs to Linux.  We of course do this when we
+- * see keyboard inputs coming in on a keyboard channel.
+- */
+-static struct input_dev *setup_client_keyboard(void *devdata,
+-					       unsigned char *keycode_table)
+-
+-{
+-	int i;
+-	struct input_dev *visorinput_dev = input_allocate_device();
+-
+-	if (!visorinput_dev)
+-		return NULL;
+-
+-	visorinput_dev->name = "visor Keyboard";
+-	visorinput_dev->phys = "visorkbd:input0";
+-	visorinput_dev->id.bustype = BUS_VIRTUAL;
+-	visorinput_dev->id.vendor = 0x0001;
+-	visorinput_dev->id.product = 0x0001;
+-	visorinput_dev->id.version = 0x0100;
+-
+-	visorinput_dev->evbit[0] = BIT_MASK(EV_KEY) |
+-				   BIT_MASK(EV_REP) |
+-				   BIT_MASK(EV_LED);
+-	visorinput_dev->ledbit[0] = BIT_MASK(LED_CAPSL) |
+-				    BIT_MASK(LED_SCROLLL) |
+-				    BIT_MASK(LED_NUML);
+-	visorinput_dev->keycode = keycode_table;
+-	/* sizeof(unsigned char) */
+-	visorinput_dev->keycodesize = 1;
+-	visorinput_dev->keycodemax = KEYCODE_TABLE_BYTES;
+-
+-	for (i = 1; i < visorinput_dev->keycodemax; i++)
+-		set_bit(keycode_table[i], visorinput_dev->keybit);
+-	for (i = 1; i < visorinput_dev->keycodemax; i++)
+-		set_bit(keycode_table[i + KEYCODE_TABLE_BYTES],
+-			visorinput_dev->keybit);
+-
+-	visorinput_dev->open = visorinput_open;
+-	visorinput_dev->close = visorinput_close;
+-	/* pre input_register! */
+-	input_set_drvdata(visorinput_dev, devdata);
+-
+-	return visorinput_dev;
+-}
+-
+-static struct input_dev *setup_client_mouse(void *devdata, unsigned int xres,
+-					    unsigned int yres)
+-{
+-	struct input_dev *visorinput_dev = input_allocate_device();
+-
+-	if (!visorinput_dev)
+-		return NULL;
+-
+-	visorinput_dev->name = "visor Mouse";
+-	visorinput_dev->phys = "visormou:input0";
+-	visorinput_dev->id.bustype = BUS_VIRTUAL;
+-	visorinput_dev->id.vendor = 0x0001;
+-	visorinput_dev->id.product = 0x0002;
+-	visorinput_dev->id.version = 0x0100;
+-
+-	visorinput_dev->evbit[0] = BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
+-	set_bit(BTN_LEFT, visorinput_dev->keybit);
+-	set_bit(BTN_RIGHT, visorinput_dev->keybit);
+-	set_bit(BTN_MIDDLE, visorinput_dev->keybit);
+-
+-	if (xres == 0)
+-		xres = PIXELS_ACROSS_DEFAULT;
+-	if (yres == 0)
+-		yres = PIXELS_DOWN_DEFAULT;
+-	input_set_abs_params(visorinput_dev, ABS_X, 0, xres, 0, 0);
+-	input_set_abs_params(visorinput_dev, ABS_Y, 0, yres, 0, 0);
+-
+-	visorinput_dev->open = visorinput_open;
+-	visorinput_dev->close = visorinput_close;
+-	/* pre input_register! */
+-	input_set_drvdata(visorinput_dev, devdata);
+-	input_set_capability(visorinput_dev, EV_REL, REL_WHEEL);
+-
+-	return visorinput_dev;
+-}
+-
+-static struct visorinput_devdata *devdata_create(struct visor_device *dev,
+-						 enum visorinput_dev_type dtype)
+-{
+-	struct visorinput_devdata *devdata = NULL;
+-	unsigned int extra_bytes = 0;
+-	unsigned int size, xres, yres, err;
+-	struct visor_input_channel_data data;
+-
+-	if (dtype == visorinput_keyboard)
+-		/* allocate room for devdata->keycode_table, filled in below */
+-		extra_bytes = KEYCODE_TABLE_BYTES * 2;
+-	devdata = kzalloc(struct_size(devdata, keycode_table, extra_bytes),
+-			  GFP_KERNEL);
+-	if (!devdata)
+-		return NULL;
+-	mutex_init(&devdata->lock_visor_dev);
+-	mutex_lock(&devdata->lock_visor_dev);
+-	devdata->dev = dev;
+-
+-	/*
+-	 * visorinput_open() can be called as soon as input_register_device()
+-	 * happens, and that will enable channel interrupts.  Setting paused
+-	 * prevents us from getting into visorinput_channel_interrupt() prior
+-	 * to the device structure being totally initialized.
+-	 */
+-	devdata->paused = true;
+-
+-	/*
+-	 * This is an input device in a client guest partition, so we need to
+-	 * create whatever input nodes are necessary to deliver our inputs to
+-	 * the guest OS.
+-	 */
+-	switch (dtype) {
+-	case visorinput_keyboard:
+-		devdata->keycode_table_bytes = extra_bytes;
+-		memcpy(devdata->keycode_table, visorkbd_keycode,
+-		       KEYCODE_TABLE_BYTES);
+-		memcpy(devdata->keycode_table + KEYCODE_TABLE_BYTES,
+-		       visorkbd_ext_keycode, KEYCODE_TABLE_BYTES);
+-		devdata->visorinput_dev = setup_client_keyboard
+-			(devdata, devdata->keycode_table);
+-		if (!devdata->visorinput_dev)
+-			goto cleanups_register;
+-		break;
+-	case visorinput_mouse:
+-		size = sizeof(struct visor_input_channel_data);
+-		err = visorbus_read_channel(dev, sizeof(struct channel_header),
+-					    &data, size);
+-		if (err)
+-			goto cleanups_register;
+-		xres = data.mouse.x_res;
+-		yres = data.mouse.y_res;
+-		devdata->visorinput_dev = setup_client_mouse(devdata, xres,
+-							     yres);
+-		if (!devdata->visorinput_dev)
+-			goto cleanups_register;
+-		break;
+-	default:
+-		/* No other input devices supported */
+-		break;
+-	}
+-
+-	dev_set_drvdata(&dev->device, devdata);
+-	mutex_unlock(&devdata->lock_visor_dev);
+-
+-	/*
+-	 * Device struct is completely set up now, with the exception of
+-	 * visorinput_dev being registered. We need to unlock before we
+-	 * register the device, because this can cause an on-stack call of
+-	 * visorinput_open(), which would deadlock if we had the lock.
+-	 */
+-	if (input_register_device(devdata->visorinput_dev)) {
+-		input_free_device(devdata->visorinput_dev);
+-		goto err_kfree_devdata;
+-	}
+-
+-	mutex_lock(&devdata->lock_visor_dev);
+-	/*
+-	 * Establish calls to visorinput_channel_interrupt() if that is the
+-	 * desired state that we've kept track of in interrupts_enabled while
+-	 * the device was being created.
+-	 */
+-	devdata->paused = false;
+-	if (devdata->interrupts_enabled)
+-		visorbus_enable_channel_interrupts(dev);
+-	mutex_unlock(&devdata->lock_visor_dev);
+-
+-	return devdata;
+-
+-cleanups_register:
+-	mutex_unlock(&devdata->lock_visor_dev);
+-err_kfree_devdata:
+-	kfree(devdata);
+-	return NULL;
+-}
+-
+-static int visorinput_probe(struct visor_device *dev)
+-{
+-	const guid_t *guid;
+-	enum visorinput_dev_type dtype;
+-
+-	guid = visorchannel_get_guid(dev->visorchannel);
+-	if (guid_equal(guid, &visor_mouse_channel_guid))
+-		dtype = visorinput_mouse;
+-	else if (guid_equal(guid, &visor_keyboard_channel_guid))
+-		dtype = visorinput_keyboard;
+-	else
+-		return -ENODEV;
+-	visorbus_disable_channel_interrupts(dev);
+-	if (!devdata_create(dev, dtype))
+-		return -ENOMEM;
+-	return 0;
+-}
+-
+-static void unregister_client_input(struct input_dev *visorinput_dev)
+-{
+-	if (visorinput_dev)
+-		input_unregister_device(visorinput_dev);
+-}
+-
+-static void visorinput_remove(struct visor_device *dev)
+-{
+-	struct visorinput_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata)
+-		return;
+-
+-	mutex_lock(&devdata->lock_visor_dev);
+-	visorbus_disable_channel_interrupts(dev);
+-
+-	/*
+-	 * due to above, at this time no thread of execution will be in
+-	 * visorinput_channel_interrupt()
+-	 */
+-
+-	dev_set_drvdata(&dev->device, NULL);
+-	mutex_unlock(&devdata->lock_visor_dev);
+-
+-	unregister_client_input(devdata->visorinput_dev);
+-	kfree(devdata);
+-}
+-
+-/*
+- * Make it so the current locking state of the locking key indicated by
+- * <keycode> is as indicated by <desired_state> (1=locked, 0=unlocked).
+- */
+-static void handle_locking_key(struct input_dev *visorinput_dev, int keycode,
+-			       int desired_state)
+-{
+-	int led;
+-
+-	switch (keycode) {
+-	case KEY_CAPSLOCK:
+-		led = LED_CAPSL;
+-		break;
+-	case KEY_SCROLLLOCK:
+-		led = LED_SCROLLL;
+-		break;
+-	case KEY_NUMLOCK:
+-		led = LED_NUML;
+-		break;
+-	default:
+-		return;
+-	}
+-	if (test_bit(led, visorinput_dev->led) != desired_state) {
+-		input_report_key(visorinput_dev, keycode, 1);
+-		input_sync(visorinput_dev);
+-		input_report_key(visorinput_dev, keycode, 0);
+-		input_sync(visorinput_dev);
+-		__change_bit(led, visorinput_dev->led);
+-	}
+-}
+-
+-/*
+- * <scancode> is either a 1-byte scancode, or an extended 16-bit scancode with
+- * 0xE0 in the low byte and the extended scancode value in the next higher byte.
+- */
+-static int scancode_to_keycode(int scancode)
+-{
+-	if (scancode > 0xff)
+-		return visorkbd_ext_keycode[(scancode >> 8) & 0xff];
+-
+-	return visorkbd_keycode[scancode];
+-}
+-
+-static int calc_button(int x)
+-{
+-	switch (x) {
+-	case 1:
+-		return BTN_LEFT;
+-	case 2:
+-		return BTN_MIDDLE;
+-	case 3:
+-		return BTN_RIGHT;
+-	default:
+-		return -EINVAL;
+-	}
+-}
+-
+-/*
+- * This is used only when this driver is active as an input driver in the
+- * client guest partition.  It is called periodically so we can obtain inputs
+- * from the channel, and deliver them to the guest OS.
+- */
+-static void visorinput_channel_interrupt(struct visor_device *dev)
+-{
+-	struct visor_inputreport r;
+-	int scancode, keycode;
+-	struct input_dev *visorinput_dev;
+-	int xmotion, ymotion, button;
+-	int i;
+-	struct visorinput_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata)
+-		return;
+-
+-	visorinput_dev = devdata->visorinput_dev;
+-
+-	while (!visorchannel_signalremove(dev->visorchannel, 0, &r)) {
+-		scancode = r.activity.arg1;
+-		keycode = scancode_to_keycode(scancode);
+-		switch (r.activity.action) {
+-		case INPUTACTION_KEY_DOWN:
+-			input_report_key(visorinput_dev, keycode, 1);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_KEY_UP:
+-			input_report_key(visorinput_dev, keycode, 0);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_KEY_DOWN_UP:
+-			input_report_key(visorinput_dev, keycode, 1);
+-			input_sync(visorinput_dev);
+-			input_report_key(visorinput_dev, keycode, 0);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_SET_LOCKING_KEY_STATE:
+-			handle_locking_key(visorinput_dev, keycode,
+-					   r.activity.arg2);
+-			break;
+-		case INPUTACTION_XY_MOTION:
+-			xmotion = r.activity.arg1;
+-			ymotion = r.activity.arg2;
+-			input_report_abs(visorinput_dev, ABS_X, xmotion);
+-			input_report_abs(visorinput_dev, ABS_Y, ymotion);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_MOUSE_BUTTON_DOWN:
+-			button = calc_button(r.activity.arg1);
+-			if (button < 0)
+-				break;
+-			input_report_key(visorinput_dev, button, 1);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_MOUSE_BUTTON_UP:
+-			button = calc_button(r.activity.arg1);
+-			if (button < 0)
+-				break;
+-			input_report_key(visorinput_dev, button, 0);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_MOUSE_BUTTON_CLICK:
+-			button = calc_button(r.activity.arg1);
+-			if (button < 0)
+-				break;
+-			input_report_key(visorinput_dev, button, 1);
+-			input_sync(visorinput_dev);
+-			input_report_key(visorinput_dev, button, 0);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_MOUSE_BUTTON_DCLICK:
+-			button = calc_button(r.activity.arg1);
+-			if (button < 0)
+-				break;
+-			for (i = 0; i < 2; i++) {
+-				input_report_key(visorinput_dev, button, 1);
+-				input_sync(visorinput_dev);
+-				input_report_key(visorinput_dev, button, 0);
+-				input_sync(visorinput_dev);
+-			}
+-			break;
+-		case INPUTACTION_WHEEL_ROTATE_AWAY:
+-			input_report_rel(visorinput_dev, REL_WHEEL, 1);
+-			input_sync(visorinput_dev);
+-			break;
+-		case INPUTACTION_WHEEL_ROTATE_TOWARD:
+-			input_report_rel(visorinput_dev, REL_WHEEL, -1);
+-			input_sync(visorinput_dev);
+-			break;
+-		default:
+-			/* Unsupported input action */
+-			break;
+-		}
+-	}
+-}
+-
+-static int visorinput_pause(struct visor_device *dev,
+-			    visorbus_state_complete_func complete_func)
+-{
+-	int rc;
+-	struct visorinput_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata) {
+-		rc = -ENODEV;
+-		goto out;
+-	}
+-
+-	mutex_lock(&devdata->lock_visor_dev);
+-	if (devdata->paused) {
+-		rc = -EBUSY;
+-		goto out_locked;
+-	}
+-	if (devdata->interrupts_enabled)
+-		visorbus_disable_channel_interrupts(dev);
+-
+-	/*
+-	 * due to above, at this time no thread of execution will be in
+-	 * visorinput_channel_interrupt()
+-	 */
+-	devdata->paused = true;
+-	complete_func(dev, 0);
+-	rc = 0;
+-out_locked:
+-	mutex_unlock(&devdata->lock_visor_dev);
+-out:
+-	return rc;
+-}
+-
+-static int visorinput_resume(struct visor_device *dev,
+-			     visorbus_state_complete_func complete_func)
+-{
+-	int rc;
+-	struct visorinput_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata) {
+-		rc = -ENODEV;
+-		goto out;
+-	}
+-	mutex_lock(&devdata->lock_visor_dev);
+-	if (!devdata->paused) {
+-		rc = -EBUSY;
+-		goto out_locked;
+-	}
+-	devdata->paused = false;
+-	complete_func(dev, 0);
+-
+-	/*
+-	 * Re-establish calls to visorinput_channel_interrupt() if that is the
+-	 * desired state that we've kept track of in interrupts_enabled while
+-	 * the device was paused.
+-	 */
+-	if (devdata->interrupts_enabled)
+-		visorbus_enable_channel_interrupts(dev);
+-
+-	rc = 0;
+-out_locked:
+-	mutex_unlock(&devdata->lock_visor_dev);
+-out:
+-	return rc;
+-}
+-
+-/* GUIDS for all channel types supported by this driver. */
+-static struct visor_channeltype_descriptor visorinput_channel_types[] = {
+-	{ VISOR_KEYBOARD_CHANNEL_GUID, "keyboard",
+-	  sizeof(struct channel_header), 0 },
+-	{ VISOR_MOUSE_CHANNEL_GUID, "mouse", sizeof(struct channel_header), 0 },
+-	{}
+-};
+-
+-static struct visor_driver visorinput_driver = {
+-	.name = "visorinput",
+-	.owner = THIS_MODULE,
+-	.channel_types = visorinput_channel_types,
+-	.probe = visorinput_probe,
+-	.remove = visorinput_remove,
+-	.channel_interrupt = visorinput_channel_interrupt,
+-	.pause = visorinput_pause,
+-	.resume = visorinput_resume,
+-};
+-
+-module_driver(visorinput_driver, visorbus_register_visor_driver,
+-	      visorbus_unregister_visor_driver);
+-
+-MODULE_DEVICE_TABLE(visorbus, visorinput_channel_types);
+-
+-MODULE_AUTHOR("Unisys");
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("s-Par human input driver for virtual keyboard/mouse");
+-
+-MODULE_ALIAS("visorbus:" VISOR_MOUSE_CHANNEL_GUID_STR);
+-MODULE_ALIAS("visorbus:" VISOR_KEYBOARD_CHANNEL_GUID_STR);
+diff --git a/drivers/staging/unisys/visornic/Kconfig b/drivers/staging/unisys/visornic/Kconfig
+deleted file mode 100644
+index 3f8f5570821b..000000000000
+--- a/drivers/staging/unisys/visornic/Kconfig
++++ /dev/null
+@@ -1,16 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Unisys visornic configuration
+-#
+-
+-config UNISYS_VISORNIC
+-	tristate "Unisys visornic driver"
+-	depends on UNISYSSPAR && UNISYS_VISORBUS && NET
+-	help
+-		The Unisys Visornic driver provides support for s-Par network
+-		devices exposed on the s-Par visorbus. When a message is sent
+-		to visorbus to create a network device, the probe function of
+-		visornic is called to create the netdev device. Networking on
+-		s-Par switches will not work if this driver is not selected.
+-		If you say Y here, you will enable the Unisys visornic driver.
+-
+diff --git a/drivers/staging/unisys/visornic/Makefile b/drivers/staging/unisys/visornic/Makefile
+deleted file mode 100644
+index f2984880c340..000000000000
+--- a/drivers/staging/unisys/visornic/Makefile
++++ /dev/null
+@@ -1,10 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for Unisys channel
+-#
+-
+-obj-$(CONFIG_UNISYS_VISORNIC)	+= visornic.o
+-
+-visornic-y := visornic_main.o
+-
+-ccflags-y += -I $(srctree)/$(src)/../include
+diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/staging/unisys/visornic/visornic_main.c
+deleted file mode 100644
+index bb7ec492503e..000000000000
+--- a/drivers/staging/unisys/visornic/visornic_main.c
++++ /dev/null
+@@ -1,2131 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/* Copyright (c) 2012 - 2015 UNISYS CORPORATION
+- * All rights reserved.
+- */
+-
+-/* This driver lives in a spar partition, and registers to ethernet io
+- * channels from the visorbus driver. It creates netdev devices and
+- * forwards transmit to the IO channel and accepts rcvs from the IO
+- * Partition via the IO channel.
+- */
+-
+-#include <linux/debugfs.h>
+-#include <linux/etherdevice.h>
+-#include <linux/module.h>
+-#include <linux/netdevice.h>
+-#include <linux/kthread.h>
+-#include <linux/skbuff.h>
+-#include <linux/rtnetlink.h>
+-#include <linux/visorbus.h>
+-
+-#include "iochannel.h"
+-
+-#define VISORNIC_INFINITE_RSP_WAIT 0
+-
+-/* MAX_BUF = 64 lines x 32 MAXVNIC x 80 characters
+- *         = 163840 bytes
+- */
+-#define MAX_BUF 163840
+-#define NAPI_WEIGHT 64
+-
+-/* GUIDS for director channel type supported by this driver.  */
+-/* {8cd5994d-c58e-11da-95a9-00e08161165f} */
+-#define VISOR_VNIC_CHANNEL_GUID \
+-	GUID_INIT(0x8cd5994d, 0xc58e, 0x11da, \
+-		0x95, 0xa9, 0x0, 0xe0, 0x81, 0x61, 0x16, 0x5f)
+-#define VISOR_VNIC_CHANNEL_GUID_STR \
+-	"8cd5994d-c58e-11da-95a9-00e08161165f"
+-
+-static struct visor_channeltype_descriptor visornic_channel_types[] = {
+-	/* Note that the only channel type we expect to be reported by the
+-	 * bus driver is the VISOR_VNIC channel.
+-	 */
+-	{ VISOR_VNIC_CHANNEL_GUID, "ultravnic", sizeof(struct channel_header),
+-	  VISOR_VNIC_CHANNEL_VERSIONID },
+-	{}
+-};
+-MODULE_DEVICE_TABLE(visorbus, visornic_channel_types);
+-/* FIXME XXX: This next line of code must be fixed and removed before
+- * acceptance into the 'normal' part of the kernel.  It is only here as a place
+- * holder to get module autoloading functionality working for visorbus.  Code
+- * must be added to scripts/mode/file2alias.c, etc., to get this working
+- * properly.
+- */
+-MODULE_ALIAS("visorbus:" VISOR_VNIC_CHANNEL_GUID_STR);
+-
+-struct chanstat {
+-	unsigned long got_rcv;
+-	unsigned long got_enbdisack;
+-	unsigned long got_xmit_done;
+-	unsigned long xmit_fail;
+-	unsigned long sent_enbdis;
+-	unsigned long sent_promisc;
+-	unsigned long sent_post;
+-	unsigned long sent_post_failed;
+-	unsigned long sent_xmit;
+-	unsigned long reject_count;
+-	unsigned long extra_rcvbufs_sent;
+-};
+-
+-/* struct visornic_devdata
+- * @enabled:                        0 disabled 1 enabled to receive.
+- * @enab_dis_acked:                 NET_RCV_ENABLE/DISABLE acked by IOPART.
+- * @struct *dev:
+- * @struct *netdev:
+- * @struct net_stats:
+- * @interrupt_rcvd:
+- * @rsp_queue:
+- * @struct **rcvbuf:
+- * @incarnation_id:                 incarnation_id lets IOPART know about
+- *                                  re-birth.
+- * @old_flags:                      flags as they were prior to
+- *                                  set_multicast_list.
+- * @usage:                          count of users.
+- * @num_rcv_bufs:                   number of rcv buffers the vnic will post.
+- * @num_rcv_bufs_could_not_alloc:
+- * @num_rcvbuf_in_iovm:
+- * @alloc_failed_in_if_needed_cnt:
+- * @alloc_failed_in_repost_rtn_cnt:
+- * @max_outstanding_net_xmits:      absolute max number of outstanding xmits
+- *                                  - should never hit this.
+- * @upper_threshold_net_xmits:      high water mark for calling
+- *                                  netif_stop_queue().
+- * @lower_threshold_net_xmits:      high water mark for calling
+- *                                  netif_wake_queue().
+- * @struct xmitbufhead:             xmitbufhead - head of the xmit buffer list
+- *                                  sent to the IOPART end.
+- * @server_down_complete_func:
+- * @struct timeout_reset:
+- * @struct *cmdrsp_rcv:             cmdrsp_rcv is used for posting/unposting rcv
+- *                                  buffers.
+- * @struct *xmit_cmdrsp:            xmit_cmdrsp - issues NET_XMIT - only one
+- *                                  active xmit at a time.
+- * @server_down:                    IOPART is down.
+- * @server_change_state:            Processing SERVER_CHANGESTATE msg.
+- * @going_away:                     device is being torn down.
+- * @interrupts_rcvd:
+- * @interrupts_notme:
+- * @interrupts_disabled:
+- * @busy_cnt:
+- * @priv_lock:                      spinlock to access devdata structures.
+- * @flow_control_upper_hits:
+- * @flow_control_lower_hits:
+- * @n_rcv0:                         # rcvs of 0 buffers.
+- * @n_rcv1:                         # rcvs of 1 buffers.
+- * @n_rcv2:                         # rcvs of 2 buffers.
+- * @n_rcvx:                         # rcvs of >2 buffers.
+- * @found_repost_rcvbuf_cnt:        # repost_rcvbuf_cnt.
+- * @repost_found_skb_cnt:           # of found the skb.
+- * @n_repost_deficit:               # of lost rcv buffers.
+- * @bad_rcv_buf:                    # of unknown rcv skb not freed.
+- * @n_rcv_packets_not_accepted:     # bogs rcv packets.
+- * @queuefullmsg_logged:
+- * @struct chstat:
+- * @struct napi:
+- * @struct cmdrsp:
+- */
+-struct visornic_devdata {
+-	unsigned short enabled;
+-	unsigned short enab_dis_acked;
+-
+-	struct visor_device *dev;
+-	struct net_device *netdev;
+-	struct net_device_stats net_stats;
+-	atomic_t interrupt_rcvd;
+-	wait_queue_head_t rsp_queue;
+-	struct sk_buff **rcvbuf;
+-	u64 incarnation_id;
+-	unsigned short old_flags;
+-	atomic_t usage;
+-
+-	int num_rcv_bufs;
+-	int num_rcv_bufs_could_not_alloc;
+-	atomic_t num_rcvbuf_in_iovm;
+-	unsigned long alloc_failed_in_if_needed_cnt;
+-	unsigned long alloc_failed_in_repost_rtn_cnt;
+-
+-	unsigned long max_outstanding_net_xmits;
+-	unsigned long upper_threshold_net_xmits;
+-	unsigned long lower_threshold_net_xmits;
+-	struct sk_buff_head xmitbufhead;
+-
+-	visorbus_state_complete_func server_down_complete_func;
+-	struct work_struct timeout_reset;
+-	struct uiscmdrsp *cmdrsp_rcv;
+-	struct uiscmdrsp *xmit_cmdrsp;
+-	bool server_down;
+-	bool server_change_state;
+-	bool going_away;
+-	u64 interrupts_rcvd;
+-	u64 interrupts_notme;
+-	u64 interrupts_disabled;
+-	u64 busy_cnt;
+-	/* spinlock to access devdata structures. */
+-	spinlock_t priv_lock;
+-
+-	/* flow control counter */
+-	u64 flow_control_upper_hits;
+-	u64 flow_control_lower_hits;
+-
+-	/* debug counters */
+-	unsigned long n_rcv0;
+-	unsigned long n_rcv1;
+-	unsigned long n_rcv2;
+-	unsigned long n_rcvx;
+-	unsigned long found_repost_rcvbuf_cnt;
+-	unsigned long repost_found_skb_cnt;
+-	unsigned long n_repost_deficit;
+-	unsigned long bad_rcv_buf;
+-	unsigned long n_rcv_packets_not_accepted;
+-
+-	int queuefullmsg_logged;
+-	struct chanstat chstat;
+-	struct napi_struct napi;
+-	struct uiscmdrsp cmdrsp[SIZEOF_CMDRSP];
+-};
+-
+-/* Returns next non-zero index on success or 0 on failure (i.e. out of room). */
+-static u16 add_physinfo_entries(u64 inp_pfn, u16 inp_off, u16 inp_len,
+-				u16 index, u16 max_pi_arr_entries,
+-				struct phys_info pi_arr[])
+-{
+-	u16 i, len, firstlen;
+-
+-	firstlen = PI_PAGE_SIZE - inp_off;
+-	if (inp_len <= firstlen) {
+-		/* The input entry spans only one page - add as is. */
+-		if (index >= max_pi_arr_entries)
+-			return 0;
+-		pi_arr[index].pi_pfn = inp_pfn;
+-		pi_arr[index].pi_off = (u16)inp_off;
+-		pi_arr[index].pi_len = (u16)inp_len;
+-		return index + 1;
+-	}
+-
+-	/* This entry spans multiple pages. */
+-	for (len = inp_len, i = 0; len;
+-		len -= pi_arr[index + i].pi_len, i++) {
+-		if (index + i >= max_pi_arr_entries)
+-			return 0;
+-		pi_arr[index + i].pi_pfn = inp_pfn + i;
+-		if (i == 0) {
+-			pi_arr[index].pi_off = inp_off;
+-			pi_arr[index].pi_len = firstlen;
+-		} else {
+-			pi_arr[index + i].pi_off = 0;
+-			pi_arr[index + i].pi_len = min_t(u16, len,
+-							 PI_PAGE_SIZE);
+-		}
+-	}
+-	return index + i;
+-}
+-
+-/* visor_copy_fragsinfo_from_skb - copy fragment list in the SKB to a phys_info
+- *				   array that the IOPART understands
+- * @skb:	  Skbuff that we are pulling the frags from.
+- * @firstfraglen: Length of first fragment in skb.
+- * @frags_max:	  Max len of frags array.
+- * @frags:	  Frags array filled in on output.
+- *
+- * Return: Positive integer indicating number of entries filled in frags on
+- *         success, negative integer on error.
+- */
+-static int visor_copy_fragsinfo_from_skb(struct sk_buff *skb,
+-					 unsigned int firstfraglen,
+-					 unsigned int frags_max,
+-					 struct phys_info frags[])
+-{
+-	unsigned int count = 0, frag, size, offset = 0, numfrags;
+-	unsigned int total_count;
+-
+-	numfrags = skb_shinfo(skb)->nr_frags;
+-
+-	/* Compute the number of fragments this skb has, and if its more than
+-	 * frag array can hold, linearize the skb
+-	 */
+-	total_count = numfrags + (firstfraglen / PI_PAGE_SIZE);
+-	if (firstfraglen % PI_PAGE_SIZE)
+-		total_count++;
+-
+-	if (total_count > frags_max) {
+-		if (skb_linearize(skb))
+-			return -EINVAL;
+-		numfrags = skb_shinfo(skb)->nr_frags;
+-		firstfraglen = 0;
+-	}
+-
+-	while (firstfraglen) {
+-		if (count == frags_max)
+-			return -EINVAL;
+-
+-		frags[count].pi_pfn =
+-			page_to_pfn(virt_to_page(skb->data + offset));
+-		frags[count].pi_off =
+-			(unsigned long)(skb->data + offset) & PI_PAGE_MASK;
+-		size = min_t(unsigned int, firstfraglen,
+-			     PI_PAGE_SIZE - frags[count].pi_off);
+-
+-		/* can take smallest of firstfraglen (what's left) OR
+-		 * bytes left in the page
+-		 */
+-		frags[count].pi_len = size;
+-		firstfraglen -= size;
+-		offset += size;
+-		count++;
+-	}
+-	if (numfrags) {
+-		if ((count + numfrags) > frags_max)
+-			return -EINVAL;
+-
+-		for (frag = 0; frag < numfrags; frag++) {
+-			count = add_physinfo_entries(page_to_pfn(
+-				  skb_frag_page(&skb_shinfo(skb)->frags[frag])),
+-				  skb_frag_off(&skb_shinfo(skb)->frags[frag]),
+-				  skb_frag_size(&skb_shinfo(skb)->frags[frag]),
+-				  count, frags_max, frags);
+-			/* add_physinfo_entries only returns
+-			 * zero if the frags array is out of room
+-			 * That should never happen because we
+-			 * fail above, if count+numfrags > frags_max.
+-			 */
+-			if (!count)
+-				return -EINVAL;
+-		}
+-	}
+-	if (skb_shinfo(skb)->frag_list) {
+-		struct sk_buff *skbinlist;
+-		int c;
+-
+-		for (skbinlist = skb_shinfo(skb)->frag_list; skbinlist;
+-		     skbinlist = skbinlist->next) {
+-			c = visor_copy_fragsinfo_from_skb(skbinlist,
+-							  skbinlist->len -
+-							  skbinlist->data_len,
+-							  frags_max - count,
+-							  &frags[count]);
+-			if (c < 0)
+-				return c;
+-			count += c;
+-		}
+-	}
+-	return count;
+-}
+-
+-static ssize_t enable_ints_write(struct file *file,
+-				 const char __user *buffer,
+-				 size_t count, loff_t *ppos)
+-{
+-	/* Don't want to break ABI here by having a debugfs
+-	 * file that no longer exists or is writable, so
+-	 * lets just make this a vestigual function
+-	 */
+-	return count;
+-}
+-
+-static const struct file_operations debugfs_enable_ints_fops = {
+-	.write = enable_ints_write,
+-};
+-
+-/* visornic_serverdown_complete - pause device following IOPART going down
+- * @devdata: Device managed by IOPART.
+- *
+- * The IO partition has gone down, and we need to do some cleanup for when it
+- * comes back. Treat the IO partition as the link being down.
+- */
+-static void visornic_serverdown_complete(struct visornic_devdata *devdata)
+-{
+-	struct net_device *netdev = devdata->netdev;
+-
+-	/* Stop polling for interrupts */
+-	visorbus_disable_channel_interrupts(devdata->dev);
+-
+-	rtnl_lock();
+-	dev_close(netdev);
+-	rtnl_unlock();
+-
+-	atomic_set(&devdata->num_rcvbuf_in_iovm, 0);
+-	devdata->chstat.sent_xmit = 0;
+-	devdata->chstat.got_xmit_done = 0;
+-
+-	if (devdata->server_down_complete_func)
+-		(*devdata->server_down_complete_func)(devdata->dev, 0);
+-
+-	devdata->server_down = true;
+-	devdata->server_change_state = false;
+-	devdata->server_down_complete_func = NULL;
+-}
+-
+-/* visornic_serverdown - Command has notified us that IOPART is down
+- * @devdata:	   Device managed by IOPART.
+- * @complete_func: Function to call when finished.
+- *
+- * Schedule the work needed to handle the server down request. Make sure we
+- * haven't already handled the server change state event.
+- *
+- * Return: 0 if we scheduled the work, negative integer on error.
+- */
+-static int visornic_serverdown(struct visornic_devdata *devdata,
+-			       visorbus_state_complete_func complete_func)
+-{
+-	unsigned long flags;
+-	int err;
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	if (devdata->server_change_state) {
+-		dev_dbg(&devdata->dev->device, "%s changing state\n",
+-			__func__);
+-		err = -EINVAL;
+-		goto err_unlock;
+-	}
+-	if (devdata->server_down) {
+-		dev_dbg(&devdata->dev->device, "%s already down\n",
+-			__func__);
+-		err = -EINVAL;
+-		goto err_unlock;
+-	}
+-	if (devdata->going_away) {
+-		dev_dbg(&devdata->dev->device,
+-			"%s aborting because device removal pending\n",
+-			__func__);
+-		err = -ENODEV;
+-		goto err_unlock;
+-	}
+-	devdata->server_change_state = true;
+-	devdata->server_down_complete_func = complete_func;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	visornic_serverdown_complete(devdata);
+-	return 0;
+-
+-err_unlock:
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-	return err;
+-}
+-
+-/* alloc_rcv_buf - alloc rcv buffer to be given to the IO Partition
+- * @netdev: Network adapter the rcv bufs are attached too.
+- *
+- * Create an sk_buff (rcv_buf) that will be passed to the IO Partition
+- * so that it can write rcv data into our memory space.
+- *
+- * Return: Pointer to sk_buff.
+- */
+-static struct sk_buff *alloc_rcv_buf(struct net_device *netdev)
+-{
+-	struct sk_buff *skb;
+-
+-	/* NOTE: the first fragment in each rcv buffer is pointed to by
+-	 * rcvskb->data. For now all rcv buffers will be RCVPOST_BUF_SIZE
+-	 * in length, so the first frag is large enough to hold 1514.
+-	 */
+-	skb = alloc_skb(RCVPOST_BUF_SIZE, GFP_ATOMIC);
+-	if (!skb)
+-		return NULL;
+-	skb->dev = netdev;
+-	/* current value of mtu doesn't come into play here; large
+-	 * packets will just end up using multiple rcv buffers all of
+-	 * same size.
+-	 */
+-	skb->len = RCVPOST_BUF_SIZE;
+-	/* alloc_skb already zeroes it out for clarification. */
+-	skb->data_len = 0;
+-	return skb;
+-}
+-
+-/* post_skb - post a skb to the IO Partition
+- * @cmdrsp:  Cmdrsp packet to be send to the IO Partition.
+- * @devdata: visornic_devdata to post the skb to.
+- * @skb:     Skb to give to the IO partition.
+- *
+- * Return: 0 on success, negative integer on error.
+- */
+-static int post_skb(struct uiscmdrsp *cmdrsp, struct visornic_devdata *devdata,
+-		    struct sk_buff *skb)
+-{
+-	int err;
+-
+-	cmdrsp->net.buf = skb;
+-	cmdrsp->net.rcvpost.frag.pi_pfn = page_to_pfn(virt_to_page(skb->data));
+-	cmdrsp->net.rcvpost.frag.pi_off =
+-		(unsigned long)skb->data & PI_PAGE_MASK;
+-	cmdrsp->net.rcvpost.frag.pi_len = skb->len;
+-	cmdrsp->net.rcvpost.unique_num = devdata->incarnation_id;
+-
+-	if ((cmdrsp->net.rcvpost.frag.pi_off + skb->len) > PI_PAGE_SIZE)
+-		return -EINVAL;
+-
+-	cmdrsp->net.type = NET_RCV_POST;
+-	cmdrsp->cmdtype = CMD_NET_TYPE;
+-	err = visorchannel_signalinsert(devdata->dev->visorchannel,
+-					IOCHAN_TO_IOPART,
+-					cmdrsp);
+-	if (err) {
+-		devdata->chstat.sent_post_failed++;
+-		return err;
+-	}
+-
+-	atomic_inc(&devdata->num_rcvbuf_in_iovm);
+-	devdata->chstat.sent_post++;
+-	return 0;
+-}
+-
+-/* send_enbdis - Send NET_RCV_ENBDIS to IO Partition
+- * @netdev:  Netdevice we are enabling/disabling, used as context return value.
+- * @state:   Enable = 1/disable = 0.
+- * @devdata: Visornic device we are enabling/disabling.
+- *
+- * Send the enable/disable message to the IO Partition.
+- *
+- * Return: 0 on success, negative integer on error.
+- */
+-static int send_enbdis(struct net_device *netdev, int state,
+-		       struct visornic_devdata *devdata)
+-{
+-	int err;
+-
+-	devdata->cmdrsp_rcv->net.enbdis.enable = state;
+-	devdata->cmdrsp_rcv->net.enbdis.context = netdev;
+-	devdata->cmdrsp_rcv->net.type = NET_RCV_ENBDIS;
+-	devdata->cmdrsp_rcv->cmdtype = CMD_NET_TYPE;
+-	err = visorchannel_signalinsert(devdata->dev->visorchannel,
+-					IOCHAN_TO_IOPART,
+-					devdata->cmdrsp_rcv);
+-	if (err)
+-		return err;
+-	devdata->chstat.sent_enbdis++;
+-	return 0;
+-}
+-
+-/* visornic_disable_with_timeout - disable network adapter
+- * @netdev:  netdevice to disable.
+- * @timeout: Timeout to wait for disable.
+- *
+- * Disable the network adapter and inform the IO Partition that we are disabled.
+- * Reclaim memory from rcv bufs.
+- *
+- * Return: 0 on success, negative integer on failure of IO Partition responding.
+- */
+-static int visornic_disable_with_timeout(struct net_device *netdev,
+-					 const int timeout)
+-{
+-	struct visornic_devdata *devdata = netdev_priv(netdev);
+-	int i;
+-	unsigned long flags;
+-	int wait = 0;
+-	int err;
+-
+-	/* send a msg telling the other end we are stopping incoming pkts */
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	devdata->enabled = 0;
+-	/* must wait for ack */
+-	devdata->enab_dis_acked = 0;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* send disable and wait for ack -- don't hold lock when sending
+-	 * disable because if the queue is full, insert might sleep.
+-	 * If an error occurs, don't wait for the timeout.
+-	 */
+-	err = send_enbdis(netdev, 0, devdata);
+-	if (err)
+-		return err;
+-
+-	/* wait for ack to arrive before we try to free rcv buffers
+-	 * NOTE: the other end automatically unposts the rcv buffers
+-	 * when it gets a disable.
+-	 */
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	while ((timeout == VISORNIC_INFINITE_RSP_WAIT) ||
+-	       (wait < timeout)) {
+-		if (devdata->enab_dis_acked)
+-			break;
+-		if (devdata->server_down || devdata->server_change_state) {
+-			dev_dbg(&netdev->dev, "%s server went away\n",
+-				__func__);
+-			break;
+-		}
+-		set_current_state(TASK_INTERRUPTIBLE);
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		wait += schedule_timeout(msecs_to_jiffies(10));
+-		spin_lock_irqsave(&devdata->priv_lock, flags);
+-	}
+-
+-	/* Wait for usage to go to 1 (no other users) before freeing
+-	 * rcv buffers
+-	 */
+-	if (atomic_read(&devdata->usage) > 1) {
+-		while (1) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-			schedule_timeout(msecs_to_jiffies(10));
+-			spin_lock_irqsave(&devdata->priv_lock, flags);
+-			if (atomic_read(&devdata->usage))
+-				break;
+-		}
+-	}
+-	/* we've set enabled to 0, so we can give up the lock. */
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* stop the transmit queue so nothing more can be transmitted */
+-	netif_stop_queue(netdev);
+-
+-	napi_disable(&devdata->napi);
+-
+-	skb_queue_purge(&devdata->xmitbufhead);
+-
+-	/* Free rcv buffers - other end has automatically unposed them on
+-	 * disable
+-	 */
+-	for (i = 0; i < devdata->num_rcv_bufs; i++) {
+-		if (devdata->rcvbuf[i]) {
+-			kfree_skb(devdata->rcvbuf[i]);
+-			devdata->rcvbuf[i] = NULL;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-/* init_rcv_bufs - initialize receive buffs and send them to the IO Partition
+- * @netdev:  struct netdevice.
+- * @devdata: visornic_devdata.
+- *
+- * Allocate rcv buffers and post them to the IO Partition.
+- *
+- * Return: 0 on success, negative integer on failure.
+- */
+-static int init_rcv_bufs(struct net_device *netdev,
+-			 struct visornic_devdata *devdata)
+-{
+-	int i, j, count, err;
+-
+-	/* allocate fixed number of receive buffers to post to uisnic
+-	 * post receive buffers after we've allocated a required amount
+-	 */
+-	for (i = 0; i < devdata->num_rcv_bufs; i++) {
+-		devdata->rcvbuf[i] = alloc_rcv_buf(netdev);
+-		/* if we failed to allocate one let us stop */
+-		if (!devdata->rcvbuf[i])
+-			break;
+-	}
+-	/* couldn't even allocate one -- bail out */
+-	if (i == 0)
+-		return -ENOMEM;
+-	count = i;
+-
+-	/* Ensure we can alloc 2/3rd of the requested number of buffers.
+-	 * 2/3 is an arbitrary choice; used also in ndis init.c
+-	 */
+-	if (count < ((2 * devdata->num_rcv_bufs) / 3)) {
+-		/* free receive buffers we did alloc and then bail out */
+-		for (i = 0; i < count; i++) {
+-			kfree_skb(devdata->rcvbuf[i]);
+-			devdata->rcvbuf[i] = NULL;
+-		}
+-		return -ENOMEM;
+-	}
+-
+-	/* post receive buffers to receive incoming input - without holding
+-	 * lock - we've not enabled nor started the queue so there shouldn't
+-	 * be any rcv or xmit activity
+-	 */
+-	for (i = 0; i < count; i++) {
+-		err = post_skb(devdata->cmdrsp_rcv, devdata,
+-			       devdata->rcvbuf[i]);
+-		if (!err)
+-			continue;
+-
+-		/* Error handling -
+-		 * If we posted at least one skb, we should return success,
+-		 * but need to free the resources that we have not successfully
+-		 * posted.
+-		 */
+-		for (j = i; j < count; j++) {
+-			kfree_skb(devdata->rcvbuf[j]);
+-			devdata->rcvbuf[j] = NULL;
+-		}
+-		if (i == 0)
+-			return err;
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+-/* visornic_enable_with_timeout	- send enable to IO Partition
+- * @netdev:  struct net_device.
+- * @timeout: Time to wait for the ACK from the enable.
+- *
+- * Sends enable to IOVM and inits, and posts receive buffers to IOVM. Timeout is
+- * defined in msecs (timeout of 0 specifies infinite wait).
+- *
+- * Return: 0 on success, negative integer on failure.
+- */
+-static int visornic_enable_with_timeout(struct net_device *netdev,
+-					const int timeout)
+-{
+-	int err = 0;
+-	struct visornic_devdata *devdata = netdev_priv(netdev);
+-	unsigned long flags;
+-	int wait = 0;
+-
+-	napi_enable(&devdata->napi);
+-
+-	/* NOTE: the other end automatically unposts the rcv buffers when it
+-	 * gets a disable.
+-	 */
+-	err = init_rcv_bufs(netdev, devdata);
+-	if (err < 0) {
+-		dev_err(&netdev->dev,
+-			"%s failed to init rcv bufs\n", __func__);
+-		return err;
+-	}
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	devdata->enabled = 1;
+-	devdata->enab_dis_acked = 0;
+-
+-	/* now we're ready, let's send an ENB to uisnic but until we get
+-	 * an ACK back from uisnic, we'll drop the packets
+-	 */
+-	devdata->n_rcv_packets_not_accepted = 0;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* send enable and wait for ack -- don't hold lock when sending enable
+-	 * because if the queue is full, insert might sleep. If an error
+-	 * occurs error out.
+-	 */
+-	err = send_enbdis(netdev, 1, devdata);
+-	if (err)
+-		return err;
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	while ((timeout == VISORNIC_INFINITE_RSP_WAIT) ||
+-	       (wait < timeout)) {
+-		if (devdata->enab_dis_acked)
+-			break;
+-		if (devdata->server_down || devdata->server_change_state) {
+-			dev_dbg(&netdev->dev, "%s server went away\n",
+-				__func__);
+-			break;
+-		}
+-		set_current_state(TASK_INTERRUPTIBLE);
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		wait += schedule_timeout(msecs_to_jiffies(10));
+-		spin_lock_irqsave(&devdata->priv_lock, flags);
+-	}
+-
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	if (!devdata->enab_dis_acked) {
+-		dev_err(&netdev->dev, "%s missing ACK\n", __func__);
+-		return -EIO;
+-	}
+-
+-	netif_start_queue(netdev);
+-	return 0;
+-}
+-
+-/* visornic_timeout_reset - handle xmit timeout resets
+- * @work: Work item that scheduled the work.
+- *
+- * Transmit timeouts are typically handled by resetting the device for our
+- * virtual NIC; we will send a disable and enable to the IOVM. If it doesn't
+- * respond, we will trigger a serverdown.
+- */
+-static void visornic_timeout_reset(struct work_struct *work)
+-{
+-	struct visornic_devdata *devdata;
+-	struct net_device *netdev;
+-	int response = 0;
+-
+-	devdata = container_of(work, struct visornic_devdata, timeout_reset);
+-	netdev = devdata->netdev;
+-
+-	rtnl_lock();
+-	if (!netif_running(netdev)) {
+-		rtnl_unlock();
+-		return;
+-	}
+-
+-	response = visornic_disable_with_timeout(netdev,
+-						 VISORNIC_INFINITE_RSP_WAIT);
+-	if (response)
+-		goto call_serverdown;
+-
+-	response = visornic_enable_with_timeout(netdev,
+-						VISORNIC_INFINITE_RSP_WAIT);
+-	if (response)
+-		goto call_serverdown;
+-
+-	rtnl_unlock();
+-
+-	return;
+-
+-call_serverdown:
+-	visornic_serverdown(devdata, NULL);
+-	rtnl_unlock();
+-}
+-
+-/* visornic_open - enable the visornic device and mark the queue started
+- * @netdev: netdevice to start.
+- *
+- * Enable the device and start the transmit queue.
+- *
+- * Return: 0 on success.
+- */
+-static int visornic_open(struct net_device *netdev)
+-{
+-	visornic_enable_with_timeout(netdev, VISORNIC_INFINITE_RSP_WAIT);
+-	return 0;
+-}
+-
+-/* visornic_close - disables the visornic device and stops the queues
+- * @netdev: netdevice to stop.
+- *
+- * Disable the device and stop the transmit queue.
+- *
+- * Return 0 on success.
+- */
+-static int visornic_close(struct net_device *netdev)
+-{
+-	visornic_disable_with_timeout(netdev, VISORNIC_INFINITE_RSP_WAIT);
+-	return 0;
+-}
+-
+-/* devdata_xmits_outstanding - compute outstanding xmits
+- * @devdata: visornic_devdata for device
+- *
+- * Return: Long integer representing the number of outstanding xmits.
+- */
+-static unsigned long devdata_xmits_outstanding(struct visornic_devdata *devdata)
+-{
+-	if (devdata->chstat.sent_xmit >= devdata->chstat.got_xmit_done)
+-		return devdata->chstat.sent_xmit -
+-			devdata->chstat.got_xmit_done;
+-	return (ULONG_MAX - devdata->chstat.got_xmit_done
+-		+ devdata->chstat.sent_xmit + 1);
+-}
+-
+-/* vnic_hit_high_watermark
+- * @devdata:	    Indicates visornic device we are checking.
+- * @high_watermark: Max num of unacked xmits we will tolerate before we will
+- *		    start throttling.
+- *
+- * Return: True iff the number of unacked xmits sent to the IO Partition is >=
+- *	   high_watermark. False otherwise.
+- */
+-static bool vnic_hit_high_watermark(struct visornic_devdata *devdata,
+-				    ulong high_watermark)
+-{
+-	return (devdata_xmits_outstanding(devdata) >= high_watermark);
+-}
+-
+-/* vnic_hit_low_watermark
+- * @devdata:	   Indicates visornic device we are checking.
+- * @low_watermark: We will wait until the num of unacked xmits drops to this
+- *		   value or lower before we start transmitting again.
+- *
+- * Return: True iff the number of unacked xmits sent to the IO Partition is <=
+- *	   low_watermark.
+- */
+-static bool vnic_hit_low_watermark(struct visornic_devdata *devdata,
+-				   ulong low_watermark)
+-{
+-	return (devdata_xmits_outstanding(devdata) <= low_watermark);
+-}
+-
+-/* visornic_xmit - send a packet to the IO Partition
+- * @skb:    Packet to be sent.
+- * @netdev: Net device the packet is being sent from.
+- *
+- * Convert the skb to a cmdrsp so the IO Partition can understand it, and send
+- * the XMIT command to the IO Partition for processing. This function is
+- * protected from concurrent calls by a spinlock xmit_lock in the net_device
+- * struct. As soon as the function returns, it can be called again.
+- *
+- * Return: NETDEV_TX_OK.
+- */
+-static netdev_tx_t visornic_xmit(struct sk_buff *skb, struct net_device *netdev)
+-{
+-	struct visornic_devdata *devdata;
+-	int len, firstfraglen, padlen;
+-	struct uiscmdrsp *cmdrsp = NULL;
+-	unsigned long flags;
+-	int err;
+-
+-	devdata = netdev_priv(netdev);
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-
+-	if (netif_queue_stopped(netdev) || devdata->server_down ||
+-	    devdata->server_change_state) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		devdata->busy_cnt++;
+-		dev_dbg(&netdev->dev,
+-			"%s busy - queue stopped\n", __func__);
+-		kfree_skb(skb);
+-		return NETDEV_TX_OK;
+-	}
+-
+-	/* sk_buff struct is used to host network data throughout all the
+-	 * linux network subsystems
+-	 */
+-	len = skb->len;
+-
+-	/* skb->len is the FULL length of data (including fragmentary portion)
+-	 * skb->data_len is the length of the fragment portion in frags
+-	 * skb->len - skb->data_len is size of the 1st fragment in skb->data
+-	 * calculate the length of the first fragment that skb->data is
+-	 * pointing to
+-	 */
+-	firstfraglen = skb->len - skb->data_len;
+-	if (firstfraglen < ETH_HLEN) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		devdata->busy_cnt++;
+-		dev_err(&netdev->dev,
+-			"%s busy - first frag too small (%d)\n",
+-			__func__, firstfraglen);
+-		kfree_skb(skb);
+-		return NETDEV_TX_OK;
+-	}
+-
+-	if (len < ETH_MIN_PACKET_SIZE &&
+-	    ((skb_end_pointer(skb) - skb->data) >= ETH_MIN_PACKET_SIZE)) {
+-		/* pad the packet out to minimum size */
+-		padlen = ETH_MIN_PACKET_SIZE - len;
+-		skb_put_zero(skb, padlen);
+-		len += padlen;
+-		firstfraglen += padlen;
+-	}
+-
+-	cmdrsp = devdata->xmit_cmdrsp;
+-	/* clear cmdrsp */
+-	memset(cmdrsp, 0, SIZEOF_CMDRSP);
+-	cmdrsp->net.type = NET_XMIT;
+-	cmdrsp->cmdtype = CMD_NET_TYPE;
+-
+-	/* save the pointer to skb -- we'll need it for completion */
+-	cmdrsp->net.buf = skb;
+-
+-	if (vnic_hit_high_watermark(devdata,
+-				    devdata->max_outstanding_net_xmits)) {
+-		/* extra NET_XMITs queued over to IOVM - need to wait */
+-		devdata->chstat.reject_count++;
+-		if (!devdata->queuefullmsg_logged &&
+-		    ((devdata->chstat.reject_count & 0x3ff) == 1))
+-			devdata->queuefullmsg_logged = 1;
+-		netif_stop_queue(netdev);
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		devdata->busy_cnt++;
+-		dev_dbg(&netdev->dev,
+-			"%s busy - waiting for iovm to catch up\n",
+-			__func__);
+-		kfree_skb(skb);
+-		return NETDEV_TX_OK;
+-	}
+-	if (devdata->queuefullmsg_logged)
+-		devdata->queuefullmsg_logged = 0;
+-
+-	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
+-		cmdrsp->net.xmt.lincsum.valid = 1;
+-		cmdrsp->net.xmt.lincsum.protocol = skb->protocol;
+-		if (skb_transport_header(skb) > skb->data) {
+-			cmdrsp->net.xmt.lincsum.hrawoff =
+-				skb_transport_header(skb) - skb->data;
+-			cmdrsp->net.xmt.lincsum.hrawoff = 1;
+-		}
+-		if (skb_network_header(skb) > skb->data) {
+-			cmdrsp->net.xmt.lincsum.nhrawoff =
+-				skb_network_header(skb) - skb->data;
+-			cmdrsp->net.xmt.lincsum.nhrawoffv = 1;
+-		}
+-		cmdrsp->net.xmt.lincsum.csum = skb->csum;
+-	} else {
+-		cmdrsp->net.xmt.lincsum.valid = 0;
+-	}
+-
+-	/* save off the length of the entire data packet */
+-	cmdrsp->net.xmt.len = len;
+-
+-	/* copy ethernet header from first frag into ocmdrsp
+-	 * - everything else will be pass in frags & DMA'ed
+-	 */
+-	memcpy(cmdrsp->net.xmt.ethhdr, skb->data, ETH_HLEN);
+-
+-	/* copy frags info - from skb->data we need to only provide access
+-	 * beyond eth header
+-	 */
+-	cmdrsp->net.xmt.num_frags =
+-		visor_copy_fragsinfo_from_skb(skb, firstfraglen,
+-					      MAX_PHYS_INFO,
+-					      cmdrsp->net.xmt.frags);
+-	if (cmdrsp->net.xmt.num_frags < 0) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		devdata->busy_cnt++;
+-		dev_err(&netdev->dev,
+-			"%s busy - copy frags failed\n", __func__);
+-		kfree_skb(skb);
+-		return NETDEV_TX_OK;
+-	}
+-
+-	err = visorchannel_signalinsert(devdata->dev->visorchannel,
+-					IOCHAN_TO_IOPART, cmdrsp);
+-	if (err) {
+-		netif_stop_queue(netdev);
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		devdata->busy_cnt++;
+-		dev_dbg(&netdev->dev,
+-			"%s busy - signalinsert failed\n", __func__);
+-		kfree_skb(skb);
+-		return NETDEV_TX_OK;
+-	}
+-
+-	/* Track the skbs that have been sent to the IOVM for XMIT */
+-	skb_queue_head(&devdata->xmitbufhead, skb);
+-
+-	/* update xmt stats */
+-	devdata->net_stats.tx_packets++;
+-	devdata->net_stats.tx_bytes += skb->len;
+-	devdata->chstat.sent_xmit++;
+-
+-	/* check if we have hit the high watermark for netif_stop_queue() */
+-	if (vnic_hit_high_watermark(devdata,
+-				    devdata->upper_threshold_net_xmits)) {
+-		/* extra NET_XMITs queued over to IOVM - need to wait */
+-		/* stop queue - call netif_wake_queue() after lower threshold */
+-		netif_stop_queue(netdev);
+-		dev_dbg(&netdev->dev,
+-			"%s busy - invoking iovm flow control\n",
+-			__func__);
+-		devdata->flow_control_upper_hits++;
+-	}
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* skb will be freed when we get back NET_XMIT_DONE */
+-	return NETDEV_TX_OK;
+-}
+-
+-/* visornic_get_stats - returns net_stats of the visornic device
+- * @netdev: netdevice.
+- *
+- * Return: Pointer to the net_device_stats struct for the device.
+- */
+-static struct net_device_stats *visornic_get_stats(struct net_device *netdev)
+-{
+-	struct visornic_devdata *devdata = netdev_priv(netdev);
+-
+-	return &devdata->net_stats;
+-}
+-
+-/* visornic_change_mtu - changes mtu of device
+- * @netdev: netdevice.
+- * @new_mtu: Value of new mtu.
+- *
+- * The device's MTU cannot be changed by system; it must be changed via a
+- * CONTROLVM message. All vnics and pnics in a switch have to have the same MTU
+- * for everything to work. Currently not supported.
+- *
+- * Return: -EINVAL.
+- */
+-static int visornic_change_mtu(struct net_device *netdev, int new_mtu)
+-{
+-	return -EINVAL;
+-}
+-
+-/* visornic_set_multi - set visornic device flags
+- * @netdev: netdevice.
+- *
+- * The only flag we currently support is IFF_PROMISC.
+- */
+-static void visornic_set_multi(struct net_device *netdev)
+-{
+-	struct uiscmdrsp *cmdrsp;
+-	struct visornic_devdata *devdata = netdev_priv(netdev);
+-	int err = 0;
+-
+-	if (devdata->old_flags == netdev->flags)
+-		return;
+-
+-	if ((netdev->flags & IFF_PROMISC) ==
+-	    (devdata->old_flags & IFF_PROMISC))
+-		goto out_save_flags;
+-
+-	cmdrsp = kmalloc(SIZEOF_CMDRSP, GFP_ATOMIC);
+-	if (!cmdrsp)
+-		return;
+-	cmdrsp->cmdtype = CMD_NET_TYPE;
+-	cmdrsp->net.type = NET_RCV_PROMISC;
+-	cmdrsp->net.enbdis.context = netdev;
+-	cmdrsp->net.enbdis.enable =
+-		netdev->flags & IFF_PROMISC;
+-	err = visorchannel_signalinsert(devdata->dev->visorchannel,
+-					IOCHAN_TO_IOPART,
+-					cmdrsp);
+-	kfree(cmdrsp);
+-	if (err)
+-		return;
+-
+-out_save_flags:
+-	devdata->old_flags = netdev->flags;
+-}
+-
+-/* visornic_xmit_timeout - request to timeout the xmit
+- * @netdev: netdevice.
+- *
+- * Queue the work and return. Make sure we have not already been informed that
+- * the IO Partition is gone; if so, we will have already timed-out the xmits.
+- */
+-static void visornic_xmit_timeout(struct net_device *netdev, unsigned int txqueue)
+-{
+-	struct visornic_devdata *devdata = netdev_priv(netdev);
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	if (devdata->going_away) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		dev_dbg(&devdata->dev->device,
+-			"%s aborting because device removal pending\n",
+-			__func__);
+-		return;
+-	}
+-
+-	/* Ensure that a ServerDown message hasn't been received */
+-	if (!devdata->enabled ||
+-	    (devdata->server_down && !devdata->server_change_state)) {
+-		dev_dbg(&netdev->dev, "%s no processing\n",
+-			__func__);
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		return;
+-	}
+-	schedule_work(&devdata->timeout_reset);
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-}
+-
+-/* repost_return - repost rcv bufs that have come back
+- * @cmdrsp: IO channel command struct to post.
+- * @devdata: Visornic devdata for the device.
+- * @skb: Socket buffer.
+- * @netdev: netdevice.
+- *
+- * Repost rcv buffers that have been returned to us when we are finished
+- * with them.
+- *
+- * Return: 0 for success, negative integer on error.
+- */
+-static int repost_return(struct uiscmdrsp *cmdrsp,
+-			 struct visornic_devdata *devdata,
+-			 struct sk_buff *skb, struct net_device *netdev)
+-{
+-	struct net_pkt_rcv copy;
+-	int i = 0, cc, numreposted;
+-	int found_skb = 0;
+-	int status = 0;
+-
+-	copy = cmdrsp->net.rcv;
+-	switch (copy.numrcvbufs) {
+-	case 0:
+-		devdata->n_rcv0++;
+-		break;
+-	case 1:
+-		devdata->n_rcv1++;
+-		break;
+-	case 2:
+-		devdata->n_rcv2++;
+-		break;
+-	default:
+-		devdata->n_rcvx++;
+-		break;
+-	}
+-	for (cc = 0, numreposted = 0; cc < copy.numrcvbufs; cc++) {
+-		for (i = 0; i < devdata->num_rcv_bufs; i++) {
+-			if (devdata->rcvbuf[i] != copy.rcvbuf[cc])
+-				continue;
+-
+-			if ((skb) && devdata->rcvbuf[i] == skb) {
+-				devdata->found_repost_rcvbuf_cnt++;
+-				found_skb = 1;
+-				devdata->repost_found_skb_cnt++;
+-			}
+-			devdata->rcvbuf[i] = alloc_rcv_buf(netdev);
+-			if (!devdata->rcvbuf[i]) {
+-				devdata->num_rcv_bufs_could_not_alloc++;
+-				devdata->alloc_failed_in_repost_rtn_cnt++;
+-				status = -ENOMEM;
+-				break;
+-			}
+-			status = post_skb(cmdrsp, devdata, devdata->rcvbuf[i]);
+-			if (status) {
+-				kfree_skb(devdata->rcvbuf[i]);
+-				devdata->rcvbuf[i] = NULL;
+-				break;
+-			}
+-			numreposted++;
+-			break;
+-		}
+-	}
+-	if (numreposted != copy.numrcvbufs) {
+-		devdata->n_repost_deficit++;
+-		status = -EINVAL;
+-	}
+-	if (skb) {
+-		if (found_skb) {
+-			kfree_skb(skb);
+-		} else {
+-			status = -EINVAL;
+-			devdata->bad_rcv_buf++;
+-		}
+-	}
+-	return status;
+-}
+-
+-/* visornic_rx - handle receive packets coming back from IO Partition
+- * @cmdrsp: Receive packet returned from IO Partition.
+- *
+- * Got a receive packet back from the IO Partition; handle it and send it up
+- * the stack.
+-
+- * Return: 1 iff an skb was received, otherwise 0.
+- */
+-static int visornic_rx(struct uiscmdrsp *cmdrsp)
+-{
+-	struct visornic_devdata *devdata;
+-	struct sk_buff *skb, *prev, *curr;
+-	struct net_device *netdev;
+-	int cc, currsize, off;
+-	struct ethhdr *eth;
+-	unsigned long flags;
+-
+-	/* post new rcv buf to the other end using the cmdrsp we have at hand
+-	 * post it without holding lock - but we'll use the signal lock to
+-	 * synchronize the queue insert the cmdrsp that contains the net.rcv
+-	 * is the one we are using to repost, so copy the info we need from it.
+-	 */
+-	skb = cmdrsp->net.buf;
+-	netdev = skb->dev;
+-
+-	devdata = netdev_priv(netdev);
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	atomic_dec(&devdata->num_rcvbuf_in_iovm);
+-
+-	/* set length to how much was ACTUALLY received -
+-	 * NOTE: rcv_done_len includes actual length of data rcvd
+-	 * including ethhdr
+-	 */
+-	skb->len = cmdrsp->net.rcv.rcv_done_len;
+-
+-	/* update rcv stats - call it with priv_lock held */
+-	devdata->net_stats.rx_packets++;
+-	devdata->net_stats.rx_bytes += skb->len;
+-
+-	/* test enabled while holding lock */
+-	if (!(devdata->enabled && devdata->enab_dis_acked)) {
+-		/* don't process it unless we're in enable mode and until
+-		 * we've gotten an ACK saying the other end got our RCV enable
+-		 */
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		repost_return(cmdrsp, devdata, skb, netdev);
+-		return 0;
+-	}
+-
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* when skb was allocated, skb->dev, skb->data, skb->len and
+-	 * skb->data_len were setup. AND, data has already put into the
+-	 * skb (both first frag and in frags pages)
+-	 * NOTE: firstfragslen is the amount of data in skb->data and that
+-	 * which is not in nr_frags or frag_list. This is now simply
+-	 * RCVPOST_BUF_SIZE. bump tail to show how much data is in
+-	 * firstfrag & set data_len to show rest see if we have to chain
+-	 * frag_list.
+-	 */
+-	/* do PRECAUTIONARY check */
+-	if (skb->len > RCVPOST_BUF_SIZE) {
+-		if (cmdrsp->net.rcv.numrcvbufs < 2) {
+-			if (repost_return(cmdrsp, devdata, skb, netdev) < 0)
+-				dev_err(&devdata->netdev->dev,
+-					"repost_return failed");
+-			return 0;
+-		}
+-		/* length rcvd is greater than firstfrag in this skb rcv buf  */
+-		/* amount in skb->data */
+-		skb->tail += RCVPOST_BUF_SIZE;
+-		/* amount that will be in frag_list */
+-		skb->data_len = skb->len - RCVPOST_BUF_SIZE;
+-	} else {
+-		/* data fits in this skb - no chaining - do
+-		 * PRECAUTIONARY check
+-		 */
+-		/* should be 1 */
+-		if (cmdrsp->net.rcv.numrcvbufs != 1) {
+-			if (repost_return(cmdrsp, devdata, skb, netdev) < 0)
+-				dev_err(&devdata->netdev->dev,
+-					"repost_return failed");
+-			return 0;
+-		}
+-		skb->tail += skb->len;
+-		/* nothing rcvd in frag_list */
+-		skb->data_len = 0;
+-	}
+-	off = skb_tail_pointer(skb) - skb->data;
+-
+-	/* amount we bumped tail by in the head skb
+-	 * it is used to calculate the size of each chained skb below
+-	 * it is also used to index into bufline to continue the copy
+-	 * (for chansocktwopc)
+-	 * if necessary chain the rcv skbs together.
+-	 * NOTE: index 0 has the same as cmdrsp->net.rcv.skb; we need to
+-	 * chain the rest to that one.
+-	 * - do PRECAUTIONARY check
+-	 */
+-	if (cmdrsp->net.rcv.rcvbuf[0] != skb) {
+-		if (repost_return(cmdrsp, devdata, skb, netdev) < 0)
+-			dev_err(&devdata->netdev->dev, "repost_return failed");
+-		return 0;
+-	}
+-
+-	if (cmdrsp->net.rcv.numrcvbufs > 1) {
+-		/* chain the various rcv buffers into the skb's frag_list. */
+-		/* Note: off was initialized above  */
+-		for (cc = 1, prev = NULL;
+-		     cc < cmdrsp->net.rcv.numrcvbufs; cc++) {
+-			curr = (struct sk_buff *)cmdrsp->net.rcv.rcvbuf[cc];
+-			curr->next = NULL;
+-			/* start of list- set head */
+-			if (!prev)
+-				skb_shinfo(skb)->frag_list = curr;
+-			else
+-				prev->next = curr;
+-			prev = curr;
+-
+-			/* should we set skb->len and skb->data_len for each
+-			 * buffer being chained??? can't hurt!
+-			 */
+-			currsize = min(skb->len - off,
+-				       (unsigned int)RCVPOST_BUF_SIZE);
+-			curr->len = currsize;
+-			curr->tail += currsize;
+-			curr->data_len = 0;
+-			off += currsize;
+-		}
+-		/* assert skb->len == off */
+-		if (skb->len != off) {
+-			netdev_err(devdata->netdev,
+-				   "something wrong; skb->len:%d != off:%d\n",
+-				   skb->len, off);
+-		}
+-	}
+-
+-	/* set up packet's protocol type using ethernet header - this
+-	 * sets up skb->pkt_type & it also PULLS out the eth header
+-	 */
+-	skb->protocol = eth_type_trans(skb, netdev);
+-	eth = eth_hdr(skb);
+-	skb->csum = 0;
+-	skb->ip_summed = CHECKSUM_NONE;
+-
+-	do {
+-		/* accept all packets */
+-		if (netdev->flags & IFF_PROMISC)
+-			break;
+-		if (skb->pkt_type == PACKET_BROADCAST) {
+-			/* accept all broadcast packets */
+-			if (netdev->flags & IFF_BROADCAST)
+-				break;
+-		} else if (skb->pkt_type == PACKET_MULTICAST) {
+-			if ((netdev->flags & IFF_MULTICAST) &&
+-			    (netdev_mc_count(netdev))) {
+-				struct netdev_hw_addr *ha;
+-				int found_mc = 0;
+-
+-				/* only accept multicast packets that we can
+-				 * find in our multicast address list
+-				 */
+-				netdev_for_each_mc_addr(ha, netdev) {
+-					if (ether_addr_equal(eth->h_dest,
+-							     ha->addr)) {
+-						found_mc = 1;
+-						break;
+-					}
+-				}
+-				/* accept pkt, dest matches a multicast addr */
+-				if (found_mc)
+-					break;
+-			}
+-		/* accept packet, h_dest must match vnic  mac address */
+-		} else if (skb->pkt_type == PACKET_HOST) {
+-			break;
+-		} else if (skb->pkt_type == PACKET_OTHERHOST) {
+-			/* something is not right */
+-			dev_err(&devdata->netdev->dev,
+-				"**** FAILED to deliver rcv packet to OS; name:%s Dest:%pM VNIC:%pM\n",
+-				netdev->name, eth->h_dest, netdev->dev_addr);
+-		}
+-		/* drop packet - don't forward it up to OS */
+-		devdata->n_rcv_packets_not_accepted++;
+-		repost_return(cmdrsp, devdata, skb, netdev);
+-		return 0;
+-	} while (0);
+-
+-	netif_receive_skb(skb);
+-	/* netif_rx returns various values, but "in practice most drivers
+-	 * ignore the return value
+-	 */
+-
+-	skb = NULL;
+-	/* whether the packet got dropped or handled, the skb is freed by
+-	 * kernel code, so we shouldn't free it. but we should repost a
+-	 * new rcv buffer.
+-	 */
+-	repost_return(cmdrsp, devdata, skb, netdev);
+-	return 1;
+-}
+-
+-/* devdata_initialize - initialize devdata structure
+- * @devdata: visornic_devdata structure to initialize.
+- * @dev:     visorbus_device it belongs to.
+- *
+- * Setup initial values for the visornic, based on channel and default values.
+- *
+- * Return: A pointer to the devdata structure.
+- */
+-static struct visornic_devdata *devdata_initialize(
+-					struct visornic_devdata *devdata,
+-					struct visor_device *dev)
+-{
+-	devdata->dev = dev;
+-	devdata->incarnation_id = get_jiffies_64();
+-	return devdata;
+-}
+-
+-/* devdata_release - free up references in devdata
+- * @devdata: Struct to clean up.
+- */
+-static void devdata_release(struct visornic_devdata *devdata)
+-{
+-	kfree(devdata->rcvbuf);
+-	kfree(devdata->cmdrsp_rcv);
+-	kfree(devdata->xmit_cmdrsp);
+-}
+-
+-static const struct net_device_ops visornic_dev_ops = {
+-	.ndo_open = visornic_open,
+-	.ndo_stop = visornic_close,
+-	.ndo_start_xmit = visornic_xmit,
+-	.ndo_get_stats = visornic_get_stats,
+-	.ndo_change_mtu = visornic_change_mtu,
+-	.ndo_tx_timeout = visornic_xmit_timeout,
+-	.ndo_set_rx_mode = visornic_set_multi,
+-};
+-
+-/* DebugFS code */
+-static ssize_t info_debugfs_read(struct file *file, char __user *buf,
+-				 size_t len, loff_t *offset)
+-{
+-	ssize_t bytes_read = 0;
+-	int str_pos = 0;
+-	struct visornic_devdata *devdata;
+-	struct net_device *dev;
+-	char *vbuf;
+-
+-	if (len > MAX_BUF)
+-		len = MAX_BUF;
+-	vbuf = kzalloc(len, GFP_KERNEL);
+-	if (!vbuf)
+-		return -ENOMEM;
+-
+-	/* for each vnic channel dump out channel specific data */
+-	rcu_read_lock();
+-	for_each_netdev_rcu(current->nsproxy->net_ns, dev) {
+-		/* Only consider netdevs that are visornic, and are open */
+-		if (dev->netdev_ops != &visornic_dev_ops ||
+-		    (!netif_queue_stopped(dev)))
+-			continue;
+-
+-		devdata = netdev_priv(dev);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     "netdev = %s (0x%p), MAC Addr %pM\n",
+-				     dev->name,
+-				     dev,
+-				     dev->dev_addr);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     "VisorNic Dev Info = 0x%p\n", devdata);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " num_rcv_bufs = %d\n",
+-				     devdata->num_rcv_bufs);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " max_outstanding_next_xmits = %lu\n",
+-				    devdata->max_outstanding_net_xmits);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " upper_threshold_net_xmits = %lu\n",
+-				     devdata->upper_threshold_net_xmits);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " lower_threshold_net_xmits = %lu\n",
+-				     devdata->lower_threshold_net_xmits);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " queuefullmsg_logged = %d\n",
+-				     devdata->queuefullmsg_logged);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.got_rcv = %lu\n",
+-				     devdata->chstat.got_rcv);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.got_enbdisack = %lu\n",
+-				     devdata->chstat.got_enbdisack);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.got_xmit_done = %lu\n",
+-				     devdata->chstat.got_xmit_done);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.xmit_fail = %lu\n",
+-				     devdata->chstat.xmit_fail);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.sent_enbdis = %lu\n",
+-				     devdata->chstat.sent_enbdis);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.sent_promisc = %lu\n",
+-				     devdata->chstat.sent_promisc);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.sent_post = %lu\n",
+-				     devdata->chstat.sent_post);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.sent_post_failed = %lu\n",
+-				     devdata->chstat.sent_post_failed);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.sent_xmit = %lu\n",
+-				     devdata->chstat.sent_xmit);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.reject_count = %lu\n",
+-				     devdata->chstat.reject_count);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " chstat.extra_rcvbufs_sent = %lu\n",
+-				     devdata->chstat.extra_rcvbufs_sent);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_rcv0 = %lu\n", devdata->n_rcv0);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_rcv1 = %lu\n", devdata->n_rcv1);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_rcv2 = %lu\n", devdata->n_rcv2);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_rcvx = %lu\n", devdata->n_rcvx);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " num_rcvbuf_in_iovm = %d\n",
+-				     atomic_read(&devdata->num_rcvbuf_in_iovm));
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " alloc_failed_in_if_needed_cnt = %lu\n",
+-				     devdata->alloc_failed_in_if_needed_cnt);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " alloc_failed_in_repost_rtn_cnt = %lu\n",
+-				     devdata->alloc_failed_in_repost_rtn_cnt);
+-		/* str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-		 *		     " inner_loop_limit_reached_cnt = %lu\n",
+-		 *		     devdata->inner_loop_limit_reached_cnt);
+-		 */
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " found_repost_rcvbuf_cnt = %lu\n",
+-				     devdata->found_repost_rcvbuf_cnt);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " repost_found_skb_cnt = %lu\n",
+-				     devdata->repost_found_skb_cnt);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_repost_deficit = %lu\n",
+-				     devdata->n_repost_deficit);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " bad_rcv_buf = %lu\n",
+-				     devdata->bad_rcv_buf);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " n_rcv_packets_not_accepted = %lu\n",
+-				     devdata->n_rcv_packets_not_accepted);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " interrupts_rcvd = %llu\n",
+-				     devdata->interrupts_rcvd);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " interrupts_notme = %llu\n",
+-				     devdata->interrupts_notme);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " interrupts_disabled = %llu\n",
+-				     devdata->interrupts_disabled);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " busy_cnt = %llu\n",
+-				     devdata->busy_cnt);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " flow_control_upper_hits = %llu\n",
+-				     devdata->flow_control_upper_hits);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " flow_control_lower_hits = %llu\n",
+-				     devdata->flow_control_lower_hits);
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " netif_queue = %s\n",
+-				     netif_queue_stopped(devdata->netdev) ?
+-				     "stopped" : "running");
+-		str_pos += scnprintf(vbuf + str_pos, len - str_pos,
+-				     " xmits_outstanding = %lu\n",
+-				     devdata_xmits_outstanding(devdata));
+-	}
+-	rcu_read_unlock();
+-	bytes_read = simple_read_from_buffer(buf, len, offset, vbuf, str_pos);
+-	kfree(vbuf);
+-	return bytes_read;
+-}
+-
+-static struct dentry *visornic_debugfs_dir;
+-static const struct file_operations debugfs_info_fops = {
+-	.read = info_debugfs_read,
+-};
+-
+-/* send_rcv_posts_if_needed - send receive buffers to the IO Partition.
+- * @devdata: Visornic device.
+- */
+-static void send_rcv_posts_if_needed(struct visornic_devdata *devdata)
+-{
+-	int i;
+-	struct net_device *netdev;
+-	struct uiscmdrsp *cmdrsp = devdata->cmdrsp_rcv;
+-	int cur_num_rcv_bufs_to_alloc, rcv_bufs_allocated;
+-	int err;
+-
+-	/* don't do this until vnic is marked ready */
+-	if (!(devdata->enabled && devdata->enab_dis_acked))
+-		return;
+-
+-	netdev = devdata->netdev;
+-	rcv_bufs_allocated = 0;
+-	/* this code is trying to prevent getting stuck here forever,
+-	 * but still retry it if you can't allocate them all this time.
+-	 */
+-	cur_num_rcv_bufs_to_alloc = devdata->num_rcv_bufs_could_not_alloc;
+-	while (cur_num_rcv_bufs_to_alloc > 0) {
+-		cur_num_rcv_bufs_to_alloc--;
+-		for (i = 0; i < devdata->num_rcv_bufs; i++) {
+-			if (devdata->rcvbuf[i])
+-				continue;
+-			devdata->rcvbuf[i] = alloc_rcv_buf(netdev);
+-			if (!devdata->rcvbuf[i]) {
+-				devdata->alloc_failed_in_if_needed_cnt++;
+-				break;
+-			}
+-			rcv_bufs_allocated++;
+-			err = post_skb(cmdrsp, devdata, devdata->rcvbuf[i]);
+-			if (err) {
+-				kfree_skb(devdata->rcvbuf[i]);
+-				devdata->rcvbuf[i] = NULL;
+-				break;
+-			}
+-			devdata->chstat.extra_rcvbufs_sent++;
+-		}
+-	}
+-	devdata->num_rcv_bufs_could_not_alloc -= rcv_bufs_allocated;
+-}
+-
+-/* drain_resp_queue - drains and ignores all messages from the resp queue
+- * @cmdrsp:  IO channel command response message.
+- * @devdata: Visornic device to drain.
+- */
+-static void drain_resp_queue(struct uiscmdrsp *cmdrsp,
+-			     struct visornic_devdata *devdata)
+-{
+-	while (!visorchannel_signalremove(devdata->dev->visorchannel,
+-					  IOCHAN_FROM_IOPART,
+-					  cmdrsp))
+-		;
+-}
+-
+-/* service_resp_queue - drain the response queue
+- * @cmdrsp:  IO channel command response message.
+- * @devdata: Visornic device to drain.
+- * @rx_work_done:
+- * @budget:
+- *
+- * Drain the response queue of any responses from the IO Partition. Process the
+- * responses as we get them.
+- */
+-static void service_resp_queue(struct uiscmdrsp *cmdrsp,
+-			       struct visornic_devdata *devdata,
+-			       int *rx_work_done, int budget)
+-{
+-	unsigned long flags;
+-	struct net_device *netdev;
+-
+-	while (*rx_work_done < budget) {
+-		/* TODO: CLIENT ACQUIRE -- Don't really need this at the
+-		 * moment
+-		 */
+-		/* queue empty */
+-		if (visorchannel_signalremove(devdata->dev->visorchannel,
+-					      IOCHAN_FROM_IOPART,
+-					      cmdrsp))
+-			break;
+-
+-		switch (cmdrsp->net.type) {
+-		case NET_RCV:
+-			devdata->chstat.got_rcv++;
+-			/* process incoming packet */
+-			*rx_work_done += visornic_rx(cmdrsp);
+-			break;
+-		case NET_XMIT_DONE:
+-			spin_lock_irqsave(&devdata->priv_lock, flags);
+-			devdata->chstat.got_xmit_done++;
+-			if (cmdrsp->net.xmtdone.xmt_done_result)
+-				devdata->chstat.xmit_fail++;
+-			/* only call queue wake if we stopped it */
+-			netdev = ((struct sk_buff *)cmdrsp->net.buf)->dev;
+-			/* ASSERT netdev == vnicinfo->netdev; */
+-			if (netdev == devdata->netdev &&
+-			    netif_queue_stopped(netdev)) {
+-				/* check if we have crossed the lower watermark
+-				 * for netif_wake_queue()
+-				 */
+-				if (vnic_hit_low_watermark
+-				    (devdata,
+-				     devdata->lower_threshold_net_xmits)) {
+-					/* enough NET_XMITs completed
+-					 * so can restart netif queue
+-					 */
+-					netif_wake_queue(netdev);
+-					devdata->flow_control_lower_hits++;
+-				}
+-			}
+-			skb_unlink(cmdrsp->net.buf, &devdata->xmitbufhead);
+-			spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-			kfree_skb(cmdrsp->net.buf);
+-			break;
+-		case NET_RCV_ENBDIS_ACK:
+-			devdata->chstat.got_enbdisack++;
+-			netdev = (struct net_device *)
+-			cmdrsp->net.enbdis.context;
+-			spin_lock_irqsave(&devdata->priv_lock, flags);
+-			devdata->enab_dis_acked = 1;
+-			spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-			if (devdata->server_down &&
+-			    devdata->server_change_state) {
+-				/* Inform Linux that the link is up */
+-				devdata->server_down = false;
+-				devdata->server_change_state = false;
+-				netif_wake_queue(netdev);
+-				netif_carrier_on(netdev);
+-			}
+-			break;
+-		case NET_CONNECT_STATUS:
+-			netdev = devdata->netdev;
+-			if (cmdrsp->net.enbdis.enable == 1) {
+-				spin_lock_irqsave(&devdata->priv_lock, flags);
+-				devdata->enabled = cmdrsp->net.enbdis.enable;
+-				spin_unlock_irqrestore(&devdata->priv_lock,
+-						       flags);
+-				netif_wake_queue(netdev);
+-				netif_carrier_on(netdev);
+-			} else {
+-				netif_stop_queue(netdev);
+-				netif_carrier_off(netdev);
+-				spin_lock_irqsave(&devdata->priv_lock, flags);
+-				devdata->enabled = cmdrsp->net.enbdis.enable;
+-				spin_unlock_irqrestore(&devdata->priv_lock,
+-						       flags);
+-			}
+-			break;
+-		default:
+-			break;
+-		}
+-		/* cmdrsp is now available for reuse  */
+-	}
+-}
+-
+-static int visornic_poll(struct napi_struct *napi, int budget)
+-{
+-	struct visornic_devdata *devdata = container_of(napi,
+-							struct visornic_devdata,
+-							napi);
+-	int rx_count = 0;
+-
+-	send_rcv_posts_if_needed(devdata);
+-	service_resp_queue(devdata->cmdrsp, devdata, &rx_count, budget);
+-
+-	/* If there aren't any more packets to receive stop the poll */
+-	if (rx_count < budget)
+-		napi_complete_done(napi, rx_count);
+-
+-	return rx_count;
+-}
+-
+-/* visornic_channel_interrupt	- checks the status of the response queue
+- *
+- * Main function of the vnic_incoming thread. Periodically check the response
+- * queue and drain it if needed.
+- */
+-static void visornic_channel_interrupt(struct visor_device *dev)
+-{
+-	struct visornic_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	if (!devdata)
+-		return;
+-
+-	if (!visorchannel_signalempty(devdata->dev->visorchannel,
+-				      IOCHAN_FROM_IOPART))
+-		napi_schedule(&devdata->napi);
+-
+-	atomic_set(&devdata->interrupt_rcvd, 0);
+-}
+-
+-/* visornic_probe - probe function for visornic devices
+- * @dev: The visor device discovered.
+- *
+- * Called when visorbus discovers a visornic device on its bus. It creates a new
+- * visornic ethernet adapter.
+- *
+- * Return: 0 on success, or negative integer on error.
+- */
+-static int visornic_probe(struct visor_device *dev)
+-{
+-	struct visornic_devdata *devdata = NULL;
+-	struct net_device *netdev = NULL;
+-	int err;
+-	int channel_offset = 0;
+-	u8 addr[ETH_ALEN];
+-	u64 features;
+-
+-	netdev = alloc_etherdev(sizeof(struct visornic_devdata));
+-	if (!netdev) {
+-		dev_err(&dev->device,
+-			"%s alloc_etherdev failed\n", __func__);
+-		return -ENOMEM;
+-	}
+-
+-	netdev->netdev_ops = &visornic_dev_ops;
+-	netdev->watchdog_timeo = 5 * HZ;
+-	SET_NETDEV_DEV(netdev, &dev->device);
+-
+-	/* Get MAC address from channel and read it into the device. */
+-	netdev->addr_len = ETH_ALEN;
+-	channel_offset = offsetof(struct visor_io_channel, vnic.macaddr);
+-	err = visorbus_read_channel(dev, channel_offset, addr, ETH_ALEN);
+-	if (err < 0) {
+-		dev_err(&dev->device,
+-			"%s failed to get mac addr from chan (%d)\n",
+-			__func__, err);
+-		goto cleanup_netdev;
+-	}
+-	eth_hw_addr_set(netdev, addr);
+-
+-	devdata = devdata_initialize(netdev_priv(netdev), dev);
+-	if (!devdata) {
+-		dev_err(&dev->device,
+-			"%s devdata_initialize failed\n", __func__);
+-		err = -ENOMEM;
+-		goto cleanup_netdev;
+-	}
+-	/* don't trust messages laying around in the channel */
+-	drain_resp_queue(devdata->cmdrsp, devdata);
+-
+-	devdata->netdev = netdev;
+-	dev_set_drvdata(&dev->device, devdata);
+-	init_waitqueue_head(&devdata->rsp_queue);
+-	spin_lock_init(&devdata->priv_lock);
+-	/* not yet */
+-	devdata->enabled = 0;
+-	atomic_set(&devdata->usage, 1);
+-
+-	/* Setup rcv bufs */
+-	channel_offset = offsetof(struct visor_io_channel, vnic.num_rcv_bufs);
+-	err = visorbus_read_channel(dev, channel_offset,
+-				    &devdata->num_rcv_bufs, 4);
+-	if (err) {
+-		dev_err(&dev->device,
+-			"%s failed to get #rcv bufs from chan (%d)\n",
+-			__func__, err);
+-		goto cleanup_netdev;
+-	}
+-
+-	devdata->rcvbuf = kcalloc(devdata->num_rcv_bufs,
+-				  sizeof(struct sk_buff *), GFP_KERNEL);
+-	if (!devdata->rcvbuf) {
+-		err = -ENOMEM;
+-		goto cleanup_netdev;
+-	}
+-
+-	/* set the net_xmit outstanding threshold
+-	 * always leave two slots open but you should have 3 at a minimum
+-	 * note that max_outstanding_net_xmits must be > 0
+-	 */
+-	devdata->max_outstanding_net_xmits =
+-		max_t(unsigned long, 3, ((devdata->num_rcv_bufs / 3) - 2));
+-	devdata->upper_threshold_net_xmits =
+-		max_t(unsigned long,
+-		      2, (devdata->max_outstanding_net_xmits - 1));
+-	devdata->lower_threshold_net_xmits =
+-		max_t(unsigned long,
+-		      1, (devdata->max_outstanding_net_xmits / 2));
+-
+-	skb_queue_head_init(&devdata->xmitbufhead);
+-
+-	/* create a cmdrsp we can use to post and unpost rcv buffers */
+-	devdata->cmdrsp_rcv = kmalloc(SIZEOF_CMDRSP, GFP_KERNEL);
+-	if (!devdata->cmdrsp_rcv) {
+-		err = -ENOMEM;
+-		goto cleanup_rcvbuf;
+-	}
+-	devdata->xmit_cmdrsp = kmalloc(SIZEOF_CMDRSP, GFP_KERNEL);
+-	if (!devdata->xmit_cmdrsp) {
+-		err = -ENOMEM;
+-		goto cleanup_cmdrsp_rcv;
+-	}
+-	INIT_WORK(&devdata->timeout_reset, visornic_timeout_reset);
+-	devdata->server_down = false;
+-	devdata->server_change_state = false;
+-
+-	/*set the default mtu */
+-	channel_offset = offsetof(struct visor_io_channel, vnic.mtu);
+-	err = visorbus_read_channel(dev, channel_offset, &netdev->mtu, 4);
+-	if (err) {
+-		dev_err(&dev->device,
+-			"%s failed to get mtu from chan (%d)\n",
+-			__func__, err);
+-		goto cleanup_xmit_cmdrsp;
+-	}
+-
+-	/* TODO: Setup Interrupt information */
+-	/* Let's start our threads to get responses */
+-	netif_napi_add(netdev, &devdata->napi, visornic_poll, NAPI_WEIGHT);
+-
+-	channel_offset = offsetof(struct visor_io_channel,
+-				  channel_header.features);
+-	err = visorbus_read_channel(dev, channel_offset, &features, 8);
+-	if (err) {
+-		dev_err(&dev->device,
+-			"%s failed to get features from chan (%d)\n",
+-			__func__, err);
+-		goto cleanup_napi_add;
+-	}
+-
+-	features |= VISOR_CHANNEL_IS_POLLING;
+-	features |= VISOR_DRIVER_ENHANCED_RCVBUF_CHECKING;
+-	err = visorbus_write_channel(dev, channel_offset, &features, 8);
+-	if (err) {
+-		dev_err(&dev->device,
+-			"%s failed to set features in chan (%d)\n",
+-			__func__, err);
+-		goto cleanup_napi_add;
+-	}
+-
+-	/* Note: Interrupts have to be enable before the while
+-	 * loop below because the napi routine is responsible for
+-	 * setting enab_dis_acked
+-	 */
+-	visorbus_enable_channel_interrupts(dev);
+-
+-	err = register_netdev(netdev);
+-	if (err) {
+-		dev_err(&dev->device,
+-			"%s register_netdev failed (%d)\n", __func__, err);
+-		goto cleanup_napi_add;
+-	}
+-
+-	dev_info(&dev->device, "%s success netdev=%s\n",
+-		 __func__, netdev->name);
+-	return 0;
+-
+-cleanup_napi_add:
+-	visorbus_disable_channel_interrupts(dev);
+-	netif_napi_del(&devdata->napi);
+-
+-cleanup_xmit_cmdrsp:
+-	kfree(devdata->xmit_cmdrsp);
+-
+-cleanup_cmdrsp_rcv:
+-	kfree(devdata->cmdrsp_rcv);
+-
+-cleanup_rcvbuf:
+-	kfree(devdata->rcvbuf);
+-
+-cleanup_netdev:
+-	free_netdev(netdev);
+-	return err;
+-}
+-
+-/* host_side_disappeared - IO Partition is gone
+- * @devdata: Device object.
+- *
+- * IO partition servicing this device is gone; do cleanup.
+- */
+-static void host_side_disappeared(struct visornic_devdata *devdata)
+-{
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	/* indicate device destroyed */
+-	devdata->dev = NULL;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-}
+-
+-/* visornic_remove - called when visornic dev goes away
+- * @dev: Visornic device that is being removed.
+- *
+- * Called when DEVICE_DESTROY gets called to remove device.
+- */
+-static void visornic_remove(struct visor_device *dev)
+-{
+-	struct visornic_devdata *devdata = dev_get_drvdata(&dev->device);
+-	struct net_device *netdev;
+-	unsigned long flags;
+-
+-	if (!devdata) {
+-		dev_err(&dev->device, "%s no devdata\n", __func__);
+-		return;
+-	}
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	if (devdata->going_away) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		dev_err(&dev->device, "%s already being removed\n", __func__);
+-		return;
+-	}
+-	devdata->going_away = true;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-	netdev = devdata->netdev;
+-	if (!netdev) {
+-		dev_err(&dev->device, "%s not net device\n", __func__);
+-		return;
+-	}
+-
+-	/* going_away prevents new items being added to the workqueues */
+-	cancel_work_sync(&devdata->timeout_reset);
+-
+-	/* this will call visornic_close() */
+-	unregister_netdev(netdev);
+-
+-	visorbus_disable_channel_interrupts(devdata->dev);
+-	netif_napi_del(&devdata->napi);
+-
+-	dev_set_drvdata(&dev->device, NULL);
+-	host_side_disappeared(devdata);
+-	devdata_release(devdata);
+-	free_netdev(netdev);
+-}
+-
+-/* visornic_pause - called when IO Part disappears
+- * @dev:	   Visornic device that is being serviced.
+- * @complete_func: Call when finished.
+- *
+- * Called when the IO Partition has gone down. Need to free up resources and
+- * wait for IO partition to come back. Mark link as down and don't attempt any
+- * DMA. When we have freed memory, call the complete_func so that Command knows
+- * we are done. If we don't call complete_func, the IO Partition will never
+- * come back.
+- *
+- * Return: 0 on success.
+- */
+-static int visornic_pause(struct visor_device *dev,
+-			  visorbus_state_complete_func complete_func)
+-{
+-	struct visornic_devdata *devdata = dev_get_drvdata(&dev->device);
+-
+-	visornic_serverdown(devdata, complete_func);
+-	return 0;
+-}
+-
+-/* visornic_resume - called when IO Partition has recovered
+- * @dev:	   Visornic device that is being serviced.
+- * @compelte_func: Call when finished.
+- *
+- * Called when the IO partition has recovered. Re-establish connection to the IO
+- * Partition and set the link up. Okay to do DMA again.
+- *
+- * Returns 0 for success, negative integer on error.
+- */
+-static int visornic_resume(struct visor_device *dev,
+-			   visorbus_state_complete_func complete_func)
+-{
+-	struct visornic_devdata *devdata;
+-	struct net_device *netdev;
+-	unsigned long flags;
+-
+-	devdata = dev_get_drvdata(&dev->device);
+-	if (!devdata) {
+-		dev_err(&dev->device, "%s no devdata\n", __func__);
+-		return -EINVAL;
+-	}
+-
+-	netdev = devdata->netdev;
+-
+-	spin_lock_irqsave(&devdata->priv_lock, flags);
+-	if (devdata->server_change_state) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		dev_err(&dev->device, "%s server already changing state\n",
+-			__func__);
+-		return -EINVAL;
+-	}
+-	if (!devdata->server_down) {
+-		spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-		dev_err(&dev->device, "%s server not down\n", __func__);
+-		complete_func(dev, 0);
+-		return 0;
+-	}
+-	devdata->server_change_state = true;
+-	spin_unlock_irqrestore(&devdata->priv_lock, flags);
+-
+-	/* Must transition channel to ATTACHED state BEFORE
+-	 * we can start using the device again.
+-	 * TODO: State transitions
+-	 */
+-	visorbus_enable_channel_interrupts(dev);
+-
+-	rtnl_lock();
+-	dev_open(netdev, NULL);
+-	rtnl_unlock();
+-
+-	complete_func(dev, 0);
+-	return 0;
+-}
+-
+-/* This is used to tell the visorbus driver which types of visor devices
+- * we support, and what functions to call when a visor device that we support
+- * is attached or removed.
+- */
+-static struct visor_driver visornic_driver = {
+-	.name = "visornic",
+-	.owner = THIS_MODULE,
+-	.channel_types = visornic_channel_types,
+-	.probe = visornic_probe,
+-	.remove = visornic_remove,
+-	.pause = visornic_pause,
+-	.resume = visornic_resume,
+-	.channel_interrupt = visornic_channel_interrupt,
+-};
+-
+-/* visornic_init - init function
+- *
+- * Init function for the visornic driver. Do initial driver setup and wait
+- * for devices.
+- *
+- * Return: 0 on success, negative integer on error.
+- */
+-static int visornic_init(void)
+-{
+-	int err;
+-
+-	visornic_debugfs_dir = debugfs_create_dir("visornic", NULL);
+-
+-	debugfs_create_file("info", 0400, visornic_debugfs_dir, NULL,
+-			    &debugfs_info_fops);
+-	debugfs_create_file("enable_ints", 0200, visornic_debugfs_dir, NULL,
+-			    &debugfs_enable_ints_fops);
+-
+-	err = visorbus_register_visor_driver(&visornic_driver);
+-	if (err)
+-		debugfs_remove_recursive(visornic_debugfs_dir);
+-
+-	return err;
+-}
+-
+-/* visornic_cleanup - driver exit routine
+- *
+- * Unregister driver from the bus and free up memory.
+- */
+-static void visornic_cleanup(void)
+-{
+-	visorbus_unregister_visor_driver(&visornic_driver);
+-	debugfs_remove_recursive(visornic_debugfs_dir);
+-}
+-
+-module_init(visornic_init);
+-module_exit(visornic_cleanup);
+-
+-MODULE_AUTHOR("Unisys");
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("s-Par NIC driver for virtual network devices");
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+

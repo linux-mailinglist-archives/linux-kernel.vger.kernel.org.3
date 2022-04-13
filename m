@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6664FECC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D142C4FECC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiDMCOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
+        id S230195AbiDMCQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiDMCOs (ORCPT
+        with ESMTP id S231583AbiDMCQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:14:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998E52180C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649815948; x=1681351948;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pe87ft1aKaeKaE+04iJ1gZNdhhDhquRrnt/SIy8fEts=;
-  b=Av0fk3m47GMHJ50kAg6ZSXBmuhHwNKNrpM3qWb/7YPYZJOZiKY2I/Xqe
-   9uJd2aNZolmV0prCHHHGxWUGnlbpcyQ4FRS4Lq7JdqsZj7Fr5drzJjs2V
-   vofdtYDuGsR+wY0U+/45eejk5cA+gaTutXEQrgH+uRfPOAy3WaxUX/GPd
-   CpWCBoT7Sl+34rydAeb6CapzvpAWXEeT9CrQ45trTvr00ZCvH+maXmRC5
-   1nvvlHVYmTsgGz6AUB/5PEzDSZAxJLIkbyne/r4o2y2XvYEImWpGxCEF/
-   IEQFnwZmnNaII6y6K4I5JHceNOWmIu9y9K2zTTu/Gdfz9SAYFQcr/gvwV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="243136079"
-X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="243136079"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 19:12:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="644983140"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2022 19:12:26 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neSUb-0003Mc-Se;
-        Wed, 13 Apr 2022 02:12:25 +0000
-Date:   Wed, 13 Apr 2022 10:12:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 99/396] fs/xfs/scrub/repair.c:181:1:
- warning: no previous prototype for function 'xrep_defer_finish'
-Message-ID: <202204131051.6jCh5cCf-lkp@intel.com>
+        Tue, 12 Apr 2022 22:16:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42EA6338;
+        Tue, 12 Apr 2022 19:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Mbjne51g7b5MpYBPVjJDEY6VmWxgJ06clSfxVNg4kpo=; b=IfcP3NODCILCw0Va76HRV+XeAP
+        UaCzcdUvvd/McEHoHoA3eIOmcLg5AW+oZpj4jDqXJCLEC3txlO5fwLJqcMrQOqP3ahG3JshzFOV1J
+        QL9Nuvk7vihM5SgkjeJz1cCK3LP9KgkbzTd39qjd9FnBHYGH+nPDEQaKiWUvm05X7IppQ5Sa0Kqz6
+        uYpu2lzaTD0JP+gdgjMtuw1EK9q6A//7F2MRDBnPvSrL/AyAM5zkTzivBLN9IlP2uYHCBcicyWsqn
+        nY2xGqFqHlyGI4dppFSiJMoJzbTzjwGuYU86maVx5ycUOFabAYcJV0EkO9dixpXQ8yk3/7FxrLT3s
+        fCgH0sYg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neSWB-00Ds0A-65; Wed, 13 Apr 2022 02:14:03 +0000
+Message-ID: <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
+Date:   Tue, 12 Apr 2022 19:13:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+Content-Language: en-US
+To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
+        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
+        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+References: <20220412231508.32629-1-libo.chen@oracle.com>
+ <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
+ <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,80 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   bd756ef7af68274b79308166ee64949d288be861
-commit: 80bc1e058e807de278cc530a53694879e4f70cb3 [99/396] xfs: implement block reservation accounting for btrees we're staging
-config: hexagon-buildonly-randconfig-r001-20220412 (https://download.01.org/0day-ci/archive/20220413/202204131051.6jCh5cCf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=80bc1e058e807de278cc530a53694879e4f70cb3
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout 80bc1e058e807de278cc530a53694879e4f70cb3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/12/22 18:35, Libo Chen wrote:
+> Hi Randy,
+> 
+> On 4/12/22 17:18, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 4/12/22 16:15, Libo Chen wrote:
+>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
+>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
+>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
+>>> rationale for such dependency.
+>>>
+>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
+>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
+>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
+>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
+>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
+>>> There is no reason other architectures cannot given the fact that they
+>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
+>>> x86.
+>>>
+>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+>>> ---
+>>>   lib/Kconfig | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/lib/Kconfig b/lib/Kconfig
+>>> index 087e06b4cdfd..7209039dfb59 100644
+>>> --- a/lib/Kconfig
+>>> +++ b/lib/Kconfig
+>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
+>>>       bool
+>>>     config CPUMASK_OFFSTACK
+>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
+>> This "if" dependency only controls whether the Kconfig symbol's prompt is
+>> displayed (presented) in kconfig tools. Removing it makes the prompt always
+>> be displayed.
+>>
+>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
+>> of DEBUG_PER_CPU_MAPS.
+> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
+> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
 
-All warnings (new ones prefixed by >>):
+I'm just talking about the Kconfig change below.  Not talking about whatever else
+it might require per architecture.
 
->> fs/xfs/scrub/repair.c:181:1: warning: no previous prototype for function 'xrep_defer_finish' [-Wmissing-prototypes]
-   xrep_defer_finish(
-   ^
-   fs/xfs/scrub/repair.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   1 warning generated.
+But you say you have tried that and it doesn't work. What part of it doesn't work?
+The Kconfig part or some code execution?
 
+I'll test the Kconfig part of it later (in a few hours).
 
-vim +/xrep_defer_finish +181 fs/xfs/scrub/repair.c
-
-   178	
-   179	/* Finish all deferred work attached to the repair transaction. */
-   180	int
- > 181	xrep_defer_finish(
-   182		struct xfs_scrub	*sc)
-   183	{
-   184		int			error;
-   185	
-   186		/* Keep the AG header buffers locked so we can keep going. */
-   187		if (sc->sa.agi_bp) {
-   188			xfs_ialloc_log_agi(sc->tp, sc->sa.agi_bp, XFS_AGI_MAGICNUM);
-   189			xfs_trans_bhold(sc->tp, sc->sa.agi_bp);
-   190		}
-   191	
-   192		if (sc->sa.agf_bp) {
-   193			xfs_alloc_log_agf(sc->tp, sc->sa.agf_bp, XFS_AGF_MAGICNUM);
-   194			xfs_trans_bhold(sc->tp, sc->sa.agf_bp);
-   195		}
-   196	
-   197		error = xfs_defer_finish(&sc->tp);
-   198		if (error)
-   199			return error;
-   200	
-   201		/*
-   202		 * The buffer log item (and hence the blf type) can detach from
-   203		 * the buffer across the transaction rolls, so ensure that the
-   204		 * types are still set on the AG header buffers.  Release the hold
-   205		 * that we set above because defer_finish won't do that for us.
-   206		 */
-   207		if (sc->sa.agi_bp) {
-   208			xfs_trans_bhold_release(sc->tp, sc->sa.agi_bp);
-   209			xfs_trans_buf_set_type(sc->tp, sc->sa.agi_bp, XFS_BLFT_AGI_BUF);
-   210		}
-   211		if (sc->sa.agf_bp) {
-   212			xfs_trans_bhold_release(sc->tp, sc->sa.agf_bp);
-   213			xfs_trans_buf_set_type(sc->tp, sc->sa.agf_bp, XFS_BLFT_AGF_BUF);
-   214		}
-   215		return 0;
-   216	}
-   217	
+> Libo
+>> Is there another problem here?
+>>
+>>> +    bool "Force CPU masks off stack"
+>>>       help
+>>>         Use dynamic allocation for cpumask_var_t, instead of putting
+>>>         them on the stack.  This is a bit more expensive, but avoids
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

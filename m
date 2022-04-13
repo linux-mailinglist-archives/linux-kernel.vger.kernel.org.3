@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51E74FFE32
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749AF4FFE37
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiDMSzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S237834AbiDMS4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiDMSzI (ORCPT
+        with ESMTP id S230176AbiDMS4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:55:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF51F3C493;
-        Wed, 13 Apr 2022 11:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649875964; x=1681411964;
+        Wed, 13 Apr 2022 14:56:00 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ACE5EBDE;
+        Wed, 13 Apr 2022 11:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649876019; x=1681412019;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=3kIdWbaHtEU0x9HW6lYv/3aJs5QjFHoVlujqamdmcyc=;
-  b=AXfVHdMqLIdOuk2XVpxhtiZLKOP0BGhBxy0n7qbJbKGanEDwZldC1qcg
-   h9NKxfe1G6zkKKBwi37n2U3ngcg7+kUarLCWFQ/btRPQfi5hW/fIUtob7
-   yH0pxRqI4y4pCxZEihVts3dVbFwO0/H4ALHf146tpEEIs3DP9x4tjNN4a
-   4=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 11:52:43 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:52:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 11:52:42 -0700
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 11:52:41 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
-        <quic_bbhatt@quicinc.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        "Jeffrey Hugo" <quic_jhugo@quicinc.com>
-Subject: [PATCH v3] bus: mhi: host: Wait for ready state after reset
-Date:   Wed, 13 Apr 2022 12:52:26 -0600
-Message-ID: <1649875946-32516-1-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+  bh=vROWOqlnompVQlKZn/1JujcHrK9zpeA4VUB/N6E30Zc=;
+  b=mm/eJVGmY1SsPfTnLH/4uIf09AXcOphT2xWoOaDPmqz/4SgLWERbEq+k
+   whv4WqPKfUfALFx1s48PCLuPn2F0Zelc/0lAmUD632/PSZdHf9P/kVClf
+   h0vCUTW99oQAKuIhJn5X60Fq+QTY61vwnrKji4yO/MqleWu7FhWTvfjJk
+   PKcbeIlObrkjLXVDtF/gLnKTSdGMUFFhQWKdAQughDBqg6FgKhydopXUS
+   Vku3R/ZuQfZv/efNtid6sP5oJgSUl8fLrUXdu+baUF89X4KudCl7TKbhx
+   rb1IAF1fFVgDb9UGfqYz857a43jUdKT0ZHajQOUgYY3ti78hVExmrRKir
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262188768"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="262188768"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:53:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="527059128"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 13 Apr 2022 11:53:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E9AD312C; Wed, 13 Apr 2022 21:53:36 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Navin Sankar Velliangiri <navin@linumiz.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] iio: temperature: max31865: Make use of device properties
+Date:   Wed, 13 Apr 2022 21:53:35 +0300
+Message-Id: <20220413185335.21743-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <jhugo@codeaurora.org>
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-After the device has signaled the end of reset by clearing the reset bit,
-it will automatically reinit MHI and the internal device structures.  Once
-That is done, the device will signal it has entered the ready state.
-
-Signaling the ready state involves sending an interrupt (MSI) to the host
-which might cause IOMMU faults if it occurs at the wrong time.
-
-If the controller is being powered down, and possibly removed, then the
-reset flow would only wait for the end of reset.  At which point, the host
-and device would start a race.  The host may complete its reset work, and
-remove the interrupt handler, which would cause the interrupt to be
-disabled in the IOMMU.  If that occurs before the device signals the ready
-state, then the IOMMU will fault since it blocked an interrupt.  While
-harmless, the fault would appear like a serious issue has occurred so let's
-silence it by making sure the device hits the ready state before the host
-completes its reset processing.
-
-Signed-off-by: Jeffrey Hugo <jhugo@codeaurora.org>
-Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
+ drivers/iio/temperature/max31865.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-v3:
-Rebase and use dev_err over dev_warn
-
-v2: 
-Fix subject and remove use of cur_state
-
- drivers/bus/mhi/host/pm.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-index a0e91bd..f46158e 100644
---- a/drivers/bus/mhi/host/pm.c
-+++ b/drivers/bus/mhi/host/pm.c
-@@ -483,6 +483,15 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
- 		 * hence re-program it
- 		 */
- 		mhi_write_reg(mhi_cntrl, mhi_cntrl->bhi, BHI_INTVEC, 0);
-+
-+		if (!MHI_IN_PBL(mhi_get_exec_env(mhi_cntrl))) {
-+			/* wait for ready to be set */
-+			ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs,
-+						 MHISTATUS,
-+						 MHISTATUS_READY_MASK, 1, 25000);
-+			if (ret)
-+				dev_err(dev, "Device failed to enter READY state\n");
-+		}
- 	}
+diff --git a/drivers/iio/temperature/max31865.c b/drivers/iio/temperature/max31865.c
+index 86c3f3509a26..e3bb78184c6e 100644
+--- a/drivers/iio/temperature/max31865.c
++++ b/drivers/iio/temperature/max31865.c
+@@ -12,9 +12,11 @@
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
++#include <linux/property.h>
+ #include <linux/spi/spi.h>
+ #include <asm/unaligned.h>
  
- 	dev_dbg(dev,
+@@ -305,7 +307,7 @@ static int max31865_probe(struct spi_device *spi)
+ 	indio_dev->channels = max31865_channels;
+ 	indio_dev->num_channels = ARRAY_SIZE(max31865_channels);
+ 
+-	if (of_property_read_bool(spi->dev.of_node, "maxim,3-wire")) {
++	if (device_property_read_bool(&spi->dev, "maxim,3-wire")) {
+ 		/* select 3 wire */
+ 		data->three_wire = 1;
+ 	} else {
 -- 
-2.7.4
+2.35.1
 

@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B944FEBEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BA34FEBF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiDMA0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S231226AbiDMAdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 20:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiDMA0i (ORCPT
+        with ESMTP id S231214AbiDMAcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:26:38 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42642237
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:24:11 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id h5so214917pgc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:24:11 -0700 (PDT)
+        Tue, 12 Apr 2022 20:32:55 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3D8140AA;
+        Tue, 12 Apr 2022 17:30:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 2so353081pjw.2;
+        Tue, 12 Apr 2022 17:30:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FgyYp5VcoidQ5XbfndPuDkccCsmpD6ZwuN3H0CutGCY=;
-        b=ldUuYwzP3gD/rj7ALLtG+rGst+MSW0eFQKuy35D0bSdRsQBpS//HqjbyviqsQHhkvA
-         fs0ojuosBvGohhltxkgUUvr6kv7EuIjYUAFaJpmR9VP43JRS7qY7Vg83HR6QMHVZfHno
-         6Nw1CHQV1PtyjJZCd4cPCdaXzqEoaf9KgR8Xs=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rms/5X4c41PJ+vCUzdvr+lYt5qjjUA2FJHiAGsamMv4=;
+        b=S6XCaBPjXc3GITrLB6wojOr7rPVLDmmJUQsiahD7teXiZhvqxCSZ7OVk+9ygByedPy
+         UF0WEvZJ3Ob448+KULEgeD1DFcDWjFZUAa0WptkI1G76FddVVr9f1PoNyhuXSzX497UI
+         j88C//dJ6v/rXpLZ+HXgmf/kxeZ61CW8R6oAIE78kzu8Crq7qY4IdsMs6qljy4EJb9hl
+         O642GyRKWQncEc8GMgELZW5bVGwF45xNrRcBRJOjCpebxTho7jTAbJlFY/vOLEz7j4dK
+         aUkoZQQY03CfWE5E+IhuRRH7uwLKNHZodxFghOcFFjdffWdvd+gshlbZ0JeHlmklewWg
+         mdSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FgyYp5VcoidQ5XbfndPuDkccCsmpD6ZwuN3H0CutGCY=;
-        b=EXA3ZgQrE4gCpBl3dkphCnTbziTtuUEtCkf/afI+jefmK2PtE3g0HP759avfKZ6TOk
-         9FsBLVNIp67CTAVbgwKRok8CIoZpW/oqyfGTocANQtFxEbYEq0xSloA75zwbktUZFoXs
-         fz/N99JbzgRhGEBsn+giXUTECbTlap8WnS8agsqhPt54395bLiqp48qCMNhmuLLOMn0A
-         7qj6zWGWSRwS/f59//agAsnhkve2/IHMrVTptPXtGwxX+VLgIfOshtOHrArezo7tZsGx
-         wLabwMmW+U9apsn1LpMA2eGYNzI5bxN3zXubLk0QkN283+UJ+6BeW9GxCf4Z6YUZJ7XG
-         o6FA==
-X-Gm-Message-State: AOAM533DFbc1+kVLD+aTl11Xmfb1qaYEbMrkMGvG5ghl08jnAY1tDPmW
-        sv8yLdN5GueuBKdDalvsFaQoMA==
-X-Google-Smtp-Source: ABdhPJy5FJY6Q6VWd+fk6QfKqME9E6j1FuWrwXXcbGKZvBz/6FWlvHnd3hcZqchTrqP3gllEJGM/cg==
-X-Received: by 2002:a05:6a00:1c63:b0:505:cc7f:a21b with SMTP id s35-20020a056a001c6300b00505cc7fa21bmr10818937pfw.9.1649809450783;
-        Tue, 12 Apr 2022 17:24:10 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm42471329pfj.146.2022.04.12.17.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 17:24:10 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 17:24:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     luciano.coelho@intel.com, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, emmanuel.grumbach@intel.com,
-        ayala.beker@intel.com, johannes.berg@intel.com,
-        colin.i.king@googlemail.com, gustavoars@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iwlwifi: mei: clean up comments
-Message-ID: <202204121724.6EB95414@keescook>
-References: <20220410142733.1454873-1-trix@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rms/5X4c41PJ+vCUzdvr+lYt5qjjUA2FJHiAGsamMv4=;
+        b=CNRTgOCKIi0US6I6YODCDSnaiqhShA/lWwHc/4ElWntWN89LFMvmMG2bRz4irIxWqZ
+         hVy2LkjtcGQogTNC1MJoGbX317Xk4Y9112b+78HhVuTkcZq1JvIliDS062mFxP3if9dx
+         MKV12/nOdBc0u6MgEIDsTH4+r9b1uTyCiCeuskr3Neei2Rt4BrQeYIGfBPyWhb0zpVkY
+         CRJeJ52sXFfEZ6vADbAjfu/5aO0j8K0A9hjVZ9gzo7sDjwfUOq95PvDjC1ukgTqFXJDf
+         qJmKvg5EsHxnpqwwAj2lzysVGoUyjBF9RkZlJPbof9aOWBQ/RZoV42IBlTm2Z2VAJ2EB
+         8LIQ==
+X-Gm-Message-State: AOAM530wS6pXAOlZVse+go8dycvnmkP/5ExdhsKnscNWBksz494luzON
+        JQZypRY4BtFLhqzwyAIKGXAxA0dzOc8K9GG8BYWv/o2OZ6s=
+X-Google-Smtp-Source: ABdhPJzkcGNCPR6N6YHDn+bUDXtmU0mqtP/6zbJ42XT8dKm/G3fJAXiY+ZBektmqaWPX5kAvARjgacv5siqV1LDppgA=
+X-Received: by 2002:a17:90b:1886:b0:1cb:8e79:8ebb with SMTP id
+ mn6-20020a17090b188600b001cb8e798ebbmr7772932pjb.176.1649809834070; Tue, 12
+ Apr 2022 17:30:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220410142733.1454873-1-trix@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Tue, 12 Apr 2022 18:30:22 -0600
+Message-ID: <CAFU3qoa3DjYPHXCurQrCMPBDxUGZBLz=SdQTBevep5R3Cayq=w@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/343] 5.17.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 10:27:33AM -0400, Tom Rix wrote:
-> SPDX
-> *.h use /* */ style comments
-> 
-> Spelling replacements
-> commnunication to communication
-> adsress to address
-> procotol to protocol
-> addtional to additional
-> kown to know
-> negotiaion to negotiation
-> mssage to message
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Tue, Apr 12, 2022 at 8:49 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.17.3 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.3-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Looks good; thanks!
+Hi Greg,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
--- 
-Kees Cook
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
+
+     Total time: 0.447 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 11.259 [sec]
+
+      11.259176 usecs/op
+          88816 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

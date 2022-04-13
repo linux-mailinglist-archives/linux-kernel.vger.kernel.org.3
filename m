@@ -2,132 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82AE4FF718
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37FA4FF725
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbiDMMxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
+        id S235638AbiDMMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDMMxK (ORCPT
+        with ESMTP id S232480AbiDMMzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:53:10 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD993616A;
-        Wed, 13 Apr 2022 05:50:47 -0700 (PDT)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 12A4E22205;
-        Wed, 13 Apr 2022 14:50:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649854246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gGQKNMATt0VXs2Gr3ljY3Dvzv0/7dWKNIw1LPszM13o=;
-        b=s+ChkiLc/0lHYW3E0/kcfVSlc0ch3xCuhjscEPqzUjM4c8VpXpETaEY7gC9FKwwkU/EaX0
-        43XH7x6ykbJxIi256NJdQ8QuqOuKENbr5Axv+LmCOzVfLbqogc33pOW0pqJZMhWEMyaJqd
-        OTQBDozq4yDWXqvbwFf/t6x4rRfcWpc=
-From:   Michael Walle <michael@walle.cc>
-To:     tudor.ambarus@microchip.com
-Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
-        nicolas.ferre@microchip.com, Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH] spi: atmel-quadspi: Add support for sama7g5 QSPI
-Date:   Wed, 13 Apr 2022 14:50:32 +0200
-Message-Id: <20220413125032.151907-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211214133404.121739-1-tudor.ambarus@microchip.com>
-References: <20211214133404.121739-1-tudor.ambarus@microchip.com>
+        Wed, 13 Apr 2022 08:55:23 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02DC53B4C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:53:00 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so3722856ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=citymesh-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=rFOS/YEtLTZTs3XK8yDit+vtofEO5aVtPZCCQ6IQw8I=;
+        b=G6mvPzPI+QdIOqo+VYv/p+nCyqq+tAdC/wMXqCeZncqy2ddvPeNP+6T37RdsQcK1A0
+         07yGip5Nu23NDeYdAL/sgPpoq2ZZOpZGm8vEYX1X22+4WPP8w8rMs5sHFDmguV7Ttu+j
+         Rg8swcismTypgyA2IqKcvu8yc8KEHLMM9gOjIF4OcFa7hfETv9eq9r8YB32/cKI4g6A3
+         /06tyyB9+m8wcSslUriQwO03ELxravLqBMrTpnvtIw9cvpGVObSFbiTYcJW2/D/ZKs36
+         re1fpPaY/CTYfcJN9mOmyOcoStPt/SA24PKVyRmQHAyWH+QpYQNk6dikipmoqPmT0ppX
+         AMyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=rFOS/YEtLTZTs3XK8yDit+vtofEO5aVtPZCCQ6IQw8I=;
+        b=qri45AmccBh+76mizEVVRp9XV5fYX5ZWzpR19cBtf9vEaVCl0QmwiK2eGHmTi71+mu
+         NHqAOEqcQVWq/aNoFPu7hiT5LtlRyudGLDCYGOpP9wf68SPxeeXpBPuFIFqHi/2iEQLG
+         kGrWhfEFoD4YHBF8FUVky50ooQD1ob8ilxbmOLfqzw9nRIdH6fkvJxtN8cJZw1gPBSoT
+         HjdAUxEmTZeju7KcFxo2qn5hONFL6Ddo7VJMvjmSVdgYClQ6pYhmryevS4XQ89cPOXlR
+         NT6hNmAVwilY8YGPAycWqjX578gW+rvIuMsgoPsGjKV1pSvumdfTyao8lrUc5rwDq/tv
+         x4/g==
+X-Gm-Message-State: AOAM5339naMsgpJnAkP6q6/5dXji3FmnVJZILakBw8IpxJrQ6/X2RRH7
+        RNRBAVvkrZZGIfwymyYChKlxvA==
+X-Google-Smtp-Source: ABdhPJza/BKaw96pPtHS6TkEzygBE95yc9sVcnWMfkYr0fvTC1gw4NlPK214LqNeY0A3srRlwLUMKQ==
+X-Received: by 2002:a17:907:8a15:b0:6e8:d28e:83d7 with SMTP id sc21-20020a1709078a1500b006e8d28e83d7mr1295827ejc.640.1649854379336;
+        Wed, 13 Apr 2022 05:52:59 -0700 (PDT)
+Received: from [10.202.0.7] ([31.31.140.89])
+        by smtp.gmail.com with ESMTPSA id m3-20020a17090679c300b006cf9ce53354sm14146420ejo.190.2022.04.13.05.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 05:52:58 -0700 (PDT)
+Message-ID: <1945c8da-99f8-8d87-343d-ff66c02df6de@citymesh.com>
+Date:   Wed, 13 Apr 2022 14:52:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: PCI: Race condition in pci_create_sysfs_dev_files (can't boot)
+Content-Language: en-US
+From:   Koen Vandeputte <koen.vandeputte@citymesh.com>
+To:     =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Dexuan Cui <dexuan.linux@gmail.com>,
+        =?UTF-8?Q?Petr_=c5=a0tetiar?= <ynezz@true.cz>,
+        Piotr Dymacz <pepe2k@gmail.com>
+References: <20220208234023.GA505306@bhelgaas> <m3czjovdqn.fsf@t19.piap.pl>
+ <46ae7788-dade-3ff4-a353-985544f12c19@citymesh.com>
+ <7873617a-b2ab-1f26-55ac-d98229aa4485@citymesh.com>
+In-Reply-To: <7873617a-b2ab-1f26-55ac-d98229aa4485@citymesh.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tudor,
 
-> The sama7g5 QSPI controller uses dedicated clocks for the
-> QSPI Controller Interface and the QSPI Controller Core, and
-> requires synchronization before accessing registers or bit
-> fields.
-> 
-> QSPI_SR.SYNCBSY must be zero before accessing any of the bits:
-> QSPI_CR.QSPIEN, QSPI_CR.QSPIDIS, QSPI_CR.SRFRSH, QSPI_CR.SWRST,
-> QSPI_CR.UPDCFG, QSPI_CR.STTFR, QSPI_CR.RTOUT, QSPI_CR.LASTXFER.
-> 
-> Also, the QSPI controller core configuration can be updated by
-> writing the QSPI_CR.UPDCFG bit to ‘1’. This is needed by the
-> following registers: QSPI_MR, QSPI_SCR, QSPI_IAR, QSPI_WICR,
-> QSPI_IFR, QSPI_RICR, QSPI_SMR, QSPI_SKR,QSPI_REFRESH, QSPI_WRACNT
-> QSPI_PCALCFG.
-> 
-> The Octal SPI supports frequencies up to 200 MHZ DDR. The need
-> for output impedance calibration arises. To avoid the degradation
-> of the signal quality, a PAD calibration cell is used to adjust
-> the output impedance to the driven I/Os.
-> 
-> The transmission flow requires different sequences for setting
-> the configuration and for the actual transfer, than what is in
-> the sama5d2 and sam9x60 versions of the IP. Different interrupts
-> are handled. aq->ops->set_cfg() and aq->ops->transfer() are
-> introduced to help differentiating the flows.
-> 
-> Tested single and octal SPI mode with mx66lm1g45g.
+On 06.04.22 16:08, Koen Vandeputte wrote:
+>
+> On 01.04.22 15:50, Koen Vandeputte wrote:
+>>
+>> On 15.02.22 07:35, Krzysztof Hałasa wrote:
+>>> Hi Bjorn,
+>>>
+>>> Bjorn Helgaas <helgaas@kernel.org> writes:
+>>>
+>>>> Koen collected some interesting logs at
+>>>> https://lore.kernel.org/all/cd4812f0-1de3-0582-936c-ba30906595af@citymesh.com/ 
+>>>>
+>>>> They're from v5.10, which was before all of Krzysztof W's nice work
+>>>> converting to static attributes, but Koen's log shows the error
+>>>> happening in the pci_sysfs_init() initcall, which is *after*
+>>>> imx6_pcie_probe():
+>>>>
+>>>>    imx6_pcie_probe                # probably device initcall (level 6)
+>>>>      ...
+>>>>        pci_create_sysfs_dev_files
+>>>>
+>>>>    pci_sysfs_init                 # late initcall (level 7)
+>>>>      pci_create_sysfs_dev_files
+>>>>        "sysfs: cannot create duplicate filename"
+>>> Well, imx6_pcie_probe() is called indirectly by
+>>> platform_driver_register(). I guess it doesn't know about the initcall
+>>> ordering, after it's registered.
+>>>
+>>> It looks like the problem is the imx6_pcie_probe() (via
+>>> dw_pcie_host_init() -> pci_host_probe()) is interfering with
+>>> pci_sysfs_init(). This may eventually cause some invalid memory access
+>>> as well.
+>>>
+>>> BTW I thought for a moment that maybe 5.14 is free from this. I was
+>>> wrong. The problem doesn't manifest itself on my custom i.MX6 device
+>>> (using Tinyrex CPU module from Voipac/Fedevel, perhaps because I don't
+>>> use any PCI devices there). It does on Ventana SBC from Gateworks,
+>>> though. BTW the above (and below) is v5.16.
+>>>
+>>> It goes like this:
+>>> [0.096212] do_initcall_level: 6
+>>> [0.105625] imx6_pcie_init
+>>> [0.106106] imx6_pcie_probe <<<<<<<<<<<<<<<<<<<<<
+>>> [0.106412] imx6q-pcie 1ffc000.pcie: host bridge /soc/pcie@1ffc000 
+>>> ranges:
+>>>
+>>> [0.322613] imx6q-pcie 1ffc000.pcie: Link up
+>>> [0.322776] imx6q-pcie 1ffc000.pcie: PCI host bridge to bus 0000:00
+>>> [0.322790] pci_bus 0000:00: root bus resource [bus 00-ff]
+>>>
+>>> [0.405251] do_initcall_level: 6 ENDs but imx6_pcie_probe() still active
+>>> [0.405262] do_initcall_level: 7
+>>>
+>>> [0.410393] pci_sysfs_init <<<<<<<<<<<<<<<<<<<<<
+>>> [0.410423] pci 0000:00:00.0: pci_create_sysfs_dev_files
+>>>
+>>> [0.410532] [<8068091c>] (pci_create_sysfs_dev_files)
+>>> [0.410551] [<80918710>] (pci_sysfs_init)
+>>> [0.410568] [<8010166c>] (do_one_initcall)
+>>>
+>>> [0.410717] pci_sysfs_init END <<<<<<<<<<<<<<<<<<<<<
+>>>
+>>> [0.533843] [<803f1c74>] (pci_bus_add_devices)
+>>> [0.533862] [<803f574c>] (pci_host_probe)
+>>> [0.533879] [<80414310>] (dw_pcie_host_init)
+>>> [0.533895] [<80681ac8>] (imx6_pcie_probe)
+>>> [0.533915] [<8045e9e4>] (platform_probe)
+>>> (Repeats multiple times, I guess for each PCI device)
+>>>
+>>> [0.543893] imx6_pcie_probe END <<<<<<<<<<<<<<<<<<<<<
+>>>
+>>> [0.692244] do_initcall_level: 7 END
+>>
+>>
+>> Hi all,
+>>
+>> Any update on this topic?
+>> I just tested kernel 5.15 on imx6 (gateworks Ventana 5200) and as 
+>> soon as I connect a pcie device on one of the ports,
+>>
+>> following happens:
+>>
+>> https://pastebin.com/raw/mgfSvTRB
+>>
+>> Any idea if this is related?
+>>
+>>
+>> Thanks,
+>>
+>> Koen
+>>
+> Hi all,
+>
+> I tested a bit more today and simply let the board reboot all day long.
+> After roughly 20 reboots, it suddenly booted once stable without any 
+> errors/warnings.
+>
+> Looks like a race condition ..
+>
+> Any idea?
+>
+> Thanks,
+>
+> Koen
+>
+As an additional addendum:
 
-I've successfully tested this on a LAN9668 with a SST25VF016B
-and 104 MHz (quad mode). But there are some catches:
+This issue is seen on a Gateworks Ventana gw5200 which has a PLX bridge.
+I also have a GW5100 which is identical but without the PLX bridge, and 
+it works fine every time.
 
-(1) SPI mode is not set, i.e. SCR.CPHA, SCR.CPOL
+So when a PCI device is sitting behind a bridge, the issue is triggered.
 
-(2) There is no (or a really short delay) between asserting
-    the chip select and the first clock edge. I.e. SCR.DLYBS
-    is zero. I wasn't able to go faster than ~20MHz with that.
-    Also the slightest capacitance, like a probe tip, made things
-    worse. I've been successful with a value of 2 at 104MHz,
-    although attaching an oscilloscope probe (<4 pF input
-    capacitance, no cheapo probe) made things unreliable again.
-    In the end a value of 4 worked perfectly. I think it is
-    overkill to make this configurable, the added delay should
-    be negligible.
 
-(3) As already discussed on IRC, the driver will iomap the
-    whole memory window which is 256MB for one controller
-    in my case. On arm32 the vmalloc area is only 240MB by
-    default. The lan9668 has three of these controllers
-	(whereas one only has an 8MB window). Therefore, we would
-    potentially waste 520MB just for the SPI windows.
+Hope this helps to easily reproduce.
 
-    I had a look at the driver, although IAR is set, it is
-    not used for the accesses through the memory window. doh ;)
-    It seems we need to map the memory just for the memcpy_io.
-    The DMA engine should be happy with the physical addresses
-    and shouldn't need the iomap. What do you think about just
-    mapping like 16MB and after that always fall back to DMA
-    regardless of the transfer size.
+Koen
 
-    In fact I don't know why that memory window is needed at all.
-    Shouldn't the DMA engine be able to just read from RDR and
-    write to TDR? And PIO mode could do the same.
-
-(4) Odd transfer lengths doesn't work. That is I get different
-    results for the folllwing:
-    (a) dd if=/dev/mtd0 bs=3 | hexdump -C | head
-    (a) dd if=/dev/mtd0 bs=4 | hexdump -C | head
-
-    Actually, I've notived that using the (busybox) hexdump
-    directly on /dev/mtd0 returned some really odd bytes. Might
-    or might not be related to that above.
-
--michael

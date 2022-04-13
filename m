@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E6A4FFDBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BFC4FFDAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbiDMS3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S237644AbiDMSZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiDMS3W (ORCPT
+        with ESMTP id S234846AbiDMSZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:29:22 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4C84D9F7;
-        Wed, 13 Apr 2022 11:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649874419; x=1681410419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qm2YltahQtD5BhZA01az8bEK9fLcMHdBo7nVBNQR/jI=;
-  b=Sh89F1VAOnaaO0i2OKT4X4hoMolm61vCf3AijOH1GHOD9ag7dubHn+Xa
-   4OGrpoacuD3pLdyPBT4/sBz4WzHhNfWZO5MXm4k9IEpT0AkLlYGq66HQ9
-   MG5BXBSD+Xoc4WqAqqYu3t9H32l2SG3vgV9mY9AJzkwL6Hpyl+s6vqq/i
-   TYcUvJFBDhISHv0eYJv0ODeacJGTTDC8WmBMLep+ziMjoy3CSXrAOlOBm
-   h+dd2FxPTa0gCeQpChDwImMW/9rSsBfJ/WmDNq73P5zSgyODc3tjWs0Av
-   HVDz/79m7VCDYIqGelQ2ClkLc5t7fKQI80LO1HqKI4QhKjAABMHeoI1fP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="250032461"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="250032461"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:26:59 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="661035861"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:26:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nehe9-001xgI-VP;
-        Wed, 13 Apr 2022 21:23:17 +0300
-Date:   Wed, 13 Apr 2022 21:23:17 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
-Message-ID: <YlcVFRQ9wJIH+sjI@smile.fi.intel.com>
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
- <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jnyg6n-1QRmVg1tjzu3szsG3DYqYTXAbobbKwkFhTreg@mail.gmail.com>
- <YlcUMNe5gDsEca4f@smile.fi.intel.com>
+        Wed, 13 Apr 2022 14:25:52 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024E39B93
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:23:30 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c64so3421601edf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jwfqri3KYR4KhSj3ppbAhDfkxtboXA/usiuYiLnlD6g=;
+        b=D2D4Krghpjip+XspQgjlS2wkMhhGg0rUren1SgkRWH79tcMehCPK6+vlkk/RaUg1qU
+         w/Yb0zCT5A7/prxIZ7Yl6eLzqFhHObVC931r0aqbWNF9ErBW90nsyv7gIleYFZJxeFLK
+         lDbW4CbdUGkB92NbMCI3JdM9A1IB1Xd561N1bUmW63yVxxytIHaA7O+gg09CWuarso6a
+         uVDJ1Tj14bpbwMw1LIhpJNWDBdteofc2c3z7IUosL56R2NHjl2RPTzkIW4G/gzuLRnlS
+         iCTWXRPTf10NlDrEzFsuuYQIEGWBYE/ZRpC1WmDOK1Xd9AHZAj5PajCQwEkLnEuoi4D6
+         eEIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jwfqri3KYR4KhSj3ppbAhDfkxtboXA/usiuYiLnlD6g=;
+        b=tW1x2KuCMjQwa7DFwG9cFg338IS1DkTvmsC2CsHncxSgQATgECfJLMf5ZKu9J3hQKa
+         CwtGjOq8wgbI1D8ebMAz1/5vvJGCwcK+gM4uNq7EWCjGM4gn6wLlMVEH0uvDWMOSCf0J
+         kZEnits29wHGuS0j8UfHA+uqV+bfQ3XM+/s3dEft5zBpBxKJITpZWSkvcI6nEG13MUN2
+         WOfYpETT6aC1p85+MC1Bt5MDECDaKcq78ViIkxfJanCcI6Zc8gHu+ZsaWU9IS+z0soa6
+         2u/a8FGYGBBx4jjjJArkjtsRu6LCHRLcUEIKEPbSy19tL2GmriACTudOspwc3NpgOQvD
+         MiAQ==
+X-Gm-Message-State: AOAM530Lw6szOlJyIIVDrahIeWEIQ3TRTKahsecGCSlVN93641zvvjai
+        CKnwFh2sZkT6kiSlqILrnY0=
+X-Google-Smtp-Source: ABdhPJxEUOQH41I8enMptU7PNcgxCcXlVuE68KqFVvcYAxghoUFXlh5kC+kMTBKhx0WOHuKjEJcIXA==
+X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id ec12-20020a0564020d4c00b00410a415fd95mr45126762edb.288.1649874208883;
+        Wed, 13 Apr 2022 11:23:28 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id lo15-20020a170906fa0f00b006e8a81cb623sm215227ejb.224.2022.04.13.11.23.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 11:23:28 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 21:23:27 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH v3 3/8] arm64: dts: ls1028a: add flextimer based pwm nodes
+Message-ID: <20220413182327.lbemqze46eq7ulfn@skbuf>
+References: <20211214093240.23320-1-leoyang.li@nxp.com>
+ <20211214093240.23320-4-leoyang.li@nxp.com>
+ <20220413163306.hp5qyxxgdlekczet@skbuf>
+ <DU2PR04MB894984A336667EF01DF709988FEC9@DU2PR04MB8949.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlcUMNe5gDsEca4f@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DU2PR04MB894984A336667EF01DF709988FEC9@DU2PR04MB8949.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:19:28PM +0300, Andy Shevchenko wrote:
-> On Wed, Apr 13, 2022 at 08:10:22PM +0200, Rafael J. Wysocki wrote:
-> > On Fri, Apr 8, 2022 at 8:49 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-
-...
-
-> > > -struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
-> > > +struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
-> > >  {
+On Wed, Apr 13, 2022 at 06:07:20PM +0000, Leo Li wrote:
+> > arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:1210.21-1219.5: Warning
+> > (unique_unit_address): /soc/pwm@2800000: duplicate unit-address (also
+> > used in node /soc/timer@2800000)
+> > arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi:1221.21-1230.5: Warning
+> > (unique_unit_address): /soc/pwm@2810000: duplicate unit-address (also
+> > used in node /soc/timer@2810000)
 > 
-> > >         if (!fwnode_has_op(fwnode, get))
-> > >                 return fwnode;
-> 
-> ^^^^, so it needs a casting, but then we have to comment why is so.
+> Well, this is similar situation as pcie.  The flextimer controller can
+> be used as timer, PWM or alarm.  We have separate drivers and bindings
+> for these modes which resulted in different nodes for the same
+> controller.
 
-Note, it means that the fwnode parameter either invalid or has no given option.
-It's not a problem to drop casting in the first case, but the second one should
-be justified and Sakari wants to be sure that the initial container is not
-const, which seems can't be achieved even with the original code.
-
-> > Why is 0-day complaining about this one?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+I think the mfd framework can address the situation where multiple
+drivers, with multiple functionalities, want access to the same memory
+region?

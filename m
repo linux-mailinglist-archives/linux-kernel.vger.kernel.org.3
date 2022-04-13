@@ -2,157 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9084FFB36
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D354FFB3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236863AbiDMQ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
+        id S236847AbiDMQ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236865AbiDMQ10 (ORCPT
+        with ESMTP id S232166AbiDMQ2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:27:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C0984A931
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649867101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RgEcoM6U2AWPf465Xahivshzo2kZbOX7C4c0ahKp1Dw=;
-        b=Eplmut0vF4DlV6c+zkqOtHlqzpvGJ3v8k5+lbRl4yV4OIA9iFxRyXwgYXzb6KlsVO9QzW3
-        nl7HxNwJgX3oOvsp23Un2bK8WEuOBeDieMudWOsbppTnuMOa3/mJXAO8o3AjJSCeWGDNZi
-        qjYkdrvIe6mRigEbiz/xC4dFVOxgsL0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-Etneel-TNCu0P8BCgL-ZbA-1; Wed, 13 Apr 2022 12:25:00 -0400
-X-MC-Unique: Etneel-TNCu0P8BCgL-ZbA-1
-Received: by mail-wm1-f71.google.com with SMTP id n37-20020a05600c502500b0038fdc1394c6so459356wmr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:24:59 -0700 (PDT)
+        Wed, 13 Apr 2022 12:28:49 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26A744A35;
+        Wed, 13 Apr 2022 09:26:27 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r133-20020a1c448b000000b0038ccb70e239so4312183wma.3;
+        Wed, 13 Apr 2022 09:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z/Cz/PyERM9YfasFoDS3iI8CoehlrApmFqRSA2cjnNY=;
+        b=UagYgR/krlOwCQL/uhhvT7TRWv62vgwbMUVVNu1i84gxKwyT8C242rDhUeZaeA5Ood
+         FK/2g6+/D9H8ySHqU+Tyu329IUW3I1ZeTi2G3Ycy9VTdTjd+aFwHThIcI2iKVz6N/yAM
+         6+gPjmp6HTN31htuTDmilsJIgVbjES9FyclkJxTY3kTjp03lzTujnesl6cjE5I9WXj7n
+         dTMoZVPSXU5ibXSGt0K9pxTjfw3OIVY+jqkP5ZwB/ckhOnd6NKgg9j6BsFARrQSfALWl
+         ssNcI8+2ArcRVuSsyW6Aql5WF6DDecigpOg1+xZvOwdvTizwrfcHVhGwDHwi5RVAC3+p
+         u2VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=RgEcoM6U2AWPf465Xahivshzo2kZbOX7C4c0ahKp1Dw=;
-        b=t5O09WNr3hts5uznGdCvfE2fJ1jFfGwEk34NTu0Rt0yXPNgx3UzwhVLgMAFQYdd5cO
-         QULybZ12fsjIy7Yv1NMibNxcYmre5SB7ZDciKnmh72xy4jDN14Rz7FrsugGciTvNLNs5
-         ylU42MKAzZ1HhQBZgU2BCqXtRXNTqK8ZfuRuwAR2uUSTJU5Y0EcPoOKubj/ind+rNBT3
-         mqfppSy6CcL2ByOvXKkAYCfewUYZIth/ZPFHTsZ2LsfTrOMAd53y/wuGcYXhVmWI1ZBC
-         74L4yxL9YTfFLOE16l586vb5DVQbDHNjgYzXbsapY8bLQBLQvYVDEp8zevZ3XDWg5Dxe
-         VN6Q==
-X-Gm-Message-State: AOAM533ynyqJFM707tCm0CO8OODyUw08Badn1oQakvL2L7WJctfFJeGZ
-        17mZPi8UlvgdS20nJDpjZWM0dkKLD1eeg5ZS+KS321YPHOcdJL0Da19K2IRw55KT+rxZ+WCuHof
-        pES8ye7YNRZL2Pho6YfkNaURP
-X-Received: by 2002:a05:600c:3c8f:b0:38e:4e47:3e95 with SMTP id bg15-20020a05600c3c8f00b0038e4e473e95mr9076127wmb.173.1649867098870;
-        Wed, 13 Apr 2022 09:24:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwylTIzzqJtz5EFX+MPmIPe9ZuRAk8yMJ3/juBgt0JzCyKFOBhzlfQN6ejdx28PKvB0mUKO0g==
-X-Received: by 2002:a05:600c:3c8f:b0:38e:4e47:3e95 with SMTP id bg15-20020a05600c3c8f00b0038e4e473e95mr9076112wmb.173.1649867098647;
-        Wed, 13 Apr 2022 09:24:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:5800:1078:ebb9:e2c3:ea8c? (p200300cbc70458001078ebb9e2c3ea8c.dip0.t-ipconnect.de. [2003:cb:c704:5800:1078:ebb9:e2c3:ea8c])
-        by smtp.gmail.com with ESMTPSA id n7-20020a5d5987000000b00207891050d4sm16274621wri.46.2022.04.13.09.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 09:24:58 -0700 (PDT)
-Message-ID: <1686fd2d-d9c3-ec12-32df-8c4c5ae26b08@redhat.com>
-Date:   Wed, 13 Apr 2022 18:24:56 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z/Cz/PyERM9YfasFoDS3iI8CoehlrApmFqRSA2cjnNY=;
+        b=f4tdL4LTn6dvAqGKW6guqKlO7M4h2cPrYzzXH+YZ1BH9PNi1RAsdrexe5RFolJrP5J
+         kg+rNWgfqecBUEU7sohChaHEYqzTxbGFoBz2LTmqXetOGC/rhhQin3nNPC4e2e7RrQFn
+         C3l5L3iZRRByhfY1VH0KN4V28bjLwhnew3Pf+aVbGFSL5rl4pFrqPfdKDIRPCoE1Zplq
+         M4lRfrRxqBz3s5SN/KSoWCcz8itFqoh/12RgJZJYkvbL3xuN15/Nr/bJUja/NdT7x9va
+         0NHZ7xyAJ7wDbPQrcWBT0hPii/b2vrR8+SFT4gpzn4pXkQKvhvED4jAchm+ptOY6g+h9
+         5S1w==
+X-Gm-Message-State: AOAM530rBm9OEwQLxbLXY4SYE80bnhXHKMWCafcOBC/0m8/YDSTRMXLU
+        i6gHWhqY77Na8bmRe5SGvI0=
+X-Google-Smtp-Source: ABdhPJwKQClODbSjjiaNQHDFeMiZXzY8jczgvkClhxZtHdEkf0dGDMkUGrEWSWsHqPRqdNKHGLwqWw==
+X-Received: by 2002:a05:600c:3493:b0:38e:bbbb:26f7 with SMTP id a19-20020a05600c349300b0038ebbbb26f7mr9345326wmq.114.1649867186333;
+        Wed, 13 Apr 2022 09:26:26 -0700 (PDT)
+Received: from arch-thunder (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm10713117wrq.81.2022.04.13.09.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 09:26:25 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 17:26:23 +0100
+From:   Rui Miguel Silva <rmfrfs@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: gyro: fxas21002c: Make use of device
+ properties
+Message-ID: <20220413162623.azoqoehu23kggk4x@arch-thunder>
+References: <20220413131513.59258-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
- <YlB3Z8fqJ+67a2Ck@google.com>
- <7ab689e7-e04d-5693-f899-d2d785b09892@redhat.com>
- <20220412143636.GG64706@ziepe.ca>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220412143636.GG64706@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413131513.59258-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.22 16:36, Jason Gunthorpe wrote:
-> On Fri, Apr 08, 2022 at 08:54:02PM +0200, David Hildenbrand wrote:
+Hi Andy,
+Thanks for the patch.
+
+On Wed, Apr 13, 2022 at 04:15:13PM +0300, Andy Shevchenko wrote:
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 > 
->> RLIMIT_MEMLOCK was the obvious candidate, but as we discovered int he
->> past already with secretmem, it's not 100% that good of a fit (unmovable
->> is worth than mlocked). But it gets the job done for now at least.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+This LGTM.
+
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+
+Cheers,
+     Rui
+
+> ---
+>  drivers/iio/gyro/fxas21002c_core.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> No, it doesn't. There are too many different interpretations how
-> MELOCK is supposed to work
+> diff --git a/drivers/iio/gyro/fxas21002c_core.c b/drivers/iio/gyro/fxas21002c_core.c
+> index 410e5e9f2672..0923fd793492 100644
+> --- a/drivers/iio/gyro/fxas21002c_core.c
+> +++ b/drivers/iio/gyro/fxas21002c_core.c
+> @@ -7,9 +7,9 @@
+>  
+>  #include <linux/interrupt.h>
+>  #include <linux/module.h>
+> -#include <linux/of_irq.h>
+>  #include <linux/pm.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+>  
+> @@ -822,7 +822,6 @@ static int fxas21002c_trigger_probe(struct fxas21002c_data *data)
+>  {
+>  	struct device *dev = regmap_get_device(data->regmap);
+>  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> -	struct device_node *np = indio_dev->dev.of_node;
+>  	unsigned long irq_trig;
+>  	bool irq_open_drain;
+>  	int irq1;
+> @@ -831,8 +830,7 @@ static int fxas21002c_trigger_probe(struct fxas21002c_data *data)
+>  	if (!data->irq)
+>  		return 0;
+>  
+> -	irq1 = of_irq_get_byname(np, "INT1");
+> -
+> +	irq1 = fwnode_irq_get_byname(dev_fwnode(dev), "INT1");
+>  	if (irq1 == data->irq) {
+>  		dev_info(dev, "using interrupt line INT1\n");
+>  		ret = regmap_field_write(data->regmap_fields[F_INT_CFG_DRDY],
+> @@ -843,7 +841,7 @@ static int fxas21002c_trigger_probe(struct fxas21002c_data *data)
+>  
+>  	dev_info(dev, "using interrupt line INT2\n");
+>  
+> -	irq_open_drain = of_property_read_bool(np, "drive-open-drain");
+> +	irq_open_drain = device_property_read_bool(dev, "drive-open-drain");
+>  
+>  	data->dready_trig = devm_iio_trigger_alloc(dev, "%s-dev%d",
+>  						   indio_dev->name,
+> -- 
+> 2.35.1
 > 
-> eg VFIO accounts per-process so hostile users can just fork to go past
-> it.
-> 
-> RDMA is per-process but uses a different counter, so you can double up
-> 
-> iouring is per-user and users a 3rd counter, so it can triple up on
-> the above two
-
-Thanks for that summary, very helpful.
-
-> 
->> So I'm open for alternative to limit the amount of unmovable memory we
->> might allocate for user space, and then we could convert seretmem as well.
-> 
-> I think it has to be cgroup based considering where we are now :\
-
-Most probably. I think the important lessons we learned are that
-
-* mlocked != unmovable.
-* RLIMIT_MEMLOCK should most probably never have been abused for
-  unmovable memory (especially, long-term pinning)
-
-
--- 
-Thanks,
-
-David / dhildenb
-

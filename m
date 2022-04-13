@@ -2,40 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E169F4FF24D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3434FF22E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiDMImS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S233950AbiDMIm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbiDMIl5 (ORCPT
+        with ESMTP id S234035AbiDMIlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:41:57 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29A2522CD;
-        Wed, 13 Apr 2022 01:38:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V9z3P0l_1649839125;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V9z3P0l_1649839125)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 13 Apr 2022 16:38:51 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     ldewangan@nvidia.com
-Cc:     jonathanh@nvidia.com, vkoul@kernel.org, thierry.reding@gmail.com,
-        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] dmaengine: tegra: Remove unused including <linux/version.h>
-Date:   Wed, 13 Apr 2022 16:38:42 +0800
-Message-Id: <20220413083842.69845-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 13 Apr 2022 04:41:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F3451E4E;
+        Wed, 13 Apr 2022 01:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649839128; x=1681375128;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3jpw++PisIykZNdamU26KW5ExhnwU6YvVfJwxILHeGY=;
+  b=FQzWivbvpE90ZISCdAmBlXxkoA5KWL67yNp2cDh4a1ZabqsOv2pDCqdY
+   Bh5dW8GfWt5L2SrYP+WJ15WXdVIAPNIx6pPXRfiE3sXqGpUKwo0AQFE5a
+   nEh5W1wDd3qQ0SjjVyiq2Vxt5G852NKT1JerHPZDoLuEIFaAxAb7OZBKD
+   q9z8qwrGHlSuQsgTB9OFC2vtz+JDu27bBKeTnzZYMe3A2URt72T+Wwuq1
+   a56PCOpmYifHc64eN1IUr8U2l/WxxgKUITtkUY5CHYA+2hhN9k6WGP1CW
+   bP9qWKZUr663V03VIJmXrprtSM0N03JtI4I4NVtr2jFyyq16T/u/QURGC
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,256,1643698800"; 
+   d="scan'208";a="152490618"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 01:38:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 13 Apr 2022 01:38:45 -0700
+Received: from [10.12.72.146] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 13 Apr 2022 01:38:43 -0700
+Message-ID: <ff06fc40-d77e-29e1-a944-5c67401c9000@microchip.com>
+Date:   Wed, 13 Apr 2022 10:38:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ARM: dts: at91: sama7g5ek: enable pull-up on flexcom3
+ console lines
+Content-Language: en-US
+To:     Tudor Ambarus - M18064 <Tudor.Ambarus@microchip.com>,
+        "Eugen Hristev - M18282" <Eugen.Hristev@microchip.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+References: <20220307113827.2419331-1-eugen.hristev@microchip.com>
+ <d16673c8-3a19-fcbf-63d0-2d2090fc7318@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <d16673c8-3a19-fcbf-63d0-2d2090fc7318@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,28 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow versioncheck warning:
+On 08/03/2022 at 09:21, Tudor Ambarus - M18064 wrote:
+> On 3/7/22 13:38, Eugen Hristev wrote:
+>> Flexcom3 is used as board console serial. There are no pull-ups on these
+>> lines on the board. This means that if a cable is not connected (that has
+>> pull-ups included), stray characters could appear on the console as the
+>> floating pins voltage levels are interpreted as incoming characters.
+>> To avoid this problem, enable the internal pull-ups on these lines.
+>>
+>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-./drivers/dma/tegra186-gpc-dma.c: 21 linux/version.h not needed.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+and queued for "fixes". Thanks!
+Best regards,
+   Nicolas
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/dma/tegra186-gpc-dma.c | 1 -
- 1 file changed, 1 deletion(-)
+> 
+>> ---
+>>   arch/arm/boot/dts/at91-sama7g5ek.dts | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
+>> index 08685a10eda1d..dd047a8523907 100644
+>> --- a/arch/arm/boot/dts/at91-sama7g5ek.dts
+>> +++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
+>> @@ -495,7 +495,7 @@ pinctrl_flx0_default: flx0_default {
+>>   	pinctrl_flx3_default: flx3_default {
+>>   		pinmux = <PIN_PD16__FLEXCOM3_IO0>,
+>>   			 <PIN_PD17__FLEXCOM3_IO1>;
+>> -		bias-disable;
+>> +		bias-pull-up;
+>>   	};
+>>   
+>>   	pinctrl_flx4_default: flx4_default {
+> 
 
-diff --git a/drivers/dma/tegra186-gpc-dma.c b/drivers/dma/tegra186-gpc-dma.c
-index f12327732041..97fe0e9e9b83 100644
---- a/drivers/dma/tegra186-gpc-dma.c
-+++ b/drivers/dma/tegra186-gpc-dma.c
-@@ -18,7 +18,6 @@
- #include <linux/platform_device.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
--#include <linux/version.h>
- #include <dt-bindings/memory/tegra186-mc.h>
- #include "virt-dma.h"
- 
+
 -- 
-2.20.1.7.g153144c
-
+Nicolas Ferre

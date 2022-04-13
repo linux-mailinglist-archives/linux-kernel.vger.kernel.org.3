@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CB04FF482
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EA74FF486
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiDMKQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 06:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S234679AbiDMKSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 06:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiDMKQ5 (ORCPT
+        with ESMTP id S231205AbiDMKSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 06:16:57 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F1366BE
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:14:35 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id p15so2910293ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hEGFqrwiFgt0pC+Shr7CLJeqGcsIwA9w+pTgNGd8olk=;
-        b=u9eF4UTMKqqJn2yf80zKmxOu4V3adcgtTvwkm2MNvmJzZuO7qiGsV8rQrc4JTcyBGl
-         qwBorw27yAvqPnxToESRaWuyxBvqdGenno34azdHslbzGSg2ZwEKR8weCu7r6hqpSxuc
-         hw//9qbh/J66eTU5giSOUe07zXk4TXjL2Ym0KglM4gs/6SuH4x9dcTsZLKdv4fzRs8U0
-         ZbZ/qG7Yfjjg/o7BYQIeBLA1pUsUFUapHHuaBTD/hc1OJM3hzCC/WwOkLXEzxMSJgbjE
-         pCyD+3b057MumA5xCtWvbJzLPtWTWNFYuY1EWQz1qBIFI5rhiGQXdMyZQDeA+/GWz4xa
-         sUdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hEGFqrwiFgt0pC+Shr7CLJeqGcsIwA9w+pTgNGd8olk=;
-        b=kROoMM47btQqn2o8D1/na7W7+jdqpnbBls7xGePdIE0Xz7ML4xRhfxZedRPetGQiwm
-         NnaHDk3fM9yhZqlYwJSAEj3N5M5K46KTsCFlewwTkpUkstU5KTw2tBig4O3+Oux8WZ0Q
-         84TdDrtNHuE8oyQoxcecoH5/uMH3c236Y7j5FhOXZwVfnc2W+PJZU2v0LsQf8rv7dJS/
-         BOLIQb+Habh9WAzz6f6o9fK2zFklRSRiP/a1tPJUIgdDxrUJG3ul1lFw4PNxlh729KPd
-         Z2UwZRjw4VoHFIMNTxd0lVI2ZL/zOq80air0kSk6RN0TrvZODM6awbjHaFJLWunFUU/f
-         spZw==
-X-Gm-Message-State: AOAM533K1QuGfb0Tn9hbm+mJvi95gqjIOfAZKZ+7k3xNiPdDUB85GibZ
-        pTRTGu+nquKB5Adf2jFdCPf7bg==
-X-Google-Smtp-Source: ABdhPJxPEGyAWUR/lWyrdqUdNHwI42/Y/p/wnXLX9hi6CbHFO0t/QXn2evoIDNPbHWtTJ5n5WcZk/g==
-X-Received: by 2002:a17:907:1608:b0:6e8:526a:2312 with SMTP id hb8-20020a170907160800b006e8526a2312mr22422267ejc.200.1649844873737;
-        Wed, 13 Apr 2022 03:14:33 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bs2-20020a056402304200b0041fc40eeb91sm358778edb.49.2022.04.13.03.14.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 03:14:33 -0700 (PDT)
-Message-ID: <eac272ec-8c33-36f0-5d14-65128cf69abb@linaro.org>
-Date:   Wed, 13 Apr 2022 12:14:32 +0200
+        Wed, 13 Apr 2022 06:18:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEB654BB94
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649844990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uYhtOyCqLPQb8ZNiEUNP5JqgsDoqYOBvlHSfSfuPAWQ=;
+        b=bE24tTU46bdOHpSg4mVoDvFAP78th6BXiZv4464UbY5OrlBuxJE1lNinXTvFDv9+kvoHBH
+        Wt/b4n/B8hhU6LvUmnaS4fD75i9TaYLEkrrv9icksJzabM2WRD3fb55VzpJSlEUBEhXuZp
+        +Su712PirsAkx+XB1uQEbEdCVaU6cZ4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-47rtHhcFPf6Fnr4rk0PFxg-1; Wed, 13 Apr 2022 06:16:27 -0400
+X-MC-Unique: 47rtHhcFPf6Fnr4rk0PFxg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C1403820F68;
+        Wed, 13 Apr 2022 10:16:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 75CBF9D7E;
+        Wed, 13 Apr 2022 10:16:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net] rxrpc: Restore removed timer deletion
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 13 Apr 2022 11:16:25 +0100
+Message-ID: <164984498582.2000115.4023190177137486137.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 3/4] arm64: dts: ti: j7200: Add VTM node
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        kristo@kernel.org
-Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-4-j-keerthy@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220412101409.7980-4-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 12:14, Keerthy wrote:
-> VTM stands for Voltage Thermal Management
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
->  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |  9 ++++
->  arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  | 45 +++++++++++++++++++
->  arch/arm64/boot/dts/ti/k3-j7200.dtsi          |  4 ++
->  3 files changed, 58 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-> index 1044ec6c4b0d..2b5c570253cc 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-> @@ -375,4 +375,13 @@
->  			ti,loczrama = <1>;
->  		};
->  	};
-> +
-> +	wkup_vtm0: wkup_vtm0@42040000 {
+A recent patch[1] from Eric Dumazet flipped the order in which the
+keepalive timer and the keepalive worker were cancelled in order to fix a
+syzbot reported issue[2].  Unfortunately, this enables the mirror image bug
+whereby the timer races with rxrpc_exit_net(), restarting the worker after
+it has been cancelled:
 
-Same issues as in other patches.
+	CPU 1		CPU 2
+	===============	=====================
+			if (rxnet->live)
+			<INTERRUPT>
+	rxnet->live = false;
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
+			rxrpc_queue_work(&rxnet->peer_keepalive_work);
+	del_timer_sync(&rxnet->peer_keepalive_timer);
+
+Fix this by restoring the removed del_timer_sync() so that we try to remove
+the timer twice.  If the timer runs again, it should see ->live == false
+and not restart the worker.
+
+Fixes: 1946014ca3b1 ("rxrpc: fix a race in rxrpc_exit_net()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/20220404183439.3537837-1-eric.dumazet@gmail.com/ [1]
+Link: https://syzkaller.appspot.com/bug?extid=724378c4bb58f703b09a [2]
+---
+
+ net/rxrpc/net_ns.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/rxrpc/net_ns.c b/net/rxrpc/net_ns.c
+index f15d6942da45..cc7e30733feb 100644
+--- a/net/rxrpc/net_ns.c
++++ b/net/rxrpc/net_ns.c
+@@ -113,7 +113,9 @@ static __net_exit void rxrpc_exit_net(struct net *net)
+ 	struct rxrpc_net *rxnet = rxrpc_net(net);
+ 
+ 	rxnet->live = false;
++	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
++	/* Remove the timer again as the worker may have restarted it. */
+ 	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	rxrpc_destroy_all_calls(rxnet);
+ 	rxrpc_destroy_all_connections(rxnet);
 
 
-Best regards,
-Krzysztof

@@ -2,217 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BD54FEF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21894FEF8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiDMGOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S231408AbiDMGON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbiDMGMb (ORCPT
+        with ESMTP id S229662AbiDMGOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:12:31 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309F7369F3;
-        Tue, 12 Apr 2022 23:10:08 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1066958pjh.3;
-        Tue, 12 Apr 2022 23:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=0g9UcE2zL5w+G01NTjUcugLriSQ8wpxoQjCrz2R0018=;
-        b=I2VW7T5lmrxE21qiKPO9lndJB6OgiCBkcMN5noH755MjocM5a4fiUTmOIIm2TkCFK+
-         0dPWv4t4FK9A+A2QucvMbMDu4RgXm9Wqj53zCnwCtHb+LXNhrRdhMqexatsIJc2BYQEK
-         n/vhUydLYp8dwRFLlT++nQpMFc2+AuV0L6TusfGFeckcFvnb3KIt4gs1ZaDovrtx9y20
-         qaiB6n9fI9Ypixj6f8nRwHMFW8WaNK4Yr9y/IBbyEnUF57x2iLURIHkp6vLJX4tVKU92
-         S5pbE89v3RQIc8669YQwHiuEpWdhHh0hlUVzfp8f4KfKvwCY0IiAtunVRb59uUJR1Os+
-         k9gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=0g9UcE2zL5w+G01NTjUcugLriSQ8wpxoQjCrz2R0018=;
-        b=EVgLsIPfKv2H+BlXEJ3CJuFpkg1oLIfoWKv0uH8Gsi/lkWwR/jC2yH2eX9IRG/uZ5E
-         0VnMTfM1AOFjD9vmn9QysMKxYycPx72vaJn8ROEitHrsNy3F9WvltNLg4HTkMidBCDQ9
-         AVDrFB6C/UVStbDzD6g6vj7YgZOTvI42RjYrYesFF9zxpMLkKN7Sx0Q08AqQG9wPvfGR
-         Mv3Wwu869+Gnu0s7rRu6IrLamUy7eaS6Ez8Mcr/G0OrYALHkP+vrh592LOZF9nq9dUdE
-         W/JHO7sDH1emCREvjuWOzDf0Wg8vPCSdkJrR6qL4qCat1tq6M6XA/gGMkGV641sUGC0w
-         1fPw==
-X-Gm-Message-State: AOAM5319DFuf623K/3lGlHlP6ZCaygFUtpnmXcBF3SbvhgBnhEy3Ky1F
-        TDYE9i+dv+FabgG6dnCg6oo=
-X-Google-Smtp-Source: ABdhPJwZGUY1wE3FwLT56wfTkox589sv0KFwbe72PnNBrsjgcyxpDTyj5tceVyPohBuu8hSyRW7Qag==
-X-Received: by 2002:a17:90b:1bc4:b0:1cb:c3db:5f4c with SMTP id oa4-20020a17090b1bc400b001cbc3db5f4cmr7738423pjb.125.1649830207617;
-        Tue, 12 Apr 2022 23:10:07 -0700 (PDT)
-Received: from localhost (220-235-208-104.tpgi.com.au. [220.235.208.104])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm41452636pfh.83.2022.04.12.23.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 23:10:07 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 16:10:02 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Low-res tick handler device not going to ONESHOT_STOPPED when tick is
- stopped (was: rcu_sched self-detected stall on CPU)
-To:     Michael Ellerman <mpe@ellerman.id.au>, paulmck@kernel.org,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-References: <CANiq72k+5Rdj7i3Df2dcE6_OPYPXK3z5EWLKnY56sSMz4G3OvA@mail.gmail.com>
-        <CAABZP2z64aYWfVSdXHaQopWc+BAbJJUGqtrju2iWER3DDTDFWg@mail.gmail.com>
-        <20220406170012.GO4285@paulmck-ThinkPad-P17-Gen-1>
-        <87pmls6nt7.fsf@mpe.ellerman.id.au> <87k0bz7i1s.fsf@mpe.ellerman.id.au>
-        <1649818529.j46672mh2p.astroid@bobo.none>
-In-Reply-To: <1649818529.j46672mh2p.astroid@bobo.none>
+        Wed, 13 Apr 2022 02:14:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7B13A5EE;
+        Tue, 12 Apr 2022 23:11:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFAF0B8210E;
+        Wed, 13 Apr 2022 06:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95EEC385A6;
+        Wed, 13 Apr 2022 06:11:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649830306;
+        bh=LgHIzY7EW2JlZQiFNPaNQv1hWKib1EqgqFQRnlXmey4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RezEm1vbs11Llplocc8D3OaWU+c1yhnGJOfEbnETpVea3VNvjoPljMe2/N0dDkM4o
+         yf1AV+O11eVhbWzrMnAx7OTuTtbIgd1AJvTCSsPPCaV1t0PDpOYRQLQpWWufQG3Jcp
+         9bBGNGPi0453X/iWefV2qMhdPIAPTELOAK3BSN7jHmVwHhprxQJeYVW1dWcr9Q5XER
+         7+Ts+h8kGcOjwvyDUpxua5NpusWUbThWEDlT1dm2UVUwF/GVj0EzXY4d8cTb9TqOV2
+         vO0MnGSXnq6nkIs+mO93KtakTf1TX8uQUkIaYdaHfYDmitTBcktJb/ax2c1l6Demiv
+         i9UayJ92OaoAg==
+Date:   Wed, 13 Apr 2022 11:41:42 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        robh+dt@kernel.org, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        agx@sigxcpu.org, robert.chiras@nxp.com, martin.kepplinger@puri.sm,
+        robert.foss@linaro.org
+Subject: Re: [PATCH v6 resend 2/5] phy: Add LVDS configuration options
+Message-ID: <YlZpnrKt9NbHZv26@matsya>
+References: <20220402052451.2517469-1-victor.liu@nxp.com>
+ <20220402052451.2517469-3-victor.liu@nxp.com>
 MIME-Version: 1.0
-Message-Id: <1649829917.xni78o33uo.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402052451.2517469-3-victor.liu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oops, fixed subject...
-
-Excerpts from Nicholas Piggin's message of April 13, 2022 3:11 pm:
-> +Daniel, Thomas, Viresh
->=20
-> Subject: Re: rcu_sched self-detected stall on CPU
->=20
-> Excerpts from Michael Ellerman's message of April 9, 2022 12:42 am:
->> Michael Ellerman <mpe@ellerman.id.au> writes:
->>> "Paul E. McKenney" <paulmck@kernel.org> writes:
->>>> On Wed, Apr 06, 2022 at 05:31:10PM +0800, Zhouyi Zhou wrote:
->>>>> Hi
->>>>>=20
->>>>> I can reproduce it in a ppc virtual cloud server provided by Oregon
->>>>> State University.  Following is what I do:
->>>>> 1) curl -l https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/l=
-inux.git/snapshot/linux-5.18-rc1.tar.gz
->>>>> -o linux-5.18-rc1.tar.gz
->>>>> 2) tar zxf linux-5.18-rc1.tar.gz
->>>>> 3) cp config linux-5.18-rc1/.config
->>>>> 4) cd linux-5.18-rc1
->>>>> 5) make vmlinux -j 8
->>>>> 6) qemu-system-ppc64 -kernel vmlinux -nographic -vga none -no-reboot
->>>>> -smp 2 (QEMU 4.2.1)
->>>>> 7) after 12 rounds, the bug got reproduced:
->>>>> (http://154.223.142.244/logs/20220406/qemu.log.txt)
->>>>
->>>> Just to make sure, are you both seeing the same thing?  Last I knew,
->>>> Zhouyi was chasing an RCU-tasks issue that appears only in kernels
->>>> built with CONFIG_PROVE_RCU=3Dy, which Miguel does not have set.  Or d=
-id
->>>> I miss something?
->>>>
->>>> Miguel is instead seeing an RCU CPU stall warning where RCU's grace-pe=
-riod
->>>> kthread slept for three milliseconds, but did not wake up for more tha=
-n
->>>> 20 seconds.  This kthread would normally have awakened on CPU 1, but
->>>> CPU 1 looks to me to be very unhealthy, as can be seen in your console
->>>> output below (but maybe my idea of what is healthy for powerpc systems
->>>> is outdated).  Please see also the inline annotations.
->>>>
->>>> Thoughts from the PPC guys?
->>>
->>> I haven't seen it in my testing. But using Miguel's config I can
->>> reproduce it seemingly on every boot.
->>>
->>> For me it bisects to:
->>>
->>>   35de589cb879 ("powerpc/time: improve decrementer clockevent processin=
-g")
->>>
->>> Which seems plausible.
->>>
->>> Reverting that on mainline makes the bug go away.
->>>
->>> I don't see an obvious bug in the diff, but I could be wrong, or the ol=
-d
->>> code was papering over an existing bug?
->>>
->>> I'll try and work out what it is about Miguel's config that exposes
->>> this vs our defconfig, that might give us a clue.
->>=20
->> It's CONFIG_HIGH_RES_TIMERS=3Dn which triggers the stall.
->>=20
->> I can reproduce just with:
->>=20
->>   $ make ppc64le_guest_defconfig
->>   $ ./scripts/config -d HIGH_RES_TIMERS
->>=20
->> We have no defconfigs that disable HIGH_RES_TIMERS, I didn't even
->> realise you could disable it TBH :)
->>=20
->> The Rust CI has it disabled because I copied that from the x86 defconfig
->> they were using back when I added the Rust support. I think that was
->> meant to be a stripped down fast config for CI, but the result is it's
->> just using a badly tested combination which is not helpful.
->>=20
->> So I'll send a patch to turn HIGH_RES_TIMERS on for the Rust CI, and we
->> can debug this further without blocking them.
->=20
-> So we traced the problem down to possibly a misunderstanding between=20
-> decrementer clock event device and core code.
->=20
-> The decrementer is only oneshot*ish*. It actually needs to either be=20
-> reprogrammed or shut down otherwise it just continues to cause=20
-> interrupts.
->=20
-> Before commit 35de589cb879, it was sort of two-shot. The initial=20
-> interrupt at the programmed time would set its internal next_tb variable=20
-> to ~0 and call the ->event_handler(). If that did not set_next_event or=20
-> stop the timer, the interrupt will fire again immediately, notice=20
-> next_tb is ~0, and only then stop the decrementer interrupt.
->=20
-> So that was already kind of ugly, this patch just turned it into a hang.
->=20
-> The problem happens when the tick is stopped with an event still=20
-> pending, then tick_nohz_handler() is called, but it bails out because=20
-> tick_stopped =3D=3D 1 so the device never gets programmed again, and so i=
-t=20
-> keeps firing.
->=20
-> How to fix it? Before commit a7cba02deced, powerpc's decrementer was=20
-> really oneshot, but we would like to avoid doing that because it requires=
-=20
-> additional programming of the hardware on each timer interrupt. We have=20
-> the ONESHOT_STOPPED state which seems to be just about what we want.
->=20
-> Did the ONESHOT_STOPPED patch just miss this case, or is there a reason=20
-> we don't stop it here? This patch seems to fix the hang (not heavily
-> tested though).
-> =20
-> Thanks,
-> Nick
->=20
+On 02-04-22, 13:24, Liu Ying wrote:
+> This patch allows LVDS PHYs to be configured through
+> the generic functions and through a custom structure
+> added to the generic union.
+> 
+> The parameters added here are based on common LVDS PHY
+> implementation practices.  The set of parameters
+> should cover all potential users.
+> 
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 > ---
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index 2d76c91b85de..7e13a55b6b71 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -1364,9 +1364,11 @@ static void tick_nohz_handler(struct clock_event_d=
-evice *dev)
->  	tick_sched_do_timer(ts, now);
->  	tick_sched_handle(ts, regs);
-> =20
-> -	/* No need to reprogram if we are running tickless  */
-> -	if (unlikely(ts->tick_stopped))
-> +	if (unlikely(ts->tick_stopped)) {
-> +		/* If we are tickless, change the clock event to stopped */
-> +		tick_program_event(KTIME_MAX, 1);
->  		return;
-> +	}
-> =20
->  	hrtimer_forward(&ts->sched_timer, now, TICK_NSEC);
->  	tick_program_event(hrtimer_get_expires(&ts->sched_timer), 1);
->=20
+> v5->v6:
+> * Rebase upon v5.17-rc1.
+> 
+> v4->v5:
+> * Align kernel-doc style to include/linux/phy/phy.h. (Vinod)
+> * Trivial tweaks.
+> * Drop Robert's R-b tag.
+> 
+> v3->v4:
+> * Add Robert's R-b tag.
+> 
+> v2->v3:
+> * No change.
+> 
+> v1->v2:
+> * No change.
+> 
+>  include/linux/phy/phy-lvds.h | 32 ++++++++++++++++++++++++++++++++
+>  include/linux/phy/phy.h      |  4 ++++
+>  2 files changed, 36 insertions(+)
+>  create mode 100644 include/linux/phy/phy-lvds.h
+> 
+> diff --git a/include/linux/phy/phy-lvds.h b/include/linux/phy/phy-lvds.h
+> new file mode 100644
+> index 000000000000..7a2f4747f624
+> --- /dev/null
+> +++ b/include/linux/phy/phy-lvds.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright 2020 NXP
+
+2022 now
+
+> + */
+> +
+> +#ifndef __PHY_LVDS_H_
+> +#define __PHY_LVDS_H_
+> +
+> +/**
+> + * struct phy_configure_opts_lvds - LVDS configuration set
+> + * @bits_per_lane_and_dclk_cycle:	Number of bits per data lane and
+> + *					differential clock cycle.
+
+What does it mean by bits per data lane and differential clock cycle?
+
+> + * @differential_clk_rate:		Clock rate, in Hertz, of the LVDS
+> + *					differential clock.
+> + * @lanes:				Number of active, consecutive,
+> + *					data lanes, starting from lane 0,
+> + *					used for the transmissions.
+> + * @is_slave:				Boolean, true if the phy is a slave
+> + *					which works together with a master
+> + *					phy to support dual link transmission,
+> + *					otherwise a regular phy or a master phy.
+> + *
+> + * This structure is used to represent the configuration state of a LVDS phy.
+> + */
+> +struct phy_configure_opts_lvds {
+> +	unsigned int	bits_per_lane_and_dclk_cycle;
+> +	unsigned long	differential_clk_rate;
+> +	unsigned int	lanes;
+> +	bool		is_slave;
+> +};
+
+Where is the user of this new configuration? Can you post that patch for
+reference as well please
+
+-- 
+~Vinod

@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0934FFA24
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0066B4FFA27
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiDMPaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S236500AbiDMPat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbiDMPaD (ORCPT
+        with ESMTP id S232010AbiDMPar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:30:03 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B97660CE3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:27:41 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id v4so2819418edl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FTu8nhpVPh5fCRzBhXpfj9kU4anJdDZdibBzSiYag/s=;
-        b=kQ3skXsasLue6DVfv5y0FVEuxEDxG29Y1+8D8hwBIbSTT92Og5I/A8u7aa66H86CJh
-         CTIQSnSYgU4/qo9oWpjORiObR3Was1RTWBru1doFnE8zXrEMb/qKPP8eTbTHhElU0GLe
-         1vvO2N+LYhMuf/VG3LHuzlUdwGL5VElXRSg6dqIEoTlptbpYL5cnHeND+lmFVatTOhI9
-         bYi6Pj/EZeidXIZV3QsK6lvx1Q0PMO8pNrA5/dXuPU2Y0OKbfG+MribaoA8zWd/q6eie
-         xpLB37J7pD536qO/VO+N9y84bf8yf/YSD8hbxMCZq+Pta05qyjpnFF64F/rQv2rB+NSk
-         JryQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FTu8nhpVPh5fCRzBhXpfj9kU4anJdDZdibBzSiYag/s=;
-        b=AT4TZecRY/zmbpp2XRSijoSJxF8UayTyRdaSPZDW9N5fwd6EYJXTvvyXeKAbNRytZr
-         sX3NhxePHH5Ey05CklARAJYDby1Cr7rVcGzvRifavG4sc3zCiMJ8cL5puijezpO4vEi+
-         fjh54g4yv3LqGtl7bEPu0TXNNKd5O1ZGB2FM24S2a0rD9n5CnGB43+1MMu57c8tFATy+
-         1HYzW4DjEhf0epe6cq/jJ1qLdLMCAs6paBiSJTW0Ajz+odOYmQ4Qe7PV26YEXhiUhCkb
-         WHziTV4fqq6+d8qrvO9ah2bbP6DojQID6v+0gtg51vFnHrE5gzjTT/jEGtc5UMKlCmwU
-         TDvw==
-X-Gm-Message-State: AOAM531hA7HRxmC+Y7C3V1zO2zbwX/PtMMQ80wyKv2xqBpUZ+5kAB6Db
-        +WlaOC6891LmSLkvwd2U80bKOQ==
-X-Google-Smtp-Source: ABdhPJxLBhlLRJV5EZ81MU7GCxLdWOBxTjQoEXFFGHWBBg0qfHICCPTgJ254wpt2+5hAPHYiEZitKw==
-X-Received: by 2002:a05:6402:27d0:b0:419:5184:58ae with SMTP id c16-20020a05640227d000b00419518458aemr45052546ede.314.1649863659774;
-        Wed, 13 Apr 2022 08:27:39 -0700 (PDT)
-Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id r3-20020aa7cb83000000b0041b573e2654sm1300328edt.94.2022.04.13.08.27.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 08:27:39 -0700 (PDT)
-Message-ID: <b415523c-34e3-28a1-bcce-4682e7c67e77@linaro.org>
-Date:   Wed, 13 Apr 2022 17:27:38 +0200
+        Wed, 13 Apr 2022 11:30:47 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5FD633A0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:28:25 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7E3141C0002;
+        Wed, 13 Apr 2022 15:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649863704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WGuKkZoZhqAp3vshntO7a0lSfalv/QZe/nQ44NUXLMc=;
+        b=fjHFRViT16sOsvfG3G/TDkG5Aj69mjco8uA9n8i3tjVrkhiNXyvVcYtwx6NANeUlxEiRxs
+        4azAHfxQyuSZKYkj8sUIg4XpPzMYOysj9o4xNd7TE/imZtURksFoadaX7xHLHByVFdwe+r
+        AO6HhHg5gbB/3Fy2mGcXxzN6RwDV72xDLigcXHG49kkyDcQZhy/gEeJc4nvtHr/H0dc4Ag
+        T/gUbuDShrMYKdqEXBTZPLpghxIfk1k27mLLOwRM0f0kY+4oCMsyezUJigZ2HyKLYe8WpK
+        qqs6Da+AdYt7/XVSQk77BMFNBeK5a0xjtE4cC6D4qYcVUdfhKbQwIS0Syl1/NQ==
+Date:   Wed, 13 Apr 2022 17:28:19 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mtd: spinand: add support for ESMT F50x1G41LB
+Message-ID: <20220413172819.438f79e4@xps13>
+In-Reply-To: <CAJsYDV+3J0ipbR+N-xE=DH-WXsjierdHe_pJtKf1Xbt7fdaiWw@mail.gmail.com>
+References: <20220413083824.247136-1-gch981213@gmail.com>
+        <20220413145843.46a3d9b5@xps13>
+        <CAJsYDV+3J0ipbR+N-xE=DH-WXsjierdHe_pJtKf1Xbt7fdaiWw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 09/14] mips: dts: ralink: mt7621: use the new compatible
- string for MT7621 pinctrl
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-10-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413060729.27639-10-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 08:07, Arınç ÜNAL wrote:
-> Use the new compatible string "ralink,mt7621-pinctrl" for the Ralink MT7621
-> pinctrl subdriver on mt7621.dtsi.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> index 3222684915ac..ee2ec78c8952 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -151,7 +151,7 @@ spi0: spi@b00 {
->  	};
->  
->  	pinctrl: pinctrl {
-> -		compatible = "ralink,rt2880-pinmux";
-> +		compatible = "ralink,mt7621-pinctrl";
+Hello,
 
-The change is non-bisectable and causes issues all other users of DT
-(other projects, systems etc). This is discouraged in general, so you
-should describe it. The commit msg lacks answer to the main question:
-Why? You focused only on what you are doing, but why you are doing is
-actually more important for such change.
+gch981213@gmail.com wrote on Wed, 13 Apr 2022 22:50:43 +0800:
 
-Best regards,
-Krzysztof
+> Hi!
+>=20
+> On Wed, Apr 13, 2022 at 8:58 PM Miquel Raynal <miquel.raynal@bootlin.com>=
+ wrote:
+> > [...] =20
+> > > This patch is made purely based on datasheet info without testing
+> > > on any actual chips. =20
+> >
+> > Do you plan to get one of these any time soon? =20
+>=20
+> No. I already have way more spi-nand chips than I possibly
+> need due to my last GigaDevice submission :)
+
+:)
+
+>=20
+> I need to replace the spi-nand driver for mediatek in OpenWrt
+> with my recent submission, and this chip is used in one of the
+> currently supported router. So I made this patch from
+> datasheet for it.
+>=20
+> BTW Rockchip added identical chip support in their u-boot.[0]
+> I assume they've tested it.
+>=20
+> > I am not really confident merging a 100% non-tested driver :) =20
+>=20
+> I can understand that.
+> I'll roll this patch out in OpenWrt anyway. I can wait for a test
+> there and resubmit piled downstream patches for chip supports
+> after next OpenWrt stable release.
+
+Yes, please, any feedback from the OpenWrt community would be good. If
+you can get a Tested-by I'll take the patch (resend it with the tag so
+that I don't miss it).
+
+> > [...] =20
+> > > +
+> > > +/* ESMT uses GigaDevice 0xc8 JECDEC ID on some SPI NANDs */
+> > > +#define SPINAND_MFR_ESMT_C8                  0xc8 =20
+> >
+> > What happens if the gigadevice driver probes first? =20
+>=20
+> Their device ID aren't conflicting yet, so nothing will happen
+> at the moment.
+>=20
+> There is a solution for future conflict: Recent SPI-NAND chips
+> contain a parameter page which has the exact chip vendor
+> and model. We can do one more detection with the parameter
+> page content.
+> Winbond W25N01KV is a 2k+96 SPI-NAND with 4-bit ECC.
+> It uses the exact same chip id as the current W25N01GV
+> (2k+64 1-bit ECC). We need to support detection using
+> parameter page for this crazy decision by Winbond anyway.
+
+:')
+
+> I'll try to code something for this with my free time.
+> My current idea is: We first do a detection based on chip id.
+> If that failed, try to read the parameter page. If we got a
+> valid one, match the chip vendor and model string.
+>=20
+> Any thoughts?
+
+Yeah that looks reasonable.
+
+> (BTW this ESMT chip is POWERCHIP PSU1GS20DX
+> according to the parameter page in their datasheet.
+> But I can't find a datasheet for this model number.)
+>=20
+> > =20
+> > > +
+> > > +#define F50L2G41XA_ECC_STATUS_MASK           GENMASK(6, 4)
+> > > +#define F50L2G41XA_STATUS_ECC_1_3_BITFLIPS   (1 << 4)
+> > > +#define F50L2G41XA_STATUS_ECC_4_6_BITFLIPS   (3 << 4)
+> > > +#define F50L2G41XA_STATUS_ECC_7_8_BITFLIPS   (5 << 4) =20
+>=20
+> Oops. These are left-over defines when I discovered that ESMT 2G/4G
+> SPI-NANDs are repackaged micron parts and dropped their support
+> from this file.
+> A v3 is needed anyway. I'll wait for a test before submitting it.
+>=20
+> [0]: https://github.com/rockchip-linux/u-boot/commit/52b00601782854887378=
+54a48ddecd381f8b236e
+
+
+Thanks,
+Miqu=C3=A8l

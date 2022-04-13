@@ -2,165 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65114FFD21
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FE04FFD23
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiDMRyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S237493AbiDMRzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbiDMRye (ORCPT
+        with ESMTP id S233973AbiDMRzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:54:34 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EEF6D3A2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:52:11 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id z16so1918284qtq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AOcfAyqGgzTsDLYWZNFvb/pt3FEBh03V8FeUjVfINLs=;
-        b=Bossa6GEY7VuCphnLPZuOzJUtcvFY0Xkwv27PVSBfCC/FdX4k2U/R/8tc3e6/TDG9b
-         w/9uAgh8u82TWvzqs9/oqezRfVKYTJcg88jPsDyVpjn5i6qVesFEQ/DApakc869u+5lk
-         GwUeq/iRHuUUSbU5VPjF+x+Nxyo3LcL64cerGvihnoxpTS7x163MByH0tjIdn6VLh7j0
-         ORezJT/JFq5so7GsIh61VtI+O3VpLisBAYp/sU9dzGHFPjvZ0UPJeFpJ9W27eu7ET5GJ
-         cvhFhPAZ1ZOsHSur//jxKwQ6gDdtJtdM7gcJ7fyJKGc6kOw1FZQe9pd2KDaJak2ceHpG
-         PJvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AOcfAyqGgzTsDLYWZNFvb/pt3FEBh03V8FeUjVfINLs=;
-        b=cyhfGpIkb+surUcWpxuQkyqtnL5I9WPnvdIplgLzj0A1pFO5Lj58xld2bHHdiFqyOM
-         HNTlEOOj5YqTNf22sG3w1cr2qzS3RFxkZbaylHCLN5XP2Nk9UCIfjvPD1IznJ0azeGJ8
-         Yvyzq9Bf/b0YcB+PPRnmssEic+6zhgMxdHOMpOxxvs6Bouu6uEHe8Hk6anyz0NGmeuP8
-         maewnb62hNWY/kh4prpf684cF9yW+Rr1QULQXjdqtf1qwflYaHN7cbRa8Htu73C/FW35
-         8it4DWmJE47wakzH3+EC/GWWwyBf2kMm3VlEEKo/0CAiH6l+eAu8aUTx6UPA0bmTp2jW
-         lhnA==
-X-Gm-Message-State: AOAM531yKoaS1lvlgh7Mlgr+5hK13+y5A7OsKPbzbSZt7OgeldmBfw4Z
-        tTuDV8H0nvBOSV+VjnKbkkLwaw==
-X-Google-Smtp-Source: ABdhPJyFh5b43Bp+tYjO2fJUecpGRbFTQokPtotFsAvgNZxKoFX6OH3MdddD7y2rpYU6hDl31dtUUQ==
-X-Received: by 2002:a05:622a:1392:b0:2e1:e7b9:3ce4 with SMTP id o18-20020a05622a139200b002e1e7b93ce4mr7976945qtk.153.1649872330523;
-        Wed, 13 Apr 2022 10:52:10 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05620a424a00b00680c0c0312dsm23050212qko.30.2022.04.13.10.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 10:52:09 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nehA0-001kWp-5D; Wed, 13 Apr 2022 14:52:08 -0300
-Date:   Wed, 13 Apr 2022 14:52:08 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <20220413175208.GI64706@ziepe.ca>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
- <YlB3Z8fqJ+67a2Ck@google.com>
- <7ab689e7-e04d-5693-f899-d2d785b09892@redhat.com>
- <20220412143636.GG64706@ziepe.ca>
- <1686fd2d-d9c3-ec12-32df-8c4c5ae26b08@redhat.com>
+        Wed, 13 Apr 2022 13:55:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925F6D3BE;
+        Wed, 13 Apr 2022 10:52:47 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 17:52:44 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649872365;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k/JagWb3bJZxrgaefpu0RP7IlAuGtfyhqOL6bvOWQkQ=;
+        b=xPIy/rESypWYbKNZmb5JCybiEGaSHd7i9bidO2m6wFxJss5ehJq/OZgf+g9XxBRBs/krn6
+        B4wvHG7HBcmz390rYPyndQ0rzm1z/6HF6S27E5U6FggFC62ARY6Fr5AQECiVTkPwFTv771
+        JWXyuwLKo9tidI+MMNRciHkutTI+B8ahe/0GxOb26lHkVMayR6+DFy39Yaq7MXlhP5kcE+
+        IdyudCXDCzMCLe4gJu4R4aUX+bdwxi6oymg41AkAFkDqgRrKX9HX0NC/5a6nNuDzCyL5kB
+        AK6jQo52Q6AP8ex/+OP1BDYJMnnsP3TUQTxJr+VBaFcR84W5HdtEWn33Te34eg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649872365;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k/JagWb3bJZxrgaefpu0RP7IlAuGtfyhqOL6bvOWQkQ=;
+        b=w1oyA3r7grVdbYeB8/ZUVNd7Z68KP9Dig4o/hrej6zQWdbOMMPEKuaGZnynCFzKCE+Pdn/
+        W0ygVfvZqhuhK6Cg==
+From:   "tip-bot2 for Eric DeVolder" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/kdump] x86/crash: Fix minor typo/bug in debug message
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        Borislav Petkov <bp@suse.de>, Baoquan He <bhe@redhat.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220413164237.20845-2-eric.devolder@oracle.com>
+References: <20220413164237.20845-2-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1686fd2d-d9c3-ec12-32df-8c4c5ae26b08@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164987236423.4207.6815235390586822382.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 06:24:56PM +0200, David Hildenbrand wrote:
-> On 12.04.22 16:36, Jason Gunthorpe wrote:
-> > On Fri, Apr 08, 2022 at 08:54:02PM +0200, David Hildenbrand wrote:
-> > 
-> >> RLIMIT_MEMLOCK was the obvious candidate, but as we discovered int he
-> >> past already with secretmem, it's not 100% that good of a fit (unmovable
-> >> is worth than mlocked). But it gets the job done for now at least.
-> > 
-> > No, it doesn't. There are too many different interpretations how
-> > MELOCK is supposed to work
-> > 
-> > eg VFIO accounts per-process so hostile users can just fork to go past
-> > it.
-> > 
-> > RDMA is per-process but uses a different counter, so you can double up
-> > 
-> > iouring is per-user and users a 3rd counter, so it can triple up on
-> > the above two
-> 
-> Thanks for that summary, very helpful.
+The following commit has been merged into the x86/kdump branch of tip:
 
-I kicked off a big discussion when I suggested to change vfio to use
-the same as io_uring
+Commit-ID:     b57a7c9dd732ca29c4400a9a710c56c55877086d
+Gitweb:        https://git.kernel.org/tip/b57a7c9dd732ca29c4400a9a710c56c55877086d
+Author:        Eric DeVolder <eric.devolder@oracle.com>
+AuthorDate:    Wed, 13 Apr 2022 12:42:30 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 13 Apr 2022 19:39:54 +02:00
 
-We may still end up trying it, but the major concern is that libvirt
-sets the RLIMIT_MEMLOCK and if we touch anything here - including
-fixing RDMA, or anything really, it becomes a uAPI break for libvirt..
+x86/crash: Fix minor typo/bug in debug message
 
-> >> So I'm open for alternative to limit the amount of unmovable memory we
-> >> might allocate for user space, and then we could convert seretmem as well.
-> > 
-> > I think it has to be cgroup based considering where we are now :\
-> 
-> Most probably. I think the important lessons we learned are that
-> 
-> * mlocked != unmovable.
-> * RLIMIT_MEMLOCK should most probably never have been abused for
->   unmovable memory (especially, long-term pinning)
+The pr_debug() intends to display the memsz member, but the
+parameter is actually the bufsz member (which is already
+displayed). Correct this to display memsz value.
 
-The trouble is I'm not sure how anything can correctly/meaningfully
-set a limit.
+Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Baoquan He <bhe@redhat.com>
+Link: https://lore.kernel.org/r/20220413164237.20845-2-eric.devolder@oracle.com
+---
+ arch/x86/kernel/crash.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Consider qemu where we might have 3 different things all pinning the
-same page (rdma, iouring, vfio) - should the cgroup give 3x the limit?
-What use is that really?
-
-IMHO there are only two meaningful scenarios - either you are unpriv
-and limited to a very small number for your user/cgroup - or you are
-priv and you can do whatever you want.
-
-The idea we can fine tune this to exactly the right amount for a
-workload does not seem realistic and ends up exporting internal kernel
-decisions into a uAPI..
-
-Jason
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index e8326a8..9730c88 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -407,7 +407,7 @@ int crash_load_segments(struct kimage *image)
+ 	}
+ 	image->elf_load_addr = kbuf.mem;
+ 	pr_debug("Loaded ELF headers at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+-		 image->elf_load_addr, kbuf.bufsz, kbuf.bufsz);
++		 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
+ 
+ 	return ret;
+ }

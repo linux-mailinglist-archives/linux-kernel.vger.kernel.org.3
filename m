@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F88500173
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573A8500179
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbiDMWAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S234907AbiDMWDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbiDMWAr (ORCPT
+        with ESMTP id S234838AbiDMWDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:00:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7365289A6;
-        Wed, 13 Apr 2022 14:58:25 -0700 (PDT)
+        Wed, 13 Apr 2022 18:03:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C9321E0A;
+        Wed, 13 Apr 2022 15:00:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC8BB8278B;
-        Wed, 13 Apr 2022 21:58:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E193FC385A6;
-        Wed, 13 Apr 2022 21:58:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A542061F6B;
+        Wed, 13 Apr 2022 22:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0821C385A6;
+        Wed, 13 Apr 2022 22:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649887103;
-        bh=3Qp8VakLhp3AT/Ltza7kSfd4UrLpvGlIXVTq7iBxA8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aF8OBacYw1Ms5OVAjVzXxx6KgYYxb/1BZB3jCWeUnCB8KA7bffTAKkSeH0cVuJ22/
-         6UmkqmLYf+hz0ToBjepct5ZaaApTiGxj1t8k83I/hcFKUbX7ePjIPK1w3habU3Svj8
-         boJXaAjvp2rcDvsulnXI6+SrFswlNcUdgo8wOF+ygofQ9kwrVtmVOwTYLH0UhMa81K
-         NbZWRNsVMYcDRWI15/BaMpa7OnIR+gXfFb3XdI9a+iYmXGEjFWPX9n/7UIBR6iByUz
-         dUpMV0IImVZKmAavYWbwJ7xXbjd4CnHXjZRa20oqMoJwbdd97pwaqjq9D0I2cgRD4O
-         tU53Ghmzf6QlA==
-Date:   Wed, 13 Apr 2022 14:58:21 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the f2fs tree
-Message-ID: <YldHfXQCUzb3ZqG3@google.com>
-References: <20220414074156.2c454505@canb.auug.org.au>
+        s=k20201202; t=1649887249;
+        bh=oM28rtasZyQEQBuedcg9Oc0qIzsKosXpfXOn6THm218=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KxK8rXO9S3OXuvicMvvv4+11GHYPJDrsjhXxtM1j7ZTKbLS5XIx+7RIlvHsOnmTW2
+         b9EqOcDbynCWuQQgAXZaHB4fjL/S/R1fmcUHshNVvkq/WdouAg5IPxvjDgkVezL0K0
+         fL4mzvQRXa5W3aM+a1m5MAXx3IXXpHqJ//lFmkphNyKth30gGjZH0E7xHCXVXqk1Rk
+         PvpCT+Xc4ZXvoiqbpgyyEm5CCg63/aAw5zySpg9fohwseyD7eO5fxgcXTwDvUbPA1+
+         V4GToQCQSqjdw8P5nJ/8TiZclowgDpriSS31sbXNudfGw3/FSVeReq/F1xQ/V/Qle+
+         3w+6Dz3dVQ6zw==
+Message-ID: <17769a5b-9569-18ee-d1c0-c8971a42c709@kernel.org>
+Date:   Wed, 13 Apr 2022 16:00:46 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414074156.2c454505@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
+ knob to implement router-side changes for RFC9131
+Content-Language: en-US
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, yoshfuji@linux-ipv6.org,
+        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        prestwoj@gmail.com, gilligan@arista.com, noureddine@arista.com,
+        gk@arista.com
+References: <20220413143434.527-1-aajith@arista.com>
+ <5a92f5cd-9af4-4228-dc44-b0c363f30e18@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <5a92f5cd-9af4-4228-dc44-b0c363f30e18@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/14, Stephen Rothwell wrote:
-> Hi all,
+On 4/13/22 3:22 PM, Eric Dumazet wrote:
 > 
-> In commit
+> On 4/13/22 07:34, Arun Ajith S wrote:
+>> Add a new neighbour cache entry in STALE state for routers on receiving
+>> an unsolicited (gratuitous) neighbour advertisement with
+>> target link-layer-address option specified.
+>> This is similar to the arp_accept configuration for IPv4.
+>> A new sysctl endpoint is created to turn on this behaviour:
+>> /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
 > 
->   4b6857882c90 ("f2fs: remove obsolete whint_mode")
 > 
-> Fixes tag
+> Do we really need to expose this to /proc/sys, for every interface added
+> in the host ?
 > 
->   Fixes: commit 41d36a9f3e53 ("fs: remove kiocb.ki_hint")
-> 
-> has these problem(s):
-> 
->   - leading word 'commit' unexpected
+> /proc files creations/deletion cost a lot in environments
+> adding/deleting netns very often.
 
-Thanks, fixed.
+agree with the general intent (along with the increasing memory costs).
+I do think this case should be done as a /proc/sys entry for consistency
+with both ARP and existing related NA settings.
 
 > 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> I would prefer using NETLINK attributes, a single recvmsg() syscall can
+> fetch/set hundreds of them.
 
+What do you have in mind here? A link attribute managed through `ip link
+set`?
 

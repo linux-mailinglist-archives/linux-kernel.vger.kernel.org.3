@@ -2,123 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26C64FF096
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A451D4FF098
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbiDMHdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S233367AbiDMHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiDMHdE (ORCPT
+        with ESMTP id S230248AbiDMHd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:33:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5843393
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:30:43 -0700 (PDT)
-Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdZ281BQCzFpnZ;
-        Wed, 13 Apr 2022 15:28:16 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 15:30:40 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 15:30:39 +0800
-Message-ID: <976b642a-4085-ac8f-1377-cc8f295203a2@huawei.com>
-Date:   Wed, 13 Apr 2022 15:30:38 +0800
+        Wed, 13 Apr 2022 03:33:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75E449F0C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:31:37 -0700 (PDT)
+X-UUID: eb95d7c3a1684443be2db332da7ebe50-20220413
+X-UUID: eb95d7c3a1684443be2db332da7ebe50-20220413
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1754399769; Wed, 13 Apr 2022 15:31:33 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 13 Apr 2022 15:31:32 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Apr
+ 2022 15:31:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Apr 2022 15:31:31 +0800
+Message-ID: <b1edb995f5dba2f8e313192a79cfc0972b7c832f.camel@mediatek.com>
+Subject: Re: [PATCH v4, 2/4] drm/mediatek: Separate poweron/poweroff from
+ enable/disable and define new funcs
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>
+CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 13 Apr 2022 15:31:31 +0800
+In-Reply-To: <1649644308-8455-3-git-send-email-xinlei.lee@mediatek.com>
+References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
+         <1649644308-8455-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to
- machine check safe
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>
-References: <20220412072552.2526871-1-tongtiangen@huawei.com>
- <20220412072552.2526871-5-tongtiangen@huawei.com>
- <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Xinlei:
 
-
-在 2022/4/13 1:08, Robin Murphy 写道:
-> On 12/04/2022 8:25 am, Tong Tiangen wrote:
-> [...]
->> diff --git a/arch/arm64/include/asm/asm-uaccess.h 
->> b/arch/arm64/include/asm/asm-uaccess.h
->> index 0557af834e03..bb17f0829042 100644
->> --- a/arch/arm64/include/asm/asm-uaccess.h
->> +++ b/arch/arm64/include/asm/asm-uaccess.h
->> @@ -92,4 +92,20 @@ alternative_else_nop_endif
->>           _asm_extable    8888b,\l;
->>       .endm
->> +
->> +    .macro user_ldp_mc l, reg1, reg2, addr, post_inc
->> +8888:        ldtr    \reg1, [\addr];
->> +8889:        ldtr    \reg2, [\addr, #8];
->> +        add    \addr, \addr, \post_inc;
->> +
->> +        _asm_extable_uaccess_mc    8888b, \l;
->> +        _asm_extable_uaccess_mc    8889b, \l;
->> +    .endm
+On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
 > 
-> You're replacing the only user of this, so please just 
-> s/_asm_extable/_asm_extable_uaccess_mc/ in the existing macro and save 
-> the rest of the churn.
+> In order to match the changes of "Use the drm_panel_bridge API",
+> the poweron/poweroff of dsi is extracted from enable/disable and
+> defined as new funcs (pre_enable/post_disable).
 > 
-> Furthermore, how come you're not similarly updating user_stp, given that 
-> you *are* updating the other stores in copy_to_user?
-
-I think all load/store instructions should be handled.
-
-Generally speaking, the load operation will receive a sea when consuming 
-a hardware memory error, and the store operation will not receive a sea 
-when consuming a hardware error. Depends on chip behavior.
-
-So add store class instructions to processed is no harm.
-
-If there is any problem with my understanding, correct me.
-
-Thanks,
-Tong.
-
+> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
+> API")
 > 
->> +
->> +    .macro user_ldst_mc l, inst, reg, addr, post_inc
->> +8888:        \inst        \reg, [\addr];
->> +        add        \addr, \addr, \post_inc;
->> +
->> +        _asm_extable_uaccess_mc    8888b, \l;
->> +    .endm
->
-[...]
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 51 +++++++++++++++++++---------
+> --
+>  1 file changed, 32 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 262c027d8c2f..cf76c53a1af6 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -679,16 +679,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  	if (--dsi->refcount != 0)
+>  		return;
+>  
+> -	/*
+> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> -	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> -	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> -	 * after dsi is fully set.
+> -	 */
+> -	mtk_dsi_stop(dsi);
+> -
+> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  	mtk_dsi_reset_engine(dsi);
+>  	mtk_dsi_lane0_ulp_mode_enter(dsi);
+>  	mtk_dsi_clk_ulp_mode_enter(dsi);
+> @@ -703,17 +693,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  
+>  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
+>  {
+> -	int ret;
+> -
+>  	if (dsi->enabled)
+>  		return;
+>  
+> -	ret = mtk_dsi_poweron(dsi);
+> -	if (ret < 0) {
+> -		DRM_ERROR("failed to power on dsi\n");
+> -		return;
+> -	}
+> -
+>  	mtk_dsi_set_mode(dsi);
+>  	mtk_dsi_clk_hs_mode(dsi, 1);
+>  
+> @@ -727,7 +709,16 @@ static void mtk_output_dsi_disable(struct
+> mtk_dsi *dsi)
+>  	if (!dsi->enabled)
+>  		return;
+>  
+> -	mtk_dsi_poweroff(dsi);
+> +	/*
+> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> +	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> +	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> +	 * after dsi is fully set.
+> +	 */
+> +	mtk_dsi_stop(dsi);
+> +
+> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  
+>  	dsi->enabled = false;
+>  }
+> @@ -762,13 +753,35 @@ static void mtk_dsi_bridge_enable(struct
+> drm_bridge *bridge)
+>  {
+>  	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>  
+> +	if (dsi->refcount == 0)
+> +		return;
+> +
+>  	mtk_output_dsi_enable(dsi);
+>  }
+>  
+> +static void mtk_dsi_bridge_pre_enable(struct drm_bridge *bridge)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +	int ret;
+> +
+> +	ret = mtk_dsi_poweron(dsi);
+> +	if (ret < 0)
+> +		DRM_ERROR("failed to power on dsi\n");
+> +}
+> +
+> +static void mtk_dsi_bridge_post_disable(struct drm_bridge *bridge)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	mtk_dsi_poweroff(dsi);
+> +}
+> +
+>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>  	.attach = mtk_dsi_bridge_attach,
+>  	.disable = mtk_dsi_bridge_disable,
+>  	.enable = mtk_dsi_bridge_enable,
+> +	.pre_enable = mtk_dsi_bridge_pre_enable,
+
+The flow looks good to me, but according to [1], pre_enable is
+deprecated. Use atomic_pre_enable instead.
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/drm/drm_bridge.h?h=v5.18-rc2#n235
+
+
+> +	.post_disable = mtk_dsi_bridge_post_disable,
+
+Ditto.
+
+Regards,
+CK
+
+>  	.mode_set = mtk_dsi_bridge_mode_set,
+>  };
+>  
+

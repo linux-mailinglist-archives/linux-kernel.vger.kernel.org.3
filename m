@@ -2,166 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EEE4FFA73
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22D94FFA71
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbiDMPlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S236614AbiDMPl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiDMPlZ (ORCPT
+        with ESMTP id S235008AbiDMPlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Apr 2022 11:41:25 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D242765791;
-        Wed, 13 Apr 2022 08:39:04 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23DCm8EU013059;
-        Wed, 13 Apr 2022 11:38:49 -0400
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3fb7w8cebm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Apr 2022 11:38:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X9wzvFk7aVuCrfBzu7hPsd/O+Jd3Yy+3/h4v/6iV8ir9NYgjVBYFIHGlahWErCV4hFAGZPSuTXsjU9TrvIQKRItWxOvaIWMCmbd/MYHjTETVovS0c5YHY57VbOP9YazxuWwmrp7UPMjpk4tGXPrWiXOKmRtC6dTugbyVqQhnk8N2Vc0uRBF3kPLLsrHlky4ceYcm2KkPo4tCrQUj21Kid4oAi1ortNFBQ4aYY4VKvj59QFa1s20rdn9crr4r0jjRSSo50CAxKtFdaykwVTbsLNJ1Dz51/YqGPlZA1uWOgcVJxOcWRvYrTAwB8pBUvQqGf3/1ORpRPeq2W3+USgKkJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MUTca4VO4bb+F+IcBAZ7TFC83CiLgCtxRuTj6XR4YB0=;
- b=UvB71jId9EmcOZdmff3Y4T1+nGL9RzNzj9GPuLGC3j9brkAl/PCsJNLz+0q/NwJEK6yz77lC8arZpuOk3Ow/Olp5uu133zvcCCnTQ/ZK7LUOjiNxtWSovGNs8Remj8w0JHhXMz1DG6gZuFimK/mfDpyJ4dwpmBt+aKAWPICvf7CPNpkyqEeMA/SZaN7HlikIsnkEoNPsmZUqQRm9vV/8XwX7Hx9aF0Zrs2G4/yIWaxhNQwYBeGvp4wsdwP6nfzra4hE6cBHO3B38KLJLjSM5CYb8HyezqH9E9n3y67omlBrrRCIsHWtu0irdWQSkGdGLvEHCQinjd8Nm+4T9krCDPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MUTca4VO4bb+F+IcBAZ7TFC83CiLgCtxRuTj6XR4YB0=;
- b=Sq7rfrDX71KDmOw1t+AK4wP1OxZS6GozSmU0OZUgsjQsrQkhM8+kBX+3F2doRxsjBxs9DoO7oaf0gNxV3EGU930r77PztoQsxaoRTSuCfG+Vt1J5Ggs5F7coGOb3327HX/STfUnDyxTRGQBrzCJZqUWBMj70aasFO6ek/6GqcIU=
-Received: from PH0PR03MB6786.namprd03.prod.outlook.com (2603:10b6:510:122::7)
- by BYAPR03MB3528.namprd03.prod.outlook.com (2603:10b6:a02:b4::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
- 2022 15:38:47 +0000
-Received: from PH0PR03MB6786.namprd03.prod.outlook.com
- ([fe80::a97e:a520:c3a6:d2ae]) by PH0PR03MB6786.namprd03.prod.outlook.com
- ([fe80::a97e:a520:c3a6:d2ae%9]) with mapi id 15.20.5164.020; Wed, 13 Apr 2022
- 15:38:47 +0000
-From:   "Sa, Nuno" <Nuno.Sa@analog.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: RE: [PATCH v1 3/3] iio: imu: adis16480: Fix getting the optional
- clocks
-Thread-Topic: [PATCH v1 3/3] iio: imu: adis16480: Fix getting the optional
- clocks
-Thread-Index: AQHYT0SimMwpSDVIaEuZFYVh6Y0wNazt+DxA
-Date:   Wed, 13 Apr 2022 15:38:47 +0000
-Message-ID: <PH0PR03MB67865D24BB7546CAF805D7BE99EC9@PH0PR03MB6786.namprd03.prod.outlook.com>
-References: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
- <20220413144124.72537-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220413144124.72537-3-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
- =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctY2NhMDJhODMtYmIzZi0xMWVjLThiZGQtZmM3Nz?=
- =?iso-8859-1?Q?c0MjFmY2FlXGFtZS10ZXN0XGNjYTAyYTg0LWJiM2YtMTFlYy04YmRkLWZj?=
- =?iso-8859-1?Q?Nzc3NDIxZmNhZWJvZHkudHh0IiBzej0iMTQ2MSIgdD0iMTMyOTQzMzc5Mj?=
- =?iso-8859-1?Q?Q0MDU3NDc1IiBoPSJkbVlYUDRVTFVybkJvRURZdytZZmg4NVNPeFk9IiBp?=
- =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
- =?iso-8859-1?Q?FFb0NBQUNEQXhXUFRFL1lBU0VwVU1IS3M4cFpJU2xRd2Nxenlsa0RBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFEYUFRQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQVZJRXZvUUFBQUFBQUFBQUFBQUFBQUo0?=
- =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
- =?iso-8859-1?Q?JsQUdNQWRBQnpBRjhBWmdCaEFHd0Fjd0JsQUY4QVpnQnZBSE1BYVFCMEFH?=
- =?iso-8859-1?Q?a0FkZ0JsQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdFQV?=
- =?iso-8859-1?Q?pBQnBBRjhBY3dCbEFHTUFkUUJ5QUdVQVh3QndBSElBYndCcUFHVUFZd0Iw?=
- =?iso-8859-1?Q?QUhNQVh3QjBBR2tBWlFCeUFERUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZUUJrQUdrQVh3?=
- =?iso-8859-1?Q?QnpBR1VBWXdCMUFISUFaUUJmQUhBQWNnQnZBR29BWlFCakFIUUFjd0JmQU?=
- =?iso-8859-1?Q?hRQWFRQmxBSElBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
- =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?iso-8859-1?Q?QUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg=3D=3D?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6b6ef58e-e096-4976-202f-08da1d63b331
-x-ms-traffictypediagnostic: BYAPR03MB3528:EE_
-x-microsoft-antispam-prvs: <BYAPR03MB352877A524F33255EAF216E999EC9@BYAPR03MB3528.namprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CS6Md/X2AKb0pPDeXQF7sHWUXGqyJ3VlXMpFwTn15JGBTw6Qtxg2IT21OkrMmsdgYlED3wIHsVCa0KzMoa/oLZ6d9qx70AZYrilcUGJ0y/z/5F4pbPI/v6QkxvnPnzgYAHT638ctRPXjX3sVHeyCFcEQ9vaGc7RLTgAFtaKOOUwvBDRCurcVYPiL+YBvjJfqVWInxVhKTuNNrAu101CR9WhPqyqjxaO+aURh5m1Oobo0YibrRu30xrB2VOiBG6dxW3RKgYrI5Z1jZKUEouvxBORhJ299Sjp33R61gM0oiJSLJb/7XJCfduKjurKEGQuBDbDldg1jfikB731jef6/p5CM+1OJ8sK/m7U5ggrDgOm90G3RbSILko9vMknBhDDishpFqynqxkgPlpekzpJlM198W1rdpqtF3/QxIvsMloaVqy2ReEQMFek3vAvtcf6i6e2UuDpw9K7+x1CJ/FiiEe412+FawRVfttohCjNi3orTXgbn9SXFf5yGAiGVCS0jdESCANzKpkyNnZzDlLw/bHkiSvEy3GcPmxoyFfC6fFCnL+cDOAh/tEqG6ATrrwTa2hN4I89s7LbT6bDtv9Nda5NO4CqbKfvB6BglRqk1RwM7EgtvravFK8AKT54SzwMY6YHiuUp9BFSaNIGr6GpZY4XWcKk02mKmJtR0l1LW2mxrMGkbukggj7ZnSHLXz2NTbWyChH/DqhjP9D67w20ArA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6786.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(9686003)(4326008)(71200400001)(316002)(86362001)(508600001)(7696005)(54906003)(6506007)(2906002)(33656002)(38070700005)(110136005)(53546011)(5660300002)(38100700002)(8676002)(66556008)(64756008)(66446008)(66476007)(76116006)(66946007)(83380400001)(8936002)(52536014)(55016003)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?3M3GXfQ6N3AB04RAk0gcKcepZGn8nErYAaY0DoDuxZO2xLJqgW+PVW9N/n?=
- =?iso-8859-1?Q?0qsQjwy1x9B6ngNlYbOeTLGZ4K+9rpZogGABdmoZwgVRvT+rSr98+ccUsg?=
- =?iso-8859-1?Q?eMy4Ox2nmX9WP9+EO/wn1Szyvl3X29CdulgTR0EdlM3ZPF9znyPDCWZTQx?=
- =?iso-8859-1?Q?aMuSyTU+e+vGfqN4LBD00+GD3MhHxsZxVVslIlMjk9OdD10GovcCQASQlV?=
- =?iso-8859-1?Q?n9GI5EwcNta5ZTVtv0haYb0E9nJWmPzcLOOFsHXV1ewXP2RHCTEqQhJn7y?=
- =?iso-8859-1?Q?4d9mRkBlOI1DlWI4ZCCT06RnpXzKNoo2NmGVSKJUHlfr1/HoOeHENbM3sv?=
- =?iso-8859-1?Q?uSSaM3thTc+qKx3oYUBWkXwAkR62R+XeRmAWqtLAAoii3SbWujEEDPpgCH?=
- =?iso-8859-1?Q?kWHp/8GkVslKbcd4B3rTxSQJsFEN9pEBqHeFRI0Tkzhn9YjdnygQxvFwX8?=
- =?iso-8859-1?Q?YuFg/bZOnE6FRXnrV0lNCThyr9524eWbgEr81eBenE0diLMJUcSYP1xigB?=
- =?iso-8859-1?Q?v1kYv7C/AUC6jf7M3jmToxu97E7xjKcC0bmLW/BmYLRY3Ci2fplsAO0gKK?=
- =?iso-8859-1?Q?UuDvCaziNKY9+Kg4LrjtTIMICG5TWU/h7vVQin1RZ0UUCEAZaLnEwNtX7F?=
- =?iso-8859-1?Q?SjaQai1CSQq5LAQo9M/OdgoFIyzLcjuxXAi6is6m7d05X6+LRMGjkGCX0B?=
- =?iso-8859-1?Q?553bSYjASatB3P5HBjzEQEHa/gk3IsA9RCLotMVOLYv1S0JOrdccDKszdx?=
- =?iso-8859-1?Q?0QYPU1HLIfk+W+H/Wzymz0Hg8xNJNE/0RU9eTs05DJEGPsFdZKeYw0/paj?=
- =?iso-8859-1?Q?q80HD5EtiHrpkXYZPDKYp4Xe2GOZRxuCvJx2ObWPlkvVA9bDd93XHWZl5d?=
- =?iso-8859-1?Q?+9umSK9jmSS93N/cAuSdZEophBFxbsEfGhCIqQreBEC0YUwERAXtu7vFd8?=
- =?iso-8859-1?Q?v5tapmyqRUlJA6kqmqCOK0XB8m1nVSh/yiX9gFO7W7TO08mjJDmKwITWn2?=
- =?iso-8859-1?Q?LQqoeX8JhTxfQV5eCWDtW+vyG9FR7dV3VQFsnNJx4N8wMuv8pRLOmwwXYX?=
- =?iso-8859-1?Q?p2QiT6n8BMPP5Ug6qPHZI2wIs3OeQTemwDhjlYYHjm6K1IkXaXxZbnTOKj?=
- =?iso-8859-1?Q?dPd3jwXTaLhPNyEyCm6I5DEQpgvvKeU2s2EEFQQxvNnKmW5W39/H6zD+66?=
- =?iso-8859-1?Q?HFTg36Akw4B9D7/f9p+GvXrsQwaiF2HU8G075DP0vujrBVz4KwrEXMti8S?=
- =?iso-8859-1?Q?mw3u5pFAdQA+lzs+eab668v3CoEAn0lWMwS5kI3fst6hdwrENsFz3+gdg6?=
- =?iso-8859-1?Q?FOg/x9SzdWyH83ymieGTniIrWj7bFF04Dnj8eqK8nm1GZ59i/7IoTTvoy1?=
- =?iso-8859-1?Q?XjuK9ljQiZhSo7xgJBvB+GA2aXQQyHmqRPOYLGHj18pOsMTCOhZCzr1UZ6?=
- =?iso-8859-1?Q?Ams3an9L6HqWEc5AMnd0gjiHmCi0CxbmA+90JqPihQxBhIMXn8V5LvrubV?=
- =?iso-8859-1?Q?hHySk3R0GkxWemO/SgkfTt2ZL1DbsJaNTA9W1gn93UeT0zvaKkyyzwqxE0?=
- =?iso-8859-1?Q?/UMVRUDsyb2BzxUlX6rqJFOo1u942q9tuR0oEtCmymvEUIrTnKWT3ve8X3?=
- =?iso-8859-1?Q?erwgu+4ndvbdNdPEzRP0+lBWMtRoTw1oOrOJ2BR1fcu9TAg7kzsaph+ziw?=
- =?iso-8859-1?Q?aJFlZ9PwwGS+yZDlBFDIKUL3+Uzu5rqUA5U1Cei0cX36GSFzFJxgLphTV6?=
- =?iso-8859-1?Q?0xTkz7m4Rx8NjL6GTEFoO2poaHiA1C8Fbc+OktzvWkYaXQLUW27aj9N7SN?=
- =?iso-8859-1?Q?2Bq5uVYHq73FBTLx7ZQa+SXzYaoR9pXIhAcIzj3V88UYd9mIcdg6ttGefR?=
- =?iso-8859-1?Q?hs?=
-x-ms-exchange-antispam-messagedata-1: E1uXODJbTO27hw==
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1075465783
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649864342;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DTng1VBQBG1w5ddfOZndBpJ6F/sDE1kAEyXenf5ppGY=;
+        b=d0DGnVkUBpW2MSmLJ/tmXzAKN46azZN5D9zEqj1k9MgFmpyyaqUsDp7QDrUgcGIGVJN1Pb
+        P5HU9pAZexsKIYWa9IUrhMcAqRo8QgyqTrdnGlpjhzM945GXUfi9OAMVurOoshejYxyIra
+        22H1Q63jV7m6RKJO+R6QqDHcdby+tfE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-GcHKYhsTMliRiuXdbGmeVw-1; Wed, 13 Apr 2022 11:39:00 -0400
+X-MC-Unique: GcHKYhsTMliRiuXdbGmeVw-1
+Received: by mail-ed1-f71.google.com with SMTP id bc9-20020a056402204900b0041fe60f6ff9so723824edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:39:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc:date
+         :in-reply-to:references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=DTng1VBQBG1w5ddfOZndBpJ6F/sDE1kAEyXenf5ppGY=;
+        b=I15wjhtCPj4iIeIfnReaQajCVZlGH10AsgRDHelPTYNdwvVIcNxogt279b7acU1NIK
+         bGCJx6mttwJRJ2WBC/1OA6sqNsqt6/i4W/g1ufm9+4yBd5/wVRbf9QW0YP/oMQJxVZP1
+         okaQbgkAcDzpx0YuRTUZZAWzjj3HYWnb05CDwctJLDLPt5UYzT/kZvRih4Kz/fopoVCN
+         W1VSAogdyDV2VPNe1A9WZrDTjFiyL/e7PTG0y4CZvzv9YysLqr3LF7cmRT+EI6yaq3S3
+         Y714jRSyqgva+Bdi1V4wyWHxdxpzJFcE1GJLJu2ShTm3TbAd829cBYFMMbBEhCPpgwn3
+         PZAw==
+X-Gm-Message-State: AOAM531HxG68jXYyaBtX2urliZd/N+FUBWpmefIqvFCftVuMzz973mwa
+        2GioIy6Fgpb1V83iPYA6N/v2x8Xv6jCD5m3lwDMloQyt8Et0ZinRgTzTjcehwUol2jGV1QOQ5ir
+        6Z0y+4WvONdPj6PHZs6aunKhJ
+X-Received: by 2002:a17:907:eaa:b0:6e8:9105:b3c7 with SMTP id ho42-20020a1709070eaa00b006e89105b3c7mr13907603ejc.26.1649864339306;
+        Wed, 13 Apr 2022 08:38:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyS4emMuGiZkqPvPLYDGoWTninw7nHNjPU9LlyGy1tPOzLfzqSeEApClSgyutyj3qg6/dRukg==
+X-Received: by 2002:a17:907:eaa:b0:6e8:9105:b3c7 with SMTP id ho42-20020a1709070eaa00b006e89105b3c7mr13907582ejc.26.1649864339020;
+        Wed, 13 Apr 2022 08:38:59 -0700 (PDT)
+Received: from [192.168.2.36] (ip4-46-175-183-46.net.iconn.cz. [46.175.183.46])
+        by smtp.gmail.com with ESMTPSA id z22-20020a1709063ad600b006e8867caa5dsm102643ejd.72.2022.04.13.08.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 08:38:58 -0700 (PDT)
+Message-ID: <8106efcab543ada95ac7ea9e56c47889f7b44f3d.camel@redhat.com>
+Subject: Re: [PATCH] ice: wait for EMP reset after firmware flash
+From:   Petr Oros <poros@redhat.com>
+Reply-To: poros@redhat.com
+To:     Jacob Keller <jacob.e.keller@intel.com>, netdev@vger.kernel.org
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        ivecera@redhat.com
+Date:   Wed, 13 Apr 2022 17:38:56 +0200
+In-Reply-To: <092c941b-a057-5cf0-97d8-0c061768dae7@intel.com>
+References: <20220412102753.670867-1-poros@redhat.com>
+         <092c941b-a057-5cf0-97d8-0c061768dae7@intel.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6786.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b6ef58e-e096-4976-202f-08da1d63b331
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 15:38:47.1030
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VPbDrPLC/c4XEiB14h53nPEZa9svYXcaolRd10Ta9rYKpuDdwPN1iBabmapCPvF+pNfGSmNdMLM4e9IPjUaf8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR03MB3528
-X-Proofpoint-GUID: DYwIrhPtjBcKar1dbabsWKpjm5Zs50q2
-X-Proofpoint-ORIG-GUID: DYwIrhPtjBcKar1dbabsWKpjm5Zs50q2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-13_02,2022-04-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 mlxscore=0 priorityscore=1501 adultscore=0 clxscore=1015
- mlxlogscore=672 impostorscore=0 bulkscore=0 spamscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204130083
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -169,40 +85,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Sent: Wednesday, April 13, 2022 4:41 PM
-> To: Sa, Nuno <Nuno.Sa@analog.com>; Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com>; linux-iio@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Cc: Lars-Peter Clausen <lars@metafoo.de>; Hennerich, Michael
-> <Michael.Hennerich@analog.com>; Jonathan Cameron
-> <jic23@kernel.org>
-> Subject: [PATCH v1 3/3] iio: imu: adis16480: Fix getting the optional
-> clocks
->=20
-> [External]
->=20
-> The extended clocks are optional and may not be present for some
-> SoCs
-> supported by this driver. Nevertheless, in case the clock is provided
-> but some error happens during its getting, that error should be
-> handled
-> properly. Use devm_clk_get_optional() API for that. Also report
-> possible
-> errors using dev_err_probe() to handle properly -EPROBE_DEFER
-> error.
->=20
-> Signed-off-by: Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com>
-> ---
+Jacob Keller píše v Út 12. 04. 2022 v 09:58 -0700:
+> 
+> 
+> On 4/12/2022 3:27 AM, Petr Oros wrote:
+> > We need to wait for EMP reset after firmware flash.
+> > Code was extracted from OOT driver and without this wait
+> > fw_activate let
+> > card in inconsistent state recoverable only by second
+> > flash/activate
+> > 
+> > Reproducer:
+> > [root@host ~]# devlink dev flash pci/0000:ca:00.0 file
+> > E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bi
+> > n
+> > Preparing to flash
+> > [fw.mgmt] Erasing
+> > [fw.mgmt] Erasing done
+> > [fw.mgmt] Flashing 100%
+> > [fw.mgmt] Flashing done 100%
+> > [fw.undi] Erasing
+> > [fw.undi] Erasing done
+> > [fw.undi] Flashing 100%
+> > [fw.undi] Flashing done 100%
+> > [fw.netlist] Erasing
+> > [fw.netlist] Erasing done
+> > [fw.netlist] Flashing 100%
+> > [fw.netlist] Flashing done 100%
+> > Activate new firmware by devlink reload
+> > [root@host ~]# devlink dev reload pci/0000:ca:00.0 action
+> > fw_activate
+> > reload_actions_performed:
+> >     fw_activate
+> > [root@host ~]# ip link show ens7f0
+> > 71: ens7f0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq
+> > state DOWN mode DEFAULT group default qlen 1000
+> >     link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
+> >     altname enp202s0f0
+> > 
+> > dmesg after flash:
+> > [   55.120788] ice: Copyright (c) 2018, Intel Corporation.
+> > [   55.274734] ice 0000:ca:00.0: Get PHY capabilities failed status
+> > = -5, continuing anyway
+> > [   55.569797] ice 0000:ca:00.0: The DDP package was successfully
+> > loaded: ICE OS Default Package version 1.3.28.0
+> > [   55.603629] ice 0000:ca:00.0: Get PHY capability failed.
+> > [   55.608951] ice 0000:ca:00.0: ice_init_nvm_phy_type failed: -5
+> > [   55.647348] ice 0000:ca:00.0: PTP init successful
+> > [   55.675536] ice 0000:ca:00.0: DCB is enabled in the hardware,
+> > max number of TCs supported on this port are 8
+> > [   55.685365] ice 0000:ca:00.0: FW LLDP is disabled, DCBx/LLDP in
+> > SW mode.
+> > [   55.692179] ice 0000:ca:00.0: Commit DCB Configuration to the
+> > hardware
+> > [   55.701382] ice 0000:ca:00.0: 126.024 Gb/s available PCIe
+> > bandwidth, limited by 16.0 GT/s PCIe x8 link at 0000:c9:02.0
+> > (capable of 252.048 Gb/s with 16.0 GT/s PCIe x16 link)
+> > Reboot don't help, only second flash/activate with OOT or patched
+> > driver put card back in consistent state
+> > 
+> > After patch:
+> > [root@host ~]# devlink dev flash pci/0000:ca:00.0 file
+> > E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bi
+> > n
+> > Preparing to flash
+> > [fw.mgmt] Erasing
+> > [fw.mgmt] Erasing done
+> > [fw.mgmt] Flashing 100%
+> > [fw.mgmt] Flashing done 100%
+> > [fw.undi] Erasing
+> > [fw.undi] Erasing done
+> > [fw.undi] Flashing 100%
+> > [fw.undi] Flashing done 100%
+> > [fw.netlist] Erasing
+> > [fw.netlist] Erasing done
+> > [fw.netlist] Flashing 100%
+> > [fw.netlist] Flashing done 100%
+> > Activate new firmware by devlink reload
+> > [root@host ~]# devlink dev reload pci/0000:ca:00.0 action
+> > fw_activate
+> > reload_actions_performed:
+> >     fw_activate
+> > [root@host ~]# ip link show ens7f0
+> > 19: ens7f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq
+> > state UP mode DEFAULT group default qlen 1000
+> >     link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
+> >     altname enp202s0f0
+> > 
+> 
+> Ahh.. good find. I checked a bunch of places, but didn't check here
+> for
+> differences. :(
+> 
+> For what its worth, I checked the source history of the out-of-tree
+> driver this came from. It appears to be a workaround added for fixing
+> a
+> similar issue.
+> 
+> I haven't been able to dig up the full details yet. It appeares to be
+> a
+> collision with firmware finalizing recovery after the EMP reset.
+> 
+> Still trying to dig for any more information I can find.
 
-This is a nice cleanup patch... But the subject might be a bit
-misleading as it says "Fix". So I would expect a Fixes tag which
-I'm not sure it's really worth it here. Yes, the code was pretty much
-doing clk_get_optional() "by hand" but I think it was still functional.
-So to me, this is more an improvement rather than a fix...
+Interesting time frame could be around this commit:
+08771bce330036 ("ice: Continue probe on link/PHY errors")
 
-Anyways,
+Petr
 
-Reviewed-by: Nuno S=E1 <nuno.sa@analog.com>
+> 
+> > Fixes: 399e27dbbd9e94 ("ice: support immediate firmware activation
+> > via devlink reload")
+> > Signed-off-by: Petr Oros <poros@redhat.com>
+> > ---
+> >  drivers/net/ethernet/intel/ice/ice_main.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/net/ethernet/intel/ice/ice_main.c
+> > b/drivers/net/ethernet/intel/ice/ice_main.c
+> > index d768925785ca79..90ea2203cdc763 100644
+> > --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> > +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+> > @@ -6931,12 +6931,15 @@ static void ice_rebuild(struct ice_pf *pf,
+> > enum ice_reset_req reset_type)
+> >  
+> >         dev_dbg(dev, "rebuilding PF after reset_type=%d\n",
+> > reset_type);
+> >  
+> > +#define ICE_EMP_RESET_SLEEP 5000
+> >         if (reset_type == ICE_RESET_EMPR) {
+> >                 /* If an EMP reset has occurred, any previously
+> > pending flash
+> >                  * update will have completed. We no longer know
+> > whether or
+> >                  * not the NVM update EMP reset is restricted.
+> >                  */
+> >                 pf->fw_emp_reset_disabled = false;
+> > +
+> > +               msleep(ICE_EMP_RESET_SLEEP);
+> >         }
+> >  
+> >         err = ice_init_all_ctrlq(hw);
+> 
 

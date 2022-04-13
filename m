@@ -2,231 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C48F4FED43
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 05:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E634FED46
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 05:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiDMDD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 23:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S231855AbiDMDF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 23:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiDMDDx (ORCPT
+        with ESMTP id S230513AbiDMDFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 23:03:53 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC9F2656C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:01:33 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o2so1091881lfu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:01:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9B5Bgd6y+D2b5bf/PHddV0cYSTfDz/gFBZ7J53x9Nsk=;
-        b=WaEkr27rG3OburA2d8oeVHK+sc+92BI3Fi8YwcbmOJarjbuxfDpU5zcriwVKazSCMV
-         jJAHJtwJvXbuSuTpY53KBCWbJzVtbOqrriaveJQvxC9YvU1ps6PNDRte1i8VvEn2um+F
-         d+trcmOQr6u6qU/DaDttRbpQdntee43gnU1afWpkBm9JEfLYhr2pxjyDdaOpwWcK19mW
-         7sqo/QYK+juQCRRqXa/Ewl+PlSZJu94q7i55c1uf7DXLc8mdeYNkSXs0pQ/PBmqX2jPh
-         VOEg9oBGqi1ZIHOYtGZnNn+PZ0bXxgClI44hK3qa9Lh8duUZM6WU5OQpO5b13WeF6PPC
-         3ROw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9B5Bgd6y+D2b5bf/PHddV0cYSTfDz/gFBZ7J53x9Nsk=;
-        b=i+9MwxcLGV2lgTh1Ft/GS88pDFa7pK+8JzVuuB3BEh0b2txmykNoxeChWVRresarcW
-         PHjcSWCYluO7J/NNDYb8iBrh8Z6aKAmENdzQN3NgE+xqokR/DiqBrhkyAMM3xCtbc8hw
-         6EII846tqjThlAEvObdf2Lo0FKoF4wP4do8u9h2R4Nu/okbqSEJKKnWeNX+I96GW7z3P
-         A1h9qC4Pv4wJLLIO88p0yLVf1Mva9TPHvmhxJEuH3SZIzOa1B7uRBTn1lIh6ueb+oXdJ
-         1Jxep3AA/7feMzIx8nJ6QuXrtbVLYmJ5B2D1s3oV3V6+5xm+QGy17PmOX51xd7HD7klw
-         6VIw==
-X-Gm-Message-State: AOAM530UA9vGh31vf9wXayern7kX82oy6tcKC1J6Uhm2vUFoHr2LxTFh
-        DmibQJWRh4OOMaCl4dSGR7HhVxSkHui150TVDjM=
-X-Google-Smtp-Source: ABdhPJxOEF8VtmULdkpXg0dHuKyT/hBLh6OzeysI154DZ2PZKJFsgIPyxdD2/h7K01/pce23CdfNtapUk14Pk4Snq5c=
-X-Received: by 2002:a05:6512:12d6:b0:44a:4a14:a19a with SMTP id
- p22-20020a05651212d600b0044a4a14a19amr27792636lfg.619.1649818891444; Tue, 12
- Apr 2022 20:01:31 -0700 (PDT)
+        Tue, 12 Apr 2022 23:05:43 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44B95469A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:03:21 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1neTHl-0006sN-VP; Wed, 13 Apr 2022 05:03:14 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        hch@lst.de, arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v9 00/12] riscv: support for Svpbmt and D1 memory types
+Date:   Wed, 13 Apr 2022 05:02:55 +0200
+Message-Id: <20220413030307.133807-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220403224207.GA397480@euclid> <YlYPuIMr8mq66Lea@iweiny-desk3> <CAMWRUK6FaOC1+3ZP+af7uSyfAHjZ3KWwNqM1GjRYth+OyA-8EQ@mail.gmail.com>
-In-Reply-To: <CAMWRUK6FaOC1+3ZP+af7uSyfAHjZ3KWwNqM1GjRYth+OyA-8EQ@mail.gmail.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Tue, 12 Apr 2022 23:01:20 -0400
-Message-ID: <CAMWRUK4785GQt2UYVbXmEkUVuf0j+mv8977hYe=XT22FnecpSA@mail.gmail.com>
-Subject: Re: [PATCH] staging: rtl8723bs: simplify control flow
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy linux kernel <outreachy@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resending again in plain-text mode.]
+Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+for things like non-cacheable pages or I/O memory pages.
 
 
-On Tue, Apr 12, 2022 at 10:59 PM Sevinj Aghayeva
-<sevinj.aghayeva@gmail.com> wrote:
->
->
->
-> On Tue, Apr 12, 2022 at 7:48 PM Ira Weiny <ira.weiny@intel.com> wrote:
->>
->> On Sun, Apr 03, 2022 at 06:42:07PM -0400, Sevinj Aghayeva wrote:
->> > Checkpatch issues "WARNING: else is not generally useful after a break
->> > or return" for the following code:
->> >
->> > while (1) {
->> >       do_join_r =3D rtw_do_join(padapter);
->> >       if (do_join_r =3D=3D _SUCCESS) {
->> >               break;
->> >       } else {
->> >               rtw_dec_to_roam(padapter);
->> >
->> >               if (rtw_to_roam(padapter) > 0) {
->> >                       continue;
->> >               } else {
->> >                       rtw_indicate_disconnect(padapter);
->> >                       break;
->> >               }
->> >       }
->> > }
->> >
->> > We simplify this code in multiple steps. First, we remove do_join_r
->>
->> I can't say how Greg would like to see a change like this but my gut say=
-s that
->> each of these steps should be a patch in a series...
->>
->> > variable because it is only used right after it is assigned. Second,
->> > we remove the unnecessary else statement right after break:
->> >
->> > while (1) {
->> >       if (rtw_do_join(padapter) =3D=3D _SUCCESS)
->> >               break;
->> >       rtw_dec_to_roam(padapter);
->> >
->> >       if (rtw_to_roam(padapter) > 0) {
->> >               continue;
->> >       } else {
->> >               rtw_indicate_disconnect(padapter);
->> >               break;
->> >       }
->> > }
->> >
->> > Next, we move the call to rtw_do_join into the while test because the
->> > while will loop only until the call is successful:
->> >
->> > while (rtw_do_join(padapter) !=3D _SUCCESS) {
->> >       rtw_dec_to_roam(padapter);
->> >       if (rtw_to_roam(padapter) > 0) {
->> >               continue;
->> >       } else {
->> >               rtw_indicate_disconnect(padapter);
->> >               break;
->> >       }
->> > }
->> >
->> > Finally, looking at the code above, it is clear that the code will
->> > break out of the loop if rtw_to_roam call is <=3D 0. Hence:
->> >
->> > while (rtw_do_join(padapter) !=3D _SUCCESS) {
->> >       rtw_dec_to_roam(padapter);
->> >       if (rtw_to_roam(padapter) <=3D 0) {
->> >               rtw_indicate_disconnect(padapter);
->> >               break;
->> >       }
->> > }
->>
->> ...  that said, this commit message made reviewing the change much easie=
-r,
->> thanks.
->
->
-> This has landed a week ago, but thanks for the review anyway!
->
->>
->> Did you submit a patch for the r8188eu driver too?  I just noticed it ha=
-s a
->> similar loop in _rtw_roaming().
->
->
-> Right, there is also another similar loop in the same file as well. I thi=
-nk I wasn't sure that this patch was going to get accepted since it was a b=
-ig change, so I didn't fix the others before this one got it. In the meanti=
-me I hit slightly more than 10 cleanup patches and moved on to working with=
- my mentors. But I can fix the other loops if you think I should do it.
->
->>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->>
->> >
->> > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
->> > ---
->> >  drivers/staging/rtl8723bs/core/rtw_mlme.c | 18 ++++--------------
->> >  1 file changed, 4 insertions(+), 14 deletions(-)
->> >
->> > diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/stagi=
-ng/rtl8723bs/core/rtw_mlme.c
->> > index 3eacf8f9d236..a45df775d535 100644
->> > --- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
->> > +++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
->> > @@ -2594,30 +2594,20 @@ void _rtw_roaming(struct adapter *padapter, st=
-ruct wlan_network *tgt_network)
->> >  {
->> >       struct mlme_priv *pmlmepriv =3D &padapter->mlmepriv;
->> >       struct wlan_network *cur_network =3D &pmlmepriv->cur_network;
->> > -     int do_join_r;
->> >
->> >       if (rtw_to_roam(padapter) > 0) {
->> >               memcpy(&pmlmepriv->assoc_ssid, &cur_network->network.ssi=
-d, sizeof(struct ndis_802_11_ssid));
->> >
->> >               pmlmepriv->assoc_by_bssid =3D false;
->> >
->> > -             while (1) {
->> > -                     do_join_r =3D rtw_do_join(padapter);
->> > -                     if (do_join_r =3D=3D _SUCCESS) {
->> > +             while (rtw_do_join(padapter) !=3D _SUCCESS) {
->> > +                     rtw_dec_to_roam(padapter);
->> > +                     if (rtw_to_roam(padapter) <=3D 0) {
->> > +                             rtw_indicate_disconnect(padapter);
->> >                               break;
->> > -                     } else {
->> > -                             rtw_dec_to_roam(padapter);
->> > -
->> > -                             if (rtw_to_roam(padapter) > 0) {
->> > -                                     continue;
->> > -                             } else {
->> > -                                     rtw_indicate_disconnect(padapter=
-);
->> > -                                     break;
->> > -                             }
->> >                       }
->> >               }
->> >       }
->> > -
->> >  }
->> >
->> >  signed int rtw_linked_check(struct adapter *padapter)
->> > --
->> > 2.25.1
->> >
->
->
->
-> --
->
-> Sevinj.Aghayeva
+So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+types) using the alternatives framework.
+
+This includes a number of changes to the alternatives mechanism itself.
+The biggest one being the move to a more central location, as I expect
+in the future, nearly every chip needing some sort of patching, be it
+either for erratas or for optional features (svpbmt or others).
+
+Detection of the svpbmt functionality is done via Atish's isa extension
+handling series [0] and thus does not need any dt-parsing of its own
+anymore.
+
+The series also introduces support for the memory types of the D1
+which are implemented differently to svpbmt. But when patching anyway
+it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+location.
+
+The only slightly bigger difference is that the "normal" type is not 0
+as with svpbmt, so kernel patches for this PMA type need to be applied
+even before the MMU is brought up, so the series introduces a separate
+stage for that.
 
 
+In theory this series is 2 parts:
+- alternatives improvements
+- svpbmt+d1
 
---=20
+I picked the recipient list from the previous versions, hopefully
+I didn't forget anybody.
 
-Sevinj.Aghayeva
+I tested the series on:
+- qemu-rv32 + buildroot rootfs
+- qemu-rv64 + debian roots
+- Allwinner D1-Nezha
+- BeagleV - it at least reached the same point as without the series
+
+
+changes in v9:
+- rebase onto 5.18-rc1
+- drop the sbi null-ptr patch
+  While I still think this to be non-ideal as is, it isn't really
+  necessary for svpbmt support anymore
+- merge cpufeature + svpbmt patch, as otherwise some empty shells
+  cause build warnings when a bisection stops between these two
+  patches
+- address review comments from Christoph Hellwig:
+  - keep alternatives optional, they now get selected by its
+    users (erratas and also the newly introduced svpbmt kconfig)
+  - wrap long lines and keep things below 80 characters
+  - restyle svpbmt + thead errata assembly
+  - introduce a helper for the repeated calls to
+    (val & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT
+
+changes in v8:
+- rebase onto 5.17-final + isa extension series
+  We're halfway through the merge-window, so this series
+  should be merge after that
+- adapt to fix limiting alternatives to non-xip-kernels
+- add .norelax option for alternatives
+- fix unused cpu_apply_errata in thead errata
+- don't use static globals to store cpu-manufacturer data
+  as it makes machines hang if done too early
+
+changes in v7:
+- fix typo in patch1 (Atish)
+- moved to Atish's isa-extension framework
+- and therefore move regular boot-alternatives directly behind fill_hwcaps
+- change T-Head errata Kconfig text (Atish)
+
+changes in v6:
+- rebase onto 5.17-rc1
+- handle sbi null-ptr differently
+- improve commit messages
+- use riscv,mmu as property name
+
+changes in v5:
+- move to use alternatives for runtime-patching
+- add D1 variant
+
+
+[0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
+
+Heiko Stuebner (12):
+  riscv: integrate alternatives better into the main architecture
+  riscv: allow different stages with alternatives
+  riscv: implement module alternatives
+  riscv: implement ALTERNATIVE_2 macro
+  riscv: extend concatenated alternatives-lines to the same length
+  riscv: prevent compressed instructions in alternatives
+  riscv: move boot alternatives to after fill_hwcap
+  riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+  riscv: add RISC-V Svpbmt extension support
+  riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+  riscv: don't use global static vars to store alternative data
+  riscv: add memory-type errata for T-Head
+
+ arch/riscv/Kconfig                          |  22 ++++
+ arch/riscv/Kconfig.erratas                  |  33 +++--
+ arch/riscv/Kconfig.socs                     |   1 -
+ arch/riscv/Makefile                         |   2 +-
+ arch/riscv/errata/Makefile                  |   2 +-
+ arch/riscv/errata/alternative.c             |  75 ------------
+ arch/riscv/errata/sifive/errata.c           |  20 ++-
+ arch/riscv/errata/thead/Makefile            |   1 +
+ arch/riscv/errata/thead/errata.c            |  82 +++++++++++++
+ arch/riscv/include/asm/alternative-macros.h | 129 +++++++++++++++-----
+ arch/riscv/include/asm/alternative.h        |  25 +++-
+ arch/riscv/include/asm/errata_list.h        |  59 +++++++++
+ arch/riscv/include/asm/fixmap.h             |   2 -
+ arch/riscv/include/asm/hwcap.h              |   1 +
+ arch/riscv/include/asm/pgtable-32.h         |  17 +++
+ arch/riscv/include/asm/pgtable-64.h         |  79 +++++++++++-
+ arch/riscv/include/asm/pgtable-bits.h       |  10 --
+ arch/riscv/include/asm/pgtable.h            |  55 +++++++--
+ arch/riscv/include/asm/vendorid_list.h      |   1 +
+ arch/riscv/kernel/Makefile                  |   1 +
+ arch/riscv/kernel/alternative.c             | 104 ++++++++++++++++
+ arch/riscv/kernel/cpu.c                     |   1 +
+ arch/riscv/kernel/cpufeature.c              |  80 +++++++++++-
+ arch/riscv/kernel/module.c                  |  29 +++++
+ arch/riscv/kernel/setup.c                   |   2 +
+ arch/riscv/kernel/smpboot.c                 |   4 -
+ arch/riscv/kernel/traps.c                   |   2 +-
+ arch/riscv/mm/init.c                        |   1 +
+ 28 files changed, 679 insertions(+), 161 deletions(-)
+ delete mode 100644 arch/riscv/errata/alternative.c
+ create mode 100644 arch/riscv/errata/thead/Makefile
+ create mode 100644 arch/riscv/errata/thead/errata.c
+ create mode 100644 arch/riscv/kernel/alternative.c
+
+-- 
+2.35.1
+

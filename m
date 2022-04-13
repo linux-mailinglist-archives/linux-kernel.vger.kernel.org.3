@@ -2,76 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9D9500190
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBAD500192
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiDMWJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
+        id S235847AbiDMWLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbiDMWJz (ORCPT
+        with ESMTP id S233818AbiDMWLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:09:55 -0400
+        Wed, 13 Apr 2022 18:11:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3E91FCC3;
-        Wed, 13 Apr 2022 15:07:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525C515720;
+        Wed, 13 Apr 2022 15:09:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9537AB8279C;
-        Wed, 13 Apr 2022 22:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF87C385A3;
-        Wed, 13 Apr 2022 22:07:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 014AEB8275E;
+        Wed, 13 Apr 2022 22:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B71CC385A6;
+        Wed, 13 Apr 2022 22:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649887650;
-        bh=12vrk9awYVCTUe0RyKFzO2xA1hChf/BZAjoo3yOchN8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SiddX4+78YNil79bJnMmE4BaZgDEthqU0TFD9xmrSaWsmrNK0tw+LlHrNAEoHtKzE
-         hAQA67iaxwPCntbzXPDhlZjNq2rpjmhvtkDHNw4e683xLY2KnP/X0jiyUknelNg3cR
-         hloy7KKKlg+n4h9V2ZXYAd+gj1lafGEUFhH4lGlMWZO65sx+SX1MQU0cgS8LnY30fP
-         OWzskynhi6XPU4vqeJA8ufYbKhsJ+JQb+r2lVoURQuA/pUZQmTYqdCNiA+Ataze5LP
-         4CBMDkbDGGl/ZDITiofJteCJ6N6cgywYZ7FNYh4J3Zejj2pns1WYFaTIlaKD4mK+rZ
-         1L+wAPZtJPv9g==
-Message-ID: <350f6a02-2975-ac1b-1c9d-ab738722a9fe@kernel.org>
-Date:   Wed, 13 Apr 2022 16:07:28 -0600
+        s=k20201202; t=1649887759;
+        bh=jgSOQzCVRoBHmb6HoMBMfjB7ijOTlpofh5TsaaZ1DII=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UZwQtlWFGuRvynrYy3Hnku+N8GlU0fnU3TmEVni5mosTZaikBoZ+xEfcEQ0kAy8Kh
+         lg9Bk5WIb4xghtorw+uyqjSKj64vtI09WL1DWHxhYiFDpMaRRonrGA3J+zZSfqutbF
+         W+/N6uY0itZI3oN1lO2FEwf76DpjkpEOJXfEjbGJPI5v4AsumQXooPBpTakEKtT2X1
+         KQvjpAcm/YC3BvoBq6tPvf0zY5wEXjRkWih8dWcpH6K1iIG92sFnVgwgjS/ND7DA15
+         8ugfsoqFsn6+ekTDh5CWIdpnKs62N0JNUOzrCGdQXokT8LrLYvD8SBEzYlyqpFnj7Q
+         LCPhQTD+5su/w==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so3445485fac.11;
+        Wed, 13 Apr 2022 15:09:19 -0700 (PDT)
+X-Gm-Message-State: AOAM532W2Osi9GHd6070TZzcvtoKYf14UnZLHTs3sugE3nZOL8S+f5WF
+        H6EBR32kuI6MI4CTFqaOyGoKMvSt2Ey+qIaIo3Q=
+X-Google-Smtp-Source: ABdhPJyFhIESFBWF4NWTke0JSO8yrNB48D6kvuTaKZGZjUJVfNqzOhAod1iXtN4jeUCBimDim5jGDX57mxsce/wQecQ=
+X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
+ s37-20020a056870eaa500b000da0b3f2b45mr397925oap.228.1649887758751; Wed, 13
+ Apr 2022 15:09:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, yoshfuji@linux-ipv6.org,
-        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
-        prestwoj@gmail.com, gilligan@arista.com, noureddine@arista.com,
-        gk@arista.com
-References: <20220413143434.527-1-aajith@arista.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220413143434.527-1-aajith@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220331221030.889718-1-jakobkoschel@gmail.com>
+ <CAMj1kXE2r4xrtFc+=OJfzutZzTtaUoFtW=f7y9+us9h+xGVEnA@mail.gmail.com> <9142505E-720F-401E-AD48-BA9D0880EDD1@gmail.com>
+In-Reply-To: <9142505E-720F-401E-AD48-BA9D0880EDD1@gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 14 Apr 2022 00:09:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFqG0n1KVPsTYo2a-qS3zb40itNmxy9gGy2A===qdPYxg@mail.gmail.com>
+Message-ID: <CAMj1kXFqG0n1KVPsTYo2a-qS3zb40itNmxy9gGy2A===qdPYxg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] efi: remove use of list iterator variable after loop
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 8:34 AM, Arun Ajith S wrote:
-> diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.py b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
-> new file mode 100755
-> index 000000000000..f508657ee126
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
-> @@ -0,0 +1,255 @@
-> +#!/bin/bash
+(cc Kees for pstore)
 
-that file name suffix should be .sh since it is a bash script; not .py
+On Wed, 13 Apr 2022 at 20:08, Jakob Koschel <jakobkoschel@gmail.com> wrote:
+>
+>
+>
+> > On 13. Apr 2022, at 19:05, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Fri, 1 Apr 2022 at 00:11, Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> >>
+> >> In preparation to limiting the scope of a list iterator to the list
+> >> traversal loop, use a dedicated pointer to iterate through the list [1].
+> >>
+> >> In the current state the list_for_each_entry() is guaranteed to
+> >> hit a break or goto in order to work properly. If the list iterator
+> >> executes completely or the list is empty the iterator variable contains
+> >> a type confused bogus value infered from the head of the list.
+> >>
+> >> With this patch the variable used past the list iterator is only set
+> >> if the list exists early and is NULL otherwise. It should therefore
+> >> be safe to just set *prev = NULL (as it was before).
+> >>
+> >
+> > This generic boilerplate is fine to include, but it would help if you
+> > could point out why repainting the current logic with your new brush
+> > is appropriate here.
+>
+> This makes sense, I can see that the commit message should be improved here.
+>
+> >
+> > In this particular case, I wonder whether updating *prev makes sense
+> > to begin with if we are returning an error, and if we fix that, the
+> > issue disappears as well.
+>
+> Actually I'm rethinking this now. The only use of 'prev' that I can see is
+> in efi_pstore_erase_name(). It only uses it if found != 0
+> which would mean err != 0 in __efivar_entry_iter().
+>
+> This would allow massively simplifying the entire function.
+> The valid case is updating *prev when there is an "error" as far as I can tell.
+>
 
-other than that looks good to me.
+OK, so in summary, the only user of that code that bothers to pass a
+value for prev abuses it to implement its own version of
+efivar_entry_find(), and so if we fix that caller, we can drop the
+'prev' argument from this function altogether.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+
+> I've sketched up a rewritten function that should hopefully be more clear and
+> archive the same goal, I'm curious what you think:
+>
+>
+>         int __efivar_entry_iter(int (*func)(struct efivar_entry *, void *),
+>                                 struct list_head *head, void *data,
+>                                 struct efivar_entry **prev)
+>         {
+>                 struct efivar_entry *entry, *n;
+>                 int err = 0;
+>
+>                 /* If prev is set and *prev != NULL start iterating from there */
+>                 if (prev)
+>                         entry = list_prepare_entry(*prev, head, list);
+>                 /* Otherwise start at the beginning */
+>                 else
+>                         entry = list_entry(head, typeof(*entry), list);
+>                 list_for_each_entry_safe_continue(entry, n, head, list) {
+>                         err = func(entry, data);
+>                         if (err && prev)
+>                                 *prev = entry;
+>                         if (err)
+>                                 return err;
+>                 }
+>
+>                 return 0;
+>         }
+>
+
+Thanks for this. I'll have a stab myself at fixing the EFI pstore
+code, and hopefully we can clean up __efivar_entry_iter() as I
+suggested.

@@ -2,200 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A451D4FF098
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744BB4FF099
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbiDMHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S233374AbiDMHfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiDMHd6 (ORCPT
+        with ESMTP id S229794AbiDMHfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:33:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75E449F0C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:31:37 -0700 (PDT)
-X-UUID: eb95d7c3a1684443be2db332da7ebe50-20220413
-X-UUID: eb95d7c3a1684443be2db332da7ebe50-20220413
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1754399769; Wed, 13 Apr 2022 15:31:33 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 13 Apr 2022 15:31:32 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Apr
- 2022 15:31:31 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Apr 2022 15:31:31 +0800
-Message-ID: <b1edb995f5dba2f8e313192a79cfc0972b7c832f.camel@mediatek.com>
-Subject: Re: [PATCH v4, 2/4] drm/mediatek: Separate poweron/poweroff from
- enable/disable and define new funcs
-From:   CK Hu <ck.hu@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>
-CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 13 Apr 2022 15:31:31 +0800
-In-Reply-To: <1649644308-8455-3-git-send-email-xinlei.lee@mediatek.com>
-References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
-         <1649644308-8455-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Apr 2022 03:35:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E940313F3F;
+        Wed, 13 Apr 2022 00:33:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83BB261298;
+        Wed, 13 Apr 2022 07:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED4DC385A3;
+        Wed, 13 Apr 2022 07:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649835204;
+        bh=Eth9R1jVxiIpBjWdOSRBL4N9xcIJCp4d4G7NUjOd5jo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1PNsbVhKl0Pz2TNrKSRGuGYsBuUBxpI7hZKwOXR+sDJyP5ZGsA27q05hGoW8YSp0G
+         H+TyEs1ZbkLnMymfx9E/9lwZBEgpO6yOsRCNV/8nti/iksdCoHdP6pu358ZAXF8wvo
+         a4C3eH+n9TAHDT3N36Rryk51t2CdM/ZqzSbYxRXo=
+Date:   Wed, 13 Apr 2022 09:33:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc:     mst@redhat.com, alikernel-developer@linux.alibaba.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
+Message-ID: <YlZ8vZ9RX5i7mWNk@kroah.com>
+References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
+On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
+> If two userspace programs both open the PCI UIO fd, when one
+> of the program exits uncleanly, the other will cause IO hang
+> due to bus-mastering disabled.
+> 
+> It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
+> to avoid such problems.
 
-On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
+Why do you have multiple userspace programs opening the same device?
+Shouldn't they coordinate?
+
 > 
-> In order to match the changes of "Use the drm_panel_bridge API",
-> the poweron/poweroff of dsi is extracted from enable/disable and
-> defined as new funcs (pre_enable/post_disable).
-> 
-> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
-> API")
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Fixes: 865a11f987ab("uio/uio_pci_generic: Disable bus-mastering on release")
+> Reported-by: Xiu Yang <yangxiu.yx@alibaba-inc.com>
+> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
 > ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 51 +++++++++++++++++++---------
-> --
->  1 file changed, 32 insertions(+), 19 deletions(-)
+> Changes for v2:
+> 	Use refcount_t instead of atomic_t to catch overflow/underflows.
+> ---
+>  drivers/uio/uio_pci_generic.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index 262c027d8c2f..cf76c53a1af6 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -679,16 +679,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi
-> *dsi)
->  	if (--dsi->refcount != 0)
->  		return;
->  
-> -	/*
-> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-> -	 * mtk_dsi_stop() should be called after
-> mtk_drm_crtc_atomic_disable(),
-> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable
-> irq.
-> -	 * mtk_dsi_start() needs to be called in
-> mtk_output_dsi_enable(),
-> -	 * after dsi is fully set.
-> -	 */
-> -	mtk_dsi_stop(dsi);
-> -
-> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_lane0_ulp_mode_enter(dsi);
->  	mtk_dsi_clk_ulp_mode_enter(dsi);
-> @@ -703,17 +693,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi
-> *dsi)
->  
->  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
->  {
-> -	int ret;
-> -
->  	if (dsi->enabled)
->  		return;
->  
-> -	ret = mtk_dsi_poweron(dsi);
-> -	if (ret < 0) {
-> -		DRM_ERROR("failed to power on dsi\n");
-> -		return;
-> -	}
-> -
->  	mtk_dsi_set_mode(dsi);
->  	mtk_dsi_clk_hs_mode(dsi, 1);
->  
-> @@ -727,7 +709,16 @@ static void mtk_output_dsi_disable(struct
-> mtk_dsi *dsi)
->  	if (!dsi->enabled)
->  		return;
->  
-> -	mtk_dsi_poweroff(dsi);
-> +	/*
-> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-> +	 * mtk_dsi_stop() should be called after
-> mtk_drm_crtc_atomic_disable(),
-> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable
-> irq.
-> +	 * mtk_dsi_start() needs to be called in
-> mtk_output_dsi_enable(),
-> +	 * after dsi is fully set.
-> +	 */
-> +	mtk_dsi_stop(dsi);
-> +
-> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
->  
->  	dsi->enabled = false;
->  }
-> @@ -762,13 +753,35 @@ static void mtk_dsi_bridge_enable(struct
-> drm_bridge *bridge)
->  {
->  	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
->  
-> +	if (dsi->refcount == 0)
-> +		return;
-> +
->  	mtk_output_dsi_enable(dsi);
->  }
->  
-> +static void mtk_dsi_bridge_pre_enable(struct drm_bridge *bridge)
-> +{
-> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
-> +	int ret;
-> +
-> +	ret = mtk_dsi_poweron(dsi);
-> +	if (ret < 0)
-> +		DRM_ERROR("failed to power on dsi\n");
-> +}
-> +
-> +static void mtk_dsi_bridge_post_disable(struct drm_bridge *bridge)
-> +{
-> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
-> +
-> +	mtk_dsi_poweroff(dsi);
-> +}
-> +
->  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
->  	.attach = mtk_dsi_bridge_attach,
->  	.disable = mtk_dsi_bridge_disable,
->  	.enable = mtk_dsi_bridge_enable,
-> +	.pre_enable = mtk_dsi_bridge_pre_enable,
-
-The flow looks good to me, but according to [1], pre_enable is
-deprecated. Use atomic_pre_enable instead.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/drm/drm_bridge.h?h=v5.18-rc2#n235
-
-
-> +	.post_disable = mtk_dsi_bridge_post_disable,
-
-Ditto.
-
-Regards,
-CK
-
->  	.mode_set = mtk_dsi_bridge_mode_set,
+> diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
+> index e03f9b5..1a5e1fd 100644
+> --- a/drivers/uio/uio_pci_generic.c
+> +++ b/drivers/uio/uio_pci_generic.c
+> @@ -31,6 +31,7 @@
+>  struct uio_pci_generic_dev {
+>  	struct uio_info info;
+>  	struct pci_dev *pdev;
+> +	refcount_t refcnt;
 >  };
 >  
+>  static inline struct uio_pci_generic_dev *
+> @@ -39,6 +40,14 @@ struct uio_pci_generic_dev {
+>  	return container_of(info, struct uio_pci_generic_dev, info);
+>  }
+>  
+> +static int open(struct uio_info *info, struct inode *inode)
+> +{
+> +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
+> +
+> +	refcount_inc(&gdev->refcnt);
+> +	return 0;
+> +}
+> +
+>  static int release(struct uio_info *info, struct inode *inode)
+>  {
+>  	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
+> @@ -51,7 +60,9 @@ static int release(struct uio_info *info, struct inode *inode)
+>  	 * Note that there's a non-zero chance doing this will wedge the device
+>  	 * at least until reset.
+>  	 */
+> -	pci_clear_master(gdev->pdev);
+> +	if (refcount_dec_and_test(&gdev->refcnt))
+> +		pci_clear_master(gdev->pdev);
 
+The goal here is to flush things when userspace closes the device, as
+the comment says.  So don't you want that to happen for when userspace
+closes the file handle no matter who opened it?
+
+As this is a functional change, how is userspace going to "know" this
+functionality is now changed or not?
+
+And if userspace really wants to open this multiple times, then properly
+switch the code to only create the device-specific structures when open
+is called.  Otherwise you are sharing structures here that are not
+intended to be shared, shouldn't you have your own private one?
+
+this feels odd.
+
+thanks,
+
+greg k-h

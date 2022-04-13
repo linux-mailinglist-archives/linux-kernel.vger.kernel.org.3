@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6E44FF9FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B9E4FF9FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbiDMPYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S236456AbiDMPYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236441AbiDMPYN (ORCPT
+        with ESMTP id S234848AbiDMPYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:24:13 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6454D9CF;
-        Wed, 13 Apr 2022 08:21:52 -0700 (PDT)
+        Wed, 13 Apr 2022 11:24:22 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4446522CD;
+        Wed, 13 Apr 2022 08:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649863312; x=1681399312;
+  t=1649863316; x=1681399316;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=9o2bFOxnslGG0yBjqTOEYQZk3iGdEFqDz33jYt55X+8=;
-  b=hKIRf3OL5YqwTHkCgKbfPrnZnusF3avgew/uldXwCnEXaJD+hiAWrt5e
-   pRh5JG+Nt7S9pmFtxGqlu+3m5dBmcbFS8r4Spk3R5vh5ojKDuYHXJPpvr
-   WKqvViQqj42uZGewW3sLSCgohE8012T86JcBXGhoaIg9QzvrnZxi3TBg9
-   g=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Apr 2022 08:21:52 -0700
+  bh=1Cq27c9y9aIcI3AsQo3+huqwP1xiaPXyynvg3nDbUuA=;
+  b=o0JUy1qu1iRXb6AyOh4Xsn/da7YDC+ONWEA/ondzbgevCQn75sxTmO9Z
+   aC3lehgy348cckjMDiPafmJpdKGmEm3+RGuI8u3PESpPiJfEz9a0jMbjA
+   paPBgzrqt/RA36ZwTq1B12Td1fXI7RGitVwW2PzDmlYc7PBpETlZWTFaG
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 08:21:56 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:21:51 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:21:55 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 08:21:50 -0700
+ 15.2.986.22; Wed, 13 Apr 2022 08:21:55 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 08:21:46 -0700
+ 15.2.986.22; Wed, 13 Apr 2022 08:21:51 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -47,9 +47,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v7 2/4] arm64: dts: qcom: sc7280: Add nodes for wcd9385 and max98360a codec
-Date:   Wed, 13 Apr 2022 20:51:15 +0530
-Message-ID: <1649863277-31615-3-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v7 3/4] arm64: dts: qcom: sc7280: Add lpass cpu node
+Date:   Wed, 13 Apr 2022 20:51:16 +0530
+Message-ID: <1649863277-31615-4-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
@@ -58,8 +58,8 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,188 +68,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add wcd938x and  max98360a codecs for audio use case on
-sc7280 based platforms.
-Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
-Add amp_en node for  max98360a codec.
+Add lpass cpu node for audio on sc7280 based platforms.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-crd.dts        |  6 ++
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  8 +++
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 94 ++++++++++++++++++++++++++
- 3 files changed, 108 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 28 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 62 ++++++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index e2efbdd..b944366 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -84,6 +84,12 @@ ap_ts_pen_1v8: &i2c13 {
- 	pins = "gpio51";
- };
- 
-+&wcd938x {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&us_euro_hs_sel>;
-+	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-+};
-+
- &tlmm {
- 	tp_int_odl: tp-int-odl {
- 		pins = "gpio7";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index dc17f20..8e4f822 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -20,6 +20,14 @@
- #include "sc7280-chrome-common.dtsi"
- 
- / {
-+	max98360a: audio-codec-0 {
-+		compatible = "maxim,max98360a";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&amp_en>;
-+		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-+		#sound-dai-cells = <0>;
-+	};
-+
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
 diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 110d9e9..6004c08 100644
+index 6004c08..cf62d06 100644
 --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -20,6 +20,41 @@
- 		serial1 = &uart7;
- 	};
- 
-+	max98360a: audio-codec-0 {
-+		compatible = "maxim,max98360a";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&amp_en>;
-+		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-+		#sound-dai-cells = <0>;
-+	};
-+
-+	wcd938x: audio-codec-1 {
-+		compatible = "qcom,wcd9385-codec";
-+		#sound-dai-cells = <1>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wcd_reset_n>, <&wcd_reset_n_sleep>;
-+		reset-gpios = <&tlmm 83 GPIO_ACTIVE_HIGH>;
-+
-+		qcom,rx-device = <&wcd_rx>;
-+		qcom,tx-device = <&wcd_tx>;
-+
-+		vdd-rxtx-supply = <&vreg_l18b_1p8>;
-+		vdd-io-supply = <&vreg_l18b_1p8>;
-+		vdd-buck-supply = <&vreg_l17b_1p8>;
-+		vdd-mic-bias-supply = <&vreg_bob>;
-+
-+		qcom,micbias1-microvolt = <1800000>;
-+		qcom,micbias2-microvolt = <1800000>;
-+		qcom,micbias3-microvolt = <1800000>;
-+		qcom,micbias4-microvolt = <1800000>;
-+
-+		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000
-+							  500000 500000 500000>;
-+		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-+		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		label = "gpio-keys";
-@@ -238,6 +273,19 @@
+@@ -273,6 +273,34 @@
  	modem-init;
  };
  
-+&lpass_rx_macro {
++&lpass_cpu {
 +	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&mi2s1_data0>, <&mi2s1_sclk>, <&mi2s1_ws>;
++
++	dai-link@1 {
++		reg = <MI2S_SECONDARY>;
++		qcom,playback-sd-lines = <0>;
++	};
++
++	dai-link@5 {
++		reg = <LPASS_DP_RX>;
++	};
++
++	dai-link@6 {
++		reg = <LPASS_CDC_DMA_RX0>;
++	};
++
++	dai-link@19 {
++		reg = <LPASS_CDC_DMA_TX3>;
++	};
++
++	dai-link@25 {
++		reg = <LPASS_CDC_DMA_VA_TX0>;
++	};
 +};
 +
-+&lpass_tx_macro {
-+	status = "okay";
-+};
-+
-+&lpass_va_macro {
-+	status = "okay";
-+	vdd-micb-supply = <&vreg_bob>;
-+};
-+
- &pcie1 {
+ &lpass_rx_macro {
  	status = "okay";
- 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
-@@ -298,6 +346,24 @@
- 	cd-gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
  };
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index c0f127f..69cb78f 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -19,6 +19,7 @@
+ #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+ #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+ #include <dt-bindings/soc/qcom,rpmh-rsc.h>
++#include <dt-bindings/sound/qcom,lpass.h>
+ #include <dt-bindings/thermal/thermal.h>
  
-+&swr0 {
-+	wcd_rx: codec@0,4 {
-+		compatible = "sdw20217010d00";
-+		reg = <0 4>;
-+		#sound-dai-cells = <1>;
-+		qcom,rx-port-mapping = <1 2 3 4 5>;
-+	};
-+};
-+
-+&swr1 {
-+	wcd_tx: codec@0,3 {
-+		compatible = "sdw20217010d00";
-+		reg = <0 3>;
-+		#sound-dai-cells = <1>;
-+		qcom,tx-port-mapping = <1 2 3 4>;
-+	};
-+};
-+
- &uart5 {
- 	compatible = "qcom,geni-debug-uart";
- 	status = "okay";
-@@ -561,6 +627,12 @@
- };
+ / {
+@@ -2102,6 +2103,67 @@
+ 			#sound-dai-cells = <1>;
+ 		};
  
- &tlmm {
-+	amp_en: amp-en {
-+		pins = "gpio63";
-+		bias-pull-down;
-+		drive-strength = <2>;
-+	};
++		lpass_cpu: audio@3987000 {
++			compatible = "qcom,sc7280-lpass-cpu";
 +
- 	bt_en: bt-en {
- 		pins = "gpio85";
- 		function = "gpio";
-@@ -643,5 +715,27 @@
- 		function = "gpio";
- 		bias-pull-down;
- 	};
++			reg = <0 0x03987000 0 0x68000>,
++			      <0 0x03b00000 0 0x29000>,
++			      <0 0x03260000 0 0xc000>,
++			      <0 0x03280000 0 0x29000>,
++			      <0 0x03340000 0 0x29000>,
++			      <0 0x0336c000 0 0x3000>;
++			reg-names = "lpass-hdmiif",
++				    "lpass-lpaif",
++				    "lpass-rxtx-cdc-dma-lpm",
++				    "lpass-rxtx-lpaif",
++				    "lpass-va-lpaif",
++				    "lpass-va-cdc-dma-lpm";
 +
-+	us_euro_hs_sel: us-euro-hs-sel {
-+		pins = "gpio81";
-+		function = "gpio";
-+		bias-pull-down;
-+		drive-strength = <2>;
-+	};
++			iommus = <&apps_smmu 0x1820 0>,
++				 <&apps_smmu 0x1821 0>,
++				 <&apps_smmu 0x1832 0>;
 +
-+	wcd_reset_n: wcd-reset-n {
-+		pins = "gpio83";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		output-high;
-+	};
++			power-domains =	<&rpmhpd SC7280_LCX>;
++			power-domain-names = "lcx";
++			required-opps = <&rpmhpd_opp_nom>;
 +
-+	wcd_reset_n_sleep: wcd-reset-n-sleep {
-+		pins = "gpio83";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-disable;
-+		output-low;
-+	};
- };
- 
++			clocks = <&lpass_aon LPASS_AON_CC_AUDIO_HM_H_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_EXT_MCLK0_CLK>,
++				 <&lpasscore LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK>,
++				 <&lpasscore LPASS_CORE_CC_EXT_IF0_IBIT_CLK>,
++				 <&lpasscore LPASS_CORE_CC_EXT_IF1_IBIT_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM0_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM1_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM2_CLK>,
++				 <&lpass_aon LPASS_AON_CC_VA_MEM0_CLK>;
++			clock-names = "aon_cc_audio_hm_h",
++				      "audio_cc_ext_mclk0",
++				      "core_cc_sysnoc_mport_core",
++				      "core_cc_ext_if0_ibit",
++				      "core_cc_ext_if1_ibit",
++				      "audio_cc_codec_mem",
++				      "audio_cc_codec_mem0",
++				      "audio_cc_codec_mem1",
++				      "audio_cc_codec_mem2",
++				      "aon_cc_va_mem0";
++
++			#sound-dai-cells = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "lpass-irq-lpaif",
++					  "lpass-irq-hdmi",
++					  "lpass-irq-vaif",
++					  "lpass-irq-rxtxif";
++
++			status = "disabled";
++		};
++
+ 		lpass_ag_noc: interconnect@3c40000 {
+ 			reg = <0 0x03c40000 0 0xf080>;
+ 			compatible = "qcom,sc7280-lpass-ag-noc";
 -- 
 2.7.4
 

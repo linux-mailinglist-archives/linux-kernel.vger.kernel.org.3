@@ -2,113 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D56500136
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247CC50013B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiDMVfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S230270AbiDMVfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiDMVfF (ORCPT
+        with ESMTP id S230218AbiDMVfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:35:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F31710FD;
-        Wed, 13 Apr 2022 14:32:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdwmP1dWRz4xL3;
-        Thu, 14 Apr 2022 07:32:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649885557;
-        bh=VZtR8HkE1+TZSDG5YYAGqR5GUnoGLn13HenXzbDS2tQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UNoAM1Oe3NV8LPPNbISd2sUprziYugI7J1GM+OsLhb+6T12YLxmaslMeWNfUmgRb4
-         YbsPFVs/COiZ81ko8Mml8EBFX3cvZ29+IdyYi3t5jSFfsL7eJLt4GwpOozgrs1xV5t
-         h1nJhM+TtV2xrS1RuR1Wr6PCAe5zFFBS0ru4LW4C0Pk3sLGix5CUZNCF02lvRSqiB/
-         Fh95Zct/D7Y0YXMcz7gRAiBf3pZYZ88O6NQXrttORsU+zNs6xRMAheMpgNs3AzUjUg
-         7n+w10FfUce5amjw4RwYJNCsh1N9pdjW6Uket0ohaXhOtDdlQtcIIXjALQyDHrs6/j
-         utXje7Y5YDybw==
-Date:   Thu, 14 Apr 2022 07:32:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the phy tree
-Message-ID: <20220414073236.1f955bff@canb.auug.org.au>
+        Wed, 13 Apr 2022 17:35:44 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1FE716CE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:33:19 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so3339372wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hrRXt3ZjySM6jgUEgS/sVOHo9ohL7qyGaHBQht/wgxc=;
+        b=ofxA5ENYuBeWsh9HN3+JXYWKOQrmwTUWaZGi+J/HtU8IYH6k/AJoFt/uFPtKhXm5CO
+         9ZLt3RamQNlm7SUz3pjDcLo4YT4xxFrZx0suG2JEjnzpEYvLSDCo4WsCcOM5zsH3F1zk
+         BP3ihT0CfADW0BdxWESdHyOUjm9KAa6G7p3pU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hrRXt3ZjySM6jgUEgS/sVOHo9ohL7qyGaHBQht/wgxc=;
+        b=LR4xm1aRgDBdPhmm1yMSlmD6/U1NeZEJ45Irg4TTAtV/Y1mpFLQXQvn0AgRpjuA0Qr
+         jLTavbIL+BNomnOBgwgbwPk3pQ/5LgEq3hEFVazT8qZolZYAbGPzkYGIHQey7Jau5bI6
+         gTkuiJeiSLXz4Wx8bPa/uk8zpqZjelDdBkDyC+MhySKOmHrfBYY/TO+qgp1JjjCMuxpv
+         AqdWRgI7Kd1FTEaDCECtTuB9Uyp38X66XuomHEqW5WX9OfZd7Q8g2MRrqc4Ll6C9oSgd
+         UKPH76pWqqPIZbRqvnnvz33ojVDcLdcyQcxaRTwBdmhIiTZFuOZWQzUG0rWMr6fT0AyI
+         N3Iw==
+X-Gm-Message-State: AOAM530+clfB1CMeNtjwYPkZQWN/a6DOaGeRHK4x4+lHao5CuVBrODYX
+        tnWM5YX37k/DzBjlaX56mQ9l0A==
+X-Google-Smtp-Source: ABdhPJzsUmO8kaFAE2HlAxutOffK+wUwusjMwPRbY+zWnNYAOUOkfYlX4aOTNTcDbKiR/LT9pqiDrA==
+X-Received: by 2002:a05:600c:1e1f:b0:38e:c3eb:2d9 with SMTP id ay31-20020a05600c1e1f00b0038ec3eb02d9mr117845wmb.90.1649885598155;
+        Wed, 13 Apr 2022 14:33:18 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-56-163.cust.vodafonedsl.it. [188.217.56.163])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b0038e75fda4edsm3025wmb.47.2022.04.13.14.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 14:33:17 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Li Jun <jun.li@nxp.com>, Richard Zhu <hongxing.zhu@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] arm64: dts: imx8mm-evk: add pwm1/backlight support
+Date:   Wed, 13 Apr 2022 23:33:11 +0200
+Message-Id: <20220413213313.11511-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//1MF6dsWpWLC_.QFKPq9vL_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//1MF6dsWpWLC_.QFKPq9vL_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add pwm1/backlight support nodes for imx8mm_evk board.
+Align with u-boot dts
 
-Hi all,
+References:
+ - https://patchwork.ozlabs.org/project/uboot/patch/20220326111911.13720-9-tommaso.merciai@amarulasolutions.com/
 
-In commit
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+---
+Changes since v1:
+ - Fix commit body
+ - Enable pwm, backlight
 
-  8724489e5ffc ("phy: ti: Add missing pm_runtime_disable() in serdes_am654_=
-probe")
+Changes since v2:
+ - Remove status okay from pwm1,backlight (enable as default)
 
-Fixes tag
+Changes since v3:
+ - Remove status okay only from backlight (enable as default), pwm1 is disabled
+   on imx8mm.dtsi, we need to enable it
 
-  Fixes: 71e2f5c ("phy: ti: Add a new SERDES driver for TI's AM654x SoC")
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-has these problem(s):
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+index 6d67df7692f1..6a209395452a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+@@ -59,6 +59,14 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
+ 		enable-active-high;
+ 	};
+ 
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 5000000>;
++		brightness-levels = <0 255>;
++		num-interpolated-steps = <255>;
++		default-brightness-level = <250>;
++	};
++
+ 	ir-receiver {
+ 		compatible = "gpio-ir-receiver";
+ 		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+@@ -395,6 +403,12 @@ &wdog1 {
+ 	status = "okay";
+ };
+ 
++&pwm1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_backlight>;
++	status = "okay";
++};
++
+ &iomuxc {
+ 	pinctrl_fec1: fec1grp {
+ 		fsl,pins = <
+@@ -549,4 +563,10 @@ pinctrl_wdog: wdoggrp {
+ 			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0x166
+ 		>;
+ 	};
++
++	pinctrl_backlight: backlightgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO01_PWM1_OUT	0x06
++		>;
++	};
+ };
+-- 
+2.25.1
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
-In commit
-
-  19974ef56750 ("phy: mapphone-mdm6600: Fix PM error handling in phy_mdm660=
-0_probe")
-
-Fixes tag
-
-  Fixes: f7f50b2 ("phy: mapphone-mdm6600: Add runtime PM support for n_gsm =
-on USB suspend")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//1MF6dsWpWLC_.QFKPq9vL_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJXQXQACgkQAVBC80lX
-0Gx/rgf9Hs947/qj9qBYdJCqgljroyiMHUCSJ4KP7G0XTxaNXRMltEFNmzTt8OnU
-BGRtD0QcOIndRZgPr1BJbEOV94+C/Ffrm/LHNqa732+iTpxV/rDE11e5Ug/xOYIZ
-O2cswSX//OqftC1+RcOmBqMAG/e9dcNWMaBKjV7XGRU5oj90OsBIF7kgI4S17Ywf
-viU7qA0ggLJQXhDkTthym4gX+BUqeWsXv3SPlBas450mh9K5YnOtV2rSCrKlbLUH
-CEWaqPmev3+Wjj4V6ZdpDgHu7208V9yuChYt3LNMvs7wFMncf+6SGeJEHD+2fUW7
-FD7Zgnr06GPgLSDK6Pfz500EyuS0ag==
-=aL79
------END PGP SIGNATURE-----
-
---Sig_//1MF6dsWpWLC_.QFKPq9vL_--

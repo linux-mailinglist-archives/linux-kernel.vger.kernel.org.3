@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB08F4FF59B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9904FF59F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbiDMLXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S234982AbiDMLXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbiDMLXU (ORCPT
+        with ESMTP id S232244AbiDMLXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:23:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D9A255BC;
-        Wed, 13 Apr 2022 04:20:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C758CB82246;
-        Wed, 13 Apr 2022 11:20:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1989EC385A4;
-        Wed, 13 Apr 2022 11:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649848856;
-        bh=cSiQfBbF6ZDYpEmvyUxanMOiy8xvxiXwnOUP/vdgTvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VD68iFFr/vvzobOfHHgbsWMJ86VflpLAgBa+/f1R8EvAN9XQhb3sTxLtLQRun6kIS
-         t8HoOnpc2HclAL+Dc9f188hF1Lj/AsdwvWZPWeaidMp5TNbcQSsUAtsckur+uxahst
-         CMortC/qwEFWvNRcbgvGebezN81LdIK4T7VrBHLE=
-Date:   Wed, 13 Apr 2022 13:20:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        alikernel-developer@linux.alibaba.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
-Message-ID: <YlayFROf5P294P/P@kroah.com>
-References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
- <YlZ8vZ9RX5i7mWNk@kroah.com>
- <20220413044246-mutt-send-email-mst@kernel.org>
- <ebd1b238-6e48-6561-93ab-f562096b1c05@linux.alibaba.com>
- <YlabT7+Hqc3h62AT@kroah.com>
- <5a80c065-e811-018e-6c35-01c12b194c94@linux.alibaba.com>
+        Wed, 13 Apr 2022 07:23:49 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C471440932
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649848888; x=1681384888;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+zJAD1HKa77om0AhT1FzlltJbJCVIeuCwXk//SW2wqk=;
+  b=oQ0HkKu7/5TWTcV06N982jV7odDoBLzmkrn3nEtBa6BvqM0xvE9N2wIk
+   37+ytwBePwO/PLkzEKfW68di5STXU3OuVpPHutRZov6YdlOvo5qkRWN1B
+   80kK2u6Ky7N82KozWXWeUKVZkV6/V5mpwlNk2hYWPXr4qvOVAg4zSXqNE
+   8=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 04:21:28 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 04:21:28 -0700
+Received: from [10.110.69.201] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
+ 2022 04:21:24 -0700
+Message-ID: <57a04278-0a60-cc7d-7ce8-a75c2befd568@quicinc.com>
+Date:   Wed, 13 Apr 2022 16:51:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5a80c065-e811-018e-6c35-01c12b194c94@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Possible race in dev_coredumpm()-del_timer() path
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <sboyd@kernel.org>, <johannes@sipsolutions.net>,
+        <rafael@kernel.org>
+References: <2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com>
+ <YlZg4KkiAgODr45d@kroah.com>
+ <20220413101639.GA24349@hu-mojha-hyd.qualcomm.com>
+ <Ylas6F75Y7O6R87U@kroah.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <Ylas6F75Y7O6R87U@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,79 +66,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 07:09:57PM +0800, Yao Hongbo wrote:
-> 
-> 在 2022/4/13 下午5:43, Greg KH 写道:
-> > On Wed, Apr 13, 2022 at 05:25:40PM +0800, Yao Hongbo wrote:
-> > > 在 2022/4/13 下午4:51, Michael S. Tsirkin 写道:
-> > > > On Wed, Apr 13, 2022 at 09:33:17AM +0200, Greg KH wrote:
-> > > > > On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
-> > > > > > If two userspace programs both open the PCI UIO fd, when one
-> > > > > > of the program exits uncleanly, the other will cause IO hang
-> > > > > > due to bus-mastering disabled.
-> > > > > > 
-> > > > > > It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
-> > > > > > to avoid such problems.
-> > > > > Why do you have multiple userspace programs opening the same device?
-> > > > > Shouldn't they coordinate?
-> > > > Or to restate, I think the question is, why not open the device
-> > > > once and pass the FD around?
-> > > Hmm, it will have the same result, no matter  whether opening the same
-> > > device or pass the FD around.
-> > How?  You only open once, and close once.  Where is the multiple closes?
-> > 
-> > > Our expectation is that even if the primary process exits abnormally,  the
-> > > second process can still send
-> > > 
-> > > or receive data.
-> > Then use the same file descriptor.
-> 
-> 
-> Yes, we can use the same file descriptor.
-> 
-> but since the pcie bus-master  has been disabled by the primary process,
-> 
-> the seconday process cannot continue to operate.
 
-Really?  With the same file descriptor?  Try it and see.  release should
-only be called when the file descriptor is closed.
 
-> > > The impact of disabling pci bus-master is relatively large, and we should
-> > > make some restrictions on
-> > > this behavior.
-> > Why?  UIO is "you better really really know what you are doing to use
-> > this interface", right?  Just duplicate the fd and pass it around if you
-> > must have multiple accesses to the same device.
-> > 
-> > And again, this will be a functional change.  How can you handle your
-> > userspace on older kernels if you make this change?
+On 4/13/2022 4:28 PM, Greg KH wrote:
+> On Wed, Apr 13, 2022 at 03:46:39PM +0530, Mukesh Ojha wrote:
+>> On Wed, Apr 13, 2022 at 07:34:24AM +0200, Greg KH wrote:
+>>> On Wed, Apr 13, 2022 at 10:59:22AM +0530, Mukesh Ojha wrote:
+>>>> Hi All,
+>>>>
+>>>> We are hitting one race due to which try_to_grab_pending() is stuck .
+>>>
+>>> What kernel version are you using?
+>>
+>> 5.10
 > 
-> Without this change, our userspace cannot work properly on older kernels.
+> 5.10.0 was released a very long time ago.  Please use a more modern
+> kernel release :)
+> 
+>> Sorry, for the formatting mess.
+>>
+>>>> In following scenario, while running (p1)dev_coredumpm() devcd device is
+>>>> added to
+>>>> the framework and uevent notification sent to userspace that result in the
+>>>> call to (p2) devcd_data_write()
+>>>> which eventually try to delete the queued timer which in the racy scenario
+>>>> timer is not queued yet.
+>>>> So, debug object report some warning and in the meantime timer is
+>>>> initialized and queued from p1 path.
+>>>> and from p2 path it gets overriden again timer->entry.pprev=NULL and
+>>>> try_to_grab_pending() stuck
+>> 	p1 					p2(X)
+>>
+>>     dev_coredump() uevent sent to userspace
+>>     device_add()  =========================> userspace process X reads the uevents
+>>                                              writes to devcd fd which
+>>                                              results into writes to
+>>
+>>                                              devcd_data_write()
+>> 					      mod_delayed_work()
+>>                                                  try_to_grab_pending()
+>> 						  del_timer()
+>> 						   debug_assert_init()
+>>    INIT_DELAYED_WORK
+>>    schedule_delayed_work
+>> 						    debug_object_fixup()
+> 
+> Why do you have object debugging enabled?  That's going to take a LONG
+> time, and will find bugs in your code.  Perhaps like this one?
+> There is no issue if we disable debug object.
+Here, some client module try to collect dump
+via dev_coredumpm() which creates devcdX device and
+expects userspace to read this data. Here, it might be
+exposing a synchronization issue between dev_coredumpm()
+and  devcd_data_write() perhaps, a mutex ??
 
-What change broke your userspace?
+================o<===============================
 
-> Our userspace only use the "multi process mode" feature of the spdk.
-> 
-> The SPDK links:
-> https://spdk.io/doc/app_overview.html
-> 
-> "Multi process mode
-> When --shm-id is specified, the application is started in multi-process
-> mode.
-> 
-> Applications using the same shm-id share their memory and NVMe devices.
-> 
-> The first app to start with a given id becomes a primary process, with the
-> rest,
-> 
-> called secondary processes, only attaching to it. When the primary process
-> exits,
-> 
-> the secondary ones continue to operate, but no new processes can be attached
-> 
-> at this point. All processes within the same shm-id group must use the same
-> --single-file-segments setting."
+  11
+  12 diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+  13 index 9243468..a620dcb 100644
+  14 --- a/drivers/base/devcoredump.c
+  15 +++ b/drivers/base/devcoredump.c
+  16 @@ -29,6 +29,7 @@ struct devcd_entry {
+  17         struct device devcd_dev;
+  18         void *data;
+  19         size_t datalen;
+  20 +       struct mutex mutex;
+  21         struct module *owner;
+  22         ssize_t (*read)(char *buffer, loff_t offset, size_t count,
+  23                         void *data, size_t datalen);
+  24 @@ -88,7 +89,9 @@ static ssize_t devcd_data_write(struct file 
+*filp, struct kobject *kobj,
+  25         struct device *dev = kobj_to_dev(kobj);
+  26         struct devcd_entry *devcd = dev_to_devcd(dev);
+  27
+  28 +       mutex_lock(&devcd->mutex);
+  29         mod_delayed_work(system_wq, &devcd->del_wk, 0);
+  30 +       mutex_unlock(&devcd->mutex);
+  31
+  32         return count;
+  33  }
+  34 @@ -282,13 +285,14 @@ void dev_coredumpm(struct device *dev, struct 
+module *owner,
+  35         devcd->read = read;
+  36         devcd->free = free;
+  37         devcd->failing_dev = get_device(dev);
+  38 -
+  39 +       mutex_init(&devcd->mutex);
+  40         device_initialize(&devcd->devcd_dev);
+  41
+  42         dev_set_name(&devcd->devcd_dev, "devcd%d",
+  43                      atomic_inc_return(&devcd_count));
+  44         devcd->devcd_dev.class = &devcd_class;
+  45
+  46 +       mutex_lock(&devcd->mutex);
+  47         if (device_add(&devcd->devcd_dev))
+  48                 goto put_device;
+  49
+  50 @@ -302,10 +306,11 @@ void dev_coredumpm(struct device *dev, struct 
+module *owner,
+  51
+  52         INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
+  53         schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
+  54 -
+  55 +       mutex_unlock(&devcd->mutex);
 
-Please work with the spdk users, I know nothing about that mess, sorry.
 
-greg k-h
+Thanks,
+-Mukesh
+
+> What type of device is this?  What bus?  What driver?
+> 
+> And if you turn object debugging off, what happens?
+> 
+> thanks,
+> 
+> greg k-h

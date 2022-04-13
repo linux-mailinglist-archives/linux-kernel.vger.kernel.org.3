@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746874FF78F
+	by mail.lfdr.de (Postfix) with ESMTP id 2C83B4FF78E
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiDMN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S235689AbiDMN0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiDMN0b (ORCPT
+        with ESMTP id S235635AbiDMN0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:26:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD685A17F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:24:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649856248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPXICJta5haLPFS6jvdk3LgrFwQUzBpKD9OoNyZ5Z/A=;
-        b=shGqH5iew2vdg6NcRgItaWgWqjMdAkG4xs72W0hSjGyglQpaD4J1vbqbAIrGllmOJRIIYD
-        4l9i1fqWyUSZd7nz+ZM5TDn7ND5pcbNRNzkX07GawdrbEtN2wq0Gw0JbzX0SOI0Gg/3D/K
-        /oKwAt5/irlrrrQACdtZyIdT7AFXuUVKD2qj0iDnjWMbblp7wmbgXVrV3Sus/Ce9S/xEpY
-        yp2YanLA7OigPtzPT7aYrL/h6ihX+SJX4eu7g4efPl2NyjmADn9ktpCziOqI5slAMDVkg+
-        TDLSMflwd619msbB1BJxl+YMd6CWtFyOgi0mIi3vZXnSMnPu8emPs/zCEA6lgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649856248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPXICJta5haLPFS6jvdk3LgrFwQUzBpKD9OoNyZ5Z/A=;
-        b=z3Us5IOV/nW26DsKuBlEsBgL9EzSW77cVW6yYp9NoyH4XTs1tgaSVuB5LmiTRX/CkTOtpG
-        AhS8A3N/wKcXmZCA==
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Daniel Vacek <neelx@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/apic: Clarify i82489DX bit overlap in APIC_LVT0
-In-Reply-To: <alpine.DEB.2.21.2204122235140.9383@angie.orcam.me.uk>
-References: <20220202140244.1681140-1-neelx@redhat.com>
- <874k361liu.ffs@tglx>
- <CACjP9X_A7aLmvypyOz1UrXM571gx_X5q7=w-1j+G+MSbCteiEw@mail.gmail.com>
- <87ee22f3ci.ffs@tglx>
- <alpine.DEB.2.21.2204122235140.9383@angie.orcam.me.uk>
-Date:   Wed, 13 Apr 2022 15:24:07 +0200
-Message-ID: <875yndf760.ffs@tglx>
+        Wed, 13 Apr 2022 09:26:44 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB825BC11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:24:20 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id a19so2029905oie.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:24:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=GkPu+VzqLRa8FBFCQSr+DQfeLMBrMIqhtSL0YhCubSF+uM5tS8sTuWEUqwysHVYkRO
+         3wyGd9EnvvL2XOfL9cphBUBh6OVk1Ihwvna0b5ut+Dwj8wIWtor/6mL4ebQCumXXTLCz
+         N7FfAXey5gD3IFXGbZZ2LhUdX2Q9O8An47MApJ33QIRoIM3AvIxSUud2dYczMOoOhlfG
+         7efP7ZgQBkc2qlKgMLt8+/PsvvbbWvWsgA0aMo2zuYwCJVHX5CXZnG/hRUARFKcKTHTn
+         xwgkyKqLxk+L3OrsjIw664A0V315RsP8alG3UnchHSkpoSKrypadHrX1xPbYfQ2bSh35
+         a/lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=VYcOUGcbzXtqkOMT5S4frcklslRtKi5Wg1KKc90C0MULlJeWrzpMgg2Um377Eveg9/
+         qjmGln5y/W4p8R5Q8nNpsWW/NzCDxuSuwKGp8CgAzK3vz44YkFNBovlYnBcoAwclE3Hk
+         UkPVHldpL1OSQjxaOiw1kkYZ4QCHXctlHPZDM8qDljf4Q0sXsjE4r4wj+dvtJjUD9doN
+         0Q1lfMyygYNywsGgz2b/gCrRjx0H8BqqSc4c/tuaB+FtEP4B8rCcoxCtahaZtVqUq8/s
+         gM5pSxtuA9fZSRnsKoBct1sDr/K1FSc07UoIZsmMojJnnAacN0qdYbeu7pO3HZ1c/p4Z
+         SzYA==
+X-Gm-Message-State: AOAM532mis2kMb5uO+CYZlkreVrLmeGXgXoYELrieHlPTetocO8isBPC
+        5Rr/tty/2SD6kDWRXaAHzxOKcEUvWATUgeLiaVc=
+X-Google-Smtp-Source: ABdhPJwia+cqS2dGsoN77ARHpjjw9sFk8+LTMJkO/9c9X9eU10metPz0oUN7U+LlsxD67WjPkkabkYXkiazR03cJbm4=
+X-Received: by 2002:a05:6808:2018:b0:2ec:c22b:15b8 with SMTP id
+ q24-20020a056808201800b002ecc22b15b8mr4118266oiw.136.1649856260074; Wed, 13
+ Apr 2022 06:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: erickone.infor@gmail.com
+Received: by 2002:a05:6841:1194:b0:bfc:d042:6840 with HTTP; Wed, 13 Apr 2022
+ 06:24:19 -0700 (PDT)
+From:   miriam yusuf <miriamyusuf08@gmail.com>
+Date:   Wed, 13 Apr 2022 13:24:19 +0000
+X-Google-Sender-Auth: B41nxYjclSSn8gvWS_Dwz5hyWAk
+Message-ID: <CAGEMGJ3+QXk5+tt0pyqw4s5G+2wK4td5SqFJvq6Xp8LPgDGNFA@mail.gmail.com>
+Subject: =?UTF-8?B?0J/RgNC40LLQtdGC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maciej,
 
-On Tue, Apr 12 2022 at 23:17, Maciej W. Rozycki wrote:
-> On Tue, 12 Apr 2022, Thomas Gleixner wrote:
->
->> Daniel stumbled over the undocumented bit overlap of the i82498DX external
->> APIC and the TSC deadline timer configuration bit in modern APICs.
->
->  For the record, it's documented in the i82498DX datasheet[1] and user 
-> manual[2]:
->
-> 'Bits [19:18] Timer Base: This field selects the time base input to be 
-> used by the timer.
-
-That's true, but how many people aside of you and me still have access
-to the i82498DX related documentation? The interwebs has no trace of
-them.
-
-With the above I explicitely meant the undocumented bit overlap both in
-the current SDMs and the kernel source.
-
-Thanks,
-
-        tglx

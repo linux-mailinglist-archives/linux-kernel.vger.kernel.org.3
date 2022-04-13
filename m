@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5B94FF924
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BD64FF909
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbiDMOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S236148AbiDMOhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiDMOnj (ORCPT
+        with ESMTP id S232591AbiDMOhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:43:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531C40E52;
-        Wed, 13 Apr 2022 07:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649860877; x=1681396877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=linNOV4EomB16L2HapHfKkK9INH52m95HA/3C7Gt7dc=;
-  b=Gf1QutFsWw4xQHNwPWm9xJbrKtf8v3m+AQWMLuHe/JfZhrtmTB+/ZlE6
-   CS5pBlET/nxZTQhDKVRkgdC9eWZQ7jmPfNWaVEdRMRyMJ/lkKWWe2VsMK
-   pCUHjx6VeZfWblhIPknj/rYww0YkT2sfl8Fw93yV1SMnQy6VAgI5RPPOV
-   9GX9ulniC/SrNEkuj0mz8iNHIi6GK5oWL+8u9zOZ8Gf/56HBBd5Gf8Nkx
-   QLUXDfIrJRsIplAv+tzP6AhcxgG21wHMJ0qC8uSyU1Vjh9MQCjGu0V5EF
-   dolLZg3G9NP+C/oXvatb3NHjFMqEJsAHlzvENFUFM5+glN0oMc/8Qe/hb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242619758"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="242619758"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:34:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="645191086"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2022 07:34:19 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nee4Y-0000NU-RM;
-        Wed, 13 Apr 2022 14:34:18 +0000
-Date:   Wed, 13 Apr 2022 22:33:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
-        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
-        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-Message-ID: <202204132236.KPzXaw0b-lkp@intel.com>
-References: <20220412231508.32629-2-libo.chen@oracle.com>
+        Wed, 13 Apr 2022 10:37:16 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB1D606E9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:34:53 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id l127so448625pfl.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CIsNfPRidIIb5w/SYfIH9yDnHL/BsniyVDIkT3SgKfE=;
+        b=cZces3/TX0L42HH5c7+xdCKMeClrHdOe6cQo5eOl2pHiJhItiP68v8/rJ1lXTVLM4M
+         /G8V8fyfivYMeuzK8+Z0SUDyq4YVFEdywCfv+C+v1uc/CMrRn7Iy619z+4/mN5AUxpoi
+         yw85g0lEHSTp/Qg5lBBYJukxmC6eTX4Kl5dyKyx8G87h8KA6TH4zWpkWc8UZd7D1PmqL
+         SyQq99ecyH2UB3zYlfny0bZq7DCHldmdyekUY3xdlnsd21993bGZzCllUZniUBwNU1MU
+         6trOxRfECcOtObxE/XFPRgFSy9hp/EunhWEKAixvIDPhCCkQuHDhWXoGKEbC8Dy2zrbN
+         Ggdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CIsNfPRidIIb5w/SYfIH9yDnHL/BsniyVDIkT3SgKfE=;
+        b=AdKvQq8vEcaJpewWxCyTcnL2KLQTg5G/Mj2KFSrCp6b03FnvTyQ3E5IgYNrY4/dvWB
+         FT+4rrwdEbZgEbS3WAOM1Ss2FpSMFkeprTil0cqP40YS9TMk2plQ//3jLqWT2kvOenyk
+         m0s4KXxGj3ErweIRsn8MX7BYb6yHTI54frGAo9WKoB6uuUKdY1z1Rfaa2B3rRXdepQ5W
+         nCmUxJtD1pNdXimSMxxnkgdn2vKfgr5CDYs0eJ5FfOd/YLTcOKunDzbJ0b4mI1qWTFcO
+         AnWv5Hp3E2cv4unBUZ6T9sxTd9A8qGUf/Y6JEOonjIkjh17Hw6Ml78omE2s2PyXYoK9V
+         P1HQ==
+X-Gm-Message-State: AOAM532Zhd4c2nNJc7PQN4W8wh0ki66qC+sadMZVB9EEkbpv3Ta5qXEC
+        e5xnOelhHDYVajYaSvLzoOrzSw==
+X-Google-Smtp-Source: ABdhPJxsOp9HkFtEvCCysqwpqV1XI4MvKtyxfGpt0EZC80W3r5iXZoMS85u0uRuSecwUSEYKupt2VQ==
+X-Received: by 2002:a63:ff03:0:b0:39d:ac7f:d97a with SMTP id k3-20020a63ff03000000b0039dac7fd97amr4148248pgi.362.1649860491922;
+        Wed, 13 Apr 2022 07:34:51 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.166.144])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm45194705pfc.98.2022.04.13.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 07:34:50 -0700 (PDT)
+From:   Arun Ajith S <aajith@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com, aajith@arista.com
+Subject: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131
+Date:   Wed, 13 Apr 2022 14:34:34 +0000
+Message-Id: <20220413143434.527-1-aajith@arista.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412231508.32629-2-libo.chen@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,162 +71,452 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Libo,
+Add a new neighbour cache entry in STALE state for routers on receiving
+an unsolicited (gratuitous) neighbour advertisement with
+target link-layer-address option specified.
+This is similar to the arp_accept configuration for IPv4.
+A new sysctl endpoint is created to turn on this behaviour:
+/proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Arun Ajith S <aajith@arista.com>
+---
+ Documentation/networking/ip-sysctl.rst        |  23 ++
+ include/linux/ipv6.h                          |   1 +
+ include/uapi/linux/ipv6.h                     |   1 +
+ net/ipv6/addrconf.c                           |  10 +
+ net/ipv6/ndisc.c                              |  20 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../net/ndisc_unsolicited_na_test.py          | 255 ++++++++++++++++++
+ 7 files changed, 310 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/net/ndisc_unsolicited_na_test.py
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc2 next-20220413]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-config: parisc-randconfig-r014-20220413 (https://download.01.org/0day-ci/archive/20220413/202204132236.KPzXaw0b-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6636f7cf28d2a79cde937c0f212e8a87080da06d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
-        git checkout 6636f7cf28d2a79cde937c0f212e8a87080da06d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: kernel/workqueue.o: in function `free_workqueue_attrs':
->> kernel/workqueue.c:3370: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `alloc_workqueue_attrs':
->> kernel/workqueue.c:3390: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_set_unbound_cpumask':
->> kernel/workqueue.c:5390: undefined reference to `zalloc_cpumask_var'
->> hppa-linux-ld: kernel/workqueue.c:5406: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `wq_unbound_cpumask_store':
-   kernel/workqueue.c:5664: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.c:5671: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_init_early':
-   kernel/workqueue.c:5995: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `sched_setaffinity':
->> kernel/sched/core.c:7948: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/sched/core.c:7951: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/sched/core.c:7978: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:7980: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_setaffinity':
-   kernel/sched/core.c:8051: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:8057: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_getaffinity':
-   kernel/sched/core.c:8108: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:8120: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `sched_init':
->> kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
->> hppa-linux-ld: kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
->> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
->> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
-   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup_type':
->> kernel/sched/isolation.c:104: undefined reference to `alloc_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup':
-   kernel/sched/isolation.c:122: undefined reference to `alloc_bootmem_cpumask_var'
->> hppa-linux-ld: kernel/sched/isolation.c:128: undefined reference to `alloc_bootmem_cpumask_var'
->> hppa-linux-ld: kernel/sched/isolation.c:173: undefined reference to `free_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/sched/isolation.c:175: undefined reference to `free_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/taskstats.o: in function `taskstats_user_cmd':
->> kernel/taskstats.c:441: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/taskstats.c:457: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/taskstats.c:464: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/events/core.o: in function `perf_event_init':
->> kernel/events/core.c:13237: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: fs/io_uring.o: in function `__io_uring_register':
->> fs/io_uring.c:11472: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: fs/io_uring.c:11488: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io_uring.c:11493: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io-wq.o: in function `io_wq_create':
-   fs/io-wq.c:1180: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: fs/io-wq.c:1214: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io-wq.o: in function `io_wq_put_and_exit':
-   fs/io-wq.c:1290: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: block/blk-mq.o: in function `blk_mq_alloc_hctx':
-   block/blk-mq.c:3528: undefined reference to `zalloc_cpumask_var_node'
-   hppa-linux-ld: block/blk-mq.c:3575: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_offline':
-   drivers/base/cpu.c:245: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.c:249: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_isolated':
-   drivers/base/cpu.c:274: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.c:281: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_clear_queues':
-   drivers/net/ethernet/emulex/benet/be_main.c:2943: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_setup_queues':
-   drivers/net/ethernet/emulex/benet/be_main.c:2981: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.o: in function `ef4_probe_nic':
-   drivers/net/ethernet/sfc/falcon/efx.c:1329: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.c:1344: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: net/core/dev.o: in function `netif_get_num_default_rss_queues':
-   net/core/dev.c:3001: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: net/core/dev.c:3009: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/profile.o: in function `prof_cpu_mask_proc_write':
-   kernel/profile.c:361: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: kernel/profile.c:369: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/profile.o: in function `profile_init':
-   kernel/profile.c:114: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/profile.c:132: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/torture.o: in function `torture_cleanup_begin':
-   kernel/torture.c:591: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/torture.o: in function `torture_shuffle_init':
-   kernel/torture.c:572: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: block/blk-mq-sysfs.o: in function `blk_mq_hw_sysfs_release':
-   block/blk-mq-sysfs.c:41: undefined reference to `free_cpumask_var'
-
-
-vim +3370 kernel/workqueue.c
-
-1fa44ecad2b864 James Bottomley     2006-02-23  3360  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3361  /**
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3362   * free_workqueue_attrs - free a workqueue_attrs
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3363   * @attrs: workqueue_attrs to free
-226223ab3c4118 Tejun Heo           2013-03-12  3364   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3365   * Undo alloc_workqueue_attrs().
-226223ab3c4118 Tejun Heo           2013-03-12  3366   */
-513c98d0868295 Daniel Jordan       2019-09-05  3367  void free_workqueue_attrs(struct workqueue_attrs *attrs)
-226223ab3c4118 Tejun Heo           2013-03-12  3368  {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3369  	if (attrs) {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02 @3370  		free_cpumask_var(attrs->cpumask);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3371  		kfree(attrs);
-226223ab3c4118 Tejun Heo           2013-03-12  3372  	}
-226223ab3c4118 Tejun Heo           2013-03-12  3373  }
-226223ab3c4118 Tejun Heo           2013-03-12  3374  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3375  /**
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3376   * alloc_workqueue_attrs - allocate a workqueue_attrs
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3377   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3378   * Allocate a new workqueue_attrs, initialize with default settings and
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3379   * return it.
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3380   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3381   * Return: The allocated new workqueue_attr on success. %NULL on failure.
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3382   */
-513c98d0868295 Daniel Jordan       2019-09-05  3383  struct workqueue_attrs *alloc_workqueue_attrs(void)
-226223ab3c4118 Tejun Heo           2013-03-12  3384  {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3385  	struct workqueue_attrs *attrs;
-226223ab3c4118 Tejun Heo           2013-03-12  3386  
-be69d00d976957 Thomas Gleixner     2019-06-26  3387  	attrs = kzalloc(sizeof(*attrs), GFP_KERNEL);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3388  	if (!attrs)
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3389  		goto fail;
-be69d00d976957 Thomas Gleixner     2019-06-26 @3390  	if (!alloc_cpumask_var(&attrs->cpumask, GFP_KERNEL))
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3391  		goto fail;
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3392  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3393  	cpumask_copy(attrs->cpumask, cpu_possible_mask);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3394  	return attrs;
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3395  fail:
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3396  	free_workqueue_attrs(attrs);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3397  	return NULL;
-226223ab3c4118 Tejun Heo           2013-03-12  3398  }
-226223ab3c4118 Tejun Heo           2013-03-12  3399  
-
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index b0024aa7b051..9e17efe343ac 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2467,6 +2467,29 @@ drop_unsolicited_na - BOOLEAN
+ 
+ 	By default this is turned off.
+ 
++accept_unsolicited_na - BOOLEAN
++	Add a new neighbour cache entry in STALE state for routers on receiving an
++	unsolicited neighbour advertisement with target link-layer address option
++	specified. This is as per router-side behavior documented in RFC9131.
++	This has lower precedence than drop_unsolicited_na.
++	 drop   accept  fwding                   behaviour
++	 ----   ------  ------  ----------------------------------------------
++	    1        X       X  Drop NA packet and don't pass up the stack
++	    0        0       X  Pass NA packet up the stack, don't update NC
++	    0        1       0  Pass NA packet up the stack, don't update NC
++	    0        1       1  Pass NA packet up the stack, and add a STALE
++	                          NC entry
++	This will optimize the return path for the initial off-link communication
++	that is initiated by a directly connected host, by ensuring that
++	the first-hop router which turns on this setting doesn't have to
++	buffer the initial return packets to do neighbour-solicitation.
++	The prerequisite is that the host is configured to send
++	unsolicited neighbour advertisements on interface bringup.
++	This setting should be used in conjunction with the ndisc_notify setting
++	on the host to satisfy this prerequisite.
++
++	By default this is turned off.
++
+ enhanced_dad - BOOLEAN
+ 	Include a nonce option in the IPv6 neighbor solicitation messages used for
+ 	duplicate address detection per RFC7527. A received DAD NS will only signal
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 16870f86c74d..918bfea4ef5f 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -61,6 +61,7 @@ struct ipv6_devconf {
+ 	__s32		suppress_frag_ndisc;
+ 	__s32		accept_ra_mtu;
+ 	__s32		drop_unsolicited_na;
++	__s32		accept_unsolicited_na;
+ 	struct ipv6_stable_secret {
+ 		bool initialized;
+ 		struct in6_addr secret;
+diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
+index d4178dace0bf..549ddeaf788b 100644
+--- a/include/uapi/linux/ipv6.h
++++ b/include/uapi/linux/ipv6.h
+@@ -194,6 +194,7 @@ enum {
+ 	DEVCONF_IOAM6_ID,
+ 	DEVCONF_IOAM6_ID_WIDE,
+ 	DEVCONF_NDISC_EVICT_NOCARRIER,
++	DEVCONF_ACCEPT_UNSOLICITED_NA,
+ 	DEVCONF_MAX
+ };
+ 
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 1afc4c024981..6473dc84b71d 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -5587,6 +5587,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
+ 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
+ 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
+ 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
++	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
+ }
+ 
+ static inline size_t inet6_ifla6_size(void)
+@@ -7037,6 +7038,15 @@ static const struct ctl_table addrconf_sysctl[] = {
+ 		.extra1		= (void *)SYSCTL_ZERO,
+ 		.extra2		= (void *)SYSCTL_ONE,
+ 	},
++	{
++		.procname	= "accept_unsolicited_na",
++		.data		= &ipv6_devconf.accept_unsolicited_na,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++		.extra1		= (void *)SYSCTL_ZERO,
++		.extra2		= (void *)SYSCTL_ONE,
++	},
+ 	{
+ 		/* sentinel */
+ 	}
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index fcb288b0ae13..254addad0dd3 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -979,6 +979,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	struct inet6_dev *idev = __in6_dev_get(dev);
+ 	struct inet6_ifaddr *ifp;
+ 	struct neighbour *neigh;
++	bool create_neigh;
+ 
+ 	if (skb->len < sizeof(struct nd_msg)) {
+ 		ND_PRINTK(2, warn, "NA: packet too short\n");
+@@ -999,6 +1000,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	/* For some 802.11 wireless deployments (and possibly other networks),
+ 	 * there will be a NA proxy and unsolicitd packets are attacks
+ 	 * and thus should not be accepted.
++	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
+ 	 */
+ 	if (!msg->icmph.icmp6_solicited && idev &&
+ 	    idev->cnf.drop_unsolicited_na)
+@@ -1039,7 +1041,23 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		in6_ifa_put(ifp);
+ 		return;
+ 	}
+-	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
++	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
++	 * An unsolicited NA can now create a neighbour cache entry
++	 * on routers if it has Target LL Address option.
++	 *
++	 * drop   accept  fwding                   behaviour
++	 * ----   ------  ------  ----------------------------------------------
++	 *    1        X       X  Drop NA packet and don't pass up the stack
++	 *    0        0       X  Pass NA packet up the stack, don't update NC
++	 *    0        1       0  Pass NA packet up the stack, don't update NC
++	 *    0        1       1  Pass NA packet up the stack, and add a STALE
++	 *                          NC entry
++	 * Note that we don't do a (daddr == all-routers-mcast) check.
++	 */
++	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
++		       idev && idev->cnf.forwarding &&
++		       idev->cnf.accept_unsolicited_na;
++	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
+ 
+ 	if (neigh) {
+ 		u8 old_flags = neigh->flags;
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 3fe2515aa616..69415dbb61d2 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -36,6 +36,7 @@ TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
+ TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
+ TEST_PROGS += vrf_strict_mode_test.sh
+ TEST_PROGS += arp_ndisc_evict_nocarrier.sh
++TEST_PROGS += ndisc_unsolicited_na_test.py
+ TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
+ TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
+ TEST_GEN_FILES =  socket nettest
+diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.py b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
+new file mode 100755
+index 000000000000..f508657ee126
+--- /dev/null
++++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
+@@ -0,0 +1,255 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This test is for the accept_unsolicited_na feature to
++# enable RFC9131 behaviour. The following is the test-matrix.
++# drop   accept  fwding                   behaviour
++# ----   ------  ------  ----------------------------------------------
++#    1        X       X  Drop NA packet and don't pass up the stack
++#    0        0       X  Pass NA packet up the stack, don't update NC
++#    0        1       0  Pass NA packet up the stack, don't update NC
++#    0        1       1  Pass NA packet up the stack, and add a STALE
++#                           NC entry
++
++ret=0
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++PAUSE_ON_FAIL=no
++PAUSE=no
++
++HOST_NS="ns-host"
++ROUTER_NS="ns-router"
++
++HOST_INTF="veth-host"
++ROUTER_INTF="veth-router"
++
++ROUTER_ADDR="2000:20::1"
++HOST_ADDR="2000:20::2"
++SUBNET_WIDTH=64
++ROUTER_ADDR_WITH_MASK="${ROUTER_ADDR}/${SUBNET_WIDTH}"
++HOST_ADDR_WITH_MASK="${HOST_ADDR}/${SUBNET_WIDTH}"
++
++IP_HOST="ip -6 -netns ${HOST_NS}"
++IP_HOST_EXEC="ip netns exec ${HOST_NS}"
++IP_ROUTER="ip -6 -netns ${ROUTER_NS}"
++IP_ROUTER_EXEC="ip netns exec ${ROUTER_NS}"
++
++tcpdump_stdout=
++tcpdump_stderr=
++
++log_test()
++{
++	local rc=$1
++	local expected=$2
++	local msg="$3"
++
++	if [ ${rc} -eq ${expected} ]; then
++		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
++		nsuccess=$((nsuccess+1))
++	else
++		ret=1
++		nfail=$((nfail+1))
++		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++		echo
++			echo "hit enter to continue, 'q' to quit"
++			read a
++			[ "$a" = "q" ] && exit 1
++		fi
++	fi
++
++	if [ "${PAUSE}" = "yes" ]; then
++		echo
++		echo "hit enter to continue, 'q' to quit"
++		read a
++		[ "$a" = "q" ] && exit 1
++	fi
++}
++
++setup()
++{
++	set -e
++
++	local drop_unsolicited_na=$1
++	local accept_unsolicited_na=$2
++	local forwarding=$3
++
++	# Setup two namespaces and a veth tunnel across them.
++	# On end of the tunnel is a router and the other end is a host.
++	ip netns add ${HOST_NS}
++	ip netns add ${ROUTER_NS}
++	${IP_ROUTER} link add ${ROUTER_INTF} type veth \
++                peer name ${HOST_INTF} netns ${HOST_NS}
++
++	# Enable IPv6 on both router and host, and configure static addresses.
++	# The router here is the DUT
++	# Setup router configuration as specified by the arguments.
++	# forwarding=0 case is to check that a non-router
++	# doesn't add neighbour entries.
++        ROUTER_CONF=net.ipv6.conf.${ROUTER_INTF}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.forwarding=${forwarding}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.drop_unsolicited_na=${drop_unsolicited_na}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.accept_unsolicited_na=${accept_unsolicited_na}
++	${IP_ROUTER_EXEC} sysctl -qw ${ROUTER_CONF}.disable_ipv6=0
++	${IP_ROUTER} addr add ${ROUTER_ADDR_WITH_MASK} dev ${ROUTER_INTF}
++
++	# Turn on ndisc_notify on host interface so that
++	# the host sends unsolicited NAs.
++	HOST_CONF=net.ipv6.conf.${HOST_INTF}
++	${IP_HOST_EXEC} sysctl -qw ${HOST_CONF}.ndisc_notify=1
++	${IP_HOST_EXEC} sysctl -qw ${HOST_CONF}.disable_ipv6=0
++	${IP_HOST} addr add ${HOST_ADDR_WITH_MASK} dev ${HOST_INTF}
++
++	set +e
++}
++
++start_tcpdump() {
++	set -e
++	tcpdump_stdout=`mktemp`
++	tcpdump_stderr=`mktemp`
++	${IP_ROUTER_EXEC} timeout 15s \
++                tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
++                "icmp6 && icmp6[0] == 136 && src ${HOST_ADDR}" \
++                > ${tcpdump_stdout} 2> /dev/null
++	set +e
++}
++
++cleanup_tcpdump()
++{
++	set -e
++	[[ ! -z  ${tcpdump_stdout} ]] && rm -f ${tcpdump_stdout}
++	[[ ! -z  ${tcpdump_stderr} ]] && rm -f ${tcpdump_stderr}
++	tcpdump_stdout=
++	tcpdump_stderr=
++	set +e
++}
++
++cleanup()
++{
++	cleanup_tcpdump
++	ip netns del ${HOST_NS}
++	ip netns del ${ROUTER_NS}
++}
++
++link_up() {
++	set -e
++	${IP_ROUTER} link set dev ${ROUTER_INTF} up
++	${IP_HOST} link set dev ${HOST_INTF} up
++	set +e
++}
++
++verify_ndisc() {
++	local drop_unsolicited_na=$1
++	local accept_unsolicited_na=$2
++	local forwarding=$3
++
++	neigh_show_output=$(${IP_ROUTER} neigh show \
++                to ${HOST_ADDR} dev ${ROUTER_INTF} nud stale)
++	if [ ${drop_unsolicited_na} -eq 0 ] && \
++			[ ${accept_unsolicited_na} -eq 1 ] && \
++			[ ${forwarding} -eq 1 ]; then
++		# Neighbour entry expected to be present for 011 case
++		[[ ${neigh_show_output} ]]
++	else
++		# Neighbour entry expected to be absent for all other cases
++		[[ -z ${neigh_show_output} ]]
++	fi
++}
++
++test_unsolicited_na_common()
++{
++	# Setup the test bed, but keep links down
++	setup $1 $2 $3
++
++	# Bring the link up, wait for the NA,
++	# and add a delay to ensure neighbour processing is done.
++	link_up
++	start_tcpdump
++
++	# Verify the neighbour table
++	verify_ndisc $1 $2 $3
++
++}
++
++test_unsolicited_na_combination() {
++	test_unsolicited_na_common $1 $2 $3
++	test_msg=("test_unsolicited_na: "
++		"drop_unsolicited_na=$1 "
++		"accept_unsolicited_na=$2 "
++		"forwarding=$3")
++	log_test $? 0 "${test_msg[*]}"
++	cleanup
++}
++
++test_unsolicited_na_combinations() {
++	# Args: drop_unsolicited_na accept_unsolicited_na forwarding
++
++	# Expect entry
++	test_unsolicited_na_combination 0 1 1
++
++	# Expect no entry
++	test_unsolicited_na_combination 0 0 0
++	test_unsolicited_na_combination 0 0 1
++	test_unsolicited_na_combination 0 1 0
++	test_unsolicited_na_combination 1 0 0
++	test_unsolicited_na_combination 1 0 1
++	test_unsolicited_na_combination 1 1 0
++	test_unsolicited_na_combination 1 1 1
++}
++
++###############################################################################
++# usage
++
++usage()
++{
++	cat <<EOF
++usage: ${0##*/} OPTS
++        -p          Pause on fail
++        -P          Pause after each test before cleanup
++EOF
++}
++
++###############################################################################
++# main
++
++while getopts :pPh o
++do
++	case $o in
++		p) PAUSE_ON_FAIL=yes;;
++		P) PAUSE=yes;;
++		h) usage; exit 0;;
++		*) usage; exit 1;;
++	esac
++done
++
++# make sure we don't pause twice
++[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
++
++if [ "$(id -u)" -ne 0 ];then
++	echo "SKIP: Need root privileges"
++	exit $ksft_skip;
++fi
++
++if [ ! -x "$(command -v ip)" ]; then
++	echo "SKIP: Could not run test without ip tool"
++	exit $ksft_skip
++fi
++
++if [ ! -x "$(command -v tcpdump)" ]; then
++	echo "SKIP: Could not run test without tcpdump tool"
++	exit $ksft_skip
++fi
++
++# start clean
++cleanup &> /dev/null
++
++test_unsolicited_na_combinations
++
++printf "\nTests passed: %3d\n" ${nsuccess}
++printf "Tests failed: %3d\n"   ${nfail}
++
++exit $ret
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+---
+Changes from v2:
+1. Address David Ahern's review comments
+ - Remove Tested-by from commit description
+ - Add limits to new sysctl with extra1 and extra2
+ - Add an unit test, added to TEST_PROGS
+
+Test output:
+#  time ./ndisc_unsolicited_na_test.py
+    TEST: test_unsolicited_na:  drop_unsolicited_na=0  accept_unsolicited_na=1  forwarding=1  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=0  accept_unsolicited_na=0  forwarding=0  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=0  accept_unsolicited_na=0  forwarding=1  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=0  accept_unsolicited_na=1  forwarding=0  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=1  accept_unsolicited_na=0  forwarding=0  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=1  accept_unsolicited_na=0  forwarding=1  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=1  accept_unsolicited_na=1  forwarding=0  [ OK ]
+    TEST: test_unsolicited_na:  drop_unsolicited_na=1  accept_unsolicited_na=1  forwarding=1  [ OK ]
+
+Tests passed:   8
+Tests failed:   0
+
+real    0m21.700s
+user    0m1.365s
+sys     0m0.049s

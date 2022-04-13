@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E954FEBC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2364B4FEBC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiDMAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S229917AbiDMAH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 20:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiDMAHM (ORCPT
+        with ESMTP id S229940AbiDMAHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:07:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A151DF76;
-        Tue, 12 Apr 2022 17:04:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdNBV0871z4xLQ;
-        Wed, 13 Apr 2022 10:04:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649808291;
-        bh=7lQG00YSg34AKkogy2Qw7IUgKJD9gWQAoWKgikf9JzA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LKGKpraDWC3yl2TfBwTh++vr+vzBx+TGAf4G/Ctj8MtiOP3aM6LJDFWJL/8FZbWAy
-         DrhaOZ/xKvK+qbaSe083E5dE19KPDG+MqIsWPtoTs4K0vLc/0uAWWcjc6iPrPvU7+G
-         qK7pnmQvQEta3tMqDxsRaBGmzrbAv9nwaKydlUiM0ZLaz1CLFFRO9Ze9WmYaXg/cnm
-         qQXOxjw9/dPyKy1kA46YtsF+QgQswjG4XkygXDlIJgTtDZGsUONZzRbhlUI5Dt9aHe
-         Xl2732PPs7+vVvQBvYVwO/vMnFsKCt9anORNmgmY27b+fxpR2mv1r2cKHrptEHNRIc
-         w9qwTIyBa+jPQ==
-Date:   Wed, 13 Apr 2022 10:04:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20220413100448.6f5f4de7@canb.auug.org.au>
-In-Reply-To: <20220406155030.0dacf051@canb.auug.org.au>
-References: <20220406155030.0dacf051@canb.auug.org.au>
+        Tue, 12 Apr 2022 20:07:54 -0400
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FFCE8A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:05:31 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 1611D8039A74
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:05:30 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 5774D100411CA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:05:29 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id eQVknTchzkku4eQVlnlIwE; Wed, 13 Apr 2022 00:05:29 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=XPf19StE c=1 sm=1 tr=0 ts=625613c9
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=3Wt_arUdeEhqb3Clg6IA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8aYdV15O9tXJOLSGH1yITgKP5A0S5t32NqiiPpDQXVM=; b=DAikxVLyLf1rNe0MarVvismHEi
+        gXeqqrM9G6fClpGxZFGn1X4COaRB8MYaDPCQkifO2QnDfuJPARh3kn707C5OnCPdj8lZzH7tsCcaD
+        ooO2ix5/5/9sga2mi7v1V8foT4Rd1n+htnve7xY+N8fCe3uq6TmPqoeR0Pifc9d2K1Segh/+NCLIB
+        EV8x6Kfuv3h4yYxvk1cbsuyzTE953X3V4o/k3fkVwJiamE0SZJ5qJWhyeBQ8CehFmye+n45aexR9/
+        baepH4U+w92y+EVXxLGKHUIyQnB1Mz6iUJe9/U0PeQF2umGvg8cfCeWUh3CpAIKhYqSibnb9X7v1F
+        MO1xLg3Q==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37264 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1neQVk-0042Lj-0Z; Tue, 12 Apr 2022 18:05:28 -0600
+Subject: Re: [PATCH 5.16 000/285] 5.16.20-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <2daa5e49-29b9-be83-8d48-02a2e2c28efb@w6rz.net>
+Date:   Tue, 12 Apr 2022 17:05:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EmSSdTRYGSuQg54z/e58xqx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1neQVk-0042Lj-0Z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37264
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/EmSSdTRYGSuQg54z/e58xqx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Wed, 6 Apr 2022 15:50:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On 4/11/22 11:27 PM, Greg Kroah-Hartman wrote:
+> ----------------------
+> Note, this will be the LAST 5.16.y kernel to be released.  Please move
+> to the 5.17.y tree at this time.
+> ----------------------
 >
-> After merging the drm-misc tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> include/drm/ttm/ttm_resource.h:226: warning: Function parameter or member=
- 'pos' not described in 'ttm_lru_bulk_move'
->=20
-> Introduced by commit
->=20
->   b0e2c9ea5afc ("drm/ttm: allow bulk moves for all domains")
+> This is the start of the stable review cycle for the 5.16.20 release.
+> There are 285 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.20-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This warning is now produced by the drm tree.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
---=20
-Cheers,
-Stephen Rothwell
+Tested-by: Ron Economos <re@w6rz.net>
 
---Sig_/EmSSdTRYGSuQg54z/e58xqx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJWE6AACgkQAVBC80lX
-0Gzpegf/TCMEUFcREDGz2XVAG+LUNZZeAbrXA0CuCvA0CNVH3UvHHCWOIsMo2TVT
-qNEITzeT6MaDcWospiMMhWLmOyh5eiTCz53g6GFL0LPFrY9DSyVRDIjbCSjiKoJT
-Zx2A4hsJANTyh5tEp8Tmvx5FtcOERaGd45r7bZqL0iI6EmrtmOvRj/kggeSHFsg1
-PFCObFDUhX3kxjyarAxoHylZE9lScoDarvGTVjWNiSASBRl49YVtBi7UQeQ5NUjU
-u6OT0Nk0+5RlDIOaWuz6I2AhKTlPtQ2UxIuZTDjKuf0mu0qiQjP1DG/mS/gXCUi0
-KO6mdTv3ZvlmET//IZ1pxu6SoFS62Q==
-=jQA3
------END PGP SIGNATURE-----
-
---Sig_/EmSSdTRYGSuQg54z/e58xqx--

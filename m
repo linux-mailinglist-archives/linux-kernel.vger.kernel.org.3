@@ -2,87 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E021D4FFE53
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E30D4FFE56
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237949AbiDMTDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S237859AbiDMTDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237843AbiDMTDH (ORCPT
+        with ESMTP id S233144AbiDMTDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:03:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EDB387AA;
-        Wed, 13 Apr 2022 12:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gGzlD5A4418uUOPHT5N2mBkui3mXPqkvbOvSDqYFo/U=; b=xcjwy8mOfbFQX2l5L/6wNiXMcd
-        SEB/7Qixa335aqP6HdeSabI4s2OLf5TOrL88lAwjPnm0kFloYfdSS6bvHOSA3sVKvXfG8ouhjxcql
-        WlQrwsK4bT+OTzhu+/TIGDR2+jJ4dKMNSHBT7p7fqi4NreV4n9tXuHU9tiBbyNioq4D6uU5sxNVLQ
-        D/tp3CGIsocA4hXMgabSDfnjrzpwRTRxQLWy0ksHSvGFXz+ge6rpdXz5xqptmR3kakhat7jhzCHLs
-        c3ReufnyjneR9qhI1N3YUS74usrjVMgETKzIyfibFm0Jas66kBGxEqpkfXStY61SXqX5vCU8GOE8l
-        Ul9yEzNg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neiEF-002HCZ-9Z; Wed, 13 Apr 2022 19:00:35 +0000
-Date:   Wed, 13 Apr 2022 12:00:35 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Yan Zhu <zhuyan34@huawei.com>, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        keescook@chromium.org, kpsingh@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liucheng32@huawei.com, netdev@vger.kernel.org,
-        nixiaoming@huawei.com, songliubraving@fb.com,
-        xiechengliang1@huawei.com, yhs@fb.com, yzaikin@google.com,
-        zengweilin@huawei.com, leeyou.li@huawei.com,
-        laiyuanyuan.lai@huawei.com
-Subject: Re: [PATCH v4 sysctl-next] bpf: move bpf sysctls from
- kernel/sysctl.c to bpf module
-Message-ID: <Ylcd0zvHhi96zVi+@bombadil.infradead.org>
-References: <Yk4XE/hKGOQs5oq0@bombadil.infradead.org>
- <20220407070759.29506-1-zhuyan34@huawei.com>
- <3a82460b-6f58-6e7e-a3d9-141f42069eda@iogearbox.net>
+        Wed, 13 Apr 2022 15:03:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202C73A194;
+        Wed, 13 Apr 2022 12:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649876481; x=1681412481;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kJDKIrd2cNiQgQ9NWri7ZGfjzDAloFANWXt7WDfGDaA=;
+  b=PukJfIPeFR+ssmCUY5I3VXr2hG+GKwNlAEbf/t/BgFHS6CLTf0aHpuNa
+   3sYOXXLSIWH2EFsA3Q90WlngaYL2fWgOx65GBipQC8sj3gqRI/8S4AbYF
+   XgrYVnz4AR26U1kECsRXvicNWUdr3OVC34xvMtUJyrx/+h/ow+qHzo/OB
+   iJSuXUFKVMVwMqA6QHbSUKZrFoxr2H7I9dDT9Vi15M6Hr+TqANMgUrRJS
+   O/5tazVPIvjbb4sZd7g7Pc3s9WJQPx56+9geHus/EIYQ0Q84nsyMY+Ivh
+   4KSKuFN16x+F+YI2D7jwAZJubg2pUAPy8wRBiOhvqBvntHsLZ175b8vUa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262928584"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="262928584"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:01:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="559864107"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2022 12:01:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8C6C012C; Wed, 13 Apr 2022 22:01:18 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: afe: rescale: Make use of device properties
+Date:   Wed, 13 Apr 2022 22:01:17 +0300
+Message-Id: <20220413190117.29814-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a82460b-6f58-6e7e-a3d9-141f42069eda@iogearbox.net>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:45:00PM +0200, Daniel Borkmann wrote:
-> On 4/7/22 9:07 AM, Yan Zhu wrote:
-> > We're moving sysctls out of kernel/sysctl.c as its a mess. We
-> > already moved all filesystem sysctls out. And with time the goal is
-> > to move all sysctls out to their own subsystem/actual user.
-> > 
-> > kernel/sysctl.c has grown to an insane mess and its easy to run
-> > into conflicts with it. The effort to move them out is part of this.
-> > 
-> > Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
-> 
-> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-> 
-> Given the desire is to route this via sysctl-next and we're not shortly
-> before but after the merge win, could we get a feature branch for bpf-next
-> to pull from to avoid conflicts with ongoing development cycle?
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-Sure thing. So I've never done this sort of thing, so forgive me for
-being new at it. Would it make sense to merge this change to sysctl-next
-as-is today and put a frozen branch sysclt-next-bpf to reflect this,
-which bpf-next can merge. And then sysctl-next just continues to chug on
-its own? As-is my goal is to keep sysctl-next as immutable as well.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/afe/Kconfig       | 1 -
+ drivers/iio/afe/iio-rescale.c | 5 ++---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-Or is there a better approach you can recommend?
+diff --git a/drivers/iio/afe/Kconfig b/drivers/iio/afe/Kconfig
+index 4fa397822cff..9a1d95c1c7ed 100644
+--- a/drivers/iio/afe/Kconfig
++++ b/drivers/iio/afe/Kconfig
+@@ -8,7 +8,6 @@ menu "Analog Front Ends"
+ 
+ config IIO_RESCALE
+ 	tristate "IIO rescale"
+-	depends on OF || COMPILE_TEST
+ 	help
+ 	  Say yes here to build support for the IIO rescaling
+ 	  that handles voltage dividers, current sense shunts and
+diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
+index 7e511293d6d1..c6cf709f0f05 100644
+--- a/drivers/iio/afe/iio-rescale.c
++++ b/drivers/iio/afe/iio-rescale.c
+@@ -10,9 +10,8 @@
+ 
+ #include <linux/err.h>
+ #include <linux/gcd.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
+@@ -536,7 +535,7 @@ static int rescale_probe(struct platform_device *pdev)
+ 
+ 	rescale = iio_priv(indio_dev);
+ 
+-	rescale->cfg = of_device_get_match_data(dev);
++	rescale->cfg = device_get_match_data(dev);
+ 	rescale->numerator = 1;
+ 	rescale->denominator = 1;
+ 	rescale->offset = 0;
+-- 
+2.35.1
 
-  Luis

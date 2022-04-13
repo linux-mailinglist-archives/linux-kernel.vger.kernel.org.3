@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1CD4FECB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C640D4FECB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiDMCEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S231646AbiDMCIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiDMCEs (ORCPT
+        with ESMTP id S229620AbiDMCId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:04:48 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF4433A13;
-        Tue, 12 Apr 2022 19:02:28 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n18so689291plg.5;
-        Tue, 12 Apr 2022 19:02:28 -0700 (PDT)
+        Tue, 12 Apr 2022 22:08:33 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E91BE0C6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:06:13 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id t4so445650pgc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bRQdjfSB+NzTzGDCOpwO8fHk5ZBQGDsMCp7g0Z2cWSY=;
-        b=TMFEJQp+nHaBJGb4nIHboKkXVS4nvp7iilxTVimyn78Uh5Wq9UrFH4JbgAS5QyYHNM
-         qxSNxppMKvjEZXXXhRX859KO4bWF8RE50RQnvwb5CKuYneD88+SOgbrIn9o7BBdrDZJ0
-         dd32phf6oQbbPB25OrkpV5E/zAXdD4XrXtzhIc7nmnslTYCTLcJMuBJsHqelAiDVXr4F
-         xpzo38msbpgy8KeHO+eGYepcuSUuPg5cY8p9JFx4FyfY5KAcj9kvCbG9Aj7A03yNT+EP
-         6SJdXGtQkTEVB3MA+tSDl+l8+xyb4tyZwPSwG4C2GH7kro/L+Xb+VJnlherIM8K830ET
-         tOvQ==
+        bh=bvHovzHUcO6H3lPRXLJZ8Y7xB7Tk6Lw/GhaAvYeEjYA=;
+        b=hZHD2Hq9N4/osAfvypcYWpaffb9Iwed26m/zyImEmdVYtn9zNf3kZTZzfgVCjwcCWp
+         L8qYusrUEUaAlEZzIMw15ruPcBP1voQAhI91PBpwGwXrFAfNazsJPTgZ58RXltkTWAoE
+         WPPG6xDbrpEesB8FPyXI3W4r09q9x5nsKxYMmpap23JF713bMoSNgTDByEOpMcYepZ9B
+         UDlfSjIXfLUqYfYXKWJogLwDBhS5VtByFZTUv5fYVnJZYo+Ut+GXqbTb6xcEI00OWy/9
+         CmXe8t3j+hSG4M9cr1/QpfO5D3cU7eJvMU39+hgjp3KNg/0jBaIhuS8ngyM2L5+H/Rg5
+         S/kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bRQdjfSB+NzTzGDCOpwO8fHk5ZBQGDsMCp7g0Z2cWSY=;
-        b=TCU5WIB8Wc4L1AaDkKY6t8iiOPYWnbaerAmLgCYcH311r80dizZWfJsf2lb1o9H7g5
-         oWvI71/q8C8y5e069f4Y5oLDVPiPC+nelHnyX8dqTlBefISLqLcc2PG0RjmuLkKWdfnV
-         NMJ0Xt8+Cxsrk7rxuakntecdysoN7JlJ/ZtHOXN9AuMswTP8WMZqYjD5lb2lpTRWjIPN
-         1DjV+gdcxusT7LKy7Lk+Ac/H6+AX+CfnBHZPA241Z2UrnfcdlXt80g7Wf19pK/SgUREF
-         eT1BHYkA8T2imqjbjUKTTDtKXzMReiGKP4+d3qwjh7iByEouv+a1CN25a0m0z+urIalm
-         ZSFg==
-X-Gm-Message-State: AOAM5329dIj0Bt0iJZxB0mRdXHIV4iC93WIIXQmHuhivlYo+4r1vZC9R
-        i73NRoapegxhA0iIfsml/xmPMor6eqgRZHB3TLk=
-X-Google-Smtp-Source: ABdhPJxVQKei4bDkivdniXg6jJ3fb9GTXqP5IcXQXi+GwhUNVt7mByI8V8sZR0Dkmst1FEp7iZSmZg==
-X-Received: by 2002:a17:902:cf05:b0:156:2aa:6e13 with SMTP id i5-20020a170902cf0500b0015602aa6e13mr40059919plg.137.1649815347724;
-        Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id t184-20020a625fc1000000b004fa3bd9bef0sm18939984pfb.110.2022.04.12.19.02.25
+        bh=bvHovzHUcO6H3lPRXLJZ8Y7xB7Tk6Lw/GhaAvYeEjYA=;
+        b=HZyo//iHWiucWnzjeJEG5jMtGL3jHyRBeJMfcujIc+IQdvzMHcWdYmtBI/LNgrFBZs
+         Jo302r78js+q3WQpcwX8gAemxNUObJas6jmvmTPTOF4A9fNeJOqvuc9YoNnEbTw/blze
+         RKDFGhaQ31BkJ6YNdoJOMg83uyNUsD0EZu97Uisq5vG+I+kySJhxul+X8Z2PxSmkrhsR
+         rLnr9dosgxHr4KSD8sEzymKId04KzKzw5Q13TprmLbt9FWa+qpKDTW8K8VMbMAzH8wHJ
+         +up6No228UJHq8ADgiBLc9BUXiPiajEm5UtYolNSmL0SOcBTjkpv7WbXytqz7Cl+ADYq
+         bqBQ==
+X-Gm-Message-State: AOAM53116kFVW7TxPGb0pI5/3K4pe+r+uNFAOzT8YBtWWCMYdYiex5w1
+        POBDVau3nLHyZcJUcp8IFjYZUa5aUWA2rw==
+X-Google-Smtp-Source: ABdhPJyYI6RSJMSEhpIcDYX5IRNsdNmJUMaEQWhwbeZUpN3xX05VaYx3mQO5Awwt2sUWnnINJqSF4A==
+X-Received: by 2002:a65:6b8e:0:b0:39d:6760:1cd5 with SMTP id d14-20020a656b8e000000b0039d67601cd5mr9669923pgw.379.1649815572575;
+        Tue, 12 Apr 2022 19:06:12 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:669f:cec7:c0c2:1cc])
+        by smtp.gmail.com with ESMTPSA id o3-20020aa79783000000b00505f720bb76sm4234053pfp.215.2022.04.12.19.06.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
-Message-ID: <62562f33.1c69fb81.e4a9.1b0e@mx.google.com>
-Date:   Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
-X-Google-Original-Date: Wed, 13 Apr 2022 02:02:24 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 000/277] 5.15.34-rc2 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 19:06:12 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
+Date:   Tue, 12 Apr 2022 19:06:39 -0700
+Message-Id: <20220413020641.2789408-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 19:47:07 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.34 release.
-> There are 277 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+TI AM437x SoCs support isolation of the IOs so that control is taken
+from the peripheral they are connected to and overridden by values
+present in the control register for that pad. This series documents a
+new property 'ti,io-isolation' and updates the wkup_m3_ipc driver to 
+inform the CM3 firmware when that property is set.
 
-5.15.34-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+A prerequisite for this series is: 
+[PATCH v2 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
+https://lore.kernel.org/lkml/20220409211215.2529387-1-dfustini@baylibre.com/T/
+
+Dave Gerlach (1):
+  soc: ti: wkup_m3_ipc: Add support for IO Isolation
+
+Drew Fustini (1):
+  dt-bindings: wkup-m3-ipc: Add ti,io-isolation property
+
+ .../bindings/soc/ti/wkup-m3-ipc.yaml          | 68 +++++++++++++++++--
+ drivers/soc/ti/wkup_m3_ipc.c                  | 14 +++-
+ include/linux/wkup_m3_ipc.h                   |  1 +
+ 3 files changed, 76 insertions(+), 7 deletions(-)
+
+-- 
+2.32.0
 

@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF02F4FF24A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED7F4FF22F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiDMIkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S233960AbiDMIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiDMIkL (ORCPT
+        with ESMTP id S233975AbiDMIlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:40:11 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444923D1EA;
-        Wed, 13 Apr 2022 01:37:51 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23D8Z6Rp011523;
-        Wed, 13 Apr 2022 03:37:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=s0oLI9Nq6FnwoegKj1xcUsq7nQL9tWqPNrp5Yhclzro=;
- b=iEqOpmdiifV4/REPmvHIlwMiCkMKx88vn1pcjUen/q6FdoukvF5ikof0KMdaRd7qGnQO
- IWojMnVuEWZg4qu2IPDa9DIgu9obqvMQ7CGVy7UD5t8zNAtgxKxnL6gZgyy66yCaXEn1
- yVXdfr8TN25Cu7RaFVN64YU2VjXOLx76XhjetcBxvzaaoN1mJ+N0LsCjYabMe0LJaLbN
- pwV596sUcsAShxW52qnnWKwkPjsa3i9BR8OhddcfsVGHAu/XLW/Rfl/w+aLyzn8+A8MX
- aKZZS5WQS9EN0ngqNJgxy3GWOZcaYPm5udpwHpKg1j5aK+P5DlmkUYafcs1hsJ417TR9 Bg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fb6pycvcv-11
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 13 Apr 2022 03:37:38 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 09:37:35 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Wed, 13 Apr 2022 09:37:35 +0100
-Received: from aryzen.ad.cirrus.com (unknown [198.61.64.152])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E0B43B06;
-        Wed, 13 Apr 2022 08:37:34 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Wed, 13 Apr 2022 04:41:02 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FD34F9F2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:35 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id be5so1332045plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bva40hCaLIr1ELmfegrLbKYUXjrya+QMIfJXoLptDZI=;
+        b=jn1H2G9sQRsFHuUbkWKDzp3rUKyRZFL8LjPfrbX7OybYyveACo8Xvz4oLMOAwfeR7x
+         79RVwbzhxpXAaXfuiN45aswMQWM1WNheQOZlXYoVDuBvo9ge/hsoH1ekLaxy8ym2Hge6
+         wGinY+Nw6s83uNwl+WQxEtpS5Wmn1RdO5fyahxh7SQ4+RdiRtGqTV6EMqVF0Ww/03Msk
+         sPrS4gz8lNs8d0ko3lCRlHoaz8yPr6aSJ9dWX+zHuCt3U80BD9gBmycXJl01PMksY1go
+         jdp7hDpfU9cyIWWaVtyTBbMOWhMdBd1Bhg8PlD46xEbcjs/O8usO+tQ6LU8kpYef5REN
+         fUlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bva40hCaLIr1ELmfegrLbKYUXjrya+QMIfJXoLptDZI=;
+        b=pIrLNOPUSo1DypfV4xOCKV7CYJCPvNGn13a+qxPwnsXdlBBdPh/UtyTRRT9PxNdEhf
+         sYkxMxaE4fv/evIARnd1n2EkUDvnYtzN5q8pz8GZ9dXjBSvwzZ4BmKu+rsI8jhuI+QAe
+         Ni2O1Cp2Uo+wK5w/C6MTG4YoITRBWBHX5Dle3MAAo5ExALfNQkkrfkU9xF9SdhTTed3T
+         zt+GHLgGcLLiOhYYeaGVJIB3PulTcGXJAWqPc6/C6SfAKLSQng1AVj4iX/ujK1FT4/5W
+         hEdkQgfI1bmpOldbS85PiXWMNpNfmLyOipZlEKpGloQBfhVtiRT7vgtJj3NR6Gp8ZC48
+         TBTQ==
+X-Gm-Message-State: AOAM532yytqax/3NiSMlcqyVQSKuwXB2Ho2z8+Q/lUIrYUv33vqoz8DD
+        gsiaD6SWMFi3r2btE7gvEX8=
+X-Google-Smtp-Source: ABdhPJygofRLBPQWqf/xEplmXkc3AZ+4Noe2MlSvLi9WIlCn0DN5W6rn2iR1hT4EygX5R1aiMPR4VQ==
+X-Received: by 2002:a17:902:e9d3:b0:158:8521:1e8f with SMTP id 19-20020a170902e9d300b0015885211e8fmr8071136plk.82.1649839114331;
+        Wed, 13 Apr 2022 01:38:34 -0700 (PDT)
+Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa79286000000b004fdf02851eesm33776264pfa.4.2022.04.13.01.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 01:38:33 -0700 (PDT)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-mtd@lists.infradead.org
+Cc:     Chuanhong Guo <gch981213@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH v7 16/16] ASoC: cs35l41: Support external boost
-Date:   Wed, 13 Apr 2022 09:37:28 +0100
-Message-ID: <20220413083728.10730-17-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
-References: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
+        Daniel Palmer <daniel@0x0f.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] mtd: spinand: add support for ESMT F50x1G41LB
+Date:   Wed, 13 Apr 2022 16:38:19 +0800
+Message-Id: <20220413083824.247136-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: OXCRXMYThKhBYlBxzJrgDlHm-i_fnxv_
-X-Proofpoint-GUID: OXCRXMYThKhBYlBxzJrgDlHm-i_fnxv_
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,179 +76,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for external boost voltage, where GPIO1 must control a
-switch to isolate CS35L41 from the external Boost Voltage
+This patch adds support for ESMT F50L1G41LB and F50D1G41LB.
+It seems that ESMT likes to use random JEDEC ID from other vendors.
+Their 1G chips uses 0xc8 from GigaDevice and 2G/4G chips uses 0x2c from
+Micron. For this reason, the ESMT entry is named esmt_c8 with explicit
+JEDEC ID in variable name.
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Acked-by: Mark Brown <broonie@kernel.org>
+Datasheets:
+https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50L1G41LB(2M).pdf
+https://www.esmt.com.tw/upload/pdf/ESMT/datasheets/F50D1G41LB(2M).pdf
+
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 ---
- include/sound/cs35l41.h        |  4 +--
- sound/soc/codecs/cs35l41-lib.c |  5 ++--
- sound/soc/codecs/cs35l41.c     | 49 +++++++++++++++++++++++++---------
- 3 files changed, 41 insertions(+), 17 deletions(-)
+This patch is made purely based on datasheet info without testing
+on any actual chips.
 
-diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
-index ac629f852f2a..dbe8d9c0191b 100644
---- a/include/sound/cs35l41.h
-+++ b/include/sound/cs35l41.h
-@@ -701,6 +701,8 @@
- #define CS35L41_GPIO1_CTRL_SHIFT	16
- #define CS35L41_GPIO2_CTRL_MASK		0x07000000
- #define CS35L41_GPIO2_CTRL_SHIFT	24
-+#define CS35L41_GPIO_LVL_SHIFT		15
-+#define CS35L41_GPIO_LVL_MASK		BIT(CS35L41_GPIO_LVL_SHIFT)
- #define CS35L41_GPIO_POL_MASK		0x1000
- #define CS35L41_GPIO_POL_SHIFT		12
- 
-@@ -802,8 +804,6 @@ int cs35l41_register_errata_patch(struct device *dev, struct regmap *reg, unsign
- int cs35l41_set_channels(struct device *dev, struct regmap *reg,
- 			 unsigned int tx_num, unsigned int *tx_slot,
- 			 unsigned int rx_num, unsigned int *rx_slot);
--int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_ind, int boost_cap,
--			 int boost_ipk);
- int cs35l41_gpio_config(struct regmap *regmap, struct cs35l41_hw_cfg *hw_cfg);
- int cs35l41_init_boost(struct device *dev, struct regmap *regmap,
- 		       struct cs35l41_hw_cfg *hw_cfg);
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index 2d3b577a63e3..491616c7c5c7 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -954,8 +954,8 @@ static const unsigned char cs35l41_bst_slope_table[4] = {
- 	0x75, 0x6B, 0x3B, 0x28
+Change since v1: drop 0x7f padding from SPINAND_ID.
+
+ drivers/mtd/nand/spi/Makefile |  2 +-
+ drivers/mtd/nand/spi/core.c   |  1 +
+ drivers/mtd/nand/spi/esmt.c   | 94 +++++++++++++++++++++++++++++++++++
+ include/linux/mtd/spinand.h   |  1 +
+ 4 files changed, 97 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/mtd/nand/spi/esmt.c
+
+diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefile
+index 9662b9c1d5a9..7e3ab8a9aec7 100644
+--- a/drivers/mtd/nand/spi/Makefile
++++ b/drivers/mtd/nand/spi/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+-spinand-objs := core.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o
++spinand-objs := core.o esmt.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o
+ obj-$(CONFIG_MTD_SPI_NAND) += spinand.o
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index ff8336870bc0..6c5d79ec3501 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -927,6 +927,7 @@ static const struct nand_ops spinand_ops = {
  };
  
--int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_ind,
--			 int boost_cap, int boost_ipk)
-+static int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_ind,
-+				int boost_cap, int boost_ipk)
- {
- 	unsigned char bst_lbst_val, bst_cbst_range, bst_ipk_scaled;
- 	int ret;
-@@ -1040,7 +1040,6 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(cs35l41_boost_config);
- 
- static const struct reg_sequence cs35l41_safe_to_reset[] = {
- 	{ 0x00000040,			0x00000055 },
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index d25689fe0c60..912196f45648 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -578,15 +578,10 @@ static int cs35l41_main_amp_event(struct snd_soc_dapm_widget *w,
- 						cs35l41_pup_patch,
- 						ARRAY_SIZE(cs35l41_pup_patch));
- 
--		regmap_update_bits(cs35l41->regmap, CS35L41_PWR_CTRL1,
--				   CS35L41_GLOBAL_EN_MASK,
--				   1 << CS35L41_GLOBAL_EN_SHIFT);
--
--		usleep_range(1000, 1100);
-+		cs35l41_global_enable(cs35l41->regmap, cs35l41->hw_cfg.bst_type, 1);
- 		break;
- 	case SND_SOC_DAPM_POST_PMD:
--		regmap_update_bits(cs35l41->regmap, CS35L41_PWR_CTRL1,
--				   CS35L41_GLOBAL_EN_MASK, 0);
-+		cs35l41_global_enable(cs35l41->regmap, cs35l41->hw_cfg.bst_type, 0);
- 
- 		ret = regmap_read_poll_timeout(cs35l41->regmap, CS35L41_IRQ1_STATUS1,
- 					       val, val &  CS35L41_PDN_DONE_MASK,
-@@ -1001,13 +996,13 @@ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
- 	if (!hw_cfg->valid)
- 		return -EINVAL;
- 
-+	if (hw_cfg->bst_type == CS35L41_EXT_BOOST_NO_VSPK_SWITCH)
-+		return -EINVAL;
+ static const struct spinand_manufacturer *spinand_manufacturers[] = {
++	&esmt_c8_spinand_manufacturer,
+ 	&gigadevice_spinand_manufacturer,
+ 	&macronix_spinand_manufacturer,
+ 	&micron_spinand_manufacturer,
+diff --git a/drivers/mtd/nand/spi/esmt.c b/drivers/mtd/nand/spi/esmt.c
+new file mode 100644
+index 000000000000..f86716332893
+--- /dev/null
++++ b/drivers/mtd/nand/spi/esmt.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author:
++ *	Chuanhong Guo <gch981213@gmail.com>
++ */
 +
- 	/* Required */
--	ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
--				   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
--	if (ret) {
--		dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
-+	ret = cs35l41_init_boost(cs35l41->dev, cs35l41->regmap, hw_cfg);
-+	if (ret)
- 		return ret;
--	}
- 
- 	/* Optional */
- 	if (hw_cfg->dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK && hw_cfg->dout_hiz >= 0)
-@@ -1017,9 +1012,31 @@ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
- 	return 0;
- }
- 
-+static const struct snd_soc_dapm_route cs35l41_ext_bst_routes[] = {
-+	{"Main AMP", NULL, "VSPK"},
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/mtd/spinand.h>
++
++/* ESMT uses GigaDevice 0xc8 JECDEC ID on some SPI NANDs */
++#define SPINAND_MFR_ESMT_C8			0xc8
++
++#define F50L2G41XA_ECC_STATUS_MASK		GENMASK(6, 4)
++#define F50L2G41XA_STATUS_ECC_1_3_BITFLIPS	(1 << 4)
++#define F50L2G41XA_STATUS_ECC_4_6_BITFLIPS	(3 << 4)
++#define F50L2G41XA_STATUS_ECC_7_8_BITFLIPS	(5 << 4)
++
++static SPINAND_OP_VARIANTS(read_cache_variants,
++			   SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
++			   SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
++			   SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(0, 1, NULL, 0),
++			   SPINAND_PAGE_READ_FROM_CACHE_X2_OP(0, 1, NULL, 0),
++			   SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
++			   SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, 0));
++
++static SPINAND_OP_VARIANTS(write_cache_variants,
++			   SPINAND_PROG_LOAD_X4(true, 0, NULL, 0),
++			   SPINAND_PROG_LOAD(true, 0, NULL, 0));
++
++static SPINAND_OP_VARIANTS(update_cache_variants,
++			   SPINAND_PROG_LOAD_X4(false, 0, NULL, 0),
++			   SPINAND_PROG_LOAD(false, 0, NULL, 0));
++
++static int f50l1g41lb_ooblayout_ecc(struct mtd_info *mtd, int section,
++				    struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	region->offset = 16 * section + 8;
++	region->length = 8;
++
++	return 0;
++}
++
++static int f50l1g41lb_ooblayout_free(struct mtd_info *mtd, int section,
++				     struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	region->offset = 16 * section + 2;
++	region->length = 6;
++
++	return 0;
++}
++
++static const struct mtd_ooblayout_ops f50l1g41lb_ooblayout = {
++	.ecc = f50l1g41lb_ooblayout_ecc,
++	.free = f50l1g41lb_ooblayout_free,
 +};
 +
-+static const struct snd_soc_dapm_widget cs35l41_ext_bst_widget[] = {
-+	SND_SOC_DAPM_SUPPLY("VSPK", CS35L41_GPIO1_CTRL1, CS35L41_GPIO_LVL_SHIFT, 0, NULL, 0),
++static const struct spinand_info esmt_c8_spinand_table[] = {
++	SPINAND_INFO("F50L1G41LB",
++		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x01),
++		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
++		     NAND_ECCREQ(1, 512),
++		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
++					      &write_cache_variants,
++					      &update_cache_variants),
++		     0,
++		     SPINAND_ECCINFO(&f50l1g41lb_ooblayout, NULL)),
++	SPINAND_INFO("F50D1G41LB",
++		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x11),
++		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
++		     NAND_ECCREQ(1, 512),
++		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
++					      &write_cache_variants,
++					      &update_cache_variants),
++		     0,
++		     SPINAND_ECCINFO(&f50l1g41lb_ooblayout, NULL)),
 +};
 +
- static int cs35l41_component_probe(struct snd_soc_component *component)
- {
- 	struct cs35l41_private *cs35l41 = snd_soc_component_get_drvdata(component);
-+	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
-+	int ret;
++static const struct spinand_manufacturer_ops esmt_spinand_manuf_ops = {
++};
 +
-+	if (cs35l41->hw_cfg.bst_type == CS35L41_EXT_BOOST) {
-+		ret = snd_soc_dapm_new_controls(dapm, cs35l41_ext_bst_widget,
-+						ARRAY_SIZE(cs35l41_ext_bst_widget));
-+		if (ret)
-+			return ret;
-+
-+		ret = snd_soc_dapm_add_routes(dapm, cs35l41_ext_bst_routes,
-+					      ARRAY_SIZE(cs35l41_ext_bst_routes));
-+		if (ret)
-+			return ret;
-+	}
++const struct spinand_manufacturer esmt_c8_spinand_manufacturer = {
++	.id = SPINAND_MFR_ESMT_C8,
++	.name = "ESMT",
++	.chips = esmt_c8_spinand_table,
++	.nchips = ARRAY_SIZE(esmt_c8_spinand_table),
++	.ops = &esmt_spinand_manuf_ops,
++};
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 3aa28240a77f..e19a1554a1e9 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -260,6 +260,7 @@ struct spinand_manufacturer {
+ };
  
- 	return wm_adsp2_component_probe(&cs35l41->dsp, component);
- }
-@@ -1084,6 +1101,10 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
- 	unsigned int val;
- 	int ret;
- 
-+	ret = device_property_read_u32(dev, "cirrus,boost-type", &val);
-+	if (ret >= 0)
-+		hw_cfg->bst_type = val;
-+
- 	ret = device_property_read_u32(dev, "cirrus,boost-peak-milliamp", &val);
- 	if (ret >= 0)
- 		hw_cfg->bst_ipk = val;
-@@ -1376,6 +1397,7 @@ int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *
- 
- 	wm_adsp2_remove(&cs35l41->dsp);
- err:
-+	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
- 	regulator_bulk_disable(CS35L41_NUM_SUPPLIES, cs35l41->supplies);
- 	gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
- 
-@@ -1390,6 +1412,7 @@ void cs35l41_remove(struct cs35l41_private *cs35l41)
- 
- 	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1, 0xFFFFFFFF);
- 	wm_adsp2_remove(&cs35l41->dsp);
-+	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
- 
- 	pm_runtime_put_noidle(cs35l41->dev);
- 
-@@ -1409,6 +1432,7 @@ static int __maybe_unused cs35l41_runtime_suspend(struct device *dev)
- 
- 	dev_dbg(cs35l41->dev, "Enter hibernate\n");
- 
-+	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
- 	regmap_write(cs35l41->regmap, CS35L41_WAKESRC_CTL, 0x0088);
- 	regmap_write(cs35l41->regmap, CS35L41_WAKESRC_CTL, 0x0188);
- 
-@@ -1505,6 +1529,7 @@ static int __maybe_unused cs35l41_runtime_resume(struct device *dev)
- 		dev_err(cs35l41->dev, "Failed to restore register cache: %d\n", ret);
- 		return ret;
- 	}
-+	cs35l41_init_boost(cs35l41->dev, cs35l41->regmap, &cs35l41->hw_cfg);
- 
- 	return 0;
- }
+ /* SPI NAND manufacturers */
++extern const struct spinand_manufacturer esmt_c8_spinand_manufacturer;
+ extern const struct spinand_manufacturer gigadevice_spinand_manufacturer;
+ extern const struct spinand_manufacturer macronix_spinand_manufacturer;
+ extern const struct spinand_manufacturer micron_spinand_manufacturer;
 -- 
-2.35.2
+2.35.1
 

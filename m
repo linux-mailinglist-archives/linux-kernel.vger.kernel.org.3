@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0225001EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876995001F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237083AbiDMWiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S237951AbiDMWij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbiDMWiE (ORCPT
+        with ESMTP id S234083AbiDMWih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:38:04 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5A34D61A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:35:41 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id i184so2615909pgc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nv3HlmL61/DZlYIUZDOTsCLYosmOGpppxKgJGQnygDE=;
-        b=aem11bdDHHr6FO5DZ6ZNCnM8lUQhLP6hZDhgknJiS7VCX8jWpBxXIbCKXu9q/CGzXb
-         3qIJ3FjY1fQfWLCVqyW3ExIS2UaKYj25lhKPcmM1s/oR+UGe9r6f8bbd4JTn85bsx8wl
-         dT8Wx7Z4TdIchMsM7yB3cGb/+BLT0Ryi8TrAWNWFxe0F9r2KJC5YzOhAzbIMRRtIsqua
-         NAtXw0jvYjAvGXaiqtomygIoxGkRwqzBZJGB88dlVjyEJiQg9JM3zCO3RLjujNpYIze6
-         do9vJvwG1li5JQDzwIVhlKqf4G+ibU9mUXUG6C8nOis4Lv2TKlFF8KdzFVqi4E5/Z20w
-         W+1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nv3HlmL61/DZlYIUZDOTsCLYosmOGpppxKgJGQnygDE=;
-        b=3bjopiXGy7G68FDiRlglCQp+irLiib8waoVatD6INKi7d1GVGk68dqdytr7tvdho43
-         FXSLxKIIEiXKMv7YdT9Ge7E/LMEUC2x58Oe143cUWftFEi2JaW3tw4Q+gkoB+AgYrf7n
-         3FsMNkAKTH17R1c4t4ExgZEAkWpu5iEKHA+ycphGsBY5WXdCQXmbxotWApYwq+/Pdb7t
-         1Dzmq6Lx1D/zTRyaPX/6hSr4HzoeTIGiQYbM/eIlkZ5aNCTxlKfPaSdm3fjzPDw1SrW/
-         OTP2BnP1D6wGAulghTo5Z4EDSitJhmfubPiSO9axJ15Mbphud6BG2vsNR6gTt2K8qpMM
-         vdEw==
-X-Gm-Message-State: AOAM5319kmrt/3D1SqM3oHPtOwmswW10hEJkAbudtISdFg7e0sltZLIj
-        qSh9FvfQhihpCVhjRYmog0GvJQ==
-X-Google-Smtp-Source: ABdhPJxuAddxkVcbOQLbigo8IDUEh3UMYyVTaZA0g0GKsTcx0mXsQCR74uZYzTOl7EHZWB+LVc/iNw==
-X-Received: by 2002:a05:6a00:2181:b0:4f6:f1b1:1ba7 with SMTP id h1-20020a056a00218100b004f6f1b11ba7mr924612pfi.73.1649889341051;
-        Wed, 13 Apr 2022 15:35:41 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c15-20020a63350f000000b003992202f95fsm121369pga.38.2022.04.13.15.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 15:35:40 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 22:35:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v5 06/10] KVM: selftests: Add NX huge pages test
-Message-ID: <YldQOJjqLJxRz6Ea@google.com>
-References: <20220413175944.71705-1-bgardon@google.com>
- <20220413175944.71705-7-bgardon@google.com>
+        Wed, 13 Apr 2022 18:38:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7E84D61A;
+        Wed, 13 Apr 2022 15:36:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C5961FA2;
+        Wed, 13 Apr 2022 22:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470EDC385A3;
+        Wed, 13 Apr 2022 22:36:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G9/lJZvu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649889364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/qY7Q5+txJsN2VM3hmo/BuFNHf1fzlowER9ysRVbtU=;
+        b=G9/lJZvutks3OBqL5Nu4B1yW4jBFb7W4ukR3afqp2x1riI/HnkanKh59pDPmGb6Y90x99g
+        9x0vTbtaEb+KLGvTJAFyA66m7Xv29xQZ9oYexjJfdBOtaFoBppboktTAxX/1YKeV1Yw39n
+        a37nwgA1eGMO6ujUD1Zudlu5gCeStNI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fe08f002 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 13 Apr 2022 22:36:03 +0000 (UTC)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2ebf4b91212so37963667b3.8;
+        Wed, 13 Apr 2022 15:36:02 -0700 (PDT)
+X-Gm-Message-State: AOAM531082+ZhP0yMYZsQtDpQlAfCkMl9qsIMk8+jr7dmLsTWeC1qJ6B
+        ANbQAjMCVqv/6F8uDKqzlhlEKHzGz8Q/xF41O6Q=
+X-Google-Smtp-Source: ABdhPJzIgqKFKpMhZPLEtAEhlDJTJz5RK85xvL5Zr9EJ3NPhLwoCvgqk5B4Jz+dLnTIilLBy7lbr9KCRJA+XIbc15b8=
+X-Received: by 2002:a81:1a49:0:b0:2eb:f4cd:b3f1 with SMTP id
+ a70-20020a811a49000000b002ebf4cdb3f1mr976064ywa.231.1649889360067; Wed, 13
+ Apr 2022 15:36:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413175944.71705-7-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com>
+ <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 14 Apr 2022 00:35:49 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+Message-ID: <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,88 +95,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022, Ben Gardon wrote:
-> There's currently no test coverage of NX hugepages in KVM selftests, so
-> add a basic test to ensure that the feature works as intended.
+Hi Maciej,
 
-...
+On Wed, Apr 13, 2022 at 2:46 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> On Wed, 13 Apr 2022, Thomas Bogendoerfer wrote:
+>
+> > > diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
+> > > index b05bb70a2e46..abc60a6395e3 100644
+> > > --- a/arch/mips/include/asm/timex.h
+> > > +++ b/arch/mips/include/asm/timex.h
+> > > @@ -94,7 +94,7 @@ static inline unsigned long random_get_entropy(void)
+> > >     else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
+> > >             return read_c0_random();
+> > >     else
+> > > -           return 0;       /* no usable register */
+> > > +           return random_get_entropy_fallback();   /* no usable register */
+> > >  }
+> > >  #define random_get_entropy random_get_entropy
+> > >
+> > > --
+> > > 2.35.1
+> >
+> > Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>
+>  Or we could drop the PRID_IMP_R6000/A check and the final `else' clause
+> entirely, as we don't even pretend to support the R6k at all anymore, and
+> this is the final reference remaining.  For one we no longer handle the
+> CPU in `cpu_probe_legacy' so any attempt to boot on such a CPU would
+> inevitably fail as no CPU options would be set (we probably should have a
+> `panic' or suchlike as the default case for the switch statement there).
+>
+>  Therefore I'm all for removing this piece instead, complementing commit
+> 3b2db173f012 ("MIPS: Remove unused R6000 support"), where it should have
+> really happened.
 
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> new file mode 100644
-> index 000000000000..7f80e48781fd
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> @@ -0,0 +1,166 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * tools/testing/selftests/kvm/nx_huge_page_test.c
-> + *
-> + * Usage: to be run via nx_huge_page_test.sh, which does the necessary
-> + * environment setup and teardown
+That's fine with me, if that's what Thomas wants to do, and I can
+submit a v5 with that in it. Indeed, from our previous conversations,
+I'm aware that the `else` there is probably never hit.
 
-It would be really nice if this test could either (a) do something useful without
-having to manually set /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages,
-or (b) refuse to run unless it's (likely) been invoked by the script.  E.g. maybe
-add a magic token that must be passed in?  That way just running the bare test
-will provide a helpful skip message, but someone that wants to fiddle with it can
-still run it manually.
+However, one thing that I've been thinking about is that the c0 random
+register is actually kind of garbage. In my fuzzy decade-old memory of
+MIPS, I believe the c0 random register starts at the maximum number of
+TLB entries (16?), and then counts down cyclically, decrementing once
+per CPU cycle. Is that right?
 
-> +int main(int argc, char **argv)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct timespec ts;
-> +	void *hva;
+If it is, there are some real pros and cons here to consider:
+- Pro: decrementing each CPU cycle means pretty good granularity
+- Con: wrapping at, like, 16 or something really is very limited, to
+the point of being almost bad
 
-This needs to check if the workaround is actually enabled via module param.  Not
-as big a deal if there's a magic number, but it's also not too hard to query a
-module param.  Or at least, it shouldn't be, I'm fairly certain that's one of the
-things I want to address in the selftests overhaul.
+Meanwhile, on systems without the c0 cycles counter, what is the
+actual resolution of random_get_entropy_fallback()? Is this just
+falling back to jiffies?
 
-Aha! Actually, IIUC, the patch that validates the per-VM override adds full support
-for the module param being turned off.
+IF (a) the fallback is jiffies AND (b) c0 wraps at 16, then actually,
+what would be really nice would be something like:
 
-So, how about pull in the tweaks to the expected number to this patch, and then
-the per-VM override test just makes disable_nx a logical OR of the module param
-beyond off or the test using the per-VM override.
+    return (jiffies << 4) | read_c0_random();
 
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> new file mode 100755
-> index 000000000000..19fc95723fcb
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> @@ -0,0 +1,25 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +# tools/testing/selftests/kvm/nx_huge_page_test.sh
-> +# Copyright (C) 2022, Google LLC.
+It seems like that would give us something somewhat more ideal than
+the status quo. Still crap, of course, but undoubtedly better.
 
-This should either check for root or use sudo.
+Unfortunately, I don't know enough about whether assumptions (a) and
+(b) hold for all hardware that doesn't have the c0 cycle counter. Can
+you or Thomas confirm/deny this? And if it is more nuanced than my
+optimistic assumption above, can we think of some scheme together that
+nicely combines jiffies or the fallback function with the c0 random
+register that would be sensible?
 
-> +NX_HUGE_PAGES=$(cat /sys/module/kvm/parameters/nx_huge_pages)
-> +NX_HUGE_PAGES_RECOVERY_RATIO=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio)
-> +NX_HUGE_PAGES_RECOVERY_PERIOD=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
-> +HUGE_PAGES=$(cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
-> +
-> +echo 1 > /sys/module/kvm/parameters/nx_huge_pages
-> +echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
-> +echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
-> +echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-> +
-> +./nx_huge_pages_test
-
-I would much prefer this find its path and use that to reference the test, e.g. this
-fails if invoking the script from anything but the x86_64 subdirectory.  I'd provide
-a snippet of how to do that, but my scripting skills are garbage :-)
-
-> +RET=$?
-> +
-> +echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
-> +echo $NX_HUGE_PAGES_RECOVERY_RATIO > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
-> +echo $NX_HUGE_PAGES_RECOVERY_PERIOD > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
-> +echo $HUGE_PAGES > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-> +
-> +exit $RET
-> -- 
-> 2.35.1.1178.g4f1659d476-goog
-> 
+Jason

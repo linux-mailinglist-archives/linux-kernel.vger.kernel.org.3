@@ -2,87 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4A04FFEEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0416E4FFEE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiDMTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S238196AbiDMTPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiDMTM4 (ORCPT
+        with ESMTP id S238543AbiDMTNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:12:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0042A72446;
-        Wed, 13 Apr 2022 12:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649876903; x=1681412903;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/NRCMCz/oyRtVdmOgQk/fJ76afo2WGVrCiTYNHVE2xg=;
-  b=jp1BTGQnqg6om4h3RVprXPx8foex2/AFlEgBn9uIgdsusvqtOC+ANY7b
-   JwaDJMv105ChXwZjTwAB5UK7wtymp51mqnnF+nTUiXc4SKjMO1+YeOxXp
-   Ofg4B/Mz+Hf1qSAwXKUi7sYaZPyysors26lvFQ6LmKXPKHR1uTSEAR447
-   VTj0bctodH+fRDMnJZvL8stADFVRpp7rt9z07Do1AWqE35nAfWRzqSHw+
-   fS5E+ZVqMflRZ3AkVL5E98iAkcDfEfZzh32gz+69kMWOFfxQcVZsvHcak
-   FOk7Wzy/qib7kx44SEXAcsuf1IBmkHR7dqkqMfPv7rtjMXbGf8ZsHG856
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="242686450"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="242686450"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:08:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="526590986"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 13 Apr 2022 12:08:20 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6E66412C; Wed, 13 Apr 2022 22:08:20 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] iio: dac: lpc18xx: Drop dependency on OF
-Date:   Wed, 13 Apr 2022 22:08:19 +0300
-Message-Id: <20220413190819.38206-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 13 Apr 2022 15:13:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C29176E1F;
+        Wed, 13 Apr 2022 12:08:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F0C9A218EF;
+        Wed, 13 Apr 2022 19:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649876930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9EyFhZgfXVFqDOsGJ8GGdwNni7OZbvbe647ljn8l0Kg=;
+        b=crSSLVb7nuaM5pMQ9PmWBc+Yv5OTLyBrGq/yvmHYRW6kBmQpl9rH14sTEvCsnuU2T6OwUD
+        cF6lo/Dcn/QQ04wcLreovJ8K6Pw90vXEQmSYKGJ2BWelryhwjnrvbBAWXsCtGuhrhj0lV7
+        MVY22fkx0No8qug34GDhqIwqPtUEx/k=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78A6413A91;
+        Wed, 13 Apr 2022 19:08:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X2JiGsIfV2J8AgAAMHmgww
+        (envelope-from <nborisov@suse.com>); Wed, 13 Apr 2022 19:08:50 +0000
+Message-ID: <c3577a83-9889-c741-bb74-051a6d9a0f61@suse.com>
+Date:   Wed, 13 Apr 2022 22:08:49 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
+Content-Language: en-US
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     dsterba@suse.cz, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, terrelln@fb.com
+References: <20220411135136.GG15609@suse.cz>
+ <20220411155540.36853-1-schspa@gmail.com>
+ <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
+ <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+In-Reply-To: <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nothing in this driver depends on OF firmware so drop the dependency
-and update the headers to remove the false impression such a dependency
-exists.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/dac/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
-index 8d5b3bad75ad..d578e242d74d 100644
---- a/drivers/iio/dac/Kconfig
-+++ b/drivers/iio/dac/Kconfig
-@@ -304,7 +304,7 @@ config DS4424
- config LPC18XX_DAC
- 	tristate "NXP LPC18xx DAC driver"
- 	depends on ARCH_LPC18XX || COMPILE_TEST
--	depends on OF && HAS_IOMEM
-+	depends on HAS_IOMEM
- 	help
- 	  Say yes here to build support for NXP LPC18XX DAC.
- 
--- 
-2.35.1
+On 13.04.22 г. 19:03 ч., Schspa Shi wrote:
+> Nikolay Borisov <nborisov@suse.com> writes:
+> 
+>> On 11.04.22 г. 18:55 ч., Schspa Shi wrote:
+>>> This is an optimization for fix fee13fe96529 ("btrfs:
+>>> correct zstd workspace manager lock to use spin_lock_bh()")
+>>> The critical region for wsm.lock is only accessed by the process context and
+>>> the softirq context.
+>>> Because in the soft interrupt, the critical section will not be preempted by
+>>> the
+>>> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock) to turn
+>>> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situation.
+>>> Changelog:
+>>> v1 -> v2:
+>>>       - Change the commit message to make it more readable.
+>>> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.com/
+>>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>>
+>> Has there been any measurable impact by this change? While it's correct it does mean that
+>>   someone looking at the code would see that in one call site we use plain spinlock and in
+>> another a _bh version and this is somewhat inconsistent.
+>>
+> Yes, it may seem a little confused. but it's allowed to save some
+> little peace of CPU times.
+> and "static inline void red_adaptative_timer(struct timer_list *t) in
+> net/sched/sch_red.c"
+> have similar usage.
+> 
+>> What's more I believe this is a noop since when softirqs are executing preemptible() would
+>> be false due to preempt_count() being non-0 and in the bh-disabling code
+>> in the spinlock we have:
+>>
+>>   /* First entry of a task into a BH disabled section? */
+>>      1         if (!current->softirq_disable_cnt) {
+>>    167                 if (preemptible()) {
+>>      1                         local_lock(&softirq_ctrl.lock);
+>>      2                         /* Required to meet the RCU bottomhalf requirements. */
+>>      3                         rcu_read_lock();
+>>      4                 } else {
+>>      5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softirq_ctrl.cnt));
+>>      6                 }
+>>      7         }
+>>
+>>
+>> In this case we'd hit the else branch.
+> 
+> We won't hit the else branch. because current->softirq_disable_cnt
+> won't be zero in the origin case.
+> 
+> __do_softirq(void)
+>          softirq_handle_begin(void)
+>          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
+>                          current->softirq_disable_cnt will be > 0 at this time.
 
+That's only relevant on CONFIG_PREEMPT_RT though, on usual kernels 
+softirq_handle_being is empty. Furthermore, in case of the non-preempt 
+rt if preemptible() always returns false this means that even in the 
+__do_softirq path we'll never increment softirq_disable_cnt. So if 
+anything this change is only beneficial (theoretically at that in 
+preempt_rt scenarios).
+
+>      ......
+>          zstd_reclaim_timer_fn(struct timer_list *timer)
+>                          spin_lock_bh(&wsm.lock);
+>                          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
+>                          if (!current->softirq_disable_cnt) {
+>                                                  // this if branch won't hit
+>                                          }
+> 
+>          softirq_handle_end();
+> 
+> In this case, the "__local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);"
+> won't do anything useful it only
+> increase softirq disable depth and decrease it in
+> "__local_bh_enable_ip(_RET_IP_, SOFTIRQ_LOCK_OFFSET);".
+> 
+> So it's safe to replace spin_lock_bh with spin_lock in a timer
+> callback function.
+> 
+> 
+> For the ksoftirqd, it's all the same.
+> 

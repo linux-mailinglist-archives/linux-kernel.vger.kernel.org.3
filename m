@@ -2,93 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED864FF97E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39F54FF98C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbiDMO6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
+        id S235037AbiDMPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiDMO6I (ORCPT
+        with ESMTP id S234367AbiDMPBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:58:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07149E0DD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:55:47 -0700 (PDT)
+        Wed, 13 Apr 2022 11:01:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE464702;
+        Wed, 13 Apr 2022 07:58:43 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8B0F31F869;
-        Wed, 13 Apr 2022 14:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649861745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4E7DB2160F;
+        Wed, 13 Apr 2022 14:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649861922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BcWSoqX6MF2jNoXvZrSaKVBHkNeLeKaasZJ9GM7J/mw=;
-        b=kRuThKFn7qs28R959Nsasud/3cMNFp1t+MNSDsmA6H9gRax1E7daj2Z19n4AW5dc9KX73p
-        pVFMArBKUV/n16ycOsVrppwWNaIJfzv5e04Nt+mFPfVaPUMpDlvzZuCFDyIGiaN8HSjkdJ
-        l79GzukUL8K/wwXfaMzci7m3PPUIxFs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649861745;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BcWSoqX6MF2jNoXvZrSaKVBHkNeLeKaasZJ9GM7J/mw=;
-        b=B9nD+lFBRxtBKKHMzUxYi9cEjbZ3h2bXt41cWrObQwxkpZxxDAT08w173fAcYn89XbWEa5
-        T5jXysjHroNAULBg==
+        bh=+GxKh4jt1u41zQwY9fFHOMk5qmURUsLIVA8mQOYyxDU=;
+        b=O6hVIo50wvWHDzF2F5mxM/evBWX1ys7K4C3M3vCUT2/eLnQPfFweYZx95LplidWNT9oCQb
+        RYGWdMnxCHlJEv7H9ZLPkRwecQX5aKb1syXbVucHysYiEIqxoQNSONpHRS+LrS/5askTWF
+        AIBvmRYRknoHncWQPEAHiGVUB5yAxxk=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31C6813A91;
-        Wed, 13 Apr 2022 14:55:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CBA0113A91;
+        Wed, 13 Apr 2022 14:58:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id dteZC3HkVmIDJQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 13 Apr 2022 14:55:45 +0000
-Message-ID: <c410215b-bae4-4bff-bc7b-3d6953e996fd@suse.cz>
-Date:   Wed, 13 Apr 2022 16:55:44 +0200
+        id GDquLiHlVmIsJgAAMHmgww
+        (envelope-from <nborisov@suse.com>); Wed, 13 Apr 2022 14:58:41 +0000
+Message-ID: <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
+Date:   Wed, 13 Apr 2022 17:58:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v3 11/16] mm/page-flags: reuse PG_mappedtodisk as
- PG_anon_exclusive for PageAnon() pages
+Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-12-david@redhat.com>
- <84c0bcbb-5c8f-d3b2-2a8c-d68462d0bc04@suse.cz>
- <e015a477-89df-5eb1-5fec-b1108c18e4a4@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <e015a477-89df-5eb1-5fec-b1108c18e4a4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Schspa Shi <schspa@gmail.com>, dsterba@suse.cz
+Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        terrelln@fb.com
+References: <20220411135136.GG15609@suse.cz>
+ <20220411155540.36853-1-schspa@gmail.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+In-Reply-To: <20220411155540.36853-1-schspa@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -99,82 +67,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 12:28, David Hildenbrand wrote:
-> On 13.04.22 10:25, Vlastimil Babka wrote:
->> On 3/29/22 18:04, David Hildenbrand wrote:
->>>   the pin will be fully reliable and stay consistent with the pages
->>>   mapped into the page table, as the bit cannot get cleared (e.g., by
->>>   fork(), KSM) while the page is pinned. For anonymous pages that
->>>   are mapped R/W, PG_anon_exclusive can be assumed to always be set
->>>   because such pages cannot possibly be shared.
->>>
->>>   The page table lock protecting the page table entry is the primary
->>>   synchronization mechanism for PG_anon_exclusive; GUP-fast that does
->>>   not take the PT lock needs special care when trying to clear the
->>>   flag.
->>>
->>>   Page table entry types and PG_anon_exclusive:
->>>   * Present: PG_anon_exclusive applies.
->>>   * Swap: the information is lost. PG_anon_exclusive was cleared.
->>>   * Migration: the entry holds this information instead.
->>>                PG_anon_exclusive was cleared.
->>>   * Device private: PG_anon_exclusive applies.
->>>   * Device exclusive: PG_anon_exclusive applies.
->>>   * HW Poison: PG_anon_exclusive is stale and not changed.
->>>
->>>   If the page may be pinned (FOLL_PIN), clearing PG_anon_exclusive is
->>>   not allowed and the flag will stick around until the page is freed
->>>   and folio->mapping is cleared.
->> 
->> Or also if it's unpinned?
-> 
-> I'm afraid I didn't get your question. Once the page is no longer
-> pinned, we can succeed in clearing PG_anon_exclusive (just like pinning
-> never happened). Does that answer your question?
 
-Yeah it looked like a scenario that's oddly missing in that description, yet
-probably obvious. Now I feel it's indeed obvious, so nevermind :)
 
->>> We won't be clearing PG_anon_exclusive on destructive unmapping (i.e.,
->>> zapping) of page table entries, page freeing code will handle that when
->>> also invalidate page->mapping to not indicate PageAnon() anymore.
->>> Letting information about exclusivity stick around will be an important
->>> property when adding sanity checks to unpinning code.
->>>
->>> Note that we properly clear the flag in free_pages_prepare() via
->>> PAGE_FLAGS_CHECK_AT_PREP for each individual subpage of a compound page,
->>> so there is no need to manually clear the flag.
->>>
->>> Signed-off-by: David Hildenbrand <david@redhat.com>
->> 
->> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+On 11.04.22 г. 18:55 ч., Schspa Shi wrote:
+> This is an optimization for fix fee13fe96529 ("btrfs:
+> correct zstd workspace manager lock to use spin_lock_bh()")
 > 
-> Thanks!
+> The critical region for wsm.lock is only accessed by the process context and
+> the softirq context.
 > 
->> 
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -3663,6 +3663,17 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->>>  		goto out_nomap;
->>>  	}
->>>  
->>> +	/*
->>> +	 * PG_anon_exclusive reuses PG_mappedtodisk for anon pages. A swap pte
->>> +	 * must never point at an anonymous page in the swapcache that is
->>> +	 * PG_anon_exclusive. Sanity check that this holds and especially, that
->>> +	 * no filesystem set PG_mappedtodisk on a page in the swapcache. Sanity
->>> +	 * check after taking the PT lock and making sure that nobody
->>> +	 * concurrently faulted in this page and set PG_anon_exclusive.
->>> +	 */
->>> +	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
->>> +	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
->>> +
->> 
->> Hmm, dunno why not VM_BUG_ON?
+> Because in the soft interrupt, the critical section will not be preempted by the
+> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock) to turn
+> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situation.
 > 
-> Getting PageAnonExclusive accidentally set by a file system would result
-> in an extremely unpleasant security issue. I most surely want to catch
-> something like that in any case, especially in the foreseeable future.
+> Changelog:
+> v1 -> v2:
+> 	- Change the commit message to make it more readable.
+> 
+> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.com/
+> 
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
 
-OK then.
+Has there been any measurable impact by this change? While it's correct it does mean that
+  someone looking at the code would see that in one call site we use plain spinlock and in
+another a _bh version and this is somewhat inconsistent.
 
+What's more I believe this is a noop since when softirqs are executing preemptible() would
+be false due to preempt_count() being non-0 and in the bh-disabling code
+in the spinlock we have:
+
+  /* First entry of a task into a BH disabled section? */
+     1         if (!current->softirq_disable_cnt) {
+   167                 if (preemptible()) {
+     1                         local_lock(&softirq_ctrl.lock);
+     2                         /* Required to meet the RCU bottomhalf requirements. */
+     3                         rcu_read_lock();
+     4                 } else {
+     5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softirq_ctrl.cnt));
+     6                 }
+     7         }
+
+
+In this case we'd hit the else branch.
+> ---
+>   fs/btrfs/zstd.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
+> index fc42dd0badd7..faa74306f0b7 100644
+> --- a/fs/btrfs/zstd.c
+> +++ b/fs/btrfs/zstd.c
+> @@ -105,10 +105,10 @@ static void zstd_reclaim_timer_fn(struct timer_list *timer)
+>   	unsigned long reclaim_threshold = jiffies - ZSTD_BTRFS_RECLAIM_JIFFIES;
+>   	struct list_head *pos, *next;
+>   
+> -	spin_lock_bh(&wsm.lock);
+> +	spin_lock(&wsm.lock);
+>   
+>   	if (list_empty(&wsm.lru_list)) {
+> -		spin_unlock_bh(&wsm.lock);
+> +		spin_unlock(&wsm.lock);
+>   		return;
+>   	}
+>   
+> @@ -137,7 +137,7 @@ static void zstd_reclaim_timer_fn(struct timer_list *timer)
+>   	if (!list_empty(&wsm.lru_list))
+>   		mod_timer(&wsm.timer, jiffies + ZSTD_BTRFS_RECLAIM_JIFFIES);
+>   
+> -	spin_unlock_bh(&wsm.lock);
+> +	spin_unlock(&wsm.lock);
+>   }
+>   
+>   /*

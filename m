@@ -2,87 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574EA50010C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64673500114
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237867AbiDMVUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S231462AbiDMVX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiDMVUI (ORCPT
+        with ESMTP id S239274AbiDMVXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:20:08 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2316E5E;
-        Wed, 13 Apr 2022 14:17:46 -0700 (PDT)
-Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E6A941F46E52;
-        Wed, 13 Apr 2022 22:17:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649884665;
-        bh=CG52Uur5vxx6WW2+Hm5dUFjVdnVffUuObFP79HK5REs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JOQyRGp5WC/z0WyH4PwgJWGANGPxAV6F9g457XzfY/sfpXqISsDDS1oo9gURfuuTN
-         I+JSkz0rOp9aSy6C5RYxmVAmIeIfJnwCj0EeHe+UFMDeZEJsifoccZ8F6Q7JD30umS
-         RweV7ItbOgmmIkdhYlaOiX7Z7/cO2G3mNSJ4cT1uBvxirVX5nQag4G2Sebw/rACFBk
-         plRtft57RsGZXFMjk7e7S8LusYyMICtZQcknCZbk6Jz6RTcbMG/Y20dcmH/cWyjqfp
-         JHrHbxNfzJ1HiC17xKwJc24aH1UxYy1dW1SEsYlmcUNRKAIjG4x6YOXPJ38pTc3R7w
-         X/5tRwyGqSoog==
-Message-ID: <c3af41bc-5d7e-660d-37b6-d0be80cd63b1@collabora.com>
-Date:   Thu, 14 Apr 2022 00:17:41 +0300
+        Wed, 13 Apr 2022 17:23:03 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9A2BB37;
+        Wed, 13 Apr 2022 14:20:41 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id q129so3431701oif.4;
+        Wed, 13 Apr 2022 14:20:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BNnhzbT7x5Fwfm2D+LNQD+lbH1XqfFIidCgzY9zOuGk=;
+        b=FIY+MZHCG+BzxvP7M0SwV6pj/njJoYdDjJcTFRGITCWMOVGTsxJpB3dwFbowihllgH
+         51rAOpR1q1mVLcc26h7v7TUcIYjy2nedRK3T0x9BXE0gp9BPEOVzI5gwgf56LjjuxULK
+         dvzNjEwAkdKoLb26IPrZPYZkxMve48vSPABtAFkrwgpmfNhexH6uryguDUAFsx/dxQJK
+         d/gjYyaMXI8jbHsOuO6IN9UOOAxtcTd9M3ITLWTHcqIvDBJyrqwfPPo+Q3HVMTAHq12w
+         /SdlAbi1BTKoSvsSXSB6Ds+Ix70S+q/jWT1dN1dcRxiSwIJap3pdDQaM1zfYkE/rOLw3
+         BUJA==
+X-Gm-Message-State: AOAM530/rgC7sAChBqqgZNYtMQ9QjSmTzJOiUAzwCR7CJJrl2ob5wuEb
+        eyYmgZSKKx31B3OMAtAlfwY4napT8w==
+X-Google-Smtp-Source: ABdhPJzOAUPoYvywkyjx8QaQOVnaIDTerWLm9Yg9DWHDGQeYUOO9E66kaHrhsX05kwA+rd6RTOa7QQ==
+X-Received: by 2002:a05:6808:118f:b0:2d4:13f1:8504 with SMTP id j15-20020a056808118f00b002d413f18504mr332417oil.90.1649884840198;
+        Wed, 13 Apr 2022 14:20:40 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bx16-20020a0568081b1000b002f7966564b4sm59862oib.43.2022.04.13.14.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 14:20:39 -0700 (PDT)
+Received: (nullmailer pid 3947483 invoked by uid 1000);
+        Wed, 13 Apr 2022 21:20:38 -0000
+Date:   Wed, 13 Apr 2022 16:20:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     xinlei.lee@mediatek.com
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rex-bc.chen@mediatek.com, jitao.shi@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v4,1/3] dt-bindings: display: mediatek: dsi: Convert
+ dsi_dtbinding to .yaml
+Message-ID: <Ylc+ph5OFzQ/YR3k@robh.at.kernel.org>
+References: <1649495514-25746-1-git-send-email-xinlei.lee@mediatek.com>
+ <1649495514-25746-2-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v7 2/4] memory: tegra: Add MC error logging on tegra186
- onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, digetx@gmail.com,
-        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220413094012.13589-1-amhetre@nvidia.com>
- <20220413094012.13589-3-amhetre@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220413094012.13589-3-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649495514-25746-2-git-send-email-xinlei.lee@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 12:40, Ashish Mhetre wrote:
-> +static inline u32 mc_ch_readl(const struct tegra_mc *mc, int ch,
-> +			      unsigned long offset)
-> +{
+On Sat, Apr 09, 2022 at 05:11:52PM +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+>  .../display/mediatek/mediatek,dsi.yaml        | 118 ++++++++++++++++++
+>  2 files changed, 118 insertions(+), 62 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
 
-return 0 if mc->bcast_ch_regs==NULL
 
-> +	if (ch == MC_BROADCAST_CHANNEL)
-> +		return readl_relaxed(mc->bcast_ch_regs + offset);
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+> new file mode 100644
+> index 000000000000..431bb981394f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+> @@ -0,0 +1,118 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,dsi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	return readl_relaxed(mc->ch_regs[ch] + offset);
-> +}
+> +title: MediaTek DSI Controller Device Tree Bindings
 > +
-> +static inline void mc_ch_writel(const struct tegra_mc *mc, int ch,
-> +				u32 value, unsigned long offset)
-> +{
+> +maintainers:
+> +  - CK Hu <ck.hu@mediatek.com>
+> +  - Jitao Shi <jitao.shi@mediatek.com>
+> +  - Xinlei Lee <xinlei.lee@mediatek.com>
+> +
+> +description: |
+> +  The MediaTek DSI function block is a sink of the display subsystem and can
+> +  drive up to 4-lane MIPI DSI output. Two DSIs can be synchronized for dual-
+> +  channel output.
 
-return if mc->bcast_ch_regs==NULL
+allOf:
+  - $ref: /schemas/display/dsi-controller.yaml#
 
-> +	if (ch == MC_BROADCAST_CHANNEL)
-> +		writel_relaxed(value, mc->bcast_ch_regs + offset);
-> +	else
-> +		writel_relaxed(value, mc->ch_regs[ch] + offset);
-> +}
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt2701-dsi
+> +      - mediatek,mt7623-dsi
+> +      - mediatek,mt8167-dsi
+> +      - mediatek,mt8173-dsi
+> +      - mediatek,mt8183-dsi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Engine Clock
+> +      - description: Digital Clock
+> +      - description: HS Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: engine
+> +      - const: digital
+> +      - const: hs
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      Output port node. This port should be connected to the input
+> +      port of an attached DSI panel or DSI-to-eDP encoder chip.
+> +
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - power-domains
+> +  - clocks
+> +  - clock-names
+> +  - phys
+> +  - phy-names
+> +  - port
+> +
+> +additionalProperties: false
 
+with the above,
+
+unevaluatedProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/power/mt8183-power.h>
+> +    #include <dt-bindings/phy/phy.h>
+> +    #include <dt-bindings/reset/mt8183-resets.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        dsi0: dsi@14014000 {
+> +            compatible = "mediatek,mt8183-dsi";
+> +            reg = <0 0x14014000 0 0x1000>;
+> +            interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_LOW>;
+> +            power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +            clocks = <&mmsys CLK_MM_DSI0_MM>,
+> +                <&mmsys CLK_MM_DSI0_IF>,
+> +                <&mipi_tx0>;
+> +            clock-names = "engine", "digital", "hs";
+> +            resets = <&mmsys MT8183_MMSYS_SW0_RST_B_DISP_DSI0>;
+> +            phys = <&mipi_tx0>;
+> +            phy-names = "dphy";
+> +            port {
+> +                dsi0_out: endpoint {
+> +                    remote-endpoint = <&panel_in>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.18.0
+> 
+> 

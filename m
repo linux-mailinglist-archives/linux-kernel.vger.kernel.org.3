@@ -2,147 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AA04FFFA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E074FFFA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiDMT4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S235545AbiDMT6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiDMT4h (ORCPT
+        with ESMTP id S232067AbiDMT6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:56:37 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783437B563
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:53:46 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u19so5458414lff.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q/DBgAkv4OQEV7GLgkTJlWv+q3kLHi60Bd65fMkiVGg=;
-        b=dxlaLoqslihL0u5ALJQQNQLkyAJAatT6/BflQltbOe8/sf91WvaHNbi7GO1b9Fv7ym
-         eGx41ozm92iUi2qBs53105A6bIUDq03qjk/3IVzSMTq9V8X0glNvjMmX3ZXtjpTtmSaa
-         IGbV8DgLGUxm4m7Y3DonNhNx06/iV90eFeUS0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q/DBgAkv4OQEV7GLgkTJlWv+q3kLHi60Bd65fMkiVGg=;
-        b=b2VACvzvZQNsfz0TnXAzK14/tL2m8a00ckmKGNN3CHex6u4QX0SEecSSqXwJYjPqQX
-         FYW5hDxJpkfnnu8JlpNqPaC3D9HCa1H3zK6cBhfSMuen1Na4npCD5kl0gaAcFhlk4S1p
-         8Eqj+EzlYubbow7qH/bO2R3wVGAZzuhLEvNlo68QhtH/JSJFSuGuJm3zn70mbt0jKRJn
-         K+6HBnW+t+gRfCDlISLzXEXiv79sJ6glB5bLIUm/MBZoxMMaNwqwxKSlDKMiOjIxy8Ke
-         PJTWqYd3lM4yra0A/epsi3p6ggxJOl1uGnle2hZONaB4JVH+E37bKVjwMbrdaqQQPwxh
-         f97w==
-X-Gm-Message-State: AOAM530cVY85/Q4SFLAvXEvCjQHLgMg+qQyG9VHQ9MlEE1hdH8IbA9Qj
-        nP9aoVuOT7N8waZ89JfGIeB382++XvktiqJW
-X-Google-Smtp-Source: ABdhPJwoNVDW4F9tz17pPGrjyGYpnUES8L9ltDS++SOk6/JsMp4Esn805q2ZHYEwOUN2PYFCuz0ivA==
-X-Received: by 2002:a05:6512:3d08:b0:46b:a03f:6896 with SMTP id d8-20020a0565123d0800b0046ba03f6896mr13768385lfv.120.1649879624522;
-        Wed, 13 Apr 2022 12:53:44 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id q14-20020a0565123a8e00b0044a7b26ae1dsm4232016lfu.109.2022.04.13.12.53.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 12:53:41 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id k5so5434498lfg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:53:40 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr28805493lfh.687.1649879620574; Wed, 13
- Apr 2022 12:53:40 -0700 (PDT)
+        Wed, 13 Apr 2022 15:58:31 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C905D64D;
+        Wed, 13 Apr 2022 12:56:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Msy4UDJe4DK+4mMHp7qo3tq+YKgyD1fQ7j6r8k/A0ReaCwUGiMaBH6KWTeBPjUklFoOZcIehYOQT2dmHBHhqMveXlZdswiynLWcCJ5axLBCdUsSpRObydyycmD2qztV89mtcBF1l1+nkD96qHODo5C0SG8BEzue9ahBAwndq8cbLNbLC3H3LOTIjpq1/yq0JBJOkWXNk1XvBCfWEmQBzkIz6wUGxYPY7MLOLgMM33CjEdZxCBq0p659ZRQ9F62jSN9c9pCk9pOQfK3Smyt1XriFKAB6jg1KmDiZqpSGRlWSxSOhD/tqDaE111zEuKEuqCKkLWLbGxc+7qPMYx6rHRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hdQr/51zBf73qwOg2uMuusQrGyU6k5n47k8UnzePFHQ=;
+ b=MgQ7VHAFwuQTPa0rPR8R0+DDCsYoCE1sKcC3AIsqtsQQjNZVi4xN7WNvMM0jXspkrBDDE92NWGt+2nVzMdtcEvPt5cSTZDUctE3qaDZGBY2xZCWDV1lsiVzFx8/uOI+/rEoxu2ld+q3DFx5vmDkQdvqB/HgO5mg9JvJjqiBXodrr/2NxLfAbj8XIcoclUMnFke1ncoS6GyF93JpE8dzPKdMA30kBUS+fzfdSrmnXTjZcld81vzfPn7c1/6k4b5UEJD3lyftcWbK11PNd/LZITWJKoEwfzABWFQKTn8tIy28ZZehrQG4Mxn6OvphyPj4KLqNTZix69flpC+Uw1c2x2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hdQr/51zBf73qwOg2uMuusQrGyU6k5n47k8UnzePFHQ=;
+ b=TFvKYIwW4DIpUWQW0WssLCoVuNS1Ip7BH+WwzHV5A/zoMqhYoIX2UlrgInyuXCWnxGD+pWlPfZ44kOOZXrnfVQjlv5uhW16woplZtAiF1oeBUdaZqE3Rj5nuQ9IwI//eb/oo6bbJ+ixyvaEf3tBfnOkjg6eJRrDCmxKevUmLqqA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB4720.namprd12.prod.outlook.com (2603:10b6:805:e6::31)
+ by BL0PR12MB4674.namprd12.prod.outlook.com (2603:10b6:207:38::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 19:56:04 +0000
+Received: from SN6PR12MB4720.namprd12.prod.outlook.com
+ ([fe80::c575:d06d:b1ba:c877]) by SN6PR12MB4720.namprd12.prod.outlook.com
+ ([fe80::c575:d06d:b1ba:c877%7]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
+ 19:56:04 +0000
+Message-ID: <1814f58c-1d26-1aa6-25cf-eb51261f8b9f@amd.com>
+Date:   Wed, 13 Apr 2022 14:55:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] selftests: cpufreq: Add wapper script for test AMD
+ P-State
+Content-Language: en-US
+To:     Meng Li <li.meng@amd.com>, Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+Cc:     Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+References: <20220413090510.4039589-1-li.meng@amd.com>
+ <20220413090510.4039589-3-li.meng@amd.com>
+From:   Nathan Fontenot <nafonten@amd.com>
+In-Reply-To: <20220413090510.4039589-3-li.meng@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0421.namprd03.prod.outlook.com
+ (2603:10b6:610:10e::26) To SN6PR12MB4720.namprd12.prod.outlook.com
+ (2603:10b6:805:e6::31)
 MIME-Version: 1.0
-References: <Yk8RGvF6ik34C6BO@arm.com> <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
- <Yk/6ts5sVDMDpKj3@arm.com> <Yk/8QExHlggU8KgC@gondor.apana.org.au>
- <YlVHSvkyUBXZPUr2@arm.com> <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
- <YlVOTsaTVkBOxthG@arm.com> <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
- <YlVxGAHHD/j6lW3c@arm.com> <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com>
-In-Reply-To: <YlaOIbSA7B/G9222@arm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 13 Apr 2022 09:53:24 -1000
-X-Gmail-Original-Message-ID: <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
-Message-ID: <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ce581afa-0a69-45e0-714e-08da1d87a41f
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4674:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB467431CC1C012F755EF8FC35ECEC9@BL0PR12MB4674.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4hdaa7jB+eSmSAQ3/wKpz2Lf1uV6SGAMUj3ONlmnBA+6unIhYd/QdCs53yDvdeTuZNFv6DaKyiyzE8aAKOtkRalkp/n/0Mum6idOizxyotdaTscNPs0+Gc49n53TTu93lY3Gms4RNbqpQP5HYbyEK0Iby1pCVRb5RlhiffOyeR+/GhTkl+qEyY+JbtlOFBIMcXwNNen886OckBofFb+En1aEtMGaF4geR0WtxC5uUN7D2NbGBwJnG6HIK92ZUgyJFZBd5JXxG5q6K7EncDU5eFT98F03iM/VyCKI2CrW5hC/t7oiQm8OneWQYftxOysE1i+vW6G5ffpPj6udruf/NqlcFz6CadCqERBJe0zL97cISJ3SRHsVk1pmMx1xQZAFNemy0W21YtbyBhIXFEj3E7GujsHOflTTdbDXHxND7j1NRHAsAjQdHdTnYgY7PGfvOYptflSbW599onnbrJCoTKZOR/baBqyL4Twdn3AyyYc+0Vta40llePCp7IEN8R3oCRPnMGaHUxPSBNwqm4RfG93piboH2+dnuEQr/tOtkHA9LKDqKyoWjmcTjATcATqVtJSII/5MHIqm8+DFfYSV8ykJC1HiCzUVZ4SKsMRZu8EfhQ3CUzD3jLK/yoaGD+affuDzoH06iUOgiOuhYtT6IqrUrYIBI1rw4s1Kq6xBYpj+Hbj0nfXNGd+WSTa0pki6f5HaKl90qkIph6owxLC5mBlMKvBFhuqqEUJx0rr2iT8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4720.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(31696002)(83380400001)(8676002)(66556008)(66476007)(36756003)(2906002)(186003)(26005)(110136005)(316002)(6486002)(2616005)(54906003)(508600001)(31686004)(38100700002)(66946007)(8936002)(6666004)(5660300002)(6512007)(53546011)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDdNOTcrQUtpcEQ5dzhSd2hDT0pVZEVKSEliNEgyWVl0RWlOekovY3VOZVB4?=
+ =?utf-8?B?d1gwdnJqQWhtVWFLemdXRWhVYUZKeWFqS3RhVmpXdm1wREsvc0tLdllWNytx?=
+ =?utf-8?B?VUxiK1hBQlNBcnhBdEFWYTI1WHJaNjhTU2hnVUZZWUlwdnBLbkVWMmpSdVR3?=
+ =?utf-8?B?TW5JY0VKR2N3UDNraVN4eFoyVTk1eVZ6T3FUNi8zMFRoOElrK1ZiMVdjZUFW?=
+ =?utf-8?B?cGNNY0xXc0xTU1AyZGJDY2xzNjVjUTMydWhqU1dBWk5mRW5aOUNPMmJPN3M2?=
+ =?utf-8?B?WGxsTGt3RGEwVUdoR1RRMUxuczdGRWpEM3Z6OEx0ZE91aENCb1o3MEdWTEp2?=
+ =?utf-8?B?dDNmajNNK3N6Zll5NmpPVE5hZHpzbDludGNSMHBTbURaMmwxTlFHdGY1ejNZ?=
+ =?utf-8?B?RmY2VmpmWEIzQ1RVdFUvZThneWNjb1oyMVdWKzRGNUFick5SN3dJTklWNWNQ?=
+ =?utf-8?B?dkF4RmlibVdlNWk2bHhjR0RTM3kwUnZnODVXRTlSaWgva0tiY1AvSXlweWVt?=
+ =?utf-8?B?eTdOcS9uZVFsS3E4TEJmR2h6ZmFGNDI4eGpES3k1SjNhRmhzNmZwUWlGc3BE?=
+ =?utf-8?B?WkJ4aHNRUTIvczExM083ai9TMVFyQ3Jkdmh4eGdiVXRCdkQ5eWNOZWxNdTdY?=
+ =?utf-8?B?cmN4Q29aQ2xWczZSV0VoOVF0cWNQdWszUzhCSyt2NmZuOXBqMThLcWVSb0FO?=
+ =?utf-8?B?SFM0d2dReEpOSUNjeXBXRWk0bXNYcVdzazVkUHlUS3FBNlV6NEFmQkJsZkM0?=
+ =?utf-8?B?NWIrSE9jMlM1aG02b2RaZldBVTkvem9TeS9DT040VlUxREZuRllmdDM4aGpz?=
+ =?utf-8?B?K0U3UXVYd3RKVzJ6OU1oaFpaME5aQUdNNE82c3NhakRFSzFlejl3VFBxeGhw?=
+ =?utf-8?B?UThYN0NiN1V2ZGNQaU92NkVrcE85RWFIbklvQ3RyOVVnSWRQNjU0Tk05UFZE?=
+ =?utf-8?B?TnVUZWhvN0RHSjUvOHJZWGQrUW0ySzg1TEg2MXhhY2R2YjRsNll4cnozeW1D?=
+ =?utf-8?B?RGJBUnRidmYyK2pueDFrdFMzN3RsUW85VnZUOEY1aFRtV09TRGdpcy9wTVVx?=
+ =?utf-8?B?THQ0R1lCMG9hTml3eGE0UGJVMFRSNHFneU1ScFpRbktpUE9jT3VaM0RCeFdT?=
+ =?utf-8?B?QmN4OTFmMzVKTytaT2NTQ0JkSUk3eHdaS0VHdE5sbXZXYlFsQ2ppNUxKWDY4?=
+ =?utf-8?B?YW5GdWpsNy9yQnVVTzV6eGlkei9WRkJ2bTFMYitjMUZmS3NGRnRHWVJOaTJS?=
+ =?utf-8?B?QUhtRUFNYWRUaGVqUmhNMHFwdm5LY1Nyc2h2VGI2c1R0NlpYZEJQOXFFMFBn?=
+ =?utf-8?B?My9CSlBvT25YbEV3VFFVaXpGWXVmcGI0ZUhQWnQ2OGVLdDZBT0dPMmFyU3hP?=
+ =?utf-8?B?RHRuazMvVTRSTHRUSGZvRkpDWERQOUNSejJReTRhQmdhbk1xaHpXOGhJV284?=
+ =?utf-8?B?aUhCOUZjZTZtRkpueC9nWmkrNkJ1c2d3VXhhVmRSdFluVEgwWE1DVWhwVHRu?=
+ =?utf-8?B?SlVDN0QxZFdBZlBhTGYxcXM1TzdGYnBPSmUrRklsMWtVdWl2elp0S1lIenE0?=
+ =?utf-8?B?Z3BQbll5eDFkOHp5WFR2SXBkVGhkbjVjK1V3NnYreHBpOER2dzRzMlJ2bmQ0?=
+ =?utf-8?B?cDNYWUdYUEEwZURsUHJwRk85aWtMbCtVUW5GSEx3ZEI0QlY3SEEyYWc5LzFk?=
+ =?utf-8?B?NE54QTVsTGFJS0owcFFEWlBaYzNjTWJON3NhRHFzTk5qWkRjWFNTYUhoRlZ3?=
+ =?utf-8?B?NlNkOFdKWGY4UCs4ekhpdGsvWGxqYUV6RkpTSkUrUUtreUVOeHYwRkdkbElv?=
+ =?utf-8?B?Y2tCTW5ad0w5WE55TUVPSklTYmh1MWpNMjNjQ25IMmFGeVZmdU9IblBZN2Qx?=
+ =?utf-8?B?RHpFSnNEdjFBVXVxWGRTb2l6WENzb0JWZkd0b2xSUi9LT09BbnlVZkZFT0JY?=
+ =?utf-8?B?WDQ3TWNubENoLy9lK2I0Qi9JeUc5Sm42YjlHR2UvRWE4ZDhyTDhSaVYwbFJP?=
+ =?utf-8?B?bkpDWVJuZE85S2JxY0ZaZ0w1dFZtOWFRLzBPZGY1SjcycDd2MmxYd25EVW9J?=
+ =?utf-8?B?R1N4bW9hU2MrREF0WHN4cGxzcjFTcTR1U1pBOTlrZWRxS1RvQ3NFcTBqT09M?=
+ =?utf-8?B?YVFyVjY0Z1lyOW43ZEVnYlNIQ1YrQTR2S2RuaVFKbFJucXRmYmJ4emsyM3ps?=
+ =?utf-8?B?NzBwcy84UnU4SHJvWnlTWUM0YzJPY3FRZFVnaVRvMGVzcDJFck4yRE82b1FV?=
+ =?utf-8?B?VEZRQmVNQVdhN2Z1SlFGa2hUbWpMYnl4Z0MwUmhlMjZmNmRwUGpncENnNkxa?=
+ =?utf-8?B?Z004L0pEdXdBNEl6NXlTN2JzSlVZMUxHeFhRNmpOSnBGdm1uYzlxZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce581afa-0a69-45e0-714e-08da1d87a41f
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB4720.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 19:56:03.9223
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sRVBE0F+jA9mzlfBcZk/qkZ3na48eq0L73T3Lp5TM+h/wJ4Z7ZM9g7AJ8DUL/0RlVb9eCThBPjRugJ043hwcBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4674
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:47 PM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> I agree. There is also an implicit expectation that the DMA API works on
-> kmalloc'ed buffers and that's what ARCH_DMA_MINALIGN is for (and the
-> dynamic arch_kmalloc_minalign() in this series). But the key point is
-> that the driver doesn't need to know the CPU cache topology, coherency,
-> the DMA API and kmalloc() take care of these.
+On 4/13/22 04:05, Meng Li wrote:
+> Adds a wrapper shell script for the amd_pstate_testmod module.
+> 
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> ---
+>  tools/testing/selftests/cpufreq/Makefile              | 2 +-
+>  tools/testing/selftests/cpufreq/amd_pstate_testmod.sh | 4 ++++
+>  tools/testing/selftests/cpufreq/config                | 1 +
+>  3 files changed, 6 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+> 
+> diff --git a/tools/testing/selftests/cpufreq/Makefile b/tools/testing/selftests/cpufreq/Makefile
+> index c86ca8342222..c32adc59a1f4 100644
+> --- a/tools/testing/selftests/cpufreq/Makefile
+> +++ b/tools/testing/selftests/cpufreq/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all:
+>  
+> -TEST_PROGS := main.sh
+> +TEST_PROGS := main.sh amd_pstate_testmod.sh
 
-Honestly, I think it would probably be worth discussing the "kmalloc
-DMA alignment" issues.
+Instead of making the amd-pstate testing a separate test program, should this
+be part of the main.sh testing program?
 
-99.9% of kmalloc users don't want to do DMA.
+Perhaps adding a "driver" test function that can check for the amd-pstate driver
+being in use and run the test module.
 
-And there's actually a fair amount of small kmalloc for random stuff.
-Right now on my laptop, I have
+-Nathan
 
-    kmalloc-8          16907  18432      8  512    1 : ...
-
-according to slabinfo, so almost 17 _thousand_ allocations of 8 bytes.
-
-It's all kinds of sad if those allocations need to be 64 bytes in size
-just because of some silly DMA alignment issue, when none of them want
-it.
-
-Yeah, yeah, wasting a megabyte of memory is "just a megabyte" these
-days. Which is crazy. It's literally memory that could have been used
-for something much more useful than just pure and utter waste.
-
-I think we could and should just say "people who actually require DMA
-accesses should say so at kmalloc time". We literally have that
-GFP_DMA and ZOME_DMA for various historical reasons, so we've been
-able to do that before.
-
-No, that historical GFP_DMA isn't what arm64 wants - it's the old
-crazy "legacy 16MB DMA" thing that ISA DMA used to have.
-
-But the basic issue was true then, and is true now - DMA allocations
-are fairly special, and should not be that hard to just mark as such.
-
-We could add a trivial wrapper function like
-
-     static void *dma_kmalloc(size_t size)
-     { return kmalloc(size | (ARCH_DMA_MINALIGN-1); }
-
-which now means that the size argument is guaranteed to be big enough
-(not not overflow to zero) that you get that aligned memory
-allocation.
-
-We could perhaps even have other special rules. Including really
-specific ones, like saying
-
- - allocations smaller than 32 bytes are not DMA coherent, because we pack them
-
-which would allow those small allocations to not pointlessly waste memory.
-
-I dunno. But it's ridiculous that arm64 wastes so much memory when
-it's approximately never needed.
-
-                 Linus
+>  TEST_FILES := cpu.sh cpufreq.sh governor.sh module.sh special-tests.sh
+>  
+>  include ../lib.mk
+> diff --git a/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh b/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+> new file mode 100755
+> index 000000000000..5398ad568885
+> --- /dev/null
+> +++ b/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+> @@ -0,0 +1,4 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Tests the AMD P-State unit test infrastructure using amd_pstate_testmod kernel module.
+> +$(dirname $0)/../kselftest/module.sh "amd_pstate_testmod" amd_pstate_testmod
+> diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+> index 75e900793e8a..374a8adbb34c 100644
+> --- a/tools/testing/selftests/cpufreq/config
+> +++ b/tools/testing/selftests/cpufreq/config
+> @@ -13,3 +13,4 @@ CONFIG_DEBUG_LOCK_ALLOC=y
+>  CONFIG_PROVE_LOCKING=y
+>  CONFIG_LOCKDEP=y
+>  CONFIG_DEBUG_ATOMIC_SLEEP=y
+> +CONFIG_AMD_PSTATE_TESTMOD=m

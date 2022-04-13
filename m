@@ -2,185 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D31E4FF59A
+	by mail.lfdr.de (Postfix) with ESMTP id CB08F4FF59B
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiDMLXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S232922AbiDMLXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiDMLXE (ORCPT
+        with ESMTP id S231904AbiDMLXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:23:04 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399B26AD9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:20:43 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bh17so3231560ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yMHX8VmInfu96ICFrLyuQfmIbbC+AVb0b8MRzaL94OU=;
-        b=mRgDYFsUynZQPMKvQ56e8mxiZ9Xy0A9C/mv9RlUnftc4X/afdBAhLXecN5e0xdj3JR
-         BSyVG8UidHxqSRpwTWyYFPt6su9knUQ85uNVAiUGUDSw5whiI9izaJOrs0qCNvHvfgGm
-         qXdSYfKFwdJb3ZYdInIr+DX0yDhWJqDnD1JSbBs78TOzvatMaI1zadBZuW9ZLU4bpK1v
-         O6HMX/S0DpstwftC2/VT7zOXrmqhcFByr/RukOi3nUnTqaOL2Ov7P1f3tQNkS5496Ret
-         /qTD+pACyTpRAo+IG22wTVTv2d5lQkAZy3TwtFaWQofbMcWWQUwQQwKysSUrqUbQzhya
-         LvVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yMHX8VmInfu96ICFrLyuQfmIbbC+AVb0b8MRzaL94OU=;
-        b=TPtymrlX5rORnY1bay/tVVz+AJR8WmnfsiEM1+7TKf3Ba7XbFGmEQV6DqtoJn93GHc
-         fGsr9+B04ITZ93MIj07aF5p2A+ENkzAUCoFPUXAbz4Dyr0gmTOdqC870EfRued167aD2
-         5UXENci6AON0eY9TZHeSxGNP11eTeZVfYxkqLfsAYXwvccWHU7yRrIsLOqwUUGhX5Ulo
-         /9/a7DMkV5Z1VAyN98qL1kBb+WO2Oq1rqsJcatrS4pA4dpgxb4TqJJc4q3O41bVHiEGd
-         fQGES5XwRgfzmOo2M/FxjzkscmvIwTqdzO7ikDcqa6n2tQTtUYklUPLPQ79M4Eqraxty
-         7oYQ==
-X-Gm-Message-State: AOAM530N0NFK3ZJa0WcxCoWVOj95R54zBowQQDb18lH8AgqlT+e0EgLQ
-        7emwDfIBtW6BnJxkm0mbtRc=
-X-Google-Smtp-Source: ABdhPJx34Og2EC543+P/clWmi2EFDObDXiIQKE++7zn61HRVanxWZuTW93TmqyezvOnQwBX8vMa7Kg==
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id x17-20020a170906299100b006cf6b24e92fmr37834229eje.748.1649848841596;
-        Wed, 13 Apr 2022 04:20:41 -0700 (PDT)
-Received: from [192.168.1.2] (host-79-54-81-151.retail.telecomitalia.it. [79.54.81.151])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm14162272ejj.142.2022.04.13.04.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 04:20:41 -0700 (PDT)
-Message-ID: <b14ed993-6c3a-ca0a-1b5c-b365628bd1fc@gmail.com>
-Date:   Wed, 13 Apr 2022 13:20:39 +0200
+        Wed, 13 Apr 2022 07:23:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D9A255BC;
+        Wed, 13 Apr 2022 04:20:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C758CB82246;
+        Wed, 13 Apr 2022 11:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1989EC385A4;
+        Wed, 13 Apr 2022 11:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649848856;
+        bh=cSiQfBbF6ZDYpEmvyUxanMOiy8xvxiXwnOUP/vdgTvI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VD68iFFr/vvzobOfHHgbsWMJ86VflpLAgBa+/f1R8EvAN9XQhb3sTxLtLQRun6kIS
+         t8HoOnpc2HclAL+Dc9f188hF1Lj/AsdwvWZPWeaidMp5TNbcQSsUAtsckur+uxahst
+         CMortC/qwEFWvNRcbgvGebezN81LdIK4T7VrBHLE=
+Date:   Wed, 13 Apr 2022 13:20:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        alikernel-developer@linux.alibaba.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
+Message-ID: <YlayFROf5P294P/P@kroah.com>
+References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
+ <YlZ8vZ9RX5i7mWNk@kroah.com>
+ <20220413044246-mutt-send-email-mst@kernel.org>
+ <ebd1b238-6e48-6561-93ab-f562096b1c05@linux.alibaba.com>
+ <YlabT7+Hqc3h62AT@kroah.com>
+ <5a80c065-e811-018e-6c35-01c12b194c94@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] binder: Address corner cases in deferred copy and fixup
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     tkjos@android.com, brauner@kernel.org, arve@android.com,
-        linux-kernel@vger.kernel.org, maco@android.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-References: <20220413085428.20367-1-ales.astone@gmail.com>
- <YlafI74E/5HttdeB@kroah.com>
-From:   Alessandro Astone <ales.astone@gmail.com>
-In-Reply-To: <YlafI74E/5HttdeB@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a80c065-e811-018e-6c35-01c12b194c94@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 12:00, Greg KH wrote:
+On Wed, Apr 13, 2022 at 07:09:57PM +0800, Yao Hongbo wrote:
+> 
+> 在 2022/4/13 下午5:43, Greg KH 写道:
+> > On Wed, Apr 13, 2022 at 05:25:40PM +0800, Yao Hongbo wrote:
+> > > 在 2022/4/13 下午4:51, Michael S. Tsirkin 写道:
+> > > > On Wed, Apr 13, 2022 at 09:33:17AM +0200, Greg KH wrote:
+> > > > > On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
+> > > > > > If two userspace programs both open the PCI UIO fd, when one
+> > > > > > of the program exits uncleanly, the other will cause IO hang
+> > > > > > due to bus-mastering disabled.
+> > > > > > 
+> > > > > > It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
+> > > > > > to avoid such problems.
+> > > > > Why do you have multiple userspace programs opening the same device?
+> > > > > Shouldn't they coordinate?
+> > > > Or to restate, I think the question is, why not open the device
+> > > > once and pass the FD around?
+> > > Hmm, it will have the same result, no matter  whether opening the same
+> > > device or pass the FD around.
+> > How?  You only open once, and close once.  Where is the multiple closes?
+> > 
+> > > Our expectation is that even if the primary process exits abnormally,  the
+> > > second process can still send
+> > > 
+> > > or receive data.
+> > Then use the same file descriptor.
+> 
+> 
+> Yes, we can use the same file descriptor.
+> 
+> but since the pcie bus-master  has been disabled by the primary process,
+> 
+> the seconday process cannot continue to operate.
 
-> On Wed, Apr 13, 2022 at 10:54:27AM +0200, Alessandro Astone wrote:
->> When handling BINDER_TYPE_FDA object we are pushing a parent fixup
->> with a certain skip_size but no scatter-gather copy object, since
->> the copy is handled standalone.
->> If BINDER_TYPE_FDA is the last children the scatter-gather copy
->> loop will never stop to skip it, thus we are left with an item in
->> the parent fixup list. This will trigger the BUG_ON().
->>
->> Furthermore, it is possible to receive BINDER_TYPE_FDA object
->> with num_fds=0 which will confuse the scatter-gather code.
->>
->> In the android userspace I could only find these usecases in the
->> libstagefright OMX implementation, so it might be that they're
->> doing something very weird, but nonetheless the kernel should not
->> panic about it.
->>
->> Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
->> Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
->> ---
->>   drivers/android/binder.c | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
->> index 8351c5638880..18ad6825ba30 100644
->> --- a/drivers/android/binder.c
->> +++ b/drivers/android/binder.c
->> @@ -2295,7 +2295,7 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
->>   {
->>   	int ret = 0;
->>   	struct binder_sg_copy *sgc, *tmpsgc;
->> -	struct binder_ptr_fixup *pf =
->> +	struct binder_ptr_fixup *tmppf, *pf =
-> Just make this a new line:
-> 	struct binder_ptr_fixup *tmppf;
-> above the existing line.
->
-Ack.
+Really?  With the same file descriptor?  Try it and see.  release should
+only be called when the file descriptor is closed.
 
->>   		list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
->>   					 node);
->>   
->> @@ -2349,7 +2349,11 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
->>   		list_del(&sgc->node);
->>   		kfree(sgc);
->>   	}
->> -	BUG_ON(!list_empty(pf_head));
-> So you are hitting this BUG_ON() today?
->
-Correct, both on 5.17, stable 5.17.2 and current master
+> > > The impact of disabling pci bus-master is relatively large, and we should
+> > > make some restrictions on
+> > > this behavior.
+> > Why?  UIO is "you better really really know what you are doing to use
+> > this interface", right?  Just duplicate the fd and pass it around if you
+> > must have multiple accesses to the same device.
+> > 
+> > And again, this will be a functional change.  How can you handle your
+> > userspace on older kernels if you make this change?
+> 
+> Without this change, our userspace cannot work properly on older kernels.
 
->> +	list_for_each_entry_safe(pf, tmppf, pf_head, node) {
->> +		BUG_ON(pf->skip_size == 0);
->> +		list_del(&pf->node);
->> +		kfree(pf);
->> +	}
->>   	BUG_ON(!list_empty(sgc_head));
->>   
->>   	return ret > 0 ? -EINVAL : ret;
->> @@ -2486,6 +2490,9 @@ static int binder_translate_fd_array(struct list_head *pf_head,
->>   	struct binder_proc *proc = thread->proc;
->>   	int ret;
->>   
->> +	if (fda->num_fds == 0)
->> +		return 0;
-> Why return 0?
->
-> This feels like a separate issue from above, should this be 2 different
-> commits?
->
-return 0 because I want it to be handled as it was handled before
-	09184ae9b575 ("binder: defer copies of pre-patched txn data")
+What change broke your userspace?
 
-Function `binder_do_deferred_txn_copies` distinguishes between a copy-fixup
-and a skip with `if (pf->skip_size)` so if the skip_size is 0, which happens
-if fda->num_fds is 0, it would accidentally enter the wrong branch.
-By returning 0 early i make sure a skip of size 0 is not added. It's not an
-error because it was never an error before commit 09184ae9b575 and some
-userspace in android is hitting this path.
+> Our userspace only use the "multi process mode" feature of the spdk.
+> 
+> The SPDK links:
+> https://spdk.io/doc/app_overview.html
+> 
+> "Multi process mode
+> When --shm-id is specified, the application is started in multi-process
+> mode.
+> 
+> Applications using the same shm-id share their memory and NVMe devices.
+> 
+> The first app to start with a given id becomes a primary process, with the
+> rest,
+> 
+> called secondary processes, only attaching to it. When the primary process
+> exits,
+> 
+> the secondary ones continue to operate, but no new processes can be attached
+> 
+> at this point. All processes within the same shm-id group must use the same
+> --single-file-segments setting."
 
-I would agree it's a separate issue.
-I originally merged it in this same patch because
-1) Both are fixups to 09184ae9b575
-2) Both are triggered by the same real-world android transaction that looks
-    something like this:
-      obj[0] BINDER_TYPE_PTR, parent
-      obj[1] BINDER_TYPE_PTR, child
-      obj[2] BINDER_TYPE_PTR, child
-      obj[3] BINDER_TYPE_FDA with num_fds=0
-3) In the other hunk of this patch i replace the BUG_ON with:
-      BUG_ON(pf->skip_size == 0)
-    to only BUG if any item remaining in the pf_head list is not a skip,
-    but as observed we may receive skips of size 0.
-4) With this hunk only, you would no longer reproduce the BUG_ON because the
-    only transaction we receive in android with BINDER_TYPE_FDA as last child
-    coincidentally always has num_fds=0. Certainly some weird behaviour...
+Please work with the spdk users, I know nothing about that mess, sorry.
 
-So if I split them, patch A would depend on patch B (see point 3), but the
-BUG of patch B would only be reproducible without patch A (see point 4).
-
-But let me know if you still prefer them split.
-
-> thanks,
->
-> greg k-h
+greg k-h

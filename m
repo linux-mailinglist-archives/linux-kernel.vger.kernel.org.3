@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886BA4FFDE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340A84FFDEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237753AbiDMSge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S237759AbiDMSgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiDMSgb (ORCPT
+        with ESMTP id S237760AbiDMSgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:36:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F039F5C871;
-        Wed, 13 Apr 2022 11:34:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A368B8272E;
-        Wed, 13 Apr 2022 18:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF871C385A3;
-        Wed, 13 Apr 2022 18:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649874846;
-        bh=lw5TiHWiWPe7FVeRC6rjUFCeA+yvP4jv9afjFgE3oWc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dIT4Z/6maeZrdDbDsQ8QTlWLPC6EtFSdS1HEsCaB+lUsrupJSh6TQDTs1CdKwGmRb
-         VS8ocCmXJ8O/+kWQu9okW7VZBMTv8vLSAOB4PrrqQUh/H579YjjHOHeENuJLHr8ez+
-         XxsFUlq//m7lhdAyUp02jFOSAj5k7AyiNM+XY/DrNwfUmi6h6zjK28sWEBnIMSkQJL
-         Kz7ZcUca6qyEOKca0G1pZ2jRHh/qCe1tQ9yatE0g0bczlTqvBVwsOGc0dP3lC+MJDZ
-         IrkKFgGzjAXHXXxA4wRP1CaXg8wYkCmvzq5K5el9UxPXLifnZpNNUmLhLFybOa6R7P
-         laVZFLI9WnABg==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6102129623E; Wed, 13 Apr 2022 20:34:02 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, x86@kernel.org, hpa@zytor.com,
-        Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-Subject: Re: [PATCH bpf-next 0/5] bpf trampoline for arm64
-In-Reply-To: <20220413054959.1053668-1-xukuohai@huawei.com>
-References: <20220413054959.1053668-1-xukuohai@huawei.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 13 Apr 2022 20:34:02 +0200
-Message-ID: <87mtgorfxh.fsf@toke.dk>
+        Wed, 13 Apr 2022 14:36:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22585FB7;
+        Wed, 13 Apr 2022 11:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649874867; x=1681410867;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tqdiP8eymdT01+dQE/j7jvUQJEU8T8q8nv/Aq0uBY14=;
+  b=l2R/al7JYG3FFmVSi2U5OlgT7niZlGgAoUKv3RzjCK6wDXFHWa1LzHiJ
+   83UA7I+V4JxBsOQOWiu+J9VpvIu5aRVciqdkLKSnwbiXr4pwZ/FKpoSVI
+   bIaP0ryS70LTzBRRD4GD8sj6QcV+vk/SvQNCM0LcuRNecowy7NCKZLsym
+   JqDWOXOqU37PWJ3jhERVEJtZfJsjmjIUg5fqDsTm6JXF9cJR9OyZM97ow
+   J8dOa0Oa+oAAVzS3iAwAACAYPFlCwyHAUcLhZsyzk3sYSORzNWORsrgIs
+   HdPu0l0jjIiDDchEQpIkdej34W38P+b6oWO689TJ5gdPqSdk66vhZ0L5r
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="244631163"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="244631163"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:34:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="611995131"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Apr 2022 11:34:22 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C947012C; Wed, 13 Apr 2022 21:34:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Klinger <ak@it-klinger.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] iio: proximity: ping: Replace OF specific code by device_get_match_data()
+Date:   Wed, 13 Apr 2022 21:34:21 +0300
+Message-Id: <20220413183421.20427-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xu Kuohai <xukuohai@huawei.com> writes:
+Instead of calling the OF specific API, use device_get_match_data().
 
-> Add bpf trampoline support for arm64. Most of the logic is the same as
-> x86.
->
-> Tested on qemu, result:
->  #55 fentry_fexit:OK
->  #56 fentry_test:OK
->  #58 fexit_sleep:OK
->  #59 fexit_stress:OK
->  #60 fexit_test:OK
->  #67 get_func_args_test:OK
->  #68 get_func_ip_test:OK
->  #101 modify_return:OK
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/proximity/ping.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Yay! Great to see this; thanks a bunch for tackling it! :)
+diff --git a/drivers/iio/proximity/ping.c b/drivers/iio/proximity/ping.c
+index 24a97d41e115..d56e037378de 100644
+--- a/drivers/iio/proximity/ping.c
++++ b/drivers/iio/proximity/ping.c
+@@ -29,9 +29,8 @@
+ #include <linux/err.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/sched.h>
+@@ -288,7 +287,7 @@ static int ping_probe(struct platform_device *pdev)
+ 
+ 	data = iio_priv(indio_dev);
+ 	data->dev = dev;
+-	data->cfg = of_device_get_match_data(dev);
++	data->cfg = device_get_match_data(dev);
+ 
+ 	mutex_init(&data->lock);
+ 	init_completion(&data->rising);
+-- 
+2.35.1
 
--Toke

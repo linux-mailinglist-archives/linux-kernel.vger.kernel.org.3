@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512A74FFA5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE424FFA6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbiDMPiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S236600AbiDMPlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiDMPiu (ORCPT
+        with ESMTP id S235008AbiDMPlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:38:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B2964713
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649864189; x=1681400189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Iq4ltTTN69V9QzH/TlL8lL1lwJpSTAOC+133meFHn4o=;
-  b=Q7xtkVCk0onK6/n8+cL4NIOvuzowSgD9wNSEpLxnq1wECfRfA19TaoML
-   yE6Vp2mLAHeppJYPj+UoFsR0bAdzvUaMJ5ZJb39t2JDhgFVCsVw1JQCh9
-   yFtRRnAVGSELHtFqmSmT2S4wACqzht/x8urUD/+Wy0Mgq1CEu8KCbdM8v
-   sh5k3l8nB72lvKSAW+VGRtllwOE/adl583+t8V2eikSI+QTM9JwVnAPLo
-   J8DrRlNGRbwcruvFsD9T8FomeHAvfq1INSkkGz0GpVnkMfW5WrhZov3Zf
-   +9vYmnRH5CSewzlwKwUxp614CDKEnNBCZYW04RG9VSz3p+tUVWM14c5wB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="249988009"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="249988009"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:36:28 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="526518653"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:36:28 -0700
-Date:   Wed, 13 Apr 2022 08:38:24 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: Remove the drivers for the Unisys s-Par
-Message-ID: <20220413153824.GA1241369@alison-desk>
-References: <20220412215901.31046-1-fmdefrancesco@gmail.com>
- <YlZzP5ghZeR1AtIg@kroah.com>
- <3988824.6PsWsQAL7t@leap>
+        Wed, 13 Apr 2022 11:41:05 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17A654BA;
+        Wed, 13 Apr 2022 08:38:44 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso2626120pjh.3;
+        Wed, 13 Apr 2022 08:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0yec1enjCeHuEsZdYQYVsHUxCAVmB/vYXKs5nIk3Z50=;
+        b=ZFQXu9DcWOTea3sc/KQ69KmeTgc9qyoWVjUPjhyUL5lQt4MaZjgPkFwgN27Dq/Dy1J
+         k7+KzCI6nHn+Nn3Qw0TX17u0QBfm/MiWDuStpHBU1OckKU4O6Do6AwtB2EMVZQJgASkX
+         xP7tA0ZlqLSYzRDXifHoNjMHWnoPjvHUdY/zmnSyUAA4ZJitlAkO6XmE2y+Q26Nkl04z
+         kaqWoEjXVoliO0cwpbz7jXi8aeCsuQcpwZAHDX1AKC4t0b3FzuX99egojY8eDkgMsf/Q
+         Pl1ioYOhE7ai3LOcwOlT4QKT8doeJiAEUTv++1D5GcLq/Qdh84GE0wxEzrWAxdsisZlT
+         EZKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0yec1enjCeHuEsZdYQYVsHUxCAVmB/vYXKs5nIk3Z50=;
+        b=oCtVerZPjDYG7dLz901qkLbOtYd0WjuXs/LbswDlDFwcFPywoTApgeyYXSfUQyBJxv
+         G8WSKtWNq9Ur3+YsYD5dJQzNjMqbf6pCvCFqIZQySAjZ2Fdh0wBW5z9WAkp1mVrtS5SH
+         BYvcN04IFwLhoWOfh1pemwx2lwFyaI2PcK33NIXpjXXpyeTp8Z8LFrAQIvieH6W88wte
+         zHwbNtMlOyO/psllFPNsYWyCSpu34liS/eQeRUh52TeSZqp4xjI+0BQfIo6KbTbTMCeK
+         k9S96slP/nEE79XvutH9owXxw5r9DwbJuwsajT9cpxEvAEG/GseZdxqGGKb6y0aAWSFT
+         rxEA==
+X-Gm-Message-State: AOAM531h3zJzkxP4s8Pyzz1CH18x3JTnN+DEnK9qvVz7pD7P9DsQ9fP+
+        WrBuABHK0AiUC9J4oW3ES8I=
+X-Google-Smtp-Source: ABdhPJxoxsrxUe08aoYeorQsNSnROQ73dUbYAK4djWPhjhDsp0KohsY7uvEpTZmrwngO1SNCXq/ajA==
+X-Received: by 2002:a17:90b:1e4d:b0:1cb:ae06:2c4 with SMTP id pi13-20020a17090b1e4d00b001cbae0602c4mr11587399pjb.12.1649864323806;
+        Wed, 13 Apr 2022 08:38:43 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id gt14-20020a17090af2ce00b001c701e0a129sm3412190pjb.38.2022.04.13.08.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 08:38:43 -0700 (PDT)
+Message-ID: <e9c81a3d-d03a-5b13-ee14-9ba6103093f7@gmail.com>
+Date:   Wed, 13 Apr 2022 08:38:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3988824.6PsWsQAL7t@leap>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 1/1] firmware: tee_bnxt: Use UUID API for exporting the
+ UUID
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Allen Pais <apais@linux.microsoft.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:35:53AM +0200, Fabio M. De Francesco wrote:
-> On mercoled? 13 aprile 2022 08:52:47 CEST Greg Kroah-Hartman wrote:
-> > On Tue, Apr 12, 2022 at 11:59:01PM +0200, Fabio M. De Francesco wrote:
-> > > The Unisys sub-tree contains three drivers for the "Unisys Secure 
-> Partition"
-> > > (s-Par(R)): visorhba, visorinput, visornic.
-> > > 
-> > > They have no maintainers, in fact the only one that is listed in 
-> MAINTAINERS
-> > > has an unreacheable email address. During 2021 and 2022 several patches 
-> have
-> > > been submitted to these drivers but nobody at Unisys cared of reviewing 
-> the
-> > > changes. Probably, also the "sparmaintainer" internal list of 
-> unisys.com is
-> > > not anymore read by interested Unisys' engineers.
-> > > 
-> > > Therefore, remove the ./unisys subdirectory of staging and delete the 
-> related
-> > > entries in the MAINTAINERS, Kconfig, Makefile files.
-> > > 
-> > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > ---
-> > >  MAINTAINERS                                   |    8 -
-> > 
-> > You forgot to at least cc: the people/list on the MAINTAINERS entry that
-> > you are removing here, to give them a hint that this is happening in
-> > case they want to speak up here (and to give us the ability to point to
-> > that years later when they complain they were never notified...)
-> 
-> Yes, this is a good idea. I'll submit a v2 and add two "Cc:" lines, one to 
-> David Kershner and the other to the "sparmaintainer" list at unisys.com.
 
-There is another contact in the TODO file (last updated 2015 though ;))
-Ken Cox <jkc@redhat.com>
 
+On 4/12/2022 4:32 AM, Andy Shevchenko wrote:
+> There is export_uuid() function which exports uuid_t to the u8 array.
+> Use it instead of open coding variant.
 > 
-> > Also, if you are in the "delete code" mood, I think drivers/staging/vme/
-> > and drivers/vme/ can probably also be deleted given that the maintainer
-> > for that has moved on to other jobs.  Ask them and see!
+> This allows to hide the uuid_t internals.
 > 
-> I can and will do exactly as you just suggested, but only after April 22nd 
-> (unless others want to do these tasks sooner, and in that case they are 
-> welcome :)).
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v3: rebased on the latest vanilla, added Andrew since it has no move for 1y+
+
+I don't think this is going to be picked up unless we designate a entry 
+in the MAINTAINERS file, I don't mind taking this via the Broadcom ARM 
+SoCs pull request if this does not move.
+
+>   drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks,
-> 
-> Fabio M. De Francesco
-> 
-> 
-> 
+> diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> index a5bf4c3f6dc7..40e3183a3d11 100644
+> --- a/drivers/firmware/broadcom/tee_bnxt_fw.c
+> +++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> @@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
+>   		return -ENODEV;
+>   
+>   	/* Open session with Bnxt load Trusted App */
+> -	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
+> +	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
+>   	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+>   	sess_arg.num_params = 0;
+>   
+
+-- 
+Florian

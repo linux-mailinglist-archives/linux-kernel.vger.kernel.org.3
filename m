@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D84FF888
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042254FF89B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiDMOIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S236090AbiDMOIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiDMOID (ORCPT
+        with ESMTP id S236092AbiDMOIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:08:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3051925E8C;
-        Wed, 13 Apr 2022 07:05:41 -0700 (PDT)
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdkpY1KPQzgY8Z;
-        Wed, 13 Apr 2022 22:03:49 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 22:05:38 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 22:05:38 +0800
-Message-ID: <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
-Date:   Wed, 13 Apr 2022 22:05:37 +0800
+        Wed, 13 Apr 2022 10:08:47 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A9260D9E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:06:25 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g18so4150709ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xclQowK5QbwCO5KzYmDKXFep6DHLbWkFBjvXdbQJZDc=;
+        b=luU37E/8JMHNl4VHIi5MneOzNwctGyKeslQDkG2RJbONP2cISPuohPncjJCMISpSLd
+         JE3lw44w2pubOWRq01DpTW7/WUf4ORBprY9WXREI+Zpr245SkV+0ZNn3PCyCbsLHC7d0
+         s/2eltfPiTse6V0nmcMriwjg+HJ4L6u73/D4uQDNJf30JY0vLCKkZIyhI+rf/5qVE68z
+         KaH6hUAP390HKfdQNawuQeDGju8SxI6imDRDEm4rwN+4bP3ubagIQZjrK93/24UoNF7t
+         Kpfsbvy03tUbdmpahzFBQD292jb53r5SIVjUB2XvsKg7sQfZr3UAwNR4nx5huS2NyDxf
+         R8bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xclQowK5QbwCO5KzYmDKXFep6DHLbWkFBjvXdbQJZDc=;
+        b=ted63oqE1TXRD2QV6N67kGtH5ppMWeWDAYSwcQfCUegwI1LdTmgyT9ZDzpO56JSJGN
+         0Kk2viaMbVFASKgM4a1dvOUYoaoRVWwAWNicTM8PWuyU8IyZlcacW2Gj7Rf0oPbTmNhv
+         m/o2OXjIy1MxGVDJB0WOkFC3wp7DvlPHsLqABeuzT4dn7/CG1Y3wj3RIOVVVDkE2UApY
+         mXmpmiJ8utQMPXguUooC6sebc+FsNxffRXncS0byGs42PkjB39mUaOjH1IT+9NXunlYE
+         bJc2NVnNDYtntRxD/8AJ0Os1EaJxhSj7pTljxUIuxkYSZoVgylhc//eongDpxqCsH0fQ
+         fSXg==
+X-Gm-Message-State: AOAM533YQumeWzOD/B1cHYRtOZcc9LA84sjIxwCemMBYJPnAu5+ImaeI
+        Z9DCb8jo+d68IJ9VIN0yBdOWLw==
+X-Google-Smtp-Source: ABdhPJzjr+0cuBz3KT6Z5/dHflarKqX3dFwJjKeJYoA6U7QJ3txgow0qPdJbiQNrXxDeHEiDBBlb1w==
+X-Received: by 2002:a17:907:16a2:b0:6e8:d283:17d0 with SMTP id hc34-20020a17090716a200b006e8d28317d0mr1658785ejc.445.1649858784172;
+        Wed, 13 Apr 2022 07:06:24 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id d13-20020a50c88d000000b0041d8c0440ebsm1208244edh.95.2022.04.13.07.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 07:06:23 -0700 (PDT)
+Message-ID: <ebfe563c-5c3f-d69f-39a3-c8c79616f060@linaro.org>
+Date:   Wed, 13 Apr 2022 16:06:22 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-To:     Lyu Tao <tao.lyu@epfl.ch>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        "anna@kernel.org" <anna@kernel.org>,
-        "bjschuma@netapp.com" <bjschuma@netapp.com>
-CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
-        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
-        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
-References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
- <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
- <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
- <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
-In-Reply-To: <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp421: Fix type for 'ti,n-factor'
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220413134729.3112190-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220413134729.3112190-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/4/13 21:42, chenxiaosong (A) 写道:
+On 13/04/2022 15:47, Rob Herring wrote:
+> 'ti,n-factor' is read as a 32-bit signed value, so the type and constraints
+> are wrong. The same property is also defined for ti,tmp464 and is correct.
 > 
-> 在 2022/4/13 20:07, Lyu Tao 写道:
->>
->> Hi Xiaosong,
->>
->>
->> Thanks for keeping focusing on this bug.
->>
->>
->> I applied this CVE for the NULL dereference bug at 
->> nfs4_valid_open_stateid() and added the following description to this 
->> CVE due to the NFS maintainers replied that to me.
->>
->> "An issue was discovered in fs/nfs/dir.c in the Linux kernel before 
->> 5.16.5. If an application sets the O_DIRECTORY flag, and tries to open 
->> a regular file, nfs_atomic_open() performs a regular lookup. If a 
->> regular file is found, ENOTDIR should occur, but the server instead 
->> returns uninitialized data in the file descriptor.
->>
->>
->> Actually I'm still confused with the root cause of this bug. In the 
->> original PoC, there is no O_DIRECTORY flag but commit ac795161c936 
->> mentioned.
->>
->> Moreover, in your latest commit ab0fc21bc710, it said "After secondly 
->> opening a file with O_ACCMODE|O_DIRECT flags, 
->> nfs4_valid_open_stateid() will dereference NULL nfs4_state when 
->> lseek()." However, the original PoC opens the file only with 
->> O_RDWR|O_CREAT for the first time.
->>
->>
->> Original PoC:
->>
->> fd = openat("./file1", o_RDWR|O_CREAT, 000);
->>
->> open("./file1", 
->> O_ACCMODE|O_CREAT|O_DIRECT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008, 
->> 001);
->>
->> lseek(fd, 9, SEEK_HOLE);
->>
->>
->> I'll update this CVE's description after I figure out these.
->>
->>
->> Best Regards,
->>
->> Tao
->>
+> The constraints should also not be under 'items' as this property is not an
+> array.
 > 
-> Hi Tao:
-> 
-> Yes, O_ACCEMODE is _not_ necessary when fistly open() file.
-> 
-> When open() the file secondly, O_ACCEMODE is necessary if we want to 
-> reproduce the bug.
-> 
-> Waiting for your modification of the CVE's description.
-> 
-> Best Regards.
-> .
 
-My reproducer:
-   1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
-   2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
-   3. close(fd)
-   4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
-   5. lseek(fd)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-When firstly open() file, O_ACCMODE|O_DIRECT is _not_ necessary, we just 
-use O_CREAT to create new file.
 
-When secondly open() file, only O_ACCMODE|O_DIRECT is necessary, 
-O_CREAT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008 in 
-your original PoC is not necessary (however, they are harmless).
+Best regards,
+Krzysztof

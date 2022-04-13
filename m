@@ -2,111 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91ECF500185
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F785500186
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbiDMWFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S235197AbiDMWGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbiDMWFj (ORCPT
+        with ESMTP id S233989AbiDMWGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:05:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030EB222B4;
-        Wed, 13 Apr 2022 15:03:17 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id z16so3178973pfh.3;
-        Wed, 13 Apr 2022 15:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dGjtYEXEvkww7m0I6B/FhETocUOCMDPi+l5G5osJj1U=;
-        b=G0kI8IXgqQDJlkctzDjTvJnEEXc47d7pEzg3lDgcff0PfDjwzkf7StTko4K3YvyBgq
-         xHgbOcxhsCQQV5vYkq2jPJvPpYpxEeMxECtt+pdoCFbdsA0zL1uacTEdwekgJEltnctH
-         MzvQBcUEYln5E8qG70s3p6yT9lcZJFzI7zDVrNw/JzRl/ljrLDijwg1tDc5muAbXm/Ut
-         FsXl+q8mFzoTnARo6spGqMz3KcIRmqOveLIlQTSargRih+x6tTyWXkjK6NnC/wJM+kwt
-         IG4mARNhOG/k9Q8FbrA7I8F4YmRBJfJrDryauKLgosclwmEZCGDeXDHbgXBJ/ZaUyvuC
-         5rHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dGjtYEXEvkww7m0I6B/FhETocUOCMDPi+l5G5osJj1U=;
-        b=mbJcDZmUvgeIWX9AiIQEHjt0LVj5+zDIdxWUNU41qA7NZifARcG+rsLvoWxarUca2G
-         N6Jx4N1BceHrFrwDnSW46UOLV/IZGYZcD7ZlKEESKPfMFoExQlLkTCrDIzMF9hgHfM3F
-         2MpgKADFQO29pIEHzo6UaM6ktjWO5DNZ1XFcaRFWikQ487ZgObNcBD58jhjwa/OcKErz
-         xuo9QGUMhkI39SB0tvDq+DiO+W6026rNGKQTZtYGfNzSZmhaHPErMtmqnCTXZw30S6aj
-         HO9Gvc5rydn52YDE64s3pN3Og+LsXKnSBI0Q5KdY6TtFnI8/I7bmvmEWsExoOvuPtiDi
-         biaA==
-X-Gm-Message-State: AOAM531sedCvgDgWmG2qByf0704/V7eER3monvUtfVJmvbCJS7oxoHZo
-        DQYPoxLs6KQOxax0420jwh0=
-X-Google-Smtp-Source: ABdhPJwqmcS7b4vgqqMKmO5kvOHNB11CErkFD7m5F/dvNTL1GQXekl8extuLoXJIc5CI4viacjjdaQ==
-X-Received: by 2002:a63:bd49:0:b0:39d:a2d3:94a2 with SMTP id d9-20020a63bd49000000b0039da2d394a2mr6977027pgp.242.1649887396477;
-        Wed, 13 Apr 2022 15:03:16 -0700 (PDT)
-Received: from ?IPV6:2620:15c:2c1:200:4cf8:b337:73c1:2c25? ([2620:15c:2c1:200:4cf8:b337:73c1:2c25])
-        by smtp.gmail.com with ESMTPSA id y7-20020a056a00180700b00506f420e62asm75922pfa.11.2022.04.13.15.03.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 15:03:15 -0700 (PDT)
-Message-ID: <2b935c82-ea5c-af47-4455-edf3a629e941@gmail.com>
-Date:   Wed, 13 Apr 2022 15:03:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     David Ahern <dsahern@kernel.org>, Arun Ajith S <aajith@arista.com>,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, yoshfuji@linux-ipv6.org,
-        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
-        prestwoj@gmail.com, gilligan@arista.com, noureddine@arista.com,
-        gk@arista.com
-References: <20220413143434.527-1-aajith@arista.com>
- <5a92f5cd-9af4-4228-dc44-b0c363f30e18@gmail.com>
- <17769a5b-9569-18ee-d1c0-c8971a42c709@kernel.org>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <17769a5b-9569-18ee-d1c0-c8971a42c709@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 13 Apr 2022 18:06:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAFE321
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:04:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0339CB82795
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 22:04:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4867FC385A7;
+        Wed, 13 Apr 2022 22:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649887466;
+        bh=M42UimkzXE80vxa1qAP02iT+NFCIF1EgvaR5EBI4QG8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DVPonsQGL6eZmLwgmK7QOXsztBWhzECZLJmherYwMvcFRR1P0ErsfadtB2nWNhyPf
+         RYaEV9p0ldaZViiw+r1+gKmctMi4Of7bgc5/nJfL9anwjojKx+Zg93USQyxU4tReQS
+         cLheyrmwdz9ezfPE7k/RpZp3MC1XOcGae4BaQqgw=
+Date:   Wed, 13 Apr 2022 15:04:22 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "liupeng (DM)" <liupeng256@huawei.com>
+Cc:     <mike.kravetz@oracle.com>, <david@redhat.com>,
+        <yaozhenguo1@gmail.com>, <baolin.wang@linux.alibaba.com>,
+        <songmuchun@bytedance.com>, <liuyuntao10@huawei.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] hugetlb: Fix wrong use of nr_online_nodes
+Message-Id: <20220413150422.e4fc3bda48a285bf7bdc5587@linux-foundation.org>
+In-Reply-To: <692ee24c-a705-0c54-7cad-a9ecf49a8f15@huawei.com>
+References: <20220413032915.251254-1-liupeng256@huawei.com>
+        <20220413032915.251254-2-liupeng256@huawei.com>
+        <20220412214238.84c20437a052458f6967e9fd@linux-foundation.org>
+        <692ee24c-a705-0c54-7cad-a9ecf49a8f15@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 13 Apr 2022 14:27:54 +0800 "liupeng (DM)" <liupeng256@huawei.com> wrote:
 
-On 4/13/22 15:00, David Ahern wrote:
-> On 4/13/22 3:22 PM, Eric Dumazet wrote:
->> On 4/13/22 07:34, Arun Ajith S wrote:
->>> Add a new neighbour cache entry in STALE state for routers on receiving
->>> an unsolicited (gratuitous) neighbour advertisement with
->>> target link-layer-address option specified.
->>> This is similar to the arp_accept configuration for IPv4.
->>> A new sysctl endpoint is created to turn on this behaviour:
->>> /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
->>
->> Do we really need to expose this to /proc/sys, for every interface added
->> in the host ?
->>
->> /proc files creations/deletion cost a lot in environments
->> adding/deleting netns very often.
-> agree with the general intent (along with the increasing memory costs).
-> I do think this case should be done as a /proc/sys entry for consistency
-> with both ARP and existing related NA settings.
->
->> I would prefer using NETLINK attributes, a single recvmsg() syscall can
->> fetch/set hundreds of them.
-> What do you have in mind here? A link attribute managed through `ip link
-> set`?
+> 
+> On 2022/4/13 12:42, Andrew Morton wrote:
+> > On Wed, 13 Apr 2022 03:29:12 +0000 Peng Liu<liupeng256@huawei.com>  wrote:
+> >
+> >> Certain systems are designed to have sparse/discontiguous nodes. In
+> >> this case, nr_online_nodes can not be used to walk through numa node.
+> >> Also, a valid node may be greater than nr_online_nodes.
+> >>
+> >> However, in hugetlb, it is assumed that nodes are contiguous. Recheck
+> >> all the places that use nr_online_nodes, and repair them one by one.
+> >>
+> > What are the runtime effects of this shortcoming?
+> > .
+> 
+> For sparse/discontiguous nodes, the current code may treat a valid node
+> as invalid, and will fail to allocate all hugepages on a valid node that
+> "nid >= nr_online_nodes".
+> 
+> As David suggested:
+> if (tmp >= nr_online_nodes)
+> 	goto invalid;
+> 
+> Just imagine node 0 and node 2 are online, and node 1 is offline. Assuming
+> that "node < 2" is valid is wrong.
 
-
-Yes, something like that, if this is a netdevice/link attribute.
-
-
+So do you think we should backport thtis fix into earlier kernel releases?

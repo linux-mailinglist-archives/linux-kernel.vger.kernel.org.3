@@ -2,140 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2504FFC1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344BC4FFC1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiDMRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S236974AbiDMRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236974AbiDMRMO (ORCPT
+        with ESMTP id S237221AbiDMRM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:12:14 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF9BE1E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id cw11so2567057pfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:52 -0700 (PDT)
+        Wed, 13 Apr 2022 13:12:26 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C6B2495A;
+        Wed, 13 Apr 2022 10:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S3oz53a9Ng+DbhMPj3RmOVulLJKw0oHFC07pKdWasCM=;
-        b=TyHwk2+ZDToVQLJjhJ+GwARFZdQ6fdXaVDK/YYC0qiPJ7F3HvvKdsIy4kR9NZ9lfiE
-         xNbBBit8CgoQNMM3vbwz+zcUp+XG/QEgMchCYBLIqOoKHYh9qiClo5rVQPmmMpqSPUnO
-         fTwAt+4RIGqoQKVn7FHmUl91EINKQGRX9V6O4XaYR3KKGwQ7DyuU+XskDD/yq+WfPPb0
-         jHhSsiDLvDy2OM8+L6vgYYlOIp1RyCtA5mM1o9SZx1R1D8uyT7qDjUAy/V21ZTuRI2KZ
-         15EHyz55yFLViX9GowNZKfzHIy8YpYtk99kUuRUamcEDzFAgVe0K5UkAGDXYVx+esSvD
-         6SWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S3oz53a9Ng+DbhMPj3RmOVulLJKw0oHFC07pKdWasCM=;
-        b=1zBUr53sAhu9jKHCmAXAUsKaqVfooYaki02dBe3kJVleYmRZXj5pby1tLFMxw9SBxP
-         JMC4AyZqR3jVBhqIkAJjGe7oOV3j7G2rFd/cNK9LlaPZvX/QpfPKGGQQg3Bubo6koH7y
-         qkaFLjk+zn2J0xWWV0rK91UpUJAoNY2CKOf8tlvZFkubN/CZTeQLIzhBuFsTMY7vWxgO
-         W5Lu3fR0VJDKwS00cvGvKHjJpsvaVffppcP3HKrPdCTn0ZL/cDFyUeJHBYCqFMHr3qZ/
-         2RKkVw+hThTGc8weROqtPTIWhGg/7bbzkd3nM03B7IKPITHJJmD91/z//jMrfsU7xvhC
-         FEkg==
-X-Gm-Message-State: AOAM532AN511IObdIdVCKvrRVw3G//+kduFxOCOrPAKDw8sApSvWYWkC
-        APGO+MxwzghyM87oC6mB2BvfbJLUWMPe+Vd4PXjIEA==
-X-Google-Smtp-Source: ABdhPJzLi8gMisuellOBcvRBO68apFNBLKqg7RJ1uejuUvIlQHfa3U9nodhdf0gc7bErx9RfyUux7vESwpwfRM8oyF0=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr35296654pgb.74.1649869791634; Wed, 13
- Apr 2022 10:09:51 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649869804; x=1681405804;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JOB+UVW8zbUV4QffJ7mmyRMUwWjpWnIftd5tTRSyqN4=;
+  b=sHlZEVDJ0KWdkEMGCDf+bt+xWUQstW5YWVXX6b1odHB6uW2ynk9339nC
+   NwmXGU1ncTLc6brFRXRtd/H6KvRMDWebfS8cZI1fz0Fh40VOLSYU1elhe
+   U5zviLVLe4Fqu5/tPyF4B5PCnVvH6fhvrq7Tl5t8KftIr97aXiix87CPm
+   U=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Apr 2022 10:10:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:10:03 -0700
+Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
+ 2022 10:10:02 -0700
+Message-ID: <fd8c702b-f433-0526-6945-3339a8de2f0a@quicinc.com>
+Date:   Wed, 13 Apr 2022 10:09:57 -0700
 MIME-Version: 1.0
-References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
- <20220410160904.3758789-7-ruansy.fnst@fujitsu.com> <20220413000423.GK1544202@dread.disaster.area>
- <CAPcyv4jKLZhcCiSEU+O+OJ2e+y9_B2CvaEfAKyBnhhSd+da=Zg@mail.gmail.com> <20220413060946.GL1544202@dread.disaster.area>
-In-Reply-To: <20220413060946.GL1544202@dread.disaster.area>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 13 Apr 2022 10:09:40 -0700
-Message-ID: <CAPcyv4jPgX3w2e1dENJvKjhCpiB7GMZURXWMoGUNNcOQFotb3A@mail.gmail.com>
-Subject: Re: [PATCH v12 6/7] xfs: Implement ->notify_failure() for XFS
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 03/11] arm64: gunyah: Add Gunyah hypercalls ABI
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>
+References: <20220223233729.1571114-1-quic_eberman@quicinc.com>
+ <20220223233729.1571114-4-quic_eberman@quicinc.com>
+ <YhdZen7MwdAIJMsu@lakrids> <874k4o4l39.wl-maz@kernel.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <874k4o4l39.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 11:10 PM Dave Chinner <david@fromorbit.com> wrote:
->
-> On Tue, Apr 12, 2022 at 07:06:40PM -0700, Dan Williams wrote:
-> > On Tue, Apr 12, 2022 at 5:04 PM Dave Chinner <david@fromorbit.com> wrote:
-> > > On Mon, Apr 11, 2022 at 12:09:03AM +0800, Shiyang Ruan wrote:
-> > > > Introduce xfs_notify_failure.c to handle failure related works, such as
-> > > > implement ->notify_failure(), register/unregister dax holder in xfs, and
-> > > > so on.
-> > > >
-> > > > If the rmap feature of XFS enabled, we can query it to find files and
-> > > > metadata which are associated with the corrupt data.  For now all we do
-> > > > is kill processes with that file mapped into their address spaces, but
-> > > > future patches could actually do something about corrupt metadata.
-> > > >
-> > > > After that, the memory failure needs to notify the processes who are
-> > > > using those files.
-> ...
-> > > > @@ -1964,8 +1965,8 @@ xfs_alloc_buftarg(
-> > > >       btp->bt_mount = mp;
-> > > >       btp->bt_dev =  bdev->bd_dev;
-> > > >       btp->bt_bdev = bdev;
-> > > > -     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, NULL,
-> > > > -                                         NULL);
-> > > > +     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, mp,
-> > > > +                                         &xfs_dax_holder_operations);
-> > >
-> > > I see a problem with this: we are setting up notify callbacks before
-> > > we've even read in the superblock during mount. i.e. we don't even
-> > > kow yet if we've got an XFS filesystem on this block device.
-> > > Hence these notifications need to be delayed until after the
-> > > filesystem is mounted, all the internal structures have been set up
-> > > and log recovery has completed.
-> >
-> > So I think this gets back to the fact that there will eventually be 2
-> > paths into this notifier.
->
-> I'm not really concerned by how the notifications are generated;
-> my concern is purely that notifications can be handled safely.
->
-> > All that to say, I think it is ok / expected for the filesystem to
-> > drop notifications on the floor when it is not ready to handle them.
->
-> Well, yes. The whole point of notifications is the consumer makes
-> the decision on what to do with the notification it receives - the
-> producer of the notification does not (and can not) dictate what
-> policy the consumer(s) implement...
->
-> > For example there are no processes to send SIGBUS to if the filesystem
-> > has not even finished mount.
->
-> There may be not processes to send SIGBUS to even if the filesystem
-> has finished mount. But we still want the notifications to be
-> delivered and we still need to handle them safely.
->
-> IOWs, while we might start by avoiding notifications during mount,
-> this doesn't mean we will never have reason to process events during
-> mount. What we do with this notification is going to evolve over
-> time as we add new and adapt existing functionality....
 
-Yes, sounds like we're on the same page. I had mistakenly interpreted
-"Hence these notifications need to be delayed until after the
-filesystem is mounted" as something the producer would need to handle,
-but yes, consumer is free to drop if the notification arrives at an
-inopportune time.
+
+On 2/24/2022 2:26 AM, Marc Zyngier wrote:
+> Thanks Mark for roping me in.
+> 
+> On Thu, 24 Feb 2022 10:10:02 +0000,
+> Mark Rutland <mark.rutland@arm.com> wrote:
+>>
+>> Hi,
+>>
+>> As a general thing, this is the *only* patch from this series which has
+>> been Cc'd to linux-arm-kernel, which makes it practically impossible to
+>> understand the context for this, which is somewhat frustrating.
+>>
+>> Looking on lore.kernel.org I see that the entire series was Cc'd to
+>> linux-arm-msm, but most people don't subscribe to that list. If you send
+>> one patch in a series to a list, please send the *entire* series there. >>>> On Wed, Feb 23, 2022 at 03:37:21PM -0800, Elliot Berman wrote:
+>>> Add initial support to perform Gunyah hypercalls. The arm64 ABI for
+>>> Gunyah hypercalls generally follows the AAPCS64, and can be summarized:
+>>>   - Function identifier is passed through the imm operand
+>>>   - [r0,r7] are parameter and result registers
+>>>   - [r8-r18] are temporary and saved by the caller (VM)
+>>>   - [r19-r31] are preserved and saved by the hypervisor
+>>>
+>>> The preprocessor macors for creating the necessary HVC instruction
+>>> roughly follows the SMCCC 1.1 implementation in
+>>> include/linux/arm-smccc.h.
+>>
+>> I've added the SMCCC maintainers (myself, Lorenzo, and SUdeep) to Cc,
+>> and also Marc who was involvedi n prior discussions in this area. Please
+>> Cc us on any future patches adding HVC or SMCC interfaces (SMCCC or
+>> otherwise).
+> 
+> In general, please Cc all the interested parties with the whole
+> series. Random patches randomly cc'd out of context are pretty useless
+> and only lead to them being ignored.
+> 
+
+I'll do this in the future, thanks for the recommendation here.
+
+>>
+>> We've previously said NO to any new hypercall mechanisms which do not
+>> follow SMCCC. There is no reason to fragment this space further; please
+>> use SMCCC (which your hypervisor must already implement in part if it
+>> exposes PSCI to a guest).
+>>
+>> NAK to this non-SMCCC interface.
+> 
+> Agreed. We pushed back on that for Hyper-V, and I don't see a reason
+> for changing tack on that.
+> 
+> The calling convention exists for a reason: portability. If this
+> hypervisor is to be "independent of any high-level OS kernel" (as it
+> is being advertised), then it must already implement SMCCC.
+> 
+> What is the issue with properly supporting SMCCC for all interactions
+> with the hypervisor and not reinventing a square wheel? >
+
+We had discussion on this and will implement SMCCC calls for Gunyah's 
+hypercalls. I'll share updated patches soon once we have update the 
+hypervisor.
+
+> Thanks,
+> 
+> 	M.
+> 

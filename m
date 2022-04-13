@@ -2,141 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAAF4FFC48
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FEE4FFC47
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbiDMRXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S237264AbiDMRXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiDMRXx (ORCPT
+        with ESMTP id S230100AbiDMRXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:23:53 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC2B62BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:21:31 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id k25so2645985iok.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BaJWBZDuogrrbM9h8fK9n5eI07qEd/FZUeVGQjfGLZY=;
-        b=RjH2Vr7/UjWidYKPEI2BDu8Y0nrFqfzyCMu9YY2n1BbC9HZmInKXfbfp69j8Zadjrl
-         fPOwsMAzixgQf4WIh8kYc2rbaYfl/AlYiKDGtOMZXduyt9Xbx/RoZ/PiNtEcR5rTopHV
-         8EkOY+yoTrsAkMYoBt0HDiHK3yrlPioNnHcOc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BaJWBZDuogrrbM9h8fK9n5eI07qEd/FZUeVGQjfGLZY=;
-        b=I+SrBX314zb8OX+QjYyFRMjR0gjBTyKQYLdd99f3IdRWhi6lawQDcnTV5+WeZa6W7d
-         r2YEFoQ1yp3P8DbGm02o+HBZAniCOSWIRGREXlrj8RvqzdKKDmNsfCNpp/aQa36h3u0X
-         VYahGqj6Lvu21z9B1nSA1rPxl2u3wpaDcfPrCHC1mT9/qc4Vzgi1NkXRJvCV6n0fcffJ
-         fWpzqSn6zS7WZk3SKk5relFt1oIdAQW7fKtG+k5uanCa6A0RY1kjpNb0hmrkxrolnIMI
-         dOYeXqIpbfuQ8yIT/EXqvLX3xUbNKa7UZTd+159BWPb8z82sozkT5xlpTRUpPzhDFTQE
-         9qEw==
-X-Gm-Message-State: AOAM5330I0fw4Ar6PF48aImEy6iakHWCHu7QEW3wfLiexhUsC7WXr3BS
-        7jtfug6glOFgkafvHaBhPoNnI6Oj5loEjQJM835/Jg==
-X-Google-Smtp-Source: ABdhPJztK+lyqX50IaiSOnE+cYTGAq/u25mmnmQqbL2DVHEGtOujz0jbIU5vSZzH+akI1wqQJdpcXM0gmeBDiW2Da2I=
-X-Received: by 2002:a05:6638:240b:b0:326:bd5:8a6f with SMTP id
- z11-20020a056638240b00b003260bd58a6fmr10721949jat.52.1649870490957; Wed, 13
- Apr 2022 10:21:30 -0700 (PDT)
+        Wed, 13 Apr 2022 13:23:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494E62BE5;
+        Wed, 13 Apr 2022 10:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649870486; x=1681406486;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wg9FsEmQwnZBXMrOYDH5tWUBw/2avAOrNH6ZhkaMiwk=;
+  b=m42hV/3YyWNx27KzPn0npI7s8Ng9g8av+vuX4px3FXlWbYJAhgNkApAR
+   60zw2xj/IJ6HR0TcK+pLdltqaxdZNhspYQNqyRNT16/Aj4jI7NygJkfKV
+   pxweE8d0eg+g2zwa7ZNqADwbeWNoLu3QbfqsxE2K5f526gW0Kgvy5exXz
+   xKU08BvpLCcwZa0CYFz5q1VcxaX1zCtUgmueEvAOw1DrNK9RjLC+SwBl3
+   pIU60BcB/rrpTnombDdoSBillqO+ZrunFrSE/eZ75ACR3gneh33KDT6RY
+   0xiTi5axGcqZncHNtxYyOm+8z3IQhthtg6V/3kCiKRhyDI38iUw2sKrKX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261572801"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="261572801"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="508059116"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 13 Apr 2022 10:21:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 057F712C; Wed, 13 Apr 2022 20:21:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: imu: mpu3050: Make use of device properties
+Date:   Wed, 13 Apr 2022 20:21:22 +0300
+Message-Id: <20220413172122.85629-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220408045734.1158817-1-kaleshsingh@google.com>
- <CAEXW_YQ6_VpneJnBfhTOMr6DwJhNmvMAKDRMnpr8LxB9Gtt=Xg@mail.gmail.com>
- <20220408143444.GC4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YSrGKXh5DiJyrNvmbssSXbWBkA-XUjGRdS8HtGvW1r6hw@mail.gmail.com>
- <20220408153447.GE4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YT-vJmXgWPQ_1J34iTb+ZhrAgN7c-HPz7kW17HmvKzJ3A@mail.gmail.com>
- <20220408173908.GJ4285@paulmck-ThinkPad-P17-Gen-1> <20220409071740.6024-1-hdanton@sina.com>
- <20220413113711.1263-1-hdanton@sina.com> <20220413140729.GL4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220413140729.GL4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 13 Apr 2022 13:21:20 -0400
-Message-ID: <CAEXW_YTmZnk_kFw48HeyyFTXZzfj1cPdw+BaOra14JiWJh6kNg@mail.gmail.com>
-Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT kthread_worker
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
+While at it, reuse temporary device pointer in the same function.
 
-On Wed, Apr 13, 2022 at 8:07 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Wed, Apr 13, 2022 at 07:37:11PM +0800, Hillf Danton wrote:
-> > On Sat, 9 Apr 2022 08:56:12 -0700 Paul E. McKenney wrote:
-> > > On Sat, Apr 09, 2022 at 03:17:40PM +0800, Hillf Danton wrote:
-> > > > On Fri, 8 Apr 2022 10:53:53 -0700 Kalesh Singh wrote
-> > > > > Thanks for the discussion everyone.
-> > > > >
-> > > > > We didn't fully switch to kthread workers to avoid changing the
-> > > > > behavior for users that dont need this low latency exp GPs. Another
-> > > > > (and perhaps more important) reason is because kthread_worker offers
-> > > > > reduced concurrency than workqueues which Pual reported can pose
-> > > > > issues on systems with a large number of CPUs.
-> > > >
-> > > > A second ... what issues were reported wrt concurrency, given the output
-> > > > of grep -nr workqueue block mm drivers.
-> > > >
-> > > > Feel free to post a URL link to the issues.
-> > >
-> > > The issues can be easily seen by inspecting kthread_queue_work() and
-> > > the functions that it invokes.  In contrast, normal workqueues uses
-> > > per-CPU mechanisms to avoid contention, as can equally easily be seen
-> > > by inspecting queue_work_on() and the functions that it invokes.
-> >
-> > The worker from kthread_create_worker() roughly matches unbound workqueue
-> > that can get every CPU overloaded, thus the difference in implementation
-> > details between kthread worker and WQ worker (either bound or unbound) can
-> > be safely ignored if the kthread method works, given that prioirty is barely
-> > a cure to concurrency issues.
->
-> Please look again, this time taking lock contention in to account,
-> keeping in mind that systems with several hundred CPUs are reasonably
-> common and that systems with more than a thousand CPUs are not unheard of.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/imu/bmi160/bmi160_core.c | 27 ++++++---------------------
+ drivers/iio/imu/bmi160/bmi160_i2c.c  | 13 ++++++-------
+ drivers/iio/imu/bmi160/bmi160_spi.c  | 18 +++++++++++-------
+ 3 files changed, 23 insertions(+), 35 deletions(-)
 
+diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
+index 01336105792e..e7aec56ea136 100644
+--- a/drivers/iio/imu/bmi160/bmi160_core.c
++++ b/drivers/iio/imu/bmi160/bmi160_core.c
+@@ -11,10 +11,9 @@
+  */
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+-#include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/irq.h>
+-#include <linux/of_irq.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ 
+ #include <linux/iio/iio.h>
+@@ -525,17 +524,6 @@ static const struct iio_info bmi160_info = {
+ 	.attrs = &bmi160_attrs_group,
+ };
+ 
+-static const char *bmi160_match_acpi_device(struct device *dev)
+-{
+-	const struct acpi_device_id *id;
+-
+-	id = acpi_match_device(dev->driver->acpi_match_table, dev);
+-	if (!id)
+-		return NULL;
+-
+-	return dev_name(dev);
+-}
+-
+ static int bmi160_write_conf_reg(struct regmap *regmap, unsigned int reg,
+ 				 unsigned int mask, unsigned int bits,
+ 				 unsigned int write_usleep)
+@@ -647,18 +635,18 @@ int bmi160_enable_irq(struct regmap *regmap, bool enable)
+ }
+ EXPORT_SYMBOL(bmi160_enable_irq);
+ 
+-static int bmi160_get_irq(struct device_node *of_node, enum bmi160_int_pin *pin)
++static int bmi160_get_irq(struct fwnode_handle *fwnode, enum bmi160_int_pin *pin)
+ {
+ 	int irq;
+ 
+ 	/* Use INT1 if possible, otherwise fall back to INT2. */
+-	irq = of_irq_get_byname(of_node, "INT1");
++	irq = fwnode_irq_get_byname(fwnode, "INT1");
+ 	if (irq > 0) {
+ 		*pin = BMI160_PIN_INT1;
+ 		return irq;
+ 	}
+ 
+-	irq = of_irq_get_byname(of_node, "INT2");
++	irq = fwnode_irq_get_byname(fwnode, "INT2");
+ 	if (irq > 0)
+ 		*pin = BMI160_PIN_INT2;
+ 
+@@ -688,7 +676,7 @@ static int bmi160_config_device_irq(struct iio_dev *indio_dev, int irq_type,
+ 		return -EINVAL;
+ 	}
+ 
+-	open_drain = of_property_read_bool(dev->of_node, "drive-open-drain");
++	open_drain = device_property_read_bool(dev, "drive-open-drain");
+ 
+ 	return bmi160_config_pin(data->regmap, pin, open_drain, irq_mask,
+ 				 BMI160_NORMAL_WRITE_USLEEP);
+@@ -872,9 +860,6 @@ int bmi160_core_probe(struct device *dev, struct regmap *regmap,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!name && ACPI_HANDLE(dev))
+-		name = bmi160_match_acpi_device(dev);
+-
+ 	indio_dev->channels = bmi160_channels;
+ 	indio_dev->num_channels = ARRAY_SIZE(bmi160_channels);
+ 	indio_dev->name = name;
+@@ -887,7 +872,7 @@ int bmi160_core_probe(struct device *dev, struct regmap *regmap,
+ 	if (ret)
+ 		return ret;
+ 
+-	irq = bmi160_get_irq(dev->of_node, &int_pin);
++	irq = bmi160_get_irq(dev_fwnode(dev), &int_pin);
+ 	if (irq > 0) {
+ 		ret = bmi160_setup_irq(indio_dev, irq, int_pin);
+ 		if (ret)
+diff --git a/drivers/iio/imu/bmi160/bmi160_i2c.c b/drivers/iio/imu/bmi160/bmi160_i2c.c
+index 26398614eddf..02f149d37b17 100644
+--- a/drivers/iio/imu/bmi160/bmi160_i2c.c
++++ b/drivers/iio/imu/bmi160/bmi160_i2c.c
+@@ -8,10 +8,9 @@
+  *      - 0x68 if SDO is pulled to GND
+  *      - 0x69 if SDO is pulled to VDDIO
+  */
+-#include <linux/acpi.h>
+ #include <linux/i2c.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/regmap.h>
+ 
+ #include "bmi160.h"
+@@ -20,7 +19,7 @@ static int bmi160_i2c_probe(struct i2c_client *client,
+ 			    const struct i2c_device_id *id)
+ {
+ 	struct regmap *regmap;
+-	const char *name = NULL;
++	const char *name;
+ 
+ 	regmap = devm_regmap_init_i2c(client, &bmi160_regmap_config);
+ 	if (IS_ERR(regmap)) {
+@@ -31,6 +30,8 @@ static int bmi160_i2c_probe(struct i2c_client *client,
+ 
+ 	if (id)
+ 		name = id->name;
++	else
++		name = dev_name(&client->dev);
+ 
+ 	return bmi160_core_probe(&client->dev, regmap, name, false);
+ }
+@@ -47,19 +48,17 @@ static const struct acpi_device_id bmi160_acpi_match[] = {
+ };
+ MODULE_DEVICE_TABLE(acpi, bmi160_acpi_match);
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id bmi160_of_match[] = {
+ 	{ .compatible = "bosch,bmi160" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bmi160_of_match);
+-#endif
+ 
+ static struct i2c_driver bmi160_i2c_driver = {
+ 	.driver = {
+ 		.name			= "bmi160_i2c",
+-		.acpi_match_table	= ACPI_PTR(bmi160_acpi_match),
+-		.of_match_table		= of_match_ptr(bmi160_of_match),
++		.acpi_match_table	= bmi160_acpi_match,
++		.of_match_table		= bmi160_of_match,
+ 	},
+ 	.probe		= bmi160_i2c_probe,
+ 	.id_table	= bmi160_i2c_id,
+diff --git a/drivers/iio/imu/bmi160/bmi160_spi.c b/drivers/iio/imu/bmi160/bmi160_spi.c
+index 61389b41c6d9..24f7d75c7903 100644
+--- a/drivers/iio/imu/bmi160/bmi160_spi.c
++++ b/drivers/iio/imu/bmi160/bmi160_spi.c
+@@ -5,9 +5,8 @@
+  * Copyright (c) 2016, Intel Corporation.
+  *
+  */
+-#include <linux/acpi.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ 
+@@ -17,6 +16,7 @@ static int bmi160_spi_probe(struct spi_device *spi)
+ {
+ 	struct regmap *regmap;
+ 	const struct spi_device_id *id = spi_get_device_id(spi);
++	const char *name;
+ 
+ 	regmap = devm_regmap_init_spi(spi, &bmi160_regmap_config);
+ 	if (IS_ERR(regmap)) {
+@@ -24,7 +24,13 @@ static int bmi160_spi_probe(struct spi_device *spi)
+ 			regmap);
+ 		return PTR_ERR(regmap);
+ 	}
+-	return bmi160_core_probe(&spi->dev, regmap, id->name, true);
++
++	if (id)
++		name = id->name;
++	else
++		name = dev_name(&spi->dev);
++
++	return bmi160_core_probe(&spi->dev, regmap, name, true);
+ }
+ 
+ static const struct spi_device_id bmi160_spi_id[] = {
+@@ -39,20 +45,18 @@ static const struct acpi_device_id bmi160_acpi_match[] = {
+ };
+ MODULE_DEVICE_TABLE(acpi, bmi160_acpi_match);
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id bmi160_of_match[] = {
+ 	{ .compatible = "bosch,bmi160" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bmi160_of_match);
+-#endif
+ 
+ static struct spi_driver bmi160_spi_driver = {
+ 	.probe		= bmi160_spi_probe,
+ 	.id_table	= bmi160_spi_id,
+ 	.driver = {
+-		.acpi_match_table	= ACPI_PTR(bmi160_acpi_match),
+-		.of_match_table		= of_match_ptr(bmi160_of_match),
++		.acpi_match_table	= bmi160_acpi_match,
++		.of_match_table		= bmi160_of_match,
+ 		.name			= "bmi160_spi",
+ 	},
+ };
+-- 
+2.35.1
 
-You are talking about lock contention in the kthread_worker infra
-which unbound WQ does not suffer from, right? I don't think the worker
-lock contention will be an issue unless several
-synchronize_rcu_expedited() calls are trying to queue work at the same
-time. Did I miss something? Considering synchronize_rcu_expedited()
-can block in the normal case (blocking is a pretty heavy operation
-involving the scheduler and load balancers), I don't see how
-contending on the worker infra locks can be an issue. If it was
-call_rcu() , then I can relate to any contention since that executes
-much more often.
-
-I think the argument about too many things being RT is stronger though.
-
-Thanks,
-
-Joel
-
-
->
->
->                                                         Thanx, Paul
->
-> > Hillf
-> > >
-> > > Please do feel free to take a look.
-> > >
-> > > If taking a look does not convince you, please construct some in-kernel
-> > > benchmarks to test the scalability of these two mechanisms.  Please note
-> > > that some care will be required to make sure that you are doing a valid
-> > > apples-to-apples comparison.
-> > >
-> > >                                                     Thanx, Paul
-> > >

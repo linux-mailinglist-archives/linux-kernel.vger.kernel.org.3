@@ -2,179 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990D14FFA67
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7304FFA6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiDMPj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S236602AbiDMPkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbiDMPj4 (ORCPT
+        with ESMTP id S236594AbiDMPkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:39:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C902664713
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:37:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b24so2839454edu.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PO/0MDUIRM3Z0h3PU4eYcvsEMMdjUT2V3VaPhr9z/E0=;
-        b=uZu249qTy6MNrhwunH7p+LQXhXmrsO80rWgRpnSw5DiD3hbfKGkKdgwP4qCDhJcosG
-         1id+AiwWFRQcUvt2is2rxDrfiNygmFCzfPjtkHQyWo9o/8aKwYt2NFGSUaheYFAnv0qw
-         G9zfjPYM47uYz8+FcXJPtTEPc/DGp0TCuUDiaHpGYbU1tFZnTCVzfVXxfRBkv760CyRq
-         lS+Q++xqPwB0O+09Gie6Y9JUnHWESMIY45tGEWA5ACGtR/BAl6R5tuY6OKbP/gveeIXZ
-         rftEEHVAopdd1PKcPDXKBuFXrQORYK+u4GsFj4JYX9g5NALffkMyFfnPBE4fQ8WZLOlh
-         +1HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PO/0MDUIRM3Z0h3PU4eYcvsEMMdjUT2V3VaPhr9z/E0=;
-        b=BaYqmGUzs3ln60e8HE8YtaCUCCsrIDSoMtMuWHwQ+7oUIbzilwX5ZX23aFwxMR6TN9
-         9sXFqO0NYYrg2rx/88mPzDZwPvUVfv5EO+vLz04iwWYev+FzpvOiyJfsbCSFxI+VBGfE
-         S1uencxtBTE6wiLJj7zDEQPLiJZo+66UQARcVRGjwUhmYuoObyDrfvExU8StEK/cLyAb
-         KvCTrH+mY7UpEzf1SAayfAvpPviWyKSghR3LcNFZmnuLdZig0fgMeVHDljhwbe/Uikn+
-         f9FhKhWjBuHEOPOIj9VR3lz7LQGfL6P6oZV7lXwCSWU2DGPQNrAg5lznfVN8ravYVfVe
-         Y//w==
-X-Gm-Message-State: AOAM532gAufucygJMFebWNndT3jPF+c0uM1IC1R8uDlvBz8NCuuHfUVD
-        gjXJYlA6GHy0im/PGNwkjiCvcA==
-X-Google-Smtp-Source: ABdhPJxyKrAG9rRVE8mRj679SzmDmAD8xVhn9EsmeCnZGHfphrC6B5qUeqw3KRrzN0aSvsQWiRckTA==
-X-Received: by 2002:aa7:da8d:0:b0:41d:71be:d8bd with SMTP id q13-20020aa7da8d000000b0041d71bed8bdmr20584914eds.71.1649864252388;
-        Wed, 13 Apr 2022 08:37:32 -0700 (PDT)
-Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dn7-20020a17090794c700b006e8b176143bsm102985ejc.155.2022.04.13.08.37.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 08:37:31 -0700 (PDT)
-Message-ID: <41fa58ee-728b-7f0d-eea7-448c59641d85@linaro.org>
-Date:   Wed, 13 Apr 2022 17:37:30 +0200
+        Wed, 13 Apr 2022 11:40:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF590654BE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649864275;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sLekYFBHk6vmdPrvSejYiiFxxEyq7KZDxaB/jClyyLg=;
+        b=U1rp9SRehMSqtuEyE9+YpEohnsJ7lrcXVUrvfTfVz/QSPysQOLk/RMnAwIrHJxBYvFkbSj
+        69fsDC64R7Llz5xgl9nvYVJhi0uvQlJeUzfmcculFcjma2Mf0FRuVH8RYGyjc54ro5Oj13
+        4GUF1v45rCdq8WBQLgEGGKKK+pBTxAo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-537-HI2ChDyCPO-K0g7Y-EmT8A-1; Wed, 13 Apr 2022 11:37:50 -0400
+X-MC-Unique: HI2ChDyCPO-K0g7Y-EmT8A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0ECAB1014A6A;
+        Wed, 13 Apr 2022 15:37:50 +0000 (UTC)
+Received: from horn.redhat.com (unknown [10.40.193.222])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 524AC40D1B98;
+        Wed, 13 Apr 2022 15:37:47 +0000 (UTC)
+From:   Petr Oros <poros@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        jacob.e.keller@intel.com, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org, ivecera@redhat.com,
+        pmenzel@molgen.mpg.de, alexandr.lobakin@intel.com
+Subject: [PATCH v2] ice: wait 5 s for EMP reset after firmware flash
+Date:   Wed, 13 Apr 2022 17:37:45 +0200
+Message-Id: <20220413153745.1125674-1-poros@redhat.com>
+In-Reply-To: <20220412102753.670867-1-poros@redhat.com>
+References: <20220412102753.670867-1-poros@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 11/14] dt-bindings: pinctrl: add binding for Ralink MT7620
- pinctrl
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-12-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413060729.27639-12-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 08:07, Arınç ÜNAL wrote:
-> Add binding for the Ralink MT7620 pin controller for MT7620, MT7628 and
-> MT7688 SoCs.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/ralink,mt7620-pinctrl.yaml        | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..01578b8aa277
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/ralink,mt7620-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ralink MT7620 Pin Controller
-> +
-> +maintainers:
-> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
-> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +
-> +description:
-> +  Ralink MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
-> +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
+We need to wait 5 s for EMP reset after firmware flash. Code was extracted
+from OOT driver (ice v1.8.3 downloaded from sourceforge). Without this
+wait, fw_activate let card in inconsistent state and recoverable only
+by second flash/activate. Flash was tested on these fw's:
+From -> To
+ 3.00 -> 3.10/3.20
+ 3.10 -> 3.00/3.20
+ 3.20 -> 3.00/3.10
 
-Run spellcheck on original bindings, don't copy same typos.
+Reproducer:
+[root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
+Preparing to flash
+[fw.mgmt] Erasing
+[fw.mgmt] Erasing done
+[fw.mgmt] Flashing 100%
+[fw.mgmt] Flashing done 100%
+[fw.undi] Erasing
+[fw.undi] Erasing done
+[fw.undi] Flashing 100%
+[fw.undi] Flashing done 100%
+[fw.netlist] Erasing
+[fw.netlist] Erasing done
+[fw.netlist] Flashing 100%
+[fw.netlist] Flashing done 100%
+Activate new firmware by devlink reload
+[root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
+reload_actions_performed:
+    fw_activate
+[root@host ~]# ip link show ens7f0
+71: ens7f0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
+    link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
+    altname enp202s0f0
 
-> +  is not supported. There is no pinconf support.
-> +
-> +properties:
-> +  compatible:
-> +    const: ralink,mt7620-pinctrl
-> +
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +    patternProperties:
-> +      '^(.*-)?pinmux$':
+dmesg after flash:
+[   55.120788] ice: Copyright (c) 2018, Intel Corporation.
+[   55.274734] ice 0000:ca:00.0: Get PHY capabilities failed status = -5, continuing anyway
+[   55.569797] ice 0000:ca:00.0: The DDP package was successfully loaded: ICE OS Default Package version 1.3.28.0
+[   55.603629] ice 0000:ca:00.0: Get PHY capability failed.
+[   55.608951] ice 0000:ca:00.0: ice_init_nvm_phy_type failed: -5
+[   55.647348] ice 0000:ca:00.0: PTP init successful
+[   55.675536] ice 0000:ca:00.0: DCB is enabled in the hardware, max number of TCs supported on this port are 8
+[   55.685365] ice 0000:ca:00.0: FW LLDP is disabled, DCBx/LLDP in SW mode.
+[   55.692179] ice 0000:ca:00.0: Commit DCB Configuration to the hardware
+[   55.701382] ice 0000:ca:00.0: 126.024 Gb/s available PCIe bandwidth, limited by 16.0 GT/s PCIe x8 link at 0000:c9:02.0 (capable of 252.048 Gb/s with 16.0 GT/s PCIe x16 link)
+Reboot doesn’t help, only second flash/activate with OOT or patched
+driver put card back in consistent state.
 
-Why do you have two levels here? pins->pinmux->actual pin configuration?
-Cannot be something like brcm,bcm636x has?
+After patch:
+[root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
+Preparing to flash
+[fw.mgmt] Erasing
+[fw.mgmt] Erasing done
+[fw.mgmt] Flashing 100%
+[fw.mgmt] Flashing done 100%
+[fw.undi] Erasing
+[fw.undi] Erasing done
+[fw.undi] Flashing 100%
+[fw.undi] Flashing done 100%
+[fw.netlist] Erasing
+[fw.netlist] Erasing done
+[fw.netlist] Flashing 100%
+[fw.netlist] Flashing done 100%
+Activate new firmware by devlink reload
+[root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
+reload_actions_performed:
+    fw_activate
+[root@host ~]# ip link show ens7f0
+19: ens7f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
+    altname enp202s0f0
 
-> +        type: object
-> +        description: node for pinctrl.
-> +        $ref: pinmux-node.yaml#
-> +
-> +        properties:
-> +          groups:
-> +            description: The pin group to select.
+v2 changes:
+- fixed format issues
+- added info about fw and OOT driver versions
+- added time in the commit message summary
+- appended the unit to the macro name
 
-I wonder where do you configure particular pins because these are
-groups... It's a bit confusing to configure "i2c" group into "i2c" -
-looks obvious.
+Fixes: 399e27dbbd9e94 ("ice: support immediate firmware activation via devlink reload")
+Signed-off-by: Petr Oros <poros@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +            enum: [
-> +              # For MT7620 SoC
-> +              ephy, i2c, mdio, nd_sd, pa, pcie, rgmii1, rgmii2, spi, spi refclk, uartf, uartlite, wdt, wled,
-> +
-> +              # For MT7628 and MT7688 SoCs
-> +              gpio, i2c, i2s, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an,
-> +              p3led_kn, p4led_an, p4led_kn, perst, pwm0, pwm1, refclk, sdmode, spi, spi cs1, spis, uart0,
-> +              uart1, uart2, wdt, wled_an, wled_kn,
-> +            ]
-> +
-> +          function:
-> +            description: The mux function to select.
-> +            enum: [
-> +              # For MT7620 SoC
-> +              ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand, pa, pcie refclk, pcie rst,
-> +              pcm gpio, pcm i2s, pcm uartf, refclk, rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite,
-> +              wdt refclk, wdt rst, wled,
-> +
-> +              # For MT7628 and MT7688 SoCs
-> +              antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
-> +              p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1,
-> +              pwm_uart2, refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi, spi cs1, spis, sw_r, uart0,
-> +              uart1, uart2, utif, wdt, wled_an, wled_kn, -,
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index d768925785ca79..38825ed2ecd1de 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -6931,12 +6931,15 @@ static void ice_rebuild(struct ice_pf *pf, enum ice_reset_req reset_type)
+ 
+ 	dev_dbg(dev, "rebuilding PF after reset_type=%d\n", reset_type);
+ 
++#define ICE_EMP_RESET_SLEEP_MS 5000
+ 	if (reset_type == ICE_RESET_EMPR) {
+ 		/* If an EMP reset has occurred, any previously pending flash
+ 		 * update will have completed. We no longer know whether or
+ 		 * not the NVM update EMP reset is restricted.
+ 		 */
+ 		pf->fw_emp_reset_disabled = false;
++
++		msleep(ICE_EMP_RESET_SLEEP_MS);
+ 	}
+ 
+ 	err = ice_init_all_ctrlq(hw);
+-- 
+2.35.1
 
-All these lines do not fit in 80-character limit. Linux coding style
-still expects this in most of cases.
-
-> +            ]
-> +
-
-Best regards,
-Krzysztof

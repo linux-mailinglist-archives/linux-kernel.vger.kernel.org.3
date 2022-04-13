@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEBE4FF92B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594E34FF926
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbiDMOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S236191AbiDMOnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbiDMOoH (ORCPT
+        with ESMTP id S236180AbiDMOnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:44:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EE850448;
-        Wed, 13 Apr 2022 07:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649860906; x=1681396906;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=h0eLVFFWViG1x6V21DPemjegErPK0/jqGlo5FApwXHc=;
-  b=BOQOilJaUo6u+3xPXSA8Yp/1wDYauNx1uNbh+j9p2xC/uYa+z+AdFSx2
-   3Qq/y2DiD/HjBSK5rHTmdeVA3N/lPGd9ReipZiMXdHRjNSZYF1CG3Wg2N
-   xFMDbUPpYeM47GmRGCanOTG9M/GOQSucSk8tDLn/Lpdq7eIPQYcVk0K97
-   Yf2QtTx6hK8XzlpINXUW0GiQ0lF21PeWt/NBkq8CcZnW203OYIsQP2XW/
-   QGP9YWLgpBKlu7wUSxNpOezKwO6rR6EWGT9cLIOnidjoqJQAESmbweq0T
-   TPeolwLtzitbO/P9kLCt35pGN5vg0hQM64yUx3RETdTjLSfYYD7KvcRPq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="323129488"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323129488"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:41:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="526500571"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 13 Apr 2022 07:41:43 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D1E15191; Wed, 13 Apr 2022 17:41:43 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: [PATCH v1 1/3] iio: imu: adis16480: Make use of device properties
-Date:   Wed, 13 Apr 2022 17:41:22 +0300
-Message-Id: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 13 Apr 2022 10:43:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690824EF70
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:41:28 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kdlbr0qV3zgYYx;
+        Wed, 13 Apr 2022 22:39:36 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 22:41:25 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 22:41:24 +0800
+Message-ID: <b86dfefe-316f-f650-bc2f-a740d7825bed@huawei.com>
+Date:   Wed, 13 Apr 2022 22:41:23 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC PATCH -next V3 3/6] arm64: add support for machine check
+ error safe
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>
+References: <20220412072552.2526871-1-tongtiangen@huawei.com>
+ <20220412072552.2526871-4-tongtiangen@huawei.com>
+ <af6bd17a-d2ec-3d1a-8360-b51fe38ecdd9@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <af6bd17a-d2ec-3d1a-8360-b51fe38ecdd9@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,115 +69,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/imu/adis16480.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/iio/imu/adis16480.c b/drivers/iio/imu/adis16480.c
-index 44bbe3d19907..68eed088cca6 100644
---- a/drivers/iio/imu/adis16480.c
-+++ b/drivers/iio/imu/adis16480.c
-@@ -7,14 +7,16 @@
- 
- #include <linux/clk.h>
- #include <linux/bitfield.h>
--#include <linux/of_irq.h>
- #include <linux/interrupt.h>
-+#include <linux/irq.h>
- #include <linux/math.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
- #include <linux/spi/spi.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/lcm.h>
-+#include <linux/property.h>
- #include <linux/swab.h>
- #include <linux/crc32.h>
- 
-@@ -1239,9 +1241,10 @@ static int adis16480_enable_irq(struct adis *adis, bool enable)
- 	return __adis_write_reg_16(adis, ADIS16480_REG_FNCTIO_CTRL, val);
- }
- 
--static int adis16480_config_irq_pin(struct device_node *of_node,
--				    struct adis16480 *st)
-+static int adis16480_config_irq_pin(struct adis16480 *st)
- {
-+	struct device *dev = &st->adis.spi->dev;
-+	struct fwnode_handle *fwnode = dev_fwnode(dev);
- 	struct irq_data *desc;
- 	enum adis16480_int_pin pin;
- 	unsigned int irq_type;
-@@ -1267,7 +1270,7 @@ static int adis16480_config_irq_pin(struct device_node *of_node,
- 	 */
- 	pin = ADIS16480_PIN_DIO1;
- 	for (i = 0; i < ARRAY_SIZE(adis16480_int_pin_names); i++) {
--		irq = of_irq_get_byname(of_node, adis16480_int_pin_names[i]);
-+		irq = fwnode_irq_get_byname(fwnode, adis16480_int_pin_names[i]);
- 		if (irq > 0) {
- 			pin = i;
- 			break;
-@@ -1295,15 +1298,15 @@ static int adis16480_config_irq_pin(struct device_node *of_node,
- 	return adis_write_reg_16(&st->adis, ADIS16480_REG_FNCTIO_CTRL, val);
- }
- 
--static int adis16480_of_get_ext_clk_pin(struct adis16480 *st,
--					struct device_node *of_node)
-+static int adis16480_fw_get_ext_clk_pin(struct adis16480 *st)
- {
-+	struct device *dev = &st->adis.spi->dev;
- 	const char *ext_clk_pin;
- 	enum adis16480_int_pin pin;
- 	int i;
- 
- 	pin = ADIS16480_PIN_DIO2;
--	if (of_property_read_string(of_node, "adi,ext-clk-pin", &ext_clk_pin))
-+	if (device_property_read_string(dev, "adi,ext-clk-pin", &ext_clk_pin))
- 		goto clk_input_not_found;
- 
- 	for (i = 0; i < ARRAY_SIZE(adis16480_int_pin_names); i++) {
-@@ -1317,9 +1320,7 @@ static int adis16480_of_get_ext_clk_pin(struct adis16480 *st,
- 	return pin;
- }
- 
--static int adis16480_ext_clk_config(struct adis16480 *st,
--				    struct device_node *of_node,
--				    bool enable)
-+static int adis16480_ext_clk_config(struct adis16480 *st, bool enable)
- {
- 	unsigned int mode, mask;
- 	enum adis16480_int_pin pin;
-@@ -1330,7 +1331,7 @@ static int adis16480_ext_clk_config(struct adis16480 *st,
- 	if (ret)
- 		return ret;
- 
--	pin = adis16480_of_get_ext_clk_pin(st, of_node);
-+	pin = adis16480_fw_get_ext_clk_pin(st);
- 	/*
- 	 * Each DIOx pin supports only one function at a time. When a single pin
- 	 * has two assignments, the enable bit for a lower priority function
-@@ -1438,7 +1439,7 @@ static int adis16480_probe(struct spi_device *spi)
- 			return ret;
- 	}
- 
--	ret = adis16480_config_irq_pin(spi->dev.of_node, st);
-+	ret = adis16480_config_irq_pin(st);
- 	if (ret)
- 		return ret;
- 
-@@ -1447,7 +1448,7 @@ static int adis16480_probe(struct spi_device *spi)
- 		return ret;
- 
- 	if (!IS_ERR_OR_NULL(st->ext_clk)) {
--		ret = adis16480_ext_clk_config(st, spi->dev.of_node, true);
-+		ret = adis16480_ext_clk_config(st, true);
- 		if (ret)
- 			return ret;
- 
--- 
-2.35.1
+在 2022/4/12 21:08, Kefeng Wang 写道:
+[...]
+>> +
+>> +bool fixup_exception_mc(struct pt_regs *regs)
+>> +{
+>> +    const struct exception_table_entry *ex;
+>> +
+>> +    ex = search_exception_tables(instruction_pointer(regs));
+>> +    if (!ex)
+>> +        return false;
+>> +
+>> +    switch (ex->type) {
+>> +    case EX_TYPE_UACCESS_MC:
+>> +        return ex_handler_fixup(ex, regs);
+>> +    }
+>> +
+>> +    return false;
+>> +}
+> 
+> The definition of EX_TYPE_UACCESS_MC is in patch4, please fix it, and if 
+> arm64 exception table
 
+ok, will do next version.
+
+> 
+> is sorted by exception type, we could drop fixup_exception_mc(), right?
+
+In sort_relative_table_with_data(), it seems sorted by insn and data.
+
+> 
+>> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+>> index 77341b160aca..56b13cf8bf1d 100644
+>> --- a/arch/arm64/mm/fault.c
+>> +++ b/arch/arm64/mm/fault.c
+>> @@ -695,6 +695,30 @@ static int do_bad(unsigned long far, unsigned int 
+>> esr, struct pt_regs *regs)
+>>       return 1; /* "fault" */
+>>   }
+>> +static bool arm64_process_kernel_sea(unsigned long addr, unsigned int 
+>> esr,
+>> +                     struct pt_regs *regs, int sig, int code)
+>> +{
+>> +    if (!IS_ENABLED(CONFIG_ARCH_HAS_COPY_MC))
+>> +        return false;
+>> +
+>> +    if (user_mode(regs) || !current->mm)
+>> +        return false;
+>> +
+>> +    if (apei_claim_sea(regs) < 0)
+>> +        return false;
+>> +
+>> +    current->thread.fault_address = 0;
+>> +    current->thread.fault_code = esr;
+>> +
+> Use set_thread_esr(0, esr) and move it after fixup_exception_mc();
+>> +    if (!fixup_exception_mc(regs))
+>> +        return false;
+>> +
+>> +    arm64_force_sig_fault(sig, code, addr,
+>> +        "Uncorrected hardware memory error in kernel-access\n");
+>> +
+>> +    return true;
+>> +}
+>> +
+>>   static int do_sea(unsigned long far, unsigned int esr, struct 
+>> pt_regs *regs)
+>>   {
+>>       const struct fault_info *inf;
+>> @@ -720,6 +744,10 @@ static int do_sea(unsigned long far, unsigned int 
+>> esr, struct pt_regs *regs)
+>>            */
+>>           siaddr  = untagged_addr(far);
+>>       }
+>> +
+>> +    if (arm64_process_kernel_sea(siaddr, esr, regs, inf->sig, 
+>> inf->code))
+>> +        return 0;
+>> +
+> 
+> Rename arm64_process_kernel_sea() to arm64_do_kernel_sea() 
+> 
+> if (!arm64_do_kernel_sea())
+> 
+>      arm64_notify_die();
+> 
+
+Agreed, will do next version.
+
+>>       arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, 
+>> esr);
+>>       return 0;
+>> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+>> index 546179418ffa..dd952aeecdc1 100644
+>> --- a/include/linux/uaccess.h
+>> +++ b/include/linux/uaccess.h
+>> @@ -174,6 +174,14 @@ copy_mc_to_kernel(void *dst, const void *src, 
+>> size_t cnt)
+>>   }
+>>   #endif
+>> +#ifndef copy_mc_to_user
+>> +static inline unsigned long __must_check
+>> +copy_mc_to_user(void *dst, const void *src, size_t cnt)
+>> +{
+> Add check_object_size(cnt, src, true);  which could make 
+> HARDENED_USERCOPY works.
+
+Agreed, will do next version.
+
+Thanks KeFeng,
+Tong.
+
+>> +    return raw_copy_to_user(dst, src, cnt);
+>> +}
+>> +#endif
+>> +
+>>   static __always_inline void pagefault_disabled_inc(void)
+>>   {
+>>       current->pagefault_disabled++;
+> .

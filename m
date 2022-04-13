@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722934FF057
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1EE4FF061
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiDMHIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S233185AbiDMHOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiDMHIN (ORCPT
+        with ESMTP id S231781AbiDMHOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:08:13 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD732ED62
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:05:52 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q12so953509pgj.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:05:52 -0700 (PDT)
+        Wed, 13 Apr 2022 03:14:04 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573933464C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:11:43 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id k22so1246009wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wA/XhN+liF7FNQdYD63xlSjmBiv/wnn45LKu56yG8aw=;
-        b=AreLMy3LsZ/2P+aighUoU5gjlgpeBV8R7aO4E6ZmNrH9sPFlHDYfXCQ9dsaQSKUUDZ
-         jV695MA6AjTW9RaVAKwYYDjPOSnx5VhKZBhY+t+VOpMmHsvuvmUO3uevsu7U4SoQZX/Q
-         hKY670Ht3+qDXUL6ihxfD4vmxjl3ro3ScX1SDiJ3bn9yNvTvyI5Jk5d9mYgm8hoPX7qr
-         1+qPrlrepeFD1qFKz+Inw4HQwj7zVmeaIa1RIZvKj+dElNrFnhxT76DSr9HnuNU6qNNj
-         CDAr/V+AXPW6hm65wKobzJCFQHpgmZ/HCfP68ZL1bibg1imj6sYE0SrrHqGdYcyfLpKZ
-         /IFQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Si/3MbWwfZmH4gHSlx8bfIyFjYYqoAHuCjt8KTbCgdQ=;
+        b=ar4zDSwNZL+cCtEeGILU8VaPb61RRvMB9bbOIsYFHT/D8VLlJprUmgOuYrrZEnNscX
+         66dJRXcz+4lDTfZJHsqb1063QlSKml+kxC+Bb4ApA6G4xwRCC0ndS2tge9u1SOa4dJH6
+         EXZSR8Y/CBns7GZTHCpZgy3kaDXBNspbUl+761CF37VnRbY/u7UnRI1D1NWz9IoqSytS
+         cAxhU+TW2v20c1RTqgtfU3ovqAP5ZzJxUQX7nZVW3e7+J3VhFOCRrFx6ML/Cws/2wP69
+         pB7ztA1oeeef/ZfLTkAzUrMsLzwQhPyMmgZo4UOf7XbrTwWFRqdxC+osJxd5aMcfU8u9
+         i8sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wA/XhN+liF7FNQdYD63xlSjmBiv/wnn45LKu56yG8aw=;
-        b=EK4sEH4Yf4Tt1uwK2W+az5LgtNcmd8jRLL73WKO+gHL59Xd6iK+L5kXk3TKb/Wxxp2
-         HbTzHtcjBJfOBTK3SybY3Rgl+9+0BiOEjSAUgasoOqpitFwdCIUfufqR+V4aIye51FyL
-         3E9s1A1MlPFMsmvF5QssUwNj77F10OGWILBs+J9JqEejYFMIIculYdM7cH+/s8ZqX8gY
-         JmHJh5RQgCDphWmIB9XDBEshZ6nSyd65Dy4Nmd9fvhznuOmJ9a0EPBT3HiVg1JJizk52
-         4irHmf3MgzSV7LmC7SHpLMuqTo1dyR4MHDmybmWg0jKreQ15KDID9dNKoFsrzm4gPT5q
-         AmEQ==
-X-Gm-Message-State: AOAM532qFyaSKDBA+M81IxPxZkMtljDhnflDjF6dwIXe2kHg7Xql1BWd
-        ZouaTiowbfk7Q6T4x+/tvrx8
-X-Google-Smtp-Source: ABdhPJzozXDajJ1TNHGEamoE5ZZSxjlxIF5/046swX9Uyn7xnV9vkvwlcsjXH3KBZ12ieR4vKeneWw==
-X-Received: by 2002:a05:6a00:10cc:b0:505:ada6:e03e with SMTP id d12-20020a056a0010cc00b00505ada6e03emr17405824pfu.45.1649833552212;
-        Wed, 13 Apr 2022 00:05:52 -0700 (PDT)
-Received: from thinkpad ([117.207.28.99])
-        by smtp.gmail.com with ESMTPSA id t15-20020a63b70f000000b00381510608e9sm5035307pgf.14.2022.04.13.00.05.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Si/3MbWwfZmH4gHSlx8bfIyFjYYqoAHuCjt8KTbCgdQ=;
+        b=rqwIfAZzf6yftThBZdl+cuT7RfxFdnbQ8oSoIS/QP/oKGiVn9L3t9+01IJzY25QClJ
+         zeVK01h+KTuToaGu7h9mHbllpSi3s8TzbcBY3ZLWzJ7GnBpDGXSUXBE6dfjAM+F0TLW8
+         9r44oQ9e65EB90So7PdryxL2cEL7yISKntOpJolvixhZTGQn0JVuiXyBFmlnftzQv6t9
+         G3xuxB/PCgCi67raRA0rk+Ay3wBykp8vNzGwlfBjNJzr9mfRx9ae2BDlcQcQ/bwdOmeJ
+         YimgTFN0aUfaFGZVghHj9nMbQ1b+GvOVobIO/qJFUBdp3RfhNq0jOaIHQcs8e6c+zTRN
+         utUA==
+X-Gm-Message-State: AOAM530I72DiSjHOgXM/iDXYFAg7m16oGGDH8A8pLkciwlV5VajOvXoR
+        x3beIooZiFszn7tIOwM6RW8tbilcyun6DA==
+X-Google-Smtp-Source: ABdhPJydOdWvQlu62gj+Tyjj1K6o+0v6Sdo48nGv500/8n/pBF4xK6Bd3vEpqm8kJYxbcwNpK5B9Vg==
+X-Received: by 2002:adf:ea91:0:b0:207:b779:7890 with SMTP id s17-20020adfea91000000b00207b7797890mr1139788wrm.676.1649833901867;
+        Wed, 13 Apr 2022 00:11:41 -0700 (PDT)
+Received: from mclaren.neureality.corp (82.166.25.98.fix.netvision.net.il. [82.166.25.98])
+        by smtp.gmail.com with ESMTPSA id p1-20020a5d59a1000000b002078c8b6dabsm18038442wrr.9.2022.04.13.00.11.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 00:05:51 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 12:35:42 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatja@google.com, refactormyself@gmail.com,
-        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org, linux-wireless@vger.kernel.org,
-        ath11k@lists.infradead.org
-Subject: Re: [PATCH v4] PCI: qcom: Add system PM support
-Message-ID: <20220413070542.GB2015@thinkpad>
-References: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
- <20220412060144.GA41348@thinkpad>
- <87k0buoa9j.fsf@kernel.org>
- <20220413054904.GA2015@thinkpad>
- <CAA8EJprcQtVFvjL_WsMoDxvPSAqaRMS90ZuTsD_cDuujtr83Xw@mail.gmail.com>
+        Wed, 13 Apr 2022 00:11:41 -0700 (PDT)
+From:   Ramon Fried <rfried.dev@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Cc:     Ramon Fried <rfried.dev@gmail.com>
+Subject: [PATCH] uio: make MAX_UIO_MAPS & MAX_UIO_PORT_REGIONS configurable
+Date:   Wed, 13 Apr 2022 10:11:37 +0300
+Message-Id: <20220413071137.4023184-1-rfried.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprcQtVFvjL_WsMoDxvPSAqaRMS90ZuTsD_cDuujtr83Xw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:36:30AM +0300, Dmitry Baryshkov wrote:
-> On Wed, 13 Apr 2022 at 08:49, Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Tue, Apr 12, 2022 at 01:40:08PM +0300, Kalle Valo wrote:
-> > > + ath11k
-> > >
-> > > Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
-> > >
-> > > > +Kalle, linux-wireless
-> > > >
-> > > > On Tue, Mar 08, 2022 at 12:25:06AM +0530, Prasad Malisetty wrote:
-> > > >> Add suspend_noirq and resume_noirq callbacks to handle
-> > > >> system suspend and resume in dwc PCIe controller driver.
-> > > >>
-> > > >> When system suspends, send PME turnoff message to enter
-> > > >> link into L2 state. Along with powerdown the PHY, disable
-> > > >> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
-> > > >> supported and disable the pcie clocks, regulators.
-> > > >>
-> > > >
-> > > > Kalle, is this behaviour appropriate for WLAN devices as well? The devices
-> > > > will be put into poweroff state (assuming no Vaux provided in D3cold) during
-> > > > system suspend.
-> > >
-> > > ath11k leaves the firmware running during suspend. I don't fully
-> > > understand what the patch is doing, but if it cuts the power from the
-> > > WLAN chip during suspend that will break ath11k.
-> > >
-> >
-> > Thanks Kalle for the confirmation. Yes the device will be put into D3cold state
-> > and that will most likely equal to poweroff state.
-> 
-> Just to remind that ath11k on Qualcomm boards has a separate power
-> supply, not directly tied to the PCIe power supply.
-> 
+MAX_UIO_MAPS and MAX_UIO_PORT_REGIONS are hard-coded to 5.
+This is not always sufficiant for some drivers.
+Make the MAX_UIO_MAPS and MAX_UIO_PORT_REGIONS configurable by
+providing Kconfig int option with the defaut value of 5.
 
-It may change in the future or on a different OEM setup. Irrespective of that,
-this patch sends the PME_Turn_Off event to the ep devices. The devices in turn
-will shutdown the internal resources for poweroff/refclk removal. Therefore the
-device state shall be lost.
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+---
+ drivers/uio/Kconfig        | 14 ++++++++++++++
+ include/linux/uio_driver.h |  4 ++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-Thanks,
-Mani
+diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
+index 2e16c5338e5b..bc1fe83cec13 100644
+--- a/drivers/uio/Kconfig
++++ b/drivers/uio/Kconfig
+@@ -13,6 +13,20 @@ menuconfig UIO
+ 
+ if UIO
+ 
++config UIO_MAX_MAPS
++	int "Maximum of memory nodes each uio device support(1-128)"
++	range 1 128
++	default 5
++	help
++	  Maximum memory mapping each uio device can support.
++
++config UIO_MAX_PORT_REGIONS
++	int "Maximum of port regions each uio device support(1-128)"
++	range 1 128
++	default 5
++	help
++	  Maximum port regions each uio device can support.
++
+ config UIO_CIF
+ 	tristate "generic Hilscher CIF Card driver"
+ 	depends on PCI
+diff --git a/include/linux/uio_driver.h b/include/linux/uio_driver.h
+index 47c5962b876b..f7dc47347c71 100644
+--- a/include/linux/uio_driver.h
++++ b/include/linux/uio_driver.h
+@@ -44,7 +44,7 @@ struct uio_mem {
+ 	struct uio_map		*map;
+ };
+ 
+-#define MAX_UIO_MAPS	5
++#define MAX_UIO_MAPS	CONFIG_UIO_MAX_MAPS
+ 
+ struct uio_portio;
+ 
+@@ -64,7 +64,7 @@ struct uio_port {
+ 	struct uio_portio	*portio;
+ };
+ 
+-#define MAX_UIO_PORT_REGIONS	5
++#define MAX_UIO_PORT_REGIONS	CONFIG_UIO_MAX_PORT_REGIONS
+ 
+ struct uio_device {
+ 	struct module           *owner;
+-- 
+2.30.2
 
-> > Prasad, you should try to just turn off the host resources like clocks and
-> > regulators (not refclk) and let the device be in the default state
-> > (D3hot/L{0/1}?) during suspend.
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry

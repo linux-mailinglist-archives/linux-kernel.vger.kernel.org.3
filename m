@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F304FF905
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6BA4FF91D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiDMOhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S236171AbiDMOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiDMOhD (ORCPT
+        with ESMTP id S233472AbiDMOmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:37:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D95F4BBB7;
-        Wed, 13 Apr 2022 07:34:41 -0700 (PDT)
-Received: from kwepemi500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KdlS16SF1zgYKd;
-        Wed, 13 Apr 2022 22:32:49 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500025.china.huawei.com (7.221.188.170) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 22:34:39 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 22:34:38 +0800
-Message-ID: <9b879bf5-53f1-663f-97ad-aeb91055bb05@huawei.com>
-Date:   Wed, 13 Apr 2022 22:34:37 +0800
+        Wed, 13 Apr 2022 10:42:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053F515A1E;
+        Wed, 13 Apr 2022 07:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649860799; x=1681396799;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FEqVR/bJ6blkfzQcYZuLKr7WhhCYJ06aOnPu5ZB6Q6Q=;
+  b=hgvQS/NeeIBDfF4aq/D3TVyFvbAS/ER/8U4Tdy/kuxOfH2FNXMVJ0d7R
+   /mSXNt/g6C63nZKXq2NLQWBPXvdga8xwQtjxvSL/7daYIHMDSzjLpFkMd
+   ox7kk0xz1EAQElKCsjNyFiPPk42JfP/WXSTW0MW+Z9AqddXNxBsPvUE4N
+   l6DWYD0XTisDRspuKNW/3Tgx7uM2/2XpVsLoDUXuBm8IS+8aJMHvUcOZw
+   h/SZ+Q7WQjwe+kr1HnGEhHyp0f6wB2tRbGldNdBGLVk7RAyEABCJhYand
+   2/aNtGDMnZjz/qViuxLurBAqHtZZ4izRO9wNaalXNv3o6VePvhiOwu5in
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325589399"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="325589399"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:35:53 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="573295871"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:35:49 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id C987220316;
+        Wed, 13 Apr 2022 17:35:46 +0300 (EEST)
+Date:   Wed, 13 Apr 2022 17:35:46 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
+Message-ID: <YlbfwjQcxj6fK7re@paasikivi.fi.intel.com>
+References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
+ <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+ <YlCq79KveByePxe9@paasikivi.fi.intel.com>
+ <CAHp75Ve-5=6bsF1mMQ4RceobV=OsR6VwZeP==iFGQJLEbt0-yg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-To:     Lyu Tao <tao.lyu@epfl.ch>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        "anna@kernel.org" <anna@kernel.org>,
-        "bjschuma@netapp.com" <bjschuma@netapp.com>
-CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
-        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
-        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
-References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
- <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
- <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
- <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
- <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
-In-Reply-To: <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Ve-5=6bsF1mMQ4RceobV=OsR6VwZeP==iFGQJLEbt0-yg@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,146 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will give some detailed code process.
-
-firstly open():
-
-```c
-open
-   do_sys_open
-     do_sys_openat2
-       do_filp_open
-         path_openat
-           open_last_lookups
-             lookup_open
-               atomic_open
-                 nfs_atomic_open
-                   create_nfs_open_context
-                     flags_to_mode() = FMODE_READ|FMODE_WRITE
-                     alloc_nfs_open_context
-                       ctx->mode = f_mode // FMODE_READ|FMODE_WRITE
-                   // NFS_PROTO(dir)->open_context
-                   nfs4_atomic_open
-                     nfs4_do_open
-                       _nfs4_do_open
-                         fmode = _nfs4_ctx_to_openmode(ctx) = 3
-                           ret = ctx->mode & (FMODE_READ|FMODE_WRITE) // 
-ctx->mode = 3
-                         nfs4_opendata_alloc
-                           nfs4_map_atomic_open_share
-                             return NFS4_SHARE_ACCESS_BOTH
-```
-
-secondly open():
-```c
-open
-   do_sys_open
-     do_sys_openat2
-       do_filp_open
-         path_openat
-           open_last_lookups
-             lookup_open
-               return dentry // if (dentry->d_inode) {
-           do_open
-             vfs_open
-               do_dentry_open
-                 // f->f_op->open
-                 nfs4_file_open
-                   if ((openflags & O_ACCMODE) == 3)
-                   nfs_open // without sunrpc request
-                     alloc_nfs_open_context
-                       ctx->state = NULL; // this is point
-```
-
-lseek() after secondly open():
-```c
-lseek
-   ksys_lseek
-     vfs_llseek
-       // file->f_op->llseek
-       nfs4_file_llseek
-         nfs42_proc_llseek
-           _nfs42_proc_llseek(lock)
-             nfs4_set_rw_stateid(ctx=lock->open_context)
-               nfs4_select_rw_stateid(state=ctx->state)
-                 nfs4_valid_open_stateid(state)
-                   state->flags // dereference NULL state
-```
-
-在 2022/4/13 22:05, chenxiaosong (A) 写道:
-> 在 2022/4/13 21:42, chenxiaosong (A) 写道:
->>
->> 在 2022/4/13 20:07, Lyu Tao 写道:
->>>
->>> Hi Xiaosong,
->>>
->>>
->>> Thanks for keeping focusing on this bug.
->>>
->>>
->>> I applied this CVE for the NULL dereference bug at 
->>> nfs4_valid_open_stateid() and added the following description to this 
->>> CVE due to the NFS maintainers replied that to me.
->>>
->>> "An issue was discovered in fs/nfs/dir.c in the Linux kernel before 
->>> 5.16.5. If an application sets the O_DIRECTORY flag, and tries to 
->>> open a regular file, nfs_atomic_open() performs a regular lookup. If 
->>> a regular file is found, ENOTDIR should occur, but the server instead 
->>> returns uninitialized data in the file descriptor.
->>>
->>>
->>> Actually I'm still confused with the root cause of this bug. In the 
->>> original PoC, there is no O_DIRECTORY flag but commit ac795161c936 
->>> mentioned.
->>>
->>> Moreover, in your latest commit ab0fc21bc710, it said "After secondly 
->>> opening a file with O_ACCMODE|O_DIRECT flags, 
->>> nfs4_valid_open_stateid() will dereference NULL nfs4_state when 
->>> lseek()." However, the original PoC opens the file only with 
->>> O_RDWR|O_CREAT for the first time.
->>>
->>>
->>> Original PoC:
->>>
->>> fd = openat("./file1", o_RDWR|O_CREAT, 000);
->>>
->>> open("./file1", 
->>> O_ACCMODE|O_CREAT|O_DIRECT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008, 
->>> 001);
->>>
->>> lseek(fd, 9, SEEK_HOLE);
->>>
->>>
->>> I'll update this CVE's description after I figure out these.
->>>
->>>
->>> Best Regards,
->>>
->>> Tao
->>>
->>
->> Hi Tao:
->>
->> Yes, O_ACCEMODE is _not_ necessary when fistly open() file.
->>
->> When open() the file secondly, O_ACCEMODE is necessary if we want to 
->> reproduce the bug.
->>
->> Waiting for your modification of the CVE's description.
->>
->> Best Regards.
->> .
+On Sun, Apr 10, 2022 at 05:10:23PM +0300, Andy Shevchenko wrote:
+> On Sat, Apr 9, 2022 at 2:35 AM Sakari Ailus
+> <sakari.ailus@linux.intel.com> wrote:
+> > On Fri, Apr 08, 2022 at 09:48:43PM +0300, Andy Shevchenko wrote:
+> > > As to_of_node() suggests and the way the code in the OF and software node
+> > > back ends actually uses the fwnode handle, it may be constified. Do this
+> > > for good.
+> >
+> > How?
+> >
+> > If the fwnode is const, then the struct it contains must be presumed to be
+> > const, too.
 > 
-> My reproducer:
->    1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
->    2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
->    3. close(fd)
->    4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
->    5. lseek(fd)
-> 
-> When firstly open() file, O_ACCMODE|O_DIRECT is _not_ necessary, we just 
-> use O_CREAT to create new file.
-> 
-> When secondly open() file, only O_ACCMODE|O_DIRECT is necessary, 
-> O_CREAT|O_LARGEFILE|O_NOFOLLOW|O_NOATIME|O_CLOEXEC|FASYNC|0xb3000008 in 
-> your original PoC is not necessary (however, they are harmless).
+> Why? The idea is that we are not updating the fwnode, but the container.
+> The container may or may not be const. It's orthogonal, no?
+
+As you wrote: may or may not. The stricter requirement, i.e. const, must be
+thus followed. I think it would be fine (after adding a comment on what is
+being done) if you *know* the container struct is not const. But that is
+not the case here.
+
+-- 
+Sakari Ailus

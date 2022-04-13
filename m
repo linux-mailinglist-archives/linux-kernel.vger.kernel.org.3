@@ -2,167 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA92C4FFC15
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2504FFC1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbiDMRLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S237199AbiDMRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiDMRLv (ORCPT
+        with ESMTP id S236974AbiDMRMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:11:51 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D1FEA6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:29 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q3so2927526wrj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:29 -0700 (PDT)
+        Wed, 13 Apr 2022 13:12:14 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF9BE1E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:52 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id cw11so2567057pfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:09:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sCLiXto+N+uwNvwTzKfo+TPPGQjP4GFjpgB4ZdDzCwA=;
-        b=MkZiwQvVjG36q8ePnIhm0w66YSzngKvc5oJJvnJmsCef4T9vJ6aWRANmip/0NJLen6
-         Aia72rjrqEleWdmX6pp3m/yfvg73D3lay36uWX/HHWfiSGnP+w8muJCzanM0t1Qh3jXZ
-         B7t3CTpV0YGIj9DrkuSuoRO0bE8j0ISFDKY2BTME0vbFx7WaCjTtyA86PjVSCxdzkgsz
-         9OhxuHhJ4K0VnzzNd8GGbWSycQfaVMqKzkVa5HH8lzy3QWHJijb997UNs4tHZkCg28gm
-         gsiRN9GK5c5CV84U6usdPEGTUBYyFth1FY3xE7NHbPPRnFHJG03oKTQZoRA7eUea2rnF
-         YxQw==
+        bh=S3oz53a9Ng+DbhMPj3RmOVulLJKw0oHFC07pKdWasCM=;
+        b=TyHwk2+ZDToVQLJjhJ+GwARFZdQ6fdXaVDK/YYC0qiPJ7F3HvvKdsIy4kR9NZ9lfiE
+         xNbBBit8CgoQNMM3vbwz+zcUp+XG/QEgMchCYBLIqOoKHYh9qiClo5rVQPmmMpqSPUnO
+         fTwAt+4RIGqoQKVn7FHmUl91EINKQGRX9V6O4XaYR3KKGwQ7DyuU+XskDD/yq+WfPPb0
+         jHhSsiDLvDy2OM8+L6vgYYlOIp1RyCtA5mM1o9SZx1R1D8uyT7qDjUAy/V21ZTuRI2KZ
+         15EHyz55yFLViX9GowNZKfzHIy8YpYtk99kUuRUamcEDzFAgVe0K5UkAGDXYVx+esSvD
+         6SWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sCLiXto+N+uwNvwTzKfo+TPPGQjP4GFjpgB4ZdDzCwA=;
-        b=RzboyY1gHV6P3J6NZfiinbqLYulnosnK/p7bmjRpqNxRWEj3/od0hXmUc6bIC2+EyO
-         72sHlRLZL5TJWqNyY7StrHxoRm4yPePfkBbKpcrQvxv7Hvlou/Tvx/KrV0t1gS0Dej4Y
-         8JbFVN76nhJmvnMm36HHXaVfK32wEMQdXX44rbdrAwcYkol02zx03b+H/89wJahBZSlZ
-         xwOcJZJdLJq31B2B6ulM24TE+a6rUOqNz/PELgZIwU65Djaor0+TeykTuXLhHqcaKv6S
-         wIiY9VQ646lvSc3gOu6b6JZxBzWuQT48UqWtaa+c6phRyCwyrGbKDZHhaR82zoEFdY21
-         YBTg==
-X-Gm-Message-State: AOAM531T+XWWHWCnHtgX37/l5c1eYih+Db+EkATQi1/JlT65vOoA2sae
-        EICQvSNy1bcvmNCLuC51jKADMq84qSjxiPO+9zja7w==
-X-Google-Smtp-Source: ABdhPJyli41f+i1rwTLIV2MJwxxgzzWw7Zz26GHsP9cvbLAt8rnThx1uAQV/lOxtF/JQ0NQPCAtI5c8ohWYReiCK+hU=
-X-Received: by 2002:a5d:6241:0:b0:207:ac0e:3549 with SMTP id
- m1-20020a5d6241000000b00207ac0e3549mr9032063wrv.343.1649869767586; Wed, 13
- Apr 2022 10:09:27 -0700 (PDT)
+        bh=S3oz53a9Ng+DbhMPj3RmOVulLJKw0oHFC07pKdWasCM=;
+        b=1zBUr53sAhu9jKHCmAXAUsKaqVfooYaki02dBe3kJVleYmRZXj5pby1tLFMxw9SBxP
+         JMC4AyZqR3jVBhqIkAJjGe7oOV3j7G2rFd/cNK9LlaPZvX/QpfPKGGQQg3Bubo6koH7y
+         qkaFLjk+zn2J0xWWV0rK91UpUJAoNY2CKOf8tlvZFkubN/CZTeQLIzhBuFsTMY7vWxgO
+         W5Lu3fR0VJDKwS00cvGvKHjJpsvaVffppcP3HKrPdCTn0ZL/cDFyUeJHBYCqFMHr3qZ/
+         2RKkVw+hThTGc8weROqtPTIWhGg/7bbzkd3nM03B7IKPITHJJmD91/z//jMrfsU7xvhC
+         FEkg==
+X-Gm-Message-State: AOAM532AN511IObdIdVCKvrRVw3G//+kduFxOCOrPAKDw8sApSvWYWkC
+        APGO+MxwzghyM87oC6mB2BvfbJLUWMPe+Vd4PXjIEA==
+X-Google-Smtp-Source: ABdhPJzLi8gMisuellOBcvRBO68apFNBLKqg7RJ1uejuUvIlQHfa3U9nodhdf0gc7bErx9RfyUux7vESwpwfRM8oyF0=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr35296654pgb.74.1649869791634; Wed, 13
+ Apr 2022 10:09:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220304083329.GC20556@xsang-OptiPlex-9020> <CAP-5=fVz=arWo19PQR_4UKY_PyywyXoyp+MUnfAJxCFZy5rhWg@mail.gmail.com>
- <20220413070529.GA1320@linux.intel.com> <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
- <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
-In-Reply-To: <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 13 Apr 2022 10:09:15 -0700
-Message-ID: <CAP-5=fXj+WT3ExNo-fL4d9b_Wm5swnKaCWd67rU85Q=QFg5KUw@mail.gmail.com>
-Subject: Re: [LKP] Re: [perf vendor events] 3f5f0df7bf: perf-sanity-tests.perf_all_metrics_test.fail
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Carel Si <beibei.si@intel.com>, acme@redhat.com,
-        alexander.shishkin@linux.intel.com, alexandre.torgue@foss.st.com,
-        ak@linux.intel.com, mingo@redhat.com, james.clark@arm.com,
-        jolsa@kernel.org, john.garry@huawei.com, mark.rutland@arm.com,
-        mcoquelin.stm32@gmail.com, namhyung@kernel.org,
-        peterz@infradead.org, eranian@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, lkp@lists.01.org,
-        lkp@intel.com
+References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
+ <20220410160904.3758789-7-ruansy.fnst@fujitsu.com> <20220413000423.GK1544202@dread.disaster.area>
+ <CAPcyv4jKLZhcCiSEU+O+OJ2e+y9_B2CvaEfAKyBnhhSd+da=Zg@mail.gmail.com> <20220413060946.GL1544202@dread.disaster.area>
+In-Reply-To: <20220413060946.GL1544202@dread.disaster.area>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 13 Apr 2022 10:09:40 -0700
+Message-ID: <CAPcyv4jPgX3w2e1dENJvKjhCpiB7GMZURXWMoGUNNcOQFotb3A@mail.gmail.com>
+Subject: Re: [PATCH v12 6/7] xfs: Implement ->notify_failure() for XFS
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 9:37 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+On Tue, Apr 12, 2022 at 11:10 PM Dave Chinner <david@fromorbit.com> wrote:
 >
->
->
-> On 4/13/2022 12:03 PM, Ian Rogers wrote:
-> > 3) Weak group doesn't fall back to no group:
->
-> That's because the group validation code doesn't take pinned events,
-> such as the NMI watchdog, into account.
->
-> I proposed a kernel patch to fix it, but it's rejected. It should be
-> hard to find a generic way to fix it from the kernel side.
-> https://lore.kernel.org/lkml/1565977750-76693-1-git-send-email-kan.liang@linux.intel.com/
->
-> Maybe we can workaround it from the perf tool side?
-> For example, for each weak group with cycles event and NMI watchdog is
-> enabled, add an extra cycles event when opening the group. If the open
-> fails with the extra cycles event, fall back to no group. After the
-> extra cycles event check, remove the extra cycles.
->
-> What do you think?
-
-Thanks Kan, it is a shame the kernel support is lacking here. I'm not
-sure what you are proposing for the perf tool to do. So:
-
-> for each weak group with cycles event and NMI watchdog
-
-Okay, let's try Branching_Overhead as mentioned in this report - but
-the event is CPU_CLK_UNHALTED.THREAD here :-/
-
-> add an extra cycles event when opening the group
-
-So the perf_event_open doesn't fail here for me:
-$ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD},cycles'
--a sleep 1
-
- Performance counter stats for 'system wide':
-
-     <not counted>      BR_INST_RETIRED.NEAR_CALL
-               (0.00%)
-     <not counted>      BR_INST_RETIRED.NEAR_TAKEN
-                (0.00%)
-     <not counted>      BR_INST_RETIRED.NOT_TAKEN
-               (0.00%)
-     <not counted>      BR_INST_RETIRED.CONDITIONAL
-                 (0.00%)
-     <not counted>      CPU_CLK_UNHALTED.THREAD
-               (0.00%)
-     4,071,908,022      cycles
-               (49.97%)
-
-       0.998134717 seconds time elapsed
-
-Some events weren't counted. Try disabling the NMI watchdog:
-echo 0 > /proc/sys/kernel/nmi_watchdog
-perf stat ...
-echo 1 > /proc/sys/kernel/nmi_watchdog
-The events in group usually have to be from the same PMU. Try
-reorganizing the group.
-
-I'm not sure what the cycles event is achieving here, but it seems the
-behavior will need a kernel change. I think I'm misunderstanding your
-proposal :-)
-
-Thanks,
-Ian
-
-> Thanks,
-> Kan
-> > $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD}:W'
-> > -a sleep 1
+> On Tue, Apr 12, 2022 at 07:06:40PM -0700, Dan Williams wrote:
+> > On Tue, Apr 12, 2022 at 5:04 PM Dave Chinner <david@fromorbit.com> wrote:
+> > > On Mon, Apr 11, 2022 at 12:09:03AM +0800, Shiyang Ruan wrote:
+> > > > Introduce xfs_notify_failure.c to handle failure related works, such as
+> > > > implement ->notify_failure(), register/unregister dax holder in xfs, and
+> > > > so on.
+> > > >
+> > > > If the rmap feature of XFS enabled, we can query it to find files and
+> > > > metadata which are associated with the corrupt data.  For now all we do
+> > > > is kill processes with that file mapped into their address spaces, but
+> > > > future patches could actually do something about corrupt metadata.
+> > > >
+> > > > After that, the memory failure needs to notify the processes who are
+> > > > using those files.
+> ...
+> > > > @@ -1964,8 +1965,8 @@ xfs_alloc_buftarg(
+> > > >       btp->bt_mount = mp;
+> > > >       btp->bt_dev =  bdev->bd_dev;
+> > > >       btp->bt_bdev = bdev;
+> > > > -     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, NULL,
+> > > > -                                         NULL);
+> > > > +     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, mp,
+> > > > +                                         &xfs_dax_holder_operations);
+> > >
+> > > I see a problem with this: we are setting up notify callbacks before
+> > > we've even read in the superblock during mount. i.e. we don't even
+> > > kow yet if we've got an XFS filesystem on this block device.
+> > > Hence these notifications need to be delayed until after the
+> > > filesystem is mounted, all the internal structures have been set up
+> > > and log recovery has completed.
 > >
-> >   Performance counter stats for 'system wide':
-> >
-> >       <not counted>      BR_INST_RETIRED.NEAR_CALL
-> >                 (0.00%)
-> >       <not counted>      BR_INST_RETIRED.NEAR_TAKEN
-> >                  (0.00%)
-> >       <not counted>      BR_INST_RETIRED.NOT_TAKEN
-> >                 (0.00%)
-> >       <not counted>      BR_INST_RETIRED.CONDITIONAL
-> >                   (0.00%)
-> >       <not counted>      CPU_CLK_UNHALTED.THREAD
-> >                 (0.00%)
-> >
-> >         1.001690318 seconds time elapsed
-> >
-> > Some events weren't counted. Try disabling the NMI watchdog:
-> > echo 0 > /proc/sys/kernel/nmi_watchdog
-> > perf stat ...
-> > echo 1 > /proc/sys/kernel/nmi_watchdog
+> > So I think this gets back to the fact that there will eventually be 2
+> > paths into this notifier.
+>
+> I'm not really concerned by how the notifications are generated;
+> my concern is purely that notifications can be handled safely.
+>
+> > All that to say, I think it is ok / expected for the filesystem to
+> > drop notifications on the floor when it is not ready to handle them.
+>
+> Well, yes. The whole point of notifications is the consumer makes
+> the decision on what to do with the notification it receives - the
+> producer of the notification does not (and can not) dictate what
+> policy the consumer(s) implement...
+>
+> > For example there are no processes to send SIGBUS to if the filesystem
+> > has not even finished mount.
+>
+> There may be not processes to send SIGBUS to even if the filesystem
+> has finished mount. But we still want the notifications to be
+> delivered and we still need to handle them safely.
+>
+> IOWs, while we might start by avoiding notifications during mount,
+> this doesn't mean we will never have reason to process events during
+> mount. What we do with this notification is going to evolve over
+> time as we add new and adapt existing functionality....
+
+Yes, sounds like we're on the same page. I had mistakenly interpreted
+"Hence these notifications need to be delayed until after the
+filesystem is mounted" as something the producer would need to handle,
+but yes, consumer is free to drop if the notification arrives at an
+inopportune time.

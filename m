@@ -2,94 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7D04FFA7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44214FFA7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbiDMPmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S236645AbiDMPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiDMPmr (ORCPT
+        with ESMTP id S235084AbiDMPmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:42:47 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B159141F8A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:25 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id u19so2668770ljd.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tgBA8s4Eh6rvde/t7B0/fiNRuz5n6J6jdeQ265aYyH8=;
-        b=kpmOrV+KZsPfrkWLBVvU4FwmIyr5wmmpmnDQAUsPiQQOu16NkeZ2WtuBiM882G6/VU
-         A6IyFgCWKc7DSGfE4MdQa1eczopD6TLLAIsjH4fnvhiIoRPkdVCl/92a4jVosMZOnVvb
-         bTsEKLTuk/zR7e+Do+VVY0voHVMqBsnvtFViju+GZc0XutmNUncDv+N+pwW3K+ZZkA1Z
-         y7SBT+/fdHZUPctOpOR/m1oD0SfcuBD7/N8kub9/clKXEeDyPGEouM3iu3OUJdnSmj1b
-         U6oezOy5k6nJWprUM1vzUZp5ykPBOy7tUoN93D76aB2uqOFX6ldZbWpMm4ziIHaa2hdX
-         JqYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tgBA8s4Eh6rvde/t7B0/fiNRuz5n6J6jdeQ265aYyH8=;
-        b=Y5JEWuTduvvhBG5Dawv0qmx/xN1TOER30PCspbh6r+b6BuVYygi6E1AyWg8sgReiTK
-         FhxbcKaPpwOvD0O+xIVLvLlwiWhu0LuUd8tzLCUKPKFqc7Vev5jPhp+kpyy6PeYK3VtB
-         M9z5kPKDUKpGDMZUHXFRLRFeuNibDTu8hWXoDFXDr0CmbOADOYVqUTHD2EPEsBrR4cT6
-         yRc2OiOWvK47+FYHOL+1hJ73pQeYOgTFlcWSr0gMypPzS4X/5vT6lLKW1KKxmHZVc3l6
-         4N2pfB2SXT6qTtfdUcO19mAUtGJqKMcSc6rBQ65ZTcW0F12Hee5bWbA0pMo6qtm/mCfX
-         41Hg==
-X-Gm-Message-State: AOAM533ZOjTJAd/V65cvU6C9RbqYyGHmnQ16y4AzSKmRrDutgnZ0w1PY
-        jqzCpFhIB2xbWHjak0UwwEpVRhrDasOlV0jwyDZa7A==
-X-Google-Smtp-Source: ABdhPJxu82n1pQGboxGAUFIx7eeNpvAi4IMWEu1/u0r+gRGn56uFNSTXMnC3B4J/Y4WX0o0oIE2ZIbpRG7C0pPASMwM=
-X-Received: by 2002:a2e:9017:0:b0:24b:6502:d63c with SMTP id
- h23-20020a2e9017000000b0024b6502d63cmr8831954ljg.426.1649864423326; Wed, 13
- Apr 2022 08:40:23 -0700 (PDT)
+        Wed, 13 Apr 2022 11:42:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A717541F8A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDCE61DA2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:40:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D28C385A8;
+        Wed, 13 Apr 2022 15:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649864430;
+        bh=aDZsnIu78Sw4wqXPmCkaYFfJvE/1m8bL+bjVG7Ns0wI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HMfsF5SappHXuWWV+oC6KDzHEsoUjuIe1WEm7lKyDHSbE/gwwYl6YSMf5LGLyz9J4
+         sTZuMuRJlmmzxQJU8Sn7/7uXyrnbVQzRkrLRr2pOM0iRN1nJ02sDBW8YJqP/5NZwA6
+         jxV+ggAxM9ReRFOEhmB/8m+gGJqCIiID9ySZ23pGb91PVXVyJvcB1CfBjpAOM+A9oF
+         4TWDPnUodyZ2+Oz3IhUxR+fWKjYHCLfJ47Hoj12Lws1ZLXdHvelLgVtvfUHmuaKRc8
+         FQkH9fCtw8FzrvC0lMj45loG1bAluE/YQIoq0koWg+4Fywp3SUSoGKqcyE71WiweC4
+         aB+yn0t2+4Llw==
+Date:   Wed, 13 Apr 2022 08:40:28 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Richard Gong <richard.gong@amd.com>
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        xinhui.pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
+ systems
+Message-ID: <Ylbu7OGHVaqnznQb@thelio-3990X>
+References: <20220412215000.897344-1-richard.gong@amd.com>
 MIME-Version: 1.0
-References: <20220411180006.4187548-1-jackyli@google.com>
-In-Reply-To: <20220411180006.4187548-1-jackyli@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 13 Apr 2022 09:40:12 -0600
-Message-ID: <CAMkAt6rzVmi6iFM_phsCEtb1c-r2PYL9SYwSGX6JqWARnDWgWw@mail.gmail.com>
-Subject: Re: [PATCH] crypto: ccp - Fix the INIT_EX data file open failure
-To:     Jacky Li <jackyli@google.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412215000.897344-1-richard.gong@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 12:00 PM Jacky Li <jackyli@google.com> wrote:
->
-> There are 2 common cases when INIT_EX data file might not be
-> opened successfully and fail the sev initialization:
->
-> 1. In user namespaces, normal user tasks (e.g. VMM) can change their
->    current->fs->root to point to arbitrary directories. While
->    init_ex_path is provided as a module param related to root file
->    system. Solution: use the root directory of init_task to avoid
->    accessing the wrong file.
->
-> 2. Normal user tasks (e.g. VMM) don't have the privilege to access
->    the INIT_EX data file. Solution: open the file as root and
->    restore permissions immediately.
->
-> Signed-off-by: Jacky Li <jackyli@google.com>
+Hi Richard,
 
-Reviewed-by: Peter Gonda <pgonda@google.com>
+On Tue, Apr 12, 2022 at 04:50:00PM -0500, Richard Gong wrote:
+> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+> There are some AMD GFX cards (such as WX3200 and RX640) that won't work
+> with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
+> video/display output, Intel Alder Lake based systems will hang during
+> suspend/resume.
+> 
+> The issue was initially reported on one system (Dell Precision 3660 with
+> BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
+> Lake based systems.
+> 
+> Add extra check to disable ASPM on Intel Alder Lake based systems.
+> 
+> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Richard Gong <richard.gong@amd.com>
+> ---
+> v4: s/CONFIG_X86_64/CONFIG_X86
+>     enhanced check logic
+> v3: s/intel_core_asom_chk/aspm_support_quirk_check
+>     correct build error with W=1 option
+> v2: correct commit description
+>     move the check from chip family to problematic platform
+> ---
+>  drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+> index 039b90cdc3bc..b33e0a9bee65 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -81,6 +81,10 @@
+>  #include "mxgpu_vi.h"
+>  #include "amdgpu_dm.h"
+>  
+> +#if IS_ENABLED(CONFIG_X86)
+> +#include <asm/intel-family.h>
+> +#endif
+> +
+>  #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+>  #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+>  #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+>  		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+>  }
+>  
+> +static bool aspm_support_quirk_check(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_X86)) {
+> +		struct cpuinfo_x86 *c = &cpu_data(0);
+> +
+> +		return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+> +	}
 
-Agreed about the fixes tag.
+I have not seen this reported by a bot, sorry if it is a duplicate. This
+breaks non-x86 builds (arm64 allmodconfig for example):
+
+drivers/gpu/drm/amd/amdgpu/vi.c:1144:28: error: implicit declaration of function 'cpu_data' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                struct cpuinfo_x86 *c = &cpu_data(0);
+                                         ^
+drivers/gpu/drm/amd/amdgpu/vi.c:1144:27: error: cannot take the address of an rvalue of type 'int'
+                struct cpuinfo_x86 *c = &cpu_data(0);
+                                        ^~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/vi.c:1146:13: error: incomplete definition of type 'struct cpuinfo_x86'
+                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+                         ~^
+drivers/gpu/drm/amd/amdgpu/vi.c:1144:10: note: forward declaration of 'struct cpuinfo_x86'
+                struct cpuinfo_x86 *c = &cpu_data(0);
+                       ^
+drivers/gpu/drm/amd/amdgpu/vi.c:1146:28: error: incomplete definition of type 'struct cpuinfo_x86'
+                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+                                        ~^
+drivers/gpu/drm/amd/amdgpu/vi.c:1144:10: note: forward declaration of 'struct cpuinfo_x86'
+                struct cpuinfo_x86 *c = &cpu_data(0);
+                       ^
+drivers/gpu/drm/amd/amdgpu/vi.c:1146:43: error: use of undeclared identifier 'INTEL_FAM6_ALDERLAKE'
+                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+                                                        ^
+5 errors generated.
+
+'struct cpuinfo_x86' is only defined for CONFIG_X86 so this section
+needs to guarded with the preprocessor, which is how it was done in v2.
+Please go back to that.
+
+Cheers,
+Nathan

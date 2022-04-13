@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6D24FF90F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DA84FF915
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiDMOi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S234815AbiDMOlP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Apr 2022 10:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiDMOiX (ORCPT
+        with ESMTP id S230388AbiDMOlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:38:23 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F060CC7;
-        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ef5380669cso7717467b3.9;
-        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
+        Wed, 13 Apr 2022 10:41:14 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F28D60A95;
+        Wed, 13 Apr 2022 07:38:52 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id v77so4063296ybi.12;
+        Wed, 13 Apr 2022 07:38:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HkFKvLI0J6quLQdPqpOX0Tj5KDs3UD15ORpTF0qg2e4=;
-        b=6hQpGirc2ucrJ9JNE7jYo5jl4SHtx/ANBT6uAt77bprdZYH5y2kuYkbDNSdKxI19CO
-         Vks0rWB1uTjTdodn/qlTfbCQVmWC+auMgUXSsCm1uDowqWiAfkjNk1wx3pPf/Jf13Rdp
-         vJdxE1OakSQ8tZTf8K9n8bjDgFxY8HGcvchTBCCDOU025JxLoeIyH2JskpbFwcviPeq3
-         b5AKzC0IikRHezcfNsEWBkYWPZdNXtpb+37gHglnBKY/I7b2JwLbL4LwZzWowJ4+vRd6
-         LWo2Ii3M9hEJJ0c60NZUXgFSjHU79QljZ2vb5uyH4PwKWXatABeSm5n5boSyfGRy5e5H
-         hiKA==
-X-Gm-Message-State: AOAM530ou+RJYTXA4bif6i9JDwSLIrPYtnvMNtPeAXQZQDUR7aQxGKvt
-        bU2k5tWOgbxLLNE1lp7sMUojoJj5GVt0Y0jaT9KWsRXp
-X-Google-Smtp-Source: ABdhPJznRcpigdB/Ir4yWmRFfF/hE4YWrrX33xtGTbB1mSjJwf3cB1Z/dbSo3oLnkmCEfqHiC41UZjsnNi4mMw7TUVA=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr33491323ywb.326.1649860560856; Wed, 13
- Apr 2022 07:36:00 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=80rnXlJvjwg31BPv10O4ldqkvQvXPgrHRPfb/fpogO0=;
+        b=xzhg+SN7omcXYwSzk0q0yX8Z9Fba7NVqDaaZvbE+6agGtxFnHG5m+S/EG4hjicWK3T
+         XsTkqp+T1buf3r0zmLev1NXUvmNJ2+DZ1gWX93VVdWk75fiNBOzmAuweXn7o86dxyOni
+         jGphNSeXvu0Jf9gD7gaFvCAUJxIgWD8XndA9hHFX0lxXTmbETTj0XZNgay3ejhUMktmO
+         AxVvscmL1zswAy2tufJFNbtmytKfb5C1b5KcOoY0PVLeoq3Q8AYBV08iFpiCpQqm7Dld
+         liKcLD/YjgNpFzUB5LZM3WVAXSyQxipRmM39vbwWYEjWZcU/3cvMsmNFB+vdNaIgJdpT
+         v26Q==
+X-Gm-Message-State: AOAM531pertQ2vvDVsNknMJlF7WcpbSyTeQxDqWtx6wE+hLRijIoSYgm
+        ZBxpGCJSJ+pX5jb+flMN8WxboSVsBlztZ+Au9yg=
+X-Google-Smtp-Source: ABdhPJxVM+QHir1XU/QmbuZRMUT4SBGRcdTbZb6s97PDe6A/GOAQBilFQA20R9vUKAc5wUL9dD/4wHVeWSi1xAXg2mI=
+X-Received: by 2002:a05:6902:1544:b0:63d:d3a7:8cc4 with SMTP id
+ r4-20020a056902154400b0063dd3a78cc4mr31259358ybu.622.1649860731311; Wed, 13
+ Apr 2022 07:38:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220324080653.454333-1-dacohen@pm.me>
-In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
+References: <20220324103443.4563-1-hesham.almatary@huawei.com> <5J099R.20GRUWFVWC5D1@crapouillou.net>
+In-Reply-To: <5J099R.20GRUWFVWC5D1@crapouillou.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 16:35:50 +0200
-Message-ID: <CAJZ5v0jDEau14RF4-pEc0HiWG+Cg7f93oMmhBXZULCXpOJFVaw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] PM: refactor pm_pr_dbg() to support dynamic debug
-To:     David Cohen <dacohen@pm.me>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 13 Apr 2022 16:38:40 +0200
+Message-ID: <CAJZ5v0hpRd_zAtrx2nV1X2=ZeNz3sE6h9+2NQZFY92qKJ82qGw@mail.gmail.com>
+Subject: Re: [PATCH] thermal:hisi_termal: Switch from CONFIG_PM_SLEEP guards
+ to pm_sleep_ptr()
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -57,28 +63,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 9:07 AM David Cohen <dacohen@pm.me> wrote:
+On Thu, Mar 24, 2022 at 1:11 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> Hi,
+> Hi Hesham,
 >
-> I am currently debugging an issue with s2idle on my laptop where in a
-> rare occasion instead of sleeping, it gets stuck in an infinite loop.
-> The pm_pr_dbg() is placed on very useful functions and it helps me to
-> debug it, but the current all or nothing enabling mechanism with
-> pm_debug_messages_on flag is causing the suspending mechanism to be
-> disturbed with so many debug messages to the point it becomes extremely
-> difficult to reproduce the issue I'm debugging. More granularity when
-> enabling pm_pr_dbg() in this case is very welcome.
+> Le jeu., mars 24 2022 at 10:34:43 +0000, Hesham Almatary
+> <hesham.almatary@huawei.com> a écrit :
+> > Cleaning up the driver to use pm_sleep_ptr() macro instead of #ifdef
+> > guards is simpler and allows the compiler to remove those functions
+> > if built without CONFIG_PM_SLEEP support.
+> >
+> > Signed-off-by: Hesham Almatary <hesham.almatary@huawei.com>
 >
-> These patches I'm sending introduce dynamic debug support to pm_pr_dbg()
-> while still maintaining the pm_debug_messages_on flag behavior if
-> dynamic debug is not used.
+> Looks good.
 >
-> Regards, David
->
-> ---
-> David Cohen (2):
->   PM: narrow down -DDEBUG on kernel/power/ files
->   PM: enable dynamic debug support within pm_pr_dbg()
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Both patches applied as 5.19 material, thanks!
+And applied as 5.19 material, thanks!
+
+> > ---
+> >  drivers/thermal/hisi_thermal.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/thermal/hisi_thermal.c
+> > b/drivers/thermal/hisi_thermal.c
+> > index 9a21ac0ceb11..b29ab09040d5 100644
+> > --- a/drivers/thermal/hisi_thermal.c
+> > +++ b/drivers/thermal/hisi_thermal.c
+> > @@ -629,7 +629,6 @@ static int hisi_thermal_remove(struct
+> > platform_device *pdev)
+> >       return 0;
+> >  }
+> >
+> > -#ifdef CONFIG_PM_SLEEP
+> >  static int hisi_thermal_suspend(struct device *dev)
+> >  {
+> >       struct hisi_thermal_data *data = dev_get_drvdata(dev);
+> > @@ -651,15 +650,14 @@ static int hisi_thermal_resume(struct device
+> > *dev)
+> >
+> >       return ret;
+> >  }
+> > -#endif
+> >
+> > -static SIMPLE_DEV_PM_OPS(hisi_thermal_pm_ops,
+> > +static DEFINE_SIMPLE_DEV_PM_OPS(hisi_thermal_pm_ops,
+> >                        hisi_thermal_suspend, hisi_thermal_resume);
+> >
+> >  static struct platform_driver hisi_thermal_driver = {
+> >       .driver = {
+> >               .name           = "hisi_thermal",
+> > -             .pm             = &hisi_thermal_pm_ops,
+> > +             .pm             = pm_sleep_ptr(&hisi_thermal_pm_ops),
+> >               .of_match_table = of_hisi_thermal_match,
+> >       },
+> >       .probe  = hisi_thermal_probe,
+> > --
+> > 2.25.1
+> >
+>
+>

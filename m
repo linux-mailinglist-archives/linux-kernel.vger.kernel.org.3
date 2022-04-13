@@ -2,292 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A48F4FF616
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB484FF615
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiDMLv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S235303AbiDMLwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbiDMLvw (ORCPT
+        with ESMTP id S235219AbiDMLwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:51:52 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55EE10DB
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:49:29 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id p1so1124859qtq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+8jFqFcU0xZx7N6D5w9B7yVdseP7o5/KM9phH/QTHjo=;
-        b=ko2TdTxuqfKCU4tsnqZF36XlNqKOYT7EFe58KR8KrMmw1yAlbm8oSlKkMM/XQebbLA
-         RpryExbl+HMKiyborYiIE9E1P4NEe3twHrNo0kPAGGHr62nNbtfMBliA5ZXkehVzIgag
-         yoX1HgrMYmf6yOfOtsgMf0t8KRECDsjBnU2KsSgqdSgRxqGxVtjMcHNLTJ79hv61GuqO
-         WlkyGQP+Uv3sfIpMhIbHfeEoz+BXG5Rq6Iq1lO6JIvdQYbluod6FXGViL2MZ7G+ELu6f
-         8rGU7gA1A6+kcxALqUZCjBnmXPhD9uRINaJjH+LkL8GvRItKJgnkwZDjLHNQu6d5LqBe
-         z47A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=+8jFqFcU0xZx7N6D5w9B7yVdseP7o5/KM9phH/QTHjo=;
-        b=dZWeOtKFUdq9HBRLdkyu4JYEPiKGJZzuwXUtA6LDma4+xJViyjDaFBLU106viUX+Co
-         AGHb09GnUnvdPePZnTuOQdnkj+hYcp5eQBPkbmax2P0E5wvin/4ujDNQ8oHMfbVle4Ry
-         qCrtrRQNtIB7R27rOKvHUN4wM2p4Nkno8PuMo0exRZtvnIHI6F7dWSQCnlHDZy5V0QqE
-         6ayYqbQwGMsF/rRiEuAjmF/GCCu0HqeBmxNs6HIg76+rW80kdnaZ5bE3Y8OLQZAXCVuQ
-         Z/NfZmMWNr7xJbdAprKBrt5pFKJkfflxz+Rrnvpc4ZhcBk33tDqMIDWtLkOQCQUkHagJ
-         EOFg==
-X-Gm-Message-State: AOAM531d1j0brT5dfcLRyBOwXhI0PVST1lOuffE4NmlPGwc/l5SBE7eu
-        fdRUgbdjbgxHQCuUb5p9FQ==
-X-Google-Smtp-Source: ABdhPJzO9UCxmF2Y8HpgxC0z14ZtJ6DunyO5PSmZmnKBgBpexWb2QnvFM+z4nMYfMjpJS88d1dHHdA==
-X-Received: by 2002:ac8:6ce:0:b0:2f0:29dd:bbc5 with SMTP id j14-20020ac806ce000000b002f029ddbbc5mr6831104qth.216.1649850568652;
-        Wed, 13 Apr 2022 04:49:28 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id i62-20020a37b841000000b0069c10d27571sm6158035qkf.70.2022.04.13.04.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 04:49:28 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:9015:968c:d8a4:67eb])
-        by serve.minyard.net (Postfix) with ESMTPSA id 5FB521800BB;
-        Wed, 13 Apr 2022 11:49:27 +0000 (UTC)
-Date:   Wed, 13 Apr 2022 06:49:26 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: drivers/char/ipmi/ipmi_msghandler.c:5283:17: warning: 'strncpy'
- specified bound 11 equals destination size
-Message-ID: <20220413114926.GE426325@minyard.net>
-Reply-To: minyard@acm.org
-References: <202204130109.hJ8G1iNz-lkp@intel.com>
- <20220413001600.GD426325@minyard.net>
- <34ee3d98-1947-299a-2c1b-22fe9b2bd93a@huawei.com>
+        Wed, 13 Apr 2022 07:52:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5F92DA96;
+        Wed, 13 Apr 2022 04:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 330C061DF3;
+        Wed, 13 Apr 2022 11:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C28AC385A3;
+        Wed, 13 Apr 2022 11:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649850611;
+        bh=THqDCvLfnB4Vl1fsgGQlKexdh/6abOcTHlctLXK8bvM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oOe9AUwS4wBUyP9HT1IJCgdIWbZGkyVYJy6nO2XYqq+9L5VUlJXoBX4iNCCtmYrnc
+         5RcrTCLHsdsjyqYXRuckuvT7F5rFa1TgyGHXhU+1tSYQQK4Yco9/pqgaC7pB0CZ2wt
+         jEO2HCNQVmLjVf/gv7+Hb2A9mNiuyAWWOR4VFDsBlY4ZYzPhWWZExSIx+nau/lHwKf
+         yLwrfnscdKcMTKQDwX2oa7NiRblAOSkSOfLg9BkTmjJZ/tW2atBqnpA7eiw+klCbPv
+         EqQmpj0DwAvQf85Gle0MLsyDIWEaqPPwfqwWROIrPM4VyhufKt3b9XhDYgqDzIuBRj
+         Yron797RQMJlg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65FB2E8DD5E;
+        Wed, 13 Apr 2022 11:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34ee3d98-1947-299a-2c1b-22fe9b2bd93a@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: ftgmac100: access hardware register after clock ready
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164985061139.24768.4926200477271415631.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Apr 2022 11:50:11 +0000
+References: <20220412114859.18665-1-dylan_hung@aspeedtech.com>
+In-Reply-To: <20220412114859.18665-1-dylan_hung@aspeedtech.com>
+To:     Dylan Hung <dylan_hung@aspeedtech.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        guoheyi@linux.alibaba.com, huangguangbin2@huawei.com,
+        chenhao288@hisilicon.com, yangyingliang@huawei.com, joel@jms.id.au,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        BMC-SW@aspeedtech.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 10:30:05AM +0800, Kefeng Wang wrote:
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue, 12 Apr 2022 19:48:59 +0800 you wrote:
+> AST2600 MAC register 0x58 is writable only when the MAC clock is
+> enabled.  Usually, the MAC clock is enabled by the bootloader so
+> register 0x58 is set normally when the bootloader is involved.  To make
+> ast2600 ftgmac100 work without the bootloader, postpone the register
+> write until the clock is ready.
 > 
-> On 2022/4/13 8:16, Corey Minyard wrote:
-> > On Wed, Apr 13, 2022 at 01:14:04AM +0800, kernel test robot wrote:
-> > > Hi Kefeng,
-> > > 
-> > > FYI, the error/warning still remains.
-> > > 
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-> > > commit: dd03762ab608e058c8f390ad9cf667e490089796 arm64: Enable KCSAN
-> > > date:   4 months ago
-> > > config: arm64-buildonly-randconfig-r003-20220412 (https://download.01.org/0day-ci/archive/20220413/202204130109.hJ8G1iNz-lkp@intel.com/config)
-> > > compiler: aarch64-linux-gcc (GCC) 11.2.0
-> > > reproduce (this is a W=1 build):
-> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >          chmod +x ~/bin/make.cross
-> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd03762ab608e058c8f390ad9cf667e490089796
-> > >          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > >          git fetch --no-tags linus master
-> > >          git checkout dd03762ab608e058c8f390ad9cf667e490089796
-> > >          # save the config file to linux build tree
-> > >          mkdir build_dir
-> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
-> > > 
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > >     drivers/char/ipmi/ipmi_msghandler.c: In function 'send_panic_events':
-> > > > > drivers/char/ipmi/ipmi_msghandler.c:5283:17: warning: 'strncpy' specified bound 11 equals destination size [-Wstringop-truncation]
-> > >      5283 |                 strncpy(data+5, p, 11);
-> > >           |                 ^~~~~~~~~~~~~~~~~~~~~~
-> > This is not a bug.  That's an 11 byte field that should be filled with
-> > zeros at the end if the string is <11 bytes, but is not nil terminated
-> > if it's 11 bytes.  So strncpy does exactly what is needed.
-> > 
-> > Is there any way to shut off this warning?
-> I think we can use strscpy or strscpy_pad to silence it.
+> Fixes: 137d23cea1c0 ("net: ftgmac100: Fix Aspeed ast2600 TX hang issue")
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> 
+> [...]
 
-strscpy nil-terminates even if it's a full buffer, which is not what I
-want.  I want exactly what strncpy does.  The only option I see is to
-open code it, which seems like a bad idea.
+Here is the summary with links:
+  - net: ftgmac100: access hardware register after clock ready
+    https://git.kernel.org/netdev/net/c/3d2504524531
 
--corey
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> > 
-> > -corey
-> > 
-> > > 
-> > > vim +/strncpy +5283 drivers/char/ipmi/ipmi_msghandler.c
-> > > 
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5143
-> > > a567b6230066e3 Corey Minyard  2018-04-05  5144  static void send_panic_events(struct ipmi_smi *intf, char *str)
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5145  {
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5146  	struct kernel_ipmi_msg msg;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5147  	unsigned char data[16];
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5148  	struct ipmi_system_interface_addr *si;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5149  	struct ipmi_addr addr;
-> > > 91e2dd0a47bae1 Corey Minyard  2018-03-28  5150  	char *p = str;
-> > > 91e2dd0a47bae1 Corey Minyard  2018-03-28  5151  	struct ipmi_ipmb_addr *ipmb;
-> > > 91e2dd0a47bae1 Corey Minyard  2018-03-28  5152  	int j;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5153
-> > > 1c9f98d1bfbd06 Corey Minyard  2017-08-18  5154  	if (ipmi_send_panic_event == IPMI_SEND_PANIC_EVENT_NONE)
-> > > 1c9f98d1bfbd06 Corey Minyard  2017-08-18  5155  		return;
-> > > 1c9f98d1bfbd06 Corey Minyard  2017-08-18  5156
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5157  	si = (struct ipmi_system_interface_addr *) &addr;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5158  	si->addr_type = IPMI_SYSTEM_INTERFACE_ADDR_TYPE;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5159  	si->channel = IPMI_BMC_CHANNEL;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5160  	si->lun = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5161
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5162  	/* Fill in an event telling that we have failed. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5163  	msg.netfn = 0x04; /* Sensor or Event. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5164  	msg.cmd = 2; /* Platform event command. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5165  	msg.data = data;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5166  	msg.data_len = 8;
-> > > cda315aba34ff4 Matt Domsch    2005-12-12  5167  	data[0] = 0x41; /* Kernel generator ID, IPMI table 5-4 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5168  	data[1] = 0x03; /* This is for IPMI 1.0. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5169  	data[2] = 0x20; /* OS Critical Stop, IPMI table 36-3 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5170  	data[4] = 0x6f; /* Sensor specific, IPMI table 36-1 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5171  	data[5] = 0xa1; /* Runtime stop OEM bytes 2 & 3. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5172
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5173  	/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5174  	 * Put a few breadcrumbs in.  Hopefully later we can add more things
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5175  	 * to make the panic events more useful.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5176  	 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5177  	if (str) {
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5178  		data[3] = str[0];
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5179  		data[6] = str[1];
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5180  		data[7] = str[2];
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5181  	}
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5182
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5183  	/* Send the event announcing the panic. */
-> > > 895dcfd1cab84d Corey Minyard  2012-03-28  5184  	ipmi_panic_request_and_wait(intf, &addr, &msg);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5185
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5186  	/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5187  	 * On every interface, dump a bunch of OEM event holding the
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5188  	 * string.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5189  	 */
-> > > 1c9f98d1bfbd06 Corey Minyard  2017-08-18  5190  	if (ipmi_send_panic_event != IPMI_SEND_PANIC_EVENT_STRING || !str)
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5191  		return;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5192
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5193  	/*
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5194  	 * intf_num is used as an marker to tell if the
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5195  	 * interface is valid.  Thus we need a read barrier to
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5196  	 * make sure data fetched before checking intf_num
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5197  	 * won't be used.
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5198  	 */
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5199  	smp_rmb();
-> > > 78ba2faf71c639 Corey Minyard  2007-02-10  5200
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5201  	/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5202  	 * First job here is to figure out where to send the
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5203  	 * OEM events.  There's no way in IPMI to send OEM
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5204  	 * events using an event send command, so we have to
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5205  	 * find the SEL to put them in and stick them in
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5206  	 * there.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5207  	 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5208
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5209  	/* Get capabilities from the get device id. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5210  	intf->local_sel_device = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5211  	intf->local_event_generator = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5212  	intf->event_receiver = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5213
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5214  	/* Request the device info from the local MC. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5215  	msg.netfn = IPMI_NETFN_APP_REQUEST;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5216  	msg.cmd = IPMI_GET_DEVICE_ID_CMD;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5217  	msg.data = NULL;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5218  	msg.data_len = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5219  	intf->null_user_handler = device_id_fetcher;
-> > > 895dcfd1cab84d Corey Minyard  2012-03-28  5220  	ipmi_panic_request_and_wait(intf, &addr, &msg);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5221
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5222  	if (intf->local_event_generator) {
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5223  		/* Request the event receiver from the local MC. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5224  		msg.netfn = IPMI_NETFN_SENSOR_EVENT_REQUEST;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5225  		msg.cmd = IPMI_GET_EVENT_RECEIVER_CMD;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5226  		msg.data = NULL;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5227  		msg.data_len = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5228  		intf->null_user_handler = event_receiver_fetcher;
-> > > 895dcfd1cab84d Corey Minyard  2012-03-28  5229  		ipmi_panic_request_and_wait(intf, &addr, &msg);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5230  	}
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5231  	intf->null_user_handler = NULL;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5232
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5233  	/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5234  	 * Validate the event receiver.  The low bit must not
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5235  	 * be 1 (it must be a valid IPMB address), it cannot
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5236  	 * be zero, and it must not be my address.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5237  	 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5238  	if (((intf->event_receiver & 1) == 0)
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5239  	    && (intf->event_receiver != 0)
-> > > 5fdb1fb2abe647 Corey Minyard  2017-09-05  5240  	    && (intf->event_receiver != intf->addrinfo[0].address)) {
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5241  		/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5242  		 * The event receiver is valid, send an IPMB
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5243  		 * message.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5244  		 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5245  		ipmb = (struct ipmi_ipmb_addr *) &addr;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5246  		ipmb->addr_type = IPMI_IPMB_ADDR_TYPE;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5247  		ipmb->channel = 0; /* FIXME - is this right? */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5248  		ipmb->lun = intf->event_receiver_lun;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5249  		ipmb->slave_addr = intf->event_receiver;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5250  	} else if (intf->local_sel_device) {
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5251  		/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5252  		 * The event receiver was not valid (or was
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5253  		 * me), but I am an SEL device, just dump it
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5254  		 * in my SEL.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5255  		 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5256  		si = (struct ipmi_system_interface_addr *) &addr;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5257  		si->addr_type = IPMI_SYSTEM_INTERFACE_ADDR_TYPE;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5258  		si->channel = IPMI_BMC_CHANNEL;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5259  		si->lun = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5260  	} else
-> > > 91e2dd0a47bae1 Corey Minyard  2018-03-28  5261  		return; /* No where to send the event. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5262
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5263  	msg.netfn = IPMI_NETFN_STORAGE_REQUEST; /* Storage. */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5264  	msg.cmd = IPMI_ADD_SEL_ENTRY_CMD;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5265  	msg.data = data;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5266  	msg.data_len = 16;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5267
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5268  	j = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5269  	while (*p) {
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5270  		int size = strlen(p);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5271
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5272  		if (size > 11)
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5273  			size = 11;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5274  		data[0] = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5275  		data[1] = 0;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5276  		data[2] = 0xf0; /* OEM event without timestamp. */
-> > > 5fdb1fb2abe647 Corey Minyard  2017-09-05  5277  		data[3] = intf->addrinfo[0].address;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5278  		data[4] = j++; /* sequence # */
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5279  		/*
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5280  		 * Always give 11 bytes, so strncpy will fill
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5281  		 * it with zeroes for me.
-> > > c70d749986f6f1 Corey Minyard  2008-04-29  5282  		 */
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16 @5283  		strncpy(data+5, p, 11);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5284  		p += size;
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5285
-> > > 895dcfd1cab84d Corey Minyard  2012-03-28  5286  		ipmi_panic_request_and_wait(intf, &addr, &msg);
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5287  	}
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5288  }
-> > > ^1da177e4c3f41 Linus Torvalds 2005-04-16  5289
-> > > 
-> > > :::::: The code at line 5283 was first introduced by commit
-> > > :::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-> > > 
-> > > :::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-> > > :::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-> > > 
-> > > -- 
-> > > 0-DAY CI Kernel Test Service
-> > > https://01.org/lkp
-> > .
+

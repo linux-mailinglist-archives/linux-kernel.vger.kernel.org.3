@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAE24FF443
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECB54FF442
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiDMJ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        id S234795AbiDMJ7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiDMJ7a (ORCPT
+        with ESMTP id S234787AbiDMJ7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:59:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA8056418
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:57:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39D59B82161
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5853BC385A4;
-        Wed, 13 Apr 2022 09:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649843826;
-        bh=Gvg7LRw/xZeBOxZ+ML/w+hzH8H2F8QR6fA7vJj6buX4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UtLOsXFywpemB7ZRATqgftGYZ2fEWxqCgcGuxcXQw4snvYCkDAhuUINIOxLb9b4aU
-         tqRfgkDGx/y7+jlGaHviy/A6MwxssuD+JFltbSeGrnGLtrDF1TQnzeDhePU/W4xRAq
-         Zd6NLWviWanUiFhp80yq14A1rRthHvVqjkaEcWIMUXH6Mr7mQxBg+MtNDYJFq7AwVw
-         XYAcy5Mq3i23R6aGWno+L9/mmAeOtD9QPwHZWQBLBsGnyxHMnYJeHi2VbpvgyEqVrC
-         ySu5hAoxch9aSVNu3NqrOMLwUbyj/JzryEan+0+XEPIyI+ZrIhXBp6njMIJuWFvzcY
-         +5vDvtXeBm5vw==
-Date:   Wed, 13 Apr 2022 15:27:03 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Swapnil Jakhade <sjakhade@cadence.com>
-Cc:     kishon@ti.com, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mparab@cadence.com,
-        a-govindraju@ti.com
-Subject: Re: [PATCH] phy: cadence: Sierra: Add TI J721E specific PCIe
- multilink lane configuration
-Message-ID: <Ylaeb1169qh/Nx5D@matsya>
-References: <20220303055026.24899-1-sjakhade@cadence.com>
+        Wed, 13 Apr 2022 05:59:36 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFA356400
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:57:15 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id bg10so2851569ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BoRyXJyiezioU86Sm/aljGreuf33ZfT6BJLzBNsYxXg=;
+        b=omhuFPP17o7WmTkQEZ/ey1v3Go+8BL8tjJxT4U351QG/ra9Bryv3m3VIz9SPeHTJ17
+         jCw/SE//G3phX7o7tXLoRgKcoX4BSJ9PABjI9xQCFfe6W3G4swybnV3G/h9LsnOdLbwT
+         5fagV3p66C2I+jC4xwGmJolqwcFge+Ye4XnAndQ37sv6VLhVJSNCl9h8uNrA5FsAHPPa
+         FHzmSsT6IsXqjyoO/7HBo4+CLfRCzPbqWXRse5r+JNQlmAGCgbB2E35s3laF1+fuCL82
+         tkCC1kZSg/JtVprV+SxonH1pDFjrmnVdxcygBf88gFWybmaonjF9JtnH6Rq8hQS9fQ6F
+         v/UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BoRyXJyiezioU86Sm/aljGreuf33ZfT6BJLzBNsYxXg=;
+        b=UVqPReEi9dUPeMqdCk6QICnfWOnkl+ME4HMJtv4DMj9Ex+wAjDkwv4AnVGJiriNU1r
+         RuZTnxWBgRjFsIKdYWu1Cjekfkvn09u4lsbNoyz8vDfhCiTRcG85vnAD/IUmkh1O4/55
+         jnAHwNDcI5qkv9a/5bTvPQH+jBYtnYTDDQazV63iHzmhMbz5l/l092amF6vhf+9rleu6
+         0z0XDSRAZyQOx8N0+DZM4o1u8a6twpGy8F4RPqYwyMPQ8UYWb0hyn1Z+tzWk48QmPpo8
+         jIVMfCHPJPayadgwMZHkynH7bOTDkOyOkXn7X7C0I6BhRXjTXTRx3Bd6T+nmaVGDx3Pn
+         NTmw==
+X-Gm-Message-State: AOAM530s7oE62G734BVmooGywiBR3REORkPDZO7QgtVvSqeXcQmvH2mV
+        g0mboSxBaFc0aq/ehsCYo0LRRMPaWOlUvR8n
+X-Google-Smtp-Source: ABdhPJy2fHjgfklx0Z5VlYqV/vz9vbavseCTQTpvw3q5LckX8zitbG3juuiHqZrfjR9BZ7vSaecpgw==
+X-Received: by 2002:a17:906:19c6:b0:6ce:98a4:5ee6 with SMTP id h6-20020a17090619c600b006ce98a45ee6mr37493225ejd.567.1649843834448;
+        Wed, 13 Apr 2022 02:57:14 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170906d20600b006ca00cb99e0sm13883293ejz.34.2022.04.13.02.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 02:57:14 -0700 (PDT)
+Message-ID: <1a12abfa-3459-18d8-5214-221f5184a9cd@linaro.org>
+Date:   Wed, 13 Apr 2022 11:57:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303055026.24899-1-sjakhade@cadence.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] phy: samsung: exynos5250-sata: fix missing device put in
+ probe error paths
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220309170028.51913-1-krzysztof.kozlowski@canonical.com>
+ <YladK4z//z1hmTRX@matsya>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YladK4z//z1hmTRX@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,39 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03-03-22, 06:50, Swapnil Jakhade wrote:
-> This patch adds workaround for TI J721E errata i2183
-> (https://www.ti.com/lit/er/sprz455a/sprz455a.pdf).
-> PCIe fails to link up if SERDES lanes not used by PCIe are assigned to
-> another protocol. For example, link training fails if lanes 2 and 3 are
-> assigned to another protocol while lanes 0 and 1 are used for PCIe to
-> form a two lane link. This failure is due to an incorrect tie-off on an
-> internal status signal indicating electrical idle.
+On 13/04/2022 11:51, Vinod Koul wrote:
+> On 09-03-22, 18:00, Krzysztof Kozlowski wrote:
+>> The actions of of_find_i2c_device_by_node() in probe function should be
+>> reversed in error paths by putting the reference to obtained device.
 > 
-> Status signals going from SERDES to PCIe Controller are tied-off when a
-> lane is not assigned to PCIe. Signal indicating electrical idle is
-> incorrectly tied-off to a state that indicates non-idle. As a result,
-> PCIe sees unused lanes to be out of electrical idle and this causes
-> LTSSM to exit Detect.Quiet state without waiting for 12ms timeout to
-> occur. If a receiver is not detected on the first receiver detection
-> attempt in Detect.Active state, LTSSM goes back to Detect.Quiet and
-> again moves forward to Detect.Active state without waiting for 12ms as
-> required by PCIe base specification. Since wait time in Detect.Quiet is
-> skipped, multiple receiver detect operations are performed back-to-back
-> without allowing time for capacitance on the transmit lines to
-> discharge. This causes subsequent receiver detection to always fail even
-> if a receiver gets connected eventually.
-> 
-> The workaround only works for 1-lane PCIe configuration. This workaround
-> involves enabling receiver detect override by setting TX_RCVDET_OVRD_PREG_j
-> register of the lane running PCIe to 0x2. This causes SERDES to indicate
-> successful receiver detect when LTSSM is in Detect.Active state, whether a
-> receiver is actually present or not. If the receiver is present, LTSSM
-> proceeds to link up as expected. However if receiver is not present, LTSSM
-> will time out in Polling.Configuration substate since the expected training
-> sequence packets will not be received.
+> This fails to apply on phy-fixes, pls rebase
 
-Applied, thanks
+You applied resent version, so you can ignore this one.
 
--- 
-~Vinod
+https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?h=fixes&id=5c8402c4db45dd55c2c93c8d730f5dfa7c78a702
+
+
+Best regards,
+Krzysztof

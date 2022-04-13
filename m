@@ -2,218 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71514FF08C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2844FF08F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiDMH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        id S233351AbiDMHaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiDMH3n (ORCPT
+        with ESMTP id S229718AbiDMHaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:29:43 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A2CD47
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:27:23 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id w19so1898376lfu.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:27:22 -0700 (PDT)
+        Wed, 13 Apr 2022 03:30:05 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007D618E0C;
+        Wed, 13 Apr 2022 00:27:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ks6so2155675ejb.1;
+        Wed, 13 Apr 2022 00:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QARgvmkpr8VVbyyV9NCF/ci4KYaV871c1Ej+b6nyl0E=;
-        b=aSERqlI6AgOSiUivPNKdqIbmT5M9Xv2yCQJxrGNk7ZF/XMJYXIkpoKgA/YEvUsje1y
-         090G2iyN7TJFvJqgRn2IQVPedZ7bIlDdZgkwACxORsQ2x47GASAOJ574hsEiNHtY+A6M
-         QP6guAS99tnF4hG5Mez/T74bgZbcRgageIJ5cDoirD1/URyjKP1zHU40n4Cv+Ry8dGq7
-         N6QvyW1QExYFHxrk7cBYKxObhUqiVaswFg+dbdwgDhVkVaeqZdK15cui+TR1pSjhdCTm
-         Xfl2vUq4bJROYc6z7yV+MR5BYUpJxIpxzNHJNDdb4PeudOFx44liJBr9QkHa+xzMXNn5
-         wonQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qwO5x8daEsKn7AJxj0XCIjFXgnsykAoMFtFOPr30/OY=;
+        b=omH/vMEmEDVQszB0OIuSdTvi7p/jJXy6R7A4244H80S4k3+XRyMjfRgpMOFKczNheK
+         0jy7I2xFnKdHegbsri9PY8EXS+4uFYoIGtYTxKnQ/I1UBHEt3e/74Tk+DLZwRfczFDpL
+         4nNc2M9wLBIW/NcnCJpG3Nwg22ZUYnph1J536J98rJMFw4wSWrNNxwdCYDzXjpoELrb8
+         AiYRB7OjbIX80I0M3LzLL+ukfZ3T35MEbZ7hX6tNFGAwytw5AuBCjFFIbH7dL7b1ku0X
+         TxjTMYhCbTwQn0DDRcsEGgsEp0t2OHz72ifkKSR4lHRLVLybOQnppkwpv8o9RuAJmVOv
+         jLaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QARgvmkpr8VVbyyV9NCF/ci4KYaV871c1Ej+b6nyl0E=;
-        b=gyV7IiWoDVj/u4ePHEoA/QKMOmdFfR/tTsF2JAHfuuPXPdZPKXTjShmBCXw4S9fMZq
-         KRhH1CEm8N/iRKVpg2dtCQfmWgS8BmQB2Pai/jDpcn3/UEITkLKUKY+80iTG5LCoUTn7
-         CCyFfJR6fSs1vK5lRva1Pos5w1/1Gn/GdBWRv7oYGXUOx8SnIHUn2Kuzh0okhz9ZAtrN
-         xNh3DCib6AszzIeUzZPG5T+0m9aH8oRnt5K/9PC2EEvirXQ6QUXZMZ8A8d6tVBsVzQWU
-         qwVCm8G8WcuKhlFJoQX1ww3vQxTLsWu4mq9xN3sfB/spM6Ds0fOGT4P9CsM8WkeciNQm
-         60yA==
-X-Gm-Message-State: AOAM533wO0gJ0xgRnN2m2OmPp6q0WM3FiodqTiDWrF5GTwnXcEk5xs1P
-        H95l8LheXWi8ObRKggk5HvxZsA==
-X-Google-Smtp-Source: ABdhPJyCMeaEoNC8ctpBkTlLeoBr7h/Q6l6by9SEIGLzZHnngd0lYcZwtTOD4kceei/TXW5O2Cm12Q==
-X-Received: by 2002:a05:6512:1526:b0:45d:cd2b:912d with SMTP id bq38-20020a056512152600b0045dcd2b912dmr28578677lfb.409.1649834841264;
-        Wed, 13 Apr 2022 00:27:21 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b6-20020a2ebc06000000b0024b5c9e91c4sm1125356ljf.63.2022.04.13.00.27.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 00:27:20 -0700 (PDT)
-Message-ID: <bad40b1b-73af-a1f3-d0df-b59e4a599015@linaro.org>
-Date:   Wed, 13 Apr 2022 10:27:19 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qwO5x8daEsKn7AJxj0XCIjFXgnsykAoMFtFOPr30/OY=;
+        b=hWU0dyWKA1xacCZ4qhwUtkslimdEHXFO9Ni3Bcnlf3CgPV01Ma2A3n9CEQ1YQ3PaCD
+         Bd//xRIshLJbJnj0sht+ZDFOkvrcU3wX5yh86LS2JEXdhGyDA5Sn+OgEUu8+xserxEqQ
+         5AMdyvdw/5odPWi3aIJIb+djkIWAdPA5YbcaK4CFPNRwIr3LyBKkM0ht2aycDV+NhpUM
+         NRHMNqElnj01RidwJrXJE26ZAWisW2pn2oKfWyTg5S/eBd4eGBFN05Syns8hJk/05m4Y
+         zo00FTPVFul2shk+q6VFmTlgxz/qrch2yg/9Y2+wDgTmx3Szo1dIkDe/P0O/X/Ab8neo
+         wY2g==
+X-Gm-Message-State: AOAM533/g2UAUJnyRTCYTPjVzthlUr+PyxuPrwIRQi+sIbgi9yleF3+w
+        UKA1a1ScYxgpo5o4jPDbbO0=
+X-Google-Smtp-Source: ABdhPJymyC0Lf62J4fDfrOo+9dDUgyCYtUkNg5mcd26g90i1LvwiUVdLiE+l5WqgQs6DUMH4EFe2EQ==
+X-Received: by 2002:a17:907:6093:b0:6e0:dabf:1a9f with SMTP id ht19-20020a170907609300b006e0dabf1a9fmr37979065ejc.424.1649834863420;
+        Wed, 13 Apr 2022 00:27:43 -0700 (PDT)
+Received: from krava ([83.240.62.142])
+        by smtp.gmail.com with ESMTPSA id q3-20020a5085c3000000b0041d7958ae70sm831859edh.25.2022.04.13.00.27.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 00:27:43 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 09:27:40 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
+Message-ID: <YlZ7bAY1lDQWxUgH@krava>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+ <20220407125224.310255-2-jolsa@kernel.org>
+ <20220408095701.54aea15c3cafcf66dd628a95@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/2] phy: qcom-qmp: Add SM8150 PCIe QMP PHYs
-Content-Language: en-GB
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-phy@lists.infradead.org
-Cc:     bhupesh.linux@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        bjorn.andersson@linaro.org
-References: <20220325222130.1783242-1-bhupesh.sharma@linaro.org>
- <20220325222130.1783242-3-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220325222130.1783242-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408095701.54aea15c3cafcf66dd628a95@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 01:21, Bhupesh Sharma wrote:
-> SM8150 has multiple (different) PHY versions:
-> QMP GEN3x1 PHY - 1 lane
-> QMP GEN3x2 PHY - 2 lanes
+On Fri, Apr 08, 2022 at 09:57:01AM +0900, Masami Hiramatsu wrote:
+
+SNIP
+
+> >  /*
+> >   * These will be re-linked against their real values
+> > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
+> >  	return __sprint_symbol(buffer, address, -1, 1, 1);
+> >  }
+> >  
+> > +static int symbols_cmp(const void *a, const void *b)
+> > +{
+> > +	const char **str_a = (const char **) a;
+> > +	const char **str_b = (const char **) b;
+> > +
+> > +	return strcmp(*str_a, *str_b);
+> > +}
+> > +
+> > +struct kallsyms_data {
+> > +	unsigned long *addrs;
+> > +	const char **syms;
+> > +	u32 cnt;
+> > +	u32 found;
 > 
-> Add support for these with relevant init sequence.
+> BTW, why do you use 'u32' for this arch independent code?
+> I think 'size_t' will make its role clearer.
+
+right, will change
+
 > 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp.c | 90 +++++++++++++++++++++++++++++
->   1 file changed, 90 insertions(+)
+> > +};
+> > +
+> > +static int kallsyms_callback(void *data, const char *name,
+> > +			     struct module *mod, unsigned long addr)
+> > +{
+> > +	struct kallsyms_data *args = data;
+> > +
+> > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
+> > +		return 0;
+> > +
+> > +	addr = ftrace_location(addr);
+> > +	if (!addr)
+> > +		return 0;
+> > +
+> > +	args->addrs[args->found++] = addr;
+> > +	return args->found == args->cnt ? 1 : 0;
+> > +}
+> > +
+> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index b144ae1f729a..8e928b9619b6 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -3294,6 +3294,11 @@ static const char * const sdm845_pciephy_clk_l[] = {
->   	"aux", "cfg_ahb", "ref", "refgen",
->   };
->   
-> +/* the pcie phy on sm8150 doesn't have a ref clock */
-> +static const char * const sm8150_pciephy_clk_l[] = {
-> +	"aux", "cfg_ahb", "refgen",
+> Ditto. I think 'size_t cnt' is better. 
 
-On sm8250 we use GCC_WIFI/WIGIG/MDM_CLKREF_EN clocks as "ref". 
-Downstream dts lists them as "pcie_X_ldo". sm8150 also has these clocks 
-(GCC_PCIE_n_CLKREF_CLK). Is there any reason why we use CLKREF clocks on 
-sm8250, but ommit them on sm8150?
+ok, thanks
 
-> +};
-> +
->   static const char * const qmp_v4_phy_clk_l[] = {
->   	"aux", "ref_clk_src", "ref", "com_aux",
->   };
-> @@ -3583,6 +3588,85 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
->   	.pwrdn_delay_max	= 1005,		/* us */
->   };
->   
-> +static const struct qmp_phy_cfg sm8150_qmp_gen3x1_pciephy_cfg = {
-> +	.type = PHY_TYPE_PCIE,
-> +	.nlanes = 1,
-> +
-> +	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-> +	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-> +	.serdes_tbl_sec		= sm8250_qmp_gen3x1_pcie_serdes_tbl,
-> +	.serdes_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_serdes_tbl),
-> +	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-> +	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-> +	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-> +	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-> +	.rx_tbl_sec		= sm8250_qmp_gen3x1_pcie_rx_tbl,
-> +	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_rx_tbl),
-> +	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-> +	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-> +	.pcs_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_tbl,
-> +	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_tbl),
-> +	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-> +	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-> +	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_misc_tbl,
-> +	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_misc_tbl),
-> +	.clk_list		= sm8150_pciephy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-> +	.reset_list		= sdm845_pciephy_reset_l,
-> +	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-> +	.vreg_list		= qmp_phy_vreg_l,
-> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> +	.regs			= sm8250_pcie_regs_layout,
-> +
-> +	.start_ctrl		= PCS_START | SERDES_START,
-> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> +	.phy_status		= PHYSTATUS,
-> +
-> +	.has_pwrdn_delay	= true,
-> +	.pwrdn_delay_min	= 995,		/* us */
-> +	.pwrdn_delay_max	= 1005,		/* us */
-> +};
-> +
-> +static const struct qmp_phy_cfg sm8150_qmp_gen3x2_pciephy_cfg = {
-> +	.type = PHY_TYPE_PCIE,
-> +	.nlanes = 2,
-> +
-> +	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-> +	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-> +	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-> +	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-> +	.tx_tbl_sec		= sm8250_qmp_gen3x2_pcie_tx_tbl,
-> +	.tx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_tx_tbl),
-> +	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-> +	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-> +	.rx_tbl_sec		= sm8250_qmp_gen3x2_pcie_rx_tbl,
-> +	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_rx_tbl),
-> +	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-> +	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-> +	.pcs_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_tbl,
-> +	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_tbl),
-> +	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-> +	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-> +	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_misc_tbl,
-> +	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_misc_tbl),
-> +	.clk_list		= sm8150_pciephy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-> +	.reset_list		= sdm845_pciephy_reset_l,
-> +	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-> +	.vreg_list		= qmp_phy_vreg_l,
-> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> +	.regs			= sm8250_pcie_regs_layout,
-> +
-> +	.start_ctrl		= PCS_START | SERDES_START,
-> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> +	.phy_status		= PHYSTATUS,
-> +
-> +	.is_dual_lane_phy	= true,
-> +	.has_pwrdn_delay	= true,
-> +	.pwrdn_delay_min	= 995,		/* us */
-> +	.pwrdn_delay_max	= 1005,		/* us */
-> +};
-> +
->   static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
->   	.type = PHY_TYPE_PCIE,
->   	.nlanes = 1,
-> @@ -6007,6 +6091,12 @@ static const struct of_device_id qcom_qmp_phy_of_match_table[] = {
->   	}, {
->   		.compatible = "qcom,sm6115-qmp-ufs-phy",
->   		.data = &sm6115_ufsphy_cfg,
-> +	}, {
-> +		.compatible = "qcom,sm8150-qmp-gen3x1-pcie-phy",
-> +		.data = &sm8150_qmp_gen3x1_pciephy_cfg,
-> +	}, {
-> +		.compatible = "qcom,sm8150-qmp-gen3x2-pcie-phy",
-> +		.data = &sm8150_qmp_gen3x2_pciephy_cfg,
->   	}, {
->   		.compatible = "qcom,sm8150-qmp-ufs-phy",
->   		.data = &sm8150_ufsphy_cfg,
+jirka
 
-
--- 
-With best wishes
-Dmitry
+> 
+> Thank you,
+> 
+> > +{
+> > +	struct kallsyms_data args;
+> > +
+> > +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
+> > +
+> > +	args.addrs = addrs;
+> > +	args.syms = syms;
+> > +	args.cnt = cnt;
+> > +	args.found = 0;
+> > +	kallsyms_on_each_symbol(kallsyms_callback, &args);
+> > +
+> > +	return args.found == args.cnt ? 0 : -EINVAL;
+> > +}
+> > +
+> >  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
+> >  struct kallsym_iter {
+> >  	loff_t pos;
+> > -- 
+> > 2.35.1
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>

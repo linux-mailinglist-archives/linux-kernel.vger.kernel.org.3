@@ -2,134 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D655500098
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5215000B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238906AbiDMVIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
+        id S235260AbiDMVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbiDMVIT (ORCPT
+        with ESMTP id S229646AbiDMVMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:08:19 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57CA8567F;
-        Wed, 13 Apr 2022 14:05:45 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id e4so3408707oif.2;
-        Wed, 13 Apr 2022 14:05:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gFOeEZI4pNvyN/LTAgs9rmC19q7UkYUYT1AJpJxfpdI=;
-        b=CLMygoQkFZgsg9JIYleQ/To94LdtInmzdM0RwpZCpzVvzNCyqjeHcuZwVNW2eqGrgo
-         h6XsG/emJnvdlU1e+R4GyW1vj0HUgrEJlzXoFJGiOtD+ug7MPOL1MdRV3o7O6nVEWvbH
-         92Ka1+EXAp1BofddkFnvJidBQ7A/pnqUFojJtJ7Ix2j+3tME1dE5xtYvlrGECdoKivpW
-         chHUfy5HIe4layMfrRk122/b45OvX8l6LBmQ4bEqUqKzsYf+0PeGw8b4QcaBcBT5ysCr
-         zO9nPeDYSarqdUyr+yKsUvqrXsYWdXP46aiaNElAT4CRBfV7Wl1O0AH0JRfEquSlaRRt
-         38qw==
-X-Gm-Message-State: AOAM532qyjP+jGApTg6EWXS6jw174s5pWl/ZUBp91oAnNQB7L4IFzq/r
-        aeGMLegu6sZkVQHzNpQZCA==
-X-Google-Smtp-Source: ABdhPJx5RFeYJLnhl//6T0M97AfdmhJRF0naPw/lnbT5EgrjjTgh8f2EadEd00qJESa3eceTDi9c0w==
-X-Received: by 2002:a05:6808:1a26:b0:2da:1bae:5186 with SMTP id bk38-20020a0568081a2600b002da1bae5186mr22287oib.144.1649883945133;
-        Wed, 13 Apr 2022 14:05:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056871078700b000e29ff467dcsm44358oap.50.2022.04.13.14.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:05:44 -0700 (PDT)
-Received: (nullmailer pid 3917373 invoked by uid 1000);
-        Wed, 13 Apr 2022 21:05:44 -0000
-Date:   Wed, 13 Apr 2022 16:05:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC
- bindings
-Message-ID: <Ylc7KJBXPXNML7UM@robh.at.kernel.org>
-References: <20220408224321.627126-1-bjorn.andersson@linaro.org>
- <0eb126b3-b323-9614-361a-22c2762b590a@linaro.org>
+        Wed, 13 Apr 2022 17:12:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD68396AF;
+        Wed, 13 Apr 2022 14:09:53 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 4EAD71F473D2;
+        Wed, 13 Apr 2022 22:09:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649884191;
+        bh=NXfE3m0blQYAD216srx6k3KFQ3FlsjslFM9iENtE754=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mCiS9x/nrN+iDb4jLyyUkpSwyw9Uf4yjAlK3Y/EeQfwteUPpNKKrJAsVDuNnrtbNB
+         EKNQqyqcAK2IQu9n3xq1nUChJc1lAdxU2qFI6J/kQs6tZJyR0aY2BIzmPoYDdyjSCj
+         D0xq4MqsCSQVmUt+Qyptlxhw1lCHABoCpnlRBl/auehQQLAJaItT7NSoKGQgLBN2GU
+         8egbvpU3+vACEA4ROoOxja74Mq120XqN2Gscb3/bn3Z00+WnzXFo7ZfPSbQ45OQct8
+         QMwzr6UOO0LHHv+pzqpoikcwYkHXdl2bsRrhw8Zdynfxwy9oNsAhAoSlRWy8p29kn6
+         6O/TPiq1nrVPA==
+Message-ID: <ae1d1098-f8b5-f41a-c33b-0f4863a43d5e@collabora.com>
+Date:   Thu, 14 Apr 2022 00:09:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0eb126b3-b323-9614-361a-22c2762b590a@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v7 3/4] dt-bindings: memory: Update reg/reg-names
+ validation
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     digetx@gmail.com, krzysztof.kozlowski@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220413094012.13589-1-amhetre@nvidia.com>
+ <20220413094012.13589-4-amhetre@nvidia.com>
+ <YlbSGEBKgpVC51dZ@robh.at.kernel.org>
+ <b050247d-a62c-62e7-7750-24cefcc93506@collabora.com>
+ <71fc3efb-5110-287e-0422-10c1ae90139c@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <71fc3efb-5110-287e-0422-10c1ae90139c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 06:41:25PM +0200, Krzysztof Kozlowski wrote:
-> On 09/04/2022 00:43, Bjorn Andersson wrote:
-> > Add binding for the Qualcomm SC8280XP Global Clock controller.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  .../bindings/clock/qcom,gcc-sc8280xp.yaml     | 199 +++++++
-> >  include/dt-bindings/clock/qcom,gcc-sc8280xp.h | 496 ++++++++++++++++++
-> >  2 files changed, 695 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-> >  create mode 100644 include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-> > new file mode 100644
-> > index 000000000000..44e5f0d0a795
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-> > @@ -0,0 +1,199 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/qcom,gcc-sc8280xp.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm Global Clock & Reset Controller Binding for SC8280xp
-> > +
-> > +maintainers:
-> > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > +
-> > +description: |
-> > +  Qualcomm global clock control module which supports the clocks, resets and
-> > +  power domains on SC8280xp.
-> > +
-> > +  See also:
-> > +  - dt-bindings/clock/qcom,gcc-sc8280xp.h
+On 4/13/22 19:17, Ashish Mhetre wrote:
 > 
-> include/dt-bindings/...
 > 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: qcom,gcc-sc8280xp
-> > +
+> On 4/13/2022 7:34 PM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 4/13/22 16:37, Rob Herring wrote:
+>>> On Wed, Apr 13, 2022 at 03:10:11PM +0530, Ashish Mhetre wrote:
+>>>>  From tegra186 onwards, memory controller support multiple channels.
+>>>> Reg items are updated with address and size of these channels.
+>>>> Tegra186 has overall 5 memory controller channels. Tegra194 and
+>>>> tegra234
+>>>> have overall 17 memory controller channels each.
+>>>> There is 1 reg item for memory controller stream-id registers.
+>>>> So update the reg maxItems to 18 in tegra186 devicetree documentation.
+>>>> Also update validation for reg-names added for these corresponding reg
+>>>> items.
+>>>
+>>> Somehow your subject should indicate this is for Tegra.
+>>>
+>>>>
+>>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>>> ---
+>>>>   .../nvidia,tegra186-mc.yaml                   | 80
+>>>> +++++++++++++++++--
+>>>>   1 file changed, 74 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git
+>>>> a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>> b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>
+>>>> index 13c4c82fd0d3..c7cfa6c2cd81 100644
+>>>> ---
+>>>> a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>
+>>>> +++
+>>>> b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>
+>>>> @@ -34,8 +34,12 @@ properties:
+>>>>             - nvidia,tegra234-mc
+>>>>
+>>>>     reg:
+>>>> -    minItems: 1
+>>>> -    maxItems: 3
+>>>> +    minItems: 6
+>>>
+>>> You just broke current users.
+>>>
+>>>> +    maxItems: 18
+>>>> +
+>>>> +  reg-names:
+>>>> +    minItems: 6
+>>>> +    maxItems: 18
+>>>>
+>>>>     interrupts:
+>>>>       items:
+>>>> @@ -142,7 +146,18 @@ allOf:
+>>>>       then:
+>>>>         properties:
+>>>>           reg:
+>>>> -          maxItems: 1
+>>>> +          maxItems: 6
+>>>> +          description: 5 memory controller channels and 1 for
+>>>> stream-id registers
+>>>> +
+>>>> +        reg-names:
+>>>> +          maxItems: 6
+>>>> +          items:
+>>>> +            - const: sid
+>>>> +            - const: broadcast
+>>>> +            - const: ch0
+>>>> +            - const: ch1
+>>>> +            - const: ch2
+>>>> +            - const: ch3
+>>>>
+>>>>     - if:
+>>>>         properties:
+>>>> @@ -151,7 +166,30 @@ allOf:
+>>>>       then:
+>>>>         properties:
+>>>>           reg:
+>>>> -          minItems: 3
+>>>> +          minItems: 18
+>>>> +          description: 17 memory controller channels and 1 for
+>>>> stream-id registers
+>>>> +
+>>>> +        reg-names:
+>>>> +          minItems: 18
+>>>> +          items:
+>>>> +            - const: sid
+>>>> +            - const: broadcast
+>>>> +            - const: ch0
+>>>> +            - const: ch1
+>>>> +            - const: ch2
+>>>> +            - const: ch3
+>>>> +            - const: ch4
+>>>> +            - const: ch5
+>>>> +            - const: ch6
+>>>> +            - const: ch7
+>>>> +            - const: ch8
+>>>> +            - const: ch9
+>>>> +            - const: ch10
+>>>> +            - const: ch11
+>>>> +            - const: ch12
+>>>> +            - const: ch13
+>>>> +            - const: ch14
+>>>> +            - const: ch15
+>>>>
+>>>>     - if:
+>>>>         properties:
+>>>> @@ -160,13 +198,37 @@ allOf:
+>>>>       then:
+>>>>         properties:
+>>>>           reg:
+>>>> -          minItems: 3
+>>>> +          minItems: 18
+>>>> +          description: 17 memory controller channels and 1 for
+>>>> stream-id registers
+>>>> +
+>>>> +        reg-names:
+>>>> +          minItems: 18
+>>>> +          items:
+>>>> +            - const: sid
+>>>> +            - const: broadcast
+>>>> +            - const: ch0
+>>>> +            - const: ch1
+>>>> +            - const: ch2
+>>>> +            - const: ch3
+>>>> +            - const: ch4
+>>>> +            - const: ch5
+>>>> +            - const: ch6
+>>>> +            - const: ch7
+>>>> +            - const: ch8
+>>>> +            - const: ch9
+>>>> +            - const: ch10
+>>>> +            - const: ch11
+>>>> +            - const: ch12
+>>>> +            - const: ch13
+>>>> +            - const: ch14
+>>>> +            - const: ch15
+>>>>
+>>>>   additionalProperties: false
+>>>>
+>>>>   required:
+>>>>     - compatible
+>>>>     - reg
+>>>> +  - reg-names
+>>>
+>>> New, added properties cannot be required. That's an ABI break.
+>>>
+>>>>     - interrupts
+>>>>     - "#address-cells"
+>>>>     - "#size-cells"
+>>>> @@ -182,7 +244,13 @@ examples:
+>>>>
+>>>>           memory-controller@2c00000 {
+>>>>               compatible = "nvidia,tegra186-mc";
+>>>> -            reg = <0x0 0x02c00000 0x0 0xb0000>;
+>>>> +            reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
+>>>> +                  <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast
+>>>> channel */
+>>>> +                  <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
+>>>> +                  <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
+>>>> +                  <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
+>>>> +                  <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
+>>>> +            reg-names = "sid", "broadcast", "ch0", "ch1", "ch2",
+>>>> "ch3";
+>>>>               interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+>>>>
+>>>>               #address-cells = <2>;
+>>>> -- 
+>>>> 2.17.1
+>>>>
+>>
+>> Oh, wait.. I didn't notice that the new reg ranges are only splitting up
+>> the old ranges. Previously it appeared to me that these are the new
+>> ranges.
+>>  > Ashish, in this case you don't need to change the regs in the DT at
+>> all.
+>> Instead, you need to specify the per-channel reg-base offsets in the
+>> driver code.
 > 
-> (...)
-> 
-> > +
-> > +  '#power-domain-cells':
-> > +    const: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  protected-clocks:
-> > +    description:
-> > +      Protected clock specifier list as per common clock binding.
-> 
-> There is still no schema with protected-clocks, so you need a type,
-> unless someoone is working on adding this to schema?
+> Yes, it's kind of splitting up the old ranges and straight forward for
+> Tegra186. But on Tegra194 and Tegra234 the old address is not in single
+> range. It's already split across 3 ranges. We have to choose right range
+> and add channel offsets to that range in order to read interrupts.
+> So I went with the approach of splitting the regs in DT itself as per
+> the channels because that way they can be mapped in a single loop and
+> used easily.
+> If we want to specify per-channel reg-base offsets then that would be
+> per-SOC. Also we would need to choose correct reg-range for Tegra194 and
+> Tegra234 and have a way to maintain offsets of channels from those
+> respective reg-ranges.
 
-The 16th addition always gets caught...
-
-I've just added one to dtschema.
-
-Rob
+That is not nice too. Should be better to switch to the new DT scheme,
+since those channels weren't used by older kernels. It's okay to change
+the binding ABI in this case then, driver will continue to work for the
+older dtbs. Have you tested driver using the older dtbs?

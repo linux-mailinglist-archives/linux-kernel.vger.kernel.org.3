@@ -2,159 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABACC4FFAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A36A4FFAFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbiDMQJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S236784AbiDMQL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbiDMQJa (ORCPT
+        with ESMTP id S230442AbiDMQL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:09:30 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAB966AF0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:07:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x17so4376782lfa.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:07:07 -0700 (PDT)
+        Wed, 13 Apr 2022 12:11:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5059E66CA9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:09:05 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v15so2955143edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+gGRtOFsAgBFuY/HR0wysWygPo2Lk5mA8o5nY/205wk=;
-        b=CBUODdGn8Cq6YWWpsGh25g2014RVwdTZRnAx4hj0paLyMetGc9QwHOC5u+2SdFeVYA
-         VvK1ZlpY9V2BtWRJTDTqpZOpcC6fbev33f/xPzINT0kbw7Kxz+A57bc6VVkLD9EFGYkg
-         ya/mlUHqv/9wy5D8+qN8VNq8I0qnEezdCsFK/3adMddyD5q/EGZzwGl1lnSYq8aYDzCt
-         qjugJks2FNh9Yty4SUfW3bwm8NQpYlYvgECkEoM92Y7YxZU3tEgH0x4Ikp1mV1zmRCil
-         kwrzg4MQCPuF5TAvQgN1MVxDeB2YlKNKso3VV0rWnbueKEGJQEeIpKN+7h0BKC/hqJah
-         8yPg==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UHgRvgx7SYkj5pmKsaI78m5hk2m1gV/Mhyu2PiUCr4E=;
+        b=lBWu77Y5D2mXiuJjDT0MwNKo4A9phca9/l3ON7aH+9P/8o1crWjKtyOgzTb9xU22b9
+         7aVTH9ZGs6JjySr9UuH8nGq/ISCdGFOLsZ4UR+IKEGEWHTPoPfamJO4M13rX2YBRB2JR
+         VwpNLfXuj30Zt7vEd7WXD6Z25w3WffY1aQ5Og=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+gGRtOFsAgBFuY/HR0wysWygPo2Lk5mA8o5nY/205wk=;
-        b=ZnsnRymmiAX0A51Ms+riAffY+g0CkAjsJocW3Hyyx9lNmPUVREYYyphJ+EICQfhAgb
-         cwvT0JB5xvT36YzpvCuGP2Jjj+zOnD9/cK+Tu7JUJWeC9nP/F+AXJ0ysu20UBbj52uBy
-         ZgRHYXwJKN5HIpIOah/UzcxZvn7bixzX3BF+Ys6NcVB9SxuTMZsvsRkU3sfuyZ8k6yFC
-         Al/3ta+ogxhxoBv3zCKQ4iyk6324aZvfrWVF7e1Pa135kWe5CKIrp2Lzi3i2ULh2M77z
-         vwwJf0fclsFOF+ctQqHTUwG+LNxO010JzYOtWFdG+JrhBV+fLCC7W3igo4MG9lcHYjdl
-         F1ZQ==
-X-Gm-Message-State: AOAM530D6nEXi2kSVgB/9qSpdOB21C7a6ED8QseCffm8qP7QK9lzw6F4
-        Lyn8vG33oObhxrwDwXDFatSf4g==
-X-Google-Smtp-Source: ABdhPJy6n1MaCGCQLYNjTpg1q51ciwj44r8aVWk9FrFKjHkLPaJum7yrK/G+zFIgXcw0linOTMBg/w==
-X-Received: by 2002:a19:5f05:0:b0:46b:a5f2:5fab with SMTP id t5-20020a195f05000000b0046ba5f25fabmr11079100lfb.8.1649866026127;
-        Wed, 13 Apr 2022 09:07:06 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id o2-20020a056512052200b0046b8e14d2edsm1719695lfc.267.2022.04.13.09.07.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UHgRvgx7SYkj5pmKsaI78m5hk2m1gV/Mhyu2PiUCr4E=;
+        b=6UeuKMhQwDTVPfBDe9S6xWdNto8mMCgfOku8kUhib21pz5FzejxvPrMWpxG3nZNSic
+         IhMSLR8MXJCrGAcsmw70H/VDV1t8rJ4dHWp0aPWzrzh8Bm8Bes7q75SD1yCF1GyY3wEh
+         EPyS+e1fgs+x5zDe/YFqAwmNuZKu/ikOlWtGtHV1oUK3YP+U/wwQ7xKxPBm43xaTiuHS
+         HIwZtLU/mCX/nVvTGldtEzyL71eFD7HWRMa6s4FObiFhzmeqXchM0r0BV3FInGyKiW3f
+         7uCaROug3m+acXsDo4XsBY4/y2en6Y4DAIHkUQrBp9ndSmrOtDg2IdfdUIBjUgeJ90kx
+         mtLA==
+X-Gm-Message-State: AOAM532mx6d7CcVSm+PBrAnXoQxgpYFR40jm4IP2c16aTUqCq8E2q63L
+        0KC2BCWS+dByJ27+axBckW9/dw==
+X-Google-Smtp-Source: ABdhPJzL+8K6wO1ADFpY262+dLQBXel1bmtF0/jCpFTKg6WqCNHpdMZbwaMQfOhRyXlG2ARv/+PYBw==
+X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id ck30-20020a0564021c1e00b004165b93eacfmr44827620edb.302.1649866143905;
+        Wed, 13 Apr 2022 09:09:03 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-245-147-71.retail.telecomitalia.it. [95.245.147.71])
+        by smtp.gmail.com with ESMTPSA id kk23-20020a170907767700b006e8a6e53a7bsm125399ejc.139.2022.04.13.09.09.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 09:07:05 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 85DD710397F; Wed, 13 Apr 2022 19:08:39 +0300 (+03)
-Date:   Wed, 13 Apr 2022 19:08:39 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 6/8] x86/mm: Provide helpers for unaccepted memory
-Message-ID: <20220413160839.arbbw5dcvmubdidz@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-7-kirill.shutemov@linux.intel.com>
- <0e366406-9a3a-0bf3-e073-272279f6abf2@intel.com>
+        Wed, 13 Apr 2022 09:09:03 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] arm64: dts: imx8mm-evk: add pwm1/backlight support
+Date:   Wed, 13 Apr 2022 18:08:59 +0200
+Message-Id: <20220413160900.36271-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e366406-9a3a-0bf3-e073-272279f6abf2@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 12:21:19PM -0700, Dave Hansen wrote:
-> On 4/5/22 16:43, Kirill A. Shutemov wrote:
-> > +void accept_memory(phys_addr_t start, phys_addr_t end)
-> > +{
-> > +	unsigned long *unaccepted_memory;
-> > +	unsigned long flags;
-> > +	unsigned int rs, re;
-> > +
-> > +	if (!boot_params.unaccepted_memory)
-> > +		return;
-> > +
-> > +	unaccepted_memory = __va(boot_params.unaccepted_memory);
-> > +	rs = start / PMD_SIZE;
-> > +
-> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> > +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
-> > +				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> > +		/* Platform-specific memory-acceptance call goes here */
-> > +		panic("Cannot accept memory");
-> > +		bitmap_clear(unaccepted_memory, rs, re - rs);
-> > +	}
-> > +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
-> > +}
-> 
-> Just to reiterate: this is a global spinlock.  It's disabling
-> interrupts.  "Platform-specific memory-acceptance call" will soon become:
-> 
-> 	tdx_accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
-> 
-> which is a page-by-page __tdx_module_call():
-> 
-> > +	for (i = 0; i < (end - start) / PAGE_SIZE; i++) {
-> > +		if (__tdx_module_call(TDACCEPTPAGE, start + i * PAGE_SIZE,
-> > +				      0, 0, 0, NULL)) {
-> > +			error("Cannot accept memory: page accept failed\n");
-> > +		}
-> > +	}
-> 
-> Each __tdx_module_call() involves a privilege transition that also
-> surely includes things like changing CR3.  It can't be cheap.  It also
-> is presumably touching the memory and probably flushing it out of the
-> CPU caches.  It's also unbounded:
-> 
-> 	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> 	for (i = 0; i < (end - start) / PAGE_SIZE; i++)
-> 		// thousands?  tens-of-thousands of cycles??
-> 	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> 
-> How far apart can end and start be?  It's at *least* 2MB in the page
-> allocator, which is on the order of a millisecond.  Are we sure there
-> aren't any callers that want to do this at a gigabyte granularity?  That
-> would hold the global lock and disable interrupts on the order of a second.
+Add pwm1/backlight support nodes for imx8mm_evk board.
+Align with u-boot dts
 
-This codepath only gets invoked with orders <MAX_ORDER or 4M on x86-64.
+References:
+ - https://patchwork.ozlabs.org/project/uboot/patch/20220326111911.13720-9-tommaso.merciai@amarulasolutions.com/
 
-> Do we want to bound the time that the lock can be held?  Or, should we
-> just let the lockup detectors tell us that we're being naughty?
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+---
+Changes since v1:
+ - Fix commit body
+ - Enable pwm, backlight
 
-Host can always DoS the guess, so yes this can lead to lockups.
+Changes since v2:
+ - Remove status okay from pwm1,backlight (enable as default)
 
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+index 6d67df7692f1..c50d2cc3ca71 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+@@ -59,6 +59,14 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
+ 		enable-active-high;
+ 	};
+ 
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 5000000>;
++		brightness-levels = <0 255>;
++		num-interpolated-steps = <255>;
++		default-brightness-level = <250>;
++	};
++
+ 	ir-receiver {
+ 		compatible = "gpio-ir-receiver";
+ 		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+@@ -395,6 +403,11 @@ &wdog1 {
+ 	status = "okay";
+ };
+ 
++&pwm1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_backlight>;
++};
++
+ &iomuxc {
+ 	pinctrl_fec1: fec1grp {
+ 		fsl,pins = <
+@@ -549,4 +562,10 @@ pinctrl_wdog: wdoggrp {
+ 			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0x166
+ 		>;
+ 	};
++
++	pinctrl_backlight: backlightgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO01_PWM1_OUT	0x06
++		>;
++	};
+ };
 -- 
- Kirill A. Shutemov
+2.25.1
+

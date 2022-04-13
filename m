@@ -2,134 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEFD500262
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65872500268
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbiDMXQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S237030AbiDMXUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbiDMXQ2 (ORCPT
+        with ESMTP id S229726AbiDMXT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:16:28 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7D325C66
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id e4so3686426oif.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
-        b=m+OmSD/e4we/K+vygGa6butFRkA8E+g/p2ckEiZ/uW+cVdyspvoJRGw+9FyyXam5cq
-         tKUR+8UFC5n7VmwCQP8rHi/+hQ5PDk//cvhjT5HtpMvvW9ER33VqwEDQkbDEFxhsM7hb
-         z5Yse8JE+ZpUXuCYKRHbRXAPEJQEZ0GE9T76A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
-        b=aGHg98m9JjZGdtxICqNmzhEe94w5RxFdGY4Np3HbJ1/rAeV92qxUsMZZR27y/2Kv+n
-         xFGWP5c8FyFYlylPsPNjO6qD766SdMAeIa9/fy2uFckrdfYBR22Sz77dIhNQuosTAAka
-         nT8NsQwHm2cZshPO+qRXmd86B1Ieb5E8Rfbdo0ObEYMChzWWbJAUi/sx4jFoOQtQhchG
-         u0PTI/Jcd9p6wS3cJLg1vej84lGvFH8PhLty6zr9c9cqsZq17gXfPppZiDWGAYR/19vw
-         tGlYQtN5gXi2eBrxU070FZlFHaijboJXMoVEOrJlFplD+JfNKW/47Ryhkv2gu1K7T1bp
-         6LeA==
-X-Gm-Message-State: AOAM533vthQ/rr0HTA4LPFhZ0pICNd3jv+d+f/1d1pRBfj763mg4bKBo
-        aieqQ7OihZcA/Z/ZlTkSuK1OjLJqLLSzOclpnLOHDQ==
-X-Google-Smtp-Source: ABdhPJy/y7cGBki5XtEew+aPGYslTH0aAHoZeAOee7B/n9e30cebHJofLtYmhLy+51DqypLaLc+k7XKo3IKWa8yDq70=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr195472oif.63.1649891644404; Wed, 13 Apr
- 2022 16:14:04 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 13 Apr 2022 16:14:02 -0700
+        Wed, 13 Apr 2022 19:19:58 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FF6220FD;
+        Wed, 13 Apr 2022 16:17:36 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5F1F55C01AF;
+        Wed, 13 Apr 2022 19:17:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 13 Apr 2022 19:17:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649891855; x=1649978255; bh=tSItXHrLBGUs0XQQKjEhwuPtZ
+        neu6+UIkfbjKrNGmVg=; b=vJa5eSRn1eWA9g9V/7EuRF+K+uCmBh4GtXhDoMRXd
+        P39S0dSPX+fnwvGsWxlRbmV8alijOSmIGYeZ2IbzJThnnz4wHNoufY5dK6N4rfE7
+        TrxxCTl24HSzUu2Hsc7zmVO5YEUaYfEiN7RiXMLfp9kU9HAFHNccVohuCSh3BDjC
+        i0/AZKwtOmpT8aMCWRWGsQZbeH/5LtXH/xq6sIOxBvkB0ex9ErUMpUEAYrTYUSoD
+        YWj6RZ7+Uy1H7r1Li1/UBtmNyuz0zHhBxsrCUNh5QdqlHQibQzzvsta52aQeF5eG
+        DxjIEJ0f94vsqG2U0oJHRler3VkUis//TlgBQET6qGhHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1649891855; x=1649978255; bh=t
+        SItXHrLBGUs0XQQKjEhwuPtZneu6+UIkfbjKrNGmVg=; b=kEeM1zYFMo+TuNHId
+        ZD2DuLK7heKqI6EpgMSY8/EYZMw+ncUPywOi/ZWcpgmDK3zPHGAvy0RIWdvni8ef
+        TjNQ9vjlW9ZcLkwbxwxEJ8SA5L7RBk07K4D0QdhXZOWcoS2eSIJdTwJY//HeASGp
+        paciplQWXR51UrMmLesiqgpXiGhCLeUg7qf8GmcgKgbb82VZAmYw6VafX0dGro4p
+        nn2VxAUxnecVHyAJNKBU7tUN2hoGNdAs3a0kfLJjXeHvcb1NmQWL4XTxxxgsmgu5
+        vpAHaAuq6eNxEiKTrCWx8k99moogtVuB35Rbqpx4IpmGl0gfBIF5LKlbN1wIfV4z
+        0Z49A==
+X-ME-Sender: <xms:DlpXYqtk_m3XQYofEduY_QFiACCgbvuS8EofE1ac1XjQAJZ52dwGWw>
+    <xme:DlpXYveaXMOd0DQjWPxjI4bRi8HqiNE7I_o1i51TwuYir-cTQ4fs76R0zi9CyPGoZ
+    FloUEL1JaN7k1Tb_Q>
+X-ME-Received: <xmr:DlpXYlw9vGYUPfZ1tJIzH2cuoNsMxufAgpZlim_L33Z0VV0xh-0_yJfWpkcTTBUrRsseNr_2EZHPCHu3nU3w6RZLLpTD6BUhuY6cx1lIotZGN8_zhz5f7q9bNLusOkEEd7roiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudelvddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:DlpXYlM0-npvWJrT4SqgFD9WrRN5Dq7NVmZZajtGD_fZJ5q794B2fA>
+    <xmx:DlpXYq-dUpqK3Ff7XFSSPSq7yckssJMfEOYjM63hbVlfqasfcLfc4A>
+    <xmx:DlpXYtX5Eo97c9Uzbp5TmiSbsIMued8wjG3bixd7R5dZ2ue7CwFXDA>
+    <xmx:D1pXYvPQDh5qD2GYcO-t679xKKtOcvk6AaJgcafLqazUEIPcB73i0A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Apr 2022 19:17:34 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] rtc: sun6i: Add NVMEM provider
+Date:   Wed, 13 Apr 2022 18:17:30 -0500
+Message-Id: <20220413231731.56709-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
-References: <20220412220033.1273607-1-swboyd@chromium.org> <20220412220033.1273607-2-swboyd@chromium.org>
- <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com> <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 13 Apr 2022 16:14:02 -0700
-Message-ID: <CAE-0n53kebRHTogSkiAOcA4tMpA+EcXQHtNX0Zzut-xE2vCkpw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] interconnect: qcom: sc7180: Drop IP0 interconnects
-To:     Alex Elder <elder@linaro.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Alex Elder (2022-04-13 14:02:00)
-> On 4/13/22 3:55 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, Apr 12, 2022 at 4:20 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >>
-> >> @@ -519,8 +500,6 @@ static const struct of_device_id qnoc_of_match[] = {
-> >>            .data = &sc7180_dc_noc},
-> >>          { .compatible = "qcom,sc7180-gem-noc",
-> >>            .data = &sc7180_gem_noc},
-> >> -       { .compatible = "qcom,sc7180-ipa-virt",
-> >> -         .data = &sc7180_ipa_virt},
-> >>          { .compatible = "qcom,sc7180-mc-virt",
-> >>            .data = &sc7180_mc_virt},
-> >>          { .compatible = "qcom,sc7180-mmss-noc",
-> >
-> > I have no objection to ${SUBJECT} change landing and based on all your
-> > research and Alex's review/testing I think it's good to go.
-> >
-> > However, now that you're removed the driver that cared about
-> > "qcom,sc7180-ipa-virt", should we also be removing it from the
-> > `bindings/interconnect/qcom,rpmh.yaml` file and the `sc7180.dtsi`
-> > file? I think that removing it from _either_ the driver (like your
-> > patch here does) _or_ the sc7180.dtsi file would fix the bug, right?
-> > ...and then removing it from the yaml would just be cleanup...
+The sun6i RTC provides 32 bytes of general-purpose data registers.
+They can be used to save data in the always-on RTC power domain.
+The registers are writable via 32-bit MMIO accesses only.
 
-Yes, but that's mostly a cleanup. I didn't include it in this series
-because DTB is supposed to be "stable" and thus backporting a fix to the
-kernel by removing something from DT is sort of wrong. I don't know or
-expect that the kernel DTS files will be used from the stable kernels.
-It's better to fix the kernel C code. We can of course remove the
-binding, but there's a part of me that would prefer that we put the IPA
-clk back into the interconnect driver, so leaving the binding is another
-motivator for me to hopefully excise the IPA clk from the rpmh-clk
-driver in the future.
+Expose them with a NVMEM provider so they can be used by other drivers.
 
-Anyway, I'm happy to remove the compatible string from the binding if
-folks want that. Having the DT node is wasteful because the kernel makes
-a device so we can certainly remove that as well. I'll send another
-patch for that if this patch is accepted by Georgi.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
->
-> That's a good point, I hadn't thought about that but you're right.
->
-> I think we were too pleased about identifying the problem and
-> proving it could happen (and cause a crash), so we didn't think
-> hard enough about this other piece.
->
-> Stephen, I think you should re-spin the series and add the
-> proper change to the binding.  You can keep the tags I gave
-> before.
+ drivers/rtc/rtc-sun6i.c | 42 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-I will not combine the removal of the binding from this patch. This
-patch is good as is and fixes the problem while ignoring the DT binding
-and that larger discussion.
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index 5b3e4da63406..755aeb82a285 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -71,6 +71,10 @@
+ #define SUN6I_LOSC_OUT_GATING			0x0060
+ #define SUN6I_LOSC_OUT_GATING_EN_OFFSET		0
+ 
++/* General-purpose data */
++#define SUN6I_GP_DATA				0x0100
++#define SUN6I_GP_DATA_SIZE			0x20
++
+ /*
+  * Get date values
+  */
+@@ -662,6 +666,39 @@ static const struct rtc_class_ops sun6i_rtc_ops = {
+ 	.alarm_irq_enable	= sun6i_rtc_alarm_irq_enable
+ };
+ 
++static int sun6i_rtc_nvmem_read(void *priv, unsigned int offset, void *_val, size_t bytes)
++{
++	struct sun6i_rtc_dev *chip = priv;
++	u32 *val = _val;
++	int i;
++
++	for (i = 0; i < bytes / 4; ++i)
++		val[i] = readl(chip->base + SUN6I_GP_DATA + offset + 4 * i);
++
++	return 0;
++}
++
++static int sun6i_rtc_nvmem_write(void *priv, unsigned int offset, void *_val, size_t bytes)
++{
++	struct sun6i_rtc_dev *chip = priv;
++	u32 *val = _val;
++	int i;
++
++	for (i = 0; i < bytes / 4; ++i)
++		writel(val[i], chip->base + SUN6I_GP_DATA + offset + 4 * i);
++
++	return 0;
++}
++
++static struct nvmem_config sun6i_rtc_nvmem_cfg = {
++	.type		= NVMEM_TYPE_BATTERY_BACKED,
++	.reg_read	= sun6i_rtc_nvmem_read,
++	.reg_write	= sun6i_rtc_nvmem_write,
++	.size		= SUN6I_GP_DATA_SIZE,
++	.word_size	= 4,
++	.stride		= 4,
++};
++
+ #ifdef CONFIG_PM_SLEEP
+ /* Enable IRQ wake on suspend, to wake up from RTC. */
+ static int sun6i_rtc_suspend(struct device *dev)
+@@ -795,6 +832,11 @@ static int sun6i_rtc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	sun6i_rtc_nvmem_cfg.priv = chip;
++	ret = devm_rtc_nvmem_register(chip->rtc, &sun6i_rtc_nvmem_cfg);
++	if (ret)
++		return ret;
++
+ 	dev_info(&pdev->dev, "RTC enabled\n");
+ 
+ 	return 0;
+-- 
+2.35.1
 
->
-> I've got a note to follow up with similar changes to other
-> platforms where the interconnect driver includes resource "IP0"
-> and will plan to do what Doug suggests there too.

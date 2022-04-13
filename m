@@ -2,106 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6A34FFAE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB474FFAF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiDMQIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S236781AbiDMQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbiDMQHt (ORCPT
+        with ESMTP id S235063AbiDMQKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:07:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D01D644C6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649865928; x=1681401928;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l4DbhfHxywn/EQ+sYTtpNBRF4EsncCGGgPFv8MfLgLs=;
-  b=hrEeTzBi3vwKfVOQEkTm9CWwcTvi4tdKJWhBUcD7R6AaF3igxfTIwQpQ
-   MCpWna3mQhc364j98iif+h3Drqp42zDokV70Rj/uD5YOYnHbNNnYRVXzz
-   j/fJAAVrkH+LqhWVORP+PtkEM7gbz7LOzsIEiBNrPME+gqwuKShM+Cgye
-   7DOPnSUkPM6kp8vSCerDucHc+arUUoEy/2NOn3+9SDkgGvWVvffFv0nHi
-   21DOq9rdlmB/tOTNgtqSQbNtvh9aBKl9HJXtuQvY31J1cz7uh+Z8vfhxU
-   fhtTh8pyVAPCBip5v9o6Q69ouYGntZYNM/rHtCqw60IuY3R6tcgYZaxi7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="260302906"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="260302906"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:05:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="526528859"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Apr 2022 09:05:26 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nefUj-0000R2-O1;
-        Wed, 13 Apr 2022 16:05:25 +0000
-Date:   Thu, 14 Apr 2022 00:04:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [linux-next:master 3834/3955] mm/memory.c:1238:1: sparse: sparse:
- symbol 'vma_needs_copy' was not declared. Should it be static?
-Message-ID: <202204140043.Tx7BIBvI-lkp@intel.com>
+        Wed, 13 Apr 2022 12:10:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE2EB66611
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649866070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QOkajocQ8odh3i+hVeTJ63TIENzeAVOjDB6rWovHQzA=;
+        b=UHIRHKdaNGk4SBrBx7HwHJXCuwjgGgSa/Vw0YYtzSnCRFsNgcqSfOw2rYwtmfv/COUkxKr
+        d+eBqd23BIB+AcbGQwIHN7FwHpXQcDDYiBRKYhCIi66AvbmgYXebfIZ03gMI5BegmHRUpG
+        OnY+xppIf9JF5ZUlBtbSwDOGZwXfKXI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-C_txJ6NDNtaGFnmpNjTvKg-1; Wed, 13 Apr 2022 12:07:49 -0400
+X-MC-Unique: C_txJ6NDNtaGFnmpNjTvKg-1
+Received: by mail-wr1-f72.google.com with SMTP id t15-20020adfdc0f000000b001ef93643476so501809wri.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:07:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=QOkajocQ8odh3i+hVeTJ63TIENzeAVOjDB6rWovHQzA=;
+        b=4dvtCI6YcNc83CgmpaYhqRiZNLqbIB16tN0HKKHn61JtMwYqgDRq0jO7vR6TQHn6kC
+         h5jMeSosuJCS2uJhXFb9M63F8D1G3qJw8IQUIqvS9/mn3jQfwcEajp/q2ovcsI3Ao2i4
+         Z1l5A4xSI4+rrkQmXNUFv7r93Yw2RIsOyVjwdwLJkEp0McSuuRZ0oe+cOLHzacAJGtV8
+         4nX4PkmtD6jJHC8Qe38xmwE3PeN0frAFRP0kaFvs+gw9WNZ45wJM0LmS4HtIgvVJLTz2
+         qMwQ4KsMZHeg9njvi2zT6jkLBt+sMc3+8dnLSgkFwwdZIOvoWNa4nyv+kFSqiibxXLZf
+         6Rkg==
+X-Gm-Message-State: AOAM5305BHzpxJYA4xBiXbARuXlCFOkhBtv5q/qgc+c7gdgBNDcS7VPx
+        pv79Xybej1TNC5msiEqgSOZNCYMN1KKedmCo+eGaMTTR/R3n5Mo4VGWKgW0Z2lBs/2BHn0fH6KL
+        dhQbpGNh3EkbVVqh10G4DhdPv
+X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id t6-20020adfeb86000000b001e68c92af6bmr33002780wrn.116.1649866068383;
+        Wed, 13 Apr 2022 09:07:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJymHGhx5mZYHX4qc0LA34JUWjZS8Rn5QEmfvMvUVt0DpiviRON0T5cX/n3xjfGY/yDNO9s2GQ==
+X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id t6-20020adfeb86000000b001e68c92af6bmr33002738wrn.116.1649866068071;
+        Wed, 13 Apr 2022 09:07:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5800:1078:ebb9:e2c3:ea8c? (p200300cbc70458001078ebb9e2c3ea8c.dip0.t-ipconnect.de. [2003:cb:c704:5800:1078:ebb9:e2c3:ea8c])
+        by smtp.gmail.com with ESMTPSA id l126-20020a1c2584000000b00387d4f35651sm2895911wml.10.2022.04.13.09.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 09:07:47 -0700 (PDT)
+Message-ID: <dd197d57-ce40-82f6-fa5f-c0450b39e23f@redhat.com>
+Date:   Wed, 13 Apr 2022 18:07:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
+ <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
+ <ff9e0bad-be9a-97ac-ae88-d22bcfbe80d4@redhat.com>
+ <ebf3ccef-e6fe-62d5-74e8-91e30e7c2642@intel.com>
+ <a458c13f-9994-b227-ff61-bfdfec10bc27@redhat.com>
+ <20220413113024.ycvocn6ynerl3b7m@box.shutemov.name>
+ <cfcf9f82-7e5f-58b6-7b47-9ac552832596@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <cfcf9f82-7e5f-58b6-7b47-9ac552832596@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   c97e430ab5539993ab2afc6e80deea80aef9d799
-commit: 729c63ce2bbd5813b8061e50cc38187aed05114c [3834/3955] mm/shmem: handle uffd-wp during fork()
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220414/202204140043.Tx7BIBvI-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=729c63ce2bbd5813b8061e50cc38187aed05114c
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 729c63ce2bbd5813b8061e50cc38187aed05114c
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+On 13.04.22 17:36, Dave Hansen wrote:
+> On 4/13/22 04:30, Kirill A. Shutemov wrote:
+>>> 2) Fast boot; after boot, all memory will slowly but steadily get
+>>>    accepted in the background. After a while, all memory is accepted and
+>>>    can be signaled to user space.
+> ...
+>> Frankly, I think option 2 is the worst one. You still CPU cycles from the
+>> workload after boot to do the job that may or may not be needed. It is an
+>> half-measure that helps nobody.
+> 
+> Let's not be too hyperbolic here.  "Worst" is entirely subjective and it
+> totally depends on your perspective and what you care about.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right. Some people might want to start their workload as soon as the
+pain is really over. Some might want to have a functional system before
+that, others might not care.
 
+> 
+> There are basically four options:
+> 
+>  * Accept everything in early boot
+>  * Accept with deferred page free
+>  * Accept with kthread after boot
+>  * Accept on demand
+> 
+> and four things that matter:
+> 
+>  * Code complexity
+>  * Time to a shell prompt
+>  * CPU/Memory waste
+>  * Deterministic overhead
+> 
+> Did I miss any?
 
-sparse warnings: (new ones prefixed by >>)
->> mm/memory.c:1238:1: sparse: sparse: symbol 'vma_needs_copy' was not declared. Should it be static?
-   mm/memory.c:1031:17: sparse: sparse: context imbalance in 'copy_pte_range' - different lock contexts for basic block
-   mm/memory.c:1827:16: sparse: sparse: context imbalance in '__get_locked_pte' - different lock contexts for basic block
-   mm/memory.c:1875:9: sparse: sparse: context imbalance in 'insert_page' - different lock contexts for basic block
-   mm/memory.c:2377:17: sparse: sparse: context imbalance in 'remap_pte_range' - different lock contexts for basic block
-   mm/memory.c:2633:17: sparse: sparse: context imbalance in 'apply_to_pte_range' - unexpected unlock
-   mm/memory.c:2922:9: sparse: sparse: context imbalance in 'wp_page_copy' - different lock contexts for basic block
-   mm/memory.c:3274:17: sparse: sparse: context imbalance in 'wp_pfn_shared' - unexpected unlock
-   mm/memory.c:3341:19: sparse: sparse: context imbalance in 'do_wp_page' - different lock contexts for basic block
-   mm/memory.c:5211:5: sparse: sparse: context imbalance in 'follow_invalidate_pte' - wrong count at exit
-   mm/memory.c:5332:23: sparse: sparse: context imbalance in 'follow_pfn' - unexpected unlock
-   mm/memory.c:5362:9: sparse: sparse: context imbalance in 'follow_phys' - unexpected unlock
-   mm/memory.c:5396:9: sparse: sparse: context imbalance in 'generic_access_phys' - unexpected unlock
+Nothing that comes to mind.
 
-Please review and possibly fold the followup patch.
+> 
+> News flash: none of the options wins on all the things that matter.
+> We're going to have to pick one (or maybe two).  I'm also not horribly
+> convinced that there's a problem here worth solving, especially one that
+> requires surgery in the core of the buddy allocator.
+> 
+> This is essentially making a performance argument: it takes too long to
+> boot if we go with a simpler solution.  Yet, I haven't seen any data.  I
+> think we need to go with the simplest approach(es) until there's some
+> actual data to guide us here.
+
+Simplest meaning: accept everything during early boot and don't touch
+core-mm/buddy code, correct?
+
+> 
+> Here's another way to look at it:
+> 
+>> https://docs.google.com/spreadsheets/d/1Fpv0Yp0CTF5_JXHR2pywvNtImTwUVGTxDMlJ5t8qiis/edit?usp=sharing
+> 
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

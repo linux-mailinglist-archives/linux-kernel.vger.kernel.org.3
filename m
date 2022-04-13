@@ -2,218 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3A64FF2D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA594FF2D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbiDMJA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S233908AbiDMJBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiDMJA4 (ORCPT
+        with ESMTP id S229605AbiDMJBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:00:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775E4EDEC
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:58:35 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kdc0D3kxhzgYnK;
-        Wed, 13 Apr 2022 16:56:44 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 16:58:33 +0800
-Subject: Re: [PATCH v2 1/8] mm/swap: remember PG_anon_exclusive via a swp pte
- bit
-To:     David Hildenbrand <david@redhat.com>
-CC:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220329164329.208407-1-david@redhat.com>
- <20220329164329.208407-2-david@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <28142e3e-2556-0ca2-7ac5-7420ef862259@huawei.com>
-Date:   Wed, 13 Apr 2022 16:58:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 13 Apr 2022 05:01:45 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2248EB41
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:59:23 -0700 (PDT)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id CA244100480FC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:59:22 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id eYqQnWnEtkku4eYqQnoS2I; Wed, 13 Apr 2022 08:59:22 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=XPf19StE c=1 sm=1 tr=0 ts=625690ea
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=AQUDBzSJgfhXC9PXz1EA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=R+HNkao+GtaJpXJBU89f9GDxTmJICgULexXJe8/GbiE=; b=yQ7ksCScUPraxAaAHKFw6htgWI
+        SsWeP/Na1VTaX7pISAqttOPCNksIKLrQWp1v5ziDd4e7TiQJdMPuYQuL6bCquuHeScGJgZBGjAtBQ
+        KJu42bBjedbZrVXZY9oPyRrCdelZ3oItcw0oWxUsdMAHziSQNRQkJg/P4r4ZshmkhzH+sm/LOo+k9
+        I6MpXQXkfw4t/M12msMAXJGxmJw4Y7iYPuSpQxahYx1XspUiJ0AmF6Ui9vMS0LAfnhHgDe0TRlvWH
+        dgf1TL9ojknZdjWV+/B8PFWFOC2B4775aqWSG0T2JEeyxG21p4C4sUhyCVDZgczqwYC6H98NYl7Ps
+        L+KaJ7iw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37364 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1neYqP-002iI0-Iu; Wed, 13 Apr 2022 02:59:21 -0600
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220412173836.126811734@linuxfoundation.org>
+In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <7603ba5a-19e1-027b-610d-46bcec069fbb@w6rz.net>
+Date:   Wed, 13 Apr 2022 01:59:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220329164329.208407-2-david@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1neYqP-002iI0-Iu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37364
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/30 0:43, David Hildenbrand wrote:
-> Currently, we clear PG_anon_exclusive in try_to_unmap() and forget about
-...
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 14618f446139..9060cc7f2123 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -792,6 +792,11 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->  						&src_mm->mmlist);
->  			spin_unlock(&mmlist_lock);
->  		}
-> +		/* Mark the swap entry as shared. */
-> +		if (pte_swp_exclusive(*src_pte)) {
-> +			pte = pte_swp_clear_exclusive(*src_pte);
-> +			set_pte_at(src_mm, addr, src_pte, pte);
-> +		}
->  		rss[MM_SWAPENTS]++;
->  	} else if (is_migration_entry(entry)) {
->  		page = pfn_swap_entry_to_page(entry);
-> @@ -3559,6 +3564,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	struct page *page = NULL, *swapcache;
->  	struct swap_info_struct *si = NULL;
->  	rmap_t rmap_flags = RMAP_NONE;
-> +	bool exclusive = false;
->  	swp_entry_t entry;
->  	pte_t pte;
->  	int locked;
-> @@ -3724,6 +3730,46 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
->  	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
->  
-> +	/*
-> +	 * Check under PT lock (to protect against concurrent fork() sharing
-> +	 * the swap entry concurrently) for certainly exclusive pages.
-> +	 */
-> +	if (!PageKsm(page)) {
-> +		/*
-> +		 * Note that pte_swp_exclusive() == false for architectures
-> +		 * without __HAVE_ARCH_PTE_SWP_EXCLUSIVE.
-> +		 */
-> +		exclusive = pte_swp_exclusive(vmf->orig_pte);
-> +		if (page != swapcache) {
-> +			/*
-> +			 * We have a fresh page that is not exposed to the
-> +			 * swapcache -> certainly exclusive.
-> +			 */
-> +			exclusive = true;
-> +		} else if (exclusive && PageWriteback(page) &&
-> +			   !(swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
+On 4/12/22 10:47 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.34 release.
+> There are 277 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Really sorry for late respond and a newbie question. IIUC, if SWP_STABLE_WRITES is set,
-it means concurrent page modifications while under writeback is not supported. For these
-problematic swap backends, exclusive marker is dropped. So the above if statement is to
-filter out these problematic swap backends which have SWP_STABLE_WRITES set. If so, the
-above check should be && (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)), i.e. no "!".
-Or am I miss something?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-It's very kind of you if you can answer this question. Many thanks!
-
-> +			/*
-> +			 * This is tricky: not all swap backends support
-> +			 * concurrent page modifications while under writeback.
-> +			 *
-> +			 * So if we stumble over such a page in the swapcache
-> +			 * we must not set the page exclusive, otherwise we can
-> +			 * map it writable without further checks and modify it
-> +			 * while still under writeback.
-> +			 *
-> +			 * For these problematic swap backends, simply drop the
-> +			 * exclusive marker: this is perfectly fine as we start
-> +			 * writeback only if we fully unmapped the page and
-> +			 * there are no unexpected references on the page after
-> +			 * unmapping succeeded. After fully unmapped, no
-> +			 * further GUP references (FOLL_GET and FOLL_PIN) can
-> +			 * appear, so dropping the exclusive marker and mapping
-> +			 * it only R/O is fine.
-> +			 */
-> +			exclusive = false;
-> +		}
-> +	}
-> +
->  	/*
->  	 * Remove the swap entry and conditionally try to free up the swapcache.
->  	 * We're already holding a reference on the page but haven't mapped it
-> @@ -3738,11 +3784,12 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	pte = mk_pte(page, vma->vm_page_prot);
->  
->  	/*
-> -	 * Same logic as in do_wp_page(); however, optimize for fresh pages
-> -	 * that are certainly not shared because we just allocated them without
-> -	 * exposing them to the swapcache.
-> +	 * Same logic as in do_wp_page(); however, optimize for pages that are
-> +	 * certainly not shared either because we just allocated them without
-> +	 * exposing them to the swapcache or because the swap entry indicates
-> +	 * exclusivity.
->  	 */
-> -	if (!PageKsm(page) && (page != swapcache || page_count(page) == 1)) {
-> +	if (!PageKsm(page) && (exclusive || page_count(page) == 1)) {
->  		if (vmf->flags & FAULT_FLAG_WRITE) {
->  			pte = maybe_mkwrite(pte_mkdirty(pte), vma);
->  			vmf->flags &= ~FAULT_FLAG_WRITE;
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 4de07234cbcf..c8c257d94962 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1656,14 +1656,15 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->  				break;
->  			}
->  			/*
-> -			 * Note: We *don't* remember yet if the page was mapped
-> -			 * exclusively in the swap entry, so swapin code has
-> -			 * to re-determine that manually and might detect the
-> -			 * page as possibly shared, for example, if there are
-> -			 * other references on the page or if the page is under
-> -			 * writeback. We made sure that there are no GUP pins
-> -			 * on the page that would rely on it, so for GUP pins
-> -			 * this is fine.
-> +			 * Note: We *don't* remember if the page was mapped
-> +			 * exclusively in the swap pte if the architecture
-> +			 * doesn't support __HAVE_ARCH_PTE_SWP_EXCLUSIVE. In
-> +			 * that case, swapin code has to re-determine that
-> +			 * manually and might detect the page as possibly
-> +			 * shared, for example, if there are other references on
-> +			 * the page or if the page is under writeback. We made
-> +			 * sure that there are no GUP pins on the page that
-> +			 * would rely on it, so for GUP pins this is fine.
->  			 */
->  			if (list_empty(&mm->mmlist)) {
->  				spin_lock(&mmlist_lock);
-> @@ -1674,6 +1675,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->  			dec_mm_counter(mm, MM_ANONPAGES);
->  			inc_mm_counter(mm, MM_SWAPENTS);
->  			swp_pte = swp_entry_to_pte(entry);
-> +			if (anon_exclusive)
-> +				swp_pte = pte_swp_mkexclusive(swp_pte);
->  			if (pte_soft_dirty(pteval))
->  				swp_pte = pte_swp_mksoft_dirty(swp_pte);
->  			if (pte_uffd_wp(pteval))
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index a7847324d476..7279b2d2d71d 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1804,7 +1804,18 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
->  	get_page(page);
->  	if (page == swapcache) {
-> -		page_add_anon_rmap(page, vma, addr, RMAP_NONE);
-> +		rmap_t rmap_flags = RMAP_NONE;
-> +
-> +		/*
-> +		 * See do_swap_page(): PageWriteback() would be problematic.
-> +		 * However, we do a wait_on_page_writeback() just before this
-> +		 * call and have the page locked.
-> +		 */
-> +		VM_BUG_ON_PAGE(PageWriteback(page), page);
-> +		if (pte_swp_exclusive(*pte))
-> +			rmap_flags |= RMAP_EXCLUSIVE;
-> +
-> +		page_add_anon_rmap(page, vma, addr, rmap_flags);
->  	} else { /* ksm created a completely new copy */
->  		page_add_new_anon_rmap(page, vma, addr);
->  		lru_cache_add_inactive_or_unevictable(page, vma);
-> 
+Tested-by: Ron Economos <re@w6rz.net>
 

@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0083D4FEC6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 03:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459704FEC92
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 03:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiDMBqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 21:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S231613AbiDMByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 21:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiDMBqO (ORCPT
+        with ESMTP id S229959AbiDMByW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 21:46:14 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309312C117;
-        Tue, 12 Apr 2022 18:43:55 -0700 (PDT)
-Received: from kwepemi100014.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdQL02RJdzFpkH;
-        Wed, 13 Apr 2022 09:41:28 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100014.china.huawei.com (7.221.188.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 09:43:52 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 09:43:51 +0800
-Subject: Re: [PATCH 5.10 000/171] 5.10.111-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220412062927.870347203@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <b56e6b79-dfb1-6840-a620-81041df2ea87@huawei.com>
-Date:   Wed, 13 Apr 2022 09:43:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 12 Apr 2022 21:54:22 -0400
+X-Greylist: delayed 142 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 18:52:00 PDT
+Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79DC52C651;
+        Tue, 12 Apr 2022 18:52:00 -0700 (PDT)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(27729:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Wed, 13 Apr 2022 09:49:15 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Wed, 13 Apr 2022 09:49:11 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Wed, 13 Apr 2022 09:49:11 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v7 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Thread-Topic: [PATCH v7 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Thread-Index: AQHYTYGRBrvPBaFpFkWb1HIe0r3aqqzrcwCAgAGhdOA=
+Date:   Wed, 13 Apr 2022 01:49:11 +0000
+Message-ID: <15d27f6131994b2d981b3fcaebdfbb3b@sphcmbx02.sunplus.com.tw>
+References: <cover.1649662002.git.lhjeff911@gmail.com>
+ <f24781413a8a305b28a1e9c3861263975eebaee6.1649662002.git.lhjeff911@gmail.com>
+ <36b7de46-7e8b-fbb5-6eeb-89180d358d84@kernel.org>
+In-Reply-To: <36b7de46-7e8b-fbb5-6eeb-89180d358d84@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,53 +65,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/4/12 14:28, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.111 release.
-> There are 171 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.111-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Tested on arm64 and x86 for 5.10.111-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.111-rc1
-Commit: d3243c194290743f86302b7d651338c47b29f406
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9030
-passed: 9030
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9030
-passed: 9030
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+SGkgTXIuIEtyenlzenRvZg0KDQpJJ20gc29ycnkgZm9yIHRoYXQuIEkgbWlzdW5kZXJzdG9vZCBh
+dCB0aGUgYmVnaW5uaW5nDQoNCkkgd2lsbCBjaGFuZ2UgdGhlIG5hbWUgdG8gc3VucGx1cyx0aGVy
+bWFsLnlhbWwgaW4gdGhlIG5leHQgY29tbWl0Lg0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudC4N
+Cg0KQmVzdCByZWdhcmRzLA0KTGkgSGFvIEt1bw0KDQo+IFlvdSBzZW50IHY2IHdpdGhvdXQgaW1w
+bGVtZW50aW5nIHRoZSBjaGFuZ2VzLiBJIHBvaW50ZWQgb3V0IHRoYXQgeW91IGRpZCBub3QgZm9s
+bG93IHdoYXQgSSBhc2tlZCBmb3IuDQo+IE5vdyB5b3Ugc2VudCB2NyBhbHNvIHdpdGhvdXQgaW1w
+bGVtZW50aW5nIHRoZXNlIGNoYW5nZXMsIGFnYWluLg0KPiANCj4gWW91IGFsc28gZGlkIG5vdCBk
+aXNjdXNzIGl0IHdpdGggbWUsIGRpZCBub3QgY29tZSB3aXRoIGNvdW50ZXIgYXJndW1lbnRzLCBv
+dGhlciBwcm9wb3NhbHMuIFRoZXJlZm9yZSBpdA0KPiBsb29rcyBsaWtlIGVpdGhlciB5b3UgbWlz
+dW5kZXJzdG9vZCBtZSBvciB5b3UgaWdub3JlZCBteSBjb21tZW50cy4NCj4gDQo+IExldCdzIGFz
+c3VtZSBmaXJzdCBjYXNlLCBzbyBJIHdpbGwgcmVwZWF0LiBOYW1lIHNob3VsZCBiZSBvbmUgb2Y6
+DQo+IDEuIHN1bnBsdXMsdGhlcm1hbC55YW1sDQo+IDIuIHN1bnBsdXMsc3A3MDIxLXRoZXJtYWwu
+eWFtbA0KDQoNCg0KDQoNCg==

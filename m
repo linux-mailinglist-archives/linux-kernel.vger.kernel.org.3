@@ -2,138 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986EA4FFB6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067544FFB71
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiDMQj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S236915AbiDMQjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbiDMQjX (ORCPT
+        with ESMTP id S235385AbiDMQjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:39:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82345D64A;
-        Wed, 13 Apr 2022 09:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649867816; x=1681403816;
+        Wed, 13 Apr 2022 12:39:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178E65153
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649867849; x=1681403849;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=SioN7hE4JJ0EbzEEpsQ1nTa8K8QRrunFk5RvqYz6FjE=;
-  b=qSh4h/Gx67jnHDr+Es3enJwuFaRfxEWjXYJXNQiZF0OiiJdsKmZchplY
-   4IwlaDd18/ya8Iknr5yEzvEfW85WCMAE7/KGhLFD5/Zsr67zy2eq/5NdD
-   rdRMvukT5AgstTjJJsjxPzfS7LbB6iiyRy7YXobpzSdUEFvNiYzAiE+6a
-   1C576vdmC2QvnEeIflPWJjBKfzRKd+MIAyLFHgUHZ0WvYRstwprLvftw5
-   pls0FYxfr9MAXNBE7/htEf+kE4ODnPJz/Dw3GGAAPYplrqTFTm9USbwfu
-   5U9OjvaFW7y/SWICI4TxoNRa1g4Bbc4mFl3L0wCT7P81yME9pv/yPSqPJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,257,1643698800"; 
-   d="scan'208";a="152546254"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 09:36:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Apr 2022 09:36:55 -0700
-Received: from [10.12.72.146] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 13 Apr 2022 09:36:53 -0700
-Message-ID: <703ee79c-3b25-5b1f-dfe1-bfafade468fd@microchip.com>
-Date:   Wed, 13 Apr 2022 18:36:52 +0200
+  bh=AYwbAQA51GI7OS3SDP9g0rw3x5qDpayrqhQKsx+i7bU=;
+  b=gezAZ8nOpTT431q5EScNe7/sz0p7JTw4X7RmcCvRPeaDQXMG0fvlLbUn
+   i/LwHg2Ph3pYgIEU+1AG5oC6Tm+pTW85KsmszVr6yR1bi/FNToU8udLn1
+   QR54h1X7p+Pm4kx/2gE4SPnqxDZpmJkvaHJwvosMzdhnPLyuLzuDk3Ygm
+   CabujCWEdbAd94jnDvovpXcCAwhp2DPSF/cN1E3h5z4ce8JMDtIcADkkg
+   3f4LH12rLhoWNaP2R2mBEfC5Ja436jNkBoT3rwCjKWqgmXOQwwcHCSYpQ
+   RKWBryluhx72prhoQC9JvBFFigG5y9OXMr6z1Lr/TwwrbRNzcwSxYE02c
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262155818"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="262155818"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:37:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="854854774"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Apr 2022 09:37:28 -0700
+Received: from [10.212.225.84] (kliang2-MOBL.ccr.corp.intel.com [10.212.225.84])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 1DA765805BD;
+        Wed, 13 Apr 2022 09:37:26 -0700 (PDT)
+Message-ID: <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
+Date:   Wed, 13 Apr 2022 12:37:24 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/3] ARM: dts: at91: sama7g5: Swap `rx` and `tx` for
- `i2c` nodes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [LKP] Re: [perf vendor events] 3f5f0df7bf:
+ perf-sanity-tests.perf_all_metrics_test.fail
 Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-References: <20220310114553.184763-1-sergiu.moga@microchip.com>
- <20220310114553.184763-2-sergiu.moga@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220310114553.184763-2-sergiu.moga@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Ian Rogers <irogers@google.com>, Carel Si <beibei.si@intel.com>
+Cc:     acme@redhat.com, alexander.shishkin@linux.intel.com,
+        alexandre.torgue@foss.st.com, ak@linux.intel.com, mingo@redhat.com,
+        james.clark@arm.com, jolsa@kernel.org, john.garry@huawei.com,
+        mark.rutland@arm.com, mcoquelin.stm32@gmail.com,
+        namhyung@kernel.org, peterz@infradead.org, eranian@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, lkp@lists.01.org,
+        lkp@intel.com
+References: <20220304083329.GC20556@xsang-OptiPlex-9020>
+ <CAP-5=fVz=arWo19PQR_4UKY_PyywyXoyp+MUnfAJxCFZy5rhWg@mail.gmail.com>
+ <20220413070529.GA1320@linux.intel.com>
+ <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2022 at 12:45, Sergiu Moga wrote:
-> Swap `rx` and `tx` for the `dma-names` property of the `i2c` nodes
-> in order to maintain consistency across Microchip/Atmel SoC files.
+
+
+On 4/13/2022 12:03 PM, Ian Rogers wrote:
+> 3) Weak group doesn't fall back to no group:
+
+That's because the group validation code doesn't take pinned events, 
+such as the NMI watchdog, into account.
+
+I proposed a kernel patch to fix it, but it's rejected. It should be 
+hard to find a generic way to fix it from the kernel side.
+https://lore.kernel.org/lkml/1565977750-76693-1-git-send-email-kan.liang@linux.intel.com/
+
+Maybe we can workaround it from the perf tool side?
+For example, for each weak group with cycles event and NMI watchdog is 
+enabled, add an extra cycles event when opening the group. If the open 
+fails with the extra cycles event, fall back to no group. After the 
+extra cycles event check, remove the extra cycles.
+
+What do you think?
+
+Thanks,
+Kan
+> $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD}:W'
+> -a sleep 1
 > 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-As it fixes some of the warning in dt schema check in 5.18-rc1, I queue 
-this patch in "fixes" branch for 5.18.
-
-Thanks, best regards,
-   Nicolas
-
-> ---
->   arch/arm/boot/dts/sama7g5.dtsi | 18 +++++++++---------
->   1 file changed, 9 insertions(+), 9 deletions(-)
+>   Performance counter stats for 'system wide':
 > 
-> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-> index 4decd3a91a76..f691c8f08d04 100644
-> --- a/arch/arm/boot/dts/sama7g5.dtsi
-> +++ b/arch/arm/boot/dts/sama7g5.dtsi
-> @@ -601,9 +601,9 @@ i2c1: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 39>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(8)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(8)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(7)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
-> @@ -786,9 +786,9 @@ i2c8: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 46>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(21)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(22)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(22)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(21)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
-> @@ -810,9 +810,9 @@ i2c9: i2c@600 {
->   				#size-cells = <0>;
->   				clocks = <&pmc PMC_TYPE_PERIPHERAL 47>;
->   				atmel,fifo-size = <32>;
-> -				dmas = <&dma0 AT91_XDMAC_DT_PERID(23)>,
-> -					<&dma0 AT91_XDMAC_DT_PERID(24)>;
-> -				dma-names = "rx", "tx";
-> +				dmas = <&dma0 AT91_XDMAC_DT_PERID(24)>,
-> +					<&dma0 AT91_XDMAC_DT_PERID(23)>;
-> +				dma-names = "tx", "rx";
->   				status = "disabled";
->   			};
->   		};
-
-
--- 
-Nicolas Ferre
+>       <not counted>      BR_INST_RETIRED.NEAR_CALL
+>                 (0.00%)
+>       <not counted>      BR_INST_RETIRED.NEAR_TAKEN
+>                  (0.00%)
+>       <not counted>      BR_INST_RETIRED.NOT_TAKEN
+>                 (0.00%)
+>       <not counted>      BR_INST_RETIRED.CONDITIONAL
+>                   (0.00%)
+>       <not counted>      CPU_CLK_UNHALTED.THREAD
+>                 (0.00%)
+> 
+>         1.001690318 seconds time elapsed
+> 
+> Some events weren't counted. Try disabling the NMI watchdog:
+> echo 0 > /proc/sys/kernel/nmi_watchdog
+> perf stat ...
+> echo 1 > /proc/sys/kernel/nmi_watchdog

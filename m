@@ -2,156 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7432C4FFD7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68CC4FFD85
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237045AbiDMSKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S236950AbiDMSNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiDMSKh (ORCPT
+        with ESMTP id S237698AbiDMSMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:10:37 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5774CD5D;
-        Wed, 13 Apr 2022 11:08:15 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id v15so3371345edb.12;
-        Wed, 13 Apr 2022 11:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=t3Z4H/kFFCbW0ZdMfLUxHxEdfJOsHw95Ck+l8KFJXOY=;
-        b=kpM7EldlTHVf/3AyxgiSxvjhHU8ApOvL3dt5h/Opo0LEPmbnasw9MEjmTxMxEhYD4t
-         A5gCUmPXjsIBGwYwV0lyQ3sz2rYjkN8WV/mzKSOnWT7ND8IpsGoiKHcd71+bP9/FBb2+
-         LMFn7Vov8OhaLzpJadz7VmjP/rFF2zIxrRp7U8jKgvmDXvYa3RSFYWpjzO4gx56P2DVC
-         H8cq3Qlx/PzG8fiWtAdWUGDIinTDITYdgyrenw3DasSxCnqWG7rG9qdTWbQhn1nb6lOj
-         bqD+kL5bIF3YZzjrB6wy/w/8Xg48QmZzixwSItmrZir+WQbBS87GJ84wNZvE3EBOO72t
-         KFzA==
+        Wed, 13 Apr 2022 14:12:55 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABA526AF7;
+        Wed, 13 Apr 2022 11:10:34 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id g34so5266240ybj.1;
+        Wed, 13 Apr 2022 11:10:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=t3Z4H/kFFCbW0ZdMfLUxHxEdfJOsHw95Ck+l8KFJXOY=;
-        b=Tnp2DgaedS8mR/+fBSxGwFKb0wNbF0XIykeZgUh/JG+xpF321lwmA2xMu2JAdkFBX5
-         L6eTSppwsxt8QQW+8BWdSmh44ZTRlK8tL5fYyKIxcjmjQVhNfwV3j7VtSy0eluB4MLjb
-         k4URYsuLRcD9aJXaoHQKl8mI4LerCP476gjxpS9F5gQdfhMzboejQNp9NgcdT0yoIeuA
-         v0fU/HNz0GtTeBGbPzvZbDGUKCB+TrFhgglqJYO+TkBDlUuGbNW8f/v2MWMlSdClH+3N
-         C1cTA3/U1GyzCIJNnVSystKEcMXHhrwN2w7ECqnjXA5KqvVQTjQRqcR/GXZwvZMmofLB
-         Wc7Q==
-X-Gm-Message-State: AOAM533A6K4pHtY9TRv98qQ2X0+8yznIpjlrAOZQpnjASzwyfseEnXO+
-        TUlNYqgFdxy73hWjRHLsFbep9dIQgmI=
-X-Google-Smtp-Source: ABdhPJyRvUjO4b6PbA+EN0H/xsxVePqfcUMyEszcuLBuOaK1OMGVkEJM0w1dcn7Gw8iWwhvNmPXBzQ==
-X-Received: by 2002:aa7:d0c9:0:b0:41d:9137:fcea with SMTP id u9-20020aa7d0c9000000b0041d9137fceamr9972980edo.110.1649873293812;
-        Wed, 13 Apr 2022 11:08:13 -0700 (PDT)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm1487440edb.47.2022.04.13.11.08.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Apr 2022 11:08:12 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 1/2] efi: remove use of list iterator variable after loop
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <CAMj1kXE2r4xrtFc+=OJfzutZzTtaUoFtW=f7y9+us9h+xGVEnA@mail.gmail.com>
-Date:   Wed, 13 Apr 2022 20:08:09 +0200
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QWnLw7pcgFg7OO/Mp5u2CJgjWXHz+s+DaK73ibuVFlU=;
+        b=55DySKyrYv/fNb5oDcmg1V44RYLhlz8LvWDgTlx7nTkQ+FFlkvOSpUHJgGSO++XAFf
+         /cMfVfOhhexjpTjbW4QCL36nX7JQmairVfqE2+tZVFXdjAYQqPG7goW5Zm6KQWVBD2UV
+         uYjXYAR/e8XNwsjlFy6mESrk4bwaoKCJQGX+sCL1A9qBU+W73Xmzwwzj/BI8WLwOoxez
+         CSWVWEsK0xcg6lHAUfzNMz9rM13TZsN5HDW+3eCuHtFWl4pF4irpteUpVLLbRndO9sgB
+         7d7EGH5Y0r6FCLpYJCdIS5jgu9kyUTdXwuSHFIaX2JU/tNjg8OIyO17Cf2gxH4RSY4z5
+         X3Fg==
+X-Gm-Message-State: AOAM5315e634pQ/H/HnJtSGe6kRVF1vFIfX2neZNA9JQSlVaPaI9h2ts
+        cIHD+UaW6fyatRtSsJ4vFQcm79u9UCNbYV/acic=
+X-Google-Smtp-Source: ABdhPJzhrYFwc77slRKKGPSvgQKp3I24ZGfcYuYi9ZzAPo/jWfp3TjnJB9dQmBb7nWtQDG5MRNl7xRiOK+ISKc8OtXE=
+X-Received: by 2002:a25:3cc3:0:b0:63e:6ee9:4840 with SMTP id
+ j186-20020a253cc3000000b0063e6ee94840mr112067yba.153.1649873433436; Wed, 13
+ Apr 2022 11:10:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com> <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 20:10:22 +0200
+Message-ID: <CAJZ5v0jnyg6n-1QRmVg1tjzu3szsG3DYqYTXAbobbKwkFhTreg@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9142505E-720F-401E-AD48-BA9D0880EDD1@gmail.com>
-References: <20220331221030.889718-1-jakobkoschel@gmail.com>
- <CAMj1kXE2r4xrtFc+=OJfzutZzTtaUoFtW=f7y9+us9h+xGVEnA@mail.gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 8, 2022 at 8:49 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> As to_of_node() suggests and the way the code in the OF and software node
+> back ends actually uses the fwnode handle, it may be constified. Do this
+> for good.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v6: new patch
+>  drivers/base/property.c  | 2 +-
+>  drivers/base/swnode.c    | 2 +-
+>  drivers/of/property.c    | 2 +-
+>  include/linux/fwnode.h   | 2 +-
+>  include/linux/property.h | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 36401cfe432c..1ad4b37cd312 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -776,7 +776,7 @@ EXPORT_SYMBOL_GPL(device_get_named_child_node);
+>   *
+>   * Returns the fwnode handle.
+>   */
+> -struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
+> +struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
+>  {
+>         if (!fwnode_has_op(fwnode, get))
+>                 return fwnode;
+> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+> index b0bbd1805970..84a11008ffb8 100644
+> --- a/drivers/base/swnode.c
+> +++ b/drivers/base/swnode.c
+> @@ -363,7 +363,7 @@ EXPORT_SYMBOL_GPL(property_entries_free);
+>  /* -------------------------------------------------------------------------- */
+>  /* fwnode operations */
+>
+> -static struct fwnode_handle *software_node_get(struct fwnode_handle *fwnode)
+> +static struct fwnode_handle *software_node_get(const struct fwnode_handle *fwnode)
+>  {
+>         struct swnode *swnode = to_swnode(fwnode);
+>
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 9a50ad25906e..8d06282af8e4 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -858,7 +858,7 @@ struct device_node *of_graph_get_remote_node(const struct device_node *node,
+>  }
+>  EXPORT_SYMBOL(of_graph_get_remote_node);
+>
+> -static struct fwnode_handle *of_fwnode_get(struct fwnode_handle *fwnode)
+> +static struct fwnode_handle *of_fwnode_get(const struct fwnode_handle *fwnode)
+>  {
+>         return of_fwnode_handle(of_node_get(to_of_node(fwnode)));
+>  }
+> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+> index 9a81c4410b9f..a94bd47192a3 100644
+> --- a/include/linux/fwnode.h
+> +++ b/include/linux/fwnode.h
+> @@ -108,7 +108,7 @@ struct fwnode_reference_args {
+>   *             zero on success, a negative error code otherwise.
+>   */
+>  struct fwnode_operations {
+> -       struct fwnode_handle *(*get)(struct fwnode_handle *fwnode);
+> +       struct fwnode_handle *(*get)(const struct fwnode_handle *fwnode);
+>         void (*put)(struct fwnode_handle *fwnode);
+>         bool (*device_is_available)(const struct fwnode_handle *fwnode);
+>         const void *(*device_get_match_data)(const struct fwnode_handle *fwnode,
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index fc24d45632eb..c631ee7fd161 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -121,7 +121,7 @@ struct fwnode_handle *fwnode_get_named_child_node(
+>  struct fwnode_handle *device_get_named_child_node(struct device *dev,
+>                                                   const char *childname);
+>
+> -struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
+> +struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode);
+>  void fwnode_handle_put(struct fwnode_handle *fwnode);
+>
+>  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
+> --
 
-
-> On 13. Apr 2022, at 19:05, Ard Biesheuvel <ardb@kernel.org> wrote:
->=20
-> On Fri, 1 Apr 2022 at 00:11, Jakob Koschel <jakobkoschel@gmail.com> =
-wrote:
->>=20
->> In preparation to limiting the scope of a list iterator to the list
->> traversal loop, use a dedicated pointer to iterate through the list =
-[1].
->>=20
->> In the current state the list_for_each_entry() is guaranteed to
->> hit a break or goto in order to work properly. If the list iterator
->> executes completely or the list is empty the iterator variable =
-contains
->> a type confused bogus value infered from the head of the list.
->>=20
->> With this patch the variable used past the list iterator is only set
->> if the list exists early and is NULL otherwise. It should therefore
->> be safe to just set *prev =3D NULL (as it was before).
->>=20
->=20
-> This generic boilerplate is fine to include, but it would help if you
-> could point out why repainting the current logic with your new brush
-> is appropriate here.
-
-This makes sense, I can see that the commit message should be improved =
-here.
-
->=20
-> In this particular case, I wonder whether updating *prev makes sense
-> to begin with if we are returning an error, and if we fix that, the
-> issue disappears as well.
-
-Actually I'm rethinking this now. The only use of 'prev' that I can see =
-is
-in efi_pstore_erase_name(). It only uses it if found !=3D 0
-which would mean err !=3D 0 in __efivar_entry_iter().
-
-This would allow massively simplifying the entire function.
-The valid case is updating *prev when there is an "error" as far as I =
-can tell.
-
-I've sketched up a rewritten function that should hopefully be more =
-clear and
-archive the same goal, I'm curious what you think:
-
-
-	int __efivar_entry_iter(int (*func)(struct efivar_entry *, void =
-*),
-				struct list_head *head, void *data,
-				struct efivar_entry **prev)
-	{
-		struct efivar_entry *entry, *n;
-		int err =3D 0;
-
-		/* If prev is set and *prev !=3D NULL start iterating =
-from there */
-		if (prev)
-			entry =3D list_prepare_entry(*prev, head, list);
-		/* Otherwise start at the beginning */
-		else
-			entry =3D list_entry(head, typeof(*entry), =
-list);
-		list_for_each_entry_safe_continue(entry, n, head, list) =
-{
-			err =3D func(entry, data);
-			if (err && prev)
-				*prev =3D entry;
-			if (err)
-				return err;
-		}
-
-		return 0;
-	}
-
+Why is 0-day complaining about this one?

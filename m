@@ -2,90 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6175A4FF9E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B394FF9E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236409AbiDMPVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
+        id S236415AbiDMPW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbiDMPVs (ORCPT
+        with ESMTP id S234689AbiDMPWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:21:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3E9BCA3;
-        Wed, 13 Apr 2022 08:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Eszu3JL25+s+bncKpFs8T3/NcthXr80OQbGJ1Dr4gIk=; b=Wv1mYgiRWhrkQQjGPqj2nHj4o2
-        Q4obSSSAceYAZAT7CYPGyVIcWuXa9yfsPBJOvuqRSAAxk75PogmT+0U3iSRC3bsOcmDJjMlVA/AFW
-        qB9KK08rJ5nJpH0bb449y9HiXaIiEr+cDP+L7R4Gmuv1iKXv2ewZU7hGrmu1o8brSHdYEvfEs9R//
-        ls3aPjMiMOYKDoh+33zSoc9RZz43VwdET4gXm7Fsl0yoO9D6gukKc6dhav3s4ImspHW7uc3T32/JH
-        NsbfJQdbZ+hGvzhv624ByzcR46RhJIsctpEavyFt5NzYUwPu00aQ3JUVLJlx98+WL2xTyuwd71s+4
-        9ix0CzJw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neemB-00EM1k-Cv; Wed, 13 Apr 2022 15:19:23 +0000
-Message-ID: <6fe36857-1c94-a421-0701-caf9c38b1c92@infradead.org>
-Date:   Wed, 13 Apr 2022 08:19:19 -0700
+        Wed, 13 Apr 2022 11:22:46 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7A6E0D2;
+        Wed, 13 Apr 2022 08:20:23 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id t67so4391091ybi.2;
+        Wed, 13 Apr 2022 08:20:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w2Lgy0xxZ/kq35mN9jTEDe99/KAY+dTqIri9HO0ska8=;
+        b=fIsxeVdjGUPOzAQXIwLuR+jgjLcl2Nrnnj8+9Z914QnpKIvCpeQJXeVhkHxZQvUgt2
+         egyVB6fU9ORmBo1UtIrq42qHIua3FRY8UUcjwRiZeXqioUPvEL+ILQ1BDj+6LeixDo0+
+         yPanUDtk0YFqPQ7CHpTlcMgJO5ffYl2rh+3C/J4pXOtOvWymChyD6O0d/THAvUzjEAoU
+         nvwasDRCliYTcobmT19eA8yr4Q3BPxsX/4ooSIFF3U2y0KW3tKcE2CqnqnFRROoPHlZl
+         Fzafsto+xPGtymXLqLbxCjxk1KLvCqkqXvwfCzBJfnafwJY+wZG0YYH+gR3yL0CHpUVG
+         +2OA==
+X-Gm-Message-State: AOAM533NsEvun26aZwsFmt6MzsF4aBVtF9IZx1guPFwdk5QbnGgZ7N5h
+        wvyzyUEOmclYrLlvc+BnQPOTuepdNGPSmXY6KFXDSvWw
+X-Google-Smtp-Source: ABdhPJwOIpKOGRh6wLe+b2eqyMIagCZXSSwKkMG4Q0iaM3xYCmKqKl32u8IbpWSAjNHIgVdbn8Ltt5Bh6VA0YsVmI+o=
+X-Received: by 2002:a25:3cc3:0:b0:63e:6ee9:4840 with SMTP id
+ j186-20020a253cc3000000b0063e6ee94840mr22598626yba.153.1649863222281; Wed, 13
+ Apr 2022 08:20:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] kernel-doc: support DECLARE_PHY_INTERFACE_MASK()
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-doc@vger.kernel.org
-References: <20211030020813.32654-1-rdunlap@infradead.org>
- <Ylavaf+OlgTVeI6a@shell.armlinux.org.uk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Ylavaf+OlgTVeI6a@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <4cb0c4573cce165657ad1f7275c4b3852cbcd115.1648833416.git.christophe.leroy@csgroup.eu>
+ <20220404062710.m6bzpg5gsx4x7tm5@vireshk-i7>
+In-Reply-To: <20220404062710.m6bzpg5gsx4x7tm5@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 17:20:11 +0200
+Message-ID: <CAJZ5v0itEsDDWPYPYJkY5xbs1t97uMx3P3pL1Qg_jrA63aXw_Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Prepare cleanup of powerpc's asm/prom.h
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 4, 2022 at 8:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 01-04-22, 19:24, Christophe Leroy wrote:
+> > powerpc's asm/prom.h brings some headers that it doesn't
+> > need itself.
+> >
+> > In order to clean it up, first add missing headers in
+> > users of asm/prom.h
+> >
+> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > ---
+> >  drivers/cpufreq/pasemi-cpufreq.c      | 1 -
+> >  drivers/cpufreq/pmac32-cpufreq.c      | 2 +-
+> >  drivers/cpufreq/pmac64-cpufreq.c      | 2 +-
+> >  drivers/cpufreq/ppc_cbe_cpufreq.c     | 1 -
+> >  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 2 +-
+> >  5 files changed, 3 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+> > index 815645170c4d..039a66bbe1be 100644
+> > --- a/drivers/cpufreq/pasemi-cpufreq.c
+> > +++ b/drivers/cpufreq/pasemi-cpufreq.c
+> > @@ -18,7 +18,6 @@
+> >
+> >  #include <asm/hw_irq.h>
+> >  #include <asm/io.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/time.h>
+> >  #include <asm/smp.h>
+> >
+> > diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+> > index 4f20c6a9108d..20f64a8b0a35 100644
+> > --- a/drivers/cpufreq/pmac32-cpufreq.c
+> > +++ b/drivers/cpufreq/pmac32-cpufreq.c
+> > @@ -24,7 +24,7 @@
+> >  #include <linux/device.h>
+> >  #include <linux/hardirq.h>
+> >  #include <linux/of_device.h>
+> > -#include <asm/prom.h>
+> > +
+> >  #include <asm/machdep.h>
+> >  #include <asm/irq.h>
+> >  #include <asm/pmac_feature.h>
+> > diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+> > index d7542a106e6b..ba9c31d98bd6 100644
+> > --- a/drivers/cpufreq/pmac64-cpufreq.c
+> > +++ b/drivers/cpufreq/pmac64-cpufreq.c
+> > @@ -22,7 +22,7 @@
+> >  #include <linux/completion.h>
+> >  #include <linux/mutex.h>
+> >  #include <linux/of_device.h>
+> > -#include <asm/prom.h>
+> > +
+> >  #include <asm/machdep.h>
+> >  #include <asm/irq.h>
+> >  #include <asm/sections.h>
+> > diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > index c58abb4cca3a..e3313ce63b38 100644
+> > --- a/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > +++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > @@ -12,7 +12,6 @@
+> >  #include <linux/of_platform.h>
+> >
+> >  #include <asm/machdep.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/cell-regs.h>
+> >
+> >  #include "ppc_cbe_cpufreq.h"
+> > diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > index 037fe23bc6ed..4fba3637b115 100644
+> > --- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > +++ b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > @@ -13,9 +13,9 @@
+> >  #include <linux/init.h>
+> >  #include <linux/of_platform.h>
+> >  #include <linux/pm_qos.h>
+> > +#include <linux/slab.h>
+> >
+> >  #include <asm/processor.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/pmi.h>
+> >  #include <asm/cell-regs.h>
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
+Applied as 5.19 material.
 
-On 4/13/22 04:09, Russell King (Oracle) wrote:
-> On Fri, Oct 29, 2021 at 07:08:13PM -0700, Randy Dunlap wrote:
->> Support the DECLARE_PHY_INTERFACE_MASK() macro that is used to declare
->> a bitmap by converting the macro to DECLARE_BITMAP(), as has been done
->> for the __ETHTOOL_DECLARE_LINK_MODE_MASK() macro.
->>
->> This fixes a 'make htmldocs' warning:
->>
->> include/linux/phylink.h:82: warning: Function parameter or member 'DECLARE_PHY_INTERFACE_MASK(supported_interfaces' not described in 'phylink_config'
->>
->> that was introduced by commit
->>   38c310eb46f5 ("net: phylink: add MAC phy_interface_t bitmap")
->>
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> Cc: Russell King (Oracle) <linux@armlinux.org.uk>
-> 
-> Thanks Randy, sorry I missed this patch.
-> 
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> 
-> What is the intention for merging this patch? Will Jon merge it?
-> Your tags said To: Jon but you don't seem to have included him in
-> the email.
-
-Hm, I didn't notice that.
-Guess I'll resend it with your R-b.
-
-thanks.
-
--- 
-~Randy
+If the powerpc folks decide to take it, I can drop it, so please let me know.

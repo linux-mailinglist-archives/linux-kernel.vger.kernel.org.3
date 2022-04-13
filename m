@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7334FF30C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7654FF319
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbiDMJMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S233787AbiDMJOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiDMJMF (ORCPT
+        with ESMTP id S234326AbiDMJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:12:05 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752EB186C2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:44 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so767774wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:09:44 -0700 (PDT)
+        Wed, 13 Apr 2022 05:13:50 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DC92ED6B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:11:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e21so1645619wrc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=vrull.eu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gwwGHu/kUMtzWbNVENzqf/cbed0N54Cas9skXOt024o=;
-        b=XPnqVjG6h0UqhmNIPxikuceAuDekilIJ8T7vPpT4es4yah+70QMaFq1ZJgjKjC0ysb
-         /OOCXveVq7AxK8PP3+X9/cJWZSEhjvknXaHwbtZWvECzXTwhiz8RvRR9n9gJ8JKJq0ij
-         Ec4lCA0rRcVHxI2+LlU9084ORpwvoSfBzhz+dC/h5+ytDlWeihmcpiEA8WjcO63Uc7LX
-         MQULtqO6+f51msdsVyPA9QpbR8k+PVyG5EPW48DOs6jbZTNSM060mNbJNLi8pJ9f4z5q
-         8KuSwphoN8QK5WZFEYW3bK62hb9rf7Mdg/7gJPj6I5/4xN7hrNKKNgl7C5cyUuj4hTPS
-         B3vQ==
+        bh=98UsXQix7jmh2cjHZ+lRGQpOdqdEegIRaK/uMV/eJ28=;
+        b=iVK5UmVvCHhETfmtz2Qc+ZHtQcwLys6z2ZXcKFnORfL+TAUKnWFCasQFj4X/XBAtUu
+         MTxinFP+6r4X88OLlV/7jz/M6eaqdHncUrrLxNBQIo6zEaqjn1RcdzhSGbNxOvU2uioP
+         s68RG0sX988OCW6p/Go3qeRNJmWMGflCB/pulvnjJZSqvyRVd6NdBvPqYpmqctvPDtbw
+         BgsVrFxGYWGdJQz6vrBt1+oRgZPcAZ32bAnkfALV4SKxNxC7i5taGxb/dAWT+jr4GmvP
+         EmnO4/lWNUrzNApzvN+z4h7Fscw4G8hoDErt4ieBR5BTiGwR4jMcTLn9O4vSG8731rUo
+         bnaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gwwGHu/kUMtzWbNVENzqf/cbed0N54Cas9skXOt024o=;
-        b=HkqRHSDgSX/SZebAKRwzMn1b/9wv3vGwSHab1lAj1HJ+Xg/91hdlVcFy2mRCW/ARFC
-         34iATlqnXQ6cjtBjO48pM3VfwLCNoEksAf5aynhyCYBognf37J3XUSXOwsuRT+4/7E4W
-         6gdGjlu7I+4kiseA5FRuUv8jDT+c6MAs5SnwULOgH0Mcs6AeHxNAY+CrLlkr9olVA6hF
-         I4F9WzNYDTpeD0+XK2sJQbBW9Uz+WasDE4voXGrn/W0qG/vOYhOLXEp9hDkBMBTH4NFp
-         deaBtpQtn+EfnhrEWyyWvFJlQxsR52vOWs0QQPpE6h4+hsOUig9HCyHOkG8Fn2wvjgIx
-         mmGQ==
-X-Gm-Message-State: AOAM533xclljCi0JWPEu1xUwNYMqMDBA1BnQ7zDgET5qFCbgKEUETpL5
-        It630Bn9vWqhggYp1XCVjRAvvbCmzD1O1MRk00cgMA==
-X-Google-Smtp-Source: ABdhPJxxa6HPTIn07pYdJ/EeVtDrpC/qaoIRKLB3HdORWATBXFu5XeDq8MFROb7IVg/gNg3daadJJezwX0cOlwNnhsM=
-X-Received: by 2002:a05:600c:35d4:b0:38f:6799:a386 with SMTP id
- r20-20020a05600c35d400b0038f6799a386mr664904wmq.196.1649840982912; Wed, 13
- Apr 2022 02:09:42 -0700 (PDT)
+        bh=98UsXQix7jmh2cjHZ+lRGQpOdqdEegIRaK/uMV/eJ28=;
+        b=TqQbp8OpaZUZthSSe8vUrPe8XRI7oFph90ViY29PxkiGgqs3gFkWAX9x5IunjFu7pq
+         WuyxntKld3aZgRjjovXlym0UKdc3ZQqWH/sQ6xlDPEeyWyfRvmILOAasqbsoZt3BkdlT
+         ryjd9zVCt4odca1YjC1KU4LCV+/xn9dJWW4NlnNvTaoC3ySdBna4W/LwLXNV4s8/vLoj
+         L0OLkfBGzXW2Z3PHZEpiSIihvxNjP1HGt7s1FzVR1Ccyh3XsoCl6Muwy3vGuaKtB41HB
+         Ybe8Wk2zvS3k1RiigOn0w8UF05Lub+TY5oUxUVPMPzCvRyccQFZxoVhIhibfRk3cQznH
+         2KsQ==
+X-Gm-Message-State: AOAM533PdAHsQM8bpqPQXKozgpHHn4Hlif93Ni8DFhqYIIBroQfXWthZ
+        D7s0Zi7UlE00/D/hSsHJ9/l82jspdmyg3mdymnY0BA==
+X-Google-Smtp-Source: ABdhPJyVZBhXbYYrZDmje6PtSvknj4BB+HRS34vLJXFflzTnZA27yZJtw2C9C/1QutOiBbxWkfGYC+mTgT/Zwe/cM/s=
+X-Received: by 2002:adf:e84a:0:b0:207:a697:462c with SMTP id
+ d10-20020adfe84a000000b00207a697462cmr11096993wrn.312.1649841081615; Wed, 13
+ Apr 2022 02:11:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-9-heiko@sntech.de>
-In-Reply-To: <20220413030307.133807-9-heiko@sntech.de>
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-10-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-10-heiko@sntech.de>
 From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
-Date:   Wed, 13 Apr 2022 11:09:31 +0200
-Message-ID: <CAAeLtUDdRTuehHFi576tpzEo0QV9=qQtU8BOarAb4OF-Bizdow@mail.gmail.com>
-Subject: Re: [PATCH v9 08/12] riscv: Fix accessing pfn bits in PTEs for
- non-32bit variants
+Date:   Wed, 13 Apr 2022 11:11:09 +0200
+Message-ID: <CAAeLtUDkODLd55EWWKj8PS2sh_TjEO_LDSFik9djgb5BLDJMBw@mail.gmail.com>
+Subject: Re: [PATCH v9 09/12] riscv: add RISC-V Svpbmt extension support
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
@@ -63,7 +62,10 @@ Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
         behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
         allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        Wei Wu <lazyparser@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Bill Huffman <huffman@cadence.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -75,19 +77,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 at 05:04, Heiko Stuebner <heiko@sntech.de> wrote:
+On Wed, 13 Apr 2022 at 05:03, Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> On rv32 the PFN part of PTEs is defined to use bits [xlen-1:10]
-> while on rv64 it is defined to use bits [53:10], leaving [63:54]
-> as reserved.
+> Svpbmt (the S should be capitalized) is the
+> "Supervisor-mode: page-based memory types" extension
+> that specifies attributes for cacheability, idempotency
+> and ordering.
 >
-> With upcoming optional extensions like svpbmt these previously
-> reserved bits will get used so simply right-shifting the PTE
-> to get the PFN won't be enough.
+> The relevant settings are done in special bits in PTEs:
 >
-> So introduce a _PAGE_PFN_MASK constant to mask the correct bits
-> for both rv32 and rv64 before shifting.
+> Here is the svpbmt PTE format:
+> | 63 | 62-61 | 60-8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
+>   N     MT     RSW    D   A   G   U   X   W   R   V
+>         ^
 >
+> Of the Reserved bits [63:54] in a leaf PTE, the high bit is already
+> allocated (as the N bit), so bits [62:61] are used as the MT (aka
+> MemType) field. This field specifies one of three memory types that
+> are close equivalents (or equivalent in effect) to the three main x86
+> and ARMv8 memory types - as shown in the following table.
+>
+> RISC-V
+> Encoding &
+> MemType     RISC-V Description
+> ----------  ------------------------------------------------
+> 00 - PMA    Normal Cacheable, No change to implied PMA memory type
+> 01 - NC     Non-cacheable, idempotent, weakly-ordered Main Memory
+> 10 - IO     Non-cacheable, non-idempotent, strongly-ordered I/O memory
+> 11 - Rsvd   Reserved for future standard use
+>
+> As the extension will not be present on all implementations,
+> implement a method to handle cpufeatures via alternatives
+> to not incur runtime penalties on cpu variants not supporting
+> specific extensions and patch relevant code parts at runtime.
+>
+> Co-developed-by: Wei Fu <wefu@redhat.com>
+> Signed-off-by: Wei Fu <wefu@redhat.com>
+> Co-developed-by: Liu Shaohua <liush@allwinnertech.com>
+> Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
+> Co-developed-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> [moved to use the alternatives mechanism]
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Drew Fustini <drew@beagleboard.org>
+> Cc: Wei Fu <wefu@redhat.com>
+> Cc: Wei Wu <lazyparser@gmail.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Maxime Ripard <maxime@cerno.tech>
+> Cc: Daniel Lustig <dlustig@nvidia.com>
+> Cc: Greg Favor <gfavor@ventanamicro.com>
+> Cc: Andrea Mondelli <andrea.mondelli@huawei.com>
+> Cc: Jonathan Behrens <behrensj@mit.edu>
+> Cc: Xinhaoqu (Freddie) <xinhaoqu@huawei.com>
+> Cc: Bill Huffman <huffman@cadence.com>
+> Cc: Nick Kossifidis <mick@ics.forth.gr>
+> Cc: Allen Baum <allen.baum@esperantotech.com>
+> Cc: Josh Scheid <jscheid@ventanamicro.com>
+> Cc: Richard Trauben <rtrauben@gmail.com>
 
 Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>

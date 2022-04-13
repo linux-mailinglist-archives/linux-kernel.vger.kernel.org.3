@@ -2,167 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CE34FEEAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7065F4FEEB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbiDMFsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S232615AbiDMFsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiDMFry (ORCPT
+        with ESMTP id S232588AbiDMFsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:47:54 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46B941605
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:45:32 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23D1Q9vh012649;
-        Wed, 13 Apr 2022 05:45:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
- b=UIrgv3ZqdgMTv5cEtr1oSNTw1UptBkmfp2nfHei5eS2ujW6WDL/LF0S8Mv4Fc1SJEVkJ
- k6rS/VsKOucOZ7EgZ4xeaxJZkdQmybzBDbr/ByyBgUDK+v6EIA4HRjW8cSnrr+l/hJYa
- fTCw9paISN7Kfz/ph+GE9Lox3xZh/+3gpHaG7Ak7I0m6yKeWcAcDL8NsKgzUUkuhwEWG
- f7fl+3e93pMwEHfFF/3zp+9eH5RnoEAYhRzRK7LQD/UGv0aeGtAYB1Bz3UWTaGnMHjLk
- hlQ3c1xKxlh7pFLPzdKgDILTKO7p8VZZTMlvyq1MZMiRVNYAVmkR5MVVkNIewevWAOFa oA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2pu101t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 05:45:19 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23D5gPwm001890;
-        Wed, 13 Apr 2022 05:45:17 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fck13j8gc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 05:45:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=chOR7EZRMLn5edc2cbuL2apf906tGvOLkB3ZiZE8zUhdqeCs1t2MKge3agNJuGhOS3slPoW/8hwQ2Fh/DlxFWhFrvK31etOBwOYAG2gNDzQyjJ1Pj63sqoo+50YmMoU74t+EUcx1w10apKqdTz5fociXVedG5KFL/y55pQXQGE/E7YfBDIGrbJewhRgI3CuOc8+1VAKTcfBVsS30qBZe7jQDbIWxItOVBBbtTyCJ0KZQRDb90oWw80ajDXR87KWvKhpxaF9ALH4VM2b2kVG0VkV2lY0apyptCtWUREG/UZpFbt5K3iZ+Fi2yJs0l00HfdhpbuS65OBph0E85+KHrRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
- b=ekx0UtcNNF5vaZm+CWs97TH1LxzrAtjBrZ5vwktmZMS60x9URl3FnHbrVPmyiSNT0ik/jH1YpTBqBRKFXwazERv3nU1hdEsWPMkhBxCejIAVZf9vAhhv7o+Qx6sYIRcPJ11GQzBmfKbGu/O9eRkd00nQN/8JQBmCrYyRChlwLhZXbTn0reQeShySiNHSnhFLtzPUMbvSy/aWuGDfAejZqoLT8i+hpyqwSF+bPWEaMutY+nWRRA81Zm/FLiWh7iDixN85luh3ednIpIR5Pi6SE6MpXXHcwB2GbQA9IvrAjIK8Sbg6CPvJ8r9+ESCEJveYQb708MoTPiNVZdnwFlcYJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 13 Apr 2022 01:48:37 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C699547040
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:46:11 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id t12so1048749pll.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NuyhElnuEi3sB0vdKk9mbqa/FKV+1u9gceGNVp6xXNA=;
- b=L4cQFLL7zDHgITWjSf/By5EEKj7RbuLp1cpK/2DLy+DEglgsEmQTBVbk8uDo7msvS9V+ZbJ2iVLnAxSGeoeR5JhyeeS55hqGvkpW7C/a1IIPSQOLDMqADI+I1M1zeBWPdLizuMd8OuOzOfSRa+aSnGHRoIK/V7w+GZV6EEDYJCY=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BLAPR10MB5345.namprd10.prod.outlook.com
- (2603:10b6:208:331::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 05:45:09 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
- 05:45:08 +0000
-Date:   Wed, 13 Apr 2022 08:44:58 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Jaehee Park <jhpark1013@gmail.com>
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=xNLSOEaEw7kf6bfeQjVyXkvE7jCgutmejEXvvU8XWSo=;
+        b=OtDlIGYH3h0B9BRwbrV57CbPXN/vz7g6l0ySDeRFpUDbL5cQgEdhgymu21e5aKKHhj
+         fVjTUTVQCknhXOCnxmPn2+aId7q2nddEa4Z7h1GpwU3RXzvPD4YuBE1SH6o1CY7xyNM7
+         dO27XZzDcTsjwbZLZrs7GJAWANR/oSFLSAl15GsSIIxDrthvvBCu8gOWHIk7zJPPqeCN
+         xgQPh2pQbJi6d3HkQcuS1ace8umFGT4IH5R4VNLo3XcqYlsJgwOvSwdztWToA9K/h5Hw
+         2f4Db6tZwj1ErdKtIgjY8PbHY45Fdf3FDURF+uuXI89MFsRm83xrVmu7O29DRM6MQUOJ
+         Ko9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xNLSOEaEw7kf6bfeQjVyXkvE7jCgutmejEXvvU8XWSo=;
+        b=5tHqmLn55zZGfITu6XlOomnTXMh6Dmi1LbckjwDT3Niri4WiWyP+LBD06rcW9NYLoV
+         NLLJLKuZ3o4T5COZKavzke1Go3Cxy+KmwIF46DZzib5pVSKRxQezB6BCE6kZbt4aswwv
+         XScWcWL5dHrhsTcn0wS4OIswzX1hRuk2/nepO7+jpJbU3ChB+J59Umk6DblMFlO+3Qdz
+         7HHmIq6WZergyxDxaNmyT5qQeErAgqI8ZkOpG7WtDXyiQv0/srUi4770ED0dG+dGziC0
+         952Ro08NJ5z3svUTrJEp/xdO8ljciiqwU86NdYzkyJAgPfwuZQn0jCBTvTBQQMsP3XEw
+         hIBg==
+X-Gm-Message-State: AOAM532/eWmFvEVKDgFTK+Qv3Yd2gbI88ZmGlnZn6DZvoS0FhxY8Ywxn
+        MSKBabHmwKdL7jE+BFC3Dos+iw8ekrbs3DxF6h8=
+X-Google-Smtp-Source: ABdhPJygW9JmRlMvLKBvGYQM+2FqU8G7dLTa/jwfWebLyGBNQGa8Xir5KRKYS3gHJrn/NhZtPkF/Lw==
+X-Received: by 2002:a17:90b:4f82:b0:1cd:328f:9cd with SMTP id qe2-20020a17090b4f8200b001cd328f09cdmr6152887pjb.38.1649828771166;
+        Tue, 12 Apr 2022 22:46:11 -0700 (PDT)
+Received: from mahak-Inspiron-7570.iitr.ac.in ([103.37.201.168])
+        by smtp.googlemail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm41365867pfj.55.2022.04.12.22.46.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 22:46:10 -0700 (PDT)
+From:   Mahak Gupta <mahak_g@cs.iitr.ac.in>
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v3 2/2] staging: greybus: remove empty callback function
-Message-ID: <20220413054458.GS12805@kadam>
-References: <cover.1649824370.git.jhpark1013@gmail.com>
- <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR1P264CA0028.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:2f::15) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca823467-8175-4756-1931-08da1d10c4d7
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5345:EE_
-X-Microsoft-Antispam-PRVS: <BLAPR10MB53450AFF28C85F13DE34EE8D8EEC9@BLAPR10MB5345.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YzvLeqGZyXQ1gwCUNc8ECVmuzcXRphd6w27CU/YUiSDxkGJwDet+I+b6h5dYIkgGRCLblqs308by1hYQbPuhbdPsUWNpx543ViNQPYM8qETtesD2SSqPEtqTvlJR9ScAtQhydXAWhyGYZSOyfDkFg7pN3NPpNS258wwNhppCrpDgCwR1WpiBpbM1g3HsleA7boBd02Gh7C98h1mEYuFlyDQqLXJZbcd/zlGg3G9ypDY5UXPA/7T4RGyyJziiWt6sXF14TGjpSt7fghjGO/aqk5i4L4/Gr9DaMaU3ixTIiuEiIlJznRV9Emq8lG5n3VWaRkjKOzk9O2haCpIV0CQ0tGq+BtpMrl8CFXHJwDM/q9BOP44BlTZ/wLDvMuPpYJ+zBtO+4hmogtfBZv7sQfVYZmvSPVThEtUKDECusq2p+aREmWCfCUc5biyNFPtohxQ7SLeFDYZ8JVbzS/Xo0mGmSuPItrVLuLrax47ndhitC2GPRfFPV990FU6b0cjPiAdFKsqmcEv8KUQvUN2DLE7A3+NX+sqnV8qq0cLschQqIcxPb+z1a9rfPAn75BnAdLimUngIQmxrLaVfTabmWPx2uSOLLOp6Q3o4uriaSq+QrfA7BXWnAprNhd1OyON4kYsRyWtXof1LzyHKZDVcBN6hkEA4wpZXeApxHqqsmeRNn3Ms6GB+r0c9K2gNHQ05LCNYGPh4PCHPcUFVzjFW+g6XJw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33656002)(508600001)(5660300002)(8936002)(44832011)(4744005)(38100700002)(38350700002)(6486002)(186003)(26005)(2906002)(52116002)(1076003)(6666004)(86362001)(9686003)(6512007)(316002)(6916009)(66476007)(4326008)(66556008)(8676002)(66946007)(33716001)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6d2aLllDU5jXH2NhK/1ArHCVlZJIZfiGNdXsLpC7GhnJxh9rGYyN8YdxtzgY?=
- =?us-ascii?Q?3KIDi0Nrxutf9CA/37IedfXzroD5jdAPw3/jLDUH12zDnSxC51oS83+jLaxC?=
- =?us-ascii?Q?3LI2zsClu4qwNpIon9Kxkc7kS0gahSbrm858rJVqoSh7Oaqyf6X4mOGvP/nj?=
- =?us-ascii?Q?wUE5Vbvq/SsKqcEI9kD3jWK6EV/CAzqUKlaBf9SQmTSIF+y29clTLiiEtl5B?=
- =?us-ascii?Q?arGfOELkUhvqF1qwmPAWgEDH30EiEyxjRoBem6RLzcJVZs8npUYr2tlGhXBu?=
- =?us-ascii?Q?7Js437u9v7pMokHUNPbW6b0DGhOP4EOqdScKGuR67G0FcKm8R9v0puC55emZ?=
- =?us-ascii?Q?Ru09wFORA5ujFd9AsoXy2jxZ39RlCV1HqHtnzkKvYfW9n5pa/EgBAhA4nHNF?=
- =?us-ascii?Q?exxCa+gfUCIJ8jvBQJIdOZlNxDDjlBexm/cDQJXrYMw6WvVtI6EWEi11XjKq?=
- =?us-ascii?Q?Dq9JYeqMzv9sjHqYBaK36IERa0U/9PfYZp91r9YBw7YvzZg6ZmODIY/fT5Oy?=
- =?us-ascii?Q?PHgWBTz/yXJ3vULkUiVU4e2xMVPukLReie+VJno3aa0fKSfPvH5YhyNHj1cs?=
- =?us-ascii?Q?V/qHfJIA7IMOAjZGMYx5E5Hy5p8qcQH3s7J6epsmRtOPkGP0KDCJQGLSe3xB?=
- =?us-ascii?Q?uGQTTITZxFXH6cS6+eet76Gyfl/EiLyRlOPEnRoFNCZ++JVJW8GAFASuqqLy?=
- =?us-ascii?Q?NHEDFVB7QAjtF+0GdEHXw+xvJSdKSBR2RAANuVrR7DmtxAZim+DgAr8uJPa5?=
- =?us-ascii?Q?RO+JfhUKDvknJl6iP2oc1jeTD+DtHuD8MqpDxYkuV8NO0upDRXtor+ZTDYNR?=
- =?us-ascii?Q?f4UN3Y2o1qE9MBZIOWceyrg/VoaXVyOch8M6S+3lXqFihLDwVRLqHEvJ3r4a?=
- =?us-ascii?Q?gXAbWuoXtRrRovy+JO4vMd5+3YUJLaFNkgkMaaTCv4biXLU6FyxijORXYHSN?=
- =?us-ascii?Q?6E6MlraOrh0+nSNSTLx83IDNAVK/lHLKGsGBW8aAZgkrRsiRCUkTvpSMmMwJ?=
- =?us-ascii?Q?9OZG0fN9p17cLOCpPRq2jt50iEN6+XtT2voFZugUxC5K36yYpA9KfAF8uuQ+?=
- =?us-ascii?Q?gjISOKlk7ne25XqqMZVa54EtFIce9/nP1m5rInvexXtI2j2af5uO51l7pbWM?=
- =?us-ascii?Q?AYlk+sj+XWUi/geO1qZmgCXjCLdnVJgILrJSFONg81ailBsyJS49JvihlEhz?=
- =?us-ascii?Q?qb1UCTnUEZamuX0k1mmjmoVS4sSH3A2MM0XAjvvs30QK1vlJfTBUC+pdY84t?=
- =?us-ascii?Q?j8m+4a9QAERPIW48zBCizv1VH0Fx+yCNXJMkKk4j5UIDWquv1SQFQlrSmYVY?=
- =?us-ascii?Q?cejmxE8R+/H7olLOhwkxRMBdvELWTPSIuWU2GbKljieaInPr3RumtbQvT3Qq?=
- =?us-ascii?Q?uzGE64eHPXRKpl6rXTTWPG0lFJgV43RbqBh07ObKSo5kXBpjmqUy7B79IGiE?=
- =?us-ascii?Q?IMErhB/E8n0LuEhvo2tC7I2TNVwRK/Bui0VvFUFoVery5RJPPclMIsGZfxr3?=
- =?us-ascii?Q?CEFkD/D4vpDSIR8V9t/qZOQUl88b2+OZGnrW7uFCVnYEMcM8MXbUtx+qicg6?=
- =?us-ascii?Q?W0qYdhzGHE5Q+WS8cYDMHfhsyMZkXzBca6djrzxrVHi9Tze13cSR86jv80nq?=
- =?us-ascii?Q?ZKna4QZ76+ZqyJ7tx9skIsrdoX8bSO8YjvaNwIASQLrT1uSImkwLzhr3cApz?=
- =?us-ascii?Q?2DJFb8Knr2Bpx10b15j6NOWToZssHSTlqSWJvAzh/xJ3W4XZY/FRrZhpuk9B?=
- =?us-ascii?Q?N7C+dB1OqD/Zu479grBdMMnWDmXmKGg=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca823467-8175-4756-1931-08da1d10c4d7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 05:45:08.6865
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JVC8QQ2GuQpW2r2Ld/3IbOeqIIuj7yGpIa9XIQs+M7AduMA9yrzfRp38YmkXDf3hyZLfwjV0ZQI3bOQCawsWbplQHzd8kM2ajpyHgp0SsbQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5345
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-12_06:2022-04-11,2022-04-12 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
- phishscore=0 mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204130033
-X-Proofpoint-ORIG-GUID: us1Xd9VyUtw0qvAT_JicBpduaTzF93UU
-X-Proofpoint-GUID: us1Xd9VyUtw0qvAT_JicBpduaTzF93UU
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Mahak Gupta <mahak_g@cs.iitr.ac.in>
+Subject: [PATCH] staging: r8188eu: add space around operators
+Date:   Wed, 13 Apr 2022 11:15:17 +0530
+Message-Id: <20220413054517.6343-1-mahak_g@cs.iitr.ac.in>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 12:38:52AM -0400, Jaehee Park wrote:
-> Remove the optional remove callback for the soc_codec_dev_gbaudio
-> structure. The only place it is referenced is
-> snd_soc_component_remove() which is only called if the sound_component
-> pointer is non-null. The null function pointers here can be optionally
-> ommitted. When a sound component is registered this way, the remove
-> callback is optional. We can safely remove the whole gbcodec_remove
-> function, which used to be an empty function with a void return type.
-> 
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+Adhere to linux coding style.
 
-Thanks!
+Reported by checkpatch:
 
-regards,
-dan carpenter
+spaces preferred around that '{operator}'.
+
+Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
+---
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 58 +++++++++++------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index 15332f9d6fe3..e1b3e9d5250b 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -87,19 +87,19 @@ static int skb_pull_and_merge(struct sk_buff *skb, unsigned char *src, int len)
+ 	int tail_len;
+ 	unsigned long end, tail;
+ 
+-	if ((src+len) > skb_tail_pointer(skb) || skb->len < len)
++	if ((src + len) > skb_tail_pointer(skb) || skb->len < len)
+ 		return -1;
+ 
+ 	tail = (unsigned long)skb_tail_pointer(skb);
+-	end = (unsigned long)src+len;
++	end = (unsigned long)src + len;
+ 	if (tail < end)
+ 		return -1;
+ 
+-	tail_len = (int)(tail-end);
++	tail_len = (int)(tail - end);
+ 	if (tail_len > 0)
+-		memmove(src, src+len, tail_len);
++		memmove(src, src + len, tail_len);
+ 
+-	skb_trim(skb, skb->len-len);
++	skb_trim(skb, skb->len - len);
+ 	return 0;
+ }
+ 
+@@ -117,7 +117,7 @@ static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
+ 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
+ 
+ 	networkAddr[0] = NAT25_IPV4;
+-	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
++	memcpy(networkAddr + 7, (unsigned char *)ipAddr, 4);
+ }
+ 
+ static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
+@@ -126,8 +126,8 @@ static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
+ 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
+ 
+ 	networkAddr[0] = NAT25_PPPOE;
+-	memcpy(networkAddr+1, (unsigned char *)sid, 2);
+-	memcpy(networkAddr+3, (unsigned char *)ac_mac, 6);
++	memcpy(networkAddr + 1, (unsigned char *)sid, 2);
++	memcpy(networkAddr + 3, (unsigned char *)ac_mac, 6);
+ }
+ 
+ static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
+@@ -136,17 +136,17 @@ static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
+ 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
+ 
+ 	networkAddr[0] = NAT25_IPV6;
+-	memcpy(networkAddr+1, (unsigned char *)ipAddr, 16);
++	memcpy(networkAddr + 1, (unsigned char *)ipAddr, 16);
+ }
+ 
+ static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
+ {
+ 	while (len > 0) {
+-		if (*data == tag && *(data+1) == len8b && len >= len8b*8)
+-			return data+2;
++		if (*data == tag && *(data + 1) == len8b && len >= len8b * 8)
++			return data + 2;
+ 
+-		len -= (*(data+1))*8;
+-		data += (*(data+1))*8;
++		len -= (*(data + 1)) * 8;
++		data += (*(data + 1)) * 8;
+ 	}
+ 	return NULL;
+ }
+@@ -158,7 +158,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 
+ 	if (icmphdr->icmp6_type == NDISC_ROUTER_SOLICITATION) {
+ 		if (len >= 8) {
+-			mac = scan_tlv(&data[8], len-8, 1, 1);
++			mac = scan_tlv(&data[8], len - 8, 1, 1);
+ 			if (mac) {
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+@@ -166,7 +166,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		}
+ 	} else if (icmphdr->icmp6_type == NDISC_ROUTER_ADVERTISEMENT) {
+ 		if (len >= 16) {
+-			mac = scan_tlv(&data[16], len-16, 1, 1);
++			mac = scan_tlv(&data[16], len - 16, 1, 1);
+ 			if (mac) {
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+@@ -174,7 +174,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		}
+ 	} else if (icmphdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
+ 		if (len >= 24) {
+-			mac = scan_tlv(&data[24], len-24, 1, 1);
++			mac = scan_tlv(&data[24], len - 24, 1, 1);
+ 			if (mac) {
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+@@ -182,7 +182,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		}
+ 	} else if (icmphdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT) {
+ 		if (len >= 24) {
+-			mac = scan_tlv(&data[24], len-24, 2, 1);
++			mac = scan_tlv(&data[24], len - 24, 2, 1);
+ 			if (mac) {
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+@@ -190,7 +190,7 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		}
+ 	} else if (icmphdr->icmp6_type == NDISC_REDIRECT) {
+ 		if (len >= 40) {
+-			mac = scan_tlv(&data[40], len-40, 2, 1);
++			mac = scan_tlv(&data[40], len - 40, 2, 1);
+ 			if (mac) {
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+@@ -397,7 +397,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			tmp = be32_to_cpu(iph->saddr);
+ 			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
+ 			/* record source IP address and , source mac address into db */
+-			__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
++			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
+ 			return 0;
+ 		default:
+ 			return -1;
+@@ -422,7 +422,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			arp_ptr += arp->ar_hln;
+ 			sender = (unsigned int *)arp_ptr;
+ 			__nat25_generate_ipv4_network_addr(networkAddr, sender);
+-			__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
++			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
+ 			return 0;
+ 		default:
+ 			return -1;
+@@ -459,22 +459,22 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 							    sizeof(tag_buf))
+ 								return -1;
+ 
+-							memcpy(tag->tag_data+MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN,
++							memcpy(tag->tag_data + MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN,
+ 								pOldTag->tag_data, old_tag_len);
+ 
+-							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN+old_tag_len) < 0)
++							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN + old_tag_len) < 0)
+ 								return -1;
+ 
+-							ph->length = htons(ntohs(ph->length)-TAG_HDR_LEN-old_tag_len);
++							ph->length = htons(ntohs(ph->length) - TAG_HDR_LEN - old_tag_len);
+ 						}
+ 
+ 						tag->tag_type = PTT_RELAY_SID;
+-						tag->tag_len = htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
++						tag->tag_len = htons(MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN + old_tag_len);
+ 
+ 						/*  insert the magic_code+client mac in relay tag */
+ 						pMagic = (__be16 *)tag->tag_data;
+ 						*pMagic = htons(MAGIC_CODE);
+-						memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN, ETH_ALEN);
++						memcpy(tag->tag_data + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
+ 
+ 						/* Add relay tag */
+ 						if (__nat25_add_pppoe_tag(skb, tag) < 0)
+@@ -487,7 +487,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 							return -2;
+ 
+ 						if (priv->pppoe_connection_in_progress == 0)
+-							memcpy(priv->pppoe_addr, skb->data+ETH_ALEN, ETH_ALEN);
++							memcpy(priv->pppoe_addr, skb->data + ETH_ALEN, ETH_ALEN);
+ 
+ 						priv->pppoe_connection_in_progress = WAIT_TIME_PPPOE;
+ 					}
+@@ -497,11 +497,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			} else {	/*  session phase */
+ 				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
+ 
+-				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
++				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
+ 
+ 				if (!priv->ethBrExtInfo.addPPPoETag &&
+ 				    priv->pppoe_connection_in_progress &&
+-				    !memcmp(skb->data+ETH_ALEN, priv->pppoe_addr, ETH_ALEN))
++				    !memcmp(skb->data + ETH_ALEN, priv->pppoe_addr, ETH_ALEN))
+ 					priv->pppoe_connection_in_progress = 0;
+ 			}
+ 			return 0;
+@@ -549,7 +549,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 		case NAT25_INSERT:
+ 			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
+ 				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
+-				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
++				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
+ 
+ 				if (iph->nexthdr == IPPROTO_ICMPV6 &&
+ 						skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
+-- 
+2.17.1
 

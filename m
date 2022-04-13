@@ -2,151 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBAD500192
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394DE500195
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiDMWLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S235864AbiDMWQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiDMWLp (ORCPT
+        with ESMTP id S234907AbiDMWQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:11:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525C515720;
-        Wed, 13 Apr 2022 15:09:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 014AEB8275E;
-        Wed, 13 Apr 2022 22:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B71CC385A6;
-        Wed, 13 Apr 2022 22:09:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649887759;
-        bh=jgSOQzCVRoBHmb6HoMBMfjB7ijOTlpofh5TsaaZ1DII=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UZwQtlWFGuRvynrYy3Hnku+N8GlU0fnU3TmEVni5mosTZaikBoZ+xEfcEQ0kAy8Kh
-         lg9Bk5WIb4xghtorw+uyqjSKj64vtI09WL1DWHxhYiFDpMaRRonrGA3J+zZSfqutbF
-         W+/N6uY0itZI3oN1lO2FEwf76DpjkpEOJXfEjbGJPI5v4AsumQXooPBpTakEKtT2X1
-         KQvjpAcm/YC3BvoBq6tPvf0zY5wEXjRkWih8dWcpH6K1iIG92sFnVgwgjS/ND7DA15
-         8ugfsoqFsn6+ekTDh5CWIdpnKs62N0JNUOzrCGdQXokT8LrLYvD8SBEzYlyqpFnj7Q
-         LCPhQTD+5su/w==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so3445485fac.11;
-        Wed, 13 Apr 2022 15:09:19 -0700 (PDT)
-X-Gm-Message-State: AOAM532W2Osi9GHd6070TZzcvtoKYf14UnZLHTs3sugE3nZOL8S+f5WF
-        H6EBR32kuI6MI4CTFqaOyGoKMvSt2Ey+qIaIo3Q=
-X-Google-Smtp-Source: ABdhPJyFhIESFBWF4NWTke0JSO8yrNB48D6kvuTaKZGZjUJVfNqzOhAod1iXtN4jeUCBimDim5jGDX57mxsce/wQecQ=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr397925oap.228.1649887758751; Wed, 13
- Apr 2022 15:09:18 -0700 (PDT)
+        Wed, 13 Apr 2022 18:16:43 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACAE20B;
+        Wed, 13 Apr 2022 15:14:21 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r66so3055469pgr.3;
+        Wed, 13 Apr 2022 15:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OgQDc06AaabwNqvOZmx+M7xA6vS8FVswgmeGiTFEFmQ=;
+        b=C/I0954RFQfeOgPPXsDSdcBq22+URv/YRu61nd8kIqommib46tUTT+kkUqguhMr/eF
+         wbP4t2bAPwN+OZ4ZdSv5MhG/gqrQpPlQ/FNWxI8IhMQzwP0jDZpxLNyLHBCVC/zHy1Sq
+         x6G/MnmA9w6LMJEsCqvoeSWMPUw2aClx8+n4E0UMXXtkf9BzuYKo8vljlQdHPNcn7kSU
+         yKrQsZ1Vc2bqq97L1m0DDWfGhMuJpMloaYXRTgzi1u0E/vfXVFle34S0qZAN9jdO3nMo
+         4xdxOfou1kusfI+sMA89/v7sjF/3py5tXrlll6qSfAMEJoyZJ5SN2FSQj+RpsPYHDQW7
+         YT0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OgQDc06AaabwNqvOZmx+M7xA6vS8FVswgmeGiTFEFmQ=;
+        b=dhvu4uvJFO9w+7NBKbf72nKg8mv8NZH9DWszE8iPfq4XgcYCtRlzqXtBUWoM1Mplha
+         ivzZgaswovSxDv3un+8DO8ABkKVdz/gjQv0RUx1I3simyiFibk1gKLLjJgrhMmFiwKK7
+         n3cLdzdKBzQeI58t9X6ETyVabj1sUg+tk6E4AmLM8eaZmQUYNYN0e7DqApfuTBR2uzeY
+         i2mqiXyyyVxG02ugFVmcKqXPByQVNeQYhYbv334i8pkEVXbT7YjKOIVstb4vJse7IxDr
+         mIX738QeYwD2l0cbXFNEqxNFKJIu4UmnPR40qqkxn9j++HqvED8BXgBdG0gsxRQxYN9W
+         Qpvg==
+X-Gm-Message-State: AOAM533TQmUN8HzTY6pbja9YfBG6qlDZLAdeGhls8UhA1kCBkcn6jcux
+        2REqA1XM+/mAhh3tqkdzS7o=
+X-Google-Smtp-Source: ABdhPJy2YawYQEhEM5R8p5OuAttWelqENZrpl40KyZkXf46PikY9jQrnx15kgh8UD16TomdH3gXeHw==
+X-Received: by 2002:a05:6a00:24c5:b0:4fa:f63a:4c3 with SMTP id d5-20020a056a0024c500b004faf63a04c3mr892965pfv.15.1649888060453;
+        Wed, 13 Apr 2022 15:14:20 -0700 (PDT)
+Received: from [172.30.1.44] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm79582pfc.111.2022.04.13.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 15:14:20 -0700 (PDT)
+Message-ID: <58fde143-ee39-a429-ce22-06d0c4095de8@gmail.com>
+Date:   Thu, 14 Apr 2022 07:14:15 +0900
 MIME-Version: 1.0
-References: <20220331221030.889718-1-jakobkoschel@gmail.com>
- <CAMj1kXE2r4xrtFc+=OJfzutZzTtaUoFtW=f7y9+us9h+xGVEnA@mail.gmail.com> <9142505E-720F-401E-AD48-BA9D0880EDD1@gmail.com>
-In-Reply-To: <9142505E-720F-401E-AD48-BA9D0880EDD1@gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 Apr 2022 00:09:07 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFqG0n1KVPsTYo2a-qS3zb40itNmxy9gGy2A===qdPYxg@mail.gmail.com>
-Message-ID: <CAMj1kXFqG0n1KVPsTYo2a-qS3zb40itNmxy9gGy2A===qdPYxg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] efi: remove use of list iterator variable after loop
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource
+ conflicts with firmware
+Content-Language: en-US
+To:     Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+References: <20220406014842.2771799-1-briannorris@chromium.org>
+ <CGME20220406094558epcas1p4fa0c77a5acd6b73c192f6b19136cd5f9@epcas1p4.samsung.com>
+ <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
+ <c8664eae-4a10-bd1a-8898-01b96c05331e@samsung.com>
+ <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Kees for pstore)
+Hi Brian,
 
-On Wed, 13 Apr 2022 at 20:08, Jakob Koschel <jakobkoschel@gmail.com> wrote:
->
->
->
-> > On 13. Apr 2022, at 19:05, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Fri, 1 Apr 2022 at 00:11, Jakob Koschel <jakobkoschel@gmail.com> wrote:
-> >>
-> >> In preparation to limiting the scope of a list iterator to the list
-> >> traversal loop, use a dedicated pointer to iterate through the list [1].
-> >>
-> >> In the current state the list_for_each_entry() is guaranteed to
-> >> hit a break or goto in order to work properly. If the list iterator
-> >> executes completely or the list is empty the iterator variable contains
-> >> a type confused bogus value infered from the head of the list.
-> >>
-> >> With this patch the variable used past the list iterator is only set
-> >> if the list exists early and is NULL otherwise. It should therefore
-> >> be safe to just set *prev = NULL (as it was before).
-> >>
-> >
-> > This generic boilerplate is fine to include, but it would help if you
-> > could point out why repainting the current logic with your new brush
-> > is appropriate here.
->
-> This makes sense, I can see that the commit message should be improved here.
->
-> >
-> > In this particular case, I wonder whether updating *prev makes sense
-> > to begin with if we are returning an error, and if we fix that, the
-> > issue disappears as well.
->
-> Actually I'm rethinking this now. The only use of 'prev' that I can see is
-> in efi_pstore_erase_name(). It only uses it if found != 0
-> which would mean err != 0 in __efivar_entry_iter().
->
-> This would allow massively simplifying the entire function.
-> The valid case is updating *prev when there is an "error" as far as I can tell.
->
+On 22. 4. 9. 12:34, Brian Norris wrote:
+> Hi Chanwoo,
+> 
+> On Wed, Apr 6, 2022 at 9:38 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>> Instead of adding the specific function for only rockchip,
+>> how about adding new function pointer (like block/unblock or start/stop and others)
+>> into 'struct generic_pm_domain'? And add new pm_genpd_* function
+>> to control the power domain.
+> 
+> I suppose that is technically possible, but I'm not sure it makes a
+> ton of sense.
+> 
+> First, genpd doesn't seem to typically expose operations directly to
+> client device drivers. It's mostly about abstract handling of the
+> dependencies of "how do I power on this device?" behind the scenes of
+> things like pm_runtime_*(). I guess maybe something like
+> dev_pm_genpd_set_performance_state() is an approximately similar API
+> though (i.e., a genpd operation exposed to client drivers)? I could
+> try to go that route, if the genpd maintainers think this makes sense.
+> 
+> But secondly, this isn't exactly an operation on one power domain.
+> It's an operation on the entire power controller. I suppose I could
+> make a new domain here for the memory controller, and teach that
+> domain to implicitly manipulate all the other domains provided by the
+> PMU, but that feels like a fake abstraction to me.
+> 
+> Lastly, and perhaps least importantly: this likely would require a
+> device tree binding change. So far, the memory controller hasn't had
+> its own power domain. I guess one could argue that it has some
+> similarities to a power domain, albeit one that is managed in firmware
+> -- so maybe this is a reasonable "bug" to fix, if it really comes down
+> to it.
+> 
+>> Because it is better to use subsystem interface.
+> 
+> I don't agree this is universally true. It makes sense when there are
+> truly abstract concepts represented, which are likely to appear across
+> multiple implementations. Or maybe if the object model is complex. But
+> this operation seems very SoC-specific to me, and it's pretty simple
+> to implement this way. Or, do you think this is really something that
+> others will need -- pausing (and powering) a power controller so
+> another entity can manage it?
 
-OK, so in summary, the only user of that code that bothers to pass a
-value for prev abuses it to implement its own version of
-efivar_entry_find(), and so if we fix that caller, we can drop the
-'prev' argument from this function altogether.
+Thanks for detailed reply.
 
+I agree your thinking. If possible, just I prefer to use standard
+subsystem interface. But as you commented, it is not general case
+that this issue is related to all power domains. Also, there is dt
+binding issue as you described.
 
-> I've sketched up a rewritten function that should hopefully be more clear and
-> archive the same goal, I'm curious what you think:
->
->
->         int __efivar_entry_iter(int (*func)(struct efivar_entry *, void *),
->                                 struct list_head *head, void *data,
->                                 struct efivar_entry **prev)
->         {
->                 struct efivar_entry *entry, *n;
->                 int err = 0;
->
->                 /* If prev is set and *prev != NULL start iterating from there */
->                 if (prev)
->                         entry = list_prepare_entry(*prev, head, list);
->                 /* Otherwise start at the beginning */
->                 else
->                         entry = list_entry(head, typeof(*entry), list);
->                 list_for_each_entry_safe_continue(entry, n, head, list) {
->                         err = func(entry, data);
->                         if (err && prev)
->                                 *prev = entry;
->                         if (err)
->                                 return err;
->                 }
->
->                 return 0;
->         }
->
+I agree this approach. Thanks.
 
-Thanks for this. I'll have a stab myself at fixing the EFI pstore
-code, and hopefully we can clean up __efivar_entry_iter() as I
-suggested.
+(snip)
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

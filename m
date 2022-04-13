@@ -2,89 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22274FF568
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84034FF56D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiDMLG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S234560AbiDMLH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiDMLGZ (ORCPT
+        with ESMTP id S235157AbiDMLHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:06:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9CCB4A90F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649847843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 13 Apr 2022 07:07:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A98D5883F;
+        Wed, 13 Apr 2022 04:05:27 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1A517210FD;
+        Wed, 13 Apr 2022 11:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649847926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SAKFvcf+P6d2EsRST5nUXnt0HSC5cHGQEXD7juEAlB0=;
-        b=fBsys0uJPf2bQaLQEvKtimWlU2r3FFSicU63JViZq6reX3SW1XpjYM647GOSIIU+cEIM4p
-        ewCZB29lbhFOqOw9pvc/NbBjtJuDtFNk9CDWQlMEdOmOu/DP+I4R+UkmO9jxUSS1Ij7Jdp
-        h6pCJTNWvNdwjeZGZoI11qi2ZuOZEe8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-364-On64rOZPOr257q0QHqtohg-1; Wed, 13 Apr 2022 07:04:02 -0400
-X-MC-Unique: On64rOZPOr257q0QHqtohg-1
-Received: by mail-wm1-f72.google.com with SMTP id o6-20020a05600c510600b0038ec5f6d217so678642wms.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:04:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SAKFvcf+P6d2EsRST5nUXnt0HSC5cHGQEXD7juEAlB0=;
-        b=ROz/KJq0EXAH/JYJUMjbTK0R5OCj3xZioVmQfQx+FuVU/KBFAID08jqOI/nocCiRkt
-         L45CTVXwBhogZWrpqaYhr/K7WGRVgMF+cvvWJKg42uCEvD0w/ktJNC1stiFkSJFstCN4
-         GrUsYM0bA4mH1evczJD2XN2IQGMRvDXIUfPshACzkVW/Hlyf4QIr7bPmKPLCsK4iE4wJ
-         xScrbrtSGc3pFrMCRXlLN0P/Y2T57Q+KtlLb6JwUPKQJFcK2LOQX3K0fMHj4BmdZcgWt
-         aPZnuPVF+7+H3N4aCIo5EPzj/SDGXb7JvHV0v/PZhmbm8PVGlv0SAqVIhVbXkzimcGJk
-         y59Q==
-X-Gm-Message-State: AOAM5313Yzzv9BtI7obenXHLs+DWjAvMnArvI3lOAq0+1dITtD8eylkE
-        tG3DOcQmOHx2bPJIuht08nwMhBSLhSu8SaYeN8FrtLp1GpyllPFBs0cRlnkaeevksV1/GQ5cVz6
-        tSvVLXGW/K/0i+sY0LsQKSqdS
-X-Received: by 2002:a05:600c:4ecb:b0:38e:d223:b0b4 with SMTP id g11-20020a05600c4ecb00b0038ed223b0b4mr4066661wmq.92.1649847840977;
-        Wed, 13 Apr 2022 04:04:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzbKeAp/60xVQlTIHBbb+L6Qv1XJBF2V0iIuW2htHB09yVazdm0LN0gRH3CTTu5mRCCDlS02A==
-X-Received: by 2002:a05:600c:4ecb:b0:38e:d223:b0b4 with SMTP id g11-20020a05600c4ecb00b0038ed223b0b4mr4066645wmq.92.1649847840796;
-        Wed, 13 Apr 2022 04:04:00 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id 10-20020a5d47aa000000b00207afc4bd39sm5100081wrb.18.2022.04.13.04.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 04:04:00 -0700 (PDT)
-Message-ID: <e65378b2-eaba-e3b8-4bd7-0fb87f343d7b@redhat.com>
-Date:   Wed, 13 Apr 2022 13:03:59 +0200
+        bh=vuDXLs71XOBzrT2KJvxwCfIHfXPj0UmnTLYWZfHEDe0=;
+        b=JC5qRv5Cuo0x3WTN1cxGKr1vYp7BboeDeJum9hm2H607castvJ6ruwuxfyk+nV+PDxTE49
+        aP9BLfuxL6HzLSnWxOG0cjTxORuNZLCDCS5o5fy9Cii3HPQ+ecEkwf0M58ohuDUMDNAgBk
+        Vv9DjYTz5J0+estjzScgqLVkX792HgY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649847926;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuDXLs71XOBzrT2KJvxwCfIHfXPj0UmnTLYWZfHEDe0=;
+        b=vlys3+ra2hG6zozEb6xdmehkg362hPm1YLYRS7wG+WphtjzfIS+Qs/0fe/rcDQ7UEryH2j
+        8myhqy33qrVNHDDQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 00F6DA3B82;
+        Wed, 13 Apr 2022 11:05:26 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id A41F2A0615; Wed, 13 Apr 2022 13:05:25 +0200 (CEST)
+Date:   Wed, 13 Apr 2022 13:05:25 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
+        jack@suse.cz, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next 05/11] block, bfq: count root group into
+ 'num_groups_with_pending_reqs'
+Message-ID: <20220413110525.u7wi2ttk5lag6r4b@quack3.lan>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <20220305091205.4188398-6-yukuai3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/5] drm/solomon: Move device info from ssd130x-i2c to
- the core driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
-        Mark Brown <broonie@kernel.org>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-References: <20220412162729.184783-1-javierm@redhat.com>
- <20220412162729.184783-5-javierm@redhat.com>
- <Ylap8rTKbXp80Woc@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Ylap8rTKbXp80Woc@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220305091205.4188398-6-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,35 +66,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+On Sat 05-03-22 17:11:59, Yu Kuai wrote:
+> Root group is not counted into 'num_groups_with_pending_reqs' because
+> 'entity->parent' is set to NULL for child entities, thus
+> for_each_entity() can't access root group.
+> 
+> This patch set root_group's entity to 'entity->parent' for child
+> entities, this way root_group will be counted because for_each_entity()
+> can access root_group in bfq_activate_requeue_entity(),
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  block/bfq-cgroup.c  | 6 +++---
+>  block/bfq-iosched.h | 3 ++-
+>  block/bfq-wf2q.c    | 5 +++++
+>  3 files changed, 10 insertions(+), 4 deletions(-)
 
-On 4/13/22 12:46, Andy Shevchenko wrote:
-> On Tue, Apr 12, 2022 at 06:27:28PM +0200, Javier Martinez Canillas wrote:
->> These are declared in the ssd130x-i2c transport driver but the information
->> is not I2C specific, and could be used by other SSD130x transport drivers.
->>
->> Move them to the ssd130x core driver and just set the OF device entries to
->> an ID that could be used to lookup the correct device info from an array.
->>
->> While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
->> bytes. Since even though they are used by the I2C interface, they could
->> also be useful for other transport protocols such as SPI.
-> 
-> ...
-> 
->> +EXPORT_SYMBOL_GPL(ssd130x_variants);
-> 
-> What I meant is to use EXPORT_SYMBOL_NS_GPL() here. It might require a separate
-> patch to move other exports to that namespace first.
-> 
+I think you can remove bfqg->my_entity after this patch, can't you? Because
+effectively it's only purpose was so that you don't have to special-case
+children of root_group...
 
-Oh, I wasn't aware of the namespace aware variant of these. Thanks for
-pointing it out! I'll change and use that one instead for v4.
+								Honza
 
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 420eda2589c0..6cd65b5e790d 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -436,7 +436,7 @@ void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg)
+>  		 */
+>  		bfqg_and_blkg_get(bfqg);
+>  	}
+> -	entity->parent = bfqg->my_entity; /* NULL for root group */
+> +	entity->parent = &bfqg->entity;
+>  	entity->sched_data = &bfqg->sched_data;
+>  }
+>  
+> @@ -581,7 +581,7 @@ static void bfq_group_set_parent(struct bfq_group *bfqg,
+>  	struct bfq_entity *entity;
+>  
+>  	entity = &bfqg->entity;
+> -	entity->parent = parent->my_entity;
+> +	entity->parent = &parent->entity;
+>  	entity->sched_data = &parent->sched_data;
+>  }
+>  
+> @@ -688,7 +688,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  	else if (bfqd->last_bfqq_created == bfqq)
+>  		bfqd->last_bfqq_created = NULL;
+>  
+> -	entity->parent = bfqg->my_entity;
+> +	entity->parent = &bfqg->entity;
+>  	entity->sched_data = &bfqg->sched_data;
+>  	/* pin down bfqg and its associated blkg  */
+>  	bfqg_and_blkg_get(bfqg);
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index ddd8eff5c272..4530ab8b42ac 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -1024,13 +1024,14 @@ extern struct blkcg_policy blkcg_policy_bfq;
+>  /* - interface of the internal hierarchical B-WF2Q+ scheduler - */
+>  
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -/* stop at one of the child entities of the root group */
+> +/* stop at root group */
+>  #define for_each_entity(entity)	\
+>  	for (; entity ; entity = entity->parent)
+>  
+>  #define is_root_entity(entity) \
+>  	(entity->sched_data == NULL)
+>  
+> +/* stop at one of the child entities of the root group */
+>  #define for_each_entity_not_root(entity) \
+>  	for (; entity && !is_root_entity(entity); entity = entity->parent)
+>  
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index 17f1d2c5b8dc..138a2950b841 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -1125,6 +1125,11 @@ static void bfq_activate_requeue_entity(struct bfq_entity *entity,
+>  {
+>  	for_each_entity(entity) {
+>  		bfq_update_groups_with_pending_reqs(entity);
+> +
+> +		/* root group is not in service tree */
+> +		if (is_root_entity(entity))
+> +			break;
+> +
+>  		__bfq_activate_requeue_entity(entity, non_blocking_wait_rq);
+>  
+>  		if (!bfq_update_next_in_service(entity->sched_data, entity,
+> -- 
+> 2.31.1
+> 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

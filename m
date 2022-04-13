@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12D44FED30
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71634FED34
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiDMCzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S231818AbiDMC4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiDMCzu (ORCPT
+        with ESMTP id S231824AbiDMC4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:55:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BD3506E7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649818411; x=1681354411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hRIWfIYlFrX7ZKl3HBejDOvzl6OoZT8bn+gfQ7L9d5o=;
-  b=Qkfo8wSi4Xn9w/JPVe56YmU5uU6iEp7W/MQLWcE88HfXJtbkhrz7gXjY
-   jgOnUhYzkMA/fUEwzfBqPPa8sy8GxNIK832aeQ6FMXMWeQLkiMWyDekhu
-   UTrXEbH+Fxdi2lTfrnQMbtLzeow79pEZn07PyjvUs3mnz6XXfOjR4omHJ
-   EYRVSALSAgoBNjREoft3YRSPmkkI+LY0tdSs7u2oNAind65SHOxOJtCZj
-   hZrfpM72cU8qSxU/TW5mqwuBYKldKl37jCr8N1CjISC/i/UqQio3z1hnS
-   p7tnVF/V+XKDoaVO6W9ga9VXr4yyNE3q/wbD9uBQLPnxXJ+clWv0aMReS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260153494"
-X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="260153494"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 19:53:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
-   d="scan'208";a="611708753"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 19:53:28 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neT8K-0003Nk-67;
-        Wed, 13 Apr 2022 02:53:28 +0000
-Date:   Wed, 13 Apr 2022 10:53:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [patch V4 1/2] smp: Rename flush_smp_call_function_from_idle()
-Message-ID: <202204131056.b582vtMv-lkp@intel.com>
-References: <20220412204353.655068649@linutronix.de>
+        Tue, 12 Apr 2022 22:56:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A89150B08
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649818438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aypMv+ZPgdsPLn658L1nF7+IyBlpmCG4qqxgdXjWqDg=;
+        b=Zjgb7V64raset1JteXXgw72x6fWXGwXsk9G0VO8hLWd8OpHNWN2HjpfOov09eJ+iV+4RS6
+        UszvSEQFzKOWj3iR5Tk5RUY7MqxDb76MbkZq4f+RPDUwC9GB8v/akpuERDw8eJdeDVc5SH
+        DnPH7u6km0RUDIQ5O/RoIzDRxedkzvY=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-gZghLop7M5uBzUuQF4yfVQ-1; Tue, 12 Apr 2022 22:53:56 -0400
+X-MC-Unique: gZghLop7M5uBzUuQF4yfVQ-1
+Received: by mail-lf1-f72.google.com with SMTP id c40-20020a05651223a800b0046b94b75eaaso309061lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:53:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aypMv+ZPgdsPLn658L1nF7+IyBlpmCG4qqxgdXjWqDg=;
+        b=6yaZe0hgWoYPtBzueO34ydnDv0JXYDn6cuJd/GYL4yftq1QJz6Nh2klSjXI+un6ocJ
+         pfSzhuf/slqN38bs06kyJbogFo6U+oovzRd5SGqsTmMK4NFLRzIJ0fhE7MXwKsioXR1Z
+         bbCVLPSFdnSVzjClvm3ANr2wa6fxAYYXyPjsI3OUpyiokAx2MIIbKJ5Fg+AH4H/yuIFs
+         EH47+pX319emfjrekWtsm0deoeDhWRhuozi2H3xRWyVZBpvqCdllKDrXPvsLErMoWrbK
+         QAKz7A2CAmARVoUStk5OHfJoKQLRXV1foVjO6ouR1PkkWfTWzeCmDiN+E7ERfQnAle9X
+         R2Gw==
+X-Gm-Message-State: AOAM531EwBi5TzjDzgWtt95ikgWUhwslsrQqaTRn5E2nSKMZQEfzot2N
+        2Mq2oqcLy0rENU3Au2+OlCLtHtZGWLzC8brvwi9gn3br4sjPqMIF0jyu2MEnSMnl/XTpUuqFsTb
+        Ghqllz8votCI8uBRUZCDKgy0e0iQogT4wdnnNod2u
+X-Received: by 2002:ac2:4189:0:b0:448:bc2b:e762 with SMTP id z9-20020ac24189000000b00448bc2be762mr27125048lfh.471.1649818435285;
+        Tue, 12 Apr 2022 19:53:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx3EpYX8EMZCFcND8kfaSkNRCake24Uu+62MAReL2MCHl6d5nFXjeR2zS/5extqCEfll6a/nkHj7E7qob8q+wQ=
+X-Received: by 2002:ac2:4189:0:b0:448:bc2b:e762 with SMTP id
+ z9-20020ac24189000000b00448bc2be762mr27125029lfh.471.1649818435001; Tue, 12
+ Apr 2022 19:53:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412204353.655068649@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220406083538.16274-1-jasowang@redhat.com> <20220406083538.16274-5-jasowang@redhat.com>
+ <20220406075952-mutt-send-email-mst@kernel.org> <87wng2e527.fsf@redhat.com>
+ <20220408150307.24b6b99f.pasic@linux.ibm.com> <20220410034556-mutt-send-email-mst@kernel.org>
+ <CACGkMEtarZb6g3ij5=+As17+d9jtdAqNa1EzSuTXc7Pq_som0Q@mail.gmail.com>
+ <877d7vbspu.fsf@redhat.com> <20220412020145.32e26e5a.pasic@linux.ibm.com> <87r1629rio.fsf@redhat.com>
+In-Reply-To: <87r1629rio.fsf@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 13 Apr 2022 10:53:43 +0800
+Message-ID: <CACGkMEuUXAUK-8GnBWgij5TOSN0ct_gmxnDQEcovRmTLK6bv4w@mail.gmail.com>
+Subject: Re: [PATCH V2 4/5] virtio-pci: implement synchronize_vqs()
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Halil Pasic <pasic@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wed, Apr 13, 2022 at 12:49 AM Cornelia Huck <cohuck@redhat.com> wrote:
+>
+> On Tue, Apr 12 2022, Halil Pasic <pasic@linux.ibm.com> wrote:
+>
+> > On Mon, 11 Apr 2022 16:27:41 +0200
+> > Cornelia Huck <cohuck@redhat.com> wrote:
+>
+> >> My main concern is that we would need to synchronize against a single
+> >> interrupt that covers all kinds of I/O interrupts, not just a single
+> >> device...
+> >>
+> >
+> > Could we synchronize on struct airq_info's lock member? If we were
+> > to grab all of these that might be involved...
+>
+> Hm, that could possibly narrow the sync down to a subset, which seems
+> better. For devices still using classic interrupts, per-device sync
+> would be easy.
+>
+> >
+> > AFAIU for the synchronize implementation we need a lock or a set of locks
+> > that contain all the possible vring_interrupt() calls with the queuues
+> > that belong to the given device as a critical section. That way, one
+> > has the acquire's and release's in place so that the vrign_interrupt()
+> > either guaranteed to finish before the change of driver_ready is
+> > guaranteed to be complete, or it is guaranteed to see the change.
+> >
+> > In any case, I guess we should first get clear on the first part. I.e.
+> > when do we want to allow host->guest notifications.
+>
+> Also, whether we just care about vring interrupts, or general device
+> interrupts (not sure if a config change interrupt may also trigger
+> things we do not want to trigger?)
 
-I love your patch! Perhaps something to improve:
+I think only vring interrupts, since the config interrupt hardening is
+done via 22b7050a024d7 ("virtio: defer config changed notifications")
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on hch-configfs/for-next linus/master linux/master v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Gleixner/smp-Make-softirq-handling-RT-friendly/20220413-045944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 089c02ae2771a14af2928c59c56abfb9b885a8d7
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20220413/202204131056.b582vtMv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7c7c3b99f3599eb409f237b32f330fa06bffcd5d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Gleixner/smp-Make-softirq-handling-RT-friendly/20220413-045944
-        git checkout 7c7c3b99f3599eb409f237b32f330fa06bffcd5d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/smp.c:697:6: warning: no previous prototype for function 'flush_smp_call_function_queue' [-Wmissing-prototypes]
-   void flush_smp_call_function_queue(void)
-        ^
-   kernel/smp.c:697:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void flush_smp_call_function_queue(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/flush_smp_call_function_queue +697 kernel/smp.c
-
-   683	
-   684	
-   685	/**
-   686	 * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
-   687	 *				   from task context (idle, migration thread)
-   688	 *
-   689	 * When TIF_POLLING_NRFLAG is supported and a CPU is in idle and has it
-   690	 * set, then remote CPUs can avoid sending IPIs and wake the idle CPU by
-   691	 * setting TIF_NEED_RESCHED. The idle task on the woken up CPU has to
-   692	 * handle queued SMP function calls before scheduling.
-   693	 *
-   694	 * The migration thread has to ensure that an eventually pending wakeup has
-   695	 * been handled before it migrates a task.
-   696	 */
- > 697	void flush_smp_call_function_queue(void)
-   698	{
-   699		unsigned long flags;
-   700	
-   701		if (llist_empty(this_cpu_ptr(&call_single_queue)))
-   702			return;
-   703	
-   704		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
-   705			      smp_processor_id(), CFD_SEQ_IDLE);
-   706		local_irq_save(flags);
-   707		__flush_smp_call_function_queue(true);
-   708		if (local_softirq_pending())
-   709			do_softirq();
-   710	
-   711		local_irq_restore(flags);
-   712	}
-   713	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,189 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E724FF752
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95594FF74E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbiDMNDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S235689AbiDMND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbiDMNDX (ORCPT
+        with ESMTP id S234194AbiDMNDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:03:23 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6293D5DE72
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:01:02 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e2fa360f6dso1916041fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:01:02 -0700 (PDT)
+        Wed, 13 Apr 2022 09:03:19 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3F55DE7F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:00:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id u18so2283610eda.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gZDaCj8hTLM0bP/l9w7YSO7g2qnbuNgNCn+DCFEd6aI=;
-        b=FEv0kyLo3VMIFAfqBNf2vyglxgp+UTUwDsIRZrjJplezgnISwnlye+51pCD+/BwS2H
-         B1016hY0GDvBfJCqcJZjHjdT4OzviCPT11gyZw9see9RLuMyS1uV+xeJuc+LL/6r8P9V
-         LWDPRVRuD4Nd34JqBPuQfy7uesTk2i37Lhm0/wgvJ8dz/beuac7vETgMBiDWAy5BZsrQ
-         NMYsTTfI9x99CKEa3NoeDcRPYklNpjxymFE0eG8Z09wVdQNW5FijH3YxurMWtL5JB0kN
-         zXDVLK9EXg8ENwB1X436vunz2P/dHcSD6SX8dpxVqW1lCPZYHtZ/K8D371ILyPyI4W2q
-         W8CQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LHqF1GjuEx3McVGIeuPFhwAsbM67ptWjDdKy3Vs5VqE=;
+        b=RDm4Nl9amAehbRuUnGCSwd8FnlDdEcqKxRkwOZb5lapQKqKde6f10rzcqNZUWxApiK
+         8cgK6QAsMxwhgMmj6h1PBMP6b1BwBQXDhRQNauzuzcIapxWBjAZCYA9PCC8Cq4TYe4cz
+         ZtygZf+u6TzgYvZQzNmjOFg5+c2VXbTTkziTMU/3LINwbFh4one0V2yAOJyvqYrkWxVX
+         UliEcVQ0dQ9Lugv/XMFHSKLcDhCL6qMm+goQzffZNXJJqLMyKJT8TykWi0jj+7M5L/yU
+         ruVn4GoRD/AAfr6trMFGA0liuwRQ5MJVfpQ/FeKZeRQTTqtuik2OYQGRUvKiVDgfWQlD
+         40Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gZDaCj8hTLM0bP/l9w7YSO7g2qnbuNgNCn+DCFEd6aI=;
-        b=JzjU4ZgK5gbkBf1GX9p9E9d3GvNTXYbm+wZWiqr6gCu23j/qFOP+X8CBVtP+QIbpLx
-         WOLnRqF8c+11OYjb1ydl2Jb41/7xKCYCVIrYBUSmtEvVNJbIf6RYdOEivJ4kL+enjk1R
-         attYGhoAX57HIfhNow+p+KJDE7Vgl7dvE0vtrdweMkHC+n84dLrXsoCy1DTD+n9PnxhE
-         8pLKYOsR2vI+JWIxxxV77927TxANMx4U4E3WbDXg080BUa8EQJ8e35C6iI6SnJsopviY
-         +Lnq12x30ua8sfMSqT073INDKpKmqSPB/biJO9B0QpzRe+1El7XpLoutPF3sVuzGBGAH
-         BJ7A==
-X-Gm-Message-State: AOAM532LUonVRNHVF0ri4EN9Kmn3N6NTD2oDUSDVRWM/YMw3QO+jZIMw
-        I8UbYAXR5FwB+SQk0Q+NlAGYeDM9bAp6qVkI0DM=
-X-Google-Smtp-Source: ABdhPJyxWqtPubtjVsfln8tW3NJZa00U2bWV6SGBrTscpzYvBAsPghZG5gshfaDwslYztZlR+9ZObVa2eOzU4UoTulU=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr3978609oaa.200.1649854861731; Wed, 13
- Apr 2022 06:01:01 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LHqF1GjuEx3McVGIeuPFhwAsbM67ptWjDdKy3Vs5VqE=;
+        b=ehALbOUI6Lln3zqcMRkGxFbf2HY/Xr6dfNtbzCVpBerWZtwyEI/qr1y5dZ0jS46cdX
+         EFfn7A1JatUwTW1BOv4nAx6pb3/7ix7iibfipZ/mqB36sQoCB+Igvv7isKR2cuqz5Jee
+         CgF8LmcXhxX6ftU4w1IK4ZmeoGYpsM+0j1FWUBSzn7ZgjASVmKk2RGIvDxafkjy+WUDG
+         T4SWE9viOMaH3qlEAxa86KCRCx4C+lKylJoiV8XVkvd5kvhkvIRhRHc1jvudBcraSYLh
+         yHU6VwxtkIRs/DHADTouZOSQFhwClIVGONuHdLsB1XsQCuDzK6eQoTFe/dINmsggFwcZ
+         q/aQ==
+X-Gm-Message-State: AOAM533pX5sJoUhVC3YVVqK4ArMKVSpAfiW0ItjyupeOzEeRKy4algPf
+        Ydl1hozgBjAAbL1lABhDPNYIAA==
+X-Google-Smtp-Source: ABdhPJwq+ksrJNgobbLQ98WyhtQ/tFCVF+DdkcJJN7rO8VSlO7/s0RKGORvL8KuijCo1P//GlzPtjw==
+X-Received: by 2002:aa7:d658:0:b0:41d:7875:74bf with SMTP id v24-20020aa7d658000000b0041d787574bfmr17896464edr.415.1649854857116;
+        Wed, 13 Apr 2022 06:00:57 -0700 (PDT)
+Received: from [192.168.0.204] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0564021e8700b0041d03a94f27sm1163266edf.66.2022.04.13.06.00.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 06:00:56 -0700 (PDT)
+Message-ID: <897a05fd-a568-9d33-dc20-5de4e5d2188f@linaro.org>
+Date:   Wed, 13 Apr 2022 15:00:55 +0200
 MIME-Version: 1.0
-References: <20220412215000.897344-1-richard.gong@amd.com> <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
-In-Reply-To: <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 13 Apr 2022 09:00:50 -0400
-Message-ID: <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
-Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based systems
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Richard Gong <richard.gong@amd.com>,
-        kernel test robot <lkp@intel.com>,
-        Dave Airlie <airlied@linux.ie>,
-        xinhui pan <xinhui.pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 0/2] memory: omap-gpmc: Allow module build
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     linux-omap@vger.kernel.org, nm@ti.com,
+        linux-kernel@vger.kernel.org, kishon@ti.com, tony@atomide.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com
+References: <20220411095516.24754-1-rogerq@kernel.org>
+ <164984299612.34759.11981181842672620752.b4-ty@linaro.org>
+ <20428012-f164-c03b-fcc5-d3d8df812aff@linaro.org>
+ <ed2167af-fc9f-1f52-e8e2-c0881f5d53c6@linaro.org>
+ <7b38a717-ffce-0f06-1a77-6d2a114c7e11@kernel.org>
+ <68d16fbb-4250-73bd-b55e-a14db91abe8f@linaro.org>
+ <fdafb49b-9349-087b-f483-4da888193683@kernel.org>
+ <f2b7b48f-906e-3445-3861-dcdd4f6551e3@linaro.org>
+ <605268c7-9d0f-83d5-d7e6-850dabb380f0@kernel.org>
+ <06852353-9ca1-6f61-7447-b5f1d64ead25@linaro.org>
+ <4681b00e-7f89-d9c4-6361-b781ced72656@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4681b00e-7f89-d9c4-6361-b781ced72656@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 3:43 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Richard,
->
->
-> Thank you for sending out v4.
->
-> Am 12.04.22 um 23:50 schrieb Richard Gong:
-> > Active State Power Management (ASPM) feature is enabled since kernel 5.=
-14.
-> > There are some AMD GFX cards (such as WX3200 and RX640) that won't work
-> > with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards=
- as
-> > video/display output, Intel Alder Lake based systems will hang during
-> > suspend/resume.
->
-> I am still not clear, what =E2=80=9Chang during suspend/resume=E2=80=9D m=
-eans. I guess
-> suspending works fine? During resume (S3 or S0ix?), where does it hang?
-> The system is functional, but there are only display problems?
->
-> > The issue was initially reported on one system (Dell Precision 3660 wit=
-h
-> > BIOS version 0.14.81), but was later confirmed to affect at least 4 Ald=
-er
-> > Lake based systems.
-> >
-> > Add extra check to disable ASPM on Intel Alder Lake based systems.
-> >
-> > Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> This tag is a little confusing. Maybe clarify that it was for an issue
-> in a previous patch iteration?
->
-> > Signed-off-by: Richard Gong <richard.gong@amd.com>
-> > ---
-> > v4: s/CONFIG_X86_64/CONFIG_X86
-> >      enhanced check logic
-> > v3: s/intel_core_asom_chk/aspm_support_quirk_check
-> >      correct build error with W=3D1 option
-> > v2: correct commit description
-> >      move the check from chip family to problematic platform
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
-> >   1 file changed, 16 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdg=
-pu/vi.c
-> > index 039b90cdc3bc..b33e0a9bee65 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/vi.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-> > @@ -81,6 +81,10 @@
-> >   #include "mxgpu_vi.h"
-> >   #include "amdgpu_dm.h"
-> >
-> > +#if IS_ENABLED(CONFIG_X86)
-> > +#include <asm/intel-family.h>
-> > +#endif
-> > +
-> >   #define ixPCIE_LC_L1_PM_SUBSTATE    0x100100C6
-> >   #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK    0=
-x00000001L
-> >   #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK        0=
-x00000002L
-> > @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device=
- *adev)
-> >               WREG32_PCIE(ixPCIE_LC_CNTL, data);
-> >   }
-> >
-> > +static bool aspm_support_quirk_check(void)
-> > +{
-> > +     if (IS_ENABLED(CONFIG_X86)) {
-> > +             struct cpuinfo_x86 *c =3D &cpu_data(0);
-> > +
-> > +             return !(c->x86 =3D=3D 6 && c->x86_model =3D=3D INTEL_FAM=
-6_ALDERLAKE);
-> > +     }
-> > +
-> > +     return true;
-> > +}
-> > +
-> >   static void vi_program_aspm(struct amdgpu_device *adev)
-> >   {
-> >       u32 data, data1, orig;
-> >       bool bL1SS =3D false;
-> >       bool bClkReqSupport =3D true;
-> >
-> > -     if (!amdgpu_device_should_use_aspm(adev))
-> > +     if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_c=
-heck())
-> >               return;
->
-> Can users still forcefully enable ASPM with the parameter `amdgpu.aspm`?
->
-> >
-> >       if (adev->flags & AMD_IS_APU ||
->
-> If I remember correctly, there were also newer cards, where ASPM worked
-> with Intel Alder Lake, right? Can only the problematic generations for
-> WX3200 and RX640 be excluded from ASPM?
+On 13/04/2022 14:56, Roger Quadros wrote:
+>>
+>> If you have spare time, maybe you could investigate the compile testing
+>> on other platforms as well and if something fails, fix it. But it seems
+>> it is separate problem.
+>>
+> 
+> I won't be able to test on all platforms. I'm ok to not add more dependency and
+> just drop COMPILE_TEST.
 
-This patch only disables it for the generation that was problematic.
+I understand that. You can still test 8-12 popular ones on a regular
+Ubuntu machine (there are like 10 or 12 cross compile toolchains now in
+standard Ubuntu repos).
 
-Alex
+Another way is to put your patches on Github and ask kbuild folks to
+test your trees. I think this was the repo (but double check):
+https://github.com/fengguang/lkp-tests
 
->
->
-> Kind regards,
->
-> Paul
+
+Best regards,
+Krzysztof

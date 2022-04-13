@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9324B4FF7A7
+	by mail.lfdr.de (Postfix) with ESMTP id DB7614FF7A8
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiDMNd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S235773AbiDMNdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235761AbiDMNdZ (ORCPT
+        with ESMTP id S235765AbiDMNd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:33:25 -0400
+        Wed, 13 Apr 2022 09:33:26 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1C45E765
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:31:03 -0700 (PDT)
-Message-ID: <20220413133024.249118058@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC72546A2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:31:05 -0700 (PDT)
+Message-ID: <20220413133024.305001096@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649856662;
+        s=2020; t=1649856664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=69AEwFG9KN7E8YNtjZ/V9qyJTOeoNdNZpvhNkDaqw4I=;
-        b=yFR2IECGpJx6Rv//CloyWMdYnZ0Mi5YoRty0BQ1EapXLz/eAGzU+JTDBe7AAjYYSvrc61B
-        3PH/NonMi5AMn3r+7EFc6tjzwYMDpS3n/iy8xsCTo3wAD1D7UicPUbGCMCn29+heCzsCzQ
-        l58NVwEcXk0HYK4JcspGJf1oKJ/J9cwxghmG5rjWrX7NgbMSeW/X2uj4uTqfzewxdfc87Z
-        UaShlNPbL6IeVPYFEzTxfjBrlRcQIcDe/nwq8baKAg20ZEJOw2D5zNzHpKGNkGiuGyxOHh
-        tIiVfqgy/QKobe81FEPFScwJY0VCor4EYqjWLTcOnI/Tfw2WF5L9ZKUHiU8jdg==
+         references:references; bh=g9e7k+CdFzSWcwYyvuM4WnmOYrbZsluI5FvW598pwQI=;
+        b=WuHAhMpVp/wRdZax9ANdLw5blo5l1bKzyNuUatODEwUxlfVaVaOlzhFulApKQpjGezM4yR
+        b8F300YrsiC/0rLlbhpKRDrfCVQ5AhOL5EMuGh2gpsbAEH74gWYCwWxB7RGxNUnvslRNaD
+        bk35szds/l/htmdzgMsPvhAZAGoozoiXMqn5H9ns7+etGPfOPgnE8xedJ2tNPPaqd745h6
+        njYa57whj4QSTK32UNvWRel3e2gFwJtsNztp2y3Z0F+AIjXbJggPIDsunP4PFvvAju5cYV
+        vt9tsvh9A7mTEemG1vsVDlO2GB0j8flbybIB7qbh0i0Srf4bd408gvx2eFYsrQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649856662;
+        s=2020e; t=1649856664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=69AEwFG9KN7E8YNtjZ/V9qyJTOeoNdNZpvhNkDaqw4I=;
-        b=Q+0vE2QoWFyjrJI/oLw/Gdo3nulfE9wFqeV5eNh5ZpuysHpDNZN3u3RPWQi2aUAByRgxS+
-        UEs9y1hmYmamMUDQ==
+         references:references; bh=g9e7k+CdFzSWcwYyvuM4WnmOYrbZsluI5FvW598pwQI=;
+        b=/BbWiysCvtKDSCw+FKCVMF5LN//Jtjw0N6Qw1v+gzHTnziwTCPf2Q2GXW5oU/tWu1fM3qt
+        rHqFUHVBmZ1bgcCQ==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Christoph Hellwig <hch@infradead.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        kernel test robot <lkp@intel.com>
-Subject: [patch V5 1/3] sched: Fix missing prototype warnings
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [patch V5 2/3] smp: Rename flush_smp_call_function_from_idle()
 References: <20220413132836.099363044@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 13 Apr 2022 15:31:02 +0200 (CEST)
+Date:   Wed, 13 Apr 2022 15:31:03 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -54,141 +53,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A W=1 build emits more than a dozen missing prototype warnings related to
-scheduler and scheduler specific includes.
+This is invoked from the stopper thread too, which is definitely not idle.
+Rename it to flush_smp_call_function_queue() and fixup the callers.
 
-Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
-V5: New patch
+V4: New patch
 ---
- include/linux/sched.h        |    2 ++
- kernel/sched/build_policy.c  |    2 ++
- kernel/sched/build_utility.c |    1 +
- kernel/sched/core.c          |    3 +++
- kernel/sched/deadline.c      |    2 --
- kernel/sched/fair.c          |    1 +
- kernel/sched/sched.h         |    8 ++------
- kernel/sched/smp.h           |    6 ++++++
- kernel/stop_machine.c        |    2 --
- 9 files changed, 17 insertions(+), 10 deletions(-)
+ kernel/sched/core.c |    2 +-
+ kernel/sched/idle.c |    2 +-
+ kernel/sched/smp.h  |    4 ++--
+ kernel/smp.c        |   27 ++++++++++++++++++++-------
+ 4 files changed, 24 insertions(+), 11 deletions(-)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2361,4 +2361,6 @@ static inline void sched_core_free(struc
- static inline void sched_core_fork(struct task_struct *p) { }
- #endif
- 
-+extern void sched_set_stop_task(int cpu, struct task_struct *stop);
-+
- #endif
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -15,6 +15,7 @@
- /* Headers: */
- #include <linux/sched/clock.h>
- #include <linux/sched/cputime.h>
-+#include <linux/sched/hotplug.h>
- #include <linux/sched/posix-timers.h>
- #include <linux/sched/rt.h>
- 
-@@ -31,6 +32,7 @@
- #include <uapi/linux/sched/types.h>
- 
- #include "sched.h"
-+#include "smp.h"
- 
- #include "autogroup.h"
- #include "stats.h"
---- a/kernel/sched/build_utility.c
-+++ b/kernel/sched/build_utility.c
-@@ -14,6 +14,7 @@
- #include <linux/sched/debug.h>
- #include <linux/sched/isolation.h>
- #include <linux/sched/loadavg.h>
-+#include <linux/sched/nohz.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/rseq_api.h>
- #include <linux/sched/task_stack.h>
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -26,7 +26,10 @@
- #include <linux/topology.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/cond_resched.h>
-+#include <linux/sched/cputime.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched/hotplug.h>
-+#include <linux/sched/init.h>
- #include <linux/sched/isolation.h>
- #include <linux/sched/loadavg.h>
- #include <linux/sched/mm.h>
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1220,8 +1220,6 @@ int dl_runtime_exceeded(struct sched_dl_
- 	return (dl_se->runtime <= 0);
- }
+@@ -2411,7 +2411,7 @@ static int migration_cpu_stop(void *data
+ 	 * __migrate_task() such that we will not miss enforcing cpus_ptr
+ 	 * during wakeups, see set_cpus_allowed_ptr()'s TASK_WAKING test.
+ 	 */
+-	flush_smp_call_function_from_idle();
++	flush_smp_call_function_queue();
  
--extern bool sched_rt_bandwidth_account(struct rt_rq *rt_rq);
--
- /*
-  * This function implements the GRUB accounting rule:
-  * according to the GRUB reclaiming algorithm, the runtime is
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -36,6 +36,7 @@
- #include <linux/sched/cond_resched.h>
- #include <linux/sched/cputime.h>
- #include <linux/sched/isolation.h>
-+#include <linux/sched/nohz.h>
+ 	raw_spin_lock(&p->pi_lock);
+ 	rq_lock(rq, &rf);
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -327,7 +327,7 @@ static void do_idle(void)
+ 	 * RCU relies on this call to be done outside of an RCU read-side
+ 	 * critical section.
+ 	 */
+-	flush_smp_call_function_from_idle();
++	flush_smp_call_function_queue();
+ 	schedule_idle();
  
- #include <linux/cpuidle.h>
- #include <linux/interrupt.h>
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1827,12 +1827,7 @@ static inline void dirty_sched_domain_sy
- #endif
- 
- extern int sched_update_scaling(void);
--
--extern void flush_smp_call_function_from_idle(void);
--
--#else /* !CONFIG_SMP: */
--static inline void flush_smp_call_function_from_idle(void) { }
--#endif
-+#endif /* CONFIG_SMP */
- 
- #include "stats.h"
- 
-@@ -2309,6 +2304,7 @@ extern void resched_cpu(int cpu);
- 
- extern struct rt_bandwidth def_rt_bandwidth;
- extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);
-+extern bool sched_rt_bandwidth_account(struct rt_rq *rt_rq);
- 
- extern void init_dl_bandwidth(struct dl_bandwidth *dl_b, u64 period, u64 runtime);
- extern void init_dl_task_timer(struct sched_dl_entity *dl_se);
+ 	if (unlikely(klp_patch_pending(current)))
 --- a/kernel/sched/smp.h
 +++ b/kernel/sched/smp.h
-@@ -7,3 +7,9 @@
- extern void sched_ttwu_pending(void *arg);
- 
+@@ -9,7 +9,7 @@ extern void sched_ttwu_pending(void *arg
  extern void send_call_function_single_ipi(int cpu);
-+
-+#ifdef CONFIG_SMP
-+extern void flush_smp_call_function_from_idle(void);
-+#else
-+static inline void flush_smp_call_function_from_idle(void) { }
-+#endif
---- a/kernel/stop_machine.c
-+++ b/kernel/stop_machine.c
-@@ -535,8 +535,6 @@ void stop_machine_park(int cpu)
- 	kthread_park(stopper->thread);
+ 
+ #ifdef CONFIG_SMP
+-extern void flush_smp_call_function_from_idle(void);
++extern void flush_smp_call_function_queue(void);
+ #else
+-static inline void flush_smp_call_function_from_idle(void) { }
++static inline void flush_smp_call_function_queue(void) { }
+ #endif
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -96,7 +96,7 @@ static DEFINE_PER_CPU_ALIGNED(struct cal
+ 
+ static DEFINE_PER_CPU_SHARED_ALIGNED(struct llist_head, call_single_queue);
+ 
+-static void flush_smp_call_function_queue(bool warn_cpu_offline);
++static void __flush_smp_call_function_queue(bool warn_cpu_offline);
+ 
+ int smpcfd_prepare_cpu(unsigned int cpu)
+ {
+@@ -141,7 +141,7 @@ int smpcfd_dying_cpu(unsigned int cpu)
+ 	 * ensure that the outgoing CPU doesn't go offline with work
+ 	 * still pending.
+ 	 */
+-	flush_smp_call_function_queue(false);
++	__flush_smp_call_function_queue(false);
+ 	irq_work_run();
+ 	return 0;
+ }
+@@ -541,11 +541,11 @@ void generic_smp_call_function_single_in
+ {
+ 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->gotipi, CFD_SEQ_NOCPU,
+ 		      smp_processor_id(), CFD_SEQ_GOTIPI);
+-	flush_smp_call_function_queue(true);
++	__flush_smp_call_function_queue(true);
  }
  
--extern void sched_set_stop_task(int cpu, struct task_struct *stop);
--
- static void cpu_stop_create(unsigned int cpu)
+ /**
+- * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
++ * __flush_smp_call_function_queue - Flush pending smp-call-function callbacks
+  *
+  * @warn_cpu_offline: If set to 'true', warn if callbacks were queued on an
+  *		      offline CPU. Skip this check if set to 'false'.
+@@ -558,7 +558,7 @@ void generic_smp_call_function_single_in
+  * Loop through the call_single_queue and run all the queued callbacks.
+  * Must be called with interrupts disabled.
+  */
+-static void flush_smp_call_function_queue(bool warn_cpu_offline)
++static void __flush_smp_call_function_queue(bool warn_cpu_offline)
  {
- 	sched_set_stop_task(cpu, per_cpu(cpu_stopper.thread, cpu));
+ 	call_single_data_t *csd, *csd_next;
+ 	struct llist_node *entry, *prev;
+@@ -681,7 +681,20 @@ static void flush_smp_call_function_queu
+ 		      smp_processor_id(), CFD_SEQ_HDLEND);
+ }
+ 
+-void flush_smp_call_function_from_idle(void)
++
++/**
++ * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
++ *				   from task context (idle, migration thread)
++ *
++ * When TIF_POLLING_NRFLAG is supported and a CPU is in idle and has it
++ * set, then remote CPUs can avoid sending IPIs and wake the idle CPU by
++ * setting TIF_NEED_RESCHED. The idle task on the woken up CPU has to
++ * handle queued SMP function calls before scheduling.
++ *
++ * The migration thread has to ensure that an eventually pending wakeup has
++ * been handled before it migrates a task.
++ */
++void flush_smp_call_function_queue(void)
+ {
+ 	unsigned long flags;
+ 
+@@ -691,7 +704,7 @@ void flush_smp_call_function_from_idle(v
+ 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
+ 		      smp_processor_id(), CFD_SEQ_IDLE);
+ 	local_irq_save(flags);
+-	flush_smp_call_function_queue(true);
++	__flush_smp_call_function_queue(true);
+ 	if (local_softirq_pending())
+ 		do_softirq();
+ 
 

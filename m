@@ -2,138 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410424FF0DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172084FF0E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbiDMHyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S233513AbiDMHyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiDMHyG (ORCPT
+        with ESMTP id S233507AbiDMHyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:54:06 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E767035ABF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:51:45 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c64so1316190edf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/lSayVPsdaIcAWY+f+5xyOZsGygWFB8bqZXV5zFL3Io=;
-        b=y4XcoZfN/r7PCh4ltBhjmsoiZHDaSBYRYuN+dYYTnz0dfhgPUQ6RFeudoMmeZ6syBv
-         moC6eYs1Xvff4ljD3tJdk7b82FscaAImj+DC/EbR+oa0yOEY1sTppOIuLg/yAGfJEeWc
-         LqUFgrfcdPRGvdEZdn5+vwaU91NwW4YUIVFyccZUyoPk7gOfbS01o6Ggj9DIH+qNcaKR
-         4C8t/s6/aEl/lldPy6kkhUcU0v0xrlP6EOH1xfIBgOfthRfPmUmZml1G5MCVogls5vbF
-         Whyac6B+ZFXjsLP0kxTrpnSjZF0dIDhEmRxSuE8l7/RvLtSKgVrzLPW0TOGMVAJoVxtL
-         JTLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/lSayVPsdaIcAWY+f+5xyOZsGygWFB8bqZXV5zFL3Io=;
-        b=hSkk0Xlqg3EHC0Tx0uTrxJTJQmHpC7H02ic87OlWnQXT/XRDo9xj3TIn3CJmJZIam+
-         uDSRfP87s+NsSsaV/M9TQekqcgZdYa/tLQa7eYAkLaQ+hHJ5/j1Tun3bUrBCictDygYd
-         8REnJf39HfWKP6D+9pcaR8rbFSk2yufZqXC89bJ/BiGoByutIvcEuraSQzMW9nj1NX40
-         9InyjQkESoApJMPlwCVSJ8tBISosj10M0rjo/eSFoD18UZNzCDWFlBe8KNhbhQPc4VMX
-         Rh1vzPAWc391vKUUmMzpuacVlQlvY249dKpU1mTiK5tDGWwAA9m9nYKnU3uJLMkliBuh
-         /paA==
-X-Gm-Message-State: AOAM530307+XQtOfFX0kASIdQyUK1yVhBo5+DnJqaIgVwXZYMAwXNsKf
-        Yp29/w8+y5Ct73JjUHs2uoxyrQ==
-X-Google-Smtp-Source: ABdhPJz3nSRQgubW9eqDEo2Z4fWQix1t+Kq8Ei7ICr3dHau8fFoHwd0FdbdWKbEFa8TDDwFnCJL/1g==
-X-Received: by 2002:a05:6402:e96:b0:41d:1a0f:e70a with SMTP id h22-20020a0564020e9600b0041d1a0fe70amr27233192eda.411.1649836304304;
-        Wed, 13 Apr 2022 00:51:44 -0700 (PDT)
-Received: from localhost.localdomain (111-250-44-108.dynamic-ip.hinet.net. [111.250.44.108])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm14035390ejj.74.2022.04.13.00.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 00:51:43 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE event
-Date:   Wed, 13 Apr 2022 15:51:24 +0800
-Message-Id: <20220413075124.635589-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Wed, 13 Apr 2022 03:54:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02742E6AE;
+        Wed, 13 Apr 2022 00:51:56 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A6BD21F38D;
+        Wed, 13 Apr 2022 07:51:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649836315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnDNJXNiPsqwH2478MjckQfLUAo7HAIZ+JqNhOObtmM=;
+        b=F3WMXURq0zdj/WaPwK9ATPJhOA2W+sR73l5rBX+C3FCBHWsYPpSJSK62skbaFhipd6VRBK
+        sde8PwLiNZj9+CzhPlwKaf+KaXALQ/cnAPuMHGw62oW9ftBLfD3aCIIlPstmjoll97iqBt
+        N6s/0c3nQaDL+VEL+jcxTMMmsJNZKO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649836315;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnDNJXNiPsqwH2478MjckQfLUAo7HAIZ+JqNhOObtmM=;
+        b=1LjboUVwvh13NTu+2OST8Z/twE3mkwCTW2EiCK50MrWUJxY0CGXMt40O7o35/3KSsjRAoB
+        sLhk1NCM6j9F/UBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 92026A3B82;
+        Wed, 13 Apr 2022 07:51:55 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 09:51:55 +0200
+Message-ID: <s5h1qy18lpg.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/16] Support external boost at CS35l41 ASoC driver
+In-Reply-To: <20220409091315.1663410-1-tanureal@opensource.cirrus.com>
+References: <20220409091315.1663410-1-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-is not available") "perf mem report" and "perf report --mem-mode"
-don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-type.
+On Sat, 09 Apr 2022 11:12:59 +0200,
+Lucas Tanure wrote:
+> 
+> Move the support for CS35L41 external boost to its shared library
+> for ASoC use.
+> This move resulted in cs35l41_hda_reg_sequence being removed,
+> and its steps were broken down into regmap writes or functions
+> from the library. And hardware configuration struct was unified
+> for its use in the shared lib.
+> While at it, some minor bugs were found and fixed it.
 
-The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-event, this allows the perf data file generated by kernel v5.18-rc1 or
-later version can be reported properly.
+The patch series seem inapplicable via git am.
+Could you check the setup of your mailer?
 
-On the other hand, perf tool still fails to be backward compatibility
-for a data file recorded by an older version's perf which contains Arm
-SPE trace data.  This patch is a workaround in reporting phase, when
-detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-force to set the bit in the sample type and give a warning info.
 
-Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/builtin-report.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+thanks,
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 1ad75c7ba074..f26dd14eb852 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
- 	struct perf_session *session = rep->session;
- 	u64 sample_type = evlist__combined_sample_type(session->evlist);
- 	bool is_pipe = perf_data__is_pipe(session->data);
-+	struct evsel *evsel;
- 
- 	if (session->itrace_synth_opts->callchain ||
- 	    session->itrace_synth_opts->add_callchain ||
-@@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
- 	}
- 
- 	if (sort__mode == SORT_MODE__MEMORY) {
-+		/*
-+		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-+		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-+		 * compatibility, set the bit if it's an old perf data file.
-+		 */
-+		evlist__for_each_entry(session->evlist, evsel) {
-+			if (strstr(evsel->name, "arm_spe_") &&
-+				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-+				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
-+					    "for Arm SPE event.\n");
-+				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
-+				sample_type |= PERF_SAMPLE_DATA_SRC;
-+			}
-+		}
-+
- 		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
- 			ui__error("Selected --mem-mode but no mem data. "
- 				  "Did you call perf record without -d?\n");
--- 
-2.25.1
-
+Takashi

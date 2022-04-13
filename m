@@ -2,95 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64A24FF2FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4822A4FF2FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiDMJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S232944AbiDMJKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiDMJK3 (ORCPT
+        with ESMTP id S233591AbiDMJKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:10:29 -0400
-Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B3C4EA15;
-        Wed, 13 Apr 2022 02:08:06 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 84BEC20A6058
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 3/6] PCI: rcar-gen2: Add R9A06G032 support
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
-CC:     Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20220412094029.287562-1-herve.codina@bootlin.com>
- <20220412094029.287562-4-herve.codina@bootlin.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <75be60ce-d9b2-b9a0-c897-3cc904889db6@omp.ru>
-Date:   Wed, 13 Apr 2022 12:08:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 13 Apr 2022 05:10:48 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5EF47AC1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:08:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso748377wme.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull.eu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dcONJnYI4hzfAnWFiwecQemmmPoFQyWC52bLjUUOhrU=;
+        b=C2A0UxLCik2RA66J4ZxU8ctZ/aw4YcYRTXGVm9HyDjtOWT0Bn25s55zjbACnN6vpTY
+         Y6sLVRjED/jhSIQrh0rna36qT3pmCF//OnTMjDlataZMQIcCuUZ1quxEX5jwdsNdOQ/j
+         Z09rc92UYJIp9JUy/q1S92YX33AaWq0n6pK7yV+6tcDOUgviPs3bd2kyg+5x2K5PBiTP
+         fl3qaJ9GioVeJRagF2rNIPp3EB6J05yTAlrsyRZesIGLsrIQSlYhKAul7767YybQ0C50
+         YDZ+bd4nErjZTXNmqTic4M1kdTgdLHbDtUgNIY2etG8k13d/z2U+B7rVXeoAvweW1DJI
+         CkxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dcONJnYI4hzfAnWFiwecQemmmPoFQyWC52bLjUUOhrU=;
+        b=8Do/518W1qOf3RCnTek/ZvhF6yWCYjVYZSN1yQMtBPDCIih06uPptuhStyCLUfZfnH
+         vPjC6k7eqdxymW6j6aax8NthNethZB/Gi3DwMyfC/ug5B2qz3j7yVaJyUZunu4CsyaBH
+         1vuHrAtmRgEOrTSGaNEmeV6IjXJ9nhuV5nltrbEkkHL4N36qWKCcQiWox6WgulxUaPIq
+         Auf0tJhHopg9jN5FLDjMSA7iMoFYyC7iB8xFh9sXmSFCuit43c69oAhKa8i7IjoVwdw9
+         zYL+na3UBgnhIwGUaAp2mrS34ea5dUGu4cGYqOtbKhWKpgRGNV8wfG4ZdEJs0JnaR/Wz
+         SI8w==
+X-Gm-Message-State: AOAM531kvKiIaFK/YVyWZZh6C7XAF+kY8wRsbwb0b42WtPE5WkTj3XBq
+        tpQ07243IE0loCJ2g/bJLFdoOlOfZW0c4oVRC4PJlQ==
+X-Google-Smtp-Source: ABdhPJzSxXBk+5mekTAuDVmri1mQi8I7f+bYDh99NHFWD3CXOjiXY2xxY5gTJfwTdzd9TpeYBmUYvQ3dF4xNbswSc0E=
+X-Received: by 2002:a7b:c20e:0:b0:38e:b9d6:211b with SMTP id
+ x14-20020a7bc20e000000b0038eb9d6211bmr7934373wmi.188.1649840902444; Wed, 13
+ Apr 2022 02:08:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220412094029.287562-4-herve.codina@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-5-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-5-heiko@sntech.de>
+From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
+Date:   Wed, 13 Apr 2022 11:08:11 +0200
+Message-ID: <CAAeLtUCK8eow4rFmWRUVHhQjpZzhiXrR+49sS6-FjtoHpafR+A@mail.gmail.com>
+Subject: Re: [PATCH v9 04/12] riscv: implement ALTERNATIVE_2 macro
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Wed, 13 Apr 2022 at 05:03, Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> When the alternatives were added the commit already provided a template
+> on how to implement 2 different alternatives for one piece of code.
+>
+> Make this usable.
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 
-On 4/12/22 12:40 PM, Herve Codina wrote:
-
-> Add Renesas R9A06G032 SoC support to the Renesas R-Car gen2 PCI
-> bridge driver.
-> The Renesas RZ/N1D (R9A06G032) internal PCI bridge is compatible
-> with the one available in the R-Car Gen2 family.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  drivers/pci/controller/pci-rcar-gen2.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-rcar-gen2.c b/drivers/pci/controller/pci-rcar-gen2.c
-> index 528bc3780e01..586e4785a57f 100644
-> --- a/drivers/pci/controller/pci-rcar-gen2.c
-> +++ b/drivers/pci/controller/pci-rcar-gen2.c
-> @@ -352,6 +352,8 @@ static const struct of_device_id rcar_pci_of_match[] = {
->  	{ .compatible = "renesas,pci-r8a7791", },
->  	{ .compatible = "renesas,pci-r8a7794", },
->  	{ .compatible = "renesas,pci-rcar-gen2", },
-> +	{ .compatible = "renesas,pci-r9a06g032", },
-
-   Do we really need this one here? Isn't it covered by the next item?
-
-> +	{ .compatible = "renesas,pci-rzn1", },
->  	{ },
->  };
->  
-
-MBR, Sergey
+Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>

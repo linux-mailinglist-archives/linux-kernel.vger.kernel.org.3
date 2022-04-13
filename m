@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BBE4FF2E9
+	by mail.lfdr.de (Postfix) with ESMTP id EC90C4FF2EB
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbiDMJJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S232815AbiDMJJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiDMJI7 (ORCPT
+        with ESMTP id S234203AbiDMJJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:08:59 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1853945067;
-        Wed, 13 Apr 2022 02:06:35 -0700 (PDT)
+        Wed, 13 Apr 2022 05:09:01 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6210943482;
+        Wed, 13 Apr 2022 02:06:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z9Bw2IIWHxpEb/KhCdlQ1aVYKl8gP9w+Fn4V0GTjguCpNgLfISdJgbLMqeR3Z0VxoSHHYFAxVhaj6bmhQxK48no2EFV3R4DzByqve6q9v0qqC67I0l8OgqCE3S3MznZAbHgmg2zMgZWtsExps6Gh4yE0Y9N2FNNZ4AdJB3i82IKoawvQEZhB7WiKUEYkDo0eUjIh1APKTw5GkSBVxk1WjfoOSKrLQY4Iq8nv92tGTQxIwAGrStrG1xb66ZncV4AIgDL2Ev3ickLEaWebT9mxb7zl2p3kphZhnwV2UCkiAk0uiJk9bYAZqDp94u0lckhtyNCt61s2qVw+7E1OJdODFA==
+ b=EIiXEnp1JUWnArQbg5Q+tqlXUXRA4d0m5yWIMoOJiDz9VBq7ZY8oTsuazodXu4NI3LkIcgwL3MTxaqSJmylF2DBJ6846Z5Trrx84scDbJAhQi6PeHcUZZFHawjlHDZxwYmm293shZ4fB/MFk3W8MUAeB3UIA8gc+tw0MQ/4fgE+Fz4OAvQInYMWnt4qaQvu4Rg+vTu2OLfh7S4wCbRetyvHb0aj+YJD2xsthBYyPEQoWx1zpbx0Mx6bNhPPiQ5VbfRnRxSUWOEoZQW5p/mbaz5GCaKnE/yOkRBk1eBKIMjZA3hCS9NBKVrhx83XKcN3ragJIzihqJjBAge0bQOHNYw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b1M/gAui03GK7QWanBmlzhDkBO7xvhEjMyYIWDq8v50=;
- b=JMHvVcnh+//0OrJmndtvBcvKqDawkMlN3rVT0JTb40zy16gQ0i55Eb2QAYlBOAbVRdYt5PUmHQmGTqC3emvayBOpWY2bJ28CouDXIgWh1nakCoo8AivNTcVlVkvu3KPNO8ZKTqqUqlslb1o5h5xCqjUAj8+uIX+ldyXtE8UBpKjPSNdjlWEKGBhvahA9SZxGTBSt9nmQtkcoYtVsTfbts/xHkuB9GlWXOZABFK7PNZLJzrmWCFSm7RJsu6K6aKJoH+2SEQ2suYCD4SBwu/891aTQJH4QnoYuUyg5qitocBE5+LVxb2/D4aYJiBcuyApoJuEiJVd3JWRB1y3GY3rfgA==
+ bh=AFhfwWP2JpSIITtzrxjnNCPm9zXDjiVGb/jIh5bbf2k=;
+ b=DnCo7kZ6TPJXHS1CT6++F5ePld+m17YocoqiqI2uw63vIkT0gTkveCBxb6zngxkdz3eaYKqD80Gscu1DLDoWd/R73HCvloqZX2m1gVP7UE68CFc15sCnXsw+rTckiC0FjQ8uyYM2cVnzngoIiCozljL3hnnlR/QP5IrHj8WQd0RBJnkXzx5e91AhPwan1ewuYqqyET1PBI4G1eDuLeqXtJ8PcmjoXkoYRFXzDVqz61eE8mKuau8qWsZwPBl+OKy6YSBIgKLXtYF0KiX3cbRCrilf0wlBPgo1CAPmRfS+OOQXN3eFnMjv61+T+FBAcjqyy3/zwmhPqAFf7TksxalclA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b1M/gAui03GK7QWanBmlzhDkBO7xvhEjMyYIWDq8v50=;
- b=F+4tKnrUorRFDESYcHIcokfQgGWm80QgFal7IUC0ScJO9caAfYsJsjchzesXnZiHFVsKVf5i2iELu2ASzeyw40FX9c3zQnNbuA3qJGYuXSqb9G8ULdhpNFr0dDpdLEoLDhPqWiUuDSqxfIxlxSiw+z7HurZ1kG0BucNB+hUPh70=
-Received: from BN9PR03CA0412.namprd03.prod.outlook.com (2603:10b6:408:111::27)
- by MW5PR12MB5598.namprd12.prod.outlook.com (2603:10b6:303:193::11) with
+ bh=AFhfwWP2JpSIITtzrxjnNCPm9zXDjiVGb/jIh5bbf2k=;
+ b=Ia83ydL8cZnSZ2lZFidi0kcN3PIcdr2hTkIoMpiHqneZK9QGxTLrtqQip+9UczxjMz0wRf2JVCUQSLirO+Cw0LDPi0WWzbcftxZqqjvJs5A7bEYToKhvPF82Kn0XHNfPv88prLn9rbBbv2GnywhjKWl9pbxa18gUui/h4zqiw3w=
+Received: from BN9PR03CA0404.namprd03.prod.outlook.com (2603:10b6:408:111::19)
+ by CH0PR12MB5345.namprd12.prod.outlook.com (2603:10b6:610:d4::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 09:06:32 +0000
+ 2022 09:06:35 +0000
 Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:111:cafe::c0) by BN9PR03CA0412.outlook.office365.com
- (2603:10b6:408:111::27) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:111:cafe::cd) by BN9PR03CA0404.outlook.office365.com
+ (2603:10b6:408:111::19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
- Transport; Wed, 13 Apr 2022 09:06:31 +0000
+ Transport; Wed, 13 Apr 2022 09:06:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5164.19 via Frontend Transport; Wed, 13 Apr 2022 09:06:30 +0000
+ 15.20.5164.19 via Frontend Transport; Wed, 13 Apr 2022 09:06:35 +0000
 Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 04:06:26 -0500
+ 2022 04:06:30 -0500
 From:   Meng Li <li.meng@amd.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
@@ -68,9 +68,9 @@ CC:     Nathan Fontenot <nathan.fontenot@amd.com>,
         "Viresh Kumar" <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
         Meng Li <li.meng@amd.com>
-Subject: [PATCH 1/3] cpufreq: amd-pstate: Expose struct amd_cpudata
-Date:   Wed, 13 Apr 2022 17:05:08 +0800
-Message-ID: <20220413090510.4039589-2-li.meng@amd.com>
+Subject: [PATCH 2/3] selftests: cpufreq: Add wapper script for test AMD P-State
+Date:   Wed, 13 Apr 2022 17:05:09 +0800
+Message-ID: <20220413090510.4039589-3-li.meng@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220413090510.4039589-1-li.meng@amd.com>
 References: <20220413090510.4039589-1-li.meng@amd.com>
@@ -82,24 +82,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d352b309-ae0b-415e-0122-08da1d2ce693
-X-MS-TrafficTypeDiagnostic: MW5PR12MB5598:EE_
-X-Microsoft-Antispam-PRVS: <MW5PR12MB559860B133F14C782A0131AEF7EC9@MW5PR12MB5598.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 61a88996-c496-4887-733b-08da1d2ce8fc
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5345:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB53450A20D5BA7FE542B04C4BF7EC9@CH0PR12MB5345.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: syYFovIqM3Wp82a04zOyRSXGEKTvkRIp/z1dmB08CAN8V/4D7ES+4BsOKAXaSOKzbaZ0ermNS5UrCE8Z8o0R4/YCyC4S8/prU41W0KS/YS+YjxMROpN4/SsrBTI8tBpzJyzc9L+sMCCvRREzjopI1Np0zl/vY2ijP8gBj7qpEoJngilP6LymdiynJMdunpaOqoX21J9/KASVQdiCwsyM/K7rDBDaMkcafNTqCC049P4iG6z16l9KG/MvKr3sgEiPSzKv+WfH+65+w76qKO+IjOMrW/rC/24JX/ek/Pk68Wy/Eqz5CYr3ZM4+DySO0grHbj2kpUBf9Ahu31rKZpTcDvSKMuaZvav+XKZEIEaVrOyROFKLnMtgQlaH8fEYcsq/IY3xauoprAnioWLoYcy2STGyzNa8rnnC8UCWSv4iAtQdV6fY+aEooVWWMI47jjfXKVYvhVPvX0WdFIvLUPlzjp5GzwuTmS+gcnUz4+5rVVDZUMgAugFTe987NIS70Q+awUuQ3o5fR5bppewlGI9vsyJv0K64q7vnV7NOMux/vTbaVGUU+SafM63rdkmlJT0l69xvRhr5EUbSRPVrFHJ1AL4XlLMszOvcepv7xdIJRK4jU34BXApAQsKt8Qu1PXaaT/Me73koVHUktx1XWxT0R7aOXTwkbogcIwbXoRuX/b5Yl4tatn2ypdug05TU3/1+trr7+KYuWWgbv5AbzkPR4Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36756003)(82310400005)(36860700001)(8676002)(4326008)(336012)(426003)(70206006)(83380400001)(81166007)(2906002)(356005)(5660300002)(40460700003)(2616005)(16526019)(8936002)(26005)(47076005)(508600001)(316002)(1076003)(86362001)(6666004)(7696005)(54906003)(70586007)(110136005)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7E+A1+ATbtt7EEdPRc7EHih6H4LWo112+/AZ97Rr7eDeMe+LvxqRaMgBKqkcfpZr9uLkXOSrE+wVDXrBDTJpQCjXXVzmMzRUlf81fJUrdgwjj4EIBGmj9Oiny/zrNoYdvpVxk0o5q/li9rVs4ec2QEVS958aI5MrReImFRwcXGRd4hOxwZ3ubekn2Xzm0M09tGe2M4l5xUM7lRtSBf0J38mVuq2N/EQAavQTh2M1q7kBJ21NcZ7+lMeHPBJsGxVsV/kcw/bQN+ci9imCo6OeOB3PNNC8AsHj9DiyicMhk6kn6NOJpKHLz//Tw+7B3jaM747FcvYj6rJ+gqSJK0Ioor4vZUMmunKX+oyaHGPTI3TqKqTBT6jz1+eDM+PATkP3pi+PQvw0YRjUkEmEShGuWsT0kkJmVa2q+Rk8s0m6dgT8honMTXGDHGuK1nnXdGEG+5cBmfVR/CC8z7ru35nNK9LE3qrSFP9b8ww8v1ZbqCEI9Ynkr0MNqQr6I2C+RX/IOZJRvGT7ESfFg5qKSPRgoG0LJGD1O28Ee49NpHf+kMPwTFW7DcQs7cHmYe8XbVK25K0qY7rnJzcLSK7SetPN8LmrEdiT8fdYfO5n3ogvatH4SeugLOmtN3JnwEdowIvSFxPKjCuqYKhqQLs+J/g1I3PKqVCbQt8HUeqn/5sYY6Fe5CF3Sq2rO6u80dK4yFvw1mjkgPbYceao2aNvkG43aQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(40460700003)(26005)(7696005)(6666004)(36756003)(81166007)(2906002)(86362001)(508600001)(82310400005)(5660300002)(8936002)(1076003)(110136005)(316002)(186003)(16526019)(356005)(54906003)(70206006)(426003)(70586007)(336012)(83380400001)(47076005)(4326008)(36860700001)(2616005)(8676002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 09:06:30.9881
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 09:06:35.0346
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d352b309-ae0b-415e-0122-08da1d2ce693
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61a88996-c496-4887-733b-08da1d2ce8fc
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5598
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5345
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -110,191 +110,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose struct amd_cpudata to AMD P-State unit test module.
-
-This data struct will be used on the following AMD P-State unit test
-(amd-pstate-ut) module. The amd-pstate-ut module can get some AMD
-infomations by this data struct. For example: highest perf,
-nominal perf, boost supported etc.
+Adds a wrapper shell script for the amd_pstate_testmod module.
 
 Signed-off-by: Meng Li <li.meng@amd.com>
 ---
- MAINTAINERS                  |  1 +
- drivers/cpufreq/amd-pstate.c | 60 +----------------------------
- include/linux/amd-pstate.h   | 74 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 76 insertions(+), 59 deletions(-)
- create mode 100644 include/linux/amd-pstate.h
+ tools/testing/selftests/cpufreq/Makefile              | 2 +-
+ tools/testing/selftests/cpufreq/amd_pstate_testmod.sh | 4 ++++
+ tools/testing/selftests/cpufreq/config                | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9832b607e2e2..f108e83ba851 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1003,6 +1003,7 @@ S:	Supported
- F:	Documentation/admin-guide/pm/amd-pstate.rst
- F:	drivers/cpufreq/amd-pstate*
- F:	tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+F:	include/linux/amd-pstate.h
+diff --git a/tools/testing/selftests/cpufreq/Makefile b/tools/testing/selftests/cpufreq/Makefile
+index c86ca8342222..c32adc59a1f4 100644
+--- a/tools/testing/selftests/cpufreq/Makefile
++++ b/tools/testing/selftests/cpufreq/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
  
- AMD PTDMA DRIVER
- M:	Sanjay R Mehta <sanju.mehta@amd.com>
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 7be38bc6a673..5f7a00a64f76 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -36,6 +36,7 @@
- #include <linux/delay.h>
- #include <linux/uaccess.h>
- #include <linux/static_call.h>
-+#include <linux/amd-pstate.h>
+-TEST_PROGS := main.sh
++TEST_PROGS := main.sh amd_pstate_testmod.sh
+ TEST_FILES := cpu.sh cpufreq.sh governor.sh module.sh special-tests.sh
  
- #include <acpi/processor.h>
- #include <acpi/cppc_acpi.h>
-@@ -65,65 +66,6 @@ MODULE_PARM_DESC(shared_mem,
- 
- static struct cpufreq_driver amd_pstate_driver;
- 
--/**
-- * struct  amd_aperf_mperf
-- * @aperf: actual performance frequency clock count
-- * @mperf: maximum performance frequency clock count
-- * @tsc:   time stamp counter
-- */
--struct amd_aperf_mperf {
--	u64 aperf;
--	u64 mperf;
--	u64 tsc;
--};
--
--/**
-- * struct amd_cpudata - private CPU data for AMD P-State
-- * @cpu: CPU number
-- * @req: constraint request to apply
-- * @cppc_req_cached: cached performance request hints
-- * @highest_perf: the maximum performance an individual processor may reach,
-- *		  assuming ideal conditions
-- * @nominal_perf: the maximum sustained performance level of the processor,
-- *		  assuming ideal operating conditions
-- * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
-- *			   savings are achieved
-- * @lowest_perf: the absolute lowest performance level of the processor
-- * @max_freq: the frequency that mapped to highest_perf
-- * @min_freq: the frequency that mapped to lowest_perf
-- * @nominal_freq: the frequency that mapped to nominal_perf
-- * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
-- * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
-- * @prev: Last Aperf/Mperf/tsc count value read from register
-- * @freq: current cpu frequency value
-- * @boost_supported: check whether the Processor or SBIOS supports boost mode
-- *
-- * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
-- * represents all the attributes and goals that AMD P-State requests at runtime.
-- */
--struct amd_cpudata {
--	int	cpu;
--
--	struct	freq_qos_request req[2];
--	u64	cppc_req_cached;
--
--	u32	highest_perf;
--	u32	nominal_perf;
--	u32	lowest_nonlinear_perf;
--	u32	lowest_perf;
--
--	u32	max_freq;
--	u32	min_freq;
--	u32	nominal_freq;
--	u32	lowest_nonlinear_freq;
--
--	struct amd_aperf_mperf cur;
--	struct amd_aperf_mperf prev;
--
--	u64 freq;
--	bool	boost_supported;
--};
--
- static inline int pstate_enable(bool enable)
- {
- 	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
-diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-new file mode 100644
-index 000000000000..790b04c9000b
+ include ../lib.mk
+diff --git a/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh b/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+new file mode 100755
+index 000000000000..5398ad568885
 --- /dev/null
-+++ b/include/linux/amd-pstate.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * linux/include/linux/amd-pstate.h
-+ *
-+ * Copyright (C) 2007-2010 Advanced Micro Devices, Inc.
-+ * Author: Meng Li <li.meng@amd.com>
-+ */
-+#ifndef _LINUX_AMD_PSTATE_H
-+#define _LINUX_AMD_PSTATE_H
-+
-+#include <linux/pm_qos.h>
-+/*********************************************************************
-+ *                        AMD P-state INTERFACE                       *
-+ *********************************************************************/
-+/**
-+ * struct  amd_aperf_mperf
-+ * @aperf: actual performance frequency clock count
-+ * @mperf: maximum performance frequency clock count
-+ * @tsc:   time stamp counter
-+ */
-+struct amd_aperf_mperf {
-+	u64 aperf;
-+	u64 mperf;
-+	u64 tsc;
-+};
-+
-+/**
-+ * struct amd_cpudata - private CPU data for AMD P-State
-+ * @cpu: CPU number
-+ * @req: constraint request to apply
-+ * @cppc_req_cached: cached performance request hints
-+ * @highest_perf: the maximum performance an individual processor may reach,
-+ *		  assuming ideal conditions
-+ * @nominal_perf: the maximum sustained performance level of the processor,
-+ *		  assuming ideal operating conditions
-+ * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
-+ *			   savings are achieved
-+ * @lowest_perf: the absolute lowest performance level of the processor
-+ * @max_freq: the frequency that mapped to highest_perf
-+ * @min_freq: the frequency that mapped to lowest_perf
-+ * @nominal_freq: the frequency that mapped to nominal_perf
-+ * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
-+ * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
-+ * @prev: Last Aperf/Mperf/tsc count value read from register
-+ * @freq: current cpu frequency value
-+ * @boost_supported: check whether the Processor or SBIOS supports boost mode
-+ *
-+ * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
-+ * represents all the attributes and goals that AMD P-State requests at runtime.
-+ */
-+struct amd_cpudata {
-+	int	cpu;
-+
-+	struct	freq_qos_request req[2];
-+	u64	cppc_req_cached;
-+
-+	u32	highest_perf;
-+	u32	nominal_perf;
-+	u32	lowest_nonlinear_perf;
-+	u32	lowest_perf;
-+
-+	u32	max_freq;
-+	u32	min_freq;
-+	u32	nominal_freq;
-+	u32	lowest_nonlinear_freq;
-+
-+	struct amd_aperf_mperf cur;
-+	struct amd_aperf_mperf prev;
-+
-+	u64	freq;
-+	bool	boost_supported;
-+};
-+
-+#endif /* _LINUX_AMD_PSTATE_H */
++++ b/tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Tests the AMD P-State unit test infrastructure using amd_pstate_testmod kernel module.
++$(dirname $0)/../kselftest/module.sh "amd_pstate_testmod" amd_pstate_testmod
+diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+index 75e900793e8a..374a8adbb34c 100644
+--- a/tools/testing/selftests/cpufreq/config
++++ b/tools/testing/selftests/cpufreq/config
+@@ -13,3 +13,4 @@ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_PROVE_LOCKING=y
+ CONFIG_LOCKDEP=y
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
++CONFIG_AMD_PSTATE_TESTMOD=m
 -- 
 2.25.1
 

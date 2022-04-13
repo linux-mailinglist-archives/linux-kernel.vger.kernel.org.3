@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F5B4FFD97
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D239B4FFD9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiDMSP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
+        id S236450AbiDMSQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiDMSPY (ORCPT
+        with ESMTP id S237620AbiDMSQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:15:24 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059DA36E0C;
-        Wed, 13 Apr 2022 11:13:03 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-d6ca46da48so2806677fac.12;
-        Wed, 13 Apr 2022 11:13:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EaNvx9WI08WE4w/5fhJh/+LgqxdrGCkOVNyF+cCJYJY=;
-        b=wMpzL6c2MoUmxONcvmcM8ifvFlRLjquqQjMmZ53IS/23zPYM0g+4fJAqUaBgDH2e9F
-         hDkGYiSIGPrDYgozCZXNVr8XEeegr0bA0eDMzrHMSbNNQa4D1hZUdzpP162gIUW8i2vd
-         +K3zmtiAwdrNtCmabGj+h7+70B1t2EKHX4zOQFFm5bJpKKv0nr9VDoF+ZOef5TecljSa
-         hPpu1XBsZPeq1VQcN3tbWmp7ISHAGO6q4JZoWHuT7KFjfHgu5EqczFBuEJlCiiuqlJWd
-         6ffo0y86a53Wm+wjbflJv0pFz5ji2671lNPUL0hYJdqcGrhENxiG/l7FiArK6GwAVlgK
-         w1vA==
-X-Gm-Message-State: AOAM532yeT9M1P4dTJvy0wTCVdOF8zsFZhcqvDL/2AlfpFK3vH7Qzqhn
-        Sm5qk7eS1941S3Lsjvd0XQKsApgklg==
-X-Google-Smtp-Source: ABdhPJzYPoKmHHmKrndbzmIMKA5MgGd/hjXVyPdpD0ukSYO7eqETW/4pUX012z3LusznCxAKWW08jQ==
-X-Received: by 2002:a05:6870:5b97:b0:e2:5d6:8bbb with SMTP id em23-20020a0568705b9700b000e205d68bbbmr2877oab.82.1649873582226;
-        Wed, 13 Apr 2022 11:13:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j16-20020a544810000000b002fa6ba4317esm1077992oij.44.2022.04.13.11.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 11:13:01 -0700 (PDT)
-Received: (nullmailer pid 3578070 invoked by uid 1000);
-        Wed, 13 Apr 2022 18:13:00 -0000
-Date:   Wed, 13 Apr 2022 13:13:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel@axis.com,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Message-ID: <YlcSrOPf45ht1njU@robh.at.kernel.org>
-References: <20220413114014.2204623-1-camel.guo@axis.com>
- <20220413114014.2204623-2-camel.guo@axis.com>
+        Wed, 13 Apr 2022 14:16:28 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8B249CA0;
+        Wed, 13 Apr 2022 11:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649873646; x=1681409646;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LKXPiucc8uZOA3E6YOnjgAM657MLMJqYgDo4nDQ7TIw=;
+  b=cODhUS2zWFSuKz4fp61/y8gsE4nT04IqsuizVDft83IE0f8c1K26P7kG
+   1lHB0c2NVmj6IfU3A1wn6xhjpPr7Lqwtj7yxDgBk1xhZtI9ZRdV46kRUD
+   RDBMrOWV715eHpMrkpHdd50frwILG/0KNNzF4fhW4ietNe4iSWQJsH9Am
+   B+RvM7lXMVngMbhAsw5UqPpCPqga1VjprzhBH1uPiD1eCNfvdv1yeqcUC
+   Q2ekDoV+Iz/+4UcozPbyEb4JywpjWUABuyEv9BVZ9OkjLiLF+gpzJj82p
+   UigMh/jfYj0i9aPTzaOIklHjSlcJTbTHJC80ZLeJ0yAXCyqJh7gJnDh7D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="242674696"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="242674696"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 11:14:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="527046358"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 13 Apr 2022 11:14:04 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4B0CB12C; Wed, 13 Apr 2022 21:14:04 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: light: tsl2772: Make use of device properties
+Date:   Wed, 13 Apr 2022 21:14:02 +0300
+Message-Id: <20220413181402.19582-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413114014.2204623-2-camel.guo@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 13:40:12 +0200, Camel Guo wrote:
-> Document the TMP401, TMP411 and TMP43x device devicetree bindings
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Camel Guo <camel.guo@axis.com>
-> ---
-> 
-> Notes:
->     v3:
->     - Remove unneeded address-cells and size-cells;
->     - Change range of ti,n-factor to [-128, 127];
->     - Remove unneeded 'items' of ti,beta-compensation;
->     - Got Reviewed-by from Krzysztof.
-> 
->     v2:
->     - Fix format and describe hardware properties instead of programming
->       models
-> 
->  .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 105 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> 
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+While at it, reuse temporary device pointer in the same function.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/light/tsl2772.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
+index 729f14d9f2a4..dd9051f1cc1a 100644
+--- a/drivers/iio/light/tsl2772.c
++++ b/drivers/iio/light/tsl2772.c
+@@ -15,7 +15,9 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/property.h>
+ #include <linux/slab.h>
++
+ #include <linux/iio/events.h>
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
+@@ -549,10 +551,10 @@ static int tsl2772_get_prox(struct iio_dev *indio_dev)
+ 
+ static int tsl2772_read_prox_led_current(struct tsl2772_chip *chip)
+ {
+-	struct device_node *of_node = chip->client->dev.of_node;
++	struct device *dev = &chip->client->dev;
+ 	int ret, tmp, i;
+ 
+-	ret = of_property_read_u32(of_node, "led-max-microamp", &tmp);
++	ret = device_property_read_u32(dev, "led-max-microamp", &tmp);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -563,20 +565,18 @@ static int tsl2772_read_prox_led_current(struct tsl2772_chip *chip)
+ 		}
+ 	}
+ 
+-	dev_err(&chip->client->dev, "Invalid value %d for led-max-microamp\n",
+-		tmp);
++	dev_err(dev, "Invalid value %d for led-max-microamp\n", tmp);
+ 
+ 	return -EINVAL;
+-
+ }
+ 
+ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ {
+-	struct device_node *of_node = chip->client->dev.of_node;
++	struct device *dev = &chip->client->dev;
+ 	int i, ret, num_leds, prox_diode_mask;
+ 	u32 leds[TSL2772_MAX_PROX_LEDS];
+ 
+-	ret = of_property_count_u32_elems(of_node, "amstaos,proximity-diodes");
++	ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -584,12 +584,9 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ 	if (num_leds > TSL2772_MAX_PROX_LEDS)
+ 		num_leds = TSL2772_MAX_PROX_LEDS;
+ 
+-	ret = of_property_read_u32_array(of_node, "amstaos,proximity-diodes",
+-					 leds, num_leds);
++	ret = device_property_read_u32_array(dev, "amstaos,proximity-diodes", leds, num_leds);
+ 	if (ret < 0) {
+-		dev_err(&chip->client->dev,
+-			"Invalid value for amstaos,proximity-diodes: %d.\n",
+-			ret);
++		dev_err(dev, "Invalid value for amstaos,proximity-diodes: %d.\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -600,9 +597,7 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ 		else if (leds[i] == 1)
+ 			prox_diode_mask |= TSL2772_DIODE1;
+ 		else {
+-			dev_err(&chip->client->dev,
+-				"Invalid value %d in amstaos,proximity-diodes.\n",
+-				leds[i]);
++			dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
+ 			return -EINVAL;
+ 		}
+ 	}
+-- 
+2.35.1
+

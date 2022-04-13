@@ -2,196 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0A84FFF3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3734FFF48
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238331AbiDMT3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S238362AbiDMTaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbiDMT3f (ORCPT
+        with ESMTP id S238348AbiDMTal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:29:35 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61CA7305C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:13 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id v12so2793450plv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5QuJjfLZ7Bo8JbiifFWEthNKBORn0XdzVgZOe84QmlY=;
-        b=PMquhaeTvND1kbVjGD4rji+UZmuiNJ1wl0XyOVD3zUHgHixCBYRe5wnMmCBw43utrc
-         0861RJ0UFwLN2Wluw+tj77xp7veJpP5Zob8dcXzP/bvYd3G5xrAfgkNoqnU5FAMNIvPj
-         mPhFj01M3XSb4yNFXaM95WHSb0deAAT6Sawb8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=5QuJjfLZ7Bo8JbiifFWEthNKBORn0XdzVgZOe84QmlY=;
-        b=pFzEBveqqktU5WGAwTeQJwULBgDR/0KwFX0U+7VPuDCoAb8mnkUipJ/Q+VOupJeylI
-         mvaUEhKNeRv7f5fvbiUEPSUh+lN40tZOuyVsmBOUKbB+aorXfJ1T6z1U/Wj0YBIhyGwe
-         t6g3VhfaqnYaMussXn1wkkROh5X12val+Gw7BV3f5qqFKGYCI6Eh2RB2WRNNd3uwIkLm
-         x2MZ2cx+RcVgfI2f90YMPQ9P+RUxkE+YJTr3y6LlI+g6ODRE6NUhnKyYkJ1EVE+JECQq
-         atMPn4g35Lv6tP5Z1Mf8cKye0yyVYM/0a6dPE39od5LHs7wbs7WwZMgAFgWCQQJE184D
-         KTUw==
-X-Gm-Message-State: AOAM532JaSsaQbmaFhUhS+Cf8wvLIvo0VOulT0740wdN8IVqTTJuYjX5
-        1uNgjXYU31jYrpBTOMjAfRcrqg==
-X-Google-Smtp-Source: ABdhPJwgeDCZyCqwy8ZRUESzIFEFHi7rksLodfhxlSTNxWsX2Or6waJ/ZFeNDLy+b3N4t0inwvFUGw==
-X-Received: by 2002:a17:90a:4e04:b0:1cb:a26f:70c2 with SMTP id n4-20020a17090a4e0400b001cba26f70c2mr299399pjh.130.1649878033194;
-        Wed, 13 Apr 2022 12:27:13 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u7-20020aa78487000000b00505d9277cb3sm8624906pfn.38.2022.04.13.12.27.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 12:27:12 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Dan Beygelman <dan.beygelman@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] arm: bcmbca: add arch bcmbca machine entry
-Date:   Wed, 13 Apr 2022 12:26:42 -0700
-Message-Id: <20220413192645.7067-3-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220413192645.7067-1-william.zhang@broadcom.com>
-References: <20220413192645.7067-1-william.zhang@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001ca7e805dc8e2a29"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 15:30:41 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508F672E24
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:28:19 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649878094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L2z4Q/1rfqvzlgKK/+Q8dR7Hr7nD3d/L3KDR+0LUxPU=;
+        b=ZvRioLZbeDyL4poeadGgM2c8Po2yBKxCKpGbpWnDtBTp34qUgzhusba/LG+/a/YwJellq0
+        Z892c6X/MEaC7LAR5WuUDf/FvNuwCTgizZXrHwgPxfm7DJWldynpomv9Etgx46bEu/yTO4
+        TCy+al8B7eu/+lHMiLrkDnNJNV2av8o=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH v3 0/3] kasan, arm64, scs: collect stack traces from Shadow Call Stack
+Date:   Wed, 13 Apr 2022 21:26:43 +0200
+Message-Id: <cover.1649877511.git.andreyknvl@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001ca7e805dc8e2a29
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Update mach-bcm Kconfig to add ARCH_BCMBCA config and select the
-required configs for Broadcom Broadband SoC chipsets
+Currently, when saving alloc and free stack traces, KASAN uses the normal
+stack trace collection routines, which rely on the unwinder.
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Instead of invoking the unwinder, collect the stack trace by copying
+frames from the Shadow Call Stack. This reduces boot time by ~30% for
+all KASAN modes when Shadow Call Stack is enabled. See below for the
+details of how the measurements were performed.
+
+Stack staces are collected from the Shadow Call Stack via a new
+stack_trace_save_shadow() interface.
+
+Note that the implementation is best-effort and only works in certain
+contexts. See patch #3 for details.
+
 ---
 
+Changes
+=======
 
- arch/arm/mach-bcm/Kconfig | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+v2->v3:
+- Limit hardirq and drop SDEI support for performance and simplicity.
+- Move stack_trace_save_shadow() implementation back to mm/kasan:
+  it's not mature enough to be used as a system-wide stack trace
+  collection replacement.
+- Clarify -ENOSYS return value from stack_trace_save_shadow().
+- Don't rename nr_entries to size in kasan_save_stack().
+- Check return value of stack_trace_save_shadow() instead of checking
+  CONFIG_HAVE_SHADOW_STACKTRACE in kasan_save_stack().
 
-diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
-index 8db655c3e321..f73a056bf560 100644
---- a/arch/arm/mach-bcm/Kconfig
-+++ b/arch/arm/mach-bcm/Kconfig
-@@ -218,4 +218,16 @@ config ARCH_BRCMSTB
- 	  This enables support for Broadcom ARM-based set-top box chipsets,
- 	  including the 7445 family of chips.
- 
-+config ARCH_BCMBCA
-+	bool "Broadcom Broadband SoC"
-+	depends on ARCH_MULTI_V7
-+	select ARM_AMBA
-+	select ARM_GIC
-+	select HAVE_ARM_ARCH_TIMER
-+	help
-+	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM-based
-+	  BCA chipset.
-+
-+	  This enables support for Broadcom BCA ARM-based broadband chipsets,
-+	  including the DSL, PON and Wireless family of chips.
- endif
+v1->v2:
+- Provide a kernel-wide stack_trace_save_shadow() interface for collecting
+  stack traces from shadow stack.
+- Use ptrauth_strip_insn_pac() and READ_ONCE_NOCHECK, see the comments.
+- Get SCS pointer from x18, as per-task value is meant to save the SCS
+  value on CPU switches.
+- Collect stack frames from SDEI and IRQ contexts.
+
+Perf
+====
+
+To measure performance impact, I used QEMU in full system emulation mode
+on an x86-64 host.
+
+As proposed by Mark, I passed no filesystem to QEMU and booted with panic=-1:
+
+qemu-system-aarch64 \
+	-machine virt,mte=on -cpu max \
+	-m 2G -smp 1 -nographic \
+	-kernel ./xbins/Image \
+	-append "console=ttyAMA0 earlyprintk=serial panic=-1" \
+	-no-shutdown -no-reboot
+
+Just in case, the QEMU version is:
+
+$ qemu-system-aarch64 --version
+QEMU emulator version 6.2.94 (v5.2.0-rc3-12124-g81c7ed41a1)
+Copyright (c) 2003-2022 Fabrice Bellard and the QEMU Project developers
+
+Then, I recorded the timestamp of when the "Kernel panic" line was printed
+to the kernel log.
+
+The measurements were done on 5 kernel flavors:
+
+master                 (mainline commit a19944809fe99):
+master-no-stack-traces (stack trace collection commented out)
+master-no-stack-depot  (saving to stack depot commented out)
+up-scs-stacks-v3       (collecting stack traces from SCS)
+up-scs-stacks-v3-noscs (up-scs-stacks-v3 with __noscs marking)
+
+(The last flavor is included just for the record: it produces an unexpected
+ slowdown. The likely reason is that helper functions stop getting inlined.)
+
+All the branches can be found here:
+
+https://github.com/xairy/linux/branches/all
+
+The measurements were performed for Generic and HW_TAGS KASAN modes.
+
+The .configs are here (essentially, defconfig + SCS + KASAN):
+
+Generic KASAN: https://gist.github.com/xairy/d527ad31c0b54898512c92898d62beed
+HW_TAGS KASAN: https://gist.github.com/xairy/390e4ef0140de3f4f9a49efe20708d21
+
+The results:
+
+Generic KASAN
+-------------
+
+master-no-stack-traces: 8.03
+master:                 11.55 (+43.8%)
+master-no-stack-depot:  11.53 (+43.5%)
+up-scs-stacks-v3:       8.31  (+3.4%)
+up-scs-stacks-v3-noscs: 9.11  (+13.4%)
+
+HW_TAGS KASAN
+-------------
+
+master-no-stack-traces: 3.31
+master:                 5.01 (+51%)
+master-no-stack-depot:  4.85 (+47%)
+up-scs-stacks-v3:       3.49 (+5.4%)
+up-scs-stacks-v3-noscs: 4.27 (+29%)
+
+The deviation for all numbers above is ~0.05.
+
+As can be seen, the up-scs-stacks-v3 flavor results in a significantly
+faster boot compared to master.
+
+Andrey Konovalov (3):
+  arm64, scs: expose irq_shadow_call_stack_ptr
+  kasan, arm64: implement stack_trace_save_shadow
+  kasan: use stack_trace_save_shadow
+
+ arch/arm64/include/asm/scs.h | 10 +++++-
+ arch/arm64/kernel/irq.c      |  4 +--
+ arch/arm64/kernel/sdei.c     |  3 --
+ mm/kasan/common.c            | 66 +++++++++++++++++++++++++++++++++++-
+ 4 files changed, 75 insertions(+), 8 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
-
---0000000000001ca7e805dc8e2a29
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ8LB33oBZoIWDH7Pj17TRXo9q72
-auRihdXdF9J+ryFnMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDQxMzE5MjcxM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBbtmFy76XC8HFqtmVqzFSnt5+Zq5s++OUcshTA3QWPatkH
-j1Mkh8LBtwk6+QWaEUiq6SrLIJ2mNeHkldeoYXNkIYh7/1BFQn6OczAKbcJRdcOT7S62IvwF5NPP
-CL3GB79r4+wP3UvNxxSHhKaC16wshPyEe4hytAL0/Thok4VYErW/YLbuNnFc/MHZaKFAcuXPy4vN
-+FcVZjGMaCmtJmLqO6pDdt96JLGJf83Bi7O5nvphtGz94d7Bv5zRPR1sChztNV2SGZpyuJqwPeeE
-SaDnaYnekShGY6wvz5QIpdY/LE+OLnn+hcaO9HXyW7s9jp9JZz++nNVkTR3EB24i2qda
---0000000000001ca7e805dc8e2a29--

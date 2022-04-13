@@ -2,154 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8DC4FFB44
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC334FFB45
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236851AbiDMQ3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S234640AbiDMQak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiDMQ3x (ORCPT
+        with ESMTP id S231166AbiDMQae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:29:53 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B821729C88
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:27:31 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l7so5078012ejn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=dHSB2OunSV8N2CP9NqgGCpEjqZt2Tp1gm+JIRx281WY=;
-        b=kVzls8+Jm+5l8AlSNCM9fh+KtEc68H/XiJChaqcD36C7J0LzgT7YgfLZrpmzHeCwti
-         uGRwzF0joozPRAuIdSVCmgR8qkSaILYa+q4Nq6jNQyH6rc8sXi5KPZa02v6rtFHB3FnS
-         zJYEcGjvhNHxgpERIgk62ePTbzGBLQHTsXl2viYHMBP93FfcRlP3hRX7uf2E+l7mEw12
-         l7Tq1pHOnzeKiY8fgHEa10FuPwa8ugh1WfD2qs3eKOcB9qtUO39BdBXaafVSB6YKEuFG
-         tRwjI8Z6Mnli8HWadcCsaHSpZ6i/tMsS6ijfKVrw94tz7keMLHByw0MGjVgYI0NVO3KR
-         /+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=dHSB2OunSV8N2CP9NqgGCpEjqZt2Tp1gm+JIRx281WY=;
-        b=vMIcEUDdutNxDUK79JFnXuJgcHMjr1OcC8ZDPauDQjFzcTEzmENaqxLwjr6uWF4pE7
-         bIlD8OGSpFE3ehCwGFXhD7sv2kfcEwFMKel5kbj4lVpoOaJSzoQ0UW1oZXpq1eM2xjOJ
-         lKNqF2TUIIalhvxMLzqZykW6VM+JK3+Tp55MmTS+i1hbZkO3H1AiRaBPeKV8/boGDLxn
-         vjs+ETAlQ748MplLsyf5nvVR4Xg08gifAHAlRO8DL8phW7haTlClM5yLwpdK3CPSe/aJ
-         lsf132C+zkd0gHQ4KxFWi+95DRWW8p169wP3Ea4wVmF9c/34xnXFoZiXSIaD1rhrhUO5
-         B5Eg==
-X-Gm-Message-State: AOAM531ph4/bFxHC01q4h36/2wzS4DnW/zJqI3Eh768biyT0sXk4Qz64
-        QmgnXb9JMiu0Zj4H/oYzWP0=
-X-Google-Smtp-Source: ABdhPJwugGCsX7h22o//7EA8siY4JDgQuOv/CXKsTbwyvqiHxO+ueNSthSfqC4XlZzhblOSnMAfArA==
-X-Received: by 2002:a17:907:8a0e:b0:6e8:c5df:d9e with SMTP id sc14-20020a1709078a0e00b006e8c5df0d9emr4124725ejc.142.1649867250201;
-        Wed, 13 Apr 2022 09:27:30 -0700 (PDT)
-Received: from [192.168.0.253] (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id k15-20020a50ce4f000000b00420119333c1sm449703edj.62.2022.04.13.09.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 09:27:29 -0700 (PDT)
-Message-ID: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
-Date:   Wed, 13 Apr 2022 18:27:28 +0200
+        Wed, 13 Apr 2022 12:30:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C722457AB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:28:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3C69C1F85F;
+        Wed, 13 Apr 2022 16:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649867291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6KBdb4VmTn/pYFWt/6bB7of9YM7bDMO/GcHFky/8y9I=;
+        b=DU+HQ89UjD06b24wlLrKpJV2S6O8fTX7sPiiaDe1a88vFba0Ms6yfuO3re5jmtDgOj3Fok
+        TxxBs5fTagnMfwnHoiBSDHhfRZhznpIvy35DjGH3HU5ckmGdyBWb9jHu1DQePI4tCGP79t
+        QlXEAy0XjyrWhhrp9vCnI1yRQyQ7Zmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649867291;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6KBdb4VmTn/pYFWt/6bB7of9YM7bDMO/GcHFky/8y9I=;
+        b=2IMJ7dl+hMr8y+/nt+9WGKZAjpxH6qSdvNoKeRJrh7N5ThCMt47NVXICG7kGUnHzGkW9li
+        Z2V4y9x4Vs1Nm/Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7A8113A91;
+        Wed, 13 Apr 2022 16:28:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0okTLBr6VmJKSgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 13 Apr 2022 16:28:10 +0000
+Message-ID: <012e3889-563b-e7fc-c2e3-e7a6373a55ac@suse.cz>
+Date:   Wed, 13 Apr 2022 18:28:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Content-Language: en-US
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        straube.linux@gmail.com
-From:   Michael Straube <straube.linux@gmail.com>
-Subject: staging: r8188eu: struct rt_firmware_header issues
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-13-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 12/16] mm: remember exclusively mapped anonymous pages
+ with PG_anon_exclusive
+In-Reply-To: <20220329160440.193848-13-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 3/29/22 18:04, David Hildenbrand wrote:
+> Let's mark exclusively mapped anonymous pages with PG_anon_exclusive as
+> exclusive, and use that information to make GUP pins reliable and stay
+> consistent with the page mapped into the page table even if the
+> page table entry gets write-protected.
+> 
+> With that information at hand, we can extend our COW logic to always
+> reuse anonymous pages that are exclusive. For anonymous pages that
+> might be shared, the existing logic applies.
+> 
+> As already documented, PG_anon_exclusive is usually only expressive in
+> combination with a page table entry. Especially PTE vs. PMD-mapped
+> anonymous pages require more thought, some examples: due to mremap() we
+> can easily have a single compound page PTE-mapped into multiple page tables
+> exclusively in a single process -- multiple page table locks apply.
+> Further, due to MADV_WIPEONFORK we might not necessarily write-protect
+> all PTEs, and only some subpages might be pinned. Long story short: once
+> PTE-mapped, we have to track information about exclusivity per sub-page,
+> but until then, we can just track it for the compound page in the head
+> page and not having to update a whole bunch of subpages all of the time
+> for a simple PMD mapping of a THP.
+> 
+> For simplicity, this commit mostly talks about "anonymous pages", while
+> it's for THP actually "the part of an anonymous folio referenced via
+> a page table entry".
+> 
+> To not spill PG_anon_exclusive code all over the mm code-base, we let
+> the anon rmap code to handle all PG_anon_exclusive logic it can easily
+> handle.
+> 
+> If a writable, present page table entry points at an anonymous (sub)page,
+> that (sub)page must be PG_anon_exclusive. If GUP wants to take a reliably
+> pin (FOLL_PIN) on an anonymous page references via a present
+> page table entry, it must only pin if PG_anon_exclusive is set for the
+> mapped (sub)page.
+> 
+> This commit doesn't adjust GUP, so this is only implicitly handled for
+> FOLL_WRITE, follow-up commits will teach GUP to also respect it for
+> FOLL_PIN without !FOLL_WRITE, to make all GUP pins of anonymous pages
 
-I think the rt_firmware_hdr structure in rtw_fw.c has some issues.
+	   without FOLL_WRITE ?
 
+> fully reliable.
 
-struct rt_firmware_hdr {
-	/*  8-byte alinment required */
-	/*  LONG WORD 0 ---- */
-	__le16		Signature;	/* 92C0: test chip; 92C,
-					 * 88C0: test chip; 88C1: MP A-cut;
-					 * 92C1: MP A-cut */
-	u8		Category;	/*  AP/NIC and USB/PCI */
-	u8		Function;	/*  Reserved for different FW function
-					 *  indcation, for further use when
-					 *  driver needs to download different
-					 *  FW for different conditions */
-	__le16		Version;	/*  FW Version */
-	u8		Subversion;	/*  FW Subversion, default 0x00 */
-	u16		Rsvd1;
+<snip>
 
-	/*  LONG WORD 1 ---- */
-	u8		Month;	/*  Release time Month field */
-	u8		Date;	/*  Release time Date field */
-	u8		Hour;	/*  Release time Hour field */
-	u8		Minute;	/*  Release time Minute field */
-	__le16		RamCodeSize;	/*  The size of RAM code */
-	u8		Foundry;
-	u8		Rsvd2;
+> @@ -202,11 +203,26 @@ static inline int is_writable_migration_entry(swp_entry_t entry)
+>  	return unlikely(swp_type(entry) == SWP_MIGRATION_WRITE);
+>  }
+>  
+> +static inline int is_readable_migration_entry(swp_entry_t entry)
+> +{
+> +	return unlikely(swp_type(entry) == SWP_MIGRATION_READ);
+> +}
+> +
+> +static inline int is_readable_exclusive_migration_entry(swp_entry_t entry)
+> +{
+> +	return unlikely(swp_type(entry) == SWP_MIGRATION_READ_EXCLUSIVE);
+> +}
 
-	/*  LONG WORD 2 ---- */
-	__le32		SvnIdx;	/*  The SVN entry index */
-	u32		Rsvd3;
+This one seems to be missing a !CONFIG_MIGRATION counterpart. Although the
+only caller __split_huge_pmd_locked() probably indirectly only exists with
+CONFIG_MIGRATION so it's not an immediate issue.  (THP selects COMPACTION
+selects MIGRATION)
 
-	/*  LONG WORD 3 ---- */
-	u32		Rsvd4;
-	u32		Rsvd5;
-};
+<snip>
 
+> @@ -3035,10 +3083,19 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>  
+>  	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
+>  	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
+> +
+> +	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+> +	if (anon_exclusive && page_try_share_anon_rmap(page)) {
+> +		set_pmd_at(mm, address, pvmw->pmd, pmdval);
+> +		return;
 
-Then we have in rtl8188e_firmware_download():
+I am admittedly not too familiar with this code, but looks like this means
+we fail to migrate the THP, right? But we don't seem to be telling the
+caller, which is try_to_migrate_one(), so it will continue and not terminate
+the walk and return false?
 
+> +	}
+> +
+>  	if (pmd_dirty(pmdval))
+>  		set_page_dirty(page);
+>  	if (pmd_write(pmdval))
+>  		entry = make_writable_migration_entry(page_to_pfn(page));
+> +	else if (anon_exclusive)
+> +		entry = make_readable_exclusive_migration_entry(page_to_pfn(page));
+>  	else
+>  		entry = make_readable_migration_entry(page_to_pfn(page));
+>  	pmdswp = swp_entry_to_pmd(entry);
 
-	fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
+<snip>
 
-	<snip>
+> @@ -1918,6 +1955,15 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>  				page_vma_mapped_walk_done(&pvmw);
+>  				break;
+>  			}
+> +			VM_BUG_ON_PAGE(pte_write(pteval) && folio_test_anon(folio) &&
+> +				       !anon_exclusive, subpage);
+> +			if (anon_exclusive &&
+> +			    page_try_share_anon_rmap(subpage)) {
+> +				set_pte_at(mm, address, pvmw.pte, pteval);
+> +				ret = false;
+> +				page_vma_mapped_walk_done(&pvmw);
+> +				break;
+> +			}
 
-	if (IS_FW_HEADER_EXIST(fwhdr)) {
-		/*  Shift 32 bytes for FW header */
-		fw_data = fw_data + 32;
-		fw_size = fw_size - 32;
-	}
+Yeah for the PTE version it seems to do what I'd expect.
 
-We add/sub 32 bytes but the size of struct rt_firmware_hdr is actually
-33 bytes. I noticed this when I wanted to replace:
-
-		fw_data = fw_data + 32;
-		fw_size = fw_size - 32;
-
-with:
-		fw_data = fw_data + sizeof(struct rt_firmware_hdr);
-		fw_size = fw_size - sizeof(struct rt_firmware_hdr);;
-
-To me it looks add/sub 32 is correct here but the struct is
-wrong. I don't know if the firmware for this driver is so much different
-from firmware for the drivers in drivers/net/wireless/realtek/rtlwifi.
-They use a struct of size 32.
-
-Also, souldn't the u16 and u32 variables in the struct be __le16 and
-__le32 ?
-
-I wonder if we can just use the rtlwifi_firmware_header structure from
-drivers/net/wireless/realtek/rtlwifi/wifi.h ?
-
-Comments from people with better knowledge appreciated. :)
-
-regards,
-Michael
-
-
+>  			/*
+>  			 * Store the pfn of the page in a special migration

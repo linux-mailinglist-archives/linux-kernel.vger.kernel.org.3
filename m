@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60774FF958
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF8A4FF962
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236275AbiDMOuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S236306AbiDMOvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236249AbiDMOup (ORCPT
+        with ESMTP id S236284AbiDMOvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:50:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B82D644E5;
-        Wed, 13 Apr 2022 07:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3AE961CD2;
-        Wed, 13 Apr 2022 14:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB28C385A4;
-        Wed, 13 Apr 2022 14:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649861303;
-        bh=FgczV9vyyhtmBq+7sQB2zbK2zkbVOySmGyJEOuInnlc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TQw7UBPRl43qPWUCP2erzWWaWPQNsx70yocpG64iBv2l/aAtgrwO3qsNv+dq2+Ch5
-         JU7LOh8SUpkXyAOfn0+SnN+NSLeR0dhUGW+m4a7/20guJtrgLblegv5sNemLcgPqKl
-         6J9FTjAKTpFtGRTENxV8SurPZxzU+o/DiJl5sBZXY5wBhL1MObXsp+5qrg/fRxl1JX
-         x9+TXStgVboZIpoQYAV1bAyaKsDvgEai2GQhwx1z7TDTwAp5kz7qfxpKf9bfGC8w8k
-         OETaHeX9pWfVR+5+xQP4RoU2bnZst5FCD2aKRDDi1+lWvsAToUjeX4fbXza6rrXPK2
-         UlrExmZwnqSbw==
-Date:   Wed, 13 Apr 2022 17:48:09 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
-Message-ID: <YlbiqdqCH+j7TK80@kernel.org>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
- <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
- <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
- <6c976344-fdd6-95cd-2cb0-b0e817bf0392@intel.com>
- <YlP94T1ACwxKTgep@kernel.org>
- <20220413114001.wdsi2xrm4btrghms@box.shutemov.name>
+        Wed, 13 Apr 2022 10:51:02 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32012644FC;
+        Wed, 13 Apr 2022 07:48:41 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-d6ca46da48so2204348fac.12;
+        Wed, 13 Apr 2022 07:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FxHwhdm9btSdYvaFRpF89WZ11d+DUJSyuwpXyhUrySg=;
+        b=ph+CLcb2D6lORM6IJIyfthmCeyks76RTfVxrWHNcwulXigGAcv6oo10iABgrk6Wx0U
+         6y+yK+Yxye7o07A9VjWY6yixw7XvrL1kMnBvAIzyzh/quWtmavCXmozqGbT2LJLsa3UH
+         TqVS2A2Fh3IQSIVu9pbOp/p8qw8nwtVyGs+ypYdjgKJc+SwLzLuzCuRowFj/LD/+Ab6M
+         KAa32cWZK0KazOyqnpd4cgi9dhgp5QOPRkdy5ByAbCYlU41ZEmHb0f8R6EVHg2IH6X8z
+         eY0etUQFEO+BrOXfV+HUnISWlPM45kODNGYo9CKkQl29CdNDVX886mUw5cl1TkxYbpvm
+         zFjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FxHwhdm9btSdYvaFRpF89WZ11d+DUJSyuwpXyhUrySg=;
+        b=v2e44qVWa0UInGl5KffpWq1Tn8nVTJK6b8Cq81QealIg8cFuhiTHrZwvXmmXn9VKYK
+         BR0thZzI5lGgb6JD1vfcmFneVNuR6j3H9zA27Md6TgADvwWmVu7Lj8CZFmo7DHRDvxMc
+         34DG04Q4GSmDqSyCnPKiunojVws/42nLinWLmDDLXyB7wbRndFwBWFxq7qjCX8zA7BOu
+         80gr1hT73m98ZN4PT4J5pm9z1mJnMU+TiSA3FFf8KaARPusXoXpvhh0ch2X/2TUZU02E
+         d/PoxwUDZhYowvcWeUGsT2vryx4r3QF+EqRofvy0F8ecEX3Fa6Vq190iD25Ncc72gGFT
+         nUgA==
+X-Gm-Message-State: AOAM533Ht1BFBBsOrK51noaC3H84OCpF49zLZKYiBLS7hC+JxuI5Ok1W
+        xOxubEXRWe5GYHhN3500pMAUHPnz4IY=
+X-Google-Smtp-Source: ABdhPJxxhlIyEawQLcU+LCbKgBzlX+AYJPer6EsJupaiTYA+lM8oT/PGy3PKD5ptIAM99efoX6njtA==
+X-Received: by 2002:a05:6870:5712:b0:de:2cbd:c39b with SMTP id k18-20020a056870571200b000de2cbdc39bmr4452829oap.180.1649861320527;
+        Wed, 13 Apr 2022 07:48:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm13715802oob.7.2022.04.13.07.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 07:48:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Apr 2022 07:48:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc2 review
+Message-ID: <20220413144837.GA2401071@roeck-us.net>
+References: <20220412173836.126811734@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220413114001.wdsi2xrm4btrghms@box.shutemov.name>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 02:40:01PM +0300, Kirill A. Shutemov wrote:
-> On Mon, Apr 11, 2022 at 01:07:29PM +0300, Mike Rapoport wrote:
-> > On Sun, Apr 10, 2022 at 11:38:08PM -0700, Dave Hansen wrote:
-> > > On 4/9/22 08:54, Kirill A. Shutemov wrote:
-> > > > On Fri, Apr 08, 2022 at 11:55:43AM -0700, Dave Hansen wrote:
-> > > 
-> > > >>>  	if (fpi_flags & FPI_TO_TAIL)
-> > > >>>  		to_tail = true;
-> > > >>>  	else if (is_shuffle_order(order))
-> > > >>> @@ -1149,7 +1192,8 @@ static inline void __free_one_page(struct page *page,
-> > > >>>  static inline bool page_expected_state(struct page *page,
-> > > >>>  					unsigned long check_flags)
-> > > >>>  {
-> > > >>> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
-> > > >>> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
-> > > >>> +	    !PageUnaccepted(page))
-> > > >>>  		return false;
-> > > >>
-> > > >> That probably deserves a comment, and maybe its own if() statement.
-> > > > 
-> > > > Own if does not work. PageUnaccepted() is encoded in _mapcount.
-> > > > 
-> > > > What about this:
-> > > > 
-> > > > 	/*
-> > > > 	 * page->_mapcount is expected to be -1.
-> > > > 	 *
-> > > > 	 * There is an exception for PageUnaccepted(). The page type can be set
-> > > > 	 * for pages on free list. Page types are encoded in _mapcount.
-> > > > 	 *
-> > > > 	 * PageUnaccepted() will get cleared in post_alloc_hook().
-> > > > 	 */
-> > > > 	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
-> > 
-> > Maybe I'm missing something, but isn't this true for any PageType?
+On Tue, Apr 12, 2022 at 07:47:07PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.34 release.
+> There are 277 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> PG_buddy gets clear on remove from the free list, before the chec.
-> 
-> PG_offline and PG_table pages are never on free lists.
+> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
+> Anything received after that time might be too late.
 
-Right, this will work 'cause PageType is inverted. I still think this
-condition is hard to parse and I liked the old variant with
-!PageUnaccepted() better.
+Build results:
+	total: 156 pass: 155 fail: 1
+Failed builds:
+	nds32:allmodconfig
+Qemu test results:
+	total: 488 pass: 488 fail: 0
 
-Maybe if we wrap the whole construct in a helper it will be less eye
-hurting.
- 
-> -- 
->  Kirill A. Shutemov
+Building nds32:allmodconfig ... failed
+--------------
+Error log:
+net/core/lwtunnel.o: in function `lwtunnel_fill_encap':
+(.text+0x4d6): relocation truncated to fit: R_NDS32_9_PCREL_RELA against `.text'
 
--- 
-Sincerely yours,
-Mike.
+I have no idea what causes the problem. Given that nds32 has been removed
+from mainline, we should probably not bother. I may stop test building it
+if the problem is persistent over multiple stable releases. 
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

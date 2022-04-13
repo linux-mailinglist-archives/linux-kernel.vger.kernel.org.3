@@ -2,246 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D71B5002CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3CC5002D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbiDMXwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S235684AbiDMXx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239266AbiDMXw1 (ORCPT
+        with ESMTP id S235649AbiDMXxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:52:27 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486AC4198F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:50:04 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id f17so6542547ybj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a5EXZ66vzc8wGGFS0KdCIOr/0vN4p+gJkK4jhufWTWo=;
-        b=tOiGJxThxXa5XCh6q8UVUVgTw+/IaL6/n8X9OvaNav/lEOgsd905IckVF9kb2xE9xL
-         Y+GyHynroF0g116azUR/a4FwWIvlMAhRwstn9Hl/82lkl1LdlSKSibvCNDAIaQvJaFFv
-         vEA0Pt14P49Dgy4V6iyeO2U8M+tHUGjHj63EE3sfJXlxpeHq9+QyxAvcn+zOvqi6ZHik
-         UFA/Y67tPsgxeUfhuWcLGq64NAr+RSSYcDHJghIpH1KIS+Zo+S8JxU9hShegcD2O6llC
-         NOtoEUIjIYme8Gvap+bDSlRvzmew4/FUmngrL58qPbvcijKRQUWCp5g+3WMnU3mKqzwL
-         V3Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a5EXZ66vzc8wGGFS0KdCIOr/0vN4p+gJkK4jhufWTWo=;
-        b=thlILLEt30ADhYu/npfpjDN2S+2zKa8LudNDZtoAH3LBiTF2KYpClf/4I2balsGXoO
-         NnpNPate6ijw80+zC7Z/hHenfyUixlEl3KU9Fxw+DZDUdyAQhKb7QNLsKxS7f26y7aBd
-         qnbhtdw2QHPf7VcfHnVhnNMIHkTsnrktMYWAtj00SMRtE3ciaNCDMzk68yzlTZdhEI/n
-         USetbGZN1PqQzGwaODHnQMTDmyZj5gvziTPijOYKs3UyhaeGOIlFTbyzjI+B5BZ/6AAM
-         v5WXKRrCUql+faKDFzgaTXlmdeo5ouj0XAjfxUNvqxcYniht+op6q5CyvTXzMqt9XbG3
-         4VVg==
-X-Gm-Message-State: AOAM5309pC59sp+TDRSt94Qnyw80gyZ2JyBbL4z2vcN6AkcVn28L6h6t
-        VyDu9yCeueSFYGIm9TNw5f6xnc2NYQRqaG0/+pEs/Q==
-X-Google-Smtp-Source: ABdhPJwFlbrl7ofnjS1cxV5eVjwrteY0hJYnsUWhyrL07X06SKz9Kfo71uCtg2eGPzBWMc0TYho+C0WwQSSOikcnwpA=
-X-Received: by 2002:a25:3744:0:b0:641:28ec:c7a8 with SMTP id
- e65-20020a253744000000b0064128ecc7a8mr1119306yba.560.1649893803087; Wed, 13
- Apr 2022 16:50:03 -0700 (PDT)
+        Wed, 13 Apr 2022 19:53:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7524851E4D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:51:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E594E1424;
+        Wed, 13 Apr 2022 16:51:29 -0700 (PDT)
+Received: from airbuntu (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D9E33F73B;
+        Wed, 13 Apr 2022 16:51:27 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 00:51:21 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "parth@linux.ibm.com" <parth@linux.ibm.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
+        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
+        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
+        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        Wei Wang <wvw@google.com>
+Subject: Re: Scheduling tasks on idle cpu
+Message-ID: <20220413235121.tzefvdvnwcipzo7p@airbuntu>
+References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
+ <20220411233447.rcencjivkhyltyxm@airbuntu>
+ <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-2-wuyun.abel@bytedance.com> <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
- <56ded56d-f7ad-a49f-c19c-8aa40fb33a29@bytedance.com>
-In-Reply-To: <56ded56d-f7ad-a49f-c19c-8aa40fb33a29@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Wed, 13 Apr 2022 16:49:52 -0700
-Message-ID: <CABk29Nu+6vh825SqyNmSJoWBQmEBgCsk6mcEtWLmXCq_T0xUjg@mail.gmail.com>
-Subject: Re: [RFC v2 1/2] sched/fair: filter out overloaded cpus in SIS
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:55 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
->
-> On 4/12/22 9:23 AM, Josh Don Wrote:
+On 04/12/22 08:39, David Laight wrote:
+> From: Qais Yousef
+> > Sent: 12 April 2022 00:35
+> > 
+> > On 04/11/22 08:26, David Laight wrote:
+> > > From: Qais Yousef
+> > > > Sent: 09 April 2022 18:09
+> > > ...
+> > > > RT scheduler will push/pull tasks to ensure the task will get to run ASAP if
+> > > > there's another cpu at lower priority is available
+> > >
+> > > Does that actually happen?
+> > 
+> > For RT tasks, yes. They should get distributed.
+> 
+> Ok, that is something slightly different from what I'm seeing.
 
-> >>   static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
-> >>   {
-> >>          struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> >> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
-> >> +       int i, cpu, idle_cpu = -1, nr = INT_MAX, nro;
-> >>          struct rq *this_rq = this_rq();
-> >>          int this = smp_processor_id();
-> >>          struct sched_domain *this_sd;
-> >> @@ -6301,7 +6310,13 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
-> >>          if (!this_sd)
-> >>                  return -1;
-> >>
-> >> +       nro = atomic_read(&sd->shared->nr_overloaded);
-> >> +       if (sched_domain_overloaded(sd, nro))
-> >> +               return -1;
-> >
-> > This early bail out doesn't seem to be related to the main idea of
-> > your patch. Apart from deciding the exact heuristic value for what is
->
-> I agree that this early check doesn't seem to have a strong bound with
-> the idea "filter out the overloaded cpus", but this check is aligned
-> with the goal of "search less when becoming more overloaded".
->
-> As to the heuristic value, which is about 95%, I think it would be nice
-> if I can show more test results? I also have tested sd->imbalance_pct
-> and 100% (nro == sd->span_weight), seems like 95% is a better choice.
->
-> > considered too unlikely to find an idle cpu, this doesn't work well
-> > with tasks constrained by affinity; a task may have a small affinity
-> > mask containing idle cpus it may wake onto, even if most of the node
-> > is overloaded.
->
-> Yes, indeed. And I haven't come to a solution except that remove this
-> check entirely. Ideas?
+If you have multiple SCHED_FIFO/SCHED_RR tasks with the same priority, they
+don't end up being distributed on different CPUs? Assuming number of tasks is
+not higher than number of CPUs.
 
-Does this check help that much? Given that you added the filter below
-to cut out searching overloaded cpus, I would think that the below is
-sufficient.
+Generally if there are two RT tasks on the same CPU and there's another CPU
+that is running something that is lower priority than these two, then the lower
+priority of these 2 tasks should move to that CPU.
 
-Another use case that would break with the above:
+Eh, hope that's readable :-)
 
-A few cpus are reserved for a job, so that it always has a couple cpus
-dedicated to it. It can run across the entire machine though (no
-affinity restriction). If the rest of the machine is very busy, we'd
-still want to be able to search for and find the idle reserved cpus
-for the job.
+> 
+> > > I've seen the following:
+> > >   34533 [017]: sys_futex(uaddr: 1049104, op: 85, val: 1, utime: 1, uaddr2: 1049100, val3: 4000001)
+> > >   34533 [017]: sched_migrate_task: pid=34512 prio=120 orig_cpu=14 dest_cpu=17
+> > >   34533 [017]: sched_wakeup: pid=34512 prio=120 success=1 target_cpu=017
+> > 
+> > prio=120 is a CFS task, no?
+> 
+> CFS = 'normal time-slice processes ? Then yes.
 
-> >>          cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
-> >> +       if (nro)
-> >> +               cpumask_andnot(cpus, cpus, sdo_mask(sd->shared));
-> >
-> > To prevent us from exhausting our search attempts too quickly, this
-> > only needs to go under the sched_feat(SIS_PROP) && !has_idle_core case
-> > below. But by doing this unconditionally here, I guess your secondary
-> > goal is to reduce total search cost in both cases. Just wondering, did
->
-> Yes, it's unnecessary to try the overloaded cpus. But this makes sense
-> only if the overloaded cpumask is relatively accurate as you pointed
-> out below.
->
-> > you observe significant time spent here that you are trying to
-> > optimize? By reducing our search space by the overload mask, it is
-> > important that the mask is relatively up to date, or else we could
-> > miss an opportunity to find an idle cpu.
->
-> I think that's why Mel asked for the SIS statistics. The result in the
-> cover letter shows improvement on the search efficiency, and that is
-> what the overhead of the cpumask calculation trade for. Would it be
-> better if skip the update when nro is small?
+Sorry, yes. CFS = SCHED_NORMAL/SCHED_OTHER.
 
-Just pointing out that with a very fast wake/sleep rate, you could hit
-cases where you potentially fail to consider waking onto a cpu that is
-actually idle. But I think this concern is addressed below.
+> 
+> > > and pid 34512 doesn't get scheduled until pid 34533 finally sleeps.
+> > > This is in spite of there being 5 idle cpu.
+> > > cpu 14 is busy running a RT thread, but migrating to cpu 17 seems wrong.
+> > >
+> > > This is on a RHEL7 kernel, I've not replicated it on anything recent.
+> > > But I've very much like a RT thread to be able to schedule a non-RT
+> > > thread to run on an idle cpu.
+> > 
+> > Oh, you want CFS to avoid CPUs that are running RT tasks.
+> > 
+> > We had a proposal in the past, but it wasn't good enough
+> > 
+> > 	https://lore.kernel.org/lkml/1567048502-6064-1-git-send-email-jing-ting.wu@mediatek.com/
+> 
+> That seems to be something different.
+> Related to something else I've seen where a RT process is scheduled
+> on its old cpu (to get the hot cache) but the process running on
+> that cpu is looping in kernel - so the RT process doesn't start.
 
-> >
-> >>          if (sched_feat(SIS_PROP) && !has_idle_core) {
-> >>                  u64 avg_cost, avg_idle, span_avg;
-> >> @@ -7018,6 +7033,51 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
-> >>
-> >>          return newidle_balance(rq, rf) != 0;
-> >>   }
-> >> +
-> >> +static inline bool cfs_rq_overloaded(struct rq *rq)
-> >> +{
-> >> +       return rq->cfs.h_nr_running - rq->cfs.idle_h_nr_running > 1;
-> >> +}
-> >
-> > Why > 1 instead of > 0? If a cpu is running 1 non-idle task and any
-> > number of idle tasks, I'd think it is still "occupied" in the way
-> > you've defined. We'd want to steer wakeups to cpus running 0 non-idle
-> > tasks.
->
-> The idea behind "> 1" is telling the unoccupied cpus to pull non-idle
-> tasks from it (in the next patch). Although "> 0" is more efficient in
-> wakeup, it blinds us when pulling tasks.
+I *think* you're hitting softirq latencies. Most likely it's the network RX
+softirq processing the packets. If this latency is a problem, then PREEMPT_RT
+[1] should help with this. For Android we hit this issue and there's a long
+living out of tree patch that I'm trying to find an upstream replacement for.
 
-Ok, I was a bit confused because there are different considerations
-for >=1 and >=2 non-idle tasks.
+There's a new knob to reduce how long netdev spends in the loop. Might be worth
+a try:
 
-So you consider >= 2 non-idle tasks to be "overloaded". TBH I do
-prefer this than ">=1" for the wakeup filtering anyway, because if
-there are at least two tasks, that makes it less likely for us to race
-with seeing a spurious wakeup/sleep causing a cpu to be fully
-idle/non-idle (ie. we have more confidence that we can safely filter
-out the overload mask).
+	https://lore.kernel.org/netdev/1492619830-7561-1-git-send-email-tedheadster@gmail.com/
 
-> > Why are these cpu mask writes not atomic?
->
-> They are atomic. The non-atomic version is __cpumask_{set,clear}_cpu.
-> Did I miss something?
+[1] https://wiki.linuxfoundation.org/realtime/start
 
-Ah, I confused these, my bad.
+> 
+> I've avoided most of the pain that caused by not using a single
+> cv_broadcast() to wake up the 34 RT threads (in this config).
+> (Each kernel thread seemed to wake up the next one, so the
+> delays were cumulative.)
+> Instead there is a separate cv for each RT thread.
+> I actually want the 'herd of wildebeest' :-)
 
-> > I'd caution about using task_tick and pick_next_task_fair as the
-> > places we set and clear overload.
-> >
-> > Some issues with task_tick:
-> > - ticks may be disabled in NO_HZ_FULL (an issue if we define overload
-> > as > 0 non-idle tasks)
-> > - most ticks will have the same state, so somewhat redundant checking.
-> > Could use an edge based trigger instead, such as enqueue/dequeue
-> > (somewhat similar to rq->rd->overload).
->
-> 1. In NO_HZ_FULL, given rq is overloaded, say have non-idle task A and
->     B enqueued, if A is dequeued before next tick then tick will be off
->     and the rq will keep "overloaded" while it's actually not. But this
->     doesn't necessarily be a bad thing because this cpu will be skipped
->     in wakeup path which helps in improving searching efficiency.
+It seems you have a big RT app running in userspace. I thought initially you're
+hitting issues with random kthreads or something. If you have control over
+these tasks, then that should be easier to handle (as you suggest at the end).
 
-Yea this concern is alleviated because overload is actually >=2 tasks
-(I had been incorrectly assuming you wanted to mark overload for >=1
-non-idle task.
+I'm not sure about the delays when using cv_broadcast(). Could it be the way
+this library is implemented is causing the problem rather than a kernel
+limitation?
 
-> 2. Yes, that's why I use rq->overloaded to save the last update state.
->     So when the overloaded state doesn't change, what we all do is a
->     simple check on a local variable.
->     The enqueue/dequeue path is not well bounded, and it could be very
->     frequent on short running workloads, which would introduce great
->     overhead to update the LLC shared atomic/cpumask.
+> 
+> > The approach in that patch modified RT to avoid CFS actually.
+> 
+> Yes I want the CFS scheduler to pick an idle cpu in preference
+> to an active RT one.
 
-Yea, the frequent update would be an issue. I now see the check on the
-cpu-local variable.
+I think that's what should happen. But I think it's racy. Vincent knows this
+code better though, so I'll defer to him.
 
-So the rate limit on updates comes from the fact that
-!overloaded->overloaded requires a tick. We can quickly go from
-overloaded->!overloaded, but will take another tick until we can go
-back to overloaded.
+> 
+> > Can you verify whether the RT task woke up after task 34512 was migrated to CPU
+> > 17? Looking at the definition of available_idle_cpu() we should have avoided
+> > that CPU if the RT task was already running. Both waking up at the same time
+> > would explain what you see. Otherwise I'm not sure why it picked CPU 17.
+> 
+> All 35 RT tasks are running when the request to schedule task 34512 is made.
+> (They wake every 10ms to process UDP/RTP audio packets.)
+> The RT task on cpu 17 carried on running until it ran out of work (after about 1ms).
+> Task 34512 then ran on cpu 17.
+> 
+> In this case task 34512 actually finished quite quickly.
+> (It is creating and binding more UDP sockets.)
+> But it looks like if it were still running on the next 10ms 'tick'
+> it would be pre-empted by the RT task and be idle.
+> Not ideal when I'm trying to schedule a background activity.
+> 
+> I don't think the load-balancer will ever pick it up.
+> All the process scheduling is happening far too fast.
+> 
+> What I think might be happening is that the futex() code is requesting
+> the woken up thread run on the current cpu.
 
-> > With pick_next_task_fair():
-> > - there's a window between a thread dequeuing, and then scheduler
-> > running through to the end of pick_next_task_fair(), during which we
-> > falsely observe the cpu as overloaded
-> > - this breaks with core scheduling, since we may use pick_task_fair
-> > rather than pick_next_task_fair
->
-> 1. I'm afraid I don't understand what the problem is, can you explain
->     more on this? Thanks.
+Hmm. Looking at kernel/futex/waitwake.c::futex_wake() it just ends up calling
+wake_up_process(). So that might not be the case.
 
-Can ignore this comment, I don't think it is relevant given that this
-isn't really a regression vs. the latency between the last thread
-dequeuing and available_idle_cpu() returning true.
+> This can be advantageous in some circumstances - usually if you
+> know the current thread is about to sleep.
+> (I remember another scheduler doing that, but I can't remember why!
+> The only sequence I can think of is a shell doing fork+exec+wait.)
+> But it seems like a bad idea when a RT thread is waking a CFS one.
+> (Or any case where the one being woken is lower priority.)
+> 
+> I might have to run the 'background tasks' at low RT priority
+> just to get them scheduled on idle cpu.
 
-> 2. Nice catch, I will fix it in next update. (Maybe by updating the
->     overloaded status in do_idle()?)
+If you make it an RT task (which I think is a good idea), then the RT scheduler
+will handle it in the push/pull remark that seem to have started this
+discussion and get pushed/pulled to another CPU that is running lower priority
+task.
 
-Ideally can catch it before we actually switch to rq->idle (just
-trying to minimize latency to mark as !overloaded).
+Cheers
 
-Thanks,
-Josh
+--
+Qais Yousef

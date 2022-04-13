@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E954FF715
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82AE4FF718
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbiDMMvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S235626AbiDMMxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDMMvV (ORCPT
+        with ESMTP id S229441AbiDMMxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:51:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E4B45AC5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RGbYhpXywzqv2Hlc31WFYOQppwWEQngmyLOiz4SPLMc=; b=o/CdrJdGaOo/+UkTwXEgHYmTJ5
-        TVDAF0tewzHLjCwR6q5XktVPi6We1u9p2XdJdoEWxcJXOUD6QlalIPEHhsY4pFuo1I4Oqu9+w/0L6
-        V/ijAASP/ARnuJDM9SbL3HymUp+TUOx4vwezAmiO810NhKDdC7dJdWBl+d8JmEKxTFyOQ4lOcHRXr
-        DUbbSHtl7FuohRtOQiEuaS5GhB+CmKXTKAryFnwf8rK84K5hSe03bQl+XI2BbAPaxUyUFl24kVmow
-        vEa4bVOlYg8AoYVAu274c8U5DjhowWcVgGl4DY77ae/2Ez54zo9nfeoXx97v7R9tCAQ/fnVPhQugF
-        xuTmCaTQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1necQV-00EGJp-Iq; Wed, 13 Apr 2022 12:48:51 +0000
-Date:   Wed, 13 Apr 2022 13:48:51 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v3 08/16] mm/rmap: drop "compound" parameter from
- page_add_new_anon_rmap()
-Message-ID: <YlbGswXaIRblKN9j@casper.infradead.org>
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-9-david@redhat.com>
- <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
- <368902ab-8d3f-5d62-581e-1ff930bcefa0@redhat.com>
- <YlbBXiVezzVw+NZZ@casper.infradead.org>
- <0c9d2c39-5080-a855-8ecd-e2c1bd1179fa@redhat.com>
+        Wed, 13 Apr 2022 08:53:10 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD993616A;
+        Wed, 13 Apr 2022 05:50:47 -0700 (PDT)
+Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 12A4E22205;
+        Wed, 13 Apr 2022 14:50:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649854246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gGQKNMATt0VXs2Gr3ljY3Dvzv0/7dWKNIw1LPszM13o=;
+        b=s+ChkiLc/0lHYW3E0/kcfVSlc0ch3xCuhjscEPqzUjM4c8VpXpETaEY7gC9FKwwkU/EaX0
+        43XH7x6ykbJxIi256NJdQ8QuqOuKENbr5Axv+LmCOzVfLbqogc33pOW0pqJZMhWEMyaJqd
+        OTQBDozq4yDWXqvbwFf/t6x4rRfcWpc=
+From:   Michael Walle <michael@walle.cc>
+To:     tudor.ambarus@microchip.com
+Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
+        nicolas.ferre@microchip.com, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH] spi: atmel-quadspi: Add support for sama7g5 QSPI
+Date:   Wed, 13 Apr 2022 14:50:32 +0200
+Message-Id: <20220413125032.151907-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211214133404.121739-1-tudor.ambarus@microchip.com>
+References: <20211214133404.121739-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c9d2c39-5080-a855-8ecd-e2c1bd1179fa@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 02:28:38PM +0200, David Hildenbrand wrote:
-> On 13.04.22 14:26, Matthew Wilcox wrote:
-> > On Tue, Apr 12, 2022 at 11:37:09AM +0200, David Hildenbrand wrote:
-> >> On 12.04.22 10:47, Vlastimil Babka wrote:
-> >>> There's a VM_BUG_ON_PAGE(PageTransCompound(page), page); later in a
-> >>> !compound branch. Since compound is now determined by the same check, could
-> >>> be deleted.
-> >>
-> >> Yes, eventually we could get rid of both VM_BUG_ON_PAGE() on both
-> >> branches and add a single VM_BUG_ON_PAGE(PageTail(page), page) check on
-> >> the compound branch. (we could also make sure that we're not given a
-> >> hugetlb page)
-> > 
-> > As a rule of thumb, if you find yourself wanting to add
-> > VM_BUG_ON_PAGE(PageTail(page), page), you probably want to change the
-> > interface to take a folio.
+Hi Tudor,
+
+> The sama7g5 QSPI controller uses dedicated clocks for the
+> QSPI Controller Interface and the QSPI Controller Core, and
+> requires synchronization before accessing registers or bit
+> fields.
 > 
-> Yeah, I had the same in mind. Might be a reasonable addon on top --
-> although it would stick out in the rmap code a bit because most
-> functions deal with both, folios and subpages.
+> QSPI_SR.SYNCBSY must be zero before accessing any of the bits:
+> QSPI_CR.QSPIEN, QSPI_CR.QSPIDIS, QSPI_CR.SRFRSH, QSPI_CR.SWRST,
+> QSPI_CR.UPDCFG, QSPI_CR.STTFR, QSPI_CR.RTOUT, QSPI_CR.LASTXFER.
+> 
+> Also, the QSPI controller core configuration can be updated by
+> writing the QSPI_CR.UPDCFG bit to ‘1’. This is needed by the
+> following registers: QSPI_MR, QSPI_SCR, QSPI_IAR, QSPI_WICR,
+> QSPI_IFR, QSPI_RICR, QSPI_SMR, QSPI_SKR,QSPI_REFRESH, QSPI_WRACNT
+> QSPI_PCALCFG.
+> 
+> The Octal SPI supports frequencies up to 200 MHZ DDR. The need
+> for output impedance calibration arises. To avoid the degradation
+> of the signal quality, a PAD calibration cell is used to adjust
+> the output impedance to the driven I/Os.
+> 
+> The transmission flow requires different sequences for setting
+> the configuration and for the actual transfer, than what is in
+> the sama5d2 and sam9x60 versions of the IP. Different interrupts
+> are handled. aq->ops->set_cfg() and aq->ops->transfer() are
+> introduced to help differentiating the flows.
+> 
+> Tested single and octal SPI mode with mx66lm1g45g.
 
-I have the start of a series which starts looking at the fault path
-to see where it makes sense to use folios and where it makes sense to
-use pages.
+I've successfully tested this on a LAN9668 with a SST25VF016B
+and 104 MHz (quad mode). But there are some catches:
 
-We're (generally) faulting on a PTE, so we need the precise page to
-be returned in vmf->page.  However vmf->cow_page can/should be a
-folio (because it's definitely not a tail page).  That trickles
-down into copy_present_page() (new_page and prealloc both become folios)
-and so page_add_new_anon_rmap() then looks like a good target to
-take a folio.
+(1) SPI mode is not set, i.e. SCR.CPHA, SCR.CPOL
 
-The finish_fault() -> do_set_pte() -> page_add_new_anon_rmap() looks
-like the only kind of strange place where we don't necessarily have a
-folio (all the others we just allocated it).
+(2) There is no (or a really short delay) between asserting
+    the chip select and the first clock edge. I.e. SCR.DLYBS
+    is zero. I wasn't able to go faster than ~20MHz with that.
+    Also the slightest capacitance, like a probe tip, made things
+    worse. I've been successful with a value of 2 at 104MHz,
+    although attaching an oscilloscope probe (<4 pF input
+    capacitance, no cheapo probe) made things unreliable again.
+    In the end a value of 4 worked perfectly. I think it is
+    overkill to make this configurable, the added delay should
+    be negligible.
+
+(3) As already discussed on IRC, the driver will iomap the
+    whole memory window which is 256MB for one controller
+    in my case. On arm32 the vmalloc area is only 240MB by
+    default. The lan9668 has three of these controllers
+	(whereas one only has an 8MB window). Therefore, we would
+    potentially waste 520MB just for the SPI windows.
+
+    I had a look at the driver, although IAR is set, it is
+    not used for the accesses through the memory window. doh ;)
+    It seems we need to map the memory just for the memcpy_io.
+    The DMA engine should be happy with the physical addresses
+    and shouldn't need the iomap. What do you think about just
+    mapping like 16MB and after that always fall back to DMA
+    regardless of the transfer size.
+
+    In fact I don't know why that memory window is needed at all.
+    Shouldn't the DMA engine be able to just read from RDR and
+    write to TDR? And PIO mode could do the same.
+
+(4) Odd transfer lengths doesn't work. That is I get different
+    results for the folllwing:
+    (a) dd if=/dev/mtd0 bs=3 | hexdump -C | head
+    (a) dd if=/dev/mtd0 bs=4 | hexdump -C | head
+
+    Actually, I've notived that using the (busybox) hexdump
+    directly on /dev/mtd0 returned some really odd bytes. Might
+    or might not be related to that above.
+
+-michael

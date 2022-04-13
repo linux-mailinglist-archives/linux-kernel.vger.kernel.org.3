@@ -2,132 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239314FF767
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007024FF76A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235635AbiDMNJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S233607AbiDMNMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbiDMNJn (ORCPT
+        with ESMTP id S232476AbiDMNMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:09:43 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A680B5DA4E;
-        Wed, 13 Apr 2022 06:07:21 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id x3so1033913wmj.5;
-        Wed, 13 Apr 2022 06:07:21 -0700 (PDT)
+        Wed, 13 Apr 2022 09:12:02 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7433636B49;
+        Wed, 13 Apr 2022 06:09:40 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id z6-20020a17090a398600b001cb9fca3210so2136356pjb.1;
+        Wed, 13 Apr 2022 06:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kafA4Cp/nvsG1AFf16x4P3arNB/XPl6avUTek6th6LM=;
-        b=JhqMhVM5H/AR7I/KTvaWwpyBIGvDRUUSTX73lauZ64L74/VO1bBrYLO4kOCXiDsp9b
-         0eYtRMoZ7x+ck797cRJmAfBS061I5aDnEewWtvDE6jhHf8tUivNI/chCSIiU2fvRcrR/
-         tRVSChnBJZ5SsIri4tfjbW9sM5U/BrgcSRF0tzmvBtL75oV4ALTkPWPmLfIHfc1bLnew
-         /Ge8zb3nnBu8FVVJjy63m44WkE5gpeahe5Xy1imr0aH8pYOpFTrFXd7Mf9Tz+fXBqDnN
-         1hjMXg6TlCD/sv/8Vsfi03n2aPOgXeeS0Beh55YH84A3mRAFlePkZiEjp95iKeWOgWSg
-         Ah8A==
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=OmdGyzNAeRxm3nkDHt1WCAV+MzEwG75Y0ksewbX+MF4=;
+        b=PAOM8WIfUZW45BC2wg57HYBsBtUv0BVv3ho9de5zzfBGpQcV6dc+dv8zglA2PNG0TM
+         5Rq3N98WLNH/UgggAEoq11zI1cWyX9OGI1tINPc0Lz5+EYhkXmpDvfYozaT+65d/ZZhp
+         NtWg/2ngoAva0x1K3o0GAkZxlVMWlzAPalDK6JsjyE5vzvzz/VNVoQaWE37Js6wLpwXX
+         657YJGsQj8kRKNyDHLuQCl86qjMX+P3TwoS+CVqqlPOUytcql1pDJnkuNyJKWaG/FEZC
+         onwHaBuMHTSiur9x7RRrMP1mJlD4cQjN6V7FhF73pmPl9msEMnnWn9yAYsOMt77zLeyi
+         fIUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kafA4Cp/nvsG1AFf16x4P3arNB/XPl6avUTek6th6LM=;
-        b=KFPJAyfw+6jxzI3PLt4g6JhWF6Khjyp0nIkR7jz+rAXrsv9jvNzR8ZuCmT8Ebs+2ZU
-         PVfiyAXECjakHTKgEw7F6AHFyB9JHAOrY1Q4ys8n3XS5e673EB35kWCLToT0Xk+TwpsZ
-         E17E1YsOQt395vT28QGpQLpAKwBxiNQxq53yKoe6jBsvgPQ1tmzt+Egp3x5Q248etYaa
-         Lw5qZew12mnCofJFkJSavK/fQcCW2IJ3Be09jx8NErHkegADjOIXeZtzRgZqzW+6NV0y
-         i5m102/eGfZmDmLyLcVAvcXOo1dfVOX/XFl1s8YOQJw2bK7oPxjBefHOuyHWJ5kbjX4I
-         OY9w==
-X-Gm-Message-State: AOAM533Bg8nMkFHJUZfvqt/pY1p9G1epQtNLdJZdn+9BHkf4np+piglR
-        oQWiIEW1IEsE0aWtoTYOh3HMkJ3BKA7idA==
-X-Google-Smtp-Source: ABdhPJz38kWLFzpnLGk8019rjJMv35e3WlH7WmyVRBX8+qR51s+Kqeuhii9sqjD11yXqjzhXO47SZg==
-X-Received: by 2002:a1c:6a02:0:b0:38b:3661:47f1 with SMTP id f2-20020a1c6a02000000b0038b366147f1mr8455676wmc.5.1649855240054;
-        Wed, 13 Apr 2022 06:07:20 -0700 (PDT)
-Received: from nz.home (host81-147-8-147.range81-147.btcentralplus.com. [81.147.8.147])
-        by smtp.gmail.com with ESMTPSA id o17-20020a05600c4fd100b0038cd5074c83sm2749187wmq.34.2022.04.13.06.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 06:07:18 -0700 (PDT)
-Received: by nz.home (Postfix, from userid 1000)
-        id 8D7CC2CBD6EC9; Wed, 13 Apr 2022 14:07:17 +0100 (BST)
-Date:   Wed, 13 Apr 2022 14:07:17 +0100
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     amd-gfx@lists.freedesktop.org, Joe Perches <joe@perches.com>,
-        linux-kbuild@vger.kernel.org, Jakub Jelinek <jakub@redhat.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: gcc inserts __builtin_popcount, causes 'modpost: "__popcountdi2"
- ... amdgpu.ko] undefined'
-Message-ID: <YlbLBUJxMDUBFo+z@nz>
-References: <YlSYv3d9a5cZR9KE@nz>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=OmdGyzNAeRxm3nkDHt1WCAV+MzEwG75Y0ksewbX+MF4=;
+        b=iQHQ+nhQODh2lObSxsdZRCwkqj9vDB3jofBcgYHhq+s2diTZrDnYVMbDzX70s7W5eN
+         eJN6PFuHYeehQ6hLZrP5b92tSEaE9P1pc/rcnj1UHVKBScnTglxyJ/M5ENh2YINaWkdY
+         S01yE4eLRJLextYXCzp9bmvB9p557gh8pn4JikyQkXCAIknDGON5ry0VcbwZSChGszfA
+         d2VUpjnKzZG6KKIxA2WqbmoezffbmPiAmCa11uVw/U4hHPt5hvniTIppsk1xj2o5Ong3
+         ZQ9TJ0oublsKSkBql48tnnp7Zn9+08HPMEkj+79ercEclj5VN5smL3GFqS7VZoPssZ6I
+         k7+g==
+X-Gm-Message-State: AOAM533p7bluuHIUNKOyoNe6cnvZYU4wnteH3QZglWkGJ9GcHHqotr1k
+        TALAWYWWo9vh2zxEVeSGzC4=
+X-Google-Smtp-Source: ABdhPJxZ3lc5i6nvGo31seZiu+YtpLNfRWuJ6SkCtAfWac6phK2piMZLcrwDr4ywT/xF+5hk0GwYOg==
+X-Received: by 2002:a17:90a:4fa6:b0:1cb:1b77:c931 with SMTP id q35-20020a17090a4fa600b001cb1b77c931mr10849472pjh.63.1649855379956;
+        Wed, 13 Apr 2022 06:09:39 -0700 (PDT)
+Received: from ?IPV6:240b:11:ea00:8f10:1cbd:f3fd:b9f6:da2b? ([240b:11:ea00:8f10:1cbd:f3fd:b9f6:da2b])
+        by smtp.gmail.com with ESMTPSA id w7-20020a63a747000000b003991d7d3728sm6445338pgo.74.2022.04.13.06.09.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 06:09:39 -0700 (PDT)
+Message-ID: <52225285-3b64-f709-81ff-0c26a9b13c02@gmail.com>
+Date:   Wed, 13 Apr 2022 22:09:32 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlSYv3d9a5cZR9KE@nz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for Buffalo WZR-1166DHP2
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
+ <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
+Content-Language: en-US
+In-Reply-To: <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 10:08:15PM +0100, Sergei Trofimovich wrote:
-> Current linux-5.17.1 on fresh gcc-12 fails to build with errors like:
-> 
->     ERROR: modpost: "__popcountdi2" [drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko] undefined!
->     ERROR: modpost: "__popcountdi2" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-> 
-> It is occasionally seen by others on previous gcc versions as well:
-> 
->     https://lkml.org/lkml/2021/7/11/261
->     https://lkml.org/lkml/2018/10/24/403
-> 
-> '__popcountdi2' are inserted by gcc for code like the following
-> from 'drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c':
-> 
->     static inline enum mod_hdcp_status validate_bksv(struct mod_hdcp *hdcp)
->     {
->         uint64_t n = 0;
->         uint8_t count = 0;
->         u8 bksv[sizeof(n)] = { };
-> 
->         memcpy(bksv, hdcp->auth.msg.hdcp1.bksv, sizeof(hdcp->auth.msg.hdcp1.bksv));
->         n = *(uint64_t *)bksv;
-> 
->         /* Here gcc inserts 'count = __builtin_popcount(n);' */
->         while (n) {
->                 count++;
->                 n &= (n - 1);
->         }
-> 
->         return (count == 20) ? MOD_HDCP_STATUS_SUCCESS :
->                                MOD_HDCP_STATUS_HDCP1_INVALID_BKSV;
->     }
-> 
-> Note that gcc can insert it regardless of -mno-* options.
-> 
-> How should linux.git handle it? A few options come to mind:
-> 
-> - Perhaps use libgcc.a directly.
-> - Just implement '__popcountdi2'. Example definition from libgcc:
->   https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libgcc/libgcc2.c;hb=HEAD#l846
-> - Or workaround it with -fno-builtin-popcount in Makefiles.
-> 
-> CCing people who can help routing it and/or deciding on the fix:
-> amd-gfx@lists.freedesktop.org, Joe Perches, linux-kbuild@vger.kernel.org,
-> Jakub Jelinek, Segher Boessenkool, Thomas Gleixner,Peter Zijlstra, Andy
-> Lutomirski.
 
-There is now a discussion in gcc bugzilla:
+Thank you for the replies.
 
-    https://gcc.gnu.org/PR105253
+On 2022/04/13 2:49, Rafał Miłecki wrote:
+>>   - 4x 10/100M ethernet switch
+> 
+> Isn't that 10/100/1000?
 
--- 
+You are right.
+It supports 10/100/1000Mbps.
 
-  Sergei
+>> +    model = "Buffalo WZR-1166DHP2 (BCM4708)";
+> 
+> We stopped adding SoC name to the "model" value, please drop it.
+
+Understood.
+
+I will fix it as follows
+model = "Buffalo WZR-1166DHP2";
+
+>> +
+>> +        wireless1 {
+>> +            label = "bcm53xx:amber:wireless";
+>> +            gpios = <&hc595 7 GPIO_ACTIVE_HIGH>;
+>> +        };
+>> +    };
+> 
+> I'm wondering if all new DTS files should use "function" and "color"
+> instead of "label". That's preferred solution and I guess it's good idea
+> to use it for new code.
+
+Understood.
+
+I will rewrite it with "function" and "color."
+
+I will post the patch again after testing.
+
+Best regards

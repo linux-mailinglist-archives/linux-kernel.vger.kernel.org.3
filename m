@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524854FF9BD
+	by mail.lfdr.de (Postfix) with ESMTP id 09DD24FF9BC
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbiDMPJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S236368AbiDMPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236359AbiDMPJY (ORCPT
+        with ESMTP id S230492AbiDMPJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:09:24 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B622DD59;
-        Wed, 13 Apr 2022 08:07:02 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id g21so2176245iom.13;
-        Wed, 13 Apr 2022 08:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=TuXEAXXN4FdSFvJmY2E4QvZOQcDvisndriIsWDy+9fM=;
-        b=GsB2Ev82NreMGIA8uvogn0/9XQwMfmY0tB/CqgJotJzPJcasMXnVVtFZV/Svy8sjJr
-         3TBiO6P8VfKQ/MvpvZqDAC9MmdbMWU+Af4nJm8FvYKhxHb8JwuNtKztNql7j6t3KgJGG
-         x3yHEvVBRXwkcv68HHNHy05m1+Fx3Vk6YO2mfHnZt413ma9wYxAq6EXvevDwzd751saF
-         B4y0Qz8EQRMCrON7tD8ZcSDg9SYB0elOygDtkJ1gDy2i4pwlq5IexWnH3knMd+3ucuMB
-         46r4hF0bFSpnlmnNboHGCzUbNpaJ+wWUyfOZIj8t/Glc2QK/TKdMQ0f+sLyFikryfC71
-         AHkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=TuXEAXXN4FdSFvJmY2E4QvZOQcDvisndriIsWDy+9fM=;
-        b=HGdvp8lWGpsB87JmZg6xq56qS8ln8hoGVuyZiw42XU7Nt0X+bX23P1NV6mCSs2+QcT
-         iuE/TcsOu5g6V10yd13tbjiwO51fPz8gR+rPSlMRGamtbWoo2odhGgrR+f0P1eUiaiP2
-         wO8rXHBQnJgM9oeoCNlttYnWsiMRRGqk1lL25WDpifnPl4vm8e8NIETKB7Bx0hGFBaGQ
-         4bAEILgXUWBKb2pCbtkAED4v7N+j5uWaTfPgWbIT0AhpJalmq2JFkjn16Tm+zF+E0gs4
-         8z/aNcA3N0ieYLfkPCqmKV2jvYplRjLxOvl3yvMoBx1K1FAEerEUkN0JRubWpO/GvOOh
-         SIHw==
-X-Gm-Message-State: AOAM530K4XZeZKBveJvqCUrSa6+I2m/pF0qzj2MFR0YbUGrj+Jt/hay+
-        9Q8Uet4CSN18nQof8aXPjYGb94CB44/edlGHdlE=
-X-Google-Smtp-Source: ABdhPJyZJj8/LyhFi/9KtP4n919c6CzmL+rXMvY3/qS+0Hkx0Bp9k/E4yK/B83BABc3bRgsV1lBl6u764Dl9PPlX3EE=
-X-Received: by 2002:a6b:f60d:0:b0:645:b224:8d45 with SMTP id
- n13-20020a6bf60d000000b00645b2248d45mr18223544ioh.131.1649862421930; Wed, 13
- Apr 2022 08:07:01 -0700 (PDT)
+        Wed, 13 Apr 2022 11:09:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDDB12DD59;
+        Wed, 13 Apr 2022 08:07:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9432A139F;
+        Wed, 13 Apr 2022 08:07:00 -0700 (PDT)
+Received: from [10.57.8.248] (unknown [10.57.8.248])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE8B23F5A1;
+        Wed, 13 Apr 2022 08:06:58 -0700 (PDT)
+Message-ID: <af2c9715-b085-ac84-22fe-c3f082f889a0@arm.com>
+Date:   Wed, 13 Apr 2022 16:06:57 +0100
 MIME-Version: 1.0
-References: <20220411154210.1870008-1-linux@roeck-us.net> <afd746404a74657a288a9272bf0c419c027dbd06.camel@intel.com>
-In-Reply-To: <afd746404a74657a288a9272bf0c419c027dbd06.camel@intel.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 13 Apr 2022 17:06:26 +0200
-Message-ID: <CA+icZUVEfKcGi7ME3hoyinz2VQxLKhCXgwDA2K3AB7MEK-bveQ@mail.gmail.com>
-Subject: Re: [PATCH] iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
-To:     "Greenman, Gregory" <gregory.greenman@intel.com>
-Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Berg, Johannes" <johannes.berg@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: use local ops instead of
+ global ops
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        allwinner-opensource-support@allwinnertech.com,
+        Stable <stable@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Kant Fan <kant@allwinnertech.com>
+References: <20220325073030.91919-1-kant@allwinnertech.com>
+ <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
+ <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,76 +55,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:56 AM Greenman, Gregory
-<gregory.greenman@intel.com> wrote:
->
->
-> On Mon, 2022-04-11 at 08:42 -0700, Guenter Roeck wrote:
-> > In Chrome OS, a large number of crashes is observed due to corrupted
-> > timer
-> > lists. Steven Rostedt pointed out that this usually happens when a
-> > timer
-> > is freed while still active, and that the problem is often triggered
-> > by code calling del_timer() instead of del_timer_sync() just before
-> > freeing.
-> >
-> > Steven also identified the iwlwifi driver as one of the possible
-> > culprits
-> > since it does exactly that.
-> >
-> > Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Johannes Berg <johannes.berg@intel.com>
-> > Cc: Gregory Greenman <gregory.greenman@intel.com>
-> > Fixes: 60e8abd9d3e91 ("iwlwifi: dbg_ini: add periodic trigger new API
-> > support")
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> > v1 (from RFC):
-> >     Removed Shahar S Matityahu from Cc: and added Gregory Greenman.
-> >     No functional change.
-> >
-> > I thought about the need to add a mutex to protect the timer list,
-> > but
-> > I convinced myself that it is not necessary because the code adding
-> > the timer list and the code removing it should never be never
-> > executed
-> > in parallel.
-> >
-> >  drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-> > b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-> > index 866a33f49915..3237d4b528b5 100644
-> > --- a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-> > +++ b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-> > @@ -371,7 +371,7 @@ void iwl_dbg_tlv_del_timers(struct iwl_trans
-> > *trans)
-> >         struct iwl_dbg_tlv_timer_node *node, *tmp;
-> >
-> >         list_for_each_entry_safe(node, tmp, timer_list, list) {
-> > -               del_timer(&node->timer);
-> > +               del_timer_sync(&node->timer);
-> >                 list_del(&node->list);
-> >                 kfree(node);
-> >         }
->
-> Hi Kalle,
->
-> Can you please pick it up to wireless-drivers for the next rc?
-> It is an important fix.
-> Luca has already assigned it to you in patchwork.
->
+
+
+On 4/13/22 15:58, Rafael J. Wysocki wrote:
+> On Fri, Mar 25, 2022 at 10:02 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Kant,
+>>
+>> On 3/25/22 07:30, Kant Fan wrote:
+>>> Fix access illegal address problem in following condition:
+>>> There are muti devfreq cooling devices in system, some of them has
+>>> em model but other does not, energy model ops such as state2power will
+>>> append to global devfreq_cooling_ops when the cooling device with
+>>> em model register. It makes the cooling device without em model
+>>> also use devfreq_cooling_ops after appending when register later by
+>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>>
+>>> IPA governor regards the cooling devices without em model as a power actor
+>>> because they also have energy model ops, and will access illegal address
+>>> at dfc->em_pd when execute cdev->ops->get_requested_power,
+>>> cdev->ops->state2power or cdev->ops->power2state.
+>>>
+>>> Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
+>>> Cc: stable@vger.kernel.org # 5.13+
+>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>> ---
+>>>    drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>>    1 file changed, 18 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+>>> index 4310cb342a9f..d38a80adec73 100644
+>>> --- a/drivers/thermal/devfreq_cooling.c
+>>> +++ b/drivers/thermal/devfreq_cooling.c
+>>> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>>        struct thermal_cooling_device *cdev;
+>>>        struct device *dev = df->dev.parent;
+>>>        struct devfreq_cooling_device *dfc;
+>>> +     struct thermal_cooling_device_ops *ops;
+>>>        char *name;
+>>>        int err, num_opps;
+>>>
+>>> -     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>>> -     if (!dfc)
+>>> +     ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+>>> +     if (!ops)
+>>>                return ERR_PTR(-ENOMEM);
+>>>
+>>> +     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>>> +     if (!dfc) {
+>>> +             err = -ENOMEM;
+>>> +             goto free_ops;
+>>> +     }
+>>> +
+>>>        dfc->devfreq = df;
+>>>
+>>>        dfc->em_pd = em_pd_get(dev);
+>>>        if (dfc->em_pd) {
+>>> -             devfreq_cooling_ops.get_requested_power =
+>>> +             ops->get_requested_power =
+>>>                        devfreq_cooling_get_requested_power;
+>>> -             devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+>>> -             devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
+>>> +             ops->state2power = devfreq_cooling_state2power;
+>>> +             ops->power2state = devfreq_cooling_power2state;
+>>>
+>>>                dfc->power_ops = dfc_power;
+>>>
+>>> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>>        if (!name)
+>>>                goto remove_qos_req;
+>>>
+>>> -     cdev = thermal_of_cooling_device_register(np, name, dfc,
+>>> -                                               &devfreq_cooling_ops);
+>>> +     cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+>>>        kfree(name);
+>>>
+>>>        if (IS_ERR(cdev)) {
+>>> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>>        kfree(dfc->freq_table);
+>>>    free_dfc:
+>>>        kfree(dfc);
+>>> +free_ops:
+>>> +     kfree(ops);
+>>>
+>>>        return ERR_PTR(err);
+>>>    }
+>>> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>>>    void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>>    {
+>>>        struct devfreq_cooling_device *dfc;
+>>> +     const struct thermal_cooling_device_ops *ops;
+>>>        struct device *dev;
+>>>
+>>>        if (IS_ERR_OR_NULL(cdev))
+>>>                return;
+>>>
+>>> +     ops = cdev->ops;
+>>>        dfc = cdev->devdata;
+>>>        dev = dfc->devfreq->dev.parent;
+>>>
+>>> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>>
+>>>        kfree(dfc->freq_table);
+>>>        kfree(dfc);
+>>> +     kfree(ops);
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+>>
+>>
+>> Thank you for updating it, LGTM
+>>
+>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> Applied as 5.19 material.
+> 
+> Lukasz, this had a conflict with your EM series, please double check
+> if my resolution in the bleeding-edge branch is correct.
+
+OK, I'll let you know after I fetch and build that branch.
+
+> 
 > Thanks!
->
-> Acked-by: Gregory Greenman <gregory.greenman@intel.com>
-
-I have tested this on top of Linux v5.17.3-rc1.
-
-Feel free to add my...
-
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Linux v5.17.3-rc1 and
-Debian LLVM-14
-
-- Sedat -

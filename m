@@ -2,135 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA29E4FFA8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3394FFA9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiDMPoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S230178AbiDMPth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236646AbiDMPoS (ORCPT
+        with ESMTP id S236642AbiDMPtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:44:18 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F17F4A93D;
-        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eafabbc80aso26634217b3.11;
-        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SHFzz4Adk6Spcagd3aayb+Zwmj10ffSyTl1fyLat03Y=;
-        b=0hM4BBnQj8mKRciCIxsYmRXevg7mX/vZc41s6r7iMVB35m4VqK9y9ACQsO43BjagJE
-         Ng5yLYZjL/JtLDmDzPIoox/whb7CzsdfpVeezuRHOksp9xTjPiBNBipE9aXiHTGP+pGu
-         JMPLfSpskjeh9bLyJysr/j1q6tqXpnGNZWtIs3mm+tRlZbBPZDFzMv064ZO+vTMz0v/a
-         zqStqFSvdMovx1c/c+JZpguGkWqZM2KIUdEAUgNjpD1xji95qY5MYmwaj0r+gl27YrnC
-         /6SLBZuMadCRk/QOIeB/Dx48LqWzBWG0fybt51XhYdd7quKKzsfWiiosLr1xr5dhIZ0U
-         fXqg==
-X-Gm-Message-State: AOAM530hpxRgEXG8jQZ1BO2ZbWSE10ANPeOkZ91/UdiOlX0mS7Z5sfkw
-        PgE4aTTIcf/LP7Uw9VL8GxcI7z6d85iD0bL/w4c=
-X-Google-Smtp-Source: ABdhPJz7T/J691Cv/mz1W3q3MZT3b4qfkZuWp3RXQM50EElAZhvyBpcUCEMrPY4T2qJ0YYjoOjsVKL3iXD/skfMzYlc=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr1407551ywa.19.1649864515666; Wed, 13
- Apr 2022 08:41:55 -0700 (PDT)
+        Wed, 13 Apr 2022 11:49:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354EB6621F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649864834; x=1681400834;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=F3zbd6vsN/xYMo+xEA/uqxZ1y5kmTnkt79dlYfFG6zA=;
+  b=F0RP3206gSTvTHi/A4o4lNTqvdvLY8uWh3gRyFhB3LC/14MAIIv1q3W4
+   SkaSaKElncmdfcwLb8cgPIj40WWUsnCjOf5nNmRFKeisPE1HhjEhExxLI
+   IGsVrPJVnFxvCLEybNh/rML6iKAsed8hurbTFsOJ+XXhWGaqDp7YAJzw+
+   Z6OIYH0CSGophED38f5AT2RiwRVP2s5uaPDN0A+8MuSLT41FlKIIXJYoC
+   Tc3QUdlwghUj7le435VOKnKM9qmx7+niekxOBRt+RPxSYLUzpA5hfDMZ4
+   vIvtZ0EyS4vCLjBYnihlKnEKhyQX1/PiKBdDDvRIZSAnojShyQm2meHhc
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="325608374"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="325608374"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:45:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="724948525"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 13 Apr 2022 08:45:24 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nefBM-0000Py-6d;
+        Wed, 13 Apr 2022 15:45:24 +0000
+Date:   Wed, 13 Apr 2022 23:44:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 49/49] drivers/tty/serial/men_z135_uart.c:346:6:
+ warning: variable '__tmp' is uninitialized when used within its own
+ initialization
+Message-ID: <202204132329.LphHCVTD-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220413090510.4039589-1-li.meng@amd.com>
-In-Reply-To: <20220413090510.4039589-1-li.meng@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 17:41:44 +0200
-Message-ID: <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:06 AM Meng Li <li.meng@amd.com> wrote:
->
-> Hi all:
->
-> AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
-> the functions of amd-pstate driver.
-> It could import as a module to launch some test tasks.
->
-> We upstream out AMD P-state driver into Linux kernel and use this unit
-> test module to verify the required conditions and basic functions of
-> amd-pstate before integration test.
->
-> We use test module in the kselftest frameworks to implement it.
-> We create amd_pstate_testmod module and tie it into kselftest.
->
-> For exmaple: The test case aput_acpi_cpc is used to check whether the
-> _CPC object is exist in SBIOS.
-> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
-> not existed at the detected processor, so it is a necessary condition.
->
-> At present, its test cases are very simple, and the corresponding test
-> cases will continue to be added later to improve the test coverage.
->
-> See patch series in below git repo:
-> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->
-> Changes from V1 -> V2:
-> - cpufreq: amd-pstate:
-> - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
-> - selftests: cpufreq
-> - - add a wrapper shell script for the amd_pstate_testmod module
-> - selftests: cpufreq:
-> - - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
-> - Documentation: amd-pstate:
-> - - amd_pstate_testmod rst document is not provided at present.
->
-> Thanks,
-> Jasmine
->
-> Meng Li (3):
->   cpufreq: amd-pstate: Expose struct amd_cpudata
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   af0ac0f5161e051a3e4a2a669e377bdc2439920e
+commit: af0ac0f5161e051a3e4a2a669e377bdc2439920e [49/49] tty: serial, use kfifo
+config: arm64-buildonly-randconfig-r003-20220413 (https://download.01.org/0day-ci/archive/20220413/202204132329.LphHCVTD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=af0ac0f5161e051a3e4a2a669e377bdc2439920e
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout af0ac0f5161e051a3e4a2a669e377bdc2439920e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/
 
-Please collect an ACK from Ray for this one as per MAINTAINERS and I
-will leave the series to Shuah as it is selftests mostly.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks!
+All warnings (new ones prefixed by >>):
 
->   selftests: cpufreq: Add wapper script for test AMD P-State
->   selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
->
->  MAINTAINERS                                   |   1 +
->  drivers/cpufreq/amd-pstate.c                  |  60 +---
->  include/linux/amd-pstate.h                    |  74 +++++
->  tools/testing/selftests/cpufreq/Makefile      |   2 +-
->  .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
->  .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
->  .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
->  tools/testing/selftests/cpufreq/config        |   1 +
->  8 files changed, 404 insertions(+), 60 deletions(-)
->  create mode 100644 include/linux/amd-pstate.h
->  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
->  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
->  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
->
-> --
-> 2.25.1
->
+>> drivers/tty/serial/men_z135_uart.c:346:6: warning: variable '__tmp' is uninitialized when used within its own initialization [-Wuninitialized]
+           n = kfifo_out_linear_ptr(&tport->xmit_fifo, &tail,
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:850:42: note: expanded from macro 'kfifo_out_linear_ptr'
+           unsigned int __count = kfifo_out_linear(__tmp, &___tail, (n)); \
+                                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:834:30: note: expanded from macro 'kfifo_out_linear'
+           typeof((fifo) + 1) __tmp = (fifo); \
+                              ~~~~~    ^~~~
+   1 warning generated.
+
+
+vim +/__tmp +346 drivers/tty/serial/men_z135_uart.c
+
+   287	
+   288	/**
+   289	 * men_z135_handle_tx() - TX tasklet routine
+   290	 * @uart: Pointer to struct men_z135_port
+   291	 *
+   292	 */
+   293	static void men_z135_handle_tx(struct men_z135_port *uart)
+   294	{
+   295		struct uart_port *port = &uart->port;
+   296		struct tty_port *tport = &port->state->port;
+   297		unsigned char *tail;
+   298		unsigned int n, txfree;
+   299		u32 txc;
+   300		u32 wptr;
+   301		int qlen;
+   302	
+   303		if (kfifo_is_empty(&tport->xmit_fifo))
+   304			goto out;
+   305	
+   306		if (uart_tx_stopped(port))
+   307			goto out;
+   308	
+   309		if (port->x_char)
+   310			goto out;
+   311	
+   312		/* calculate bytes to copy */
+   313		qlen = kfifo_len(&tport->xmit_fifo);
+   314		if (qlen <= 0)
+   315			goto out;
+   316	
+   317		wptr = ioread32(port->membase + MEN_Z135_TX_CTRL);
+   318		txc = (wptr >> 16) & 0x3ff;
+   319		wptr &= 0x3ff;
+   320	
+   321		if (txc > MEN_Z135_FIFO_WATERMARK)
+   322			txc = MEN_Z135_FIFO_WATERMARK;
+   323	
+   324		txfree = MEN_Z135_FIFO_WATERMARK - txc;
+   325		if (txfree <= 0) {
+   326			dev_err(&uart->mdev->dev,
+   327				"Not enough room in TX FIFO have %d, need %d\n",
+   328				txfree, qlen);
+   329			goto irq_en;
+   330		}
+   331	
+   332		/* if we're not aligned, it's better to copy only 1 or 2 bytes and
+   333		 * then the rest.
+   334		 */
+   335		if (align && qlen >= 3 && BYTES_TO_ALIGN(wptr))
+   336			n = 4 - BYTES_TO_ALIGN(wptr);
+   337		else if (qlen > txfree)
+   338			n = txfree;
+   339		else
+   340			n = qlen;
+   341	
+   342		if (n <= 0)
+   343			goto irq_en;
+   344	
+   345	
+ > 346		n = kfifo_out_linear_ptr(&tport->xmit_fifo, &tail,
+   347				min_t(unsigned int, UART_XMIT_SIZE, n));
+   348		memcpy_toio(port->membase + MEN_Z135_TX_RAM, tail, n);
+   349		kfifo_dma_out_finish(&tport->xmit_fifo, n);
+   350	
+   351		iowrite32(n & 0x3ff, port->membase + MEN_Z135_TX_CTRL);
+   352	
+   353		port->icount.tx += n;
+   354	
+   355		if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
+   356			uart_write_wakeup(port);
+   357	
+   358	irq_en:
+   359		if (!kfifo_is_empty(&tport->xmit_fifo))
+   360			men_z135_reg_set(uart, MEN_Z135_CONF_REG, MEN_Z135_IER_TXCIEN);
+   361		else
+   362			men_z135_reg_clr(uart, MEN_Z135_CONF_REG, MEN_Z135_IER_TXCIEN);
+   363	
+   364	out:
+   365		return;
+   366	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

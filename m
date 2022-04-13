@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FA34FF8CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEF34FF8CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236128AbiDMOT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S232833AbiDMOUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236117AbiDMOTw (ORCPT
+        with ESMTP id S231936AbiDMOUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:19:52 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2036213C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:17:13 -0700 (PDT)
+        Wed, 13 Apr 2022 10:20:43 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CDA6213C;
+        Wed, 13 Apr 2022 07:18:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649859433; x=1681395433;
+  t=1649859502; x=1681395502;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
   bh=mMePPCPwRD0B6CGcAVU9zxObl60Dqj06lOAGekbmlj8=;
-  b=AdKD48Jb1g0gV6CmbVq3ZT/smRIDmjeXGaUCn6a6tMPRsVNvk68oY8E0
-   qOPGOsqxlM+CK5ZcmKP5ggthT60ZcwgP1XBzqbyzmMRO80WCXt9mchymd
-   2xnK1xBcjVZCqBK1VfTZZwQhUuBQ/LAMMb3eaMaT33nqhWPy/T3Wjy+mR
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Apr 2022 07:17:13 -0700
+  b=sbjvnnlpz1w6bEvRwkiq7zB+BJXRJjJI4cuIBvfRVccjyYAIaVNKSOrQ
+   MqxiVhBHcX8MvIF+0MczBklw0jSh0Pp7M/FoMEnXViyKmIu7KiF+Vfz1y
+   J5tPoWHj+FJPXYEI832TvGofHLeJibTDS7XAz/3DjhNwaO1wQ6BZEHYfZ
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 07:18:22 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:17:13 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:18:21 -0700
 Received: from [10.110.69.201] (10.80.80.8) by nasanex01c.na.qualcomm.com
  (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
- 2022 07:17:09 -0700
-Message-ID: <b9c70a58-6d79-3976-c74e-91210cf162f5@quicinc.com>
-Date:   Wed, 13 Apr 2022 19:47:02 +0530
+ 2022 07:18:16 -0700
+Message-ID: <38602241-3d4e-7348-526c-80b44fb4cba7@quicinc.com>
+Date:   Wed, 13 Apr 2022 19:48:12 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: Possible race in dev_coredumpm()-del_timer() path
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        <linux-remoteproc@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
         <sboyd@kernel.org>, <johannes@sipsolutions.net>,
         <rafael@kernel.org>
@@ -56,8 +57,8 @@ Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on

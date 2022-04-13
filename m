@@ -2,163 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84034FF56D
+	by mail.lfdr.de (Postfix) with ESMTP id F11854FF56E
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbiDMLH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S235112AbiDMLIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbiDMLHs (ORCPT
+        with ESMTP id S235183AbiDMLHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:07:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A98D5883F;
-        Wed, 13 Apr 2022 04:05:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1A517210FD;
-        Wed, 13 Apr 2022 11:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649847926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuDXLs71XOBzrT2KJvxwCfIHfXPj0UmnTLYWZfHEDe0=;
-        b=JC5qRv5Cuo0x3WTN1cxGKr1vYp7BboeDeJum9hm2H607castvJ6ruwuxfyk+nV+PDxTE49
-        aP9BLfuxL6HzLSnWxOG0cjTxORuNZLCDCS5o5fy9Cii3HPQ+ecEkwf0M58ohuDUMDNAgBk
-        Vv9DjYTz5J0+estjzScgqLVkX792HgY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649847926;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuDXLs71XOBzrT2KJvxwCfIHfXPj0UmnTLYWZfHEDe0=;
-        b=vlys3+ra2hG6zozEb6xdmehkg362hPm1YLYRS7wG+WphtjzfIS+Qs/0fe/rcDQ7UEryH2j
-        8myhqy33qrVNHDDQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 00F6DA3B82;
-        Wed, 13 Apr 2022 11:05:26 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id A41F2A0615; Wed, 13 Apr 2022 13:05:25 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 13:05:25 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
-        jack@suse.cz, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH -next 05/11] block, bfq: count root group into
- 'num_groups_with_pending_reqs'
-Message-ID: <20220413110525.u7wi2ttk5lag6r4b@quack3.lan>
-References: <20220305091205.4188398-1-yukuai3@huawei.com>
- <20220305091205.4188398-6-yukuai3@huawei.com>
+        Wed, 13 Apr 2022 07:07:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFB25883F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:05:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bg10so3193226ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PS3VhaFtyBO9DatsV/CyvDlQh5hYtTRi+Z+F+oPBZHc=;
+        b=aas+peqOgXfaDQtFGQ6PkUFndDFJ/bQN8deYk7uucLlWOQJY6St7o+wM/OMwlm8uMP
+         iWI1BEYVY+4OFhXZ/hlyzNT7NBDbJJj4/ymrICSzMeaO/XTfcIIOzJp4ZDe+GmAXzNf3
+         1+ljJRUBh8/C2Tj4bqZMwMfH6FYMTxaJC/2qL6KC7Xlhdj/MfJ+Ddzk6zysQpqTyTxHO
+         n3qrIZMmGB3paCJZ8rpat4mGdtHncgcCJbpLPEdBbbt7G1W6PHMQM+MA7oUI3ITmIvSG
+         4SfNuMxmrkQmFG9zPPbcvhXJrZJ5AUQFezhe8DhRw6dti5qCRPXWUg1K9OELvHrNpd6Q
+         aiKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PS3VhaFtyBO9DatsV/CyvDlQh5hYtTRi+Z+F+oPBZHc=;
+        b=fdz115GeKs6icICfGg3KR52O9QbN01SYoYqBfWTM7w0vdR5SBHDQ74hYVlYltPqyHk
+         61Tn9gWZhZrOoJbK7Q0ipMfjkbn78/mHV1yJqNMcxA9yGFwbA+9TRvedwS2w4oJPIkjP
+         SCsynTwQj26Ab+L8YcNtymI8KJDXV0+GXy04yjo2ISuNB0U+LT7pBpmpNp/E+HMlCKgp
+         V9/5Q1WyhQXAxP7ZHs0lo3MbHiHJGZQvtRyrjX2YhIB8DWFrd89N9xD87rNruP9xY0WE
+         Qg0IzR9ac6Q6trb1xJ/aQddwRj6/AmPwOlMSXXG+tuzZkdo5dTBHM7NQt+Tk1F+7hS7v
+         nlDg==
+X-Gm-Message-State: AOAM532brtfp+MsfhrUB5i5uvk4ARfVAy13bYIzc0ffeyccUHsvN9v92
+        yPvy2gqvj4U9HWJiIIN4nN1o2A==
+X-Google-Smtp-Source: ABdhPJwK89+NCQ4gDvarGQBiLdX8MSJa2HxKL1uMkTJNddkeBUFdOy0KEsAj7r8eBxU+9poR0zRrEA==
+X-Received: by 2002:a17:907:8a0e:b0:6e8:c5df:d9e with SMTP id sc14-20020a1709078a0e00b006e8c5df0d9emr2841387ejc.142.1649847931499;
+        Wed, 13 Apr 2022 04:05:31 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id kw3-20020a170907770300b006d2a835ac33sm13972528ejc.197.2022.04.13.04.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 04:05:31 -0700 (PDT)
+Message-ID: <68d16fbb-4250-73bd-b55e-a14db91abe8f@linaro.org>
+Date:   Wed, 13 Apr 2022 13:05:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220305091205.4188398-6-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 0/2] memory: omap-gpmc: Allow module build
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, krzk@kernel.org
+Cc:     linux-omap@vger.kernel.org, nm@ti.com,
+        linux-kernel@vger.kernel.org, kishon@ti.com, tony@atomide.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com
+References: <20220411095516.24754-1-rogerq@kernel.org>
+ <164984299612.34759.11981181842672620752.b4-ty@linaro.org>
+ <20428012-f164-c03b-fcc5-d3d8df812aff@linaro.org>
+ <ed2167af-fc9f-1f52-e8e2-c0881f5d53c6@linaro.org>
+ <7b38a717-ffce-0f06-1a77-6d2a114c7e11@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7b38a717-ffce-0f06-1a77-6d2a114c7e11@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 05-03-22 17:11:59, Yu Kuai wrote:
-> Root group is not counted into 'num_groups_with_pending_reqs' because
-> 'entity->parent' is set to NULL for child entities, thus
-> for_each_entity() can't access root group.
+On 13/04/2022 13:01, Roger Quadros wrote:
+>> https://krzk.eu/#/builders/63/builds/162
+>>
+>>
+>>>  config OMAP_GPMC
+>>> -	bool "Texas Instruments OMAP SoC GPMC driver" if COMPILE_TEST
+>>> -	depends on OF_ADDRESS
+>>> +	bool "Texas Instruments OMAP SoC GPMC driver"
+>>> +	depends on OF_ADDRESS || COMPILE_TEST
 > 
-> This patch set root_group's entity to 'entity->parent' for child
-> entities, this way root_group will be counted because for_each_entity()
-> can access root_group in bfq_activate_requeue_entity(),
 > 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  block/bfq-cgroup.c  | 6 +++---
->  block/bfq-iosched.h | 3 ++-
->  block/bfq-wf2q.c    | 5 +++++
->  3 files changed, 10 insertions(+), 4 deletions(-)
+> Looks like include/linux/irqdomain.h does not have fallbacks if
+> CONFIG_IRQ_DOMAIN is not enabled.
+> 
+> I'll have to drop COMPILE_TEST and add depends on IRQ_DOMAIN.
+> Is that OK?
 
-I think you can remove bfqg->my_entity after this patch, can't you? Because
-effectively it's only purpose was so that you don't have to special-case
-children of root_group...
+Previously it was building with COMPILE_TEST on sparc, so what else changed?
 
-								Honza
 
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 420eda2589c0..6cd65b5e790d 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -436,7 +436,7 @@ void bfq_init_entity(struct bfq_entity *entity, struct bfq_group *bfqg)
->  		 */
->  		bfqg_and_blkg_get(bfqg);
->  	}
-> -	entity->parent = bfqg->my_entity; /* NULL for root group */
-> +	entity->parent = &bfqg->entity;
->  	entity->sched_data = &bfqg->sched_data;
->  }
->  
-> @@ -581,7 +581,7 @@ static void bfq_group_set_parent(struct bfq_group *bfqg,
->  	struct bfq_entity *entity;
->  
->  	entity = &bfqg->entity;
-> -	entity->parent = parent->my_entity;
-> +	entity->parent = &parent->entity;
->  	entity->sched_data = &parent->sched_data;
->  }
->  
-> @@ -688,7 +688,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  	else if (bfqd->last_bfqq_created == bfqq)
->  		bfqd->last_bfqq_created = NULL;
->  
-> -	entity->parent = bfqg->my_entity;
-> +	entity->parent = &bfqg->entity;
->  	entity->sched_data = &bfqg->sched_data;
->  	/* pin down bfqg and its associated blkg  */
->  	bfqg_and_blkg_get(bfqg);
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index ddd8eff5c272..4530ab8b42ac 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -1024,13 +1024,14 @@ extern struct blkcg_policy blkcg_policy_bfq;
->  /* - interface of the internal hierarchical B-WF2Q+ scheduler - */
->  
->  #ifdef CONFIG_BFQ_GROUP_IOSCHED
-> -/* stop at one of the child entities of the root group */
-> +/* stop at root group */
->  #define for_each_entity(entity)	\
->  	for (; entity ; entity = entity->parent)
->  
->  #define is_root_entity(entity) \
->  	(entity->sched_data == NULL)
->  
-> +/* stop at one of the child entities of the root group */
->  #define for_each_entity_not_root(entity) \
->  	for (; entity && !is_root_entity(entity); entity = entity->parent)
->  
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index 17f1d2c5b8dc..138a2950b841 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -1125,6 +1125,11 @@ static void bfq_activate_requeue_entity(struct bfq_entity *entity,
->  {
->  	for_each_entity(entity) {
->  		bfq_update_groups_with_pending_reqs(entity);
-> +
-> +		/* root group is not in service tree */
-> +		if (is_root_entity(entity))
-> +			break;
-> +
->  		__bfq_activate_requeue_entity(entity, non_blocking_wait_rq);
->  
->  		if (!bfq_update_next_in_service(entity->sched_data, entity,
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Best regards,
+Krzysztof

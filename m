@@ -2,152 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F77500229
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1BC50022A
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238720AbiDMW5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S238819AbiDMW6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238050AbiDMW5U (ORCPT
+        with ESMTP id S238744AbiDMW6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:57:20 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD303B299;
-        Wed, 13 Apr 2022 15:54:57 -0700 (PDT)
+        Wed, 13 Apr 2022 18:58:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4202C58E7B;
+        Wed, 13 Apr 2022 15:55:41 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z99so4210632ede.5;
+        Wed, 13 Apr 2022 15:55:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649890497; x=1681426497;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m9Tzk5iuVsfm3l6Vm0LArjqnKY1ATrD/yP8P02JitlM=;
-  b=A6FORCrhBrIgM9aJORJW1uv6Y+ortK+7QD1mFjJflG4/uhD7TCTfrzzc
-   BoZvTnX074nhR7/m+sfplKUbyNv1AU7GJPwLjvUm6/qbBshtoUZ+dMmVc
-   oSfb6boKA79Sh2/3NoPmt/TegE4YLB2jFZNwzoxe/bYaYOlkaTanAkLTI
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 15:54:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 15:54:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 15:54:56 -0700
-Received: from [10.110.74.164] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
- 2022 15:54:55 -0700
-Message-ID: <d6ae3572-58db-5264-c26a-9f75de6292a7@quicinc.com>
-Date:   Wed, 13 Apr 2022 15:54:55 -0700
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dyvjfLWBF83ldDk4yCXAC9aBU6w05cT1GCfa/ITsV5M=;
+        b=GjAUZCsq0IIScVS5wpaNnTUGNYz/WuHRVFd6BTprSefXbiclMpphZ0PhN5kV6LbNDI
+         e8vvBo2rYCY/sWrOpBAfTQrweOIm10DKQ3FSrHKa4IZUt1HE2PJNcw4IqFnmc+hUlcbn
+         LGv5jlv9pMKQu+giZ7qc2yfQBGKv/56qHblvcm82VJ5cQtU8wUT5iRda/IpsgEIC7Omf
+         XDSyVq5MHmhOB6I/e31vLizL+mvVTwIKy93HbDMi8YFyD9J/xpfLsVIfrCiM8y3qs930
+         Rslk+o0wWO40dKhtbZC9LxjiWu29lRIQOSg8DHJwDgnnuVYFOG1LJuXZbbDad86kYAOR
+         bVhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dyvjfLWBF83ldDk4yCXAC9aBU6w05cT1GCfa/ITsV5M=;
+        b=aUcGGKNIG9V7LeoyjgFQCxJHiAkNER1obnhwd15W/rONUwjyBOGr7aV6IpCUABX//+
+         lGthh/E4Lqagf60ppfjARe0Z1jFHiFHTUFggO6RdmvFPppMX4qZ4SYftdXtKV04RYk/9
+         8qSpQPklpwE8GT3T8xP6um4MKBL98n4ar26vCfW9o5nOrvLV8R7jD2uruSF25dZL8iAR
+         BIhUuCNdu577LxugK9OQj9UDDch3m26znoCRtfzkEc++ET9+0WfIxtV1RCfdTAZSd6nQ
+         8La6FK0SNhVQJWSZRFrIjr9Xvu7XnowqTrd+q4HnVa0Dz8JQOCIcTbzfBL/Zv5G3s/Er
+         5p3A==
+X-Gm-Message-State: AOAM53380zp8x3xUaUD6uKYboOXA4rWPm78XAvoCPnFVkaEPCYaJ1B7q
+        u7Ky5wdADN2T00pX7OODsQ4=
+X-Google-Smtp-Source: ABdhPJwUF1oJQj2/lXqKcrWMbBCNj86N9kaBYLDVYEjlque7ZruiFwrT8oH+sfxef6CI03oAKpYTwg==
+X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr1056662edb.189.1649890539778;
+        Wed, 13 Apr 2022 15:55:39 -0700 (PDT)
+Received: from localhost.localdomain (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm78329ejc.61.2022.04.13.15.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 15:55:38 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_store()
+Date:   Thu, 14 Apr 2022 00:55:31 +0200
+Message-Id: <20220413225531.9425-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] bus: mhi: host: Add soc_reset sysfs
-Content-Language: en-US
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <mani@kernel.org>,
-        <quic_hemantk@quicinc.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jeffrey Hugo <jhugo@codeaurora.org>
-References: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
-From:   Bhaumik Vasav Bhatt <quic_bbhatt@quicinc.com>
-In-Reply-To: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The use of kmap() is being deprecated in favor of kmap_local_page()
+where it is feasible. The same is true for kmap_atomic().
 
-On 4/13/2022 2:00 PM, Jeffrey Hugo wrote:
-> From: Jeffrey Hugo <jhugo@codeaurora.org>
->
-> The MHI bus supports a standardized hardware reset, which is known as the
-> "SoC Reset".  This reset is similar to the reset sysfs for PCI devices -
-> a hardware mechanism to reset the state back to square one.
->
-> The MHI SoC Reset is described in the spec as a reset of last resort.  If
-> some unrecoverable error has occurred where other resets have failed, SoC
-> Reset is the "big hammer" that ungracefully resets the device.  This is
-> effectivly the same as yanking the power on the device, and reapplying it.
-> However, depending on the nature of the particular issue, the underlying
-> transport link may remain active and configured.  If the link remains up,
-> the device will flag a MHI system error early in the boot process after
-> the reset is executed, which allows the MHI bus to process a fatal error
-> event, and clean up appropiately.
->
-> While the SoC Reset is generally intended as a means of recovery when all
-> else has failed, it can be useful in non-error scenarios.  For example,
-> if the device loads firmware from the host filesystem, the device may need
-> to be fully rebooted inorder to pick up the new firmware.  In this
-> scenario, the system administrator may use the soc_reset sysfs to cause
-> the device to pick up the new firmware that the admin placed on the
-> filesystem.
->
-> Signed-off-by: Jeffrey Hugo <jhugo@codeaurora.org>
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
-Reviewed-by: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
-> v2:
-> Rebase
->
->   Documentation/ABI/stable/sysfs-bus-mhi | 11 +++++++++++
->   drivers/bus/mhi/host/init.c            | 14 ++++++++++++++
->   2 files changed, 25 insertions(+)
->
-> diff --git a/Documentation/ABI/stable/sysfs-bus-mhi b/Documentation/ABI/stable/sysfs-bus-mhi
-> index ecfe766..306f63e 100644
-> --- a/Documentation/ABI/stable/sysfs-bus-mhi
-> +++ b/Documentation/ABI/stable/sysfs-bus-mhi
-> @@ -19,3 +19,14 @@ Description:	The file holds the OEM PK Hash value of the endpoint device
->   		read without having the device power on at least once, the file
->   		will read all 0's.
->   Users:		Any userspace application or clients interested in device info.
-> +
-> +What:           /sys/bus/mhi/devices/.../soc_reset
-> +Date:           April 2022
-> +KernelVersion:  5.19
-> +Contact:        mhi@lists.linux.dev
-> +Description:	Initiates a SoC reset on the MHI controller.  A SoC reset is
-> +                a reset of last resort, and will require a complete re-init.
-> +                This can be useful as a method of recovery if the device is
-> +                non-responsive, or as a means of loading new firmware as a
-> +                system administration task.
-> +
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index 04c409b..e12b210 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -108,9 +108,23 @@ static ssize_t oem_pk_hash_show(struct device *dev,
->   }
->   static DEVICE_ATTR_RO(oem_pk_hash);
->   
-> +static ssize_t soc_reset_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf,
-> +			       size_t count)
-> +{
-> +	struct mhi_device *mhi_dev = to_mhi_device(dev);
-> +	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
-> +
-> +	mhi_soc_reset(mhi_cntrl);
-> +	return count;
-> +}
-> +static DEVICE_ATTR_WO(soc_reset);
-> +
->   static struct attribute *mhi_dev_attrs[] = {
->   	&dev_attr_serial_number.attr,
->   	&dev_attr_oem_pk_hash.attr,
-> +	&dev_attr_soc_reset.attr,
->   	NULL,
->   };
->   ATTRIBUTE_GROUPS(mhi_dev);
+In file pci/hmm/hmm.c, function hmm_store() test if we are in atomic
+context and, if so, it calls kmap_atomic(), if not, it calls kmap().
+
+First of all, in_atomic() shouldn't be used in drivers. This macro
+cannot always detect atomic context; in particular, it cannot know
+about held spinlocks in non-preemptible kernels.
+
+Notwithstanding what it is said above, this code doesn't need to care
+whether or not it is executing in atomic context. It can simply use
+kmap_local_page() / kunmap_local() that can instead do the mapping /
+unmapping regardless of the context.
+
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Therefore, hmm_store()() is a function where the use
+of kmap_local_page() in place of both kmap() and kmap_atomic() is
+correctly suited.
+
+Convert the calls of kmap() / kunmap() and kmap_atomic() /
+kunmap_atomic() to kmap_local_page() / kunmap_local() and drop the
+unnecessary tests which test if the code is in atomic context.
+
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/staging/media/atomisp/pci/hmm/hmm.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index 46ac082cd3f1..54188197c3dc 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -482,10 +482,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+ 		idx = (virt - bo->start) >> PAGE_SHIFT;
+ 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
+ 
+-		if (in_atomic())
+-			des = (char *)kmap_atomic(bo->page_obj[idx].page);
+-		else
+-			des = (char *)kmap(bo->page_obj[idx].page);
++		des = (char *)kmap_local_page(bo->page_obj[idx].page);
+ 
+ 		if (!des) {
+ 			dev_err(atomisp_dev,
+@@ -512,14 +509,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+ 
+ 		clflush_cache_range(des, len);
+ 
+-		if (in_atomic())
+-			/*
+-			 * Note: kunmap_atomic requires return addr from
+-			 * kmap_atomic, not the page. See linux/highmem.h
+-			 */
+-			kunmap_atomic(des - offset);
+-		else
+-			kunmap(bo->page_obj[idx].page);
++		kunmap_local(des);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+

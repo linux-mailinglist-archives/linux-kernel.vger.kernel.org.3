@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA844FFBC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD4E4FFBDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237054AbiDMQyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S234391AbiDMQ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbiDMQyM (ORCPT
+        with ESMTP id S230090AbiDMQ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:54:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F5674D3;
-        Wed, 13 Apr 2022 09:51:49 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 16:51:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649868708;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=86mdrBQ5bfO1glHLGsv54Godblef0RidxRX59FMwf5I=;
-        b=Z7e5cleoO6eg1OHsYh8MGQDt4kQJtWEc5T2vuvJg4keutI1pHaPTZHKswNmbOhYFxwsH2L
-        aHbEqSzRaFFCDO5F4lTrUg27i2lx2RsT10ZfPCchfD7ISNlpHlIt1Yci3cQcRzan7oELC8
-        jztCizlRazjdrefhn/aqS3XZDJCMMCnBOi7NEVd4kAIP6G26flVaWbKbyh9HZ7UKAyXEvn
-        7kmEoUEQVG52ax81mditmA2DiEWb6EPbwgmyWXPZrtwR78b9ztSDyGSrRaFPwPHNLrFDbE
-        0yRrXqSZ29pJxyEZZru8hJ6EVd3TKr5H/VDxTmbB7RB7eTTwsFmGyCwq3zlE9A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649868708;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=86mdrBQ5bfO1glHLGsv54Godblef0RidxRX59FMwf5I=;
-        b=VO85mUgLKDgwaHlvamH5Z0m/ETcRkGAOn9CfPFuZydie32geQn+MKKOX2cphuP3OyfQPnf
-        MuzD3Yc40ILH0nCg==
-From:   "tip-bot2 for Nadav Amit" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/urgent] smp: Fix offline cpu check in
- flush_smp_call_function_queue()
-Cc:     Nadav Amit <namit@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220319072015.1495036-1-namit@vmware.com>
-References: <20220319072015.1495036-1-namit@vmware.com>
+        Wed, 13 Apr 2022 12:57:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED62694BC;
+        Wed, 13 Apr 2022 09:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649868931; x=1681404931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qKLsSmM8C2ANbxcduOTHPpWcCwOoYNAktF5KlwQD/vg=;
+  b=hRY2N2dykpEvQo9nFLdi1vc/NodeFY2bpyljvdyFY1Qw+wjz3u5xzURP
+   gDWEk/tNZI6tCbix3wZO8bajRAAuUjpvhIWqpmtEg3fhUzyix33IcpS0Z
+   g09VdQkocXQj7Z+n+O1VDAbNy1gynpnKqIOZr1kv7uI3UnP82VA6x8hst
+   AgUrTl/Lv1RPSWug2jIsU6nbPdUnWvlxl8nmkV9Y9JrosHQMFtSmu/X/2
+   SgXeFD97ZG6Ssyprn+muo0JMYTspVgcVFIzn75ESBKCz0tSxOPjWHkDfB
+   nWC88qY4EfF6bpk2nolZrwZkfXHzE2WsX7kZbxaOf9n9JCFdFuurhuSv7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262159465"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="262159465"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:55:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="508050744"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:55:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1negDd-001vtf-J4;
+        Wed, 13 Apr 2022 19:51:49 +0300
+Date:   Wed, 13 Apr 2022 19:51:49 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 1/1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <Ylb/pczsmQWCD3bz@smile.fi.intel.com>
+References: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
+ <e9c81a3d-d03a-5b13-ee14-9ba6103093f7@gmail.com>
 MIME-Version: 1.0
-Message-ID: <164986870674.4207.3617586517028813554.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9c81a3d-d03a-5b13-ee14-9ba6103093f7@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/urgent branch of tip:
+On Wed, Apr 13, 2022 at 08:38:41AM -0700, Florian Fainelli wrote:
+> On 4/12/2022 4:32 AM, Andy Shevchenko wrote:
 
-Commit-ID:     9e949a3886356fe9112c6f6f34a6e23d1d35407f
-Gitweb:        https://git.kernel.org/tip/9e949a3886356fe9112c6f6f34a6e23d1d35407f
-Author:        Nadav Amit <namit@vmware.com>
-AuthorDate:    Sat, 19 Mar 2022 00:20:15 -07:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 13 Apr 2022 18:44:35 +02:00
+...
 
-smp: Fix offline cpu check in flush_smp_call_function_queue()
+> > v3: rebased on the latest vanilla, added Andrew since it has no move for 1y+
+> 
+> I don't think this is going to be picked up unless we designate a entry in
+> the MAINTAINERS file, I don't mind taking this via the Broadcom ARM SoCs
+> pull request if this does not move.
 
-The check in flush_smp_call_function_queue() for callbacks that are sent
-to offline CPUs currently checks whether the queue is empty.
+Please do, seems above mentioned tree is the best choice for this driver.
 
-However, flush_smp_call_function_queue() has just deleted all the
-callbacks from the queue and moved all the entries into a local list.
-This checks would only be positive if some callbacks were added in the
-short time after llist_del_all() was called. This does not seem to be
-the intention of this check.
+Thanks!
 
-Change the check to look at the local list to which the entries were
-moved instead of the queue from which all the callbacks were just
-removed.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Fixes: 8d056c48e4862 ("CPU hotplug, smp: flush any pending IPI callbacks before CPU offline")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220319072015.1495036-1-namit@vmware.com
----
- kernel/smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 01a7c17..65a630f 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -579,7 +579,7 @@ static void flush_smp_call_function_queue(bool warn_cpu_offline)
- 
- 	/* There shouldn't be any pending callbacks on an offline CPU. */
- 	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
--		     !warned && !llist_empty(head))) {
-+		     !warned && entry != NULL)) {
- 		warned = true;
- 		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
- 

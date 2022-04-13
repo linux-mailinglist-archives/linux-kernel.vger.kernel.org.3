@@ -2,75 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5408E4FED36
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FE94FECFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiDMC4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S231736AbiDMCgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiDMCzv (ORCPT
+        with ESMTP id S231451AbiDMCgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:55:51 -0400
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1516.securemx.jp [210.130.202.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B5C506E1;
-        Tue, 12 Apr 2022 19:53:30 -0700 (PDT)
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1516) id 23D2cMd0009658; Wed, 13 Apr 2022 11:38:22 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 23D2c1WL014315; Wed, 13 Apr 2022 11:38:01 +0900
-X-Iguazu-Qid: 34trhY1ImnHWYiuqOd
-X-Iguazu-QSIG: v=2; s=0; t=1649817481; q=34trhY1ImnHWYiuqOd; m=UBigd8VW37nIylWtwyNAP1iScEww5didpBPsosnJJYk=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1512) id 23D2c1Qv012527
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 13 Apr 2022 11:38:01 +0900
-X-SA-MID: 35919150
-From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH 3/3] MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
-Date:   Wed, 13 Apr 2022 11:32:34 +0900
-X-TSB-HOP2: ON
-Message-Id: <20220413023234.19526-4-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220413023234.19526-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20220413023234.19526-1-yuji2.ishikawa@toshiba.co.jp>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 22:36:40 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C691828E09;
+        Tue, 12 Apr 2022 19:34:20 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id 3so422149qkj.5;
+        Tue, 12 Apr 2022 19:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MqB+e2xT6Yv8MpPTnOJ+2E7n6YyjIMzpIJ4iHfGOxzQ=;
+        b=MiGg6bcAs91xkbp2RAUHsNccXGOyhvPuMSn82Wa1gSKILPMKoQG5P3Nl6kIPR+N5J+
+         zVXOLkNpjaDHn+waq32rztY1uH6Ltt+sjAJ0nV2d/w1hp6PgqHrypZf+6wnGN6+VoZhA
+         Gqm9ac5gX/HqIda6RlWEEWZA5aB3xxReNhoT8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MqB+e2xT6Yv8MpPTnOJ+2E7n6YyjIMzpIJ4iHfGOxzQ=;
+        b=t7fBsECdTn7A+wWRmrPxbNn52y/e/rvmTo4iyTOJAOMhiEGdM0QBSgjnDqYpVKBp2q
+         uuOyUOnzUgNNZ39xdcWuvW2IVezSFQFUFTRMDGy30x9jIG2tSyqD+5dAvuE7xoKz2KsZ
+         3znyBWE8H+5fU7kijyFqRUDb+vcEyQSmYUOAsOUZ6U0dGhksUiJPzFshnEtf+3FOBBMo
+         Ryd8juNhX01VC7Qwzdpim0dwEafUeVUn/k6+kJtl5FMITimGd2XKh9OK0inx7ujbJFFK
+         6rEDSL/FZsXtCTe/GIBHxXAq6N8rg0kSBOCySPqom8//9Tpix57wX5uU88l9f9O67IrX
+         B7bA==
+X-Gm-Message-State: AOAM531/UGpyveGOSjyQHSpXkK5Drkq1WOLQ9yGlq9jXe3XBuyw3DtAo
+        4ptVkW+NWEM3y7hQmyxSA+WWf3yXX8lqB3xVCSd14xzDK3Q=
+X-Google-Smtp-Source: ABdhPJywZYFb5Kxa0f4hpEMdUjYMwcNEQCHYq0m2mmEOdorMP1FM/4Q5J9SAQdd/0fyvytzb+Axet0s98+c5ArMZPco=
+X-Received: by 2002:a37:f903:0:b0:648:ca74:b7dc with SMTP id
+ l3-20020a37f903000000b00648ca74b7dcmr5261283qkj.666.1649817259877; Tue, 12
+ Apr 2022 19:34:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220412065611.8930-1-dylan_hung@aspeedtech.com> <20220412065611.8930-2-dylan_hung@aspeedtech.com>
+In-Reply-To: <20220412065611.8930-2-dylan_hung@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 13 Apr 2022 02:34:08 +0000
+Message-ID: <CACPK8Xd0gh5pDafP3ysu7odhnP=YPNSYPV9u36CEoMPDtQxEJw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: add reset property for aspeed,
+ ast2600-mdio binding
+To:     Dylan Hung <dylan_hung@aspeedtech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
+        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+On Tue, 12 Apr 2022 at 06:55, Dylan Hung <dylan_hung@aspeedtech.com> wrote:
+>
+> The AST2600 MDIO bus controller has a reset control bit and must be
+> deasserted before manipulating the MDIO controller. By default, the
+> hardware asserts the reset so the driver only need to deassert it.
+>
+> Regarding to the old DT blobs which don't have reset property in them,
+> the reset deassertion is usually done by the bootloader so the reset
+> property is optional to work with them.
+>
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml         | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> index 1c88820cbcdf..1174c14898e1 100644
+> --- a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> @@ -20,10 +20,14 @@ allOf:
+>  properties:
+>    compatible:
+>      const: aspeed,ast2600-mdio
+> +
+>    reg:
+>      maxItems: 1
+>      description: The register range of the MDIO controller instance
+>
+> +  resets:
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -39,6 +43,7 @@ examples:
+>              reg = <0x1e650000 0x8>;
+>              #address-cells = <1>;
+>              #size-cells = <0>;
+> +            resets = <&syscon ASPEED_RESET_MII>;
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87..30b0fcd0e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2792,12 +2792,14 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
- F:	Documentation/devicetree/bindings/arm/toshiba.yaml
-+F:  Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
- F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
- F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
- F:	arch/arm64/boot/dts/toshiba/
-+F:  drivers/media/platform/visconti/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/gpio/gpio-visconti.c
- F:	drivers/pci/controller/dwc/pcie-visconti.c
--- 
-2.17.1
+You will need to include the definition for ASPEED_RESET_MII at the
+start of the example:
 
+#include <dt-bindings/clock/ast2600-clock.h>
 
+You can test the bindings example by doing this:
+
+pip install dtschema
+
+make dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+
+Cheers,
+
+Joel
+
+>
+>              ethphy0: ethernet-phy@0 {
+>                      compatible = "ethernet-phy-ieee802.3-c22";
+> --
+> 2.25.1
+>

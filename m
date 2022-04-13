@@ -2,199 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837A64FFF56
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1034FFF5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbiDMTdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S238235AbiDMTdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238565AbiDMTdH (ORCPT
+        with ESMTP id S236864AbiDMTdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:33:07 -0400
-X-Greylist: delayed 43642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 12:30:44 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7CB23167;
-        Wed, 13 Apr 2022 12:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649878220;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=XizD8wLk7RPr/MmlqEKaUWzpG6m4WiqeZdBPHS0La8o=;
-    b=E29x+v4cnWoYTOOQZ3tOrcqmGRKwpSCBnpTnlNCdcRSrJK4MG4pih2yeqnzzhn/Je/
-    GY5tNEepJQbAnarKOqlWgt+zkI1gXNmoEqImr0yfLX0ThgyXg8FLVidTZWqdKx7Q+8MJ
-    BYWYh/+X8qnxM4I2W2dat1/9XcgH1Mh36gT0NcC3ibY6LoJRve5A6FfUdHQVfPXy12gy
-    U9vVtxjeohA/2w/bgtLPEaod1jTKE9SSd7r4uXmp3R5d5P3gB+2bKe3D82joLMQf57d+
-    mXQsSdvz5wDkdwzk0U+d90/mUmGXfnT3bis+Qq5TyblENzOpMk6kpoD3zfK+96K+gL6a
-    jAyg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4nvnQ=="
-X-RZG-CLASS-ID: mo00
-Received: from mbp-13-nikolaus.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy3DJUJAlv
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 13 Apr 2022 21:30:19 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
-Date:   Wed, 13 Apr 2022 21:30:18 +0200
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
-        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
- <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 15:33:39 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AB876295
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:31:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v4so3660011edl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=frTEyC0/+CfTIF4PYPNiHQ4Gsfm5fIkYJSxFNrCEuso=;
+        b=USSnSZtoD5qwvH/yvxHC79p7rIcFBfYSAwCS/8l+UAOQVYZUKJ+vDuBaAJB/nJmEPx
+         g7xJs94b53G9SqzrTEyV7LiPRqY0+FlEUHXsFaG0byJs5XO9935tw+7S/EMAJuTtQhFu
+         VjfWoAx3Fgh06C/08DWnLONaqlnuWzNwZGJHbJI9za5M55H9pRP/jioGj6z6SD5mSuf5
+         OhqjpbUnqQeW/s2ZVSve+5lCImK8h2qDomy0YIMCtTsk3zqfpMMDy2LoFmTLoUjvNvp4
+         WpBvZbIOz7I46fmHuumVjEpqpu1SEQkwedZ3gusL5+0cPXdh1QTDfn/NzBsWi6w2TCm3
+         pPRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=frTEyC0/+CfTIF4PYPNiHQ4Gsfm5fIkYJSxFNrCEuso=;
+        b=ZxKL2J+GvfiVktlxMZOGCLL26Y5IyTJQD0GjyLtaQz8Fr+I1gKtdpGywe4tV5Be8F1
+         srmWgsSAcX8p5nZQfmxYVG4U4hMMHUO/8J6UMks0nCWszOO/vgxiDCN7E/tv0HzYs9hr
+         3LoJ9+67KaBOCpdXk/joKgQKwF1wRUWPhIAXzsMxy+1YFeIfcnv0RY6xdLTUSHiOa+5Q
+         gKKIu6RM/yNI7s4PVz/EkoG2OfhnF//Govf7Z0JlDCZdMGducI5XZENzVkIfuv4fnIBY
+         Sz3V2jbbrmwmXRJDI3QVHeMn0ZOkIA8Tsiz1BXccbenLpcHUgbaGChJIjZD9uOxcbOeu
+         goJw==
+X-Gm-Message-State: AOAM531e8F0qn12b47c89AjqlmBsI3xxYzliyi5h4nD7WPIn1ewh+W/Q
+        oWoCxEB8DXZD7Nac1Rl1KE5NfQ==
+X-Google-Smtp-Source: ABdhPJxCWuXB+xuTb6sKG9nbhRjhHzVASERrwIqlT8IubgeDh/aIhOShiVtJmLn6LiaKB+HEOkgWow==
+X-Received: by 2002:a05:6402:5250:b0:41d:8556:4191 with SMTP id t16-20020a056402525000b0041d85564191mr14027035edd.269.1649878275612;
+        Wed, 13 Apr 2022 12:31:15 -0700 (PDT)
+Received: from [192.168.0.207] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id e26-20020a50ec9a000000b004193fe50151sm1584782edr.9.2022.04.13.12.31.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 12:31:15 -0700 (PDT)
+Message-ID: <44efe8b6-1712-5b87-f030-2f1328533ee8@linaro.org>
+Date:   Wed, 13 Apr 2022 21:31:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 24/33] dt-bindings: crypto: convert rockchip-crypto to
+ YAML
+Content-Language: en-US
+To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
+        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220413190713.1427956-1-clabbe@baylibre.com>
+ <20220413190713.1427956-25-clabbe@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220413190713.1427956-25-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 13/04/2022 21:07, Corentin Labbe wrote:
+> Convert rockchip-crypto to YAML.
+
+Thank you for your patch. There is something to discuss/improve.
+
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3288-crypto
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    maxItems: 4
+
+This is not needed and dt_bindings_check should complain.
+
+> +    items:
+> +      const: aclk
+> +      const: hclk
+> +      const: sclk
+> +      const: apb_pclk
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    maxItems: 1
+
+The same.
 
 
-> Am 13.04.2022 um 20:55 schrieb Zhou Yanjie =
-<zhouyanjie@wanyeetech.com>:
->=20
-> Hi Nikolaus,
->=20
-> On 2022/4/13 =E4=B8=8B=E5=8D=883:22, H. Nikolaus Schaller wrote:
->> Hi,
->>=20
->>=20
->>> Am 12.04.2022 um 20:30 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
-Yanjie) <zhouyanjie@wanyeetech.com>
->>> :
->>>=20
->>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
->>> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
->>> from Ingenic.
->>>=20
->>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
->>> <zhouyanjie@wanyeetech.com>
->>>=20
->>> Acked-by: Rob Herring=20
->>> <robh@kernel.org>
->>>=20
->>> ---
->>>=20
->>> Notes:
->>>    v1->v2:
->>>    Add Rob Herring's Acked-by.
->>>=20
->>> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
->>> 1 file changed, 7 insertions(+)
->>>=20
->>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml =
-b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>> index 4cebce6..c6e8c0b 100644
->>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>> @@ -17,6 +17,13 @@ properties:
->>>     oneOf:
->>>       - const: brcm,bcm2835-usb
->>>       - const: hisilicon,hi6220-usb
->>> +      - const: ingenic,jz4775-otg
->>> +      - const: ingenic,jz4780-otg
->>> +      - const: ingenic,x1000-otg
->>> +      - const: ingenic,x1600-otg
->>> +      - const: ingenic,x1700-otg
->>> +      - const: ingenic,x1830-otg
->>> +      - const: ingenic,x2000-otg
->>>=20
->> I have merged it with my recently proposed removal of
->> ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
->> complaint about missing snps,dwc2.
->>=20
->> So I think should it be:
->>=20
->>       - items:
->>           - enum:
->>               - const: ingenic,jz4775-otg
->>               - const: ingenic,jz4780-otg
->>               - const: ingenic,x1000-otg
->>               - const: ingenic,x1600-otg
->>               - const: ingenic,x1700-otg
->>               - const: ingenic,x1830-otg
->>               - const: ingenic,x2000-otg
->>=20
-
-PS: the const: above should be removed (I hadn't run it through the =
-compiler).
-
->>           - const: snps,dwc2
-
-here it is needed.
-
->>=20
->> similar to the entry for amlogic?
->>=20
->=20
->=20
-> Or we can just remove the "snps,dwc2" from jz4780.dtsi?
-
-Well, my recent proposal to fix dtbscheck was the other way round:
-remove "ingenic,jz4780-otg" from jz4780.dtsi and leave it out here.
-
-> I'm not too sure, but since we already have a dedicated "ingenic, =
-jz4780-otg", it seems "snps,dwc2" is redundant.
-
-As far as I see there is no driver specialization compatible to
-"ingenic,jz4780-otg". `grep ingenic,jz4780-otg *` only shows the .dtsi =
-(and the new .yaml).
-
-So we need "snps,dwc2" to get any driver match and I thought the =
-"ingenic,jz4780-otg" is redundant.
-
-But maintainers convinced me to keep it as a dummy compatible in the =
-.dtsi for potential future
-specialization (which does not exist and seems not to be necessary). =
-Unless I can convince them=20
-that this is never ever needed. Which is beyond my knowledge and almost =
-everyone.
-
-So we can't remove the "snps,dwc2" here.
-
-Well, we can with more work elsewhere.
-You have to extend the dwc2_of_match_table to include all ingenic =
-devices.
-
-Therefore we now know 3 potential solutions:
-a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
-b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" (your =
-proposal + my suggestion here)
-c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match table =
-in drivers//usb/dwc2/params.c (new proposals)
-
-=46rom consistency point of view I think variant b) is the right one. a) =
-was rejected and c) only adds redundant code.
-
-I am open to anything as long as the dtbscheck doesn't complain any =
-more.
-
-BR an thanks,
-Nikolaus
-
+Best regards,
+Krzysztof

@@ -2,57 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B594FF0CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994754FF0D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiDMHwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S233479AbiDMHww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiDMHwA (ORCPT
+        with ESMTP id S233465AbiDMHwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:52:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2A964F5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:49:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEC576152B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABAA4C385A6;
-        Wed, 13 Apr 2022 07:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649836177;
-        bh=U5PFHPlUvPZnKkFDVh2DWWPvU8ylQUClBVWmpgIeQN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YIcN8dEbQPD4AXASMcF4KWt3uc1Wf8dkf0NVKB9SbSj8GBbWjMiXP0nYBKSlWmr1t
-         UMIZxQl++1jqmr/cWNew75zE2zGbuxWPjFXsgM/oP86tLlFaDhvM9I/iIToWLqhxc2
-         8uM8fFrxHGe/cqM7P/0y41lPctHsEV7pB5PIMjnxHEKTIi3lG9cE1/YWF09HLQwTyx
-         /e2b8jQplvbZUHXSNBO1LeXcvu29+mLBR+A22h513FNlCe3/qPxoDekFebfVEZ0DUs
-         EnOAF9zEE4xHze8pbAcjj/WCry/rkyGEh9a0z6syhYNvi2IDk1g+jCjkpKoAc4AdpO
-         jmuivhSio3W5Q==
-Date:   Wed, 13 Apr 2022 13:19:33 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-        chunfeng.yun@mediatek.com, kishon@ti.com, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] phy: mediatek: phy-mtk-mipi-dsi: Simplify with
- dev_err_probe()
-Message-ID: <YlaAjXmwFB6eRNnd@matsya>
-References: <20220328145217.228457-1-angelogioacchino.delregno@collabora.com>
+        Wed, 13 Apr 2022 03:52:50 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2318627FCB;
+        Wed, 13 Apr 2022 00:50:26 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 13 Apr
+ 2022 15:50:25 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 13 Apr
+ 2022 15:50:24 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Haowen Bai <baihaowen@meizu.com>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: renesas: Fix memory leak of 'cpg'
+Date:   Wed, 13 Apr 2022 15:50:21 +0800
+Message-ID: <1649836222-17581-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328145217.228457-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,10 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-03-22, 16:52, AngeloGioacchino Del Regno wrote:
-> Use the dev_err_probe() helper to simplify error handling during probe.
+Fix this issue by freeing the cpg when exiting the function in the
+error/normal path.
 
-Applied, thanks
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/clk/renesas/clk-r8a73a4.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/clk/renesas/clk-r8a73a4.c b/drivers/clk/renesas/clk-r8a73a4.c
+index cfed11c659d9..6cacda1f91d8 100644
+--- a/drivers/clk/renesas/clk-r8a73a4.c
++++ b/drivers/clk/renesas/clk-r8a73a4.c
+@@ -215,7 +215,7 @@ static void __init r8a73a4_cpg_clocks_init(struct device_node *np)
+ 
+ 	cpg->reg = of_iomap(np, 0);
+ 	if (WARN_ON(cpg->reg == NULL))
+-		return;
++		goto out_free_cpg;
+ 
+ 	for (i = 0; i < num_clks; ++i) {
+ 		const char *name;
+@@ -233,6 +233,8 @@ static void __init r8a73a4_cpg_clocks_init(struct device_node *np)
+ 	}
+ 
+ 	of_clk_add_provider(np, of_clk_src_onecell_get, &cpg->data);
++out_free_cpg:
++	kfree(cpg);
+ }
+ CLK_OF_DECLARE(r8a73a4_cpg_clks, "renesas,r8a73a4-cpg-clocks",
+ 	       r8a73a4_cpg_clocks_init);
 -- 
-~Vinod
+2.7.4
+

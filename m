@@ -2,121 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5310A4FF326
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1D34FF325
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbiDMJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S234214AbiDMJRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234313AbiDMJQ7 (ORCPT
+        with ESMTP id S234303AbiDMJRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:16:59 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C62A237EF;
-        Wed, 13 Apr 2022 02:14:20 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23D8ZUZ3023705;
-        Wed, 13 Apr 2022 04:14:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=V3w7OsZXrFneyHUnLK1Ci1c4WOnspWrTkpaaeM+/9lk=;
- b=FYY90fiFFrsSsYG5bsleo3WwLkG00GvRjtaK9bYNzh2PqaBL/1shpBge8QHkiDMQkI0O
- i5gzZef7vEVLp+CWo9joj9Cdv95At+wYxuo/wRahpOo+5ZTk8vmea44AyAOlDW6FkB4g
- +p5xToU3aWGrroRN2VE812iIR+Ows/UAOYoOdtgTmu+p3gmjA9FvDzdvRTIRxLauSSFU
- DWcVx8mW4v/be6DK1uCM8Yh8st4iH3XW+3Npwn10umSEHu3mUqGR0urJUzMmv5+ouqFI
- LQi+lTwSaKae3Uajw8jGA6+dIiM+5pl5qrUl0cnS7L4/XFZyaIHfQk3YLpRSGmc+K4bP ig== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fb7hymxbk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 13 Apr 2022 04:14:14 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 10:14:12 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Wed, 13 Apr 2022 10:14:12 +0100
-Received: from aryzen.ad.cirrus.com (unknown [198.61.64.152])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D7E95475;
-        Wed, 13 Apr 2022 09:14:11 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH v2 RESEND] i2c: cadence: Increase timeout per message if necessary
-Date:   Wed, 13 Apr 2022 10:14:10 +0100
-Message-ID: <20220413091410.17970-1-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.35.2
+        Wed, 13 Apr 2022 05:17:08 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0695245B6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:14:47 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id i20so1629010wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull.eu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K3wssubFNSH7PhBBCoCTd/2JMEvbfGH2Qx2/SYbOnME=;
+        b=nz8vYJU3FhQmjoV7Y8KclGI8GnSjXDec3FDL3g1rX5pofcO/KvkzzyTHQDXGDHYnph
+         Ua0QxEZmhNmjNprfDUWQwcy6537deH/arJYaGceRm6jBXL92DcMmVflhOdGCuDDTSBT4
+         M2SxpThCS3VmQFUbGJFOvqawKqsT4GBPVDeEQUmX1JZUypCcDKCMCNcB4Ho+3d5fViD1
+         s6tbqC8oGDFAROfHZsDTZc+bvH4CFVJuyMm0MDz6X1zq7cG05qExNJtkZn/sHiS9JBjh
+         cDZIrYdDzoxJP+8Dj6TxBKIMznMRrYAs1ValFnfuuRJo+BT+bMU38p2DZSQj+4RlJKyh
+         IUKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K3wssubFNSH7PhBBCoCTd/2JMEvbfGH2Qx2/SYbOnME=;
+        b=xbR3nFdZWeFJmj9OaoDVX4Bg9b2kC9WKFNQD5Q4qmZ07uOrhyrzP56NgnPlXpooAB4
+         Sz/ysTpMV91GMGHv+dmWoeeASCO1IISKpg5cfpxeR0XRmwAVC9gpYOBx6s3aH+mQ3lLK
+         cL377Olg4yVKTEgr/5bON6UF1uQRo9Wj49QGo+toJdI2BeRW4d6780TxEyD2CRQ3/Mgc
+         FcoadiejcxWulJwOkY50Z3im8rjAFMiqevLO76k8SA6mFRQdrZgpi0qN44IrKeQnNMu3
+         N+NWWioTBNhAyCRVasJOXH5/ARU5xtvEBoIwDtEU78DdtXuWPNojUOXeDSCFVKqT6F1W
+         0qcQ==
+X-Gm-Message-State: AOAM530+eRhR3/JfS6QkgenFkCjDUirmu/whlhkD68qJzhAyfF70LVYh
+        znzLngHYsweqDs/U5z+c8fDgk9UbQ70meGcgqHYl4A==
+X-Google-Smtp-Source: ABdhPJwa1Z41m1QvtVzrKDmKI/ngC+L9la6nwqhud5QEuhIRlRUZ8acL6wKbDnw3aTqQ55EF4dZSO1sKMY26X6t52tc=
+X-Received: by 2002:adf:e84a:0:b0:207:a697:462c with SMTP id
+ d10-20020adfe84a000000b00207a697462cmr11108107wrn.312.1649841286170; Wed, 13
+ Apr 2022 02:14:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
-X-Proofpoint-ORIG-GUID: 5aljsWVwJRGGfYP4FdAwCtEeDgeCkHMI
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-11-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-11-heiko@sntech.de>
+From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
+Date:   Wed, 13 Apr 2022 11:14:34 +0200
+Message-ID: <CAAeLtUDtv+Xh_A1G_cyWEGayrAhY3vQ6WaE09NjJL+vmJc6GLw@mail.gmail.com>
+Subject: Re: [PATCH v9 10/12] riscv: remove FIXMAP_PAGE_IO and fall back to
+ its default value
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Timeout as 1 second sets an upper limit on the length
-of the transfer executed, but there is no maximum length
-of a write or read message set in i2c_adapter_quirks for
-this controller.
+On Wed, 13 Apr 2022 at 05:05, Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> If not defined in the arch, FIXMAP_PAGE_IO defaults to PAGE_KERNEL_IO,
+> which we defined when adding the svpbmt implementation.
+>
+> So drop the FIXMAP_PAGE_IO riscv define.
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-This upper limit affects devices that require sending
-large firmware blobs over I2C.
-
-To remove that limitation, calculate the minimal time
-necessary, plus some wiggle room, for every message and
-use it instead of the default one second, if more than
-one second.
-
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
----
- drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 805c77143a0f..b4c1ad19cdae 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -760,7 +760,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
- static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 		struct i2c_adapter *adap)
- {
--	unsigned long time_left;
-+	unsigned long time_left, msg_timeout;
- 	u32 reg;
- 
- 	id->p_msg = msg;
-@@ -785,8 +785,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	else
- 		cdns_i2c_msend(id);
- 
-+	/* Minimal time to execute this message */
-+	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
-+	/* Plus some wiggle room */
-+	msg_timeout += msecs_to_jiffies(500);
-+
-+	if (msg_timeout < adap->timeout)
-+		msg_timeout = adap->timeout;
-+
- 	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
-+	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
--- 
-2.35.2
-
+Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>

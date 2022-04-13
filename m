@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84254FECAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1CD4FECB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiDMCCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S231634AbiDMCEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiDMCCN (ORCPT
+        with ESMTP id S229681AbiDMCEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:02:13 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEDADF00
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 18:59:49 -0700 (PDT)
-X-UUID: ca0c66fc92ec45dea805913229f322ed-20220413
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:a2dc3060-ee44-4995-b2c9-ebf8a1b67e6d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.4,REQID:a2dc3060-ee44-4995-b2c9-ebf8a1b67e6d,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:faefae9,CLOUDID:72833078-0afa-4dca-bdec-ca54c998425a,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: ca0c66fc92ec45dea805913229f322ed-20220413
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1022785704; Wed, 13 Apr 2022 09:59:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 13 Apr 2022 09:59:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Apr 2022 09:59:42 +0800
-Message-ID: <12c7587db24f0f72e8f7d30c294c7b3eac241a83.camel@mediatek.com>
-Subject: Re: [PATCH v4, 1/4] drm/mediatek: Adjust the timing of mipi signal
- from LP00 to LP11
-From:   CK Hu <ck.hu@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>
-CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 13 Apr 2022 09:59:42 +0800
-In-Reply-To: <1649644308-8455-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1649644308-8455-1-git-send-email-xinlei.lee@mediatek.com>
-         <1649644308-8455-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Tue, 12 Apr 2022 22:04:48 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF4433A13;
+        Tue, 12 Apr 2022 19:02:28 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n18so689291plg.5;
+        Tue, 12 Apr 2022 19:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bRQdjfSB+NzTzGDCOpwO8fHk5ZBQGDsMCp7g0Z2cWSY=;
+        b=TMFEJQp+nHaBJGb4nIHboKkXVS4nvp7iilxTVimyn78Uh5Wq9UrFH4JbgAS5QyYHNM
+         qxSNxppMKvjEZXXXhRX859KO4bWF8RE50RQnvwb5CKuYneD88+SOgbrIn9o7BBdrDZJ0
+         dd32phf6oQbbPB25OrkpV5E/zAXdD4XrXtzhIc7nmnslTYCTLcJMuBJsHqelAiDVXr4F
+         xpzo38msbpgy8KeHO+eGYepcuSUuPg5cY8p9JFx4FyfY5KAcj9kvCbG9Aj7A03yNT+EP
+         6SJdXGtQkTEVB3MA+tSDl+l8+xyb4tyZwPSwG4C2GH7kro/L+Xb+VJnlherIM8K830ET
+         tOvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bRQdjfSB+NzTzGDCOpwO8fHk5ZBQGDsMCp7g0Z2cWSY=;
+        b=TCU5WIB8Wc4L1AaDkKY6t8iiOPYWnbaerAmLgCYcH311r80dizZWfJsf2lb1o9H7g5
+         oWvI71/q8C8y5e069f4Y5oLDVPiPC+nelHnyX8dqTlBefISLqLcc2PG0RjmuLkKWdfnV
+         NMJ0Xt8+Cxsrk7rxuakntecdysoN7JlJ/ZtHOXN9AuMswTP8WMZqYjD5lb2lpTRWjIPN
+         1DjV+gdcxusT7LKy7Lk+Ac/H6+AX+CfnBHZPA241Z2UrnfcdlXt80g7Wf19pK/SgUREF
+         eT1BHYkA8T2imqjbjUKTTDtKXzMReiGKP4+d3qwjh7iByEouv+a1CN25a0m0z+urIalm
+         ZSFg==
+X-Gm-Message-State: AOAM5329dIj0Bt0iJZxB0mRdXHIV4iC93WIIXQmHuhivlYo+4r1vZC9R
+        i73NRoapegxhA0iIfsml/xmPMor6eqgRZHB3TLk=
+X-Google-Smtp-Source: ABdhPJxVQKei4bDkivdniXg6jJ3fb9GTXqP5IcXQXi+GwhUNVt7mByI8V8sZR0Dkmst1FEp7iZSmZg==
+X-Received: by 2002:a17:902:cf05:b0:156:2aa:6e13 with SMTP id i5-20020a170902cf0500b0015602aa6e13mr40059919plg.137.1649815347724;
+        Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id t184-20020a625fc1000000b004fa3bd9bef0sm18939984pfb.110.2022.04.12.19.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
+Message-ID: <62562f33.1c69fb81.e4a9.1b0e@mx.google.com>
+Date:   Tue, 12 Apr 2022 19:02:27 -0700 (PDT)
+X-Google-Original-Date: Wed, 13 Apr 2022 02:02:24 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 000/277] 5.15.34-rc2 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
-
-On Mon, 2022-04-11 at 10:31 +0800, xinlei.lee@mediatek.com wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
+On Tue, 12 Apr 2022 19:47:07 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.34 release.
+> There are 277 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Old sequence:
-> 1. Pull the MIPI signal high
-> 2. Delay & Dsi_reset
-> 3. Set the dsi timing register
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
+> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
+> Anything received after that time might be too late.
 > 
-> The sequence after patching is:
-> 1. Set the dsi timing register
-> 2. Pull the MIPI signal high
-> 3. Delay & Dsi_reset
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
-
-You just describe WHAT this patch do, but WHY this patch do? Does this
-patch reorder sequence to follow any spec?
-
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
-> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
-> API")
+> thanks,
 > 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> greg k-h
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index ccb0511b9cd5..262c027d8c2f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -649,14 +649,14 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_phy_timconfig(dsi);
->  
-> -	mtk_dsi_rxtx_control(dsi);
-> -	usleep_range(30, 100);
-> -	mtk_dsi_reset_dphy(dsi);
->  	mtk_dsi_ps_control_vact(dsi);
->  	mtk_dsi_set_vm_cmd(dsi);
->  	mtk_dsi_config_vdo_timing(dsi);
->  	mtk_dsi_set_interrupt_enable(dsi);
->  
-> +	mtk_dsi_rxtx_control(dsi);
-> +	usleep_range(30, 100);
-> +	mtk_dsi_reset_dphy(dsi);
 
-The original sequence is done by patch [1] not the patch in the Fixes
-tag. So modify the Fixes tag.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dsi.c?h=v5.18-rc2&id=75374fc2c152ef42c45c6bf716743d5f5bb6d24d
-
-Regards,
-CK
-
->  	mtk_dsi_clk_ulp_mode_leave(dsi);
->  	mtk_dsi_lane0_ulp_mode_leave(dsi);
->  	mtk_dsi_clk_hs_mode(dsi, 0);
+5.15.34-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 

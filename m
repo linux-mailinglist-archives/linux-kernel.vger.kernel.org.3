@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6BA4FF91D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6D24FF90F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbiDMOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S236153AbiDMOi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiDMOmU (ORCPT
+        with ESMTP id S235589AbiDMOiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:42:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053F515A1E;
-        Wed, 13 Apr 2022 07:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649860799; x=1681396799;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FEqVR/bJ6blkfzQcYZuLKr7WhhCYJ06aOnPu5ZB6Q6Q=;
-  b=hgvQS/NeeIBDfF4aq/D3TVyFvbAS/ER/8U4Tdy/kuxOfH2FNXMVJ0d7R
-   /mSXNt/g6C63nZKXq2NLQWBPXvdga8xwQtjxvSL/7daYIHMDSzjLpFkMd
-   ox7kk0xz1EAQElKCsjNyFiPPk42JfP/WXSTW0MW+Z9AqddXNxBsPvUE4N
-   l6DWYD0XTisDRspuKNW/3Tgx7uM2/2XpVsLoDUXuBm8IS+8aJMHvUcOZw
-   h/SZ+Q7WQjwe+kr1HnGEhHyp0f6wB2tRbGldNdBGLVk7RAyEABCJhYand
-   2/aNtGDMnZjz/qViuxLurBAqHtZZ4izRO9wNaalXNv3o6VePvhiOwu5in
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325589399"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="325589399"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:35:53 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="573295871"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:35:49 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id C987220316;
-        Wed, 13 Apr 2022 17:35:46 +0300 (EEST)
-Date:   Wed, 13 Apr 2022 17:35:46 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
-Message-ID: <YlbfwjQcxj6fK7re@paasikivi.fi.intel.com>
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
- <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
- <YlCq79KveByePxe9@paasikivi.fi.intel.com>
- <CAHp75Ve-5=6bsF1mMQ4RceobV=OsR6VwZeP==iFGQJLEbt0-yg@mail.gmail.com>
+        Wed, 13 Apr 2022 10:38:23 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F060CC7;
+        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ef5380669cso7717467b3.9;
+        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HkFKvLI0J6quLQdPqpOX0Tj5KDs3UD15ORpTF0qg2e4=;
+        b=6hQpGirc2ucrJ9JNE7jYo5jl4SHtx/ANBT6uAt77bprdZYH5y2kuYkbDNSdKxI19CO
+         Vks0rWB1uTjTdodn/qlTfbCQVmWC+auMgUXSsCm1uDowqWiAfkjNk1wx3pPf/Jf13Rdp
+         vJdxE1OakSQ8tZTf8K9n8bjDgFxY8HGcvchTBCCDOU025JxLoeIyH2JskpbFwcviPeq3
+         b5AKzC0IikRHezcfNsEWBkYWPZdNXtpb+37gHglnBKY/I7b2JwLbL4LwZzWowJ4+vRd6
+         LWo2Ii3M9hEJJ0c60NZUXgFSjHU79QljZ2vb5uyH4PwKWXatABeSm5n5boSyfGRy5e5H
+         hiKA==
+X-Gm-Message-State: AOAM530ou+RJYTXA4bif6i9JDwSLIrPYtnvMNtPeAXQZQDUR7aQxGKvt
+        bU2k5tWOgbxLLNE1lp7sMUojoJj5GVt0Y0jaT9KWsRXp
+X-Google-Smtp-Source: ABdhPJznRcpigdB/Ir4yWmRFfF/hE4YWrrX33xtGTbB1mSjJwf3cB1Z/dbSo3oLnkmCEfqHiC41UZjsnNi4mMw7TUVA=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr33491323ywb.326.1649860560856; Wed, 13
+ Apr 2022 07:36:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Ve-5=6bsF1mMQ4RceobV=OsR6VwZeP==iFGQJLEbt0-yg@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220324080653.454333-1-dacohen@pm.me>
+In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 16:35:50 +0200
+Message-ID: <CAJZ5v0jDEau14RF4-pEc0HiWG+Cg7f93oMmhBXZULCXpOJFVaw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] PM: refactor pm_pr_dbg() to support dynamic debug
+To:     David Cohen <dacohen@pm.me>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 05:10:23PM +0300, Andy Shevchenko wrote:
-> On Sat, Apr 9, 2022 at 2:35 AM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> > On Fri, Apr 08, 2022 at 09:48:43PM +0300, Andy Shevchenko wrote:
-> > > As to_of_node() suggests and the way the code in the OF and software node
-> > > back ends actually uses the fwnode handle, it may be constified. Do this
-> > > for good.
-> >
-> > How?
-> >
-> > If the fwnode is const, then the struct it contains must be presumed to be
-> > const, too.
-> 
-> Why? The idea is that we are not updating the fwnode, but the container.
-> The container may or may not be const. It's orthogonal, no?
+On Thu, Mar 24, 2022 at 9:07 AM David Cohen <dacohen@pm.me> wrote:
+>
+> Hi,
+>
+> I am currently debugging an issue with s2idle on my laptop where in a
+> rare occasion instead of sleeping, it gets stuck in an infinite loop.
+> The pm_pr_dbg() is placed on very useful functions and it helps me to
+> debug it, but the current all or nothing enabling mechanism with
+> pm_debug_messages_on flag is causing the suspending mechanism to be
+> disturbed with so many debug messages to the point it becomes extremely
+> difficult to reproduce the issue I'm debugging. More granularity when
+> enabling pm_pr_dbg() in this case is very welcome.
+>
+> These patches I'm sending introduce dynamic debug support to pm_pr_dbg()
+> while still maintaining the pm_debug_messages_on flag behavior if
+> dynamic debug is not used.
+>
+> Regards, David
+>
+> ---
+> David Cohen (2):
+>   PM: narrow down -DDEBUG on kernel/power/ files
+>   PM: enable dynamic debug support within pm_pr_dbg()
 
-As you wrote: may or may not. The stricter requirement, i.e. const, must be
-thus followed. I think it would be fine (after adding a comment on what is
-being done) if you *know* the container struct is not const. But that is
-not the case here.
-
--- 
-Sakari Ailus
+Both patches applied as 5.19 material, thanks!

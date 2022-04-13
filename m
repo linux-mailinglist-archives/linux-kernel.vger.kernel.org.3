@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8B0500278
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AFE50028F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239212AbiDMXWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S239301AbiDMXXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbiDMXW0 (ORCPT
+        with ESMTP id S239168AbiDMXW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:22:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7079D23BDD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:04 -0700 (PDT)
+        Wed, 13 Apr 2022 19:22:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3822323BE5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649892003;
+        s=mimecast20190719; t=1649892005;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BGrvBgwYKVcZxNjPAVz0wV8tSGZLIzNr8FbkF5Q7c6c=;
-        b=fUUp0c8QjaDU3dfvu3fJh3oyW3x647NxRR7CEOG/rU7Hcirdl6USwFFtoJjYHtTAexSIx5
-        SHGenS1tLBnGBDninq7G/DRkbQ1mRSjj7H6XAxcfJAXfgka9GOdZdTn9aF3ws27gi4w3Ml
-        QFpE8G5dhwAaN2HK8zAut/DA0Sxgm7A=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BHuuVJWlvrxXx0mO6xbXx/8ozzJANVHdMftQcW5g5Us=;
+        b=gmab3WDNDduWfRfR2dVDOXgpmATKzm6yEuTmaR87h6OUk+AUvcYkPJvfpfAbC0UPSbxi68
+        8vpzn9C8HEohf3KyDuQ9tY2BZeVhkT/4TNujqQuAcxLbTgHlYulejr0kn7Rhzy+7HbrP/o
+        EWeAQnSbGT/tYUJugUMKBKIkYd9PZKA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-265-0-IDmroPP7iqebaYRhogRQ-1; Wed, 13 Apr 2022 19:20:02 -0400
-X-MC-Unique: 0-IDmroPP7iqebaYRhogRQ-1
-Received: by mail-qt1-f198.google.com with SMTP id m20-20020a05622a119400b002ef68184e7fso2219907qtk.15
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:02 -0700 (PDT)
+ us-mta-484-XAXNL7tBOO2xxW2qSFGheQ-1; Wed, 13 Apr 2022 19:20:04 -0400
+X-MC-Unique: XAXNL7tBOO2xxW2qSFGheQ-1
+Received: by mail-qt1-f197.google.com with SMTP id z3-20020ac86b83000000b002ed0f18c23cso2214517qts.17
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BGrvBgwYKVcZxNjPAVz0wV8tSGZLIzNr8FbkF5Q7c6c=;
-        b=OanuRGHlgWkd3XGS6ZBv0JUkp93/erllfnCKUWqqEjpqWxY/+PXEOIfL/kO1vHJ9dN
-         s5z76+ch4x2RLv2/7zOmudNFfYn/qtwOofc81sgwO4PxMAVQd5bznMl3B3tf9a0mSOYX
-         xtEhFyOhBjWhNF929oY1L760Sp1u51VLrRluGSGjc6hYdC5+VnY9YrYJvCsEhvDEZfi7
-         J2iPm8H7T3zdiDcVdXkMT2Ov02RL/YbssnMDR5/lsLH/fpHpxdJWQdMSgq8uYBum6B6A
-         AixSdmQKoVuO22QKJ4rtWc/OYk3YAP7mBTj0cjBe5mGWzjKmP4odZr64iQ3SLqPRRfhU
-         PvGw==
-X-Gm-Message-State: AOAM531H3792tPA6/ooYDAN5l1MN11k/O3zbefOlEhSmmfayorMcMkZx
-        z5y5mW99WmUGMp2yI273Jr4b/RbVGB5ECEet0crXlXDgMnAtSwPsfsse0jhUlT/W5hBHjm+Hcau
-        Sqa0p+4ORCtrJOlA3af7DsQZK
-X-Received: by 2002:ac8:7088:0:b0:2f1:89a6:4001 with SMTP id y8-20020ac87088000000b002f189a64001mr5341794qto.588.1649892001938;
-        Wed, 13 Apr 2022 16:20:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOD2TTAOnlx406Slej/kYMmagHy+ojVopPnLeDEqApBQ6pl6+0R1x0MQwx/Ef8VLuk5KwadA==
-X-Received: by 2002:ac8:7088:0:b0:2f1:89a6:4001 with SMTP id y8-20020ac87088000000b002f189a64001mr5341782qto.588.1649892001687;
-        Wed, 13 Apr 2022 16:20:01 -0700 (PDT)
+        bh=BHuuVJWlvrxXx0mO6xbXx/8ozzJANVHdMftQcW5g5Us=;
+        b=n8ixq/By2sHIJYv4qKop9f9F1YXpmDqMqtGqeDf1zRprAQS5rMWfgI4wYrDzhhF0vd
+         fPOwHmeLQHPEH/RAb9Px2i4IrO3sZHDL1rimEH/YTfCvVgrJz34mtqCLEdtEo6E+FjJJ
+         5Xw5Qzuk1BTGHKFgjRcLih1bsXtKEL2T0sNoGw930ECqpSdB8d+kHS4Gk3eaNIpEmFui
+         c54db2gwtoZE+YauE1KJv+grdCphaV5Zbnr6+s80FfKcJNE7jzSCdwEuwn64/MMlpn6B
+         g3M7w+xjDeh0DfSLuEhc+eIUCZ8SLhKKQlGi05nhtfoOzdcu4UJc7IggpJ48yiNEE/pi
+         Q5Ag==
+X-Gm-Message-State: AOAM532Pf/4aXx+bswg3LYo+B8VsyGcB0D3U5bSkKDQS5Gcdxvf40Ryk
+        EVhv/WTZ8d47BMCr8ckLJcrlzDvaPTm6blNZf+78O8tqSuXab870xFFKi9fKKgYGNWzVmqgtgWa
+        hXRhNtSt+RcI1o2nRZ31mSzCE
+X-Received: by 2002:a05:6214:300d:b0:444:4ada:a471 with SMTP id ke13-20020a056214300d00b004444adaa471mr1037216qvb.93.1649892003431;
+        Wed, 13 Apr 2022 16:20:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzWFG0Q4OCZ9/S2OUyvhDtsAEUq0kQxxzhgvu7klVXQ4+McpzuRKD53TLydwbrR+krLLHmBPQ==
+X-Received: by 2002:a05:6214:300d:b0:444:4ada:a471 with SMTP id ke13-20020a056214300d00b004444adaa471mr1037201qvb.93.1649892003185;
+        Wed, 13 Apr 2022 16:20:03 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.20.00
+        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.20.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 16:20:01 -0700 (PDT)
+        Wed, 13 Apr 2022 16:20:02 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 03/18] objtool: Add sec+offset to warnings
-Date:   Wed, 13 Apr 2022 16:19:38 -0700
-Message-Id: <76e1ed8e27b6fb3ed584004ad3fb79a95914b7e6.1649891421.git.jpoimboe@redhat.com>
+        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH 04/18] objtool: Print data address for "!ENDBR" data warnings
+Date:   Wed, 13 Apr 2022 16:19:39 -0700
+Message-Id: <8208fa7edf2dc576e8f9bcf24396b128f59bdfe9.1649891421.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1649891421.git.jpoimboe@redhat.com>
 References: <cover.1649891421.git.jpoimboe@redhat.com>
@@ -71,7 +70,7 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,98 +78,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change this:
+When a "!ENDBR" warning is reported for a data section, objtool just
+prints the text address of the relocation target twice, without giving
+any clues about the location of the original data reference:
 
-  vmlinux.o: warning: objtool: fixup_exception()+0x2d1: unreachable instruction
+  vmlinux.o: warning: objtool: dcbnl_netdevice_event()+0x0: .text+0xb64680: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
 
-to this:
+Instead, print the address of the data reference, in addition to the
+address of the relocation target.
 
-  vmlinux.o: warning: objtool: fixup_exception()+0x2d1: .text+0x76c51: unreachable instruction
+  vmlinux.o: warning: objtool: dcbnl_nb+0x0: .data..read_mostly+0xe260: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
 
-It's noisier, but it makes our lives considerably easier.
-
-Make this new 'verbose' mode optional, which will come in handy soon.
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- tools/objtool/include/objtool/warn.h | 39 +++++++++++++---------------
- 1 file changed, 18 insertions(+), 21 deletions(-)
+ tools/objtool/check.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index dab0dda7c617..a4c6b52a58c9 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -15,12 +15,13 @@
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 5bd3aa815d51..7a1a02dacb77 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3825,11 +3825,8 @@ static int validate_ibt(struct objtool_file *file)
+ 			struct instruction *dest;
  
- extern const char *objname;
- 
--static inline char *offstr(struct section *sec, unsigned long offset)
-+static inline char *offstr(struct section *sec, unsigned long offset,
-+			   bool verbose)
- {
- 	bool is_text = (sec->sh.sh_flags & SHF_EXECINSTR);
- 	struct symbol *sym = NULL;
--	unsigned long name_off;
--	char *name, *str;
-+	char *str;
-+	int len;
- 
- 	if (is_text)
- 		sym = find_func_containing(sec, offset);
-@@ -28,20 +29,16 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 		sym = find_symbol_containing(sec, offset);
- 
- 	if (sym) {
--		name = sym->name;
--		name_off = offset - sym->offset;
-+		str = malloc(strlen(sym->name) + strlen(sec->name) + 40);
-+		len = sprintf(str, "%s%s+0x%lx",
-+			      sym->name, is_text ? "()" : "", offset - sym->offset);
-+		if (verbose)
-+			sprintf(str+len, ": %s+0x%lx", sec->name, offset);
- 	} else {
--		name = sec->name;
--		name_off = offset;
-+		str = malloc(strlen(sec->name) + 20);
-+		sprintf(str, "%s+0x%lx", sec->name, offset);
+ 			dest = validate_ibt_reloc(file, reloc);
+-			if (is_data && dest && !dest->noendbr) {
+-				warn_noendbr("data ", reloc->sym->sec,
+-					     reloc->sym->offset + reloc->addend,
+-					     dest);
+-			}
++			if (is_data && dest && !dest->noendbr)
++				warn_noendbr("data ", sec, reloc->offset, dest);
+ 		}
  	}
  
--	str = malloc(strlen(name) + 20);
--
--	if (sym)
--		sprintf(str, "%s%s+0x%lx", name, is_text ? "()" : "", name_off);
--	else
--		sprintf(str, "%s+0x%lx", name, name_off);
--
- 	return str;
- }
- 
-@@ -52,17 +49,17 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 
- #define WARN_FUNC(format, sec, offset, ...)		\
- ({							\
--	char *_str = offstr(sec, offset);		\
-+	char *_str = offstr(sec, offset, true);		\
- 	WARN("%s: " format, _str, ##__VA_ARGS__);	\
- 	free(_str);					\
- })
- 
--#define BT_FUNC(format, insn, ...)			\
--({							\
--	struct instruction *_insn = (insn);		\
--	char *_str = offstr(_insn->sec, _insn->offset); \
--	WARN("  %s: " format, _str, ##__VA_ARGS__);	\
--	free(_str);					\
-+#define BT_FUNC(format, insn, ...)				\
-+({								\
-+	struct instruction *_insn = (insn);			\
-+	char *_str = offstr(_insn->sec, _insn->offset, true);	\
-+	WARN("  %s: " format, _str, ##__VA_ARGS__);		\
-+	free(_str);						\
- })
- 
- #define WARN_ELF(format, ...)				\
 -- 
 2.34.1
 

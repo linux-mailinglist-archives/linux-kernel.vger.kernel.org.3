@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453044FFFC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBE64FFFBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiDMUKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S237184AbiDMUJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiDMUKL (ORCPT
+        with ESMTP id S235545AbiDMUJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:10:11 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459137B10B;
-        Wed, 13 Apr 2022 13:07:49 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nej10-000FtR-Vy; Wed, 13 Apr 2022 21:50:59 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nej10-000PG8-EN; Wed, 13 Apr 2022 21:50:58 +0200
-Subject: Re: [PATCH v4 sysctl-next] bpf: move bpf sysctls from kernel/sysctl.c
- to bpf module
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Yan Zhu <zhuyan34@huawei.com>, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        keescook@chromium.org, kpsingh@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liucheng32@huawei.com, netdev@vger.kernel.org,
-        nixiaoming@huawei.com, songliubraving@fb.com,
-        xiechengliang1@huawei.com, yhs@fb.com, yzaikin@google.com,
-        zengweilin@huawei.com, leeyou.li@huawei.com,
-        laiyuanyuan.lai@huawei.com
-References: <Yk4XE/hKGOQs5oq0@bombadil.infradead.org>
- <20220407070759.29506-1-zhuyan34@huawei.com>
- <3a82460b-6f58-6e7e-a3d9-141f42069eda@iogearbox.net>
- <Ylcd0zvHhi96zVi+@bombadil.infradead.org>
- <b615bd44-6bd1-a958-7e3f-dd2ff58931a1@iogearbox.net>
- <YlcoevXO2t1pn3Pu@bombadil.infradead.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <86460c31-f25a-445a-b58c-0e90eb60a95f@iogearbox.net>
-Date:   Wed, 13 Apr 2022 21:50:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 13 Apr 2022 16:09:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160F47B545;
+        Wed, 13 Apr 2022 13:07:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A391E61E32;
+        Wed, 13 Apr 2022 20:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE4C385A3;
+        Wed, 13 Apr 2022 20:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649880420;
+        bh=1lv0TYn1rI0bZiX2xcJLC6rgxIwufGUuDS8PwYZgZZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oxeoUVNxqagKDTCoBhEg0ZjenI8HlagF6DUcw+G/PXtILlsb/+4C9pEpvNlD3uf3p
+         E1v+kxYnRb8b20Y1YbQOvYk79efC+87JQDK3EzvaIg4gX5CtXbi6K6Z8Gfj7QI0Dop
+         TYMDAmgwT9qN1CC287v6xLZf9RDalh20LNPvfCIJPDQlgqB5MU43zs16zcyjJp3bps
+         aJhxG6La5MxAlJFcJ8YkEprju0ttd6mReGFuXZKsED7A7qu3OrktN/MXqtX+Y6z9Vh
+         jaJNTthb2d6e3Adq6vTyH+gxu4FVqcgI5SXduICpNWFjEqDM466H4gwBr7tIY6rfE8
+         zQR8zc24UsmKQ==
+Date:   Wed, 13 Apr 2022 23:06:46 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
+Message-ID: <YlctVvp5V1OpgKJW@kernel.org>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
+ <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
+ <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
+ <6c976344-fdd6-95cd-2cb0-b0e817bf0392@intel.com>
+ <YlP94T1ACwxKTgep@kernel.org>
+ <20220413114001.wdsi2xrm4btrghms@box.shutemov.name>
+ <YlbiqdqCH+j7TK80@kernel.org>
+ <20220413151517.tzd76kzja3424lqu@box.shutemov.name>
 MIME-Version: 1.0
-In-Reply-To: <YlcoevXO2t1pn3Pu@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26511/Wed Apr 13 10:22:45 2022)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413151517.tzd76kzja3424lqu@box.shutemov.name>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 9:46 PM, Luis Chamberlain wrote:
-> On Wed, Apr 13, 2022 at 09:40:58PM +0200, Daniel Borkmann wrote:
->> On 4/13/22 9:00 PM, Luis Chamberlain wrote:
->>> On Wed, Apr 13, 2022 at 04:45:00PM +0200, Daniel Borkmann wrote:
->>>> On 4/7/22 9:07 AM, Yan Zhu wrote:
->>>>> We're moving sysctls out of kernel/sysctl.c as its a mess. We
->>>>> already moved all filesystem sysctls out. And with time the goal is
->>>>> to move all sysctls out to their own subsystem/actual user.
->>>>>
->>>>> kernel/sysctl.c has grown to an insane mess and its easy to run
->>>>> into conflicts with it. The effort to move them out is part of this.
->>>>>
->>>>> Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
->>>>
->>>> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
->>>>
->>>> Given the desire is to route this via sysctl-next and we're not shortly
->>>> before but after the merge win, could we get a feature branch for bpf-next
->>>> to pull from to avoid conflicts with ongoing development cycle?
->>>
->>> Sure thing. So I've never done this sort of thing, so forgive me for
->>> being new at it. Would it make sense to merge this change to sysctl-next
->>> as-is today and put a frozen branch sysclt-next-bpf to reflect this,
->>> which bpf-next can merge. And then sysctl-next just continues to chug on
->>> its own? As-is my goal is to keep sysctl-next as immutable as well.
->>>
->>> Or is there a better approach you can recommend?
->>
->> Are you able to merge the pr/bpf-sysctl branch into your sysctl-next tree?
->>
->>    https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/log/?h=pr/bpf-sysctl
->>
->> This is based off common base for both trees (3123109284176b1532874591f7c81f3837bbdc17)
->> so should only pull in the single commit then.
+On Wed, Apr 13, 2022 at 06:15:17PM +0300, Kirill A. Shutemov wrote:
+> On Wed, Apr 13, 2022 at 05:48:09PM +0300, Mike Rapoport wrote:
+> > On Wed, Apr 13, 2022 at 02:40:01PM +0300, Kirill A. Shutemov wrote:
+> > > On Mon, Apr 11, 2022 at 01:07:29PM +0300, Mike Rapoport wrote:
+> > > > On Sun, Apr 10, 2022 at 11:38:08PM -0700, Dave Hansen wrote:
+> > > > > On 4/9/22 08:54, Kirill A. Shutemov wrote:
+> > > > > > On Fri, Apr 08, 2022 at 11:55:43AM -0700, Dave Hansen wrote:
+> > > > > 
+> > > > > >>>  	if (fpi_flags & FPI_TO_TAIL)
+> > > > > >>>  		to_tail = true;
+> > > > > >>>  	else if (is_shuffle_order(order))
+> > > > > >>> @@ -1149,7 +1192,8 @@ static inline void __free_one_page(struct page *page,
+> > > > > >>>  static inline bool page_expected_state(struct page *page,
+> > > > > >>>  					unsigned long check_flags)
+> > > > > >>>  {
+> > > > > >>> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
+> > > > > >>> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
+> > > > > >>> +	    !PageUnaccepted(page))
+> > > > > >>>  		return false;
+> > > > > >>
+> > > > > >> That probably deserves a comment, and maybe its own if() statement.
+> > > > > > 
+> > > > > > Own if does not work. PageUnaccepted() is encoded in _mapcount.
+> > > > > > 
+> > > > > > What about this:
+> > > > > > 
+> > > > > > 	/*
+> > > > > > 	 * page->_mapcount is expected to be -1.
+> > > > > > 	 *
+> > > > > > 	 * There is an exception for PageUnaccepted(). The page type can be set
+> > > > > > 	 * for pages on free list. Page types are encoded in _mapcount.
+> > > > > > 	 *
+> > > > > > 	 * PageUnaccepted() will get cleared in post_alloc_hook().
+> > > > > > 	 */
+> > > > > > 	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
+> > > > 
+> > > > Maybe I'm missing something, but isn't this true for any PageType?
+> > > 
+> > > PG_buddy gets clear on remove from the free list, before the chec.
+> > > 
+> > > PG_offline and PG_table pages are never on free lists.
+> > 
+> > Right, this will work 'cause PageType is inverted. I still think this
+> > condition is hard to parse and I liked the old variant with
+> > !PageUnaccepted() better.
 > 
-> Yup. That worked just fine. I pushed it.
+> Well the old way to deal with PageUnaccepted() had a flaw: if the page is
+> PageUnaccepted() it will allow any other page types to pass here. Like
+> PG_unaccepted + PG_buddy will slide here.
 
-Great, thanks!
+It seems to me that there was an implicit assumption that page types are
+exclusive and PG_unaccepted would break it.
+ 
+> > Maybe if we wrap the whole construct in a helper it will be less eye
+> > hurting.
+> 
+> Hm. Any suggestion how such helper could look like? Cannot think of
+> anything sane.
+
+Me neither :(
+
+How about updating the comment to be
+
+	/*
+	 * The page must not be mapped to userspace and must not have a
+	 * PageType other than PageUnaccepted.
+	 * This means that page->_mapcount must be -1 or have only
+	 * PG_unaccepted bit cleared.
+	 */
+	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
+ 
+> -- 
+>  Kirill A. Shutemov
+
+-- 
+Sincerely yours,
+Mike.

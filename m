@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36474FF575
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289DE4FF577
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiDMLME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S235114AbiDMLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiDMLMD (ORCPT
+        with ESMTP id S235119AbiDMLMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:12:03 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58FF140EB;
-        Wed, 13 Apr 2022 04:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CBlu8+J5V5g3eicBd9/EALqxYdrUeqXoa0KFWr1/CBo=; b=bvL9CxLnFpwWqAiMycEp4G+Kyj
-        HwZdWb+IhLaHtvSoz16da28NrRCjV0Uwq9fYWfo8p9g/Zw0p4GyJ6/B/K7LA8K3Y+AdAY+8tXkAo5
-        OLpYrX/fAGFS39RNmnxTdeHfmkKNVrmtEv4jJRQMkuYMlGPPhdr0c6tz+LtoytprYxjCokraCNpTr
-        bQXEV3pvgk7mHJJ9PAYtgsFsJh8SshYoB7zG+mwmkABF0W/oBB27kM9siiJkAt9TUuuP8YA1yG1Nx
-        W6iXtdAIRMNnCKJP3tsP/+ahzrlguAeFLR0ep8zLslhQ/SPJ2f2OUsuFTUjmCsz4pfLVVUK4wYQ7/
-        V4oCzAtg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58238)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1neasP-00032X-I2; Wed, 13 Apr 2022 12:09:33 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1neasL-0003II-Ni; Wed, 13 Apr 2022 12:09:29 +0100
-Date:   Wed, 13 Apr 2022 12:09:29 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] kernel-doc: support DECLARE_PHY_INTERFACE_MASK()
-Message-ID: <Ylavaf+OlgTVeI6a@shell.armlinux.org.uk>
-References: <20211030020813.32654-1-rdunlap@infradead.org>
+        Wed, 13 Apr 2022 07:12:24 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFD122299;
+        Wed, 13 Apr 2022 04:10:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V9zdJNn_1649848198;
+Received: from 30.225.28.93(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V9zdJNn_1649848198)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 13 Apr 2022 19:09:59 +0800
+Message-ID: <5a80c065-e811-018e-6c35-01c12b194c94@linux.alibaba.com>
+Date:   Wed, 13 Apr 2022 19:09:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211030020813.32654-1-rdunlap@infradead.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        alikernel-developer@linux.alibaba.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
+ <YlZ8vZ9RX5i7mWNk@kroah.com> <20220413044246-mutt-send-email-mst@kernel.org>
+ <ebd1b238-6e48-6561-93ab-f562096b1c05@linux.alibaba.com>
+ <YlabT7+Hqc3h62AT@kroah.com>
+From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
+In-Reply-To: <YlabT7+Hqc3h62AT@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 07:08:13PM -0700, Randy Dunlap wrote:
-> Support the DECLARE_PHY_INTERFACE_MASK() macro that is used to declare
-> a bitmap by converting the macro to DECLARE_BITMAP(), as has been done
-> for the __ETHTOOL_DECLARE_LINK_MODE_MASK() macro.
-> 
-> This fixes a 'make htmldocs' warning:
-> 
-> include/linux/phylink.h:82: warning: Function parameter or member 'DECLARE_PHY_INTERFACE_MASK(supported_interfaces' not described in 'phylink_config'
-> 
-> that was introduced by commit
->   38c310eb46f5 ("net: phylink: add MAC phy_interface_t bitmap")
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Thanks Randy, sorry I missed this patch.
+在 2022/4/13 下午5:43, Greg KH 写道:
+> On Wed, Apr 13, 2022 at 05:25:40PM +0800, Yao Hongbo wrote:
+>> 在 2022/4/13 下午4:51, Michael S. Tsirkin 写道:
+>>> On Wed, Apr 13, 2022 at 09:33:17AM +0200, Greg KH wrote:
+>>>> On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
+>>>>> If two userspace programs both open the PCI UIO fd, when one
+>>>>> of the program exits uncleanly, the other will cause IO hang
+>>>>> due to bus-mastering disabled.
+>>>>>
+>>>>> It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
+>>>>> to avoid such problems.
+>>>> Why do you have multiple userspace programs opening the same device?
+>>>> Shouldn't they coordinate?
+>>> Or to restate, I think the question is, why not open the device
+>>> once and pass the FD around?
+>> Hmm, it will have the same result, no matter  whether opening the same
+>> device or pass the FD around.
+> How?  You only open once, and close once.  Where is the multiple closes?
+>
+>> Our expectation is that even if the primary process exits abnormally,  the
+>> second process can still send
+>>
+>> or receive data.
+> Then use the same file descriptor.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-What is the intention for merging this patch? Will Jon merge it?
-Your tags said To: Jon but you don't seem to have included him in
-the email.
+Yes, we can use the same file descriptor.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+but since the pcie bus-master  has been disabled by the primary process,
+
+the seconday process cannot continue to operate.
+
+>
+>> The impact of disabling pci bus-master is relatively large, and we should
+>> make some restrictions on
+>> this behavior.
+> Why?  UIO is "you better really really know what you are doing to use
+> this interface", right?  Just duplicate the fd and pass it around if you
+> must have multiple accesses to the same device.
+>
+> And again, this will be a functional change.  How can you handle your
+> userspace on older kernels if you make this change?
+
+Without this change, our userspace cannot work properly on older kernels.
+
+
+Our userspace only use the "multi process mode" feature of the spdk.
+
+The SPDK links:
+https://spdk.io/doc/app_overview.html
+
+"Multi process mode
+When --shm-id is specified, the application is started in multi-process 
+mode.
+
+Applications using the same shm-id share their memory and NVMe devices.
+
+The first app to start with a given id becomes a primary process, with 
+the rest,
+
+called secondary processes, only attaching to it. When the primary 
+process exits,
+
+the secondary ones continue to operate, but no new processes can be 
+attached
+
+at this point. All processes within the same shm-id group must use the 
+same --single-file-segments setting."
+
+> thanks,
+>
+> greg k-h

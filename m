@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA1E500125
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E492E50011D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiDMVY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S231761AbiDMV0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiDMVYu (ORCPT
+        with ESMTP id S234532AbiDMV0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:24:50 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B7E5BA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:22:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso3675206pjj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:22:25 -0700 (PDT)
+        Wed, 13 Apr 2022 17:26:18 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2E37E5A9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:23:56 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 125so2924084pgc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:23:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ZYerA/teNMufTz5u0iPno8fx6n3BkVy0K1GMILVmGm0=;
-        b=Ve6vCo6zdOl0GExRe4t92l0AMv6Ra5r0eooW5wxLcgL0STztQc4HFF7n8Y/txIRlba
-         Mm+rCvei8x8WNI7cMz7tnKpUg9k2macqmF0zvTreGg3Rngv1AszNUH6SGqY1Xst39xdL
-         +vrqHhc46olROxCPyEMJgI3sjVVA4UKX9dJT8=
+        bh=tZYBLnf1WvbjqU84GZINNxkL///8AUQJyyFh7egPwwQ=;
+        b=BDAAniCHhvMIwNEfFsQCYnUD7lEkEzbHYvYYKqavUmsChSe48h5JdRlA5rGnpaHSs1
+         eQlv9fluXoOY/S3xRW7Bva4x5+0IcxVBEiOUv/lBDahj0olbbFyoRRgIC6M4PdmB+tkf
+         LN2H2d+YQHOfmYf/8gujChRJzgasYWkQw9d44=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZYerA/teNMufTz5u0iPno8fx6n3BkVy0K1GMILVmGm0=;
-        b=BDLpvVGj1lBch6wbqO8klUKM33imx4QZFHTk9Fdla2PJA2h2aUcj6V7E3Fa4kYsh3K
-         RYymN0fn7+Wk6zpWDU79Ja9QqcRyJU4SQaqieDF8jDyfJGPA7K4m6I4CEj1qwOS578d7
-         VMz4JrJgfnH3QTd4pjCZgpMWLLztQC1hhGey8MSBCbR7Msg/B7JTAOc7wKPrmzpKcrKq
-         GuYVykfoNcSBKdxuTNObXq+2XRO5YolTH+OEh31kvf3U/EwEN8n8VBUoWtU9Utk2vNvK
-         VSbKnd/HihpaYvafoLMM27Wp3sH5qeosIDzek47MY5ZXJThmTNqr05wvK4FiQEq+daqI
-         8YGg==
-X-Gm-Message-State: AOAM530IHBtm0dn9bp3uFXVjSdHd6sg89fQOpUcJ+DGIAwRHqtn8lxZ0
-        TgVM+ohVVZQMEEk7+OWCxoA8ng==
-X-Google-Smtp-Source: ABdhPJzUWNVeiS95lPTUIZrht0qt/ZgNS3oQAeqQHbhl11+3SubvVYk7wcdbAoae9PBQFjrlw/hHwQ==
-X-Received: by 2002:a17:902:e791:b0:151:dbbd:aeae with SMTP id cp17-20020a170902e79100b00151dbbdaeaemr44679245plb.171.1649884944727;
-        Wed, 13 Apr 2022 14:22:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v3-20020aa78503000000b00504e93ef182sm20070pfn.31.2022.04.13.14.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:22:24 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 14:22:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2] lkdtm/bugs: Don't expect thread termination without
- CONFIG_UBSAN_TRAP
-Message-ID: <202204131421.0E83CACC7@keescook>
-References: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
- <202204121440.FEE123D7@keescook>
- <20220413205714.scrrktpq43kzryim@meerkat.local>
+        bh=tZYBLnf1WvbjqU84GZINNxkL///8AUQJyyFh7egPwwQ=;
+        b=WRz3SUYXdBSADAiWnFd3XmWTLpzGtYZexl1ubFiKmcXk1InAkJ9+aDWEzk2IFM8RRl
+         pYb+zr43e+HBDx2Ymg4cbI5akT6ZK2mVQNuWCvuR/GvA7S1NrKiHhYe9YU+KQyoXEYP4
+         Lw7I5gCPofSUt6loZaN6FUUN6Ph+8e8hY0CZeOQTd7l8k+Tl5DFZcWzQonYT23HSPjph
+         ApaiBdSWgBLrv0FWX62YxVPA1coxmnah9iYx5ig6qfM+gOj8n0ERuSl2jpMV8E1sFc7C
+         MYYgpjzQtM1fyM9eOGkBCKRXJaF/Xdtq4FqFQbLuHjNIVY6WEeTZd7qqb9jmdYPFf3w6
+         Js1w==
+X-Gm-Message-State: AOAM532vUXGi5cWWw9UHkgDjmGKVd1KYwCi6hsz7uuneeazB/8ciAR5l
+        mF+60YhbVUWEJ7dxfYK6htQvgQ==
+X-Google-Smtp-Source: ABdhPJzsV5/KTZqWBS0floNBXZNysp8R605YR+M4xOUEjukOwuFVPkcg9ni3tqIwcmw1j2Om86Xe1A==
+X-Received: by 2002:a63:6e43:0:b0:386:4801:13a6 with SMTP id j64-20020a636e43000000b00386480113a6mr36718914pgc.403.1649885036170;
+        Wed, 13 Apr 2022 14:23:56 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6a4f:9277:743f:c648])
+        by smtp.gmail.com with UTF8SMTPSA id b80-20020a621b53000000b005059f5d7587sm20536pfb.60.2022.04.13.14.23.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 14:23:55 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:23:53 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v7 4/4] arm64: dts: qcom: sc7280: Add dt nodes for sound
+ card
+Message-ID: <Ylc/aR0hUGa6OKBO@google.com>
+References: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649863277-31615-5-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220413205714.scrrktpq43kzryim@meerkat.local>
+In-Reply-To: <1649863277-31615-5-git-send-email-quic_srivasam@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,42 +73,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:57:14PM -0400, Konstantin Ryabitsev wrote:
-> On Tue, Apr 12, 2022 at 04:06:20PM -0700, Kees Cook wrote:
-> > Also, Konstantin, I note that
-> > https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/
-> > does not have a .keyring/ed25519 directory. Should it? 
+On Wed, Apr 13, 2022 at 08:51:17PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add dt nodes for sound card support, which is using WCD938x headset
+> playback, capture, I2S speaker playback and DMICs via VA macro.
 > 
-> No, because it's not a "pgpkey". :)
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts  | 23 ++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
+>  2 files changed, 116 insertions(+)
 > 
-> > I added one
-> > locally for at least one other developer, as I use this setting:
-> > 
-> > [patatt]
-> >         keyringsrc = ~/korg/pgpkeys/.keyring
-> > 
-> > Am I holding this thing wrong? :)
-> 
-> Nope, but you can also list multiple locations where patatt can look, for
-> example:
-> 
-> [patatt]
->        keyringsrc = ~/korg/pgpkeys/.keyring
->        keyringsrc = ~/.local/share/patatt/public
-> 
-> In fact, if you take Christophe's patches all the time, you can add a keyring
-> ref to your tree. The process is documented here:
-> https://github.com/mricon/patatt#managing-the-keyring-large-teams
-> 
-> This way I'm not managing the keys of your trusted contributors.
-> 
-> I'll be happy to explain further -- in fact, I'm happy anyone uses it at all!
-> :)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index b944366..1e16854 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
 
-I read emails out of order. :) Thanks!
+You need to refresh your tree, this file has been renamed to
+sc7280-crd-r3.dts. That DT is for the CRD <= 2.x, newer versions
+use sc7280-herobrine-crd.dts.
 
-If the expectation is other kernel devs are using ed25519 over gpg,
-should there be a central repo for those?
+> @@ -90,6 +90,29 @@ ap_ts_pen_1v8: &i2c13 {
+>  	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+>  };
+>  
+> +&sound {
+> +	audio-routing =
+> +		"IN1_HPHL", "HPHL_OUT",
+> +		"IN2_HPHR", "HPHR_OUT",
+> +		"AMIC1", "MIC BIAS1",
+> +		"AMIC2", "MIC BIAS2",
+> +		"VA DMIC0", "MIC BIAS1",
+> +		"VA DMIC1", "MIC BIAS1",
+> +		"VA DMIC2", "MIC BIAS3",
+> +		"VA DMIC3", "MIC BIAS3",
+> +		"TX SWR_ADC0", "ADC1_OUTPUT",
+> +		"TX SWR_ADC1", "ADC2_OUTPUT",
+> +		"TX SWR_ADC2", "ADC3_OUTPUT",
+> +		"TX SWR_DMIC0", "DMIC1_OUTPUT",
+> +		"TX SWR_DMIC1", "DMIC2_OUTPUT",
+> +		"TX SWR_DMIC2", "DMIC3_OUTPUT",
+> +		"TX SWR_DMIC3", "DMIC4_OUTPUT",
+> +		"TX SWR_DMIC4", "DMIC5_OUTPUT",
+> +		"TX SWR_DMIC5", "DMIC6_OUTPUT",
+> +		"TX SWR_DMIC6", "DMIC7_OUTPUT",
+> +		"TX SWR_DMIC7", "DMIC8_OUTPUT";
+> +};
+> +
+>  &tlmm {
+>  	tp_int_odl: tp-int-odl {
+>  		pins = "gpio7";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index cf62d06..a7c884a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -84,6 +84,99 @@
+>  		pinctrl-names = "default";
+>  		pinctrl-0 = <&nvme_pwren>;
+>  	};
+> +
+> +	sound: sound {
+> +		compatible = "google,sc7280-herobrine";
+> +		model = "sc7280-wcd938x-max98360a-1mic";
+> +
+> +		audio-routing =
+> +			"IN1_HPHL", "HPHL_OUT",
+> +			"IN2_HPHR", "HPHR_OUT",
+> +			"AMIC1", "MIC BIAS1",
+> +			"AMIC2", "MIC BIAS2",
+> +			"VA DMIC0", "MIC BIAS3",
+> +			"VA DMIC1", "MIC BIAS3",
+> +			"VA DMIC2", "MIC BIAS1",
+> +			"VA DMIC3", "MIC BIAS1",
+> +			"TX SWR_ADC0", "ADC1_OUTPUT",
+> +			"TX SWR_ADC1", "ADC2_OUTPUT",
+> +			"TX SWR_ADC2", "ADC3_OUTPUT",
+> +			"TX SWR_DMIC0", "DMIC1_OUTPUT",
+> +			"TX SWR_DMIC1", "DMIC2_OUTPUT",
+> +			"TX SWR_DMIC2", "DMIC3_OUTPUT",
+> +			"TX SWR_DMIC3", "DMIC4_OUTPUT",
+> +			"TX SWR_DMIC4", "DMIC5_OUTPUT",
+> +			"TX SWR_DMIC5", "DMIC6_OUTPUT",
+> +			"TX SWR_DMIC6", "DMIC7_OUTPUT",
+> +			"TX SWR_DMIC7", "DMIC8_OUTPUT";
+> +
+> +		qcom,msm-mbhc-hphl-swh = <1>;
+> +		qcom,msm-mbhc-gnd-swh = <1>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		#sound-dai-cells = <0>;
+> +
+> +		dai-link@1 {
+> +			link-name = "MAX98360A";
+> +			reg = <MI2S_SECONDARY>;
 
--- 
-Kees Cook
+Dumb question: is this value actually used? A quick glance through
+qcom_snd_parse_of() suggests it isn't. And the CPU DAI id is already
+specified in the 'sound-dai' property below.
+
+In a quick test I replaced the corresponding 'reg' values in
+sc7180-trogdor.dtsi with 'random' values and audio playback on
+my coachz (sc7180-trogdor-coachz-r3.dts) still works ...
+
+> +			cpu {
+> +				sound-dai = <&lpass_cpu MI2S_SECONDARY>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&max98360a>;
+> +			};
+> +		};
+> +
+> +		dai-link@5 {
+> +			link-name = "DisplayPort";
+> +			reg = <LPASS_DP_RX>;
+
+nit: add an empty line (in all links) to separate the properties from the node
+
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_DP_RX>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&mdss_dp>;
+> +			};
+> +		};
+> +
+> +		dai-link@6 {
+> +			link-name = "WCD9385 Playback";
+> +			reg = <LPASS_CDC_DMA_RX0>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&wcd938x 0>, <&swr0 0>, <&lpass_rx_macro 0>;
+> +			};
+> +		};
+> +
+> +		dai-link@19 {
+> +			link-name = "WCD9385 Capture";
+> +			reg = <LPASS_CDC_DMA_TX3>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&wcd938x 1>, <&swr1 0>, <&lpass_tx_macro 0>;
+> +			};
+> +		};
+> +
+> +		dai-link@25 {
+> +			link-name = "DMIC";
+> +			reg = <LPASS_CDC_DMA_VA_TX0>;
+> +			cpu {
+> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_VA_TX0>;
+> +			};
+> +
+> +			codec {
+> +				sound-dai = <&lpass_va_macro 0>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &apps_rsc {
+> -- 
+> 2.7.4
+> 

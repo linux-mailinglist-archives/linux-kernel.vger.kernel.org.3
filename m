@@ -2,114 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084464FF2C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B964FF2C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiDMIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S234135AbiDMI5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiDMIzy (ORCPT
+        with ESMTP id S232043AbiDMI5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:55:54 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCA3FDB2;
-        Wed, 13 Apr 2022 01:53:33 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id bo5so1419811pfb.4;
-        Wed, 13 Apr 2022 01:53:33 -0700 (PDT)
+        Wed, 13 Apr 2022 04:57:12 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0EE4AE1A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:54:50 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id p18so770241wru.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vrTdQF20XoNgjKqhooRdhomx5wbpyGcrgzLCucSJKsQ=;
-        b=lp760lm4NwRsPDsRYdz/MWMHhWVyIy3o6EuQyqy+j/cU4lO8+jUIY2EPEV9tLMLzqX
-         tFs4cZ0qBTHYFzVqCEWH3BBGAx4X/SGuq3wx/P97/XsfhaBQf4xoyYSFr4qm2r6yL99O
-         DdzhMNMbUd8eHXQ+nbRAEA30nefNCPlrP5+PM0lPjLKTMCjQh2o0WcQqq2jsXsUE0HSA
-         cjq/kdZ6MGkaCMjwGP71XVQF/Sv8wbJ86UOATWjESkvOn5cPYdzAAGt6HaZ3H7g/QefQ
-         T2FOgklqmhA7c4nis82wL0Zt4V3CXfHW6QG3hn/cYnUudMii3rhwmXTwrZ25IqPx+1tL
-         3C2w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wmyPHo1Y68x7jSUi9Pb4BVUEFgwW7a8QvfJOh1mI294=;
+        b=AEYs5kcBVf7G9kgn/ZtroKCSb3X2FqywNXTHog48PmdNvnhPr8WSHtcAHBtd+mWHWi
+         27k+pys7X8G7Mi5jimZOmdmymAT/Re/tLMJqs3YzaL6jPamQwWmSCCfnteF3ZFUxuklK
+         yGb4NnVN+j97MaB8eFjDWK7QVLK4cW/T/Y+3DHVc6ULjT1pX/6R8veFC8/Al1Spv+coB
+         IWTZuS3fZmUVHpOVvn3mLYI8HgS5lkWzds8N2qggpQqPu30HadsfWCy8x/RH58cMHsAs
+         USN9xqfLq+Ca1hTgfeUtb+t7Xd4FXCIVRc1vWTRi6xOLOgxzi/QtVmwsJcQgLwjvp29T
+         NWPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vrTdQF20XoNgjKqhooRdhomx5wbpyGcrgzLCucSJKsQ=;
-        b=OBezk2F/YBXEpf9azuF0w0rorQGiW7+adb57xnIEUr8tJ2U1MJF41+B+rrPuMBJUt9
-         jD5LBKOZB3hI/vW9hPntiKnwnQcj2sZuukbEkO/XlDqaaRNNmNV9I4XPM5U3KzN1EjID
-         I5aMuAX5YYobUJ4Jw6U475HeQ8LzuFBfwEcMMAZlkHWlYJCWcuCJgUPJ0dgvOvvxki0T
-         i+2WecC2uabzjexJKt5CR6vKlNhNWBx9IP8dZej8GSuF0xibNhHWKmVQFKPM+L0tE1Z/
-         iVnLndPBPaW34DOw+ohe1shdwlNAIZBObKKNIcPw542y9P203HxuMWh1kbj2CnbgP8Vo
-         QZ4A==
-X-Gm-Message-State: AOAM5313tIN8jv4fXITW+IlWCBcghyXAFzng2oBuF+RxozNvRtfkvrJT
-        5ZfwlO1c5DWhiwgW2ovWMm8=
-X-Google-Smtp-Source: ABdhPJxDKSmRO3F/JxnbBNIZJWGtcMs44vj8qujdQNYz1RwsoGzyyBZwIXg68LqZw5E5F3o1DEJp/A==
-X-Received: by 2002:a63:3f0e:0:b0:386:1d94:312a with SMTP id m14-20020a633f0e000000b003861d94312amr34322386pga.317.1649840013257;
-        Wed, 13 Apr 2022 01:53:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-52.three.co.id. [116.206.28.52])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm45318769pfl.148.2022.04.13.01.53.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 01:53:32 -0700 (PDT)
-Message-ID: <c59ded56-23a0-a600-c669-1307d3ff1be4@gmail.com>
-Date:   Wed, 13 Apr 2022 15:53:27 +0700
+        bh=wmyPHo1Y68x7jSUi9Pb4BVUEFgwW7a8QvfJOh1mI294=;
+        b=cKQ//7eKRRxhCE7S0uoR11UlOat5lensGvOEDF5PJajfMK0JTR5gUmo78huBN05jGp
+         1+Gt2GFqkYlW+cuHAHEqyDqwNShkiyANU2vpoNpPpixzQHuiO29M6bsCUptQ1zJ8+hO6
+         YWWX/OdA/jetdG6l54evrDcSfmIp60LyquJqryuBr5hKntpf1rY44i0EMShKJSLrfw7S
+         xZQmZffUMGMhC+rslucJHeIuTydee6j8cWMRHnKoEXjwxp8qHWhme69RIGiTgybp7LBd
+         NC7/meZL4FZXdBcXBghKC/HsUzpMOnbLK59xjOXsUjhOmjX9ffwk47NbroKqMrVw4DMJ
+         tKWQ==
+X-Gm-Message-State: AOAM532/bcwMbuIfb1D7BnBSWfcXaJpaRLwFm+P+3ZR14QcpctESIRw/
+        umsC1yqFos51vcLNJXsIf0o=
+X-Google-Smtp-Source: ABdhPJwJRrT3cP8c2aM+zQMORH9xbNommRtYhlfS1BWy0pjwfb85+QWWhewoFRdWyVMn9haC0EiFZA==
+X-Received: by 2002:a05:6000:508:b0:1e4:a027:d147 with SMTP id a8-20020a056000050800b001e4a027d147mr32016314wrf.315.1649840088888;
+        Wed, 13 Apr 2022 01:54:48 -0700 (PDT)
+Received: from zero.. (host-79-54-81-151.retail.telecomitalia.it. [79.54.81.151])
+        by smtp.gmail.com with ESMTPSA id l13-20020a05600002ad00b00207b935e962sm638724wry.37.2022.04.13.01.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 01:54:48 -0700 (PDT)
+From:   Alessandro Astone <ales.astone@gmail.com>
+To:     tkjos@android.com, gregkh@linuxfoundation.org, brauner@kernel.org,
+        arve@android.com, linux-kernel@vger.kernel.org, maco@android.com
+Cc:     Alessandro Astone <ales.astone@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: [PATCH] binder: Address corner cases in deferred copy and fixup
+Date:   Wed, 13 Apr 2022 10:54:27 +0200
+Message-Id: <20220413085428.20367-1-ales.astone@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [net-next PATCH v5 1/7] octeon_ep: Add driver framework and
- device initialization
-Content-Language: en-US
-To:     Veerasenareddy Burru <vburru@marvell.com>, davem@davemloft.net,
-        kuba@kernel.org, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Abhijit Ayarekar <aayarekar@marvell.com>,
-        Satananda Burla <sburla@marvell.com>
-References: <20220413033503.3962-1-vburru@marvell.com>
- <20220413033503.3962-2-vburru@marvell.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220413033503.3962-2-vburru@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 10:34, Veerasenareddy Burru wrote:
-> @@ -0,0 +1,35 @@
-> +.. SPDX-License-Identifier: GPL-2.0+
-> +
-> +====================================================================
-> +Linux kernel networking driver for Marvell's Octeon PCI Endpoint NIC
-> +====================================================================
-> +
-> +Network driver for Marvell's Octeon PCI EndPoint NIC.
-> +Copyright (c) 2020 Marvell International Ltd.
-> +
-> +Contents
-> +========
-> +
-> +- `Overview`_
-> +- `Supported Devices`_
-> +- `Interface Control`_
-> +
+When handling BINDER_TYPE_FDA object we are pushing a parent fixup
+with a certain skip_size but no scatter-gather copy object, since
+the copy is handled standalone.
+If BINDER_TYPE_FDA is the last children the scatter-gather copy
+loop will never stop to skip it, thus we are left with an item in
+the parent fixup list. This will trigger the BUG_ON().
 
-Why did you manually add table of contents?
+Furthermore, it is possible to receive BINDER_TYPE_FDA object
+with num_fds=0 which will confuse the scatter-gather code.
 
-> +Interface Control
-> +=================
-> +Network Interface control like changing mtu, link speed, link down/up are
-> +done by writing command to mailbox command queue, a mailbox interface
-> +implemented through a reserved region in BAR4.
-> +This driver writes the commands into the mailbox and the firmware on the
-> +Octeon device processes them. The firmware also sends unsolicited notifications
-> +to driver for events suchs as link change, through notification queue
-> +implemented as part of mailbox interface.
+In the android userspace I could only find these usecases in the
+libstagefright OMX implementation, so it might be that they're
+doing something very weird, but nonetheless the kernel should not
+panic about it.
 
-How does one write to mailbox command queue?
+Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
+Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
+---
+ drivers/android/binder.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 8351c5638880..18ad6825ba30 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2295,7 +2295,7 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+ {
+ 	int ret = 0;
+ 	struct binder_sg_copy *sgc, *tmpsgc;
+-	struct binder_ptr_fixup *pf =
++	struct binder_ptr_fixup *tmppf, *pf =
+ 		list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
+ 					 node);
+ 
+@@ -2349,7 +2349,11 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+ 		list_del(&sgc->node);
+ 		kfree(sgc);
+ 	}
+-	BUG_ON(!list_empty(pf_head));
++	list_for_each_entry_safe(pf, tmppf, pf_head, node) {
++		BUG_ON(pf->skip_size == 0);
++		list_del(&pf->node);
++		kfree(pf);
++	}
+ 	BUG_ON(!list_empty(sgc_head));
+ 
+ 	return ret > 0 ? -EINVAL : ret;
+@@ -2486,6 +2490,9 @@ static int binder_translate_fd_array(struct list_head *pf_head,
+ 	struct binder_proc *proc = thread->proc;
+ 	int ret;
+ 
++	if (fda->num_fds == 0)
++		return 0;
++
+ 	fd_buf_size = sizeof(u32) * fda->num_fds;
+ 	if (fda->num_fds >= SIZE_MAX / sizeof(u32)) {
+ 		binder_user_error("%d:%d got transaction with invalid number of fds (%lld)\n",
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.1
+

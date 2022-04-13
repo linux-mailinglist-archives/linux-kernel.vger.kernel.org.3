@@ -2,157 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939244FF1C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB454FF1CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiDMI1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S231520AbiDMI1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiDMI1G (ORCPT
+        with ESMTP id S233770AbiDMI1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:27:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C4F2B18C;
-        Wed, 13 Apr 2022 01:24:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fHHp4PvgdfdUKeuZo6ty3HpZ6aqtc/ccQYLBWTjmhsdbFiya+1/S1eaUKjOdzUcRt2ZB+LscTWhGOo/SWu15VRe4C9MYKtjNMndCnXKNDjKt/CR5O4q9UIwz8T0K7Dv2mWL66Bzu2AJvbjL3HQGXp5jn4ZC3tl4TmaUYMV8VvH92RcC5W7bFcRWYtwf5hVsONxCcBgngpAYpUXOSw9cvk/4oMen0dK2t77c7nacCJxrOlsmTWnGCzan2/rWf8KgWNitvP9V1aQGqy4TArCC79UZ0GRFSLhtI0juhzE1CX5qsGPBBXys7hhoFyYm4jbbXCJWAJxL2aIe6rP20CXgaSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hzOjtAX8RkT1f/OMndfoeoUNoRMkLaZXAAR3wFWZoYM=;
- b=igzCWfgqKV0dSLP5yHGkRwHFYeSx2dOZRcZ46e8Bw14fo1vkRo8JhZLVyltpR2lACYXiWmk965kfycw/vCo2NatYNpuJaEFCANAF65hHYjG79xao5VXEP9/YHd0ReJE1VZkySq5USddnAHgkhCkWjM7/4dZVBcLg0eReZCFFfxDs8DHb+Bu4WmmCGEYEflxgoT7oyTckDvs5gQULPfcgxgk1EdcCDIkcOZjeeNYcIwzsjRNldzhHoeXDlnkV7WrfqK+FJ/CyZLd7ZC0cHx1raqcW2SOH5hNRDS5dSGBefTGW/HDpL3z28x7dNDR46PrTK0VYBUAnytNzqBAcyBqqcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hzOjtAX8RkT1f/OMndfoeoUNoRMkLaZXAAR3wFWZoYM=;
- b=agnQIwnlyBwehUJyNz5CUrakNe5Y3DwiH0fXGs2JFlu/1Hsd0Acj0/O0ipXTPmVdDKsIkcX4O5sLbQ6hP2Jo4FRLdi23jTWNwKfOlIe72/IvoxB/dS1YBZLXD6rJKnqX7pN/pMUTm8jUb1ZuKq/HEW4X1VagAYo+WToZg9qnG8w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SN1PR12MB2382.namprd12.prod.outlook.com (2603:10b6:802:2e::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 08:24:43 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8%5]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
- 08:24:43 +0000
-Message-ID: <b6eee576-b950-c1a9-74d1-fe91468faba4@amd.com>
-Date:   Wed, 13 Apr 2022 10:24:37 +0200
+        Wed, 13 Apr 2022 04:27:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE75832055
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:25:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6DF7B1F38D;
+        Wed, 13 Apr 2022 08:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649838314; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HdKDKj+n4FUzRh9JIKpSWp18OPIWOtswFRpKcTIEJ9I=;
+        b=QdnpT+FQjm0lGbWs4ckB78zDIU7dMjIoogldUTquohHAdOx1gJvLXQ+ErGUjG/CssawzWl
+        IKngXO+jWh8XAkjLVKTI/5NOFP881yQzTXl0njyt/0ZnTnOlsv3eKZQEeIfL5eeLnLxVZs
+        Td14RebWjLnNnYTbRxWFcNCkFk1mg2Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649838314;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HdKDKj+n4FUzRh9JIKpSWp18OPIWOtswFRpKcTIEJ9I=;
+        b=rq61aqBQGn4tR/C1EI1ZBSplk9jdFngICXMP/A17Dpy44vk6smBxzyOyjFQ1r81vCiXTjJ
+        qjnS7WexcFT953Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1BE613AB8;
+        Wed, 13 Apr 2022 08:25:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aEJdOumIVmLhfAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 13 Apr 2022 08:25:13 +0000
+Message-ID: <84c0bcbb-5c8f-d3b2-2a8c-d68462d0bc04@suse.cz>
+Date:   Wed, 13 Apr 2022 10:25:13 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-12-david@redhat.com>
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220406155030.0dacf051@canb.auug.org.au>
- <20220413100448.6f5f4de7@canb.auug.org.au>
- <YlaIgxknwmPbsg1h@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <YlaIgxknwmPbsg1h@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v3 11/16] mm/page-flags: reuse PG_mappedtodisk as
+ PG_anon_exclusive for PageAnon() pages
+In-Reply-To: <20220329160440.193848-12-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5PR04CA0035.eurprd04.prod.outlook.com
- (2603:10a6:206:1::48) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7cd17b0c-0737-45b0-4147-08da1d270f93
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2382:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB2382B50F2A2583DCC318179383EC9@SN1PR12MB2382.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xelbPXWCmiSAEzcP5FehVg5YTcnpXaUY233+fHS/JFkOQ7V1NbxyT7n8R3lZz26Fial1f3f89N4F6NJEvYHHIyhFTHv6Kz71LhVckoyR3azlEKQ/STxHc0fNj0tJaHaQBMj79hcMBtRh6B8IeQFKaUWtJXFX3sculf559GUiF3qjX+gLIJunv2BgIl4poPG+ZZjiTU3iZLCwpKAip1gwykS0LviurACJxTzSpxPwqEiih8n+dN96T2RXmYxerSr/2BDx5a816/Fx7LkFuAdkStC0job+DANjAYryiY61SjlThmbSGqvK1gVhJwBS7gBeQ0MUParHqa0CdiOUw5RTCXQcAMkNHCgclI9rdO0Xzh4rUNj2nWTXTKlDvDpUiV01IYxO/9Wdf8Ky0iXKCg2DxeVGEO8X21mz8WDSYsbksY0GTUqfV0LBMx7KGReSbEpx0fKJnC0AdRoOTqg/fYYBcR6Miof0947X58n9xxpuXykWUwOxgUILB+uiCsoMYTSMY1FER1VrmXLDTYQ2HEmOlGPEpPoWleoi+Fn04BCQPC4RoQbCNG2HcV/cfItjSxuvE3iSGGttjG5f6lxOzkGvyKTHXaH+R89k2NqPUtijLqUJjSUZKp0p7RU3ZGvCRSPw51PK2MU5Pl+rOg7yF8jFMSPMaoSeP9O0IYH95gdqfZNeK5RitOyF7FOX66/AxB+OG9cjXDjT0Tm56sMrTHZt80fjCrshSDFW6v0up4v1ODk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(5660300002)(31686004)(83380400001)(26005)(2906002)(4744005)(2616005)(186003)(66556008)(86362001)(66476007)(8676002)(6486002)(31696002)(6666004)(8936002)(110136005)(316002)(6512007)(6506007)(508600001)(38100700002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZXBRZFVVeVl6R2czN2pnN01zNGZBTzhTL3MrOFFPYU5Rc3BQUkp2NVFKajZo?=
- =?utf-8?B?RjlhcEVZNjNSRjI3T3I4NVk1eldVRTBJYlNOV24zbU9HTU1UeFpadUdFd3Ew?=
- =?utf-8?B?eGpsdVNFQWk5N1lCLzY2ZWlkNllLOGNld1BCT29iRUNDZ1RtTzNja1F1dmJ2?=
- =?utf-8?B?QWZqRnlFNkZJaDRaOVJ3c3hhR1czbGtxb2I2VDAxSGQwU3VUYks0U0tCaFRF?=
- =?utf-8?B?WURKbWswc0NXOXVHbG9pTWR1WlJ0bDFoYmJ3MXJ5L0djSUZxd0hwQkc5KzlT?=
- =?utf-8?B?czdEWlBpVWJlWmhVN3RIeGp6RFhvL2dRUTkzK1VaaHlteVdKeEdjNDBRWFRM?=
- =?utf-8?B?c2RUUmFVMlcvaHNsWS9LZzIwNCtlR0hwMXN6emJ2U3JaNUJYei94dVUrL0J6?=
- =?utf-8?B?anJncmpUTWg3aGdjbFVybDl2TzBGS1BQY3VMNXduYStOVllwaXNRZUpzbWln?=
- =?utf-8?B?SCtZVGhVVFAyV2pKd1VLZHlGc25yQ3hoK3JkVThYTzlZODZaNG04dzlhaHIx?=
- =?utf-8?B?RGh5RUZIUENsSG1DbU9LUGNsdm80d0dodTlEb2pDUHVNeVJ3UGdOQ09IQmVE?=
- =?utf-8?B?bFJTNUtpektrTHVEWnhNT0xZWDBWNndkdm9xRGZURUdEQUFtU0pPOUV5TFd1?=
- =?utf-8?B?eHFiRmJMNnNhVUg1ZmN6emRLMG5EdXZIUXRmbG1DZ2M5VDBkWHZwSTdKT1dE?=
- =?utf-8?B?SjhkL20vMjdYTWRPeE1xK2Uzby9pazFUT3RWTUJmdGJqNk9kU0VnTWVMN2JG?=
- =?utf-8?B?aGMvSFVtWHh4Vk5Ocm1PYkVGcDV1RXJsMmhOMkdYTXRsY2k4Qi9iTVVhdHJ5?=
- =?utf-8?B?RzAzL2RobEZZYndycy9rcWJYMUY1d0xjOXRMVU9VaW5NSzFWSURPQVR2eDhC?=
- =?utf-8?B?elZkYjRvNGRmaFIvRk50eXZRcTRIaHlEN1lPMEk4dzVFZklPOEtlQk1QUzNa?=
- =?utf-8?B?dUxYV2VpYitPNnJmaWNrSlNvSUpOSUYyU2Nkc2lKZHBzMFB3MVc0RjEzUXJa?=
- =?utf-8?B?NndoY2lndDcxYVMwaWpESTVkTTVOSjM5ZTlGeU91eFB6Wms1d0V4ZldnZXpB?=
- =?utf-8?B?cG04UnZxOWZaaGZEck93MUU4M28wK3ZYTGhTUitvWDNKM0ZaVmdkL0kraUpQ?=
- =?utf-8?B?eTNHZk8ycldtaEwyMVdQR2tMcldHSUdPTmZJQXdKcC9ldkhscVB1aTRmcnVi?=
- =?utf-8?B?ZTVxVytrZEh1M2ZLcHRRRGd3cUhlbmxMektsQ1g1WE92azVMWEUvekZFc2c5?=
- =?utf-8?B?dk5HUzJOSXcxQnNxdjYvd0hCd3hCU01lTWk4Q1djNVdOMDd4VmtyT1pPajV2?=
- =?utf-8?B?N3h0Uk96TldweUdmWnJ0RTY1RHBabmxiUzRwN1lrcHhrKzA5QzlRRU1sMWpj?=
- =?utf-8?B?bXBZVlBibzRUaUNTMmgvMG1sdjBEc2lueEFrVmFkbFdHU2o0RG1DQnFXOTBo?=
- =?utf-8?B?eFFuRHhQWVI1RkNDVFNSWWVOeG9tK2NTUFRybU1mVzRUQ1Y3WE43ZmU4L3Nl?=
- =?utf-8?B?bkQ4Nk14dDF1TjRyRGV5OXdqRDRTZ2xHdXRBTlFyY2tBTWxUR3J3Ym9EQ1pj?=
- =?utf-8?B?MVZnUWtFT1dsNlNJa2ZaNisvbUVFNWR0VHV3SXVnZlA1dXF2eFJ5akxBZVhI?=
- =?utf-8?B?aThsSk9YZzRGNWNiVHlaMlRJbjZhSmZqME1KSHppdVRDMEZ1L0ZqU0k0ZkJo?=
- =?utf-8?B?UDFWZVQ0WGl0QXVpTFU4TW13WWtNVkR2NG9vK3k3bnFiRGl1Qm5TZFRrMkdC?=
- =?utf-8?B?SFVjbWp1VU5nQnB4TXRsNkRWUVNhblRMM1hJMTZ4V3N2bmVFM1piZWgxNGFt?=
- =?utf-8?B?ZHA5MGNhaDVZYTAvU1hZTnFZWUhsbnpRRHlQRUZwYk5MZEZuRStFV0Nqb0V1?=
- =?utf-8?B?aU9iakZjam92Y0MxcTJjTjFiVUJUZGhrY1M4R005TjNvV3dQZnBZdkJuL1kz?=
- =?utf-8?B?QjVPTFpYY1hlWUFlb2JOSmRPNkNFWHVFckNaSU9OZWtnbEwvdVJZbGNkc1ps?=
- =?utf-8?B?cGtxRVBQdG5kcjgrMXR6NFozVmJTQTdsWjFMY1RWdlRBZUR6SjY2cjdpelZl?=
- =?utf-8?B?K0pCSkg5UElmQjlWV3VGRWRtcDFOVHVpQ09RZ3hTS28xc3lnckk5SzhaSWlv?=
- =?utf-8?B?dDJXQkNMbTJBZW8vckN4NG50Z1JaQ0JtNzRaY0J3SDVVL1NKRXdEZHhmVndS?=
- =?utf-8?B?ZEVkUlZuMEhkTDYxYTIzdGtxVHNQRlRMcUhWMWpsVkRWb1BSWkdvTldDVG9z?=
- =?utf-8?B?NW9zaWxjb2tPMTlxSEc5cHJuSHhPWDBVVE1URUNWQ21LdENiMCtyT29tQStx?=
- =?utf-8?B?ZWFaeVc3WjU4aU00RS9CL0NsVFJsT2cwYkN5NVVKL0lWQVhuTE81UT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cd17b0c-0737-45b0-4147-08da1d270f93
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 08:24:43.1866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /v6Xj87fD+WN4EKhabh0YmskrXbf4ixoR/Vtvac0TSISASiTgozZ0IXQdqlGFGMP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2382
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 13.04.22 um 10:23 schrieb Daniel Vetter:
-> On Wed, Apr 13, 2022 at 10:04:48AM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> On Wed, 6 Apr 2022 15:50:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>> After merging the drm-misc tree, today's linux-next build (htmldocs)
->>> produced this warning:
->>>
->>> include/drm/ttm/ttm_resource.h:226: warning: Function parameter or member 'pos' not described in 'ttm_lru_bulk_move'
->>>
->>> Introduced by commit
->>>
->>>    b0e2c9ea5afc ("drm/ttm: allow bulk moves for all domains")
->> This warning is now produced by the drm tree.
-> Christian, do you have a patch to fix this?
+On 3/29/22 18:04, David Hildenbrand wrote:
+> The basic question we would like to have a reliable and efficient answer
+> to is: is this anonymous page exclusive to a single process or might it
+> be shared? We need that information for ordinary/single pages, hugetlb
+> pages, and possibly each subpage of a THP.
+> 
+> Introduce a way to mark an anonymous page as exclusive, with the
+> ultimate goal of teaching our COW logic to not do "wrong COWs", whereby
+> GUP pins lose consistency with the pages mapped into the page table,
+> resulting in reported memory corruptions.
+> 
+> Most pageflags already have semantics for anonymous pages, however,
+> PG_mappedtodisk should never apply to pages in the swapcache, so let's
+> reuse that flag.
+> 
+> As PG_has_hwpoisoned also uses that flag on the second tail page of a
+> compound page, convert it to PG_error instead, which is marked as
+> PF_NO_TAIL, so never used for tail pages.
+> 
+> Use custom page flag modification functions such that we can do
+> additional sanity checks. The semantics we'll put into some kernel doc
+> in the future are:
+> 
+> "
+>   PG_anon_exclusive is *usually* only expressive in combination with a
+>   page table entry. Depending on the page table entry type it might
+>   store the following information:
+> 
+>        Is what's mapped via this page table entry exclusive to the
+>        single process and can be mapped writable without further
+>        checks? If not, it might be shared and we might have to COW.
+> 
+>   For now, we only expect PTE-mapped THPs to make use of
+>   PG_anon_exclusive in subpages. For other anonymous compound
+>   folios (i.e., hugetlb), only the head page is logically mapped and
+>   holds this information.
+> 
+>   For example, an exclusive, PMD-mapped THP only has PG_anon_exclusive
+>   set on the head page. When replacing the PMD by a page table full
+>   of PTEs, PG_anon_exclusive, if set on the head page, will be set on
+>   all tail pages accordingly. Note that converting from a PTE-mapping
+>   to a PMD mapping using the same compound page is currently not
+>   possible and consequently doesn't require care.
+> 
+>   If GUP wants to take a reliable pin (FOLL_PIN) on an anonymous page,
+>   it should only pin if the relevant PG_anon_bit is set. In that case,
 
-Yeah, already on the TODO list. Just a few to much things coming in at 
-the same time here.
+					^ PG_anon_exclusive bit ?
 
-Christian.
+>   the pin will be fully reliable and stay consistent with the pages
+>   mapped into the page table, as the bit cannot get cleared (e.g., by
+>   fork(), KSM) while the page is pinned. For anonymous pages that
+>   are mapped R/W, PG_anon_exclusive can be assumed to always be set
+>   because such pages cannot possibly be shared.
+> 
+>   The page table lock protecting the page table entry is the primary
+>   synchronization mechanism for PG_anon_exclusive; GUP-fast that does
+>   not take the PT lock needs special care when trying to clear the
+>   flag.
+> 
+>   Page table entry types and PG_anon_exclusive:
+>   * Present: PG_anon_exclusive applies.
+>   * Swap: the information is lost. PG_anon_exclusive was cleared.
+>   * Migration: the entry holds this information instead.
+>                PG_anon_exclusive was cleared.
+>   * Device private: PG_anon_exclusive applies.
+>   * Device exclusive: PG_anon_exclusive applies.
+>   * HW Poison: PG_anon_exclusive is stale and not changed.
+> 
+>   If the page may be pinned (FOLL_PIN), clearing PG_anon_exclusive is
+>   not allowed and the flag will stick around until the page is freed
+>   and folio->mapping is cleared.
 
-> -Daniel
+Or also if it's unpinned?
 
+> "
+> 
+> We won't be clearing PG_anon_exclusive on destructive unmapping (i.e.,
+> zapping) of page table entries, page freeing code will handle that when
+> also invalidate page->mapping to not indicate PageAnon() anymore.
+> Letting information about exclusivity stick around will be an important
+> property when adding sanity checks to unpinning code.
+> 
+> Note that we properly clear the flag in free_pages_prepare() via
+> PAGE_FLAGS_CHECK_AT_PREP for each individual subpage of a compound page,
+> so there is no need to manually clear the flag.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3663,6 +3663,17 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  		goto out_nomap;
+>  	}
+>  
+> +	/*
+> +	 * PG_anon_exclusive reuses PG_mappedtodisk for anon pages. A swap pte
+> +	 * must never point at an anonymous page in the swapcache that is
+> +	 * PG_anon_exclusive. Sanity check that this holds and especially, that
+> +	 * no filesystem set PG_mappedtodisk on a page in the swapcache. Sanity
+> +	 * check after taking the PT lock and making sure that nobody
+> +	 * concurrently faulted in this page and set PG_anon_exclusive.
+> +	 */
+> +	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
+> +	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
+> +
+
+Hmm, dunno why not VM_BUG_ON?
+
+>  	/*
+>  	 * Remove the swap entry and conditionally try to free up the swapcache.
+>  	 * We're already holding a reference on the page but haven't mapped it
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index af0223605e69..4264f78299a8 100644

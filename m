@@ -2,162 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2844FF08F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DDC4FF090
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbiDMHaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S233362AbiDMHaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiDMHaF (ORCPT
+        with ESMTP id S229718AbiDMHaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:30:05 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007D618E0C;
-        Wed, 13 Apr 2022 00:27:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ks6so2155675ejb.1;
-        Wed, 13 Apr 2022 00:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qwO5x8daEsKn7AJxj0XCIjFXgnsykAoMFtFOPr30/OY=;
-        b=omH/vMEmEDVQszB0OIuSdTvi7p/jJXy6R7A4244H80S4k3+XRyMjfRgpMOFKczNheK
-         0jy7I2xFnKdHegbsri9PY8EXS+4uFYoIGtYTxKnQ/I1UBHEt3e/74Tk+DLZwRfczFDpL
-         4nNc2M9wLBIW/NcnCJpG3Nwg22ZUYnph1J536J98rJMFw4wSWrNNxwdCYDzXjpoELrb8
-         AiYRB7OjbIX80I0M3LzLL+ukfZ3T35MEbZ7hX6tNFGAwytw5AuBCjFFIbH7dL7b1ku0X
-         TxjTMYhCbTwQn0DDRcsEGgsEp0t2OHz72ifkKSR4lHRLVLybOQnppkwpv8o9RuAJmVOv
-         jLaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qwO5x8daEsKn7AJxj0XCIjFXgnsykAoMFtFOPr30/OY=;
-        b=hWU0dyWKA1xacCZ4qhwUtkslimdEHXFO9Ni3Bcnlf3CgPV01Ma2A3n9CEQ1YQ3PaCD
-         Bd//xRIshLJbJnj0sht+ZDFOkvrcU3wX5yh86LS2JEXdhGyDA5Sn+OgEUu8+xserxEqQ
-         5AMdyvdw/5odPWi3aIJIb+djkIWAdPA5YbcaK4CFPNRwIr3LyBKkM0ht2aycDV+NhpUM
-         NRHMNqElnj01RidwJrXJE26ZAWisW2pn2oKfWyTg5S/eBd4eGBFN05Syns8hJk/05m4Y
-         zo00FTPVFul2shk+q6VFmTlgxz/qrch2yg/9Y2+wDgTmx3Szo1dIkDe/P0O/X/Ab8neo
-         wY2g==
-X-Gm-Message-State: AOAM533/g2UAUJnyRTCYTPjVzthlUr+PyxuPrwIRQi+sIbgi9yleF3+w
-        UKA1a1ScYxgpo5o4jPDbbO0=
-X-Google-Smtp-Source: ABdhPJymyC0Lf62J4fDfrOo+9dDUgyCYtUkNg5mcd26g90i1LvwiUVdLiE+l5WqgQs6DUMH4EFe2EQ==
-X-Received: by 2002:a17:907:6093:b0:6e0:dabf:1a9f with SMTP id ht19-20020a170907609300b006e0dabf1a9fmr37979065ejc.424.1649834863420;
-        Wed, 13 Apr 2022 00:27:43 -0700 (PDT)
-Received: from krava ([83.240.62.142])
-        by smtp.gmail.com with ESMTPSA id q3-20020a5085c3000000b0041d7958ae70sm831859edh.25.2022.04.13.00.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 00:27:43 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 09:27:40 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-ID: <YlZ7bAY1lDQWxUgH@krava>
-References: <20220407125224.310255-1-jolsa@kernel.org>
- <20220407125224.310255-2-jolsa@kernel.org>
- <20220408095701.54aea15c3cafcf66dd628a95@kernel.org>
+        Wed, 13 Apr 2022 03:30:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934EC3CA59
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:28:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 346A4B80C74
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4A0C385A4;
+        Wed, 13 Apr 2022 07:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649834880;
+        bh=FceGUS5UxBxc0Dc2kBN/cY3kfOQ39VurE+gLc5V/9M4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hle5dIkr+vORI47Bjib4y4WRpas9OC4XSMiTwWOQu6Q7d9kfbFgdZyBaeFfoR1gJo
+         Mk1gdBMJGok4sb+lE3QCRwN/R4Sz0GsaHb1kShBF6gAW3goOSu4yEKk0myerJLZjpR
+         bad72aOcyX5Q5F3cqhvq8evgMx8xOI4ov4Damjw8=
+Date:   Wed, 13 Apr 2022 09:27:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ramon Fried <rfried.dev@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uio: make MAX_UIO_MAPS & MAX_UIO_PORT_REGIONS
+ configurable
+Message-ID: <YlZ7fQIpXNJSbd+P@kroah.com>
+References: <20220413071137.4023184-1-rfried.dev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408095701.54aea15c3cafcf66dd628a95@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220413071137.4023184-1-rfried.dev@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:57:01AM +0900, Masami Hiramatsu wrote:
+On Wed, Apr 13, 2022 at 10:11:37AM +0300, Ramon Fried wrote:
+> MAX_UIO_MAPS and MAX_UIO_PORT_REGIONS are hard-coded to 5.
+> This is not always sufficiant for some drivers.
 
-SNIP
+Why not?  What in-kernel drivers need more than this?
 
-> >  /*
-> >   * These will be re-linked against their real values
-> > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
-> >  	return __sprint_symbol(buffer, address, -1, 1, 1);
-> >  }
-> >  
-> > +static int symbols_cmp(const void *a, const void *b)
-> > +{
-> > +	const char **str_a = (const char **) a;
-> > +	const char **str_b = (const char **) b;
-> > +
-> > +	return strcmp(*str_a, *str_b);
-> > +}
-> > +
-> > +struct kallsyms_data {
-> > +	unsigned long *addrs;
-> > +	const char **syms;
-> > +	u32 cnt;
-> > +	u32 found;
-> 
-> BTW, why do you use 'u32' for this arch independent code?
-> I think 'size_t' will make its role clearer.
+> Make the MAX_UIO_MAPS and MAX_UIO_PORT_REGIONS configurable by
+> providing Kconfig int option with the defaut value of 5.
 
-right, will change
+Spelling check?
 
 > 
-> > +};
-> > +
-> > +static int kallsyms_callback(void *data, const char *name,
-> > +			     struct module *mod, unsigned long addr)
-> > +{
-> > +	struct kallsyms_data *args = data;
-> > +
-> > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> > +		return 0;
-> > +
-> > +	addr = ftrace_location(addr);
-> > +	if (!addr)
-> > +		return 0;
-> > +
-> > +	args->addrs[args->found++] = addr;
-> > +	return args->found == args->cnt ? 1 : 0;
-> > +}
-> > +
-> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+> ---
+>  drivers/uio/Kconfig        | 14 ++++++++++++++
+>  include/linux/uio_driver.h |  4 ++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 > 
-> Ditto. I think 'size_t cnt' is better. 
+> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
+> index 2e16c5338e5b..bc1fe83cec13 100644
+> --- a/drivers/uio/Kconfig
+> +++ b/drivers/uio/Kconfig
+> @@ -13,6 +13,20 @@ menuconfig UIO
+>  
+>  if UIO
+>  
+> +config UIO_MAX_MAPS
+> +	int "Maximum of memory nodes each uio device support(1-128)"
 
-ok, thanks
+Space before "(" please.
 
-jirka
+> +	range 1 128
+> +	default 5
+> +	help
+> +	  Maximum memory mapping each uio device can support.
 
-> 
-> Thank you,
-> 
-> > +{
-> > +	struct kallsyms_data args;
-> > +
-> > +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
-> > +
-> > +	args.addrs = addrs;
-> > +	args.syms = syms;
-> > +	args.cnt = cnt;
-> > +	args.found = 0;
-> > +	kallsyms_on_each_symbol(kallsyms_callback, &args);
-> > +
-> > +	return args.found == args.cnt ? 0 : -EINVAL;
-> > +}
-> > +
-> >  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
-> >  struct kallsym_iter {
-> >  	loff_t pos;
-> > -- 
-> > 2.35.1
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
+Any hints as to what this means in more detail?
+
+> +
+> +config UIO_MAX_PORT_REGIONS
+> +	int "Maximum of port regions each uio device support(1-128)"
+> +	range 1 128
+> +	default 5
+> +	help
+> +	  Maximum port regions each uio device can support.
+
+Again more detail please.
+
+thanks,
+
+greg k-h

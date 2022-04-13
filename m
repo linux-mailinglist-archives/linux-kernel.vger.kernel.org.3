@@ -2,255 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A1D4FF26A
+	by mail.lfdr.de (Postfix) with ESMTP id 51A674FF26B
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbiDMIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S233977AbiDMIpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiDMIpo (ORCPT
+        with ESMTP id S229495AbiDMIpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:45:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159AB4EF6E;
-        Wed, 13 Apr 2022 01:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B9YkVN+zETpSpWU7cq4MarKPe7gLn1sjGxlryEkU3KY=; b=NMi8W15yKp4NbzUmRlKny8mtun
-        v5DgHy67mWCb95llT6faiT7MogK0iutOj78TgY3E3U71KyQijbZqXIChZwd5uJ0piWWZY+49xwEPf
-        dMJAfDEJqSpye3xK9gDP0MNO3VPYS3464lCe4aTyzMeLgIq4lO6oM/PtQ3cyRaOxHLG3lrLJLD5AA
-        0C1hC6LcDtUE4PW+XJwTSubkJgRlyjEfpjekfV4Eg8P5d5TLRdmo4qEgqdAFnb2BnU9mshakqKak+
-        7rvCsC7d+gygP4qmD/qmNJJOsUU2W/6kMp05Z9dEIqwHAlmk4kYQaM67BuFSkRGjenwrVxbs7/+QK
-        bdFW+PUw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neYal-004bFE-TQ; Wed, 13 Apr 2022 08:43:12 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EFF959861CB; Wed, 13 Apr 2022 10:43:09 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 10:43:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     linux-cxl@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, linux-kernel@vger.kernel.org,
-        nvdimm@lists.linux.dev
-Subject: Re: [PATCH v2 02/12] device-core: Add dev->lock_class to enable
- device_lock() lockdep validation
-Message-ID: <20220413084309.GV2731@worktop.programming.kicks-ass.net>
-References: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
- <164982969858.684294.17819743973041389492.stgit@dwillia2-desk3.amr.corp.intel.com>
+        Wed, 13 Apr 2022 04:45:40 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637C84EF5A;
+        Wed, 13 Apr 2022 01:43:16 -0700 (PDT)
+X-UUID: 0bbbdd5bd93344c480f5c0971460dec0-20220413
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:0530d422-fb45-401b-be82-18cd9bb43ebc,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:516802a9-d103-4e36-82b9-b0e86991b3df,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 0bbbdd5bd93344c480f5c0971460dec0-20220413
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 203685718; Wed, 13 Apr 2022 16:43:12 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 13 Apr 2022 16:43:11 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Apr 2022 16:43:10 +0800
+Message-ID: <1c37ca0eb8fad7afd4eb4e32566d8affd71c894f.camel@mediatek.com>
+Subject: Re: [PATCH v18 03/10] soc: mediatek: add mtk-mmsys support for
+ mt8195 vdosys0
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>, <kbuild@lists.01.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <lkp@intel.com>, <kbuild-all@lists.01.org>, <fshao@chromium.org>,
+        "David Airlie" <airlied@linux.ie>, <singo.chang@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <roy-cw.yeh@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        <devicetree@vger.kernel.org>, <nancy.lin@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <moudy.ho@mediatek.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Date:   Wed, 13 Apr 2022 16:43:10 +0800
+In-Reply-To: <202204130935.urqkcDrG-lkp@intel.com>
+References: <202204130935.urqkcDrG-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164982969858.684294.17819743973041389492.stgit@dwillia2-desk3.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 11:01:38PM -0700, Dan Williams wrote:
-> The device_lock() is hidden from lockdep by default because, for
-> example, a device subsystem may do something like:
+Hi Dan,
+
+Thanks for the reviews.
+
+On Wed, 2022-04-13 at 09:07 +0300, Dan Carpenter wrote:
+> Hi "jason-jh.lin",
 > 
-> ---
-> device_add(dev1);
-> ...in driver core...
-> device_lock(dev1);
-> bus->probe(dev1); /* where bus->probe() calls driver1_probe() */
-> 
-> driver1_probe(struct device *dev)
-> {
-> 	...do some enumeration...
-> 	dev2->parent = dev;
-> 	/* this triggers probe under device_lock(dev2); */
-> 	device_add(dev2);
-> }
-> ---
-> 
-> To lockdep, that device_lock(dev2) looks like a deadlock because lockdep
-
-Recursion, you're meaning to say it looks like same lock recursion.
-
-> only sees lock classes, not individual lock instances. All device_lock()
-> instances across the entire kernel are the same class. However, this is
-> not a deadlock in practice because the locking is strictly hierarchical.
-> I.e. device_lock(dev1) is held over device_lock(dev2), but never the
-> reverse.
-
-I have some very vague memories from a conversation with Alan Stern,
-some maybe 10 years ago, where I think he was explaining to me this was
-not in fact a simple hierarchy.
-
-> In order for lockdep to be satisfied and see that it is
-> hierarchical in practice the mutex_lock() call in device_lock() needs to
-> be moved to mutex_lock_nested() where the @subclass argument to
-> mutex_lock_nested() represents the nesting level, i.e.:
-
-That's not an obvious conclusion; lockdep has lots of funny annotations,
-subclasses is just one.
-
-I think the big new development in lockdep since that time with Alan
-Stern is that lockdep now has support for dynamic keys; that is lock
-keys in heap memory (as opposed to static storage).
-
-> s/device_lock(dev1)/mutex_lock_nested(&dev1->mutex, 1)/
-> 
-> s/device_lock(dev2)/mutex_lock_nested(&dev2->mutex, 2)/
-> 
-> Now, what if the internals of the device_lock() could be annotated with
-> the right @subclass argument to call mutex_lock_nested()?
-> 
-> With device_set_lock_class() a subsystem can optionally add that
-> metadata. The device_lock() still takes dev->mutex, but when
-> dev->lock_class is >= 0 it additionally takes dev->lockdep_mutex with
-> the proper nesting. Unlike dev->mutex, dev->lockdep_mutex is not marked
-> lockdep_set_novalidate_class() and lockdep will become useful... at
-> least for one subsystem at a time.
-> 
-> It is still the case that only one subsystem can be using lockdep with
-> lockdep_mutex at a time because different subsystems will collide class
-> numbers. You might say "well, how about subsystem1 gets class ids 0 to 9
-> and subsystem2 gets class ids 10 to 20?". MAX_LOCKDEP_SUBCLASSES is 8,
-> and 8 is just enough class ids for one subsystem of moderate complexity.
-
-Again, that doesn't seem like an obvious suggestion at all. Why not give
-each subsystem a different lock key?
-
-
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index af2576ace130..6083e757e804 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -402,6 +402,7 @@ struct dev_msi_info {
->   * @mutex:	Mutex to synchronize calls to its driver.
->   * @lockdep_mutex: An optional debug lock that a subsystem can use as a
->   * 		peer lock to gain localized lockdep coverage of the device_lock.
-> + * @lock_class: per-subsystem annotated device lock class
->   * @bus:	Type of bus device is on.
->   * @driver:	Which driver has allocated this
->   * @platform_data: Platform data specific to the device.
-> @@ -501,6 +502,7 @@ struct device {
->  					   dev_set_drvdata/dev_get_drvdata */
->  #ifdef CONFIG_PROVE_LOCKING
->  	struct mutex		lockdep_mutex;
-> +	int			lock_class;
->  #endif
->  	struct mutex		mutex;	/* mutex to synchronize calls to
->  					 * its driver.
-> @@ -762,18 +764,100 @@ static inline bool dev_pm_test_driver_flags(struct device *dev, u32 flags)
->  	return !!(dev->power.driver_flags & flags);
->  }
+> url:    
+> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/jason-jh-lin/Add-Mediatek-Soc-DRM-vdosys0-support-for-mt8195/20220412-183359__;!!CTRNKA9wMg0ARbw!wAjdEcyQM5SvYaLtDA1d-7DTP-0V0x2EYmyKkpr3QDeGXEknO3vUGir-oiGEYodb6RAr$
 >  
-> +static inline void device_lock_assert(struct device *dev)
-> +{
-> +	lockdep_assert_held(&dev->mutex);
-> +}
-> +
->  #ifdef CONFIG_PROVE_LOCKING
->  static inline void device_lockdep_init(struct device *dev)
->  {
->  	mutex_init(&dev->lockdep_mutex);
-> +	dev->lock_class = -1;
->  	lockdep_set_novalidate_class(&dev->mutex);
->  }
-> -#else
-> +
-> +static inline void device_lock(struct device *dev)
-> +{
-> +	/*
-> +	 * For double-lock programming errors the kernel will hang
-> +	 * trying to acquire @dev->mutex before lockdep can report the
-> +	 * problem acquiring @dev->lockdep_mutex, so manually assert
-> +	 * before that hang.
-> +	 */
-> +	lockdep_assert_not_held(&dev->lockdep_mutex);
-> +
-> +	mutex_lock(&dev->mutex);
-> +	if (dev->lock_class >= 0)
-> +		mutex_lock_nested(&dev->lockdep_mutex, dev->lock_class);
-> +}
-> +
-> +static inline int device_lock_interruptible(struct device *dev)
-> +{
-> +	int rc;
-> +
-> +	lockdep_assert_not_held(&dev->lockdep_mutex);
-> +
-> +	rc = mutex_lock_interruptible(&dev->mutex);
-> +	if (rc || dev->lock_class < 0)
-> +		return rc;
-> +
-> +	return mutex_lock_interruptible_nested(&dev->lockdep_mutex,
-> +					       dev->lock_class);
-> +}
-> +
-> +static inline int device_trylock(struct device *dev)
-> +{
-> +	if (mutex_trylock(&dev->mutex)) {
-> +		if (dev->lock_class >= 0)
-> +			mutex_lock_nested(&dev->lockdep_mutex, dev->lock_class);
+> base:   git://anongit.freedesktop.org/drm/drm drm-next
+> config: arc-randconfig-m031-20220411 (
+> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220413/202204130935.urqkcDrG-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wAjdEcyQM5SvYaLtDA1d-7DTP-0V0x2EYmyKkpr3QDeGXEknO3vUGir-oiGEYvQ-IvSq$
+>  )
+> compiler: arc-elf-gcc (GCC) 11.2.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> smatch warnings:
+> drivers/soc/mediatek/mtk-mmsys.c:315 mtk_mmsys_probe() warn: passing
+> zero to 'PTR_ERR'
+> 
+> vim +/PTR_ERR +315 drivers/soc/mediatek/mtk-mmsys.c
+> 
+> 13032709e23285 Matthias Brugger       2020-03-25  281  static int
+> mtk_mmsys_probe(struct platform_device *pdev)
+> 13032709e23285 Matthias Brugger       2020-03-25  282  {
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  283  	struct
+> device *dev = &pdev->dev;
+> 13032709e23285 Matthias Brugger       2020-03-25  284  	struct
+> platform_device *clks;
+> 667c769246b01c Enric Balletbo i Serra 2020-03-25  285  	struct
+> platform_device *drm;
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  286  	const
+> struct mtk_mmsys_match_data *match_data;
+> ce15e7faa2fc54 CK Hu                  2021-03-17  287  	struct
+> mtk_mmsys *mmsys;
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  288  	struct
+> resource *res;
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  289  	int
+> ret;
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  290  
+> ce15e7faa2fc54 CK Hu                  2021-03-17  291  	mmsys =
+> devm_kzalloc(dev, sizeof(*mmsys), GFP_KERNEL);
+> ce15e7faa2fc54 CK Hu                  2021-03-17  292  	if
+> (!mmsys)
+> ce15e7faa2fc54 CK Hu                  2021-03-17  293  		
+> return -ENOMEM;
+> ce15e7faa2fc54 CK Hu                  2021-03-17  294  
+> ce15e7faa2fc54 CK Hu                  2021-03-17  295  	mmsys-
+> >regs = devm_platform_ioremap_resource(pdev, 0);
+> ce15e7faa2fc54 CK Hu                  2021-03-17  296  	if
+> (IS_ERR(mmsys->regs)) {
+> ce15e7faa2fc54 CK Hu                  2021-03-17  297  		
+> ret = PTR_ERR(mmsys->regs);
+> cc6576029aedc7 Enric Balletbo i Serra 2020-10-06  298  		
+> dev_err(dev, "Failed to ioremap mmsys registers: %d\n", ret);
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  299  		
+> return ret;
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  300  	}
+> 2c758e301ed95a Enric Balletbo i Serra 2020-03-25  301  
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  302  	spin_lo
+> ck_init(&mmsys->lock);
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  303  
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  304  	mmsys-
+> >rcdev.owner = THIS_MODULE;
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  305  	mmsys-
+> >rcdev.nr_resets = 32;
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  306  	mmsys-
+> >rcdev.ops = &mtk_mmsys_reset_ops;
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  307  	mmsys-
+> >rcdev.of_node = pdev->dev.of_node;
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  308  	ret =
+> devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  309  	if
+> (ret) {
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  310  		
+> dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n",
+> ret);
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  311  		
+> return ret;
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  312  	}
+> f27ef2856343e2 Enric Balletbo i Serra 2021-09-30  313  
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  314  	res =
+> platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12 @315  	if
+> (PTR_ERR(res)) {
+> 
+> You probably meant IS_ERR() instead of PTR_ERR().  But actually
+> platform_get_resource() does not return error pointers, it returns
+> NULL so the correct check is:
+> 
+> 	if (!res) {
+> 
+Yes, I missed this fix and I will also apply the fix to 
+mtk_drm_drv.c:639 in [v18,07/10] of this series.
 
-This must be the weirdest stuff I've seen in a while.
+Thank you!
 
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static inline void device_unlock(struct device *dev)
-> +{
-> +	if (dev->lock_class >= 0)
-> +		mutex_unlock(&dev->lockdep_mutex);
-> +	mutex_unlock(&dev->mutex);
-> +}
-> +
-> +/*
-> + * Note: this routine expects that the state of @dev->mutex is stable
-> + * from entry to exit. There is no support for changing lockdep
-> + * validation classes, only enabling and disabling validation.
-> + */
-> +static inline void device_set_lock_class(struct device *dev, int lock_class)
-> +{
-> +	/*
-> +	 * Allow for setting or clearing the lock class while the
-> +	 * device_lock() is held, in which case the paired nested lock
-> +	 * might need to be acquired or released now to accommodate the
-> +	 * next device_unlock().
-> +	 */
-> +	if (dev->lock_class < 0 && lock_class >= 0) {
-> +		/* Enabling lockdep validation... */
-> +		if (mutex_is_locked(&dev->mutex))
-> +			mutex_lock_nested(&dev->lockdep_mutex, lock_class);
-> +	} else if (dev->lock_class >= 0 && lock_class < 0) {
-> +		/* Disabling lockdep validation... */
-> +		if (mutex_is_locked(&dev->mutex))
-> +			mutex_unlock(&dev->lockdep_mutex);
-> +	} else {
-> +		dev_warn(dev,
-> +			 "%s: failed to change lock_class from: %d to %d\n",
-> +			 __func__, dev->lock_class, lock_class);
-> +		return;
-> +	}
-> +	dev->lock_class = lock_class;
-> +}
-> +#else /* !CONFIG_PROVE_LOCKING */
+Regards,
+Jason-JH.Lin
 
-This all reads like something utterly surreal... *WHAT*!?!?
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  316  		
+> dev_err(dev, "Couldn't get mmsys resource\n");
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  317  		
+> return -EINVAL;
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  318  	}
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  319  	mmsys-
+> >io_start = res->start;
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  320  
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  321  	match_d
+> ata = of_device_get_match_data(dev);
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  322  	if
+> (match_data->num_drv_data > 1) {
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  323  		
+> /* This SoC has multiple mmsys channels */
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  324  		
+> ret = mtk_mmsys_find_match_drvdata(mmsys, match_data);
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  325  		
+> if (ret < 0) {
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  326  		
+> 	dev_err(dev, "Couldn't get match driver data\n");
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  327  		
+> 	return ret;
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  328  		
+> }
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  329  		
+> mmsys->data = match_data->drv_data[ret];
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  330  	} else
+> {
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  331  		
+> dev_dbg(dev, "Using single mmsys channel\n");
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  332  		
+> mmsys->data = match_data->drv_data[0];
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  333  	}
+> 8cfc54a36d3e79 jason-jh.lin           2022-04-12  334  
+> ce15e7faa2fc54 CK Hu                  2021-03-17  335  	platfor
+> m_set_drvdata(pdev, mmsys);
+> 13032709e23285 Matthias Brugger       2020-03-25  336  
+> ce15e7faa2fc54 CK Hu                  2021-03-17  337  	clks =
+> platform_device_register_data(&pdev->dev, mmsys->data->clk_driver,
+> 13032709e23285 Matthias Brugger       2020-03-25  338  		
+> 			     PLATFORM_DEVID_AUTO, NULL, 0);
+> 13032709e23285 Matthias Brugger       2020-03-25  339  	if
+> (IS_ERR(clks))
+> 13032709e23285 Matthias Brugger       2020-03-25  340  		
+> return PTR_ERR(clks);
+> 13032709e23285 Matthias Brugger       2020-03-25  341  
+> 667c769246b01c Enric Balletbo i Serra 2020-03-25  342  	drm =
+> platform_device_register_data(&pdev->dev, "mediatek-drm",
+> 667c769246b01c Enric Balletbo i Serra 2020-03-25  343  		
+> 			    PLATFORM_DEVID_AUTO, NULL, 0);
+> ff34e17cf9bce8 Wei Yongjun            2020-05-06  344  	if
+> (IS_ERR(drm)) {
+> ff34e17cf9bce8 Wei Yongjun            2020-05-06  345  		
+> platform_device_unregister(clks);
+> 667c769246b01c Enric Balletbo i Serra 2020-03-25  346  		
+> return PTR_ERR(drm);
+> ff34e17cf9bce8 Wei Yongjun            2020-05-06  347  	}
+> 667c769246b01c Enric Balletbo i Serra 2020-03-25  348  
+> 13032709e23285 Matthias Brugger       2020-03-25  349  	return
+> 0;
+> 13032709e23285 Matthias Brugger       2020-03-25  350  }
+> 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 
-If you want lockdep validation for one (or more) dev->mutex instances,
-why not pull them out of the no_validate class and use the normal
-locking?
-
-This is all quite insane.

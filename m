@@ -2,183 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69F34FF793
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E5F4FF795
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiDMN2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S235013AbiDMN3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiDMN2V (ORCPT
+        with ESMTP id S232618AbiDMN3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:28:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D82D4EF6E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:26:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52FBB1595;
-        Wed, 13 Apr 2022 06:26:00 -0700 (PDT)
-Received: from [10.57.8.248] (unknown [10.57.8.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 744CA3F73B;
-        Wed, 13 Apr 2022 06:25:58 -0700 (PDT)
-Message-ID: <f100bd49-7a1d-5265-29ce-1092195bb2dd@arm.com>
-Date:   Wed, 13 Apr 2022 14:25:56 +0100
+        Wed, 13 Apr 2022 09:29:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628105D649;
+        Wed, 13 Apr 2022 06:26:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AADF6196E;
+        Wed, 13 Apr 2022 13:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84157C385A6;
+        Wed, 13 Apr 2022 13:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649856406;
+        bh=huzeaPBM4joEiWG34xFTjGMlaFsI6Qi5QXhXd+tYt4E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eUO8ZZFD4VMw0xm2d7KhfkyWSTpIogel1xK2LFNPpTcqQWUBWSZkU7E0qTMEeRa6+
+         FDDeQtz5+8zg/a/uw37loUdLe8t2IP2upCrtDlGWC4DTwju3Gb0iifml08wHvPAslW
+         1mIPepdi+GgU+I1VfbkIkAZmLbqDhyoBgziZuySU/Cjm3vcFylh/0MOOVgqzT1jB/3
+         ae+jdYAOk4f/UqwmrapIM9rPHk/ibtO+ExhhJl9aSIwvqLbpLxSBB74y4KZH/fyw/0
+         lxhDlyiaXZV55Ya2xuF2X0fyimMZB2OurpDqbqgoLJOkk4Wnn7YAsgz6l9XFTEFDxW
+         2XIT8wqG2Q8pw==
+Date:   Wed, 13 Apr 2022 08:26:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
+        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
+        kai.heng.feng@canonical.com, chris.packham@alliedtelesis.co.nz,
+        yangyicong@hisilicon.com, treding@nvidia.com, jonathanh@nvidia.com,
+        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Ricky Wu <ricky_wu@realtek.com>,
+        Rajat Jain <rajatja@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Victor Ding <victording@google.com>
+Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
+Message-ID: <20220413132644.GA673431@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, di.shen@unisoc.com
-References: <20220407051932.4071-1-xuewen.yan@unisoc.com>
- <02350916-aa36-ea53-2c98-91b97f49d27e@arm.com>
- <CAB8ipk-KenZaVWQwWqVMksQXLP5r19BQ1OGAdmwHRbjwv3qFHg@mail.gmail.com>
- <9bb00bcb-f984-1cf6-39aa-c11dcf7f07cb@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <9bb00bcb-f984-1cf6-39aa-c11dcf7f07cb@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412225047.GA627910@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/11/22 15:07, Dietmar Eggemann wrote:
-> On 11/04/2022 10:52, Xuewen Yan wrote:
->> HI Dietmar
->>
->> On Mon, Apr 11, 2022 at 4:21 PM Dietmar Eggemann
->> <dietmar.eggemann@arm.com> wrote:
->>>
->>> On 07/04/2022 07:19, Xuewen Yan wrote:
->>>> There are cases when the cpu max capacity might be reduced due to thermal.
->>>> Take into the thermal pressure into account when judge whether the rt task
->>>> fits the cpu. And when schedutil govnor get cpu util, the thermal pressure
->>>> also should be considered.
->>>>
->>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
->>>> ---
->>>>   kernel/sched/cpufreq_schedutil.c | 1 +
->>>>   kernel/sched/rt.c                | 1 +
->>>>   2 files changed, 2 insertions(+)
->>>>
->>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
->>>> index 3dbf351d12d5..285ad51caf0f 100644
->>>> --- a/kernel/sched/cpufreq_schedutil.c
->>>> +++ b/kernel/sched/cpufreq_schedutil.c
->>>> @@ -159,6 +159,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
->>>>        struct rq *rq = cpu_rq(sg_cpu->cpu);
->>>>        unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
->>>>
->>>> +     max -= arch_scale_thermal_pressure(sg_cpu->cpu);
->>>
->>> max' = arch_scale_cpu_capacity() - arch_scale_thermal_pressure()
->>>
->>> For the energy part (A) we use max' in compute_energy() to cap sum_util
->>> and max_util at max' and to call em_cpu_energy(..., max_util, sum_util,
->>> max'). This was done to match (B)'s `policy->max` capping.
->>>
->>> For the frequency part (B) we have freq_qos_update_request() in:
->>>
->>> power_actor_set_power()
->>>    ...
->>>    cdev->ops->set_cur_state()
->>>
->>>      cpufreq_set_cur_state()
->>>        freq_qos_update_request()      <-- !
->>>        arch_update_thermal_pressure()
->>>
->>> restricting `policy->max` which then clamps `target_freq` in:
->>>
->>>    cpufreq_update_util()
->>>      ...
->>>      get_next_freq()
->>>        cpufreq_driver_resolve_freq()
->>>          __resolve_freq()
->>>
->>
->> Do you mean that the "max" here will not affect the frequency
->> conversion, so there is no need to change it?
->> But is it better to reflect the influence of thermal here?
+On Tue, Apr 12, 2022 at 05:50:47PM -0500, Bjorn Helgaas wrote:
+> ...
+> I think we should try this patch again with some changes and maybe
+> some debug logging:
 > 
-> I guess your point is that even though max' has no effect on frequency
-> since QOS caps policy->max anyway, it is still easier to understand the
-> dependency between schedutil and EAS/EM when it comes to the use of
-> thermal pressure.
+>   - I wonder if we should integrate the LTR, L1 SS, and Link Control
+>     ASPM restore instead of having them spread around through
+>     pci_restore_ltr_state(), pci_restore_aspm_l1ss_state(), and
+>     pci_restore_pcie_state().  Maybe a new pci_restore_aspm() that
+>     would be called from pci_restore_pcie_state()?
+
+Sorry, this was a dumb idea, please ignore it.  Maybe it would be
+useful in the future sometime, but right now when we're trying to
+understand the issue, the code churn would just confuse things.  I
+think we need minimal changes right now (like 4257f7e008ea).
+
+>   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
+>     must be configured while ASPM L1 is disabled, but I don't think we
+>     currently guarantee this: we restore all the upstream component
+>     state first, and we don't know the ASPM state of the downstream
+>     one.  Maybe we need to:
 > 
-> I agree. The way how the "hidden" policy->max capping guarantees that
-> schedutil and EAS/EM are doing the same even when only the latter uses
-> max' is not obvious.
-
-+1 here, IMO we shouldn't rely on hidden stuff. There are two which set
-the thermal pressure, but one is not setting the freq_qos which causes
-the update of the 'policy->max'. So the schedutil will send that high
-frequency but that driver would just ignore and clamp internally. In the
-end we might argue it still works, but is it clean and visible from the
-code? Funny thing might start to happen then the driver, which might be
-the last safety net cannot capture this.
-
-We also should be OK with energy estimation and the CPU capacity vs.
-task utilization comparisons, since the thermal pressure is accounted
-there* (until the thermal is controlled in kernel not in FW, which is
-something where we are heading with scmi-cpufreq mentioned in this
-cover letter [1]).
-
+>       * When restoring upstream component,
+>           + disable its ASPM
 > 
-> I just wanted to mention the historical reason why the code looks like
-> it does today.
+>       * When restoring downstream component,
+>           + disable its ASPM
+> 	  + restore upstream component's LTR, L1SS
+> 	  + restore downstream component's LTR, L1SS
+> 	  + restore upstream component's ASPM
+> 	  + restore downstream component's ASPM
 > 
->>> [...]
->>>
->>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->>>> index a32c46889af8..d9982ebd4821 100644
->>>> --- a/kernel/sched/rt.c
->>>> +++ b/kernel/sched/rt.c
->>>> @@ -466,6 +466,7 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
->>>>        max_cap = uclamp_eff_value(p, UCLAMP_MAX);
->>>>
->>>>        cpu_cap = capacity_orig_of(cpu);
->>>> +     cpu_cap -= arch_scale_thermal_pressure(cpu);
->>>>
->>>>        return cpu_cap >= min(min_cap, max_cap);
->>>>   }
->>>
->>> IMHO, this should follow what we do with rq->cpu_capacity
->>> (capacity_of(), the remaining capacity for CFS). E.g. we use
->>> capacity_of() in find_energy_efficient_cpu() and select_idle_capacity()
->>> to compare capacities. So we would need a function like
->>> scale_rt_capacity() for RT (minus the rq->avg_rt.util_avg) but then also
->>> one for DL (minus rq->avg_dl.util_avg and rq->avg_rt.util_avg).
->>
->> It's a really good idea. And do you already have the corresponding patch?
->> If there is, can you tell me the corresponding link?
-> 
-> No, I don't have any code for this. Should be trivial though. But the
-> issue is that the update would probably have to be decoupled from CFS
-> load_balance (update_group_capacity()) and the use cases in RT/DL are
-> only valid for asymmetric CPU capacity systems.
+>       This seems pretty messy, but seems like what the spec requires.
 
-Having in mind those I would vote for fixing it incrementally.
-Thus, IMHO this patch is good for taking it. Later we might think how
-to better estimate the real CPU capacity visible from RT and DL classes.
-In this shape it is good for many systems which only use RT,
-but not DL class. Those systems w/ RT and w/o DL might suffer on some
-asymmetric CPU platforms where medium cores have capacity e.g. 850 and
-thermal pressure reduced the big cores capacity by 250 making them 774.
+Actually, I think it's unlikely that a downstream device would have
+ASPM enabled while we're restoring state of the upstream device, since 
+we're probably restoring state after a reset or coming back from
+D3cold.  But we may still need to wait to enable the upstream device
+ASPM until after configuring it in the downstream device.
 
-Regards,
-Lukasz
+Logging of the previous & new state of these registers might help
+untangle things.
 
-[1] 
-https://lore.kernel.org/linux-pm/20211007080729.8262-1-lukasz.luba@arm.com/
+>     - Add some pci_dbg() logging of all these save/restore values to
+>       help debug any issues.

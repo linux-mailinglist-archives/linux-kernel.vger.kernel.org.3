@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0479B4FF191
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFA34FF276
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbiDMISM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S234006AbiDMIqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiDMISJ (ORCPT
+        with ESMTP id S229495AbiDMIqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:18:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D5F52CC9D;
-        Wed, 13 Apr 2022 01:15:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C94A113D5;
-        Wed, 13 Apr 2022 01:15:48 -0700 (PDT)
-Received: from [10.1.33.136] (e127744.cambridge.arm.com [10.1.33.136])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 890833F5A1;
-        Wed, 13 Apr 2022 01:15:46 -0700 (PDT)
-Subject: Re: [PATCH] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
- event
-To:     Leo Yan <leo.yan@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220413075124.635589-1-leo.yan@linaro.org>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <c21b3409-a8a0-aae7-7634-5e648f0a49b1@arm.com>
-Date:   Wed, 13 Apr 2022 09:15:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 13 Apr 2022 04:46:08 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11EF4F458;
+        Wed, 13 Apr 2022 01:43:48 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id v12so1377498plv.4;
+        Wed, 13 Apr 2022 01:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXJ0x6B6fscSnw3U9TyMu1fz6RdndgOIc6aGYEspekU=;
+        b=A5UEdlb2sTcqbwV2HtfB+uLhHQHyAFhwdjCN3Tz6+lBNarziZOCRVXV74sSQEzU870
+         RABQJbnF37Ny5JTuykqxg1FPJDsRi1Kdlu3PpB9ymjKIKb9luu+1y/9UgET8peOEpQTi
+         9IoyWfTRCG0F92lWWVucyTmXKaM0c3JAOMSVz/pB5ZenEalc8sFIVHNz3F7cXj+cV3fJ
+         3sjMmRZKutveDMEDQNuRgQr3RzXcRtjjjtnPNWCcjiZ3rAv2izQZYpShvX8T+qAv64ir
+         mnNkfxW4OkSnNCnxJdH+YjOUNFmk0z7Thuoop3Z6DG/qxQf8tVekgWbV2KM/mykI3Cus
+         Coow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXJ0x6B6fscSnw3U9TyMu1fz6RdndgOIc6aGYEspekU=;
+        b=ZHIGzJNsfw9apsn21szXI+cKIG84lu4qrU+y8GYgUut67uheutDt9kfrdah1DJR/My
+         m+B5RbT5oad/et3il1EmY++Jnf/gDVW4jg7wzP0Lz/yXAht4DNUBOTh8l/pTYwU6xJtm
+         bSqqbMphUq+qKdAn+d3BP3zhIEwdFfShOQJoBfyQcQb4eLJgYVG6334Gcf5lj5tW5goW
+         XlyK+prGjbSRvMT23K9UVtFtbNNSPZ4p37U60IKEu/TQcE6H9YB4pBg6VaRAXlg8uPM2
+         hu0MFOOohhCX3HhtD9bTKqb8wfLFut6YyY1rD7jQGY41eCosmusZJW21zeTRL6m6Y4Nx
+         cT6A==
+X-Gm-Message-State: AOAM531oYKY5bgFz0SWGCa4Tfl7vq9BkKBYdch0wAC7B2UjPmXns8vQD
+        V2NzZEebA+1s7ptcasa8gYE=
+X-Google-Smtp-Source: ABdhPJzerT6Pr78YbDL8k6DjXS6/h7frfnlot8xyPo/lggGRdxCNVvR2digAkLVaqX1MtHe4TSWzDA==
+X-Received: by 2002:a17:90b:1c8e:b0:1bf:364c:dd7a with SMTP id oo14-20020a17090b1c8e00b001bf364cdd7amr9482472pjb.103.1649839428272;
+        Wed, 13 Apr 2022 01:43:48 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.119])
+        by smtp.gmail.com with ESMTPSA id l5-20020a63f305000000b0039daaa10a1fsm2410335pgh.65.2022.04.13.01.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 01:43:47 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     dsahern@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        benbjiang@tencent.com, flyingpeng@tencent.com,
+        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
+        talalahmad@google.com, keescook@chromium.org,
+        mengensun@tencent.com, dongli.zhang@oracle.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next 0/9] net: ip: add skb drop reasons to ip ingress
+Date:   Wed, 13 Apr 2022 16:15:51 +0800
+Message-Id: <20220413081600.187339-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20220413075124.635589-1-leo.yan@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,68 +74,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+From: Menglong Dong <imagedong@tencent.com>
 
-On 13/04/2022 08:51, Leo Yan wrote:
-> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-> is not available") "perf mem report" and "perf report --mem-mode"
-> don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-> type.
->
-> The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-> partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-> event, this allows the perf data file generated by kernel v5.18-rc1 or
-> later version can be reported properly.
->
-> On the other hand, perf tool still fails to be backward compatibility
-> for a data file recorded by an older version's perf which contains Arm
-> SPE trace data.  This patch is a workaround in reporting phase, when
-> detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-> force to set the bit in the sample type and give a warning info.
->
-> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->  tools/perf/builtin-report.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> index 1ad75c7ba074..f26dd14eb852 100644
-> --- a/tools/perf/builtin-report.c
-> +++ b/tools/perf/builtin-report.c
-> @@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
->  	struct perf_session *session = rep->session;
->  	u64 sample_type = evlist__combined_sample_type(session->evlist);
->  	bool is_pipe = perf_data__is_pipe(session->data);
-> +	struct evsel *evsel;
->  
->  	if (session->itrace_synth_opts->callchain ||
->  	    session->itrace_synth_opts->add_callchain ||
-> @@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
->  	}
->  
->  	if (sort__mode == SORT_MODE__MEMORY) {
-> +		/*
-> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-> +		 * compatibility, set the bit if it's an old perf data file.
-> +		 */
-> +		evlist__for_each_entry(session->evlist, evsel) {
-> +			if (strstr(evsel->name, "arm_spe_") &&
+In the series "net: use kfree_skb_reason() for ip/udp packet receive",
+skb drop reasons are added to the basic ingress path of IPv4. And in
+the series "net: use kfree_skb_reason() for ip/neighbour", the egress
+paths of IPv4 and IPv6 are handled. Related links:
 
-This didn't work for me when the file recorded "-e arm_spe//" instead of
-"-e arm_spe_0//". Could you remove the trailing _? With that:
+https://lore.kernel.org/netdev/20220205074739.543606-1-imagedong@tencent.com/
+https://lore.kernel.org/netdev/20220226041831.2058437-1-imagedong@tencent.com/
 
-Tested-by: German Gomez <german.gomez@arm.com>
+Seems we still have a lot work to do with IP layer, including IPv6 basic
+ingress path, IPv4/IPv6 forwarding, IPv6 exthdrs, fragment and defrag,
+etc.
 
-> +				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-> +				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
-> +					    "for Arm SPE event.\n");
-> +				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
-> +				sample_type |= PERF_SAMPLE_DATA_SRC;
-> +			}
-> +		}
-> +
->  		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
->  			ui__error("Selected --mem-mode but no mem data. "
->  				  "Did you call perf record without -d?\n");
+In this series, skb drop reasons are added to the basic ingress path of
+IPv6 protocol and IPv4/IPv6 packet forwarding. Following functions, which
+are used for IPv6 packet receiving are handled:
+
+  ip6_pkt_drop()
+  ip6_rcv_core()
+  ip6_protocol_deliver_rcu()
+
+And following functions that used for IPv6 TLV parse are handled:
+
+  ip6_parse_tlv()
+  ipv6_hop_ra()
+  ipv6_hop_ioam()
+  ipv6_hop_jumbo()
+  ipv6_hop_calipso()
+  ipv6_dest_hao()
+
+Besides, ip_forward() and ip6_forward(), which are used for IPv4/IPv6
+forwarding, are also handled. And following new drop reasons are added:
+
+  /* host unreachable, corresponding to IPSTATS_MIB_INADDRERRORS */
+  SKB_DROP_REASON_IP_INADDRERRORS
+  /* network unreachable, corresponding to IPSTATS_MIB_INADDRERRORS */
+  SKB_DROP_REASON_IP_INNOROUTES
+  /* packet size is too big, corresponding to
+   * IPSTATS_MIB_INTOOBIGERRORS
+   */
+  SKB_DROP_REASON_PKT_TOO_BIG
+
+In order to simply the definition and assignment for
+'enum skb_drop_reason', some helper functions are introduced in the 1th
+patch. I'm not such if this is necessary, but it makes the code simpler.
+For example, we can replace the code:
+
+  if (reason == SKB_DROP_REASON_NOT_SPECIFIED)
+          reason = SKB_DROP_REASON_IP_INHDR;
+
+with:
+
+  SKB_DR_OR(reason, IP_INHDR);
+
+
+In the 6th patch, the statistics for skb in ipv6_hop_jum() is removed,
+as I think it is redundant. There are two call chains for
+ipv6_hop_jumbo(). The first one is:
+
+  ipv6_destopt_rcv() -> ip6_parse_tlv() -> ipv6_hop_jumbo()
+
+On this call chain, the drop statistics will be done in
+ipv6_destopt_rcv() with 'IPSTATS_MIB_INHDRERRORS' if ipv6_hop_jumbo()
+returns false.
+
+The second call chain is:
+
+  ip6_rcv_core() -> ipv6_parse_hopopts() -> ip6_parse_tlv()
+
+And the drop statistics will also be done in ip6_rcv_core() with
+'IPSTATS_MIB_INHDRERRORS' if ipv6_hop_jumbo() returns false.
+
+Therefore, the statistics in ipv6_hop_jumbo() is redundant, which
+means the drop is counted twice. The statistics in ipv6_hop_jumbo()
+is almost the same as the outside, except the
+'IPSTATS_MIB_INTRUNCATEDPKTS', which seems that we have to ignore it.
+
+
+======================================================================
+
+Here is a basic test for IPv6 forwarding packet drop that monitored by
+'dropwatch' tool:
+
+  drop at: ip6_forward+0x81a/0xb70 (0xffffffff86c73f8a)
+  origin: software
+  input port ifindex: 7
+  timestamp: Wed Apr 13 11:51:06 2022 130010176 nsec
+  protocol: 0x86dd
+  length: 94
+  original length: 94
+  drop reason: IP_INADDRERRORS
+
+The origin cause of this case is that IPv6 doesn't allow to forward the
+packet with LOCAL-LINK saddr, and results the 'IP_INADDRERRORS' drop
+reason.
+
+Menglong Dong (9):
+  skb: add some helpers for skb drop reasons
+  net: ipv4: add skb drop reasons to ip_error()
+  net: ipv6: add skb drop reasons to ip6_pkt_drop()
+  net: ip: add skb drop reasons to ip forwarding
+  net: icmp: introduce function icmpv6_param_prob_reason()
+  net: ipv6: remove redundant statistics in ipv6_hop_jumbo()
+  net: ipv6: add skb drop reasons to TLV parse
+  net: ipv6: add skb drop reasons to ip6_rcv_core()
+  net: ipv6: add skb drop reasons to ip6_protocol_deliver_rcu()
+
+ include/linux/icmpv6.h     | 11 +++++++++--
+ include/linux/skbuff.h     | 21 ++++++++++++++++++++
+ include/trace/events/skb.h |  3 +++
+ net/ipv4/ip_forward.c      | 13 ++++++++++---
+ net/ipv4/route.c           |  6 +++++-
+ net/ipv6/exthdrs.c         | 39 +++++++++++++++++++++----------------
+ net/ipv6/icmp.c            |  7 ++++---
+ net/ipv6/ip6_input.c       | 40 ++++++++++++++++++++++++++------------
+ net/ipv6/ip6_output.c      |  9 ++++++---
+ net/ipv6/route.c           |  6 +++++-
+ 10 files changed, 113 insertions(+), 42 deletions(-)
+
+-- 
+2.35.1
+

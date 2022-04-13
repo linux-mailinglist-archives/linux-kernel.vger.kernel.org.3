@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306984FF2E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8F54FF2E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbiDMJHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S234200AbiDMJIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiDMJHu (ORCPT
+        with ESMTP id S234191AbiDMJIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:07:50 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A802A273
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:05:30 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l9-20020a05600c4f0900b0038ccd1b8642so2705728wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:05:30 -0700 (PDT)
+        Wed, 13 Apr 2022 05:08:23 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AFB4160D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:06:03 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m14so1633511wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=vrull.eu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9NDtSKId3t6dVkA8YfqUQPPECjRhEPlDuS/Z/pAcPWM=;
-        b=TuU29OnmVZBwDVSbKNjQMlspssMwQ0smsXVpvEekZAZYhMZ6rmcAtcUd71RRjOL277
-         u6oyzNzv/A4ja7FzUqeBmT7WN1zE8/44iI/RvZ7P8smd6U4gAXVE8TQL/19+8C3+KPUv
-         yBdRoUcWVJnyaqmXn/p5q9phVKTEcX9VLnba+gP/K4wx9g/FlU70zOXwqNnh5QQbNhqK
-         nDYMONLJMbgaADuYmicO3KSDVch4RAKY461SnjN+MOe/GOELjayUmzGF/V1/T2RM2Mnv
-         r/sGs1uE7Cvf9/P+VwBq0QFg4Qcavl40LxXI7JiXW34D5+6iGXS69QhIxsLs4kRvyi2f
-         KhSQ==
+        bh=f4Ur5FuAMtA6xVJsN+nl3/RAKHtJZB/dEjqv/D42SDM=;
+        b=E9zncH8fDX4akfa0q887+k3HgURcftW3VOd3P3DKaRcVVy5WhbTBD846cDePAP6rPe
+         +w3Ttm3WFE/HtZ9nxnTqGKlzE2nQx0WSKNbmb1UcCDOv9yhUt5WE2+Oy6n20B5S7sNWj
+         PINcVdUSSIKc7BTpjDCBRb7h5SKl3EP9tpmiUon0I1W/9LqH2gQTqTtJnGTX0G7sJhFe
+         1TyR2T8frmfmVy+Db9tV5J2zMjlCaTJeQAgw+Meb6bniNWCKiGyWGFJbsiSYupheLcJ0
+         VyegBwqX9QvW5oOtzoSbBhqqjkZOs5rl7GNp0bBPOwQhDJ75+qI6HFAFhnsHDPxIDAmc
+         MS6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9NDtSKId3t6dVkA8YfqUQPPECjRhEPlDuS/Z/pAcPWM=;
-        b=shFwbKghtCIzpwt0XWeuQd6eOG7GuDM8e9SWAYSu6W2LjYdrq3CQpIeVH5WxobI27M
-         puSfEFXw2jFxhCJHbg4Fz5e3idaq7yTx0xZlNK0BNk3pxCSEc86IvOlzdqMBU4GfJguG
-         75VEDNZU0fnXDNZc3g0X7mNKWF3YdBStId/RsEnM+GEB5gqTtUPccJr/p+jBkt9p60kh
-         cnwfKG9wrnK4BGgw0tweMO91VV8H1pd65u037Kceh/gCEQszYAunwAqz9B4yIKoBvkFD
-         80nxN+ySJaH6SuN5zb21b9UIacKwdSOAUKNv4A6OGCEj2VVAWYpHarI4UYnNCTm61i78
-         U2fQ==
-X-Gm-Message-State: AOAM532XRDrQ5UNpUuPHKGKePQ5NAKSDFODyYMcua8ckSIOKI2FQfjxo
-        j6c1TMXwVgRJGHvd8TQoFRZ/8+3DgvSj1b2njrAs4w==
-X-Google-Smtp-Source: ABdhPJylOEa/v15SyQPNZavNcci4UoiyZBtHsblEWuNg3HE6JBWlJPfFv0k6WcrfgqyGBjMmc+alxMQUkxaGdQ6vvWc=
-X-Received: by 2002:a1c:3bd6:0:b0:38f:4e30:6c2f with SMTP id
- i205-20020a1c3bd6000000b0038f4e306c2fmr791293wma.66.1649840728817; Wed, 13
- Apr 2022 02:05:28 -0700 (PDT)
+        bh=f4Ur5FuAMtA6xVJsN+nl3/RAKHtJZB/dEjqv/D42SDM=;
+        b=LXs7hoCMzJIS2nqLbNk0n5r0WMm+2PEtw7OxCwwEo9zNLW4dxdYrUOnBoWZtr2BfVL
+         KWKCR5EX9il4XjirHrybJ9/6/PCjhRGqv8ZJRUOv3vQJV9oQ9yAieEMtOBAOKmAmsdke
+         ZQnitoOMRh1GxDlo7EYRlmThzjllXvKJCrxVh/SlWE3B88f1TqRag6UIVGg/pqxLpaIH
+         gO8SmLbsg3ISvuj0iu4RLYus3sz10ndThKmxIPGz+upC0Ixf9N3+gmYNgqq41xuEEXhe
+         BBIVK2IALYqhSH+6mzdzWRkK6ppFUD0Bwj9+2vwhzZKyWdDPX1gdSvl8JfztyrZdo+sR
+         it0Q==
+X-Gm-Message-State: AOAM532xpPRvdhOsG22cM15cR6NsNnb1Y6UqbnCTVyKSHdlIFbHB86Fv
+        bE81FuDaVWOpUJMJearMwMFzc7KhKdhRceIV1gpxLw==
+X-Google-Smtp-Source: ABdhPJyIwwxPJ6LcuXM9IBchpQCcd3b56k+vDKmb4JRXyHcSQ1I6icydynMFl1ioG+SUrUV6KnvsJSVwMsPbpOLncK4=
+X-Received: by 2002:a05:6000:18e:b0:207:a221:302c with SMTP id
+ p14-20020a056000018e00b00207a221302cmr14318339wrx.120.1649840761707; Wed, 13
+ Apr 2022 02:06:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-2-heiko@sntech.de>
-In-Reply-To: <20220413030307.133807-2-heiko@sntech.de>
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-3-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-3-heiko@sntech.de>
 From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
-Date:   Wed, 13 Apr 2022 11:05:17 +0200
-Message-ID: <CAAeLtUBrmBg1E=AdAkOQwMPYu74WtL2YuEacLdNA69PqqkDnyg@mail.gmail.com>
-Subject: Re: [PATCH v9 01/12] riscv: integrate alternatives better into the
- main architecture
+Date:   Wed, 13 Apr 2022 11:05:50 +0200
+Message-ID: <CAAeLtUAiF+d5Yj0Dak-hiCZVGe1zSU0k=E630n_BOXkutg6jZw@mail.gmail.com>
+Subject: Re: [PATCH v9 02/12] riscv: allow different stages with alternatives
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
@@ -75,19 +74,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 at 05:04, Heiko Stuebner <heiko@sntech.de> wrote:
+On Wed, 13 Apr 2022 at 05:03, Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> Right now the alternatives need to be explicitly enabled and
-> erratas are limited to SiFive ones.
+> Future features may need to be applied at a different
+> time during boot, so allow defining stages for alternatives
+> and handling them differently depending on the stage.
 >
-> We want to use alternatives not only for patching soc erratas,
-> but in the future also for handling different behaviour depending
-> on the existence of future extensions.
->
-> So move the core alternatives over to the kernel subdirectory
-> and move the CONFIG_RISCV_ALTERNATIVE to be a hidden symbol
-> which we expect relevant erratas and extensions to just select
-> if needed.
+> Also make the alternatives-location more flexible so that
+> future stages may provide their own location.
 >
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 

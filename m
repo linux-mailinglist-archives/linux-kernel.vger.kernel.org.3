@@ -2,169 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5904FFA0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE0E4FFA0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbiDMP15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S236459AbiDMP2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiDMP1z (ORCPT
+        with ESMTP id S236091AbiDMP2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:27:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F68D5DA00
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:25:33 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u15so4639445ejf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:25:33 -0700 (PDT)
+        Wed, 13 Apr 2022 11:28:33 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ADE5EDDE;
+        Wed, 13 Apr 2022 08:26:12 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23DClx9R012968;
+        Wed, 13 Apr 2022 11:25:51 -0400
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3fb7w8cbkp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Apr 2022 11:25:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jyuyql8jNPS9GrQ6n+HQVhpkivB3GdU61WCHjaAIsdPuG5JPuub4NMStcV6KRjzD9np+jfJ8msmtyQDxbWXr9zSQfF4xsta9e1okdTsgdyzV0vcEDM6QsdwFAoTSG0p1uCGqouBVLGRy8/1QwZMoT68+z7OZae22QQCLogt20wColXkjCvAFf0niyvC2mKei+O44OeTscQ3hzCYpDoKPCDZ0gdN0HOfBL/AKH3I9i3skCj6ZSHRVd+jAUAJfpZ6ie16Z3w0I0/Lvp4spt4aRU1+5VqQeQv7BLAqpGstbvYr1vI3oMSQokKJF5ZYl4imFtSswLfvo51gb0y2/jfxOWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+mhFtm2R4Tk/xQkALF+56pj1AcIDfGuzH5UWyI2JWrI=;
+ b=MFCUfcUNO0hyipQ7/pZiksYsot00rF1FOo7CQ7x42jMTJAS326EmhDFTbYRErJOkXryBKKecmwmqRVlhWSXULJT9E/oYls4ly7vmubT/7yHK6cXhQVm1JWleWAjwU6yni+xEZhBLN6eMSRQn98ZzUq2V0ZQMSBhK/32vRx7IgTKsZauB+YoBlJt7t1mACygYb7YS/acmmTJlQdKNtGUPk8XGRWVs4jEmIBleQfNx6004WXp9U68YyDjj4lPtBEE2pELoQDxjyy6br9KKZbFiA4jEffoJHxwbSoVwoUPkvKNFYmZ1V6rcegZ4hA4cfkyJuN0CTyHbFIFi9qADzugzdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=E/KosFpseT7IWJRZQCnSiS447R6ssnKcrthoESTGiCY=;
-        b=Vh4Nsq/68C5HjeI3A+yT1TCrzlxkKT0sfz8S3WArS7wXqU2HMY1kjSoZ15QEZmFtM6
-         OFYv1iWTnr+tlMIiILChInAOK+egjDR+MtIwNLJlFgSPS0IaHvcSB/B8FcrmDr+ZyIDg
-         IiiQB3pNO94TEGvLWtXS/CjPEk0O7T7J0MsTPVtfkCt+WO4kRbnT4evsF7X3kPB8ayF4
-         5J/XJAFVO/Wopdl0EmW8QilO0Iz/XWwoNMkPhoQJPNm2KavV8w9DXemGntKKxv+uKR1E
-         Mxe3ylpT7zTGScy4KM865rbxBZMJ4K0dj47qLEXSEyh6zUTCCLXrC6xnjkDTbvcgjPHW
-         96/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=E/KosFpseT7IWJRZQCnSiS447R6ssnKcrthoESTGiCY=;
-        b=bWBrD3hfYGK1yKL4hxtLTOa2B5EgSEqgU33ZElLG6K5sepoZhdpjsbXVqtqRpBqhjj
-         pEPQtXlCH/Q5u0u/hOSy6792AS1iGphUx3/UpspUbgsCHWlC4hSYuNiq+KtD8uavgFFn
-         uFkvZC3OyFXhpeAsz8c44OKe/tomdyGN1oc6oleslbQbQlvOgUiByf0JytFpgY1spbSJ
-         dh1scMQvM/KlMhc/2R+LLapQne3+nTrSZ4YJiDydBZqANRTNRCgb9Me/6cjJz4VyFbqh
-         EioRveiDM+B8noY1r9SKz7BuhlhrdLnNhtoJmYr8mwL+bRzysS2Sgn5xwXJtqnLrskjo
-         24lg==
-X-Gm-Message-State: AOAM5308D/FWi3SmKbCMcyeX1ct9EDM78pk8jSYlM2EJMjXFshJjhYCL
-        9Ghm8uqjkil8z7imtd+0uIcrng==
-X-Google-Smtp-Source: ABdhPJy/Caleobpyz0qcwl3NnfHCSIKGS22hcXQsHSSVLfDURXci+05UMvKVZOUGgl9LtMNCuV3Fuw==
-X-Received: by 2002:a17:907:2d27:b0:6e8:3ea6:7645 with SMTP id gs39-20020a1709072d2700b006e83ea67645mr28970048ejc.727.1649863531801;
-        Wed, 13 Apr 2022 08:25:31 -0700 (PDT)
-Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709060f4700b006e8d0746969sm83440ejj.222.2022.04.13.08.25.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 08:25:30 -0700 (PDT)
-Message-ID: <ba7cd13f-d216-0ac6-97e1-6c13f1e15f38@linaro.org>
-Date:   Wed, 13 Apr 2022 17:25:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 10/14] dt-bindings: pinctrl: rt2880: fix binding name, pin
- groups and functions
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+mhFtm2R4Tk/xQkALF+56pj1AcIDfGuzH5UWyI2JWrI=;
+ b=K1HjbE8arGorrhlZhnJ9S9FQRXB1kYhYafdp2vWRgrpq/4UXav0fOh3L2ZSiv2knAUlgmUuIEFzsFXl1kUqd8vo6ZpyaH43TxZHx4OoHJuqOk7WDz8syNQfKH+iZ+o6Eu8zG/OhQk+deV9eYNCVxKO/gF3HIHaFRdlOBWT2rPXU=
+Received: from PH0PR03MB6786.namprd03.prod.outlook.com (2603:10b6:510:122::7)
+ by CH2PR03MB5366.namprd03.prod.outlook.com (2603:10b6:610:96::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 15:25:49 +0000
+Received: from PH0PR03MB6786.namprd03.prod.outlook.com
+ ([fe80::a97e:a520:c3a6:d2ae]) by PH0PR03MB6786.namprd03.prod.outlook.com
+ ([fe80::a97e:a520:c3a6:d2ae%9]) with mapi id 15.20.5164.020; Wed, 13 Apr 2022
+ 15:25:49 +0000
+From:   "Sa, Nuno" <Nuno.Sa@analog.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: RE: [PATCH v1 1/3] iio: imu: adis16480: Make use of device properties
+Thread-Topic: [PATCH v1 1/3] iio: imu: adis16480: Make use of device
+ properties
+Thread-Index: AQHYT0Scayim55zviU+m0GokmBcEa6zt9nCw
+Date:   Wed, 13 Apr 2022 15:25:49 +0000
+Message-ID: <PH0PR03MB67867FD2A0043F5331D1C5E399EC9@PH0PR03MB6786.namprd03.prod.outlook.com>
+References: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-11-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413060729.27639-11-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?iso-8859-1?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbnNhXGFwcG?=
+ =?iso-8859-1?Q?RhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
+ =?iso-8859-1?Q?OWUzNWJcbXNnc1xtc2ctZmNhMGNkZWEtYmIzZC0xMWVjLThiZGQtZmM3Nz?=
+ =?iso-8859-1?Q?c0MjFmY2FlXGFtZS10ZXN0XGZjYTBjZGVjLWJiM2QtMTFlYy04YmRkLWZj?=
+ =?iso-8859-1?Q?Nzc3NDIxZmNhZWJvZHkudHh0IiBzej0iMTA0MyIgdD0iMTMyOTQzMzcxND?=
+ =?iso-8859-1?Q?U3ODgzMzcxIiBoPSJjOWliTFRNQzJEV0tERWk4M0FYV281UFFQNjA9IiBp?=
+ =?iso-8859-1?Q?ZD0iIiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQU?=
+ =?iso-8859-1?Q?FFb0NBQURyYlAyK1NrL1lBZUFwV0xiUU4xTFY0Q2xZdHRBM1V0VURBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBSEFBQUFEYUFRQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBRUFBUUFCQUFBQVZJRXZvUUFBQUFBQUFBQUFBQUFBQUo0?=
+ =?iso-8859-1?Q?QUFBQmhBR1FBYVFCZkFITUFaUUJqQUhVQWNnQmxBRjhBY0FCeUFHOEFhZ0?=
+ =?iso-8859-1?Q?JsQUdNQWRBQnpBRjhBWmdCaEFHd0Fjd0JsQUY4QVpnQnZBSE1BYVFCMEFH?=
+ =?iso-8859-1?Q?a0FkZ0JsQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdFQV?=
+ =?iso-8859-1?Q?pBQnBBRjhBY3dCbEFHTUFkUUJ5QUdVQVh3QndBSElBYndCcUFHVUFZd0Iw?=
+ =?iso-8859-1?Q?QUhNQVh3QjBBR2tBWlFCeUFERUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFZUUJrQUdrQVh3?=
+ =?iso-8859-1?Q?QnpBR1VBWXdCMUFISUFaUUJmQUhBQWNnQnZBR29BWlFCakFIUUFjd0JmQU?=
+ =?iso-8859-1?Q?hRQWFRQmxBSElBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU?=
+ =?iso-8859-1?Q?FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?iso-8859-1?Q?QUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg=3D=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fd3b2caf-43c3-4cd2-7006-08da1d61e376
+x-ms-traffictypediagnostic: CH2PR03MB5366:EE_
+x-microsoft-antispam-prvs: <CH2PR03MB53668FC2D1D57918B1C1DBC599EC9@CH2PR03MB5366.namprd03.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: u4UJwn3Vpwz+w+cGsWZgHyOGl8p/n9U+x1k+ubz4Aoybn6Jk3bUe3dkREOtpOUr435eo9SY75wbQR0rvR4zeijyGNMhcxu0IQmXBuVWkjqantRNnbx8Cp7str7slEfpL5VMmOQQ6OWPCYt+7rSJT6GvTUpsLiBVG0wuf7HNNMMyA5HyJ9vf19VEZGkZbhjpgG0oboJhRYQ8mEyeq7pZwV/Yf/DY09QR088QRhXxWswImC3tL05+aVy0kPEAxBL4/DZbptrJzHYe/nVS+X1WS9zpp5n0LHzLOEWQz8/61rSrSVMsvgk36ABQwbDK12ysRYztCb2wkVRglZQ6y6b/X8UpxVoDAwMQOP8/6yKWblp9iZ8jQtBdzHsFM+nzy1Gt/m4LLrRiCjYQzO5PUyq2E2A1SPnXEa5ZnH+LNMwTn37gWowtjneVxexXIirpK+rY9+hFvC58zm7zeiwCSfeZytAyRW5kCaitlPpmuMFgPHWdVYPCrgejTiOioW23l7D1uojtrCtNREcGKu17KRiiX+AF1s+mfwvdCL7cLqhoKAGQw7loQvkkWTHQ8pu/eyqTg7kUiH+hICutfQbNl/PXWEmVB5sRT6+w7FATkC6E0CqRJ6NGI7SBxTa7ZvGu8uxdAa9m2fdjOlmHjn4H0BsUtBgH/AD92yhgwShfl8mSwW/EfBVbz4EII6C/AmhAYkSEnj+t9XHEnOhGsCH+Kiskyrg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6786.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(54906003)(86362001)(71200400001)(33656002)(122000001)(4744005)(5660300002)(508600001)(66476007)(66556008)(66946007)(76116006)(4326008)(8676002)(38070700005)(66446008)(7696005)(53546011)(6506007)(9686003)(64756008)(110136005)(2906002)(8936002)(316002)(52536014)(186003)(83380400001)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?iYbwEDyGozr81USm2UqnN0sfLzvMAPa4Q3dvxh2HvzTn6v+spSJvgFAK/J?=
+ =?iso-8859-1?Q?csdmTsrQ9GgOHF+0mvgPIK/2/6sHI5nnkVs8FFfLy5XnAQHv7t9UBrnQvT?=
+ =?iso-8859-1?Q?XyFD6hz3+S54b8wvYGivuYQycyhwg8RO/eD5VCJl0K4vSAUUI4xTcc50vG?=
+ =?iso-8859-1?Q?TYUtxcG2dIZoYl63L7EkYxzOaCkT0tIoqyNo+e5H+8yMk7WqFVA7BklplD?=
+ =?iso-8859-1?Q?HS/I/Qdh0mjg7Tn1OgyAAV8CNBjBDcJKCEgso5rriRM9sbJiHKBYsiJN5O?=
+ =?iso-8859-1?Q?KHa0J3AligG+rqK0fbsyv3/M0sIXhIIzCClxq/2uBtbbCD2ikI4t0wyOKC?=
+ =?iso-8859-1?Q?XKfIR01y/TJT4LGlTU2kl97+f79EqLk4NXfknXFewah31M3D66bcAb3W81?=
+ =?iso-8859-1?Q?ysa4zkSL26QG2t2YhYLCXIvaPc3Tw/eMv/YarAEM7L2jUXdkO9a4YMYmHh?=
+ =?iso-8859-1?Q?smcqMwjdEPEkrRf1W6BddbX5mQfvL/tsMQ8eodDvBt3Td+Hy8d0nA2SbSS?=
+ =?iso-8859-1?Q?8kyQpO1Zjxv55lZHBh/gKEDL1zwTBMcyszPikUBOdWjxSS4G0Oy1uWe5DA?=
+ =?iso-8859-1?Q?TehCVDfm/59SiLygg7cjTu2jJc0UU+WmbEZRS+htclNjwCp0KDbm+Gzwn6?=
+ =?iso-8859-1?Q?UeQaS3Tj8T0jQt1/fq7oTz2po1uK4N+hR+wo1HZNdlpgruI5m0oJfrToEL?=
+ =?iso-8859-1?Q?Pi6W/JCqVzUfk0s157TIRI9798OFLpErG81IoH8laPAdixn3WiAo6X8zEZ?=
+ =?iso-8859-1?Q?dr+PusqVUdAZUlU9eLtD5Ipr+y543ZVdwLGSZ9HPybH3R/49V1ft1EyxXF?=
+ =?iso-8859-1?Q?0HKDXU7hHXUg1LGx99secj44XqIZpHo0esYEoLVwOb/LDqEBi2NYUMiHZp?=
+ =?iso-8859-1?Q?PXBtnUWffBoy9JozQpiMZlBAI6vTAcHGCoIy/sPoBLyS9T7ryM8BunzYhu?=
+ =?iso-8859-1?Q?HXmU6y4saQ5YQ17Hv9Guq/J3EqYH+L47GpEQTRlsqGg2mw92TB64Xjdoj5?=
+ =?iso-8859-1?Q?VWBg0w4zWslyHbGeSLPtOGi3sWQJpSg4XX/H35JZHScqUBJYGV/2yBfs1l?=
+ =?iso-8859-1?Q?LYn564AaOrm0aDDnk4sbFQN32kHhC1gcFaao038ispVv9viV83ModKQi5d?=
+ =?iso-8859-1?Q?9HvaHq+7Rm6X7P3ar0jnARBAjP1c/UocYRreXjC3wyGAo/I/WkmUrASIvI?=
+ =?iso-8859-1?Q?kBiIW9snU0qRum5KN5RUGy8HwwCxTpTecSFwaRpAPGY1oHaHVRGKjVPgr3?=
+ =?iso-8859-1?Q?5YrAnuyKdDriK+ijYBazT+BUO+gPP7PiYWl1aqIHIZzqnmy2LTFsKzrLDY?=
+ =?iso-8859-1?Q?HWPIQ0F9VflEpLdMqeiiJzQpNlHTVSbfpBVXOIDiVGhgPUtIyiMMLmIVJw?=
+ =?iso-8859-1?Q?yjNUaFjm5NHMg6IZXXWR0Hv1o7oqvQjaYM8keaNogV1Qvf6KZV9NwSLyFe?=
+ =?iso-8859-1?Q?Cztvi5mus2q77Yzj2VfuCJ+qEe2cW+dr1UR8yWk+YjL4GYYUkrbr2On4T4?=
+ =?iso-8859-1?Q?PiD9DTe/tNN+pst88XmReyNPktnTcdWM23tVs/WcrFVNR0ac2v1Dcr/pOD?=
+ =?iso-8859-1?Q?UyHE3wukzvmsHSKwXELuRDAVorj5UmufPrBBTWF88lFFIw5/DA+fG2sf77?=
+ =?iso-8859-1?Q?8kdLSAgZWvMdpGBZJBosDxyvVp4FTiV4EVcj2LJpWlMuneI1Xr/6cpxtTZ?=
+ =?iso-8859-1?Q?7E+CcOzhV4TNPOXjgUs/2SH3QpxXQPzMyGjinS3M0rbUkBaAqk8zOhI82N?=
+ =?iso-8859-1?Q?P19TEJp9O+2szAJ0Bqv6BdWOIodEhqC3QvKChZ1JZRHfSfwKp6w5fPbcAN?=
+ =?iso-8859-1?Q?9+WBy+Wwf1JuWQhEYPjya5D/D9SjS7npHLJGWASC1KzAbvfr4v6ofzYGBg?=
+ =?iso-8859-1?Q?oV?=
+x-ms-exchange-antispam-messagedata-1: s2THgxguHaoVOA==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6786.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd3b2caf-43c3-4cd2-7006-08da1d61e376
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 15:25:49.0787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: m4Aj/OND7leCt7kHH509oLxdyOsaO6wrAt10q51ys30+ZyOS8QOP9TpzDEZqbjk5PjOz9wHGAXu9Id9RRCQ1Aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5366
+X-Proofpoint-GUID: ZnFKHAofU0CJ09326nsTxVAp3KsF0fKg
+X-Proofpoint-ORIG-GUID: ZnFKHAofU0CJ09326nsTxVAp3KsF0fKg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-13_02,2022-04-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxscore=0 priorityscore=1501 adultscore=0 clxscore=1015
+ mlxlogscore=516 impostorscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204130082
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 08:07, Arınç ÜNAL wrote:
-> Change binding name from ralink,rt2880-pinmux to ralink,rt2880-pinctrl.
-> This is the binding for the Ralink RT2880 pinctrl subdriver.
 
-What I don't see here is why you are doing this. pinmux/pinctrl have the
-same meaning, I guess?
 
-> 
-> Current pin group and function bindings are for MT7621. Put bindings for
-> RT2880 instead.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> -----Original Message-----
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Sent: Wednesday, April 13, 2022 4:41 PM
+> To: Sa, Nuno <Nuno.Sa@analog.com>; Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com>; linux-iio@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Cc: Lars-Peter Clausen <lars@metafoo.de>; Hennerich, Michael
+> <Michael.Hennerich@analog.com>; Jonathan Cameron
+> <jic23@kernel.org>
+> Subject: [PATCH v1 1/3] iio: imu: adis16480: Make use of device
+> properties
+>=20
+> [External]
+>=20
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
+>=20
+> Signed-off-by: Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com>
 > ---
->  ...pinmux.yaml => ralink,rt2880-pinctrl.yaml} | 24 +++++++++----------
->  1 file changed, 12 insertions(+), 12 deletions(-)
->  rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,rt2880-pinctrl.yaml} (56%)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-> similarity index 56%
-> rename from Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
-> rename to Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-> index 9de8b0c075e2..c657bbf9fdda 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-> @@ -1,21 +1,23 @@
->  # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinmux.yaml#
-> +$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinctrl.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Ralink rt2880 pinmux controller
-> +title: Ralink RT2880 Pin Controller
->  
->  maintainers:
-> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Mention this in commit msg.
+You beat me to do this. I actually had planned to do this next week
+once I saw we already have fwnode_irq_get_byname(). Anyways...
 
->    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->  
->  description:
-> -  The rt2880 pinmux can only set the muxing of pin groups. Muxing indiviual pins
-> +  Ralink RT2880 pin controller for RT2880 SoC.
-> +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
->    is not supported. There is no pinconf support.
->  
->  properties:
->    compatible:
-> -    const: ralink,rt2880-pinmux
-> +    const: ralink,rt2880-pinctrl
+Reviewed-by: Nuno S=E1 <nuno.sa@analog.com>
 
-you need to deprecate old property and add a new one.
-
-
->  
->  patternProperties:
->    '-pins$':
-> @@ -28,14 +30,12 @@ patternProperties:
->  
->          properties:
->            groups:
-> -            description: Name of the pin group to use for the functions.
-> -            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi,
-> -                   uart1, uart2, uart3, wdt]
-> +            description: The pin group to select.
-> +            enum: [i2c, spi, uartlite, jtag, mdio, sdram, pci]
-> +
->            function:
-> -            description: The mux function to select
-> -            enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
-> -                   pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3,
-> -                   spi, uart1, uart2, uart3, wdt refclk, wdt rst]
-> +            description: The mux function to select.
-> +            enum: [gpio, i2c, spi, uartlite, jtag, mdio, sdram, pci]
->  
-
-These were all incorrect for rt2880, I understand?
-
-
-Best regards,
-Krzysztof
+(I will still give this a test next week)

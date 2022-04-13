@@ -2,157 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106EB4FEFC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF54FEFCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiDMGY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S232397AbiDMGaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiDMGY0 (ORCPT
+        with ESMTP id S231625AbiDMGaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:24:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E6714BFD1;
-        Tue, 12 Apr 2022 23:22:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BB61150C;
-        Tue, 12 Apr 2022 23:22:06 -0700 (PDT)
-Received: from [10.163.39.141] (unknown [10.163.39.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A73273F70D;
-        Tue, 12 Apr 2022 23:22:00 -0700 (PDT)
-Message-ID: <e0efde60-625c-fa58-79c4-5e8a86ddf203@arm.com>
-Date:   Wed, 13 Apr 2022 11:52:36 +0530
+        Wed, 13 Apr 2022 02:30:04 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24BAAD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:27:44 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ec42eae76bso11196207b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gfr+yFv+alpSNVfS5J2ynVyzX3s0qBnSigSkSVyt5qo=;
+        b=lb6BCQUIv/I7NgwAMBBW7VFQUaXsxx5Mae1osQaABtBEHa6/rWY7zLhzObo+mkW1Hi
+         HsyHIwuT995ah/aczmtfGrSwQgQDJKQHkI9zx39d4D4ws21EBLm0fGb4OcDyIouS8ToD
+         pjb8jUET2YCx/64CFvXI2bdLhbBkWTVrl29CpW9kpnMptj4pf5FWp42BmViLdUnbBn3q
+         yiUgWxpBsXylNwu9gXvkX0r7LXH9lDSJK6jfpf5f2W1SSyj/8r3H9XPCs0H12ARddQmW
+         xdDoXkRahnH3g6dmelgpIr5ZxoLotG0ag+3E0Owp3i3PPU36aUhAQfQxV761rIBN28Y5
+         nqLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gfr+yFv+alpSNVfS5J2ynVyzX3s0qBnSigSkSVyt5qo=;
+        b=D01ayMWJqV/gAmkApi7g7r9Mon1xqhfQZ5pyVZJBKS9Y8CLPupk1ZMrj0+AsVrUWtN
+         nBsBRPbvPR0YYl/z0z8GxP5zQLlw6vET1hw9nxcH0qbBgLWR3YBZcIUWtSlS1NhqmZZ5
+         A0Ak8F5dubwfOfnAZnHiDdIXVFxdy6WD7h8y4Ij3MagIVbOdX4MoDqc5tKwtZkR+2MhT
+         Hkwwof4Hjn1apbhGXN7wmqjDgAJSN3wltLqmqyUei9CAoHfIoAz/SnnKv3UOZKzVpdrv
+         Am8BWkRlFM4FEmkJwjLiwtadsD6Db/V7v7pn8w2lFtQVsyDS8HukK/DaQoekYS9+3H/J
+         QYWA==
+X-Gm-Message-State: AOAM530ugQBENtP1FoEXQKKV4H8k6B+hNGB+9HoXoPFk94kf3X2gbSoq
+        ITQ0nMxYrHThqwbuUjDw05rnsbzCjS2x6jQyL1O3nQ==
+X-Google-Smtp-Source: ABdhPJysSuKSW6gTaJmCvHOpSFnmLQSXLpIiGYvmF8L9dXrhxJdRWG1wOG2V7da99cDpVqT2dtlgVU9hkASxT02WV5E=
+X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
+ d12-20020a81e90c000000b002dbd63e56ffmr34784132ywm.60.1649831263712; Tue, 12
+ Apr 2022 23:27:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V6 4/7] sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        khalid.aziz@oracle.com
-Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-References: <20220413055840.392628-1-anshuman.khandual@arm.com>
- <20220413055840.392628-5-anshuman.khandual@arm.com>
- <c3619877-32db-aaa3-5dd9-4917c067bc42@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <c3619877-32db-aaa3-5dd9-4917c067bc42@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412173819.234884577@linuxfoundation.org>
+In-Reply-To: <20220412173819.234884577@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 13 Apr 2022 11:57:32 +0530
+Message-ID: <CA+G9fYsD9FnViDYUpGC1VSKp92MfdagvPunnHcYtK55KaYyxSQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/170] 5.10.111-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 12 Apr 2022 at 23:17, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.111 release.
+> There are 170 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Apr 2022 17:37:53 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.111-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On 4/13/22 11:43, Christophe Leroy wrote:
-> 
-> 
-> Le 13/04/2022 à 07:58, Anshuman Khandual a écrit :
->> This defines and exports a platform specific custom vm_get_page_prot() via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. It localizes arch_vm_get_page_prot()
->> as sparc_vm_get_page_prot() and moves near vm_get_page_prot().
->>
->> Cc: "David S. Miller" <davem@davemloft.net>
->> Cc: Khalid Aziz <khalid.aziz@oracle.com>
->> Cc: sparclinux@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/sparc/Kconfig            |  1 +
->>   arch/sparc/include/asm/mman.h |  6 ------
->>   arch/sparc/mm/init_64.c       | 13 +++++++++++++
->>   3 files changed, 14 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
->> index 9200bc04701c..85b573643af6 100644
->> --- a/arch/sparc/Kconfig
->> +++ b/arch/sparc/Kconfig
->> @@ -84,6 +84,7 @@ config SPARC64
->>   	select PERF_USE_VMALLOC
->>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->>   	select HAVE_C_RECORDMCOUNT
->> +	select ARCH_HAS_VM_GET_PAGE_PROT
->>   	select HAVE_ARCH_AUDITSYSCALL
->>   	select ARCH_SUPPORTS_ATOMIC_RMW
->>   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
->> diff --git a/arch/sparc/include/asm/mman.h b/arch/sparc/include/asm/mman.h
->> index 274217e7ed70..af9c10c83dc5 100644
->> --- a/arch/sparc/include/asm/mman.h
->> +++ b/arch/sparc/include/asm/mman.h
->> @@ -46,12 +46,6 @@ static inline unsigned long sparc_calc_vm_prot_bits(unsigned long prot)
->>   	}
->>   }
->>   
->> -#define arch_vm_get_page_prot(vm_flags) sparc_vm_get_page_prot(vm_flags)
->> -static inline pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
->> -{
->> -	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
->> -}
->> -
->>   #define arch_validate_prot(prot, addr) sparc_validate_prot(prot, addr)
->>   static inline int sparc_validate_prot(unsigned long prot, unsigned long addr)
->>   {
->> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
->> index 8b1911591581..dcb17763c1f2 100644
->> --- a/arch/sparc/mm/init_64.c
->> +++ b/arch/sparc/mm/init_64.c
->> @@ -3184,3 +3184,16 @@ void copy_highpage(struct page *to, struct page *from)
->>   	}
->>   }
->>   EXPORT_SYMBOL(copy_highpage);
->> +
->> +static pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
->> +}
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	return __pgprot(pgprot_val(protection_map[vm_flags &
->> +			(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
->> +			pgprot_val(sparc_vm_get_page_prot(vm_flags)));
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> 
-> sparc is now the only one with two functions. You can most likely do 
-> like you did for ARM and POWERPC: merge into a single function:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I was almost about to do this one as well but as this patch has already been
-reviewed with a tag, just skipped it. I will respin the series once more :)
+## Build
+* kernel: 5.10.111-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: b82c8b005aaf13b8aa97a4fea425ae4fb1f3fc8c
+* git describe: v5.10.110-171-gb82c8b005aaf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.110-171-gb82c8b005aaf
 
-Khalid,
+## Test Regressions (compared to v5.10.109-593-gd189d4a7b878)
+No test regressions found.
 
-Could I keep your review tag after the following change ?
+## Metric Regressions (compared to v5.10.109-593-gd189d4a7b878)
+No metric regressions found.
 
-> 
-> pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> {
-> 	unsigned long prot = pgprot_val(protection_map[vm_flags &
-> 		(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
-> 
-> 	if (vm_flags & VM_SPARC_ADI)
-> 		prot |= _PAGE_MCD_4V;
-> 
-> 	return __pgprot(prot);
-> }
-> EXPORT_SYMBOL(vm_get_page_prot);
+## Test Fixes (compared to v5.10.109-593-gd189d4a7b878)
+No metric fixes found.
 
-- Anshuman
+## Metric Fixes (compared to v5.10.109-593-gd189d4a7b878)
+No metric fixes found.
+
+## Test result summary
+total: 88872, pass: 74945, fail: 768, skip: 12466, xfail: 693
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 51 passed, 9 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

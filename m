@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3F64FF0C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA604FF0C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiDMHqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S233460AbiDMHsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiDMHqJ (ORCPT
+        with ESMTP id S229835AbiDMHs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:46:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03932E69C;
-        Wed, 13 Apr 2022 00:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649835829; x=1681371829;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9LnT73jUESFVZOk+Ffoh5evZ5ZtPW8CwyMo+B2FIm2w=;
-  b=av3yyfp1BfjByYv/XvOuhIrXsZ/hb/C9DvCo/CTt/acArZAlMF9Uuczj
-   isOBV1vImuXI4ggs3aLzy1RCrRdX2TcCylqEuA36ro3qdvDvTuX/wiThh
-   Y6KVZ5ydBccTJSp+/rEXbA266Y/qYegF+Y3vp1Jlajyl7MfyDL+4cnp4U
-   Lv4i2GfW7kNnuWEszeAgF9V5ghcJiheVhCZSlcsQC0/Vih1WogRSGUowN
-   HBhpeqCG8z945BuDyTGdl7gJpYE9Ad3WK4oUA7m3wrYd6GM+RJq/4SGKE
-   w+ajfBeiNYip7wh3qx0m67qw0m+6hu67gWZb7LFA3kxrdRnjOJfbmhe9q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="323044265"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="323044265"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 00:43:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="573159281"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 00:43:47 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Dump all rcuc kthreads status for CPUs that not report quiescent state
-Date:   Wed, 13 Apr 2022 15:44:11 +0800
-Message-Id: <20220413074411.2369623-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 03:48:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1374642ED8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:46:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BB7A61328
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3679C385A4;
+        Wed, 13 Apr 2022 07:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649835965;
+        bh=cuHoYy+Y/Fb3+nw6/VecCrtTq1QAy9QdjGKgoL/poqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZmlzhwBbGtoURc3KLo63sFtjYdieuPef+ooftDxxxC60JuW09JhI6E5G172AcCZoO
+         HWD3aEqewYBFDouSEwYUkPmd8ohjM3D2nCyRCr/WwqYd1hj/mKVicbvPUFeEFQSWrd
+         F455iUSsCpQvOGd1CRtAzAtXRNuL5YKvRgQA5tjA=
+Date:   Wed, 13 Apr 2022 09:45:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ramon Fried <rfried.dev@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] uio: make MAX_UIO_MAPS & MAX_UIO_PORT_REGIONS
+ configurable
+Message-ID: <YlZ/tK/51GiQI8uP@kroah.com>
+References: <20220413071137.4023184-1-rfried.dev@gmail.com>
+ <YlZ7fQIpXNJSbd+P@kroah.com>
+ <CAGi-RULbkLS0wRQni8mQ0Dp_dAGuRSj96TmqD7oD+Tj=zSo3Gg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGi-RULbkLS0wRQni8mQ0Dp_dAGuRSj96TmqD7oD+Tj=zSo3Gg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,56 +53,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the rcutree.use_softirq is configured, when RCU Stall event
-happened, dump status of all rcuc kthreads who due to starvation
-prevented grace period ends on CPUs that not report quiescent
-state.
+On Wed, Apr 13, 2022 at 10:40:09AM +0300, Ramon Fried wrote:
+> On Wed, Apr 13, 2022 at 10:28 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Apr 13, 2022 at 10:11:37AM +0300, Ramon Fried wrote:
+> > > MAX_UIO_MAPS and MAX_UIO_PORT_REGIONS are hard-coded to 5.
+> > > This is not always sufficiant for some drivers.
+> >
+> > Why not?  What in-kernel drivers need more than this?
+> Obviously kernel drivers don't need more, but I'm developing a driver
+> that needs more.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_stall.h | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Great, let's consider this change at the same time you submit your
+driver, otherwise it doesn't make much sense now, right?
 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index d7956c03edbd..e6ecc32cfe23 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -348,6 +348,7 @@ static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)
- }
- #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
- 
-+static void rcuc_kthread_dump(struct rcu_data *rdp);
- /*
-  * Dump stacks of all tasks running on stalled CPUs.  First try using
-  * NMIs, but fall back to manual remote stack tracing on architectures
-@@ -368,6 +369,7 @@ static void rcu_dump_cpu_stacks(void)
- 					pr_err("Offline CPU %d blocking current GP.\n", cpu);
- 				else if (!trigger_single_cpu_backtrace(cpu))
- 					dump_cpu_task(cpu);
-+				rcuc_kthread_dump(per_cpu_ptr(&rcu_data, cpu));
- 			}
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	}
-@@ -471,6 +473,9 @@ static void rcuc_kthread_dump(struct rcu_data *rdp)
- 	unsigned long j;
- 	struct task_struct *rcuc;
- 
-+	if (use_softirq)
-+		return;
-+
- 	rcuc = rdp->rcu_cpu_kthread_task;
- 	if (!rcuc)
- 		return;
-@@ -659,9 +664,6 @@ static void print_cpu_stall(unsigned long gps)
- 	rcu_check_gp_kthread_expired_fqs_timer();
- 	rcu_check_gp_kthread_starvation();
- 
--	if (!use_softirq)
--		rcuc_kthread_dump(rdp);
--
- 	rcu_dump_cpu_stacks();
- 
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
--- 
-2.25.1
+thanks,
 
+greg k-h

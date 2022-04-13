@@ -2,154 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0416E4FFEE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF684FFEF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238196AbiDMTPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S238211AbiDMTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbiDMTNP (ORCPT
+        with ESMTP id S238633AbiDMTNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:13:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C29176E1F;
-        Wed, 13 Apr 2022 12:08:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F0C9A218EF;
-        Wed, 13 Apr 2022 19:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649876930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9EyFhZgfXVFqDOsGJ8GGdwNni7OZbvbe647ljn8l0Kg=;
-        b=crSSLVb7nuaM5pMQ9PmWBc+Yv5OTLyBrGq/yvmHYRW6kBmQpl9rH14sTEvCsnuU2T6OwUD
-        cF6lo/Dcn/QQ04wcLreovJ8K6Pw90vXEQmSYKGJ2BWelryhwjnrvbBAWXsCtGuhrhj0lV7
-        MVY22fkx0No8qug34GDhqIwqPtUEx/k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78A6413A91;
-        Wed, 13 Apr 2022 19:08:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id X2JiGsIfV2J8AgAAMHmgww
-        (envelope-from <nborisov@suse.com>); Wed, 13 Apr 2022 19:08:50 +0000
-Message-ID: <c3577a83-9889-c741-bb74-051a6d9a0f61@suse.com>
-Date:   Wed, 13 Apr 2022 22:08:49 +0300
+        Wed, 13 Apr 2022 15:13:24 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A87F7938D;
+        Wed, 13 Apr 2022 12:09:07 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e2442907a1so2989192fac.8;
+        Wed, 13 Apr 2022 12:09:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DLfFRlPR18ak0Dg98RjZkZ+swlB0PONrUxc3NZGeV2c=;
+        b=vPebnLDsWtFRRCt7KvZX9tAeUU6BxIg+CZBdi/YxNeyLLAx4ifffad8wZS5YU0gRue
+         jcGxNppYBXAEr1rmnZDJVxUtl+gZgoCGk26CtgCFhliPvLqURvm/nSVcm643KMJ5yjRz
+         tJSo+dqktAnXHck4VSWfMSSWLS49R+WqbZYOA33/inuKPsHVkyDDtdYLMh5Cyf8h8zqp
+         ypl1J6qCTJQDi2D54oNv1f5wU98yqIxTMz9kkIYrBRvilVKSuz8W+5n/FW/i2dpe+KuQ
+         ZdyxPEEG0craU+4dr8VQWkkkeQ9nPkq13cWxA1HLypNtJaxmwQeFzA/OoRZw8t/Vhf68
+         yrew==
+X-Gm-Message-State: AOAM532R9kZDvC+ZhQ9rcSA6wX42jDozhkqglFGI/MTL8oTXSuwKkPR7
+        RhGlXXEKPkKyeaDQj0Fl5xTo04nQxg==
+X-Google-Smtp-Source: ABdhPJw7hT2QmeBA/ltdKB38j/W8WiKNHRYpddijFqt+fqHm6/4cCtwZkGaKp1wKMMN4w5kGnCJ2/g==
+X-Received: by 2002:a05:6870:b525:b0:e3:9db:e075 with SMTP id v37-20020a056870b52500b000e309dbe075mr90116oap.41.1649876946855;
+        Wed, 13 Apr 2022 12:09:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l14-20020a056820030e00b00320edaf9b8esm13631840ooe.44.2022.04.13.12.09.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 12:09:06 -0700 (PDT)
+Received: (nullmailer pid 3659930 invoked by uid 1000);
+        Wed, 13 Apr 2022 19:09:05 -0000
+Date:   Wed, 13 Apr 2022 14:09:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interrrupt-controller: uniphier-aidet: Use
+ unevaluatedProperties
+Message-ID: <Ylcf0QOBAne6fKQr@robh.at.kernel.org>
+References: <1649317664-21391-1-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
-Content-Language: en-US
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     dsterba@suse.cz, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, terrelln@fb.com
-References: <20220411135136.GG15609@suse.cz>
- <20220411155540.36853-1-schspa@gmail.com>
- <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com>
- <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
-From:   Nikolay Borisov <nborisov@suse.com>
-In-Reply-To: <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649317664-21391-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 07, 2022 at 04:47:44PM +0900, Kunihiko Hayashi wrote:
+> This refers common bindings, so this is preferred for
+> unevaluatedProperties instead of additionalProperties.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../bindings/interrupt-controller/socionext,uniphier-aidet.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/socionext,uniphier-aidet.yaml b/Documentation/devicetree/bindings/interrupt-controller/socionext,uniphier-aidet.yaml
+> index f89ebde76dab..77f2d58a9c3f 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/socionext,uniphier-aidet.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/socionext,uniphier-aidet.yaml
+> @@ -49,7 +49,7 @@ required:
+>    - interrupt-controller
+>    - '#interrupt-cells'
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
 
+As mentioned elsewhere, not necessary here.
 
-On 13.04.22 г. 19:03 ч., Schspa Shi wrote:
-> Nikolay Borisov <nborisov@suse.com> writes:
-> 
->> On 11.04.22 г. 18:55 ч., Schspa Shi wrote:
->>> This is an optimization for fix fee13fe96529 ("btrfs:
->>> correct zstd workspace manager lock to use spin_lock_bh()")
->>> The critical region for wsm.lock is only accessed by the process context and
->>> the softirq context.
->>> Because in the soft interrupt, the critical section will not be preempted by
->>> the
->>> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock) to turn
->>> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situation.
->>> Changelog:
->>> v1 -> v2:
->>>       - Change the commit message to make it more readable.
->>> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.com/
->>> Signed-off-by: Schspa Shi <schspa@gmail.com>
->>
->> Has there been any measurable impact by this change? While it's correct it does mean that
->>   someone looking at the code would see that in one call site we use plain spinlock and in
->> another a _bh version and this is somewhat inconsistent.
->>
-> Yes, it may seem a little confused. but it's allowed to save some
-> little peace of CPU times.
-> and "static inline void red_adaptative_timer(struct timer_list *t) in
-> net/sched/sch_red.c"
-> have similar usage.
-> 
->> What's more I believe this is a noop since when softirqs are executing preemptible() would
->> be false due to preempt_count() being non-0 and in the bh-disabling code
->> in the spinlock we have:
->>
->>   /* First entry of a task into a BH disabled section? */
->>      1         if (!current->softirq_disable_cnt) {
->>    167                 if (preemptible()) {
->>      1                         local_lock(&softirq_ctrl.lock);
->>      2                         /* Required to meet the RCU bottomhalf requirements. */
->>      3                         rcu_read_lock();
->>      4                 } else {
->>      5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softirq_ctrl.cnt));
->>      6                 }
->>      7         }
->>
->>
->> In this case we'd hit the else branch.
-> 
-> We won't hit the else branch. because current->softirq_disable_cnt
-> won't be zero in the origin case.
-> 
-> __do_softirq(void)
->          softirq_handle_begin(void)
->          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
->                          current->softirq_disable_cnt will be > 0 at this time.
-
-That's only relevant on CONFIG_PREEMPT_RT though, on usual kernels 
-softirq_handle_being is empty. Furthermore, in case of the non-preempt 
-rt if preemptible() always returns false this means that even in the 
-__do_softirq path we'll never increment softirq_disable_cnt. So if 
-anything this change is only beneficial (theoretically at that in 
-preempt_rt scenarios).
-
->      ......
->          zstd_reclaim_timer_fn(struct timer_list *timer)
->                          spin_lock_bh(&wsm.lock);
->                          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
->                          if (!current->softirq_disable_cnt) {
->                                                  // this if branch won't hit
->                                          }
-> 
->          softirq_handle_end();
-> 
-> In this case, the "__local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);"
-> won't do anything useful it only
-> increase softirq disable depth and decrease it in
-> "__local_bh_enable_ip(_RET_IP_, SOFTIRQ_LOCK_OFFSET);".
-> 
-> So it's safe to replace spin_lock_bh with spin_lock in a timer
-> callback function.
-> 
-> 
-> For the ksoftirqd, it's all the same.
-> 
+Rob

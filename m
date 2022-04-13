@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251FE4FF2B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538134FF2BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiDMIxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S234006AbiDMIyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiDMIxp (ORCPT
+        with ESMTP id S234092AbiDMIye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:53:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A933D37A09
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649839883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 13 Apr 2022 04:54:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD70149939;
+        Wed, 13 Apr 2022 01:52:04 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7698121110;
+        Wed, 13 Apr 2022 08:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649839923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CXaBut5TtVX/5x8criaiy+9HCqtO5Zc1LaQGUaRBMEA=;
-        b=WiI8PHrDgqEQzepEdzXaImZIebF0xzTHUD6WFhDwDQtHRBZGPauFkRW9JJlU0CoRy6q4f5
-        WFux6I8g3oDKW+SGvmslR+gyQSeGfLF6ul0Z9D9WkZU1fQesejDbGKYN0sQnJhOn5Kb+sw
-        6Mzta+m1gi8gxNhkAZWV9ludyYbc63I=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-14G5CK0SN5exSXnTpWL82w-1; Wed, 13 Apr 2022 04:51:22 -0400
-X-MC-Unique: 14G5CK0SN5exSXnTpWL82w-1
-Received: by mail-wm1-f72.google.com with SMTP id r132-20020a1c448a000000b0038eaca2b8c9so175429wma.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:51:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CXaBut5TtVX/5x8criaiy+9HCqtO5Zc1LaQGUaRBMEA=;
-        b=kEjjVeRuf56yCJoWcQU4fCHW4D/MFM0abFJ8xBa/6lGWtXgEruEAxGXWz1jTFlb5Wn
-         AepYqrzWLioa03I9J6SaUjpi83WmWbz+DPaHymRLKb6OigRvQhi6scUnh8GdRvUIlJfo
-         9QjvDkQm5zqsOEhXN86Apj73+12qtkMg3b502aWtt8P1GWXHZbRznxNDgKXnOVothTvN
-         mUDicKjdDdEXHIR5KErhnhyOdlt+gShR0uLPYinkgsb8Bblrm8hU2MGbVqb3bgTJVljo
-         DqpLDVW67ygBlul2tRK6H7nm47BXiUEAT6eqDqmtvVieAsvMAhuiDRPy5WcsGH3uo6FM
-         TTEA==
-X-Gm-Message-State: AOAM5333dwTknHMxPyroN6u9bfTtXK+OvWuWg6s6XhZGH2LyXPVMAk4y
-        Lm7sHMaLxkiZihpM/kAgYaCX6JQOzRFvUhXi0n2tGqRSMJJYxbG8DHwn9X0jTffUq9+IiT/gKr8
-        gIX+GSJ7ibByEPzHoGoAmS6uS
-X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr8007995wml.160.1649839881425;
-        Wed, 13 Apr 2022 01:51:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxn5qtF2uQ6pUNxFjxEXQhAZa5yNorXoA/krDl871AVJA2ATWMJLEmGmsp6F9Svpp/KYF0D+w==
-X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr8007973wml.160.1649839881115;
-        Wed, 13 Apr 2022 01:51:21 -0700 (PDT)
-Received: from redhat.com ([2.55.135.33])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05600c3b1400b0038ebbbb2ad2sm1723628wms.44.2022.04.13.01.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 01:51:20 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 04:51:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        alikernel-developer@linux.alibaba.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] uio/uio_pci_generic: Introduce refcnt on open/release
-Message-ID: <20220413044246-mutt-send-email-mst@kernel.org>
-References: <1649833302-27299-1-git-send-email-yaohongbo@linux.alibaba.com>
- <YlZ8vZ9RX5i7mWNk@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlZ8vZ9RX5i7mWNk@kroah.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        bh=9GYpfybgqBmDWR1LwtozuNW1NwOcsVxp2JYkv3jb+yY=;
+        b=SRrH+U6/GxLh5gIco/h3NzyN6nL2hY7kKvFftKjks6rLr11sAaM5xBB9AmQ8CZ+yYHvNsB
+        a1IeWuSXON5AXDovDW7as7+RizvxtpTJXhqkfyIgY0Jr2oeuifFxgxwvYg/Tp9QAh6uj9S
+        KY5Pje9vDWz2DQXTlsPgipFmm4SX6qE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649839923;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9GYpfybgqBmDWR1LwtozuNW1NwOcsVxp2JYkv3jb+yY=;
+        b=RJtEx7vKdnApwiOUV4wEAhgiR1vk2SsFPNkKs4+FdxjrRWnCW3PXF6TkzPLbm+BpjTMHAX
+        mk20nz1CuzQIOPDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 613FEA3B95;
+        Wed, 13 Apr 2022 08:52:03 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 10:52:03 +0200
+Message-ID: <s5hilrd74cs.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 00/16] Support external boost at CS35l41 ASoC driver
+In-Reply-To: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
+References: <20220413083728.10730-1-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,94 +67,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:33:17AM +0200, Greg KH wrote:
-> On Wed, Apr 13, 2022 at 03:01:42PM +0800, Yao Hongbo wrote:
-> > If two userspace programs both open the PCI UIO fd, when one
-> > of the program exits uncleanly, the other will cause IO hang
-> > due to bus-mastering disabled.
-> > 
-> > It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
-> > to avoid such problems.
+On Wed, 13 Apr 2022 10:37:12 +0200,
+Lucas Tanure wrote:
 > 
-> Why do you have multiple userspace programs opening the same device?
-> Shouldn't they coordinate?
-
-Or to restate, I think the question is, why not open the device
-once and pass the FD around?
-
-
-> > 
-> > Fixes: 865a11f987ab("uio/uio_pci_generic: Disable bus-mastering on release")
-
-
-space missing before ( here .
-
-> > Reported-by: Xiu Yang <yangxiu.yx@alibaba-inc.com>
-> > Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> > ---
-> > Changes for v2:
-> > 	Use refcount_t instead of atomic_t to catch overflow/underflows.
-> > ---
-> >  drivers/uio/uio_pci_generic.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
-> > index e03f9b5..1a5e1fd 100644
-> > --- a/drivers/uio/uio_pci_generic.c
-> > +++ b/drivers/uio/uio_pci_generic.c
-> > @@ -31,6 +31,7 @@
-> >  struct uio_pci_generic_dev {
-> >  	struct uio_info info;
-> >  	struct pci_dev *pdev;
-> > +	refcount_t refcnt;
-> >  };
-> >  
-> >  static inline struct uio_pci_generic_dev *
-> > @@ -39,6 +40,14 @@ struct uio_pci_generic_dev {
-> >  	return container_of(info, struct uio_pci_generic_dev, info);
-> >  }
-> >  
-> > +static int open(struct uio_info *info, struct inode *inode)
-> > +{
-> > +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > +
-> > +	refcount_inc(&gdev->refcnt);
-> > +	return 0;
-> > +}
-> > +
-> >  static int release(struct uio_info *info, struct inode *inode)
-> >  {
-> >  	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> > @@ -51,7 +60,9 @@ static int release(struct uio_info *info, struct inode *inode)
-> >  	 * Note that there's a non-zero chance doing this will wedge the device
-> >  	 * at least until reset.
-> >  	 */
-> > -	pci_clear_master(gdev->pdev);
-> > +	if (refcount_dec_and_test(&gdev->refcnt))
-> > +		pci_clear_master(gdev->pdev);
+> Move the support for CS35L41 external boost to its shared library
+> for ASoC use.
+> This move resulted in cs35l41_hda_reg_sequence being removed,
+> and its steps were broken down into regmap writes or functions
+> from the library. And hardware configuration struct was unified
+> for its use in the shared lib.
+> While at it, some minor bugs were found and fixed it.
 > 
-> The goal here is to flush things when userspace closes the device, as
-> the comment says.  So don't you want that to happen for when userspace
-> closes the file handle no matter who opened it?
+> v7 changelog:
+>  - Rebased on top v5.18-rc2 tag
+>  - Acks from Mark Brown
 > 
-> As this is a functional change, how is userspace going to "know" this
-> functionality is now changed or not?
+> v6 changelog:
+>  - Rebased on top of Linux Next with community patches for CS35L41
+>  - Document patch acked by Charles Keepax
 > 
-> And if userspace really wants to open this multiple times, then properly
-> switch the code to only create the device-specific structures when open
-> is called.  Otherwise you are sharing structures here that are not
-> intended to be shared, shouldn't you have your own private one?
+> v5 changelog:
+>  - Fixed wrong indentation at Documentation patch
+>  - Use of consistent prefix
 > 
-> this feels odd.
+> v4 changelog:
+>  - Separated GPIO 1 and 2 function enums
 > 
-> thanks,
+> v3 changelog:
+>  - Remove patches already accepted
+>  - Improved logic in documentation patch
+>  - Documentation patch goes before its code
+>  - Fixed missing Signed-off-by
+>  - Fixed subject for HDA patches
 > 
-> greg k-h
+> v2 changelog:
+>  - Instead of removing the log, playback actions will log the last regmap access.
+>  - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
+>  provided example.
+> 
+> Previous versions:
+>  v1: https://lkml.org/lkml/2022/3/3/759
+>  v2: https://lkml.org/lkml/2022/3/4/743
+>  v3: https://lkml.org/lkml/2022/3/8/975
+>  v4: https://lkml.org/lkml/2022/3/17/267
+>  v5: https://lkml.org/lkml/2022/3/22/696
+>  v6: https://lkml.org/lkml/2022/4/9/114
+> 
+> David Rhodes (1):
+>   ASoC: cs35l41: Document CS35l41 External Boost
+> 
+> Lucas Tanure (15):
+>   ALSA: cs35l41: Unify hardware configuration
+>   ALSA: cs35l41: Check hw_config before using it
+>   ALSA: cs35l41: Move cs35l41_gpio_config to shared lib
+>   ALSA: hda: cs35l41: Fix I2S params comments
+>   ALSA: hda: cs35l41: Always configure the DAI
+>   ALSA: hda: cs35l41: Add Boost type flag
+>   ALSA: hda: cs35l41: Put the device into safe mode for external boost
+>   ALSA: hda: cs35l41: Mute the device before shutdown
+>   ALSA: cs35l41: Enable Internal Boost in shared lib
+>   ALSA: hda: cs35l41: Move boost config to initialization code
+>   ALSA: hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+>   ALSA: hda: cs35l41: Reorganize log for playback actions
+>   ALSA: hda: cs35l41: Handle all external boost setups the same way
+>   ALSA: hda: cs35l41: Move external boost handling to lib for ASoC use
+>   ASoC: cs35l41: Support external boost
 
-Sigh. Maybe it was a mistake to do 865a11f987ab to begin with.
-Anyone doing DMA with UIO is already on very thin ice.
-But oh well.
+Now applied all 16 patches to for-next branch.
 
--- 
-MST
 
+thanks,
+
+Takashi

@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64673500114
+	by mail.lfdr.de (Postfix) with ESMTP id 1A12C500113
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbiDMVX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S238888AbiDMVXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239274AbiDMVXD (ORCPT
+        with ESMTP id S239308AbiDMVXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:23:03 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9A2BB37;
-        Wed, 13 Apr 2022 14:20:41 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id q129so3431701oif.4;
-        Wed, 13 Apr 2022 14:20:41 -0700 (PDT)
+        Wed, 13 Apr 2022 17:23:12 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F902BB37
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:20:50 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bg24so3250030pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=eMGB2zfPbAG9Q8WOOd6Fy48l+atpiddj7/fan+CEbbg=;
+        b=ktIH450oeVvWGl4fzzvsVVfe+uBGTeIwIIF87quitTz+JZUrWK7zlxSKIZC7EPRfIj
+         mTKK14MeJjAWdnYLKuc7p35D43iZYPomIJV9cznWMxfFMDNIoAjOrv1aWFS045v9Lzjt
+         FgTiH2N2MkrJIiMj70Vsp1n2fwjpa3kdF1qGA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BNnhzbT7x5Fwfm2D+LNQD+lbH1XqfFIidCgzY9zOuGk=;
-        b=FIY+MZHCG+BzxvP7M0SwV6pj/njJoYdDjJcTFRGITCWMOVGTsxJpB3dwFbowihllgH
-         51rAOpR1q1mVLcc26h7v7TUcIYjy2nedRK3T0x9BXE0gp9BPEOVzI5gwgf56LjjuxULK
-         dvzNjEwAkdKoLb26IPrZPYZkxMve48vSPABtAFkrwgpmfNhexH6uryguDUAFsx/dxQJK
-         d/gjYyaMXI8jbHsOuO6IN9UOOAxtcTd9M3ITLWTHcqIvDBJyrqwfPPo+Q3HVMTAHq12w
-         /SdlAbi1BTKoSvsSXSB6Ds+Ix70S+q/jWT1dN1dcRxiSwIJap3pdDQaM1zfYkE/rOLw3
-         BUJA==
-X-Gm-Message-State: AOAM530/rgC7sAChBqqgZNYtMQ9QjSmTzJOiUAzwCR7CJJrl2ob5wuEb
-        eyYmgZSKKx31B3OMAtAlfwY4napT8w==
-X-Google-Smtp-Source: ABdhPJzOAUPoYvywkyjx8QaQOVnaIDTerWLm9Yg9DWHDGQeYUOO9E66kaHrhsX05kwA+rd6RTOa7QQ==
-X-Received: by 2002:a05:6808:118f:b0:2d4:13f1:8504 with SMTP id j15-20020a056808118f00b002d413f18504mr332417oil.90.1649884840198;
-        Wed, 13 Apr 2022 14:20:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bx16-20020a0568081b1000b002f7966564b4sm59862oib.43.2022.04.13.14.20.39
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=eMGB2zfPbAG9Q8WOOd6Fy48l+atpiddj7/fan+CEbbg=;
+        b=tvTGLLeh/Wp5QfK4SrI1Kdo2QNpTW84AU4k6+Havw4SWg2hPS0CIAWsPznDz3fc96o
+         Q60bHUCmxNTI9WhqAzZNiidOVECu6dZ4CfQbytOU9NfGpTDofHZ/G2s1yGrldhX3qKu6
+         bank2PogVexnmVFdPizHahkGploINOTPHPTmE2ZqOsKSJWzJWOF4AOhdBl2v0R/nqYgc
+         L7T1GOcbAl9ulHorQiLtx0ttKj9Kq1/wfela/B7YWSeKscfaEZzgTo81NEvONB3zh7TW
+         +boSWw8Ts9G9PbXdty8oEpfQLwhhzIy0xrDbHboOeK3AeFo5tKWQrLFSTlbIy9QEudNy
+         z2sg==
+X-Gm-Message-State: AOAM532AX9ViK9/PAEM94hrq/gQ23Gza08IjlEfy7VGX3zfkLLAURzgo
+        49fHCWfJ5uFZTdv8VzeUQwlLRQ==
+X-Google-Smtp-Source: ABdhPJyI/txgkIATfc9o3YYs6eT53/rozlKJ9Mvz4Kx+Swh0erWgHqDdBlMYX0n5vUrnH02mjv1ykw==
+X-Received: by 2002:a17:90a:8595:b0:1bb:fbfd:bfbf with SMTP id m21-20020a17090a859500b001bbfbfdbfbfmr682428pjn.125.1649884849632;
+        Wed, 13 Apr 2022 14:20:49 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f4-20020aa79d84000000b00505f920ffb8sm4678pfq.179.2022.04.13.14.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:20:39 -0700 (PDT)
-Received: (nullmailer pid 3947483 invoked by uid 1000);
-        Wed, 13 Apr 2022 21:20:38 -0000
-Date:   Wed, 13 Apr 2022 16:20:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        rex-bc.chen@mediatek.com, jitao.shi@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v4,1/3] dt-bindings: display: mediatek: dsi: Convert
- dsi_dtbinding to .yaml
-Message-ID: <Ylc+ph5OFzQ/YR3k@robh.at.kernel.org>
-References: <1649495514-25746-1-git-send-email-xinlei.lee@mediatek.com>
- <1649495514-25746-2-git-send-email-xinlei.lee@mediatek.com>
+        Wed, 13 Apr 2022 14:20:49 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:20:48 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] lkdtm/bugs: Don't expect thread termination without
+ CONFIG_UBSAN_TRAP
+Message-ID: <202204131405.025EAE89@keescook>
+References: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
+ <202204121440.FEE123D7@keescook>
+ <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
+ <20220413210131.46tqfxlkwtcayurs@meerkat.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1649495514-25746-2-git-send-email-xinlei.lee@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220413210131.46tqfxlkwtcayurs@meerkat.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,154 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 05:11:52PM +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Wed, Apr 13, 2022 at 05:01:31PM -0400, Konstantin Ryabitsev wrote:
+> On Wed, Apr 13, 2022 at 06:29:36AM +0000, Christophe Leroy wrote:
+> > I have a [patatt] section in .gitconfig which contains:
+> > 	signingkey  = ed25519:xxxxxxxx
+> > 	selector = xxxxxxxx (the same value as above)
+> > 
+> > What should I do now for you to get the key ? I don't even know where 
+> > the key is stored in my computer.
 > 
-> Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> Your key is stored in ~/.local/share/patatt, but you don't really need to do
+> anything, Kees can do the following:
 > 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
->  .../display/mediatek/mediatek,dsi.yaml        | 118 ++++++++++++++++++
->  2 files changed, 118 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+>     b4 kr --show-keys 363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
 
+Ah-ha, excellent.
 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> new file mode 100644
-> index 000000000000..431bb981394f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
-> @@ -0,0 +1,118 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,dsi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek DSI Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - CK Hu <ck.hu@mediatek.com>
-> +  - Jitao Shi <jitao.shi@mediatek.com>
-> +  - Xinlei Lee <xinlei.lee@mediatek.com>
-> +
-> +description: |
-> +  The MediaTek DSI function block is a sink of the display subsystem and can
-> +  drive up to 4-lane MIPI DSI output. Two DSIs can be synchronized for dual-
-> +  channel output.
-
-allOf:
-  - $ref: /schemas/display/dsi-controller.yaml#
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt2701-dsi
-> +      - mediatek,mt7623-dsi
-> +      - mediatek,mt8167-dsi
-> +      - mediatek,mt8173-dsi
-> +      - mediatek,mt8183-dsi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Engine Clock
-> +      - description: Digital Clock
-> +      - description: HS Clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: engine
-> +      - const: digital
-> +      - const: hs
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    items:
-> +      - const: dphy
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      Output port node. This port should be connected to the input
-> +      port of an attached DSI panel or DSI-to-eDP encoder chip.
-> +
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - power-domains
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - phy-names
-> +  - port
-> +
-> +additionalProperties: false
-
-with the above,
-
-unevaluatedProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/power/mt8183-power.h>
-> +    #include <dt-bindings/phy/phy.h>
-> +    #include <dt-bindings/reset/mt8183-resets.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        dsi0: dsi@14014000 {
-> +            compatible = "mediatek,mt8183-dsi";
-> +            reg = <0 0x14014000 0 0x1000>;
-> +            interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_LOW>;
-> +            power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
-> +            clocks = <&mmsys CLK_MM_DSI0_MM>,
-> +                <&mmsys CLK_MM_DSI0_IF>,
-> +                <&mipi_tx0>;
-> +            clock-names = "engine", "digital", "hs";
-> +            resets = <&mmsys MT8183_MMSYS_SW0_RST_B_DISP_DSI0>;
-> +            phys = <&mipi_tx0>;
-> +            phy-names = "dphy";
-> +            port {
-> +                dsi0_out: endpoint {
-> +                    remote-endpoint = <&panel_in>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.18.0
 > 
+> For now, this just provides instructions on what to do with the key:
 > 
+> 	christophe.leroy@csgroup.eu: (unknown)
+> 		keytype: ed25519
+> 		 pubkey: HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+> 		 krpath: ed25519/csgroup.eu/christophe.leroy/20211009
+> 	   fullpath: /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
+
+"fullpath" seems misleading for my config, given:
+
+[patatt]
+	...
+        keyringsrc = ~/korg/pgpkeys/.keyring
+
+Shouldn't this report fullpath as:
+
+	/home/kees/korg/pgpkeys/.keyring/ed25519/csgroup.eu/christophe.leroy/20211009
+
+And as a side note, should I prefer .local/share/b4/keyring over adding
+keys to a branch of the kernel keyring git tree?
+
+> 	---
+> 	For ed25519 keys:
+> 		echo [pubkey] > [fullpath]
+> 
+> So, for Kees to start being aware of your key, he needs to do:
+> 
+> 	mkdir -p /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy
+> 	echo HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0= > /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
+> 
+> I know this is awkward and clunky right now. Future versions of b4 will
+> streamline keyring management to make it a lot easier, I promise.
+
+Thanks for this walk-through! I think I managed this in the past with
+another ed25519 key, but I failed to figure it out this time. ;)
+
+Now it works! :)
+
+  ✓ [PATCH v2] lkdtm/bugs: Don't expect thread termination without
+CONFIG_UBSAN_TRAP
+    + Signed-off-by: Kees Cook <keescook@chromium.org>
+    + Link: https://lore.kernel.org/r/363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
+  ---
+  ✓ Signed: ed25519/christophe.leroy@csgroup.eu
+
+
+-- 
+Kees Cook

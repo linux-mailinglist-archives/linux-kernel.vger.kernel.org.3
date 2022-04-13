@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285184FFDCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95F24FFDCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbiDMSbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S237700AbiDMSbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiDMSbD (ORCPT
+        with ESMTP id S236313AbiDMSbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Apr 2022 14:31:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E88517C0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:28:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 93C96218A2;
-        Wed, 13 Apr 2022 18:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649874519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bovZqnW3J0sEXG7lYTUTR5FPz9PnssVKHBXSHW46LQ0=;
-        b=PQonp1i35SxnZ2dbgKPu3HjVNiKFgwCjk0Yh/iC11NYQyLAqbnpig19Z+LdAFK4p+2jRda
-        J1i8MRR7zXduEY3aLb9/L5inQLHGmK8oxFd4TOgNuYLCbAy0HEgouveF+1gnxE8d5zKREg
-        oB4WQHUYTqAXFZj5wiLfQVkpcKZxCPM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649874519;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bovZqnW3J0sEXG7lYTUTR5FPz9PnssVKHBXSHW46LQ0=;
-        b=bC5OHzIBPmRa6JH5hnumHiSVp/pd20Rk3/Qi2UIFsm29TVOpl3WO0cRiqVRpx5iZGa1ReW
-        n/UZWOyvYCj7ISCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F63713A91;
-        Wed, 13 Apr 2022 18:28:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fRF8BlcWV2IhdAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 13 Apr 2022 18:28:39 +0000
-Message-ID: <5fc7d007-e59b-de8d-4d88-3f1b5adfa95b@suse.cz>
-Date:   Wed, 13 Apr 2022 20:28:38 +0200
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0011A517C4;
+        Wed, 13 Apr 2022 11:28:41 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id e189so2957544oia.8;
+        Wed, 13 Apr 2022 11:28:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5SWSELfeWa5DmOzvc6fSLXMlhJprFBxcF+xYsyulMiQ=;
+        b=PnR+yKHKfAu4DYhMjJSwjqawAgciT1X/SOGn6t2xnkMkSGzQHaRbkUMst8U5Chfump
+         QJUSdDJ7/rkDYlGHxmt2Lxup+ZgMM4zI9vPA6ChYfh4jMb9ZfIsswK5dk5twwuytJbVw
+         xc/DR1XIkz6ZXsw8eICDyLwq9zRAdd3zwUk9TxwhsRfoIht9IBA0PgdfIyxrp5vOZjP4
+         cqDugWHOo276qj4qyt/iFQ99AJiP2Z9uGUkM7F9Uwtloivzrogm2GB0Or7h7cmxH1DSe
+         Hj/8h1jb9tRMfw+XfFlz3psh6u5eDKXO/VL/2vDmSQoXws/PdJL5iVmfrxAHLT0G5b3Z
+         /QkA==
+X-Gm-Message-State: AOAM532bWQIFKMyjGEHXRTCe5XfaVMm+Pg5u6lt78udhw26XL1XL4nXp
+        X1r36FVjQkHhsvGjKjbjJg==
+X-Google-Smtp-Source: ABdhPJxrB+xyAwGoK50FDp8/Bpf1gaWPjyG9igkAc4ADUhJd3bjMrwiFnpPxDcEpNSAUEARe3qs7QA==
+X-Received: by 2002:a05:6808:209e:b0:2da:4de9:e632 with SMTP id s30-20020a056808209e00b002da4de9e632mr66327oiw.214.1649874521279;
+        Wed, 13 Apr 2022 11:28:41 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bd32-20020a056870d7a000b000d43d4d2de1sm14458027oab.5.2022.04.13.11.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 11:28:41 -0700 (PDT)
+Received: (nullmailer pid 3601957 invoked by uid 1000);
+        Wed, 13 Apr 2022 18:28:40 -0000
+Date:   Wed, 13 Apr 2022 13:28:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jarrett Schultz <jaschultzms@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Jarrett Schultz <jaschultz@microsoft.com>
+Subject: Re: [PATCH v5 0/4] platform: surface: Introduce Surface XBL Driver
+Message-ID: <YlcWWPqGzc4Zk9R+@robh.at.kernel.org>
+References: <20220405210750.619511-1-jaschultzMS@gmail.com>
+ <d648629e-2339-449f-f63c-41af85ba35b5@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 12/16] mm: remember exclusively mapped anonymous pages
- with PG_anon_exclusive
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-13-david@redhat.com>
- <012e3889-563b-e7fc-c2e3-e7a6373a55ac@suse.cz>
- <2ae0a409-3d6d-9f6a-09e8-2f6867a4069a@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <2ae0a409-3d6d-9f6a-09e8-2f6867a4069a@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d648629e-2339-449f-f63c-41af85ba35b5@redhat.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,33 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 18:39, David Hildenbrand wrote:
->>> @@ -3035,10 +3083,19 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
->>>  
->>>  	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
->>>  	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
->>> +
->>> +	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
->>> +	if (anon_exclusive && page_try_share_anon_rmap(page)) {
->>> +		set_pmd_at(mm, address, pvmw->pmd, pmdval);
->>> +		return;
->> 
->> I am admittedly not too familiar with this code, but looks like this means
->> we fail to migrate the THP, right? But we don't seem to be telling the
->> caller, which is try_to_migrate_one(), so it will continue and not terminate
->> the walk and return false?
+On Mon, Apr 11, 2022 at 02:13:42PM +0200, Hans de Goede wrote:
+> Hi Jarrett,
 > 
-> Right, we're not returning "false". Returning "false" would be an
-> optimization to make rmap_walk_anon() fail faster.
-
-Ah right, that's what I missed, it's an optimization and we will realize
-elsewhere afterwards that the page has still mappings and we can't migrate...
-
-> But, after all, the THP is exclusive (-> single mapping), so
-> anon_vma_interval_tree_foreach() would most probably not have a lot work
-> to do either way I'd assume?
+> On 1/1/70 01:00, Jarrett Schultz wrote:
+> > After v4, there were some suggestions to change the driver again to use
+> > nvmem that would include some other changes to the sm8150 dtsi. While
+> > the suggestions make sense, this driver was supposed to remain simple
+> > for the introduction in order to get it into the tree and I think that
+> > it would be best to implement those and any other suggestions in a future
+> > patch. Hopefully this patch is now in a state where it can be accepted.
+> > Thanks to all who have helped and been patient along the way, this was
+> > my first patch :)
+> I appreciate your efforts to get this upstream, but this is not
+> how upstream development typically works. We usually iterate a patch
+> until all stakeholders are happy and then merge it.
 > 
-> In  any case, once we return from try_to_migrate(), the page will still
-> be mapped.
-> 
+> So unless Rob changes its mind and gives his Reviewed-by for the
+> devicetree bits from this v5, then this cannot be merged as is.
 
+This is dependent on the QCom folks. We can't really define the child 
+without first defining the parent binding.
+
+Rob

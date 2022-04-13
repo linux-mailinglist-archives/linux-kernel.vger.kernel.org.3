@@ -2,136 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675E14FF921
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEBE4FF92B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiDMOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S236215AbiDMOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiDMOmr (ORCPT
+        with ESMTP id S236192AbiDMOoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:42:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175271ADA4;
-        Wed, 13 Apr 2022 07:40:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA78B61C44;
-        Wed, 13 Apr 2022 14:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14502C385A9;
-        Wed, 13 Apr 2022 14:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649860825;
-        bh=78m64rXl3BqnnR/vfXtui5J5LLZFfkI1NSRN1fS+Ck0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D54WqGsxh9YBnBgVmvFtiH5xy6s421ODtURwwd50VnkQ1mXHYGJ+2NWNkXVfQZun6
-         Um89dJ+0wbeFbHd3sSL9OoZB6/ZY5yarddaEataYCkikYsyn8eI7/xeCzq+VRRV8xe
-         BZGcLMcKA8UBjiGbU0QRPsb6ObofS55dzwMzW99Oi0rFBFu1zhfvS81FAMTyxhutkG
-         NKI0fhh2MqANm0VuID9wzWfkhT536p0LR4pZOQgULlpV4jISPYbXfl5zWUTcwNZh7f
-         b9siyKpl0nHPTnRLdyWkhzMGHOp3r3auUj1pWuEHuj45bmaIeTgj3nYkCxjnDipmbN
-         iVdUdXACq3mCA==
-Received: by mail-il1-f171.google.com with SMTP id y16so1234114ilc.7;
-        Wed, 13 Apr 2022 07:40:25 -0700 (PDT)
-X-Gm-Message-State: AOAM531EOR2kz6q0YaDoaGbVTC2RSx2qodFFyndjP6XyMJaALgSAbcfn
-        60f5ghnAPpBgUajB4CwVsfJSbi9WjB4q9LE2og==
-X-Google-Smtp-Source: ABdhPJwPF0VHE9D8w/oeESIlTTrvwO1gVXfb+xfx+0hNhkJEN+zqgaOI+EWicwhkoM5T8fMAkoGBIRO6Tom03sqTu+o=
-X-Received: by 2002:a92:dd86:0:b0:2bc:805c:23c7 with SMTP id
- g6-20020a92dd86000000b002bc805c23c7mr17523118iln.279.1649860824300; Wed, 13
- Apr 2022 07:40:24 -0700 (PDT)
+        Wed, 13 Apr 2022 10:44:07 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EE850448;
+        Wed, 13 Apr 2022 07:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649860906; x=1681396906;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h0eLVFFWViG1x6V21DPemjegErPK0/jqGlo5FApwXHc=;
+  b=BOQOilJaUo6u+3xPXSA8Yp/1wDYauNx1uNbh+j9p2xC/uYa+z+AdFSx2
+   3Qq/y2DiD/HjBSK5rHTmdeVA3N/lPGd9ReipZiMXdHRjNSZYF1CG3Wg2N
+   xFMDbUPpYeM47GmRGCanOTG9M/GOQSucSk8tDLn/Lpdq7eIPQYcVk0K97
+   Yf2QtTx6hK8XzlpINXUW0GiQ0lF21PeWt/NBkq8CcZnW203OYIsQP2XW/
+   QGP9YWLgpBKlu7wUSxNpOezKwO6rR6EWGT9cLIOnidjoqJQAESmbweq0T
+   TPeolwLtzitbO/P9kLCt35pGN5vg0hQM64yUx3RETdTjLSfYYD7KvcRPq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="323129488"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="323129488"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:41:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="526500571"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 13 Apr 2022 07:41:43 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D1E15191; Wed, 13 Apr 2022 17:41:43 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: [PATCH v1 1/3] iio: imu: adis16480: Make use of device properties
+Date:   Wed, 13 Apr 2022 17:41:22 +0300
+Message-Id: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-4-Jason@zx2c4.com>
-In-Reply-To: <20220413115411.21489-4-Jason@zx2c4.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 13 Apr 2022 09:40:13 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-Message-ID: <CAL_JsqJ86vZKZQO+9_Kva-EbZrRPMbcgDm+UvjJdnR=GL-qHSw@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] riscv: use fallback for random_get_entropy()
- instead of zero
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:56 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is really not the best we can do.
-> Instead, at least calling random_get_entropy_fallback() would be
-> preferable, because that always needs to return _something_, even
-> falling back to jiffies eventually. It's not as though
-> random_get_entropy_fallback() is super high precision or guaranteed to
-> be entropic, but basically anything that's not zero all the time is
-> better than returning zero all the time.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/riscv/include/asm/timex.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
-> index 507cae273bc6..d6a7428f6248 100644
-> --- a/arch/riscv/include/asm/timex.h
-> +++ b/arch/riscv/include/asm/timex.h
-> @@ -41,7 +41,7 @@ static inline u32 get_cycles_hi(void)
->  static inline unsigned long random_get_entropy(void)
->  {
->         if (unlikely(clint_time_val == NULL))
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-Moving this check to get_cycles() implementation would eliminate the
-RiscV implementation of random_get_entropy() if you follow my other
-suggestion.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/imu/adis16480.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-I guess there's some advantage to skipping a NULL check every time for
-get_cycles(), but really the register read time will be much slower
-than an added check.
+diff --git a/drivers/iio/imu/adis16480.c b/drivers/iio/imu/adis16480.c
+index 44bbe3d19907..68eed088cca6 100644
+--- a/drivers/iio/imu/adis16480.c
++++ b/drivers/iio/imu/adis16480.c
+@@ -7,14 +7,16 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/bitfield.h>
+-#include <linux/of_irq.h>
+ #include <linux/interrupt.h>
++#include <linux/irq.h>
+ #include <linux/math.h>
+ #include <linux/device.h>
+ #include <linux/kernel.h>
+ #include <linux/spi/spi.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/lcm.h>
++#include <linux/property.h>
+ #include <linux/swab.h>
+ #include <linux/crc32.h>
+ 
+@@ -1239,9 +1241,10 @@ static int adis16480_enable_irq(struct adis *adis, bool enable)
+ 	return __adis_write_reg_16(adis, ADIS16480_REG_FNCTIO_CTRL, val);
+ }
+ 
+-static int adis16480_config_irq_pin(struct device_node *of_node,
+-				    struct adis16480 *st)
++static int adis16480_config_irq_pin(struct adis16480 *st)
+ {
++	struct device *dev = &st->adis.spi->dev;
++	struct fwnode_handle *fwnode = dev_fwnode(dev);
+ 	struct irq_data *desc;
+ 	enum adis16480_int_pin pin;
+ 	unsigned int irq_type;
+@@ -1267,7 +1270,7 @@ static int adis16480_config_irq_pin(struct device_node *of_node,
+ 	 */
+ 	pin = ADIS16480_PIN_DIO1;
+ 	for (i = 0; i < ARRAY_SIZE(adis16480_int_pin_names); i++) {
+-		irq = of_irq_get_byname(of_node, adis16480_int_pin_names[i]);
++		irq = fwnode_irq_get_byname(fwnode, adis16480_int_pin_names[i]);
+ 		if (irq > 0) {
+ 			pin = i;
+ 			break;
+@@ -1295,15 +1298,15 @@ static int adis16480_config_irq_pin(struct device_node *of_node,
+ 	return adis_write_reg_16(&st->adis, ADIS16480_REG_FNCTIO_CTRL, val);
+ }
+ 
+-static int adis16480_of_get_ext_clk_pin(struct adis16480 *st,
+-					struct device_node *of_node)
++static int adis16480_fw_get_ext_clk_pin(struct adis16480 *st)
+ {
++	struct device *dev = &st->adis.spi->dev;
+ 	const char *ext_clk_pin;
+ 	enum adis16480_int_pin pin;
+ 	int i;
+ 
+ 	pin = ADIS16480_PIN_DIO2;
+-	if (of_property_read_string(of_node, "adi,ext-clk-pin", &ext_clk_pin))
++	if (device_property_read_string(dev, "adi,ext-clk-pin", &ext_clk_pin))
+ 		goto clk_input_not_found;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(adis16480_int_pin_names); i++) {
+@@ -1317,9 +1320,7 @@ static int adis16480_of_get_ext_clk_pin(struct adis16480 *st,
+ 	return pin;
+ }
+ 
+-static int adis16480_ext_clk_config(struct adis16480 *st,
+-				    struct device_node *of_node,
+-				    bool enable)
++static int adis16480_ext_clk_config(struct adis16480 *st, bool enable)
+ {
+ 	unsigned int mode, mask;
+ 	enum adis16480_int_pin pin;
+@@ -1330,7 +1331,7 @@ static int adis16480_ext_clk_config(struct adis16480 *st,
+ 	if (ret)
+ 		return ret;
+ 
+-	pin = adis16480_of_get_ext_clk_pin(st, of_node);
++	pin = adis16480_fw_get_ext_clk_pin(st);
+ 	/*
+ 	 * Each DIOx pin supports only one function at a time. When a single pin
+ 	 * has two assignments, the enable bit for a lower priority function
+@@ -1438,7 +1439,7 @@ static int adis16480_probe(struct spi_device *spi)
+ 			return ret;
+ 	}
+ 
+-	ret = adis16480_config_irq_pin(spi->dev.of_node, st);
++	ret = adis16480_config_irq_pin(st);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1447,7 +1448,7 @@ static int adis16480_probe(struct spi_device *spi)
+ 		return ret;
+ 
+ 	if (!IS_ERR_OR_NULL(st->ext_clk)) {
+-		ret = adis16480_ext_clk_config(st, spi->dev.of_node, true);
++		ret = adis16480_ext_clk_config(st, true);
+ 		if (ret)
+ 			return ret;
+ 
+-- 
+2.35.1
 
-> -               return 0;
-> +               return random_get_entropy_fallback();
->         return get_cycles();
->  }
->  #define random_get_entropy()   random_get_entropy()

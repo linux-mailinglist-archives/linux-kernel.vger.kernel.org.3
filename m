@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FEE4FFC47
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0684FFC4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbiDMRXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S237272AbiDMRYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiDMRXs (ORCPT
+        with ESMTP id S229540AbiDMRYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:23:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494E62BE5;
-        Wed, 13 Apr 2022 10:21:26 -0700 (PDT)
+        Wed, 13 Apr 2022 13:24:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6C62C8C;
+        Wed, 13 Apr 2022 10:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649870486; x=1681406486;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wg9FsEmQwnZBXMrOYDH5tWUBw/2avAOrNH6ZhkaMiwk=;
-  b=m42hV/3YyWNx27KzPn0npI7s8Ng9g8av+vuX4px3FXlWbYJAhgNkApAR
-   60zw2xj/IJ6HR0TcK+pLdltqaxdZNhspYQNqyRNT16/Aj4jI7NygJkfKV
-   pxweE8d0eg+g2zwa7ZNqADwbeWNoLu3QbfqsxE2K5f526gW0Kgvy5exXz
-   xKU08BvpLCcwZa0CYFz5q1VcxaX1zCtUgmueEvAOw1DrNK9RjLC+SwBl3
-   pIU60BcB/rrpTnombDdoSBillqO+ZrunFrSE/eZ75ACR3gneh33KDT6RY
-   0xiTi5axGcqZncHNtxYyOm+8z3IQhthtg6V/3kCiKRhyDI38iUw2sKrKX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261572801"
+  t=1649870507; x=1681406507;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hj5kneNXt9GQIiug/+hb6huww6UsvPYM41YmQxPGypE=;
+  b=SS3xYGR4zGzbnNSG4fzC/NB6AzIL7fkdyOdSlBZ8AaJAwnLgm7w4UjfZ
+   aUTalm+Ri9hf/qH4Ic069wvWVGSo4NbwJholCCs3+4XPwqzwwHBvqe9SX
+   6cWiA3x52gauiPwRS1tYYuTbPbGmtCtZwo8ZDAmH2mPTYJQG1bjiic51n
+   gC/zZH1cD0OfA7JaITBlGx+SriPqqE6PuUG2o1Rsb44sdjOjP9wekBc5s
+   NdcQBsjq3fs+9Tzh9YjhSWRv8bVtj8iwABLGuMr66g5gNKdJc6R1HYmHI
+   nB8kshuRda9M9DAFUsjwBeJitRhZe22xIkdhSYqbTp1jEmY1o1CEi7Gfd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="349161021"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="261572801"
+   d="scan'208";a="349161021"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:25 -0700
-X-ExtLoop1: 1
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="508059116"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 13 Apr 2022 10:21:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 057F712C; Wed, 13 Apr 2022 20:21:22 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v1 1/1] iio: imu: mpu3050: Make use of device properties
-Date:   Wed, 13 Apr 2022 20:21:22 +0300
-Message-Id: <20220413172122.85629-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="508059205"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
+Message-ID: <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Wed, 13 Apr 2022 10:21:47 -0700
+In-Reply-To: <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,219 +65,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
+> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
+> daniel.lezcano@linaro.org> wrote:
+> > 
+> > On 06/04/2022 16:28, srinivas pandruvada wrote:
+> > > Hi Daniel,
+> > > 
+> > > On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > if there is no comment for the series, shall I pick it so we
+> > > > can go
+> > > > forward ?
+> > > Didn't get time to check yet. It will still be for the next merge
+> > > window, correct?
+> > 
+> > Right, but I would like to continue adding more features, scripts
+> > and
+> > tests. Iteratively.
+> 
+> Srinivas, if you can give this a go, please, it will help.
+> 
+> Otherwise, I think that all of your comments so far have been
+> addressed, or have I missed anything?
+> 
+I will provide by the end of this week.
 
-While at it, reuse temporary device pointer in the same function.
+Thanks,
+Srinivas
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/imu/bmi160/bmi160_core.c | 27 ++++++---------------------
- drivers/iio/imu/bmi160/bmi160_i2c.c  | 13 ++++++-------
- drivers/iio/imu/bmi160/bmi160_spi.c  | 18 +++++++++++-------
- 3 files changed, 23 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
-index 01336105792e..e7aec56ea136 100644
---- a/drivers/iio/imu/bmi160/bmi160_core.c
-+++ b/drivers/iio/imu/bmi160/bmi160_core.c
-@@ -11,10 +11,9 @@
-  */
- #include <linux/module.h>
- #include <linux/regmap.h>
--#include <linux/acpi.h>
- #include <linux/delay.h>
- #include <linux/irq.h>
--#include <linux/of_irq.h>
-+#include <linux/property.h>
- #include <linux/regulator/consumer.h>
- 
- #include <linux/iio/iio.h>
-@@ -525,17 +524,6 @@ static const struct iio_info bmi160_info = {
- 	.attrs = &bmi160_attrs_group,
- };
- 
--static const char *bmi160_match_acpi_device(struct device *dev)
--{
--	const struct acpi_device_id *id;
--
--	id = acpi_match_device(dev->driver->acpi_match_table, dev);
--	if (!id)
--		return NULL;
--
--	return dev_name(dev);
--}
--
- static int bmi160_write_conf_reg(struct regmap *regmap, unsigned int reg,
- 				 unsigned int mask, unsigned int bits,
- 				 unsigned int write_usleep)
-@@ -647,18 +635,18 @@ int bmi160_enable_irq(struct regmap *regmap, bool enable)
- }
- EXPORT_SYMBOL(bmi160_enable_irq);
- 
--static int bmi160_get_irq(struct device_node *of_node, enum bmi160_int_pin *pin)
-+static int bmi160_get_irq(struct fwnode_handle *fwnode, enum bmi160_int_pin *pin)
- {
- 	int irq;
- 
- 	/* Use INT1 if possible, otherwise fall back to INT2. */
--	irq = of_irq_get_byname(of_node, "INT1");
-+	irq = fwnode_irq_get_byname(fwnode, "INT1");
- 	if (irq > 0) {
- 		*pin = BMI160_PIN_INT1;
- 		return irq;
- 	}
- 
--	irq = of_irq_get_byname(of_node, "INT2");
-+	irq = fwnode_irq_get_byname(fwnode, "INT2");
- 	if (irq > 0)
- 		*pin = BMI160_PIN_INT2;
- 
-@@ -688,7 +676,7 @@ static int bmi160_config_device_irq(struct iio_dev *indio_dev, int irq_type,
- 		return -EINVAL;
- 	}
- 
--	open_drain = of_property_read_bool(dev->of_node, "drive-open-drain");
-+	open_drain = device_property_read_bool(dev, "drive-open-drain");
- 
- 	return bmi160_config_pin(data->regmap, pin, open_drain, irq_mask,
- 				 BMI160_NORMAL_WRITE_USLEEP);
-@@ -872,9 +860,6 @@ int bmi160_core_probe(struct device *dev, struct regmap *regmap,
- 	if (ret)
- 		return ret;
- 
--	if (!name && ACPI_HANDLE(dev))
--		name = bmi160_match_acpi_device(dev);
--
- 	indio_dev->channels = bmi160_channels;
- 	indio_dev->num_channels = ARRAY_SIZE(bmi160_channels);
- 	indio_dev->name = name;
-@@ -887,7 +872,7 @@ int bmi160_core_probe(struct device *dev, struct regmap *regmap,
- 	if (ret)
- 		return ret;
- 
--	irq = bmi160_get_irq(dev->of_node, &int_pin);
-+	irq = bmi160_get_irq(dev_fwnode(dev), &int_pin);
- 	if (irq > 0) {
- 		ret = bmi160_setup_irq(indio_dev, irq, int_pin);
- 		if (ret)
-diff --git a/drivers/iio/imu/bmi160/bmi160_i2c.c b/drivers/iio/imu/bmi160/bmi160_i2c.c
-index 26398614eddf..02f149d37b17 100644
---- a/drivers/iio/imu/bmi160/bmi160_i2c.c
-+++ b/drivers/iio/imu/bmi160/bmi160_i2c.c
-@@ -8,10 +8,9 @@
-  *      - 0x68 if SDO is pulled to GND
-  *      - 0x69 if SDO is pulled to VDDIO
-  */
--#include <linux/acpi.h>
- #include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/regmap.h>
- 
- #include "bmi160.h"
-@@ -20,7 +19,7 @@ static int bmi160_i2c_probe(struct i2c_client *client,
- 			    const struct i2c_device_id *id)
- {
- 	struct regmap *regmap;
--	const char *name = NULL;
-+	const char *name;
- 
- 	regmap = devm_regmap_init_i2c(client, &bmi160_regmap_config);
- 	if (IS_ERR(regmap)) {
-@@ -31,6 +30,8 @@ static int bmi160_i2c_probe(struct i2c_client *client,
- 
- 	if (id)
- 		name = id->name;
-+	else
-+		name = dev_name(&client->dev);
- 
- 	return bmi160_core_probe(&client->dev, regmap, name, false);
- }
-@@ -47,19 +48,17 @@ static const struct acpi_device_id bmi160_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, bmi160_acpi_match);
- 
--#ifdef CONFIG_OF
- static const struct of_device_id bmi160_of_match[] = {
- 	{ .compatible = "bosch,bmi160" },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, bmi160_of_match);
--#endif
- 
- static struct i2c_driver bmi160_i2c_driver = {
- 	.driver = {
- 		.name			= "bmi160_i2c",
--		.acpi_match_table	= ACPI_PTR(bmi160_acpi_match),
--		.of_match_table		= of_match_ptr(bmi160_of_match),
-+		.acpi_match_table	= bmi160_acpi_match,
-+		.of_match_table		= bmi160_of_match,
- 	},
- 	.probe		= bmi160_i2c_probe,
- 	.id_table	= bmi160_i2c_id,
-diff --git a/drivers/iio/imu/bmi160/bmi160_spi.c b/drivers/iio/imu/bmi160/bmi160_spi.c
-index 61389b41c6d9..24f7d75c7903 100644
---- a/drivers/iio/imu/bmi160/bmi160_spi.c
-+++ b/drivers/iio/imu/bmi160/bmi160_spi.c
-@@ -5,9 +5,8 @@
-  * Copyright (c) 2016, Intel Corporation.
-  *
-  */
--#include <linux/acpi.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
- 
-@@ -17,6 +16,7 @@ static int bmi160_spi_probe(struct spi_device *spi)
- {
- 	struct regmap *regmap;
- 	const struct spi_device_id *id = spi_get_device_id(spi);
-+	const char *name;
- 
- 	regmap = devm_regmap_init_spi(spi, &bmi160_regmap_config);
- 	if (IS_ERR(regmap)) {
-@@ -24,7 +24,13 @@ static int bmi160_spi_probe(struct spi_device *spi)
- 			regmap);
- 		return PTR_ERR(regmap);
- 	}
--	return bmi160_core_probe(&spi->dev, regmap, id->name, true);
-+
-+	if (id)
-+		name = id->name;
-+	else
-+		name = dev_name(&spi->dev);
-+
-+	return bmi160_core_probe(&spi->dev, regmap, name, true);
- }
- 
- static const struct spi_device_id bmi160_spi_id[] = {
-@@ -39,20 +45,18 @@ static const struct acpi_device_id bmi160_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, bmi160_acpi_match);
- 
--#ifdef CONFIG_OF
- static const struct of_device_id bmi160_of_match[] = {
- 	{ .compatible = "bosch,bmi160" },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, bmi160_of_match);
--#endif
- 
- static struct spi_driver bmi160_spi_driver = {
- 	.probe		= bmi160_spi_probe,
- 	.id_table	= bmi160_spi_id,
- 	.driver = {
--		.acpi_match_table	= ACPI_PTR(bmi160_acpi_match),
--		.of_match_table		= of_match_ptr(bmi160_of_match),
-+		.acpi_match_table	= bmi160_acpi_match,
-+		.of_match_table		= bmi160_of_match,
- 		.name			= "bmi160_spi",
- 	},
- };
--- 
-2.35.1
+> > 
+> > > > 
+> > > > On 30/03/2022 12:04, Daniel Lezcano wrote:
+> > > > > These changes are providing the following tools and library:
+> > > > > 
+> > > > >    - A thermal library doing the netlink abstraction from the
+> > > > > kernel
+> > > > > in
+> > > > >      order to make the userspace thermal implementation
+> > > > > easier.
+> > > > > Having
+> > > > >      the library integrated with the kernel tree is also a
+> > > > > guarantee
+> > > > > to
+> > > > >      keep the message format and their encoding/decoding
+> > > > > aligned
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > >    - A thermal tools library providing a set of functions to
+> > > > > deal
+> > > > > with
+> > > > >      usual features like the log, the mainloop and the time.
+> > > > > This
+> > > > >      library is used by the provided tools below
+> > > > > 
+> > > > >    - An data acquisition program to capture the temperature
+> > > > > of the
+> > > > >      different thermal zone during an amount of time or
+> > > > > during the
+> > > > >      execution of an application. The output is formated to
+> > > > > be
+> > > > > easily
+> > > > >      parsed by gnuplot, a spreadsheet program or a
+> > > > > statistical
+> > > > > command
+> > > > >      line utility. The timestamp is based on the system
+> > > > > uptime, thus
+> > > > >      giving an indication of when a thermal event happened,
+> > > > > that can
+> > > > >      help to spot or reproduce thermal issue in the long run
+> > > > > 
+> > > > >    - A thermal monitoring program based on the thermal
+> > > > > library. It
+> > > > > gives
+> > > > >      a skeleton to build any logic on top of it and shows how
+> > > > > to use
+> > > > > the
+> > > > >      thermal library. It does nothing except discovering the
+> > > > > thermal
+> > > > >      zones, their trip points and listening for events like
+> > > > > cooling
+> > > > >      devices state changes or trip point crossed
+> > > > > 
+> > > > >    Changelog:
+> > > > > 
+> > > > >    v1: Initial post after a RFC
+> > > > > 
+> > > > >    v2:
+> > > > > 
+> > > > >     - Fixed all trailing whitespaces and some other
+> > > > > checkpatch
+> > > > >       warnings. Some warnings remain but they can be
+> > > > > considered as
+> > > > > false
+> > > > >       positive
+> > > > > 
+> > > > >     - Added in the thermometer tool:
+> > > > >       - Usage/help option as well as a man page
+> > > > >       - The ability to execute a program
+> > > > >       - The capture duration
+> > > > >       - Create the output directory if it does not exist
+> > > > > 
+> > > > >     - Add in the thermal-engine tool:
+> > > > >       - A usage/help option
+> > > > >       - A message telling the userspace it is waiting for
+> > > > > events
+> > > > >       - A daemonize option
+> > > > > 
+> > > > >     - Minor bug fixes here and there, as well as typos
+> > > > > 
+> > > > > Daniel Lezcano (4):
+> > > > >     tools/lib/thermal: Add a thermal library
+> > > > >     tools/thermal: Add util library
+> > > > >     tools/thermal: A temperature capture tool
+> > > > >     tools/thermal: Add thermal daemon skeleton
+> > > > > 
+> > > > >    MAINTAINERS                                   |   1 +
+> > > > >    tools/Makefile                                |  36 +-
+> > > > >    tools/lib/thermal/.gitignore                  |   2 +
+> > > > >    tools/lib/thermal/Build                       |   5 +
+> > > > >    tools/lib/thermal/Makefile                    | 165 ++++++
+> > > > >    tools/lib/thermal/commands.c                  | 349
+> > > > > +++++++++++
+> > > > >    tools/lib/thermal/events.c                    | 164 +++++
+> > > > >    tools/lib/thermal/include/thermal.h           | 142 +++++
+> > > > >    tools/lib/thermal/libthermal.map              |  25 +
+> > > > >    tools/lib/thermal/libthermal.pc.template      |  12 +
+> > > > >    tools/lib/thermal/sampling.c                  |  75 +++
+> > > > >    tools/lib/thermal/thermal.c                   | 126 ++++
+> > > > >    tools/lib/thermal/thermal_nl.c                | 215
+> > > > > +++++++
+> > > > >    tools/lib/thermal/thermal_nl.h                |  46 ++
+> > > > >    tools/thermal/lib/Build                       |   3 +
+> > > > >    tools/thermal/lib/Makefile                    | 158 +++++
+> > > > >    .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> > > > >    tools/thermal/lib/log.c                       |  77 +++
+> > > > >    tools/thermal/lib/log.h                       |  31 +
+> > > > >    tools/thermal/lib/mainloop.c                  | 120 ++++
+> > > > >    tools/thermal/lib/mainloop.h                  |  15 +
+> > > > >    tools/thermal/lib/thermal-tools.h             |  10 +
+> > > > >    tools/thermal/lib/uptimeofday.c               |  40 ++
+> > > > >    tools/thermal/lib/uptimeofday.h               |  12 +
+> > > > >    tools/thermal/thermal-engine/Build            |   2 +
+> > > > >    tools/thermal/thermal-engine/Makefile         |  28 +
+> > > > >    tools/thermal/thermal-engine/thermal-engine.c | 326
+> > > > > ++++++++++
+> > > > >    tools/thermal/thermometer/Build               |   2 +
+> > > > >    tools/thermal/thermometer/Makefile            |  26 +
+> > > > >    tools/thermal/thermometer/thermometer.8       |  93 +++
+> > > > >    tools/thermal/thermometer/thermometer.c       | 558
+> > > > > ++++++++++++++++++
+> > > > >    tools/thermal/thermometer/thermometer.conf    |   5 +
+> > > > >    32 files changed, 2878 insertions(+), 3 deletions(-)
+> > > > >    create mode 100644 tools/lib/thermal/.gitignore
+> > > > >    create mode 100644 tools/lib/thermal/Build
+> > > > >    create mode 100644 tools/lib/thermal/Makefile
+> > > > >    create mode 100644 tools/lib/thermal/commands.c
+> > > > >    create mode 100644 tools/lib/thermal/events.c
+> > > > >    create mode 100644 tools/lib/thermal/include/thermal.h
+> > > > >    create mode 100644 tools/lib/thermal/libthermal.map
+> > > > >    create mode 100644
+> > > > > tools/lib/thermal/libthermal.pc.template
+> > > > >    create mode 100644 tools/lib/thermal/sampling.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.h
+> > > > >    create mode 100644 tools/thermal/lib/Build
+> > > > >    create mode 100644 tools/thermal/lib/Makefile
+> > > > >    create mode 100644
+> > > > > tools/thermal/lib/libthermal_tools.pc.template
+> > > > >    create mode 100644 tools/thermal/lib/log.c
+> > > > >    create mode 100644 tools/thermal/lib/log.h
+> > > > >    create mode 100644 tools/thermal/lib/mainloop.c
+> > > > >    create mode 100644 tools/thermal/lib/mainloop.h
+> > > > >    create mode 100644 tools/thermal/lib/thermal-tools.h
+> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.c
+> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.h
+> > > > >    create mode 100644 tools/thermal/thermal-engine/Build
+> > > > >    create mode 100644 tools/thermal/thermal-engine/Makefile
+> > > > >    create mode 100644 tools/thermal/thermal-engine/thermal-
+> > > > > engine.c
+> > > > >    create mode 100644 tools/thermal/thermometer/Build
+> > > > >    create mode 100644 tools/thermal/thermometer/Makefile
+> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.8
+> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.c
+> > > > >    create mode 100644
+> > > > > tools/thermal/thermometer/thermometer.conf
+> > > > > 
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> > --
+> > <http://www.linaro.org/> Linaro.org │ Open source software for ARM
+> > SoCs
+> > 
+> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> > <http://twitter.com/#!/linaroorg> Twitter |
+> > <http://www.linaro.org/linaro-blog/> Blog
+
 

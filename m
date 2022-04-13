@@ -2,357 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD33F4FF65E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974FE4FF6D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235187AbiDMMDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S235540AbiDMMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiDMMDa (ORCPT
+        with ESMTP id S231431AbiDMMbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:03:30 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD8E37022;
-        Wed, 13 Apr 2022 05:01:02 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23DC0a54012598;
-        Wed, 13 Apr 2022 07:00:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649851236;
-        bh=OYwspQWrg2w1QdZZN6xT2o9L5Ycpcc2ucJhIOyqwWA4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=mWI6fw2issplm3lUbxRSvKU8aoZx3nir388FGjMyKYFQEn0C8EqIAvDGXSct5DbJE
-         c4Htb1Pg2hUlB0H0WuNHrByK0fNIYwzOv/nkOQ2o6TEBn6Qz9cCmuQ/hLph6bu/EKw
-         AoQzrGMJJCAYJ0M8yAGTcuhBRiL8KMD+4eRTcY3o=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23DC0a9j015017
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Apr 2022 07:00:36 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 13
- Apr 2022 07:00:36 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 13 Apr 2022 07:00:36 -0500
-Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23DC0W5T029225;
-        Wed, 13 Apr 2022 07:00:33 -0500
-Message-ID: <b213502e-becf-e66d-3394-4d0f4db3e2b1@ti.com>
-Date:   Wed, 13 Apr 2022 17:30:32 +0530
+        Wed, 13 Apr 2022 08:31:20 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6876C5DA71
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:28:53 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bg24so1848240pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6RSDnm2Y2JFpci7V9TY4tM67jG94icmuFSCmnwJqi24=;
+        b=2thGbsEzJkz3DFCfRJpCkh7npSxkliJKHq52MtQdkXd/SEy/+3MqSHsH2trptAneTn
+         G0GQhpXGSGIlv8fdEtxF3/165GMBoraaQvTfXYMMArG5wj6vDcqhth4tXRxueQNVjKzp
+         HnnNBQLCRCmYMcNrrFhnCm12ZaXxT8IVTlJXPaOCnWrERHvNDyVnLO/0bDAgPf/bjYB+
+         3e/Mq5rX97sNpYtpF26wsd494gRRzJ6RgRbRznFzIrVah+cgvEM7giwDJs4egDsBredE
+         X950fuSflcz4m4mxLn0KEONoqZ+nIt51oR3E+S5D8+ImVMGkl6vA/LeM2FQcKesmlirD
+         8Lig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6RSDnm2Y2JFpci7V9TY4tM67jG94icmuFSCmnwJqi24=;
+        b=eI5OKS/GjXO2RX28jWqnYp/jGwCObgAxwBkcHy2LUdFSOA84nbrBpwmqxfUm2KMvKO
+         YL1qwvFnEG0mt8PIc7+svay8ga7TnnAqRtba7M1ztNYVdvW646DCBppuGYj2Aekfz3+Y
+         nz/STb3kq38M4s7nG0ayDjdCC2+F9e9EhB1vsYl4fk75siMMgcfUvuljf1yi/R+hI1u7
+         Hk7/cvIA0bPFNN+MM0z3tfBOUUP43HuMOLY6PoIBntj2tj/PMyaPOKyb53En6a0TFz7R
+         STVV6MUYQx2mRKZWbkStG2XiYxkTbnrSkSwzg8/vcVmVVnAifBsoDFEWk3d1kKM19xp2
+         knBg==
+X-Gm-Message-State: AOAM531Fiaq/0L3WjK/sEbjra+IRvILpp+FUR7zsQ2SKjOOvrRpTvko8
+        FSvl0xJ7aQhg/MuHIK0HQnawjO3Cf6Jg4FnmAgLkWgVj8MInw5DhTs0=
+X-Google-Smtp-Source: ABdhPJz+sfADIsd9AEujqIqxgF+CCQ3CFW5mpfP6dmxYcqyEQSrgj1uKi3fcyZJd5VvLEzT2hlPAuwHz8YBZv5DYcfc=
+X-Received: by 2002:a17:903:4c:b0:158:8e21:213d with SMTP id
+ l12-20020a170903004c00b001588e21213dmr6845915pla.108.1649852932665; Wed, 13
+ Apr 2022 05:28:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH RFC] usb: typec: tipd: Add support for polling interrupts
- status when interrupt line is not connected
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Saranya Gopal <saranya.gopal@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220412145059.4717-1-a-govindraju@ti.com>
- <YlaZIual4Fa/a81I@kuha.fi.intel.com>
- <5672af5d-d4a9-08ab-0594-7da57cd0972b@ti.com>
- <c41e011b-16de-d49f-21d4-0abd81841324@kernel.org>
- <48cf5e66-e9ec-07fa-a971-dcf02d35fc2a@ti.com>
- <792de53c-8a2f-e0fd-4be8-5af60ea355cd@kernel.org>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <792de53c-8a2f-e0fd-4be8-5af60ea355cd@kernel.org>
+References: <20220412215458.4120-1-mahak_g@cs.iitr.ac.in> <alpine.DEB.2.22.394.2204130811430.3470@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2204130811430.3470@hadrien>
+From:   MAHAK GUPTA <mahak_g@cs.iitr.ac.in>
+Date:   Wed, 13 Apr 2022 12:28:08 +0530
+Message-ID: <CANnaPbA4hgWQcWxDR+jbcMd0GgAmJ7uA9vxNxosE2+=n1BiJXA@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: r8188eu: correct multiple misspellings in the
+ source driver
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
-
-On 13/04/22 17:12, Roger Quadros wrote:
-> 
-> 
-> On 13/04/2022 13:51, Aswath Govindraju wrote:
->> Hi Roger,
->>
->> On 13/04/22 16:08, Roger Quadros wrote:
->>> Hi Aswath,
->>>
->>> On 13/04/2022 13:02, Aswath Govindraju wrote:
->>>> Hi Heikki,
->>>>
->>>> On 13/04/22 15:04, Heikki Krogerus wrote:
->>>>> Hi Aswath,
->>>>>
->>>>> On Tue, Apr 12, 2022 at 08:20:58PM +0530, Aswath Govindraju wrote:
->>>>>> In some cases the interrupt line from the pd controller may not be
->>>>>> connected. In these cases, poll the status of various events.
->>>>>
->>>>> Well, if the alert/interrupt line is not connected anywhere, then
->>>>> polling is the only way to go. I'm fine with that, but the driver
->>>>> really should be told that there is no interrupt. Using polling
->>>>> whenever request_threaded_irq() returns -EINVAL is wrong. We really
->>>>> should not even attempt to request the interrupt if there is no
->>>>> interrupt for the device.
->>>>>
->>>>> Isn't there any way you can get that information from DT? Or how is
->>>>> the device enumerated in your case?
->>>>>
->>>>
->>>> Would checking if (client->irq) field is populated, to decide between
->>>> polling and interrupts be a good approach?
->>>
->>> 'interrupt' and 'interrupt-names' are required properties in DT binding doc
->>> Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>
->>> You will need to add a new property to indicate that polling mode must be used
->>> and then interrupt properties become optional.
->>>
->>
->> Doesn't adding polling support mean that we are making interrupts
->> optional? So, can't we directly make the properties optional in the
->> bindings?
-> 
-> I don't see why not. It must be clear from the binding documentation that
-> interrupt property is required unless polling mode is specified.
-> 
-
-To a get a confirmation on whether I understood correctly, would the
-following update in the bindings and using (client->irq) to
-differentiate between polling and interrupts be the correct approach?
-
-diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-index a4c53b1f1af3..1c4b8c6233e5 100644
---- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-@@ -25,6 +25,8 @@ properties:
-
-   interrupts:
-     maxItems: 1
-+    description:
-+      If interrupts are not populated then by default polling will be used.
-
-   interrupt-names:
-     items:
-@@ -33,8 +35,6 @@ properties:
- required:
-   - compatible
-   - reg
--  - interrupts
--  - interrupt-names
-
- additionalProperties: true
-
-Thanks,
-Aswath
-
->>
->>
->>>>
->>>> I am sorry but I did not understand what you meant by device getting
->>>> enumerated. The device is on an I2C bus and gets enumerated based on the
->>>> I2C address provided. The device does not have I2C_IRQ line connected,
->>>> in my case.
->>>
->>> I think he meant whether you are using device tree or something else.
->>>
->>
->> ohh okay, Thank you.
->>
->> Regards,
->> Aswath
->>
->>>>
->>>> Thanks,
->>>> Aswath
->>>>
->>>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
->>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>>>>> ---
->>>>>>  drivers/usb/typec/tipd/core.c | 90 ++++++++++++++++++++++++++++++++---
->>>>>>  1 file changed, 83 insertions(+), 7 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
->>>>>> index 16b4560216ba..fa52d2067d6d 100644
->>>>>> --- a/drivers/usb/typec/tipd/core.c
->>>>>> +++ b/drivers/usb/typec/tipd/core.c
->>>>>> @@ -15,6 +15,8 @@
->>>>>>  #include <linux/interrupt.h>
->>>>>>  #include <linux/usb/typec.h>
->>>>>>  #include <linux/usb/role.h>
->>>>>> +#include <linux/workqueue.h>
->>>>>> +#include <linux/devm-helpers.h>
->>>>>>  
->>>>>>  #include "tps6598x.h"
->>>>>>  #include "trace.h"
->>>>>> @@ -93,6 +95,8 @@ struct tps6598x {
->>>>>>  	struct power_supply *psy;
->>>>>>  	struct power_supply_desc psy_desc;
->>>>>>  	enum power_supply_usb_type usb_type;
->>>>>> +
->>>>>> +	struct delayed_work wq_poll;
->>>>>>  };
->>>>>>  
->>>>>>  static enum power_supply_property tps6598x_psy_props[] = {
->>>>>> @@ -473,9 +477,8 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->>>>>>  	}
->>>>>>  }
->>>>>>  
->>>>>> -static irqreturn_t cd321x_interrupt(int irq, void *data)
->>>>>> +static int cd321x_handle_interrupt_status(struct tps6598x *tps)
->>>>>>  {
->>>>>> -	struct tps6598x *tps = data;
->>>>>>  	u64 event;
->>>>>>  	u32 status;
->>>>>>  	int ret;
->>>>>> @@ -513,14 +516,45 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->>>>>>  err_unlock:
->>>>>>  	mutex_unlock(&tps->lock);
->>>>>>  
->>>>>> +	if (ret)
->>>>>> +		return ret;
->>>>>> +
->>>>>>  	if (event)
->>>>>> -		return IRQ_HANDLED;
->>>>>> -	return IRQ_NONE;
->>>>>> +		return 0;
->>>>>> +	return 1;
->>>>>>  }
->>>>>>  
->>>>>> -static irqreturn_t tps6598x_interrupt(int irq, void *data)
->>>>>> +static irqreturn_t cd321x_interrupt(int irq, void *data)
->>>>>>  {
->>>>>>  	struct tps6598x *tps = data;
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = cd321x_handle_interrupt_status(tps);
->>>>>> +	if (ret)
->>>>>> +		return IRQ_NONE;
->>>>>> +	return IRQ_HANDLED;
->>>>>> +}
->>>>>> +
->>>>>> +/* Time interval for Polling */
->>>>>> +#define POLL_INTERVAL   500 /* msecs */
->>>>>> +static void cd321x_poll_work(struct work_struct *work)
->>>>>> +{
->>>>>> +	struct tps6598x *tps = container_of(to_delayed_work(work),
->>>>>> +					    struct tps6598x, wq_poll);
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = cd321x_handle_interrupt_status(tps);
->>>>>> +	/*
->>>>>> +	 * If there is an error while reading the interrupt registers
->>>>>> +	 * then stop polling else, schedule another poll work item
->>>>>> +	 */
->>>>>> +	if (!(ret < 0))
->>>>>> +		queue_delayed_work(system_power_efficient_wq,
->>>>>> +				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
->>>>>> +}
->>>>>> +
->>>>>> +static int tps6598x_handle_interrupt_status(struct tps6598x *tps)
->>>>>> +{
->>>>>>  	u64 event1;
->>>>>>  	u64 event2;
->>>>>>  	u32 status;
->>>>>> @@ -561,9 +595,39 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
->>>>>>  err_unlock:
->>>>>>  	mutex_unlock(&tps->lock);
->>>>>>  
->>>>>> +	if (ret)
->>>>>> +		return ret;
->>>>>> +
->>>>>>  	if (event1 | event2)
->>>>>> -		return IRQ_HANDLED;
->>>>>> -	return IRQ_NONE;
->>>>>> +		return 0;
->>>>>> +	return 1;
->>>>>> +}
->>>>>> +
->>>>>> +static irqreturn_t tps6598x_interrupt(int irq, void *data)
->>>>>> +{
->>>>>> +	struct tps6598x *tps = data;
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = tps6598x_handle_interrupt_status(tps);
->>>>>> +	if (ret)
->>>>>> +		return IRQ_NONE;
->>>>>> +	return IRQ_HANDLED;
->>>>>> +}
->>>>>> +
->>>>>> +static void tps6598x_poll_work(struct work_struct *work)
->>>>>> +{
->>>>>> +	struct tps6598x *tps = container_of(to_delayed_work(work),
->>>>>> +					    struct tps6598x, wq_poll);
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = tps6598x_handle_interrupt_status(tps);
->>>>>> +	/*
->>>>>> +	 * If there is an error while reading the interrupt registers
->>>>>> +	 * then stop polling else, schedule another poll work item
->>>>>> +	 */
->>>>>> +	if (!(ret < 0))
->>>>>> +		queue_delayed_work(system_power_efficient_wq,
->>>>>> +				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
->>>>>>  }
->>>>>>  
->>>>>>  static int tps6598x_check_mode(struct tps6598x *tps)
->>>>>> @@ -704,6 +768,7 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
->>>>>>  static int tps6598x_probe(struct i2c_client *client)
->>>>>>  {
->>>>>>  	irq_handler_t irq_handler = tps6598x_interrupt;
->>>>>> +	work_func_t work_poll_handler = tps6598x_poll_work;
->>>>>>  	struct device_node *np = client->dev.of_node;
->>>>>>  	struct typec_capability typec_cap = { };
->>>>>>  	struct tps6598x *tps;
->>>>>> @@ -748,6 +813,7 @@ static int tps6598x_probe(struct i2c_client *client)
->>>>>>  			APPLE_CD_REG_INT_PLUG_EVENT;
->>>>>>  
->>>>>>  		irq_handler = cd321x_interrupt;
->>>>>> +		work_poll_handler = cd321x_poll_work;
->>>>>>  	} else {
->>>>>>  		/* Enable power status, data status and plug event interrupts */
->>>>>>  		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
->>>>>> @@ -846,6 +912,16 @@ static int tps6598x_probe(struct i2c_client *client)
->>>>>>  					irq_handler,
->>>>>>  					IRQF_SHARED | IRQF_ONESHOT,
->>>>>>  					dev_name(&client->dev), tps);
->>>>>> +	if (ret == -EINVAL) {
->>>>>> +		dev_warn(&client->dev, "Unable to find the interrupt, switching to polling\n");
->>>>>> +		ret = devm_delayed_work_autocancel(tps->dev, &tps->wq_poll, work_poll_handler);
->>>>>> +		if (ret)
->>>>>> +			dev_err(&client->dev, "error while initializing workqueue\n");
->>>>>> +		else
->>>>>> +			queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
->>>>>> +					   msecs_to_jiffies(POLL_INTERVAL));
->>>>>> +	}
->>>>>> +
->>>>>>  	if (ret) {
->>>>>>  		tps6598x_disconnect(tps, 0);
->>>>>>  		typec_unregister_port(tps->port);
->>>>>
->>>>> thanks,
->>>>>
->>>>
->>>>
-> 
-> cheers,
-> -roger
-
-
--- 
-Thanks,
-Aswath
+On Wed, Apr 13, 2022 at 11:44 AM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+> When you send a change to a patch, the version number has to increase.
+> Greg will take the patch with the largest version.  He wants there to be
+> only one.
+I mentioned patch v2 in the subject. Do I need to do anything else too?
+>
+> In the source driver is not any more useful than in r8188eu.  Just drop
+> that part.
+Will do that in v3.
+>
+> On Wed, 13 Apr 2022, Mahak Gupta wrote:
+>
+> > Fix multiple spelling errors reported by checkpatch.
+>
+> Here you could say that all the errors are in comments.  That would remove
+> any concern that the behavior of the code is changed.
+Will do that in v3.
+>
+> julia
+>
+> > Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
+> > ---
+> > v1 -> v2: Updated the subject and description of the patch
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 +-
+> >  drivers/staging/r8188eu/core/rtw_mlme.c      | 10 +++---
+> >  drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 36 ++++++++++----------
+> >  drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++---
+> >  drivers/staging/r8188eu/core/rtw_xmit.c      |  8 ++---
+> >  5 files changed, 32 insertions(+), 32 deletions(-)
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> > index 4b78e42d180d..9df6fb122bc5 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> > @@ -290,7 +290,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
+> >
+> >               if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
+> >                       if (check_fwstate(pmlmepriv, _FW_LINKED))
+> > -                             rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
+> > +                             rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether  issue dis-assoc_cmd or not */
+> >              }
+> >
+> >               *pold_state = networktype;
+> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > index c90f36dee1ea..a2b42779bc87 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > @@ -193,7 +193,7 @@ void _rtw_free_network_nolock(struct      mlme_priv *pmlmepriv, struct wlan_network *
+> >  /*
+> >       return the wlan_network with the matching addr
+> >
+> > -     Shall be calle under atomic context... to avoid possible racing condition...
+> > +     Shall be called under atomic context... to avoid possible racing condition...
+> >  */
+> >  struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+> >  {
+> > @@ -329,7 +329,7 @@ void rtw_free_network_queue(struct adapter *dev, u8 isfreeall)
+> >  /*
+> >       return the wlan_network with the matching addr
+> >
+> > -     Shall be calle under atomic context... to avoid possible racing condition...
+> > +     Shall be called under atomic context... to avoid possible racing condition...
+> >  */
+> >  struct       wlan_network *rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+> >  {
+> > @@ -912,7 +912,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
+> >               }
+> >               /*      Commented by Albert 2012/07/21 */
+> >               /*      When doing the WPS, the wps_ie_len won't equal to 0 */
+> > -             /*      And the Wi-Fi driver shouldn't allow the data packet to be tramsmitted. */
+> > +             /*      And the Wi-Fi driver shouldn't allow the data packet to be transmitted. */
+> >               if (padapter->securitypriv.wps_ie_len != 0) {
+> >                       psta->ieee8021x_blocked = true;
+> >                       padapter->securitypriv.wps_ie_len = 0;
+> > @@ -1304,7 +1304,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
+> >  }
+> >
+> >  /*
+> > -* _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
+> > +* _rtw_join_timeout_handler - Timeout/failure handler for CMD JoinBss
+> >  * @adapter: pointer to struct adapter structure
+> >  */
+> >  void _rtw_join_timeout_handler (struct adapter *adapter)
+> > @@ -1339,7 +1339,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
+> >  }
+> >
+> >  /*
+> > -* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
+> > +* rtw_scan_timeout_handler - Timeout/Failure handler for CMD SiteSurvey
+> >  * @adapter: pointer to struct adapter structure
+> >  */
+> >  void rtw_scan_timeout_handler (struct adapter *adapter)
+> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> > index 474391bf7cb5..fd445aa09377 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> > @@ -156,7 +156,7 @@ static struct rt_channel_plan_map RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
+> >       {0x03}, /* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
+> >  };
+> >
+> > -static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
+> > +static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
+> >
+> >  /*
+> >   * Search the @param channel_num in given @param channel_set
+> > @@ -1733,7 +1733,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
+> >       p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+> >
+> >       /*      Commented by Albert 20110306 */
+> > -     /*      According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
+> > +     /*      According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
+> >       /*      1. P2P Capability */
+> >       /*      2. Group Owner Intent */
+> >       /*      3. Configuration Timeout */
+> > @@ -2088,7 +2088,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
+> >       p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+> >
+> >       /*      Commented by Albert 20100908 */
+> > -     /*      According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
+> > +     /*      According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
+> >       /*      1. Status */
+> >       /*      2. P2P Capability */
+> >       /*      3. Group Owner Intent */
+> > @@ -2384,7 +2384,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
+> >       p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+> >
+> >       /*      Commented by Albert 20110306 */
+> > -     /*      According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
+> > +     /*      According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
+> >       /*      1. Status */
+> >       /*      2. P2P Capability */
+> >       /*      3. Operating Channel */
+> > @@ -4009,7 +4009,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
+> >
+> >  /****************************************************************************
+> >
+> > -Following are some TX fuctions for WiFi MLME
+> > +Following are some TX functions for WiFi MLME
+> >
+> >  *****************************************************************************/
+> >
+> > @@ -4611,7 +4611,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+> >       return ret;
+> >  }
+> >
+> > -/*  if psta == NULL, indiate we are station(client) now... */
+> > +/*  if psta == NULL, indicate we are station(client) now... */
+> >  void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
+> >  {
+> >       struct xmit_frame *pmgntframe;
+> > @@ -5010,7 +5010,7 @@ void issue_assocreq(struct adapter *padapter)
+> >                               if (!padapter->registrypriv.wifi_spec) {
+> >                                       /* Commented by Kurt 20110629 */
+> >                                       /* In some older APs, WPS handshake */
+> > -                                     /* would be fail if we append vender extensions informations to AP */
+> > +                                     /* would be fail if we append vender extensions information to AP */
+> >                                       if (!memcmp(pIE->data, WPS_OUI, 4))
+> >                                               pIE->Length = 14;
+> >                               }
+> > @@ -5165,7 +5165,7 @@ void issue_assocreq(struct adapter *padapter)
+> >               kfree(pmlmepriv->assoc_req);
+> >  }
+> >
+> > -/* when wait_ack is ture, this function shoule be called at process context */
+> > +/* when wait_ack is true, this function should be called at process context */
+> >  static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
+> >  {
+> >       int ret = _FAIL;
+> > @@ -5234,7 +5234,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
+> >       return ret;
+> >  }
+> >
+> > -/* when wait_ms > 0 , this function shoule be called at process context */
+> > +/* when wait_ms > 0 , this function should be called at process context */
+> >  /* da == NULL for station mode */
+> >  int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
+> >  {
+> > @@ -5243,7 +5243,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+> >       struct mlme_ext_priv    *pmlmeext = &padapter->mlmeextpriv;
+> >       struct mlme_ext_info    *pmlmeinfo = &pmlmeext->mlmext_info;
+> >
+> > -     /* da == NULL, assum it's null data for sta to ap*/
+> > +     /* da == NULL, assume it's null data for sta to ap*/
+> >       if (!da)
+> >               da = get_my_bssid(&pmlmeinfo->network);
+> >
+> > @@ -5267,7 +5267,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+> >       return ret;
+> >  }
+> >
+> > -/* when wait_ack is ture, this function shoule be called at process context */
+> > +/* when wait_ack is true, this function should be called at process context */
+> >  static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
+> >  {
+> >       int ret = _FAIL;
+> > @@ -5340,7 +5340,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+> >       return ret;
+> >  }
+> >
+> > -/* when wait_ms > 0 , this function shoule be called at process context */
+> > +/* when wait_ms > 0 , this function should be called at process context */
+> >  /* da == NULL for station mode */
+> >  int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
+> >  {
+> > @@ -5349,7 +5349,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
+> >       struct mlme_ext_priv    *pmlmeext = &padapter->mlmeextpriv;
+> >       struct mlme_ext_info    *pmlmeinfo = &pmlmeext->mlmext_info;
+> >
+> > -     /* da == NULL, assum it's null data for sta to ap*/
+> > +     /* da == NULL, assume it's null data for sta to ap*/
+> >       if (!da)
+> >               da = get_my_bssid(&pmlmeinfo->network);
+> >
+> > @@ -5790,7 +5790,7 @@ void clear_beacon_valid_bit(struct adapter *adapter)
+> >
+> >  /****************************************************************************
+> >
+> > -Following are some utitity fuctions for WiFi MLME
+> > +Following are some utility functions for WiFi MLME
+> >
+> >  *****************************************************************************/
+> >
+> > @@ -5888,7 +5888,7 @@ void site_survey(struct adapter *padapter)
+> >               } else {
+> >                       /*  20100721:Interrupt scan operation here. */
+> >                       /*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
+> > -                     /*  It compares the scan result and select beter one to do connection. */
+> > +                     /*  It compares the scan result and select better one to do connection. */
+> >                       if (AntDivBeforeLink8188E(padapter)) {
+> >                               pmlmeext->sitesurvey_res.bss_cnt = 0;
+> >                               pmlmeext->sitesurvey_res.channel_idx = -1;
+> > @@ -6109,7 +6109,7 @@ void start_create_ibss(struct adapter *padapter)
+> >       /* update wireless mode */
+> >       update_wireless_mode(padapter);
+> >
+> > -     /* udpate capability */
+> > +     /* update capability */
+> >       caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+> >       update_capinfo(padapter, caps);
+> >       if (caps & cap_IBSS) {/* adhoc master */
+> > @@ -6160,7 +6160,7 @@ void start_clnt_join(struct adapter *padapter)
+> >       /* update wireless mode */
+> >       update_wireless_mode(padapter);
+> >
+> > -     /* udpate capability */
+> > +     /* update capability */
+> >       caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+> >       update_capinfo(padapter, caps);
+> >       if (caps & cap_ESS) {
+> > @@ -6740,7 +6740,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
+> >       /* BCN interval */
+> >       rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
+> >
+> > -     /* udpate capability */
+> > +     /* update capability */
+> >       update_capinfo(padapter, pmlmeinfo->capability);
+> >
+> >       /* WMM, Update EDCA param */
+> > diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> > index 91a6e0f035f4..a3f71697f6d7 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> > @@ -877,7 +877,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+> >                       if (psta->sleepq_len == 0) {
+> >                               pstapriv->tim_bitmap &= ~BIT(psta->aid);
+> >
+> > -                             /* upate BCN for TIM IE */
+> > +                             /* update BCN for TIM IE */
+> >                               /* update_BCNTIM(padapter); */
+> >                               update_beacon(padapter, _TIM_IE_, NULL, false);
+> >                       }
+> > @@ -891,7 +891,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+> >
+> >                               pstapriv->tim_bitmap &= ~BIT(psta->aid);
+> >
+> > -                             /* upate BCN for TIM IE */
+> > +                             /* update BCN for TIM IE */
+> >                               /* update_BCNTIM(padapter); */
+> >                               update_beacon(padapter, _TIM_IE_, NULL, false);
+> >                       }
+> > @@ -1810,13 +1810,13 @@ void rtw_signal_stat_timer_hdl(struct timer_list *t)
+> >       } else {
+> >               if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
+> >                       avg_signal_strength = recvpriv->signal_strength_data.avg_val;
+> > -                     /*  after avg_vals are accquired, we can re-stat the signal values */
+> > +                     /*  after avg_vals are acquired, we can re-stat the signal values */
+> >                       recvpriv->signal_strength_data.update_req = 1;
+> >               }
+> >
+> >               if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
+> >                       avg_signal_qual = recvpriv->signal_qual_data.avg_val;
+> > -                     /*  after avg_vals are accquired, we can re-stat the signal values */
+> > +                     /*  after avg_vals are acquired, we can re-stat the signal values */
+> >                       recvpriv->signal_qual_data.update_req = 1;
+> >               }
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> > index 029b994e1b71..2a686b5c65b1 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> > @@ -958,7 +958,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+> >               }
+> >
+> >               if (bmcst) {
+> > -                     /*  don't do fragment to broadcat/multicast packets */
+> > +                     /*  don't do fragment to broadcast/multicast packets */
+> >                       mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
+> >               } else {
+> >                       mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
+> > @@ -1768,7 +1768,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+> >                       pstapriv->tim_bitmap |= BIT(0);/*  */
+> >                       pstapriv->sta_dz_bitmap |= BIT(0);
+> >
+> > -                     update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
+> > +                     update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after update bcn */
+> >
+> >                       ret = true;
+> >               }
+> > @@ -1818,7 +1818,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+> >                               pstapriv->tim_bitmap |= BIT(psta->aid);
+> >
+> >                               if (psta->sleepq_len == 1) {
+> > -                                     /* upate BCN for TIM IE */
+> > +                                     /* update BCN for TIM IE */
+> >                                       update_beacon(padapter, _TIM_IE_, NULL, false);
+> >                               }
+> >                       }
+> > @@ -2087,7 +2087,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
+> >               if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
+> >                       pstapriv->tim_bitmap &= ~BIT(psta->aid);
+> >
+> > -                     /* upate BCN for TIM IE */
+> > +                     /* update BCN for TIM IE */
+> >                       update_beacon(padapter, _TIM_IE_, NULL, false);
+> >               }
+> >       }
+> > --
+> > 2.17.1
+> >
+> >
+> >
+>

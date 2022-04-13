@@ -2,126 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D42500080
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B442500085
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbiDMVE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        id S238771AbiDMVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiDMVE0 (ORCPT
+        with ESMTP id S235758AbiDMVFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:04:26 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D040A71A24
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id p21so3327355ioj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
+        Wed, 13 Apr 2022 17:05:43 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABBB8148A;
+        Wed, 13 Apr 2022 14:03:20 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id c15so3694531ljr.9;
+        Wed, 13 Apr 2022 14:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/qUIJWUYp0OgGPrDZUu+q7DE+3dlNWkqw9Br15Nf3Qo=;
-        b=OFkr8OF7baDSWlxCIRyQaETk6E21TEaTMW5FVY+5KHmdECRnIAsakMkZ/xCkZXz4ac
-         PdZqm6T77fdP7wYKyifi5RY9/SKqzc9ibPhBZrX838SKGG22M6CycSrHR9Ju/Op7WzvQ
-         QwZNjVRy6QjsZ59/TF2V3TjHUZ7PfedKp5pDfUZDzX9qKsYuyjQkbbgQP79z5ZV1tFdO
-         vTpckEpdgg4UwHcW2gktfOivWYC86kxRnF50FdeNeCrMtNsqb/kDTmVJh3bh8F+mnam9
-         tSxzUURicv6wWp9KxpmEx71w2UA03ns+iN3HUGcsuiXiK0xbt9C7+tasx/OuDNLNR19x
-         1lOw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LZ83DhkBBZG+nmgaAN5JuMecxE6+rXnsPcGZMd6P5Us=;
+        b=A1CrRXIUjnvMG6dKthCK0WPXr1bst9Dthfm7oG9Pdug62bdRKTaJnXSbGLdMQBZOV6
+         ugramo2G/EYDnvAgA+ON3SmPX9KDn3pUo/2i034jKN2SUJY4uQzypxgSP7cAzfzcuskc
+         qSyjDC785Pacz7CSM6MlXhnMd7B6Xqux8oRmHa8xW0e6sziFV9HVSN+LDxJ7O/o3F80O
+         zW0kCbcAeGRT3CJuVXKL06PLQzg90vTFB/zO4EiCT0Pozrt6ym0bhvcMODzlkP8SHLZK
+         /cDTftHemWU/N5nGKE/dwlw1qmVmjS194xBjh+MduBOPrbs60P48KC1Dj5a4rRegioGR
+         TAJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/qUIJWUYp0OgGPrDZUu+q7DE+3dlNWkqw9Br15Nf3Qo=;
-        b=e3DHwL/45iQgHj24gA/ipE6OCdmuvENvJWT+g3KNZMJrg4/YrtdEu1QYhcuRRaS1fG
-         zvmiqxDp3QYUb135BD+DTRzJXxb728V8YKaQx52O7s92BJRYDvKobi2wMv5yF6ae2bKs
-         7P/logOhLSl5RB8h21lRH4fGonZlDJ66+nSmJsWmlOhsTs2+8SZGPmlspU4Tsopl9cRF
-         wtlbFQNUYQK9rJTsJbcw/98UDfYa5MXrcDnwjOHer3p7bKPWrDcHFHDuifwv8Azo1OVG
-         FTb70SFieYwvJs3Ywxesnbg7ROp6e9RRJfcer7MKec1E+o7WemL0yauqQk1mQwYtGlQm
-         Pr9w==
-X-Gm-Message-State: AOAM533yeVSuubIxg2QAkg4uEJQpfZ1uHsyBOW++xtF0ms2XJMpbWt0u
-        L2966WLlAi4gQm5OgPg9aJXom0KpNgllRg==
-X-Google-Smtp-Source: ABdhPJxBqzKWs5v+J9djfCdod9R40p3p0DgaokqZxmyWAB6vqPwMBob/hkA2/LTw8bOWzbrl4sSpQQ==
-X-Received: by 2002:a05:6638:25c2:b0:326:223d:4494 with SMTP id u2-20020a05663825c200b00326223d4494mr9784815jat.162.1649883722145;
-        Wed, 13 Apr 2022 14:02:02 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id i5-20020a6bf405000000b00645be60c31csm21576iog.23.2022.04.13.14.02.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 14:02:01 -0700 (PDT)
-Message-ID: <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
-Date:   Wed, 13 Apr 2022 16:02:00 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LZ83DhkBBZG+nmgaAN5JuMecxE6+rXnsPcGZMd6P5Us=;
+        b=v6ClH7afCAwsXB546g6fAcfELxZeoR45ZN46SeQfhsZcjYheDwlnBNLAZq/4QNMyrw
+         LkrwN7O3sXwrkYTdX5+gr3F0VcEYq6Qxx0rp5LtXGDigjVC6kZ0UgZuj8dzsFtnRCRIW
+         RypFXDy+eZ+5NytNt0ms2VoB7r7nIPDMNid+Sz1VP1MvuakF/JLz2DonbkPjXFjMvWwc
+         kb479+AFLbKKNJRxt/qZ1nUJF5d/P1XfX7rKtDSQom4zuRaMdT/hYIrTJqXvLuH0EZ6j
+         4zyiR9HFugbYuyNgv5eaum4F2LdD40Upc6Qe1LuYhsaPI5be+DgNcrM/KS+18G+mkrqG
+         KScg==
+X-Gm-Message-State: AOAM533CQbCV/YQ2ZbpPRkqEcn2rPXGcqGAxsOGvKRwZd7uqxgHmfpia
+        q2sh+cLG0l7woP8L/1ar9Iw=
+X-Google-Smtp-Source: ABdhPJzYwv1HlyLnTGVUKLQd2vjVKNQJgZHMVDVmslMcXnVuVOGBNfFyVntbEQ2MADkUqkABZ6pXkQ==
+X-Received: by 2002:a05:651c:992:b0:24b:99c:35c with SMTP id b18-20020a05651c099200b0024b099c035cmr27850033ljq.142.1649883798192;
+        Wed, 13 Apr 2022 14:03:18 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id a16-20020a195f50000000b00464f8b13286sm6288lfj.294.2022.04.13.14.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 14:03:17 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 00:03:15 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/12] PCI: dwc: Don't use generic IO-ops for DBI-space
+ access
+Message-ID: <20220413210315.2tsmlgudbz4ezzf2@mobilestation>
+References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324012524.16784-3-Sergey.Semin@baikalelectronics.ru>
+ <20220324082746.GB2854@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] interconnect: qcom: sc7180: Drop IP0 interconnects
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220412220033.1273607-1-swboyd@chromium.org>
- <20220412220033.1273607-2-swboyd@chromium.org>
- <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324082746.GB2854@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 3:55 PM, Doug Anderson wrote:
-> Hi,
+On Thu, Mar 24, 2022 at 01:57:46PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:25:13AM +0300, Serge Semin wrote:
+> > Commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") replaced
+> > the locally defined DW PCIe host controller config-space accessors with
+> > the generic methods pci_generic_config_read() and
+> > pci_generic_config_write(). It was intended that the corresponding
+> > bus-mapping callback returned a correct virtual address of the passed PCI
+> > config-space register. The problem of the proposed solution was that it
+> > didn't take into account the way the host config-space is accessed on the
+> > DW PCIe. Depending on the DW PCIe IP-core synthesize parameters different
+> > interfaces can be used to access the host and peripheral config/memory
+> > spaces. The former one can be accessed via the DBI interface, while the
+> > later ones is reached via the AHB/AXI application bus. In case if the DW
+> > PCIe controller is configured to have a dedicated DBI interface, the way
+> > it is mapped into the IO-memory turns to be platform-specific. For such
+> > setups the DWC PCIe driver provides a set of the callbacks
+> > dw_pcie_ops.{read_dbi,write_dbi} so the platforms glue-drivers would be
+> > able to take into account the DBI bus IO peculiarities. Since
+> > commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") these
+> > methods haven't been utilized during the generic host initialization
+> > performed by the PCIe subsystem code.
+> > 
+> > I don't really know how come there have been no problems spotted for the
+> > Histb/Exynos/Kirin PCIe controllers so far, but in our case with dword
+> > aligned IO requirement the generic config-space accessors can't be
+> > utilized for the host config-space. Thus in order to make sure the host
+> > config-space is properly accessed via the DBI bus let's get back the
+> > dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() methods. They are going to
+> > be just wrappers around the already defined
+> > dw_pcie_read_dbi()/dw_pcie_write_dbi() functions with proper arguments
+> > conversion. These methods perform the platform-specific config-space IO if
+> > the DBI accessors are specified, otherwise they call normal MMIO
+> > operations.
+> > 
 > 
-> On Tue, Apr 12, 2022 at 4:20 PM Stephen Boyd <swboyd@chromium.org> wrote:
->>
->> @@ -519,8 +500,6 @@ static const struct of_device_id qnoc_of_match[] = {
->>            .data = &sc7180_dc_noc},
->>          { .compatible = "qcom,sc7180-gem-noc",
->>            .data = &sc7180_gem_noc},
->> -       { .compatible = "qcom,sc7180-ipa-virt",
->> -         .data = &sc7180_ipa_virt},
->>          { .compatible = "qcom,sc7180-mc-virt",
->>            .data = &sc7180_mc_virt},
->>          { .compatible = "qcom,sc7180-mmss-noc",
+
+> Why can't you override the "pci_ops" in your host driver's "host_init"?
+
+I have already defined the platform-specific DBI operations. These
+operations are supposed to be used to access the DBI MMIO including
+the own config space. Not doing so is very wrong and will cause
+problems not only on my platforms, but on all platforms with specific
+DBI implementation (such that requiring some more actions than
+standard {read|write}{b,w,l} ops). So the commit c2b0c098fbd1 ("PCI:
+dwc: Use generic config accessors") shouldn't have introduced the
+generic IOs usage in this case and it needs to be fixed.
+
+-Sergey
+
 > 
-> I have no objection to ${SUBJECT} change landing and based on all your
-> research and Alex's review/testing I think it's good to go.
+> Thanks,
+> Mani
 > 
-> However, now that you're removed the driver that cared about
-> "qcom,sc7180-ipa-virt", should we also be removing it from the
-> `bindings/interconnect/qcom,rpmh.yaml` file and the `sc7180.dtsi`
-> file? I think that removing it from _either_ the driver (like your
-> patch here does) _or_ the sc7180.dtsi file would fix the bug, right?
-> ...and then removing it from the yaml would just be cleanup...
-
-That's a good point, I hadn't thought about that but you're right.
-
-I think we were too pleased about identifying the problem and
-proving it could happen (and cause a crash), so we didn't think
-hard enough about this other piece.
-
-Stephen, I think you should re-spin the series and add the
-proper change to the binding.  You can keep the tags I gave
-before.
-
-I've got a note to follow up with similar changes to other
-platforms where the interconnect driver includes resource "IP0"
-and will plan to do what Doug suggests there too.
-
-					-Alex
-
-> -Doug
-
+> > Fixes: c2b0c098fbd1 ("PCI: dwc: Use generic config accessors")
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  .../pci/controller/dwc/pcie-designware-host.c | 34 +++++++++++++++++--
+> >  1 file changed, 32 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > index a03619a30c20..f89e6552139b 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > @@ -528,10 +528,40 @@ void __iomem *dw_pcie_own_conf_map_bus(struct pci_bus *bus, unsigned int devfn,
+> >  }
+> >  EXPORT_SYMBOL_GPL(dw_pcie_own_conf_map_bus);
+> >  
+> > +static int dw_pcie_rd_own_conf(struct pci_bus *bus, unsigned int devfn,
+> > +			       int where, int size, u32 *val)
+> > +{
+> > +	struct pcie_port *pp = bus->sysdata;
+> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > +
+> > +	if (PCI_SLOT(devfn) > 0) {
+> > +		*val = ~0U;
+> > +		return PCIBIOS_DEVICE_NOT_FOUND;
+> > +	}
+> > +
+> > +	*val = dw_pcie_read_dbi(pci, where, size);
+> > +
+> > +	return PCIBIOS_SUCCESSFUL;
+> > +}
+> > +
+> > +static int dw_pcie_wr_own_conf(struct pci_bus *bus, unsigned int devfn,
+> > +			       int where, int size, u32 val)
+> > +{
+> > +	struct pcie_port *pp = bus->sysdata;
+> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > +
+> > +	if (PCI_SLOT(devfn) > 0)
+> > +		return PCIBIOS_DEVICE_NOT_FOUND;
+> > +
+> > +	dw_pcie_write_dbi(pci, where, size, val);
+> > +
+> > +	return PCIBIOS_SUCCESSFUL;
+> > +}
+> > +
+> >  static struct pci_ops dw_pcie_ops = {
+> >  	.map_bus = dw_pcie_own_conf_map_bus,
+> > -	.read = pci_generic_config_read,
+> > -	.write = pci_generic_config_write,
+> > +	.read = dw_pcie_rd_own_conf,
+> > +	.write = dw_pcie_wr_own_conf,
+> >  };
+> >  
+> >  void dw_pcie_setup_rc(struct pcie_port *pp)
+> > -- 
+> > 2.35.1
+> > 

@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22C44FF51C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38F04FF512
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbiDMKwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 06:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S233583AbiDMKuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 06:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiDMKwO (ORCPT
+        with ESMTP id S229875AbiDMKuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 06:52:14 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403C35858
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 03:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649846992; x=1681382992;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=24MmeEn2Cbl39Z9DZndnyl+5AVJ6TfhTumGasuy47do=;
-  b=Z94uTTS3c7NoBUaIgInaSWig6IrAgRICXK/y5gWDlv/nKpqcoV+Oq03B
-   xYLFJRF1gb8JV7ytwBKOeJAB2AYH1aEeHfRTx4wqXaMIgVx5sUHgbXi7E
-   XPjwDIcdPtaMY5yYFWmIjiWnoGLHSyYicCKTOF6jtqG54kf0xNg3jDxcS
-   9Gp3r1dGX1BsPNm6d9GIedlOw7Z4BMN5Ypuib6itbGWgRSZdnMIeoOz5R
-   eUhx9Jtu4JvV/VaWP+9Ul6CMbvpYQqmbr687bMBMSAHo+DPzir5Zaqe3f
-   08TXPj98G0uY/kDP1/5BduLHxaZcTwhnlzvo97rSz15KCNa6JImy13Vt/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="262077085"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="262077085"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 03:49:52 -0700
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="660883901"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 03:49:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1neaVm-001nR0-8j;
-        Wed, 13 Apr 2022 13:46:10 +0300
-Date:   Wed, 13 Apr 2022 13:46:10 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
-        Mark Brown <broonie@kernel.org>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v3 4/5] drm/solomon: Move device info from ssd130x-i2c to
- the core driver
-Message-ID: <Ylap8rTKbXp80Woc@smile.fi.intel.com>
-References: <20220412162729.184783-1-javierm@redhat.com>
- <20220412162729.184783-5-javierm@redhat.com>
+        Wed, 13 Apr 2022 06:50:35 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5164D58823;
+        Wed, 13 Apr 2022 03:48:15 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23DAm2wA021355;
+        Wed, 13 Apr 2022 05:48:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649846882;
+        bh=O+86ub9Rq04Lr287UmBX3aEvJAug5Lag0f/aY757xB0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=yF/m8g9Geh0XYqYAtaSSjFLMfZ9zL+2AAuc/UbSnnzDdLFX4sNOrnfnl/V4YMiIpm
+         eYCsMBKbcU1m8TVeSt2W+HDkDmf1o8MnEAhXCbTMZxFzz37/CusGic9Q7DE7rVZRKy
+         sGHpW0nqSPQ2TZKW3tGNCTVxx7vzvLN+Z2iq69EU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23DAm2jm101447
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Apr 2022 05:48:02 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 13
+ Apr 2022 05:48:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 13 Apr 2022 05:48:01 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23DAlvJS128379;
+        Wed, 13 Apr 2022 05:47:58 -0500
+Message-ID: <09dde54e-de77-4f53-b674-8253069c6b05@ti.com>
+Date:   Wed, 13 Apr 2022 16:17:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412162729.184783-5-javierm@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC] usb: typec: tipd: Add support for polling interrupts
+ status when interrupt line is not connected
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Saranya Gopal <saranya.gopal@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220412145059.4717-1-a-govindraju@ti.com>
+ <YlaZIual4Fa/a81I@kuha.fi.intel.com>
+ <5672af5d-d4a9-08ab-0594-7da57cd0972b@ti.com>
+ <Ylan/MzWWTeE8hDh@kuha.fi.intel.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <Ylan/MzWWTeE8hDh@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 06:27:28PM +0200, Javier Martinez Canillas wrote:
-> These are declared in the ssd130x-i2c transport driver but the information
-> is not I2C specific, and could be used by other SSD130x transport drivers.
+Hi Heikki,
+
+On 13/04/22 16:07, Heikki Krogerus wrote:
+> On Wed, Apr 13, 2022 at 03:32:50PM +0530, Aswath Govindraju wrote:
+>> Hi Heikki,
+>>
+>> On 13/04/22 15:04, Heikki Krogerus wrote:
+>>> Hi Aswath,
+>>>
+>>> On Tue, Apr 12, 2022 at 08:20:58PM +0530, Aswath Govindraju wrote:
+>>>> In some cases the interrupt line from the pd controller may not be
+>>>> connected. In these cases, poll the status of various events.
+>>>
+>>> Well, if the alert/interrupt line is not connected anywhere, then
+>>> polling is the only way to go. I'm fine with that, but the driver
+>>> really should be told that there is no interrupt. Using polling
+>>> whenever request_threaded_irq() returns -EINVAL is wrong. We really
+>>> should not even attempt to request the interrupt if there is no
+>>> interrupt for the device.
+>>>
+>>> Isn't there any way you can get that information from DT? Or how is
+>>> the device enumerated in your case?
+>>>
+>>
+>> Would checking if (client->irq) field is populated, to decide between
+>> polling and interrupts be a good approach?
+>>
+>> I am sorry but I did not understand what you meant by device getting
+>> enumerated. The device is on an I2C bus and gets enumerated based on the
+>> I2C address provided. The device does not have I2C_IRQ line connected,
+>> in my case.
 > 
-> Move them to the ssd130x core driver and just set the OF device entries to
-> an ID that could be used to lookup the correct device info from an array.
+> "I2C devices are not enumerated at hardware level":
+> https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html
 > 
-> While being there, also move the SSD130X_DATA and SSD130X_COMMAND control
-> bytes. Since even though they are used by the I2C interface, they could
-> also be useful for other transport protocols such as SPI.
+> So your PD controller I2C slave device has to be either described in
+> Devicetree or ACPI tables, or there is a board file or platform driver
+> that actually populates the device for it.
+> 
+> Can you tell a little bit about the platform you are running? Is it
+> ARM, x86, or what, and is it ACPI or DT platform?
+> 
 
-...
+Got it. Currently I am testing on a ARM platform and the I2C device tree
+nodes are populated in the device tree. This is how the PD controller
+gets enumerated.
 
-> +EXPORT_SYMBOL_GPL(ssd130x_variants);
 
-What I meant is to use EXPORT_SYMBOL_NS_GPL() here. It might require a separate
-patch to move other exports to that namespace first.
+> thanks,
+> 
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Aswath

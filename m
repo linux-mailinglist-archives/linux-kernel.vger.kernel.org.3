@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86784FF713
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E954FF715
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235613AbiDMMu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S235623AbiDMMvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiDMMu0 (ORCPT
+        with ESMTP id S229441AbiDMMvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:50:26 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A869C40E60
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:48:05 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id y65so1731602iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9jPZG9/+m97btsIbUfBFkqEN0JQ7wZ3+b8nQQ/RX0/U=;
-        b=QBoFY5ec7cTEQSifRW8FUGrkedVgwRZQotcNk3yipnOF3lhr9Pcn4eFZ9Puuwt97s9
-         uXvcFWEzJ2ok1oCj6cpgUqFryCjxuO3hPjWQrNyMdJDmwZw2HOQrGwO1anN03ZPZZR65
-         VSUM5TcLIQTgDrKFO1rlFgqmx4H88Sn4OPrXo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9jPZG9/+m97btsIbUfBFkqEN0JQ7wZ3+b8nQQ/RX0/U=;
-        b=6dKW/Siv9SJjpnNxaK/ZDqTW97RTyhKL+zcDcnoSUFo6XDuV4BBu5I4UA045lJRhBg
-         DJHuB73zFGOcUg+oQpNlig7F0pRQ7YbM2ibk6cu3TJJ9+a3jUtOcIe4LCqIe3X+QB7az
-         sn/2KbcSCIaIKY3faw3pIahy7NlsFscjnBKT/UQDxCVIv1Ef69bFrwk1E7UUzcrzi3HP
-         LVlX8XaSg08RBcN2peSVOjnoJa1VgRxEgdjPxYOb/CbefrP5EzDJYRx9Q9/8Z6uBlS5L
-         z/WwjJicsF3VpZ+ZPHLEMoOB+R46eFS3EogVasLZv0mHcl87iy38La22tZxyHvS0PSvb
-         1grg==
-X-Gm-Message-State: AOAM531Ssyf2Jj9JtYIcW+voVMurONFGTuOzs5B8/5GqMP9FrnsvK9X5
-        1htW6lTWiAfbgW3qIvYhR+/L1w==
-X-Google-Smtp-Source: ABdhPJwcDwROpz/UfIELVwrdwOuvg76PG0BW+jpB2S6XlS8+0l+GjJIkxkMWI7DdRYklftWbiiTamQ==
-X-Received: by 2002:a02:271f:0:b0:326:af4:3f0c with SMTP id g31-20020a02271f000000b003260af43f0cmr11290770jaa.300.1649854085065;
-        Wed, 13 Apr 2022 05:48:05 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id x186-20020a6bc7c3000000b00648deae6630sm24343335iof.54.2022.04.13.05.48.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 05:48:04 -0700 (PDT)
-Message-ID: <a4e5c567-63dd-f7de-114b-a357075444a2@ieee.org>
-Date:   Wed, 13 Apr 2022 07:48:03 -0500
+        Wed, 13 Apr 2022 08:51:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E4B45AC5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RGbYhpXywzqv2Hlc31WFYOQppwWEQngmyLOiz4SPLMc=; b=o/CdrJdGaOo/+UkTwXEgHYmTJ5
+        TVDAF0tewzHLjCwR6q5XktVPi6We1u9p2XdJdoEWxcJXOUD6QlalIPEHhsY4pFuo1I4Oqu9+w/0L6
+        V/ijAASP/ARnuJDM9SbL3HymUp+TUOx4vwezAmiO810NhKDdC7dJdWBl+d8JmEKxTFyOQ4lOcHRXr
+        DUbbSHtl7FuohRtOQiEuaS5GhB+CmKXTKAryFnwf8rK84K5hSe03bQl+XI2BbAPaxUyUFl24kVmow
+        vEa4bVOlYg8AoYVAu274c8U5DjhowWcVgGl4DY77ae/2Ez54zo9nfeoXx97v7R9tCAQ/fnVPhQugF
+        xuTmCaTQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1necQV-00EGJp-Iq; Wed, 13 Apr 2022 12:48:51 +0000
+Date:   Wed, 13 Apr 2022 13:48:51 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH v3 08/16] mm/rmap: drop "compound" parameter from
+ page_add_new_anon_rmap()
+Message-ID: <YlbGswXaIRblKN9j@casper.infradead.org>
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-9-david@redhat.com>
+ <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
+ <368902ab-8d3f-5d62-581e-1ff930bcefa0@redhat.com>
+ <YlbBXiVezzVw+NZZ@casper.infradead.org>
+ <0c9d2c39-5080-a855-8ecd-e2c1bd1179fa@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/2] staging: greybus: remove empty callback function
-Content-Language: en-US
-To:     Jaehee Park <jhpark1013@gmail.com>, johan@kernel.org
-Cc:     elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <cover.1649824370.git.jhpark1013@gmail.com>
- <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <12037ae2502ad7d0311bcdf2178c3d2156293236.1649824370.git.jhpark1013@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c9d2c39-5080-a855-8ecd-e2c1bd1179fa@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/22 11:38 PM, Jaehee Park wrote:
-> Remove the optional remove callback for the soc_codec_dev_gbaudio
-> structure. The only place it is referenced is
-> snd_soc_component_remove() which is only called if the sound_component
-> pointer is non-null. The null function pointers here can be optionally
-> ommitted. When a sound component is registered this way, the remove
-> callback is optional. We can safely remove the whole gbcodec_remove
-> function, which used to be an empty function with a void return type.
-
-Now I think your description is a little long...  But that's OK.
-
-This looks good to me.  Thank you for responding to all our
-feedback.
-
-Reviewed-by: Alex Elder <elder@linaro.org>
+On Wed, Apr 13, 2022 at 02:28:38PM +0200, David Hildenbrand wrote:
+> On 13.04.22 14:26, Matthew Wilcox wrote:
+> > On Tue, Apr 12, 2022 at 11:37:09AM +0200, David Hildenbrand wrote:
+> >> On 12.04.22 10:47, Vlastimil Babka wrote:
+> >>> There's a VM_BUG_ON_PAGE(PageTransCompound(page), page); later in a
+> >>> !compound branch. Since compound is now determined by the same check, could
+> >>> be deleted.
+> >>
+> >> Yes, eventually we could get rid of both VM_BUG_ON_PAGE() on both
+> >> branches and add a single VM_BUG_ON_PAGE(PageTail(page), page) check on
+> >> the compound branch. (we could also make sure that we're not given a
+> >> hugetlb page)
+> > 
+> > As a rule of thumb, if you find yourself wanting to add
+> > VM_BUG_ON_PAGE(PageTail(page), page), you probably want to change the
+> > interface to take a folio.
 > 
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> ---
->   drivers/staging/greybus/audio_codec.c | 8 --------
->   1 file changed, 8 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
-> index 0f50d1e51e2c..dc030caa64ba 100644
-> --- a/drivers/staging/greybus/audio_codec.c
-> +++ b/drivers/staging/greybus/audio_codec.c
-> @@ -1029,12 +1029,6 @@ static int gbcodec_probe(struct snd_soc_component *comp)
->   	return 0;
->   }
->   
-> -static void gbcodec_remove(struct snd_soc_component *comp)
-> -{
-> -	/* Empty function for now */
-> -	return;
-> -}
-> -
->   static int gbcodec_write(struct snd_soc_component *comp, unsigned int reg,
->   			 unsigned int value)
->   {
-> @@ -1049,8 +1043,6 @@ static unsigned int gbcodec_read(struct snd_soc_component *comp,
->   
->   static const struct snd_soc_component_driver soc_codec_dev_gbaudio = {
->   	.probe	= gbcodec_probe,
-> -	.remove	= gbcodec_remove,
-> -
->   	.read = gbcodec_read,
->   	.write = gbcodec_write,
->   };
+> Yeah, I had the same in mind. Might be a reasonable addon on top --
+> although it would stick out in the rmap code a bit because most
+> functions deal with both, folios and subpages.
 
+I have the start of a series which starts looking at the fault path
+to see where it makes sense to use folios and where it makes sense to
+use pages.
+
+We're (generally) faulting on a PTE, so we need the precise page to
+be returned in vmf->page.  However vmf->cow_page can/should be a
+folio (because it's definitely not a tail page).  That trickles
+down into copy_present_page() (new_page and prealloc both become folios)
+and so page_add_new_anon_rmap() then looks like a good target to
+take a folio.
+
+The finish_fault() -> do_set_pte() -> page_add_new_anon_rmap() looks
+like the only kind of strange place where we don't necessarily have a
+folio (all the others we just allocated it).

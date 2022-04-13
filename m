@@ -2,142 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05A94FF35B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2151F4FF376
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiDMJZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S230140AbiDMJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234423AbiDMJZv (ORCPT
+        with ESMTP id S234442AbiDMJ1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:25:51 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153AA532F5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:23:30 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so5700637pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wRXirUEKSPI6ru648JuWYPXw/sXNZVfeivfow6gXxCU=;
-        b=NSQWSk7KTjgR1R43JsBYQ1pozNWfaSSFh31fwZQJRY/JP0eqmDA4oV+tGsAdykD2UZ
-         uOhRQMH6sGK7PYixM4yd9JfnUZlo/Fvhe4Kc40ApShO3t4147mY0e28258Jvb1QRyrkf
-         XRWBeAQfIitmvcJGeRhFHMfaJQbQy5QvBslX0upT5e/VM2JcnHtDMCipGIG7g4PBxd1k
-         aM95mmBKUp+K6Y1ygBJTrdluHuatVEtlYJB7WNHlrv80hht0ytKkjUoXfbRcFL19/zu6
-         d//4NBZ+dPv7IBQrIRDAIKpmdAN+UY3N5N52oejxrZ4V7nShq6noho/95AFQtyDKYiUw
-         WqRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wRXirUEKSPI6ru648JuWYPXw/sXNZVfeivfow6gXxCU=;
-        b=CXLNEBkGe1U3RN0A+mi3B53Y/LzjwKOoQbXWwd59eUWIjTP4yv8C30th1fl0ye1G1A
-         S5ndkdb6yeBz/qa3HxAUWjy7e9Vijd3OWhpsLiWbvH3i7/zEjmJHtFXYIsok1HjNX6Mc
-         2UfTPLkPltWw+A7DFWk8LY2A46sLQEZJWGkJG9H/ZRpVBw69yFWm1llcvLKZJB8QSI/1
-         rYv0BzM1r5hXDvZUklZ5h4+jLaVL1bsVcjH73Xi7YKBw8GWL80WgL+wk5/GhQovH8W7A
-         Vw4+w1Xwpg1kGgzsLer1ijh/rnnkMbd6AYM01eWkwU4uHP6gnY6uEc+rLTfEZDIFJ6Wh
-         ycew==
-X-Gm-Message-State: AOAM530Cl73sOXDBt3nkdm3ouMFSld/lAxh51KtC/NL6uVb+TPieUVMb
-        R2juG3k6rT9OVik5QW1VslUYDg==
-X-Google-Smtp-Source: ABdhPJyZnbZbZZKVFPTF/SFu5yucL9hFbgSI04LlY+Sq49nPD/NAIJHwFuLlpA9dtv6xAvAk52XDFQ==
-X-Received: by 2002:a17:90b:1c88:b0:1b8:a77e:c9cb with SMTP id oo8-20020a17090b1c8800b001b8a77ec9cbmr9622873pjb.205.1649841809256;
-        Wed, 13 Apr 2022 02:23:29 -0700 (PDT)
-Received: from localhost.localdomain (111-250-44-108.dynamic-ip.hinet.net. [111.250.44.108])
-        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001c7ea7f487asm2363144pjh.39.2022.04.13.02.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 02:23:28 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE event
-Date:   Wed, 13 Apr 2022 17:23:17 +0800
-Message-Id: <20220413092317.756022-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 05:27:02 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4090BDF8E;
+        Wed, 13 Apr 2022 02:24:41 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdcZK6jz6zgYl0;
+        Wed, 13 Apr 2022 17:22:49 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 17:24:39 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 17:24:39 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <masahiroy@kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <chenlifu@huawei.com>
+Subject: [PATCH v3 -next] scripts: add compare-config utility
+Date:   Wed, 13 Apr 2022 17:23:31 +0800
+Message-ID: <20220413092331.203284-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-is not available") "perf mem report" and "perf report --mem-mode"
-don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-type.
+This is an alternative utility to compare two .config files. Unlike
+existing utilities "diffconfig" in the kernel tree, it prints detailed
+results in table style, and support config name prefix so that it can be
+used elsewhere. It is useful sometimes, for example, to analyze .config
+files through tables, or to compare Buildroot .config.
 
-The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-event, this allows the perf data file generated by kernel v5.18-rc1 or
-later version can be reported properly.
+With grep and awk, it can print similar results like "diffconfg" as well.
 
-On the other hand, perf tool still fails to be backward compatibility
-for a data file recorded by an older version's perf which contains Arm
-SPE trace data.  This patch is a workaround in reporting phase, when
-detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-force to set the bit in the sample type and give a warning info.
-
-Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Tested-by: German Gomez <german.gomez@arm.com>
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
 ---
-v2: Change event name from "arm_spe_" to "arm_spe";
-    Add German's test tag.
+Changes in v3:
+- Add -D option, a combination of -C -O -N, and set it as default mode
 
- tools/perf/builtin-report.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Changes in v2:
+- Add config name prefix support
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 1ad75c7ba074..acb07a4a9b67 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
- 	struct perf_session *session = rep->session;
- 	u64 sample_type = evlist__combined_sample_type(session->evlist);
- 	bool is_pipe = perf_data__is_pipe(session->data);
-+	struct evsel *evsel;
- 
- 	if (session->itrace_synth_opts->callchain ||
- 	    session->itrace_synth_opts->add_callchain ||
-@@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
- 	}
- 
- 	if (sort__mode == SORT_MODE__MEMORY) {
-+		/*
-+		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-+		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-+		 * compatibility, set the bit if it's an old perf data file.
-+		 */
-+		evlist__for_each_entry(session->evlist, evsel) {
-+			if (strstr(evsel->name, "arm_spe") &&
-+				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-+				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
-+					    "for Arm SPE event.\n");
-+				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
-+				sample_type |= PERF_SAMPLE_DATA_SRC;
-+			}
-+		}
+ scripts/compare-config | 203 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 203 insertions(+)
+ create mode 100755 scripts/compare-config
+
+diff --git a/scripts/compare-config b/scripts/compare-config
+new file mode 100755
+index 000000000000..f770a1b02170
+--- /dev/null
++++ b/scripts/compare-config
+@@ -0,0 +1,203 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++#
++# An utility to compare two .config files and print the results in table style.
++#
 +
- 		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
- 			ui__error("Selected --mem-mode but no mem data. "
- 				  "Did you call perf record without -d?\n");
++import sys
++import argparse
++import traceback
++
++def args_parser():
++    comment = ("An utility to compare two .config files and "
++               "print the results in table style.")
++    parser = argparse.ArgumentParser(description = comment,
++                                     formatter_class =
++                                         argparse.RawTextHelpFormatter)
++    parser.add_argument(dest = "old_file", nargs = "?",
++                        metavar = "old-file",
++                        default = ".config.old",
++                        help = "specify old .config file "
++                               "(default: .config.old)")
++    parser.add_argument(dest = "new_file", nargs = "?",
++                        metavar = "new-file",
++                        default = ".config",
++                        help = "specify new .config file "
++                               "(default: .config)")
++    parser.add_argument("-S", dest = "S", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "and are equal")
++    parser.add_argument("-C", dest = "C", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "but are not equal")
++    parser.add_argument("-O", dest = "O", action = "store_true",
++                        help = "print configs that only exist in old-file")
++    parser.add_argument("-N", dest = "N", action = "store_true",
++                        help = "print configs that only exist in new-file")
++    parser.add_argument("-D", dest = "D", action = "store_true",
++                        help = "a combination of -C -O -N, it's the default mode")
++    parser.add_argument("-y", dest = "y", action = "store_true",
++                        help = "print configs that are y")
++    parser.add_argument("-n", dest = "n", action = "store_true",
++                        help = "print configs that are n (not set)")
++    parser.add_argument("-m", dest = "m", action = "store_true",
++                        help = "print configs that are m")
++    parser.add_argument("-v", dest = "v", action = "store_true",
++                        help = "print configs that are "
++                               "string/hex/int value")
++    parser.add_argument("--old", dest = "old", action = "store_true",
++                        help = "filter configs base on old-file")
++    parser.add_argument("--new", dest = "new", action = "store_true",
++                        help = "filter configs base on new-file")
++    parser.add_argument("-p", "--prefix", dest = "prefix",
++                        action = "store", default = "CONFIG_",
++                        help = "config name prefix (default: CONFIG_)")
++    return parser
++
++def usage():
++    args_parser().parse_args(["-h"])
++
++def parse_args():
++    args = args_parser().parse_args()
++    setattr(args, "doptions", diff_options(args))
++    setattr(args, "voptions", value_options(args))
++    old = args.old or not args.new
++    new = args.new or not args.old
++    args.old = old
++    args.new = new
++    return args
++
++def diff_options(args):
++    doptions = []
++    if args.S: doptions.append("S")
++    if args.C or args.D: doptions.append("C")
++    if args.O or args.D: doptions.append("O")
++    if args.N or args.D: doptions.append("N")
++    if len(doptions) == 0:
++        doptions = ["C", "O", "N"]
++    return doptions
++
++def value_options(args):
++    voptions = set()
++    if args.y: voptions.add("y")
++    if args.n: voptions.add("n")
++    if args.m: voptions.add("m")
++    if args.v: voptions.add("v")
++    if len(voptions) == 0:
++        voptions = {"y", "n", "m", "v"}
++    return voptions
++
++def test_value(val, voptions):
++    if val is None: return False
++    if val in voptions: return True
++    return (not val in {"y", "n", "m"}) and ("v" in voptions)
++
++def format_exception():
++    es = ""
++    exc_type, exc_value, exc_traceback = sys.exc_info()
++    exc_str = traceback.format_exception(exc_type, exc_value, exc_traceback)
++    for s in exc_str:
++        es += s
++    return es
++
++def read_line(line, prefix):
++    line = line.strip()
++    if line.endswith(" is not set"):
++        beg = line.find(prefix)
++        if beg == -1: return None, None
++        name, val = line[beg:-10].rsplit(" ", 1)
++        return name.strip(), "n"
++    if line.startswith(prefix):
++        if line.find("=") == -1: return None, None
++        name, val = line.split("=", 1)
++        return name.strip(), val.strip()
++    return None, None
++
++def read_file(filename, prefix):
++    configs = {}
++    with open(filename, "r", encoding = "utf-8") as f:
++        for line in f:
++            name, val = read_line(line, prefix)
++            if not name is None: configs[name] = val
++    return configs
++
++def compare_config(args):
++    result = {"S": {}, "C": {}, "O": {}, "N": {}}
++    try:
++        old_configs = read_file(args.old_file, args.prefix)
++        new_configs = read_file(args.new_file, args.prefix)
++        while len(old_configs) > 0:
++            name, old_val = old_configs.popitem()
++            new_val = new_configs.pop(name, None)
++            if new_val is None:
++                result["O"][name] = (old_val, None)
++            elif old_val == new_val:
++                result["S"][name] = (old_val, new_val)
++            else:
++                result["C"][name] = (old_val, new_val)
++        while len(new_configs) > 0:
++            name, new_val = new_configs.popitem()
++            result["N"][name] = (None, new_val)
++    except:
++        print(format_exception())
++        usage()
++    return result
++
++def filter_output(result, args):
++    output = {"S": {}, "C": {}, "O": {}, "N": {}}
++    for opt in args.doptions:
++        for name, val in result[opt].items():
++            if (args.old and test_value(val[0], args.voptions) or
++                args.new and test_value(val[1], args.voptions)):
++                old_val = "-" if val[0] is None else val[0]
++                new_val = "-" if val[1] is None else val[1]
++                output[opt][name] = (old_val, new_val)
++    return output
++
++def print_table(output, args):
++    name_max_len = 8
++    old_max_len  = 8
++    new_max_len  = 8
++    name_list = sum([list(output[opt].keys()) for opt in args.doptions], [])
++    if len(name_list) > 0:
++        name_max_len = len(max(name_list, key = len))
++    val_list = sum([list(output[opt].values()) for opt in args.doptions], [])
++    if len(val_list) > 0:
++        old_max_len = len(max([val[0] for val in val_list], key = len))
++        new_max_len = len(max([val[1] for val in val_list], key = len))
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    header = ["NAME", "DIFF", "OLD", "NEW"]
++    # table row format
++    row = ("{{:{}}}\t{{:{}}}\t{{:{}}}\t{{:{}}}"
++           .format(min(max(name_max_len, len(header[0])), 40),
++                   min(max(diff_max_len, len(header[1])), 40),
++                   min(max(old_max_len,  len(header[2])), 40),
++                   min(max(new_max_len,  len(header[3])), 40)))
++    print(row.format(header[0], header[1], header[2], header[3]))
++    for opt in args.doptions:
++        for name, val in sorted(output[opt].items()):
++            print(row.format(name, diff_types[opt], val[0], val[1]))
++
++def print_summary(output, args):
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    # summary line format
++    line = "{{:{}}}: {{}}".format(max(diff_max_len, 8))
++    print("\nSummary:")
++    print(line.format("Old-file", args.old_file))
++    print(line.format("New-file", args.new_file))
++    total = 0
++    for opt in args.doptions:
++        count = len(output[opt])
++        print(line.format(diff_types[opt], count))
++        total += count
++    print(line.format("Total", total))
++
++def print_result(result, args):
++    output = filter_output(result, args)
++    print_table(output, args)
++    print_summary(output, args)
++
++diff_types = {"S": "Same", "C": "Changed", "O": "Old-only", "N": "New-only"}
++args = parse_args()
++result = compare_config(args)
++print_result(result, args)
 -- 
-2.25.1
+2.35.1
 

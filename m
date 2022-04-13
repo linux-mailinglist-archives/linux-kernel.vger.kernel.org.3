@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AFE50028F
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7C1500290
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbiDMXXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S239292AbiDMXW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbiDMXW3 (ORCPT
+        with ESMTP id S239198AbiDMXWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:22:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3822323BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:06 -0700 (PDT)
+        Wed, 13 Apr 2022 19:22:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 280D02B27C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649892005;
+        s=mimecast20190719; t=1649892007;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BHuuVJWlvrxXx0mO6xbXx/8ozzJANVHdMftQcW5g5Us=;
-        b=gmab3WDNDduWfRfR2dVDOXgpmATKzm6yEuTmaR87h6OUk+AUvcYkPJvfpfAbC0UPSbxi68
-        8vpzn9C8HEohf3KyDuQ9tY2BZeVhkT/4TNujqQuAcxLbTgHlYulejr0kn7Rhzy+7HbrP/o
-        EWeAQnSbGT/tYUJugUMKBKIkYd9PZKA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=24h2UVDbRHHVLlC2Pwg8j1khR625cr4JBFHOIM2d6fU=;
+        b=SVx6tXpXAviF25xAbjOlP01Cr1jab8gNbKx4a3U+c3PuaWn2AV86tEQDOHTmw0STopsX7h
+        DodlmUQIDPPSuFLGLe2e/7ZqzriWwGW6ef7jXhwuynoN3R0jXNFHhae+oi4Z2jLjVgV3lr
+        cKH3/lsprSRKzb2n2PVW94GYKtPnGco=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-484-XAXNL7tBOO2xxW2qSFGheQ-1; Wed, 13 Apr 2022 19:20:04 -0400
-X-MC-Unique: XAXNL7tBOO2xxW2qSFGheQ-1
-Received: by mail-qt1-f197.google.com with SMTP id z3-20020ac86b83000000b002ed0f18c23cso2214517qts.17
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:04 -0700 (PDT)
+ us-mta-499-CRRz5NAoNNmPhrbepL1uQg-1; Wed, 13 Apr 2022 19:20:05 -0400
+X-MC-Unique: CRRz5NAoNNmPhrbepL1uQg-1
+Received: by mail-qv1-f72.google.com with SMTP id dd5-20020ad45805000000b004461b16d4caso1742036qvb.16
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:20:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BHuuVJWlvrxXx0mO6xbXx/8ozzJANVHdMftQcW5g5Us=;
-        b=n8ixq/By2sHIJYv4qKop9f9F1YXpmDqMqtGqeDf1zRprAQS5rMWfgI4wYrDzhhF0vd
-         fPOwHmeLQHPEH/RAb9Px2i4IrO3sZHDL1rimEH/YTfCvVgrJz34mtqCLEdtEo6E+FjJJ
-         5Xw5Qzuk1BTGHKFgjRcLih1bsXtKEL2T0sNoGw930ECqpSdB8d+kHS4Gk3eaNIpEmFui
-         c54db2gwtoZE+YauE1KJv+grdCphaV5Zbnr6+s80FfKcJNE7jzSCdwEuwn64/MMlpn6B
-         g3M7w+xjDeh0DfSLuEhc+eIUCZ8SLhKKQlGi05nhtfoOzdcu4UJc7IggpJ48yiNEE/pi
-         Q5Ag==
-X-Gm-Message-State: AOAM532Pf/4aXx+bswg3LYo+B8VsyGcB0D3U5bSkKDQS5Gcdxvf40Ryk
-        EVhv/WTZ8d47BMCr8ckLJcrlzDvaPTm6blNZf+78O8tqSuXab870xFFKi9fKKgYGNWzVmqgtgWa
-        hXRhNtSt+RcI1o2nRZ31mSzCE
-X-Received: by 2002:a05:6214:300d:b0:444:4ada:a471 with SMTP id ke13-20020a056214300d00b004444adaa471mr1037216qvb.93.1649892003431;
-        Wed, 13 Apr 2022 16:20:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzWFG0Q4OCZ9/S2OUyvhDtsAEUq0kQxxzhgvu7klVXQ4+McpzuRKD53TLydwbrR+krLLHmBPQ==
-X-Received: by 2002:a05:6214:300d:b0:444:4ada:a471 with SMTP id ke13-20020a056214300d00b004444adaa471mr1037201qvb.93.1649892003185;
-        Wed, 13 Apr 2022 16:20:03 -0700 (PDT)
+        bh=24h2UVDbRHHVLlC2Pwg8j1khR625cr4JBFHOIM2d6fU=;
+        b=3aqBRxLtktGkDUlMBCcDDF+ElaMaCILqCBYWuzH72jxVRgDEVAo1YnxVuOi66iktsE
+         /TWXdJ+G6FRjBTE0R6v03c2d6HKBY6X2fTAV+Q8Ein8xJQM/fcfGWbid/TMzkiWV2csU
+         898AF9tTeEAMsvvDg9hq3zpSbYEtA2SfeyO0Z73tDA9jgaZ2FVltSAuw8KSRq92WsGfT
+         LqJ/S1L1DNLpnMlFfVa/5FqMSai2cCMZdJqohT6AjavPkbA07mUe+igKMzqnZIZhSr7O
+         RSQPeLHhWjUw/A6wmT40WCsrMjcZ4Tezl6zytjl/BfA1EuFg5XJ3yeUfdYvWhYNTgTzH
+         PGGQ==
+X-Gm-Message-State: AOAM532ZyMt8dRPWqNZcW4GNxXVo/fPvt9UseP+YXpzyfwXDhnvWXEfk
+        Pxog7sdOBgMua0sLtIkRu93JJMyz64Gosa8GjAqED7wJ2Yda/5JxAckDIbY6D1lpFHObsKtgD/+
+        4mbR8NseXiGF2yf11QOrLio1A
+X-Received: by 2002:a05:620a:40ca:b0:69c:59d7:9d06 with SMTP id g10-20020a05620a40ca00b0069c59d79d06mr3516482qko.0.1649892005096;
+        Wed, 13 Apr 2022 16:20:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2yYZiDbxv+G1x1q/PriByATvG+RzT0FBcaPyy0T6nN5oKkjW9Z07oFx7eymFaduJSzROiqA==
+X-Received: by 2002:a05:620a:40ca:b0:69c:59d7:9d06 with SMTP id g10-20020a05620a40ca00b0069c59d79d06mr3516469qko.0.1649892004876;
+        Wed, 13 Apr 2022 16:20:04 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.20.01
+        by smtp.gmail.com with ESMTPSA id b20-20020a05622a021400b002f08f5658a2sm193925qtx.68.2022.04.13.16.20.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 16:20:02 -0700 (PDT)
+        Wed, 13 Apr 2022 16:20:04 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 04/18] objtool: Print data address for "!ENDBR" data warnings
-Date:   Wed, 13 Apr 2022 16:19:39 -0700
-Message-Id: <8208fa7edf2dc576e8f9bcf24396b128f59bdfe9.1649891421.git.jpoimboe@redhat.com>
+Subject: [PATCH 05/18] objtool: Use offstr() to print address of missing ENDBR
+Date:   Wed, 13 Apr 2022 16:19:40 -0700
+Message-Id: <28a9b87970329e70c59c575a240fb9390c2e24f9.1649891421.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1649891421.git.jpoimboe@redhat.com>
 References: <cover.1649891421.git.jpoimboe@redhat.com>
@@ -70,7 +70,7 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,40 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a "!ENDBR" warning is reported for a data section, objtool just
-prints the text address of the relocation target twice, without giving
-any clues about the location of the original data reference:
-
-  vmlinux.o: warning: objtool: dcbnl_netdevice_event()+0x0: .text+0xb64680: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
-
-Instead, print the address of the data reference, in addition to the
-address of the relocation target.
-
-  vmlinux.o: warning: objtool: dcbnl_nb+0x0: .data..read_mostly+0xe260: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
-
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- tools/objtool/check.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ tools/objtool/check.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 5bd3aa815d51..7a1a02dacb77 100644
+index 7a1a02dacb77..b27c2ce5d79e 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -3825,11 +3825,8 @@ static int validate_ibt(struct objtool_file *file)
- 			struct instruction *dest;
+@@ -3219,9 +3219,8 @@ validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
+ static void warn_noendbr(const char *msg, struct section *sec, unsigned long offset,
+ 			 struct instruction *dest)
+ {
+-	WARN_FUNC("%srelocation to !ENDBR: %s+0x%lx", sec, offset, msg,
+-		  dest->func ? dest->func->name : dest->sec->name,
+-		  dest->func ? dest->offset - dest->func->offset : dest->offset);
++	WARN_FUNC("%srelocation to !ENDBR: %s", sec, offset, msg,
++		  offstr(dest->sec, dest->offset, false));
+ }
  
- 			dest = validate_ibt_reloc(file, reloc);
--			if (is_data && dest && !dest->noendbr) {
--				warn_noendbr("data ", reloc->sym->sec,
--					     reloc->sym->offset + reloc->addend,
--					     dest);
--			}
-+			if (is_data && dest && !dest->noendbr)
-+				warn_noendbr("data ", sec, reloc->offset, dest);
- 		}
- 	}
- 
+ static void validate_ibt_dest(struct objtool_file *file, struct instruction *insn,
 -- 
 2.34.1
 

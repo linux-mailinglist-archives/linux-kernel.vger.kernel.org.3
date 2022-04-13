@@ -2,151 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A08500079
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E59150007D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbiDMVDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S238763AbiDMVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237823AbiDMVDE (ORCPT
+        with ESMTP id S237013AbiDMVD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:03:04 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD2C6A02C;
-        Wed, 13 Apr 2022 14:00:42 -0700 (PDT)
+        Wed, 13 Apr 2022 17:03:57 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DC849276
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id ay4so2266447qtb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649883642; x=1681419642;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TYcb4p1NHchumQzV88t1cTQVvmNzj45vyo9q6CrK+2Y=;
-  b=N/VNXYbN9uKEG2ePy71Dgn238WlTbfMFPV8k0j6iMc4AhPNIYuFkQ6A0
-   E2uDFSTwcqK/QnTf+5u7qSVKiCAULzu76hPn0cleHVF6GXq8OI8Ujpqbn
-   LrPZ7eiZ6f8/8pRfrvCiHxGMRPV8emQg/wRbt1xSNruHTSvgrNWJ2hJ1M
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 14:00:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:00:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 14:00:41 -0700
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 14:00:40 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
-        <quic_bbhatt@quicinc.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        "Jeffrey Hugo" <quic_jhugo@quicinc.com>
-Subject: [PATCH v2] bus: mhi: host: Add soc_reset sysfs
-Date:   Wed, 13 Apr 2022 15:00:19 -0600
-Message-ID: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=53xZC/O9UyqpGImr9R1mlpH431NIXU6bLsXMAgQ60tY=;
+        b=Cb7jS5srlil3xnNArsgvM8sfvSyjPGnrhCGF92oDFb1+bHORvFUi0J9X/jfdaqOxIf
+         zmi6P47O8jDmKPMFVcY5xAHO4l2ztEgF4S/7i2lqpD6korUL+2hT2l0rK/mCkJYULRFO
+         L6TJJgXBemM+/agjkBlrmMgHwrVK80bLXmaZo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=53xZC/O9UyqpGImr9R1mlpH431NIXU6bLsXMAgQ60tY=;
+        b=1eO8S5/97ahVgr4Vmef0JJNZhR2PACSlV1JowmlExe79CIpCduRuAOi+SxOFxsA75K
+         tTbAVq/coTtVZ5ETU/KlNiC5u+Tj6D/dPeoF1J69p0Im/iWi9yukMPBqhyMBYHxxvurE
+         PwCSnfLeTaZyHGATv0IXNeUsdUeb8GHwn92FznXGCO7zv1Rv9fxXct9Uc5nfuYx4YlpH
+         CD/YFTn/xFo/pI7HHafaDAPbyvBWlGChj7Bs58jFx3mNSy3zEW06f3C/Hj0malI2d3bq
+         ePO1kkpZ8tyBWdhyKTZ6h6j56JjzgBM0h40SAHI/40As9TBVXs2n6FovbNhY8uh9HAEa
+         uVJA==
+X-Gm-Message-State: AOAM532JVvSYQuwYDFXCNNr3gn7IcIUFF+nsNb+oYhlHWgifUNt8NIpe
+        8XVriWaQD+jvG8Vy7JXH4BhROg==
+X-Google-Smtp-Source: ABdhPJy7rSpT7n33E9TTMvSaYR4b6eBYooLu9g9j0Ll9iQPouUjI51f4nPMp8cyI+6tlbAT+4kAzcA==
+X-Received: by 2002:a05:622a:1e07:b0:2ef:b1ef:850c with SMTP id br7-20020a05622a1e0700b002efb1ef850cmr8593542qtb.292.1649883693008;
+        Wed, 13 Apr 2022 14:01:33 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05622a054e00b002e2072cffe6sm30985qtx.5.2022.04.13.14.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 14:01:32 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 17:01:31 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] lkdtm/bugs: Don't expect thread termination without
+ CONFIG_UBSAN_TRAP
+Message-ID: <20220413210131.46tqfxlkwtcayurs@meerkat.local>
+References: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
+ <202204121440.FEE123D7@keescook>
+ <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <jhugo@codeaurora.org>
+On Wed, Apr 13, 2022 at 06:29:36AM +0000, Christophe Leroy wrote:
+> I have a [patatt] section in .gitconfig which contains:
+> 	signingkey  = ed25519:xxxxxxxx
+> 	selector = xxxxxxxx (the same value as above)
+> 
+> What should I do now for you to get the key ? I don't even know where 
+> the key is stored in my computer.
 
-The MHI bus supports a standardized hardware reset, which is known as the
-"SoC Reset".  This reset is similar to the reset sysfs for PCI devices -
-a hardware mechanism to reset the state back to square one.
+Your key is stored in ~/.local/share/patatt, but you don't really need to do
+anything, Kees can do the following:
 
-The MHI SoC Reset is described in the spec as a reset of last resort.  If
-some unrecoverable error has occurred where other resets have failed, SoC
-Reset is the "big hammer" that ungracefully resets the device.  This is
-effectivly the same as yanking the power on the device, and reapplying it.
-However, depending on the nature of the particular issue, the underlying
-transport link may remain active and configured.  If the link remains up,
-the device will flag a MHI system error early in the boot process after
-the reset is executed, which allows the MHI bus to process a fatal error
-event, and clean up appropiately.
+    b4 kr --show-keys 363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
 
-While the SoC Reset is generally intended as a means of recovery when all
-else has failed, it can be useful in non-error scenarios.  For example,
-if the device loads firmware from the host filesystem, the device may need
-to be fully rebooted inorder to pick up the new firmware.  In this
-scenario, the system administrator may use the soc_reset sysfs to cause
-the device to pick up the new firmware that the admin placed on the
-filesystem.
+For now, this just provides instructions on what to do with the key:
 
-Signed-off-by: Jeffrey Hugo <jhugo@codeaurora.org>
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
----
+	christophe.leroy@csgroup.eu: (unknown)
+		keytype: ed25519
+		 pubkey: HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+		 krpath: ed25519/csgroup.eu/christophe.leroy/20211009
+	   fullpath: /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
+	---
+	For ed25519 keys:
+		echo [pubkey] > [fullpath]
 
-v2:
-Rebase
+So, for Kees to start being aware of your key, he needs to do:
 
- Documentation/ABI/stable/sysfs-bus-mhi | 11 +++++++++++
- drivers/bus/mhi/host/init.c            | 14 ++++++++++++++
- 2 files changed, 25 insertions(+)
+	mkdir -p /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy
+	echo HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0= > /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
 
-diff --git a/Documentation/ABI/stable/sysfs-bus-mhi b/Documentation/ABI/stable/sysfs-bus-mhi
-index ecfe766..306f63e 100644
---- a/Documentation/ABI/stable/sysfs-bus-mhi
-+++ b/Documentation/ABI/stable/sysfs-bus-mhi
-@@ -19,3 +19,14 @@ Description:	The file holds the OEM PK Hash value of the endpoint device
- 		read without having the device power on at least once, the file
- 		will read all 0's.
- Users:		Any userspace application or clients interested in device info.
-+
-+What:           /sys/bus/mhi/devices/.../soc_reset
-+Date:           April 2022
-+KernelVersion:  5.19
-+Contact:        mhi@lists.linux.dev
-+Description:	Initiates a SoC reset on the MHI controller.  A SoC reset is
-+                a reset of last resort, and will require a complete re-init.
-+                This can be useful as a method of recovery if the device is
-+                non-responsive, or as a means of loading new firmware as a
-+                system administration task.
-+
-diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-index 04c409b..e12b210 100644
---- a/drivers/bus/mhi/host/init.c
-+++ b/drivers/bus/mhi/host/init.c
-@@ -108,9 +108,23 @@ static ssize_t oem_pk_hash_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(oem_pk_hash);
- 
-+static ssize_t soc_reset_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf,
-+			       size_t count)
-+{
-+	struct mhi_device *mhi_dev = to_mhi_device(dev);
-+	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
-+
-+	mhi_soc_reset(mhi_cntrl);
-+	return count;
-+}
-+static DEVICE_ATTR_WO(soc_reset);
-+
- static struct attribute *mhi_dev_attrs[] = {
- 	&dev_attr_serial_number.attr,
- 	&dev_attr_oem_pk_hash.attr,
-+	&dev_attr_soc_reset.attr,
- 	NULL,
- };
- ATTRIBUTE_GROUPS(mhi_dev);
--- 
-2.7.4
+I know this is awkward and clunky right now. Future versions of b4 will
+streamline keyring management to make it a lot easier, I promise.
 
+-K

@@ -2,85 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD878500115
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE8A50011A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237876AbiDMVXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S238996AbiDMVY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239344AbiDMVXU (ORCPT
+        with ESMTP id S234621AbiDMVYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:23:20 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105E22BB37;
-        Wed, 13 Apr 2022 14:20:58 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id k13so3457294oiw.1;
-        Wed, 13 Apr 2022 14:20:58 -0700 (PDT)
+        Wed, 13 Apr 2022 17:24:24 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFD265431
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:22:01 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bu29so5880821lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x3TRA+tCXTK9mEbYg5Lv9cf1dVXAsaYzfr1HSpri9bo=;
+        b=Gum9AzxCYASIREo20sZ1IQ9O5ZpaxXIIagK7QqxRutdoyqR2BBCY11MUMUMmYjTRj4
+         thx+yErEGSugL1d2ClBHGhxnzg7/ALijZ/gSuI9+QQTv8zTIcghc4vJsgKcb3Qb8AvNc
+         AwMJaS3fnSLd8MCtT0DRrRr3nf5lwqdhTbSpFGAR1JREEGftB2GlpZ3841mZjOwmHjj8
+         AFSrn/QovTMqwKcmMT0JL7VIENFtk1rQmJ9TLXTpeXGyTQevDgSMnDTAtVVkXjlyFumm
+         qpy8bouH2p8PqK8e4t8ZpfdGN4Z3oZJrXF7EpJBQDspbkDLbpxdQ0+iXEP6GTk6+W15g
+         cmUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7YzYdFiMLsDoyTU0PbwVa3WC4PKMjoqkq1VcU6L/mnM=;
-        b=yb+pf7Xxtk0RKjPF3sIwSQ5W4IhFG/45tYjks9zcOcxcn9pBnmoZ2IIQbNvQg9ukyd
-         Wj2bl6H9rGBGttJO8kaUtQxW1qSJpjqDr2vEYtfe1YazJ4j5q5Dqf8w9I0BbQdxJCr58
-         gOR527UeIayRRvl9C1SkulfPLqnLQytTwL7hJxrR0cFEMRv4Q8vY685YXFqbjgjMqusW
-         9DIMVapM8H0Unsfdh2G3LieRwmXx7oem6X0C28+GpI2HLPHe80RaU3D6itTwVzZR1JAQ
-         1MYFfw/jD+BskGCQBRfrvC3nEjVL92V22Ooj5Y7gR2TuHNBKc1eTsRhhCs5ut4kaOviw
-         ZXAA==
-X-Gm-Message-State: AOAM53235fxd9RWDivH9bT5BmxKNBR/iydTb2F5A8oLkBZNQkgGJ9NCd
-        P3cNa+J2DGwHKRutHeozww==
-X-Google-Smtp-Source: ABdhPJy4XCwE/l0IcNFu8QLwKB/o4da+J+bSKytm1PrKJqmc/W/35vPD+DdPKg9ewLQ9IkLcmNk+6A==
-X-Received: by 2002:a05:6808:21a3:b0:2f9:a87d:53a6 with SMTP id be35-20020a05680821a300b002f9a87d53a6mr34405oib.85.1649884857359;
-        Wed, 13 Apr 2022 14:20:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j5-20020a4a9445000000b00329dab1a07fsm45143ooi.17.2022.04.13.14.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:20:57 -0700 (PDT)
-Received: (nullmailer pid 3948819 invoked by uid 1000);
-        Wed, 13 Apr 2022 21:20:56 -0000
-Date:   Wed, 13 Apr 2022 16:20:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     xinlei.lee@mediatek.com
-Cc:     matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        p.zabel@pengutronix.de, rex-bc.chen@mediatek.com,
-        jitao.shi@mediatek.com, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        chunkuang.hu@kernel.org, airlied@linux.ie,
-        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4,2/3] dt-bindings: display: mediatek: dsi: Add
- compatible for MediaTek MT8186
-Message-ID: <Ylc+uMqGS0w2T72w@robh.at.kernel.org>
-References: <1649495514-25746-1-git-send-email-xinlei.lee@mediatek.com>
- <1649495514-25746-3-git-send-email-xinlei.lee@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x3TRA+tCXTK9mEbYg5Lv9cf1dVXAsaYzfr1HSpri9bo=;
+        b=QfXVQtBzXBFIx18ZAiHlxAMrqAhUhl/57fYp9E7L+PvjacX86wHdo4/hcj74ycJ415
+         50y2cre6YIrYPUwkTzCq3XK8O9rLJ7XDVJDYQW+TQtz0lfobi0BLdNVNfDvn3jy/oR8i
+         QogOgsHZ1+f8PsabaXCey4eIDQ8UYD/awYNShdH9GGfx+PTAr3d0DTCfe7O2cbJw1kc6
+         1ObelZdB0vQRXJpNtFyfgzce7BbZC9nt9XpdEj9jCq94tzlc6SXPQ0jSIbtnG0kUKVm7
+         9PPGlQbFGa6RU2j1kH+AVza202gG96Lsqnd+X0WF2hmUe/TC+BwNpau2tOeig3UhijZR
+         knxQ==
+X-Gm-Message-State: AOAM532NEsOk8wN1OV6GW4IIF5AghblsCJw6srpz85Ov4ji/ZQVl5kuO
+        MhK5rrIYhpUgdnHW69EaBzu/Pzs9aommlOXQxWpd7A==
+X-Google-Smtp-Source: ABdhPJw+pAmjcokB//78jbBBaBQ/fl9bpcHNKk03eIo8kGG4njNRCrn6YdUqdyKEP+FwwIazpZYKiCMMbKzyt93HPao=
+X-Received: by 2002:ac2:484c:0:b0:46d:28f:cc03 with SMTP id
+ 12-20020ac2484c000000b0046d028fcc03mr2989844lfy.235.1649884919479; Wed, 13
+ Apr 2022 14:21:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649495514-25746-3-git-send-email-xinlei.lee@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220413175944.71705-1-bgardon@google.com>
+In-Reply-To: <20220413175944.71705-1-bgardon@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Wed, 13 Apr 2022 14:21:32 -0700
+Message-ID: <CALzav=cikLaM1a3jB5DbUH_nFnGNUyrnL03ZQE_dAAiD1Tq+bg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/10] KVM: x86: Add a cap to disable NX hugepages on a VM
+To:     Ben Gardon <bgardon@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 09 Apr 2022 17:11:53 +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Add dt-binding documentation of dsi for MediaTek MT8186 SoC.
-> 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,dsi.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Wed, Apr 13, 2022 at 10:59 AM Ben Gardon <bgardon@google.com> wrote:
+>
+> Given the high cost of NX hugepages in terms of TLB performance, it may
+> be desirable to disable the mitigation on a per-VM basis. In the case of public
+> cloud providers with many VMs on a single host, some VMs may be more trusted
+> than others. In order to maximize performance on critical VMs, while still
+> providing some protection to the host from iTLB Multihit, allow the mitigation
+> to be selectively disabled.
 
-Acked-by: Rob Herring <robh@kernel.org>
+For the series:
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+>
+> Disabling NX hugepages on a VM is relatively straightforward, but I took this
+> as an opportunity to add some NX hugepages test coverage and clean up selftests
+> infrastructure a bit.
+>
+> This series was tested with the new selftest and the rest of the KVM selftests
+> on an Intel Haswell machine.
+>
+> The following tests failed, but I do not believe that has anything to do with
+> this series:
+>         userspace_io_test
+>         vmx_nested_tsc_scaling_test
+>         vmx_preemption_timer_test
+>
+> Changelog:
+> v1->v2:
+>         Dropped the complicated memslot refactor in favor of Ricardo Koller's
+>         patch with a similar effect.
+>         Incorporated David Dunn's feedback and reviewed by tag: shortened waits
+>         to speed up test.
+> v2->v3:
+>         Incorporated a suggestion from David on how to build the NX huge pages
+>         test.
+>         Fixed a build breakage identified by David.
+>         Dropped the per-vm nx_huge_pages field in favor of simply checking the
+>         global + per-VM disable override.
+>         Documented the new capability
+>         Separated out the commit to test disabling NX huge pages
+>         Removed permission check when checking if the disable NX capability is
+>         supported.
+>         Added test coverage for the permission check.
+> v3->v4:
+>         Collected RB's from Jing and David
+>         Modified stat collection to reduce a memory allocation [David]
+>         Incorporated various improvments to the NX test [David]
+>         Changed the NX disable test to run by default [David]
+>         Removed some now unnecessary commits
+>         Dropped the code to dump KVM stats from the binary stats test, and
+>         factor out parts of the existing test to library functions instead.
+>         [David, Jing, Sean]
+>         Dropped the improvement to a debugging log message as it's no longer
+>         relevant to this series.
+> v4->v5:
+>         Incorporated cleanup suggestions from David and Sean
+>         Added a patch with style fixes for the binary stats test from Sean
+>         Added a restriction that NX huge pages can only be disabled before
+>         vCPUs are created [Sean]
+>
+> Ben Gardon (9):
+>   KVM: selftests: Remove dynamic memory allocation for stats header
+>   KVM: selftests: Read binary stats header in lib
+>   KVM: selftests: Read binary stats desc in lib
+>   KVM: selftests: Read binary stat data in lib
+>   KVM: selftests: Add NX huge pages test
+>   KVM: x86: Fix errant brace in KVM capability handling
+>   KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis
+>   KVM: selftests: Factor out calculation of pages needed for a VM
+>   KVM: selftests: Test disabling NX hugepages on a VM
+>
+> Sean Christopherson (1):
+>   KVM: selftests: Clean up coding style in binary stats test
+>
+>  Documentation/virt/kvm/api.rst                |  13 +
+>  arch/x86/include/asm/kvm_host.h               |   2 +
+>  arch/x86/kvm/mmu.h                            |   9 +-
+>  arch/x86/kvm/mmu/spte.c                       |   7 +-
+>  arch/x86/kvm/mmu/spte.h                       |   3 +-
+>  arch/x86/kvm/mmu/tdp_mmu.c                    |   3 +-
+>  arch/x86/kvm/x86.c                            |  25 +-
+>  include/uapi/linux/kvm.h                      |   1 +
+>  tools/testing/selftests/kvm/Makefile          |  10 +
+>  .../selftests/kvm/include/kvm_util_base.h     |  13 +
+>  .../selftests/kvm/kvm_binary_stats_test.c     | 142 ++++++-----
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 232 ++++++++++++++++--
+>  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 206 ++++++++++++++++
+>  .../kvm/x86_64/nx_huge_pages_test.sh          |  25 ++
+>  14 files changed, 597 insertions(+), 94 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+>  create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+>
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

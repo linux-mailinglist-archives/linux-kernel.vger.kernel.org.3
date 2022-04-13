@@ -2,147 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1402E4FF8FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14C64FF903
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbiDMOfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        id S236139AbiDMOfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbiDMOfI (ORCPT
+        with ESMTP id S233994AbiDMOfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:35:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE895676A;
-        Wed, 13 Apr 2022 07:32:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CA661BA6;
-        Wed, 13 Apr 2022 14:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA83C385A6;
-        Wed, 13 Apr 2022 14:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649860366;
-        bh=y/gFQs+hgHZ3/vvOq41ylGPCtjhP53O/JBKcPRIcQfg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c6zZdWDOUnHSGNHfBTXEBVZObxER3VgBA/8QflX/jfQ5RRQ8Bxgqk2eFNQ2MXzEuy
-         jSkpa6Jwc1N4IvWLMHH+Zt0+XCE7tpnn8KFoIgvwAN4tQB93mzX7TE3tlvhL6XG/Fr
-         WTnRTPKLKs7TxKy144wJ8pe88A68vmmh5K4rknhCaZes7AxMngvMVG8iLOIfcPhXiw
-         fEpxXUDgzsVLgt2eQn6aeFnaL7eLX0DZMkr1aWcOFtdc0XWBwsSNtD31Y7tfNtZO5t
-         Xo068bQO4+veX4gUup6qM1r8ayg9R8rjAguYKzFRRu+kP9M7+oBWwfwk7CyrX1OCiG
-         araLq0MFphDFg==
-Received: by mail-io1-f43.google.com with SMTP id 9so2089173iou.5;
-        Wed, 13 Apr 2022 07:32:46 -0700 (PDT)
-X-Gm-Message-State: AOAM532oM5Vh0Qd7XdCfuH6CoK5N2MVtuwPHjv6/LRkBqhWrj1MlUJYp
-        QYh7hTQdm4Tcv698Oz3OhrZSVXTfqwcWDWchxg==
-X-Google-Smtp-Source: ABdhPJztV5+8KEJ74WCQvEE2mueV1uP9FdDpJontci3NKw8uFVcyU1+ScsVCAwrzKj/88xIwClDnzYiNbkHkece/VFk=
-X-Received: by 2002:a05:6638:24d0:b0:326:34d2:5c22 with SMTP id
- y16-20020a05663824d000b0032634d25c22mr6761858jat.91.1649860365852; Wed, 13
- Apr 2022 07:32:45 -0700 (PDT)
+        Wed, 13 Apr 2022 10:35:38 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF7556C00;
+        Wed, 13 Apr 2022 07:33:16 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KdlMW1PQDzCqwJ;
+        Wed, 13 Apr 2022 22:28:55 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 22:33:12 +0800
+Subject: Re: [PATCH] bpf/benchs: fix error check return value of
+ bpf_program__attach()
+To:     <cgel.zte@gmail.com>, <shuah@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <joannekoong@fb.com>, <lv.ruyi@zte.com.cn>, <toke@redhat.com>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220413093123.2538001-1-lv.ruyi@zte.com.cn>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <3dab1e4b-2317-4730-f699-627583ff759d@huawei.com>
+Date:   Wed, 13 Apr 2022 22:33:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-2-Jason@zx2c4.com>
-In-Reply-To: <20220413115411.21489-2-Jason@zx2c4.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 13 Apr 2022 09:32:34 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
-Message-ID: <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/11] timekeeping: add raw clock fallback for random_get_entropy()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220413093123.2538001-1-lv.ruyi@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:55 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+Hi,
+
+On 4/13/2022 5:31 PM, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 >
-> The addition of random_get_entropy_fallback() provides access to
-> whichever time source has the highest frequency, which is useful for
-> gathering entropy on platforms without available cycle counters. It's
-> not necessarily as good as being able to quickly access a cycle counter
-> that the CPU has, but it's still something, even when it falls back to
-> being jiffies-based.
+> bpf_program__attach() returns error ptr when it fails, so we should use
+> IS_ERR() to check it in error handling path. The patch fix all the same
+> problems in the bpf/benchs/*.
+The fix is unnecessary. Because libbpf has been setup as  LIBBPF_STRICT_ALL mode
+in setup_libbpf() of bench.c, so when bpf_program__attach() fails, it will
+return NULL instead of ERR_PTR(err).
+
 >
-> In the event that a given arch does not define get_cycles(), falling
-> back to the get_cycles() default implementation that returns 0 is really
-> not the best we can do. Instead, at least calling
-> random_get_entropy_fallback() would be preferable, because that always
-> needs to return _something_, even falling back to jiffies eventually.
-> It's not as though random_get_entropy_fallback() is super high precision
-> or guaranteed to be entropic, but basically anything that's not zero all
-> the time is better than returning zero all the time.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 > ---
->  include/linux/timex.h     |  8 ++++++++
->  kernel/time/timekeeping.c | 10 ++++++++++
->  2 files changed, 18 insertions(+)
+>  .../selftests/bpf/benchs/bench_bloom_filter_map.c      | 10 +++++-----
+>  tools/testing/selftests/bpf/benchs/bench_bpf_loop.c    |  2 +-
+>  tools/testing/selftests/bpf/benchs/bench_rename.c      |  2 +-
+>  tools/testing/selftests/bpf/benchs/bench_ringbufs.c    |  6 +++---
+>  tools/testing/selftests/bpf/benchs/bench_strncmp.c     |  2 +-
+>  tools/testing/selftests/bpf/benchs/bench_trigger.c     |  2 +-
+>  6 files changed, 12 insertions(+), 12 deletions(-)
 >
-> diff --git a/include/linux/timex.h b/include/linux/timex.h
-> index 5745c90c8800..fbbe34226044 100644
-> --- a/include/linux/timex.h
-> +++ b/include/linux/timex.h
-> @@ -62,6 +62,8 @@
->  #include <linux/types.h>
->  #include <linux/param.h>
->
-> +extern unsigned long random_get_entropy_fallback(void);
-> +
->  #include <asm/timex.h>
->
->  #ifndef random_get_entropy
-> @@ -74,8 +76,14 @@
->   *
->   * By default we use get_cycles() for this purpose, but individual
->   * architectures may override this in their asm/timex.h header file.
-> + * If a given arch does not have get_cycles(), then we fallback to
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> index 5bcb8a8cdeb2..fd1be1042516 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> @@ -309,7 +309,7 @@ static void bloom_lookup_setup(void)
+>  	populate_maps();
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.bloom_lookup);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> @@ -326,7 +326,7 @@ static void bloom_update_setup(void)
+>  	populate_maps();
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.bloom_update);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> @@ -345,7 +345,7 @@ static void false_positive_setup(void)
+>  	populate_maps();
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> @@ -363,7 +363,7 @@ static void hashmap_with_bloom_setup(void)
+>  	populate_maps();
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> @@ -380,7 +380,7 @@ static void hashmap_no_bloom_setup(void)
+>  	populate_maps();
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c b/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
+> index d0a6572bfab6..8dbdc28d26c8 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
+> @@ -85,7 +85,7 @@ static void setup(void)
+>  	}
+>  
+>  	link = bpf_program__attach(ctx.skel->progs.benchmark);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_rename.c b/tools/testing/selftests/bpf/benchs/bench_rename.c
+> index 3c203b6d6a6e..66d63b92a28a 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_rename.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_rename.c
+> @@ -65,7 +65,7 @@ static void attach_bpf(struct bpf_program *prog)
+>  	struct bpf_link *link;
+>  
+>  	link = bpf_program__attach(prog);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+> index c2554f9695ff..fff24ca82dc0 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+> @@ -181,7 +181,7 @@ static void ringbuf_libbpf_setup(void)
+>  	}
+>  
+>  	link = bpf_program__attach(ctx->skel->progs.bench_ringbuf);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> @@ -271,7 +271,7 @@ static void ringbuf_custom_setup(void)
+>  	}
+>  
+>  	link = bpf_program__attach(ctx->skel->progs.bench_ringbuf);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program\n");
+>  		exit(1);
+>  	}
+> @@ -426,7 +426,7 @@ static void perfbuf_libbpf_setup(void)
+>  	}
+>  
+>  	link = bpf_program__attach(ctx->skel->progs.bench_perfbuf);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program\n");
+>  		exit(1);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_strncmp.c b/tools/testing/selftests/bpf/benchs/bench_strncmp.c
+> index 494b591c0289..dcb9ce5ffcb0 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_strncmp.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_strncmp.c
+> @@ -103,7 +103,7 @@ static void strncmp_attach_prog(struct bpf_program *prog)
+>  	struct bpf_link *link;
+>  
+>  	link = bpf_program__attach(prog);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+> index 0c481de2833d..bda930a8153c 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+> @@ -61,7 +61,7 @@ static void attach_bpf(struct bpf_program *prog)
+>  	struct bpf_link *link;
+>  
+>  	link = bpf_program__attach(prog);
+> -	if (!link) {
+> +	if (IS_ERR(link)) {
+>  		fprintf(stderr, "failed to attach program!\n");
+>  		exit(1);
+>  	}
 
-'does not have a usable get_cycles(), ...' as clearly some arches have
-get_cycles() and yet still need a fallback.
-
-Why not handle the 'if get_cycles() returns 0 do the fallback' within
-a weak random_get_entropy() function? Then more arches don't need any
-random_get_entropy() implementation.
-
-Rob

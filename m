@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EDB4FEE02
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 06:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BA94FEDF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 05:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiDMECP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 00:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S231620AbiDMD5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 23:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiDMECN (ORCPT
+        with ESMTP id S232126AbiDMD4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 00:02:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B35349F81
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 20:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649822390;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/qiTSPilnqb+8HttBSbUgM80usd/Sw8eEZqKgB3SiXI=;
-        b=iPQwJ3Yxoqr+VTY7lq5w9k1gM2vku1j5Zawsxv6HbwkzlYnevSfAk83u62kSYV9iR5iKH5
-        7h4HLHPYuD17EFZ+a8v+ZiYE35ZG149Cmm81ze0PGckPdJ1IJU2qF9LFFyn0PjlQ+REAly
-        dSUuGkxDaJWMO/NP6eRYNR1xHRHZgUc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-4XVIyB8ENPq93URrelPJvQ-1; Tue, 12 Apr 2022 23:59:47 -0400
-X-MC-Unique: 4XVIyB8ENPq93URrelPJvQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4664829A9CCB;
-        Wed, 13 Apr 2022 03:59:45 +0000 (UTC)
-Received: from [10.72.13.171] (ovpn-13-171.pek2.redhat.com [10.72.13.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C80B5145BA59;
-        Wed, 13 Apr 2022 03:59:38 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v5 04/10] KVM: arm64: Add vendor hypervisor firmware
- register
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-References: <20220407011605.1966778-1-rananta@google.com>
- <20220407011605.1966778-5-rananta@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <06b7539f-c5c0-843d-7617-a35a9f1d0e60@redhat.com>
-Date:   Wed, 13 Apr 2022 11:59:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 12 Apr 2022 23:56:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC3F273A;
+        Tue, 12 Apr 2022 20:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649822068; x=1681358068;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qWnHsji0gnh/xDp7MQF81PbKycXAQAQAMMGE3n28kdA=;
+  b=YlhoMOngZDWEyJon07RvXTvrthpaDc+N+wS0AqTD8UqmyKrHA2Jzq+eP
+   bCxsTEddmO2VWcKEjnfypmWBBOU2QV+rgQY9mWqqwDBwT+azVS6dpvewZ
+   rxMJx2vrHHs8Ltx59uEj83UlNpeG3Yc33hD/0BTUDuZL2CLFwWFjP+XE9
+   VQz33zcwXCmHdnaIPm0rkHBD8lhZMW60qbGBa2TAoWH5UYejoZUD5ujEY
+   eSwJP6GiQNO/VUioeEgUoawKVLeI5ObmJCKWgLMbe7rHVcJDUOXhz1DQM
+   NAj0Jp5iSZxHPK15nkEKWcmizwabXjhZ4xHiFF2/4deaBj+Gi7+u6A0cJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="249852148"
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="249852148"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 20:54:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="724733855"
+Received: from p12hl01tmin.png.intel.com ([10.158.65.75])
+  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 20:54:23 -0700
+From:   Tan Tee Min <tee.min.tan@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: [PATCH net 1/1] net: stmmac: add fsleep() in HW Rx timestamp checking loop
+Date:   Wed, 13 Apr 2022 12:01:15 +0800
+Message-Id: <20220413040115.2351987-1-tee.min.tan@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220407011605.1966778-5-rananta@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,173 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghavendra,
+There is a possibility that the context descriptor still owned by the DMA
+even the previous normal descriptor own bit is already cleared. Checking
+the context descriptor readiness without delay might be not enough time
+for the DMA to update the descriptor field, which causing failure in
+getting HW Rx timestamp.
 
-On 4/7/22 9:15 AM, Raghavendra Rao Ananta wrote:
-> Introduce the firmware register to hold the vendor specific
-> hypervisor service calls (owner value 6) as a bitmap. The
-> bitmap represents the features that'll be enabled for the
-> guest, as configured by the user-space. Currently, this
-> includes support for KVM-vendor features, and Precision Time
-> Protocol (PTP), represented by bit-0 and bit-1 respectively.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->   arch/arm64/include/asm/kvm_host.h |  2 ++
->   arch/arm64/include/uapi/asm/kvm.h |  4 ++++
->   arch/arm64/kvm/hypercalls.c       | 21 +++++++++++++++++----
->   include/kvm/arm_hypercalls.h      |  4 ++++
->   4 files changed, 27 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 20165242ebd9..b79161bad69a 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
->    *
->    * @std_bmap: Bitmap of standard secure service calls
->    * @std_hyp_bmap: Bitmap of standard hypervisor service calls
-> + * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
->    */
->   struct kvm_smccc_features {
->   	u64 std_bmap;
->   	u64 std_hyp_bmap;
-> +	u64 vendor_hyp_bmap;
->   };
->   
->   struct kvm_arch {
-> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> index 67353bf4e69d..9a5ac0ed4113 100644
-> --- a/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/arch/arm64/include/uapi/asm/kvm.h
-> @@ -344,6 +344,10 @@ struct kvm_arm_copy_mte_tags {
->   #define KVM_REG_ARM_STD_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(1)
->   #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME		BIT(0)
->   
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(2)
-> +#define KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT	BIT(0)
-> +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP		BIT(1)
-> +
->   /* Device Control API: ARM VGIC */
->   #define KVM_DEV_ARM_VGIC_GRP_ADDR	0
->   #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS	1
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index 64ae6c7e7145..80836c341fd3 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -66,8 +66,6 @@ static const u32 hvc_func_default_allowed_list[] = {
->   	ARM_SMCCC_VERSION_FUNC_ID,
->   	ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
->   	ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID,
-> -	ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID,
-> -	ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID,
->   };
->   
->   static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
-> @@ -102,6 +100,12 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
->   	case ARM_SMCCC_HV_PV_TIME_ST:
->   		return kvm_arm_fw_reg_feat_enabled(smccc_feat->std_hyp_bmap,
->   					KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
-> +	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> +		return kvm_arm_fw_reg_feat_enabled(smccc_feat->vendor_hyp_bmap,
-> +					KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT);
-> +	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> +		return kvm_arm_fw_reg_feat_enabled(smccc_feat->vendor_hyp_bmap,
-> +					KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
->   	default:
->   		return kvm_hvc_call_default_allowed(vcpu, func_id);
->   	}
+This patch introduces a 1us fsleep() in HW Rx timestamp checking loop
+to give time for DMA to update/complete the context descriptor.
 
-I guess we may return SMCCC_RET_NOT_SUPPORTED for ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID
-if KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT isn't set? Otherwise, we need explain it
-in the commit log.
+ptp4l Timestamp log without this patch:
+-----------------------------------------------------------
+$ echo 10000 > /sys/class/net/enp0s30f4/gro_flush_timeout
+$ echo 10000 > /sys/class/net/enp0s30f4/napi_defer_hard_irqs
+$ ptp4l -P2Hi enp0s30f4 --step_threshold=1 -m
+ptp4l: selected /dev/ptp2 as PTP clock
+ptp4l: port 1: INITIALIZING to LISTENING on INIT_COMPLETE
+ptp4l: selected local clock 901210.fffe.b57df7 as best master
+ptp4l: port 1: new foreign master 22bb22.fffe.bb22bb-1
+ptp4l: selected best master clock 22bb22.fffe.bb22bb
+ptp4l: port 1: LISTENING to UNCALIBRATED on RS_SLAVE
+ptp4l: port 1: UNCALIBRATED to SLAVE on MASTER_CLOCK_SELECTED
+ptp4l: port 1: received SYNC without timestamp
+ptp4l: rms   49 max   63 freq  -9573 +/-  34 delay    71 +/-   1
+ptp4l: rms   15 max   25 freq  -9553 +/-  20 delay    72 +/-   0
+ptp4l: port 1: received SYNC without timestamp
+ptp4l: rms    9 max   18 freq  -9540 +/-  11 delay    70 +/-   0
+ptp4l: port 1: received PDELAY_REQ without timestamp
+ptp4l: rms   16 max   29 freq  -9519 +/-  12 delay    72 +/-   0
+ptp4l: port 1: received PDELAY_REQ without timestamp
+ptp4l: rms    9 max   18 freq  -9527 +/-  12 delay    72 +/-   0
+ptp4l: rms    5 max    9 freq  -9530 +/-   7 delay    70 +/-   0
+ptp4l: rms   11 max   20 freq  -9530 +/-  16 delay    72 +/-   0
+ptp4l: rms    5 max   11 freq  -9530 +/-   7 delay    74 +/-   0
+ptp4l: rms    6 max    9 freq  -9522 +/-   7 delay    72 +/-   0
+ptp4l: port 1: received PDELAY_REQ without timestamp
+-----------------------------------------------------------
 
-KVM_REG_ARM_VENDOR_HYP_BIT_{FUNC_FEAT, PTP} aren't parallel to each other.
-I think PTP can't be on if KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT is off.
+ptp4l Timestamp log with this patch:
+-----------------------------------------------------------
+$ echo 10000 > /sys/class/net/enp0s30f4/gro_flush_timeout
+$ echo 10000 > /sys/class/net/enp0s30f4/napi_defer_hard_irqs
+$ ptp4l -P2Hi enp0s30f4 --step_threshold=1 -m
+ptp4l: selected /dev/ptp2 as PTP clock
+ptp4l: port 1: INITIALIZING to LISTENING on INIT_COMPLETE
+ptp4l: selected local clock 901210.fffe.b57df7 as best master
+ptp4l: port 1: new foreign master 22bb22.fffe.bb22bb-1
+ptp4l: selected best master clock 22bb22.fffe.bb22bb
+ptp4l: port 1: LISTENING to UNCALIBRATED on RS_SLAVE
+ptp4l: port 1: UNCALIBRATED to SLAVE on MASTER_CLOCK_SELECTED
+ptp4l: rms   30 max   45 freq  -9400 +/-  23 delay    72 +/-   0
+ptp4l: rms    7 max   16 freq  -9414 +/-  10 delay    70 +/-   0
+ptp4l: rms    6 max    9 freq  -9422 +/-   6 delay    72 +/-   0
+ptp4l: rms   13 max   20 freq  -9436 +/-  13 delay    74 +/-   0
+ptp4l: rms   12 max   27 freq  -9446 +/-  11 delay    72 +/-   0
+ptp4l: rms    9 max   12 freq  -9453 +/-   6 delay    74 +/-   0
+ptp4l: rms    9 max   15 freq  -9438 +/-  11 delay    74 +/-   0
+ptp4l: rms   10 max   16 freq  -9435 +/-  12 delay    74 +/-   0
+ptp4l: rms    8 max   18 freq  -9428 +/-   8 delay    72 +/-   0
+ptp4l: rms    8 max   18 freq  -9423 +/-   8 delay    72 +/-   0
+ptp4l: rms    9 max   16 freq  -9431 +/-  12 delay    70 +/-   0
+ptp4l: rms    9 max   18 freq  -9441 +/-   9 delay    72 +/-   0
+-----------------------------------------------------------
 
-> @@ -194,8 +198,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
->   		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> -		val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
-> -		val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
-> +		val[0] = smccc_feat->vendor_hyp_bmap;
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
->   		kvm_ptp_get_time(vcpu, val);
-> @@ -222,6 +225,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
->   	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
->   	KVM_REG_ARM_STD_BMAP,
->   	KVM_REG_ARM_STD_HYP_BMAP,
-> +	KVM_REG_ARM_VENDOR_HYP_BMAP,
->   };
->   
->   void kvm_arm_init_hypercalls(struct kvm *kvm)
-> @@ -230,6 +234,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
->   
->   	smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
->   	smccc_feat->std_hyp_bmap = KVM_ARM_SMCCC_STD_HYP_FEATURES;
-> +	smccc_feat->vendor_hyp_bmap = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
->   }
->   
->   int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> @@ -322,6 +327,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->   	case KVM_REG_ARM_STD_HYP_BMAP:
->   		val = READ_ONCE(smccc_feat->std_hyp_bmap);
->   		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		val = READ_ONCE(smccc_feat->vendor_hyp_bmap);
-> +		break;
->   	default:
->   		return -ENOENT;
->   	}
-> @@ -348,6 +356,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
->   		fw_reg_bmap = &smccc_feat->std_hyp_bmap;
->   		fw_reg_features = KVM_ARM_SMCCC_STD_HYP_FEATURES;
->   		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		fw_reg_bmap = &smccc_feat->vendor_hyp_bmap;
-> +		fw_reg_features = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
-> +		break;
->   	default:
->   		return -ENOENT;
->   	}
+Fixes: ba1ffd74df74 ("stmmac: fix PTP support for GMAC4")
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-If KVM_REG_ARM_VENDOR_HYP_BIT_{FUNC_FEAT, PTP} aren't parallel to each other,
-special code is needed to gurantee PTP is cleared if VENDOR_HYP is disabled.
-
-> @@ -453,6 +465,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->   		return 0;
->   	case KVM_REG_ARM_STD_BMAP:
->   	case KVM_REG_ARM_STD_HYP_BMAP:
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
->   		return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
->   	default:
->   		return -ENOENT;
-> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
-> index b0915d8c5b81..eaf4f6b318a8 100644
-> --- a/include/kvm/arm_hypercalls.h
-> +++ b/include/kvm/arm_hypercalls.h
-> @@ -9,6 +9,7 @@
->   /* Last valid bits of the bitmapped firmware registers */
->   #define KVM_REG_ARM_STD_BMAP_BIT_MAX		0
->   #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX	0
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX	1
->   
->   #define KVM_ARM_SMCCC_STD_FEATURES \
->   	GENMASK_ULL(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
-> @@ -16,6 +17,9 @@
->   #define KVM_ARM_SMCCC_STD_HYP_FEATURES \
->   	GENMASK_ULL(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
->   
-> +#define KVM_ARM_SMCCC_VENDOR_HYP_FEATURES \
-> +	GENMASK_ULL(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
-> +
->   int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
->   
->   static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
-> 
-
-Thanks,
-Gavin
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+index d3b4765c1a5b..289bf26a6105 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+@@ -279,10 +279,11 @@ static int dwmac4_wrback_get_rx_timestamp_status(void *desc, void *next_desc,
+ 			/* Check if timestamp is OK from context descriptor */
+ 			do {
+ 				ret = dwmac4_rx_check_timestamp(next_desc);
+-				if (ret < 0)
++				if (ret <= 0)
+ 					goto exit;
+ 				i++;
+ 
++				fsleep(1);
+ 			} while ((ret == 1) && (i < 10));
+ 
+ 			if (i == 10)
+-- 
+2.25.1
 

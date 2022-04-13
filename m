@@ -2,152 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2AA4FF810
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8A34FF80F
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiDMNpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S235915AbiDMNqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbiDMNpc (ORCPT
+        with ESMTP id S235707AbiDMNqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:45:32 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2051.outbound.protection.outlook.com [40.107.100.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9538606D0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:43:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lEfpxHeDsUIhb6I/oqPYSYSNwb6SQlJmCPYP7CiEAS/SgksEgeo9RyDBEjKpDMxYiOWinFdl8p4tR1ehLbeyJZjPjFsbq9pHTbMn/eqgk5Ee0KsQsZrkkmVtO+bR2kwaX4YmIC+h0QL8DwhPZoQetGOoR62h6DYd7j2SPgbfB953CeSbUBHEFtJUPYR3282WfnFkgO6edtTVPy3uftZrEKn2tlGzrWKbgoI1WLyFA5MH946CP4Jqgn/96iGFA1vEobMYKH4j/aAElnFErcnaU9/iXFrRBmiUoKC7+NK6vknWb3sVz1zIPYx2SaYxfFjsTJvI8wSCPsvtk5JdDCQhfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hRx4H9opX7UXPtztSb1BIApszX80GbtnjZ1tB41tWgk=;
- b=Mlh1/JbLuncTo+dIoWT47AzvbPRzuSjfYeTHKLEokwBhx4Kz/jWKbFXZbNA9HB0p2l4FT5Yrj00sMSlqQ5NrDcFf2BbYXDYMvT2vZFMNvMAOA82lgLlxuN74mB8mO6orAl6XaPSxU3bQBMtWhtb2wa05xpc4EMHCoUQBGbYfv87rVrxcc1AR456HcxrEPQSUZjUdguHcQ4o6ITToj6+DK8JqR5XUAHFLO73bhhXyd5N2QooDuIU1kLeKOm67Hm+F8vNp6uIZm9yT8WCqhi2mT5K9It0uA+g675ujvA3Zp5qaLH/pwNSooq+oa1LbaDRufM8L3hW4/IJpy1zRKOrmOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hRx4H9opX7UXPtztSb1BIApszX80GbtnjZ1tB41tWgk=;
- b=J5ZTR8HnnEHg8tyCyl0rui14lxIESjajsqmL6Y3HsyIF7Qq655xXxEQawZZP/C38xWyA0zQYnsWJ5K7WZdCly1xwUNxWyx4lLED3Nu2Dj5KzwkfNhJJCeBR1ZwDbs3myf0VM37QHZbVe1Z4uNAuxhwmwIxOsc0X4qSDu3F6v6u2D219p0GOmym+j5wfjoUj7dl0szjY0vPIxfHtL2Rz8WV2hnFmhqXSeq1HtSdJPD8YIWYu1lX7ozsEH+hDyzGEKW0+09ZnKMKj0P76JtIE8rE1Pd50230DoAOsktgceH6UQF+9Om5t2sBzlT76rtGinw5z+xIh3QdYP8QvlnDw84Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MWHPR12MB1616.namprd12.prod.outlook.com (2603:10b6:301:b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
- 2022 13:43:08 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5164.018; Wed, 13 Apr 2022
- 13:43:08 +0000
-Date:   Wed, 13 Apr 2022 10:43:07 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
-Message-ID: <20220413134307.GC368031@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-6-hch@lst.de>
- <20220411152508.GH2120790@nvidia.com>
- <87zgkrha7c.fsf@intel.com>
- <20220411165121.GA26801@lst.de>
- <877d7tgo33.fsf@intel.com>
- <e8cdc103-f683-0b73-70a7-807f6fee0280@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8cdc103-f683-0b73-70a7-807f6fee0280@intel.com>
-X-ClientProxiedBy: BL1PR13CA0357.namprd13.prod.outlook.com
- (2603:10b6:208:2c6::32) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 13 Apr 2022 09:46:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17EE2018B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649857465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LhTw9F9UDchErjlX1iEf9dQ5QBg67b/AFMenqWnDONU=;
+        b=PIpOq8iChqGPj9XE/cNJOZcBdHXTtgFHAEFFo5LCCy6DrnRZnQC04Ow8Tj8DcTJ+RMn2LM
+        RsU+bcqhIhPV2ImwyQNUPWnZoLdeK+sfXZDCwB35pi697b0pBpU6WrgAQ/su/q2TAmfJhG
+        CfiZdHFkN8qw6hWEa3yUJzvuwBsAQyo=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-Z4zkpSHsO4megauwekuySg-1; Wed, 13 Apr 2022 09:44:24 -0400
+X-MC-Unique: Z4zkpSHsO4megauwekuySg-1
+Received: by mail-il1-f197.google.com with SMTP id j5-20020a056e020ee500b002cbc90840ecso1112875ilk.23
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:44:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LhTw9F9UDchErjlX1iEf9dQ5QBg67b/AFMenqWnDONU=;
+        b=UhKifCKSRNpcXruIZ2GlFmnhsrSnOcOErIcNnSZNElcZp5XoeLvWvESnMsuSlbMI7Y
+         zz2dq6C9EJQNlASXUUl9wVf0Dn8B6ZB7iylZx1e6uPQAxOLB8B9fjkS9/NJRznoQgttN
+         10R58EUpmMzUna12o3f5LqwO6LfByAsOp/mC9v9mGbcVGnVx/h/S4h2l9SIAxo2WXWqT
+         rb9iA11OEC3pXUmovEh9KQpb35MDTrENw6YitkBrRwE2g3amh7IaYNI8SX/yO7Hyc0MW
+         x17cKyHK7xfi2iSZoM2zMHJCccV/6JtGUiGBNb0h5lUL3xHACNMtc2oynw5XzOQDcqZ2
+         omMQ==
+X-Gm-Message-State: AOAM530RpySPlFGep5MuMeVLDvCgcDbh64DyztQgsmuI6ZrfjLpU3qxA
+        6M1OhZ4rtkPT06snJNf3cCJTpD5wlR9JW9JRI2gdJ2U0Nn017oTxTFHuzJxU/czKU5I2txhU5nZ
+        EbDbBuQU6qEHej27ym9mETBCa
+X-Received: by 2002:a05:6638:2587:b0:323:bc9f:9230 with SMTP id s7-20020a056638258700b00323bc9f9230mr19657054jat.216.1649857464178;
+        Wed, 13 Apr 2022 06:44:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJziFlvv7OvSg+9WwNOlAr419a4UYKWbNEeCzGwsPZS9ePMKd3bDn+XBMGy9rVOnJXBw3bnJPg==
+X-Received: by 2002:a05:6638:2587:b0:323:bc9f:9230 with SMTP id s7-20020a056638258700b00323bc9f9230mr19657044jat.216.1649857463928;
+        Wed, 13 Apr 2022 06:44:23 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a9-20020a926609000000b002ca50234d00sm23633ilc.2.2022.04.13.06.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 06:44:23 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 09:44:21 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+Subject: Re: [PATCH v8 01/23] mm: Introduce PTE_MARKER swap entry
+Message-ID: <YlbTtUqa61ygTn1F@xz-m1.local>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014646.13522-2-peterx@redhat.com>
+ <87bkx7ayfs.fsf@nvdebian.thelocal>
+ <YlXWzf3nF+lGA5fn@xz-m1.local>
+ <8735ihbw6g.fsf@nvdebian.thelocal>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3a428c69-e2a5-4f7d-65ef-08da1d538b22
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1616:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB16164F6B1B31FD078825348BC2EC9@MWHPR12MB1616.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zwDgFcoywlRVTx+oLK9T5IzrAJ2E1ahZhZpe4QeyyEvzjfki2Z2H8lMSo1AXGjpRd5/fHI13NAG6Fewa7abnbvFHky7iAJg49GF9SqBsrP2F5BHf6fjs8O0gInHZssnxsQMITD4b2fLvfrIqzu1ZnNv6dWEjKD2x+H/rDy+/MMdlKgWjZwpduTLHHkcoSoTxu+y/QyqbNM0eXbuRoaNY2jHZT/+Ox6KMMgPMgenKYmO6Z04W4I4had9OmLpbWVgK00g7e1AE58HczdR5a+kGtGxmvvqvVd9/+7arEx8sqdbaAEFkA0/ah6VCHkM1XXAwF4yAXEwYirDaEc5yVPr0QelmMF1EU1La8UtnE+TpFq16j55R/LHgz58+dfvR0psORX+dHnqMxjeL1CJZ06rPtyLplz1vB8QwJmIO8YiJUjfgdSPBKn+54yVzqhMPo5i8U9eLs/26R8r1/KtfAU0Ricy/bVc9Tw9AcZ/XWcFpMwLS/1ZaxUpgZQC5idtYSHYuakyTRj5QsX9Z2sOq8ay8usBX3IoIcOu2FoRjWEqHgWTK20tcNLf04jb82Ou5ClbJtF30BnDh+4YHAGC2cRD22tSuTT2ACyuZ/wMfNI90LqavrR4ElsShcBjCGYXKDL9yz7m8hAHZPzj9bd5n2TOz1wOyiOsGrF2yNeW8T6J+/4vHu1WCQtNymi+SpKZwAZThtY9oemK8sdHuaQibCQhueQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(38100700002)(6916009)(54906003)(4744005)(66556008)(66946007)(186003)(508600001)(8676002)(4326008)(2616005)(66476007)(1076003)(86362001)(26005)(83380400001)(316002)(6512007)(6506007)(2906002)(8936002)(5660300002)(36756003)(7416002)(6486002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kr2hw/s+PMZtuaHT9gYHPqBVGHYPuljeq85DKGb+aWFnh78n3AbYWf0dV2/7?=
- =?us-ascii?Q?Ec+Y37IbBRRBs0TVhKgxwUbna3RMy3FeeERMEO3rKMaAkHOtFdfy3L8KjLi5?=
- =?us-ascii?Q?VlHBaJiYykLh+KhH0kPyIQGmrnZCi245fHsi3tSTGBIQMKMf4JjJdecMRWDw?=
- =?us-ascii?Q?+EBXDmx21fTAaR/IQlTkbdzpBFNHVnwbbFl4C1JgyComPK2Y1vYNys1V+dle?=
- =?us-ascii?Q?k9PF0SuuVaUSZHqKQfmAEbJfrbuWPFMeBJOOXyhEwKEmXxSXxZxgvBpxVp2R?=
- =?us-ascii?Q?XoSYs4E1Rcpoy1OjD6kv1OGyQcVGNOycgA2YPreA5DRwTSVsccwYfo+hGyC7?=
- =?us-ascii?Q?thVDzby2MQY2luw6paFPRPOTsDMA2PN7/iF+fQ7Y3o/R4mP3rG94oUS9vHet?=
- =?us-ascii?Q?I7sOyGqEmEGM11V5H7twHTqQpb7unDY6Ri7NuMeuC35VR/czM2YJnXUPUR45?=
- =?us-ascii?Q?5BlY/wO1+QuU9Hxrd4xLMJDXyweKqzVg0MLYl5kp3CXiCeQ5cWpM5Rxyp1CO?=
- =?us-ascii?Q?GpgjWcis26/xk0UEOdKVLgFRtNEl7Xs81EKPXt+NF1e3yJuK+BJHiHsnxYY5?=
- =?us-ascii?Q?Mn8/dRrNELJq1Cj8DEApiE8RubFjQ5jwkZdrqLc+8gHGooSO7JQo0qOH8tM2?=
- =?us-ascii?Q?APkiy2Bwywhk1gJcQprmlB6jUOe7Z2IubXM897qgdGW3WZt5pExw8wzhv9tq?=
- =?us-ascii?Q?jjpOorqygzr+u97Nr805Ct+mbuvAFehfhHA79mrNSG8ZabqXJ21xBZB1jXmu?=
- =?us-ascii?Q?A/jNt6V1yf9laA4YU9ow4v8ji+KVCUyMkpbdeoiimFpNoi1VmCbQ652RA0d+?=
- =?us-ascii?Q?o53N4YSi0IyrJxUuVguRvY+KS+IsWgEkcO2I8I8/WtAy2pRcjMPtxhxgBppA?=
- =?us-ascii?Q?N087EH/dv44PpDMWAJqKA1FlN0DDUM3jJGonxkwtcrS9IxMMWKO3evh9eNhB?=
- =?us-ascii?Q?gEfnzlAh/61U7hrBek3Yjo5K8CgkUB+QAE/ARAzYy7BvSWlruB6/mLcwkaCb?=
- =?us-ascii?Q?FS2SDtmJ4rq5R0YAzD91EDutLjkaZMWQHa3LC4vF+m17MaHXhMV0ycFJHxhC?=
- =?us-ascii?Q?HfdTHs1zqhPriu01Iw4s9ILQ4md08vxfkCiaI1O5nVX4teXktD7lGfAMLdsf?=
- =?us-ascii?Q?2Vc/h6cPSEywlz5junCDLaXeIWqLLJk5mM+Ah5JnLdZVj9jSIwNl0kayQOhd?=
- =?us-ascii?Q?Iv/JRMdFUP+GFcUId8G40MurIWD8yXCGcBoSH1jr3fy7I2or6Ho+wHAC+WAz?=
- =?us-ascii?Q?IYNkPmSYQ0vlZF85FYzjTpSidF44F4vt7rRvFhPUFRF+RQhDAwA2fuz/+gHR?=
- =?us-ascii?Q?Nkz0VkMke3sfugWroo3eIY1/FhkpU0slpGrmPGUAAbkT2WFEpBBYaRKHkL5a?=
- =?us-ascii?Q?sX5T66Z2nis7KqutetwcW8lRZHERFECcsalj6z3Qy2AtI3XqH2l9GZKF5vhU?=
- =?us-ascii?Q?LBMqvlNwl0R+iqMrB0OR1M0lxSD2nNvDcNwcleBk+00Qxflz/YS5DYbBM1wl?=
- =?us-ascii?Q?JxJpRIMvU8n9rcx1kFj0tg0rBV9Dup+POCtPTYW5HiEUUly4dMuxFbCj0Uss?=
- =?us-ascii?Q?Ca/v98iwTMkGYkTiaOusFU/W6e6W+JLek3mTrFdRg/WOXGmKInhvq47rRhpG?=
- =?us-ascii?Q?OwoQaqg548JAsmU3qroyORJZsY2LEKEu398Bt3a7dVKQ/fgSkQTTMAItE4Ya?=
- =?us-ascii?Q?HckR78zGA9uSoQFVSvPdXG0+TOwvm/fTUTCI0DqYQm3MFejnhLhIwRBdvgDf?=
- =?us-ascii?Q?JVSyfoxOIA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a428c69-e2a5-4f7d-65ef-08da1d538b22
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 13:43:08.1530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m84xDoR34/Uk8PLDa2ccgaRARfxNdO6cxx0Fb18g4QQX03kWJBRj78zXnpeJ/rb/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1616
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8735ihbw6g.fsf@nvdebian.thelocal>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 01:39:35PM +0000, Wang, Zhi A wrote:
-
-> It seems Jani's makefile clean patch has already included this one, I can
-> just simply drop this one so that Christoph won't need to re-send everything.
+On Wed, Apr 13, 2022 at 10:30:33AM +1000, Alistair Popple wrote:
+> Peter Xu <peterx@redhat.com> writes:
 > 
-> For the branch to move on, I am merging the patches and will re-generate the
-> gvt-staging branch, which combines the newest drm-tip vfio-upstream and other
-> gvt branches.
+> > On Tue, Apr 12, 2022 at 11:07:56AM +1000, Alistair Popple wrote:
+> >> Hi Peter,
+> >
+> > Hi, Alistair,
+> >
+> >>
+> >> I noticed this while reviewing the next patch in the series. I think you need to
+> >> add CONFIG_PTE_MARKER to the below as well:
+> >>
+> >> #if defined(CONFIG_MEMORY_FAILURE) || defined(CONFIG_MIGRATION) || \
+> >>     defined(CONFIG_DEVICE_PRIVATE)
+> >> static inline int non_swap_entry(swp_entry_t entry)
+> >> {
+> >> 	return swp_type(entry) >= MAX_SWAPFILES;
+> >> }
+> >> #else
+> >> static inline int non_swap_entry(swp_entry_t entry)
+> >> {
+> >> 	return 0;
+> >> }
+> >> #endif
+> >>
+> >> Otherwise marker entries will be treated as swap entries, which is wrong for
+> >> example in swapin_walk_pmd_entry() as marker entries are no longer considered
+> >> pte_none().
+> >
+> > Thanks for the comment, that makes sense.
+> >
+> > Instead of adding PTE_MARKER into this equation, I'm going backward and
+> > wondering purely on why we need to bother with non_swap_entry() at all if
+> > MAX_SWAPFILES is already defined with proper knowledges of all these bits.
 > 
-> If you are in a rush of re-basing the patches of non-GVT-g stuff, you can use
-> gvt-staging branch until my pull request landed in drm-intel-next.
+> I was going to suggest it was to help the compiler optimise the non-swap entry
+> code away. But I just tested and it makes no difference in .text section size
+> either way so I think your suggestion is good unless that isn't true for other
+> architecture/compiler combinations (I only tried gcc-10.2.1 and x86_64).
 > 
-> Also our QA will test gvt-staging-branch before the pull request. I suppose
-> it will take one or two days.
+> That's a possibility because the optimisation isn't obvious to me at least.
+> 
+> non_swap_entry() is equivalent to:
+> 
+> (entry.val >> SWP_TYPE_SHIFT) >= MAX_SWAPFILES;
+> (entry.val >> (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)) >= (1<<5);
+> (entry.val >> (BITS_PER_LONG - 1 - 5)) >= (1<<5);
+> (entry.val >> 58) >= (1<<5);
+> 
+> Where entry.val is a long. So from that alone it's not obvious this could be
+> optimised away, because nothing there implies entry.val != (1<<63) which would
+> make the conditional true. But there's a lot of inlining going on in the
+> creation of swap entries which I didn't trace, so something must end up implying
+> entry.val < (1<<63).
 
-When you are wrangling the branches it would be great if Christoph's
-series and it's minimal dependencies could be on a single branch that
-could reasonably be pulled to the VFIO tree too, thanks
+I think my point was that we check non_swap_entry() with a pre-assumption
+that it's a swap entry, then it means it's the slow path already after
+we've parsed the pte entry and be aware it's not present.
 
-Jason
+So I'm doubting how much the optimization (even if at last, applicable)
+could help in reality, not to mention that it'll only have an effect when
+all of the configs are not set, so it's a micro optimization on slow path
+in a rare config setup.
+
+For any sane modern hosts I'd expect CONFIG_MIGRATION should at least be
+set.. then it invalidates any potential optimization we're discussing here.
+
+Let me post a patch for this and move the discussion there.  Thanks a lot
+for looking into it.
+
+-- 
+Peter Xu
+

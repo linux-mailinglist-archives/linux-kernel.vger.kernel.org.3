@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734524FFD57
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF944FFD56
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiDMSC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S237617AbiDMSDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237567AbiDMSCS (ORCPT
+        with ESMTP id S237579AbiDMSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:02:18 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CAF3FBD2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:55 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id oo16-20020a17090b1c9000b001c6d21e8c04so4097064pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:55 -0700 (PDT)
+        Wed, 13 Apr 2022 14:02:20 -0400
+Received: from mail-ot1-x349.google.com (mail-ot1-x349.google.com [IPv6:2607:f8b0:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A93FDB0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:57 -0700 (PDT)
+Received: by mail-ot1-x349.google.com with SMTP id f8-20020a9d5f08000000b005cb3a6c4c1cso1319572oti.21
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dGdHT2bPLXOJ2n8aFuh4xhdm9dOQMBhMBknnyhFlP5I=;
-        b=jBAwjxink+IFXlbU98ZjIOs4uulu5gO8kRsE7u4MXqpB8RzpFew92LEOwx4Xu9X8k6
-         xgoBr1hxRAUDGQ4kJ/MnRo04q0jTuZTTcosAtfJhwItYkFSokhBaSr58g6X42k1DPPVa
-         2Kqr6dmOtE+hUey8r9q5rFiUOv0nlW8R2sdtAD64IdlTe4So1NjCYEQwjwFN4tochF9P
-         AWaA1CH7FDYgCSDTspVLWbL7yqNDxiXZ3xu3IsNz+qR+Nk0/qqtJYnCAfmOnkRgATAg3
-         v8L9TysbeR0jl5BKqY5Znlh64uGAV+JGCdG6puNyFcHiVje3A5beJKeI4YFR1g7st/Nz
-         qZng==
+        bh=nE0p9VkAEZPrbUZLBLHj/EA6GeKDyutWcWOyx+QH1CQ=;
+        b=CGNbDpPje6DWNjSf8HxzYlFoeW1No4i38r6wXXxwwBripH9w+hcowUZjbCXeEk7ebm
+         JxfkF/a2MAsta6GRKlumZE6cFaOm/Yli8aCQmtf0wxrUnAcQlyyzk/cU8XGWus381SF/
+         JJMqKOUXYgEuvwwpU3m8+ZCRalGNv0LEk6CSfdh9BSWnas3iuooeZM7XMsT8H5BrlMnh
+         RGhfZnBAP6eymm5zbSoH03p791b2+LMIiH3gDKpQfotTNSudybPXIx3ElmeOLTSdcP6Z
+         a2wkvjqmqlx90KsFRn1CWqeB5Gjecuhtn5LxmvywsA0apGF8kDHFZe/PSmzbdFhrC2DV
+         /7nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dGdHT2bPLXOJ2n8aFuh4xhdm9dOQMBhMBknnyhFlP5I=;
-        b=3Jqh0iKSMOeERPexQ3vYI2vca2R9DNCrIw0d4h9d7mLj3lMtC3W0l/ErZGSfmmwSKJ
-         29k8OubIoVL40MqVL+JGpP0Bt0LzTJUKBxQsbsz8ow5scLKgh5LFdx0L9SUtWJkyxvpD
-         eIBlXWg8rIRdzmcCY/XjoFeFAcQtrzzll55gbRT7ATiJW4tNIs3xCDTbFgmti61F0U91
-         XTBtuUSt5DuBtplaI3B8uVyjZXcT04qz3mU8rs1huV/6vCyFs89bEJlagcIFrbImHSpP
-         zhYa3rpXPYme7OZfI/m+r7rwPIJqRgI3mw81r7yCCCVjofLjkSl7/dflGq+l2S3j1jof
-         RmmA==
-X-Gm-Message-State: AOAM531DrZH1pOaEIMDPQuMdZyvUNOBA8NbrHj4dEIyyxFd5kaBV94wP
-        3YLUekkLAbGGyQX3GeRGgfh9ESUZ5G6OgFfknT6Puq0qMgkW6S6PVE5dlrqBwsxGaM4MqvlR0V5
-        8b0eOL3CSFPl6hrYQ2+HKfj112ifEhZUSw7yEgVJifR7THQDJr/A3WTeDIzOyrn8tay201Gnu
-X-Google-Smtp-Source: ABdhPJxg3bnsHDqR36HhTPliOgczpjBpwZNk93DfkQ5KZoOER3XSqIWUzuxf7JvzKrhCcxw9cok/KWCo4t8q
+        bh=nE0p9VkAEZPrbUZLBLHj/EA6GeKDyutWcWOyx+QH1CQ=;
+        b=oF3+WFB7R/wDM+4LNKZ9V+ri4/ByXB72LWLRTk9EK+0GPSBcUDRigMUMdSJQgYEO4P
+         xL9j+VClBlicqoozFly9HcYQ+gXxE1d4R+bvk96wraPVTXKtBMEny+3EnPNyRaOg5Kq9
+         DIEe1+rihruMJ/ndbb/iQyExlYsBhdD58sKmYG0LYCGmRmqw4Q0K6F+fsu8bHcduv8L9
+         0z0T0eegIHLa2L9JzcIsSXfa9Z6Kz4abBFv4u9dftv2JR2AD6nUuv9vh8KPZ+0DHFVXU
+         kIBCmTxOLfnjomurB3utNUAMf/CwqYm+twUTVbYbTH4L5qZQgeSXB5RDA46t/JHSB76V
+         v4Sw==
+X-Gm-Message-State: AOAM533jl+YeMOBOKeTCsaY7PKmUx+3BkP8JrPLYiUGWT75NyY9o67tS
+        xldw9AClZDASj7IrK2OmFkAoDijOpVlb4mG0OKkLwUQmz0IUM5mkvUC9dKMr0nUJbUrPL+Y13sJ
+        cnWdpX/rjlFG+wXgXtk7c75jMrymn/9BjXcKHP7DkVO4gs1kgUvbaq6FmgH0Qd7l5C6b5YSAR
+X-Google-Smtp-Source: ABdhPJxIEOLgikotz+8frIC7nYGrz+JkYc/+D4E6cRrh+T9b8zgx11iYyDt9qlI4bTND46iVkwTs5LlwOE4V
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:c087:f2f2:f5f0:f73])
- (user=bgardon job=sendgmr) by 2002:a65:6753:0:b0:385:fa8a:188f with SMTP id
- c19-20020a656753000000b00385fa8a188fmr36502519pgu.499.1649872794452; Wed, 13
- Apr 2022 10:59:54 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 10:59:38 -0700
+ (user=bgardon job=sendgmr) by 2002:a05:6870:a789:b0:de:a48c:c953 with SMTP id
+ x9-20020a056870a78900b000dea48cc953mr9066oao.298.1649872796515; Wed, 13 Apr
+ 2022 10:59:56 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 10:59:39 -0700
 In-Reply-To: <20220413175944.71705-1-bgardon@google.com>
-Message-Id: <20220413175944.71705-5-bgardon@google.com>
+Message-Id: <20220413175944.71705-6-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220413175944.71705-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v5 04/10] KVM: selftests: Clean up coding style in binary
- stats test
+Subject: [PATCH v5 05/10] KVM: selftests: Read binary stat data in lib
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -69,187 +68,101 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+Move the code to read the binary stats data to the KVM selftests
+library. It will be re-used by other tests to check KVM behavior.
 
-Fix a variety of code style violations and/or inconsistencies in the
-binary stats test.  The 80 char limit is a soft limit and can and should
-be ignored/violated if doing so improves the overall code readability.
+No functional change intended.
 
-Specifically, provide consistent indentation and don't split expressions
-at arbitrary points just to honor the 80 char limit.
-
-Opportunistically expand/add comments to call out the more subtle aspects
-of the code.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- .../selftests/kvm/kvm_binary_stats_test.c     | 91 ++++++++++++-------
- 1 file changed, 56 insertions(+), 35 deletions(-)
+ .../selftests/kvm/include/kvm_util_base.h     |  3 ++
+ .../selftests/kvm/kvm_binary_stats_test.c     |  7 ++--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 36 +++++++++++++++++++
+ 3 files changed, 41 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index fabe46ddc1b2..2a3a4d9ed8e3 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -403,6 +403,9 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
+ void read_stats_header(int stats_fd, struct kvm_stats_header *header);
+ struct kvm_stats_desc *read_stats_desc(int stats_fd,
+ 				       struct kvm_stats_header *header);
++int read_stat_data(int stats_fd, struct kvm_stats_header *header,
++		   struct kvm_stats_desc *desc, uint64_t *data,
++		   ssize_t max_elements);
+ 
+ uint32_t guest_get_vcpuid(void);
+ 
 diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-index b49fae45db1e..8b31f8fc7e08 100644
+index 8b31f8fc7e08..59677fae26e5 100644
 --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
 +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-@@ -35,47 +35,64 @@ static void stats_test(int stats_fd)
- 	/* Read kvm stats header */
- 	read_stats_header(stats_fd, &header);
- 
-+	/*
-+	 * The base size of the descriptor is defined by KVM's ABI, but the
-+	 * size of the name field is variable as far as KVM's ABI is concerned.
-+	 * But, the size of name is constant for a given instance of KVM and
-+	 * is provided by KVM in the overall stats header.
-+	 */
- 	size_desc = sizeof(*stats_desc) + header.name_size;
- 
- 	/* Read kvm stats id string */
- 	id = malloc(header.name_size);
- 	TEST_ASSERT(id, "Allocate memory for id string");
-+
- 	ret = read(stats_fd, id, header.name_size);
- 	TEST_ASSERT(ret == header.name_size, "Read id string");
- 
- 	/* Check id string, that should start with "kvm" */
- 	TEST_ASSERT(!strncmp(id, "kvm", 3) && strlen(id) < header.name_size,
--				"Invalid KVM stats type, id: %s", id);
-+		    "Invalid KVM stats type, id: %s", id);
- 
- 	/* Sanity check for other fields in header */
- 	if (header.num_desc == 0) {
- 		printf("No KVM stats defined!");
- 		return;
- 	}
--	/* Check overlap */
--	TEST_ASSERT(header.desc_offset > 0 && header.data_offset > 0
--			&& header.desc_offset >= sizeof(header)
--			&& header.data_offset >= sizeof(header),
--			"Invalid offset fields in header");
-+	/*
-+	 * The descriptor and data offsets must be valid, they must not overlap
-+	 * the header, and the descriptor and data blocks must not overlap each
-+	 * other.  Note, the data block is rechecked after its size is known.
-+	 */
-+	TEST_ASSERT(header.desc_offset && header.desc_offset >= sizeof(header) &&
-+		    header.data_offset && header.data_offset >= sizeof(header),
-+		    "Invalid offset fields in header");
-+
- 	TEST_ASSERT(header.desc_offset > header.data_offset ||
--			(header.desc_offset + size_desc * header.num_desc <=
--							header.data_offset),
--			"Descriptor block is overlapped with data block");
-+		    (header.desc_offset + size_desc * header.num_desc <= header.data_offset),
-+		    "Descriptor block is overlapped with data block");
- 
- 	/* Read kvm stats descriptors */
- 	stats_desc = read_stats_desc(stats_fd, &header);
- 
- 	/* Sanity check for fields in descriptors */
+@@ -160,11 +160,8 @@ static void stats_test(int stats_fd)
+ 	size_data = 0;
  	for (i = 0; i < header.num_desc; ++i) {
-+		/*
-+		 * Note, size_desc includes the of the name field, which is
-+		 * variable, i.e. this is NOT equivalent to &stats_desc[i].
-+		 */
  		pdesc = (void *)stats_desc + i * size_desc;
--		/* Check type,unit,base boundaries */
--		TEST_ASSERT((pdesc->flags & KVM_STATS_TYPE_MASK)
--				<= KVM_STATS_TYPE_MAX, "Unknown KVM stats type");
--		TEST_ASSERT((pdesc->flags & KVM_STATS_UNIT_MASK)
--				<= KVM_STATS_UNIT_MAX, "Unknown KVM stats unit");
--		TEST_ASSERT((pdesc->flags & KVM_STATS_BASE_MASK)
--				<= KVM_STATS_BASE_MAX, "Unknown KVM stats base");
--		/* Check exponent for stats unit
-+
-+		/* Check type, unit, and base boundaries */
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_TYPE_MASK) <= KVM_STATS_TYPE_MAX,
-+			    "Unknown KVM stats type");
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_UNIT_MASK) <= KVM_STATS_UNIT_MAX,
-+			    "Unknown KVM stats unit");
-+		TEST_ASSERT((pdesc->flags & KVM_STATS_BASE_MASK) <= KVM_STATS_BASE_MAX,
-+			    "Unknown KVM stats base");
-+
-+		/*
-+		 * Check exponent for stats unit
- 		 * Exponent for counter should be greater than or equal to 0
- 		 * Exponent for unit bytes should be greater than or equal to 0
- 		 * Exponent for unit seconds should be less than or equal to 0
-@@ -86,47 +103,51 @@ static void stats_test(int stats_fd)
- 		case KVM_STATS_UNIT_NONE:
- 		case KVM_STATS_UNIT_BYTES:
- 		case KVM_STATS_UNIT_CYCLES:
--			TEST_ASSERT(pdesc->exponent >= 0,
--					"Unsupported KVM stats unit");
-+			TEST_ASSERT(pdesc->exponent >= 0, "Unsupported KVM stats unit");
- 			break;
- 		case KVM_STATS_UNIT_SECONDS:
--			TEST_ASSERT(pdesc->exponent <= 0,
--					"Unsupported KVM stats unit");
-+			TEST_ASSERT(pdesc->exponent <= 0, "Unsupported KVM stats unit");
- 			break;
- 		}
- 		/* Check name string */
- 		TEST_ASSERT(strlen(pdesc->name) < header.name_size,
--				"KVM stats name(%s) too long", pdesc->name);
-+			    "KVM stats name(%s) too long", pdesc->name);
- 		/* Check size field, which should not be zero */
--		TEST_ASSERT(pdesc->size, "KVM descriptor(%s) with size of 0",
--				pdesc->name);
-+		TEST_ASSERT(pdesc->size,
-+			    "KVM descriptor(%s) with size of 0", pdesc->name);
- 		/* Check bucket_size field */
- 		switch (pdesc->flags & KVM_STATS_TYPE_MASK) {
- 		case KVM_STATS_TYPE_LINEAR_HIST:
- 			TEST_ASSERT(pdesc->bucket_size,
--			    "Bucket size of Linear Histogram stats (%s) is zero",
--			    pdesc->name);
-+				    "Bucket size of Linear Histogram stats (%s) is zero",
-+				    pdesc->name);
- 			break;
- 		default:
- 			TEST_ASSERT(!pdesc->bucket_size,
--			    "Bucket size of stats (%s) is not zero",
--			    pdesc->name);
-+				    "Bucket size of stats (%s) is not zero",
-+				    pdesc->name);
- 		}
+-		ret = pread(stats_fd, stats_data,
+-				pdesc->size * sizeof(*stats_data),
+-				header.data_offset + size_data);
+-		TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
+-				"Read data of KVM stats: %s", pdesc->name);
++		read_stat_data(stats_fd, &header, pdesc, stats_data,
++			       pdesc->size);
  		size_data += pdesc->size * sizeof(*stats_data);
  	}
--	/* Check overlap */
--	TEST_ASSERT(header.data_offset >= header.desc_offset
--		|| header.data_offset + size_data <= header.desc_offset,
--		"Data block is overlapped with Descriptor block");
-+
-+	/*
-+	 * Now that the size of the data block is known, verify the data block
-+	 * doesn't overlap the descriptor block.
-+	 */
-+	TEST_ASSERT(header.data_offset >= header.desc_offset ||
-+		    header.data_offset + size_data <= header.desc_offset,
-+		    "Data block is overlapped with Descriptor block");
-+
- 	/* Check validity of all stats data size */
- 	TEST_ASSERT(size_data >= header.num_desc * sizeof(*stats_data),
--			"Data size is not correct");
-+		    "Data size is not correct");
-+
- 	/* Check stats offset */
- 	for (i = 0; i < header.num_desc; ++i) {
- 		pdesc = (void *)stats_desc + i * size_desc;
- 		TEST_ASSERT(pdesc->offset < size_data,
--			"Invalid offset (%u) for stats: %s",
--			pdesc->offset, pdesc->name);
-+			    "Invalid offset (%u) for stats: %s",
-+			    pdesc->offset, pdesc->name);
- 	}
  
- 	/* Allocate memory for stats data */
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 12fa8cc88043..fc2321055a69 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -2615,3 +2615,39 @@ struct kvm_stats_desc *read_stats_desc(int stats_fd,
+ 
+ 	return stats_desc;
+ }
++
++/*
++ * Read stat data for a particular stat
++ *
++ * Input Args:
++ *   stats_fd - the file descriptor for the binary stats file from which to read
++ *   header - the binary stats metadata header corresponding to the given FD
++ *   desc - the binary stat metadata for the particular stat to be read
++ *   max_elements - the maximum number of 8-byte values to read into data
++ *
++ * Output Args:
++ *   data - the buffer into which stat data should be read
++ *
++ * Return:
++ *   The number of data elements read into data or -ERRNO on error.
++ *
++ * Read the data values of a specified stat from the binary stats interface.
++ */
++int read_stat_data(int stats_fd, struct kvm_stats_header *header,
++		   struct kvm_stats_desc *desc, uint64_t *data,
++		   ssize_t max_elements)
++{
++	ssize_t size = min((ssize_t)desc->size, max_elements);
++	ssize_t ret;
++
++	ret = pread(stats_fd, data, size * sizeof(*data),
++		    header->data_offset + desc->offset);
++
++	/* ret from pread is in bytes. */
++	ret = ret / sizeof(*data);
++
++	TEST_ASSERT(ret == size,
++		    "Read data of KVM stats: %s", desc->name);
++
++	return ret;
++}
 -- 
 2.35.1.1178.g4f1659d476-goog
 

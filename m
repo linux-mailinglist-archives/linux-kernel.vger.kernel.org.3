@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A084FEF88
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650D44FEF94
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbiDMGMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S230134AbiDMGND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiDMGMP (ORCPT
+        with ESMTP id S233220AbiDMGMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:12:15 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56C1F35DE1;
-        Tue, 12 Apr 2022 23:09:53 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-115-138.pa.nsw.optusnet.com.au [49.181.115.138])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id E9AFA53458F;
-        Wed, 13 Apr 2022 16:09:48 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1neWCI-00H7H4-RH; Wed, 13 Apr 2022 16:09:46 +1000
-Date:   Wed, 13 Apr 2022 16:09:46 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Subject: Re: [PATCH v12 6/7] xfs: Implement ->notify_failure() for XFS
-Message-ID: <20220413060946.GL1544202@dread.disaster.area>
-References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
- <20220410160904.3758789-7-ruansy.fnst@fujitsu.com>
- <20220413000423.GK1544202@dread.disaster.area>
- <CAPcyv4jKLZhcCiSEU+O+OJ2e+y9_B2CvaEfAKyBnhhSd+da=Zg@mail.gmail.com>
+        Wed, 13 Apr 2022 02:12:36 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468BD33E15
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:10:14 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ebf4b91212so11004327b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5fgVChRRApKlBIxVlW1f3hD3updGvqv5yvWmNDhjdtM=;
+        b=sI58AZkwnV0PCwyvFIbzfa5QQOD2KOa4/arl6YdzEnwXWAhOnYuzFBRM7LS9aH+/Bx
+         lZ5qzStf0i7jmdVP+bD2gt4luZx+SYboLf8Z0boKiZnt2/Y1XqjdMMMAgBOnwWT1nwOd
+         /+3y6q0sg6fTMSJv3/ieKe4oSjz27TUBC0bz5Idccf64BemXK7Zz4WVqLBU/4AngPlkq
+         rVrGNebOihUvSCCiugDQz8ahIhi5UJbqzb8Z3WIWItzxQBVyH6gLuxH0gypY35v7j5P+
+         C+ALokXhuan4JZ+3M5C09TpgU0kN8IIWje2bnLnT3+0BwZhunY4BdFvvXYxyNxuXBdDe
+         R+cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5fgVChRRApKlBIxVlW1f3hD3updGvqv5yvWmNDhjdtM=;
+        b=JZl0AwRMGlUh+MLLH0xbWaK0cYO+F4pd9xNx29BFcpULbqr8yfC2YBVx3VxiMsxWzU
+         WHfYL6g+Zb9qkG8BdxOpbNWGmItn7MyixmXGWXAYh2Kwl6BY9KsOhOweqklOWnHweROE
+         le9Hh7B2+fRe4xgvXRBJrWPycfBB2FUxxAhvsq0mfU8RMR0JkdWys1kw6nVui+43CSky
+         J147uc7jOnEMQ1JcPFaLpVp//KDEDl7XyyRYRlJxgIMyZolzuxxGHuJ/PYA3py2RBOhb
+         IlvZCoeluNzLydv/mEl7NA/JrytK8DqZGUv+uSJIti6Qfnl7kzbYUrHI2yp9Sv48AVbn
+         1KwQ==
+X-Gm-Message-State: AOAM533HJjLPns++WcVOu5IIb9acTcdXV6ryzEllz/9oEw45pLIo9a2f
+        dsWwQRz/oD/Eyx3B5LqCQ3/BwwZ8gt4NcX3/b06XWQ==
+X-Google-Smtp-Source: ABdhPJyL+jMiw5z7EODt9P0QXbBXCN/kSj7h9Iv6Dz1aDHs5FhCsk1IdpCBf2tyRfFSkdgqquVySeXxYu3HczxYW3aI=
+X-Received: by 2002:a81:bf51:0:b0:2ef:414a:f03b with SMTP id
+ s17-20020a81bf51000000b002ef414af03bmr2551046ywk.199.1649830213341; Tue, 12
+ Apr 2022 23:10:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4jKLZhcCiSEU+O+OJ2e+y9_B2CvaEfAKyBnhhSd+da=Zg@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=62566930
-        a=/kVtbFzwtM2bJgxRVb+eeA==:117 a=/kVtbFzwtM2bJgxRVb+eeA==:17
-        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=7-415B0cAAAA:8
-        a=1SRcz3ERVth_psKDs80A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220412173836.126811734@linuxfoundation.org>
+In-Reply-To: <20220412173836.126811734@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 13 Apr 2022 11:40:02 +0530
+Message-ID: <CA+G9fYvwjKoO4TmPDgZ8pZfuv3b9_3V9keR7rR6aiH2_n4a6cw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,66 +71,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 07:06:40PM -0700, Dan Williams wrote:
-> On Tue, Apr 12, 2022 at 5:04 PM Dave Chinner <david@fromorbit.com> wrote:
-> > On Mon, Apr 11, 2022 at 12:09:03AM +0800, Shiyang Ruan wrote:
-> > > Introduce xfs_notify_failure.c to handle failure related works, such as
-> > > implement ->notify_failure(), register/unregister dax holder in xfs, and
-> > > so on.
-> > >
-> > > If the rmap feature of XFS enabled, we can query it to find files and
-> > > metadata which are associated with the corrupt data.  For now all we do
-> > > is kill processes with that file mapped into their address spaces, but
-> > > future patches could actually do something about corrupt metadata.
-> > >
-> > > After that, the memory failure needs to notify the processes who are
-> > > using those files.
-...
-> > > @@ -1964,8 +1965,8 @@ xfs_alloc_buftarg(
-> > >       btp->bt_mount = mp;
-> > >       btp->bt_dev =  bdev->bd_dev;
-> > >       btp->bt_bdev = bdev;
-> > > -     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, NULL,
-> > > -                                         NULL);
-> > > +     btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, mp,
-> > > +                                         &xfs_dax_holder_operations);
-> >
-> > I see a problem with this: we are setting up notify callbacks before
-> > we've even read in the superblock during mount. i.e. we don't even
-> > kow yet if we've got an XFS filesystem on this block device.
-> > Hence these notifications need to be delayed until after the
-> > filesystem is mounted, all the internal structures have been set up
-> > and log recovery has completed.
-> 
-> So I think this gets back to the fact that there will eventually be 2
-> paths into this notifier.
+On Tue, 12 Apr 2022 at 23:17, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.34 release.
+> There are 277 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Apr 2022 17:37:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.34-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I'm not really concerned by how the notifications are generated;
-my concern is purely that notifications can be handled safely.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> All that to say, I think it is ok / expected for the filesystem to
-> drop notifications on the floor when it is not ready to handle them.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Well, yes. The whole point of notifications is the consumer makes
-the decision on what to do with the notification it receives - the
-producer of the notification does not (and can not) dictate what
-policy the consumer(s) implement...
+## Build
+* kernel: 5.15.34-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 1ad810a5a764358347407720dd6ea61e771cfe36
+* git describe: v5.15.33-278-g1ad810a5a764
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.33-278-g1ad810a5a764
 
-> For example there are no processes to send SIGBUS to if the filesystem
-> has not even finished mount.
+## Test Regressions (compared to v5.15.33-277-g059c7c9bf722)
+No test regressions found.
 
-There may be not processes to send SIGBUS to even if the filesystem
-has finished mount. But we still want the notifications to be
-delivered and we still need to handle them safely.
+## Metric Regressions (compared to v5.15.33-277-g059c7c9bf722)
+No metric regressions found.
 
-IOWs, while we might start by avoiding notifications during mount,
-this doesn't mean we will never have reason to process events during
-mount. What we do with this notification is going to evolve over
-time as we add new and adapt existing functionality....
+## Test Fixes (compared to v5.15.33-277-g059c7c9bf722)
+No test fixes found.
 
-Cheers,
+## Metric Fixes (compared to v5.15.33-277-g059c7c9bf722)
+No metric fixes found.
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+## Test result summary
+total: 100224, pass: 84238, fail: 999, skip: 13860, xfail: 1127
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm6[
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* prep-inline
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,126 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57484FFD62
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C844FFD67
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbiDMSDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S237750AbiDMSEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237604AbiDMSC2 (ORCPT
+        with ESMTP id S237606AbiDMSC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Apr 2022 14:02:28 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3483FDB0
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E939241611
         for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:00:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id n8so2618054plh.1
+Received: by mail-pl1-x649.google.com with SMTP id m11-20020a170902f64b00b0015820f8038fso1519346plg.23
         for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Svs19TUafKQm/jCU2RrZAsQ5QwXjh0iyJjgadXLqin0=;
-        b=xLqG+MWjB+1ONdwrTD0/w1/RC8Cfa0ESVVwZNBb5TYNlChKDlGlurbuIAhq0g3JOLY
-         HBalb10a9q5otPR4Ue4esCZJhdzZn3erpsytC0MtHM/NGjzOEojXQxx2TbJoL5PJ8x1n
-         UJsuKYLvVWQiFf8eN47eWokol4IH5IeBctvKmR1hR7FpwfyJJ0VYotDpdg3xdere/5Du
-         sbagu6ImkoKzwNfliSHrNBSzt0HwvxAWijAdaBWaHf0ne/1d0iEFTdmT2otr9T8AEKAV
-         zO4XuNE+MQ7TquLYInmTp5lGFGMxdCBFaEsle5Ae7QbwHAS//6uDL6aqvyYwPcfU7nxj
-         X8qg==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=3UKcgaouWDljoBhDJNavl7iHJ9K4UWQ5k+7D01IUkUU=;
+        b=i1LjNyj0MfWmClJT9PfmfWxlCGWG1mhzWBvkSRz4Hwmt2mE12WeqUlJ2ktSPAWym7p
+         2lceXs2Ff5HmbmubdwUFXPqbvPDNnD26dUUz3C7nKYW7Ol8ZGz+TbasHddOngbsv7M22
+         Rm/Y0C4ulAOrpjWMCxARkkPhjEhweZ4zzLmh8WlRzPD1u3nnikEzmmsLLOjl55/0cX7q
+         iHd2HBP9IcAQB5JXMMA0yM38wgkXg5F5vQEyZB/0/z5egSRt9khEg/oS6WW8O7J+ofNb
+         Lrg9o+7uJpBVNv+QEYewY6Okig2iZRfkaYE+KIPpM+aWuc5zOYfbj7Hy6R0awrlbI1tW
+         B4JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Svs19TUafKQm/jCU2RrZAsQ5QwXjh0iyJjgadXLqin0=;
-        b=zIJZ8YlaySGzUOxwpG0x3XbhSkrYL9wKUJ0LzWTLfy8pVtS9ltOd2amrs9bzwo+L6F
-         apDXq/L0nXgLHg1rzWioluVLDAq0X0sCQVzJeturEXa47DyeF5vl+azZMRMVauKekbjz
-         A3dDANFgvfxWhlghcdZcwi7DT8AVxYdYmkA83vRoFxhsz2F9ofNu/p766tfMMPYOc11h
-         /vVsf4CYkVtieaaPTxHcrCfXZ9DF4ecyBv8sGChm1L/p3VT0Sgsc0ZH9sS8jyl9M2mA1
-         UkqGDA7+7Q4Jj+6H7AT+wtgIu4JRY4RPP7IL+dW0VxtT5S2mQ8IgQHyG7MWl/2iB3F5I
-         x4iA==
-X-Gm-Message-State: AOAM530r3WlLFhcwEFISfsGMy3H1DInVzzjqjOSF2LAOEjYNbOwiLRJK
-        6XiQsq0GYFlklOob5xAfxZfTgA==
-X-Google-Smtp-Source: ABdhPJxC4fnpXtuWpOkL3gqwzMGvaPHtdemOp/P9bcKS6MectCfQp1h+7v//HPZZb5PfpyIJ6nKnoA==
-X-Received: by 2002:a17:90b:384b:b0:1c7:41fd:9991 with SMTP id nl11-20020a17090b384b00b001c741fd9991mr12251421pjb.199.1649872802844;
-        Wed, 13 Apr 2022 11:00:02 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id k5-20020a17090ac50500b001cd5ffcca96sm1930645pjt.27.2022.04.13.11.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 11:00:01 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 11:59:59 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Daniel Baluta <daniel.baluta@oss.nxp.com>
-Cc:     linux-remoteproc@vger.kernel.org, bjorn.andersson@linaro.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        shengjiu.wang@nxp.com, daniel.baluta@gmail.com,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: Make rsc_table optional
-Message-ID: <20220413175959.GC547134@p14s>
-References: <20220331103237.340796-1-daniel.baluta@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331103237.340796-1-daniel.baluta@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=3UKcgaouWDljoBhDJNavl7iHJ9K4UWQ5k+7D01IUkUU=;
+        b=53XOC/3hJvcH1+aoJlfnctkmxcmlH7odjEwBH1P5CR7251MHuqdib7RcmA7LLKv7rk
+         oMs+wxAdDMhi8hlM4R7+iQqOoHDUQl/RNjBntbvOxcbJpKXnFKm3Wp9+ucdXzobIA5C6
+         lvGT81lM2xi73nChkwRzIb7aVdB/I2mc9CukhQ5c7xUrwNQ95QUmlKlZnQYZJqFHwkET
+         jUPfhaJT30af/8qBFov54g9wLdnWejiBk6jA3UVW8+cMC09clQldlQFgrhBRpXGpCbJ6
+         MzU4w6r/2fidvBhd8CRRTIj460kMO04Mf6A2KXY6GzvhtYRom7R1qllaDnmcy37RlYgO
+         Kh3w==
+X-Gm-Message-State: AOAM533+M3ZdJfQ1Tsxe9BriPh8cW7HM5Jpl0dh5XPfp9zbF5Pvl0VoW
+        75s71BWrhFfotYJWL0xrru+znJogqy4VY2vjUPssypP6yUO6DdPQG8dhIRgschNQ2jLWwdzPdD/
+        m9Cu5f9Lyr1Wima0CB+pKIO/emwwHhp3auqHol4KvxUM2fkkb3EWlnFplcx7KyK6xJm0/h526
+X-Google-Smtp-Source: ABdhPJxEgv3bZO/MXBspajYZ97mvWEzxbBffsN8qoEnCjAE++uaayaerZdHkHynBoa07zL4ad89k0EzRJ/Ns
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:c087:f2f2:f5f0:f73])
+ (user=bgardon job=sendgmr) by 2002:a05:6a00:22c7:b0:505:9c6e:de39 with SMTP
+ id f7-20020a056a0022c700b005059c6ede39mr23398922pfj.79.1649872804260; Wed, 13
+ Apr 2022 11:00:04 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 10:59:43 -0700
+In-Reply-To: <20220413175944.71705-1-bgardon@google.com>
+Message-Id: <20220413175944.71705-10-bgardon@google.com>
+Mime-Version: 1.0
+References: <20220413175944.71705-1-bgardon@google.com>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v5 09/10] KVM: selftests: Factor out calculation of pages
+ needed for a VM
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Factor out the calculation of the number of pages needed for a VM to
+make it easier to separate creating the VM and adding vCPUs.
 
-On Thu, Mar 31, 2022 at 01:32:37PM +0300, Daniel Baluta wrote:
-> From: Daniel Baluta <daniel.baluta@nxp.com>
-> 
-> There are cases when we want to test a simple "hello world"
-> app on the DSP and we do not need a resource table.
-> 
-> remoteproc core allows us having an optional rsc_table.
-> 
-> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 2abee78df96e..987ab1add761 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -802,6 +802,14 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
->  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
->  }
->  
-> +static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-> +{
-> +	if (rproc_elf_load_rsc_table(rproc, fw))
-> +		dev_warn(&rproc->dev, "no resource table found for this firmware\n");
-> +
-> +	return 0;
-> +}
-> +
->  static const struct rproc_ops imx_dsp_rproc_ops = {
->  	.prepare	= imx_dsp_rproc_prepare,
->  	.unprepare	= imx_dsp_rproc_unprepare,
-> @@ -809,7 +817,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
->  	.stop		= imx_dsp_rproc_stop,
->  	.kick		= imx_dsp_rproc_kick,
->  	.load		= imx_dsp_rproc_elf_load_segments,
-> -	.parse_fw	= rproc_elf_load_rsc_table,
-> +	.parse_fw	= imx_dsp_rproc_parse_fw,
+Signed-off-by: Ben Gardon <bgardon@google.com>
+---
+ .../selftests/kvm/include/kvm_util_base.h     |  4 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 59 ++++++++++++++-----
+ 2 files changed, 47 insertions(+), 16 deletions(-)
 
-Applied.
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 001b55ae25f8..1dac3c6607f1 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -312,6 +312,10 @@ vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+ 			      vm_paddr_t paddr_min, uint32_t memslot);
+ vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm);
+ 
++uint64_t vm_pages_needed(enum vm_guest_mode mode, uint32_t nr_vcpus,
++			 uint64_t slot0_mem_pages, uint64_t extra_mem_pages,
++			 uint32_t num_percpu_pages);
++
+ /*
+  * Create a VM with reasonable defaults
+  *
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index d332f02370d1..5ffed44ab328 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -377,7 +377,7 @@ struct kvm_vm *vm_create_without_vcpus(enum vm_guest_mode mode, uint64_t pages)
+ }
+ 
+ /*
+- * VM Create with customized parameters
++ * Get the number of pages needed for a VM
+  *
+  * Input Args:
+  *   mode - VM Mode (e.g. VM_MODE_P52V48_4K)
+@@ -385,27 +385,17 @@ struct kvm_vm *vm_create_without_vcpus(enum vm_guest_mode mode, uint64_t pages)
+  *   slot0_mem_pages - Slot0 physical memory size
+  *   extra_mem_pages - Non-slot0 physical memory total size
+  *   num_percpu_pages - Per-cpu physical memory pages
+- *   guest_code - Guest entry point
+- *   vcpuids - VCPU IDs
+  *
+  * Output Args: None
+  *
+  * Return:
+- *   Pointer to opaque structure that describes the created VM.
+- *
+- * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K),
+- * with customized slot0 memory size, at least 512 pages currently.
+- * extra_mem_pages is only used to calculate the maximum page table size,
+- * no real memory allocation for non-slot0 memory in this function.
++ *   The number of pages needed for the VM.
+  */
+-struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
+-				    uint64_t slot0_mem_pages, uint64_t extra_mem_pages,
+-				    uint32_t num_percpu_pages, void *guest_code,
+-				    uint32_t vcpuids[])
++uint64_t vm_pages_needed(enum vm_guest_mode mode, uint32_t nr_vcpus,
++			 uint64_t slot0_mem_pages, uint64_t extra_mem_pages,
++			 uint32_t num_percpu_pages)
+ {
+ 	uint64_t vcpu_pages, extra_pg_pages, pages;
+-	struct kvm_vm *vm;
+-	int i;
+ 
+ 	/* Force slot0 memory size not small than DEFAULT_GUEST_PHY_PAGES */
+ 	if (slot0_mem_pages < DEFAULT_GUEST_PHY_PAGES)
+@@ -421,11 +411,48 @@ struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
+ 	extra_pg_pages = (slot0_mem_pages + extra_mem_pages + vcpu_pages) / PTES_PER_MIN_PAGE * 2;
+ 	pages = slot0_mem_pages + vcpu_pages + extra_pg_pages;
+ 
++	pages = vm_adjust_num_guest_pages(mode, pages);
++
++	return pages;
++}
++
++/*
++ * VM Create with customized parameters
++ *
++ * Input Args:
++ *   mode - VM Mode (e.g. VM_MODE_P52V48_4K)
++ *   nr_vcpus - VCPU count
++ *   slot0_mem_pages - Slot0 physical memory size
++ *   extra_mem_pages - Non-slot0 physical memory total size
++ *   num_percpu_pages - Per-cpu physical memory pages
++ *   guest_code - Guest entry point
++ *   vcpuids - VCPU IDs
++ *
++ * Output Args: None
++ *
++ * Return:
++ *   Pointer to opaque structure that describes the created VM.
++ *
++ * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K),
++ * with customized slot0 memory size, at least 512 pages currently.
++ * extra_mem_pages is only used to calculate the maximum page table size,
++ * no real memory allocation for non-slot0 memory in this function.
++ */
++struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
++				    uint64_t slot0_mem_pages, uint64_t extra_mem_pages,
++				    uint32_t num_percpu_pages, void *guest_code,
++				    uint32_t vcpuids[])
++{
++	uint64_t pages;
++	struct kvm_vm *vm;
++	int i;
++
+ 	TEST_ASSERT(nr_vcpus <= kvm_check_cap(KVM_CAP_MAX_VCPUS),
+ 		    "nr_vcpus = %d too large for host, max-vcpus = %d",
+ 		    nr_vcpus, kvm_check_cap(KVM_CAP_MAX_VCPUS));
+ 
+-	pages = vm_adjust_num_guest_pages(mode, pages);
++	pages = vm_pages_needed(mode, nr_vcpus, slot0_mem_pages,
++				extra_mem_pages, num_percpu_pages);
+ 
+ 	vm = vm_create_without_vcpus(mode, pages);
+ 
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-Thanks,
-Mathieu
-
->  	.sanity_check	= rproc_elf_sanity_check,
->  	.get_boot_addr	= rproc_elf_get_boot_addr,
->  };
-> -- 
-> 2.27.0
-> 

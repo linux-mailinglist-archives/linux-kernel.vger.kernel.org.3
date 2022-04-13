@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DDD500009
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F36950000E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237455AbiDMUgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S236510AbiDMUjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiDMUgl (ORCPT
+        with ESMTP id S229624AbiDMUji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:36:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242C86156
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:34:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id u19so5632151lff.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:34:19 -0700 (PDT)
+        Wed, 13 Apr 2022 16:39:38 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9124CD67
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:37:16 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c23so2977851plo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v/vz88+MzPaF9+gxdJjGj9X24km3lwGNweK9uHwzCBE=;
-        b=LcP3wgBirZj9Ean8yRjuduXu8kcCP+8ZJJviSlkM0WcUGQVUW9r3Beube3Q/w8167U
-         fnHJSfeViDL5ZLnwl2lHsNXTGGa/t9CWxXeKtalepowghtRZk9bEIHwhvd5q5oqJpLm7
-         VVFbNA4biJ541tbDKQ8QEPuLizcbl8zNut09yKmxiQc+gdabofYoBL8Nt/FWJIgzbD3c
-         LFVVIa5vbG8JX4fcNjf73J6MyM+b4z/Cv/+MN08wa8Qnp9GrySucokoF6dA9F2VSPVwp
-         +5jQn+c2Oe42MgA5kJyoh+SlTHli796o4nSdsTdXLAhnhdgJ8nRebGXKgVWJ73xQo/im
-         61zw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=561d3TuyxJYJX7jFDENACAIZB9UHFv2jKUtYOnNdzJ4=;
+        b=oPjHfRmAUcTkgs3S/vhHe/NXTBQmMsN9zz5JgSjKDYozfGoNBLUV/gjOx01FaHjdvG
+         ntLT9uab+PHEbd/g+NDXdx3BwDf3OmH8YesnWLiPc/4Cqn9cGDr3JvzOIdx1bH6/QCWe
+         mO9LwMxm92L+k1bxGIBgg/DVnnQD3b//KFCjg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v/vz88+MzPaF9+gxdJjGj9X24km3lwGNweK9uHwzCBE=;
-        b=ygWSNs4dhkYNi4w2InDxrEOpAbyqDNzdT1M3+VwGf9TSBTILCUKiqvqoshZ3rnLjxt
-         lVZq+zbOeBiAw9KfUyRwbadZrpC1bJJ68z3zHcW66JvGZGc5SWoCrLVf1WCXLVkQ1Go/
-         ILHc3vaOp4fU0n/Gad52FGRftc0fu0ZxD8yWKkEzV4chURfeDc35gPtCJhv8aM6/7sww
-         UpivK0mD8twGlUetpA6jx/3dOrR77ypi6Ysxv26vKyCfh44l6wLtNgCPfv/EGjtB4jST
-         dEc9dwKdSTRAy8tYZCu1YnfRrIakRrOPb5+SCzvd/2FfcCnzQN2wI/WnEMDpX4L6zek9
-         xPqg==
-X-Gm-Message-State: AOAM531IeUFjmZ7a6lbdaADIhC0g65JexTr7oXiWhZdsfE8XQKflsq0U
-        RdT9ZmXpWNEa/mYabOunLJU=
-X-Google-Smtp-Source: ABdhPJxN01CWnr32DOv6C3yB1Nh97ZYIuWrEWuN2tQ9CtSTD4i8eVnP0H+vGx/FX7bTWphFt6EEtuQ==
-X-Received: by 2002:a05:6512:1322:b0:44b:75d:ac8 with SMTP id x34-20020a056512132200b0044b075d0ac8mr28290383lfu.213.1649882057138;
-        Wed, 13 Apr 2022 13:34:17 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.17])
-        by smtp.gmail.com with ESMTPSA id e18-20020a196752000000b0046b8d3cd18csm2754lfj.55.2022.04.13.13.34.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=561d3TuyxJYJX7jFDENACAIZB9UHFv2jKUtYOnNdzJ4=;
+        b=IDQUx46aoAP/KQePgXxgDqvU2Pc53JrQw34Z04IQ7gcJjO01oJbTacQNCXA0j3p5WL
+         cKP7++lEn7nOATbdL6b8s8xKOK8hiqMv4UjCEASJe2kK5clY33ti9KM7/7Uh1z2gvMJy
+         wthWiRKM7s7bjK+8bqsA9XF3OdzzNJf7cagMYGhCRolppSGPo40EhwV7m5LrwpnllPs7
+         h08FQrA8RFdvojm3H3BnsZwE1Suo7o+3zHwSdpVaumr4cppVZR4RJlL2YNJ3QSbmEhxE
+         Wd2aNlyYgO0WIr/NIivuU6jwlEUHtFVVZFRaTx/fY+1tcpaXMIw0HjxPhDks4z8XxVGP
+         woVg==
+X-Gm-Message-State: AOAM533gOLGp/4JuyyA9nSW7UVVLG5c3tTwXkSmaovFZvqtDX5S2uTSF
+        pYrlsdTTuwTJ3UC4r1ZmaNfGGQ==
+X-Google-Smtp-Source: ABdhPJxlS6V+yaBYXnD7Ck6dhm8oz9vcrEy+zm2UNOOBnri1Nu+76MZmLzBqdBHOJi+YIOix36X8cQ==
+X-Received: by 2002:a17:902:d051:b0:158:5910:d67a with SMTP id l17-20020a170902d05100b001585910d67amr18105963pll.15.1649882235801;
+        Wed, 13 Apr 2022 13:37:15 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6a4f:9277:743f:c648])
+        by smtp.gmail.com with UTF8SMTPSA id n20-20020a634d54000000b0039d18bf7864sm6666996pgl.20.2022.04.13.13.37.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 13:34:16 -0700 (PDT)
-Message-ID: <e32f1f61-127c-3e90-0f06-7b60cdca9ef7@gmail.com>
-Date:   Wed, 13 Apr 2022 23:34:14 +0300
+        Wed, 13 Apr 2022 13:37:14 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 13:37:13 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v7 3/4] arm64: dts: qcom: sc7280: Add lpass cpu node
+Message-ID: <Ylc0eYIXnLZMybp6@google.com>
+References: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649863277-31615-4-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5/6] staging: r8188eu: replace spaces with tabs
-Content-Language: en-US
-To:     Jaehee Park <jhpark1013@gmail.com>, Larry.Finger@lwfinger.net
-Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-References: <cover.1649880454.git.jhpark1013@gmail.com>
- <c2d719eba2a374be573034022218a098e4db9e77.1649880454.git.jhpark1013@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <c2d719eba2a374be573034022218a098e4db9e77.1649880454.git.jhpark1013@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1649863277-31615-4-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaehee,
-
-On 4/13/22 23:11, Jaehee Park wrote:
-> Use tabs instead of spaces. Issue found with checkpatch.
-> WARNING: suspect code indent for conditional statements
+On Wed, Apr 13, 2022 at 08:51:16PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add lpass cpu node for audio on sc7280 based platforms.
 > 
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> ---
->   drivers/staging/r8188eu/core/rtw_mlme.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-> index b943fb190e4c..7a90fe826d1d 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> @@ -722,7 +722,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
->   			pmlmepriv->to_join = false;
->   			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
->   			if (s_ret == _SUCCESS) {
-> -			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
-> +				_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
->   			} else if (s_ret == 2) { /* there is no need to wait for join */
->   				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
->   				rtw_indicate_connect(adapter);
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
-Not related to your patch, but looks like `s_ret` can't be 2.
-
-rtw_select_and_join_from_scanned_queue
-
-   rtw_joinbss_cmd
-
-     rtw_enqueue_cmd
-       _rtw_enqueue_cmd <- always returns SUCCESS
-
-
-Other functions from calltrace may return _FAIL, but _FAIL is not equal 
-2, right?
-
-
-
-With regards,
-Pavel Skripkin
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

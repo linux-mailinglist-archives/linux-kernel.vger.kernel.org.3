@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6734FEFE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2154FEFE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiDMGhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S232726AbiDMGiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbiDMGhy (ORCPT
+        with ESMTP id S232348AbiDMGiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:37:54 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E70831924
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id l7so1925521ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:34 -0700 (PDT)
+        Wed, 13 Apr 2022 02:38:20 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7324D9EB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id i27so1864119ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nHozlyZgApPoTh4m5wIyFuBKBguRcJ5lguy2Gn/96+U=;
-        b=Ekj30wKjfsZPLwckVPcpm3PbVUQWKAaOCkOwmj7voUniwIOS3Zh1JmlDQWnPs1W6cD
-         aFfpLwWKsLumVa/eOswIYAeTN0SPolT3mS/We/9YlB1zEje/T64PvdVJxbeeHcTZ0/nx
-         SiYftxNYntYLINvZ9K2/vn4eGXMzPjsolO0FDsvGkcwtHekq8QFrcjKJ3KybSZbMS3GW
-         z9NSOXbKR7B6Te5+1PEQRRVQbzS+d8zRnqoVw9o+cfcVb4lSNvkDcpGlHFCHCQRrswgl
-         E2qgk0oPxCyvg9ShCShXZ6s9JKRpGZt2oNjvt41jrCVf+L1ZrfA8hIdn8+DM6X3av6J2
-         /wlg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Xj3NkHVQDUDdPGRvpYOra85n0Y6fiRtoa7goWufEXwA=;
+        b=IipliNokdRI0CsxMkUB9sqMWtAmv4DupWgoqxkLCSQ74xweyTK8fAwpOQVUumnb/Ps
+         RbAND6snNPJ7LjU/cKI5mR1LHnBUScPIBtY1b9LdXQZr8nXcWSAg0bah4x94O0YrRguF
+         BlgBtqBl147T4yDft3Oi7PchBTm7tXtUXSSa5S/jJTyk1L5nTAxYZT8i7KWkdZjqe6k1
+         b7FxseDFhrdniTXrMTxGi/M0yuAxT5BJf4vhhg0uuqugoY/e/ExjL0moavcwzT9WBD+R
+         0gAON8z7M3iIoccFr1CaYoVF89IfYGaExxy0PMKlakNuyAA2u35aswmnNaQ3TLB3YkpD
+         9N8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nHozlyZgApPoTh4m5wIyFuBKBguRcJ5lguy2Gn/96+U=;
-        b=S8hR88mhoBz0Vld09kg5HQPZ5EXzJNibkQFlV0qdF87pZe+8oaawBc/lUNqN2BwhGL
-         bCki1viA/+6z6Ut0zo+UGKPMy8Fyx3oJRkEHUkMdNGwaSoJlol06sMnKTqMJfTIgVkCs
-         99YTXMghwYRXcVujmV878WxekoJFRKk53IvtJ0uG7IgnSj4BlPKNsTgEe/GRIM6w7nz8
-         9HtiJL7BsjqMgOTPivyC4LjlPjJ/xvoXFTNwP81dfdoXVhx8rxLdkCnGGdQySSmojFKY
-         /mbrhdeBfYvTP/s9zJ1SGVa7G2uv2UAKyXLWEQQSGXztzS0h9K27ts0ZZ/z6R02cfxbe
-         v44g==
-X-Gm-Message-State: AOAM530iN/HuUhrxmzlegqyXDRC9t3ILs+I3V/2DDOt6fYuA/+kk4ROO
-        /t1mvM+ptuehNWQYUem3yqQMzA==
-X-Google-Smtp-Source: ABdhPJxsBQxfnY0nU7wbr7a8DqG4+vez5xl2Ri9fVBpj76nlBEtpUYuFPwxSFnr57UUnlKtNcLdOMw==
-X-Received: by 2002:a17:906:8497:b0:6e8:89e1:e4f0 with SMTP id m23-20020a170906849700b006e889e1e4f0mr13673990ejx.61.1649831732867;
-        Tue, 12 Apr 2022 23:35:32 -0700 (PDT)
-Received: from [192.168.0.201] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dd6-20020a1709069b8600b006df08710d00sm14091202ejc.85.2022.04.12.23.35.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 23:35:32 -0700 (PDT)
-Message-ID: <7d2128bb-2d60-ba5b-bb70-6a2d5116e20d@linaro.org>
-Date:   Wed, 13 Apr 2022 08:35:31 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Xj3NkHVQDUDdPGRvpYOra85n0Y6fiRtoa7goWufEXwA=;
+        b=KREFPxmTF7be6s/Ld8+fSmmYVg6srQNh2RHYsuAvfbOQky+NrdnqTD34mOrAsoY6qr
+         1BAyKgRzGyKRS9by9YqRvJER1rPoFUmpuGGznmVxN5tulML75xHqcmoQ2VRj5inJOBOX
+         o9DHjZ99WSUqc4WSbs5VxskB+z1unWyef5YR+BaXDTm2MT7igiKlouObGjvdM0KQsWf7
+         k+2ag40oMGSaft6nWAz4c/A6ts2bKcqoUQIRW+YtTPOGcLRcMTGcJkC5oxeGTS/KJ2oV
+         Hiso23BBa5EOWsHlGalQTysc+FUlAQlvHkRTBLqST0eWM46mv/UO/fWgC3dHl4aENXNQ
+         eN+g==
+X-Gm-Message-State: AOAM531RXgEBnThDx7N38doYQAs7AheUZeemFArnEfHzCAu5h57Y1DvC
+        tUBy6N5FPIfbjh6l9gntcNM=
+X-Google-Smtp-Source: ABdhPJx/w+TNTuJBwku63yNpMxP+dSA7e5/ZFjDNFqRpJ4GmK5rwDjIRug4tZCtYGSnIImjhTWm1dw==
+X-Received: by 2002:a17:906:1f11:b0:685:d50e:3bf9 with SMTP id w17-20020a1709061f1100b00685d50e3bf9mr39244987ejj.275.1649831758439;
+        Tue, 12 Apr 2022 23:35:58 -0700 (PDT)
+Received: from leap.localnet (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id s2-20020a1709066c8200b006e4e1b1f875sm13226169ejr.199.2022.04.12.23.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 23:35:57 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     johan@kernel.org, Jaehee Park <jhpark1013@gmail.com>,
+        elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] staging: greybus: remove unneeded return
+Date:   Wed, 13 Apr 2022 08:35:55 +0200
+Message-ID: <6300782.K2JlShyGXD@leap>
+In-Reply-To: <alpine.DEB.2.22.394.2204130815020.3470@hadrien>
+References: <cover.1649793138.git.jhpark1013@gmail.com> <5792471.alqRGMn8q6@leap> <alpine.DEB.2.22.394.2204130815020.3470@hadrien>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v13 2/9] dt-bindings: reset: Add bindings for SP7021 reset
- driver
-Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1649659095.git.qinjian@cqplus1.com>
- <11b8f60a7f19f25d2fdaa7a2ed770e9383cec3ba.1649659095.git.qinjian@cqplus1.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <11b8f60a7f19f25d2fdaa7a2ed770e9383cec3ba.1649659095.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 08:49, Qin Jian wrote:
-> Add documentation to describe Sunplus SP7021 reset driver bindings.
-> 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
+On mercoled=EC 13 aprile 2022 08:16:20 CEST Julia Lawall wrote:
+>=20
+> On Tue, 12 Apr 2022, Fabio M. De Francesco wrote:
+>=20
+> > On marted=EC 12 aprile 2022 21:59:15 CEST Jaehee Park wrote:
+> > > An empty function with void return type does not need an explicit
+> > > return. Issue found by checkpatch.
+> > >
+> > > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> > > ---
+> > >  drivers/staging/greybus/audio_codec.c | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > >
+> > > diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/
+> > greybus/audio_codec.c
+> > > index 0f50d1e51e2c..3e3a16568def 100644
+> > > --- a/drivers/staging/greybus/audio_codec.c
+> > > +++ b/drivers/staging/greybus/audio_codec.c
+> > > @@ -1032,7 +1032,6 @@ static int gbcodec_probe(struct=20
+snd_soc_component
+> > *comp)
+> > >  static void gbcodec_remove(struct snd_soc_component *comp)
+> > >  {
+> > >  	/* Empty function for now */
+> > > -	return;
+> > >  }
+> > >
+> > >  static int gbcodec_write(struct snd_soc_component *comp, unsigned=20
+int
+> > reg,
+> > > --
+> > > 2.25.1
+> > >
+> > Hi Jaehee,
+> >
+> > If I recall it correctly, Dan Carpenter suggested to remove this empty
+> > function.
+> >
+> > When developers remove lines of code from a function which becomes=20
+empty
+> > after the removals, they also remove the resulting empty function and
+> > delete all the calls (if there are any left) at the same time.
+>=20
+> It's probably not relevant in this case,=20
+
+No, it's relevant :)
+I should have been more exhaustive :(
+
+> but the function could be needed
+> if it is a branch of an ifdef.  Also if it is stored in a structure field
+> and the user of the structure does not check for NULL.
+
+Here we have one of special cases you've mentioned. The pointer to the=20
+function is stored in a structure field _but_ we know that the user does=20
+check for NULL.
+
+Thanks,
+
+=46abio
+
+> julia
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-Best regards,
-Krzysztof

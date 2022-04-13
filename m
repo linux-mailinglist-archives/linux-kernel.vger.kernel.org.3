@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E634FEE59
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 06:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0B14FEE58
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 06:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiDMEqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 00:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S232322AbiDMEqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 00:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiDMEqE (ORCPT
+        with ESMTP id S230030AbiDMEp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 00:46:04 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DEB31DDD;
-        Tue, 12 Apr 2022 21:43:44 -0700 (PDT)
+        Wed, 13 Apr 2022 00:45:58 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1107C31DDD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:43:39 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id x20so767255qvl.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649825025; x=1681361025;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=Euy5GyMcnB1dcHLsisZMhR4czkWWcNeX4uR3GjmBfcw=;
-  b=rV2BuH1Ma1k9AJGdycvPbJY6qE7b8Kib/9XNR5Yl9XJ0aL6PeOavKTyE
-   63wHEjHDTy0Uhwn2PsSY+h/wSZzrfScVFfuBGHDYxwOwZi0QuQtX8l40o
-   zAyvKDwKfB6YJqZpx3xB3MUGDZHZ70KDq2cX7yg1Sr4JOBCY4zEU469iV
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Apr 2022 21:43:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 21:43:44 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 21:43:24 -0700
-Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 21:43:21 -0700
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-To:     <tony@atomide.com>, <paul@pwsan.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Rajendra Nayak" <quic_rjendra@quicinc.com>
-Subject: [PATCH] MAINTAINERS: omap: remove me as a maintainer
-Date:   Wed, 13 Apr 2022 10:13:03 +0530
-Message-ID: <1649824983-29400-1-git-send-email-quic_rjendra@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gnkQTImgRI33ZK9OLchOQ7aSmw/PhVSRrhu3fSy1iZg=;
+        b=ZbhMUPy/EyrDGrM+JVic57mbguSyqn8G8Rwc7zn8E61maWR3oiagoyf8rAjX/7Uozl
+         Cd1EiMK4VDMIbXIUwW6x8t+LF8rsPa0TN5D7EfHBT/Tz//MiFlPESnttplGTxEP+ywUf
+         7RzqyzMDpLCJ0Ljh+ygk7+RpUeYxt5FS7p+fxmP0cjRhdwcvN4o2eqL8LlwN/jg28Epc
+         tI0xiSnl0uPkK5uJdeukoRYwdcleTChcRrpCFR2hMyLgKuc8S9rsnf51euicPsxb6GGQ
+         Rqz6FuiNXgSz8/d2WXTpgKfqZ7syScZWjjopuL0Ddz+VsKc6FpWg1y2htQww0gPUurNE
+         mvsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gnkQTImgRI33ZK9OLchOQ7aSmw/PhVSRrhu3fSy1iZg=;
+        b=ivcf2ZBaYdcZL5i5SLqpDkmgu+Ymk0SqFHY0309FgOZoQmvc0lQFY3Byoy8PYqfip5
+         PqrDF5fcIYJZs3Uzyju08aiTCZZwQSqOjDFypHRIsd9JY8qWdMSnZ/b9/dwiIUYOPUis
+         zCIGSS2fSDdQJu4418j7Cq1F3RAbug4j8QHF+gceEpgANcJReQsH5byQ10KP4cbh5szw
+         1EnRbJ9xv+xHKFHPAycJLj5thi0R43GRRd+ei1WMq0O4tZkev51jpRsl6PFUt5mOBeZj
+         fXHX03Nz+hxOPrTXtQ7VJf8DG3OjHXN19iru4WK4wuOOMWGCvQMjcObfeI+eSMnACUl3
+         JSXA==
+X-Gm-Message-State: AOAM530nFaRBrdCCFQb4jz9q6u6z/Zw59HPV+W2IKvOC4N+Mz9Zc7cV+
+        gb/fEBHNz9JrhEkxWAE6DzA=
+X-Google-Smtp-Source: ABdhPJxs+8h3Jgf+36tQgod98PKxWlqrNNYr9BXOcfCTtP13Z6w5QMYbD22papvqA3pMx8K6v0z7Mg==
+X-Received: by 2002:ad4:4ee3:0:b0:444:3496:67cb with SMTP id dv3-20020ad44ee3000000b00444349667cbmr15826834qvb.91.1649825018242;
+        Tue, 12 Apr 2022 21:43:38 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme ([2607:fb90:50fb:900e:5e57:caff:f44b:33f4])
+        by smtp.gmail.com with ESMTPSA id z8-20020ac87f88000000b002e1cecad0e4sm28423346qtj.33.2022.04.12.21.43.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 21:43:37 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 00:43:34 -0400
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     Alex Elder <elder@ieee.org>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] staging: greybus: remove unneeded return
+Message-ID: <20220413044334.GA3357359@jaehee-ThinkPad-X1-Extreme>
+References: <cover.1649793138.git.jhpark1013@gmail.com>
+ <d4d01ecdabc492e52a3decebf165d1f584f3b3bf.1649793138.git.jhpark1013@gmail.com>
+ <a509099e-2b19-7a27-693c-b418bd2f7b28@ieee.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a509099e-2b19-7a27-693c-b418bd2f7b28@ieee.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The codeaurora.org domain is no longer valid, remove my id
-from the maintainers for OMAP PM frameworks.
-I haven't contributed to them in years, neither do I plan to
-in the future so not updating this with my new quicinc id.
+On Tue, Apr 12, 2022 at 03:35:04PM -0500, Alex Elder wrote:
+> On 4/12/22 2:59 PM, Jaehee Park wrote:
+> > An empty function with void return type does not need an explicit
+> > return. Issue found by checkpatch.
+> > 
+> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> 
+> Dan's suggestion here was to simply remove this function
+> entirely.  It is only used as the ->remove callback
+> for the soc_codec_dev_gbaudio structure.
+> 
+> You can see that soc_codec_dev_gbaudio is only used in the
+> call to devm_snd_soc_register_component() near the end of
+> "audio_codec.c".  When a sound component is registered
+> that way, the ->remove callback is optional.  You can see
+> that because the only place in "sound/soc/soc-component.c"
+> that it is referenced is snd_soc_component_remove() (as
+> Dan said), and it only calls the function if it the pointer
+> is non-null.  Allowing null function pointers in places
+> like this. to allow them to be optionally omitted is not
+> an uncommon pattern you'll see in the kernel.
+> 
+> Anyway, please don't just add another small patch to remove
+> the function.  Just replace *this* patch with one that
+> removes the function, and omits the assignment if its
+> address to soc_codec_dev_gbaudio->remove.
+> 
+> 					-Alex
 
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61d9f11..9dbadc8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14364,7 +14364,6 @@ F:	arch/arm/*omap*/*pm*
- F:	drivers/cpufreq/omap-cpufreq.c
+Hi Alex, Thank you for explaining where the functions are called from!
+It makes a lot more sense now. I've used your explanation for my patch
+log. Please let me know if I'm misunderstanding things. I've sent patch 
+v3 for your review. The first patch (typo patch) already has your 
+"review-by" -- thank you for the advice.
  
- OMAP POWERDOMAIN SOC ADAPTATION LAYER SUPPORT
--M:	Rajendra Nayak <rnayak@codeaurora.org>
- M:	Paul Walmsley <paul@pwsan.com>
- L:	linux-omap@vger.kernel.org
- S:	Maintained
--- 
-2.7.4
-
+Thanks,
+Jaehee
+> 
+> > ---
+> >   drivers/staging/greybus/audio_codec.c | 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
+> > index 0f50d1e51e2c..3e3a16568def 100644
+> > --- a/drivers/staging/greybus/audio_codec.c
+> > +++ b/drivers/staging/greybus/audio_codec.c
+> > @@ -1032,7 +1032,6 @@ static int gbcodec_probe(struct snd_soc_component *comp)
+> >   static void gbcodec_remove(struct snd_soc_component *comp)
+> >   {
+> >   	/* Empty function for now */
+> > -	return;
+> >   }
+> >   static int gbcodec_write(struct snd_soc_component *comp, unsigned int reg,
+> 

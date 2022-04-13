@@ -2,148 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44214FFA7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2BE4FFA85
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiDMPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S236642AbiDMPnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235084AbiDMPmx (ORCPT
+        with ESMTP id S229732AbiDMPnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:42:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A717541F8A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDCE61DA2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D28C385A8;
-        Wed, 13 Apr 2022 15:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649864430;
-        bh=aDZsnIu78Sw4wqXPmCkaYFfJvE/1m8bL+bjVG7Ns0wI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HMfsF5SappHXuWWV+oC6KDzHEsoUjuIe1WEm7lKyDHSbE/gwwYl6YSMf5LGLyz9J4
-         sTZuMuRJlmmzxQJU8Sn7/7uXyrnbVQzRkrLRr2pOM0iRN1nJ02sDBW8YJqP/5NZwA6
-         jxV+ggAxM9ReRFOEhmB/8m+gGJqCIiID9ySZ23pGb91PVXVyJvcB1CfBjpAOM+A9oF
-         4TWDPnUodyZ2+Oz3IhUxR+fWKjYHCLfJ47Hoj12Lws1ZLXdHvelLgVtvfUHmuaKRc8
-         FQkH9fCtw8FzrvC0lMj45loG1bAluE/YQIoq0koWg+4Fywp3SUSoGKqcyE71WiweC4
-         aB+yn0t2+4Llw==
-Date:   Wed, 13 Apr 2022 08:40:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Richard Gong <richard.gong@amd.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        xinhui.pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
- systems
-Message-ID: <Ylbu7OGHVaqnznQb@thelio-3990X>
-References: <20220412215000.897344-1-richard.gong@amd.com>
+        Wed, 13 Apr 2022 11:43:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76C1449CB2;
+        Wed, 13 Apr 2022 08:41:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42E681576;
+        Wed, 13 Apr 2022 08:41:29 -0700 (PDT)
+Received: from [10.57.8.248] (unknown [10.57.8.248])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81BA53F5A1;
+        Wed, 13 Apr 2022 08:41:27 -0700 (PDT)
+Message-ID: <a931a51f-ea43-846c-0075-086da283ad74@arm.com>
+Date:   Wed, 13 Apr 2022 16:41:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412215000.897344-1-richard.gong@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: use local ops instead of
+ global ops
+Content-Language: en-US
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        allwinner-opensource-support@allwinnertech.com,
+        Stable <stable@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Kant Fan <kant@allwinnertech.com>
+References: <20220325073030.91919-1-kant@allwinnertech.com>
+ <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
+ <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
+ <af2c9715-b085-ac84-22fe-c3f082f889a0@arm.com>
+In-Reply-To: <af2c9715-b085-ac84-22fe-c3f082f889a0@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
 
-On Tue, Apr 12, 2022 at 04:50:00PM -0500, Richard Gong wrote:
-> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-> There are some AMD GFX cards (such as WX3200 and RX640) that won't work
-> with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
-> video/display output, Intel Alder Lake based systems will hang during
-> suspend/resume.
+
+On 4/13/22 16:06, Lukasz Luba wrote:
 > 
-> The issue was initially reported on one system (Dell Precision 3660 with
-> BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
-> Lake based systems.
 > 
-> Add extra check to disable ASPM on Intel Alder Lake based systems.
+> On 4/13/22 15:58, Rafael J. Wysocki wrote:
+>> On Fri, Mar 25, 2022 at 10:02 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>> Hi Kant,
+>>>
+>>> On 3/25/22 07:30, Kant Fan wrote:
+>>>> Fix access illegal address problem in following condition:
+>>>> There are muti devfreq cooling devices in system, some of them has
+>>>> em model but other does not, energy model ops such as state2power will
+>>>> append to global devfreq_cooling_ops when the cooling device with
+>>>> em model register. It makes the cooling device without em model
+>>>> also use devfreq_cooling_ops after appending when register later by
+>>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>>>
+>>>> IPA governor regards the cooling devices without em model as a power 
+>>>> actor
+>>>> because they also have energy model ops, and will access illegal 
+>>>> address
+>>>> at dfc->em_pd when execute cdev->ops->get_requested_power,
+>>>> cdev->ops->state2power or cdev->ops->power2state.
+>>>>
+>>>> Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power 
+>>>> model and use EM")
+>>>> Cc: stable@vger.kernel.org # 5.13+
+>>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>>> ---
+>>>>    drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>>>    1 file changed, 18 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/thermal/devfreq_cooling.c 
+>>>> b/drivers/thermal/devfreq_cooling.c
+>>>> index 4310cb342a9f..d38a80adec73 100644
+>>>> --- a/drivers/thermal/devfreq_cooling.c
+>>>> +++ b/drivers/thermal/devfreq_cooling.c
+>>>> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct 
+>>>> device_node *np, struct devfreq *df,
+>>>>        struct thermal_cooling_device *cdev;
+>>>>        struct device *dev = df->dev.parent;
+>>>>        struct devfreq_cooling_device *dfc;
+>>>> +     struct thermal_cooling_device_ops *ops;
+>>>>        char *name;
+>>>>        int err, num_opps;
+>>>>
+>>>> -     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>>>> -     if (!dfc)
+>>>> +     ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+>>>> +     if (!ops)
+>>>>                return ERR_PTR(-ENOMEM);
+>>>>
+>>>> +     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>>>> +     if (!dfc) {
+>>>> +             err = -ENOMEM;
+>>>> +             goto free_ops;
+>>>> +     }
+>>>> +
+>>>>        dfc->devfreq = df;
+>>>>
+>>>>        dfc->em_pd = em_pd_get(dev);
+>>>>        if (dfc->em_pd) {
+>>>> -             devfreq_cooling_ops.get_requested_power =
+>>>> +             ops->get_requested_power =
+>>>>                        devfreq_cooling_get_requested_power;
+>>>> -             devfreq_cooling_ops.state2power = 
+>>>> devfreq_cooling_state2power;
+>>>> -             devfreq_cooling_ops.power2state = 
+>>>> devfreq_cooling_power2state;
+>>>> +             ops->state2power = devfreq_cooling_state2power;
+>>>> +             ops->power2state = devfreq_cooling_power2state;
+>>>>
+>>>>                dfc->power_ops = dfc_power;
+>>>>
+>>>> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct 
+>>>> device_node *np, struct devfreq *df,
+>>>>        if (!name)
+>>>>                goto remove_qos_req;
+>>>>
+>>>> -     cdev = thermal_of_cooling_device_register(np, name, dfc,
+>>>> -                                               &devfreq_cooling_ops);
+>>>> +     cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+>>>>        kfree(name);
+>>>>
+>>>>        if (IS_ERR(cdev)) {
+>>>> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct 
+>>>> device_node *np, struct devfreq *df,
+>>>>        kfree(dfc->freq_table);
+>>>>    free_dfc:
+>>>>        kfree(dfc);
+>>>> +free_ops:
+>>>> +     kfree(ops);
+>>>>
+>>>>        return ERR_PTR(err);
+>>>>    }
+>>>> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>>>>    void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>>>    {
+>>>>        struct devfreq_cooling_device *dfc;
+>>>> +     const struct thermal_cooling_device_ops *ops;
+>>>>        struct device *dev;
+>>>>
+>>>>        if (IS_ERR_OR_NULL(cdev))
+>>>>                return;
+>>>>
+>>>> +     ops = cdev->ops;
+>>>>        dfc = cdev->devdata;
+>>>>        dev = dfc->devfreq->dev.parent;
+>>>>
+>>>> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct 
+>>>> thermal_cooling_device *cdev)
+>>>>
+>>>>        kfree(dfc->freq_table);
+>>>>        kfree(dfc);
+>>>> +     kfree(ops);
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+>>>
+>>>
+>>> Thank you for updating it, LGTM
+>>>
+>>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>>
+>> Applied as 5.19 material.
+>>
+>> Lukasz, this had a conflict with your EM series, please double check
+>> if my resolution in the bleeding-edge branch is correct.
 > 
-> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Richard Gong <richard.gong@amd.com>
-> ---
-> v4: s/CONFIG_X86_64/CONFIG_X86
->     enhanced check logic
-> v3: s/intel_core_asom_chk/aspm_support_quirk_check
->     correct build error with W=1 option
-> v2: correct commit description
->     move the check from chip family to problematic platform
-> ---
->  drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-> index 039b90cdc3bc..b33e0a9bee65 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-> @@ -81,6 +81,10 @@
->  #include "mxgpu_vi.h"
->  #include "amdgpu_dm.h"
->  
-> +#if IS_ENABLED(CONFIG_X86)
-> +#include <asm/intel-family.h>
-> +#endif
-> +
->  #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
->  #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
->  #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
-> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
->  		WREG32_PCIE(ixPCIE_LC_CNTL, data);
->  }
->  
-> +static bool aspm_support_quirk_check(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_X86)) {
-> +		struct cpuinfo_x86 *c = &cpu_data(0);
-> +
-> +		return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-> +	}
+> OK, I'll let you know after I fetch and build that branch.
 
-I have not seen this reported by a bot, sorry if it is a duplicate. This
-breaks non-x86 builds (arm64 allmodconfig for example):
+I've read the code and confirm you've do this correctly.
+I've also built that branch with ENERGY_MODEL and DEVFREQ_COOLING
+configs set - no issues observed.
+Later this week I would use it for some other development
+so I will test it as well.
 
-drivers/gpu/drm/amd/amdgpu/vi.c:1144:28: error: implicit declaration of function 'cpu_data' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                struct cpuinfo_x86 *c = &cpu_data(0);
-                                         ^
-drivers/gpu/drm/amd/amdgpu/vi.c:1144:27: error: cannot take the address of an rvalue of type 'int'
-                struct cpuinfo_x86 *c = &cpu_data(0);
-                                        ^~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/vi.c:1146:13: error: incomplete definition of type 'struct cpuinfo_x86'
-                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-                         ~^
-drivers/gpu/drm/amd/amdgpu/vi.c:1144:10: note: forward declaration of 'struct cpuinfo_x86'
-                struct cpuinfo_x86 *c = &cpu_data(0);
-                       ^
-drivers/gpu/drm/amd/amdgpu/vi.c:1146:28: error: incomplete definition of type 'struct cpuinfo_x86'
-                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-                                        ~^
-drivers/gpu/drm/amd/amdgpu/vi.c:1144:10: note: forward declaration of 'struct cpuinfo_x86'
-                struct cpuinfo_x86 *c = &cpu_data(0);
-                       ^
-drivers/gpu/drm/amd/amdgpu/vi.c:1146:43: error: use of undeclared identifier 'INTEL_FAM6_ALDERLAKE'
-                return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-                                                        ^
-5 errors generated.
+Thank you for solving this!
 
-'struct cpuinfo_x86' is only defined for CONFIG_X86 so this section
-needs to guarded with the preprocessor, which is how it was done in v2.
-Please go back to that.
-
-Cheers,
-Nathan
+Regards,
+Lukasz

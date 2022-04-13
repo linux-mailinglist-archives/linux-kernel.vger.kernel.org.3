@@ -2,292 +2,566 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DAC4FF87C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF3F4FF88C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbiDMOG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S236031AbiDMOIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbiDMOGr (ORCPT
+        with ESMTP id S234119AbiDMOIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:06:47 -0400
-Received: from IND01-MA1-obe.outbound.protection.outlook.com (mail-ma1ind01olkn0165.outbound.protection.outlook.com [104.47.100.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289976252;
-        Wed, 13 Apr 2022 07:04:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SIvilzrEY241uDTNww0fc9FFvbFhM7mvD5zqb7LSXcppwHIhRr9cj485KeA4r9VRYzt4n2WEfVGehs8ExnZHfFNThpGmQeP781r3kFB+8TFo/VgWK+R5anboy5YYEArbWsdJ8jBYBvA1189cThK0TTiwju70wXiNLNaTDGOHG0ozDS7Hu2U37dr840HMlT00zo1MlUUjnVy18ZeLHPPrf5/T9039XeJaczfbLpE5sAgFzvMs2pc6lqP0+i7TepO47Lc08cTS54+qqTjO4UfnKBWwHiyBhYEc2ElwTrKZFJd3Uz8WnqMJGi4njKf+caCc4tq/EMRe9heeezfdw1EoJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ApuCERXhLlrcIvk22sjEpQJAbjQii2yMS3hHqTWR9+Y=;
- b=bnp5dxIrtEc1DLnfFLJLJ29UWoTbJuxlM7TGe1dwYIV65Q2mm02Doe3t8afvwk9LpmvjGG6puSBFoW7uWZzgFqKMPlAUtckYYGBCbxcfVRTjNBOv4ywAP+LwfMCeU3y4tjxDM4yNUtu1HWiQMR9rNZIs2CK45MbkOCiAE6t2pCacqB0vT1U2jWEt37TtW0y9drHikYwLSJZuGUGIsUTh8u99ZDa4n6DRWwoQ9IdHqGADm5/zDMt/LIcOg7Pqf3ogRfWm4USJFGAW3YKQJQAPsOF/dZaY8yIQC5ro6CPIlc0W6kJTqGnnOQX72C4bymXRgrao3n604oBmp/ArPcv8IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ApuCERXhLlrcIvk22sjEpQJAbjQii2yMS3hHqTWR9+Y=;
- b=oX4Cck2CTKt4dM6q67soLMJDIWInx15F3+tnz1IGFe+a0Hcw+MeO/33e+SXbxH3u3fSLp/MEIrgogTMKNYCpAjYgOHMBhdZHwJB88768HCFBTQAH3oB6yThchKaKi/0xr4OqtgL2uU2O4INe30n8czB+yr6gBFAZdLbZMuJNcJd7Qx4QgaXwA0E/B44o1TvwX7PmYizW6+xFdX4L41sijSCcUypCW8L/zIRNEIE4Ez5ROc+bguFH2QpQzRDVvgOLn17ih86SUNcP8BmJRJwXqfGL8/U6sNtIMtu6DCrh2ukam2not2eH8jrPS++O9uO2/Abxl3LsHptLjEzsmU6ltg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PN1PR0101MB2045.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:1c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
- 2022 14:04:18 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::dc4b:b757:214c:22cd]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::dc4b:b757:214c:22cd%7]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
- 14:04:18 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "admin@kodeit.net" <admin@kodeit.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v5] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH v5] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYTz9dLlSTMdRHnkmSfUQV8JWzhA==
-Date:   Wed, 13 Apr 2022 14:04:18 +0000
-Message-ID: <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
-References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
- <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
- <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
-In-Reply-To: <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [ySZnu0NEl5DFr7K8br+1m4eD1pKN9JE3]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6ab0b5f7-e5a8-48b3-3495-08da1d568054
-x-ms-traffictypediagnostic: PN1PR0101MB2045:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P6cpX/uQrPD+SM9yMe6z4XVHNxSOlfC0vMPcwcOc9ZG616cUy+tZS1dDHfXYiUisIbx1jjdADznU5580HLQ3MgbSkwr1EDKv4VOC1dGeFg6fgZgQ/tmJSQWWaFZTSY65dCHqCPVgCMxHABUQHf2nEP0kEPlHiitovz7qgrZ5VBqKX8dnz0UdORupFPd8/piplZkG0hUR34sybUqU/J6hRGBm1Ivcgu9RiwfBGqNqzVqRJ6VmFJUxH04eObhn0yKJi453C91GJlR7MVXunyxkSpSGRJrwnw7eh0goSlb+m8oiDX6anAMMaX9tEOczJuUruMnorlyJGGxrchfNfzpDbuDwykjZQqEhs3nQXZzuZYKo15dP8FwK1ZdfLLTuaxKxSj2K/YTPyhcw6VqQm/6NI74vOYCDBEOb+qMmLRLsAOv803dxpyWhbR/3qtx/siKfK84uHT14vfivpYsBfxnImq7t5k1K8JpkNIEnKsM3surP+4PIZTfwz88JigvlHmCz6tej3ovQGXf5O98mZeUVoDzze6k4/wnnCeKxAOqzy/CSidfOsL1NQnKc9LSBxtXvD2zbzm4DKi/cput6SU0QGg==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9HzOYunob4of6GwZGxECn6PCccgAflYLk2RdmSVmY/q+Bmu8ZcndOq/IRYAI?=
- =?us-ascii?Q?X2WQoM0JOixN7DZdCcpbLYq0aVRdOFp28+A/MdjVH2bqeQ0O5gzruCYx4hpC?=
- =?us-ascii?Q?Jbv58joYgiAtpsUOAJXqrGDsKz42vpm+twr/pINx/OYp2CPTReqRk1jr8+5j?=
- =?us-ascii?Q?r83irDaJcSsQ+LbuVa5RXfpbdUnHcTOVWemBcc8hWhjxVHsu2peg04pbDMpi?=
- =?us-ascii?Q?B3fLn7mNDVg11c7e5b6Eh/BVAeZ/tg/46jATTsOdd8iNdDqasVYg//mECEim?=
- =?us-ascii?Q?n4LHpalQdptqPjzmAkX2BoxcyqSO49AQH8nKYkiPSPXJjx+uLVFX2mGIt+rg?=
- =?us-ascii?Q?QZcpwwLlTScSCw8EuBeArHcCzenstIf9o5JfFKfaLBw1gKhakdjHM4CJMGMo?=
- =?us-ascii?Q?JbkGjiHgx0v5c/APnmIDKo+opawRC2DGu0CtYhVCdqjO4A/H6hzVETVF8azv?=
- =?us-ascii?Q?JVYIqGYx1r9mYFFH+oCOFb3IQp4+STpsbiWatWlIWopmpfzYBsRhIrtYx2Tb?=
- =?us-ascii?Q?hCen5sAytKHeDy59vbkPhB9CODQ9wnRt8+XhET7UCtlydtIRsZVlohkKZ0ja?=
- =?us-ascii?Q?swxr++M6hN8yEbiDIwWR8GwAWmk/l7Jf9PiPhI0OE+iDGIZSjhfp2AwTiwET?=
- =?us-ascii?Q?KOaMyDs6FzLME5KWEhywnMCGRHCn+DHnnWhWvVu7V36hf1ovEaGs7VYRHkVc?=
- =?us-ascii?Q?ZChOJ2rK6dZikWl3kprL8N/hY2EhKSyuvHlYejGDl19l+6VBCYOk6VckE9jr?=
- =?us-ascii?Q?GSLPqNuXNaGREg1R4yyvAGD8KNGc/N1f7W3YSD1ReOB+MT0VOQE+9E0vi+hU?=
- =?us-ascii?Q?fsPYnIKbI2NLsBm/iUyuAq963jmSbomDKw/q6jpup6suzpuESfaOwpwvWGJI?=
- =?us-ascii?Q?KtbMHn8i7TET9ujroi5FDGXczCEZVTDUi9qRGpLBQvbVWElj7q3d6ad55+1p?=
- =?us-ascii?Q?HFF2XhTNj6Vc0xZ2R/0QHBfbhp/jbyVHTPbjzXTJAAkDJp7Q7tuqI5VY7Bzw?=
- =?us-ascii?Q?6/lI7pP/Fk1VTHqAyffa9d2sseKF628wPDnHSTUQWol9qqEgCN4ggRu7nDYV?=
- =?us-ascii?Q?rl2cvyjvrnydD97RxB+LkA109HNOjQVC/M6+K2DNfN4MOI0342xPDMrrgvxC?=
- =?us-ascii?Q?nolpxdHAymOnq4i0od3ND0sTTzprGEVTNLy7RTBWG1vd89OE3bRb1ENPCqj1?=
- =?us-ascii?Q?hMuIP+WLJiNf7O4yYEVGuO5BGTIVnRJOfHw1nYklX1aUtWPZFlM/1+pExd8H?=
- =?us-ascii?Q?IK+3h2frRK8Ra6Ued5Juyd3xByD8fz4XsIa2cWJBRxcUJVlZkpGyhX5kL6sO?=
- =?us-ascii?Q?ydDEPHeoGjUSNsdicgE7pH9F87sJsfE2QA5fLsJxrd5u7Wor2HxcPS5v46S8?=
- =?us-ascii?Q?gyVwajoJf9w8geN+rShGiKPk4GLb7CR9Z0QWk4NRwnAz80bVWyMdlQygj8Iu?=
- =?us-ascii?Q?GeOULuXrOm0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BCD9548BD9399942898A4B5F46481393@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 13 Apr 2022 10:08:05 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D030255A3;
+        Wed, 13 Apr 2022 07:05:43 -0700 (PDT)
+Received: from x64host.home (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 14F0E20C34C9;
+        Wed, 13 Apr 2022 07:05:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 14F0E20C34C9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1649858742;
+        bh=dWHq4doixXJwZt/ZsNxyQzkehCjTu0gOyXB2c2nR0Wc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=hZCqrqt5h8Tt3yQSPp8xhYb3ZR8G/ibnkdvbqpjbyUZTMD9u3zct0/63VkSvQ4ORo
+         EWzcGEdWpdc4/ptf5OoErK2rO2zmAOkNpHhOuBnzCJvn33Yy63l12b2DmLgu4qf6gD
+         p1EmM5fawyiZGvcveo7XBbbhU9kb3JVXKNcrWyCg=
+From:   madvenka@linux.microsoft.com
+To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [PATCH v14 0/7] arm64: Reorganize the unwinder and implement stack trace reliability checks
+Date:   Wed, 13 Apr 2022 09:05:21 -0500
+Message-Id: <20220413140528.3815-1-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f460a35f88195413bcf7305e5083480aab3ca858>
+References: <f460a35f88195413bcf7305e5083480aab3ca858>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ab0b5f7-e5a8-48b3-3495-08da1d568054
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 14:04:18.0461
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN1PR0101MB2045
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-On Apple T2 Macs, when Linux reads the db and dbx efi variables to load
-UEFI Secure Boot certificates, a page fault occurs in Apple firmware
-code and EFI services are disabled with the following logs:
+I have rebased this patch series on top of this branch:
 
-Call Trace:
- <TASK>
- page_fault_oops+0x4f/0x2c0
- ? search_bpf_extables+0x6b/0x80
- ? search_module_extables+0x50/0x80
- ? search_exception_tables+0x5b/0x60
- kernelmode_fixup_or_oops+0x9e/0x110
- __bad_area_nosemaphore+0x155/0x190
- bad_area_nosemaphore+0x16/0x20
- do_kern_addr_fault+0x8c/0xa0
- exc_page_fault+0xd8/0x180
- asm_exc_page_fault+0x1e/0x30
-(Removed some logs from here)
- ? __efi_call+0x28/0x30
- ? switch_mm+0x20/0x30
- ? efi_call_rts+0x19a/0x8e0
- ? process_one_work+0x222/0x3f0
- ? worker_thread+0x4a/0x3d0
- ? kthread+0x17a/0x1a0
- ? process_one_work+0x3f0/0x3f0
- ? set_kthread_struct+0x40/0x40
- ? ret_from_fork+0x22/0x30
- </TASK>
----[ end trace 1f82023595a5927f ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get mokx list
-integrity: Couldn't get size: 0x80000000
+	arm64/stacktrace/cleanups
 
-This also occurs when some other variables are read (see examples below,
-there are many more), but only when these variables are read at an early
-stage like db and dbx are to load UEFI certs.
+in Mark Rutland's fork of Linux. The branch contains a set of patches
+from Mark and me for reliable stack trace.
 
-BridgeOSBootSessionUUID-4d1ede05-38c7-4a6a-9cc6-4bcca8b38c14
-KEK-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Split unwind_init()
+===================
 
-On these Macs, we skip reading the EFI variables for the UEFI certificates.
-As a result without certificates, secure boot signature verification fails.
-As these Macs have a non-standard implementation of secure boot that only
-uses Apple's and Microsoft's keys (users can't add their own), securely
-booting Linux was never supported on this hardware, so skipping it
-shouldn't cause a regression.
+Unwind initialization has 3 cases. Accordingly, define 3 separate init
+functions as follows:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
+	- unwind_init_from_regs()
+	- unwind_init_from_current()
+	- unwind_init_from_task()
+
+This makes it easier to understand and add specialized code to each case
+in the future.
+
+Copy task argument
+==================
+
+Copy the task argument passed to arch_stack_walk() to unwind_state so that
+it can be passed to unwind functions via unwind_state rather than as a
+separate argument. The task is a fundamental part of the unwind state.
+
+Redefine the unwinder loop
+==========================
+
+Redefine the unwinder loop and make it simple and somewhat similar to other
+architectures. Define the following:
+
+	while (unwind_continue(&state, consume_entry, cookie))
+		unwind_next(&state);
+
+unwind_continue()
+	This new function implements checks to determine whether the
+	unwind should continue or terminate.
+
+Reliability checks
+==================
+
+There are some kernel features and conditions that make a stack trace
+unreliable. Callers may require the unwinder to detect these cases.
+E.g., livepatch.
+
+Introduce a new function called unwind_check_reliability() that will detect
+these cases and set a boolean "reliable" in the stackframe. Call
+unwind_check_reliability() for every frame.
+
+Introduce the first reliability check in unwind_check_reliability() - If
+a return PC is not a valid kernel text address, consider the stack
+trace unreliable. It could be some generated code.
+
+Other reliability checks will be added in the future.
+
+Make unwind() return a boolean to indicate reliability of the stack trace.
+
+SYM_CODE check
+==============
+
+This is the second reliability check implemented.
+
+SYM_CODE functions do not follow normal calling conventions. They cannot
+be unwound reliably using the frame pointer. Collect the address ranges
+of these functions in a special section called "sym_code_functions".
+
+In unwind_check_reliability(), check the return PC against these ranges. If
+a match is found, then mark the stack trace unreliable.
+
+Last stack frame
+================
+
+If a SYM_CODE function occurs in the very last frame in the stack trace,
+then the stack trace is not considered unreliable. This is because there
+is no more unwinding to do. Examples:
+
+	- EL0 exception stack traces end in the top level EL0 exception
+	  handlers.
+
+	- All kernel thread stack traces end in ret_from_fork().
+
+arch_stack_walk_reliable()
+==========================
+
+Introduce arch_stack_walk_reliable() for ARM64. This works like
+arch_stack_walk() except that it returns an error if the stack trace is
+found to be unreliable.
+
+Until all of the reliability checks are in place in
+unwind_check_reliability(), arch_stack_walk_reliable() may not be used by
+livepatch. But it may be used by debug and test code.
+
+HAVE_RELIABLE_STACKTRACE
+========================
+
+Select this config for arm64. However, make it conditional on
+STACK_VALIDATION. When objtool is enhanced to implement stack
+validation for arm64, STACK_VALIDATION will be defined.
+
 ---
-v2 :- Reduce code size of the table.
-v3 :- Close the brackets which were left open by mistake.
-v4 :- Fix comment style issues, remove blank spaces and limit use of dmi_fi=
-rst_match()
-v4 RESEND :- Add stable to cc
-v5 :- Rewrite the description
- .../platform_certs/keyring_handler.h          |  8 ++++
- security/integrity/platform_certs/load_uefi.c | 37 +++++++++++++++++++
- 2 files changed, 45 insertions(+)
+Changelog:
+v14:
+	- Some of the patches from v13 have been added to the branch:
 
-diff --git a/security/integrity/platform_certs/keyring_handler.h b/security=
-/integrity/platform_certs/keyring_handler.h
-index 284558f30..212d894a8 100644
---- a/security/integrity/platform_certs/keyring_handler.h
-+++ b/security/integrity/platform_certs/keyring_handler.h
-@@ -35,3 +35,11 @@ efi_element_handler_t get_handler_for_mok(const efi_guid=
-_t *sig_type);
- efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type);
-=20
- #endif
-+
-+#ifndef UEFI_QUIRK_SKIP_CERT
-+#define UEFI_QUIRK_SKIP_CERT(vendor, product) \
-+		 .matches =3D { \
-+			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
-+			DMI_MATCH(DMI_PRODUCT_NAME, product), \
-+		},
-+#endif
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
-rity/platform_certs/load_uefi.c
-index 5f45c3c07..bbddc7c7c 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -3,6 +3,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/cred.h>
-+#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/efi.h>
- #include <linux/slab.h>
-@@ -12,6 +13,35 @@
- #include "../integrity.h"
- #include "keyring_handler.h"
-=20
-+/*
-+ * On T2 Macs reading the reading the db and dbx efi variables to load UEF=
-I
-+ * Secure Boot certificates causes occurrence of a page fault in Apple's
-+ * firmware and a crash disabling EFI runtime services. The following quir=
-k
-+ * skips loading of these certificates.
-+ *
-+ * As these Macs have a non-standard implementation of secure boot that on=
-ly uses
-+ * Apple's and Microsoft's keys, booting Linux securely was never supporte=
-d on
-+ * this hardware, so these quirks shouldn't cause a regression.
-+ */
-+static const struct dmi_system_id uefi_skip_cert[] =3D {
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,3") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,4") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,3") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,4") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
-+	{ }
-+};
-+
- /*
-  * Look to see if a UEFI variable called MokIgnoreDB exists and return tru=
-e if
-  * it does.
-@@ -138,6 +168,13 @@ static int __init load_uefi_certs(void)
- 	unsigned long dbsize =3D 0, dbxsize =3D 0, mokxsize =3D 0;
- 	efi_status_t status;
- 	int rc =3D 0;
-+	const struct dmi_system_id *dmi_id;
-+
-+	dmi_id =3D dmi_first_match(uefi_skip_cert);
-+	if (dmi_id) {
-+		pr_err("Getting UEFI Secure Boot Certs is not supported on T2 Macs.\n");
-+		return false;
-+	}
-=20
- 	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
- 		return false;
---=20
+		arm64/stacktrace/cleanups
+
+	  in Mark Rutland's fork of Linux.
+
+	  I have rebased the rest of the patches on top of that.
+
+	From Mark Rutland, Mark Brown:
+
+	- Add requirements for the three helper functions that init a stack
+	  trace.
+
+	From Mark Rutland:
+
+	- Change the comment for the task field in struct stackframe.
+
+	- Hard code the task to current in unwind_init_from_regs(). Add a
+	  sanity check task == current.
+
+	- Rename unwind_init_from_current() to unwind_init_from_caller().
+
+	- Remove task argument from unwind_init_from_caller().
+
+	From Mark Brown:
+
+	- Reviewed-By: for:
+
+	[PATCH v13 05/11] arm64: Copy the task argument to unwind_state
+v13:
+	From Mark Brown:
+
+	- Reviewed-by for the following:
+
+	[PATCH v12 03/10] arm64: Rename stackframe to unwind_state
+	[PATCH v11 05/10] arm64: Copy unwind arguments to unwind_state
+	[PATCH v11 07/10] arm64: Introduce stack trace reliability checks
+	                  in the unwinder
+	[PATCH v11 5/5] arm64: Create a list of SYM_CODE functions, check
+	                return PC against list
+
+	From Mark Rutland:
+
+	- Reviewed-by for the following:
+
+	[PATCH v12 01/10] arm64: Remove NULL task check from unwind_frame()
+	[PATCH v12 02/10] arm64: Rename unwinder functions
+	[PATCH v12 03/10] arm64: Rename stackframe to unwind_state
+
+	- For each of the 3 cases of unwind initialization, have a separate
+	  init function. Call the common init from each of these init
+	  functions rather than call it separately.
+
+	- Only copy the task argument to arch_stack_walk() into
+	  unwind state. Pass the rest of the arguments as arguments to
+	  unwind functions.
+
+v12:
+	From Mark Brown:
+
+	- Reviewed-by for the following:
+
+	[PATCH v11 1/5] arm64: Call stack_backtrace() only from within
+	                walk_stackframe()
+	[PATCH v11 2/5] arm64: Rename unwinder functions
+	[PATCH v11 3/5] arm64: Make the unwind loop in unwind() similar to
+	                other architectures
+	[PATCH v11 5/5] arm64: Create a list of SYM_CODE functions, check
+	                return PC against list
+
+	- Add an extra patch at the end to select HAVE_RELIABLE_STACKTRACE
+	  just as a place holder for the review. I have added it and made
+	  it conditional on STACK_VALIDATION which has not yet been
+	  implemented.
+
+	- Mark had a concern about the code for the check for the final
+	  frame being repeated in two places. I have now added a new
+	  field called "final_fp" in struct stackframe which I compute
+	  once in stacktrace initialization. I have added an explicit
+	  comment that the stacktrace must terminate at the final_fp.
+
+	- Place the implementation of arch_stack_walk_reliable() in a
+	  separate patch after all the reliability checks have been
+	  implemented.
+
+	From Mark Rutland:
+
+	- Place the removal of the NULL task check in unwind_frame() in
+	  a separate patch.
+
+	- Add a task field to struct stackframe so the task pointer can be
+	  passed around via the frame instead of as a separate argument. I have
+	  taken this a step further by copying all of the arguments to
+	  arch_stack_walk() into struct stackframe so that only that
+	  struct needs to be passed to unwind functions.
+
+	- Rename start_backtrace() to unwind_init() instead of unwind_start().
+
+	- Acked-by for the following:
+
+	[PATCH v11 2/5] arm64: Rename unwinder functions
+
+	- Rename "struct stackframe" to "struct unwind_state".
+
+	- Define separate inline functions for initializing the starting
+	  FP and PC from regs, or caller, or blocked task. Don't merge
+	  unwind_init() into unwind().
+
+v11:
+	From Mark Rutland:
+
+	- Peter Zijlstra has submitted patches that make ARCH_STACKWALK
+	  independent of STACKTRACE. Mark Rutland extracted some of the
+	  patches from my v10 series and added his own patches and comments,
+	  rebased it on top of Peter's changes and submitted the series.
+	  
+	  So, I have rebased the rest of the patches from v10 on top of
+	  Mark Rutland's changes.
+
+	- Split the renaming of the unwinder functions and annotating them
+	  with notrace and NOKPROBE_SYMBOL(). Also, there is currently no
+	  need to annotate unwind_start() as its caller is already annotated
+	  properly. So, I am removing the annotation patch from the series.
+	  This can be done separately later if deemed necessary. Similarly,
+	  I have removed the annotations from unwind_check_reliability() and
+	  unwind_continue().
+
+	From Nobuta Keiya:
+
+	- unwind_start() should check for final frame and not mark the
+	  final frame unreliable.
+
+v9, v10:
+	- v9 had a threading problem. So, I resent it as v10.
+
+	From me:
+
+	- Removed the word "RFC" from the subject line as I believe this
+	  is mature enough to be a regular patch.
+
+	From Mark Brown, Mark Rutland:
+
+	- Split the patches into smaller, self-contained ones.
+
+	- Always enable STACKTRACE so that arch_stack_walk() is always
+	  defined.
+
+	From Mark Rutland:
+
+	- Update callchain_trace() take the return value of
+	  perf_callchain_store() into acount.
+
+	- Restore get_wchan() behavior to the original code.
+
+	- Simplify an if statement in dump_backtrace().
+
+	From Mark Brown:
+
+	- Do not abort the stack trace on the first unreliable frame.
+
+	
+v8:
+	- Synced to v5.14-rc5.
+
+	From Mark Rutland:
+
+	- Make the unwinder loop similar to other architectures.
+
+	- Keep details to within the unwinder functions and return a simple
+	  boolean to the caller.
+
+	- Convert some of the current code that contains unwinder logic to
+	  simply use arch_stack_walk(). I have converted all of them.
+
+	- Do not copy sym_code_functions[]. Just place it in rodata for now.
+
+	- Have the main loop check for termination conditions rather than
+	  having unwind_frame() check for them. In other words, let
+	  unwind_frame() assume that the fp is valid.
+
+	- Replace the big comment for SYM_CODE functions with a shorter
+	  comment.
+
+		/*
+		 * As SYM_CODE functions don't follow the usual calling
+		 * conventions, we assume by default that any SYM_CODE function
+		 * cannot be unwound reliably.
+		 *
+		 * Note that this includes:
+		 *
+		 * - Exception handlers and entry assembly
+		 * - Trampoline assembly (e.g., ftrace, kprobes)
+		 * - Hypervisor-related assembly
+		 * - Hibernation-related assembly
+		 * - CPU start-stop, suspend-resume assembly
+		 * - Kernel relocation assembly
+		 */
+
+v7:
+	The Mailer screwed up the threading on this. So, I have resent this
+	same series as version 8 with proper threading to avoid confusion.
+v6:
+	From Mark Rutland:
+
+	- The per-frame reliability concept and flag are acceptable. But more
+	  work is needed to make the per-frame checks more accurate and more
+	  complete. E.g., some code reorg is being worked on that will help.
+
+	  I have now removed the frame->reliable flag and deleted the whole
+	  concept of per-frame status. This is orthogonal to this patch series.
+	  Instead, I have improved the unwinder to return proper return codes
+	  so a caller can take appropriate action without needing per-frame
+	  status.
+
+	- Remove the mention of PLTs and update the comment.
+
+	  I have replaced the comment above the call to __kernel_text_address()
+	  with the comment suggested by Mark Rutland.
+
+	Other comments:
+
+	- Other comments on the per-frame stuff are not relevant because
+	  that approach is not there anymore.
+
+v5:
+	From Keiya Nobuta:
+	
+	- The term blacklist(ed) is not to be used anymore. I have changed it
+	  to unreliable. So, the function unwinder_blacklisted() has been
+	  changed to unwinder_is_unreliable().
+
+	From Mark Brown:
+
+	- Add a comment for the "reliable" flag in struct stackframe. The
+	  reliability attribute is not complete until all the checks are
+	  in place. Added a comment above struct stackframe.
+
+	- Include some of the comments in the cover letter in the actual
+	  code so that we can compare it with the reliable stack trace
+	  requirements document for completeness. I have added a comment:
+
+	  	- above unwinder_is_unreliable() that lists the requirements
+		  that are addressed by the function.
+
+		- above the __kernel_text_address() call about all the cases
+		  the call covers.
+
+v4:
+	From Mark Brown:
+
+	- I was checking the return PC with __kernel_text_address() before
+	  the Function Graph trace handling. Mark Brown felt that all the
+	  reliability checks should be performed on the original return PC
+	  once that is obtained. So, I have moved all the reliability checks
+	  to after the Function Graph Trace handling code in the unwinder.
+	  Basically, the unwinder should perform PC translations first (for
+	  rhe return trampoline for Function Graph Tracing, Kretprobes, etc).
+	  Then, the reliability checks should be applied to the resulting
+	  PC.
+
+	- Mark said to improve the naming of the new functions so they don't
+	  collide with existing ones. I have used a prefix "unwinder_" for
+	  all the new functions.
+
+	From Josh Poimboeuf:
+
+	- In the error scenarios in the unwinder, the reliable flag in the
+	  stack frame should be set. Implemented this.
+
+	- Some of the other comments are not relevant to the new code as
+	  I have taken a different approach in the new code. That is why
+	  I have not made those changes. E.g., Ard wanted me to add the
+	  "const" keyword to the global section array. That array does not
+	  exist in v4. Similarly, Mark Brown said to use ARRAY_SIZE() for
+	  the same array in a for loop.
+
+	Other changes:
+
+	- Add a new definition for SYM_CODE_END() that adds the address
+	  range of the function to a special section called
+	  "sym_code_functions".
+
+	- Include the new section under initdata in vmlinux.lds.S.
+
+	- Define an early_initcall() to copy the contents of the
+	  "sym_code_functions" section to an array by the same name.
+
+	- Define a function unwinder_blacklisted() that compares a return
+	  PC against sym_code_sections[]. If there is a match, mark the
+	  stack trace unreliable. Call this from unwind_frame().
+
+v3:
+	- Implemented a sym_code_ranges[] array to contains sections bounds
+	  for text sections that contain SYM_CODE_*() functions. The unwinder
+	  checks each return PC against the sections. If it falls in any of
+	  the sections, the stack trace is marked unreliable.
+
+	- Moved SYM_CODE functions from .text and .init.text into a new
+	  text section called ".code.text". Added this section to
+	  vmlinux.lds.S and sym_code_ranges[].
+
+	- Fixed the logic in the unwinder that handles Function Graph
+	  Tracer return trampoline.
+
+	- Removed all the previous code that handles:
+		- ftrace entry code for traced function
+		- special_functions[] array that lists individual functions
+		- kretprobe_trampoline() special case
+
+v2
+	- Removed the terminating entry { 0, 0 } in special_functions[]
+	  and replaced it with the idiom { /* sentinel */ }.
+
+	- Change the ftrace trampoline entry ftrace_graph_call in
+	  special_functions[] to ftrace_call + 4 and added explanatory
+	  comments.
+
+	- Unnested #ifdefs in special_functions[] for FTRACE.
+
+v1
+	- Define a bool field in struct stackframe. This will indicate if
+	  a stack trace is reliable.
+
+	- Implement a special_functions[] array that will be populated
+	  with special functions in which the stack trace is considered
+	  unreliable.
+	
+	- Using kallsyms_lookup(), get the address ranges for the special
+	  functions and record them.
+
+	- Implement an is_reliable_function(pc). This function will check
+	  if a given return PC falls in any of the special functions. If
+	  it does, the stack trace is unreliable.
+
+	- Implement check_reliability() function that will check if a
+	  stack frame is reliable. Call is_reliable_function() from
+	  check_reliability().
+
+	- Before a return PC is checked against special_funtions[], it
+	  must be validates as a proper kernel text address. Call
+	  __kernel_text_address() from check_reliability().
+
+	- Finally, call check_reliability() from unwind_frame() for
+	  each stack frame.
+
+	- Add EL1 exception handlers to special_functions[].
+
+		el1_sync();
+		el1_irq();
+		el1_error();
+		el1_sync_invalid();
+		el1_irq_invalid();
+		el1_fiq_invalid();
+		el1_error_invalid();
+
+	- The above functions are currently defined as LOCAL symbols.
+	  Make them global so that they can be referenced from the
+	  unwinder code.
+
+	- Add FTRACE trampolines to special_functions[]:
+
+		ftrace_graph_call()
+		ftrace_graph_caller()
+		return_to_handler()
+
+	- Add the kretprobe trampoline to special functions[]:
+
+		kretprobe_trampoline()
+
+Previous versions and discussion
+================================
+
+v13: https://lore.kernel.org/linux-arm-kernel/20220117145608.6781-1-madvenka@linux.microsoft.com/T/#t
+v12: https://lore.kernel.org/linux-arm-kernel/20220103165212.9303-1-madvenka@linux.microsoft.com/T/#m21e86eecb9b8f0831196568f0bf62c3b56f65bf0
+v11: https://lore.kernel.org/linux-arm-kernel/20211123193723.12112-1-madvenka@linux.microsoft.com/T/#t
+v10: https://lore.kernel.org/linux-arm-kernel/4b3d5552-590c-e6a0-866b-9bc51da7bebf@linux.microsoft.com/T/#t
+v9: Mailer screwed up the threading. Sent the same as v10 with proper threading.
+v8: https://lore.kernel.org/linux-arm-kernel/20210812190603.25326-1-madvenka@linux.microsoft.com/
+v7: Mailer screwed up the threading. Sent the same as v8 with proper threading.
+v6: https://lore.kernel.org/linux-arm-kernel/20210630223356.58714-1-madvenka@linux.microsoft.com/
+v5: https://lore.kernel.org/linux-arm-kernel/20210526214917.20099-1-madvenka@linux.microsoft.com/
+v4: https://lore.kernel.org/linux-arm-kernel/20210516040018.128105-1-madvenka@linux.microsoft.com/
+v3: https://lore.kernel.org/linux-arm-kernel/20210503173615.21576-1-madvenka@linux.microsoft.com/
+v2: https://lore.kernel.org/linux-arm-kernel/20210405204313.21346-1-madvenka@linux.microsoft.com/
+v1: https://lore.kernel.org/linux-arm-kernel/20210330190955.13707-1-madvenka@linux.microsoft.com/
+
+Madhavan T. Venkataraman (7):
+  arm64: Split unwind_init()
+  arm64: Copy the task argument to unwind_state
+  arm64: Make the unwind loop in unwind() similar to other architectures
+  arm64: Introduce stack trace reliability checks in the unwinder
+  arm64: Create a list of SYM_CODE functions, check return PC against
+    list
+  arm64: Introduce arch_stack_walk_reliable()
+  arm64: Select HAVE_RELIABLE_STACKTRACE
+
+ arch/arm64/Kconfig                |   1 +
+ arch/arm64/include/asm/linkage.h  |  11 ++
+ arch/arm64/include/asm/sections.h |   1 +
+ arch/arm64/kernel/stacktrace.c    | 266 +++++++++++++++++++++++++-----
+ arch/arm64/kernel/vmlinux.lds.S   |  10 ++
+ 5 files changed, 247 insertions(+), 42 deletions(-)
+
+
+base-commit: 5ec58b607fab3cb6f6519103f663731b7bb749f3
+-- 
 2.25.1
-
 

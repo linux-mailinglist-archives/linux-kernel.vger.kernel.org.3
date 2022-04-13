@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BA04FFFFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FECA500007
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238669AbiDMUbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S237243AbiDMUgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiDMUa5 (ORCPT
+        with ESMTP id S229624AbiDMUgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:30:57 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F14F83B0F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:28:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o2so5539179lfu.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:28:34 -0700 (PDT)
+        Wed, 13 Apr 2022 16:36:23 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F21D40A3A;
+        Wed, 13 Apr 2022 13:33:59 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id a21so2983550pfv.10;
+        Wed, 13 Apr 2022 13:33:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YogmsT3U/7IiGgtRupJ7l2JCvP07NCmlPwoFX7KDPtY=;
-        b=BPo2dFn3g3Gh2JwBI11FdGs4x3mRiOExHJeQ0r5erW9MSIGbZjN8Th2c967Kx/7qf0
-         5OXeYO3hDq6ZNvj20Gn+M66UP5whLZ7SNR3PT65RWwnPevdzMu8a4w12cMx99fkiyn86
-         c86oP1HLwUiOvcm0css861ol8AmuTSxmsvPXd5tnG5VaFF720ge3kMgxvcvyXbVyLC2g
-         AB9k2hJg6PAr5dKeHZybm1kcabwcp+wLYNh/hJzN6yTiUeLjNKrttW5A2KVS0E/7eiF+
-         nH3hdggmgHb4XfAU0BEPLAwmvhXclpiHl+ex4n5v3iAjbJ5z6ZUmQfywc3dd7fCBEzaf
-         lkog==
+        bh=T+tj8AwxdLMsDrK6Df/frL5bOX0smbrU7i4U3XHQO/I=;
+        b=XdXuuFvLCX+ccZWP99VYlC5UO5aRxrl/zgtr24wAwGsolxPUDXdrjGp4CdClMPIq58
+         e79K+jkTWAQsRfhZwUwXaqixQqahKoLf/g9Su60UJBBWgVFQpuRKJY5CeSWbz/kP2hox
+         nZNeSyuKEBwM8KMlrESU4DsVcrzWFQmpciYcyktuK9Jb1hfArT02RPiwoc3/RNrSTNth
+         Elr5Ap1o5hMEGlFIVQ8LNGzhpo3NltSENA1+QD5Hv4L0YYCSncxilpKV1HhMV/lQJXno
+         jeTz3ZSFrLEhX7+euVI+s+W7fDjzrH9wFaigQ/mXZ2MECymchQLdb4b3VHOeH549UJhQ
+         YdAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=YogmsT3U/7IiGgtRupJ7l2JCvP07NCmlPwoFX7KDPtY=;
-        b=NJH7IDUfQJWJQIP/raof3vb3vYJ9++Ij26eiPfyFFLKY7kNYj8jdvDC5yeKvluKuWv
-         XKCFyOqN8jagqTl4glCnvI0kqdJWIDBr2dLkGa+ELGwc0BTkL+RBjXq1vbderwLQX7tl
-         Mky0OzA6wUx9XWrsoBFLz8jmFBKtfFKJPwFm/v52IfPEueXHuzVrUTS+A4IRhOklMduy
-         b0Xw8pz48GoPHWRkEoyuDSalZIAYIzQzOzzYlritqBCihrv3VaxIw0r34aiB/C1y4n/y
-         y2Wh4/ffd0poHM7Osi5SyYHBr2sOnRJyr8kiXzTfXgLb1RzyRc+An4IvTPNAXpSNoKP1
-         1u2g==
-X-Gm-Message-State: AOAM532QdjrnqVY3lS3kuebMKWhjAEkeAqsEXZyG8iVHqjXrowaocwEU
-        hpXiDQX7NlsJWBVCs4vpoGs=
-X-Google-Smtp-Source: ABdhPJx0JXqvqpQqiCaSHmJ/9FmujTfxUUTysOB33UP0zQiaykp3WYA8RUFbyQijMt5X0AQ8Snm2IQ==
-X-Received: by 2002:a05:6512:131d:b0:464:f4f7:1b2d with SMTP id x29-20020a056512131d00b00464f4f71b2dmr21530767lfu.143.1649881712569;
-        Wed, 13 Apr 2022 13:28:32 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.17])
-        by smtp.gmail.com with ESMTPSA id 26-20020ac24d5a000000b0046ba2c20d79sm1405438lfp.206.2022.04.13.13.28.31
+        bh=T+tj8AwxdLMsDrK6Df/frL5bOX0smbrU7i4U3XHQO/I=;
+        b=PmM6aUBZUUUbiCdcIOqOuWDfA5Gxmgj6qy+zM0Lapmu7T1EzZfQtcOXK/dRUL5J3ev
+         9X2fiX8QK81I7baIEP9GhMRlTlw4yJW3KotkRllNYEYvT/YYCyA2RG9ZHwBMSJ8xonrO
+         vz9IuIcYyjTSKZ5/mS9iWNgbpoHdJjIUffH8/jKFJyuYzMbG2N1Uz8DhG7TnGDRN5RIh
+         wnYH6TQk/84u982MIEgRylPQrmlZVnjYB00QLYFYke/pyNto/5brg553PMEZtCe/bJ2/
+         6OZtmQyRgZ18J+45dRRjX5RpIESMcXpcoCDKwPE9ZC61GnqheNfo34WHaNqCYm6WpDv4
+         7L7A==
+X-Gm-Message-State: AOAM532uTbhX1Tas8E7MUCFvt2H8DLeG3bjqC3xc8WMIN9OFDj+IvgVq
+        n3jPnxvN/oQHIrUuyCeZ7nUxLac/o0E=
+X-Google-Smtp-Source: ABdhPJyPcshJbKIEQUvyca/wwtNGaRiFhPjkwnpN7JKh3xSMlTI5YtiFJ6T2Wdw7drBxuSSejdfOcg==
+X-Received: by 2002:a65:63cf:0:b0:39d:40ed:ced6 with SMTP id n15-20020a6563cf000000b0039d40edced6mr15960520pgv.77.1649882038511;
+        Wed, 13 Apr 2022 13:33:58 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q15-20020a056a00150f00b004fb28ea8d9fsm45822651pfu.171.2022.04.13.13.33.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 13:28:32 -0700 (PDT)
-Message-ID: <2eab9c9e-7e56-9920-de4d-2e53b3d7e6a1@gmail.com>
-Date:   Wed, 13 Apr 2022 23:28:31 +0300
+        Wed, 13 Apr 2022 13:33:57 -0700 (PDT)
+Message-ID: <0624f072-3bdf-0e1a-a237-1b7d0bc5162f@gmail.com>
+Date:   Wed, 13 Apr 2022 13:33:56 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/6] staging: r8188eu: remove 'added by' author comments
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 5.17 000/343] 5.17.3-rc1 review
 Content-Language: en-US
-To:     Jaehee Park <jhpark1013@gmail.com>, Larry.Finger@lwfinger.net
-Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Alison Schofield <alison.schofield@intel.com>
-References: <cover.1649880454.git.jhpark1013@gmail.com>
- <c0c0a0e748ad85585b65e73841d431adefe86a59.1649880454.git.jhpark1013@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <c0c0a0e748ad85585b65e73841d431adefe86a59.1649880454.git.jhpark1013@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220412062951.095765152@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,18 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaehee,
 
-On 4/13/22 23:11, Jaehee Park wrote:
-> Author comments "Added by Albert" and "Added by Annie" are sprinkled
-> through the file. Git will keep history so these comments can be
-> removed from the code.
+
+On 4/11/2022 11:26 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.3 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-these people are not in the git log, since this driver was added in 
-2021. I am afraid they are not even in Larry's GH repo log.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Anyway these comments are not so useful, so patch is OK.
-
-With regards,
-Pavel Skripkin
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

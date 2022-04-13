@@ -2,143 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07154FFA4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8A44FFA4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbiDMPfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S236575AbiDMPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbiDMPfA (ORCPT
+        with ESMTP id S229765AbiDMPfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:35:00 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A183A1A6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:32:39 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id v12so2279977plv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:32:39 -0700 (PDT)
+        Wed, 13 Apr 2022 11:35:40 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEB638BD4;
+        Wed, 13 Apr 2022 08:33:18 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DFNb43003034;
+        Wed, 13 Apr 2022 15:33:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
+ b=Ay7GuMRrdr9vysZ+OQ3fFzjn5On7M/Kdk/SO+OZ55x8ScoxR+R57Z7zNt+v+RQR+PbQ+
+ Uu/nxtJj4uDPcrvE5cbCVR2qayN4aAGvLOEuSOfmxppraCOT8TMrW4Ct9Jsdf1fJ8JOZ
+ hgNYiq13gOs+oVsJ63jYto9EvvPtkEPuK+C/sFh2ioiTA1gz9Za1timKcOQ2e+g1uu5Y
+ Ib85pWUJ+OD75a7v9lZcy8FNp95cVSmFoOjo/001OuVw+ihYSpWWWcc87SOlGzawqs/c
+ /E+XQ0SBJQEA4F/a9i9tVcgHyGIhPM4PvY33bf9WLDKoWI9f+BPp2KL4t6e/+mLLA4wq Xw== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0x2jaue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 15:33:05 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DFFnmO006520;
+        Wed, 13 Apr 2022 15:33:05 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k49rjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 15:33:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kjhlIh6bnN9s34Lxk71HbGR2odY7ZUZWyNOG8adsbFt/Kegy/b3zgDBq+waLdRbdr3BfsGsJfUSnsvzy14Gx7VMfi65TROFdzPtlDkq8qyx7WERqpIZeK1Ddn59w/ipA+T42vK6+HhHpo5SDJcgagiDXIdXIMzsXLhOHHn14Qm4nyoDH7NExzcs7pXs9XsJJr5k0RO08LAOc5J59PNfNZ6dsfTebG4sFtcSOutEDjnkmoVdVys24hpK9MpYzCWlSeEur/wltBuV9fnm15TrihuNJrPEDmEjY3CbNhV9Zx6wmU4eMY+PQsX02lCBmFPar9XzkwP9SMH4M1MhO5xrUow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
+ b=ZqegNSMKPSI8W0XM4qVYADsjzYkgDPJdLj1dfBZ08QDZgmCByET9Ycj3GnYqLU0vkLSKiOSww23CFynAdXVclIIL+zaAeBXeoSjCHZAxU6VVfSddVFQSud5J4+24M/2YfbXYxUcmNPgsNntLTq8gtswPWa48Zg7Z05k7Wvmkfl8ruxLXdTFPcwYQNYSCwvmhgH3SengiPSeiEwwX/zKDhcgfaQ9QnYMknl9a59iUHisv93bSr3x7JstGag+zePPWVhFfKO5zNud/XoqD7U50r91N1ddI/W7zBan83TgFYaAEiATpZl6/cbbtRzYz/yZZqfTMjfz7+QYxX1JJ5XWg5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hiY5e47Ko87MkIuTm3Q1jTYlfib2vDpGlep7TMJhc9k=;
-        b=Q9gxT9nRG1LTxgkkOUk1qCK00K0XYxWgpNRVUIxImzeLs7XiMyPdgcVGJsjUUf/pY2
-         nGM5QWtEokydtV8uhy7oesYrXrFTiUhqfKWNreuuE9WLPW/nvsi0lS1qzUx9Jzc1gme/
-         y23Y+A5L4r3qsmP5N742xj7xd7KaaguVSN5oS/yUex5uSb5MwHKVOoeePvcrTvJ47s0E
-         dKReepulDBRt62XXrHDF+eh+Ow9tnK7meHH7eprD6A/QPNnnYl83e+z49SBKT7giLd+n
-         mxH5mhLjhvWc48tozh97oE3B4VvYqc8rQNp+i6YfLFdaXI9J2k2xCjO3krJ2zIrcgXy5
-         qmJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hiY5e47Ko87MkIuTm3Q1jTYlfib2vDpGlep7TMJhc9k=;
-        b=Ij3d/NQiSxrhYr100v+OpAF5S+0kcWS1V3t2pguqO3bDKy0Vc+g4qOzKkdX7Crp4UA
-         xAKQcVEdUa5h3P50JrhwA11VQN0i2bElV3xBWOw7E5q4WkGL4yFsqSTmSI9ecyRhsyKr
-         lV+//wgKn3aLbFPH/AgPKCB1PhgMNmHKbxS27Cf4kYFhcm7haEfU9wVsUF1nn0TylGkA
-         pZxIXMT4n5C4AdMG2ueQD6yHXn8Smu6DhJu+WOanTlA2XRnsnYTGql4QpOIrSQXYrD02
-         UyVv5bFkj3sLB+9TYKC4IcXMEaIjpMXO8RfUWeNwzRwhYa4q9xCq26ivq5bM9UF2qQiM
-         6Eyg==
-X-Gm-Message-State: AOAM5303vA6oHXA8gFYPY9djB6Nki/PwgRtKDgcPyK600mOzJHFREzf7
-        3ahH7vxgN43WrRP4IbZ5k/gLmg==
-X-Google-Smtp-Source: ABdhPJwSs6PNtBuvPLZpQ+fLuyzDyamAXM9ZZct6t4rnjZdP2unsnaEnc0+Ry75ZRnjsRYT6G8RAgQ==
-X-Received: by 2002:a17:90a:7:b0:1c7:c286:abc2 with SMTP id 7-20020a17090a000700b001c7c286abc2mr11600715pja.65.1649863958374;
-        Wed, 13 Apr 2022 08:32:38 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x8-20020aa784c8000000b0050577c51d38sm19390312pfn.20.2022.04.13.08.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 08:32:37 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 15:32:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH V3 2/4] KVM: X86: Introduce role.glevel for level
- expanded pagetable
-Message-ID: <YlbtEorfabzkRucF@google.com>
-References: <20220330132152.4568-1-jiangshanlai@gmail.com>
- <20220330132152.4568-3-jiangshanlai@gmail.com>
- <YlXvtMqWpyM9Bjox@google.com>
- <caffa434-5644-ee73-1636-45a87517bae2@redhat.com>
- <YlbhVov4cvM26FnC@google.com>
- <d2122fb0-7327-0490-9077-c69bbfba4830@redhat.com>
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
+ b=An/2h1VseMJ2sSnzKP94XkuQS/au5cqg1L54fRYE4c0t5Rj4WGzEBFA/36mXRPoXhx5WOLPYQ8DiFC04nOiVTuNV9qgbHEw37TMiyiCwYvkRypnShreAJdlilViwKE5wCs3GRKSxqUlLITsyw6/iqgmB2EkRJ4SIJAU59d3n6IM=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CO1PR10MB5507.namprd10.prod.outlook.com
+ (2603:10b6:303:162::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
+ 2022 15:33:03 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
+ 15:33:02 +0000
+Date:   Wed, 13 Apr 2022 18:32:49 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Kahurani <k.kahurani@gmail.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
+        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
+ errors
+Message-ID: <20220413153249.GZ12805@kadam>
+References: <20220404151036.265901-1-k.kahurani@gmail.com>
+ <20220404153151.GF3293@kadam>
+ <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d2122fb0-7327-0490-9077-c69bbfba4830@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR2P264CA0136.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::28) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
+X-MS-TrafficTypeDiagnostic: CO1PR10MB5507:EE_
+X-Microsoft-Antispam-PRVS: <CO1PR10MB5507C88CCCF21FFCAE99E8948EEC9@CO1PR10MB5507.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ShitkBKOAwmKMqSgjZkTYIk2BmheBu2CyTxJHcpbF23ed7YnWMSXroCrHqy/TIUKYfw+m3jgxZn2IXfeXrN2+l8I8V3+kR3GBBMN4R1T6j5iHEJtIhsj0wfufNQeLCSAwWL1HsH+SJ3SIodSOatZJvfsTDofP+UnwhFz/jKXKiVeiQw0/imyV/sKRSZurdLdHnH0TXmlXllpvFnoDsPvMa2tP1XdUIApNmh6n2WROkjw5nMo1nHE1hCn2jEJpImT68INi3lWB312/dIDTDC9kID3O1fOs2bzVF5hNPfdSzfS+BZ3HMXq4vvspjxGohKNsvEcrnNjfhA9E85E4++RlSlpCW5szY6efMXl582rrmaaEgOvOY+iH4/bdtbvRxmhLaldbCf4tlI+CEtRwerl4w6KiymaxZ8GJiHP6j0Ba65s8veWYyDTbkBdohft5mAeln52n8XhKnUT7fkCu4tO186+HUpxLXx3WstywZw20B6uohL13mgoq7kgZiVQGM8cYaRvBdsm8gt1gOjIjValy0zqtdn3myWbvJwN9Xa+CkOAUrAFYkIaMXOW/zBCyJj69I7YxKeDTti9rqpzwylOrr9mWvJUtl5KWM/Bo99IeIL36LjQjQd2VzZ40QVfwHRQPwuelzj6iAgtD1qHU3TUeIEZOLOEufd/q4nHSjz7/ai5F3SPmNHauxomp4O56xnF2JoLczHRZwPEXUGye2UAjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66946007)(186003)(8676002)(4326008)(33716001)(2906002)(5660300002)(7416002)(38100700002)(44832011)(38350700002)(316002)(33656002)(508600001)(1076003)(8936002)(26005)(6512007)(86362001)(6506007)(6666004)(52116002)(53546011)(6486002)(54906003)(6916009)(66476007)(9686003)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6hbg0AMMfcfbGrIzPGU3CYjKg5K9RD9FT1VZkcOgNG+7QLWedt4jERXEhSpz?=
+ =?us-ascii?Q?9hpqxYL0QgXU16bw9vsZiDqjH7TA8WU0pB9F/Ib0prLFFpjcv+uahRE5qdas?=
+ =?us-ascii?Q?/XTF2GA1Fm5VeoyxP0o19v3BRgofA0WvZSVSUVWqtkmx362A0SwZSPwY3s7I?=
+ =?us-ascii?Q?yEq4tuHntdOH10mSq0/rvFhNpAreUqRoYaHx1VwReB5ndqA0I/Coidi2KjdR?=
+ =?us-ascii?Q?Mg5NjfPR+eDx3oEgNzJzG/e/e7lZY6uRetYOdMI1z28d9y0/Rx4ThqTm82ow?=
+ =?us-ascii?Q?uFisaLhCFYeAfAxqFXtqHVyAice+RhSJpx57sPtpCRFRf2s9NZdc8o6wfLnQ?=
+ =?us-ascii?Q?GEI8j5RzwfWQo4WHqRwBLG0dZqTjvNpD98HxXKN3hUPT76rrtRfOT/N0FqGV?=
+ =?us-ascii?Q?BlV3FfoD+jPH5QB3OSaidycHdLA0+0WQli/+XPmYq6Fw+0FMm+cEL7UUybRT?=
+ =?us-ascii?Q?SQ5yJfyFfq5QJrfh0CXLxfcSAe0KPVRL6x3KIDnun3qG++DmqER6Q8PQ2K2p?=
+ =?us-ascii?Q?pzpPnCHXDGgAweNprep3PIN4WZDeAOZcobamUzOaKSqnHy5RHLWqxRhi415G?=
+ =?us-ascii?Q?BTzgl+s7z8jAbvLtwjpR8Bf6Yk8uFVccOKhwlBuV+oNmFcxe1hDGY29WF4WE?=
+ =?us-ascii?Q?6wTZBP5iwK+7Ffcgy6b2ITIRhtzoe59dNTDocmKq6IE3T/FR2paiT5qkffoK?=
+ =?us-ascii?Q?wnb9fbpkDI6Gw0HP/EpxhVGsTQZImxg0/zYPanjc2H4DMnQqGd6sIcmg97eP?=
+ =?us-ascii?Q?evEfSWqtIoKALARuwMfvSiuxJphr7zF+ymVKmafSIvybG3e0XnkgPK7CVclg?=
+ =?us-ascii?Q?YzccXO6KYd6KzDm/N5wf62CTpIlFpplGWVYyc5DUQUOEcuzQXRLMjrOCEpm5?=
+ =?us-ascii?Q?IoM+WfjbX5Cd2T2ga3tNr5a5xYJx1D+2qY92gYkUOVJd+k3CU+CIJHSw0deS?=
+ =?us-ascii?Q?a68Y3ABzCrX2RcUdzYP4B7wbpPHuYV8bu9SVSj4ZqJea3MEqV22xx+z2OgPn?=
+ =?us-ascii?Q?XXvNuUZ0dcPEYWcs2G68Ss8Z0k9pwu3xNoyRlUvFIXY8lMW2PO1c0jL0TPom?=
+ =?us-ascii?Q?4r0Sb4U8ZT70TBq6dxUxBRJrZ9UyhDghmy4K2YPZmB6fGqMVylLg3eju90OB?=
+ =?us-ascii?Q?IfmYab3/6YggH+56EzrFUb0WxUvKLYFPG82oVCAXEjjHx+c/8uK+Yt0vPcSL?=
+ =?us-ascii?Q?R2LQuRLAta+W576GlRO9ep9Ugl6+sO2yxfGYw4bOThyB7oSwlL/wnDNEo38s?=
+ =?us-ascii?Q?+vRmRh/E0/MhYcB1w/zTBMqFkQye4ww3EKYslXaGh8NDojPygKPqrhvlurdN?=
+ =?us-ascii?Q?zejh5tM13u5C43pMxWAHqhlYN2DF35ONgXSJDvM+WlRlmRnxvsItBcI2q0Jx?=
+ =?us-ascii?Q?bBVcXmWjs8NUFDj3QOgBmZGoBkbLhGo50NXyGKahtFwpp96LweY3xoVwrSgq?=
+ =?us-ascii?Q?ff3minDc43MuFc5jShUDDrRuunM9MfCchN/ZWALH4/vFOszAkLI8GmcEuYyH?=
+ =?us-ascii?Q?zr6CtTYyspEQl0CHDlAgXK02NgXRPygcbFkE0RkrcHOpnLX6N4SC1wlz8GFZ?=
+ =?us-ascii?Q?d8hlebSzeSp+fSvZzA7gqXNkwjkm4s/36Uqz/+XtXnSlYOzfz/W1zOlb5VAM?=
+ =?us-ascii?Q?6jXxo6cmF8jxqenLlKxkK1NW4NbAxb09W6KnAySwM/8VgvWfOjxhV+EfW4Ha?=
+ =?us-ascii?Q?ZqmEcx6TlBWL1ZTLhIRM2DoK/A7ERJrva2HvMfZ1VooBsQ/++Q5ZbzOc+qxg?=
+ =?us-ascii?Q?WamB32K2Yq0qJ//zxQa6HxetqPqzh3c=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 15:33:02.9103
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ymlfWWOHnqyJf973DGkg+3X9TpOxkO2eabSXrGATOOps+o1oO6gSaJ2RXRfqwniJws3mK022DK89H5X1X7w5GNfZcRs+risGBoJiUWaU2dQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB5507
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-13_02:2022-04-13,2022-04-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=967 malwarescore=0
+ mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204130082
+X-Proofpoint-ORIG-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
+X-Proofpoint-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022, Paolo Bonzini wrote:
-> On 4/13/22 16:42, Sean Christopherson wrote:
-> > On Wed, Apr 13, 2022, Paolo Bonzini wrote:
-> > > On 4/12/22 23:31, Sean Christopherson wrote:
-> > > > We don't need 4 bits for this.  Crossing our fingers that we never had to shadow
-> > > > a 2-level guest with a 6-level host, we can do:
-> > > > 
-> > > > 		unsigned passthrough_delta:2;
-> > > > 
-> > > Basically, your passthrough_delta is level - glevel in Jiangshan's patches.
-> > > You'll need 3 bits anyway when we remove direct later (that would be
-> > > passthrough_delta == level).
-> > 
-> > Are we planning on removing direct?
+On Wed, Apr 13, 2022 at 03:36:57PM +0300, David Kahurani wrote:
+> On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 > 
-> I think so, it's redundant and the code almost always checks
-> direct||passthrough (which would be passthrough_delta > 0 with your scheme).
-
-It's not redundant, just split out.  E.g. if 3 bits are used for the target_level,
-a special value is needed to indicate "direct", otherwise KVM couldn't differentiate
-between indirect and direct.  Violent agreement and all that :-)
-
-I'm ok dropping direct and rolling it into target_level, just so long as we add
-helpers, e.g. IIUC they would be
-
-static inline bool is_sp_direct(...)
-{
-	return !sp->role.target_level;
-}
-
-static inline bool is_sp_direct_or_passthrough(...)
-{
-	return sp->role.target_level != sp->role.level;
-}
-
-> > > Regarding the naming:
-> > > 
-> > > * If we keep Jiangshan's logic, I don't like the glevel name very much, any
-> > > of mapping_level, target_level or direct_level would be clearer?
-> > 
-> > I don't love any of these names, especially glevel, because the field doesn't
-> > strictly track the guest/mapping/target/direct level.  That could obviously be
-> > remedied by making it valid at all times, but then the role would truly need 3
-> > bits (on top of direct) to track 5-level guest paging.
+> Hi Dan
 > 
-> Yes, it would need 3 bits but direct can be removed.
+> > >       int ret;
+> > >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> > > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> > >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> > >                value, index, data, size);
+> > >
+> > > -     if (unlikely(ret < 0))
+> > > +     if (unlikely(ret < size)) {
+> > > +             ret = ret < 0 ? ret : -ENODATA;
+> > > +
+> > >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+> > >                           index, ret);
+> > > +     }
+> > >
+> > >       return ret;
+> >
+> > It would be better to make __ax88179_read_cmd() return 0 on success
+> > instead of returning size on success.  Non-standard returns lead to bugs.
+> >
 > 
-> > > * If we go with yours, I would call the field "passthrough_levels".
-> > 
-> > Hmm, it's not a raw level though.
+> I don't suppose this would have much effect on the structure of the
+> code and indeed plan to do this but just some minor clarification.
 > 
-> Hence the plural. :)
+> Isn't it standard for reader functions to return the number of bytes read?
+> 
 
-LOL, I honestly thought that was a typo.  Making it plural sounds like it's passing
-through to multiple levels.
+Not really.
+
+There are some functions that do it, but it has historically lead to bug
+after bug.  For example, see commit 719b8f2850d3 ("USB: add
+usb_control_msg_send() and usb_control_msg_recv()") where USB is moving
+away from that to avoid bugs.
+
+If you return zero on success then it's simple:
+
+	if (ret)
+		return ret;
+
+If you return the bytes people will try call kinds of things:
+
+	if (ret)
+		return ret;
+
+Bug: Now the driver is broken.  (Not everyone can test the hardware).
+
+	if (ret != size)
+		return ret;
+
+Bug: returns a positive.
+
+	if (ret != size)
+		return -EIO;
+
+Bug: forgot to propagate the error code.
+
+	if (ret < sizeof(foo))
+		return -EIO;
+
+Bug: because of type promotion negative error codes are treated as
+     success.
+
+	if (ret < 0)
+		return ret;
+
+Bug: buffer partially filled.  Information leak.
+
+If you return the bytes then the only correct way to write error
+handling is:
+
+	if (ret < 0)
+		return ret;
+	if (ret != size)
+		return -EIO;
+
+regards,
+dan carpenter
+
+

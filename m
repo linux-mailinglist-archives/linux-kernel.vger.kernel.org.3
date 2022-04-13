@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD814FF5FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D234FF5FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiDMLp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S229726AbiDMLqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiDMLp5 (ORCPT
+        with ESMTP id S230331AbiDMLqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:45:57 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63F25B3F5;
-        Wed, 13 Apr 2022 04:43:32 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23D9xvYW032238;
-        Wed, 13 Apr 2022 11:43:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2021-07-09; bh=snGXKT5n6XDtwCnQA9MLkATepstbNlkspFrk9ndNi6U=;
- b=BdRk1rkD6rINJkZWx1YEFObZL3ohwLy3ETlWjYD74GLgaRxfePw6HROebBZ38+h6xO/8
- Ptu3sw4vsoBLLqSjblsLcS3yUp9VtzIashOTd04ncEcijRplK3TH1mbfdvOVESj/LK3W
- bWkquRBU5NcDAP8OLgUXnjON/VP77pvrTe1S2BFj0D5E6cXx/IWheuWkw0BzqGxfgvw0
- eaM1a+JJnqHpss1lytLXAvbG+gJLXbtO7h4fib1g3IoQB2CPLVuWGmdXIn/9uE2LmZjI
- STOAEaWjxJE1FjEjQ4POeQa5qZamYPoK9Z27XcY8RmxLvvrrZZA+789h5iJUhHL7FGEM BA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd9da7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 11:43:17 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DBfRRL010353;
-        Wed, 13 Apr 2022 11:43:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k3wau6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 11:43:16 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 23DBhG65016664;
-        Wed, 13 Apr 2022 11:43:16 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k3watn-1;
-        Wed, 13 Apr 2022 11:43:16 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
-        smfrench@gmail.com, Steve French <sfrench@samba.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] cifs: potential buffer overflow in handling symlinks
-Date:   Wed, 13 Apr 2022 04:42:51 -0700
-Message-Id: <20220413114251.73083-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 13 Apr 2022 07:46:14 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F535B3F5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:43:52 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u19so1819426ljd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zEOvVQ8ODptnK3WwFBWfeYgjoqgGL18PHLUqQQVknZE=;
+        b=IbDWQ6exmcYIF5xlYm/WQBVMxiI8gzxIlrURJHj4gun+Tfehojc623NglyuXPeXtem
+         s3kj95CbN5IpEZiShOZ3p7KWR6T1IoH8Vve+GD9QG5gDR+5bRDwWfyK3ITy5zWsiBXXA
+         OClXS6PkEVcFzkwMiMHnkuffDW2E3/DZN0BKFCw6B5FpphArioxoqdyai/uUZbJshTQY
+         UxLKrifaPneqZ6/twcwWr+6+uR4Uw0E+Tmq9sBS9A0B1B5p1Ou835VDKJ3PdD3aX+Jza
+         YPiSrtykL2uJOyQxThOQ0kd3qKwpkxfSZFANqbL7zFkBJBPclnW6dbKo1eZuEPcXqeUR
+         451Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zEOvVQ8ODptnK3WwFBWfeYgjoqgGL18PHLUqQQVknZE=;
+        b=k52fd9kTIMS0c9o5KgQz7yZOB/Ko3i7V7BuPsUH3i3ePw2xrExhpULpvArJm3FFv0e
+         shnGWziSiiYTeRzNr9Jf+ob+QZO0jK3z86yYUEE+HW9kalhKQ/A9IgUoXpgFEIejfweB
+         rRkLhh5Mwxz9KPeA8vo/qvHdN/BFuiYSZ69EPUFhS3X+WIUSQ6HnlKMcKymqlB0xc4FU
+         m6OQVWDLTEvchmgWnuKAFx2KSrgZCB6IQ/GQSHtZiY1g79t5tXDigbMMkzuxKdckLlLZ
+         dACGPmXQcTgzS8xlKC1tRaXlOB1bwVo3/c5pHgeiLE0YsVFZTOAaKyAGopyvtbH9Gobh
+         G5Aw==
+X-Gm-Message-State: AOAM530Ekwkl36Gmjxw86lhfA2f2GqmFiY5fjYDyk34zSdsXqukhc6LA
+        Qpbh4XdP7NthRP/4Xv4pFgth8A==
+X-Google-Smtp-Source: ABdhPJxSc2DiuJ8ztlJC/7du5pH7HUiYvKu1fv1sdTG2x0jctLC+Bp5dpszyE0eMhivO+pDlpFDILQ==
+X-Received: by 2002:a05:651c:1781:b0:247:daa7:4358 with SMTP id bn1-20020a05651c178100b00247daa74358mr25671523ljb.477.1649850230444;
+        Wed, 13 Apr 2022 04:43:50 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05651231c400b0044ac20061ecsm4099397lfe.128.2022.04.13.04.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 04:43:49 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id B7F8010369B; Wed, 13 Apr 2022 14:45:23 +0300 (+03)
+Date:   Wed, 13 Apr 2022 14:45:23 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 2/8] efi/x86: Get full memory map in allocate_e820()
+Message-ID: <20220413114523.5si2ywl7zlgestz5@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-3-kirill.shutemov@linux.intel.com>
+ <Ylae+bejPzRMPrDw@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: pmHfV1bQBRIjOkb1odkxWsvclPwJw5bw
-X-Proofpoint-GUID: pmHfV1bQBRIjOkb1odkxWsvclPwJw5bw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ylae+bejPzRMPrDw@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch printed a warning:
-	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
-	__memcpy() 'dctx->buf' too small (16 vs u32max)
+On Wed, Apr 13, 2022 at 11:59:21AM +0200, Borislav Petkov wrote:
+> On Wed, Apr 06, 2022 at 02:43:37AM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> > index 01ddd4502e28..d18cac8ab436 100644
+> > --- a/drivers/firmware/efi/libstub/x86-stub.c
+> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> > @@ -569,30 +569,28 @@ static efi_status_t alloc_e820ext(u32 nr_desc, struct setup_data **e820ext,
+> >  }
+> >  
+> >  static efi_status_t allocate_e820(struct boot_params *params,
+> > +				  struct efi_boot_memmap *map,
+> >  				  struct setup_data **e820ext,
+> >  				  u32 *e820ext_size)
+> >  {
+> > -	unsigned long map_size, desc_size, map_key;
+> >  	efi_status_t status;
+> > -	__u32 nr_desc, desc_version;
+> > +	__u32 nr_desc;
+> >  
+> > -	/* Only need the size of the mem map and size of each mem descriptor */
+> > -	map_size = 0;
+> > -	status = efi_bs_call(get_memory_map, &map_size, NULL, &map_key,
+> > -			     &desc_size, &desc_version);
+> > -	if (status != EFI_BUFFER_TOO_SMALL)
+> > -		return (status != EFI_SUCCESS) ? status : EFI_UNSUPPORTED;
+> > -
+> > -	nr_desc = map_size / desc_size + EFI_MMAP_NR_SLACK_SLOTS;
+> > +	status = efi_get_memory_map(map);
+> > +	if (status != EFI_SUCCESS)
+> > +		return status;
+> >  
+> > -	if (nr_desc > ARRAY_SIZE(params->e820_table)) {
+> > -		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table);
+> > +	nr_desc = *map->map_size / *map->desc_size;
+> > +	if (nr_desc > ARRAY_SIZE(params->e820_table) - EFI_MMAP_NR_SLACK_SLOTS) {
+> > +		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table) +
+> > +			EFI_MMAP_NR_SLACK_SLOTS;
+> >  
+> >  		status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
+> >  		if (status != EFI_SUCCESS)
+> > -			return status;
+> > +			goto out;
+> 
+> This looks weird. With the goto out of the way, this code turns into:
+> 
+>   		status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
+> 		if (status != EFI_SUCCESS) {
+> 			efi_bs_call(free_pool, *map->map);
+> 			return EFI_SUCCESS;
+> 		}
+> 
+> I think you want to return status as above after having called
+> 
+> 	efi_bs_call(free_pool, *map->map);
+> 
+> ...
 
-It's caused because Smatch marks 'link_len' as untrusted since it comes
-from sscanf(). Add a check to ensure that 'link_len' is not larger than
-the size of the 'link_str' buffer.
+Ah. Right. I actually fix this in the next patch.
 
-Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-v2: make use of CIFS_MF_SYMLINK_LINK_MAXLEN (same but cleaner).
+Will move it here.
 
- fs/cifs/link.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/cifs/link.c b/fs/cifs/link.c
-index 852e54e..bbdf328 100644
---- a/fs/cifs/link.c
-+++ b/fs/cifs/link.c
-@@ -85,6 +85,9 @@
- 	if (rc != 1)
- 		return -EINVAL;
- 
-+	if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
-+		return -EINVAL;
-+
- 	rc = symlink_hash(link_len, link_str, md5_hash);
- 	if (rc) {
- 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
 -- 
-1.8.3.1
-
+ Kirill A. Shutemov

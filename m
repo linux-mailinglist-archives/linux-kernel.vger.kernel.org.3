@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A12C500113
+	by mail.lfdr.de (Postfix) with ESMTP id AD878500115
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238888AbiDMVXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
+        id S237876AbiDMVXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239308AbiDMVXM (ORCPT
+        with ESMTP id S239344AbiDMVXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:23:12 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F902BB37
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:20:50 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bg24so3250030pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=eMGB2zfPbAG9Q8WOOd6Fy48l+atpiddj7/fan+CEbbg=;
-        b=ktIH450oeVvWGl4fzzvsVVfe+uBGTeIwIIF87quitTz+JZUrWK7zlxSKIZC7EPRfIj
-         mTKK14MeJjAWdnYLKuc7p35D43iZYPomIJV9cznWMxfFMDNIoAjOrv1aWFS045v9Lzjt
-         FgTiH2N2MkrJIiMj70Vsp1n2fwjpa3kdF1qGA=
+        Wed, 13 Apr 2022 17:23:20 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105E22BB37;
+        Wed, 13 Apr 2022 14:20:58 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id k13so3457294oiw.1;
+        Wed, 13 Apr 2022 14:20:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=eMGB2zfPbAG9Q8WOOd6Fy48l+atpiddj7/fan+CEbbg=;
-        b=tvTGLLeh/Wp5QfK4SrI1Kdo2QNpTW84AU4k6+Havw4SWg2hPS0CIAWsPznDz3fc96o
-         Q60bHUCmxNTI9WhqAzZNiidOVECu6dZ4CfQbytOU9NfGpTDofHZ/G2s1yGrldhX3qKu6
-         bank2PogVexnmVFdPizHahkGploINOTPHPTmE2ZqOsKSJWzJWOF4AOhdBl2v0R/nqYgc
-         L7T1GOcbAl9ulHorQiLtx0ttKj9Kq1/wfela/B7YWSeKscfaEZzgTo81NEvONB3zh7TW
-         +boSWw8Ts9G9PbXdty8oEpfQLwhhzIy0xrDbHboOeK3AeFo5tKWQrLFSTlbIy9QEudNy
-         z2sg==
-X-Gm-Message-State: AOAM532AX9ViK9/PAEM94hrq/gQ23Gza08IjlEfy7VGX3zfkLLAURzgo
-        49fHCWfJ5uFZTdv8VzeUQwlLRQ==
-X-Google-Smtp-Source: ABdhPJyI/txgkIATfc9o3YYs6eT53/rozlKJ9Mvz4Kx+Swh0erWgHqDdBlMYX0n5vUrnH02mjv1ykw==
-X-Received: by 2002:a17:90a:8595:b0:1bb:fbfd:bfbf with SMTP id m21-20020a17090a859500b001bbfbfdbfbfmr682428pjn.125.1649884849632;
-        Wed, 13 Apr 2022 14:20:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f4-20020aa79d84000000b00505f920ffb8sm4678pfq.179.2022.04.13.14.20.48
+         :mime-version:content-disposition:in-reply-to;
+        bh=7YzYdFiMLsDoyTU0PbwVa3WC4PKMjoqkq1VcU6L/mnM=;
+        b=yb+pf7Xxtk0RKjPF3sIwSQ5W4IhFG/45tYjks9zcOcxcn9pBnmoZ2IIQbNvQg9ukyd
+         Wj2bl6H9rGBGttJO8kaUtQxW1qSJpjqDr2vEYtfe1YazJ4j5q5Dqf8w9I0BbQdxJCr58
+         gOR527UeIayRRvl9C1SkulfPLqnLQytTwL7hJxrR0cFEMRv4Q8vY685YXFqbjgjMqusW
+         9DIMVapM8H0Unsfdh2G3LieRwmXx7oem6X0C28+GpI2HLPHe80RaU3D6itTwVzZR1JAQ
+         1MYFfw/jD+BskGCQBRfrvC3nEjVL92V22Ooj5Y7gR2TuHNBKc1eTsRhhCs5ut4kaOviw
+         ZXAA==
+X-Gm-Message-State: AOAM53235fxd9RWDivH9bT5BmxKNBR/iydTb2F5A8oLkBZNQkgGJ9NCd
+        P3cNa+J2DGwHKRutHeozww==
+X-Google-Smtp-Source: ABdhPJy4XCwE/l0IcNFu8QLwKB/o4da+J+bSKytm1PrKJqmc/W/35vPD+DdPKg9ewLQ9IkLcmNk+6A==
+X-Received: by 2002:a05:6808:21a3:b0:2f9:a87d:53a6 with SMTP id be35-20020a05680821a300b002f9a87d53a6mr34405oib.85.1649884857359;
+        Wed, 13 Apr 2022 14:20:57 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j5-20020a4a9445000000b00329dab1a07fsm45143ooi.17.2022.04.13.14.20.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:20:49 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 14:20:48 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] lkdtm/bugs: Don't expect thread termination without
- CONFIG_UBSAN_TRAP
-Message-ID: <202204131405.025EAE89@keescook>
-References: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
- <202204121440.FEE123D7@keescook>
- <672572c0-b698-ab5c-b99c-bc78c61db956@csgroup.eu>
- <20220413210131.46tqfxlkwtcayurs@meerkat.local>
+        Wed, 13 Apr 2022 14:20:57 -0700 (PDT)
+Received: (nullmailer pid 3948819 invoked by uid 1000);
+        Wed, 13 Apr 2022 21:20:56 -0000
+Date:   Wed, 13 Apr 2022 16:20:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     xinlei.lee@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        p.zabel@pengutronix.de, rex-bc.chen@mediatek.com,
+        jitao.shi@mediatek.com, dri-devel@lists.freedesktop.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        chunkuang.hu@kernel.org, airlied@linux.ie,
+        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4,2/3] dt-bindings: display: mediatek: dsi: Add
+ compatible for MediaTek MT8186
+Message-ID: <Ylc+uMqGS0w2T72w@robh.at.kernel.org>
+References: <1649495514-25746-1-git-send-email-xinlei.lee@mediatek.com>
+ <1649495514-25746-3-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220413210131.46tqfxlkwtcayurs@meerkat.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1649495514-25746-3-git-send-email-xinlei.lee@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,68 +70,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 05:01:31PM -0400, Konstantin Ryabitsev wrote:
-> On Wed, Apr 13, 2022 at 06:29:36AM +0000, Christophe Leroy wrote:
-> > I have a [patatt] section in .gitconfig which contains:
-> > 	signingkey  = ed25519:xxxxxxxx
-> > 	selector = xxxxxxxx (the same value as above)
-> > 
-> > What should I do now for you to get the key ? I don't even know where 
-> > the key is stored in my computer.
+On Sat, 09 Apr 2022 17:11:53 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> Your key is stored in ~/.local/share/patatt, but you don't really need to do
-> anything, Kees can do the following:
+> Add dt-binding documentation of dsi for MediaTek MT8186 SoC.
 > 
->     b4 kr --show-keys 363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
-
-Ah-ha, excellent.
-
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../devicetree/bindings/display/mediatek/mediatek,dsi.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> For now, this just provides instructions on what to do with the key:
-> 
-> 	christophe.leroy@csgroup.eu: (unknown)
-> 		keytype: ed25519
-> 		 pubkey: HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-> 		 krpath: ed25519/csgroup.eu/christophe.leroy/20211009
-> 	   fullpath: /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
 
-"fullpath" seems misleading for my config, given:
-
-[patatt]
-	...
-        keyringsrc = ~/korg/pgpkeys/.keyring
-
-Shouldn't this report fullpath as:
-
-	/home/kees/korg/pgpkeys/.keyring/ed25519/csgroup.eu/christophe.leroy/20211009
-
-And as a side note, should I prefer .local/share/b4/keyring over adding
-keys to a branch of the kernel keyring git tree?
-
-> 	---
-> 	For ed25519 keys:
-> 		echo [pubkey] > [fullpath]
-> 
-> So, for Kees to start being aware of your key, he needs to do:
-> 
-> 	mkdir -p /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy
-> 	echo HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0= > /home/user/.local/share/b4/keyring/ed25519/csgroup.eu/christophe.leroy/20211009
-> 
-> I know this is awkward and clunky right now. Future versions of b4 will
-> streamline keyring management to make it a lot easier, I promise.
-
-Thanks for this walk-through! I think I managed this in the past with
-another ed25519 key, but I failed to figure it out this time. ;)
-
-Now it works! :)
-
-  ✓ [PATCH v2] lkdtm/bugs: Don't expect thread termination without
-CONFIG_UBSAN_TRAP
-    + Signed-off-by: Kees Cook <keescook@chromium.org>
-    + Link: https://lore.kernel.org/r/363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu
-  ---
-  ✓ Signed: ed25519/christophe.leroy@csgroup.eu
-
-
--- 
-Kees Cook
+Acked-by: Rob Herring <robh@kernel.org>

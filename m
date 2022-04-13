@@ -2,133 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F378F4FF587
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600EA4FF597
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiDMLQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S232266AbiDMLWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiDMLQ3 (ORCPT
+        with ESMTP id S231673AbiDMLWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:16:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB1948888
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649848448; x=1681384448;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=l2uizx05vRTt4iq6ZJGY0xJd73c67KAOG1q/jwxX0qY=;
-  b=Lrinb+/WWlD+rgy/4uXRGDV8F8xhUlbW0UVjuuO7OCH9ewl1CbmeaOT7
-   kRWKXbw5h0Phh5SINu0GLhzC1RGOBTztWaf7Bat+RK8EgE3+Ix91tK/YH
-   ZFlU91fOu4ljS56q1an9oRfwFRyM7Ckdg3Oqjgi2LURyV17UxOd0rYPg5
-   R6ysrx8OYjxIuv7IaSs/iGF7mk5Kk23SfZX2wmR9JNwGQEVoA6VU7bPc3
-   j3v+i85yf2msRj3nFnLOWgOh7T8eBgUcQ+2Uy/Wdg6sKA81+yZVHeYEw9
-   mN2LucqITk+hC1sUg3E0EkGu/y1rkIjl0FQLxJUJrfZBR+MfNAA7UBRfu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="349075057"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="349075057"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 04:14:08 -0700
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="573224127"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.67]) ([10.254.215.67])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 04:14:03 -0700
-Message-ID: <5588a772-3875-7733-aae1-36a036b91c3b@linux.intel.com>
-Date:   Wed, 13 Apr 2022 19:14:01 +0800
+        Wed, 13 Apr 2022 07:22:41 -0400
+Received: from smtp233.corp-email.com (smtp233.corp-email.com [222.73.234.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF80255BC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:20:19 -0700 (PDT)
+Received: from ([114.119.32.142])
+        by smtp233.corp-email.com ((D)) with ASMTP (SSL) id IHI00009;
+        Wed, 13 Apr 2022 19:20:09 +0800
+Received: from [172.16.35.4] (172.16.35.4) by GCY-MBS-28.TCL.com (10.136.3.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 13 Apr
+ 2022 19:20:00 +0800
+Message-ID: <ff186d65-2103-b796-79b9-3eb4a3e04380@tcl.com>
+Date:   Wed, 13 Apr 2022 19:20:06 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     baolu.lu@linux.intel.com, Fenghua Yu <fenghua.yu@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220207230254.3342514-6-fenghua.yu@intel.com>
- <Ygt4h0PgYzKOiB38@8bytes.org>
- <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
- <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
- <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
- <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
- <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <41ed3405-66d9-0cde-fc01-b3eacb85a081@intel.com> <YlWWavIDMNpbD3Ye@larix>
- <8b1e40c9-b2e8-7b73-d9ad-2c6a5a167370@intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <8b1e40c9-b2e8-7b73-d9ad-2c6a5a167370@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Michal Hocko <mhocko@suse.com>
+CC:     <jaegeuk@kernel.org>, <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <tang.ding@tcl.com>
+References: <181ce21548da652d9a14eebc684fe75c@sslemail.net>
+ <Ylab+Tz4d8kZYjef@dhcp22.suse.cz>
+From:   Wu Yan <wu-yan@tcl.com>
+In-Reply-To: <Ylab+Tz4d8kZYjef@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.35.4]
+X-ClientProxiedBy: GCY-EXS-05.TCL.com (10.74.128.155) To GCY-MBS-28.TCL.com
+ (10.136.3.28)
+tUid:   2022413192009cdda9d904e4172743aab11da4840b35c
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On 2022/4/12 23:35, Dave Hansen wrote:
-> On 4/12/22 08:10, Jean-Philippe Brucker wrote:
->>> I wonder if the Intel and ARM IOMMU code differ in the way they keep
->>> references to the mm, or if this affects Intel as well, but we just
->>> haven't tested the code enough.
->> The Arm code was written expecting the PASID to be freed on unbind(), not
->> mm exit. I missed the change of behavior, sorry (I thought your plan was
->> to extend PASID lifetime, not shorten it?) but as is it seems very broken.
->> For example in the iommu_sva_unbind_device(), we have
->> arm_smmu_mmu_notifier_put() clearing the PASID table entry for
->> "mm->pasid", which is going to end badly if the PASID has been cleared or
->> reallocated. We can't clear the PASID entry in mm exit because at that
->> point the device may still be issuing DMA for that PASID and we need to
->> quiesce the entry rather than deactivate it.
+On 4/13/22 17:46, Michal Hocko wrote:
+> On Wed 13-04-22 16:44:32, Rokudo Yan wrote:
+>> There is a potential deadlock in gc thread may happen
+>> under low memory as below:
+>>
+>> gc_thread_func
+>>   -f2fs_gc
+>>    -do_garbage_collect
+>>     -gc_data_segment
+>>      -move_data_block
+>>       -set_page_writeback(fio.encrypted_page);
+>>       -f2fs_submit_page_write
+>> as f2fs_submit_page_write try to do io merge when possible, so the
+>> encrypted_page is marked PG_writeback but may not submit to block
+>> layer immediately, if system enter low memory when gc thread try
+>> to move next data block, it may do direct reclaim and enter fs layer
+>> as below:
+>>     -move_data_block
+>>      -f2fs_grab_cache_page(index=?, for_write=false)
+>>       -grab_cache_page
+>>        -find_or_create_page
+>>         -pagecache_get_page
+>>          -__page_cache_alloc --  __GFP_FS is set
+>>           -alloc_pages_node
+>>            -__alloc_pages
+>>             -__alloc_pages_slowpath
+>>              -__alloc_pages_direct_reclaim
+>>               -__perform_reclaim
+>>                -try_to_free_pages
+>>                 -do_try_to_free_pages
+>>                  -shrink_zones
+>>                   -mem_cgroup_soft_limit_reclaim
+>>                    -mem_cgroup_soft_reclaim
+>>                     -mem_cgroup_shrink_node
+>>                      -shrink_node_memcg
+>>                       -shrink_list
+>>                        -shrink_inactive_list
+>>                         -shrink_page_list
+>>                          -wait_on_page_writeback -- the page is marked
+>>                         writeback during previous move_data_block call
 > 
-> I think we ended up flipping some of this around on the Intel side.
-> Instead of having to quiesce the device on mm exit, we don't let the mm
-> exit until the device is done.
-
-The Intel IOMMU code doesn't quiesce the device on mm exit. It only
-tears down the PASID entry so that the subsequent device accesses to mm
-is dropped silently.
-
-Just like ARM, Intel IOMMU code also expects that PASID should be freed
-and reused after device is done (i.e. after iommu_sva_unbind_device())
-so that the PASID could be drained in both hardware and software before
-reusing it for other purpose.
-
+> This is a memcg reclaim path and you would have to have __GFP_ACCOUNT in
+> the gfp mask to hit it from the page allocator. I am not really familiar
+> with f2fs but I doubt it is using this flag.
 > 
-> When you program the pasid into the device, it's a lot like when you
-> create a thread.  We bump the reference count on the mm when we program
-> the page table pointer into a CPU.  We drop the thread's reference to
-> the mm when the thread exits and will no longer be using the page tables.
+> On the other hand the memory is charged to a memcg when the newly
+> allocated page is added to the page cache. That wouldn't trigger the
+> soft reclaim path but that is not really necessary because even the
+> regular memcg reclaim would trigger wait_on_page_writeback for cgroup
+> v1.
 > 
-> Same thing with pasids.  We bump the refcount on the mm when the pasid
-> is programmed into the device.  Once the device is done with the mm, we
-> drop the mm.
+> Also are you sure that the mapping's gfp mask has __GFP_FS set for this
+> allocation? f2fs_iget uses GFP_NOFS like mask for some inode types.
 > 
-> Basically, instead of recounting the pasid itself, we just refcount the mm.
+> All that being said, you will need to change the above call chain but it
+> would be worth double checking the dead lock is real.
 
-Above makes sense to me. It guarantees that the mm->pasid could only be
-freed and reused after the device is done.
+Hi, Michal
 
-Best regards,
-baolu
+1. The issue is occur when do monkey test in Android Device with 4GB RAM 
++ 3GB zram, and memory cgroup v1 enabled.
+
+2. full memory dump has caught when the issue occur and the dead lock 
+has confirmed from dump. We can see the mapping->gfp_mask is 0x14200ca,
+so both __GFP_ACCOUNT(0x1000000) and __GFP_FS(0x80) set
+
+crash-arm64> struct inode.i_mapping 0xFFFFFFDFD578EEA0
+   i_mapping = 0xffffffdfd578f028,
+crash-arm64> struct address_space.host,gfp_mask -x 0xffffffdfd578f028
+   host = 0xffffffdfd578eea0,
+   gfp_mask = 0x14200ca,
+
+Thanks
+yanwu

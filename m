@@ -2,75 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8814FEBB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBB74FEBBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 02:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiDMACU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 20:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S229809AbiDMAGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 20:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiDMACR (ORCPT
+        with ESMTP id S229772AbiDMAGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 20:02:17 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9631D336
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:59:57 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id p10so450717plf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 16:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zgyL7xcOAUjOypHELxtMCCquCqKsmj/HjRPoph8p7J0=;
-        b=N5j3xgvs/0AfivYhTg39kpBckh9L646vQgUaML9oftFV0OPdPSGk36ue9gvzz8sqkq
-         O8NvHN1w+U0ougebclqQgVeiH3WNrPPxJyYP5Hp9PyVwv1hIdQ1Xd4Ln7E4oUMYX4wix
-         x/2wgVUuNnY0kEz7jrQP0b5Prya3tG9LOnPcI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zgyL7xcOAUjOypHELxtMCCquCqKsmj/HjRPoph8p7J0=;
-        b=Njn4XR35f5qnb1u4c5/vR6SNNTl1UTR24XYO8EzO/0nwJ2Izndyr7w8wwxOC//QCjT
-         F/sOGLIGou5Ns923DV6Jjt3GthF3IXjBXh1+yHGvR0jEsIF7dAfqq6B/mCzpethecfLk
-         CsTuXIHy3DpXnBIZhBwJp4YzFpyU3jrJ8K/ea6WIjAN58csB91yAGF54FGJxD9NkcIBD
-         mPhkO44pmTYBhPmTd71zKENTjbsWtWJOHQ13M/SJxKo+fv3f/a6Cu1L/mKwabxyk58GE
-         5aCqi7c3M0Tg9c1Bl6zc4STnaUbb5g9xpQCMHkUkaOff0IZ3I2bBBvuR7jsf803MPzFi
-         mInw==
-X-Gm-Message-State: AOAM530a9x4FL0+/bozb9GZOX8Q+NpoSnL1wybyr1Lpm5FG03BgoOGbF
-        S9dJTop1Mzm4luvtGJtivRVgoQ==
-X-Google-Smtp-Source: ABdhPJzJVBY9h5aDtAUdCACo+XB5WzSYoVMi9TlrWZZ6uaibr8u7hRuCV0vpVGnCZRJe1mXw02WHXQ==
-X-Received: by 2002:a17:902:b696:b0:156:b63:6bed with SMTP id c22-20020a170902b69600b001560b636bedmr39940117pls.24.1649807997206;
-        Tue, 12 Apr 2022 16:59:57 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:3a41:5079:6f1b:397c])
-        by smtp.gmail.com with UTF8SMTPSA id j2-20020a17090a588200b001ca37c215aasm641975pji.2.2022.04.12.16.59.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 16:59:56 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 16:59:55 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v7 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
- controller node
-Message-ID: <YlYSe5/wm06oTJej@google.com>
-References: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
- <1649685184-8448-3-git-send-email-quic_srivasam@quicinc.com>
- <YlSCWC47tITuW/BZ@google.com>
- <9bacee6d-ab44-2975-c523-38164d016af5@quicinc.com>
- <be8c6dae-20b1-3ba1-db3f-119da1e4ebfe@quicinc.com>
+        Tue, 12 Apr 2022 20:06:47 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97DC59FD1;
+        Tue, 12 Apr 2022 17:04:27 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-115-138.pa.nsw.optusnet.com.au [49.181.115.138])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 6345553451E;
+        Wed, 13 Apr 2022 10:04:24 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1neQUh-00H19U-LP; Wed, 13 Apr 2022 10:04:23 +1000
+Date:   Wed, 13 Apr 2022 10:04:23 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, jane.chu@oracle.com
+Subject: Re: [PATCH v12 6/7] xfs: Implement ->notify_failure() for XFS
+Message-ID: <20220413000423.GK1544202@dread.disaster.area>
+References: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
+ <20220410160904.3758789-7-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <be8c6dae-20b1-3ba1-db3f-119da1e4ebfe@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220410160904.3758789-7-ruansy.fnst@fujitsu.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=6256138a
+        a=/kVtbFzwtM2bJgxRVb+eeA==:117 a=/kVtbFzwtM2bJgxRVb+eeA==:17
+        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=omOdbC7AAAAA:8 a=7-415B0cAAAA:8
+        a=4dCMZFeZnbfWj20spA0A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,69 +50,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 06:41:25PM +0530, Srinivasa Rao Mandadapu wrote:
+On Mon, Apr 11, 2022 at 12:09:03AM +0800, Shiyang Ruan wrote:
+> Introduce xfs_notify_failure.c to handle failure related works, such as
+> implement ->notify_failure(), register/unregister dax holder in xfs, and
+> so on.
 > 
-> On 4/12/2022 6:18 PM, Srinivasa Rao Mandadapu wrote:
-> > 
-> > On 4/12/2022 1:02 AM, Matthias Kaehlcke wrote:
-> > Thanks for your time Matthias!!!
-> > > On Mon, Apr 11, 2022 at 07:23:04PM +0530, Srinivasa Rao Mandadapu wrote:
-> > > > Add LPASS LPI pinctrl node required for Audio functionality on sc7280
-> > > > based platforms.
-> > > > 
-> > > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> > > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> > > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> > > > ---
-> > > >   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84
-> > > > ++++++++++++++++++++++++
-> > > >   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107
-> > > > +++++++++++++++++++++++++++++++
-> > > >   2 files changed, 191 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > > b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > > index 4ba2274..ea751dc 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > > @@ -238,6 +238,90 @@
-> > > >       modem-init;
-> > > >   };
-> > > >   +&dmic01 {
-> > > Shouldn't these nodes be in the PINCTRL section at their respective
-> > > positions in alphabetical order?
-> > 
-> > These are not part of tlmm pin control section. These are part of
-> > lpass_tlmm section.
-> > 
-> > In your previous comment you asked to remove &lpass_tlmm. Hence brought
-> > out.
-> > 
-> > > 
-> > > nit: since you are keeping the groups the group names are a bit
-> > > generic IMO.
-> > > e.g. it is fairly obvious that 'dmic01_clk' refers to a clock pin,
-> > > however
-> > > just 'dmic01' is a bit vague. You could consider adding the prefix
-> > > 'lpass_'
-> > > to the group names for more clarity.
-> > as dmic01 has both clk and data section, I don't think keeping clk is
-> > appropriate here.
+> If the rmap feature of XFS enabled, we can query it to find files and
+> metadata which are associated with the corrupt data.  For now all we do
+> is kill processes with that file mapped into their address spaces, but
+> future patches could actually do something about corrupt metadata.
 > 
-> As these nodes are part of SC7280, i.e. qcom specific chipset, I feel lpass_
-> is redundant.
+> After that, the memory failure needs to notify the processes who are
+> using those files.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  fs/xfs/Makefile             |   5 +
+>  fs/xfs/xfs_buf.c            |   7 +-
+>  fs/xfs/xfs_fsops.c          |   3 +
+>  fs/xfs/xfs_mount.h          |   1 +
+>  fs/xfs/xfs_notify_failure.c | 219 ++++++++++++++++++++++++++++++++++++
+>  fs/xfs/xfs_super.h          |   1 +
+>  6 files changed, 233 insertions(+), 3 deletions(-)
+>  create mode 100644 fs/xfs/xfs_notify_failure.c
+> 
+> diff --git a/fs/xfs/Makefile b/fs/xfs/Makefile
+> index 04611a1068b4..09f5560e29f2 100644
+> --- a/fs/xfs/Makefile
+> +++ b/fs/xfs/Makefile
+> @@ -128,6 +128,11 @@ xfs-$(CONFIG_SYSCTL)		+= xfs_sysctl.o
+>  xfs-$(CONFIG_COMPAT)		+= xfs_ioctl32.o
+>  xfs-$(CONFIG_EXPORTFS_BLOCK_OPS)	+= xfs_pnfs.o
+>  
+> +# notify failure
+> +ifeq ($(CONFIG_MEMORY_FAILURE),y)
+> +xfs-$(CONFIG_FS_DAX)		+= xfs_notify_failure.o
+> +endif
+> +
+>  # online scrub/repair
+>  ifeq ($(CONFIG_XFS_ONLINE_SCRUB),y)
+>  
+> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+> index f9ca08398d32..9064b8dfbc66 100644
+> --- a/fs/xfs/xfs_buf.c
+> +++ b/fs/xfs/xfs_buf.c
+> @@ -5,6 +5,7 @@
+>   */
+>  #include "xfs.h"
+>  #include <linux/backing-dev.h>
+> +#include <linux/dax.h>
+>  
+>  #include "xfs_shared.h"
+>  #include "xfs_format.h"
+> @@ -1911,7 +1912,7 @@ xfs_free_buftarg(
+>  	list_lru_destroy(&btp->bt_lru);
+>  
+>  	blkdev_issue_flush(btp->bt_bdev);
+> -	fs_put_dax(btp->bt_daxdev, NULL);
+> +	fs_put_dax(btp->bt_daxdev, btp->bt_mount);
+>  
+>  	kmem_free(btp);
+>  }
+> @@ -1964,8 +1965,8 @@ xfs_alloc_buftarg(
+>  	btp->bt_mount = mp;
+>  	btp->bt_dev =  bdev->bd_dev;
+>  	btp->bt_bdev = bdev;
+> -	btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, NULL,
+> -					    NULL);
+> +	btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off, mp,
+> +					    &xfs_dax_holder_operations);
 
-It helps to provide some context about the pins which might not be evident
-from their short names like 'dmic01' or 'rx_swr'. A nice side effect is that
-the pins/groups would grouped automatically together in alphabetic ordering.
+I see a problem with this: we are setting up notify callbacks before
+we've even read in the superblock during mount. i.e. we don't even
+kow yet if we've got an XFS filesystem on this block device.
 
-In terms of 'redundancy' it is similar to 'qup_' prefix for the I2C/SPI/UART
-pins.
+Hence if we get a notification immediately after registering this
+notification callback....
 
-> If we add lpass_ to all dmic nodes, some node names are too lengthy.
+[...]
 
-The longest would be like 'lpass_dmic01_sleep' or 'lpass_rx_swr_sleep', which
-doesn't seem outrageous.
+> +
+> +static int
+> +xfs_dax_notify_ddev_failure(
+> +	struct xfs_mount	*mp,
+> +	xfs_daddr_t		daddr,
+> +	xfs_daddr_t		bblen,
+> +	int			mf_flags)
+> +{
+> +	struct xfs_trans	*tp = NULL;
+> +	struct xfs_btree_cur	*cur = NULL;
+> +	struct xfs_buf		*agf_bp = NULL;
+> +	int			error = 0;
+> +	xfs_fsblock_t		fsbno = XFS_DADDR_TO_FSB(mp, daddr);
+> +	xfs_agnumber_t		agno = XFS_FSB_TO_AGNO(mp, fsbno);
+> +	xfs_fsblock_t		end_fsbno = XFS_DADDR_TO_FSB(mp, daddr + bblen);
+> +	xfs_agnumber_t		end_agno = XFS_FSB_TO_AGNO(mp, end_fsbno);
 
-In any case it's not super important. If it bothers someone enough later
-on they can always send a patch that changes it.
+.... none of this code is going to function correctly because it
+is dependent on the superblock having been read, validated and
+copied to the in-memory superblock.
+
+> +	error = xfs_trans_alloc_empty(mp, &tp);
+> +	if (error)
+> +		return error;
+
+... and it's not valid to use transactions (even empty ones) before
+log recovery has completed and set the log up correctly.
+
+> +
+> +	for (; agno <= end_agno; agno++) {
+> +		struct xfs_rmap_irec	ri_low = { };
+> +		struct xfs_rmap_irec	ri_high;
+> +		struct failure_info	notify;
+> +		struct xfs_agf		*agf;
+> +		xfs_agblock_t		agend;
+> +
+> +		error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
+> +		if (error)
+> +			break;
+> +
+> +		cur = xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
+
+... and none of the structures this rmapbt walk is dependent on
+(e.g. perag structures) have been initialised yet so there's null
+pointer dereferences going to happen here.
+
+Perhaps even worse is that the rmapbt is not guaranteed to be in
+consistent state until after log recovery has completed, so this
+walk could get stuck forever in a stale on-disk cycle that
+recovery would have corrected....
+
+Hence these notifications need to be delayed until after the
+filesystem is mounted, all the internal structures have been set up
+and log recovery has completed.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

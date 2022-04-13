@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169304FFF79
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB544FFF7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236524AbiDMTmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S237438AbiDMTnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiDMTl6 (ORCPT
+        with ESMTP id S235913AbiDMTnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:41:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B529DF3F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649878775; x=1681414775;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Unbq9wvs3stZpFFAlOqO54M0np3+hySwkxR+G8fbUvc=;
-  b=PNHLEZBUxtREXIjUHBIcB7e7Vff0iHu5Xypaa5fW18WJKvBctnK5FEWg
-   D30V6GOvlyC43Eb7gyT1k6inAQvj6thonZu8odNBzSFY1fXAk6jIFtzMM
-   t4rr4pz5EBvHqMeM37z6tAM3cbUxQ1pt+KnJp4yb2i12faOwVC54YTwqD
-   cXWM3Ymmvi2uxlviMsxnq1udP/TpvLh9815Y5X7K2e9tVVj45to30clrk
-   BlxlFPvKcRkzN8JLerIaHmVRIOI6orETxS63g+OeteQ25j6GNA2uw7Ohm
-   PgGVznITPzcdLKkyEilNbUAmvreURmO86ye0+7QjA+W1z23xlGktzqL+h
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262508925"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="262508925"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:39:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="854913635"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Apr 2022 12:39:33 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neipw-0000YY-Ar;
-        Wed, 13 Apr 2022 19:39:32 +0000
-Date:   Thu, 14 Apr 2022 03:39:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/fixes 1/4] rcar_du_drv.c:(.text+0x130): multiple
- definition of `kallsyms_lookup_names';
- drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first
- defined here
-Message-ID: <202204140323.azvyw7PV-lkp@intel.com>
+        Wed, 13 Apr 2022 15:43:05 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3CF75E7C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:40:42 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id b21so3484152ljf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=KSvbPWcgC+EYpvQJgWFy6k/bppn4PjhiXHZYOLmzGZQ=;
+        b=DK7W1eF1DVRunhPz52c10Omi5ui/jCBWO3zXXAdXz7MqXfF5mpI+5WnAjjMheHwPqy
+         4gVXjPksWYf5suZpky6ntZ6YExRxIjvudoMs6GMYc5X2Ot+zQk6IcUx4WG7bBjEHQjuD
+         qLdqLNoOH0vL/eug7Q8pdk6DiyYEWzNAfwRqNYZJ+CXC8oYggOSPoJ7XJGztKDxxqmVj
+         rOrhvNB9dFz62OkS7B9brZQ04qm9OmR7bzs393IIGxCKi49IbRz3uVV384VKpPsaFKRH
+         AMjrRmE6EAVyhQ/yN1wPGfn15z+pxkYErUC5JmJeAcgHASQw09I3wTVOHy/vTqiva9bC
+         260A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KSvbPWcgC+EYpvQJgWFy6k/bppn4PjhiXHZYOLmzGZQ=;
+        b=ZGCN6rnhx2Oi3gRR0EWohAJPbPO3RqTM9TVnrvVsOakD7SrvBOfifRLkkUpANUWMZk
+         yU7JkGxnywi1NX1OvcrjRWBac0wo+bAeGSGKrkCxrVLxl/z7llBy1RX4jA1w3Zvnp3vm
+         OAsbUdku7qmSRm95m/0taPLR4wkp2Hci3EWSBzsG2U2g/pNRyJ05dcwwK29zJDQyzNkm
+         q24Ku5YBBKMeIw3day+0O02/ypICRcDTOW7E66JHEDBwen49Qc+uLaHcrXY0XFhi5eRq
+         ty9ahHEEz4RuD3osPxvqcH1e3/A7rpUCiX9kWmU/sEXn6ZycoTuROI2iZlaZzolZWV8C
+         X8Gw==
+X-Gm-Message-State: AOAM531xOnzzPtBRAx2cOHgEtbvJPjcvkiFtavKlYnBmthuSopsUAO9p
+        1mYExRcvysabG/HFa3BVg7b6sw==
+X-Google-Smtp-Source: ABdhPJw+fve7UmoJNDguXxV9w1RErcG8dtgyNN+2QOCsDgx6W/GK+8oz5oPqQhagCy7aKKYdw9TPrA==
+X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id n19-20020a2ebd13000000b002461ff86da1mr27104815ljq.219.1649878840486;
+        Wed, 13 Apr 2022 12:40:40 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s13-20020ac2464d000000b0046cff822d0fsm406876lfo.225.2022.04.13.12.40.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 12:40:39 -0700 (PDT)
+Message-ID: <e50de775-731b-d8e5-ad0f-794903fbed92@linaro.org>
+Date:   Wed, 13 Apr 2022 22:40:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 09/18] clk: qcom: krait-cc: drop pr_info and register
+ qsb only if needed
+Content-Language: en-GB
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220321231548.14276-1-ansuelsmth@gmail.com>
+ <20220321231548.14276-10-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220321231548.14276-10-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,135 +81,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
-head:   ba203a35f44376540c3c5dd72bf9ba0b9cfc4473
-commit: c42ec4e0334aacc783148e3571f3e0db53e4220a [1/4] kallsyms: Add kallsyms_lookup_names function
-config: arm-randconfig-c002-20220413 (https://download.01.org/0day-ci/archive/20220414/202204140323.azvyw7PV-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=c42ec4e0334aacc783148e3571f3e0db53e4220a
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/fixes
-        git checkout c42ec4e0334aacc783148e3571f3e0db53e4220a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On 22/03/2022 02:15, Ansuel Smith wrote:
+> Replace pr_info() with dev_info() to provide better diagnostics.
+> Register qsb fixed clk only if it's not declared in DTS.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This can be split into two patches
 
-All errors (new ones prefixed by >>):
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>   drivers/clk/qcom/krait-cc.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
+> index 645ad9e8dd73..e9508e3104ea 100644
+> --- a/drivers/clk/qcom/krait-cc.c
+> +++ b/drivers/clk/qcom/krait-cc.c
+> @@ -308,7 +308,9 @@ static int krait_cc_probe(struct platform_device *pdev)
+>   		return -ENODEV;
+>   
+>   	/* Rate is 1 because 0 causes problems for __clk_mux_determine_rate */
+> -	clk = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
+> +	if (IS_ERR(clk_get(dev, "qsb")))
+> +		clk = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
+> +
+>   	if (IS_ERR(clk))
+>   		return PTR_ERR(clk);
+>   
+> @@ -363,25 +365,25 @@ static int krait_cc_probe(struct platform_device *pdev)
+>   	cur_rate = clk_get_rate(l2_pri_mux_clk);
+>   	aux_rate = 384000000;
+>   	if (cur_rate == 1) {
+> -		pr_info("L2 @ QSB rate. Forcing new rate.\n");
+> +		dev_info(dev, "L2 @ QSB rate. Forcing new rate.\n");
+>   		cur_rate = aux_rate;
+>   	}
+>   	clk_set_rate(l2_pri_mux_clk, aux_rate);
+>   	clk_set_rate(l2_pri_mux_clk, 2);
+>   	clk_set_rate(l2_pri_mux_clk, cur_rate);
+> -	pr_info("L2 @ %lu KHz\n", clk_get_rate(l2_pri_mux_clk) / 1000);
+> +	dev_info(dev, "L2 @ %lu KHz\n", clk_get_rate(l2_pri_mux_clk) / 1000);
+>   	for_each_possible_cpu(cpu) {
+>   		clk = clks[cpu];
+>   		cur_rate = clk_get_rate(clk);
+>   		if (cur_rate == 1) {
+> -			pr_info("CPU%d @ QSB rate. Forcing new rate.\n", cpu);
+> +			dev_info(dev, "CPU%d @ QSB rate. Forcing new rate.\n", cpu);
+>   			cur_rate = aux_rate;
+>   		}
+>   
+>   		clk_set_rate(clk, aux_rate);
+>   		clk_set_rate(clk, 2);
+>   		clk_set_rate(clk, cur_rate);
+> -		pr_info("CPU%d @ %lu KHz\n", cpu, clk_get_rate(clk) / 1000);
+> +		dev_info(dev, "CPU%d @ %lu KHz\n", cpu, clk_get_rate(clk) / 1000);
+>   	}
+>   
+>   	of_clk_add_provider(dev->of_node, krait_of_get, clks);
 
-   arm-linux-gnueabi-ld: drivers/gpu/drm/rcar-du/rcar_du_drv.o: in function `kallsyms_lookup_names':
->> rcar_du_drv.c:(.text+0x130): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/rcar-du/rcar_du_encoder.o: in function `kallsyms_lookup_names':
-   rcar_du_encoder.c:(.text+0x0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/rcar-du/rcar_du_group.o: in function `kallsyms_lookup_names':
-   rcar_du_group.c:(.text+0x0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/rcar-du/rcar_du_kms.o: in function `kallsyms_lookup_names':
-   rcar_du_kms.c:(.text+0x430): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/rcar-du/rcar_du_plane.o: in function `kallsyms_lookup_names':
-   rcar_du_plane.c:(.text+0x560): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/rcar-du/rcar_du_crtc.o:rcar_du_crtc.c:(.text+0xb7a): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/i2c/ch7006_mode.o: in function `kallsyms_lookup_names':
->> ch7006_mode.c:(.text+0x9e): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/i2c/ch7006_drv.o:ch7006_drv.c:(.text+0x834): first defined here
---
-   arm-linux-gnueabi-ld: drivers/net/ethernet/marvell/mvpp2/mvpp2_prs.o: in function `kallsyms_lookup_names':
->> mvpp2_prs.c:(.text+0xe7c): multiple definition of `kallsyms_lookup_names'; drivers/net/ethernet/marvell/mvpp2/mvpp2_main.o:mvpp2_main.c:(.text+0x3034): first defined here
-   arm-linux-gnueabi-ld: drivers/net/ethernet/marvell/mvpp2/mvpp2_cls.o: in function `kallsyms_lookup_names':
-   mvpp2_cls.c:(.text+0x588): multiple definition of `kallsyms_lookup_names'; drivers/net/ethernet/marvell/mvpp2/mvpp2_main.o:mvpp2_main.c:(.text+0x3034): first defined here
-   arm-linux-gnueabi-ld: drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.o: in function `kallsyms_lookup_names':
-   mvpp2_debugfs.c:(.text+0x8a8): multiple definition of `kallsyms_lookup_names'; drivers/net/ethernet/marvell/mvpp2/mvpp2_main.o:mvpp2_main.c:(.text+0x3034): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.o: in function `kallsyms_lookup_names':
->> atmel_hlcdc_dc.c:(.text+0x378): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.o:atmel_hlcdc_crtc.c:(.text+0x5a6): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.o: in function `kallsyms_lookup_names':
-   atmel_hlcdc_output.c:(.text+0x11c): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.o:atmel_hlcdc_crtc.c:(.text+0x5a6): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.o: in function `kallsyms_lookup_names':
-   atmel_hlcdc_plane.c:(.text+0x924): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.o:atmel_hlcdc_crtc.c:(.text+0x5a6): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/shmobile/shmob_drm_crtc.o: in function `kallsyms_lookup_names':
->> shmob_drm_crtc.c:(.text+0x8cc): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/shmobile/shmob_drm_backlight.o:shmob_drm_backlight.c:(.text+0x68): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/shmobile/shmob_drm_drv.o: in function `kallsyms_lookup_names':
-   shmob_drm_drv.c:(.text+0x258): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/shmobile/shmob_drm_backlight.o:shmob_drm_backlight.c:(.text+0x68): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/shmobile/shmob_drm_kms.o: in function `kallsyms_lookup_names':
-   shmob_drm_kms.c:(.text+0x0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/shmobile/shmob_drm_backlight.o:shmob_drm_backlight.c:(.text+0x68): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/shmobile/shmob_drm_plane.o: in function `kallsyms_lookup_names':
-   shmob_drm_plane.c:(.text+0x350): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/shmobile/shmob_drm_backlight.o:shmob_drm_backlight.c:(.text+0x68): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_framebuffer.o: in function `kallsyms_lookup_names':
->> sun4i_framebuffer.c:(.text+0x30): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_drv.o:sun4i_drv.c:(.text+0x464): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_dotclock.o: in function `kallsyms_lookup_names':
->> sun4i_dotclock.c:(.text+0x22c): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_crtc.o:sun4i_crtc.c:(.text+0x28c): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_lvds.o: in function `kallsyms_lookup_names':
-   sun4i_lvds.c:(.text+0x168): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_crtc.o:sun4i_crtc.c:(.text+0x28c): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_tcon.o: in function `kallsyms_lookup_names':
-   sun4i_tcon.c:(.text+0x10b4): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_crtc.o:sun4i_crtc.c:(.text+0x28c): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_rgb.o: in function `kallsyms_lookup_names':
-   sun4i_rgb.c:(.text+0x31c): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_crtc.o:sun4i_crtc.c:(.text+0x28c): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_hdmi_enc.o: in function `kallsyms_lookup_names':
->> sun4i_hdmi_enc.c:(.text+0x824): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_hdmi_ddc_clk.o:sun4i_hdmi_ddc_clk.c:(.text+0x14a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.o: in function `kallsyms_lookup_names':
-   sun4i_hdmi_i2c.c:(.text+0x6c4): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_hdmi_ddc_clk.o:sun4i_hdmi_ddc_clk.c:(.text+0x14a): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun4i_hdmi_tmds_clk.o: in function `kallsyms_lookup_names':
-   sun4i_hdmi_tmds_clk.c:(.text+0x25e): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun4i_hdmi_ddc_clk.o:sun4i_hdmi_ddc_clk.c:(.text+0x14a): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun8i_hdmi_phy.o: in function `kallsyms_lookup_names':
->> sun8i_hdmi_phy.c:(.text+0x7b0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun8i_dw_hdmi.o:sun8i_dw_hdmi.c:(.text+0x3d2): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun8i_hdmi_phy_clk.o: in function `kallsyms_lookup_names':
-   sun8i_hdmi_phy_clk.c:(.text+0x1ae): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun8i_dw_hdmi.o:sun8i_dw_hdmi.c:(.text+0x3d2): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun8i_ui_layer.o: in function `kallsyms_lookup_names':
->> sun8i_ui_layer.c:(.text+0x518): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun8i_mixer.o:sun8i_mixer.c:(.text+0x4c8): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/sun4i/sun8i_vi_layer.o: in function `kallsyms_lookup_names':
-   sun8i_vi_layer.c:(.text+0x730): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/sun4i/sun8i_mixer.o:sun8i_mixer.c:(.text+0x4c8): first defined here
---
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/uapi.o: in function `kallsyms_lookup_names':
->> uapi.c:(.text+0x70): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/submit.o: in function `kallsyms_lookup_names':
-   submit.c:(.text+0x9e8): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/firewall.o: in function `kallsyms_lookup_names':
-   firewall.c:(.text+0xde): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/gem.o: in function `kallsyms_lookup_names':
-   gem.c:(.text+0x6c8): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/fb.o: in function `kallsyms_lookup_names':
-   fb.c:(.text+0x0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/dp.o: in function `kallsyms_lookup_names':
-   dp.c:(.text+0x294): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/hub.o: in function `kallsyms_lookup_names':
-   hub.c:(.text+0xd48): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/plane.o: in function `kallsyms_lookup_names':
-   plane.c:(.text+0x460): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/dc.o: in function `kallsyms_lookup_names':
-   dc.c:(.text+0x1f20): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/output.o: in function `kallsyms_lookup_names':
-   output.c:(.text+0x56): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/rgb.o: in function `kallsyms_lookup_names':
-   rgb.c:(.text+0x14c): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/hdmi.o: in function `kallsyms_lookup_names':
-   hdmi.c:(.text+0x1370): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/dsi.o: in function `kallsyms_lookup_names':
-   dsi.c:(.text+0x13d0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/sor.o: in function `kallsyms_lookup_names':
-   sor.c:(.text+0x2b34): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/dpaux.o: in function `kallsyms_lookup_names':
-   dpaux.c:(.text+0x7c8): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/gr2d.o: in function `kallsyms_lookup_names':
-   gr2d.c:(.text+0x42c): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/gr3d.o: in function `kallsyms_lookup_names':
-   gr3d.c:(.text+0x5cc): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/falcon.o: in function `kallsyms_lookup_names':
-   falcon.c:(.text+0xc0): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/vic.o: in function `kallsyms_lookup_names':
-   vic.c:(.text+0x574): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-   arm-linux-gnueabi-ld: drivers/gpu/drm/tegra/nvdec.o: in function `kallsyms_lookup_names':
-   nvdec.c:(.text+0x49e): multiple definition of `kallsyms_lookup_names'; drivers/gpu/drm/tegra/drm.o:drm.c:(.text+0x638): first defined here
-..
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With best wishes
+Dmitry

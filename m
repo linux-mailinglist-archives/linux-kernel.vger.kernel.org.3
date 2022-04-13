@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E874500123
+	by mail.lfdr.de (Postfix) with ESMTP id 57065500124
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbiDMVYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S239133AbiDMVYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239057AbiDMVYh (ORCPT
+        with ESMTP id S239038AbiDMVYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:24:37 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB93D6A036;
-        Wed, 13 Apr 2022 14:22:14 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id t12so3013854pll.7;
-        Wed, 13 Apr 2022 14:22:14 -0700 (PDT)
+        Wed, 13 Apr 2022 17:24:39 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B4B66C97;
+        Wed, 13 Apr 2022 14:22:16 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k23so6509134ejd.3;
+        Wed, 13 Apr 2022 14:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+X08DSG/wNY3wo7nWD+dVOpfZxmyUQ5QFyn/yBwqpvM=;
-        b=an44rIKGAbQ06/p6QvCLRLjVZ+F34I0eg+iMhW7XJx6yPlvfIeHFvPJMr7Z7/pIn0S
-         9GC20kjhsZjoODkQLQIWkd59pUHQM4/99wXtaqFM5Yi7jP5hWlK/YcqHhFWn5CbxJnR2
-         gIjpHyI1nyjtjvv1QccC4qAxgx6QMbh/QoiDqWIry7BRp8gW0BZZm2FDS6qrswnc6Bdo
-         xSj4rkONzAbK/+RUVY1oGjG5b2Nmn7/thqChKcxHNcHnymC727azLRETn2MaNU3W+OHZ
-         SXkvjJvnL+50389O7j12r5LQbpArv3OVmuraqSwKIkIk6/m0/+rDM10LS0DAzz9Cto7d
-         5zgQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LbnAeJu+mSJrOhK0YF2KczoT41D0h8PfC3LbVNUGzpE=;
+        b=aa+5LyswOpxqjG7WzCPpOCdbgp/WuK2qXlP817DNGTK6jUIufD5TzDs9RA2MsJln1+
+         0Z1lvg7BMweewUwAduqBkG49jSLyPlzD9kj6T816ZVKoAnlVMrxCNvd1oSKsRfYUHfeC
+         AQsxsu7H8tANDPU42PgNsaHyv0dQGPMzFr2rFPJNsIpQokqz7+ZAAES2h93mssw7W6ZE
+         TPP6rEOtrkHPw2Rd/mPb6YYuQcnObWMqeIiACyaUxjwN6YacZTnf18qAheRAd40FK+7V
+         z57zj7n4iKeNu1CYELHZbw3k3tknVlfG8nZPMdsu7QPoa8r3NJEYjs2enKa4Y5gEhUld
+         WTLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+X08DSG/wNY3wo7nWD+dVOpfZxmyUQ5QFyn/yBwqpvM=;
-        b=JRp4cN6QsO7y0MOJUAjXHyjr6XVa9Xsgxw1YUWdtqTBIoMt18ZbSIsFvzWpa+KQbdO
-         OYN0Sd+qNaihah/1BOfuXCH6Jr95397LGJyPc21fnMc179xOEfvMBrjOz58wcSKEkX1k
-         LtG285fbhIn+tq/WUSdQGVl6TjgS6RIx22ufjXkfeeVpLOw8eXPDY0f+DmFubnctHk4k
-         Q//bIwPAREvPOl8W4N8REOHFlrC+CBnDv+6CxwuICYbNDy7jkNqfUFM3BKvD0lpiVfJD
-         yMvX2rkUFBEAlEiIuLBU+dKzxo3U3gDUDLx5M5DsTGQintX6TBxnYPTWpPTQpTUomwBV
-         lteQ==
-X-Gm-Message-State: AOAM533lkPIzcXnBWLDqI/LWRSI7NPusd4QchvHi8DrrmjiZhTR0nztl
-        30YXOByghJAur8D1it1uRYM=
-X-Google-Smtp-Source: ABdhPJzyrfk1LaEa181NDaE4Bh3o0Uwb2eaPySFMcmtdLjnUwvvdCWJXLA0PoL9SPkRMg0G56lAnWg==
-X-Received: by 2002:a17:90b:3e8b:b0:1c7:852d:e843 with SMTP id rj11-20020a17090b3e8b00b001c7852de843mr103082pjb.244.1649884934409;
+        bh=LbnAeJu+mSJrOhK0YF2KczoT41D0h8PfC3LbVNUGzpE=;
+        b=Z8aqcu3AN0d8YUTmutzq+4cuRIa171af1EFZUk3ct6EKW678CcsW5l4+2KHcQHpwOd
+         /K5ASkKrIIp9Z1Z6Dz4BHRxdymmxqMVfeUi+hkTDlfzAZE2XfP5En7JXTPOwQaiSC/jA
+         s051T439PUfNLADi/OoRKVg+0jWHrhD/TjdAgPHTBoIL6MSdvvq/kDdq/O9LXcxNGshd
+         2b3eQMC/7z06/DtNYAQF/Z7NVedwe4+nO0wITT3LN4tNO3a47Hvd5R3Q/IqdAXI7K48g
+         8igmX2E/gK/ThWTrRto2MBSLV44n5XMouT66sfvJ6CyKS4Zuu2UXbgQW3svHwPn21+Uj
+         qH8g==
+X-Gm-Message-State: AOAM533JgvLFtbWNQRdJVGvZLHs9rZsWXnmOvR4gfkh1irqnFMZa3bMG
+        +QwMCbTdwCxky8zrjB++AUQ=
+X-Google-Smtp-Source: ABdhPJxvooD4u6SAjw+4A4hPyn40ux/U5r40VIzqQDjzdLtvQHLsWPGxk146dW4t8vuSsZKQFmNgbQ==
+X-Received: by 2002:a17:907:3f0f:b0:6e8:3b05:cc6 with SMTP id hq15-20020a1709073f0f00b006e83b050cc6mr30886644ejc.91.1649884935461;
+        Wed, 13 Apr 2022 14:22:15 -0700 (PDT)
+Received: from localhost.localdomain (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id k22-20020a508ad6000000b00420bd71e06bsm30883edk.79.2022.04.13.14.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 13 Apr 2022 14:22:14 -0700 (PDT)
-Received: from ?IPV6:2620:15c:2c1:200:4cf8:b337:73c1:2c25? ([2620:15c:2c1:200:4cf8:b337:73c1:2c25])
-        by smtp.gmail.com with ESMTPSA id d24-20020aa797b8000000b0050759ced9d9sm13100pfq.119.2022.04.13.14.22.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 14:22:13 -0700 (PDT)
-Message-ID: <5a92f5cd-9af4-4228-dc44-b0c363f30e18@gmail.com>
-Date:   Wed, 13 Apr 2022 14:22:09 -0700
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_set()
+Date:   Wed, 13 Apr 2022 23:22:10 +0200
+Message-Id: <20220413212210.18494-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, dsahern@kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-References: <20220413143434.527-1-aajith@arista.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <20220413143434.527-1-aajith@arista.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,24 +76,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The use of kmap() is being deprecated in favor of kmap_local_page()
+where it is feasible. In file pci/hmm/hmm.c, function hmm_set() calls
+kmap() / kunmap() where kmap_local_page() can instead do the mapping.
 
-On 4/13/22 07:34, Arun Ajith S wrote:
-> Add a new neighbour cache entry in STALE state for routers on receiving
-> an unsolicited (gratuitous) neighbour advertisement with
-> target link-layer-address option specified.
-> This is similar to the arp_accept configuration for IPv4.
-> A new sysctl endpoint is created to turn on this behaviour:
-> /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Therefore, hmm_set()() is a function where the use
+of kmap_local_page() in place of kmap() is correctly suited.
 
+Convert the calls of kmap() / kunmap() to kmap_local_page() /
+kunmap_local().
 
-Do we really need to expose this to /proc/sys, for every interface added 
-in the host ?
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/staging/media/atomisp/pci/hmm/hmm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-/proc files creations/deletion cost a lot in environments 
-adding/deleting netns very often.
-
-I would prefer using NETLINK attributes, a single recvmsg() syscall can 
-fetch/set hundreds of them.
-
-
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index 6394385b6637..46ac082cd3f1 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -563,7 +563,7 @@ int hmm_set(ia_css_ptr virt, int c, unsigned int bytes)
+ 		idx = (virt - bo->start) >> PAGE_SHIFT;
+ 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
+ 
+-		des = (char *)kmap(bo->page_obj[idx].page) + offset;
++		des = (char *)kmap_local_page(bo->page_obj[idx].page) + offset;
+ 
+ 		if ((bytes + offset) >= PAGE_SIZE) {
+ 			len = PAGE_SIZE - offset;
+@@ -579,7 +579,7 @@ int hmm_set(ia_css_ptr virt, int c, unsigned int bytes)
+ 
+ 		clflush_cache_range(des, len);
+ 
+-		kunmap(bo->page_obj[idx].page);
++		kunmap_local(des);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
 

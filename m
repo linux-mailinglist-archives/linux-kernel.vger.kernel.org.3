@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285CD4FF38E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E86B4FF391
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiDMJey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229891AbiDMJfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiDMJeu (ORCPT
+        with ESMTP id S231169AbiDMJf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:34:50 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C07E53B69
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:32:30 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id v12so1472432plv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:32:30 -0700 (PDT)
+        Wed, 13 Apr 2022 05:35:28 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0F853E33;
+        Wed, 13 Apr 2022 02:33:08 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id bg9so1273716pgb.9;
+        Wed, 13 Apr 2022 02:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PJvC/v5Z4vt3b0hI2Sufdr2aXHGEjFQtW1ly8K8dLZI=;
-        b=Ch4ipHIxNsXyYDqVwxC/e70s5eHUWoUyDfr5iOo7gNCQFoSr2QfbSqM4JKJs8rr8/X
-         t1+Uvy+HoCOPGxe1CeWGhSaOLLvS7fq7o5Jm6QVVa5c7maPphqqEMl9866Enex3JN6g0
-         n4UCN1wsKIHOlyF8SrX2xvatGTS2gPTqomgFJJG488mAqQUzhKuGWdL16djI7z5m9zwB
-         XM4cVUoIOggsrhVDzfA+swEVw+DvflnCRhIpakPYKePgOEpQx4pDtubss01MTTqMsyA8
-         ZgYyXZsftnHShjxBpsPqC4HwJY1niDbsIFbVW8zNHNA/OTd4/3fuUGpeCRf4VWFmSOpq
-         eaQw==
+        bh=71rejMLUOpE9jq6515Gy00CkulFrob9qebd7+EUnqFQ=;
+        b=R0+gpZkREyDs1i9PSyA6T9OmKO18FnN82EapnK44lsAXWBIIvUDjjantw+t/ZbT/lo
+         kTyErA6DZx4l8ssmupcZ0WJoS1YUcmgGQSqoYMq2d0DiaBz9nxATUGo2SxVEfORD4NRc
+         MlLSLxvFjSnR161Ee+mTKh0DbK5nvI+ZlsldZDjHvNeAvpEpOF9ceX+xBw/Iw8+g/qSq
+         OlZ7OHk1GwUx4mC6FLB2J/ksBD9lbL2C3yH17bwc4779ALvCxw0YqLb6xFJoNgj+JBVp
+         CLh0ECVEF3fsmwx1Cgcvy8QNKv2uI3Kn0lG23XP4Q/7TRnCGXIGHAyhk7fXNr+dZ7uXI
+         S5IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PJvC/v5Z4vt3b0hI2Sufdr2aXHGEjFQtW1ly8K8dLZI=;
-        b=7OgF9hqo+2yIWTnoyumC+Y+6wOTq66U8mpreFtgHCs0MmRA+yqqEoCIE5f44YAl3+R
-         pHktzqNAtGX9/AVTdOvLG9OajibZKhrWR6IU51B83pIijuaG1q3sxpLgXIxL/ElWckPZ
-         2f4QnaREOWsk3tt7PnP/zTs9XLq40gJK6OFCtJTjyj4b+n87jxYolyBtktr7Gnxr656w
-         C49IT9Dnidwecew2uGxJ22z55QGcv/zlxF4aeFW845lWC6EYXkPZ2xRcRXRG5I7kKcDZ
-         wMO54H1iiEfaZ6uGoEcoNVxP1jQRmjhTDIbZ6CYuZ7U29W6ImQyjPw6+/Uc+b2zQES+m
-         b/Tw==
-X-Gm-Message-State: AOAM530MbmXYKUDWro2kFL66vhTf9D2pBMfD+IUuwARNJt3raVhWDP/e
-        Qp67Tzx3lXs4zjBrQk5oD72jHSJy5uQ=
-X-Google-Smtp-Source: ABdhPJwIJOGTTokRQt4hDbORGoKVbzbIKfMTdf8SBVleRESVFNyF143qsiRt7l98H2SZ866pSOaDtw==
-X-Received: by 2002:a17:90a:de87:b0:1cb:b207:a729 with SMTP id n7-20020a17090ade8700b001cbb207a729mr9715897pjv.144.1649842349882;
-        Wed, 13 Apr 2022 02:32:29 -0700 (PDT)
+        bh=71rejMLUOpE9jq6515Gy00CkulFrob9qebd7+EUnqFQ=;
+        b=0CigAMzbO3c8dX/XaWCdjYaG9UWkZOW+Vt0Q2o9BBvEvrCpjeLkkQ8fdqknLG+a7QW
+         Yn24/OG7zE7NiRQfE+ILyCezrkYgdFUrm4YSBo8i+1TeB3ex/fXhhWQkTgMM0dWCUq0q
+         iyVf0nAI+WJ++E3qa6/un4JMpOfwYsqlKVL1NtxF9Ngp8A5yPWv41IxBxZmHwPUXeuqK
+         RdfJYsmdNlnmW/lt6/FN5EuOrZnHOLzdxqmDpGg7KMZOXzX4LZsMia718t1Lrl20du/n
+         HZpnepq0FsWpMtBYMcr0jMWKArVYAuhVwRMuKbgZOMPTPcADgPnacTijhnjtYaStv8Kh
+         JaZA==
+X-Gm-Message-State: AOAM531vpbtZf8PJuSfl9MOrVNb7slFqaLol+gn3KcPC/4SgC9nlZxjo
+        oYGX3GmLzAW0KQPYM6q6MsU=
+X-Google-Smtp-Source: ABdhPJyJviGGDXGauLUSmhS1nxXWoDSj3bD5zchrj+1BZ3Yyxk0KclX/bwrUAWptbn+aq4Sgu7WKLg==
+X-Received: by 2002:aa7:843c:0:b0:505:7943:63a0 with SMTP id q28-20020aa7843c000000b00505794363a0mr8828509pfn.71.1649842387804;
+        Wed, 13 Apr 2022 02:33:07 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h18-20020a63c012000000b0039cc3c323f7sm5411339pgg.33.2022.04.13.02.32.26
+        by smtp.gmail.com with ESMTPSA id 2-20020a17090a0f0200b001cb6621403csm2332678pjy.24.2022.04.13.02.33.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 02:32:29 -0700 (PDT)
+        Wed, 13 Apr 2022 02:33:07 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     codrin.ciubotariu@microchip.com
-Cc:     arnd@arndb.de, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] misc: atmel-ssc: fix error check return value of platform_get_irq()
-Date:   Wed, 13 Apr 2022 09:32:22 +0000
-Message-Id: <20220413093222.2538066-1-lv.ruyi@zte.com.cn>
+To:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com
+Cc:     peterz@infradead.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        james.clark@arm.com, lv.ruyi@zte.com.cn,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] perf stat: fix error check return value of hashmap__new()
+Date:   Wed, 13 Apr 2022 09:33:02 +0000
+Message-Id: <20220413093302.2538128-1-lv.ruyi@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,28 +74,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-platform_get_irq() return negative value on failure, so null check of
-ssc->irq is incorrect. Fix it by comparing whether it is less than zero.
+hashmap__new() returns ERR_PTR(-ENOMEM) when it fails, so we should use
+IS_ERR() to check it in error handling path.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
- drivers/misc/atmel-ssc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/stat.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
-index d6cd5537126c..5e7b290d9515 100644
---- a/drivers/misc/atmel-ssc.c
-+++ b/drivers/misc/atmel-ssc.c
-@@ -232,7 +232,7 @@ static int ssc_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(ssc->clk);
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index ee6f03481215..817a2de264b4 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <errno.h>
++#include <linux/err.h>
+ #include <inttypes.h>
+ #include <math.h>
+ #include <string.h>
+@@ -311,7 +312,7 @@ static int check_per_pkg(struct evsel *counter, struct perf_counts_values *vals,
  
- 	ssc->irq = platform_get_irq(pdev, 0);
--	if (!ssc->irq) {
-+	if (ssc->irq < 0) {
- 		dev_dbg(&pdev->dev, "could not get irq\n");
- 		return -ENXIO;
- 	}
+ 	if (!mask) {
+ 		mask = hashmap__new(pkg_id_hash, pkg_id_equal, NULL);
+-		if (!mask)
++		if (IS_ERR(mask))
+ 			return -ENOMEM;
+ 
+ 		counter->per_pkg_mask = mask;
 -- 
 2.25.1
 

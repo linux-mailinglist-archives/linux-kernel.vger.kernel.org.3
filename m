@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E28E4FF580
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041194FF582
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 13:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235136AbiDMLOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 07:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
+        id S235147AbiDMLOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 07:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbiDMLOa (ORCPT
+        with ESMTP id S232227AbiDMLOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 07:14:30 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C86D2317C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:12:09 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id v4so1917882edl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 04:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=87vL2p0pvhqf2NKE/P/XI4XOW4lM/9Q/Rj1t8GWi1VY=;
-        b=iFpZlw0WhnEeSG0qd6AJpduqRQb8ehjjOGBH4WdIkuLlwWGDjohiquXQQSBt41lFSY
-         Yg0fDRfGeTDR/dto1BoIj5AqsY7K0ueRu+NHf/olgixW8sn2UnBaupRBeoOQi85Fewkn
-         1/LqrbMry3XCcNtbDzB/+sUl6DoqTYVMb9CfJZzdXbgCsPn0YTc0tm+k1zPkz4IMCpla
-         rvkAVRHxIs9hG9x3/2bACCq7gBxo23ebbMC+9Nmk7B7wENMIb6v8WxcDSSXxqtWGcY4U
-         yY4ebadiEWq/qpdVuT7fmAvgLewUYoroAclevvF7Pk0POkmlW7ecGagj8ZAGvx7gvC8D
-         bkAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=87vL2p0pvhqf2NKE/P/XI4XOW4lM/9Q/Rj1t8GWi1VY=;
-        b=lRPGnHHkhN0ixfapEuAtiGTc3X5xonBX+7s26KPS/mdclIZRLcjYnIFxFTRj1QXPHP
-         diWWXvvLw1yvLe+fmX5rAnV95dTqpf0yjwd3dLltRsjpR8I6MNjKLHn2m7c/2NZC5One
-         TcCgCWnPlgE5A7Jq0TX6VLBXUmh0jH7HGCed31qiAmNpyak6gG9q9ZL1KrI/V2PU9QP4
-         UGzQRBd6GV8XXQG93/wzeWtY/GyBG472AbWUntANyzZdWtRyG0BwD66u1u9HKO9u6Ry9
-         I5gqThIn5NJQAN+SAgBJSPnVqqKvTCyQ0ZG/w/VSlYxwWzwdPip93nC3Y3rA9AjNnVcn
-         x6lQ==
-X-Gm-Message-State: AOAM532ACLF4komhlzzuFfNJF9nQ0Awi9KcWqokyeYspJSB2NzUH1IsC
-        O8+cIu249rHdbO1R8DWEUwj/Mw==
-X-Google-Smtp-Source: ABdhPJxlPDfsOxnR5ZwL7ovWY0IIPZSF4YXgSIOlLo5C8SHy0yCkfqr6KodAmndXR6n0qaTHg3KxVA==
-X-Received: by 2002:a05:6402:28a0:b0:41d:732c:d9ec with SMTP id eg32-20020a05640228a000b0041d732cd9ecmr19072001edb.197.1649848328196;
-        Wed, 13 Apr 2022 04:12:08 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c3-20020a17090654c300b006e4e1a3e9d5sm13772854ejp.144.2022.04.13.04.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 04:12:07 -0700 (PDT)
-Message-ID: <3622cf00-db47-2f95-f38a-426ad3690cba@linaro.org>
-Date:   Wed, 13 Apr 2022 13:12:06 +0200
+        Wed, 13 Apr 2022 07:14:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3573027FE3;
+        Wed, 13 Apr 2022 04:12:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E1787210E5;
+        Wed, 13 Apr 2022 11:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649848336; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ngB0VaDZkffeOh+BSwJSCsqMcNibSRUO4jU8FKml6Bs=;
+        b=i8qKj0NNFnGDs/62UlAmcsdLiT3oYBGGKRDyTKuXoGgeqCfro+kOFHFEtUEnkuXMb9nrfZ
+        jsOai74lku4/r+dmPZLZkCSpMSx3PL33g3X0PyDW/EOZWGk9rEXFvoS8UkeuIHLitPT1b5
+        ViZOs9dic+cSfwyRWq1RVGDSWUAlQGw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649848336;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ngB0VaDZkffeOh+BSwJSCsqMcNibSRUO4jU8FKml6Bs=;
+        b=haFT45FMpnXW+0MzW9Ui1fMZNh/llnnI3l08AdD/0HoufaBvM07pNwAHzWzodylCXdQXTp
+        kTc795IgiNJSZQBA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CCDB2A3B87;
+        Wed, 13 Apr 2022 11:12:16 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7F4AFA0615; Wed, 13 Apr 2022 13:12:16 +0200 (CEST)
+Date:   Wed, 13 Apr 2022 13:12:16 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
+        jack@suse.cz, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next 00/11] support concurrent sync io for bfq on a
+ specail occasion
+Message-ID: <20220413111216.npgrdzaubsvjsmy3@quack3.lan>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
- SP7021
-Content-Language: en-US
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de
-Cc:     wells.lu@sunplus.com, lh.Kuo@sunplus.com, tony.huang@sunplus.com
-References: <cover.1649229258.git.tonyhuang.sunplus@gmail.com>
- <9628a68b922ae9f32c6cd7ea734c436440d21e6d.1649229258.git.tonyhuang.sunplus@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9628a68b922ae9f32c6cd7ea734c436440d21e6d.1649229258.git.tonyhuang.sunplus@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220305091205.4188398-1-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2022 10:29, Tony Huang wrote:
-> Add MMC YAML file for Sunplus SP7021.
+On Sat 05-03-22 17:11:54, Yu Kuai wrote:
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
 > 
-> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> ---
-> Changes in v5:
->  - Addressed comments from Krzysztof.
->  
-> Changes in v6:
->  - Addressed comments from Krzysztof.
->  - To substitute MMC for mmc. To substitute YMAL for ymal.
->  - Remove max-frequency.
->  - Fixed wrong file name.
+> This patchset tries to support concurrent sync io if all the sync ios
+> are issued from the same cgroup:
 > 
+> 1) Count root_group into 'num_groups_with_pending_reqs', patch 1-5;
 
+Seeing the complications and special casing for root_group I wonder: Won't
+we be better off to create fake bfq_sched_data in bfq_data and point
+root_group->sched_data there? AFAICS it would simplify the code
+considerably as root_group would be just another bfq_group, no need to
+special case it in various places, no games with bfqg->my_entity, etc.
+Paolo, do you see any problem with that?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,154 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0066B4FFA27
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC344FFA2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236500AbiDMPat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S236509AbiDMPbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiDMPar (ORCPT
+        with ESMTP id S232010AbiDMPbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:30:47 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5FD633A0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:28:25 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7E3141C0002;
-        Wed, 13 Apr 2022 15:28:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649863704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WGuKkZoZhqAp3vshntO7a0lSfalv/QZe/nQ44NUXLMc=;
-        b=fjHFRViT16sOsvfG3G/TDkG5Aj69mjco8uA9n8i3tjVrkhiNXyvVcYtwx6NANeUlxEiRxs
-        4azAHfxQyuSZKYkj8sUIg4XpPzMYOysj9o4xNd7TE/imZtURksFoadaX7xHLHByVFdwe+r
-        AO6HhHg5gbB/3Fy2mGcXxzN6RwDV72xDLigcXHG49kkyDcQZhy/gEeJc4nvtHr/H0dc4Ag
-        T/gUbuDShrMYKdqEXBTZPLpghxIfk1k27mLLOwRM0f0kY+4oCMsyezUJigZ2HyKLYe8WpK
-        qqs6Da+AdYt7/XVSQk77BMFNBeK5a0xjtE4cC6D4qYcVUdfhKbQwIS0Syl1/NQ==
-Date:   Wed, 13 Apr 2022 17:28:19 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mtd: spinand: add support for ESMT F50x1G41LB
-Message-ID: <20220413172819.438f79e4@xps13>
-In-Reply-To: <CAJsYDV+3J0ipbR+N-xE=DH-WXsjierdHe_pJtKf1Xbt7fdaiWw@mail.gmail.com>
-References: <20220413083824.247136-1-gch981213@gmail.com>
-        <20220413145843.46a3d9b5@xps13>
-        <CAJsYDV+3J0ipbR+N-xE=DH-WXsjierdHe_pJtKf1Xbt7fdaiWw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 13 Apr 2022 11:31:31 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328E56338E;
+        Wed, 13 Apr 2022 08:29:10 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 623F81F45A37
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649863748;
+        bh=QkuxM+5pnkSA1ICUnAKMrVwzy8WneSmBDiuAOn1jeUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j2P2ES0QUqCA8NlI18oTrBam5MoFphrsbmf+R5RvhI4PZA6bUx1dA6fGxfrwf+jOv
+         7381/YQjBg9oODeEmpBqpo9q515hMr/XGKo2aveT750cxgtfyPMEBXSE1nr2GV/uEf
+         biVW+X12b/5t8N9cKppfWxYGJnZpY17RQG/3uH3pGgbnCa2a3vsP/ksctA4/cfq8G8
+         FK4ewWzrI3bBmVFtZ1feT7weYHHjXrIiGjAc2oBUN+ZNCvB3mIpNunPylDCmUZ2Hw+
+         DTEGJnzrwU9Fb83K950oZ+Ry4cx4N9g5si4BKW1FG9PKa5kB3Wy8znVjkp5PXuVHgM
+         EiNWtT0Xd7AVg==
+Date:   Wed, 13 Apr 2022 11:29:03 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+Subject: Re: [PATCH 1/1] arm64: dts: mt8192: Add vcodec lat and core nodes
+Message-ID: <20220413152903.3pk3ed5a5lgtiyf4@notapiano>
+References: <20220408104124.31395-1-allen-kh.cheng@mediatek.com>
+ <20220408104124.31395-2-allen-kh.cheng@mediatek.com>
+ <20220412230819.vnbdv6wpsg73eqzi@notapiano>
+ <649d747ceddc7fbd3f226f4448874665231ae744.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <649d747ceddc7fbd3f226f4448874665231ae744.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Apr 13, 2022 at 03:21:29PM +0800, allen-kh.cheng wrote:
+> Hi Nícolas,
+> 
+> On Tue, 2022-04-12 at 19:08 -0400, Nícolas F. R. A. Prado wrote:
+> > Hi Allen,
+> > 
+> > On Fri, Apr 08, 2022 at 06:41:24PM +0800, Allen-KH Cheng wrote:
+> > > Add vcodec lat and core nodes for mt8192 SoC.
+> > > 
+> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 60
+> > > ++++++++++++++++++++++++
+> > >  1 file changed, 60 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > index 18a58239d6f1..c7f4b2fbb315 100644
+> > > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > @@ -1120,6 +1120,66 @@
+> > >  			power-domains = <&spm
+> > > MT8192_POWER_DOMAIN_ISP2>;
+> > >  		};
+> > >  
+> > > +		vcodec_dec: vcodec-dec@16000000 {
+> > > +			compatible = "mediatek,mt8192-vcodec-dec";
+> > > +			reg = <0 0x16000000 0 0x1000>;
+> > > +			mediatek,scp = <&scp>;
+> > > +			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+> > > +			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0
+> > > 0xfff00000>;
+> > > +			#address-cells = <2>;
+> > > +			#size-cells = <2>;
+> > 
+> > The dt-binding says address-cells and size-cells should be 1. Then
+> > most of the
+> > extra 0s can be dropped from ranges and the children's regs.
+> > 
+> > Other than that,
+> > 
+> > Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > Thanks,
+> > Nícolas
+> > 
+> 
+> I have checked the description in mediatek,vcodec-subdev-decoder.yaml
+> 
+> address-cells and size-cells are two after the below commit is merged.
+> 
+> media: mediatek,vcodec: Fix addressing cell sizes
+> linux/kernel/git/next/linux-next.git
+> commit/id=a50e431bbc6fc5768ed26be5fab5b149b7b8b1fe
 
-gch981213@gmail.com wrote on Wed, 13 Apr 2022 22:50:43 +0800:
+Hi Allen,
 
-> Hi!
->=20
-> On Wed, Apr 13, 2022 at 8:58 PM Miquel Raynal <miquel.raynal@bootlin.com>=
- wrote:
-> > [...] =20
-> > > This patch is made purely based on datasheet info without testing
-> > > on any actual chips. =20
-> >
-> > Do you plan to get one of these any time soon? =20
->=20
-> No. I already have way more spi-nand chips than I possibly
-> need due to my last GigaDevice submission :)
-
-:)
-
->=20
-> I need to replace the spi-nand driver for mediatek in OpenWrt
-> with my recent submission, and this chip is used in one of the
-> currently supported router. So I made this patch from
-> datasheet for it.
->=20
-> BTW Rockchip added identical chip support in their u-boot.[0]
-> I assume they've tested it.
->=20
-> > I am not really confident merging a 100% non-tested driver :) =20
->=20
-> I can understand that.
-> I'll roll this patch out in OpenWrt anyway. I can wait for a test
-> there and resubmit piled downstream patches for chip supports
-> after next OpenWrt stable release.
-
-Yes, please, any feedback from the OpenWrt community would be good. If
-you can get a Tested-by I'll take the patch (resend it with the tag so
-that I don't miss it).
-
-> > [...] =20
-> > > +
-> > > +/* ESMT uses GigaDevice 0xc8 JECDEC ID on some SPI NANDs */
-> > > +#define SPINAND_MFR_ESMT_C8                  0xc8 =20
-> >
-> > What happens if the gigadevice driver probes first? =20
->=20
-> Their device ID aren't conflicting yet, so nothing will happen
-> at the moment.
->=20
-> There is a solution for future conflict: Recent SPI-NAND chips
-> contain a parameter page which has the exact chip vendor
-> and model. We can do one more detection with the parameter
-> page content.
-> Winbond W25N01KV is a 2k+96 SPI-NAND with 4-bit ECC.
-> It uses the exact same chip id as the current W25N01GV
-> (2k+64 1-bit ECC). We need to support detection using
-> parameter page for this crazy decision by Winbond anyway.
-
-:')
-
-> I'll try to code something for this with my free time.
-> My current idea is: We first do a detection based on chip id.
-> If that failed, try to read the parameter page. If we got a
-> valid one, match the chip vendor and model string.
->=20
-> Any thoughts?
-
-Yeah that looks reasonable.
-
-> (BTW this ESMT chip is POWERCHIP PSU1GS20DX
-> according to the parameter page in their datasheet.
-> But I can't find a datasheet for this model number.)
->=20
-> > =20
-> > > +
-> > > +#define F50L2G41XA_ECC_STATUS_MASK           GENMASK(6, 4)
-> > > +#define F50L2G41XA_STATUS_ECC_1_3_BITFLIPS   (1 << 4)
-> > > +#define F50L2G41XA_STATUS_ECC_4_6_BITFLIPS   (3 << 4)
-> > > +#define F50L2G41XA_STATUS_ECC_7_8_BITFLIPS   (5 << 4) =20
->=20
-> Oops. These are left-over defines when I discovered that ESMT 2G/4G
-> SPI-NANDs are repackaged micron parts and dropped their support
-> from this file.
-> A v3 is needed anyway. I'll wait for a test before submitting it.
->=20
-> [0]: https://github.com/rockchip-linux/u-boot/commit/52b00601782854887378=
-54a48ddecd381f8b236e
-
+yes, you're right. I missed that commit, sorry. This patch is perfectly fine
+as it is then.
 
 Thanks,
-Miqu=C3=A8l
+Nícolas
+
+> 
+> Correct me if I got this wrong.
+> 
+> Thanks,
+> Allen
+> 
+> > > +			ranges = <0 0 0 0x16000000 0 0x26000>;
+> > > +
+> > > +			vcodec_lat: vcodec-lat@10000 {
+> > > +				compatible = "mediatek,mtk-vcodec-lat";
+> > > +				reg = <0x0 0x10000 0 0x800>;
+> > > +				interrupts = <GIC_SPI 426
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +				iommus = <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
+> > > +				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+> > > +					 <&vdecsys_soc
+> > > CLK_VDEC_SOC_VDEC>,
+> > > +					 <&vdecsys_soc
+> > > CLK_VDEC_SOC_LAT>,
+> > > +					 <&vdecsys_soc
+> > > CLK_VDEC_SOC_LARB1>,
+> > > +					 <&topckgen
+> > > CLK_TOP_MAINPLL_D4>;
+> > > +				clock-names = "sel", "soc-vdec", "soc-
+> > > lat", "vdec", "top";
+> > > +				assigned-clocks = <&topckgen
+> > > CLK_TOP_VDEC_SEL>;
+> > > +				assigned-clock-parents = <&topckgen
+> > > CLK_TOP_MAINPLL_D4>;
+> > > +				power-domains = <&spm
+> > > MT8192_POWER_DOMAIN_VDEC>;
+> > > +			};
+> > > +
+> > > +			vcodec_core: vcodec-core@25000 {
+> > > +				compatible = "mediatek,mtk-vcodec-
+> > > core";
+> > > +				reg = <0 0x25000 0 0x1000>;
+> > > +				interrupts = <GIC_SPI 425
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +				iommus = <&iommu0
+> > > M4U_PORT_L4_VDEC_MC_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_UFO_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_PP_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_PRED_RD_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_PRED_WR_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_PPWRAP_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_TILE_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_VLD_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_VLD2_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_AVC_MV_EXT>,
+> > > +					 <&iommu0
+> > > M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
+> > > +				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+> > > +					 <&vdecsys CLK_VDEC_VDEC>,
+> > > +					 <&vdecsys CLK_VDEC_LAT>,
+> > > +					 <&vdecsys CLK_VDEC_LARB1>,
+> > > +					 <&topckgen
+> > > CLK_TOP_MAINPLL_D4>;
+> > > +				clock-names = "sel", "soc-vdec", "soc-
+> > > lat", "vdec", "top";
+> > > +				assigned-clocks = <&topckgen
+> > > CLK_TOP_VDEC_SEL>;
+> > > +				assigned-clock-parents = <&topckgen
+> > > CLK_TOP_MAINPLL_D4>;
+> > > +				power-domains = <&spm
+> > > MT8192_POWER_DOMAIN_VDEC2>;
+> > > +			};
+> > > +		};
+> > > +
+> > >  		larb5: larb@1600d000 {
+> > >  			compatible = "mediatek,mt8192-smi-larb";
+> > >  			reg = <0 0x1600d000 0 0x1000>;
+> > > -- 
+> > > 2.18.0
+> > > 
+> > > 
+> 

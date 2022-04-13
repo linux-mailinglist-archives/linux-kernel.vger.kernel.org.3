@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B861F50025C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEFD500262
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238856AbiDMXQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S239049AbiDMXQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiDMXP7 (ORCPT
+        with ESMTP id S239122AbiDMXQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:15:59 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2E61FCDA;
-        Wed, 13 Apr 2022 16:13:37 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso3911470pjf.5;
-        Wed, 13 Apr 2022 16:13:37 -0700 (PDT)
+        Wed, 13 Apr 2022 19:16:28 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7D325C66
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e4so3686426oif.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kWx4kuwqUqPCRq2vnSKBnzzGe5+yrJ0mzhBM9ESQvds=;
-        b=qeL5sRdil4P1oO5GVdWOovYd5WwhZ+goHVTepE0Eqx/2H3qtJzKKTZme7lHRmfMW/Q
-         UusYhPDToq1dlNCFX8A9sW01Msnfd9JI0Axlv/rpnJwGFbql8jlkG16n20SNYZibbMmf
-         KblnmUVPv9/hZYcIvZBX2Z9i1qihzmpRwSXFAz+/HYaDnQTssahfnqAqfZ7q9GNCl8uE
-         /EN8TPoSBiExnWrCOEz5J8JbqGQelRQfGt5SnbEq2M2taNxqnPYkpRdofeyX8rLhcjVM
-         zfXPq+yombU5+XcGUgb+sfqT+BrjpdfEcVqtoNIzR4RpcpOEfvNYqwUQonWNnZF3Ze3t
-         6ZAw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
+        b=m+OmSD/e4we/K+vygGa6butFRkA8E+g/p2ckEiZ/uW+cVdyspvoJRGw+9FyyXam5cq
+         tKUR+8UFC5n7VmwCQP8rHi/+hQ5PDk//cvhjT5HtpMvvW9ER33VqwEDQkbDEFxhsM7hb
+         z5Yse8JE+ZpUXuCYKRHbRXAPEJQEZ0GE9T76A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kWx4kuwqUqPCRq2vnSKBnzzGe5+yrJ0mzhBM9ESQvds=;
-        b=sYzQM8V7Gzcazer1zNO+d6RDlbj34cngzSmJsnHk1CP/CkeWRswA2ftVhY1YAPnmO7
-         k5lw8XFxbxQgaFd7v31F5f9Q0Y/3dMTuKFK5nH3YRuaT7jzNPpL4cxGZFngiS64Q4e+B
-         32FcgxZLuPvaVMhHf2tmexN52EHeM+JuBSqJIYcbPtzkZfA4GZ2JtoAqyJx2KFwsUvJ0
-         VjqHzEXTxld0IGkXHxWsgGPYEG5zxF0ToV/s8oqSYTbh4nKmXrF7yBuyDXV0tmbP0lo1
-         /KNKCWYcLKCIGs6rR6Pxyq6Kx7VS19IWeaq7bVyQO17KZZTd+UBaE9F2u1wYjgiFyK0j
-         XrTA==
-X-Gm-Message-State: AOAM5333XeQdbmJqahiFdYQX4fS7tiE9da9yCcgh2j05iJtWtlZ77WD1
-        BohWTm5OAvlrK7w12mx/WNa8nRQGCeg=
-X-Google-Smtp-Source: ABdhPJxzBPi73YEPEQiMGVA1+E5/vikRotNKxeILYirYP1w1ewhUibYQFMdWYGiJqtjeKoaKay7pEg==
-X-Received: by 2002:a17:90b:4a41:b0:1c7:a0d7:718c with SMTP id lb1-20020a17090b4a4100b001c7a0d7718cmr1120180pjb.57.1649891617074;
-        Wed, 13 Apr 2022 16:13:37 -0700 (PDT)
-Received: from [172.30.1.44] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63ae4f000000b003995a4ce0aasm166419pgp.22.2022.04.13.16.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 16:13:36 -0700 (PDT)
-Message-ID: <582e3645-b24e-356e-7f0f-0d37bb1e32e6@gmail.com>
-Date:   Thu, 14 Apr 2022 08:13:32 +0900
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
+        b=aGHg98m9JjZGdtxICqNmzhEe94w5RxFdGY4Np3HbJ1/rAeV92qxUsMZZR27y/2Kv+n
+         xFGWP5c8FyFYlylPsPNjO6qD766SdMAeIa9/fy2uFckrdfYBR22Sz77dIhNQuosTAAka
+         nT8NsQwHm2cZshPO+qRXmd86B1Ieb5E8Rfbdo0ObEYMChzWWbJAUi/sx4jFoOQtQhchG
+         u0PTI/Jcd9p6wS3cJLg1vej84lGvFH8PhLty6zr9c9cqsZq17gXfPppZiDWGAYR/19vw
+         tGlYQtN5gXi2eBrxU070FZlFHaijboJXMoVEOrJlFplD+JfNKW/47Ryhkv2gu1K7T1bp
+         6LeA==
+X-Gm-Message-State: AOAM533vthQ/rr0HTA4LPFhZ0pICNd3jv+d+f/1d1pRBfj763mg4bKBo
+        aieqQ7OihZcA/Z/ZlTkSuK1OjLJqLLSzOclpnLOHDQ==
+X-Google-Smtp-Source: ABdhPJy/y7cGBki5XtEew+aPGYslTH0aAHoZeAOee7B/n9e30cebHJofLtYmhLy+51DqypLaLc+k7XKo3IKWa8yDq70=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr195472oif.63.1649891644404; Wed, 13 Apr
+ 2022 16:14:04 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 13 Apr 2022 16:14:02 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during
- transitions
-Content-Language: en-US
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <20220406014842.2771799-1-briannorris@chromium.org>
- <20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid>
- <8824147c-5512-a7a5-9e89-60b510111500@gmail.com> <3484357.R56niFO833@diego>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <3484357.R56niFO833@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
+References: <20220412220033.1273607-1-swboyd@chromium.org> <20220412220033.1273607-2-swboyd@chromium.org>
+ <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com> <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 13 Apr 2022 16:14:02 -0700
+Message-ID: <CAE-0n53kebRHTogSkiAOcA4tMpA+EcXQHtNX0Zzut-xE2vCkpw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] interconnect: qcom: sc7180: Drop IP0 interconnects
+To:     Alex Elder <elder@linaro.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Georgi Djakov <djakov@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 4. 14. 07:45, Heiko Stübner wrote:
-> Hi,
-> 
-> Am Donnerstag, 14. April 2022, 00:14:40 CEST schrieb Chanwoo Choi:
->> On 22. 4. 6. 10:48, Brian Norris wrote:
->>> See the previous patch ("soc: rockchip: power-domain: Manage resource
->>> conflicts with firmware") for a thorough explanation of the conflicts.
->>> While ARM Trusted Firmware may be modifying memory controller and
->>> power-domain states, we need to block the kernel's power-domain driver.
->>>
->>> If the power-domain driver is disabled, there is no resource conflict
->>> and this becomes a no-op.
->>>
->>> Signed-off-by: Brian Norris <briannorris@chromium.org>
->>> ---
->>>
->>>    drivers/devfreq/rk3399_dmc.c | 13 +++++++++++++
->>>    1 file changed, 13 insertions(+)
->>>
->>> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
->>> index e494d1497d60..daff40702615 100644
->>> --- a/drivers/devfreq/rk3399_dmc.c
->>> +++ b/drivers/devfreq/rk3399_dmc.c
->>> @@ -21,6 +21,7 @@
->>>    #include <linux/rwsem.h>
->>>    #include <linux/suspend.h>
->>>    
->>> +#include <soc/rockchip/pm_domains.h>
->>>    #include <soc/rockchip/rk3399_grf.h>
->>>    #include <soc/rockchip/rockchip_sip.h>
->>>    
->>> @@ -93,6 +94,16 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
->>>    
->>>    	mutex_lock(&dmcfreq->lock);
->>>    
->>> +	/*
->>> +	 * Ensure power-domain transitions don't interfere with ARM Trusted
->>> +	 * Firmware power-domain idling.
->>> +	 */
->>> +	err = rockchip_pmu_block();
->>> +	if (err) {
->>> +		dev_err(dev, "Failed to block PMU: %d\n", err);
->>> +		goto out_unlock;
->>> +	}
->>> +
->>>    	/*
->>>    	 * Some idle parameters may be based on the DDR controller clock, which
->>>    	 * is half of the DDR frequency.
->>> @@ -198,6 +209,8 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
->>>    	dmcfreq->volt = target_volt;
->>>    
->>>    out:
->>> +	rockchip_pmu_unblock();
->>> +out_unlock:
->>>    	mutex_unlock(&dmcfreq->lock);
->>>    	return err;
->>>    }
->>
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> 
-> so I guess you're ok with me picking up both patches, right?
-> [Just making sure :-) ]
+Quoting Alex Elder (2022-04-13 14:02:00)
+> On 4/13/22 3:55 PM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, Apr 12, 2022 at 4:20 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >>
+> >> @@ -519,8 +500,6 @@ static const struct of_device_id qnoc_of_match[] = {
+> >>            .data = &sc7180_dc_noc},
+> >>          { .compatible = "qcom,sc7180-gem-noc",
+> >>            .data = &sc7180_gem_noc},
+> >> -       { .compatible = "qcom,sc7180-ipa-virt",
+> >> -         .data = &sc7180_ipa_virt},
+> >>          { .compatible = "qcom,sc7180-mc-virt",
+> >>            .data = &sc7180_mc_virt},
+> >>          { .compatible = "qcom,sc7180-mmss-noc",
+> >
+> > I have no objection to ${SUBJECT} change landing and based on all your
+> > research and Alex's review/testing I think it's good to go.
+> >
+> > However, now that you're removed the driver that cared about
+> > "qcom,sc7180-ipa-virt", should we also be removing it from the
+> > `bindings/interconnect/qcom,rpmh.yaml` file and the `sc7180.dtsi`
+> > file? I think that removing it from _either_ the driver (like your
+> > patch here does) _or_ the sc7180.dtsi file would fix the bug, right?
+> > ...and then removing it from the yaml would just be cleanup...
 
-This patch have the dependency of latest devfreq-next branch.
-So that need to make the immutable branch between rockchip and devfreq.
+Yes, but that's mostly a cleanup. I didn't include it in this series
+because DTB is supposed to be "stable" and thus backporting a fix to the
+kernel by removing something from DT is sort of wrong. I don't know or
+expect that the kernel DTS files will be used from the stable kernels.
+It's better to fix the kernel C code. We can of course remove the
+binding, but there's a part of me that would prefer that we put the IPA
+clk back into the interconnect driver, so leaving the binding is another
+motivator for me to hopefully excise the IPA clk from the rpmh-clk
+driver in the future.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Anyway, I'm happy to remove the compatible string from the binding if
+folks want that. Having the DT node is wasteful because the kernel makes
+a device so we can certainly remove that as well. I'll send another
+patch for that if this patch is accepted by Georgi.
+
+>
+> That's a good point, I hadn't thought about that but you're right.
+>
+> I think we were too pleased about identifying the problem and
+> proving it could happen (and cause a crash), so we didn't think
+> hard enough about this other piece.
+>
+> Stephen, I think you should re-spin the series and add the
+> proper change to the binding.  You can keep the tags I gave
+> before.
+
+I will not combine the removal of the binding from this patch. This
+patch is good as is and fixes the problem while ignoring the DT binding
+and that larger discussion.
+
+>
+> I've got a note to follow up with similar changes to other
+> platforms where the interconnect driver includes resource "IP0"
+> and will plan to do what Doug suggests there too.

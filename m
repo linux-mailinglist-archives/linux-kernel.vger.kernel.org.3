@@ -2,177 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9744FFF62
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A64FFF65
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237731AbiDMThJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S236884AbiDMTh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiDMThG (ORCPT
+        with ESMTP id S238425AbiDMThk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:37:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6B34649
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649878485; x=1681414485;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bxOEYd/O4ZEPZhdPfFrr9b5wMPlP81vOTaWoWXr7omc=;
-  b=CW22cmMIibpV017vVmQttGWG+m18WdioMSaBjuWALDSnkVQhi9PAQN9B
-   sz83Z8atCqxIZhrOVaPnznz0CI/6JH+Ssiz4m71eCzDUgTeszC2HodfYN
-   CiXP3F4RwjxJi9nwCTekP5StcRNIib/lR1TTFCNQo3G/pzBtXW7L6xNci
-   tJbke2OzuWgS3d6+j5alMHDqfddEdRknC/bCS0n1fm4TCW9eyhG2PABFi
-   cAPNpO9RVfwsp6evJCA6LvUu3btg3dygy75PAOF9x393YCnxc6G8nt9tN
-   qQdoJqgebhyehhWk0HKbc4niCQfN9FJbqA751MwSQWSQ/8DN3ui/doCHX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="260352103"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="260352103"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 12:34:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725029042"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Apr 2022 12:34:32 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neil6-0000YA-0Y;
-        Wed, 13 Apr 2022 19:34:32 +0000
-Date:   Thu, 14 Apr 2022 03:34:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.04.11b] BUILD SUCCESS
- 9cc24cd39f593675fa3f5758ab2a85679597cf7f
-Message-ID: <625725be.h0487bJGa5IjZdwm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 13 Apr 2022 15:37:40 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA5075608
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:35:17 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q12so2676123pgj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4WH7f6JXFremjrBlmUML6pWVJn/974Z6+oDZ1BDIsM0=;
+        b=MxQuCgA+KjXz/suVqxz/KwPy9HtRl6Z4cNYXjCPujEu096i/Gk/uXd0eqR5bOgr6L/
+         sTIWuJ5DPUdMGazPE3msjwL6ZNZ53/DGVWnckKEjq2lWW+yMAFY5TqcP0Xo0yidPz/MY
+         DjQyvRlEGq5TxVA3/Ii13Uq3RijmPH1TBtzpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4WH7f6JXFremjrBlmUML6pWVJn/974Z6+oDZ1BDIsM0=;
+        b=67ZEbJJ9dOOPxraFaR5+EB6x8gUzNJ4ryQjYfiLbtqq0vIsGHYuyXi5QlZCvDNtwkv
+         HDzw6Itfp8NbcsWK7zZgIXaszU4CtgGiK5qy7xs99Yn9yU2hvDIPJ5saXxJe4Aj2+bXR
+         fUfP7blZqIPZJek0EO4v6tPggpuMFjWKocV71hyhaHEbs9/rpAGOZTF4qREaw4Y5EZ1U
+         jb1meCCTQ8iy8dvX26cJQJvIYQQHAx02MWijyP8VVUUR1OOUAJ8IBt0iV3oh1lWDPTUr
+         LGxK3TEafJSB7EintykZWhM7geD0ykQ92IVuzCeoupTGvS2/2THbd+rQIvVGD0qD7IML
+         7UPw==
+X-Gm-Message-State: AOAM5323J/c5vwhfex1fRuoNvkzK6XGpRHqGZFU736tRmkILLSM8PF8A
+        vwW3llV1+ko4NXngRs2ySU/K+w==
+X-Google-Smtp-Source: ABdhPJwTPfFuvyUpXywvV44/zNtujcJtz/ALWc7o9uQbDEcIrUDjnJ+bpl8M/uqMaWB/5K2VTCuubw==
+X-Received: by 2002:a05:6a00:2354:b0:505:c6c3:af87 with SMTP id j20-20020a056a00235400b00505c6c3af87mr367490pfj.78.1649878517206;
+        Wed, 13 Apr 2022 12:35:17 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6a4f:9277:743f:c648])
+        by smtp.gmail.com with UTF8SMTPSA id z13-20020a17090a468d00b001c7db8e6ac7sm3728002pjf.40.2022.04.13.12.35.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 12:35:16 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 12:35:15 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc7280: Add nodes for wcd9385
+ and max98360a codec
+Message-ID: <Ylcl830KnrzXHpSx@google.com>
+References: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649863277-31615-3-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1649863277-31615-3-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.11b
-branch HEAD: 9cc24cd39f593675fa3f5758ab2a85679597cf7f  rcu-tasks: Check for abandoned callbacks
+On Wed, Apr 13, 2022 at 08:51:15PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add wcd938x and  max98360a codecs for audio use case on
+> sc7280 based platforms.
+> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
+> Add amp_en node for  max98360a codec.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
 
-elapsed time: 2159m
+Applicable to all you patches: a per-patch change log would be really
+nice for reviewers. It can help them to focus on the parts that have
+actually changed with respect to earlier revisions they might have
+already reviewed.
 
-configs tested: 93
-configs skipped: 3
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts        |  6 ++
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  8 +++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 94 ++++++++++++++++++++++++++
+>  3 files changed, 108 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index e2efbdd..b944366 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Your branch needs a refresh, this file doesn't exist anymore.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                 mpc837x_mds_defconfig
-sh                        sh7763rdp_defconfig
-arm                         at91_dt_defconfig
-sh                             sh03_defconfig
-arm                           sunxi_defconfig
-xtensa                           alldefconfig
-arm                           u8500_defconfig
-arm                        spear6xx_defconfig
-arm                            mps2_defconfig
-arm                        oxnas_v6_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220413
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+You'll want to change sc7280-crd-r3.dts for the CRD <= 2.x and
+sc7280-herobrine-crd.dts for the CRD >= 3.x
 
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220413
-arm                  randconfig-c002-20220413
-i386                          randconfig-c001
-riscv                randconfig-c006-20220413
-mips                 randconfig-c004-20220413
-arm                       spear13xx_defconfig
-mips                malta_qemu_32r6_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-i386                 randconfig-a004-20220411
-i386                 randconfig-a001-20220411
-i386                 randconfig-a003-20220411
-i386                 randconfig-a005-20220411
-i386                 randconfig-a006-20220411
-i386                 randconfig-a002-20220411
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-riscv                randconfig-r042-20220412
-hexagon              randconfig-r041-20220412
-hexagon              randconfig-r045-20220412
-hexagon              randconfig-r041-20220413
-hexagon              randconfig-r045-20220413
+> @@ -84,6 +84,12 @@ ap_ts_pen_1v8: &i2c13 {
+>  	pins = "gpio51";
+>  };
+>  
+> +&wcd938x {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&us_euro_hs_sel>;
+> +	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+>  &tlmm {
+>  	tp_int_odl: tp-int-odl {
+>  		pins = "gpio7";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> index dc17f20..8e4f822 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> @@ -20,6 +20,14 @@
+>  #include "sc7280-chrome-common.dtsi"
+>  
+>  / {
+> +	max98360a: audio-codec-0 {
+> +		compatible = "maxim,max98360a";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&amp_en>;
+> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+> +		#sound-dai-cells = <0>;
+> +	};
+> +
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I agreed earlier that sorting by node name is correct, but that wasn't
+entirely true. The nodes should be sorted by name within the 'device'
+section, i.e. after the comment "/* BOARD-SPECIFIC TOP LEVEL NODES */".
+
+>  	chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index 110d9e9..6004c08 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -20,6 +20,41 @@
+>  		serial1 = &uart7;
+>  	};
+>  
+> +	max98360a: audio-codec-0 {
+> +		compatible = "maxim,max98360a";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&amp_en>;
+> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+> +		#sound-dai-cells = <0>;
+> +	};
+> +
+> +	wcd938x: audio-codec-1 {
+> +		compatible = "qcom,wcd9385-codec";
+> +		#sound-dai-cells = <1>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wcd_reset_n>, <&wcd_reset_n_sleep>;
+
+Shouldn't this be:
+
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&wcd_reset_n>;
+		pinctrl-1 = <&wcd_reset_n_sleep>;
+
+?
+
+nit: make the ordering of properties (pinctrl, #sound-dai-cells) and
+spacing within the node consistent for max98360a and wcd938x? Not
+super-important, but since both are codecs and added by the same
+patch, why not :)
+
+> +		reset-gpios = <&tlmm 83 GPIO_ACTIVE_HIGH>;
+> +
+> +		qcom,rx-device = <&wcd_rx>;
+> +		qcom,tx-device = <&wcd_tx>;
+> +
+> +		vdd-rxtx-supply = <&vreg_l18b_1p8>;
+> +		vdd-io-supply = <&vreg_l18b_1p8>;
+> +		vdd-buck-supply = <&vreg_l17b_1p8>;
+> +		vdd-mic-bias-supply = <&vreg_bob>;
+> +
+> +		qcom,micbias1-microvolt = <1800000>;
+> +		qcom,micbias2-microvolt = <1800000>;
+> +		qcom,micbias3-microvolt = <1800000>;
+> +		qcom,micbias4-microvolt = <1800000>;
+> +
+> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000
+> +							  500000 500000 500000>;
+> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
+> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+> +	};
+> +
+>  	gpio-keys {
+>  		compatible = "gpio-keys";
+>  		label = "gpio-keys";
+> @@ -238,6 +273,19 @@
+>  	modem-init;
+>  };
+>  
+> +&lpass_rx_macro {
+> +	status = "okay";
+> +};
+> +
+> +&lpass_tx_macro {
+> +	status = "okay";
+> +};
+> +
+> +&lpass_va_macro {
+> +	status = "okay";
+> +	vdd-micb-supply = <&vreg_bob>;
+> +};
+> +
+>  &pcie1 {
+>  	status = "okay";
+>  	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
+> @@ -298,6 +346,24 @@
+>  	cd-gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
+>  };
+>  
+> +&swr0 {
+> +	wcd_rx: codec@0,4 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 4>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,rx-port-mapping = <1 2 3 4 5>;
+> +	};
+> +};
+> +
+> +&swr1 {
+> +	wcd_tx: codec@0,3 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 3>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,tx-port-mapping = <1 2 3 4>;
+> +	};
+> +};
+> +
+>  &uart5 {
+>  	compatible = "qcom,geni-debug-uart";
+>  	status = "okay";
+> @@ -561,6 +627,12 @@
+>  };
+>  
+>  &tlmm {
+> +	amp_en: amp-en {
+> +		pins = "gpio63";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+>  	bt_en: bt-en {
+>  		pins = "gpio85";
+>  		function = "gpio";
+> @@ -643,5 +715,27 @@
+>  		function = "gpio";
+>  		bias-pull-down;
+>  	};
+> +
+> +	us_euro_hs_sel: us-euro-hs-sel {
+> +		pins = "gpio81";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	wcd_reset_n: wcd-reset-n {
+> +		pins = "gpio83";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		output-high;
+> +	};
+> +
+> +	wcd_reset_n_sleep: wcd-reset-n-sleep {
+> +		pins = "gpio83";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-disable;
+> +		output-low;
+> +	};
+>  };
+>  
+> -- 
+> 2.7.4
+> 

@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C85A4FF37F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16E74FF383
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234442AbiDMJ3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S234443AbiDMJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiDMJ3h (ORCPT
+        with ESMTP id S231222AbiDMJb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:29:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75A853B69;
-        Wed, 13 Apr 2022 02:27:16 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 2so1408038pjw.2;
-        Wed, 13 Apr 2022 02:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aWHwuVM56mGn8hBqdvVQF2h0/hgZKGEUzuVUodXvntM=;
-        b=aB5TwnS2HFOxmF1b4l/z53MXkVL/ul/v+PNiOchygCcKgXValBvZeliRKQJV9gj+Vc
-         slXEpmzWh4+qwCgizBHHcwatvJK+yGMbDQVlcKamI7mLLHsWbqqaGCoNgwgU7NkvhjjN
-         4anPrku0hGi4Gnx1ceAqVwoBcAoPsQJ5bCKeR0q6lvogtnEtu7A0CelRpz9PRQsQvCq/
-         C4cpmbhO+PVUMP+LHcAPLZBkYd2uRpGA2RfWNySq9ltXftbkhX5Z4qfOk05h/WmjCH4T
-         R8pQWKToUbzigm26AAkQkemT3Oi6+vTYyaPdt0Q686WhH4YfAwo3EFk51RineGqM/R5e
-         xVlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aWHwuVM56mGn8hBqdvVQF2h0/hgZKGEUzuVUodXvntM=;
-        b=35rz8bpTb+Yr94p9BF5Qx6Bqn/OmueOiirla1K8uyBD9joZ8/T7acyMS7FhPyYZcLN
-         Q/CsyyLbChLaFbOaMzke3118DOBPQ171h+jJDEVkKbGtgpq6PAtPCHn5Gs0+X1/0l9gt
-         qITHiLKzD0eKLUQN4CA84f1YZAWrf8PHR41BuLHem9IvrO9DyNNOZVO7NepkCb10Ciym
-         JHAUsqj6M7QPDAH2IxlGeXtSNc7s32yyRlmQgKsiJWmmCbBAM5gw/s99dnZBAHZo23NM
-         qvB4s6tOVOS8lyFk5r1GAh+Kq0NuN4uqMdM6yJgEZoTXrnDjc7ndwKgx7DEog7D1XuXq
-         fMEg==
-X-Gm-Message-State: AOAM530O6iu/KxGqKwAVlA/WpBpKm9iskQcd+aXqP1UePDjjHAJtmIDn
-        Po7ycAGtP7jwcAAzqJcmZw/5Tg5QuQ/+y6q4Sw==
-X-Google-Smtp-Source: ABdhPJz9O5s6O8Bzb1wJFWqKHLGPLctQp79wNjlG9K87jHZwVNQ1wY2A1CSv2mriOcsbvGMVcNcMLrNXE9xUX/PJAU4=
-X-Received: by 2002:a17:90a:fb97:b0:1cb:adf9:88ba with SMTP id
- cp23-20020a17090afb9700b001cbadf988bamr9766014pjb.46.1649842036480; Wed, 13
- Apr 2022 02:27:16 -0700 (PDT)
+        Wed, 13 Apr 2022 05:31:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5178330543
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649842173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ss4icJRzT/CRgX0lA3mqnDiaVS28swR/SsJFvAdocPs=;
+        b=FsEp52HG2Pn+Wnra06glss+E/aJhzY8B0XIIl3mZPNGv8Bv6ZB0JeGD8FlyTaRU44dOgBT
+        4I6JegHw1L4cm6D0W0BNF2uAH/nQ5gVvmk1NAXyBsD7tfxK+QZ3/j260E6DI8kpF9F1XCe
+        s92G9QLwUIkbBcVWpfvjLLoaxVO3L5E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-OHjYqE3rOxCCBirmZYSY5Q-1; Wed, 13 Apr 2022 05:29:29 -0400
+X-MC-Unique: OHjYqE3rOxCCBirmZYSY5Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33BA1899EC1;
+        Wed, 13 Apr 2022 09:29:29 +0000 (UTC)
+Received: from localhost (ovpn-12-51.pek2.redhat.com [10.72.12.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 11343C27E8E;
+        Wed, 13 Apr 2022 09:29:27 +0000 (UTC)
+Date:   Wed, 13 Apr 2022 17:29:24 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Heiko Carstens <hca@linux.ibm.com>, hch@lst.de
+Cc:     akpm@linux-foundation.org, willy@infradead.org,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        yangtiezhu@loongson.cn, amit.kachhap@arm.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
+Message-ID: <YlaX9CxqPUvCN2dS@MiWiFi-R3L-srv>
+References: <20220408090636.560886-1-bhe@redhat.com>
+ <Yk//TCkucXiVD3s0@MiWiFi-R3L-srv>
+ <YlPt+3R63XYP22um@osiris>
 MIME-Version: 1.0
-References: <20220409134926.331728-1-zheyuma97@gmail.com> <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
-In-Reply-To: <CAFdVvOzx7t99Btf4Jv5+5=6es0i8AKx_1Bwj5gQd-Oqnqi+tPA@mail.gmail.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Wed, 13 Apr 2022 17:27:04 +0800
-Message-ID: <CAMhUBj=EG8UrFoLp34F2aSTAoM8jY+Agg_PQypn6zjZ_dkUyoA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: mpi3mr: Fix an error code when probing the driver
-To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        jejb@linux.ibm.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        mpi3mr-drvr-developers <mpi3mr-linuxdrv.pdl@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlPt+3R63XYP22um@osiris>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 1:58 AM Sathya Prakash Veerichetty
-<sathya.prakash@broadcom.com> wrote:
->
-> On Sat, Apr 9, 2022 at 7:49 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
-> >
-> > During the process of driver probing, probe function should return < 0
-> > for failure, otherwise kernel will treat value >= 0 as success.
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > ---
-> >  drivers/scsi/mpi3mr/mpi3mr_os.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-> > index f7cd70a15ea6..240bfdf9788b 100644
-> > --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-> > +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-> > @@ -4222,9 +4222,10 @@ mpi3mr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >         struct Scsi_Host *shost = NULL;
-> >         int retval = 0, i;
-> >
-> > -       if (osintfc_mrioc_security_status(pdev)) {
-> > +       retval = osintfc_mrioc_security_status(pdev);
-> > +       if (retval) {
-> >                 warn_non_secure_ctlr = 1;
-> > -               return 1; /* For Invalid and Tampered device */
-> > +               return retval; /* For Invalid and Tampered device */
-> >         }
-> NAK. The driver has to return 1 when invalid/tampered controllers are
-> detected just to say the controller is held by the mpi3mr driver
-> without any actual operation.
+On 04/11/22 at 10:59am, Heiko Carstens wrote:
+> On Fri, Apr 08, 2022 at 05:24:28PM +0800, Baoquan He wrote:
+> > Add Heiko to CC.
+> > 
+> > On 04/08/22 at 05:06pm, Baoquan He wrote:
+> > > Copy the description of v3 cover letter from Willy:
+> > > ===
+> > > For some reason several people have been sending bad patches to fix
+> > > compiler warnings in vmcore recently.  Here's how it should be done.
+> > > Compile-tested only on x86.  As noted in the first patch, s390 should
+> > > take this conversion a bit further, but I'm not inclined to do that
+> > > work myself.
+> > 
+> > Forgot adding Heiko to CC again.
+> > 
+> > Hi Heiko,
+> > 
+> > Andrew worried you may miss the note, "As noted in the first patch,
+> > s390 should take this conversion a bit further, but I'm not inclined
+> > to do that work myself." written in cover letter from willy.
+> > 
+> > I told him you had already known this in v1 discussion. So add you in CC
+> > list as Andrew required. Adding words to explain, just in case confusion.
+> 
+> Thanks for letting me know again. I'm still aware of this, but would
+> appreciate if I could be added to cc in the first patch of this
+> series, so I get notified when Andrew sends this Linus.
 
-Thanks for your explanation, I will drop this patch.
+Right, it's my neglect. I should CC all involved during the discussion.
 
-Zheyu Ma
+By the way, could both of you, Heiko, Christoph, help check this
+patchset and offer your ack again if it's OK to you? I removed
+Christoph's Reviewed-by because there's some change as per Al's 
+comment, and replace my own 'Acked-by' with 'Signed-off-by' according to
+our posting rule.
+

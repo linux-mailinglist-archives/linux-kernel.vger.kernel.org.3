@@ -2,152 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C6F4FF7D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AFE4FF7C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 15:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbiDMNkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 09:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S234502AbiDMNlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 09:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiDMNkY (ORCPT
+        with ESMTP id S232078AbiDMNlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 09:40:24 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE605F261;
-        Wed, 13 Apr 2022 06:38:03 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id d9so1605547qvm.4;
-        Wed, 13 Apr 2022 06:38:03 -0700 (PDT)
+        Wed, 13 Apr 2022 09:41:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F9C5FF15
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:38:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bg10so4034586ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 06:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IqOtlYyePRN/r4aPym/C6r8euVVGX9fSqK0zMFP5Scg=;
-        b=QVWku54j+UAXoEMpnZ1vv7gQuCMEln37OGTReSXY+KDFySd2yXriskDocWaYYDoi16
-         R1DEchhdtrw58TIj16nF4Dake/0VNdzRAcLysRzLCKefxLPM+NTyY1AnatI3Z8J6kf6P
-         nzAdeh7SEeO5UvvljFB+hk7xxCTMbx6F15dTzaYRd9NzML2taBWSDbEao2JJ2VQxwufs
-         +sq/41Pb95oMjpJ11dOfj9VP7pD4a21gDC7qdQIEYIPfyUQwAzWOWkE1AMOmowxi0lPh
-         FSUGLYWqw6tZQDkzeuReqlLMOoqQUaRqXJx1vlfO71j0EoccWOCwE6Cu8pOSnqBKDcaL
-         lGVA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iMNm5cMMRWBx6q53DUYrIONewJC2dWyH+H8kLXgxOFg=;
+        b=ii3norTJVfcTqX9c/TW+FsugFydTXtBPxLu20kHlOrma7AzgGit5Ba5nVYL+sLEzvO
+         tX7oLCAT9ZqcLyI8A+pyJjo2SpS1JlBYv0oE5zk8vm0OoUUB3Wk8MJn2uisvvgoFuD00
+         L3+XcxdoLuZFdp35D/Z8eN9XAd29gKF6mHyjjpRJdlMSgmx8uYi7TWlPWRbmrePNJV2s
+         Usj7uVdcWGfsMt4qUzlNzN6szZvz/Limvolm96xxU3Eiydr1Vn4J0SUQdspTy73JXuQQ
+         JtK+yePl4bd867m/M5IfjPByWT2FKa/k7qVVLuOm+rjxyKo4eI1DJ1cwlRSi/DQ25tOw
+         R40Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IqOtlYyePRN/r4aPym/C6r8euVVGX9fSqK0zMFP5Scg=;
-        b=Xa9LBvrrT47OcL0fCzyN2jh/O/XAV41/n33t/tKvx6DQwrHdQzmroVPHc0F1GoCfjO
-         m0OsVvWw1IUT8TvYqLNpsSFlmtriK1QfElBOCb8DKOu5mbB6EpWELi+B5yfvJ9P0pODX
-         qVtjgc0sC/BNyWgBs4OkBdeTwCJZwacjAg6JCyyLroBSGsT0j2qHuuluN4naLJSxqLNV
-         bSTjiOQL89QOZ38yNOCIeEmLAklYaj28z6pUSloWO+gMog9Q5TJLX/pmO33QRZRB1Hib
-         x7F1yrH6XcLNgK2ZOoJPYhOEW/IqVAs8nKe6ZN597ItWPqlFTJd9sW2fA0WeMSnt6J17
-         U51g==
-X-Gm-Message-State: AOAM533jzABwSlqyq3e+kfCbh/z02525YpTuyfwHJJ5L0S/RBA7Ssktp
-        UCZ9BeqrVoSxsSIX8Fb4liIQyY/v76sHH8Cp
-X-Google-Smtp-Source: ABdhPJxvhXF0hMoO3IPsR9ctAISTuf1qYFUU0vcqTreM1lIvwx2wqzJSVw45r9E3LRkANSxrLVws9Q==
-X-Received: by 2002:a05:6214:e4f:b0:442:88d4:ecc0 with SMTP id o15-20020a0562140e4f00b0044288d4ecc0mr35807143qvc.47.1649857082566;
-        Wed, 13 Apr 2022 06:38:02 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id 143-20020a370795000000b0069c59e1b8eesm790584qkh.10.2022.04.13.06.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 06:38:02 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: dts: rockchip: enable pcie controller on quartz64-a
-Date:   Wed, 13 Apr 2022 09:37:31 -0400
-Message-Id: <20220413133731.242870-5-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220413133731.242870-1-pgwipeout@gmail.com>
-References: <20220413133731.242870-1-pgwipeout@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iMNm5cMMRWBx6q53DUYrIONewJC2dWyH+H8kLXgxOFg=;
+        b=GL4UUerCqpIEaAw5pPAOGGkG09mHFNVhF++98eq99L9LpYJvuJXnrqEsQxfFC/YyPx
+         osDF2MnyNZdoYjSzJPHVhKlxpyWDi2KFQG+bwdvxlJYeko4UWL53jciNo+ulocXccxj8
+         pwn4dnBd812RL9xE/Mt159fvJnl/avm8jN36+5pKd9z2sPTFKhO5PsOoNDf5yJ6Em+0a
+         ITNE35Ad2cQBMihTyTLsvKrcsj8kn9ow12zdMQeqQuQwlRn5nwNErZvvxaMGtfY7jHYD
+         WRAns1R3pPKNKaiBjKr4LcgJ5qB/lLtnyvlMS/KgMrb8R3+gtbXQaRS5S8BccAjeXkvn
+         kQ+w==
+X-Gm-Message-State: AOAM530jVx9pIpY3wOKaBi6IwFPLLjI1cQJw9p+kLVezy00WPRGlI5hS
+        RI84mb0zHeYUC2FYuIHGPpQhLUovbEfZUNMl
+X-Google-Smtp-Source: ABdhPJxg3FD/IlAF/2JxsWrX7ul105g9wCOUToaX9VP7SjqilKHhiNzbMFHc6AxHkx0MeW5nZFgGXQ==
+X-Received: by 2002:a17:906:1615:b0:6bb:150f:adf8 with SMTP id m21-20020a170906161500b006bb150fadf8mr38768988ejd.272.1649857133430;
+        Wed, 13 Apr 2022 06:38:53 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id n25-20020aa7db59000000b00415965e9727sm1189483edt.18.2022.04.13.06.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 06:38:52 -0700 (PDT)
+Message-ID: <79281f23-1eb8-6659-d126-eaa608c7abe5@linaro.org>
+Date:   Wed, 13 Apr 2022 15:38:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v8 4/6] dt-bindings: mfd: sensehat: Add Raspberry Pi Sense
+ HAT schema
+Content-Language: en-US
+To:     Charles Mirabile <cmirabil@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org, Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+References: <20220412201343.8074-1-cmirabil@redhat.com>
+ <20220412201343.8074-5-cmirabil@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412201343.8074-5-cmirabil@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the nodes to enable the pcie controller on the quartz64 model a
-board.
+On 12/04/2022 22:13, Charles Mirabile wrote:
+> This patch adds the device tree bindings for the Sense HAT
+> and each of its children devices in yaml form.
+>
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 141a433429b5..85926d46337d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -125,6 +125,18 @@ vbus: vbus {
- 		vin-supply = <&vcc12v_dcin>;
- 	};
- 
-+	vcc3v3_pcie_p: vcc3v3_pcie_p {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pcie_enable_h>;
-+		regulator-name = "vcc3v3_pcie_p";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3v3>;
-+	};
-+
- 	vcc5v0_usb: vcc5v0_usb {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc5v0_usb";
-@@ -201,6 +213,10 @@ &combphy1 {
- 	status = "okay";
- };
- 
-+&combphy2 {
-+	status = "okay";
-+};
-+
- &cpu0 {
- 	cpu-supply = <&vdd_cpu>;
- };
-@@ -509,6 +525,14 @@ rgmii_phy1: ethernet-phy@0 {
- 	};
- };
- 
-+&pcie2x1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie_reset_h>;
-+	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+	vpcie3v3-supply = <&vcc3v3_pcie_p>;
-+};
-+
- &pinctrl {
- 	bt {
- 		bt_enable_h: bt-enable-h {
-@@ -534,6 +558,16 @@ diy_led_enable_h: diy-led-enable-h {
- 		};
- 	};
- 
-+	pcie {
-+		pcie_enable_h: pcie-enable-h {
-+			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
-+		pcie_reset_h: pcie-reset-h {
-+			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
--- 
-2.25.1
+> +description:
+> +  This device is part of the sensehat multi function device.
+> +  For more information see ../mfd/raspberrypi,sensehat.yaml.
+> +
+> +  This device features a programmable 8x8 RGB LED matrix.
+> +
+> +properties:
+> +  compatible:
+> +    const: raspberrypi,sensehat-display
 
+This binding is practically empty, so I wonder what's is purpose? Do you
+plan to grow it? If this was already explained, sorry for bringing it up
+again... :)
+
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml b/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
+> new file mode 100644
+> index 000000000000..c97cd1d8eac6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
+> @@ -0,0 +1,33 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/raspberrypi,sensehat-joystick.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Raspberry Pi Sensehat Joystick
+> +
+> +maintainers:
+> +  - Charles Mirabile <cmirabil@redhat.com>
+> +  - Mwesigwa Guma <mguma@redhat.com>
+> +  - Joel Savitz <jsavitz@redhat.com>
+> +
+> +description:
+> +  This device is part of the sensehat multi function device.
+> +  For more information see ../mfd/raspberrypi,sensehat.yaml.
+> +
+> +  This device features a five button joystick (up, down,left,
+> +  right, click)
+> +
+> +properties:
+> +  compatible:
+> +    const: raspberrypi,sensehat-joystick
+> +
+> +  interrupts:
+> +    items:
+> +      - description: pin number for joystick interrupt
+
+Description is obvious, so just "maxItems: 1"
+
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +
+> +additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml b/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+> new file mode 100644
+> index 000000000000..2484ec91b430
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/raspberrypi,sensehat.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Raspberry Pi Sensehat
+> +
+> +maintainers:
+> +  - Charles Mirabile <cmirabil@redhat.com>
+> +  - Mwesigwa Guma <mguma@redhat.com>
+> +  - Joel Savitz <jsavitz@redhat.com>
+> +
+> +description:
+> +  The Raspberry Pi Sensehat is an addon board originally developed
+> +  for the Raspberry Pi that has a joystick and an 8x8 RGB LED display
+> +  as well as several environmental sensors. It connects via i2c and
+> +  a gpio for irq.
+> +
+> +properties:
+> +  compatible:
+> +    const: raspberrypi,sensehat
+> +
+> +  reg:
+> +    items:
+> +      - description: i2c device address
+
+Description is obvious, so just "maxItems: 1"
+
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+
+Why do you need these? You are not allowing any children with unit
+addresses.
+
+> +
+> +  "joystick":
+> +    $ref: ../input/raspberrypi,sensehat-joystick.yaml
+
+Full path, so "/schemas/input/raspberrypi,sensehat-joystick.yaml#"
+
+> +
+> +  "display":
+> +    $ref: ../auxdisplay/raspberrypi,sensehat-display.yaml
+
+The same.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - joystick
+> +  - display
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      sensehat@46 {
+
+Generic node names please, so "hat".
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        compatible = "raspberrypi,sensehat";
+> +        reg = <0x46>;
+
+Could you put compatible and then reg at beginning of properties (before
+address/size)? It is more common convention and these are more important
+properties.
+
+> +        display {
+> +          compatible = "raspberrypi,sensehat-display";
+> +        };
+> +        joystick {
+> +          compatible = "raspberrypi,sensehat-joystick";
+> +          interrupts = <23 GPIO_ACTIVE_HIGH>;
+
+This does not look like proper interrupt flag. Wrong constant.
+
+> +        };
+> +      };
+> +    };
+
+
+Best regards,
+Krzysztof

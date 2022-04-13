@@ -2,104 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37254FFDB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0414FFDBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237143AbiDMS23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S232089AbiDMS3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiDMS21 (ORCPT
+        with ESMTP id S237664AbiDMS3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:28:27 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530924D9F7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:26:05 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id a11so1967129qtb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:26:05 -0700 (PDT)
+        Wed, 13 Apr 2022 14:29:30 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021DD50E39
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:27:08 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t25so5063066lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=biwzMecONP16OJhQH/FKNOs+wHfPK7aPZRPUNGPrEJU=;
-        b=diwup2s1nEc9QdCOyhezJHV481K+c1mxaEwqI79kSgnAUQS+Natwz5NeIvppSXq8Q+
-         TpT9xw7Dy7hJw+AQY5JOTZ4TwbH/EzDKvhFPOtRvsUll8cdGP1n5LUFT9qacfCpm+TeP
-         ZJ2rM3PaxqeR3i+ZNKpITEGWjIR/1D8BmOB9cXLr2NLEM9T+LhasNjx8CIFBkPVv/rif
-         5VVtmVigRaBpg5SyUpFfgsnlLdJ+VBzokTC4vU0H51quRSjArD36MsW8/HQKAUoKCELn
-         BlVirzBTPdac3wzV95lZfxsahcZaD4TBskhKlrQOJgoeVU5fyOAUwpMtDaI46lFYl02/
-         HOpA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=evNdnFlztHFMuk1KFy7a+r2V+6GxCGpL2xRUgYQrCNI=;
+        b=SJ9s+6oNOpeXNETNkmIBRwFI6nz5q0dVpBUNZTU3FRblP/zvHvAq+LunGszMn+U/N8
+         Yfc9iDiglJQEXXka1gCag3YKKqDjUdhCdOL5rhEVeIRHHsosqtt7+HRbtAgib8qniMf5
+         wDmiKOf1Sy0jByybF9yhEp81Fa7yOoJEx2/3qpbUwSzrVqdRihktzxWML9eiFewnWgI6
+         FtjjeXKPJ7UIFBhYoy3RLefTD27QSKxtswuSVKTZlG7EF/teLvk3OSp+7nFq25tLT9+S
+         eUjwTASNTpmQtWEkdb9uIUi2y26d1YGKR8EH8jemjY/O9Wy4STByMEoJfC5PKU3ZGmpv
+         K7Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=biwzMecONP16OJhQH/FKNOs+wHfPK7aPZRPUNGPrEJU=;
-        b=xUAkxh+vVUA7N7ipMyqYK8XEdJ2we1qI7xm/9JUZydxFZJrmhX7x0fcdJs1IXvaqoc
-         IY15V8/3gjA417oNlE93dzS5MXOOIzKCMgrEFEdfxB4bmqZ4NA67QAJvyLETQaeSMH1Q
-         v9twlxZfjnxltN44/eiRb/n3ymSPdW7oF+213QLwM30cefnMtiwW6WUS4nOzy45jydwF
-         7RvxGLmbzCuEIhqg7pVVLdqYG4zQ3AcPrWESecXVyTB9oETpvdQz72Z5PtOGAUj2mZho
-         PZczR+RIE7+Xd+gNcq07b/dT8IDI3JbUPi5C8cV8hmVvtcw6xz6Ydv0rfaaGGNLR4ID9
-         ABwA==
-X-Gm-Message-State: AOAM5331aEJykvboQYxjYQA72biPXc4qufU9OZCE61eOiJMIXcrYr/O0
-        47+NFKTshy2fbDoPPrRL3EL93A==
-X-Google-Smtp-Source: ABdhPJwJIylY/WIV9aIFAbhMxv2XyDSV7kK088FKGKPQh1xIhcgg95ObNESZZBUc0O0U2zlI3rVb/Q==
-X-Received: by 2002:a05:622a:1c12:b0:2ef:5061:b78e with SMTP id bq18-20020a05622a1c1200b002ef5061b78emr8368097qtb.361.1649874364491;
-        Wed, 13 Apr 2022 11:26:04 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05622a064700b002e238d6db02sm30335314qtb.54.2022.04.13.11.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 11:26:03 -0700 (PDT)
-Message-ID: <d0b796aee7c4f31643e73efe7c50fedd61c7bfef.camel@ndufresne.ca>
-Subject: Re: [PATCH v2] media: amphion: fix decoder's interlaced field
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        shawnguo@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 13 Apr 2022 14:26:02 -0400
-In-Reply-To: <20220412110155.21427-1-ming.qian@nxp.com>
-References: <20220412110155.21427-1-ming.qian@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=evNdnFlztHFMuk1KFy7a+r2V+6GxCGpL2xRUgYQrCNI=;
+        b=4M3RNJWP5xj/0nqRoa9CAmOBbHZTfZUg9J/m5WgrL8IeKj4ZDPsBEshG16C3hWu5CX
+         JHXm0r4wAZhFT7FHVRDDPx4TgvTiZiUmQBjm5e+s99lUZVaFS+CpwXXUnPzLUyhQsUk3
+         G6RHEqUKRbLjKsXPcuxtzxTbltDaM0WVx36554tzyePwD/0WBz8vUdOEZgv1hO+UrfeH
+         81TIATHFpiugpdnbHQvZtXQF7JQvih+57Tk8VJoucsI9l3KYed0IVszg+D/79Ellq71h
+         sQ9G5FTXd4gOT5BAqea1Txg2CG0Zl1H1mk84DvCQYU8bDQ9HskXQYoCDAwbLSmVlWuI0
+         Dv4Q==
+X-Gm-Message-State: AOAM532qQEv4V8D81AtQOUbJn4ZxySMI4a1Ma5PsORMDwiMA8c08weKh
+        fCSGwkiXhoEAiH6daXHaOmCRNg==
+X-Google-Smtp-Source: ABdhPJzN1zALQp60Sj96QlkcmVqI6vxvbY3CVJAGYAFaV5TOpu9RM/EhIy2ftk/gqVOuhSIkBrFzbg==
+X-Received: by 2002:a05:6512:2252:b0:44a:3038:cbc with SMTP id i18-20020a056512225200b0044a30380cbcmr29213760lfu.252.1649874426159;
+        Wed, 13 Apr 2022 11:27:06 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056512312300b0046b83c2f92fsm1980155lfd.58.2022.04.13.11.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 11:27:05 -0700 (PDT)
+Message-ID: <3805180e-a5df-7a5e-ce08-1a998a8bcf69@linaro.org>
+Date:   Wed, 13 Apr 2022 21:27:04 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 07/18] ARM: dts: qcom: reduce pci IO size to 64K for
+ ipq8064
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan McDowell <noodles@earth.li>
+References: <20220309190152.7998-1-ansuelsmth@gmail.com>
+ <20220309190152.7998-8-ansuelsmth@gmail.com>
+ <a7034b5e-24de-ef17-ae93-c626beb35a41@linaro.org>
+In-Reply-To: <a7034b5e-24de-ef17-ae93-c626beb35a41@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 12 avril 2022 =C3=A0 19:01 +0800, Ming Qian a =C3=A9crit=C2=A0:
-> For interlaced frame, the amphion vpu will store the
-> two fields sequential into one buffer, top-bottom order
-> so the field should be set to V4L2_FIELD_SEQ_TB.
-> fix the previous bug that set it to V4L2_FIELD_SEQ_BT wrongly.
->=20
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+On 13/04/2022 16:19, Dmitry Baryshkov wrote:
+> On 09/03/2022 22:01, Ansuel Smith wrote:
+>> The current value for pci IO is problematic for ath10k wifi card
+>> commonly connected to ipq8064 SoC.
+>> The current value is probably a typo and is actually uncommon to find
+>> 1MB IO space even on a x86 arch.
+> 
+> I checked other Qualcomm platforms (including downstream apq8084.dtsi). 
+> All of them list 1MB region as IO space.
+> 
+> Interesting enough I couldn't get PCI to work on my IFC6410 (apq8064). 
+> It has an ethernet adapter AR8151 sitting on the PCIe bus. The driver 
+> probes, transmits packets successfully, but receives only garbage. I'm 
+> not sure if it is the hardware or a software problem. Same adapter works 
+> fine on db820c.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+I noticed that it looks like the packet is shifted by two bytes. Maybe 
+it's some weird maths somewhere. Maybe it's the lack of iommu on 
+apq8064. Anyway, it seems to be unrelated to the issue being discussed.
 
-> ---
->  drivers/media/platform/amphion/vdec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platfo=
-rm/amphion/vdec.c
-> index 09628dd0c855..0a1976852b0d 100644
-> --- a/drivers/media/platform/amphion/vdec.c
-> +++ b/drivers/media/platform/amphion/vdec.c
-> @@ -804,7 +804,7 @@ static void vdec_init_fmt(struct vpu_inst *inst)
->  	if (vdec->codec_info.progressive)
->  		inst->cap_format.field =3D V4L2_FIELD_NONE;
->  	else
-> -		inst->cap_format.field =3D V4L2_FIELD_SEQ_BT;
-> +		inst->cap_format.field =3D V4L2_FIELD_SEQ_TB;
->  	if (vdec->codec_info.color_primaries =3D=3D V4L2_COLORSPACE_DEFAULT)
->  		vdec->codec_info.color_primaries =3D V4L2_COLORSPACE_REC709;
->  	if (vdec->codec_info.transfer_chars =3D=3D V4L2_XFER_FUNC_DEFAULT)
+> 
+>> Also with recent changes to the pci
+>> driver, pci1 and pci2 now fails to function as any connected device
+>> fails any reg read/write. Reduce this to 64K as it should be more than
+>> enough and 3 * 64K of total IO space doesn't exceed the IO_SPACE_LIMIT
+>> hardcoded for the ARM arch.
+>>
+>> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+>> Tested-by: Jonathan McDowell <noodles@earth.li>
+>> ---
+>>   arch/arm/boot/dts/qcom-ipq8064.dtsi | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi 
+>> b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+>> index e247bf51df01..36bdfc8db3f0 100644
+>> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+>> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+>> @@ -918,7 +918,7 @@ pcie0: pci@1b500000 {
+>>               #address-cells = <3>;
+>>               #size-cells = <2>;
+>> -            ranges = <0x81000000 0 0x0fe00000 0x0fe00000 0 
+>> 0x00100000   /* downstream I/O */
+>> +            ranges = <0x81000000 0 0x0fe00000 0x0fe00000 0 
+>> 0x00010000   /* downstream I/O */
+>>                     0x82000000 0 0x08000000 0x08000000 0 0x07e00000>; 
+>> /* non-prefetchable memory */
+>>               interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+>> @@ -969,7 +969,7 @@ pcie1: pci@1b700000 {
+>>               #address-cells = <3>;
+>>               #size-cells = <2>;
+>> -            ranges = <0x81000000 0 0x31e00000 0x31e00000 0 
+>> 0x00100000   /* downstream I/O */
+>> +            ranges = <0x81000000 0 0x31e00000 0x31e00000 0 
+>> 0x00010000   /* downstream I/O */
+>>                     0x82000000 0 0x2e000000 0x2e000000 0 0x03e00000>; 
+>> /* non-prefetchable memory */
+>>               interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+>> @@ -1020,7 +1020,7 @@ pcie2: pci@1b900000 {
+>>               #address-cells = <3>;
+>>               #size-cells = <2>;
+>> -            ranges = <0x81000000 0 0x35e00000 0x35e00000 0 
+>> 0x00100000   /* downstream I/O */
+>> +            ranges = <0x81000000 0 0x35e00000 0x35e00000 0 
+>> 0x00010000   /* downstream I/O */
+>>                     0x82000000 0 0x32000000 0x32000000 0 0x03e00000>; 
+>> /* non-prefetchable memory */
+>>               interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+> 
+> 
 
+
+-- 
+With best wishes
+Dmitry

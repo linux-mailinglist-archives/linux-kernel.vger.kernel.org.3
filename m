@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E404FF0BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EF74FF0C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiDMHm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S233452AbiDMHqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiDMHmn (ORCPT
+        with ESMTP id S233435AbiDMHqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:42:43 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52FE1EAC7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:40:20 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u19so2005315lff.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DJLJUZ5W5QrQNorPuhVBZk31ozNDYTlIXuspQU8iTXA=;
-        b=lpbBMv0P981hAOP4gANFVsX43x8TW44Se82vUrOBqgL5z36JtJ8CNvu5vOZz5bqiFQ
-         WO/IUpslAiW5L1Dm49lyUsDhrGZGFgLh8EGT46ILedjwhwDFolRubfSBsuIUuuTzZCLW
-         YreS6pnwkg60z772Ovpg+sYUniUoak5squK0d2lS27l+95uI/YkzgQDLTknOExNC5ChY
-         a1AdbIIXjPT9wBkt+Et3uVbREvxs9Yq28nZMtpD/XlWA1dddvAmWPkHDdiMREcG6gG2+
-         X43htRTk9DIdy4Xitb5NpGnXv45quT+wa5VR+J5xPycFoiO1pz6q+7hi404+a16ULSN1
-         QG5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DJLJUZ5W5QrQNorPuhVBZk31ozNDYTlIXuspQU8iTXA=;
-        b=N5zE9sumS43a6yyJAvNQLn3OX5YR03847FueUyrQ82u4eaggwqbl2XFcJxGgo5QhQk
-         bdbQ93M9SXQmyQIyH39OtXhw533uYra+e9tziGhDz1LFI5vuc/Lpj/nBEEixYrgYEv37
-         Jycorij/s04xArWXUvYAOuU8x7QTwaQClRgkPGi+Uq5ID1cd8pFjuRvDhk/h/zsB4R5p
-         NEUqOvWiw2Wj47Z7i29T2AmUrirgEjAFPFmgVyI4YH6aQ/qhP+YMBElTOFXeZdyZnp2P
-         z+5KTjWBYStqoxfBR+g2Ol8b8OBe64BG/6ymR0YG8VoBUhjiUXzAjyuoopBdRZuMICQF
-         h5nw==
-X-Gm-Message-State: AOAM532LrD9NqVYe2J/V5OByP0VsGpHlEp1DDF66YOZFI8hNJh3RKrdr
-        aR/3T1O/j/3CCYQKF7N6ssr4YQ==
-X-Google-Smtp-Source: ABdhPJyHYuYoE8j30RTzyjwkaVAvL/uPJ0wNi72TAqvVSPv18ZSqs7v78jwe5jwWyIItaFk1NmH7Mw==
-X-Received: by 2002:a05:6512:262a:b0:45d:b42d:3e46 with SMTP id bt42-20020a056512262a00b0045db42d3e46mr27259650lfb.22.1649835619138;
-        Wed, 13 Apr 2022 00:40:19 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y37-20020a0565123f2500b0044a1e1c6b37sm4010722lfa.53.2022.04.13.00.40.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 00:40:18 -0700 (PDT)
-Message-ID: <32df5270-9df8-c5be-a9d2-9764409a2711@linaro.org>
-Date:   Wed, 13 Apr 2022 10:40:16 +0300
+        Wed, 13 Apr 2022 03:46:10 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6932E63E7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:43:49 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae908.dynamic.kabel-deutschland.de [95.90.233.8])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9BE2661EA192C;
+        Wed, 13 Apr 2022 09:43:46 +0200 (CEST)
+Message-ID: <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
+Date:   Wed, 13 Apr 2022 09:43:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 06/18] ARM: dts: qcom: enable usb phy by default for
- ipq8064
-Content-Language: en-GB
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan McDowell <noodles@earth.li>
-References: <20220309190152.7998-1-ansuelsmth@gmail.com>
- <20220309190152.7998-7-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220309190152.7998-7-ansuelsmth@gmail.com>
+ Thunderbird/91.8.0
+Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
+ systems
+Content-Language: en-US
+To:     Richard Gong <richard.gong@amd.com>
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        xinhui.pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mario.limonciello@amd.com
+References: <20220412215000.897344-1-richard.gong@amd.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220412215000.897344-1-richard.gong@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2022 22:01, Ansuel Smith wrote:
-> Enable usb phy by default. When the usb phy were pushed, half of them
-> were flagged as disabled by mistake. Fix this to correctly init dwc3
-> node on any ipq8064 based SoC.
+Dear Richard,
 
-Typically they would be disabled in the platform dtsi file and would be 
-enabled one-by-one in the board dts file. So, if half of usb phys are 
-enabled by default, I'd kindly ask to perform the opposite change: 
-disable all of them by default and enable in board dts files.
 
+Thank you for sending out v4.
+
+Am 12.04.22 um 23:50 schrieb Richard Gong:
+> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+> There are some AMD GFX cards (such as WX3200 and RX640) that won't work
+> with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
+> video/display output, Intel Alder Lake based systems will hang during
+> suspend/resume.
+
+I am still not clear, what “hang during suspend/resume” means. I guess 
+suspending works fine? During resume (S3 or S0ix?), where does it hang? 
+The system is functional, but there are only display problems?
+
+> The issue was initially reported on one system (Dell Precision 3660 with
+> BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
+> Lake based systems.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Tested-by: Jonathan McDowell <noodles@earth.li>
+> Add extra check to disable ASPM on Intel Alder Lake based systems.
+> 
+> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+> Reported-by: kernel test robot <lkp@intel.com>
+
+This tag is a little confusing. Maybe clarify that it was for an issue 
+in a previous patch iteration?
+
+> Signed-off-by: Richard Gong <richard.gong@amd.com>
 > ---
->   arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ----
->   1 file changed, 4 deletions(-)
+> v4: s/CONFIG_X86_64/CONFIG_X86
+>      enhanced check logic
+> v3: s/intel_core_asom_chk/aspm_support_quirk_check
+>      correct build error with W=1 option
+> v2: correct commit description
+>      move the check from chip family to problematic platform
+> ---
+>   drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+>   1 file changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index 9d658fcc1f12..e247bf51df01 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -1175,8 +1175,6 @@ hs_phy_0: phy@100f8800 {
->   			clocks = <&gcc USB30_0_UTMI_CLK>;
->   			clock-names = "ref";
->   			#phy-cells = <0>;
-> -
-> -			status = "disabled";
->   		};
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+> index 039b90cdc3bc..b33e0a9bee65 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -81,6 +81,10 @@
+>   #include "mxgpu_vi.h"
+>   #include "amdgpu_dm.h"
 >   
->   		ss_phy_0: phy@100f8830 {
-> @@ -1185,8 +1183,6 @@ ss_phy_0: phy@100f8830 {
->   			clocks = <&gcc USB30_0_MASTER_CLK>;
->   			clock-names = "ref";
->   			#phy-cells = <0>;
-> -
-> -			status = "disabled";
->   		};
+> +#if IS_ENABLED(CONFIG_X86)
+> +#include <asm/intel-family.h>
+> +#endif
+> +
+>   #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+>   #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+>   #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+>   		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+>   }
 >   
->   		usb3_0: usb3@100f8800 {
+> +static bool aspm_support_quirk_check(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_X86)) {
+> +		struct cpuinfo_x86 *c = &cpu_data(0);
+> +
+> +		return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>   static void vi_program_aspm(struct amdgpu_device *adev)
+>   {
+>   	u32 data, data1, orig;
+>   	bool bL1SS = false;
+>   	bool bClkReqSupport = true;
+>   
+> -	if (!amdgpu_device_should_use_aspm(adev))
+> +	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
+>   		return;
+
+Can users still forcefully enable ASPM with the parameter `amdgpu.aspm`?
+
+>   
+>   	if (adev->flags & AMD_IS_APU ||
+
+If I remember correctly, there were also newer cards, where ASPM worked 
+with Intel Alder Lake, right? Can only the problematic generations for 
+WX3200 and RX640 be excluded from ASPM?
 
 
--- 
-With best wishes
-Dmitry
+Kind regards,
+
+Paul

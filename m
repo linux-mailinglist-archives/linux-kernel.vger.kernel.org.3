@@ -2,129 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D29E5000FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1954F5000FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiDMVQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S239141AbiDMVQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239004AbiDMVPE (ORCPT
+        with ESMTP id S239070AbiDMVPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:15:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E74688B06
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:11:55 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id r13so4353930wrr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:11:55 -0700 (PDT)
+        Wed, 13 Apr 2022 17:15:12 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BCE8A319
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:12:10 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id t21so3381371oie.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 14:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZVlwaZ4r8ijIp+ov3AzcuVTp5XRIpxTrDG+Zd3PV7JM=;
-        b=ZRHlFVvi16U6+yoBP5GHkYV2aQKBX4ciYTOKAMEoFO75CALi3MqoTMV8h6fSxQKRNM
-         YC6VFCSW+GKiOF5Dmmcl6Qhh7VsAkX7acmwzgZMehKZLruEuuPO2iQLM5GGV2h5Q7Swn
-         gOO88lMpu1w3LoncZ9Xs7yZ+iidJDMS9dvxhdXcTMyGC9AhXAg1a+p9ZJgcEPf4hHHNG
-         lDhzc2wZYgCqhLsY76otluWbqUVrtoT0EyC/z16Z9nV+rcrae0mi+dCXk20qv7PG67dL
-         sHHRZCZkAlaLGn3o5fNE6U60EuDzPr0F/3qNMVwVUikySR+0rV0yQE0EhFyhFvsdX7AS
-         pEZw==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XPkP4JXEovKBhIkTq76xChuGR44XoLAO8GaoPBQ6nDs=;
+        b=i6TzqlXXoKxsPdUorCMk9xGTDjOPKY+7uxFP8nTnysDkCRjaietD00ON+PbT/asNdl
+         Ku6YTDFeewegP5EEnXDd6cdzT3D1pzCOPPlRBhJEaZp9dxn4fgw7liuFoWONt9VfwxNd
+         afUnjUJmTxutSp65q4lRUZEkY6MW++ZERke0fw6hQOLt/K8sWUwaSVYg0proozbIuqdE
+         vDjyn5ms7Ec5TtIxrjsKtCdodGLU84023kxslabSmcYHn6p2UvA6bcliC/Xcsu13q7ca
+         4Z3uRWs+Wj3oQoGMWN6JdWIBBt+5J/wf4AAZcDFR+uyNV8pDMTJDPvBKzdfXhQ3O5ABM
+         /K8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZVlwaZ4r8ijIp+ov3AzcuVTp5XRIpxTrDG+Zd3PV7JM=;
-        b=JAU2bJPf3NbQF2HefcI+0L60peSYti+7xTNc71wzlg8MU3U9KFetyXnNsPO/cK9lBC
-         1FQXbCt987nHV3SHEZ1G3iJyDQJeGGKdLEl4uqAsgygzwZzEO5sGlaUrZE0oHX9Rp95M
-         mWmw/9pqVzrUEvaD50BGLurhMEBTJK8WtWI7NIQmUc7LJuwCqsA0L+GOmpl1whXH6lIm
-         iX7irzAg0qckFkJfDjg+Yaq9wz6TlSzFqRf2OhTHL11T9tUnjTFTRAmU9UA7Aj08VPHX
-         VGGAuTAzWtuRld1MAz4gkzCsbYUFieiPHckThZVDEuyjqHKbqd4tIunCTWuhwoCn24df
-         V3QQ==
-X-Gm-Message-State: AOAM5317OqbJEJs7/s9q5xEH3ILt6BbVZlVS73y2Lxrk/jfWlQb6lEj9
-        AxrXeY6riPxCCl46wKTMSM7gDhD5J3iyVaGL4XdkrsyvbIaRTw==
-X-Google-Smtp-Source: ABdhPJyMrFJ4QQ7As5Vq4HgSlcuor/51e+7VQC8fiSYCu07wYxr2Xjxc8+aZOUf97xSkkMHgHgaR763dH2PIlomrU3s=
-X-Received: by 2002:adf:eb09:0:b0:207:bb77:9abb with SMTP id
- s9-20020adfeb09000000b00207bb779abbmr487388wrn.375.1649884313810; Wed, 13 Apr
- 2022 14:11:53 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XPkP4JXEovKBhIkTq76xChuGR44XoLAO8GaoPBQ6nDs=;
+        b=Lfixl/1DkaHX8q/RgQrKfMR91HUEFQ0q3BjgJsAFFSguKxjSbqmXpZefZMEwHaZVtL
+         9XMtgsLSwnzCXnlKyRd8Xo/hiPzwY+zMneDwMje1UKSoWYCp0Fo/fpUE00AzM7xdR9Yq
+         AB8v2Fe3TvWxbP3Ely3i8xbyCtu6lly28V40AU3BJDM4Ya9bW9FToQOcRjhZm/YpsWVJ
+         7Ep5v3SkKkuHpI2SziNjspuddR2w9094ewsypasOdzorFGS0r8eHqcBsvHU/PGdDZ9mB
+         MiX6Q9usE8R7avb/kplXYgwYmjrzGh2EqVHJPeVpPLs24DvdfDPQUNonYtBcckG5oPzH
+         PMiw==
+X-Gm-Message-State: AOAM53004HujPvtAi+B/HXysv7jKVY9XzBPAeRLg8j4mZPqO3ECaLtWu
+        HyEbJJDLnLRBI5bckc/fl4mB/W2/j/436Q==
+X-Google-Smtp-Source: ABdhPJzljYBj3a1U7Y0r50ZxzdFG3dRnWSFpStT29jjX1SBQU7D/7JQkWEl2ydtWzIJDAXRSGieJQA==
+X-Received: by 2002:a05:6808:138d:b0:2ef:9f4b:26fe with SMTP id c13-20020a056808138d00b002ef9f4b26femr32820oiw.124.1649884329601;
+        Wed, 13 Apr 2022 14:12:09 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
+        by smtp.gmail.com with ESMTPSA id c5-20020a9d4805000000b005e6ed41066fsm68202otf.9.2022.04.13.14.12.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 14:12:08 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <bffc888b-5f22-6b3d-9762-2a90a33fa530@lwfinger.net>
+Date:   Wed, 13 Apr 2022 16:12:07 -0500
 MIME-Version: 1.0
-References: <20220413114232.26914-1-adrian.hunter@intel.com>
-In-Reply-To: <20220413114232.26914-1-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 13 Apr 2022 14:11:41 -0700
-Message-ID: <CAP-5=fUWHb=fSVQmURbxqOO=DvhjeczzJpuXbR2ebtEsmhf7TQ@mail.gmail.com>
-Subject: Re: [PATCH] perf tools: Fix segfault accessing sample_id xyarray
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: struct rt_firmware_header issues
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
+ <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 4:42 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> perf_evsel sample_id is an xyarray which can cause a segfault when
-> accessed beyond its size. e.g.
->
->  # perf record -e intel_pt// -C 1 sleep 1
->  Segmentation fault (core dumped)
->
-> That is happening because a dummy event is opened to capture text poke
-> events accoss all CPUs, however the mmap logic is allocating according
-> to the number of user_requested_cpus.
+On 4/13/22 14:42, Michael Straube wrote:
+> On 4/13/22 18:27, Michael Straube wrote:
+>> Hi all,
+>>
+>> I think the rt_firmware_hdr structure in rtw_fw.c has some issues.
+>>
+>>
+>> struct rt_firmware_hdr {
+>>      /*  8-byte alinment required */
+>>      /*  LONG WORD 0 ---- */
+>>      __le16        Signature;    /* 92C0: test chip; 92C,
+>>                       * 88C0: test chip; 88C1: MP A-cut;
+>>                       * 92C1: MP A-cut */
+>>      u8        Category;    /*  AP/NIC and USB/PCI */
+>>      u8        Function;    /*  Reserved for different FW function
+>>                       *  indcation, for further use when
+>>                       *  driver needs to download different
+>>                       *  FW for different conditions */
+>>      __le16        Version;    /*  FW Version */
+>>      u8        Subversion;    /*  FW Subversion, default 0x00 */
+>>      u16        Rsvd1;
+>>
+>>      /*  LONG WORD 1 ---- */
+>>      u8        Month;    /*  Release time Month field */
+>>      u8        Date;    /*  Release time Date field */
+>>      u8        Hour;    /*  Release time Hour field */
+>>      u8        Minute;    /*  Release time Minute field */
+>>      __le16        RamCodeSize;    /*  The size of RAM code */
+>>      u8        Foundry;
+>>      u8        Rsvd2;
+>>
+>>      /*  LONG WORD 2 ---- */
+>>      __le32        SvnIdx;    /*  The SVN entry index */
+>>      u32        Rsvd3;
+>>
+>>      /*  LONG WORD 3 ---- */
+>>      u32        Rsvd4;
+>>      u32        Rsvd5;
+>> };
+>>
+>>
+>> Then we have in rtl8188e_firmware_download():
+>>
+>>
+>>      fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
+>>
+>>      <snip>
+>>
+>>      if (IS_FW_HEADER_EXIST(fwhdr)) {
+>>          /*  Shift 32 bytes for FW header */
+>>          fw_data = fw_data + 32;
+>>          fw_size = fw_size - 32;
+>>      }
+>>
+>> We add/sub 32 bytes but the size of struct rt_firmware_hdr is actually
+>> 33 bytes. I noticed this when I wanted to replace:
+>>
+>>          fw_data = fw_data + 32;
+>>          fw_size = fw_size - 32;
+>>
+>> with:
+>>          fw_data = fw_data + sizeof(struct rt_firmware_hdr);
+>>          fw_size = fw_size - sizeof(struct rt_firmware_hdr);;
+>>
+>> To me it looks add/sub 32 is correct here but the struct is
+>> wrong. I don't know if the firmware for this driver is so much different
+>> from firmware for the drivers in drivers/net/wireless/realtek/rtlwifi.
+>> They use a struct of size 32.
+>>
+>> Also, souldn't the u16 and u32 variables in the struct be __le16 and
+>> __le32 ?
+>>
+>> I wonder if we can just use the rtlwifi_firmware_header structure from
+>> drivers/net/wireless/realtek/rtlwifi/wifi.h ?
+>>
+>> Comments from people with better knowledge appreciated. :)
+>>
+>> regards,
+>> Michael
+>>
+>>
+> 
+> Ok, I figured it out by looking at the hexdumps of firmware files. The
+> field Rsvd1 should be u8 instead of u16. I'll prepare a patch for this.
 
-Nit: typo on 'accoss'
+I agree. I had prepared an analysis, but did not get it mailed before I got this 
+one.
 
-> In general, perf sometimes uses the evsel cpus to open events, and
-> sometimes the evlist user_requested_cpus. However, it is not necessary
-> to determine which case is which because the opened event file
-> descriptors are also in an xyarray, the size of whch can be used
-> to correctly allocate the size of the sample_id xyarray, because there
-> is one ID per file descriptor. Note, in the affected code path,
-> perf_evsel fd array is subsequently used to get the file descriptor for
-> the mmap, so it makes sense for the xyarrays to be the same size there.
->
-> Fixes: 246eba8e9041c4 ("perf tools: Add support for PERF_RECORD_TEXT_POKE")
-> Fixes: d1a177595b3a82 ("libperf: Adopt perf_evlist__mmap()/munmap() from tools/perf")
-> Cc: stable@vger.kernel.org # 5.5+
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Larry
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
->  tools/lib/perf/evlist.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 1b15ba13c477..a09315538a30 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -577,7 +577,6 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
->  {
->         struct perf_evsel *evsel;
->         const struct perf_cpu_map *cpus = evlist->user_requested_cpus;
-> -       const struct perf_thread_map *threads = evlist->threads;
->
->         if (!ops || !ops->get || !ops->mmap)
->                 return -EINVAL;
-> @@ -589,7 +588,7 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
->         perf_evlist__for_each_entry(evlist, evsel) {
->                 if ((evsel->attr.read_format & PERF_FORMAT_ID) &&
->                     evsel->sample_id == NULL &&
-> -                   perf_evsel__alloc_id(evsel, perf_cpu_map__nr(cpus), threads->nr) < 0)
-> +                   perf_evsel__alloc_id(evsel, evsel->fd->max_x, evsel->fd->max_y) < 0)
->                         return -ENOMEM;
->         }
->
-> --
-> 2.25.1
->

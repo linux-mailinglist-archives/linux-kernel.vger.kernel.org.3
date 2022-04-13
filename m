@@ -2,190 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C5E500019
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F10B500022
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 22:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiDMUna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 16:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S237577AbiDMUq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 16:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiDMUnY (ORCPT
+        with ESMTP id S231976AbiDMUqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:43:24 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6022D2529D;
-        Wed, 13 Apr 2022 13:41:02 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q3so2950585plg.3;
-        Wed, 13 Apr 2022 13:41:02 -0700 (PDT)
+        Wed, 13 Apr 2022 16:46:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C382253A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:44:29 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bg10so6363781ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IUPk0cjP+4hWCuB6avcV0cHzsw30NHswIq8OiU3ddNU=;
-        b=ReI3wLYKxYQMcshcryGDuOkOSHoAFa0/OEAHRf/wkZ/mdy+ST3238gUuSKvkQ9/pHn
-         JBgQp3a8PjBGmyt8YpOoOfII3nMYgePm8zQGH9CH4M7eNGEg0bRhPPrjTiD6QzYji85l
-         MPCiGDloipFaxOVtQ6ZzJyxwMuPBVwXnKJ9obXWiSYZ9ffa/8j3IR/vFRRYvvXyULukq
-         j9cNWJ5Voz75RzwhYeK3kOf7xUgmpaAfWMtQL5CKS/irlXKZNUiIHxuu+2iQ/n4TkIaA
-         3mLjdGRoJN9gku4tOva0XC2ipg1G2sdgltRV42ff9bAh9aJxIspOOlaXworShpKB93D3
-         7OlQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9t746E0a3Zsh93FlmUmusMHEf6L1/F6+kRTi3ZPWd3U=;
+        b=NpPyUcrQ7ZOjuUtydpO0p2toOxFON7X+5zw1Y63SEiUiNqQ4gztOMnnPJOXGMzYTSC
+         5rYy7JDvRCd8Y15GeAIxAzAfXIgI7S33JA/ZAmDD9vgR0zHszTSDxGCrQWWaXRl9v8ue
+         GqUiGQHi4etpqlM/9j3h0Rn+mq48g3srPc1X8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IUPk0cjP+4hWCuB6avcV0cHzsw30NHswIq8OiU3ddNU=;
-        b=MCydicPed1upQhKUls7ljHLy+3KAWVsAugIGmsryx4oTDu74dJXG42w0aMp5k+HRyZ
-         CPHOuznPBhnP/7ddhBWVwkWZgCEAPi+601SIFp3juEdP9DEvnRpkB04yb6PQbunw6jYS
-         df0f/oW4wEwA4L6N9QCQqh6i1jwsNH3sJPoPoPo7FjtTf5LPs0W3LJoPQcAGixT9W43Q
-         d7YlWDRbPIFtW+VRh2I519uAm923wrCp07aLclEM6hmTz57POtEG/7Xy9Ur16n3ngxnq
-         ifEHRQCOnmLK/G4w/AwZAIEFR5/r6MyYW3hTbbhObyGKQ6rQoghbEOjTfX83nejUsUzc
-         PE5w==
-X-Gm-Message-State: AOAM5332mO+dgVOOzFA32/YWMTwGpEZFCSc24CwqeFiRh6RDVwQRw8Nw
-        ra7xBIFm8MJs8yzpH4yI99I=
-X-Google-Smtp-Source: ABdhPJwaJgi/MY4HCRItMOFzgS3VZEdf0c8cSo1OiMQsEJZQPYqQUgGG6nvWq6rw1GphN+dA6QhmBw==
-X-Received: by 2002:a17:90b:4b0e:b0:1cd:a983:6aac with SMTP id lx14-20020a17090b4b0e00b001cda9836aacmr8108pjb.33.1649882461718;
-        Wed, 13 Apr 2022 13:41:01 -0700 (PDT)
-Received: from ?IPV6:2620:15c:2c1:200:4cf8:b337:73c1:2c25? ([2620:15c:2c1:200:4cf8:b337:73c1:2c25])
-        by smtp.gmail.com with ESMTPSA id b12-20020a17090aa58c00b001ca977b49d5sm3828062pjq.31.2022.04.13.13.41.00
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9t746E0a3Zsh93FlmUmusMHEf6L1/F6+kRTi3ZPWd3U=;
+        b=hvRAKp8qnFad1i5SNnHIfac0wojQkS379q0wwbi7A2NU3excA9z20uic+F0mG0OLQI
+         WZn2ZVuA5nFtnoTPrE6XDeapS7nSRzBzaAmrIyoe9Wu+FWu39X7FqZxrLUbT2pubRRFw
+         sIE4Nn11khL9S6Pl1iw6QSyxQSS//iV0RUGpYsBGmbEK0vLs8UU6PJKm5c9b7N/9jnzK
+         iYe9q3WX53kFaul6X4moc/XnfYDp5PG2ezsItKijsZWHWYK9YLtxhyc7VL5VivHdAo5H
+         lG/SLF2AGSHJPCQxxuCah+KgwxIJlLiMdsywmR2XH85Xq3/yWgNrshcLB0vwTnpxHaeP
+         x1RA==
+X-Gm-Message-State: AOAM531yfxBVGqylJECZZNK+ZguBXp2D//LNnpPRjL/pppkCn6ytw9Gf
+        Fq0QVDU/9gtA6AFC+mv8aeMhqNH3EUeZwg==
+X-Google-Smtp-Source: ABdhPJzSq3INZ5SB+eb+RZjK3NovoCCIazQRYKhQNGPCXc6XvOUBHklqdJ9Ksu0IkaxgJO3rAyoJkw==
+X-Received: by 2002:a17:906:c092:b0:6cd:f3a1:a11e with SMTP id f18-20020a170906c09200b006cdf3a1a11emr39447053ejz.185.1649882667796;
+        Wed, 13 Apr 2022 13:44:27 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm318438eje.183.2022.04.13.13.44.25
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 13:41:01 -0700 (PDT)
-Message-ID: <62903323-d1c0-79cd-7cf8-d6c4b89ff848@gmail.com>
-Date:   Wed, 13 Apr 2022 13:40:59 -0700
+        Wed, 13 Apr 2022 13:44:25 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id k22so4313379wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 13:44:25 -0700 (PDT)
+X-Received: by 2002:adf:c14d:0:b0:207:a28f:f5dd with SMTP id
+ w13-20020adfc14d000000b00207a28ff5ddmr420309wre.679.1649882664627; Wed, 13
+ Apr 2022 13:44:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next 8/9] net: ipv6: add skb drop reasons to
- ip6_rcv_core()
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, dsahern@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        benbjiang@tencent.com, flyingpeng@tencent.com,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org,
-        mengensun@tencent.com, dongli.zhang@oracle.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220413081600.187339-1-imagedong@tencent.com>
- <20220413081600.187339-9-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@gmail.com>
-In-Reply-To: <20220413081600.187339-9-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220413033334.1514008-1-swboyd@chromium.org> <20220413033334.1514008-2-swboyd@chromium.org>
+In-Reply-To: <20220413033334.1514008-2-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 13 Apr 2022 13:44:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ux8AmWpsphRL2waUSrp_Vioykn5WTui4UpzsGLr4fdcA@mail.gmail.com>
+Message-ID: <CAD=FV=Ux8AmWpsphRL2waUSrp_Vioykn5WTui4UpzsGLr4fdcA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] Input: cros-ec-keyb: Only register keyboard if
+ rows/columns exist
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 4/13/22 01:15, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On Tue, Apr 12, 2022 at 8:33 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> Replace kfree_skb() used in ip6_rcv_core() with kfree_skb_reason().
-> No new drop reasons are added.
+> If the device is a detachable, we may still probe this device because
+> there are some button switches, e.g. volume buttons and power buttons,
+> registered by this driver. Let's allow the device node to be missing row
+> and column device properties to indicate that the keyboard matrix
+> shouldn't be registered. This removes an input device on Trogdor devices
+> such as Wormdingler that don't have a matrix keyboard, but still have
+> power and volume buttons. That helps userspace understand there isn't
+> a keyboard present when the detachable keyboard is disconnected.
 >
-> Seems now we use 'SKB_DROP_REASON_IP_INHDR' for too many case during
-> ipv6 header parse or check, just like what 'IPSTATS_MIB_INHDRERRORS'
-> do. Will it be too general and hard to know what happened?
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->   net/ipv6/ip6_input.c | 24 ++++++++++++++++--------
->   1 file changed, 16 insertions(+), 8 deletions(-)
 >
-> diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-> index b4880c7c84eb..1b925ecb26e9 100644
-> --- a/net/ipv6/ip6_input.c
-> +++ b/net/ipv6/ip6_input.c
-> @@ -145,13 +145,14 @@ static void ip6_list_rcv_finish(struct net *net, struct sock *sk,
->   static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   				    struct net *net)
->   {
-> +	enum skb_drop_reason reason;
->   	const struct ipv6hdr *hdr;
->   	u32 pkt_len;
->   	struct inet6_dev *idev;
->   
->   	if (skb->pkt_type == PACKET_OTHERHOST) {
->   		dev_core_stats_rx_otherhost_dropped_inc(skb->dev);
-> -		kfree_skb(skb);
-> +		kfree_skb_reason(skb, SKB_DROP_REASON_OTHERHOST);
->   		return NULL;
->   	}
->   
-> @@ -161,9 +162,12 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   
->   	__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
->   
-> +	SKB_DR_SET(reason, NOT_SPECIFIED);
->   	if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
->   	    !idev || unlikely(idev->cnf.disable_ipv6)) {
->   		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
-> +		if (unlikely(idev->cnf.disable_ipv6))
+> I tried to use mkbp info to query the number of rows and columns, but my
+> EC firmware doesn't have commit 8505881ed0b9 ("mkbp: Separate MKBP_INFO
+> host command from the keyboard driver") so it always returns 8 and 13
+> for the rows and columns. Sigh. With updated firmware we could query it,
+> or we could rely on DT like we do already.
+>
+> Originally I was setting the properties to 0, but
+> matrix_keypad_parse_properties() spits out an error message in that case
+> and so it seems better to delete the properties and check for their
+> existence instead. Another alternative would be to change the compatible
+> to be "google,cros-ec-keyb-switches" or something that indicates there
+> are only switches and no matrix keyboard.
+>
+>  drivers/input/keyboard/cros_ec_keyb.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-idev can be NULL here (according to surrounding code), and we crash :/
+I do wonder if there will be any unintentional side effects here.
+Specifically, even though there is truly no keyboard here, I wonder if
+anything in the system is relying on the EC to simulate keypresses
+even on tablets where the keyboard isn't actually there...
 
+OK, I guess not. While I think it _used_ to be the case that you could
+simulate keyboard inputs from the EC console even for devices w/out a
+keyboard, it doesn't seem to be the case anymore. I just tried it and
+nothing made it through to the AP.
 
+Seems reasonable to me:
 
-> +			SKB_DR_SET(reason, IPV6DISABLED);
->   		goto drop;
->   	}
->   
-> @@ -187,8 +191,10 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   
->   	hdr = ipv6_hdr(skb);
->   
-> -	if (hdr->version != 6)
-> +	if (hdr->version != 6) {
-> +		SKB_DR_SET(reason, UNHANDLED_PROTO);
->   		goto err;
-> +	}
->   
->   	__IP6_ADD_STATS(net, idev,
->   			IPSTATS_MIB_NOECTPKTS +
-> @@ -226,8 +232,10 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   	if (!ipv6_addr_is_multicast(&hdr->daddr) &&
->   	    (skb->pkt_type == PACKET_BROADCAST ||
->   	     skb->pkt_type == PACKET_MULTICAST) &&
-> -	    idev->cnf.drop_unicast_in_l2_multicast)
-> +	    idev->cnf.drop_unicast_in_l2_multicast) {
-> +		SKB_DR_SET(reason, UNICAST_IN_L2_MULTICAST);
->   		goto err;
-> +	}
->   
->   	/* RFC4291 2.7
->   	 * Nodes must not originate a packet to a multicast address whose scope
-> @@ -256,12 +264,11 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   		if (pkt_len + sizeof(struct ipv6hdr) > skb->len) {
->   			__IP6_INC_STATS(net,
->   					idev, IPSTATS_MIB_INTRUNCATEDPKTS);
-> +			SKB_DR_SET(reason, PKT_TOO_SMALL);
->   			goto drop;
->   		}
-> -		if (pskb_trim_rcsum(skb, pkt_len + sizeof(struct ipv6hdr))) {
-> -			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-> -			goto drop;
-> -		}
-> +		if (pskb_trim_rcsum(skb, pkt_len + sizeof(struct ipv6hdr)))
-> +			goto err;
->   		hdr = ipv6_hdr(skb);
->   	}
->   
-> @@ -282,9 +289,10 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->   	return skb;
->   err:
->   	__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
-> +	SKB_DR_OR(reason, IP_INHDR);
->   drop:
->   	rcu_read_unlock();
-> -	kfree_skb(skb);
-> +	kfree_skb_reason(skb, reason);
->   	return NULL;
->   }
->   
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

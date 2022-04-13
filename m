@@ -2,169 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1464FF90D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EAA4FF8E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbiDMOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S234316AbiDMO3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiDMOiG (ORCPT
+        with ESMTP id S232833AbiDMO3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:38:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE049606E9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:35:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649860544; x=1681396544;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=OOnLqTLDkxCmgOTdNgsm1CzZ/iQdTAwWFJ0n3OcCG5A=;
-  b=Sjw5ooUqiRoD6v3zY0aFE6uR21iqUo5lKulJP36bXaX/PxAD947jrg3g
-   DVPHzBY4/S4x0qVHdxm7fpEB0vjt65nsscnrfX35Z9uq8x5GSK+wadIvt
-   KcrJ+UIeAXeEwL9iU9TwPhNPvOHqaa+AsM+hDxqiLozwSNyR1k9FEBnxg
-   AD/ldmPcH0RsvoF6RGLraUkz0D1d3roiO6pFCJ5b3DwoOlrHZohL6Ii6R
-   olQn8jsQssphfo8TJZc6aF8iqyfmixaVZ3Tj7GLJLo7yq5Q4MMK/VxfcU
-   K6GcyrHcD3Ooku7xYa5oKVX6GfOB36RlQFdontmtFeimeepBT/YkXy9Mn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260279299"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="260279299"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="611904866"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Apr 2022 07:26:26 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 13 Apr 2022 07:26:25 -0700
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 13 Apr 2022 07:26:25 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 13 Apr 2022 07:26:25 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.46) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 13 Apr 2022 07:26:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nxvQDulT6fmZts8bYJAI8j+n5ii/Bnh73yZ3BdSH4JkqgUxDQ+fjJBamKSmiAsVzN5jJZ3JoDBBemLrXdKP4dSVe5xFjG7crIg3hxXOHramzM4oafP4JuVPir2IFC06LctwW6hGxys7JjAJv9rhEOG6fJh9z5ODwtKy2IonHrgdTCYMExYDCYzzz7SVW8dK8/Eozepxw98FGgognRxrVTqM2rp9yYuSrbrwBut1+/FVZMa1xaBTVdLhUg1DIYtbmalWvXzAdadOjUUMjtxHqc2IMwQlTXy5rNZN6TQJmD6a6Jv+sgc1sNJNFjyPWDYc/Bfzanz77UBMC2TgmxrWSvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OOnLqTLDkxCmgOTdNgsm1CzZ/iQdTAwWFJ0n3OcCG5A=;
- b=Ud8hGJpqrDxO0ev75vj4TYoQItOMPIObAZWWcLXREvepy/MIB002VvsxYktUTbY3NRuB7mTQHOZOaxwmqjA7YLOlioXq1bQOHfo1RC174vQdnX2Kkwspcb9CFXktpfBcbMTycv/KWZM3BHtlw+XcfUZFVgLoACekHws88v2yrP+KxRhlgapRjvbJiRvSUMjDLmTFe7rdzYVyJlxFKmsLhGKJOZLNzXOK9QeLtF5WnvaGrAzlvIQfauo3hGbQdsDuH7dTWxEy+1w6UeKBCQwjtd/zIX8D5ChG7cQ5syuKfQitcx7aMo/X0AUcET3ETkaew3ItGj4NLexuUTf5tQmQnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
- CO1PR11MB4946.namprd11.prod.outlook.com (2603:10b6:303:9e::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.18; Wed, 13 Apr 2022 14:26:23 +0000
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab]) by DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab%6]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
- 14:26:23 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
-Thread-Topic: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
-Thread-Index: AQHYTa57MrQvrkmHQUyclnfpNoW96Kzq1UoAgAAM1ICAAAtDgIAC3JIAgAASg4CAAAD9gIAADBUA
-Date:   Wed, 13 Apr 2022 14:26:23 +0000
-Message-ID: <86ee8fcc-e021-bb9f-fda6-a8e85cb1d9b4@intel.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-6-hch@lst.de> <20220411152508.GH2120790@nvidia.com>
- <87zgkrha7c.fsf@intel.com> <20220411165121.GA26801@lst.de>
- <877d7tgo33.fsf@intel.com> <e8cdc103-f683-0b73-70a7-807f6fee0280@intel.com>
- <20220413134307.GC368031@nvidia.com>
-In-Reply-To: <20220413134307.GC368031@nvidia.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9db205c6-d10f-441b-6d5e-08da1d599657
-x-ms-traffictypediagnostic: CO1PR11MB4946:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CO1PR11MB494659231E8085C675889DF9CAEC9@CO1PR11MB4946.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2ITm4TH9abAWjHKZQNjoegOL7CvpJ+68PuRGfrZnrbrWHn0Ui9cZ6pEpexShVcCyItv8ar4m21iDnRqzcI/J4KQZu6UTWuB3oy+e/pOB5JmKQ5EJuZ2Y438/wj87K2pMfewrBs1NjLWMFGjGL+dR/1WHwUB3MsVdtShLVHkRRClIKn0pd/WipU1pa10VnRAV1Lfzpmzl4W7aGs5CUcU0MXDatrF+lgrZtd9EZenTWc7PZy+UayUjxbM37o622dFkub4zzNKS6xq4n2tUq0QTcuPg/Xdu3G7BgmfzZEmP/S+Y0PemfPlHIOcdKKBtEwNzyBJNSur+/6pdG+BoN1byu+E06YK5wv9727tQxGDnC9Ymj7urD6EdBYKXZQNCTbJCVN9+7grJO8uuewbQatrRM+vLmOAjabBh3GFgwMfzQP/tu4/a08jp/M+fPhjZHOAZwDgdkFx6RPhyTaOfcUo3LVuNrOTWaMe3Q0Ca304CI0qaUamMtyXutZb2uMPCUIzjHRT/p0j0ISvAHWLFc8lq+PnQhhdH3oVQz7rEEwc87n0B55MCUAvl83TP7tdquRyT2R//C6xA62U2KvufTjn/0IP3PhykQ2pMcQhKB6tvCvDioVzK+xRyRlzgsr8147BlfppMf56fSNipMKvToZpK6sWKDOBgp4P1HE7vUyPBqOdZyOIN54LoGwWWrjppU426G8djI+o7CvPHpu5Fl0q2Gow5mXoJpEnuLVlp/QRpMUZeGwfel7jlXAWtrnoDAIOep7WsR5cKfa9jjLFLSFdP3Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(508600001)(31696002)(6486002)(2616005)(186003)(8936002)(6512007)(6506007)(122000001)(82960400001)(38100700002)(86362001)(53546011)(5660300002)(83380400001)(38070700005)(66556008)(66946007)(8676002)(76116006)(4326008)(31686004)(66476007)(316002)(64756008)(66446008)(71200400001)(54906003)(6916009)(36756003)(91956017)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?M6gYNyMFaK2OJK3EKWpYPwmxBFu/fFnl03UxX08gr/kzndg1sb9M975M?=
- =?Windows-1252?Q?5ZHBzzcVBQLkjQy5mqN+vh0mXj8EV0H4WKne8CIWyiMyG+Y7c6753n3M?=
- =?Windows-1252?Q?CJIVbWHAGP+hiu0M/+8sNs5fxJMLpoMoemt5JvHs4WGEZ/2Y36Kzor54?=
- =?Windows-1252?Q?QJY7DM0TCpasvPfGrP7f1KR+kuN6nN1Eg0vLMmjKBtE7x+DvXPbgwlz1?=
- =?Windows-1252?Q?E25QUZTg6cKh1eywUPSVKvrguwMF+4kRMkKHUK0ijf70cxWOK4dpslrL?=
- =?Windows-1252?Q?loKzcVf72301pu3/ZoK/OuCSMj0VH3KrtRA79gDFsCICaLGjXOtNCpEM?=
- =?Windows-1252?Q?20jQoTDL3haWGKr41suCKbu8rJ/cmVHo19ksnSGFgNbUIs2LIwE7vbGS?=
- =?Windows-1252?Q?3oMGSuVBw4S5fTt0eh40Z69lHLubLy8FvKbRNB4yEk+Hk3/PhtOzcSpM?=
- =?Windows-1252?Q?qFGjEGnEhGL42kvRfTOz7rYOfQQbDgcLuknIxsiH8LxATPiMG8bPSisD?=
- =?Windows-1252?Q?r2vr5xtxFroNfzEmULdLAuTolGIDS9SPd3OhI4nQQdKMYtoP9QHT34qw?=
- =?Windows-1252?Q?pFxWyiloMbwPu4gVpV8XjV6TnTHI+kCWYVf3PLUb75tKKJgEX7RjTAsH?=
- =?Windows-1252?Q?i4ZaMSyKfokig2SUbsO3XP0Y3LWXXBmkru5/s4it1TvIyGMbeZLxVKdD?=
- =?Windows-1252?Q?JuzqYT5zIQo20xGOzUAagWu53BOGi/XtabnricJqIhH6Q4xt8TSYP0GA?=
- =?Windows-1252?Q?E/3OqVI0OHIIrkI70H6ANrKDRzkMygSJnbCvHvkkKJUSsGb8P4VXuVC+?=
- =?Windows-1252?Q?TFBUwkktG2/f9QftDw+TEm9PXDg9APAdwTZCdoYo0zT03tvnoJcfreLK?=
- =?Windows-1252?Q?CJRpi6Ood1G06EBeTDpCgHCVo7iRG86mmZl/3Yl0c26Z629rMy3eYdh3?=
- =?Windows-1252?Q?Zw8mPX0c99VyVUFXArvL8kr9C4EM0nSEPZalWME6T7CHJ/JI6Vb+geps?=
- =?Windows-1252?Q?szHISzgKwkH249RqF+RwxQm9hRlGVviqeMpNq1nR4vd5pCJY6O5vlxGh?=
- =?Windows-1252?Q?TTNjQ6EdUOlWG5TeTF6yRnHYqnsJCSszfnVy+BkD3aZO3oLx+/CpHkm+?=
- =?Windows-1252?Q?BDI8kt9xX5YCGMPqgJ846/I5/FqDEgrrW+ZU+Y1QhDrcOXzZQMNuKt6e?=
- =?Windows-1252?Q?/tXIKcx9zQ4BM2qWVfzymHh5fhrVJo3x8tSS8e3V1LY4+BjwEtnyAj8N?=
- =?Windows-1252?Q?jeBt7C9ljO99JGCqKl1Z1OR8FQMdni6GCafD7Znetcp3krRIKwqw3b/h?=
- =?Windows-1252?Q?ejZRYZNcMIam0jKpRDzr2ZGGfssBy5WiK6tjV9xDBSWeU9H6S5xCHfky?=
- =?Windows-1252?Q?UIwCM40DMNqrQQfVq/LWtlaKWAMhfbLt8AGNvDPfGJENmvP1cE2wt5AL?=
- =?Windows-1252?Q?NE/sXcdMpYGJujhAWgQPc0Bf8E8U0Yh0nPIwNWtHLZFBQR5/fARWKJGJ?=
- =?Windows-1252?Q?X3CCEF3M9RpvQ6sKW1kZmxKdujVUpqrH7BrxaKyKgSQd0PonQuZqARD8?=
- =?Windows-1252?Q?2FmhkYDYQr/ibXMIfxUeoB/7R2Q4WRFV0LPOuCNC7X/u+soW+iryfISP?=
- =?Windows-1252?Q?kyOk581M51u4+jg6X2a8/uU+6mXQnTQt1nwJCLj/Pbi3T+QdXQKUVQla?=
- =?Windows-1252?Q?Fwud0togDn73bWBUeCGBfLSTRCIHk/M+D1T4UVUiLervmqk5lhB887Ld?=
- =?Windows-1252?Q?sGKwZGpv4TWMrUMXoL3KmTgOWGoMNbF0bHHEgpKQIzsGoGZnSTZ0OhsJ?=
- =?Windows-1252?Q?GxipBEQsHyFqRQ8r33fZcEWkgk0ln1zs5iDq+YfNZXyv7FDOBhvjEImZ?=
- =?Windows-1252?Q?0DJi2bZOeCzSTw=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <0FAF46D230F6AC4FB5A1C739A69CDB09@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 13 Apr 2022 10:29:16 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ACB5620E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:26:53 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a14so667599uan.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=43J0yXvH4ROwR66NzzY2ROnhEkvw7zmvsdv9tyaOFBg=;
+        b=okZaRwO9PClWxdq/tG6n1MhoNff5DO91mf2h91Fv0qP6Slpej8oQRbqr3Ybd9So6kl
+         3gtLFqJs/KEgyJYrdlEvi04JtWHoIjS+U5e7FM/9k1E6JHScQeSCimgmZi8veMTWrM+2
+         LDVXgjFffEnlRST3oXr2RtELLVSBecz6h0kbdvGkbjfz2p4254S5QaCbkh6WAVv/4ekI
+         9w1MHeEI1TqD04pNHba3SECbyJEcjh9Yj5QukWq3SYQgcLZC5I+ViywYZP7yWILPxJkl
+         xQ/iRlmlA94YKvbbv/WTaWlYUFTPLr2zE8QPX/d6Lthw4YZ6UcDLUPJAWHZ+fSNtlHj/
+         fZnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=43J0yXvH4ROwR66NzzY2ROnhEkvw7zmvsdv9tyaOFBg=;
+        b=Rr74yswe5etfgy14TU6FGJBXdMcVI9jjF9bhpsvX8gfPyb1ef1uitBbRLMBXaQ1noh
+         YUgswekP0YE+OxSfPkV3noea3bTHQT/csDo0bgxmpSw6awCII07rx2VNFT2B0zcXoshC
+         Z9kxW3LKuD3Z1OqY6xYajqfkavpYkXd/UPrE60KDVswEkImePhrr55W6u9SYiT6fSPs+
+         yZ6L+euEf3K0Y9oPEOg/rvABV/C8IpOcOu7KAXRLXBzHhkyxl2pF0IgCIeDQIfywcukO
+         zsBXlzBBYcSXhtUq0BP5dEDvr/S15i+Fi5AaGRTMXzKf07nXeq2IrilGLnM5KwDvVMYi
+         820Q==
+X-Gm-Message-State: AOAM532kHNVTZec2JACgpR0FTgos1nEITj7XH9o/lNXDe1eYXMWk1Dtj
+        WaJg3nyLlBLOV0Aq+wPjibk7v9UqiS5ZoQzN/T0=
+X-Google-Smtp-Source: ABdhPJz1qHyripY7pUrpl0qeWv2kRzlcs6xlv+JcnNk5x17s1QBsn+NugZQITJFrxE054itlevbyEB6udiBPFY2kgoM=
+X-Received: by 2002:a9f:31f1:0:b0:357:9034:2afc with SMTP id
+ w46-20020a9f31f1000000b0035790342afcmr3286870uad.11.1649860012506; Wed, 13
+ Apr 2022 07:26:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9db205c6-d10f-441b-6d5e-08da1d599657
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 14:26:23.6859
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EiZIQq10DZSldmPlukn2wtx8HcVNRW+C8eb5a6Bg4wAWASnUbUzfyqgTTQGzQSC9L92N8W6rtZPiSmqQmNdGDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4946
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Sender: anselmenicki@gmail.com
+Received: by 2002:a59:db5a:0:b0:2a3:6f2a:6536 with HTTP; Wed, 13 Apr 2022
+ 07:26:51 -0700 (PDT)
+From:   John Kumor <owo219901@gmail.com>
+Date:   Wed, 13 Apr 2022 14:26:51 +0000
+X-Google-Sender-Auth: 4cITI-vIcGWnaCZGCqcwFh5W_Ko
+Message-ID: <CANbcXbEJX7QO12iUr1zQqVJ3-eqTNgrgP4DTGiHooC3Bs1vSKA@mail.gmail.com>
+Subject: Reply me BACK.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,54 +65,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 1:43 PM, Jason Gunthorpe wrote:
-> On Wed, Apr 13, 2022 at 01:39:35PM +0000, Wang, Zhi A wrote:
->=20
->> It seems Jani's makefile clean patch has already included this one, I ca=
-n
->> just simply drop this one so that Christoph won't need to re-send everyt=
-hing.
->>
->> For the branch to move on, I am merging the patches and will re-generate=
- the
->> gvt-staging branch, which combines the newest drm-tip vfio-upstream and =
-other
->> gvt branches.
->>
->> If you are in a rush of re-basing the patches of non-GVT-g stuff, you ca=
-n use
->> gvt-staging branch until my pull request landed in drm-intel-next.
->>
->> Also our QA will test gvt-staging-branch before the pull request. I supp=
-ose
->> it will take one or two days.
->=20
-> When you are wrangling the branches it would be great if Christoph's
-> series and it's minimal dependencies could be on a single branch that
-> could reasonably be pulled to the VFIO tree too, thanks
->=20
-> Jason
->=20
-
-Hi Jason:
-
-I am thinking about the process of merging process. Here are the dependence=
-:
-
-1) My patches depend on one patch in drm-intel/drm-intel-next. So it has to
-go through drm.
-My patches of GVT-g will go through drm-intel-next -> drm -> upstream.=20
-
-2) Christoph's patches depends on my patches, but part of them are for VFIO=
-.
-
-a. If they are fully going through VFIO repo, they might have to wait my
-patches to get landed first.
-
-b. If only the GVT-g parts goes through GVT repo, and rest of them goes
-through VFIO, the rest part still needs to wait.
-
-What would be a better process?
-
-Thanks,
-Zhi.
+My dear,
+Greetings! I trust that all is well with you and your family. Did you
+receive my previous email?
+Regards
+Attorney John,

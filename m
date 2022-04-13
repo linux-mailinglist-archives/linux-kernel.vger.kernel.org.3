@@ -2,531 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1C34FEEA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E014FEEA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiDMFob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        id S232532AbiDMFqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiDMFoZ (ORCPT
+        with ESMTP id S232517AbiDMFqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:44:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBDA20BF0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:42:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EE3361C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971D8C385BD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649828523;
-        bh=UroexlyaOJ612A7j7r35/w0UlBKtJvaBUe7hpU+WntA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aYvOsu9rlOGXKLHcD2ErlWv5t2hQd15h4rxJyRpzfPRwdskPCf4fiuEjnLospz1IV
-         l63Yq5LMQRo9zHLQ3Hi4k27qyJyUd+CStHsWecjjs9f3OqKz6ClDWKb+utr4Q9+t73
-         uvb/u9V+HSeErUlFA4FZfS9IvcUhvQgoS734A/xJV/LjDR4B9/32cSeESoc1FaU4ES
-         m6kyIXAgUeb8WU2QX+JO2QRa/XL+bJyd2oiFL8+F9AqQVAkv7FRinUKVrczX5onXwy
-         2AbjGTgm5D4hmjDfyIogZmvPzA2se6Uw8LTk6RR1l2I4Ef8m/Vs19HkdGDxtbQbCUS
-         bDW0GdC5SwDfg==
-Received: by mail-vs1-f42.google.com with SMTP id a127so622795vsa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:42:03 -0700 (PDT)
-X-Gm-Message-State: AOAM5301ZTvGbjgXjG8Zb8t2zbocuMdUQkEfFwdlfKGG4RUj37ONFfZB
-        4Nlp514iPYmoXA5EwDzz5Q36vSaB/SEGYGA1Q40=
-X-Google-Smtp-Source: ABdhPJyngkJWZ3iQRI4D4DlYUOwZZwnSYipvNk62gxblNW8wDygahYcGLA1AIpSG4yfsB0URYMx/GMPTm3NnNpN0F6I=
-X-Received: by 2002:a67:d48d:0:b0:328:2e7b:977a with SMTP id
- g13-20020a67d48d000000b003282e7b977amr5843137vsj.51.1649828522323; Tue, 12
- Apr 2022 22:42:02 -0700 (PDT)
+        Wed, 13 Apr 2022 01:46:18 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732CE30F55
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:43:58 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23D1P95q012645;
+        Wed, 13 Apr 2022 05:43:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=lrkIA6FPjNDJVPYlvd4BhJjE46UKmWVVjrSaFHQjxv0=;
+ b=IBcuzxLUt3dQLTOy29DcT7eUH9WESD2d2W4QRgahqL4Qzpc92Urj8hQIv4jG+GfkcPY4
+ 6et5cIhxBwXwrHsBGdeauIRqF61JxsoDQHsDJnbKe1ejyD7Z2hrh+qNP8fiOVkSgux8x
+ Tkm/UJMOPnLWACgDdDWWDFpRT5/PpRGkUfCU1wmbePuLqtETEzKLTGeUP8qvl+/MtYzD
+ +ScNoPSp6ZM502ktcNiwfouE4qwVNJVDWfGNyys0uyNtnbr5V7w+xgXgPQg6T4dsI74F
+ iTKyb5tX6aoE88uthMR2BWJyi2ljVod42I6NXJSNzgTB2pp+Ua0j+8yO05cwHHxd/1Uy 0g== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2pu0ywe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 05:43:21 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23D5fQVo033782;
+        Wed, 13 Apr 2022 05:43:20 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k3mtfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Apr 2022 05:43:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TRCwjWFEpciZRWqQhlvW/vmywxEtdf6+hLa71m4Xyl3Q44PFzrVArw375BrE5P3aZM/hTsAQviF7yrcWy/HaNe0EnlMEsdJc5sSTMvrvsxMf6TX7BL+QdBsLxuPQXGign3KlSMrhBYKwhu7vh+iu6TyrrbOplTRy75DH1dOoY5hq6WhZoPCKfT4RaqYbFKsGu0qP1UisvP1st2FdcIGXjdbBX6d/dLO4x8gL03V7Vo7lMbID9PRd+NGF0b69chUVyKchaAJtRRUNo/g6kL6mNHNCZF1GyfMO6TwzygdA5AT+sd1xUH4oCjnVyPb/pTLLhLPgZtTYNstQ5Z9VcbpcgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lrkIA6FPjNDJVPYlvd4BhJjE46UKmWVVjrSaFHQjxv0=;
+ b=d99oDb7XoCHYCcC6BAIIF2qtUeIhn3rRTIZ4bJWJtzOBtGUzdIdarfxmeEJMvK87tXQLuB2rM5SO6BG2V1/HvYs5mdsMGnLZ2spVO8N2csOKGTZIkII1Y1kM3wCv9kI5jkemDN5gJ8liCNMWqA7xQlI7v0V7JK9Cw18R0HQ8URYVwd2aotKD9RYIg8GSdp39QrXCmIOgQqCU4BrfVPKdYwrPmUS2SJavv55H0oUPsmrVKTnzT8UsQ+jPZwtr/LdMR79htaQURxH80k809DMq08UORzRRXk7fSOhVMmQ8BctdW0sua8IDMxPnL+1u/cI4F0HqoC/Yb7LUrHn1m7yvSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lrkIA6FPjNDJVPYlvd4BhJjE46UKmWVVjrSaFHQjxv0=;
+ b=X7dbUnXLFqmSi2YalMMglOdhICit6z9Q3LkNMCixQ3JPrk8nY3WF2gHyxsaUgprFG2JMhbKaNaIm8GqIfYUZ+Zqn2uPsHd8nIBtAEh5D+9CKARzpDgf+BFx7h2xuYsh7WjXs4IIO6Uj5IHKqmyohjOPOC/bCv2ae2IyWALFKHW4=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BLAPR10MB5345.namprd10.prod.outlook.com
+ (2603:10b6:208:331::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
+ 2022 05:43:18 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
+ 05:43:17 +0000
+Date:   Wed, 13 Apr 2022 08:42:52 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Vihas Makwana <makvihas@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH v2 0/7] drop some unnecessary wrappers
+Message-ID: <20220413054252.GR12805@kadam>
+References: <20220411102136.14937-1-makvihas@gmail.com>
+ <3484215.R56niFO833@leap>
+ <20220412151529.GF3293@kadam>
+ <3134226.AJdgDx1Vlc@leap>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3134226.AJdgDx1Vlc@leap>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0047.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::35)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-13-heiko@sntech.de>
-In-Reply-To: <20220413030307.133807-13-heiko@sntech.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 13 Apr 2022 13:41:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR=JexYCOpuYAndtrLEGQwO7-ZC0kLb3+Air000q-84Ww@mail.gmail.com>
-Message-ID: <CAJF2gTR=JexYCOpuYAndtrLEGQwO7-ZC0kLb3+Air000q-84Ww@mail.gmail.com>
-Subject: Re: [PATCH v9 12/12] riscv: add memory-type errata for T-Head
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, liush <liush@allwinnertech.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        "Xinhaoqu (Freddie)" <xinhaoqu@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 91d01f31-20f7-47cd-8a30-08da1d108222
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5345:EE_
+X-Microsoft-Antispam-PRVS: <BLAPR10MB5345936A1C80CC65B39912E18EEC9@BLAPR10MB5345.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V5aDO0RfMDtVArk3Sta/75+bWFyJav/elVN8IewfYPuywhvgixNTIFY+aY0uE7oWIS4Ad32CrnPP3APz+mwiUno0ZrvKWsSBN1z7GfU2WzoDhY0Wma+bmp3Ge+6LBgm5BG4oaCKCgLiIvPIH5c6+vk23sW07BSt/Ktl7wYv6+/QCtyBAXPORoMiCoozd7Q1RHnWte7RXE0IfB4mC39TSmGGBOMeEAsKxuzN9QqfB7AUnZcnvJYOvgCItGDs4mCPa9WSknoEl4QGuFEn/CHHTC8LghQ83GSYqbg/9r2Hz674ymnCT2lQDa6m1L2B9Ykgm5WYcn0ncgxn9VjA+WA9rJSU/AukMhLUmv829ZbV4k/Dej7U9EEV+CLwC6eSbwa6k97SmNWhtlJKUfTlmg1bPkVXMLUr7FQgGelW6FofUv/PBmKUr+3h43WTJZRZLuoTn2VEW6O4WPRfiUxUOjV1metlYNx6LtzFI1QAONYPT//BA0w5z1pwKvl/1v19bLObHuw6b53DDJYSQSQDZiJDFqjI/vylCGk5ylPkoBn4jMxSYcQceCWZMpcgcSW5oD141eoglJQMjKEjbExIJlK3szf+z3oChjcq6myfP+dKPvVmR9FgIIrHvuJeQG+bycHWXjUSRYYRLuwNmPom+NDZKp6a+Vh0RJZyhW7ljLXcYuq8QW7cY+xdKlwmb36y4btK+D/XtTiOZiytkK4TRPPGHlg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33656002)(508600001)(5660300002)(8936002)(44832011)(38100700002)(38350700002)(6486002)(83380400001)(186003)(26005)(2906002)(52116002)(1076003)(6666004)(86362001)(9686003)(6512007)(316002)(54906003)(6916009)(66476007)(4326008)(66556008)(8676002)(66946007)(33716001)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E0Z0rCfUR85rCH8sLO3CcyF2sby6jUljsSSrpUtz1Re4QIi/NYEM+CryAn+h?=
+ =?us-ascii?Q?0gYu3nxIiUgKdArCuCt7KNugmQY0087Br3ZgrmlENLY2cwsd0DuxF6QU+ZLn?=
+ =?us-ascii?Q?72rzRoByIXWDEgY23YXgBjwkhn+3viRQJn5hEeqUFaX5IasGklkOcR0UVVb1?=
+ =?us-ascii?Q?wasH2rTk0nuK/PMPiNNZaT8jUnjc1P05NElDMQ+Kqyvf3q3nVhw74f4CoNZa?=
+ =?us-ascii?Q?E+4v7MgP2LdpqE16OWGc5GSrWFiwnuZhrDnNwxZSqPv4SsFu8M6dV5AR6cNJ?=
+ =?us-ascii?Q?Q4dg+Sp2WSbm4tNLc2zobPn3QXrXUMW+YIzKKv5l4Pga/yw1QNfF+kKoLEJE?=
+ =?us-ascii?Q?O7/dBBnWnCScdzxZgJstq9ltyuor/gHvBjDGDr+zKewh9XNbhkF6ZY7H5giH?=
+ =?us-ascii?Q?Z6piO/ZqDQe+i5rLP2ssnnQlzneUa10/t/VCY1FStxK5k1mf6QVTSTvJq/Pn?=
+ =?us-ascii?Q?skbZqERGwMnbeEZK3NZiZkOigfmNfGPBn1vfSXGE3V+DuaIbhGNmYxUTkP6m?=
+ =?us-ascii?Q?NqKmVrkH4HIN0xpgz6XR7X7NsO3M7gtpnQ6knzPjdfjElaUWxDYlmCmhmA43?=
+ =?us-ascii?Q?oIXRruoiBK6eVY56KUQQnDzZmXgT9cDAnd4782vRvpS3riNPcfT8o6W8w3+Z?=
+ =?us-ascii?Q?NWV/KMl6/EnuV/nED2eF52P01QVCXDwQzXYVDVcn7AtqhVWUr052nj0D9KFz?=
+ =?us-ascii?Q?UC4PofgFzXtiSs/VNR6vAToZZdNS/KYL8xPTeASq4t5QJfkFxJTRo+itJG3X?=
+ =?us-ascii?Q?4/g2UTZkq271+8KDxiL1/BE3ygqBSXkq41pBNClPwfMlsMam/oMk8b6JvjcZ?=
+ =?us-ascii?Q?dHTz9GLdATLL8hjhQYgReI4hDFsBP8HV4Us3cpOOi7ldz8KHf/cYWytypyWd?=
+ =?us-ascii?Q?84Bi62Y74alrPsnxQu6yi1RWaE1UBskL7LlXPClptD49HpKu2uZmmJXwOsLU?=
+ =?us-ascii?Q?7mFZV94dxcWbibg/HZsGgeZ+80DN7unstgk8We9lG5HyZeH/SVQmsj5YUhoW?=
+ =?us-ascii?Q?cT/zkgQySDNoU/jNFxW2BbeCtm/dXnAgOWFP3cgD3eUiTgJKoXi7gZken1d0?=
+ =?us-ascii?Q?vcC5QuVH504w3C5Pv8mwvCW/pKNK8UWvhc9OeCMr1K30ilNeyVm6gQmejSmy?=
+ =?us-ascii?Q?vgkDqmdiL3Riegaes/NX2dLHPfHF/g/a1FS94Pk4lbExsI99JRzfldCJ9VnO?=
+ =?us-ascii?Q?0IqyKqVsCS1n2DR+cCaebGeRH1i8iNX7LXrm9x83wOaHz+bhyTA+nrMt2RMU?=
+ =?us-ascii?Q?S7PNDURb52Lqd5UIF/GYMEUqynP1QtW6LIF2P8NHjCYIaW/vZ5CNZHVVB2Gg?=
+ =?us-ascii?Q?R/HyrBISk0MwTcQDytZsKUjhP2ApFmzyfV+7v602sEwqB/o2e351mAVKkfPB?=
+ =?us-ascii?Q?JzfRXrPHGv+y43lnjQijqpPOZbM+qR6nEN9JajKyz7GamnSEkuw6h5Ll2M2N?=
+ =?us-ascii?Q?MgSuBre/OyC9aoFLsp3ocgK0uDpf0RzjdlBPojkeZ9HZI40lAZphCacmDaK6?=
+ =?us-ascii?Q?e7gRcK9lXtkidvyPFxRaJ9aFKC5l9MdUIxVRN45+y6eA8+P+GBxei160egA7?=
+ =?us-ascii?Q?5zU8gKCo5H6PMSiWwrNG7R02IPPUASSUIH3T+OneUY0UN2kyd+JSV9Wl0pTn?=
+ =?us-ascii?Q?Yd9ccBS5pcgg4vuqPDZ6skbMwJlheYJKZ5xNNO7N9SPcf5M77pmH7kFaV/gP?=
+ =?us-ascii?Q?rieAmy3EXMV/WuVV+4vWkTFPUA9R9tfXa4n3ydB/9CGUsJgjpOEjF9s5ZDUR?=
+ =?us-ascii?Q?C2nX6RtPyi5PgqokjAjIzZOQfsIKG0o=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91d01f31-20f7-47cd-8a30-08da1d108222
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 05:43:17.7735
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kign1VO16QyVzYKWsjV4EjrjZCpRGbOHFUyGnwsr5S3eJfkrzbMOXU/cKxISt7ymFoZXmpvokB/4SgOxdeiIVLexkOKycPcS3ya7IMmcunA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5345
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-12_06:2022-04-11,2022-04-12 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=885 mlxscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204130033
+X-Proofpoint-ORIG-GUID: _W7Alxsa1s4VG3Hyu_hWpJarC068WIPY
+X-Proofpoint-GUID: _W7Alxsa1s4VG3Hyu_hWpJarC068WIPY
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On Tue, Apr 12, 2022 at 06:08:24PM +0200, Fabio M. De Francesco wrote:
+> On marted? 12 aprile 2022 17:15:29 CEST Dan Carpenter wrote:
+> > On Tue, Apr 12, 2022 at 11:53:42AM +0200, Fabio M. De Francesco wrote:
+> > > I didn't suggest a re-write of the commit messages.
+> > 
+> > Yes.  That's the problem.  If you want to complain about a commit
+> > message then you *should* suggest how you would re-write it.  Otherwise
+> > how are we supposed to read your mind?
+> 
+> Ah, sorry. I had missed that you were asking for a re-write (literally).
+> 
+> Here it is a sort of diff on Vihas' patch:
+> 
+> - [PATCH v2 1/7] staging: r8188eu: drop unnecessary wrapper _rtw_free_cmd_priv
+> + [PATCH v2 1/7] staging: r8188eu: drop unnecessary helper _rtw_free_cmd_priv()
+> 
+> - Drop unnecessary wrapper _rtw_free_cmd_priv and move its logic to
+> - rtw_free_cmd_priv.
+> + Drop unnecessary helper (wrapped function) _rtw_free_cmd_priv() and
+> + move its code to the wrapper rtw_free_cmd_priv().
+> 
 
-On Wed, Apr 13, 2022 at 11:05 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Some current cpus based on T-Head cores implement memory-types
-> way different than described in the svpbmt spec even going
-> so far as using PTE bits marked as reserved.
->
-> Add the T-Head vendor-id and necessary errata code to
-> replace the affected instructions.
->
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> Tested-by: Samuel Holland <samuel@sholland.org>
-> ---
->  arch/riscv/Kconfig.erratas             | 20 +++++++
->  arch/riscv/errata/Makefile             |  1 +
->  arch/riscv/errata/sifive/errata.c      |  7 ++-
->  arch/riscv/errata/thead/Makefile       |  1 +
->  arch/riscv/errata/thead/errata.c       | 82 ++++++++++++++++++++++++++
->  arch/riscv/include/asm/alternative.h   |  6 ++
->  arch/riscv/include/asm/errata_list.h   | 50 +++++++++++++++-
->  arch/riscv/include/asm/pgtable-64.h    | 18 +++++-
->  arch/riscv/include/asm/pgtable.h       | 18 +++++-
->  arch/riscv/include/asm/vendorid_list.h |  1 +
->  arch/riscv/kernel/alternative.c        | 12 ++++
->  arch/riscv/kernel/cpufeature.c         |  7 ++-
->  arch/riscv/mm/init.c                   |  1 +
->  13 files changed, 215 insertions(+), 9 deletions(-)
->  create mode 100644 arch/riscv/errata/thead/Makefile
->  create mode 100644 arch/riscv/errata/thead/errata.c
->
-> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-> index c521c2ae2de2..12036e65648e 100644
-> --- a/arch/riscv/Kconfig.erratas
-> +++ b/arch/riscv/Kconfig.erratas
-> @@ -33,4 +33,24 @@ config ERRATA_SIFIVE_CIP_1200
->
->           If you don't know what to do here, say "Y".
->
-> +config ERRATA_THEAD
-> +       bool "T-HEAD errata"
-> +       select RISCV_ALTERNATIVE
-> +       help
-> +         All T-HEAD errata Kconfig depend on this Kconfig. Disabling
-> +         this Kconfig will disable all T-HEAD errata. Please say "Y"
-> +         here if your platform uses T-HEAD CPU cores.
-> +
-> +         Otherwise, please say "N" here to avoid unnecessary overhead.
-> +
-> +config ERRATA_THEAD_PBMT
-> +       bool "Apply T-Head memory type errata"
-> +       depends on ERRATA_THEAD && 64BIT
-> +       default y
-> +       help
-> +         This will apply the memory type errata to handle the non-standard
-> +         memory type bits in page-table-entries on T-Head SoCs.
-> +
-> +         If you don't know what to do here, say "Y".
-> +
->  endmenu
-> diff --git a/arch/riscv/errata/Makefile b/arch/riscv/errata/Makefile
-> index 0ca1c5281a2d..a1055965fbee 100644
-> --- a/arch/riscv/errata/Makefile
-> +++ b/arch/riscv/errata/Makefile
-> @@ -1 +1,2 @@
->  obj-$(CONFIG_ERRATA_SIFIVE) += sifive/
-> +obj-$(CONFIG_ERRATA_THEAD) += thead/
-> diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-> index 3e39587a49dc..672f02b21ce0 100644
-> --- a/arch/riscv/errata/sifive/errata.c
-> +++ b/arch/riscv/errata/sifive/errata.c
-> @@ -88,10 +88,15 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
->                                                unsigned int stage)
->  {
->         struct alt_entry *alt;
-> -       u32 cpu_req_errata = sifive_errata_probe(archid, impid);
-> +       u32 cpu_req_errata;
->         u32 cpu_apply_errata = 0;
->         u32 tmp;
->
-> +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +               return;
-> +
-> +       cpu_req_errata = sifive_errata_probe(archid, impid);
-> +
->         for (alt = begin; alt < end; alt++) {
->                 if (alt->vendor_id != SIFIVE_VENDOR_ID)
->                         continue;
-> diff --git a/arch/riscv/errata/thead/Makefile b/arch/riscv/errata/thead/Makefile
-> new file mode 100644
-> index 000000000000..2d644e19caef
-> --- /dev/null
-> +++ b/arch/riscv/errata/thead/Makefile
-> @@ -0,0 +1 @@
-> +obj-y += errata.o
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> new file mode 100644
-> index 000000000000..e5d75270b99c
-> --- /dev/null
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2021 Heiko Stuebner <heiko@sntech.de>
-> + */
-> +
-> +#include <linux/bug.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/string.h>
-> +#include <linux/uaccess.h>
-> +#include <asm/alternative.h>
-> +#include <asm/cacheflush.h>
-> +#include <asm/errata_list.h>
-> +#include <asm/patch.h>
-> +#include <asm/vendorid_list.h>
-> +
-> +struct errata_info {
-> +       char name[ERRATA_STRING_LENGTH_MAX];
-> +       bool (*check_func)(unsigned long arch_id, unsigned long impid);
-> +       unsigned int stage;
-> +};
-> +
-> +static bool errata_mt_check_func(unsigned long  arch_id, unsigned long impid)
-> +{
-> +       if (arch_id != 0 || impid != 0)
-> +               return false;
-> +       return true;
-> +}
-> +
-> +static const struct errata_info errata_list[ERRATA_THEAD_NUMBER] = {
-> +       {
-> +               .name = "memory-types",
-> +               .stage = RISCV_ALTERNATIVES_EARLY_BOOT,
-> +               .check_func = errata_mt_check_func
-> +       },
-> +};
-> +
-> +static u32 thead_errata_probe(unsigned int stage, unsigned long archid, unsigned long impid)
-> +{
-> +       const struct errata_info *info;
-> +       u32 cpu_req_errata = 0;
-> +       int idx;
-> +
-> +       for (idx = 0; idx < ERRATA_THEAD_NUMBER; idx++) {
-> +               info = &errata_list[idx];
-> +
-> +               if ((stage == RISCV_ALTERNATIVES_MODULE ||
-> +                    info->stage == stage) && info->check_func(archid, impid))
-> +                       cpu_req_errata |= (1U << idx);
-> +       }
-> +
-> +       return cpu_req_errata;
-> +}
-> +
-> +void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-> +                                             unsigned long archid, unsigned long impid,
-> +                                             unsigned int stage)
-> +{
-> +       struct alt_entry *alt;
-> +       u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
-> +       u32 tmp;
-> +
-> +       for (alt = begin; alt < end; alt++) {
-> +               if (alt->vendor_id != THEAD_VENDOR_ID)
-> +                       continue;
-> +               if (alt->errata_id >= ERRATA_THEAD_NUMBER)
-> +                       continue;
-> +
-> +               tmp = (1U << alt->errata_id);
-> +               if (cpu_req_errata & tmp) {
-> +                       /* On vm-alternatives, the mmu isn't running yet */
-> +                       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +                               memcpy((void *)__pa_symbol(alt->old_ptr),
-> +                                      (void *)__pa_symbol(alt->alt_ptr), alt->alt_len);
-> +                       else
-> +                               patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> +               }
-> +       }
-> +
-> +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +               local_flush_icache_all();
-> +}
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> index 64936356c37c..6511dd73e812 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -21,8 +21,10 @@
->
->  #define RISCV_ALTERNATIVES_BOOT                0 /* alternatives applied during regular boot */
->  #define RISCV_ALTERNATIVES_MODULE      1 /* alternatives applied during module-init */
-> +#define RISCV_ALTERNATIVES_EARLY_BOOT  2 /* alternatives applied before mmu start */
->
->  void __init apply_boot_alternatives(void);
-> +void __init apply_early_boot_alternatives(void);
->  void apply_module_alternatives(void *start, size_t length);
->
->  struct alt_entry {
-> @@ -41,6 +43,9 @@ struct errata_checkfunc_id {
->  void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
->                               unsigned long archid, unsigned long impid,
->                               unsigned int stage);
-> +void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-> +                            unsigned long archid, unsigned long impid,
-> +                            unsigned int stage);
->
->  void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
->                                  unsigned int stage);
-> @@ -48,6 +53,7 @@ void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
->  #else /* CONFIG_RISCV_ALTERNATIVE */
->
->  static inline void apply_boot_alternatives(void) { }
-> +static inline void apply_early_boot_alternatives(void) { }
->  static inline void apply_module_alternatives(void *start, size_t length) { }
->
->  #endif /* CONFIG_RISCV_ALTERNATIVE */
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index dbfcd9b72bd8..9e2888dbb5b1 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -14,6 +14,11 @@
->  #define        ERRATA_SIFIVE_NUMBER 2
->  #endif
->
-> +#ifdef CONFIG_ERRATA_THEAD
-> +#define        ERRATA_THEAD_PBMT 0
-> +#define        ERRATA_THEAD_NUMBER 1
-> +#endif
-> +
->  #define        CPUFEATURE_SVPBMT 0
->  #define        CPUFEATURE_NUMBER 1
->
-> @@ -42,12 +47,51 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,    \
->   * in the default case.
->   */
->  #define ALT_SVPBMT_SHIFT 61
-> +#define ALT_THEAD_PBMT_SHIFT 59
->  #define ALT_SVPBMT(_val, prot)                                         \
-> -asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,    \
-> -               CPUFEATURE_SVPBMT, CONFIG_RISCV_ISA_SVPBMT)             \
-> +asm(ALTERNATIVE_2("li %0, 0\t\nnop",                                   \
-> +                 "li %0, %1\t\nslli %0,%0,%3", 0,                      \
-> +                       CPUFEATURE_SVPBMT, CONFIG_RISCV_ISA_SVPBMT,     \
-> +                 "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,        \
-> +                       ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)    \
->                 : "=r"(_val)                                            \
->                 : "I"(prot##_SVPBMT >> ALT_SVPBMT_SHIFT),               \
-> -                 "I"(ALT_SVPBMT_SHIFT))
-> +                 "I"(prot##_THEAD >> ALT_THEAD_PBMT_SHIFT),            \
-> +                 "I"(ALT_SVPBMT_SHIFT),                                \
-> +                 "I"(ALT_THEAD_PBMT_SHIFT))
-> +
-> +#ifdef CONFIG_ERRATA_THEAD_PBMT
-> +/*
-> + * IO/NOCACHE memory types are handled together with svpbmt,
-> + * so on T-Head chips, check if no other memory type is set,
-> + * and set the non-0 PMA type if applicable.
-> + */
-> +#define ALT_THEAD_PMA(_val)                                            \
-> +asm volatile(ALTERNATIVE(                                              \
-> +       "nop\n\t"                                                       \
-> +       "nop\n\t"                                                       \
-> +       "nop\n\t"                                                       \
-> +       "nop\n\t"                                                       \
-> +       "nop\n\t"                                                       \
-> +       "nop\n\t"                                                       \
-> +       "nop",                                                          \
-> +       "li      t3, %2\n\t"                                            \
-> +       "slli    t3, t3, %4\n\t"                                        \
-> +       "and     t3, %0, t3\n\t"                                        \
-> +       "bne     t3, zero, 2f\n\t"                                      \
-> +       "li      t3, %3\n\t"                                            \
-> +       "slli    t3, t3, %4\n\t"                                        \
-> +       "or      %0, %0, t3\n\t"                                        \
-> +       "2:",  THEAD_VENDOR_ID,                                         \
-> +               ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)            \
-> +       : "+r"(_val)                                                    \
-> +       : "0"(_val),                                                    \
-> +         "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),              \
-> +         "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),                 \
-> +         "I"(ALT_THEAD_PBMT_SHIFT))
-> +#else
-> +#define ALT_THEAD_PMA(_val)
-> +#endif
->
->  #endif /* __ASSEMBLY__ */
->
-> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> index 2354501f0203..e4ff3e0ab887 100644
-> --- a/arch/riscv/include/asm/pgtable-64.h
-> +++ b/arch/riscv/include/asm/pgtable-64.h
-> @@ -86,6 +86,18 @@ typedef struct {
->  #define _PAGE_IO_SVPBMT                (1UL << 62)
->  #define _PAGE_MTMASK_SVPBMT    (_PAGE_NOCACHE_SVPBMT | _PAGE_IO_SVPBMT)
->
-> +/*
-> + * [63:59] T-Head Memory Type definitions:
-> + *
-> + * 00000 - NC   Weakly-ordered, Non-cacheable, Non-bufferable, Non-shareable, Non-trustable
-> + * 01110 - PMA  Weakly-ordered, Cacheable, Bufferable, Shareable, Non-trustable
-> + * 10000 - IO   Strongly-ordered, Non-cacheable, Non-bufferable, Non-shareable, Non-trustable
-> + */
-> +#define _PAGE_PMA_THEAD                ((1UL << 62) | (1UL << 61) | (1UL << 60))
-> +#define _PAGE_NOCACHE_THEAD    0UL
-> +#define _PAGE_IO_THEAD         (1UL << 63)
-> +#define _PAGE_MTMASK_THEAD     (_PAGE_PMA_THEAD | _PAGE_IO_THEAD | (1UL << 59))
-> +
->  static inline u64 riscv_page_mtmask(void)
->  {
->         u64 val;
-> @@ -193,7 +205,11 @@ static inline bool mm_pud_folded(struct mm_struct *mm)
->
->  static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
->  {
-> -       return __pmd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-> +       unsigned long prot_val = pgprot_val(prot);
-> +
-> +       ALT_THEAD_PMA(prot_val);
-> +
-> +       return __pmd((pfn << _PAGE_PFN_SHIFT) | prot_val);
->  }
->
->  static inline unsigned long _pmd_pfn(pmd_t pmd)
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index c55341b72de1..6f0a260d3f2c 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -250,7 +250,11 @@ static inline void pmd_clear(pmd_t *pmdp)
->
->  static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
->  {
-> -       return __pgd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-> +       unsigned long prot_val = pgprot_val(prot);
-> +
-> +       ALT_THEAD_PMA(prot_val);
-> +
-> +       return __pgd((pfn << _PAGE_PFN_SHIFT) | prot_val);
->  }
->
->  static inline unsigned long _pgd_pfn(pgd_t pgd)
-> @@ -289,7 +293,11 @@ static inline unsigned long pte_pfn(pte_t pte)
->  /* Constructs a page table entry */
->  static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
->  {
-> -       return __pte((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-> +       unsigned long prot_val = pgprot_val(prot);
-> +
-> +       ALT_THEAD_PMA(prot_val);
-> +
-> +       return __pte((pfn << _PAGE_PFN_SHIFT) | prot_val);
->  }
->
->  #define mk_pte(page, prot)       pfn_pte(page_to_pfn(page), prot)
-> @@ -398,7 +406,11 @@ static inline int pmd_protnone(pmd_t pmd)
->  /* Modify page protection bits */
->  static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  {
-> -       return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
-> +       unsigned long newprot_val = pgprot_val(newprot);
-> +
-> +       ALT_THEAD_PMA(newprot_val);
-> +
-> +       return __pte((pte_val(pte) & _PAGE_CHG_MASK) | newprot_val);
->  }
->
->  #define pgd_ERROR(e) \
-> diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
-> index 9d934215b3c8..cb89af3f0704 100644
-> --- a/arch/riscv/include/asm/vendorid_list.h
-> +++ b/arch/riscv/include/asm/vendorid_list.h
-> @@ -6,5 +6,6 @@
->  #define ASM_VENDOR_LIST_H
->
->  #define SIFIVE_VENDOR_ID       0x489
-> +#define THEAD_VENDOR_ID                0x5b7
->
->  #endif
-> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-> index 27f722ae452b..e7980bf17e8b 100644
-> --- a/arch/riscv/kernel/alternative.c
-> +++ b/arch/riscv/kernel/alternative.c
-> @@ -42,6 +42,11 @@ static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_inf
->         case SIFIVE_VENDOR_ID:
->                 cpu_mfr_info->vendor_patch_func = sifive_errata_patch_func;
->                 break;
-> +#endif
-> +#ifdef CONFIG_ERRATA_THEAD
-> +       case THEAD_VENDOR_ID:
-> +               cpu_mfr_info->vendor_patch_func = thead_errata_patch_func;
-> +               break;
->  #endif
->         default:
->                 cpu_mfr_info->vendor_patch_func = NULL;
-> @@ -82,6 +87,13 @@ void __init apply_boot_alternatives(void)
->                             RISCV_ALTERNATIVES_BOOT);
->  }
->
-> +void __init apply_early_boot_alternatives(void)
-> +{
-> +       _apply_alternatives((struct alt_entry *)__alt_start,
-> +                           (struct alt_entry *)__alt_end,
-> +                           RISCV_ALTERNATIVES_EARLY_BOOT);
-> +}
-> +
->  #ifdef CONFIG_MODULES
->  void apply_module_alternatives(void *start, size_t length)
->  {
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index f514b949c6a7..dea3ea19deee 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -254,7 +254,12 @@ struct cpufeature_info {
->  static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
->  {
->  #ifdef CONFIG_RISCV_ISA_SVPBMT
-> -       return riscv_isa_extension_available(NULL, SVPBMT);
-> +       switch (stage) {
-> +       case RISCV_ALTERNATIVES_EARLY_BOOT:
-> +               return false;
-> +       default:
-> +               return riscv_isa_extension_available(NULL, SVPBMT);
-> +       }
->  #endif
->
->         return false;
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 9535bea8688c..1d35a0667db3 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -935,6 +935,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->         BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
->  #endif
->
-> +       apply_early_boot_alternatives();
->         pt_ops_set_early();
->
->         /* Setup early PGD for fixmap */
-> --
-> 2.35.1
->
+I kind of feel like the original is better.  Why would we want to remove
+helper functions?  Helper functions are ok.  What we don't like are
+pointless wrapper functions.  The whole motivation for the patch is to
+remove wrapper functions and that's what it does.
 
+regards,
+dan carpenter
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

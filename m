@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABD0500289
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7A5500298
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239325AbiDMXYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S238806AbiDMX2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239303AbiDMXYe (ORCPT
+        with ESMTP id S233812AbiDMX2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:24:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDF85EDE6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:21:57 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id l127so1580625pfl.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:21:57 -0700 (PDT)
+        Wed, 13 Apr 2022 19:28:10 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6EF1D305
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:25:47 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id q14so4011138ljc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:25:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UM9NtFS2C2cjktUEm9aNoAq0M5aZEQyz1ml6+NlYQKY=;
-        b=bxQ7mfJ64M61VNHKr5eU+RnJ0hXl2IfEGPvH8gf4KyvXd46WJYpDShYsvoPZMHZ36j
-         yIlQ23iL8hlK5cnBXgrEDWSZuHluDlIvNRZEsjjHJ2ZO1rKHSz0P6/dT0Q0peDZlU/Tj
-         d44pmAVX3yzgZrmMYNX0uYYuH3RLC/F7t3Jqy1VhjQWZT9hfkFzNO5VEL5nz871cBMy6
-         IMWwRkPKAJ3ODVPYbeFER3079hJLHH04ZEJFhZTpwX2fIDqFoa9v/D34ITh1E/awXKUm
-         KJJ0iF84bylRjSVysU4wbSuUNL0fkG5UmLh1jWCDygLjgixwWtxJnQSF+8iQIjr5ARJ9
-         WhGA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Nsu6iEBJUOTQozke1T9X3o9EC6RQLqqh+ifXlL+Otg=;
+        b=oxU1a6L2fej+ORREt8jy2pSUYDiEb7FXHzFlD5XqZkoT9vlJ+LozCgxZmMrqgcDSfr
+         1a8DGM+0ysjMiBbJGojfMoNCGp8q9WhDHft70NbEmHfhfZVuYe4sEkspgavjUP22zVNX
+         BWSIU7zetVHDRoF5ryRqEYOtdefD4uR3wg12SpKVmFfcEh/R0c3U8F4wzOBCs/epZSzS
+         g8oG3q+gYZNT3fl/rPdJg7YSETv1T9D/CQeeZtbBhiKE+kXH4oDCcmwHRG47P7g4WYgE
+         jAPNk004Fx9+poamJbvMbdUqZeY6L/FQctjTzRnvLEeUz5ZY2hVJSmfCGmjGIm3/wRrd
+         qvpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=UM9NtFS2C2cjktUEm9aNoAq0M5aZEQyz1ml6+NlYQKY=;
-        b=WDZ6mTKmWb3K4RrYwntSt8bacQn+TiiU1qEQPs0Wt3BGVr4f98tMa/IsXXJBhyZN9G
-         XiZVA+PJUKyjmj7BWHiDqL8aUu37iwIolsIn2bXD+hU1Cx2rxNf5xQBI38B381oPxqPp
-         sV9Qnpt7js02PwqkAWFvCB6Zrr6X+gxDi7BKti8XVPNrhAvaS6hk47cOE3CAJhgsQRhV
-         nIWGFNTB0majtDc1rfYwqDzL6plClntiQ1VR7WWOoIHvxHI3pWVpapiWmVjg0fClySjH
-         AaPIV0F/iJGOGviac7sDwBJ2kquUhJHTYVLDbgrxspUWryr9pVwPOE1TxH8XxYQ1t4KJ
-         HN9Q==
-X-Gm-Message-State: AOAM533MtcCe4cWdI487+ab9x0lTPzeOecxvrAjSqJkUae3vTp4EUTxK
-        uTh2pWLzV9OeP6tEEFYRNJrMk+PSOt4=
-X-Google-Smtp-Source: ABdhPJyjFLIH5wU3fz1hztdDroHH3ZMnRuFklUDMTKCYbRlVsU6rJtmXoM80Qipw6lRHnPGwwbGWNg==
-X-Received: by 2002:a05:6a00:228b:b0:4fa:e12b:2c7b with SMTP id f11-20020a056a00228b00b004fae12b2c7bmr11919291pfe.79.1649892116558;
-        Wed, 13 Apr 2022 16:21:56 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:400:e00:389b:6ba3:7cbd:d8d])
-        by smtp.gmail.com with ESMTPSA id b2-20020a6541c2000000b0039d1280084asm171811pgq.26.2022.04.13.16.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 16:21:55 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: localize labels used in memmove
-Date:   Wed, 13 Apr 2022 16:21:42 -0700
-Message-Id: <20220413232142.1210744-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=6Nsu6iEBJUOTQozke1T9X3o9EC6RQLqqh+ifXlL+Otg=;
+        b=1Rfy6/HH8eaqV1CZljqkFsF5BsSQSZrmNOA4Laan4SOa34Isd2k7kL9oB2LJy/oqg5
+         +ZQRAV5XiE8BMntT+LajuYRKbD3Ogfuyts4snsm0cryZMCu0rnqzzxqRlcRiLTob0Onh
+         Hjx/oNR/JOGrFmnYwPkUY0Df641Hc9rgXhTLbFCB/uZYFqibOcBtWe2Fi31uya0dAOha
+         FgkwpJYyI30VcXy3DNjXeIGgXJvGSYDXvu6Leqfi/761v5jhuouOw2ZJvr0/fR3l51X6
+         RRuxfSb7Ee6WMDJEIVK8VYQNG7fv1HsHnhsh7T8SvLhrqPZcHE5UhGrYBuBCGBgldeaH
+         mEtw==
+X-Gm-Message-State: AOAM533FfT3xpOKh8ByKY6FqIIJ3zIgFhsTcySxYAT2czCzyCOEKm6qD
+        luMx8nIwz3NbEaZQZGdY87AS5Q==
+X-Google-Smtp-Source: ABdhPJxgmavsDFQMqV8RzqL4TViPTHyIi+lpCIERHmr2ESVyQpRZ37JzqNgzMumIegNulUpvEK0ltw==
+X-Received: by 2002:a05:651c:1a20:b0:24c:8e51:8e6e with SMTP id by32-20020a05651c1a2000b0024c8e518e6emr15599ljb.479.1649892346159;
+        Wed, 13 Apr 2022 16:25:46 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id p25-20020a056512313900b0046b82a9582asm40204lfd.29.2022.04.13.16.25.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 16:25:45 -0700 (PDT)
+Message-ID: <98d5edce-eec0-e618-d1c8-5b86fe44d5fc@linaro.org>
+Date:   Thu, 14 Apr 2022 02:25:45 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] drm/msm/dp: stop event kernel thread when DP unbind
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649883865-9012-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1649883865-9012-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,76 +79,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Internal labels in the memmove implementation don't need to be visible,
-localize them by prefixing their names with '.L'.
+On 14/04/2022 00:04, Kuogee Hsieh wrote:
+> Current DP driver implementation, event thread is kept running
+> after DP display is unbind. This patch fix this problem by disabling
+> DP irq and stop event thread to exit gracefully at dp_display_unbind().
+> 
+> Changes in v2:
+> -- start event thread at dp_display_bind()
+> 
+> Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 40 +++++++++++++++++++++++++++----------
+>   1 file changed, 30 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 01453db..943e4f1 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -113,6 +113,7 @@ struct dp_display_private {
+>   	u32 hpd_state;
+>   	u32 event_pndx;
+>   	u32 event_gndx;
+> +	struct task_struct *ev_tsk;
+>   	struct dp_event event_list[DP_EVENT_Q_MAX];
+>   	spinlock_t event_lock;
+>   
+> @@ -230,6 +231,31 @@ void dp_display_signal_audio_complete(struct msm_dp *dp_display)
+>   	complete_all(&dp->audio_comp);
+>   }
+>   
+> +static int hpd_event_thread(void *data);
+> +
+> +static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
+> +{
+> +	init_waitqueue_head(&dp_priv->event_q);
+> +	spin_lock_init(&dp_priv->event_lock);
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/lib/memcopy.S | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+This can go to dp_probe()
 
-diff --git a/arch/xtensa/lib/memcopy.S b/arch/xtensa/lib/memcopy.S
-index 582d817979ed..b20d206bcb71 100644
---- a/arch/xtensa/lib/memcopy.S
-+++ b/arch/xtensa/lib/memcopy.S
-@@ -402,13 +402,13 @@ WEAK(memmove)
- 	 */
- 	# copy 16 bytes per iteration for word-aligned dst and word-aligned src
- #if XCHAL_HAVE_LOOPS
--	loopnez	a7, .backLoop1done
-+	loopnez	a7, .LbackLoop1done
- #else /* !XCHAL_HAVE_LOOPS */
--	beqz	a7, .backLoop1done
-+	beqz	a7, .LbackLoop1done
- 	slli	a8, a7, 4
- 	sub	a8, a3, a8	# a8 = start of first 16B source chunk
- #endif /* !XCHAL_HAVE_LOOPS */
--.backLoop1:
-+.LbackLoop1:
- 	addi	a3, a3, -16
- 	l32i	a7, a3, 12
- 	l32i	a6, a3,  8
-@@ -420,9 +420,9 @@ WEAK(memmove)
- 	s32i	a7, a5,  4
- 	s32i	a6, a5,  0
- #if !XCHAL_HAVE_LOOPS
--	bne	a3, a8, .backLoop1  # continue loop if a3:src != a8:src_start
-+	bne	a3, a8, .LbackLoop1  # continue loop if a3:src != a8:src_start
- #endif /* !XCHAL_HAVE_LOOPS */
--.backLoop1done:
-+.LbackLoop1done:
- 	bbci.l	a4, 3, .Lback2
- 	# copy 8 bytes
- 	addi	a3, a3, -8
-@@ -479,13 +479,13 @@ WEAK(memmove)
- #endif
- 	l32i	a6, a3, 0	# load first word
- #if XCHAL_HAVE_LOOPS
--	loopnez	a7, .backLoop2done
-+	loopnez	a7, .LbackLoop2done
- #else /* !XCHAL_HAVE_LOOPS */
--	beqz	a7, .backLoop2done
-+	beqz	a7, .LbackLoop2done
- 	slli	a10, a7, 4
- 	sub	a10, a3, a10	# a10 = start of first 16B source chunk
- #endif /* !XCHAL_HAVE_LOOPS */
--.backLoop2:
-+.LbackLoop2:
- 	addi	a3, a3, -16
- 	l32i	a7, a3, 12
- 	l32i	a8, a3,  8
-@@ -501,9 +501,9 @@ WEAK(memmove)
- 	__src_b	a9, a6, a9
- 	s32i	a9, a5,  0
- #if !XCHAL_HAVE_LOOPS
--	bne	a3, a10, .backLoop2 # continue loop if a3:src != a10:src_start
-+	bne	a3, a10, .LbackLoop2 # continue loop if a3:src != a10:src_start
- #endif /* !XCHAL_HAVE_LOOPS */
--.backLoop2done:
-+.LbackLoop2done:
- 	bbci.l	a4, 3, .Lback12
- 	# copy 8 bytes
- 	addi	a3, a3, -8
+> +
+> +	dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> +
+> +	if (IS_ERR(dp_priv->ev_tsk))
+> +		DRM_ERROR("failed to create DP event thread\n");
+> +}
+> +
+> +static void dp_hpd_event_stop(struct dp_display_private *dp_priv)
+> +{
+> +	if (IS_ERR(dp_priv->ev_tsk))
+> +		return;
+> +
+> +	kthread_stop(dp_priv->ev_tsk);
+> +
+> +	/* reset event q to empty */
+> +	dp_priv->event_gndx = 0;
+> +	dp_priv->event_pndx = 0;
+> +}
+> +
+>   static int dp_display_bind(struct device *dev, struct device *master,
+>   			   void *data)
+>   {
+> @@ -269,6 +295,7 @@ static int dp_display_bind(struct device *dev, struct device *master,
+>   	if (rc)
+>   		DRM_ERROR("Audio registration Dp failed\n");
+>   
+> +	dp_hpd_event_setup(dp); /* start event thread */
+>   end:
+>   	return rc;
+>   }
+> @@ -280,6 +307,8 @@ static void dp_display_unbind(struct device *dev, struct device *master,
+>   	struct drm_device *drm = dev_get_drvdata(master);
+>   	struct msm_drm_private *priv = drm->dev_private;
+>   
+> +	disable_irq(dp->irq);
+> +	dp_hpd_event_stop(dp); /* stop event thread */
+>   	dp_power_client_deinit(dp->power);
+>   	dp_aux_unregister(dp->aux);
+>   	priv->dp[dp->id] = NULL;
+> @@ -1054,7 +1083,7 @@ static int hpd_event_thread(void *data)
+>   
+>   	dp_priv = (struct dp_display_private *)data;
+>   
+> -	while (1) {
+> +	while (!kthread_should_stop()) {
+>   		if (timeout_mode) {
+>   			wait_event_timeout(dp_priv->event_q,
+>   				(dp_priv->event_pndx == dp_priv->event_gndx),
+> @@ -1132,13 +1161,6 @@ static int hpd_event_thread(void *data)
+>   	return 0;
+>   }
+>   
+> -static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
+> -{
+> -	init_waitqueue_head(&dp_priv->event_q);
+> -	spin_lock_init(&dp_priv->event_lock);
+> -
+> -	kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> -}
+>   
+>   static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+>   {
+> @@ -1441,8 +1463,6 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>   
+>   	dp = container_of(dp_display, struct dp_display_private, dp_display);
+>   
+> -	dp_hpd_event_setup(dp);
+> -
+>   	dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>   }
+>   
+
+
 -- 
-2.30.2
-
+With best wishes
+Dmitry

@@ -2,177 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F2E4FEF35
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C26F4FEF25
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 08:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbiDMGIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 02:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S232853AbiDMGEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 02:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbiDMGHv (ORCPT
+        with ESMTP id S232824AbiDMGEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 02:07:51 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EE335879
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 23:05:31 -0700 (PDT)
+        Wed, 13 Apr 2022 02:04:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F42C517D8;
+        Tue, 12 Apr 2022 23:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649829931; x=1681365931;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7J159Gh9HkMijLSs1cF0rPxuBSczFLJZo1h/cJRFq6E=;
-  b=fIgryeKWt5UlXbW2k2blBNARX8ZToe9LoRKBnoWnc8X7j5+ORLUf6Oak
-   i55MtmmM3nMdvh75AKvWnOcXZFhCApplonJ89a7SNoe4PUe84pCYkRo+K
-   ZIJ6oQWn9F6s/3AgnJ2q9k1GcUEhy3PwxXY5l9B4LIJHhy2/GJ4iylEvB
-   M9RkZjJZeGlfSH8KywMuhp7SnyWT87YJuiNY9niUb4AL07uctH1TnnOWZ
-   aSnBLO7m67nhJPa+R5iH+XN/YedvLQoy6Apv718p+Y3JiYsS4C7AV6Glh
-   TsslDVm8VSVhRkhK3q94FYzl2udM6B2p+VmzWqXEQUsNEV+Q1wWl8b8si
+  t=1649829736; x=1681365736;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mfj3RQD/VbNG6IA6CbK1hSm+Veq8Lr6khP2wJSf72E8=;
+  b=TQ/eIQl/1M3d2lHTZuMV+Wq55xoho1/1hC5bsDJE5AEFiG4onkZmaLyn
+   7jqgoin6MDakKX/vxAORNwJ0vrkoPW6G4UYh0Z4PyF3VVB2zHbN0Wi/MY
+   YPnP+qsdfAi8NH0LP1iRhbS6gxnN7ism3lhkmRVxfug7O8n3XFnDOENie
+   MBxEqUKV6eYOx/b+fpASXVUUYg+yyJT455jMc7jY3N7t8mXcVhse9QEXx
+   OMd+tg+4X7ikLBbcIJVWy7gIsjoCmUHYDi/XxrlEGUMHGrLPEnn/2jwCj
+   sGmA+mp/D/iDokeLdHeAiF3ESB7deLb9MMkiPILh0QXIAoojSjnQiMuYX
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="262026484"
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="243168221"
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="262026484"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:05:31 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="243168221"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:02:16 -0700
 X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="724769585"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 23:05:30 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neW89-00005k-G5;
-        Wed, 13 Apr 2022 06:05:29 +0000
-Date:   Wed, 13 Apr 2022 14:02:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 92/94]
- drivers/net/netdevsim/dev.c:119:25: error: too few arguments to function
- call, expected 5, have 4
-Message-ID: <202204131305.23NkbTFh-lkp@intel.com>
+   d="scan'208";a="623559363"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 23:02:16 -0700
+Subject: [PATCH v2 09/12] ACPI: NFIT: Drop nfit_device_lock()
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     linux-cxl@vger.kernel.org
+Cc:     Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>, peterz@infradead.org,
+        alison.schofield@intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev
+Date:   Tue, 12 Apr 2022 23:02:15 -0700
+Message-ID: <164982973591.684294.5429843723059577546.stgit@dwillia2-desk3.amr.corp.intel.com>
+In-Reply-To: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
+References: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   ca9bd759ed5f4422d41446de7c31c6a189ac87df
-commit: f39238e4c9d54b5f8d9ebe9c333b83509a644803 [92/94] TMP: devlink device type
-config: x86_64-randconfig-a001-20220411 (https://download.01.org/0day-ci/archive/20220413/202204131305.23NkbTFh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/f39238e4c9d54b5f8d9ebe9c333b83509a644803
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout f39238e4c9d54b5f8d9ebe9c333b83509a644803
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/netdevsim/
+In preparation for the libnvdimm subsystem switching to device-core
+common lockdep validation. Delete nfit_device_lock() which will need to
+be replaced with an implementation that specifies a non-zero lock class.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Note this reverts back to the default state of unvalidated
+device_lock(), until a lock class for ACPI NFIT devices is added.
 
-All errors (new ones prefixed by >>):
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+---
+ drivers/acpi/nfit/core.c |   30 +++++++++++++++---------------
+ drivers/acpi/nfit/nfit.h |   24 ------------------------
+ 2 files changed, 15 insertions(+), 39 deletions(-)
 
->> drivers/net/netdevsim/dev.c:119:25: error: too few arguments to function call, expected 5, have 4
-                                                           nsim_dev_linecard);
-                                                                            ^
-   include/net/devlink.h:1607:1: note: 'devlink_linecard_device_create' declared here
-   devlink_linecard_device_create(struct devlink_linecard *linecard,
-   ^
-   drivers/net/netdevsim/dev.c:870:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:844:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:883:39: error: too many arguments to function call, expected single argument 'nsim_dev_port', have 3 arguments
-                           __nsim_dev_port_del(nsim_dev_port, NULL, i);
-                           ~~~~~~~~~~~~~~~~~~~                ^~~~~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^
-   drivers/net/netdevsim/dev.c:846:13: note: '__nsim_dev_port_del' declared here
-   static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
-               ^
-   drivers/net/netdevsim/dev.c:1625:12: error: conflicting types for '__nsim_dev_port_add'
-   static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-              ^
-   drivers/net/netdevsim/dev.c:844:1: note: previous declaration is here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:1738:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:844:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:2213:27: error: too many arguments to function call, expected 3, have 4
-                                             nsim_dev_linecard, port_index);
-                                                                ^~~~~~~~~~
-   drivers/net/netdevsim/dev.c:844:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   6 errors generated.
+diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+index fe61f617a943..ae5f4acf2675 100644
+--- a/drivers/acpi/nfit/core.c
++++ b/drivers/acpi/nfit/core.c
+@@ -1230,7 +1230,7 @@ static ssize_t hw_error_scrub_store(struct device *dev,
+ 	if (rc)
+ 		return rc;
+ 
+-	nfit_device_lock(dev);
++	device_lock(dev);
+ 	nd_desc = dev_get_drvdata(dev);
+ 	if (nd_desc) {
+ 		struct acpi_nfit_desc *acpi_desc = to_acpi_desc(nd_desc);
+@@ -1247,7 +1247,7 @@ static ssize_t hw_error_scrub_store(struct device *dev,
+ 			break;
+ 		}
+ 	}
+-	nfit_device_unlock(dev);
++	device_unlock(dev);
+ 	if (rc)
+ 		return rc;
+ 	return size;
+@@ -1267,10 +1267,10 @@ static ssize_t scrub_show(struct device *dev,
+ 	ssize_t rc = -ENXIO;
+ 	bool busy;
+ 
+-	nfit_device_lock(dev);
++	device_lock(dev);
+ 	nd_desc = dev_get_drvdata(dev);
+ 	if (!nd_desc) {
+-		nfit_device_unlock(dev);
++		device_unlock(dev);
+ 		return rc;
+ 	}
+ 	acpi_desc = to_acpi_desc(nd_desc);
+@@ -1287,7 +1287,7 @@ static ssize_t scrub_show(struct device *dev,
+ 	}
+ 
+ 	mutex_unlock(&acpi_desc->init_mutex);
+-	nfit_device_unlock(dev);
++	device_unlock(dev);
+ 	return rc;
+ }
+ 
+@@ -1304,14 +1304,14 @@ static ssize_t scrub_store(struct device *dev,
+ 	if (val != 1)
+ 		return -EINVAL;
+ 
+-	nfit_device_lock(dev);
++	device_lock(dev);
+ 	nd_desc = dev_get_drvdata(dev);
+ 	if (nd_desc) {
+ 		struct acpi_nfit_desc *acpi_desc = to_acpi_desc(nd_desc);
+ 
+ 		rc = acpi_nfit_ars_rescan(acpi_desc, ARS_REQ_LONG);
+ 	}
+-	nfit_device_unlock(dev);
++	device_unlock(dev);
+ 	if (rc)
+ 		return rc;
+ 	return size;
+@@ -1697,9 +1697,9 @@ static void acpi_nvdimm_notify(acpi_handle handle, u32 event, void *data)
+ 	struct acpi_device *adev = data;
+ 	struct device *dev = &adev->dev;
+ 
+-	nfit_device_lock(dev->parent);
++	device_lock(dev->parent);
+ 	__acpi_nvdimm_notify(dev, event);
+-	nfit_device_unlock(dev->parent);
++	device_unlock(dev->parent);
+ }
+ 
+ static bool acpi_nvdimm_has_method(struct acpi_device *adev, char *method)
+@@ -3152,8 +3152,8 @@ static int acpi_nfit_flush_probe(struct nvdimm_bus_descriptor *nd_desc)
+ 	struct device *dev = acpi_desc->dev;
+ 
+ 	/* Bounce the device lock to flush acpi_nfit_add / acpi_nfit_notify */
+-	nfit_device_lock(dev);
+-	nfit_device_unlock(dev);
++	device_lock(dev);
++	device_unlock(dev);
+ 
+ 	/* Bounce the init_mutex to complete initial registration */
+ 	mutex_lock(&acpi_desc->init_mutex);
+@@ -3305,8 +3305,8 @@ void acpi_nfit_shutdown(void *data)
+ 	 * acpi_nfit_ars_rescan() submissions have had a chance to
+ 	 * either submit or see ->cancel set.
+ 	 */
+-	nfit_device_lock(bus_dev);
+-	nfit_device_unlock(bus_dev);
++	device_lock(bus_dev);
++	device_unlock(bus_dev);
+ 
+ 	flush_workqueue(nfit_wq);
+ }
+@@ -3449,9 +3449,9 @@ EXPORT_SYMBOL_GPL(__acpi_nfit_notify);
+ 
+ static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
+ {
+-	nfit_device_lock(&adev->dev);
++	device_lock(&adev->dev);
+ 	__acpi_nfit_notify(&adev->dev, adev->handle, event);
+-	nfit_device_unlock(&adev->dev);
++	device_unlock(&adev->dev);
+ }
+ 
+ static const struct acpi_device_id acpi_nfit_ids[] = {
+diff --git a/drivers/acpi/nfit/nfit.h b/drivers/acpi/nfit/nfit.h
+index 50882bdbeb96..6023ad61831a 100644
+--- a/drivers/acpi/nfit/nfit.h
++++ b/drivers/acpi/nfit/nfit.h
+@@ -337,30 +337,6 @@ static inline struct acpi_nfit_desc *to_acpi_desc(
+ 	return container_of(nd_desc, struct acpi_nfit_desc, nd_desc);
+ }
+ 
+-#ifdef CONFIG_PROVE_LOCKING
+-static inline void nfit_device_lock(struct device *dev)
+-{
+-	device_lock(dev);
+-	mutex_lock(&dev->lockdep_mutex);
+-}
+-
+-static inline void nfit_device_unlock(struct device *dev)
+-{
+-	mutex_unlock(&dev->lockdep_mutex);
+-	device_unlock(dev);
+-}
+-#else
+-static inline void nfit_device_lock(struct device *dev)
+-{
+-	device_lock(dev);
+-}
+-
+-static inline void nfit_device_unlock(struct device *dev)
+-{
+-	device_unlock(dev);
+-}
+-#endif
+-
+ const guid_t *to_nfit_uuid(enum nfit_uuids id);
+ int acpi_nfit_init(struct acpi_nfit_desc *acpi_desc, void *nfit, acpi_size sz);
+ void acpi_nfit_shutdown(void *data);
 
-
-vim +119 drivers/net/netdevsim/dev.c
-
-f516d881f25d5ec Jiri Pirko 2021-05-05  100  
-f516d881f25d5ec Jiri Pirko 2021-05-05  101  static int
-f516d881f25d5ec Jiri Pirko 2021-05-05  102  nsim_dev_linecard_devices_create(struct nsim_dev_linecard *nsim_dev_linecard)
-f516d881f25d5ec Jiri Pirko 2021-05-05  103  {
-f516d881f25d5ec Jiri Pirko 2021-05-05  104  	struct devlink_linecard_device *device;
-f516d881f25d5ec Jiri Pirko 2021-05-05  105  	char *component_name;
-f516d881f25d5ec Jiri Pirko 2021-05-05  106  	int err;
-f516d881f25d5ec Jiri Pirko 2021-05-05  107  	int i;
-f516d881f25d5ec Jiri Pirko 2021-05-05  108  
-f516d881f25d5ec Jiri Pirko 2021-05-05  109  	snprintf(nsim_dev_linecard->device_component_name,
-f516d881f25d5ec Jiri Pirko 2021-05-05  110  		 sizeof(nsim_dev_linecard->device_component_name), "lc%u_dev0",
-f516d881f25d5ec Jiri Pirko 2021-05-05  111  		 nsim_dev_linecard->linecard_index);
-f516d881f25d5ec Jiri Pirko 2021-05-05  112  	component_name = nsim_dev_linecard->device_component_name;
-f516d881f25d5ec Jiri Pirko 2021-05-05  113  
-f516d881f25d5ec Jiri Pirko 2021-05-05  114  	for (i = 0; i < NSIM_DEV_LINECARD_DEVICE_COUNT; i++) {
-f516d881f25d5ec Jiri Pirko 2021-05-05  115  		if (i > 0)
-f516d881f25d5ec Jiri Pirko 2021-05-05  116  			component_name = NULL;
-f516d881f25d5ec Jiri Pirko 2021-05-05  117  		device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
-f516d881f25d5ec Jiri Pirko 2021-05-05  118  							i, component_name,
-f516d881f25d5ec Jiri Pirko 2021-05-05 @119  							nsim_dev_linecard);
-f516d881f25d5ec Jiri Pirko 2021-05-05  120  		if (IS_ERR(device)) {
-f516d881f25d5ec Jiri Pirko 2021-05-05  121  			err = PTR_ERR(device);
-f516d881f25d5ec Jiri Pirko 2021-05-05  122  			goto rollback;
-f516d881f25d5ec Jiri Pirko 2021-05-05  123  		}
-f516d881f25d5ec Jiri Pirko 2021-05-05  124  		nsim_dev_linecard->devlink_device[i] = device;
-f516d881f25d5ec Jiri Pirko 2021-05-05  125  	}
-f516d881f25d5ec Jiri Pirko 2021-05-05  126  	return 0;
-f516d881f25d5ec Jiri Pirko 2021-05-05  127  
-f516d881f25d5ec Jiri Pirko 2021-05-05  128  rollback:
-f516d881f25d5ec Jiri Pirko 2021-05-05  129  	for (i--; i >= 0; i--) {
-f516d881f25d5ec Jiri Pirko 2021-05-05  130  		device = nsim_dev_linecard->devlink_device[i];
-f516d881f25d5ec Jiri Pirko 2021-05-05  131  		devlink_linecard_device_destroy(nsim_dev_linecard->devlink_linecard,
-f516d881f25d5ec Jiri Pirko 2021-05-05  132  						device);
-f516d881f25d5ec Jiri Pirko 2021-05-05  133  	}
-f516d881f25d5ec Jiri Pirko 2021-05-05  134  	return err;
-f516d881f25d5ec Jiri Pirko 2021-05-05  135  }
-f516d881f25d5ec Jiri Pirko 2021-05-05  136  
-
-:::::: The code at line 119 was first introduced by commit
-:::::: f516d881f25d5ec76a01608f6b13e88d91687f6c netdevsim: create couple of devices on each linecard
-
-:::::: TO: Jiri Pirko <jiri@nvidia.com>
-:::::: CC: Jiri Pirko <jiri@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

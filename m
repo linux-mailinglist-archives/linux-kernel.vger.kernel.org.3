@@ -2,156 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2454FF3BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D7B4FF3C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbiDMJlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
+        id S234566AbiDMJmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234564AbiDMJlX (ORCPT
+        with ESMTP id S229934AbiDMJmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:41:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D984D546BB
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:39:01 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kdctt2xVrzgYgD;
-        Wed, 13 Apr 2022 17:37:10 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 17:38:59 +0800
-Subject: Re: [PATCH v2 1/8] mm/swap: remember PG_anon_exclusive via a swp pte
- bit
-To:     David Hildenbrand <david@redhat.com>
-CC:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220329164329.208407-1-david@redhat.com>
- <20220329164329.208407-2-david@redhat.com>
- <28142e3e-2556-0ca2-7ac5-7420ef862259@huawei.com>
- <374d2be1-e13d-e605-ff80-b9d5eee4c40e@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3b9c6cc6-c5f5-8a8d-0b0f-9ca903cfab20@huawei.com>
-Date:   Wed, 13 Apr 2022 17:38:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 13 Apr 2022 05:42:05 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBD416599;
+        Wed, 13 Apr 2022 02:39:44 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n18so1484673plg.5;
+        Wed, 13 Apr 2022 02:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhegUgjc/7VHRLP2gdtsnZm8adnS3l3cX73PyLsMGRk=;
+        b=ARKI66sAkLyVzLdo1WE8DshrLMWmBCs9E7n6aGgK9cqB3oVkTySrW8TkAyxoxGms2E
+         K222tpdE9a+sxA+q7V2nGmIgu6FiZLQbx73ITRSU4APR9gpUKY7K4QwXHsb8AEXB59I8
+         c9HCyDrm4OCF7UY8jFeY5F0a3R81n5Otjd4WQ+7JHwOzk037mlwL8bzmej5bxTbg42qm
+         HJFt9TyjX+pqdQhAgKAlEpz3dUiz18+cdiGIn3YlBFanQ8mfci5Cczvpb5RruJALPqS7
+         C8GfyeZbQz/gjftS0XKefkLgK2Gy2i/3XoJwbbGu0QvOD+swJ2YsugwaCqhPoUPr255t
+         mjYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhegUgjc/7VHRLP2gdtsnZm8adnS3l3cX73PyLsMGRk=;
+        b=51JdK1VVLATZDhIIPcw4IUvtiJi6xb8YZtzkeGhA1J0lAN9b843gGS/R9L+AbMG8GS
+         LYIY0+w91NA12i4HmE0+v1fWwoW26TgRSyP5YKYinuVzva5bt2pmhIVQggUYtQn9jtO0
+         LgyBjGSVvJ7TPaJQk22i/kRYOFPeL33qGlYx9HAFAHoDbsSUBqRISV4FsgZP6Vt31rl4
+         pYt6bmCaTv1V9tSm0iU9K0Kv8W1/C3uUXD1YpIJqjUrimX4RvI4r/aFdtMzte8jrvVcf
+         oP8De8oD99En6KkGzW3jTpyPogI4AMUwKyfOd5Q5aVuGGtc6bk4e/SFZarL2AluKmEqJ
+         dFwQ==
+X-Gm-Message-State: AOAM532JgIQl13v/Uq+nJJzTvQK8fYEr/XigKwow3xt7QzWZVKX/lVze
+        qHK325qM7tocftxtL8pOLjQ=
+X-Google-Smtp-Source: ABdhPJwkgg7b/12aUFRK5iwhxMcz1c2QyYp9PhA6rSpY/3uzhaFb3dcLDGd0TQxSU3Ady4kqsgP1Jw==
+X-Received: by 2002:a17:902:cf0d:b0:156:1cc:f08f with SMTP id i13-20020a170902cf0d00b0015601ccf08fmr41362048plg.42.1649842784486;
+        Wed, 13 Apr 2022 02:39:44 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r35-20020a635163000000b0039d2213ca6csm5522616pgl.45.2022.04.13.02.39.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 02:39:44 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     kvalo@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] wlcore: vendor_cmd: use pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Wed, 13 Apr 2022 09:39:39 +0000
+Message-Id: <20220413093939.2538825-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <374d2be1-e13d-e605-ff80-b9d5eee4c40e@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/13 17:30, David Hildenbrand wrote:
-> On 13.04.22 10:58, Miaohe Lin wrote:
->> On 2022/3/30 0:43, David Hildenbrand wrote:
->>> Currently, we clear PG_anon_exclusive in try_to_unmap() and forget about
->> ...
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index 14618f446139..9060cc7f2123 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -792,6 +792,11 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->>>  						&src_mm->mmlist);
->>>  			spin_unlock(&mmlist_lock);
->>>  		}
->>> +		/* Mark the swap entry as shared. */
->>> +		if (pte_swp_exclusive(*src_pte)) {
->>> +			pte = pte_swp_clear_exclusive(*src_pte);
->>> +			set_pte_at(src_mm, addr, src_pte, pte);
->>> +		}
->>>  		rss[MM_SWAPENTS]++;
->>>  	} else if (is_migration_entry(entry)) {
->>>  		page = pfn_swap_entry_to_page(entry);
->>> @@ -3559,6 +3564,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->>>  	struct page *page = NULL, *swapcache;
->>>  	struct swap_info_struct *si = NULL;
->>>  	rmap_t rmap_flags = RMAP_NONE;
->>> +	bool exclusive = false;
->>>  	swp_entry_t entry;
->>>  	pte_t pte;
->>>  	int locked;
->>> @@ -3724,6 +3730,46 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->>>  	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
->>>  	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
->>>  
->>> +	/*
->>> +	 * Check under PT lock (to protect against concurrent fork() sharing
->>> +	 * the swap entry concurrently) for certainly exclusive pages.
->>> +	 */
->>> +	if (!PageKsm(page)) {
->>> +		/*
->>> +		 * Note that pte_swp_exclusive() == false for architectures
->>> +		 * without __HAVE_ARCH_PTE_SWP_EXCLUSIVE.
->>> +		 */
->>> +		exclusive = pte_swp_exclusive(vmf->orig_pte);
->>> +		if (page != swapcache) {
->>> +			/*
->>> +			 * We have a fresh page that is not exposed to the
->>> +			 * swapcache -> certainly exclusive.
->>> +			 */
->>> +			exclusive = true;
->>> +		} else if (exclusive && PageWriteback(page) &&
->>> +			   !(swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
->>
->> Really sorry for late respond and a newbie question. IIUC, if SWP_STABLE_WRITES is set,
->> it means concurrent page modifications while under writeback is not supported. For these
->> problematic swap backends, exclusive marker is dropped. So the above if statement is to
->> filter out these problematic swap backends which have SWP_STABLE_WRITES set. If so, the
->> above check should be && (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)), i.e. no "!".
->> Or am I miss something?
-> 
-> Oh, thanks for your careful eyes!
-> 
-> Indeed, SWP_STABLE_WRITES indicates that the backend *requires* stable
-> writes, meaning, we must not modify the page while writeback is active.
-> 
-> So if and only if that is set, we must drop the exclusive marker.
-> 
-> This essentially corresponds to previous reuse_swap_page() logic:
-> 
-> bool reuse_swap_page(struct page *page)
-> {
-> ...
-> 	if (!PageWriteback(page)) {
-> 		...
-> 	} else {
-> 		...
-> 		if (p->flags & SWP_STABLE_WRITES) {
-> 			spin_unlock(&p->lock);
-> 			return false;
-> 		}
-> ...
-> }
-> 
-> Fortunately, this only affects such backends. For backends without
-> SWP_STABLE_WRITES, the current code is simply sub-optimal.
-> 
-> 
-> So yes, this has to be
-> 
-> } else if (exclusive && PageWriteback(page) &&
-> 	   (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
-> 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I am glad that my question helps. :)
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-> 
-> Let me try finding a way to test this, the tests I was running so far
-> were apparently not using a backend with SWP_STABLE_WRITES.
-> 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/wireless/ti/wlcore/vendor_cmd.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-That will be really helpful. Many thanks for your hard work!
+diff --git a/drivers/net/wireless/ti/wlcore/vendor_cmd.c b/drivers/net/wireless/ti/wlcore/vendor_cmd.c
+index e1bd344c4ebc..e4269e2b0098 100644
+--- a/drivers/net/wireless/ti/wlcore/vendor_cmd.c
++++ b/drivers/net/wireless/ti/wlcore/vendor_cmd.c
+@@ -53,11 +53,9 @@ wlcore_vendor_cmd_smart_config_start(struct wiphy *wiphy,
+ 		goto out;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	ret = wlcore_smart_config_start(wl,
+ 			nla_get_u32(tb[WLCORE_VENDOR_ATTR_GROUP_ID]));
+@@ -88,11 +86,9 @@ wlcore_vendor_cmd_smart_config_stop(struct wiphy *wiphy,
+ 		goto out;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	ret = wlcore_smart_config_stop(wl);
+ 
+@@ -135,11 +131,9 @@ wlcore_vendor_cmd_smart_config_set_group_key(struct wiphy *wiphy,
+ 		goto out;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	ret = wlcore_smart_config_set_group_key(wl,
+ 			nla_get_u32(tb[WLCORE_VENDOR_ATTR_GROUP_ID]),
+-- 
+2.25.1
+
+

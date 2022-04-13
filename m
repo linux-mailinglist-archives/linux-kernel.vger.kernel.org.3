@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7EE4FFC42
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9854FFC44
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiDMRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S237175AbiDMRWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237175AbiDMRVm (ORCPT
+        with ESMTP id S237322AbiDMRWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:21:42 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E274D6E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:19:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so6864917pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lME6SHAgnKlmWBOKOizWm8XVxJpddGvUH85Ld8tYptw=;
-        b=UTabBOIrMAwX7G926h1g/XxwxCNw+redFrANl5vrbvEVFXqf3dVOsfKbJlN/8qVd6b
-         9gZ/mx8JQZDJ2nW52LktmlO9klbmAm34eSmWShJ+HKBGgunwO3ZUW6fiHXwTKvXPPJwK
-         EjYmODPltiC3D/nlbGntEawXo1fKfBXxUO7ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lME6SHAgnKlmWBOKOizWm8XVxJpddGvUH85Ld8tYptw=;
-        b=4fVYCUTC4HhhIc0zx0OLVW9zoaC4UKKw7w36j2stI+5KNy152Zb1W98wJWkQ5ym51D
-         lyj/EY29typKCHyncd12ztFMWZPDcYvUUBHbkw+d0JLNOSNOKRiAaI69/ku5C4EcEEEO
-         D+vJg5NSfUCyEUJv1sEz9MT+quPIdS6Ryi/Hioa8QGOO7HIaAm6raZIzbF54JwJZvCp7
-         ofoAQdXT0LJst+a0D9DvYqi9xU2zQ/5hJpv6K0lBM8+3RMvUX5dW2e/p7ajdaZZ6a+Uy
-         c16LcSe8pLywmwtBkVeeqFWXRqlP21aLohzZfGZcVhKM7MoxJX9IWVfk1OuR5DfobbYw
-         yq2Q==
-X-Gm-Message-State: AOAM530LpivzBTUl8UT+82ltXmL7dsa1gZv7rmSpWFGsae9kJH33t2GT
-        OWS8XO4WYaz65jcZfNHiEz4L5A==
-X-Google-Smtp-Source: ABdhPJz7ppfzbQ8wE0OtGonV82yO6sDyoE48BgV4umaaIEAVFFGDk/8CJYoUUK24mmhN04OGb0xKpg==
-X-Received: by 2002:a17:902:e74d:b0:156:9d3c:4271 with SMTP id p13-20020a170902e74d00b001569d3c4271mr43099858plf.79.1649870360761;
-        Wed, 13 Apr 2022 10:19:20 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6a4f:9277:743f:c648])
-        by smtp.gmail.com with UTF8SMTPSA id b25-20020a637159000000b00381fda49d15sm6821133pgn.39.2022.04.13.10.19.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 10:19:20 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 10:19:18 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v9 1/2] arm64: dts: qcom: sc7280: Add pinmux for I2S
- speaker and Headset
-Message-ID: <YlcGFlFXhh+bHGko@google.com>
-References: <1649861047-7811-1-git-send-email-quic_srivasam@quicinc.com>
- <1649861047-7811-2-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 13 Apr 2022 13:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD3752E6C;
+        Wed, 13 Apr 2022 10:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA1A461E9C;
+        Wed, 13 Apr 2022 17:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A9CC385A8;
+        Wed, 13 Apr 2022 17:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649870420;
+        bh=cd1OS579F8P5cfiY9Bbwx5RCM4PGh4h+DqwC6PuVcR4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Kf18OhECYLGZH8wbde+UHfoN5fbuDIlSLuNazbIh+Nal+k/f20tXp8K0mWpk19ItQ
+         6rmJguL3geTZ3HeNft4CdzXgu7YHwYI0ZIMS27Nto7/p4wBPbgXo+GqcHqUq+pVnBa
+         FmuwIcglmddoVtp2R6PYF4SPfMzfsKXhSHE/PbYngrdNzlau/yEuH05Hwk6Qo3oEgr
+         pK0IWUJqdC15h6Yoop5dsaREVG6HYlf5cFLljUap0aiMAqxSS767wA6y0HRIXQ9U6e
+         luy4ZgPk/y7wgWnwFPH/BEgApc7GHuQESZolqvtmGw9JD39EHqWq3p+TUFr68hg6xX
+         n+2BN7WAME4+Q==
+Received: by mail-oo1-f52.google.com with SMTP id w20-20020a4ae9f4000000b003243aa2c71aso463765ooc.0;
+        Wed, 13 Apr 2022 10:20:20 -0700 (PDT)
+X-Gm-Message-State: AOAM530slrhd1C6xxNfX0pNPAa1qNMP13hewtd1wHcCGqEcP8cPTSzoV
+        94CyDVmvJ6l+p841gaO1qjqZSZ7BIByxihper6E=
+X-Google-Smtp-Source: ABdhPJzSqbHk9eXUEuAkD5T3Q/MtGbeX3UEr1WcBXvB0gbVie0xrcXPCwdHKBSP1XJbTxSIH6U1W/r7doz7hYYy3rwo=
+X-Received: by 2002:a4a:95f3:0:b0:331:3e74:ed5d with SMTP id
+ p48-20020a4a95f3000000b003313e74ed5dmr1604304ooi.60.1649870419423; Wed, 13
+ Apr 2022 10:20:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649861047-7811-2-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com>
+In-Reply-To: <c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 13 Apr 2022 19:20:08 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFkDES_b9NA6KHd6mf_UeS0gjbfdtknK24aBD0hAE7pVw@mail.gmail.com>
+Message-ID: <CAMj1kXFkDES_b9NA6KHd6mf_UeS0gjbfdtknK24aBD0hAE7pVw@mail.gmail.com>
+Subject: Re: [PATCH] efi: Add missing prototype for efi_capsule_setup_info
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,11 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 08:14:06PM +0530, Srinivasa Rao Mandadapu wrote:
-> Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+On Fri, 4 Mar 2022 at 07:36, Jan Kiszka <jan.kiszka@siemens.com> wrote:
+>
+> From: Jan Kiszka <jan.kiszka@siemens.com>
+>
+> Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings
+> under W=1.
+>
+> Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Thanks Jan, I've queued this up now.
+
+> ---
+>  include/linux/efi.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index ccd4d3f91c98..cc6d2be2ffd5 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -213,6 +213,8 @@ struct capsule_info {
+>         size_t                  page_bytes_remain;
+>  };
+>
+> +int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
+> +                           size_t hdr_bytes);
+>  int __efi_capsule_setup_info(struct capsule_info *cap_info);
+>
+>  /*
+> --
+> 2.34.1

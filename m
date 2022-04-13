@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8FA4FECBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6664FECC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiDMCIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S229959AbiDMCOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiDMCIf (ORCPT
+        with ESMTP id S229473AbiDMCOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:08:35 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8D2613D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:06:15 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id be5so662738plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Nzvi/7I6o4g6gT+tWp3ktIpiQNQJRFeE4veqO2lT0Cg=;
-        b=eKqKjAr4pOgRkVvIywuOKZrA+1JkHZeB4DPvaRtX84pupA4Xh5uCCFwBf/j/bXki4E
-         zoeT5mfIoFWi8E1Sh5ibmDqxmgTg7YwjJRpXDwCWIW3g6evCufRybe/GWHJvsKwiPsd9
-         Kp/8cBV9wAGkugBu0ibCIvB8Z1tDuVuvQoWmgDZewT9BYepvWDzLydrACLsatYhAzRTs
-         d2XwCkg9PxcJZ3/uj2bJkFnCzV8JtQ/LwDQ2gHzyGuTodr/DAUqYgZLF0X1PRKJRUMrI
-         xEqo6ofkXQsE+RkQLqKelZGTcOEsKc+421+M2mg8Mpmu08vZDHDhTXmkkHp9UN0fnz9c
-         VZLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Nzvi/7I6o4g6gT+tWp3ktIpiQNQJRFeE4veqO2lT0Cg=;
-        b=8PJ02E6D5GqZ4uo5y77R4TLC4VRq02e0TqrddDbCiOAF1DsbFgqmygT9WUFpjeXeSd
-         se8EYyzRTSywiJ14o/AKIQa8XifKq4fnKZRcI5mm0sjPyR+jn2S+yaSqO3YoOwJ79Tml
-         q7KuEV8bcphmAd6edEzAYeBjA2Uv7vUCseayFT27E1c55yoOB6k9l3LY0ZNNRz3S8V8A
-         PF8IXAa13KRNdsuI5GC1a6Z2+LrQ0XpJTAJrWkl3iR9MQCMZN7UuAmC23n2j5jxKg3Vz
-         K0VDaOBZXoryNxaAJMzYSUsBmH8wPkCUglha7f4CDOdJEzyWHsV/7KsD5hx7Foe/Ex3d
-         QZwg==
-X-Gm-Message-State: AOAM533/tekrb9Zu0206SxhXm6teu1M8YsXO8DAIYEmIU39H7QfHc6XO
-        UvGAq77/iE2G0N34EYRAaHF9wQ==
-X-Google-Smtp-Source: ABdhPJz4RdYgxf39eBGJAQQcu/L60B2/GMbOeS1p/vMQQ88FQqB1pwtDxzR3Z9fyqDxnG04Jk8W7+w==
-X-Received: by 2002:a17:90b:1642:b0:1c7:2497:3807 with SMTP id il2-20020a17090b164200b001c724973807mr8088350pjb.176.1649815575283;
-        Tue, 12 Apr 2022 19:06:15 -0700 (PDT)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:669f:cec7:c0c2:1cc])
-        by smtp.gmail.com with ESMTPSA id o3-20020aa79783000000b00505f720bb76sm4234053pfp.215.2022.04.12.19.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 19:06:14 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>,
-        Keerthy <j-keerthy@ti.com>
-Subject: [PATCH 2/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
-Date:   Tue, 12 Apr 2022 19:06:41 -0700
-Message-Id: <20220413020641.2789408-3-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220413020641.2789408-1-dfustini@baylibre.com>
-References: <20220413020641.2789408-1-dfustini@baylibre.com>
+        Tue, 12 Apr 2022 22:14:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998E52180C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 19:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649815948; x=1681351948;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pe87ft1aKaeKaE+04iJ1gZNdhhDhquRrnt/SIy8fEts=;
+  b=Av0fk3m47GMHJ50kAg6ZSXBmuhHwNKNrpM3qWb/7YPYZJOZiKY2I/Xqe
+   9uJd2aNZolmV0prCHHHGxWUGnlbpcyQ4FRS4Lq7JdqsZj7Fr5drzJjs2V
+   vofdtYDuGsR+wY0U+/45eejk5cA+gaTutXEQrgH+uRfPOAy3WaxUX/GPd
+   CpWCBoT7Sl+34rydAeb6CapzvpAWXEeT9CrQ45trTvr00ZCvH+maXmRC5
+   1nvvlHVYmTsgGz6AUB/5PEzDSZAxJLIkbyne/r4o2y2XvYEImWpGxCEF/
+   IEQFnwZmnNaII6y6K4I5JHceNOWmIu9y9K2zTTu/Gdfz9SAYFQcr/gvwV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="243136079"
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="243136079"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 19:12:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,255,1643702400"; 
+   d="scan'208";a="644983140"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2022 19:12:26 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neSUb-0003Mc-Se;
+        Wed, 13 Apr 2022 02:12:25 +0000
+Date:   Wed, 13 Apr 2022 10:12:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 99/396] fs/xfs/scrub/repair.c:181:1:
+ warning: no previous prototype for function 'xrep_defer_finish'
+Message-ID: <202204131051.6jCh5cCf-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Gerlach <d-gerlach@ti.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   bd756ef7af68274b79308166ee64949d288be861
+commit: 80bc1e058e807de278cc530a53694879e4f70cb3 [99/396] xfs: implement block reservation accounting for btrees we're staging
+config: hexagon-buildonly-randconfig-r001-20220412 (https://download.01.org/0day-ci/archive/20220413/202204131051.6jCh5cCf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=80bc1e058e807de278cc530a53694879e4f70cb3
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout 80bc1e058e807de278cc530a53694879e4f70cb3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
 
-AM43xx support isolation of the IOs so that control is taken
-from the peripheral they are connected to and overridden by values
-present in the CTRL_CONF_* registers for the pad in the control module.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The actual toggling happens from the wkup_m3, so use a DT property from
-the wkup_m3_ipc node to allow the PM code to communicate the necessity
-for placing the IOs into isolation to the firmware.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- drivers/soc/ti/wkup_m3_ipc.c | 14 ++++++++++++--
- include/linux/wkup_m3_ipc.h  |  1 +
- 2 files changed, 13 insertions(+), 2 deletions(-)
+>> fs/xfs/scrub/repair.c:181:1: warning: no previous prototype for function 'xrep_defer_finish' [-Wmissing-prototypes]
+   xrep_defer_finish(
+   ^
+   fs/xfs/scrub/repair.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   1 warning generated.
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index 247a4b57a372..988162dd153a 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -46,6 +46,8 @@
- #define IPC_VTT_STAT_MASK		(0x1 << 3)
- #define IPC_VTT_GPIO_PIN_SHIFT		(0x4)
- #define IPC_VTT_GPIO_PIN_MASK		(0x3f << 4)
-+#define IPC_IO_ISOLATION_STAT_SHIFT	(10)
-+#define IPC_IO_ISOLATION_STAT_MASK	(0x1 << 10)
- 
- #define M3_STATE_UNKNOWN		0
- #define M3_STATE_RESET			1
-@@ -228,6 +230,11 @@ static void wkup_m3_set_vtt_gpio(struct wkup_m3_ipc *m3_ipc, int gpio)
- 			    (gpio << IPC_VTT_GPIO_PIN_SHIFT);
- }
- 
-+static void wkup_m3_set_io_isolation(struct wkup_m3_ipc *m3_ipc)
-+{
-+	m3_ipc->isolation_conf = (1 << IPC_IO_ISOLATION_STAT_SHIFT);
-+}
-+
- /* Public functions */
- /**
-  * wkup_m3_set_mem_type - Pass wkup_m3 which type of memory is in use
-@@ -308,8 +315,8 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->resume_addr, 0);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
--			       m3_ipc->vtt_conf, 4);
--
-+			       m3_ipc->vtt_conf |
-+			       m3_ipc->isolation_conf, 4);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 5);
-@@ -518,6 +525,9 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
- 			dev_warn(dev, "Invalid VTT GPIO(%d) pin\n", temp);
- 	}
- 
-+	if (of_find_property(np, "ti,set-io-isolation", NULL))
-+		wkup_m3_set_io_isolation(m3_ipc);
-+
- 	/*
- 	 * Wait for firmware loading completion in a thread so we
- 	 * can boot the wkup_m3 as soon as it's ready without holding
-diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
-index 2bc52c6381d5..b706eac58f92 100644
---- a/include/linux/wkup_m3_ipc.h
-+++ b/include/linux/wkup_m3_ipc.h
-@@ -34,6 +34,7 @@ struct wkup_m3_ipc {
- 	int mem_type;
- 	unsigned long resume_addr;
- 	int vtt_conf;
-+	int isolation_conf;
- 	int state;
- 
- 	struct completion sync_complete;
+
+vim +/xrep_defer_finish +181 fs/xfs/scrub/repair.c
+
+   178	
+   179	/* Finish all deferred work attached to the repair transaction. */
+   180	int
+ > 181	xrep_defer_finish(
+   182		struct xfs_scrub	*sc)
+   183	{
+   184		int			error;
+   185	
+   186		/* Keep the AG header buffers locked so we can keep going. */
+   187		if (sc->sa.agi_bp) {
+   188			xfs_ialloc_log_agi(sc->tp, sc->sa.agi_bp, XFS_AGI_MAGICNUM);
+   189			xfs_trans_bhold(sc->tp, sc->sa.agi_bp);
+   190		}
+   191	
+   192		if (sc->sa.agf_bp) {
+   193			xfs_alloc_log_agf(sc->tp, sc->sa.agf_bp, XFS_AGF_MAGICNUM);
+   194			xfs_trans_bhold(sc->tp, sc->sa.agf_bp);
+   195		}
+   196	
+   197		error = xfs_defer_finish(&sc->tp);
+   198		if (error)
+   199			return error;
+   200	
+   201		/*
+   202		 * The buffer log item (and hence the blf type) can detach from
+   203		 * the buffer across the transaction rolls, so ensure that the
+   204		 * types are still set on the AG header buffers.  Release the hold
+   205		 * that we set above because defer_finish won't do that for us.
+   206		 */
+   207		if (sc->sa.agi_bp) {
+   208			xfs_trans_bhold_release(sc->tp, sc->sa.agi_bp);
+   209			xfs_trans_buf_set_type(sc->tp, sc->sa.agi_bp, XFS_BLFT_AGI_BUF);
+   210		}
+   211		if (sc->sa.agf_bp) {
+   212			xfs_trans_bhold_release(sc->tp, sc->sa.agf_bp);
+   213			xfs_trans_buf_set_type(sc->tp, sc->sa.agf_bp, XFS_BLFT_AGF_BUF);
+   214		}
+   215		return 0;
+   216	}
+   217	
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

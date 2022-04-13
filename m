@@ -2,63 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF825001FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146EF5001FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiDMWp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S238091AbiDMWrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiDMWp1 (ORCPT
+        with ESMTP id S238282AbiDMWrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:45:27 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5457495
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649889785; x=1681425785;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OCogSq1Gggs1oQn4VK6cnJ5320FEvJO0kTYpTnXi0Qc=;
-  b=Y5Q6pIjakdBNBs0eEZn5hKHBLoWiflbHV8nxceyXIG1hnRqPl0b3dKcR
-   zKxWk8w60MkB/rXf00CCGBbzEfItW9v0xsjNiwplUix9U1gtArSvyXL1X
-   1HuI0mr7yIOBgFuzVa52dx9qP/0xDs7DgZXdxcCwyrqagyfnOTivFpW7c
-   TaWXnRtpDUgXTrXGBi+rqS2wTGYbQndTTxtw1xJp37V3LpXngYz4lXs6j
-   zecd6YYkRxaECSs4kAgYcfwqZfk+pNe93rFcFdEgA6v2Otv9UP5hKYQmx
-   dFaEG97yftoGIRyuHzDyU/8628kXuXCMRhf5NH8XKW/DHG3mV+N6ADvBR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261639413"
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="261639413"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 15:43:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="661112626"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Apr 2022 15:43:03 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nelhW-0000gK-LN;
-        Wed, 13 Apr 2022 22:43:02 +0000
-Date:   Thu, 14 Apr 2022 06:42:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yan Zhu <zhuyan34@huawei.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [ammarfaizi2-block:bpf/bpf-next/pr/bpf-sysctl 1/1]
- kernel/bpf/syscall.c:4944:13: warning: no previous prototype for
- 'unpriv_ebpf_notify'
-Message-ID: <202204140614.Tt9e1fIt-lkp@intel.com>
+        Wed, 13 Apr 2022 18:47:46 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681DE4C416;
+        Wed, 13 Apr 2022 15:45:21 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1neljf-0006LW-0U; Thu, 14 Apr 2022 00:45:15 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Brian Norris <briannorris@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
+Date:   Thu, 14 Apr 2022 00:45:14 +0200
+Message-ID: <3484357.R56niFO833@diego>
+In-Reply-To: <8824147c-5512-a7a5-9e89-60b510111500@gmail.com>
+References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid> <8824147c-5512-a7a5-9e89-60b510111500@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,43 +48,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/pr/bpf-sysctl
-head:   2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-commit: 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d [1/1] bpf: Move BPF sysctls from kernel/sysctl.c to BPF core
-config: sh-buildonly-randconfig-r001-20220413 (https://download.01.org/0day-ci/archive/20220414/202204140614.Tt9e1fIt-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/pr/bpf-sysctl
-        git checkout 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Am Donnerstag, 14. April 2022, 00:14:40 CEST schrieb Chanwoo Choi:
+> On 22. 4. 6. 10:48, Brian Norris wrote:
+> > See the previous patch ("soc: rockchip: power-domain: Manage resource
+> > conflicts with firmware") for a thorough explanation of the conflicts.
+> > While ARM Trusted Firmware may be modifying memory controller and
+> > power-domain states, we need to block the kernel's power-domain driver.
+> > 
+> > If the power-domain driver is disabled, there is no resource conflict
+> > and this becomes a no-op.
+> > 
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> > ---
+> > 
+> >   drivers/devfreq/rk3399_dmc.c | 13 +++++++++++++
+> >   1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+> > index e494d1497d60..daff40702615 100644
+> > --- a/drivers/devfreq/rk3399_dmc.c
+> > +++ b/drivers/devfreq/rk3399_dmc.c
+> > @@ -21,6 +21,7 @@
+> >   #include <linux/rwsem.h>
+> >   #include <linux/suspend.h>
+> >   
+> > +#include <soc/rockchip/pm_domains.h>
+> >   #include <soc/rockchip/rk3399_grf.h>
+> >   #include <soc/rockchip/rockchip_sip.h>
+> >   
+> > @@ -93,6 +94,16 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
+> >   
+> >   	mutex_lock(&dmcfreq->lock);
+> >   
+> > +	/*
+> > +	 * Ensure power-domain transitions don't interfere with ARM Trusted
+> > +	 * Firmware power-domain idling.
+> > +	 */
+> > +	err = rockchip_pmu_block();
+> > +	if (err) {
+> > +		dev_err(dev, "Failed to block PMU: %d\n", err);
+> > +		goto out_unlock;
+> > +	}
+> > +
+> >   	/*
+> >   	 * Some idle parameters may be based on the DDR controller clock, which
+> >   	 * is half of the DDR frequency.
+> > @@ -198,6 +209,8 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
+> >   	dmcfreq->volt = target_volt;
+> >   
+> >   out:
+> > +	rockchip_pmu_unblock();
+> > +out_unlock:
+> >   	mutex_unlock(&dmcfreq->lock);
+> >   	return err;
+> >   }
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-All error/warnings (new ones prefixed by >>):
+so I guess you're ok with me picking up both patches, right?
+[Just making sure :-) ]
 
-   sh4-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
->> (.text+0x50): undefined reference to `dump_stack'
---
->> kernel/bpf/syscall.c:4944:13: warning: no previous prototype for 'unpriv_ebpf_notify' [-Wmissing-prototypes]
-    4944 | void __weak unpriv_ebpf_notify(int new_state)
-         |             ^~~~~~~~~~~~~~~~~~
+Thanks
+Heiko
 
 
-vim +/unpriv_ebpf_notify +4944 kernel/bpf/syscall.c
-
-  4943	
-> 4944	void __weak unpriv_ebpf_notify(int new_state)
-  4945	{
-  4946	}
-  4947	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

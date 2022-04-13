@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DA84FF915
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE9F4FF91A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbiDMOlP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Apr 2022 10:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S236160AbiDMOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 10:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiDMOlO (ORCPT
+        with ESMTP id S230492AbiDMOl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:41:14 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F28D60A95;
-        Wed, 13 Apr 2022 07:38:52 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id v77so4063296ybi.12;
-        Wed, 13 Apr 2022 07:38:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=80rnXlJvjwg31BPv10O4ldqkvQvXPgrHRPfb/fpogO0=;
-        b=xzhg+SN7omcXYwSzk0q0yX8Z9Fba7NVqDaaZvbE+6agGtxFnHG5m+S/EG4hjicWK3T
-         XsTkqp+T1buf3r0zmLev1NXUvmNJ2+DZ1gWX93VVdWk75fiNBOzmAuweXn7o86dxyOni
-         jGphNSeXvu0Jf9gD7gaFvCAUJxIgWD8XndA9hHFX0lxXTmbETTj0XZNgay3ejhUMktmO
-         AxVvscmL1zswAy2tufJFNbtmytKfb5C1b5KcOoY0PVLeoq3Q8AYBV08iFpiCpQqm7Dld
-         liKcLD/YjgNpFzUB5LZM3WVAXSyQxipRmM39vbwWYEjWZcU/3cvMsmNFB+vdNaIgJdpT
-         v26Q==
-X-Gm-Message-State: AOAM531pertQ2vvDVsNknMJlF7WcpbSyTeQxDqWtx6wE+hLRijIoSYgm
-        ZBxpGCJSJ+pX5jb+flMN8WxboSVsBlztZ+Au9yg=
-X-Google-Smtp-Source: ABdhPJxVM+QHir1XU/QmbuZRMUT4SBGRcdTbZb6s97PDe6A/GOAQBilFQA20R9vUKAc5wUL9dD/4wHVeWSi1xAXg2mI=
-X-Received: by 2002:a05:6902:1544:b0:63d:d3a7:8cc4 with SMTP id
- r4-20020a056902154400b0063dd3a78cc4mr31259358ybu.622.1649860731311; Wed, 13
- Apr 2022 07:38:51 -0700 (PDT)
+        Wed, 13 Apr 2022 10:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A0BFD1C;
+        Wed, 13 Apr 2022 07:39:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D120360DEA;
+        Wed, 13 Apr 2022 14:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7A8C385A4;
+        Wed, 13 Apr 2022 14:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649860774;
+        bh=8yJB3RTfMHAvG+qVCpJGHNnXUQN/4L5d65PERRX6VvI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R6UmbR9Nnkyyb0sa6mU+ScjeQj6ySSju0otK3fB765GF5jbY38UmFbxK8+CO3WWmv
+         F90FPJTu6x0c5EdcRloalAL0l4kvi4dhG77+C7x2aoN2CGYa6EA/STzOwkBp+H1/bI
+         /dxmdZQhK/FfXWeHKOiRPHwA8AtpSvBl86ja5Y46Vm/w1prNZkBZoE3Ds4VCn5CFtq
+         v+/MnU4bLFcgdCigJu1Yg2hJWLSN6KwcZQ+9ZG0DtRkfjHjUMcvOE04QbRbZ0gYAeB
+         /XCJIHJAHtZ9YjazAXQfpXUbK9a31JvULtIkqEwSTHTpvcazlHD76suMOabluS2C0x
+         7aPTRxcwuEDKQ==
+Date:   Wed, 13 Apr 2022 17:39:20 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
+Message-ID: <YlbgmOwb9uXMt49l@kernel.org>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
+ <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
+ <ff9e0bad-be9a-97ac-ae88-d22bcfbe80d4@redhat.com>
+ <ebf3ccef-e6fe-62d5-74e8-91e30e7c2642@intel.com>
+ <a458c13f-9994-b227-ff61-bfdfec10bc27@redhat.com>
 MIME-Version: 1.0
-References: <20220324103443.4563-1-hesham.almatary@huawei.com> <5J099R.20GRUWFVWC5D1@crapouillou.net>
-In-Reply-To: <5J099R.20GRUWFVWC5D1@crapouillou.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 16:38:40 +0200
-Message-ID: <CAJZ5v0hpRd_zAtrx2nV1X2=ZeNz3sE6h9+2NQZFY92qKJ82qGw@mail.gmail.com>
-Subject: Re: [PATCH] thermal:hisi_termal: Switch from CONFIG_PM_SLEEP guards
- to pm_sleep_ptr()
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a458c13f-9994-b227-ff61-bfdfec10bc27@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 1:11 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Hesham,
->
-> Le jeu., mars 24 2022 at 10:34:43 +0000, Hesham Almatary
-> <hesham.almatary@huawei.com> a écrit :
-> > Cleaning up the driver to use pm_sleep_ptr() macro instead of #ifdef
-> > guards is simpler and allows the compiler to remove those functions
-> > if built without CONFIG_PM_SLEEP support.
-> >
-> > Signed-off-by: Hesham Almatary <hesham.almatary@huawei.com>
->
-> Looks good.
->
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+On Wed, Apr 13, 2022 at 12:36:11PM +0200, David Hildenbrand wrote:
+> On 12.04.22 18:08, Dave Hansen wrote:
+> > On 4/12/22 01:15, David Hildenbrand wrote:
+> > 
+> > The other option might be to tie this all to DEFERRED_STRUCT_PAGE_INIT.
+> >  Have the rule that everything that gets a 'struct page' must be
+> > accepted.  If you want to do delayed acceptance, you do it via
+> > DEFERRED_STRUCT_PAGE_INIT.
+> 
+> That could also be an option, yes. At least being able to chose would be
+> good. But IIRC, DEFERRED_STRUCT_PAGE_INIT will still make the system get
+> stuck during boot and wait until everything was accepted.
 
-And applied as 5.19 material, thanks!
+The deferred page init runs multithreaded, so guest with SMP will be stuck
+for less time.
+ 
+> I see the following variants:
+> 
+> 1) Slow boot; after boot, all memory is already accepted.
+> 2) Fast boot; after boot, all memory will slowly but steadily get
+>    accepted in the background. After a while, all memory is accepted and
+>    can be signaled to user space.
+> 3) Fast boot; after boot, memory gets accepted on demand. This is what
+>    we have in this series.
+> 
+> I somehow don't quite like 3), but with deferred population in the
+> hypervisor, it might just make sense.
 
-> > ---
-> >  drivers/thermal/hisi_thermal.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/thermal/hisi_thermal.c
-> > b/drivers/thermal/hisi_thermal.c
-> > index 9a21ac0ceb11..b29ab09040d5 100644
-> > --- a/drivers/thermal/hisi_thermal.c
-> > +++ b/drivers/thermal/hisi_thermal.c
-> > @@ -629,7 +629,6 @@ static int hisi_thermal_remove(struct
-> > platform_device *pdev)
-> >       return 0;
-> >  }
-> >
-> > -#ifdef CONFIG_PM_SLEEP
-> >  static int hisi_thermal_suspend(struct device *dev)
-> >  {
-> >       struct hisi_thermal_data *data = dev_get_drvdata(dev);
-> > @@ -651,15 +650,14 @@ static int hisi_thermal_resume(struct device
-> > *dev)
-> >
-> >       return ret;
-> >  }
-> > -#endif
-> >
-> > -static SIMPLE_DEV_PM_OPS(hisi_thermal_pm_ops,
-> > +static DEFINE_SIMPLE_DEV_PM_OPS(hisi_thermal_pm_ops,
-> >                        hisi_thermal_suspend, hisi_thermal_resume);
-> >
-> >  static struct platform_driver hisi_thermal_driver = {
-> >       .driver = {
-> >               .name           = "hisi_thermal",
-> > -             .pm             = &hisi_thermal_pm_ops,
-> > +             .pm             = pm_sleep_ptr(&hisi_thermal_pm_ops),
-> >               .of_match_table = of_hisi_thermal_match,
-> >       },
-> >       .probe  = hisi_thermal_probe,
-> > --
-> > 2.25.1
-> >
->
->
+IMHO, deferred population in hypervisor will be way more complex than this
+series with similar "visible" performance.
+
+-- 
+Sincerely yours,
+Mike.

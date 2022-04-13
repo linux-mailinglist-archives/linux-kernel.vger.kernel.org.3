@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714E94FEC07
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 03:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A184FEC2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 03:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiDMBGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 21:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S231318AbiDMBWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 21:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiDMBGu (ORCPT
+        with ESMTP id S229627AbiDMBWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 21:06:50 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADAB2558D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 18:04:31 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id k14so335725pga.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 18:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nY/di/ysNrXys5hLZLAzfqtetv16NHy5HD+OIKSD450=;
-        b=pfAmzAgd+3XvYXMaijTNmoTdKLKheabhIAus+/1HOCL9K/aGGRWf0wIqFioAi75BsT
-         03EegT91x09xqKjy+NphmLlDhLtcT9fqKPcmucw3I4hUbrCKwckux01A/LIntSY4do7R
-         hVp/6fdoa3DfedqIR5+4FtFVZuAeJcs/xSBDQgT5Gm0fav19AHvD4/LSX5tkdVl0L07t
-         QDK+gddHbdRjcclAJb5QzvveGx9bwYh4h1QS2NtaENHYmsR/IBqhpnD7MMmgrKfw1cr7
-         /IgFOIB6QsNwWXRBbbatKWXAbVdhihw9PvV+8NpYcmWTFP5dnHaCKS1IWKAoxTKBodYM
-         SBnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nY/di/ysNrXys5hLZLAzfqtetv16NHy5HD+OIKSD450=;
-        b=mxCHsiE+t3E3m9BsHtojh5c01DFhcs1LMLHoeFsGDXjhPbHWVhVARv1oG3owj6Vsd0
-         LJNupk/dueR8mbvOBVqtLZHaQvfEIdXCDNMo6crNo3bOCe6M7yK/QJ1z0r8WOV0s5X30
-         09zsPymRs36dDeznYwCiqiWz1jLH56eiPzROzaHrvzf3rUksE2eYbCUgl/X07fy4bkCo
-         L+yhtAfbJlRiP5pw3ZoBU1m04cGlTyTxXUSGpjJ4V79YLzYvkFEyrGvq2Un8cxxsWOgZ
-         qmIQyDrQeuoJu9y7upsQoQDqhi4UvaKeNcgQ0CEPQlOmUXXpeP3eYPnOsNdWmqU7r/Se
-         gIRQ==
-X-Gm-Message-State: AOAM531nWtHHccvJn4NjOyFhIF6F+gXYHoyRmk5FtebDWJ5JZXSHxSDr
-        Se6vikN61c8DzohrP/g+W1o=
-X-Google-Smtp-Source: ABdhPJzO2HhOlpHu6E6g/YKT6WPznRIK8MTuigx0kAa2cPRadPTgCsRINF7fdUU8ekY6oAQzyooYSg==
-X-Received: by 2002:a63:5219:0:b0:39d:7212:4b3f with SMTP id g25-20020a635219000000b0039d72124b3fmr7907489pgb.255.1649811870927;
-        Tue, 12 Apr 2022 18:04:30 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i15-20020a17090a058f00b001cd50a6ec5csm251107pji.16.2022.04.12.18.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 18:04:30 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     iwona.winiarska@intel.com
-Cc:     andrew@aj.id.au, cgel.zte@gmail.com, jae.hyun.yoo@linux.intel.com,
-        joel@jms.id.au, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        lv.ruyi@zte.com.cn, openbmc@lists.ozlabs.org,
-        pierre-louis.bossart@linux.intel.com,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2] peci: aspeed: fix error check return value of platform_get_irq()
-Date:   Wed, 13 Apr 2022 01:04:25 +0000
-Message-Id: <20220413010425.2534887-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <d09484f7cda13de3f156bd1bcba8c2671495dcd1.camel@intel.com>
-References: <d09484f7cda13de3f156bd1bcba8c2671495dcd1.camel@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 21:22:40 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34CDB28994;
+        Tue, 12 Apr 2022 18:20:19 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSsxKJVZivjMhAA--.12746S2;
+        Wed, 13 Apr 2022 09:20:11 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MAINTAINERS: update IOMAP FILESYSTEM LIBRARY and XFS FILESYSTEM
+Date:   Wed, 13 Apr 2022 09:20:10 +0800
+Message-Id: <1649812810-18189-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxSsxKJVZivjMhAA--.12746S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw47tF47XF18GFy3ZFW8WFg_yoWftwb_Ca
+        1UWa93Xa4UJF4jk3y8ua47A3yYvF4xGFWxX3Z0q3y7uasrtr1Fy3WYyrZav34DWw4rur13
+        Ja4UX3Z7Wr1DXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2kYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JV
+        WxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Kg43UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+In IOMAP FILESYSTEM LIBRARY and XFS FILESYSTEM, the M(ail): entry is
+redundant with the L(ist): entry, remove the redundant M(ail): entry.
 
-platform_get_irq() return negative value on failure, so null check of
-priv->irq is incorrect. Fix it by comparing whether it is less than zero.
-
-Fixes: a85e4c52086c ("peci: Add peci-aspeed controller driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-v2: prefix the subject with "peci: aspeed:"
----
- drivers/peci/controller/peci-aspeed.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/peci/controller/peci-aspeed.c b/drivers/peci/controller/peci-aspeed.c
-index 1925ddc13f00..731c5d8f75c6 100644
---- a/drivers/peci/controller/peci-aspeed.c
-+++ b/drivers/peci/controller/peci-aspeed.c
-@@ -523,7 +523,7 @@ static int aspeed_peci_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->base);
- 
- 	priv->irq = platform_get_irq(pdev, 0);
--	if (!priv->irq)
-+	if (priv->irq < 0)
- 		return priv->irq;
- 
- 	ret = devm_request_irq(&pdev->dev, priv->irq, aspeed_peci_irq_handler,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 61d9f11..726608f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10238,8 +10238,6 @@ F:	drivers/net/ethernet/sgi/ioc3-eth.c
+ IOMAP FILESYSTEM LIBRARY
+ M:	Christoph Hellwig <hch@infradead.org>
+ M:	Darrick J. Wong <djwong@kernel.org>
+-M:	linux-xfs@vger.kernel.org
+-M:	linux-fsdevel@vger.kernel.org
+ L:	linux-xfs@vger.kernel.org
+ L:	linux-fsdevel@vger.kernel.org
+ S:	Supported
+@@ -21596,7 +21594,6 @@ F:	drivers/xen/*swiotlb*
+ XFS FILESYSTEM
+ C:	irc://irc.oftc.net/xfs
+ M:	Darrick J. Wong <djwong@kernel.org>
+-M:	linux-xfs@vger.kernel.org
+ L:	linux-xfs@vger.kernel.org
+ S:	Supported
+ W:	http://xfs.org/
 -- 
-2.25.1
+2.1.0
 

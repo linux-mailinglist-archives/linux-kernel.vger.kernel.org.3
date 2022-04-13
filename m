@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEDA4FF1EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D7A4FF1F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 10:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbiDMIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 04:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S233820AbiDMIdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 04:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiDMIcV (ORCPT
+        with ESMTP id S233800AbiDMIdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:32:21 -0400
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652BD252BC;
-        Wed, 13 Apr 2022 01:30:00 -0700 (PDT)
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id E6D7960B0F;
-        Wed, 13 Apr 2022 08:29:57 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id D72BC1D;
-        Wed, 13 Apr 2022 08:29:54 +0000 (UTC)
-Message-ID: <d0ed8518dfb93e6f2bbbaf4aac3436dd20369c00.camel@perches.com>
-Subject: Re: [PATCH 08/14] MAINTAINERS: add Ralink pinctrl driver
-From:   Joe Perches <joe@perches.com>
-To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Date:   Wed, 13 Apr 2022 01:29:53 -0700
-In-Reply-To: <20220413060729.27639-9-arinc.unal@arinc9.com>
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
-         <20220413060729.27639-9-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Wed, 13 Apr 2022 04:33:50 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356AD457A2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:31:28 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id q12so1130784pgj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 01:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=chGjcfefBnQ4BeBZDhW3oPLmrJW6azxv+NwFPPJzzAM=;
+        b=DbI02QRbLh3TKahtEbJlM9IUfwo5nw9k7L49CekyKhC0YG1zNGhFunA9774GbfI818
+         koamUo/NSFcZy4EUKnJRFP4oECkt3BzDtdmP6CFHrobN1j0F+qaAgfcj+Nc3sORKcTB5
+         KHX1NejylgST4ZRTWpwL1eGElWNpGd+RrWvK0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=chGjcfefBnQ4BeBZDhW3oPLmrJW6azxv+NwFPPJzzAM=;
+        b=Jj2Klqu1yloeNxGDf/CgIvnY35WQRIR2pwR8b/5htaQhmMUsCXGtLUzTY61yniOKlt
+         OOjQXwNauXh4bWXp3eGIuNf7sOZNHjHA717+AvILq69/hKV6d/HT4sAKxR8I0ua7mGZy
+         U8yNnH9zRUVmRcOhyBZkENZlqP1SB6hySevmjhj412+HJ9xkgeT8x0cusvIqNhuE/jw2
+         tgjX3avx4fa7SYdFV9HIkCeoPVHCTTWY35cZArITGNGQN/pPnp1xkhyu4QCOjxZlMGL8
+         zN0MeouePUFlZsfuqcAnhT3R7PLsMYPFQSxBPK0zMFnxt11R7MqD/vEFnzZxs+TfI7g/
+         WgFQ==
+X-Gm-Message-State: AOAM5311mF5lszu9V7P/4+7m36u2tceCZ5vhJfI+/10XcA9uRk0TpgFI
+        ClHVfljd8XvEhsLYMvLPJ+qLeQ==
+X-Google-Smtp-Source: ABdhPJyUUR9gRYGMz39Fk8QlFmSeUjwOj6rgzZcR7HNHJMlUG6EXy1jLvDcbuzH2icNVHEZK0g1nkA==
+X-Received: by 2002:a63:5525:0:b0:39d:40ed:5e3c with SMTP id j37-20020a635525000000b0039d40ed5e3cmr13651541pgb.20.1649838687567;
+        Wed, 13 Apr 2022 01:31:27 -0700 (PDT)
+Received: from 7b8f14d3d472 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm20939203pfw.77.2022.04.13.01.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 01:31:26 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 08:31:17 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/343] 5.17.3-rc1 review
+Message-ID: <20220413083117.GA7@7b8f14d3d472>
+References: <20220412062951.095765152@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: zhuoxxoync4pzqz7sdbq39i3jeft38mk
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: D72BC1D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18hGnWBYKAheXpW4IDdjP9YcLGcKeoboe4=
-X-HE-Tag: 1649838594-350832
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-13 at 09:07 +0300, Arınç ÜNAL wrote:
-> Add a new section for the Ralink pinctrl driver and add me and Sergio as
-> the maintainers.
+On Tue, Apr 12, 2022 at 08:26:58AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.3 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
 
-It's unusual for a last name to be completely capitalized.
+Hi Greg,
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> @@ -16502,6 +16502,13 @@ L:	linux-mips@vger.kernel.org
->  S:	Maintained
->  F:	arch/mips/boot/dts/ralink/mt7621*
->  
-> +RALINK PINCTRL DRIVER
-> +M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-> +M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +L:	linux-mips@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/pinctrl/ralink/*
+5.17.3-rc1 tested.
 
-Typically this is just the directory.
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-F:	drivers/pinctrl/ralink/
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-as this covers any file in the directory as well as
-any possible subdirectories and files.
-
-Using
-
-F:	drivers/pinctrl/ralink/*
-
-excludes any possible subdirectories and files within those
-possible subdirectories.
-
-
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

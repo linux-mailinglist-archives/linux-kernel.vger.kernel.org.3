@@ -2,122 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067544FFB71
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002814FFB78
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbiDMQjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S235385AbiDMQmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiDMQjv (ORCPT
+        with ESMTP id S230332AbiDMQmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:39:51 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178E65153
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649867849; x=1681403849;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AYwbAQA51GI7OS3SDP9g0rw3x5qDpayrqhQKsx+i7bU=;
-  b=gezAZ8nOpTT431q5EScNe7/sz0p7JTw4X7RmcCvRPeaDQXMG0fvlLbUn
-   i/LwHg2Ph3pYgIEU+1AG5oC6Tm+pTW85KsmszVr6yR1bi/FNToU8udLn1
-   QR54h1X7p+Pm4kx/2gE4SPnqxDZpmJkvaHJwvosMzdhnPLyuLzuDk3Ygm
-   CabujCWEdbAd94jnDvovpXcCAwhp2DPSF/cN1E3h5z4ce8JMDtIcADkkg
-   3f4LH12rLhoWNaP2R2mBEfC5Ja436jNkBoT3rwCjKWqgmXOQwwcHCSYpQ
-   RKWBryluhx72prhoQC9JvBFFigG5y9OXMr6z1Lr/TwwrbRNzcwSxYE02c
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262155818"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="262155818"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:37:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="854854774"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Apr 2022 09:37:28 -0700
-Received: from [10.212.225.84] (kliang2-MOBL.ccr.corp.intel.com [10.212.225.84])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1DA765805BD;
-        Wed, 13 Apr 2022 09:37:26 -0700 (PDT)
-Message-ID: <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
-Date:   Wed, 13 Apr 2022 12:37:24 -0400
+        Wed, 13 Apr 2022 12:42:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94711377FB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649867999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p0aXMnUhveJJccTOKVcvOAmJYVv7ZueT3l37YMI4RmU=;
+        b=aFr9aWKKcSU2elTZdeVg8ctO4mAzkrvjiSpxqK6X6VubcSVmDLsja8fdcdhFEIk6UUBBRs
+        qgf2FaXoAeBkpQVoVzkwMmHTvkNA7MTyQ7mi/rpXz9TafSHScoVyCHMsgnCcwLZxh/WE/b
+        YmpratRNMhKPOiVrZWJQVxORyTAtErQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-510-2FOfBH8HOn6kPAOK2hOVZA-1; Wed, 13 Apr 2022 12:39:50 -0400
+X-MC-Unique: 2FOfBH8HOn6kPAOK2hOVZA-1
+Received: by mail-wm1-f71.google.com with SMTP id q6-20020a1cf306000000b0038c5726365aso993422wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:39:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=p0aXMnUhveJJccTOKVcvOAmJYVv7ZueT3l37YMI4RmU=;
+        b=34nuzf4crH6cPFQmtmpTLtczb+G9AIpRfw1HWFvOPCe7tORc6R5kAOYfXq787QkPKN
+         tS75m2pH36/qniqIW/dsPm3j9Lr7W/SVv7Ym14N5/HAORulogQv1nndnExG1r/s20tt5
+         QsxPyoBusEBzh1nD8/x7iF+bzGGR1mQs0UEpDiF2aCoD2FeeFRlLQD7SHJNoV+R5BMeC
+         FNa8MeLWas1OLFemcwc5v3kwTx2Y3I8oLsM8NAm+Sj4wQKasHDUaUxmKjjVLskq1vfaO
+         C8lNnuSKlsJSfVieEGV50NgueG5K1X1XvogF1oZyECeoCRQrEK/Zi+y5S8qtLlO0hQPk
+         XEuA==
+X-Gm-Message-State: AOAM532YKsSjMw1T+qT+oKwrK+TsnidaTiIjBF/U7Qw2ev+6O7CWVqc9
+        XR5SGe88bhSro9MG2YPsjumy6osETuiKrfsBeAxqOzB5QEOHQe1DY1Fu3K5cqCOw22S43UWdb3n
+        2lpsHu0GlReG1dx1yT1ra2TsU
+X-Received: by 2002:a5d:5846:0:b0:204:1a79:f1ab with SMTP id i6-20020a5d5846000000b002041a79f1abmr32829243wrf.520.1649867989523;
+        Wed, 13 Apr 2022 09:39:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJykcbG+BeznZ7c5fNBOejCki5gd90EzDQrV7Yc5yjD4w6+BWn7lmQ7xpzBTxuZ+oGxzZQBwbg==
+X-Received: by 2002:a5d:5846:0:b0:204:1a79:f1ab with SMTP id i6-20020a5d5846000000b002041a79f1abmr32829210wrf.520.1649867989192;
+        Wed, 13 Apr 2022 09:39:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5800:1078:ebb9:e2c3:ea8c? (p200300cbc70458001078ebb9e2c3ea8c.dip0.t-ipconnect.de. [2003:cb:c704:5800:1078:ebb9:e2c3:ea8c])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b0038cc9aac1a3sm3143976wmq.23.2022.04.13.09.39.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 09:39:48 -0700 (PDT)
+Message-ID: <2ae0a409-3d6d-9f6a-09e8-2f6867a4069a@redhat.com>
+Date:   Wed, 13 Apr 2022 18:39:45 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [LKP] Re: [perf vendor events] 3f5f0df7bf:
- perf-sanity-tests.perf_all_metrics_test.fail
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>, Carel Si <beibei.si@intel.com>
-Cc:     acme@redhat.com, alexander.shishkin@linux.intel.com,
-        alexandre.torgue@foss.st.com, ak@linux.intel.com, mingo@redhat.com,
-        james.clark@arm.com, jolsa@kernel.org, john.garry@huawei.com,
-        mark.rutland@arm.com, mcoquelin.stm32@gmail.com,
-        namhyung@kernel.org, peterz@infradead.org, eranian@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, lkp@lists.01.org,
-        lkp@intel.com
-References: <20220304083329.GC20556@xsang-OptiPlex-9020>
- <CAP-5=fVz=arWo19PQR_4UKY_PyywyXoyp+MUnfAJxCFZy5rhWg@mail.gmail.com>
- <20220413070529.GA1320@linux.intel.com>
- <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-13-david@redhat.com>
+ <012e3889-563b-e7fc-c2e3-e7a6373a55ac@suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 12/16] mm: remember exclusively mapped anonymous pages
+ with PG_anon_exclusive
+In-Reply-To: <012e3889-563b-e7fc-c2e3-e7a6373a55ac@suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13.04.22 18:28, Vlastimil Babka wrote:
+> On 3/29/22 18:04, David Hildenbrand wrote:
+>> Let's mark exclusively mapped anonymous pages with PG_anon_exclusive as
+>> exclusive, and use that information to make GUP pins reliable and stay
+>> consistent with the page mapped into the page table even if the
+>> page table entry gets write-protected.
+>>
+>> With that information at hand, we can extend our COW logic to always
+>> reuse anonymous pages that are exclusive. For anonymous pages that
+>> might be shared, the existing logic applies.
+>>
+>> As already documented, PG_anon_exclusive is usually only expressive in
+>> combination with a page table entry. Especially PTE vs. PMD-mapped
+>> anonymous pages require more thought, some examples: due to mremap() we
+>> can easily have a single compound page PTE-mapped into multiple page tables
+>> exclusively in a single process -- multiple page table locks apply.
+>> Further, due to MADV_WIPEONFORK we might not necessarily write-protect
+>> all PTEs, and only some subpages might be pinned. Long story short: once
+>> PTE-mapped, we have to track information about exclusivity per sub-page,
+>> but until then, we can just track it for the compound page in the head
+>> page and not having to update a whole bunch of subpages all of the time
+>> for a simple PMD mapping of a THP.
+>>
+>> For simplicity, this commit mostly talks about "anonymous pages", while
+>> it's for THP actually "the part of an anonymous folio referenced via
+>> a page table entry".
+>>
+>> To not spill PG_anon_exclusive code all over the mm code-base, we let
+>> the anon rmap code to handle all PG_anon_exclusive logic it can easily
+>> handle.
+>>
+>> If a writable, present page table entry points at an anonymous (sub)page,
+>> that (sub)page must be PG_anon_exclusive. If GUP wants to take a reliably
+>> pin (FOLL_PIN) on an anonymous page references via a present
+>> page table entry, it must only pin if PG_anon_exclusive is set for the
+>> mapped (sub)page.
+>>
+>> This commit doesn't adjust GUP, so this is only implicitly handled for
+>> FOLL_WRITE, follow-up commits will teach GUP to also respect it for
+>> FOLL_PIN without !FOLL_WRITE, to make all GUP pins of anonymous pages
+> 
+> 	   without FOLL_WRITE ?
 
+Indeed, thanks.
 
-On 4/13/2022 12:03 PM, Ian Rogers wrote:
-> 3) Weak group doesn't fall back to no group:
+> 
+>> fully reliable.
+> 
+> <snip>
+> 
+>> @@ -202,11 +203,26 @@ static inline int is_writable_migration_entry(swp_entry_t entry)
+>>  	return unlikely(swp_type(entry) == SWP_MIGRATION_WRITE);
+>>  }
+>>  
+>> +static inline int is_readable_migration_entry(swp_entry_t entry)
+>> +{
+>> +	return unlikely(swp_type(entry) == SWP_MIGRATION_READ);
+>> +}
+>> +
+>> +static inline int is_readable_exclusive_migration_entry(swp_entry_t entry)
+>> +{
+>> +	return unlikely(swp_type(entry) == SWP_MIGRATION_READ_EXCLUSIVE);
+>> +}
+> 
+> This one seems to be missing a !CONFIG_MIGRATION counterpart. Although the
+> only caller __split_huge_pmd_locked() probably indirectly only exists with
+> CONFIG_MIGRATION so it's not an immediate issue.  (THP selects COMPACTION
+> selects MIGRATION)
 
-That's because the group validation code doesn't take pinned events, 
-such as the NMI watchdog, into account.
+So far no builds bailed out. And yes, I think it's for the reason
+stated. THP without compaction would be a lost bet.
 
-I proposed a kernel patch to fix it, but it's rejected. It should be 
-hard to find a generic way to fix it from the kernel side.
-https://lore.kernel.org/lkml/1565977750-76693-1-git-send-email-kan.liang@linux.intel.com/
+> 
+> <snip>
+> 
+>> @@ -3035,10 +3083,19 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>>  
+>>  	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
+>>  	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
+>> +
+>> +	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+>> +	if (anon_exclusive && page_try_share_anon_rmap(page)) {
+>> +		set_pmd_at(mm, address, pvmw->pmd, pmdval);
+>> +		return;
+> 
+> I am admittedly not too familiar with this code, but looks like this means
+> we fail to migrate the THP, right? But we don't seem to be telling the
+> caller, which is try_to_migrate_one(), so it will continue and not terminate
+> the walk and return false?
 
-Maybe we can workaround it from the perf tool side?
-For example, for each weak group with cycles event and NMI watchdog is 
-enabled, add an extra cycles event when opening the group. If the open 
-fails with the extra cycles event, fall back to no group. After the 
-extra cycles event check, remove the extra cycles.
+Right, we're not returning "false". Returning "false" would be an
+optimization to make rmap_walk_anon() fail faster.
 
-What do you think?
+But, after all, the THP is exclusive (-> single mapping), so
+anon_vma_interval_tree_foreach() would most probably not have a lot work
+to do either way I'd assume?
 
+In  any case, once we return from try_to_migrate(), the page will still
+be mapped.
+
+-- 
 Thanks,
-Kan
-> $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,BR_INST_RETIRED.CONDITIONAL,CPU_CLK_UNHALTED.THREAD}:W'
-> -a sleep 1
-> 
->   Performance counter stats for 'system wide':
-> 
->       <not counted>      BR_INST_RETIRED.NEAR_CALL
->                 (0.00%)
->       <not counted>      BR_INST_RETIRED.NEAR_TAKEN
->                  (0.00%)
->       <not counted>      BR_INST_RETIRED.NOT_TAKEN
->                 (0.00%)
->       <not counted>      BR_INST_RETIRED.CONDITIONAL
->                   (0.00%)
->       <not counted>      CPU_CLK_UNHALTED.THREAD
->                 (0.00%)
-> 
->         1.001690318 seconds time elapsed
-> 
-> Some events weren't counted. Try disabling the NMI watchdog:
-> echo 0 > /proc/sys/kernel/nmi_watchdog
-> perf stat ...
-> echo 1 > /proc/sys/kernel/nmi_watchdog
+
+David / dhildenb
+

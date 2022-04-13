@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F97F4FFF85
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D384F4FFF87
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 21:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbiDMTnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 15:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S238305AbiDMToA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 15:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238305AbiDMTng (ORCPT
+        with ESMTP id S237993AbiDMTn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 15:43:36 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29D78067;
-        Wed, 13 Apr 2022 12:41:13 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1neirM-000F0N-13; Wed, 13 Apr 2022 21:41:00 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1neirL-000Bl2-HH; Wed, 13 Apr 2022 21:40:59 +0200
-Subject: Re: [PATCH v4 sysctl-next] bpf: move bpf sysctls from kernel/sysctl.c
- to bpf module
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Yan Zhu <zhuyan34@huawei.com>, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        keescook@chromium.org, kpsingh@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liucheng32@huawei.com, netdev@vger.kernel.org,
-        nixiaoming@huawei.com, songliubraving@fb.com,
-        xiechengliang1@huawei.com, yhs@fb.com, yzaikin@google.com,
-        zengweilin@huawei.com, leeyou.li@huawei.com,
-        laiyuanyuan.lai@huawei.com
-References: <Yk4XE/hKGOQs5oq0@bombadil.infradead.org>
- <20220407070759.29506-1-zhuyan34@huawei.com>
- <3a82460b-6f58-6e7e-a3d9-141f42069eda@iogearbox.net>
- <Ylcd0zvHhi96zVi+@bombadil.infradead.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b615bd44-6bd1-a958-7e3f-dd2ff58931a1@iogearbox.net>
-Date:   Wed, 13 Apr 2022 21:40:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 13 Apr 2022 15:43:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFEE78073
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:41:36 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id g18so6029936ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 12:41:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=o6aYxcvUneI95bTdsz28eCaOVBdeKnTjyTuYgm31g58=;
+        b=Ar3JAMnHPCsIfQYgcOes+uiSzpnx2R4RdaeNwBiYdyffO5H4jlupRKtMT1blWMazuk
+         tjVoI3SSwl54uS9M3FkXwQePiClm6RACTE/aXHpYtDIRLtOo03dbhCVQitsMd4w3dFd8
+         czqlfics96/Kpux4eQ2ek8DDhjaj8YRi39er2T83Pv/WnUs4r3dPgAtkzpGfE5BvtZLd
+         2fAt15A/DSqyFYyrnl54U7zparp6BwDfcWc9xUuy3y/qMp/oZ790IL4hV0y5uIvSNRuK
+         0elHxdOKzwMOa/VazktVd6X0o2vuu8fEdDPYovN1jRitw/MVI/utxIcOkAM4oZd7AZIW
+         bJzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=o6aYxcvUneI95bTdsz28eCaOVBdeKnTjyTuYgm31g58=;
+        b=sTpdl9eOJmTPXpBk8BsAg2TTB9efSEEqh8w7bsx8id6eze8EbArf3XDAUQBjy/OVNh
+         xxxyA/IYBSyphSzP+bWqT2hN8IAYs5GnKEh/yCJuWNxwipNrWmGpiFCpxQeaFg1st7cO
+         N5uoeiTK0cxDyrZIlKI5XZ5k+wnWP7vbalYLd+z0hI+/E4vVwQ+0Ky48mHCz4pfmkRva
+         xEE9kjf1r4cfQ7PT8butGLTau46vm6gsIeLysnzmFJbmnHBVai/GaLxMkAZVf65uudPR
+         KpvZhD241iywuDZdNX+xHF+fEadRgn25tCqrYPvPdppElLWU0qQex5m0wXpCR5wG1uKn
+         lsGA==
+X-Gm-Message-State: AOAM531U5i3TNpjFCRqCPdJjB2Yc6pvw83yHxRXrhKzzgrMgH0Of2oIP
+        FZ+y3UPY3VQH+K6Rwi8uJ+o=
+X-Google-Smtp-Source: ABdhPJxEljLLVQ0kEiFPkfKG9RmhUUwAQUiziY+Xv9O5hm0W3swx+T8iKPfSoBJTmPnsirazAn9qfA==
+X-Received: by 2002:a17:906:6a14:b0:6e8:a87d:3f2f with SMTP id qw20-20020a1709066a1400b006e8a87d3f2fmr10779140ejc.300.1649878894821;
+        Wed, 13 Apr 2022 12:41:34 -0700 (PDT)
+Received: from darkstar.example.org (host-79-21-204-193.retail.telecomitalia.it. [79.21.204.193])
+        by smtp.gmail.com with ESMTPSA id h7-20020a1709066d8700b006d4b4d137fbsm287200ejt.50.2022.04.13.12.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 12:41:34 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 21:41:32 +0200
+From:   Michele Ballabio <ballabio.m@gmail.com>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Subject: Re: AMDGPU: regression on 5.17.1
+Message-ID: <20220413214132.6aaa061a@darkstar.example.org>
+In-Reply-To: <CADnq5_MVO8B-EH70XJ=L6pp7haHz5ZeF1rGFvPEX5nD1+4n1AQ@mail.gmail.com>
+References: <20220403132322.51c90903@darkstar.example.org>
+        <CADnq5_M+M_iykM0Ag6RF+kxzgpEopUBtp82h7tRM3G+B3AWZ2w@mail.gmail.com>
+        <20220404213940.09a56d15@darkstar.example.org>
+        <CADnq5_PhaFbVCb=-AUCx4L-sCyPCPOsY3tNpiAg=gfCN7hFcJA@mail.gmail.com>
+        <20220409182831.185e5d92@darkstar.example.org>
+        <CADnq5_MvGGONvAvhwgokDxRpTbnsGEFROcgsZteJby9Bya81Nw@mail.gmail.com>
+        <20220413193337.16ecc808@darkstar.example.org>
+        <CADnq5_MVO8B-EH70XJ=L6pp7haHz5ZeF1rGFvPEX5nD1+4n1AQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Ylcd0zvHhi96zVi+@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26511/Wed Apr 13 10:22:45 2022)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,38 +80,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 9:00 PM, Luis Chamberlain wrote:
-> On Wed, Apr 13, 2022 at 04:45:00PM +0200, Daniel Borkmann wrote:
->> On 4/7/22 9:07 AM, Yan Zhu wrote:
->>> We're moving sysctls out of kernel/sysctl.c as its a mess. We
->>> already moved all filesystem sysctls out. And with time the goal is
->>> to move all sysctls out to their own subsystem/actual user.
->>>
->>> kernel/sysctl.c has grown to an insane mess and its easy to run
->>> into conflicts with it. The effort to move them out is part of this.
->>>
->>> Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
->>
->> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
->>
->> Given the desire is to route this via sysctl-next and we're not shortly
->> before but after the merge win, could we get a feature branch for bpf-next
->> to pull from to avoid conflicts with ongoing development cycle?
+On Wed, 13 Apr 2022 14:14:42 -0400
+Alex Deucher <alexdeucher@gmail.com> wrote:
+
+> On Wed, Apr 13, 2022 at 1:33 PM Michele Ballabio
+> <ballabio.m@gmail.com> wrote:
+> >
+> > On Mon, 11 Apr 2022 14:34:37 -0400
+> > Alex Deucher <alexdeucher@gmail.com> wrote:
+> >  
+> > > On Sat, Apr 9, 2022 at 12:28 PM Michele Ballabio
+> > > <ballabio.m@gmail.com> wrote:  
+> > > >
+> > > > On Tue, 5 Apr 2022 10:23:16 -0400
+> > > > Alex Deucher <alexdeucher@gmail.com> wrote:
+> > > >  
+> > > > > On Mon, Apr 4, 2022 at 3:39 PM Michele Ballabio
+> > > > > <ballabio.m@gmail.com> wrote:  
+> > > > > >
+> > > > > > On Mon, 4 Apr 2022 13:03:41 -0400
+> > > > > > Alex Deucher <alexdeucher@gmail.com> wrote:
+> > > > > >  
+> > > > > > > On Sun, Apr 3, 2022 at 10:19 AM Michele Ballabio
+> > > > > > > <ballabio.m@gmail.com> wrote:  
+> > > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >         I've hit a regression on 5.17.1 (haven't tested
+> > > > > > > > 5.17.0, but 5.16-stable didn't have this problem).
+> > > > > > > >
+> > > > > > > > The machine is a Ryzen 5 1600 with AMD graphics (RX
+> > > > > > > > 560).
+> > > > > > > >
+> > > > > > > > The regression I hit seems to trigger when the machine
+> > > > > > > > is left idle at boot (I don't boot straight to X, I
+> > > > > > > > boot to a tty, login and then start X). The machine
+> > > > > > > > after a while blanks the screen. Usually, the screen
+> > > > > > > > unblanks as the keyboard is hit or the mouse moves, but
+> > > > > > > > with kernel 5.17.1 the screen does not wake up. The
+> > > > > > > > machine seems to run mostly fine: I can login from ssh,
+> > > > > > > > but I cannot reboot or halt it: a sysrq sequence is
+> > > > > > > > needed for that. Note that if the screen goes blank
+> > > > > > > > under X, it wakes up fine.
+> > > > > > > >
+> > > > > > > > Below a dmesg and two traces from syslog (they're quite
+> > > > > > > > similar).  
+> > > > > > >
+> > > > > > > Can you bisect?  Does setting amdgpu.runpm=0 help?  
+> > > > > >
+> > > > > > I can try to bisect, should I narrow the search to
+> > > > > > drivers/gpu/drm/ ?  
+> > > > >
+> > > > > I would just do a full bisect if possible in case the change
+> > > > > happens to be outside of drm.
+> > > > >  
+> > > > > >
+> > > > > > Setting amdgpu.runpm=0 works, the display now unblanks
+> > > > > > without problems.  
+> > > > >  
+> > > >
+> > > > Hi,
+> > > >     I bisected this, and the first bad commit is
+> > > > [087451f372bf76d971184caa258807b7c35aac8f] drm/amdgpu: use
+> > > > generic fb helpers instead of setting up AMD own's.
+> > > >
+> > > > Let me know if you need some more testing.  
+> > >
+> > > Thanks.  Do the attached patches fix the issue?
+> > >
+> > > Thanks,
+> > >
+> > > Alex  
+> >
+> > Sorry, no. I applied them both on top of 5.17.1.  
 > 
-> Sure thing. So I've never done this sort of thing, so forgive me for
-> being new at it. Would it make sense to merge this change to sysctl-next
-> as-is today and put a frozen branch sysclt-next-bpf to reflect this,
-> which bpf-next can merge. And then sysctl-next just continues to chug on
-> its own? As-is my goal is to keep sysctl-next as immutable as well.
+> Thanks.  Please try the attached patch.
 > 
-> Or is there a better approach you can recommend?
+> Thanks,
+> 
+> Alex
 
-Are you able to merge the pr/bpf-sysctl branch into your sysctl-next tree?
+I applied the v2 patch on top of 5.17.1 and it works as expected.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/log/?h=pr/bpf-sysctl
-
-This is based off common base for both trees (3123109284176b1532874591f7c81f3837bbdc17)
-so should only pull in the single commit then.
+Tested-by: Michele Ballabio <ballabio.m@gmail.com>
 
 Thanks,
-Daniel
+    Michele Ballabio
+

@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732414FFE09
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675944FFE0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbiDMSmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S237804AbiDMSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234793AbiDMSmF (ORCPT
+        with ESMTP id S237789AbiDMSmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:42:05 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5612E21D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:39:42 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id m8so3284805ljc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 11:39:42 -0700 (PDT)
+        Wed, 13 Apr 2022 14:42:33 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E935223BDF;
+        Wed, 13 Apr 2022 11:40:09 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id u19so5138278lff.4;
+        Wed, 13 Apr 2022 11:40:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v0uxIEiOGXAVbrPGMXz16+Yl9VteQ3InKsyKHHrbkhY=;
-        b=h2OmjY4+49Tg6IGmmKVnS46h0KMF5nJCrpra12ygtmpweIVAW4C9qzxr0IhwZZEkU6
-         r7BQKw12FLOi3dtraqvutf6t94HSeOzMa9EC7/DPsC/VPbyvc4sbTONsqSKXVwJrk4NQ
-         9/8kCNc4U140teNFFauidckx5eHVIC+7LLlV/7gGC2mz3w9RkSL0OqGvASOKJcj5UyaI
-         4EuWcsiT2laec06NvgBB72OnYzCUNr5H31jPErL91bBqJi21Vc3TQnxvmvGILKPbQb8z
-         CpXxPbcoe11SYDJsRjyQeXOl3DgYvLfyR0E9zp/So6Uh7gtb5DHrsl/Ybq49TZk4J1sD
-         8tzA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MDR0Fg5QWdm585RNYBMjB04jwb3sFn/V9jLMN5lDMUg=;
+        b=qrBrDzqcreAYaA733LjFmIOK2n07pxS+7vJhMVpAV9lIvaHwH1/RSpbglSH7Rs+nhZ
+         hsySkF0Jdh19E697WXVher4+6h1ri0/kHlH+qAWio6s0wmRuJXZPaTDuIHsdQwqPgwEI
+         P5EaKCmSyp1lOhGFRsu3WUU4IcXObg9bGQRK31GJMj7Es9/RX0T3Zk64VC2yPdA8qdlR
+         /u9PdpOGPWyXR59OUo9591/KdaKdq05N1kdDphnR+kED47LbNsnSZgwFqfcJnoW3uN12
+         CUYVaf5TdZGJqOcSauYebjYfCj8EUSIrpCSEmNRVZqWIorQKnhjjwItyKF0ga8mWSAMS
+         rXYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v0uxIEiOGXAVbrPGMXz16+Yl9VteQ3InKsyKHHrbkhY=;
-        b=JcRz2pxntlFPG/8F+qz8sLLOOy22PlDIaL4ai7Khv+fZtL7ESdJT4chZ7RSGCWR81C
-         6onpTh9vt+9OI8dy1lEz715T4U9e7HvVlji8deGrFbKaW7NYrEDWF3/F2zfrhF5bZwOt
-         fLVfSjBQg3bEQki/my9XYAEW3tUbYdDXAoIxBEpJKiyDn72fpRT8al+iflOncFHsMA4+
-         xMMngzOiuo3kPi4OoyqW6wIfcbedhcuOALtOC+Mehy9bRlMaeFFkWe9VazJ4IN9zG32K
-         TW1BAGF96cQ9kHmfcdW7hm5Q9vTkEKCmxoOrFu4x7A+GWH45GfkSAl7nC5fR2ACgWZu7
-         8tXA==
-X-Gm-Message-State: AOAM532Uuy4uaX7IncWoBP0RkWC576g8brYLL6aMOZu+TyA06WtRDDK1
-        D65QBbRbeZpSOI9RFME+jwY=
-X-Google-Smtp-Source: ABdhPJzhbs3dT23xzQ3oXIyWAhtY4I0DTwhniFJB67OwXphv4OtRYr1uWo06bpQLykfliFtF418d6Q==
-X-Received: by 2002:a05:651c:a0e:b0:249:90c8:453d with SMTP id k14-20020a05651c0a0e00b0024990c8453dmr26505188ljq.399.1649875180430;
-        Wed, 13 Apr 2022 11:39:40 -0700 (PDT)
-Received: from [192.168.1.38] (91-159-150-194.elisa-laajakaista.fi. [91.159.150.194])
-        by smtp.gmail.com with ESMTPSA id u3-20020a197903000000b00464f4c76ebbsm2256852lfc.94.2022.04.13.11.39.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 11:39:39 -0700 (PDT)
-Message-ID: <2a2becf1-fc19-a7da-deb7-1c12781d503d@gmail.com>
-Date:   Wed, 13 Apr 2022 21:39:37 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MDR0Fg5QWdm585RNYBMjB04jwb3sFn/V9jLMN5lDMUg=;
+        b=We6A2OHgDQpdNBt62LyvQjbviEhEP4qdkroepkQjPqvxHp+ta5SM8pZQFkufEwuJM5
+         JNb2u8+TL7TKhbQO5om1Wt5NuiYlSMkaoJQoSoOEuTGHRm4UYlJPYldI2+J0YE0eW1WM
+         WllqNI3yGRXwcipZKmUnkt/YriCyx8xyprhqB/iTqxG/cUDdospnvayn0V58WhJdlZyA
+         8yN1/jLFxdM/+dky79qdmDb0yvlvr2Axu62ku7bqEgWUBvY/Tt3kaEFyz8TakDjzKgHC
+         0ZshPbQwWxtQtwZvl3qTho9VvCAyrpxzEOShG0VCKz/B/90DBpcZaBGz/qYBjRmH31g8
+         olcQ==
+X-Gm-Message-State: AOAM530zg/SyOf0S1ukbY0svwHw8mBXpiKifRsdOxopP7j+OpNGngpWQ
+        72KunqN6h6m0zsgFmxwpdvd63uQBXA209NPix9Q=
+X-Google-Smtp-Source: ABdhPJzeDf8ZH88L1WhbR/Mu5T8Lqhxe2UylQed//0u6hSOwi+wreW2FAIestF0SpDXLY2GNqmfovwCNVNTp3HN5FU8=
+X-Received: by 2002:ac2:41c4:0:b0:445:9a7c:b76f with SMTP id
+ d4-20020ac241c4000000b004459a7cb76fmr28407987lfi.497.1649875208069; Wed, 13
+ Apr 2022 11:40:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
- memory-deny-write-execute (MDWE)
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        =?UTF-8?Q?Zbigniew_J=c4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-Cc:     Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net
-References: <20220413134946.2732468-1-catalin.marinas@arm.com>
-From:   Topi Miettinen <toiwoton@gmail.com>
-In-Reply-To: <20220413134946.2732468-1-catalin.marinas@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220409062449.3752252-1-zheyuma97@gmail.com>
+In-Reply-To: <20220409062449.3752252-1-zheyuma97@gmail.com>
+From:   Stanislav Yakovlev <stas.yakovlev@gmail.com>
+Date:   Wed, 13 Apr 2022 14:39:54 -0400
+Message-ID: <CA++WF2Np7Bk_qT68Uc3mrC38mN5p3fm9eVT7VA8NoX6=es2r2w@mail.gmail.com>
+Subject: Re: [PATCH] wireless: ipw2x00: Refine the error handling of ipw2100_pci_init_one()
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     kvalo@kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        wireless <linux-wireless@vger.kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,67 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.4.2022 16.49, Catalin Marinas wrote:
-> Hi,
-> 
-> The background to this is that systemd has a configuration option called
-> MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
-> is to prevent a user task from inadvertently creating an executable
-> mapping that is (or was) writeable. Since such BPF filter is stateless,
-> it cannot detect mappings that were previously writeable but
-> subsequently changed to read-only. Therefore the filter simply rejects
-> any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
-> support (Branch Target Identification), the dynamic loader cannot change
-> an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
-> For libraries, it can resort to unmapping and re-mapping but for the
-> main executable it does not have a file descriptor. The original bug
-> report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
-> for libraries - [3].
-> 
-> Add in-kernel support for such feature as a DENY_WRITE_EXEC personality
-> flag, inherited on fork() and execve(). The kernel tracks a previously
-> writeable mapping via a new VM_WAS_WRITE flag (64-bit only
-> architectures). I went for a personality flag by analogy with the
-> READ_IMPLIES_EXEC one. However, I'm happy to change it to a prctl() if
-> we don't want more personality flags. A minor downside with the
-> personality flag is that there is no way for the user to query which
-> flags are supported, so in patch 3 I added an AT_FLAGS bit to advertise
-> this.
+On Sat, 9 Apr 2022 at 02:25, Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> The driver should release resources in reverse order, i.e., the
+> resources requested first should be released last, and the driver
+> should adjust the order of error handling code by this rule.
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> ---
+>  drivers/net/wireless/intel/ipw2x00/ipw2100.c | 34 +++++++++-----------
+>  1 file changed, 16 insertions(+), 18 deletions(-)
+>
+[Skipped]
 
-With systemd there's a BPF construct to block personality changes 
-(LockPersonality=yes) but I think prctl() would be easier to lock down 
-irrevocably.
+> @@ -6306,9 +6303,13 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+>  out:
+>         return err;
+>
+> -      fail_unlock:
+> +fail_unlock:
+>         mutex_unlock(&priv->action_mutex);
+> -      fail:
+> +fail:
+> +       pci_release_regions(pci_dev);
+> +fail_disable:
+> +       pci_disable_device(pci_dev);
+We can't move these functions before the following block.
 
-Requiring or implying NoNewPrivileges could prevent nasty surprises from 
-set-uid Python programs which happen to use FFI.
+> +fail_dev:
+>         if (dev) {
+>                 if (registered >= 2)
+>                         unregister_netdev(dev);
+This block continues with a function call to ipw2100_hw_stop_adapter
+which assumes that device is still accessible via pci bus.
 
-> Posting this as an RFC to start a discussion and cc'ing some of the
-> systemd guys and those involved in the earlier thread around the glibc
-> workaround for dynamic libraries [4]. Before thinking of upstreaming
-> this we'd need the systemd folk to buy into replacing the MDWE SECCOMP
-> BPF filter with the in-kernel one.
+> @@ -6334,11 +6335,8 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+>
+>                 free_libipw(dev, 0);
+>         }
+> -
+> +fail_iounmap:
+>         pci_iounmap(pci_dev, ioaddr);
+> -
+> -       pci_release_regions(pci_dev);
+> -       pci_disable_device(pci_dev);
+>         goto out;
+>  }
+>
+> --
+> 2.25.1
+>
 
-As the author of this feature in systemd (also similar feature in 
-Firejail), I'd highly prefer in-kernel version to BPF protection. I'd 
-definitely also want to use this in place of BPF on x86_64 and other 
-arches too.
-
-In-kernel version would probably allow covering pretty easily this case 
-(maybe it already does):
-
-	fd = memfd_create(...);
-	write(fd, malicious_code, sizeof(malicious_code));
-	mmap(..., PROT_EXEC, ..., fd);
-
-Other memory W^X implementations include S.A.R.A [1] and SELinux 
-EXECMEM/EXECSTACK/EXECHEAP protections [2], [3]. SELinux checks 
-IS_PRIVATE(file_inode(file)) and vma->anon_vma != NULL, which might be 
-useful additions here too (or future extensions if you prefer).
-
--Topi
-
-[1] https://smeso.it/sara/
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3708
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3787
+Stanislav.

@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D142C4FECC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FF14FECCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 04:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiDMCQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 22:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S231167AbiDMCTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 22:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiDMCQi (ORCPT
+        with ESMTP id S229500AbiDMCTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 22:16:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42EA6338;
-        Tue, 12 Apr 2022 19:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Mbjne51g7b5MpYBPVjJDEY6VmWxgJ06clSfxVNg4kpo=; b=IfcP3NODCILCw0Va76HRV+XeAP
-        UaCzcdUvvd/McEHoHoA3eIOmcLg5AW+oZpj4jDqXJCLEC3txlO5fwLJqcMrQOqP3ahG3JshzFOV1J
-        QL9Nuvk7vihM5SgkjeJz1cCK3LP9KgkbzTd39qjd9FnBHYGH+nPDEQaKiWUvm05X7IppQ5Sa0Kqz6
-        uYpu2lzaTD0JP+gdgjMtuw1EK9q6A//7F2MRDBnPvSrL/AyAM5zkTzivBLN9IlP2uYHCBcicyWsqn
-        nY2xGqFqHlyGI4dppFSiJMoJzbTzjwGuYU86maVx5ycUOFabAYcJV0EkO9dixpXQ8yk3/7FxrLT3s
-        fCgH0sYg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neSWB-00Ds0A-65; Wed, 13 Apr 2022 02:14:03 +0000
-Message-ID: <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
-Date:   Tue, 12 Apr 2022 19:13:56 -0700
+        Tue, 12 Apr 2022 22:19:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA7A24BDF;
+        Tue, 12 Apr 2022 19:16:56 -0700 (PDT)
+X-UUID: e9f2f699d8434f1aa79683e32a83811c-20220413
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:9235956a-d02e-46f9-9ba6-afac918df9e4,OB:10,L
+        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:9235956a-d02e-46f9-9ba6-afac918df9e4,OB:10,LOB
+        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Release_UHam,AC
+        TION:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:fb453178-0afa-4dca-bdec-ca54c998425a,C
+        OID:e47890283164,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: e9f2f699d8434f1aa79683e32a83811c-20220413
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <chui-hao.chiu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1672171992; Wed, 13 Apr 2022 10:16:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 13 Apr 2022 10:16:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Apr 2022 10:16:50 +0800
+Message-ID: <25f9b550e2a179db63aff2639f7a140633dd5b17.camel@mediatek.com>
+Subject: Re: [PATCH] arm64: dts: mt7986: add built-in Wi-Fi device nodes
+From:   Peter Chiu <chui-hao.chiu@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
+        "Evelyn Tsai" <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Wed, 13 Apr 2022 10:16:50 +0800
+In-Reply-To: <20220221020708.12724-1-chui-hao.chiu@mediatek.com>
+References: <20220221020708.12724-1-chui-hao.chiu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-Content-Language: en-US
-To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
-        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
-        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-References: <20220412231508.32629-1-libo.chen@oracle.com>
- <20220412231508.32629-2-libo.chen@oracle.com>
- <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
- <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,67 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 4/12/22 18:35, Libo Chen wrote:
-> Hi Randy,
+On Mon, 2022-02-21 at 10:07 +0800, Peter Chiu wrote:
+> This enables built-in 802.11ax Wi-Fi support.
 > 
-> On 4/12/22 17:18, Randy Dunlap wrote:
->> Hi--
->>
->> On 4/12/22 16:15, Libo Chen wrote:
->>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
->>> make a lot of sense nowaday. Even the original patch dating back to 2008,
->>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
->>> rationale for such dependency.
->>>
->>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
->>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
->>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
->>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
->>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
->>> There is no reason other architectures cannot given the fact that they
->>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
->>> x86.
->>>
->>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
->>> ---
->>>   lib/Kconfig | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/lib/Kconfig b/lib/Kconfig
->>> index 087e06b4cdfd..7209039dfb59 100644
->>> --- a/lib/Kconfig
->>> +++ b/lib/Kconfig
->>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
->>>       bool
->>>     config CPUMASK_OFFSTACK
->>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
->> This "if" dependency only controls whether the Kconfig symbol's prompt is
->> displayed (presented) in kconfig tools. Removing it makes the prompt always
->> be displayed.
->>
->> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
->> of DEBUG_PER_CPU_MAPS.
-> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
-> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
-
-I'm just talking about the Kconfig change below.  Not talking about whatever else
-it might require per architecture.
-
-But you say you have tried that and it doesn't work. What part of it doesn't work?
-The Kconfig part or some code execution?
-
-I'll test the Kconfig part of it later (in a few hours).
-
-> Libo
->> Is there another problem here?
->>
->>> +    bool "Force CPU masks off stack"
->>>       help
->>>         Use dynamic allocation for cpumask_var_t, instead of putting
->>>         them on the stack.  This is a bit more expensive, but avoids
+> Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
+> ---
+> This patch depends on below patchs
+> 1) https://patchwork.kernel.org/patch/12704208/
+> 2) https://patchwork.kernel.org/patch/12704207/
+> 3) https://patchwork.kernel.org/patch/12739683/
+> ---
+>  arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 41
+> +++++++++++++++++++
+>  arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 19 +++++++++
+>  arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 43
+> ++++++++++++++++++++
+>  3 files changed, 103 insertions(+)
 > 
 
--- 
-~Randy
+Hello, just a gentle ping.
+
+Best regards,
+Peter Chiu
+

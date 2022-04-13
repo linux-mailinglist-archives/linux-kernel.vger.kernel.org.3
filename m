@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FE04FFD23
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02344FFD26
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbiDMRzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 13:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S237501AbiDMRzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 13:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbiDMRzJ (ORCPT
+        with ESMTP id S236058AbiDMRzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 13:55:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925F6D3BE;
-        Wed, 13 Apr 2022 10:52:47 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 17:52:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649872365;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k/JagWb3bJZxrgaefpu0RP7IlAuGtfyhqOL6bvOWQkQ=;
-        b=xPIy/rESypWYbKNZmb5JCybiEGaSHd7i9bidO2m6wFxJss5ehJq/OZgf+g9XxBRBs/krn6
-        B4wvHG7HBcmz390rYPyndQ0rzm1z/6HF6S27E5U6FggFC62ARY6Fr5AQECiVTkPwFTv771
-        JWXyuwLKo9tidI+MMNRciHkutTI+B8ahe/0GxOb26lHkVMayR6+DFy39Yaq7MXlhP5kcE+
-        IdyudCXDCzMCLe4gJu4R4aUX+bdwxi6oymg41AkAFkDqgRrKX9HX0NC/5a6nNuDzCyL5kB
-        AK6jQo52Q6AP8ex/+OP1BDYJMnnsP3TUQTxJr+VBaFcR84W5HdtEWn33Te34eg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649872365;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k/JagWb3bJZxrgaefpu0RP7IlAuGtfyhqOL6bvOWQkQ=;
-        b=w1oyA3r7grVdbYeB8/ZUVNd7Z68KP9Dig4o/hrej6zQWdbOMMPEKuaGZnynCFzKCE+Pdn/
-        W0ygVfvZqhuhK6Cg==
-From:   "tip-bot2 for Eric DeVolder" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/kdump] x86/crash: Fix minor typo/bug in debug message
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        Borislav Petkov <bp@suse.de>, Baoquan He <bhe@redhat.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220413164237.20845-2-eric.devolder@oracle.com>
-References: <20220413164237.20845-2-eric.devolder@oracle.com>
+        Wed, 13 Apr 2022 13:55:46 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32A46D847
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:53:24 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ec04a2ebadso30745587b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RyDA9iTfWDztFEqgkjQ89chzQS7kxTaj+KPUwJ15bKQ=;
+        b=hm/d5hw0nIb0T07H45j4gZMonAjBta7sGE/+gSqIL0ZfSSa/i6jk87hXkRSs7z/C/R
+         60JnUaEuDn6DUDyPkIggKlVmAjiDTk/GQ9G/K/CI/Lm/vr+QIlfxHICshK8N13g1rBuh
+         YrPka14d4JSk4qIJngtB173o0mOdiR4YgL6L760zRUikxvhg5TE0FZv7l4ezoZYu7B+V
+         Qq+htzJHXO80lH3F1krxeje45ufFPml7qJsln/xNg/7PeZZ59HPVjDKkshG421Fxel1B
+         BD61+ZtykRVGIM+sF3Z5LJCxQNE7xrXhVgpsB3QLLikglWiNO9XhjdL9JqPSAd/SV50s
+         V5RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RyDA9iTfWDztFEqgkjQ89chzQS7kxTaj+KPUwJ15bKQ=;
+        b=HBLWHIbMXnFlzKvgsxYeYU9nWJJsbxGTgzaHhcgjkQAIVSl/vat2odEInDFIN9MFFz
+         cJT5xEwB4c5HQDArqDs3WrPXRJNHf40F7BsegYHVj7DtFyfUB2zpGZ5f5qKtuALvNt6n
+         xPeKw/CGbPDlyH4/1gL9i2yelf7nYmbG1f5Br4PJub8wW+bEwCuZmRvaR+lJ7slqzaZ3
+         tiKqTXlJFs0S3ljYn5S8pQK3rnLwExBT8nh4h758ZrCL8cgeQXXk30Q2rxVwigqO83Zw
+         6hM4MvfOf1cfWXkTxEOrgMF7GVCSBje3tkkZAgkLpBDhMjGe/r/2CJt//Xz1Hx2DvbP3
+         PKIw==
+X-Gm-Message-State: AOAM532cAd47WN6qTZBjhgh1ULi7cpT8O5Dod4thnK27fEJrTGxtQ48s
+        u07XY834GHplYYH+fnmDxGEmNfZbisPtvxF8Ab0QtQ==
+X-Google-Smtp-Source: ABdhPJwExmug60eQjdpe2sIF2Eb8k/QhuTphLsiPFCLbDhrEUkyvWzjHgHxme2qSemiF2GV3585ju2b+b2Wogr8btKI=
+X-Received: by 2002:a0d:cb86:0:b0:2ec:894:aa51 with SMTP id
+ n128-20020a0dcb86000000b002ec0894aa51mr27535ywd.467.1649872403635; Wed, 13
+ Apr 2022 10:53:23 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <164987236423.4207.6815235390586822382.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <164984498582.2000115.4023190177137486137.stgit@warthog.procyon.org.uk>
+ <CANn89iLEch=H9OJpwue7HVJNPxxn-TobRyoATHTrSdetwpHVXA@mail.gmail.com> <2419532.1649871672@warthog.procyon.org.uk>
+In-Reply-To: <2419532.1649871672@warthog.procyon.org.uk>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 13 Apr 2022 10:53:12 -0700
+Message-ID: <CANn89iK=8Z2dznM_SVGtk3NsXu3PK_BOBnCOM2ZgFtKe-mBOyA@mail.gmail.com>
+Subject: Re: [PATCH net] rxrpc: Restore removed timer deletion
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/kdump branch of tip:
+On Wed, Apr 13, 2022 at 10:41 AM David Howells <dhowells@redhat.com> wrote:
+>
+> Eric Dumazet <edumazet@google.com> wrote:
+>
+> > ok... so we have a timer and a work queue, both activating each other
+> > in kind of a ping pong ?
+>
+> Yes.  I want to emit regular keepalive pokes.
+>
+> > Any particular reason not using delayed works ?
+>
+> Because there's a race between starting the keepalive timer when a new peer is
+> added and when the keepalive worker is resetting the timer for the next peer
+> in the list.  This is why I'm using timer_reduce().  delayed_work doesn't
+> currently have such a facility.  It's not simple to add because
+> try_to_grab_pending() as called from mod_delayed_work_on() cancels the timer -
+> which is not what I want it to do.
+>
 
-Commit-ID:     b57a7c9dd732ca29c4400a9a710c56c55877086d
-Gitweb:        https://git.kernel.org/tip/b57a7c9dd732ca29c4400a9a710c56c55877086d
-Author:        Eric DeVolder <eric.devolder@oracle.com>
-AuthorDate:    Wed, 13 Apr 2022 12:42:30 -04:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 13 Apr 2022 19:39:54 +02:00
+SGTM, thanks !
 
-x86/crash: Fix minor typo/bug in debug message
-
-The pr_debug() intends to display the memsz member, but the
-parameter is actually the bufsz member (which is already
-displayed). Correct this to display memsz value.
-
-Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Baoquan He <bhe@redhat.com>
-Link: https://lore.kernel.org/r/20220413164237.20845-2-eric.devolder@oracle.com
----
- arch/x86/kernel/crash.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index e8326a8..9730c88 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -407,7 +407,7 @@ int crash_load_segments(struct kimage *image)
- 	}
- 	image->elf_load_addr = kbuf.mem;
- 	pr_debug("Loaded ELF headers at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
--		 image->elf_load_addr, kbuf.bufsz, kbuf.bufsz);
-+		 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
- 
- 	return ret;
- }
+Reviewed-by: Eric Dumazet <edumazet@google.com>

@@ -2,141 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A36A4FFAFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8F34FFB02
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 18:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiDMQL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 12:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S235210AbiDMQPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 12:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiDMQL1 (ORCPT
+        with ESMTP id S230442AbiDMQPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 12:11:27 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5059E66CA9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:09:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v15so2955143edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 09:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UHgRvgx7SYkj5pmKsaI78m5hk2m1gV/Mhyu2PiUCr4E=;
-        b=lBWu77Y5D2mXiuJjDT0MwNKo4A9phca9/l3ON7aH+9P/8o1crWjKtyOgzTb9xU22b9
-         7aVTH9ZGs6JjySr9UuH8nGq/ISCdGFOLsZ4UR+IKEGEWHTPoPfamJO4M13rX2YBRB2JR
-         VwpNLfXuj30Zt7vEd7WXD6Z25w3WffY1aQ5Og=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UHgRvgx7SYkj5pmKsaI78m5hk2m1gV/Mhyu2PiUCr4E=;
-        b=6UeuKMhQwDTVPfBDe9S6xWdNto8mMCgfOku8kUhib21pz5FzejxvPrMWpxG3nZNSic
-         IhMSLR8MXJCrGAcsmw70H/VDV1t8rJ4dHWp0aPWzrzh8Bm8Bes7q75SD1yCF1GyY3wEh
-         EPyS+e1fgs+x5zDe/YFqAwmNuZKu/ikOlWtGtHV1oUK3YP+U/wwQ7xKxPBm43xaTiuHS
-         HIwZtLU/mCX/nVvTGldtEzyL71eFD7HWRMa6s4FObiFhzmeqXchM0r0BV3FInGyKiW3f
-         7uCaROug3m+acXsDo4XsBY4/y2en6Y4DAIHkUQrBp9ndSmrOtDg2IdfdUIBjUgeJ90kx
-         mtLA==
-X-Gm-Message-State: AOAM532mx6d7CcVSm+PBrAnXoQxgpYFR40jm4IP2c16aTUqCq8E2q63L
-        0KC2BCWS+dByJ27+axBckW9/dw==
-X-Google-Smtp-Source: ABdhPJzL+8K6wO1ADFpY262+dLQBXel1bmtF0/jCpFTKg6WqCNHpdMZbwaMQfOhRyXlG2ARv/+PYBw==
-X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id ck30-20020a0564021c1e00b004165b93eacfmr44827620edb.302.1649866143905;
-        Wed, 13 Apr 2022 09:09:03 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-245-147-71.retail.telecomitalia.it. [95.245.147.71])
-        by smtp.gmail.com with ESMTPSA id kk23-20020a170907767700b006e8a6e53a7bsm125399ejc.139.2022.04.13.09.09.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 09:09:03 -0700 (PDT)
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     tommaso.merciai@amarulasolutions.com,
-        linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] arm64: dts: imx8mm-evk: add pwm1/backlight support
-Date:   Wed, 13 Apr 2022 18:08:59 +0200
-Message-Id: <20220413160900.36271-1-tommaso.merciai@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 12:15:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72427120BE;
+        Wed, 13 Apr 2022 09:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649866393; x=1681402393;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DWtb2usfjznadWpJhU4OziLP1yrGa1nabsKTrAq6jcE=;
+  b=cY9Nq4FQTGglMfxAklIPjtdtTa+IZ2U/7LuKpuMnZTWE/6SEZzICXgN4
+   t4jAon9zsN7k0AxajSSCHYg4waVrQqbq+0m7BmaVH/ehU3DXs5JAF1WhA
+   3uhp1Uq2EvPJCOosxyboqerb4c5D0nVFaoeosGHn2ruQeFGmwPYfWP/1a
+   nWeROQVjY67oVCzpx/f9/42m+WtEvRARFP6mu/e5hqOit40gUdXGZsAbW
+   2hTZrJqPQh4e682HM3/1jFtSFDqxpkgxdsDubkBxPQ5B1jMzzEiG2Ytc1
+   DO2LDhSLI3drNsXM2sxQ9wXChdxEp8sRG0VnAGpex1VTBNPq7jKlFzLJ5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="243295317"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="243295317"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:13:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="559803224"
+Received: from jmsepko-mobl.amr.corp.intel.com (HELO [10.212.61.150]) ([10.212.61.150])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 09:13:10 -0700
+Message-ID: <6848cde8-697a-3fb5-e517-ae6e3413f188@intel.com>
+Date:   Wed, 13 Apr 2022 09:13:17 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
+ <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
+ <ff9e0bad-be9a-97ac-ae88-d22bcfbe80d4@redhat.com>
+ <ebf3ccef-e6fe-62d5-74e8-91e30e7c2642@intel.com>
+ <a458c13f-9994-b227-ff61-bfdfec10bc27@redhat.com>
+ <20220413113024.ycvocn6ynerl3b7m@box.shutemov.name>
+ <cfcf9f82-7e5f-58b6-7b47-9ac552832596@intel.com>
+ <dd197d57-ce40-82f6-fa5f-c0450b39e23f@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <dd197d57-ce40-82f6-fa5f-c0450b39e23f@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pwm1/backlight support nodes for imx8mm_evk board.
-Align with u-boot dts
+On 4/13/22 09:07, David Hildenbrand wrote:
+> Simplest meaning: accept everything during early boot and don't touch
+> core-mm/buddy code, correct?
 
-References:
- - https://patchwork.ozlabs.org/project/uboot/patch/20220326111911.13720-9-tommaso.merciai@amarulasolutions.com/
-
-Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
----
-Changes since v1:
- - Fix commit body
- - Enable pwm, backlight
-
-Changes since v2:
- - Remove status okay from pwm1,backlight (enable as default)
-
- arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-index 6d67df7692f1..c50d2cc3ca71 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-@@ -59,6 +59,14 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
- 		enable-active-high;
- 	};
- 
-+	backlight: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm1 0 5000000>;
-+		brightness-levels = <0 255>;
-+		num-interpolated-steps = <255>;
-+		default-brightness-level = <250>;
-+	};
-+
- 	ir-receiver {
- 		compatible = "gpio-ir-receiver";
- 		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-@@ -395,6 +403,11 @@ &wdog1 {
- 	status = "okay";
- };
- 
-+&pwm1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_backlight>;
-+};
-+
- &iomuxc {
- 	pinctrl_fec1: fec1grp {
- 		fsl,pins = <
-@@ -549,4 +562,10 @@ pinctrl_wdog: wdoggrp {
- 			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B	0x166
- 		>;
- 	};
-+
-+	pinctrl_backlight: backlightgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO01_PWM1_OUT	0x06
-+		>;
-+	};
- };
--- 
-2.25.1
-
+Yes, exactly.

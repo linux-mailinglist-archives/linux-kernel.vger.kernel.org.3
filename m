@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F243D4FF09E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B4B4FF0A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbiDMHhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S233393AbiDMHhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiDMHhI (ORCPT
+        with ESMTP id S233387AbiDMHh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:37:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910E14CD6B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:34:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B8DFB8213D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40746C385A4;
-        Wed, 13 Apr 2022 07:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649835284;
-        bh=JfKQqUtSRO+n6Mg/TdQQXoXDb3x9otKPEADPuS48Q9E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WxIUJY1IyYpjBmBGKI4lf3FFiHg36Hua/HbjwvJIIJIICkCg7/CdRudCJEcz+QR64
-         x97ixjiiMOhKy6cjtTnAxyEPTgE4ONIEZzl7/Z5Qua+VzJHHqSijn/tazbVtHhvkeQ
-         f/Y7xOvYe0V8ZXU/GtLkQob3cGhtCnJ1GJVpHNSW7UHUB1v76O4Apy2QBkVSu8wb1f
-         zFvr1wuagVY4qQTEEaJXSzjGJ63iP2s/hXo4K+Kikxp0c3B2DmzwEWUWaZ1jX4VMR9
-         ipJa7x0zwe+XB3ouL8AqpWmvZHjSBEco5PvtwgBTH9YOQ4sQva+OAEG2Y3jp/VDLMH
-         352k61dPl1Caw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH v5] f2fs: give priority to select unpinned section for foreground GC
-Date:   Wed, 13 Apr 2022 15:34:38 +0800
-Message-Id: <20220413073438.18874-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 03:37:27 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A097D4D9E8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:35:04 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 32so1043276pgl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4shEO0FDjWAPEb/iOkbhrTf4wcohhpVSh+KPI0icLZI=;
+        b=qets2QwMPoIS07bG1f+KyzSxy6S8KfID+zTuDtEKft9hUvDP7QZj5L+WzEREoAmiY/
+         XOrB4o04xL+0RYSOVEMDw3reHRpqsa51k5T4ihGVeqQBAk9Ho2mspk66Bl+l56Dr6PnA
+         OXMaSzqgFA6Cu3ryvS2nNYt+BMVcjYDJCeoyictMJ5uwYo8Q+jDXBNZtA56w09lyCRZe
+         YKuZbPQDp/Lmcn2qX0ZVrncFMbVbfr15nMmbXBHqjWfTdFcFYfj5OcOArO5W40hVsUn2
+         a51Mapulb8/S926Wh9qcxCXmC7IAcSSPS7a7UXSjHa0/8KiqsCCwgoA+O7nm6GKvATiM
+         mKVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4shEO0FDjWAPEb/iOkbhrTf4wcohhpVSh+KPI0icLZI=;
+        b=w/tUYn0nZmqPRiu6Sds2PA7vdvvNbK/3mCvYwYP7clC4oZ8VNWDqvCGvhU9PKKvJ67
+         Mv8t8FsFjkYNjNdduLrKSAKyouxjWO+PcItzpcOXSWp0Z2ajkU9c0i+SMMXWnyGStRwQ
+         74hBXatzzzAf1Eqg6b9N82fEdpH/xMCpR86pibziplQplMj250otNvpzkWstDpp3b3UY
+         dyIuvJ/7q63Ce4WczXaNDyEnV3fQ+PBLy6y1X34NPBzb1ZtNeSKqYg3hOTFV7s8eCRsx
+         Haw7fEEWUxxo0ooKezhCiEbE6Z91+Mt/ckih9i1qw/CZwiD7PIFa8zNaVBIfO9NhsAy+
+         LoNw==
+X-Gm-Message-State: AOAM533WCddfOLvtqFoG/2yBMD1e/yo3+TcYa2/CfujYmeMCy8KtkfPr
+        rRt7QsFx/yWJ3H0GFDubLPJq
+X-Google-Smtp-Source: ABdhPJzMxUXE89aUhRoeF6JFh0xgIGr9S8og3SCLfG1L88EFRg2hK4A2qSzGupVw4T6UTu0MgphGLw==
+X-Received: by 2002:a63:780f:0:b0:386:5d6f:2153 with SMTP id t15-20020a63780f000000b003865d6f2153mr33053657pgc.555.1649835303345;
+        Wed, 13 Apr 2022 00:35:03 -0700 (PDT)
+Received: from thinkpad ([117.207.28.99])
+        by smtp.gmail.com with ESMTPSA id d8-20020a17090a114800b001cb95a92bd7sm1816639pje.13.2022.04.13.00.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 00:35:02 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 13:04:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] phy: qcom-qmp: Add support for SDX65 QMP PHY
+Message-ID: <20220413073456.GC2015@thinkpad>
+References: <1649740652-17515-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1649740652-17515-3-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649740652-17515-3-git-send-email-quic_rohiagar@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,208 +73,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, during foreground GC, if victims contain data of pinned file,
-it will fail migration of the data, and meanwhile i_gc_failures of that
-pinned file may increase, and when it exceeds threshold, GC will unpin
-the file, result in breaking pinfile's semantics.
+On Tue, Apr 12, 2022 at 10:47:32AM +0530, Rohit Agarwal wrote:
+> Add support for USB3 QMP PHY found in SDX65 platform. SDX65 uses
+> version 5.0.0 of the QMP PHY IP.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 
-In order to mitigate such condition, let's record and skip section which
-has pinned file's data and give priority to select unpinned one.
+I don't have access to SDX65 downstream devicetree source but overall it looks
+good to me.
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
-v5:
-- clean up codes
- fs/f2fs/gc.c      | 83 +++++++++++++++++++++++++++++++++++++++--------
- fs/f2fs/segment.c |  8 +++++
- fs/f2fs/segment.h |  3 ++
- 3 files changed, 80 insertions(+), 14 deletions(-)
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 6a7e4148ff9d..0b3325fe4ffd 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -646,6 +646,51 @@ static void release_victim_entry(struct f2fs_sb_info *sbi)
- 	f2fs_bug_on(sbi, !list_empty(&am->victim_list));
- }
- 
-+static bool f2fs_pin_section(struct f2fs_sb_info *sbi, unsigned int segno)
-+{
-+	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
-+	unsigned int secno = GET_SEC_FROM_SEG(sbi, segno);
-+
-+	if (!dirty_i->enable_pin_section)
-+		return false;
-+	if (!test_and_set_bit(secno, dirty_i->pinned_secmap))
-+		dirty_i->pinned_secmap_cnt++;
-+	return true;
-+}
-+
-+static bool f2fs_pinned_section_exists(struct dirty_seglist_info *dirty_i)
-+{
-+	return dirty_i->enable_pin_section && dirty_i->pinned_secmap_cnt;
-+}
-+
-+static bool f2fs_section_is_pinned(struct dirty_seglist_info *dirty_i,
-+						unsigned int secno)
-+{
-+	return f2fs_pinned_section_exists(dirty_i) &&
-+			test_bit(secno, dirty_i->pinned_secmap);
-+}
-+
-+static void f2fs_unpin_all_sections(struct f2fs_sb_info *sbi, bool enable)
-+{
-+	unsigned int bitmap_size = f2fs_bitmap_size(MAIN_SECS(sbi));
-+
-+	memset(DIRTY_I(sbi)->pinned_secmap, 0, bitmap_size);
-+	DIRTY_I(sbi)->pinned_secmap_cnt = 0;
-+	DIRTY_I(sbi)->enable_pin_section = enable;
-+}
-+
-+static bool f2fs_gc_pinned_control(struct inode *inode, int gc_type,
-+							unsigned int segno)
-+{
-+	if (!f2fs_is_pinned_file(inode))
-+		return 0;
-+	if (gc_type != FG_GC)
-+		return -EBUSY;
-+	if (!f2fs_pin_section(F2FS_I_SB(inode), segno))
-+		f2fs_pin_file_control(inode, true);
-+	return -EAGAIN;
-+}
-+
- /*
-  * This function is called from two paths.
-  * One is garbage collection and the other is SSR segment selection.
-@@ -787,6 +832,9 @@ static int get_victim_by_default(struct f2fs_sb_info *sbi,
- 		if (gc_type == BG_GC && test_bit(secno, dirty_i->victim_secmap))
- 			goto next;
- 
-+		if (gc_type == FG_GC && f2fs_section_is_pinned(dirty_i, secno))
-+			goto next;
-+
- 		if (is_atgc) {
- 			add_victim_entry(sbi, &p, segno);
- 			goto next;
-@@ -1201,12 +1249,9 @@ static int move_data_block(struct inode *inode, block_t bidx,
- 		goto out;
- 	}
- 
--	if (f2fs_is_pinned_file(inode)) {
--		if (gc_type == FG_GC)
--			f2fs_pin_file_control(inode, true);
--		err = -EAGAIN;
-+	err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+	if (err)
- 		goto out;
--	}
- 
- 	set_new_dnode(&dn, inode, NULL, NULL, 0);
- 	err = f2fs_get_dnode_of_data(&dn, bidx, LOOKUP_NODE);
-@@ -1351,12 +1396,10 @@ static int move_data_page(struct inode *inode, block_t bidx, int gc_type,
- 		err = -EAGAIN;
- 		goto out;
- 	}
--	if (f2fs_is_pinned_file(inode)) {
--		if (gc_type == FG_GC)
--			f2fs_pin_file_control(inode, true);
--		err = -EAGAIN;
-+
-+	err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+	if (err)
- 		goto out;
--	}
- 
- 	if (gc_type == BG_GC) {
- 		if (PageWriteback(page)) {
-@@ -1476,14 +1519,15 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
- 		ofs_in_node = le16_to_cpu(entry->ofs_in_node);
- 
- 		if (phase == 3) {
-+			int err;
-+
- 			inode = f2fs_iget(sb, dni.ino);
- 			if (IS_ERR(inode) || is_bad_inode(inode) ||
- 					special_file(inode->i_mode))
- 				continue;
- 
--			if (is_inode_flag_set(inode, FI_PIN_FILE) &&
--							gc_type == FG_GC) {
--				f2fs_pin_file_control(inode, true);
-+			err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+			if (err == -EAGAIN) {
- 				iput(inode);
- 				return submitted;
- 			}
-@@ -1766,9 +1810,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 		ret = -EINVAL;
- 		goto stop;
- 	}
-+retry:
- 	ret = __get_victim(sbi, &segno, gc_type);
--	if (ret)
-+	if (ret) {
-+		/* allow to search victim from sections has pinned data */
-+		if (ret == -ENODATA && gc_type == FG_GC &&
-+				f2fs_pinned_section_exists(DIRTY_I(sbi))) {
-+			f2fs_unpin_all_sections(sbi, false);
-+			goto retry;
-+		}
- 		goto stop;
-+	}
- 
- 	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
- 	if (gc_type == FG_GC &&
-@@ -1811,6 +1863,9 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
- 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
- 
-+	if (gc_type == FG_GC && f2fs_pinned_section_exists(DIRTY_I(sbi)))
-+		f2fs_unpin_all_sections(sbi, true);
-+
- 	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
- 				get_pages(sbi, F2FS_DIRTY_NODES),
- 				get_pages(sbi, F2FS_DIRTY_DENTS),
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 22dfeb991529..93c7bae57a25 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -4734,6 +4734,13 @@ static int init_victim_secmap(struct f2fs_sb_info *sbi)
- 	dirty_i->victim_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
- 	if (!dirty_i->victim_secmap)
- 		return -ENOMEM;
-+
-+	dirty_i->pinned_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
-+	if (!dirty_i->pinned_secmap)
-+		return -ENOMEM;
-+
-+	dirty_i->pinned_secmap_cnt = 0;
-+	dirty_i->enable_pin_section = true;
- 	return 0;
- }
- 
-@@ -5322,6 +5329,7 @@ static void destroy_victim_secmap(struct f2fs_sb_info *sbi)
- {
- 	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
- 
-+	kvfree(dirty_i->pinned_secmap);
- 	kvfree(dirty_i->victim_secmap);
- }
- 
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 5c94caf0c0a1..8a591455d796 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -294,6 +294,9 @@ struct dirty_seglist_info {
- 	struct mutex seglist_lock;		/* lock for segment bitmaps */
- 	int nr_dirty[NR_DIRTY_TYPE];		/* # of dirty segments */
- 	unsigned long *victim_secmap;		/* background GC victims */
-+	unsigned long *pinned_secmap;		/* pinned victims from foreground GC */
-+	unsigned int pinned_secmap_cnt;		/* count of victims which has pinned data */
-+	bool enable_pin_section;		/* enable pinning section */
- };
- 
- /* victim selection function for cleaning and SSR */
--- 
-2.25.1
+Thanks,
+Mani
 
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp.c | 76 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index 8ea87c6..58506b8 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> @@ -2535,6 +2535,50 @@ static const struct qmp_phy_init_tbl sdx55_qmp_pcie_pcs_misc_tbl[] = {
+>  	QMP_PHY_INIT_CFG(QPHY_V4_20_PCS_LANE1_INSIG_MX_CTRL2, 0x00),
+>  };
+>  
+> +static const struct qmp_phy_init_tbl sdx65_usb3_uniphy_tx_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_1, 0xa5),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_2, 0x82),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_3, 0x3f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_4, 0x3f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_PI_QEC_CTRL, 0x21),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_RES_CODE_LANE_OFFSET_TX, 0x1f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_TX_RES_CODE_LANE_OFFSET_RX, 0x0b),
+> +};
+> +
+> +static const struct qmp_phy_init_tbl sdx65_usb3_uniphy_rx_tbl[] = {
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_00_HIGH4, 0xdb),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_00_HIGH3, 0xbd),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_00_HIGH2, 0xff),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_00_HIGH, 0x7f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_00_LOW, 0xff),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_01_HIGH4, 0xa9),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_01_HIGH3, 0x7b),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_01_HIGH2, 0xe4),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_01_HIGH, 0x24),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_MODE_01_LOW, 0x64),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_PI_CONTROLS, 0x99),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_SB2_THRESH1, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_SB2_THRESH2, 0x08),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_SB2_GAIN1, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_SB2_GAIN2, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_FASTLOCK_FO_GAIN, 0x2f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_FASTLOCK_COUNT_LOW, 0xff),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_FASTLOCK_COUNT_HIGH, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_FO_GAIN, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_VGA_CAL_CNTRL1, 0x54),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_VGA_CAL_CNTRL2, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_EQU_ADAPTOR_CNTRL2, 0x0f),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_EQU_ADAPTOR_CNTRL4, 0x0a),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1, 0x47),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_RX_OFFSET_ADAPTOR_CNTRL2, 0x80),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_SIGDET_CNTRL, 0x04),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_SIGDET_DEGLITCH_CNTRL, 0x0e),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_DFE_CTLE_POST_CAL_OFFSET, 0x38),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_UCDR_SO_GAIN, 0x05),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_GM_CAL, 0x00),
+> +	QMP_PHY_INIT_CFG(QSERDES_V5_RX_SIGDET_ENABLES, 0x00),
+> +};
+> +
+>  static const struct qmp_phy_init_tbl sm8350_ufsphy_serdes_tbl[] = {
+>  	QMP_PHY_INIT_CFG(QSERDES_V5_COM_SYSCLK_EN_SEL, 0xd9),
+>  	QMP_PHY_INIT_CFG(QSERDES_V5_COM_HSCLK_SEL, 0x11),
+> @@ -4217,6 +4261,35 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
+>  	.pwrdn_delay_max	= 1005,		/* us */
+>  };
+>  
+> +static const struct qmp_phy_cfg sdx65_usb3_uniphy_cfg = {
+> +	.type			= PHY_TYPE_USB3,
+> +	.nlanes			= 1,
+> +
+> +	.serdes_tbl		= sm8150_usb3_uniphy_serdes_tbl,
+> +	.serdes_tbl_num		= ARRAY_SIZE(sm8150_usb3_uniphy_serdes_tbl),
+> +	.tx_tbl			= sdx65_usb3_uniphy_tx_tbl,
+> +	.tx_tbl_num		= ARRAY_SIZE(sdx65_usb3_uniphy_tx_tbl),
+> +	.rx_tbl			= sdx65_usb3_uniphy_rx_tbl,
+> +	.rx_tbl_num		= ARRAY_SIZE(sdx65_usb3_uniphy_rx_tbl),
+> +	.pcs_tbl		= sm8350_usb3_uniphy_pcs_tbl,
+> +	.pcs_tbl_num		= ARRAY_SIZE(sm8350_usb3_uniphy_pcs_tbl),
+> +	.clk_list		= qmp_v4_sdx55_usbphy_clk_l,
+> +	.num_clks		= ARRAY_SIZE(qmp_v4_sdx55_usbphy_clk_l),
+> +	.reset_list		= msm8996_usb3phy_reset_l,
+> +	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+> +	.vreg_list		= qmp_phy_vreg_l,
+> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+> +	.regs			= sm8350_usb3_uniphy_regs_layout,
+> +
+> +	.start_ctrl		= SERDES_START | PCS_START,
+> +	.pwrdn_ctrl		= SW_PWRDN,
+> +	.phy_status		= PHYSTATUS,
+> +
+> +	.has_pwrdn_delay	= true,
+> +	.pwrdn_delay_min	= POWER_DOWN_DELAY_US_MIN,
+> +	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+> +};
+> +
+>  static const struct qmp_phy_cfg sm8350_ufsphy_cfg = {
+>  	.type			= PHY_TYPE_UFS,
+>  	.nlanes			= 2,
+> @@ -6044,6 +6117,9 @@ static const struct of_device_id qcom_qmp_phy_of_match_table[] = {
+>  		.compatible = "qcom,sdx55-qmp-usb3-uni-phy",
+>  		.data = &sdx55_usb3_uniphy_cfg,
+>  	}, {
+> +		.compatible = "qcom,sdx65-qmp-usb3-uni-phy",
+> +		.data = &sdx65_usb3_uniphy_cfg,
+> +	}, {
+>  		.compatible = "qcom,sm8350-qmp-usb3-phy",
+>  		.data = &sm8350_usb3phy_cfg,
+>  	}, {
+> -- 
+> 2.7.4
+> 

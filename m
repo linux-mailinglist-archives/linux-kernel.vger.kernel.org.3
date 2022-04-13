@@ -2,192 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B442500085
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87E050008A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 23:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238771AbiDMVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 17:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S238773AbiDMVHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 17:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbiDMVFn (ORCPT
+        with ESMTP id S230265AbiDMVG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:05:43 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABBB8148A;
-        Wed, 13 Apr 2022 14:03:20 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id c15so3694531ljr.9;
-        Wed, 13 Apr 2022 14:03:20 -0700 (PDT)
+        Wed, 13 Apr 2022 17:06:59 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0EF1EADC;
+        Wed, 13 Apr 2022 14:04:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LZ83DhkBBZG+nmgaAN5JuMecxE6+rXnsPcGZMd6P5Us=;
-        b=A1CrRXIUjnvMG6dKthCK0WPXr1bst9Dthfm7oG9Pdug62bdRKTaJnXSbGLdMQBZOV6
-         ugramo2G/EYDnvAgA+ON3SmPX9KDn3pUo/2i034jKN2SUJY4uQzypxgSP7cAzfzcuskc
-         qSyjDC785Pacz7CSM6MlXhnMd7B6Xqux8oRmHa8xW0e6sziFV9HVSN+LDxJ7O/o3F80O
-         zW0kCbcAeGRT3CJuVXKL06PLQzg90vTFB/zO4EiCT0Pozrt6ym0bhvcMODzlkP8SHLZK
-         /cDTftHemWU/N5nGKE/dwlw1qmVmjS194xBjh+MduBOPrbs60P48KC1Dj5a4rRegioGR
-         TAJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LZ83DhkBBZG+nmgaAN5JuMecxE6+rXnsPcGZMd6P5Us=;
-        b=v6ClH7afCAwsXB546g6fAcfELxZeoR45ZN46SeQfhsZcjYheDwlnBNLAZq/4QNMyrw
-         LkrwN7O3sXwrkYTdX5+gr3F0VcEYq6Qxx0rp5LtXGDigjVC6kZ0UgZuj8dzsFtnRCRIW
-         RypFXDy+eZ+5NytNt0ms2VoB7r7nIPDMNid+Sz1VP1MvuakF/JLz2DonbkPjXFjMvWwc
-         kb479+AFLbKKNJRxt/qZ1nUJF5d/P1XfX7rKtDSQom4zuRaMdT/hYIrTJqXvLuH0EZ6j
-         4zyiR9HFugbYuyNgv5eaum4F2LdD40Upc6Qe1LuYhsaPI5be+DgNcrM/KS+18G+mkrqG
-         KScg==
-X-Gm-Message-State: AOAM533CQbCV/YQ2ZbpPRkqEcn2rPXGcqGAxsOGvKRwZd7uqxgHmfpia
-        q2sh+cLG0l7woP8L/1ar9Iw=
-X-Google-Smtp-Source: ABdhPJzYwv1HlyLnTGVUKLQd2vjVKNQJgZHMVDVmslMcXnVuVOGBNfFyVntbEQ2MADkUqkABZ6pXkQ==
-X-Received: by 2002:a05:651c:992:b0:24b:99c:35c with SMTP id b18-20020a05651c099200b0024b099c035cmr27850033ljq.142.1649883798192;
-        Wed, 13 Apr 2022 14:03:18 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id a16-20020a195f50000000b00464f8b13286sm6288lfj.294.2022.04.13.14.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 14:03:17 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 00:03:15 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/12] PCI: dwc: Don't use generic IO-ops for DBI-space
- access
-Message-ID: <20220413210315.2tsmlgudbz4ezzf2@mobilestation>
-References: <20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru>
- <20220324012524.16784-3-Sergey.Semin@baikalelectronics.ru>
- <20220324082746.GB2854@thinkpad>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649883876; x=1681419876;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=4g9kIwKn84VsdzcM7eVUWEjweV9j7Y7uJiQP/4rq6JE=;
+  b=r0AJ0iQykUeW6GJH+18icmVt3zDwa4aGELAhYJvghoIHdAy0q/hF4+lC
+   XkdmbDa03pEyyE6nkvb5zJ+V/ZQboSoBPfImdhrwvzTfymlgd0MY/H7ID
+   GH6VXkNl7j0wPXuQPoPUUFG/ASILcrTcnglmjdOer7jDAgdPZXRqKFi3e
+   s=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 14:04:36 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:04:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Apr 2022 14:04:35 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Apr 2022 14:04:34 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/msm/dp: stop event kernel thread when DP unbind
+Date:   Wed, 13 Apr 2022 14:04:25 -0700
+Message-ID: <1649883865-9012-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324082746.GB2854@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 01:57:46PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:25:13AM +0300, Serge Semin wrote:
-> > Commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") replaced
-> > the locally defined DW PCIe host controller config-space accessors with
-> > the generic methods pci_generic_config_read() and
-> > pci_generic_config_write(). It was intended that the corresponding
-> > bus-mapping callback returned a correct virtual address of the passed PCI
-> > config-space register. The problem of the proposed solution was that it
-> > didn't take into account the way the host config-space is accessed on the
-> > DW PCIe. Depending on the DW PCIe IP-core synthesize parameters different
-> > interfaces can be used to access the host and peripheral config/memory
-> > spaces. The former one can be accessed via the DBI interface, while the
-> > later ones is reached via the AHB/AXI application bus. In case if the DW
-> > PCIe controller is configured to have a dedicated DBI interface, the way
-> > it is mapped into the IO-memory turns to be platform-specific. For such
-> > setups the DWC PCIe driver provides a set of the callbacks
-> > dw_pcie_ops.{read_dbi,write_dbi} so the platforms glue-drivers would be
-> > able to take into account the DBI bus IO peculiarities. Since
-> > commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") these
-> > methods haven't been utilized during the generic host initialization
-> > performed by the PCIe subsystem code.
-> > 
-> > I don't really know how come there have been no problems spotted for the
-> > Histb/Exynos/Kirin PCIe controllers so far, but in our case with dword
-> > aligned IO requirement the generic config-space accessors can't be
-> > utilized for the host config-space. Thus in order to make sure the host
-> > config-space is properly accessed via the DBI bus let's get back the
-> > dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() methods. They are going to
-> > be just wrappers around the already defined
-> > dw_pcie_read_dbi()/dw_pcie_write_dbi() functions with proper arguments
-> > conversion. These methods perform the platform-specific config-space IO if
-> > the DBI accessors are specified, otherwise they call normal MMIO
-> > operations.
-> > 
-> 
+Current DP driver implementation, event thread is kept running
+after DP display is unbind. This patch fix this problem by disabling
+DP irq and stop event thread to exit gracefully at dp_display_unbind().
 
-> Why can't you override the "pci_ops" in your host driver's "host_init"?
+Changes in v2:
+-- start event thread at dp_display_bind()
 
-I have already defined the platform-specific DBI operations. These
-operations are supposed to be used to access the DBI MMIO including
-the own config space. Not doing so is very wrong and will cause
-problems not only on my platforms, but on all platforms with specific
-DBI implementation (such that requiring some more actions than
-standard {read|write}{b,w,l} ops). So the commit c2b0c098fbd1 ("PCI:
-dwc: Use generic config accessors") shouldn't have introduced the
-generic IOs usage in this case and it needs to be fixed.
+Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 40 +++++++++++++++++++++++++++----------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
 
--Sergey
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 01453db..943e4f1 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -113,6 +113,7 @@ struct dp_display_private {
+ 	u32 hpd_state;
+ 	u32 event_pndx;
+ 	u32 event_gndx;
++	struct task_struct *ev_tsk;
+ 	struct dp_event event_list[DP_EVENT_Q_MAX];
+ 	spinlock_t event_lock;
+ 
+@@ -230,6 +231,31 @@ void dp_display_signal_audio_complete(struct msm_dp *dp_display)
+ 	complete_all(&dp->audio_comp);
+ }
+ 
++static int hpd_event_thread(void *data);
++
++static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
++{
++	init_waitqueue_head(&dp_priv->event_q);
++	spin_lock_init(&dp_priv->event_lock);
++
++	dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
++
++	if (IS_ERR(dp_priv->ev_tsk))
++		DRM_ERROR("failed to create DP event thread\n");
++}
++
++static void dp_hpd_event_stop(struct dp_display_private *dp_priv)
++{
++	if (IS_ERR(dp_priv->ev_tsk))
++		return;
++
++	kthread_stop(dp_priv->ev_tsk);
++
++	/* reset event q to empty */
++	dp_priv->event_gndx = 0;
++	dp_priv->event_pndx = 0;
++}
++
+ static int dp_display_bind(struct device *dev, struct device *master,
+ 			   void *data)
+ {
+@@ -269,6 +295,7 @@ static int dp_display_bind(struct device *dev, struct device *master,
+ 	if (rc)
+ 		DRM_ERROR("Audio registration Dp failed\n");
+ 
++	dp_hpd_event_setup(dp); /* start event thread */
+ end:
+ 	return rc;
+ }
+@@ -280,6 +307,8 @@ static void dp_display_unbind(struct device *dev, struct device *master,
+ 	struct drm_device *drm = dev_get_drvdata(master);
+ 	struct msm_drm_private *priv = drm->dev_private;
+ 
++	disable_irq(dp->irq);
++	dp_hpd_event_stop(dp); /* stop event thread */
+ 	dp_power_client_deinit(dp->power);
+ 	dp_aux_unregister(dp->aux);
+ 	priv->dp[dp->id] = NULL;
+@@ -1054,7 +1083,7 @@ static int hpd_event_thread(void *data)
+ 
+ 	dp_priv = (struct dp_display_private *)data;
+ 
+-	while (1) {
++	while (!kthread_should_stop()) {
+ 		if (timeout_mode) {
+ 			wait_event_timeout(dp_priv->event_q,
+ 				(dp_priv->event_pndx == dp_priv->event_gndx),
+@@ -1132,13 +1161,6 @@ static int hpd_event_thread(void *data)
+ 	return 0;
+ }
+ 
+-static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
+-{
+-	init_waitqueue_head(&dp_priv->event_q);
+-	spin_lock_init(&dp_priv->event_lock);
+-
+-	kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+-}
+ 
+ static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+ {
+@@ -1441,8 +1463,6 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+ 
+ 	dp = container_of(dp_display, struct dp_display_private, dp_display);
+ 
+-	dp_hpd_event_setup(dp);
+-
+ 	dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+ }
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-> 
-> Thanks,
-> Mani
-> 
-> > Fixes: c2b0c098fbd1 ("PCI: dwc: Use generic config accessors")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  .../pci/controller/dwc/pcie-designware-host.c | 34 +++++++++++++++++--
-> >  1 file changed, 32 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > index a03619a30c20..f89e6552139b 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > @@ -528,10 +528,40 @@ void __iomem *dw_pcie_own_conf_map_bus(struct pci_bus *bus, unsigned int devfn,
-> >  }
-> >  EXPORT_SYMBOL_GPL(dw_pcie_own_conf_map_bus);
-> >  
-> > +static int dw_pcie_rd_own_conf(struct pci_bus *bus, unsigned int devfn,
-> > +			       int where, int size, u32 *val)
-> > +{
-> > +	struct pcie_port *pp = bus->sysdata;
-> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> > +
-> > +	if (PCI_SLOT(devfn) > 0) {
-> > +		*val = ~0U;
-> > +		return PCIBIOS_DEVICE_NOT_FOUND;
-> > +	}
-> > +
-> > +	*val = dw_pcie_read_dbi(pci, where, size);
-> > +
-> > +	return PCIBIOS_SUCCESSFUL;
-> > +}
-> > +
-> > +static int dw_pcie_wr_own_conf(struct pci_bus *bus, unsigned int devfn,
-> > +			       int where, int size, u32 val)
-> > +{
-> > +	struct pcie_port *pp = bus->sysdata;
-> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> > +
-> > +	if (PCI_SLOT(devfn) > 0)
-> > +		return PCIBIOS_DEVICE_NOT_FOUND;
-> > +
-> > +	dw_pcie_write_dbi(pci, where, size, val);
-> > +
-> > +	return PCIBIOS_SUCCESSFUL;
-> > +}
-> > +
-> >  static struct pci_ops dw_pcie_ops = {
-> >  	.map_bus = dw_pcie_own_conf_map_bus,
-> > -	.read = pci_generic_config_read,
-> > -	.write = pci_generic_config_write,
-> > +	.read = dw_pcie_rd_own_conf,
-> > +	.write = dw_pcie_wr_own_conf,
-> >  };
-> >  
-> >  void dw_pcie_setup_rc(struct pcie_port *pp)
-> > -- 
-> > 2.35.1
-> > 

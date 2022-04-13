@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9A14FF46A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D734FF473
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiDMKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 06:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
+        id S234659AbiDMKMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 06:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiDMKJM (ORCPT
+        with ESMTP id S231593AbiDMKMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 06:09:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10BA2574A6;
-        Wed, 13 Apr 2022 03:06:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFF7E13D5;
-        Wed, 13 Apr 2022 03:06:51 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.39.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DD6003F73B;
-        Wed, 13 Apr 2022 03:06:46 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     inux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tlb/hugetlb: Add framework to handle PGDIR_SIZE HugeTLB pages
-Date:   Wed, 13 Apr 2022 15:37:14 +0530
-Message-Id: <20220413100714.509888-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 06:12:45 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B651FA5C;
+        Wed, 13 Apr 2022 03:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649844624; x=1681380624;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=mXEo1vMbCQhz7IIKv1PA2DXOYacKulksQjxVdLQuTL8=;
+  b=dxuCIc2HdkPW2o+c1kKtvF1cVybbR4y8jZJ+Pk1fZmmhnA2GKalrIprk
+   r7oFv9Vs5mRDy1LgtTYHCO13JTZCsBv1ISaTXDIvgduQIts50VLj8E0MB
+   wZIfb8ZeOuILIwvaYigAj7EKMQ8OxyaVLHdjS3/CaNqB4RJdqoswvAjoW
+   s=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2022 03:10:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 03:10:23 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Apr 2022 03:10:22 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Apr 2022 03:10:16 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH] ASoC: qcom: lpass-platform: Update memremap flag to MEMREMAP_WC
+Date:   Wed, 13 Apr 2022 15:39:56 +0530
+Message-ID: <1649844596-5264-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change tlb_remove_huge_tlb_entry() to accommodate larger PGDIR_SIZE HugeTLB
-pages via adding a new helper tlb_flush_pgd_range(). While here also update
-struct mmu_gather as required, that is add a new member cleared_pgds.
+Update memremap flag from MEMREMAP_WT to MEMREMAP_WC for better
+performance.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 ---
-This applies on v5.18-rc2, some earlier context could be found here
+ sound/soc/qcom/lpass-platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://lore.kernel.org/all/20220406112124.GD2731@worktop.programming.kicks-ass.net/
-
- include/asm-generic/tlb.h | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index eee6f7763a39..6eaf0080ef2d 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -282,6 +282,7 @@ struct mmu_gather {
- 	unsigned int		cleared_pmds : 1;
- 	unsigned int		cleared_puds : 1;
- 	unsigned int		cleared_p4ds : 1;
-+	unsigned int		cleared_pgds : 1;
+diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
+index a7c677f..2590d65 100644
+--- a/sound/soc/qcom/lpass-platform.c
++++ b/sound/soc/qcom/lpass-platform.c
+@@ -1160,7 +1160,7 @@ static int lpass_platform_prealloc_cdc_dma_buffer(struct snd_soc_component *comp
+ 		break;
+ 	}
  
- 	/*
- 	 * tracks VM_EXEC | VM_HUGETLB in tlb_start_vma
-@@ -325,6 +326,7 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
- 	tlb->cleared_pmds = 0;
- 	tlb->cleared_puds = 0;
- 	tlb->cleared_p4ds = 0;
-+	tlb->cleared_pgds = 0;
- 	/*
- 	 * Do not reset mmu_gather::vma_* fields here, we do not
- 	 * call into tlb_start_vma() again to set them if there is an
-@@ -420,7 +422,7 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
- 	 * these bits.
- 	 */
- 	if (!(tlb->freed_tables || tlb->cleared_ptes || tlb->cleared_pmds ||
--	      tlb->cleared_puds || tlb->cleared_p4ds))
-+	      tlb->cleared_puds || tlb->cleared_p4ds || tlb->cleared_pgds))
- 		return;
+-	buf->area = (unsigned char * __force)memremap(buf->addr, buf->bytes, MEMREMAP_WT);
++	buf->area = (unsigned char * __force)memremap(buf->addr, buf->bytes, MEMREMAP_WC);
  
- 	tlb_flush(tlb);
-@@ -472,6 +474,8 @@ static inline unsigned long tlb_get_unmap_shift(struct mmu_gather *tlb)
- 		return PUD_SHIFT;
- 	if (tlb->cleared_p4ds)
- 		return P4D_SHIFT;
-+	if (tlb->cleared_pgds)
-+		return PGDIR_SHIFT;
- 
- 	return PAGE_SHIFT;
+ 	return 0;
  }
-@@ -545,6 +549,14 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
- 	tlb->cleared_p4ds = 1;
- }
- 
-+static inline void tlb_flush_pgd_range(struct mmu_gather *tlb,
-+				     unsigned long address, unsigned long size)
-+{
-+	__tlb_adjust_range(tlb, address, size);
-+	tlb->cleared_pgds = 1;
-+}
-+
-+
- #ifndef __tlb_remove_tlb_entry
- #define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
- #endif
-@@ -565,7 +577,9 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
- #define tlb_remove_huge_tlb_entry(h, tlb, ptep, address)	\
- 	do {							\
- 		unsigned long _sz = huge_page_size(h);		\
--		if (_sz >= P4D_SIZE)				\
-+		if (_sz >= PGDIR_SIZE)				\
-+			tlb_flush_pgd_range(tlb, address, _sz);	\
-+		else if (_sz >= P4D_SIZE)			\
- 			tlb_flush_p4d_range(tlb, address, _sz);	\
- 		else if (_sz >= PUD_SIZE)			\
- 			tlb_flush_pud_range(tlb, address, _sz);	\
 -- 
-2.20.1
+2.7.4
 

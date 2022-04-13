@@ -2,187 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EE550023E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A6E500247
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 01:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbiDMXG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 19:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S238947AbiDMXIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 19:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiDMXGZ (ORCPT
+        with ESMTP id S232204AbiDMXIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:06:25 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEDC41F98
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:04:02 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id l127so1550305pfl.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 16:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2X3uicfOLSBUBzVzdE5/oWfcLTIRlhFHODXMCALg0vU=;
-        b=Hntq20sATPLdJyU/h7Ttcsthca71JopiVmru2qp5Pz1Iydac/eHjcTEuqaAadrjVwR
-         VxblHLjHcgFpGinccN+V9JEncr6KbwQHvQV1jiboVzjIIlcrWX3V5Ce8ouosHlvAwOon
-         NBactZtCPJIMIqIsH0S71j0QdhVsnVvg0lqPJtql+HXtAiI41ghYXBTbig2IdrP5mGwR
-         p92Qaw+N2NH0OQ9LPtNmyqbL+ZuqbRyeZMq6sNUyZktzAH3SWu/od9znpRAR35/EK3p3
-         8dpoJOiV2nzGwPaq7YoS81ZLzj28tstEEEiWVN2hTN26nSYhRcvPcZQDll5E8EN8O5hH
-         rw9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2X3uicfOLSBUBzVzdE5/oWfcLTIRlhFHODXMCALg0vU=;
-        b=lPwVsNJdcmgYeCqUHmHc9RMa+G6SkTII5F64HJNNK8vUzdAjfalzD2pv0l7neV+8c0
-         2+xrtXlDUfju+YQXZumbwh/IAajkYaAZU3jcywwHrg8DcnHAb6GviEGkbKvBgB8m+jk3
-         9X8wqgNc+3v47d3yXPLLKajS3ioWO1qBKtHUpuslDWlUwHvP6ZMCA8DNBDzH95mgDHoX
-         E6IQdvjpIJ0LBjwh17QpizvROdy/ZbaY1v9RhRuwkxx6RIdr9OZBb33zXeu9+03syifX
-         I69rWvZqr2xGZ4Ld0xu4T+3mTNqo2Phfp/C0OJ0gLhtWOxPCGqDJcXtU3ZxE3JPSKKyl
-         4uYQ==
-X-Gm-Message-State: AOAM533ogqZUXoJ9GKlptNFnW2bS3j/iQMfw56bONH1gjq1yt1QNjxGO
-        LFOSgciOsZPMVNs8ZYMv/o8+0Vn2asz81A==
-X-Google-Smtp-Source: ABdhPJxQYGGnjFJ+ZjvyFpvXZEf+aUEKJKt8206pLdDz3t1VHzuoYNDdbMCmJ/KRmyO9i2QRxzLE4Q==
-X-Received: by 2002:a63:5d4c:0:b0:39d:5470:efc7 with SMTP id o12-20020a635d4c000000b0039d5470efc7mr14682488pgm.27.1649891042130;
-        Wed, 13 Apr 2022 16:04:02 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b11-20020a621b0b000000b00505c6892effsm141831pfb.26.2022.04.13.16.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 16:04:01 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 23:03:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v5 08/10] KVM: x86/MMU: Allow NX huge pages to be
- disabled on a per-vm basis
-Message-ID: <YldW3QEDM5Z0Y5Mn@google.com>
-References: <20220413175944.71705-1-bgardon@google.com>
- <20220413175944.71705-9-bgardon@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413175944.71705-9-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 19:08:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAF92528F;
+        Wed, 13 Apr 2022 16:06:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06A58B82792;
+        Wed, 13 Apr 2022 23:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C680C385A6;
+        Wed, 13 Apr 2022 23:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649891174;
+        bh=eWoWonxCoNljYRVKhnJBW3w5BMc5SBWugMCEjTpDLok=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uautVyWW7P+lnFbIYbKqQvYsgSb1d1GQNLDfUD7PP4uDY3dCRtkoxX6WprnGiGjDX
+         muWyGww4K9gep2e/lBXV5QH7pCc6JtvesX0EBVAEiTZCD9aSH7nIUElYh5TxwoME8p
+         4zN8t8UJIoW3og8ciJqnby5CyJtwW4azwqjMcf2s=
+Date:   Wed, 13 Apr 2022 16:06:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Daniel Colascione <dancol@google.com>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm/smaps_rollup: return empty file for kthreads instead
+ of ESRCH
+Message-Id: <20220413160613.385269bf45a9ebb2f7223ca8@linux-foundation.org>
+In-Reply-To: <1649886492.rqei1nn3vm.none@localhost>
+References: <20220413211357.26938-1-alex_y_xu.ref@yahoo.ca>
+        <20220413211357.26938-1-alex_y_xu@yahoo.ca>
+        <20220413142748.a5796e31e567a6205c850ae7@linux-foundation.org>
+        <1649886492.rqei1nn3vm.none@localhost>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022, Ben Gardon wrote:
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 72183ae628f7..021452a9fa91 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7855,6 +7855,19 @@ At this time, KVM_PMU_CAP_DISABLE is the only capability.  Setting
->  this capability will disable PMU virtualization for that VM.  Usermode
->  should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
->  
-> +8.36 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-> +---------------------------
-> +
-> +:Capability KVM_CAP_PMU_CAPABILITY
-> +:Architectures: x86
-> +:Type: vm
-> +:Returns 0 on success, -EPERM if the userspace process does not
-> +	 have CAP_SYS_BOOT
+On Wed, 13 Apr 2022 18:25:53 -0400 "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
 
-Needs to document the -EINVAL cases, especially the requirement that this be
-called before VMs are created.  The 
+> Excerpts from Andrew Morton's message of April 13, 2022 5:27 pm:
+> > On Wed, 13 Apr 2022 17:13:57 -0400 "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
+> > 
+> >> This restores the behavior prior to 258f669e7e88 ("mm:
+> >> /proc/pid/smaps_rollup: convert to single value seq_file"), making it
+> >> once again consistent with maps and smaps, and allowing patterns like
+> >> awk '$1=="Anonymous:"{x+=$2}END{print x}' /proc/*/smaps_rollup to work.
+> >> Searching all Debian packages for "smaps_rollup" did not find any
+> >> programs which would be affected by this change.
+> > 
+> > Thanks.
+> > 
+> > 258f669e7e88 was 4 years ago, so I guess a -stable backport isn't
+> > really needed.
+> > 
+> > However, we need to be concerned about causing new regressions, and I
+> > don't think you've presented enough information for this to be determined.
+> > 
+> > So please provide us with a full description of how the smaps_rollup
+> > output will be altered by this patch.  Quoting example output would be
+> > helpful.
+> > 
+> > 
+> 
+> Current behavior (4.19+):
+> 
+> $ cat /proc/2/smaps; echo $?
+> 0
+> $ cat /proc/2/smaps_rollup; echo $?
+> cat: /proc/2/smaps_rollup: No such process
+> 1
+> $ strace -yP /proc/2/smaps_rollup cat /proc/2/smaps_rollup
+> openat(AT_FDCWD</>, "/proc/2/smaps_rollup", O_RDONLY) = 3</proc/2/smaps_rollup>
+> newfstatat(3</proc/2/smaps_rollup>, "", {st_mode=S_IFREG|0444, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> fadvise64(3</proc/2/smaps_rollup>, 0, 0, POSIX_FADV_SEQUENTIAL) = 0
+> read(3</proc/2/smaps_rollup>, 0x7fa475f5d000, 131072) = -1 ESRCH (No such process)
+> cat: /proc/2/smaps_rollup: No such process
+> close(3</proc/2/smaps_rollup>)          = 0
+> +++ exited with 1 +++
+> 
+> Pre-4.19 and post-patch behavior:
+> 
+> $ cat /proc/2/smaps; echo $?
+> 0
+> $ cat /proc/2/smaps_rollup; echo $?
+> 0
+> $ strace -yP /proc/2/smaps_rollup cat /proc/2/smaps_rollup
+> openat(AT_FDCWD</>, "/proc/2/smaps_rollup", O_RDONLY) = 3</proc/2/smaps_rollup>
+> newfstatat(3</proc/2/smaps_rollup>, "", {st_mode=S_IFREG|0444, st_size=0, ...}, AT_EMPTY_PATH) = 0
+> fadvise64(3</proc/2/smaps_rollup>, 0, 0, POSIX_FADV_SEQUENTIAL) = 0
+> read(3</proc/2/smaps_rollup>, "", 131072) = 0
+> close(3</proc/2/smaps_rollup>)          = 0
+> +++ exited with 0 +++
 
-> +This capability disables the NX huge pages mitigation for iTLB MULTIHIT.
-> +
-> +The capability has no effect if the nx_huge_pages module parameter is not set.
-> +
->  9. Known KVM API problems
->  =========================
->  
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 2c20f715f009..b8ab4fa7d4b2 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1240,6 +1240,8 @@ struct kvm_arch {
->  	hpa_t	hv_root_tdp;
->  	spinlock_t hv_root_tdp_lock;
->  #endif
-> +
-> +	bool disable_nx_huge_pages;
->  };
->  
->  struct kvm_vm_stat {
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 671cfeccf04e..148f630af78a 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -173,9 +173,10 @@ struct kvm_page_fault {
->  int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
->  
->  extern int nx_huge_pages;
-> -static inline bool is_nx_huge_page_enabled(void)
-> +static inline bool is_nx_huge_page_enabled(struct kvm *kvm)
->  {
-> -	return READ_ONCE(nx_huge_pages);
-> +	return READ_ONCE(nx_huge_pages) &&
-> +	       !kvm->arch.disable_nx_huge_pages;
+OK, thanks.
 
-No need for a newline, that fits on a single line.
+But the current behaviour is appropriate, isn't it?  An attempt to read
+the maps of a process which has no maps returns -ESRCH.  Seems sensible
+enough.
 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 566548a3efa7..03aa1e0f60e2 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1469,7 +1469,8 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
->  	 * not been linked in yet and thus is not reachable from any other CPU.
->  	 */
->  	for (i = 0; i < PT64_ENT_PER_PAGE; i++)
-> -		sp->spt[i] = make_huge_page_split_spte(huge_spte, level, i);
-> +		sp->spt[i] = make_huge_page_split_spte(kvm, huge_spte,
-> +						       level, i);
+On the other hand, returning a zero-length read() is also appropriate.
 
-Just let this poke past 80 chars.
+> I agree that this type of change must be done carefully to avoid 
+> introducing inadvertent regressions. However, I think this particular 
+> change is highly unlikely to introduce regressions for the following 
+> reasons:
+> 
+> 1. I cannot think of a plausible case which would be affected. The only 
+>    case I can possibly imagine is a program checking whether a process 
+>    is a kernel thread, but this seems like a particularly silly method. 
+>    Moreover, the method is already broken on kernels before 4.14 
+>    (because smaps_rollup does not exist) and before 4.19 (because 
+>    smaps_rollup worked like smaps). A plausible method would be opening 
+>    /proc/x/(s)maps and checking that it is empty, which some programs 
+>    actually do.
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 665c1fa8bb57..27631c3b53c2 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4286,6 +4286,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_SYS_ATTRIBUTES:
->  	case KVM_CAP_VAPIC:
->  	case KVM_CAP_ENABLE_CAP:
-> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
->  		r = 1;
->  		break;
->  	case KVM_CAP_EXIT_HYPERCALL:
-> @@ -6079,6 +6080,28 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  		}
->  		mutex_unlock(&kvm->lock);
->  		break;
-> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-> +		r = -EINVAL;
-> +		if (cap->args[0])
-> +			break;
-> +
-> +		/*
-> +		 * Since the risk of disabling NX hugepages is a guest crashing
-> +		 * the system, ensure the userspace process has permission to
-> +		 * reboot the system.
+Well, I suppose a poorly coded application could do something like
 
-Since I'm nitpicking already and there's also a comment...
+	if (read(fd, buf, 1000) >= 0)
+		assume_buf_now_contains_data()
 
-Can you call out that, unlike the actual reboot() syscall, the process needs the
-capability in the init? namespace (I don't actual know the terminology) because
-exposing /dev/kvm into a container doesn't magically limit the iTLB multihit bug
-to that container.  I.e. that this _must_ use capable(), not ns_capable().	
+> 2. Research on Debian Code Search did not find any apparent cases. I also 
+>    searched GitHub Code Search but found too many irrelevant results with 
+>    no useful way to filter them out.
 
-Amusingly, someone could subvert the selftest's SYS_reboot heuristic by running
-the test in a container :-)
+I don't think this will work very well.  smaps_rollup is the sort of
+system tuning thing for which organizations will develop in-house
+tooling which never get relesaed externally.
+
+> 3. As mentioned previously, this was already the behavior between 4.14 
+>    and 4.18 (inclusive).
+> 
+
+Yup.  Hm, tricky.  I'd prefer to leave it alone if possible.  How
+serious a problem is this, really?  

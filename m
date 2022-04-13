@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EA44FF094
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26C64FF096
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 09:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiDMHc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 03:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S233358AbiDMHdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 03:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiDMHck (ORCPT
+        with ESMTP id S233373AbiDMHdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:32:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D025FB0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1332E611BE
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C545C385A4;
-        Wed, 13 Apr 2022 07:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649835019;
-        bh=tnsDDmAz5jCh8QzAGMRo7VrdbOtjp8Lv5iT4u54iBtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QbJH6qYtsbwXLt8vy2i1ZR94jc4HOVOLE3f/OrrBJSh4/VjzzWvAsZdKHNjc3g5+L
-         rLzWCPoDhg40J4Va02FgWnDHZY0ip3Ib6vYzwgo/snrIWP2zEhXXZa67HiiR3qpU6l
-         z6r+RxPJD9L74xo+hqartNiLu60/2x4EuCdDn640VZ/x0qlAKuGhxP1/+MvFfaU+hX
-         WOMTZazleoMig5cNnteiuM2oYrIV7GwLz5CzdG/B39ijHn2XX2KDCYD0KjvhDOhl6l
-         ksAcAw8Lu85vg4JDI5y6JmMaZBmnGhzcKBCjMy4tcq0iRMT1ioh6/WqNZSiaXeP8pW
-         rMtk6/tJ8oAWg==
-Date:   Wed, 13 Apr 2022 09:30:12 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, lkp@lists.01.org,
-        lkp@intel.com, guobing.chen@intel.com, ming.a.chen@intel.com,
-        frank.du@intel.com, Shuhua.Fan@intel.com, wangyang.guo@intel.com,
-        Wenhuan.Huang@intel.com, jessica.ji@intel.com, shan.kang@intel.com,
-        guangli.li@intel.com, tiejun.li@intel.com, yu.ma@intel.com,
-        dapeng1.mi@intel.com, jiebin.sun@intel.com, gengxin.xie@intel.com,
-        fan.zhao@intel.com, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [ovl]  30f9ef9479: BUG:kernel_NULL_pointer_dereference,address
-Message-ID: <20220413073012.qwtlopbcbbkffaby@wittgenstein>
-References: <20220407094023.GA13500@xsang-OptiPlex-9020>
- <20220407102605.ipstobkadq34gmzg@wittgenstein>
- <20220411090719.GA21954@xsang-OptiPlex-9020>
+        Wed, 13 Apr 2022 03:33:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5843393
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 00:30:43 -0700 (PDT)
+Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdZ281BQCzFpnZ;
+        Wed, 13 Apr 2022 15:28:16 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 15:30:40 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 15:30:39 +0800
+Message-ID: <976b642a-4085-ac8f-1377-cc8f295203a2@huawei.com>
+Date:   Wed, 13 Apr 2022 15:30:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220411090719.GA21954@xsang-OptiPlex-9020>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to
+ machine check safe
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>
+References: <20220412072552.2526871-1-tongtiangen@huawei.com>
+ <20220412072552.2526871-5-tongtiangen@huawei.com>
+ <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 05:07:19PM +0800, Oliver Sang wrote:
-> hi, Christian,
+
+
+在 2022/4/13 1:08, Robin Murphy 写道:
+> On 12/04/2022 8:25 am, Tong Tiangen wrote:
+> [...]
+>> diff --git a/arch/arm64/include/asm/asm-uaccess.h 
+>> b/arch/arm64/include/asm/asm-uaccess.h
+>> index 0557af834e03..bb17f0829042 100644
+>> --- a/arch/arm64/include/asm/asm-uaccess.h
+>> +++ b/arch/arm64/include/asm/asm-uaccess.h
+>> @@ -92,4 +92,20 @@ alternative_else_nop_endif
+>>           _asm_extable    8888b,\l;
+>>       .endm
+>> +
+>> +    .macro user_ldp_mc l, reg1, reg2, addr, post_inc
+>> +8888:        ldtr    \reg1, [\addr];
+>> +8889:        ldtr    \reg2, [\addr, #8];
+>> +        add    \addr, \addr, \post_inc;
+>> +
+>> +        _asm_extable_uaccess_mc    8888b, \l;
+>> +        _asm_extable_uaccess_mc    8889b, \l;
+>> +    .endm
 > 
-> On Thu, Apr 07, 2022 at 12:26:05PM +0200, Christian Brauner wrote:
-> > On Thu, Apr 07, 2022 at 05:40:23PM +0800, kernel test robot wrote:
-> > > 
-> > > 
-> > > Greeting,
-> > > 
-> > > FYI, we noticed the following commit (built with gcc-11):
-> > > 
-> > > commit: 30f9ef94795008e5146f69d2eb043922a512bf85 ("ovl: support idmapped layers")
-> > > https://github.com/ammarfaizi2/linux-block brauner/linux/fs.idmapped.overlayfs.v3
-> > 
-> > That's an old branch. :)
-> > Anything that has a *.v<idx> appended is basically an old version in my
-> > tree. The base branch is always the branch name without the *.v<idx>
-> > suffix.
+> You're replacing the only user of this, so please just 
+> s/_asm_extable/_asm_extable_uaccess_mc/ in the existing macro and save 
+> the rest of the churn.
 > 
-> got it. so there is no need to test these *.v<idx> branches, whatever build,
-> boot or function, right? If so, we will disable it.
+> Furthermore, how come you're not similarly updating user_stp, given that 
+> you *are* updating the other stores in copy_to_user?
 
-Yeah, I maintain *.v<idx> branches around. Each time I need to send a
-new version of a patchset I do:
+I think all load/store instructions should be handled.
 
-git checkout -b base.branch.v<idx> base.branch
+Generally speaking, the load operation will receive a sea when consuming 
+a hardware memory error, and the store operation will not receive a sea 
+when consuming a hardware error. Depends on chip behavior.
 
-and then continue working on
+So add store class instructions to processed is no harm.
 
-git checkout base.branch
+If there is any problem with my understanding, correct me.
 
-for the new version. :)
+Thanks,
+Tong.
 
-I try to make sure to only push base.branch to git.kernel.org once I
-know it builds fine. Before that I only push to other code-hosting
-platforms. One of the reasons being that I try to avoid upsetting the
-various build bots. :)
+> 
+>> +
+>> +    .macro user_ldst_mc l, inst, reg, addr, post_inc
+>> +8888:        \inst        \reg, [\addr];
+>> +        add        \addr, \addr, \post_inc;
+>> +
+>> +        _asm_extable_uaccess_mc    8888b, \l;
+>> +    .endm
+>
+[...]

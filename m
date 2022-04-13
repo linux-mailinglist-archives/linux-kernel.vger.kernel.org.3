@@ -2,121 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4D64FEE5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 06:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B0B4FEE5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 06:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiDMEqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 00:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S231951AbiDMEs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 00:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiDMEql (ORCPT
+        with ESMTP id S229454AbiDMEsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 00:46:41 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA9C1F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:44:20 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id bk12so567484qkb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:44:20 -0700 (PDT)
+        Wed, 13 Apr 2022 00:48:54 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C577F25C5B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:46:34 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id 12so937296pll.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZLPVnz8+CmyHrIBYurkIW2TTvDikbuZwnfUEIgf50uI=;
-        b=nANZ40d7vawO4uMCRvgPuFdQC14wrez+F1spKBqrPRbKH/PbQhWPj3BukiLVnold9U
-         0wojkJNsY/E/O3lZwDBdyV/13isiyg56SFHMum30GeQ7MI5Wf/DZFDN4R1G32WD6xGX0
-         CLBFcVbLaS3pLQPo0qSRfDpIi+erD8//drjNs+KK0WU5rBicFeJqf8yEhHO2LP1gUIZO
-         VSEo1ZYvh6MXAXGgL0PXgLBXlaV14PDz+1RGQhj+FMImklOK2cNXja9eacJOGDduK6Rv
-         pp598Y/ISAHe/3kuBj/Ay5qTboJIMigTawILJSa59NyK7yV0Poy7rwUcusXQxPXhWbBG
-         cbKA==
+         :content-disposition:in-reply-to;
+        bh=ixwzFBt9E7HuXOI8XQF0vh33XwIlUCbbXRafmnp+24Y=;
+        b=LVggo4XJVRaW187fyGpyTH/Q9EdlYrCF6FPME79M5OH4rzn0/Rg6IDLTKBulVCcYzp
+         r/elD6GPga+tRqPoptCT7WSh0ASlkrbREVxZPQgIR+i5sSGFv/KHYxNVTsMHGDxr7/Ku
+         Kpo3r0I2nDzDYEV5QWebcw0DhEPGCJwRBRn2+LckOz9vT2oLjhxwcCkmDjUihyeMedcY
+         nFNibo74pNSuIl4TZ0hGrAWbl1D8W+SelZPzIffNVrcrI92aY92OyPj/X1IWxtDQA07V
+         rQwDsRuGG8JalM7KSCAGTs4qZiFu2ejXwuOVhH3uD48jRDyvo0+9ColcFcpVetoGlfpH
+         tZWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZLPVnz8+CmyHrIBYurkIW2TTvDikbuZwnfUEIgf50uI=;
-        b=iJwWJEki3oHIn3+Fj6M2KRXfchmdbtlQzRokGCd5GryBDSiF3rNtkunxNpw7BiZcYh
-         bEoLYbfFiEGWzY2Mk1Tef0T00ENwQnUQE9ruirppwLWs0A7hWR9YK3EXr4Ajfn6Ku+O4
-         HeVlPbGYFDN/Lh42t7WwgM6cmBZHUaz1w1DGLmXPXB9huIelA7nW+oj6P6iT/tfF260H
-         jHIOdcCCy+mD8kcRMcj1nrqQH2e9MkmhULbMRbbHN4YYwADCFArZoKkzK/J13P0t9ZVS
-         yQYv++rDCobHGNEr6I0NMXN8MH0QupuMpscLuXJcRYfIWm86lQHBhP+OuXunGhLl/0dd
-         /oDw==
-X-Gm-Message-State: AOAM532MxNg33wOwTyzl44ymTrXbNXbu9XRGN720D3UJ2QTAnBZ8VAk9
-        GsEVhAcN//0+GtgHLBQ5eL0=
-X-Google-Smtp-Source: ABdhPJxhvR9BbzTTdUPd0GN26sm1C64fuJ3oWzB8hVSptjitL40jxKTzif/wA+YYGD7UvYGksUmXDg==
-X-Received: by 2002:a05:620a:4014:b0:69c:10af:d98e with SMTP id h20-20020a05620a401400b0069c10afd98emr5471620qko.633.1649825059953;
-        Tue, 12 Apr 2022 21:44:19 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme ([2607:fb90:50fb:900e:5e57:caff:f44b:33f4])
-        by smtp.gmail.com with ESMTPSA id b126-20020a37b284000000b0069a11927e57sm10232117qkf.101.2022.04.12.21.44.18
+         :mime-version:content-disposition:in-reply-to;
+        bh=ixwzFBt9E7HuXOI8XQF0vh33XwIlUCbbXRafmnp+24Y=;
+        b=qBUqM7d4cfDE++k+SVzv8ccKk7MFOBHD8WzJjRNCE2eyOAT553rRXu0kF5IUS3wUmD
+         D624Nn38ZLKvEJdJpgOUyNcB72OWE8sxLloETefZ/0f5mCkuXiuYA6auup5D4etXmLJ7
+         ugNBBH6JiL2vjAh5iSLqn659MSRLmvArUDWMfMl1WL5luS9ZrKyq0FWqDMPZgJ5r+1ke
+         GlAyP+877KoBLLj9GXeBpf6TNHkWXk6dpe9ahvRyNdU4GSISj2d9SGqDkIyz3zbvGF29
+         8c7bRce5APTf+rGL6s0vEOhfz1SPqTq90jNTnf4N8KbOtdQTsnC0FHWOQ6UaNTEQ47jL
+         TV7Q==
+X-Gm-Message-State: AOAM532K42cM9SRVWE4Jq9P06Ie4RB3/AyEF9uJzr9N1ncYx5ESER4E4
+        JjhDqKnZS9o0LCYxhXSSfrm0Tw==
+X-Google-Smtp-Source: ABdhPJxTLzqP8aT1b+Rlq4rXdhmHHhz2huzE6eZ+WJqUoWyNN2hgdjFV030csM9yPUKc5Xh/OSpg+w==
+X-Received: by 2002:a17:90a:af8f:b0:1ca:7bce:ce3b with SMTP id w15-20020a17090aaf8f00b001ca7bcece3bmr8757021pjq.224.1649825194055;
+        Tue, 12 Apr 2022 21:46:34 -0700 (PDT)
+Received: from google.com ([2401:fa00:9:211:7ffa:5afe:e07f:12e1])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056a00234c00b00505deacf78dsm5524208pfj.149.2022.04.12.21.46.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 21:44:19 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 00:44:16 -0400
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] staging: greybus: remove unneeded return
-Message-ID: <20220413044416.GB3357359@jaehee-ThinkPad-X1-Extreme>
-References: <cover.1649793138.git.jhpark1013@gmail.com>
- <d4d01ecdabc492e52a3decebf165d1f584f3b3bf.1649793138.git.jhpark1013@gmail.com>
- <5792471.alqRGMn8q6@leap>
+        Tue, 12 Apr 2022 21:46:33 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:46:20 +1000
+From:   Matthew Bobrowski <repnop@google.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Alois Wohlschlager <alwoju@gmx.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Hildenbrand <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pid: Allow creation of pidfds to threads
+Message-ID: <YlZVnMk39kFHF0Kp@google.com>
+References: <3412128.IC5jYiYEAv@genesis>
+ <20220401070942.odjbuc5wecfayyok@wittgenstein>
+ <5392366.5i5WIIk9Ns@genesis>
+ <20220401094225.epianrz3afrhfrqp@wittgenstein>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5792471.alqRGMn8q6@leap>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220401094225.epianrz3afrhfrqp@wittgenstein>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:35:58PM +0200, Fabio M. De Francesco wrote:
-> On martedì 12 aprile 2022 21:59:15 CEST Jaehee Park wrote:
-> > An empty function with void return type does not need an explicit
-> > return. Issue found by checkpatch.
+On Fri, Apr 01, 2022 at 11:42:25AM +0200, Christian Brauner wrote:
+> On Fri, Apr 01, 2022 at 11:00:27AM +0200, Alois Wohlschlager wrote:
+> > Hello Christian,
 > > 
-> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> > ---
-> >  drivers/staging/greybus/audio_codec.c | 1 -
-> >  1 file changed, 1 deletion(-)
+> > > We originally blocked this because it is not as easy as simply allowing
+> > > pidfds to be created for non-thread-group leaders.
+> > > For a start, pidfd_poll() currently doens't work if pidfd_task() isn't a
+> > > thread-group leader
 > > 
-> > diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/
-> greybus/audio_codec.c
-> > index 0f50d1e51e2c..3e3a16568def 100644
-> > --- a/drivers/staging/greybus/audio_codec.c
-> > +++ b/drivers/staging/greybus/audio_codec.c
-> > @@ -1032,7 +1032,6 @@ static int gbcodec_probe(struct snd_soc_component 
-> *comp)
-> >  static void gbcodec_remove(struct snd_soc_component *comp)
-> >  {
-> >  	/* Empty function for now */
-> > -	return;
-> >  }
-> >  
-> >  static int gbcodec_write(struct snd_soc_component *comp, unsigned int 
-> reg,
-> > -- 
-> > 2.25.1
+> > I did notice the hang there, that's why my patch changes pidfd_poll to return
+> > error on tasks which are not thread-group leaders. IIRC, waiting on specific
+> > threads is not supported by Linux at all, so I don't see a problem with not
+> > supporting it here either.
+> 
+> In general, it would be quite neat if we could get notified about thread
+> exit through poll though. That'd be pretty useful. But maybe it's indeed
+> ok to just not support this (for now at least).
+> 
+> I know that systemd is using pidfds in their event loop so I'd need to
+> see whether they'd want support for this behavior.
+> 
 > > 
-> Hi Jaehee,
+> > > and you'll just hang for CLONE_PIDFD | CLONE_THREAD.
+> > 
+> > No, CLONE_PIDFD | CLONE_THREAD behavior is unchanged, it will still fail with
+> > EINVAL. I actually confirmed this by double-checking right now.
 > 
-> If I recall it correctly, Dan Carpenter suggested to remove this empty 
-> function. 
+> I just used the two flags as a shorthand for pidfds referring to
+> threads. That might've been misleading here.
 > 
-> When developers remove lines of code from a function which becomes empty
-> after the removals, they also remove the resulting empty function and
-> delete all the calls (if there are any left) at the same time.
+> > 
+> > > So at least that needs to be adapated as well and there's likely a bunch
+> > > of other corner-cases I'm forgetting about.
+> > 
+> > I'd be happy to hear about other corner-cases so I can fix them.
 > 
-> Thanks,
+> I need to play with this patch a little and see what current
+> expectations we do have in the code.
 > 
-> Fabio M. De Francesco 
+> There are various consumers of pidfds and they all have been added with
+> the assumption that a pidfd refers to a thread-group leader. We should
+> go through them and see whether changing them to operate on threads is
+> sane before we can just switch the generic helper.
 > 
+> Bot process_madvise() and process_mrelease() should be fine to operate
+> on threads afaict from the discussion when they were added.
 > 
->
+> For pidfd_send_signal() we likely want to at least consider adding the
+> ability to send a thread-specific signal, i.e. supporting tgkill()
+> behavior. As it stands it currently only supports kill()-like behavior
+> where the signal that gets sent is thread-group directed.
+> 
+> I roughly had originally envisioned this to be supportable through the
+> addition of a new flag to pidfd_send_signal() so callers would be able
+> to select whether to send a thread-specific signal or not. What do
+> people think of that?
 
-Thanks Fabio for pointing this out!
+Sorry, I've been on parental leave for the last couple of months and
+I'm now playing catch-up.
+
+For the fanotify API i.e. FAN_REPORT_PIDFD, I don't see there being
+any issues with supporting/returning pidfds which belong to
+non-thread-group leaders. In saying that, for this to be useful from
+the fanotify API POV, I definitely do think we should consider
+supporting the ability to send thread-specific signals via
+pidfd_send_signal(). Adding this extension through the optional flag
+parameter makes sense to me.
+
+> > > Do you have a concrete use-case you want this for?
+> > 
+> > My use-case is basically making pidfd_getfd actually useful for its intended
+> > purpose: there is a seccomp_unotify-based supervisor that wants to obtain a
+> > file descriptor from its guest. This currently does not work if the action to
+> > be forwarded to the supervisor is performed in a secondary thread, since there
+> > is no way to obtain the required pidfd.
+> 
+> Yeah, I'm well aware of that. I've been working around this limitation
+> in our implementation for the seccomp notifier for quite a long time
+> when intercepting the bpf()-syscall.
+
+/M

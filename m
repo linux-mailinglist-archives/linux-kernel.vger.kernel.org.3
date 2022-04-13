@@ -2,111 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1A950021D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F77500229
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 00:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238689AbiDMW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 18:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S238720AbiDMW5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 18:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbiDMW4u (ORCPT
+        with ESMTP id S238050AbiDMW5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 18:56:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110FF2E9C9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 15:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649890467; x=1681426467;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8V4OPc5qWzAYZSVwVpMIb8F9Q8695qCcFacUPCDjceI=;
-  b=X3ZVKCkVSiaEuf9oxESpvnbcstPbFOkBXYlAqjpSLVmsHlJQpgUeL6HM
-   LBUCoZvLdtQgl94sQ3IjP+hcPAIPwmaja00kspA4GR52kFlpfGODji4+q
-   6oNaTClU6nMhwy8Hw0CKwl31yi01uPIBVZJaip/lKt8Y7Oad3lxILrwmh
-   l8aTfiROmMCdaU1oYoel9LbC1worH9nspg+HPRafchA0SZYWja0+I+cDR
-   l7SmuPX1zK78s2JuTp1wMEEQ0ewQFJwh8Anci+UpElDCu6GV76a/y3Jw3
-   acGowP2ckXyuzOE18+6wt+grsrr83cCIvFnP39rqszGR9cKA3yUx/00nO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="250085799"
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="250085799"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 15:54:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="854968940"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Apr 2022 15:54:15 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nelsN-0000gs-2D;
-        Wed, 13 Apr 2022 22:54:15 +0000
-Date:   Thu, 14 Apr 2022 06:54:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yan Zhu <zhuyan34@huawei.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [ammarfaizi2-block:bpf/bpf-next/pr/bpf-sysctl 1/1]
- kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function
- 'unpriv_ebpf_notify'
-Message-ID: <202204140608.VUvJxAlq-lkp@intel.com>
+        Wed, 13 Apr 2022 18:57:20 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD303B299;
+        Wed, 13 Apr 2022 15:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649890497; x=1681426497;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m9Tzk5iuVsfm3l6Vm0LArjqnKY1ATrD/yP8P02JitlM=;
+  b=A6FORCrhBrIgM9aJORJW1uv6Y+ortK+7QD1mFjJflG4/uhD7TCTfrzzc
+   BoZvTnX074nhR7/m+sfplKUbyNv1AU7GJPwLjvUm6/qbBshtoUZ+dMmVc
+   oSfb6boKA79Sh2/3NoPmt/TegE4YLB2jFZNwzoxe/bYaYOlkaTanAkLTI
+   Q=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 15:54:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 15:54:57 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Apr 2022 15:54:56 -0700
+Received: from [10.110.74.164] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
+ 2022 15:54:55 -0700
+Message-ID: <d6ae3572-58db-5264-c26a-9f75de6292a7@quicinc.com>
+Date:   Wed, 13 Apr 2022 15:54:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] bus: mhi: host: Add soc_reset sysfs
+Content-Language: en-US
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <mani@kernel.org>,
+        <quic_hemantk@quicinc.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jeffrey Hugo <jhugo@codeaurora.org>
+References: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
+From:   Bhaumik Vasav Bhatt <quic_bbhatt@quicinc.com>
+In-Reply-To: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/pr/bpf-sysctl
-head:   2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-commit: 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d [1/1] bpf: Move BPF sysctls from kernel/sysctl.c to BPF core
-config: arm64-buildonly-randconfig-r005-20220413 (https://download.01.org/0day-ci/archive/20220414/202204140608.VUvJxAlq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/pr/bpf-sysctl
-        git checkout 2900005ea287b11dcc8c1b9fcf24893b7ff41d6d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/bpf/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
-   void __weak unpriv_ebpf_notify(int new_state)
-               ^
-   kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak unpriv_ebpf_notify(int new_state)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/unpriv_ebpf_notify +4944 kernel/bpf/syscall.c
-
-  4943	
-> 4944	void __weak unpriv_ebpf_notify(int new_state)
-  4945	{
-  4946	}
-  4947	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 4/13/2022 2:00 PM, Jeffrey Hugo wrote:
+> From: Jeffrey Hugo <jhugo@codeaurora.org>
+>
+> The MHI bus supports a standardized hardware reset, which is known as the
+> "SoC Reset".  This reset is similar to the reset sysfs for PCI devices -
+> a hardware mechanism to reset the state back to square one.
+>
+> The MHI SoC Reset is described in the spec as a reset of last resort.  If
+> some unrecoverable error has occurred where other resets have failed, SoC
+> Reset is the "big hammer" that ungracefully resets the device.  This is
+> effectivly the same as yanking the power on the device, and reapplying it.
+> However, depending on the nature of the particular issue, the underlying
+> transport link may remain active and configured.  If the link remains up,
+> the device will flag a MHI system error early in the boot process after
+> the reset is executed, which allows the MHI bus to process a fatal error
+> event, and clean up appropiately.
+>
+> While the SoC Reset is generally intended as a means of recovery when all
+> else has failed, it can be useful in non-error scenarios.  For example,
+> if the device loads firmware from the host filesystem, the device may need
+> to be fully rebooted inorder to pick up the new firmware.  In this
+> scenario, the system administrator may use the soc_reset sysfs to cause
+> the device to pick up the new firmware that the admin placed on the
+> filesystem.
+>
+> Signed-off-by: Jeffrey Hugo <jhugo@codeaurora.org>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> ---
+Reviewed-by: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
+> v2:
+> Rebase
+>
+>   Documentation/ABI/stable/sysfs-bus-mhi | 11 +++++++++++
+>   drivers/bus/mhi/host/init.c            | 14 ++++++++++++++
+>   2 files changed, 25 insertions(+)
+>
+> diff --git a/Documentation/ABI/stable/sysfs-bus-mhi b/Documentation/ABI/stable/sysfs-bus-mhi
+> index ecfe766..306f63e 100644
+> --- a/Documentation/ABI/stable/sysfs-bus-mhi
+> +++ b/Documentation/ABI/stable/sysfs-bus-mhi
+> @@ -19,3 +19,14 @@ Description:	The file holds the OEM PK Hash value of the endpoint device
+>   		read without having the device power on at least once, the file
+>   		will read all 0's.
+>   Users:		Any userspace application or clients interested in device info.
+> +
+> +What:           /sys/bus/mhi/devices/.../soc_reset
+> +Date:           April 2022
+> +KernelVersion:  5.19
+> +Contact:        mhi@lists.linux.dev
+> +Description:	Initiates a SoC reset on the MHI controller.  A SoC reset is
+> +                a reset of last resort, and will require a complete re-init.
+> +                This can be useful as a method of recovery if the device is
+> +                non-responsive, or as a means of loading new firmware as a
+> +                system administration task.
+> +
+> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+> index 04c409b..e12b210 100644
+> --- a/drivers/bus/mhi/host/init.c
+> +++ b/drivers/bus/mhi/host/init.c
+> @@ -108,9 +108,23 @@ static ssize_t oem_pk_hash_show(struct device *dev,
+>   }
+>   static DEVICE_ATTR_RO(oem_pk_hash);
+>   
+> +static ssize_t soc_reset_store(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf,
+> +			       size_t count)
+> +{
+> +	struct mhi_device *mhi_dev = to_mhi_device(dev);
+> +	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
+> +
+> +	mhi_soc_reset(mhi_cntrl);
+> +	return count;
+> +}
+> +static DEVICE_ATTR_WO(soc_reset);
+> +
+>   static struct attribute *mhi_dev_attrs[] = {
+>   	&dev_attr_serial_number.attr,
+>   	&dev_attr_oem_pk_hash.attr,
+> +	&dev_attr_soc_reset.attr,
+>   	NULL,
+>   };
+>   ATTRIBUTE_GROUPS(mhi_dev);

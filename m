@@ -2,277 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B2A4FEEC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7558C4FEECA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiDMFzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S232643AbiDMF5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbiDMFzu (ORCPT
+        with ESMTP id S232623AbiDMF5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:55:50 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD94938DB5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:53:29 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220413055327epoutp045174ae472f5b0c8ee6bfed6b3e745ca6~lXuwvWAjs3151831518epoutp04y
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:53:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220413055327epoutp045174ae472f5b0c8ee6bfed6b3e745ca6~lXuwvWAjs3151831518epoutp04y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1649829207;
-        bh=6ZhMkWjEBIJMwwmZrasFz3lnjYzy1QYa0020sLjnlnw=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=ix202Pd/TcRXELtr81kvcWHm6dq4szeQ8/G7KwfO7ao5jRoldd/nxfvpyzshbaQP1
-         Lv+FO2w1BN1IYzXQi5BnYpWB7flv/nzv2m2SnF5hq03iLpO6z2UOhVLA7VZg+4NWuZ
-         G+ykDDCVmfXe1T1qaICTTEVwdlgxDj5Dl7GZaxtE=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220413055326epcas5p163aff4ce081824980e5b9b89a78814e1~lXuv5m_WI2502325023epcas5p1Z;
-        Wed, 13 Apr 2022 05:53:26 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5A.27.09952.55566526; Wed, 13 Apr 2022 14:53:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2~lXuoeD5FZ1332113321epcas5p3U;
-        Wed, 13 Apr 2022 05:53:18 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220413055318epsmtrp2a9352d11863a347cf6fef962b20559cd~lXuocrkWZ2060120601epsmtrp2N;
-        Wed, 13 Apr 2022 05:53:18 +0000 (GMT)
-X-AuditID: b6c32a4b-4cbff700000226e0-ba-6256655562b6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        42.3F.03370.D4566526; Wed, 13 Apr 2022 14:53:17 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220413055313epsmtip2c2981e443d8654693a34ce6935b2bc7e~lXukmP6jd0059200592epsmtip2c;
-        Wed, 13 Apr 2022 05:53:13 +0000 (GMT)
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        wedsonaf@google.com, boqun.feng@gmail.com,
-        christophe.leroy@csgroup.eu
-Cc:     swboyd@chromium.org, ojeda@kernel.org, ast@kernel.org,
-        gary@garyguo.net, mbenes@suse.cz, ndesaulniers@google.com,
-        void@manifault.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        v.narang@samsung.com, Maninder Singh <maninder1.s@samsung.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-Subject: [PATCH 1/1] kallsyms: add kallsyms_show_value definition in all
- cases
-Date:   Wed, 13 Apr 2022 11:23:05 +0530
-Message-Id: <20220413055305.1768223-1-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Apr 2022 01:57:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48EA31914;
+        Tue, 12 Apr 2022 22:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=PJpELrfEfQuWZjKbDkypA6zC2kpPZACj1HWhDFACoP0=; b=QxThprG+Na/yFzeP7m3gSXB7A8
+        IzoB7l2NbMz9OvDC8mIwBmAvP7syGps1+G03nviB3zx/04zO+khkTqlQXhSZBfxmKlEgP/XH5cZHJ
+        NGf5rHJKbZMulufWM2wsGaSgbyCPziPUCiJ56DSWqPxh1oF2/hPgm/kOvXyFZUbtmYnboJ9JhSvr/
+        S8dW204z9M2bvH0CuXLQi1++c9TQQaNGNTHI7Xx2Dm+RwcyfhW9pVBTw1fW2uhNFjOItNy78fc5oV
+        4oXy9qMIzjYuv4uL10MRtyeg8x03ORao7Tmreky7S2IlpykSZhWAAYdV1sJFUl8R0AnvKbPm+rrcn
+        4UYaMRWw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neVxe-004YiF-N5; Wed, 13 Apr 2022 05:54:40 +0000
+Message-ID: <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org>
+Date:   Tue, 12 Apr 2022 22:54:30 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+Content-Language: en-US
+To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
+        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
+        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+References: <20220412231508.32629-1-libo.chen@oracle.com>
+ <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
+ <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+ <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
+ <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0xTVxzeuff23tJZd62PnYHKrHMDpgW3gSdK3LLIdpNF4uIrYQ9X4Aaa
-        8SitDDAxq4PJYzIalTDaylNjW5BS1iqC0q3UQKEsQ2JAHgFHgWwNC1AIaAnMcjHzv+/3PX6P
-        k8PHRblkIF+WdpZVpElTxKSAuN0eGrrvFHsqPmJRhnSmehIV/1CGofmnQxSqt1zA0PDlKQr1
-        ujwAOa5qcNTXoiNRe+VFAo3oBzA0oJ4AaEa9iiFD5U2A9JdmeGh1fIGH2grGMNRqriFRx/AE
-        huzOawDduWki0QXvKEAFtQbw0TZGq+olmIXHf2DM9cJnGHNXM0IxeW2DFFPVlMnkOaZ5TJOx
-        kGQ6f/ERTIXzc8ZVdxtjfrYYAWOyPCIYV5WDYrxNO4+9FieITmRTZN+xivDD3wiSVaulhPz6
-        7uy24lpKBUa3FwE+H9IfwCV9ThEQ8EV0K4D9ozNkEQh4XswBqL3McIIXQN/gOO4X/IHqBgfJ
-        CS0A3tI+orhiHkB3ez/wu0haAo0t9wi/sIVeAbC74clagdM3MNjs06y5NtPHYI350lpfgt4D
-        56p/XOOF9GGoqecWgXQwLH+4SHH8JugsdxN+jD/nc61a3N8U0vkB0DM7hnGBI7DmrmE9vBn+
-        02GhOBwIvf/eJ7mrs6BV/T2XzQPQpru67v8QunureX4PTodCU0s4R++ApV0NGDd3Iyz2uddH
-        CWFzxQu8B+Y9buRxOAh6Z2cJDjPQrH+GcY/6FTT/asHUIFjz0jmal87R/D+5CuBG8AYrV6Ym
-        scpI+ftpbJZEKU1VZqYlSRLSU5vA2j8N+6wZ/DU2I7EDjA/sAPJx8RZhyTsn40XCRGnOOVaR
-        fkaRmcIq7SCIT4hfF3YlNUpFdJL0LPsty8pZxQsV4wcEqrDJe12+gQchkzJnhr5UnhuXWGA7
-        PvH7iQVPVojjYMzcDmurz3P64/QjJ6+goaPRx9/au9JiK+z74u2irZ2vGLdniCNCEg7Su18l
-        ag8Mmq1ROkf+Ytj+0/2btO4le5DuJ8F0VqQ1lKxOn1LNO4cO3YhS3Y8fMbBnFjp2amtykiOF
-        1i9L3nv6ZCpGsTzuCRU/LBucPKqe7oZ/D82WneumXLER7bYNdT3b+upS8x/I8t2tjqXFtv5K
-        +bu6QwmS3Nhbcecl5ZR3uMu01RyzHH1lBecZGz9hDlCdaVF/iiqCey5m2Hbt/dTQeKJkQ8/G
-        8659sZblN8cEd2Rfx0T95p7OznaFiwllsnR/GK5QSv8DAGiHuxYEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDIsWRmVeSWpSXmKPExsWy7bCSvK5valiSwfcfVhZz1q9hs+htms5k
-        8eXnbXaLNVsamSzuTHrObnHxzGtGiyNTZjFbXN41h83i8Pw2Fou7K24wWdyY8JTR4sOE/0wW
-        K+cvZ7RY0fOB1eL/46+sFvs6HjBZ7N64iM3i+J2nTBaHTs5ltNi+fD2bRePn+4wWHYtXMjqI
-        ecxuuMji8fXmOSaPJZ2/mDx2zrrL7tGy7xa7x4JNpR4tR96yemxa1cnmcWLGbxaPeScDPc6s
-        3sbk0bdlFaPH+i1XWTzOLDjC7vF5k1wAfxSXTUpqTmZZapG+XQJXRsP/qSwFS5Qr9vUuZm9g
-        vC/TxcjJISFgIrFw3RG2LkYuDiGBHYwSO+9MZoZISEv8/PeeBcIWllj57zk7RNEnRolti18w
-        gSTYBPQkVu3awwKSEBHoYpL4uOM/E4jDLLCZSeL/y/Vgo4QF/CSWnzsHNopFQFXi08JWRhCb
-        V8BOYtaaD2wQK+QlZl76zg4RF5Q4OfMJWD0zULx562zmCYx8s5CkZiFJLWBkWsUomVpQnJue
-        W2xYYJSXWq5XnJhbXJqXrpecn7uJERyhWlo7GPes+qB3iJGJg/EQowQHs5IIb796aJIQb0pi
-        ZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTAcfJ2o+sjzq3PO5
-        6s7X/1FpfXZfrulP+ML1uPY9z+JOtRoe36Oc8az6EiHyPyxeR4XuD+dfNGtL58b9t6UMNu1d
-        Wrraa9tuJhH9nGkp3v3v5mxp5VzZcS/qZPTU3X1zAhkr83NUEm9d2xYb+WbZzRfK5063Ryid
-        597IIHyMzzZIMG/Jr8WXE0O/B5zbp/t3JduU+QoVTmE+D/t5UrYJm26rD/JM3x7/6tut8zqr
-        9sVkzRQx6Lv7/EjB2x8RtZlx0lcv/eWtfjJf+8HHhOC9iTPfN/j6ZDG9PKRlvatlkqtffJ7a
-        EoW3JacjM+IeLlC6p7Th4Gv2rJ7/n9reG5cz8PP94cpuna5tVrf1ckpyuhJLcUaioRZzUXEi
-        AN2FOmQ/AwAA
-X-CMS-MailID: 20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2
-References: <CGME20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kallsyms_show_value return false if KALLSYMS is disabled,
-but it's used in module.c also.
-Thus when KALLSYMS is disabled, system will not print module
-load address:
+Hi Libo,
 
-/ # insmod crash.ko
-/ # lsmod
-crash 12288 0 - Live 0x0000000000000000 (O)
+On 4/12/22 19:34, Libo Chen wrote:
+> 
+> 
+> On 4/12/22 19:13, Randy Dunlap wrote:
+>> Hi,
+>>
+>> On 4/12/22 18:35, Libo Chen wrote:
+>>> Hi Randy,
+>>>
+>>> On 4/12/22 17:18, Randy Dunlap wrote:
+>>>> Hi--
+>>>>
+>>>> On 4/12/22 16:15, Libo Chen wrote:
+>>>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
+>>>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
+>>>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
+>>>>> rationale for such dependency.
+>>>>>
+>>>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
+>>>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
+>>>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
+>>>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
+>>>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
+>>>>> There is no reason other architectures cannot given the fact that they
+>>>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
+>>>>> x86.
+>>>>>
+>>>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+>>>>> ---
+>>>>>    lib/Kconfig | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/lib/Kconfig b/lib/Kconfig
+>>>>> index 087e06b4cdfd..7209039dfb59 100644
+>>>>> --- a/lib/Kconfig
+>>>>> +++ b/lib/Kconfig
+>>>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
+>>>>>        bool
+>>>>>      config CPUMASK_OFFSTACK
+>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
+>>>> This "if" dependency only controls whether the Kconfig symbol's prompt is
+>>>> displayed (presented) in kconfig tools. Removing it makes the prompt always
+>>>> be displayed.
+>>>>
+>>>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
+>>>> of DEBUG_PER_CPU_MAPS.
+>>> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
+>>> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
+>> I'm just talking about the Kconfig change below.  Not talking about whatever else
+>> it might require per architecture.
+>>
+>> But you say you have tried that and it doesn't work. What part of it doesn't work?
+>> The Kconfig part or some code execution?
+> oh the Kconfig part. For example, make olddefconfig on a config file with CPUMASK_OFFSTACK=y only turns off CPUMASK_OFFSTACK unless I explicitly set DEBUG_PER_CPU_MAPS=y
 
-After change (making definition generic)
-============
-/ # lsmod
-crash 12288 0 - Live 0xffff800000ec0000 (O)
-/ # cat /proc/modules
-crash 12288 0 - Live 0xffff800000ec0000 (O)
-/ #
+I can enable CPUMASK_OFFSTACK for arm64 without having DEBUG_PER_CPU_MAPS enabled.
+(with a patch, of course.)
+It builds OK. I don't know if it will run OK.
 
-Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
-Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
----
- include/linux/kallsyms.h | 11 +++--------
- kernel/kallsyms.c        | 35 -----------------------------------
- lib/vsprintf.c           | 36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 43 deletions(-)
+I think that you are arguing for a patch like this:
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index e5ad6e31697d..efabb8c18492 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -24,6 +24,9 @@
- struct cred;
- struct module;
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -511,7 +511,8 @@ config CHECK_SIGNATURE
+ 	bool
  
-+/* How and when do we show kallsyms values? */
-+extern bool kallsyms_show_value(const struct cred *cred);
-+
- static inline int is_kernel_text(unsigned long addr)
- {
- 	if (__is_kernel_text(addr))
-@@ -93,9 +96,6 @@ extern int sprint_backtrace_build_id(char *buffer, unsigned long address);
- int lookup_symbol_name(unsigned long addr, char *symname);
- int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
- 
--/* How and when do we show kallsyms values? */
--extern bool kallsyms_show_value(const struct cred *cred);
--
- #else /* !CONFIG_KALLSYMS */
- 
- static inline unsigned long kallsyms_lookup_name(const char *name)
-@@ -158,11 +158,6 @@ static inline int lookup_symbol_attrs(unsigned long addr, unsigned long *size, u
- 	return -ERANGE;
- }
- 
--static inline bool kallsyms_show_value(const struct cred *cred)
--{
--	return false;
--}
--
- #endif /*CONFIG_KALLSYMS*/
- 
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index e8d2262ef2d2..71ef15ba20c7 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -818,41 +818,6 @@ static const struct seq_operations kallsyms_op = {
- 	.show = s_show
- };
- 
--static inline int kallsyms_for_perf(void)
--{
--#ifdef CONFIG_PERF_EVENTS
--	extern int sysctl_perf_event_paranoid;
--	if (sysctl_perf_event_paranoid <= 1)
--		return 1;
--#endif
--	return 0;
--}
--
--/*
-- * We show kallsyms information even to normal users if we've enabled
-- * kernel profiling and are explicitly not paranoid (so kptr_restrict
-- * is clear, and sysctl_perf_event_paranoid isn't set).
-- *
-- * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
-- * block even that).
-- */
--bool kallsyms_show_value(const struct cred *cred)
--{
--	switch (kptr_restrict) {
--	case 0:
--		if (kallsyms_for_perf())
--			return true;
--		fallthrough;
--	case 1:
--		if (security_capable(cred, &init_user_ns, CAP_SYSLOG,
--				     CAP_OPT_NOAUDIT) == 0)
--			return true;
--		fallthrough;
--	default:
--		return false;
--	}
--}
--
- static int kallsyms_open(struct inode *inode, struct file *file)
- {
- 	/*
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 49ef55ffabd7..4bc96a4f3a00 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -870,6 +870,42 @@ static char *default_pointer(char *buf, char *end, const void *ptr,
- 
- int kptr_restrict __read_mostly;
- 
-+static inline int kallsyms_for_perf(void)
-+{
-+#ifdef CONFIG_PERF_EVENTS
-+	extern int sysctl_perf_event_paranoid;
-+
-+	if (sysctl_perf_event_paranoid <= 1)
-+		return 1;
-+#endif
-+	return 0;
-+}
-+
-+/*
-+ * We show kallsyms information even to normal users if we've enabled
-+ * kernel profiling and are explicitly not paranoid (so kptr_restrict
-+ * is clear, and sysctl_perf_event_paranoid isn't set).
-+ *
-+ * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
-+ * block even that).
-+ */
-+bool kallsyms_show_value(const struct cred *cred)
-+{
-+	switch (kptr_restrict) {
-+	case 0:
-+		if (kallsyms_for_perf())
-+			return true;
-+		fallthrough;
-+	case 1:
-+		if (security_capable(cred, &init_user_ns, CAP_SYSLOG,
-+				     CAP_OPT_NOAUDIT) == 0)
-+			return true;
-+		fallthrough;
-+	default:
-+		return false;
-+	}
-+}
-+
- static noinline_for_stack
- char *restricted_pointer(char *buf, char *end, const void *ptr,
- 			 struct printf_spec spec)
+ config CPUMASK_OFFSTACK
+-	bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
++	bool "Force CPU masks off stack"
++	depends on DEBUG_PER_CPU_MAPS
+ 	help
+ 	  Use dynamic allocation for cpumask_var_t, instead of putting
+ 	  them on the stack.  This is a bit more expensive, but avoids
+
+
+As I said earlier, the "if" on the "bool" line just controls the prompt message.
+This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
+
+
+> Libo
+>> I'll test the Kconfig part of it later (in a few hours).
+>>
+>>> Libo
+>>>> Is there another problem here?
+>>>>
+>>>>> +    bool "Force CPU masks off stack"
+>>>>>        help
+>>>>>          Use dynamic allocation for cpumask_var_t, instead of putting
+>>>>>          them on the stack.  This is a bit more expensive, but avoids
+> 
+
 -- 
-2.17.1
-
+~Randy

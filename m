@@ -2,48 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1841F4FEE6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15CE4FEE72
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 07:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiDMFRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 01:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S232390AbiDMFUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 01:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiDMFRh (ORCPT
+        with ESMTP id S229478AbiDMFT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:17:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF224F47D;
-        Tue, 12 Apr 2022 22:15:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdW4g0cXxz4xNp;
-        Wed, 13 Apr 2022 15:15:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649826915;
-        bh=MJI2fvsqvA9AcqaZGQX/nWxrCq8mpakwYuiN3F16N38=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aOhLdYA33e4fYIAULVFU3kMY9Qil0vVCsC7PujqgYw9cyBZWRLI+z7Y3t1KsMTghF
-         o+BnCLEV6dckcSIde7ZkD2Tg5uVj3PRB4kwhXNn9xRFRF0HZkWckp53n74tE5kXAkp
-         0MfcVRAW3oYBrxZNK4eLLZo2kZ0+6GjMvldAtLG6eVCq8JdUPXdWYHVF0TWHwD4sqZ
-         f4NgAEnIthn0BaFch5yl0FwCCffJPMfGXQq0ZUu1d6EcGPobBF5jjc54S9V4gEiuYM
-         pFVKFtT3mSqGlLGGcGsD8/j4KqhP28aFRPjo3rENQCYB8EuAmPVQtEP7jI/2ZdDMhr
-         6VqdQ50faXMCw==
-Date:   Wed, 13 Apr 2022 15:15:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yu Zhao <yuzhao@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20220413151513.5a0d7a7e@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//kAm4UCa8YTpBahUwuBLnat";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 13 Apr 2022 01:19:59 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A80D65E7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:17:39 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b15so1019662pfm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=qKdnsHbCO7pP3uEagIAEVEW5aLCkOugF8FrrZybf0t4=;
+        b=Y4SbTLcFvJTIwS1+Ez/SWHb1/JMXuzjPG+yjUp+RBTwjzogohF+Rw/KDrRMf0Uhpl9
+         nkLeG3868Zo+ZT48Yx6WlyiSvcNo1IZ33Ini3NzSn8Milk+pBrRFCT4b8R6xSR61ffmZ
+         1fBUHIy5a6PuZEsqKh1lYBWNDxT7zvRZQQfb1J6nOo6q9OgLqIBjvHYBH9ujqSeITKSW
+         m+8u6QsjTLoZAghpbnFxjRv1h4S3OVH3nVhatr/e8VX0goLycQM6GxoKcp8FYvsTr+xr
+         OfM+t+grXOUfutjmlJJBDGAKG+65P1XWV5Vyc0KkjuDsO/Zy5DKPNBrQ4+Az8SeOu6ut
+         exBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=qKdnsHbCO7pP3uEagIAEVEW5aLCkOugF8FrrZybf0t4=;
+        b=Z/2bP9zhQDXCmneQeGwXzXfmM0RhA17I0ZQgE8vY6oQWhcWVnXnnW8Z005xWvCAnbs
+         tMX+pWdid22X0oQjiWrkMjPuX6qfdBFhgAZtAu96nwbb0EG2JlEp1viNapZxdfcRMKIv
+         yGS0bEQISEHypWPV3y84ZKagcHStPSCjktLw2ab5sEKT8w079PAs2EuryRI/JvHXPcFw
+         L+uRKk6psbT/hnZW7mcsJBaKETkdVOgggK2B2aT2LjiVr96BMZO5A/z63UireOUYuKco
+         GVRFSGbw9DkcERPr7NHWmmPW2Yq6ls81ggjk0ntswgvyo3eB5XUOIDIE3L/gJj6e2ilx
+         xxTw==
+X-Gm-Message-State: AOAM532T7ufeVn0IPrR27/b2hncofPm+tCcJJ7db+aoWnVBTPw9BF5W0
+        Tiy6+VH6faPEtBtlKX+LT0I=
+X-Google-Smtp-Source: ABdhPJwlNCjgnq3rWTz0ZvV+7x7rjSzlzuZX/W+ct/kDNdSIY9PRxDWO4sBMxMwMB22OC2O3yEaMRA==
+X-Received: by 2002:a05:6a00:181f:b0:505:a395:3ad5 with SMTP id y31-20020a056a00181f00b00505a3953ad5mr7957568pfa.43.1649827059037;
+        Tue, 12 Apr 2022 22:17:39 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.119.18])
+        by smtp.gmail.com with ESMTPSA id g1-20020a633741000000b0039958c06c53sm4396441pgn.61.2022.04.12.22.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 22:17:38 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     patrik.r.jakobsson@gmail.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, xiam0nd.tong@gmail.com
+Subject: Re: [PATCH v2] drm/gma500: fix a potential repeat execution in psb_driver_load
+Date:   Wed, 13 Apr 2022 13:17:34 +0800
+Message-Id: <20220413051734.5975-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAMeQTsaXM-ddGLukxuEJvm+0UtuJEZGL_5KEY8h9ZPH-ZxmBsQ@mail.gmail.com>
+References: <CAMeQTsaXM-ddGLukxuEJvm+0UtuJEZGL_5KEY8h9ZPH-ZxmBsQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,62 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//kAm4UCa8YTpBahUwuBLnat
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 12 Apr 2022 16:58:24 +0200, Patrik Jakobsson wrote:
+> Hi,
+> This would work but using gotos like this easily turns the code into
+> spaghetti. See "7. Centralized exiting of functions" in
+> Documentation/process/coding-style.rst for when to use gotos.
+> 
+> In this particular case I think we are better off using an
+> if-statement. What about something like this:
+> 
+> if (gma_encoder->type == INTEL_OUTPUT_LVDS ||
+>     gma_encoder->type == INTEL_OUTPUT_MIPI) {
+>         ret = gma_backlight_init();
+>         break;
+> }
 
-Hi all,
+Yes, it looks better.
+I have sent a PATCH v3 with changes as you suggested, please check it.
+Thank you very much.
 
-After merging the akpm-current tree, today's linux-next build (i386
-defconfig) produced this warning:
-
-WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
-  Depends on [n]: PGTABLE_LEVELS [=3D2]>2
-  Selected by [y]:
-  - X86 [=3Dy]
-
-WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
-  Depends on [n]: PGTABLE_LEVELS [=3D2]>2
-  Selected by [y]:
-  - X86 [=3Dy]
-
-WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
-  Depends on [n]: PGTABLE_LEVELS [=3D2]>2
-  Selected by [y]:
-  - X86 [=3Dy]
-
-WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
-  Depends on [n]: PGTABLE_LEVELS [=3D2]>2
-  Selected by [y]:
-  - X86 [=3Dy]
-
-WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
-  Depends on [n]: PGTABLE_LEVELS [=3D2]>2
-  Selected by [y]:
-  - X86 [=3Dy]
-
-Introduced by commit
-
-  7613417c58a8 ("mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//kAm4UCa8YTpBahUwuBLnat
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJWXGEACgkQAVBC80lX
-0GzQ5Qf8DpsmpmwYiIcPI74eKPrL0N3AtDN/ovvirYJ3/lzZ8y6H42ewJYT50zWJ
-LOuKg9wMs9v5ID3byiDHAKyRLeaUiL38tlNk5Rrd3MfaUVxqHVz2zZ/g/hwBD0uB
-F6MFGnVCaH+/WPuI7TnO8QFeGFU0DLOLmCDrt6JySnZi3kb2vbkBvIPEaHlg0QYl
-gjN0uR9EcdE0d6GSphyvmX/oWrsSTCyU/N3Pe2ML7/QFdx8UQkLZ7LQ5Pl/1IBxq
-oHHxzy3ozRhRp4VU85iG2MkkgRjBWGYZSHcMTEJXHm4KLBJgsXCfHAzAjPmVqrqt
-fOUuayh8eskm4bG7l/qVRfh/6WQGmg==
-=ztRJ
------END PGP SIGNATURE-----
-
---Sig_//kAm4UCa8YTpBahUwuBLnat--
+--
+Xiaomeng Tong

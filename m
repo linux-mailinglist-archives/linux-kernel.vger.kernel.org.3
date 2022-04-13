@@ -2,131 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF764FF6F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896124FF6FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiDMMmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S235593AbiDMMnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbiDMMmT (ORCPT
+        with ESMTP id S232476AbiDMMmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:42:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79775FD7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:39:57 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7EE451F856;
-        Wed, 13 Apr 2022 12:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649853596; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oHveYnTR4O71wsHS4RHblj+dtZiwY1YycG/UmcBzgWE=;
-        b=d9PRZucw/+GHfElRTeUb3qeZKy/B31oTOTTEXb92DW6lBJhCaMoUjJuCrY5bCeVxbM1cMT
-        v7IgJRdKfqaeJ++OZm/EGFLxFt6cZqQbpFcyXterl0ehs2bU8qDQXMY3y94H6RF0sqoJRM
-        CE8zoniFt2ivu5mqxCSaFv3PPLJEs9A=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 207F0A3B88;
-        Wed, 13 Apr 2022 12:39:56 +0000 (UTC)
-Date:   Wed, 13 Apr 2022 14:39:53 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
+        Wed, 13 Apr 2022 08:42:55 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559C31D0D3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:40:34 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so3655689ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zFKVdhwqvB7aeF/C+fCQJ8m5WUa4wks0kbfX3z5LRGA=;
+        b=kVUmIEJOVSa2rG4QhjQCm63rdkDtXgmjOT8+HbeZS4FEfQNLk1UBapZ3gdGMRgdSdt
+         8bjEP5KoXaPU9n5Rcc0QPX8e92Ow74z5wQV2h1g+LenQ8df9BPos7L9ZmqN97GDEwfdb
+         i0uZPTsmHBrRqOcGxBSi41jpROFFEm9AJyH38=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zFKVdhwqvB7aeF/C+fCQJ8m5WUa4wks0kbfX3z5LRGA=;
+        b=F9YqZ9G5XGL/CY9H0GbDxsk81pkN2ykY6E1lNSS1GxRy0ZI2dvkUh+N0s3JAS9McNO
+         QOCSZDQnebjNVsQ2FXVhQ8eQq0ckHz63HraL8bcOM4g4VOQlgFSvqn7R2lqHn9HT1ulP
+         6UFOHTapI4mq7soU9xXQPjgmNymJT4MKX5bzaHVADQxv7RSwa4YetBZo/K57FdTxyo84
+         /dEkPz8wuLqV+iuid2YPGJnn8KtIDZO2ooac0Zd4HTlRgJzOSXUMEuVG3XG8H+pgNxNu
+         eHhAMBPWqCD7m6fGEW6KqMIDJdCE1bytgzDO28ITNHsb6Fxui3qScyLqd0E24waIBnMN
+         2wYQ==
+X-Gm-Message-State: AOAM530z8dzc5SFQQ7S7FRjRFGNoZ0PbnrgciQTB0SZq5RXfTxiJt2vt
+        zksWyPfAepqOcaxmnD4uQlNqLg==
+X-Google-Smtp-Source: ABdhPJy1BPF87o/iJmH4a3RGEakNokIfqqqetDp9oGgdS3cHUlPW84nziRj/m21dyZUNEyMqpneb9Q==
+X-Received: by 2002:a17:906:7751:b0:6ce:e3c:81a6 with SMTP id o17-20020a170906775100b006ce0e3c81a6mr36760541ejn.278.1649853632909;
+        Wed, 13 Apr 2022 05:40:32 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (host-95-245-147-71.retail.telecomitalia.it. [95.245.147.71])
+        by smtp.gmail.com with ESMTPSA id k26-20020a056402049a00b004197b0867e0sm1131779edv.42.2022.04.13.05.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 05:40:32 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:40:30 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] printk/index: Printk index feature documentation
-Message-ID: <YlbEmZiGXZmhRvQs@alley>
-References: <20220405114829.31837-1-pmladek@suse.com>
- <Ykw0mdX0GXZWJohH@chrisdown.name>
+Subject: Re: [PATCH] arm64: dts: imx8mm-evk: add pwm1/backlight support
+Message-ID: <20220413124030.GB4713@tom-ThinkPad-T14s-Gen-2i>
+References: <20220413102052.20207-1-tommaso.merciai@amarulasolutions.com>
+ <c6fe3895-29b2-a371-ccae-c5a12c45d4f1@linaro.org>
+ <20220413115810.GA4713@tom-ThinkPad-T14s-Gen-2i>
+ <a4b6c158-da56-7879-04a4-558f751cb372@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ykw0mdX0GXZWJohH@chrisdown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a4b6c158-da56-7879-04a4-558f751cb372@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-04-05 13:22:49, Chris Down wrote:
-> Petr Mladek writes:
-> > Document the printk index feature. The primary motivation is to
-> > explain that it is not creating KABI from particular printk() calls.
+On Wed, Apr 13, 2022 at 02:27:00PM +0200, Krzysztof Kozlowski wrote:
+> On 13/04/2022 13:58, Tommaso Merciai wrote:
+> >>> +	backlight: backlight {
+> >>> +		status = "disabled";
+> >>
+> >> Why disabled?
+> >>
+> >>> +		compatible = "pwm-backlight";
+> >>> +		pwms = <&pwm1 0 5000000>;
+> >>> +		brightness-levels = <0 255>;
+> >>> +		num-interpolated-steps = <255>;
+> >>> +		default-brightness-level = <250>;
+> >>> +	};
+> >>> +
+> >>>  	ir-receiver {
+> >>>  		compatible = "gpio-ir-receiver";
+> >>>  		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+> >>> @@ -395,6 +404,12 @@ &wdog1 {
+> >>>  	status = "okay";
+> >>>  };
+> >>>  
+> >>> +&pwm1 {
+> >>> +	pinctrl-names = "default";
+> >>> +	pinctrl-0 = <&pinctrl_backlight>;
+> >>> +	status = "disabled";
+> >>
+> >> Same here.
+> >>
+> >>
+> >> Best regards,
+> >> Krzysztof
 > > 
-> > Signed-off-by: Petr Mladek <pmladek@suse.com>
-> > Acked-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > Hi Krzysztof,
+> > I think is better to keep disable into .dtsi and enable it at .dts
+> > level.
+> > What do you think about?
 > 
-> This looks great, thanks a lot for spending the time to write this up. Just
-> some very minor comments.
-
-Ah, I forgot to do the small fixup when pushing. So, I did it now are rebased.
-
-> > --- /dev/null
-> > +++ b/Documentation/core-api/printk-index.rst
-> > +User Interface
-> > +==============
-> > +
-> > +The index of printk formats are split in into separate files. The files are
-> > +named according to the binaries where the printk formats are built-in. There
-> > +is always "vmlinux" and optionally also modules, for example::
-> > +
-> > +   /sys/kernel/debug/printk/index/vmlinux
-> > +   /sys/kernel/debug/printk/index/ext4
-> > +   /sys/kernel/debug/printk/index/scsi_mod
-> > +
-> > +Note that only loaded modules are shown. Also printk formats from a module
-> > +might appear in "vmlinux" when the module is built-in.
-> > +
-> > +The content is inspired by the dynamic debug interface and looks like::
+> Why better? This is already board DTSI, not a SoC DTSI. All boards using
+> it are supposed to have it available, aren't they?
 > 
-> s/::/:/
+> Usually nodes should be disabled in a DTSI if they need some resources
+> not available in that DTSI. For example if they need some supply. It's
+> not the case here, right?
 
-The double double dots '::' cause that the following paragraph will be
-block quoting. There is only single ':' in the generated html.
+Hi Krzysztof,
+Yes, right I check both schematics (DSI_BL_PWM). We can set PWM enable.
+I'll update status in v2.
 
-> > +   $> head -1 /sys/kernel/debug/printk/index/vmlinux; shuf -n 5 vmlinux
-> > +   # <level[,flags]> filename:line function "format"
-> > +   <5> block/blk-settings.c:661 disk_stack_limits "%s: Warning: Device %s is misaligned\n"
-> > +   <4> kernel/trace/trace.c:8296 trace_create_file "Could not create tracefs '%s' entry\n"
-> > +   <6> arch/x86/kernel/hpet.c:144 _hpet_print_config "hpet: %s(%d):\n"
-> > +   <6> init/do_mounts.c:605 prepare_namespace "Waiting for root device %s...\n"
-> > +   <6> drivers/acpi/osl.c:1410 acpi_no_auto_serialize_setup "ACPI: auto-serialization disabled\n"
-> > +
-> > +, where the meaning is::
-
-I uses only single double dot here.
-
-> > +   - level: log level
 > 
-> Maybe worth noting that level may not be there if we have a KERN_CONT.
+> 
+> Best regards,
+> Krzysztof
 
-I added:
+Regards,
+Tommaso
 
-   - :level: log level value: 0-7 for particular severity, -1 as default,
-	'c' as continuous line without an explicit log level
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
-> > +   - flags: optional flags: currently only 'c' for KERN_CONT
- > +   - filename:line: source filename and line number of the related
-> > +	printk() call. Note that there are many wrappers, for example,
-> > +	pr_warn(), pr_warn_once(), dev_warn().
-> > +   - function: function name where the printk() call is used.
-> > +   - format: format string
-
-I added few more double dots to generate bold: 'level', 'flags',
-'filename:line', etc.
-
-See the updated commit at
-https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/commit/?h=for-5.19&id=a5c7a39f508ae1fd3288493b96dd26079bae41bf
-
-Best Regards,
-Petr
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

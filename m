@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C911F4FF6B1
+	by mail.lfdr.de (Postfix) with ESMTP id 39D254FF6AF
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbiDMM1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
+        id S235507AbiDMM1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiDMM11 (ORCPT
+        with ESMTP id S235490AbiDMM13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:27:27 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADE55B3D7;
-        Wed, 13 Apr 2022 05:25:06 -0700 (PDT)
+        Wed, 13 Apr 2022 08:27:29 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AD75B3DE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:25:08 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ks6so3627898ejb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649852706; x=1681388706;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EKwk77NQWQ3blrhwRLxsWtVHafSCwKFNqxFUCO9mJVA=;
-  b=bR0SuJ/ykDJTW2RfLFSU93LnvJnAGvORCHKlMlXmZ9aNX6D6RIFFScxC
-   HEK+/hNDoJb9m9/DFZysS8cZ/2/VNWAfUaldH8e1F7p6Nr0VluY1CSFs0
-   88rMOJwhn0OtjFo3OZqyRHWC9SirVisVn+Woh02hsB9D3kb6ghmoqQ0s7
-   o=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Apr 2022 05:25:06 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 05:25:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Apr 2022 05:25:04 -0700
-Received: from [10.216.28.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Apr
- 2022 05:25:01 -0700
-Message-ID: <954fae08-b11a-7a1b-b1b5-49fc2af660a6@quicinc.com>
-Date:   Wed, 13 Apr 2022 17:54:58 +0530
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IPvL+x9UQrwXvR+utNinpI9NAsoIPUuR7BzTYCnsPmc=;
+        b=I6HtBB7uA/yx0vq72axTx9u/3uqWUB99OEtYm5nNLXwI17sSjJos+fifoXsLy57+yP
+         U2KtYRXjs8SZyZrd18o5WhlGMNXFxtIHEtB/xgrqGaR5ByLqNRGLW/HENfnLQA9Jl7Vt
+         bmjosDfmIT0dJiuKMt6iWAKp4XXe3SIeM5KosBgRqvOO9+HVaE60mjmO1qJHsF0vh6xQ
+         VtKnlsgh4C7fu/UxA6Lp3YLM2Hx/mvxP8VK3vMK/Kb+Ow576CmJ8GesR/EQc+Ck0Hmft
+         oLrpUOG8TAzDRXOE21VAtyJ7a6MR1YL15APvvYvfwfhUKYVC71LEK0TtuFpRvmS4wmCs
+         kSng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IPvL+x9UQrwXvR+utNinpI9NAsoIPUuR7BzTYCnsPmc=;
+        b=WSgoDpHeDv5MmZ3CDPccdOhfP1QWEwYSaXrWflmL4ld0vhkOryqSLmZ84xTo+NOfUq
+         eNfrWTjG2BoJjh9bMaOOqhdzBgZ76XUvC3WXqeRp/M9elLnCpK4qRuOSJM4arNE/zwt2
+         lRmnms4JKaxaLzoUl8sWV7mNP4wCwNNMJ5swrgal0wMKihUDs5gBSTXQ7T3JDGz7vkpp
+         7bCJfVtaA9Ju0ZwmiNYDsG/Xq4xVJMPd9XYTr8qMgN6Ww7zHISzUukVU5U7eyvbJc6mK
+         I8mhl8TFx+Lc+TtgtTL8e9QL2nbQhxpvBWfyF7d+rNUFrI+UMo9eeKyVkNHJNylcXswO
+         sZiw==
+X-Gm-Message-State: AOAM532pMIFkYZDUAVxsa2qkoLxvx8mPlcZYrs4DiBEjj6yUwD6NO6Yw
+        jbMa2m/71IYAihWunoHNoJxfpA==
+X-Google-Smtp-Source: ABdhPJz31ZrmQcG0YyMsnYKKIybMJUwfMZzrUtJTz4S+3vdABkkqHUaU2YMflXKJ/VRzTNNjPk62NQ==
+X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr37638157ejx.339.1649852706904;
+        Wed, 13 Apr 2022 05:25:06 -0700 (PDT)
+Received: from [192.168.0.204] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id fu13-20020a170907b00d00b006e8ae97f91asm1987512ejc.64.2022.04.13.05.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 05:25:06 -0700 (PDT)
+Message-ID: <a01f58d5-b42b-e870-1f10-4945d3b6fba6@linaro.org>
+Date:   Wed, 13 Apr 2022 14:25:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SDX65 DT
- bindings
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <djakov@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>
-CC:     <manivannan.sadhasivam@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
- <1649740053-14507-2-git-send-email-quic_rohiagar@quicinc.com>
- <7e1e6c10-c02a-c8da-44c0-ba3abef1950e@linaro.org>
- <99e49c61-4a6a-69c6-810c-581ee0ce5008@quicinc.com>
- <89ad9e08-e0b2-d163-b089-c96ce70509b3@linaro.org>
- <9704adae-54f0-f8f4-1584-aefc2b1de402@quicinc.com>
- <a96f56b6-0959-b672-0521-e44e5d9f6fbc@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <a96f56b6-0959-b672-0521-e44e5d9f6fbc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "J, KEERTHY" <j-keerthy@ti.com>, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        kristo@kernel.org
+Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-2-j-keerthy@ti.com>
+ <17474b72-d823-e1ff-9831-c5f9f887fccd@linaro.org>
+ <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13/04/2022 14:04, J, KEERTHY wrote:
+> Apologies. Some issues with my mailbox. Rob's response didn't reach me 
+> for some reason.
+> 
+> I am now seeing them on the web: 
+> https://lore.kernel.org/lkml/YY7HvCyJ90Ge8mr7@robh.at.kernel.org/
+> 
+> It wasn't deliberate to ignore comments. Apologies.
+> 
+> I will fix them in v6.
 
-On 4/13/2022 5:51 PM, Krzysztof Kozlowski wrote:
-> On 13/04/2022 14:14, Rohit Agarwal wrote:
->> On 4/13/2022 12:03 PM, Krzysztof Kozlowski wrote:
->>> On 13/04/2022 08:29, Rohit Agarwal wrote:
->>>> On 4/12/2022 2:52 PM, Krzysztof Kozlowski wrote:
->>>>> On 12/04/2022 07:07, Rohit Agarwal wrote:
->>>>>> Add interconnect IDs for Qualcomm SDX65 platform.
->>>>>>
->>>>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>>>> (...)
->>>>>
->>>>>> diff --git a/include/dt-bindings/interconnect/qcom,sdx65.h b/include/dt-bindings/interconnect/qcom,sdx65.h
->>>>>> new file mode 100644
->>>>>> index 0000000..8d02c79
->>>>>> --- /dev/null
->>>>>> +++ b/include/dt-bindings/interconnect/qcom,sdx65.h
->>>>>> @@ -0,0 +1,67 @@
->>>>>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>>>> Is it possible to license it the same as bindings (GPL-2.0 OR BSD-2-Clause)?
->>>> The qcom related code are marked as GPL 2.0 license
->>> This I see here, unless you meant some other qcom related code?
->> Yes, I meant the other codes as well because most of them I see (for eg.
->> sdx55) have added only GPL 2.0.
-> Happens, maybe no one pointed out this. The bindings, including headers
-> because these are part of bindings, are expected to have (GPL-2.0 OR
-> BSD-2-Clause) license. Just because some bindings or some binding
-> headers have GPL-2.0, is not a justification that wrong license should
-> be used.
+Sure :)
 
-Okay, understood. Thanks for the clarification. Will update this 
-immediately.
 
-Thanks,
-Rohit.
-
->
-> Best regards,
-> Krzysztof
+Best regards,
+Krzysztof

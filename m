@@ -2,164 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58CF4FFA7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7D04FFA7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 17:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiDMPmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 11:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S236634AbiDMPmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 11:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiDMPmK (ORCPT
+        with ESMTP id S232984AbiDMPmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:42:10 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826AF3E0DD;
-        Wed, 13 Apr 2022 08:39:48 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id p65so4432834ybp.9;
-        Wed, 13 Apr 2022 08:39:48 -0700 (PDT)
+        Wed, 13 Apr 2022 11:42:47 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B159141F8A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:25 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id u19so2668770ljd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 08:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tgBA8s4Eh6rvde/t7B0/fiNRuz5n6J6jdeQ265aYyH8=;
+        b=kpmOrV+KZsPfrkWLBVvU4FwmIyr5wmmpmnDQAUsPiQQOu16NkeZ2WtuBiM882G6/VU
+         A6IyFgCWKc7DSGfE4MdQa1eczopD6TLLAIsjH4fnvhiIoRPkdVCl/92a4jVosMZOnVvb
+         bTsEKLTuk/zR7e+Do+VVY0voHVMqBsnvtFViju+GZc0XutmNUncDv+N+pwW3K+ZZkA1Z
+         y7SBT+/fdHZUPctOpOR/m1oD0SfcuBD7/N8kub9/clKXEeDyPGEouM3iu3OUJdnSmj1b
+         U6oezOy5k6nJWprUM1vzUZp5ykPBOy7tUoN93D76aB2uqOFX6ldZbWpMm4ziIHaa2hdX
+         JqYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ilj9o7n3l/1aK2gZGkvAu8R7H4z8gknEBb05cWzjfsQ=;
-        b=AnmvA+SZjt3/kCY+oKn6By7ac9WAlu7rTX+EmOPyqewm0yZNb5gu6/cE11lS44egtJ
-         XgMjAh9V8szWszCrQY0w2lxYvCsbX1/VzdYITZ9+Foo/Xbtx2EbyDw35KqsTzZTQMtYb
-         ZvBHA3Uu+VRK5LLtn6VWrQbksTRrFtX5e+1jRxNucKGqe9nLx5Sk3whN+bTQ4tu5jaeQ
-         XnLSOmeelxtPiIjMTENqGzcB0qcJGOnhrGsKzA2hozggGlgt/Z2t1nRTbayXJ+s5MDz5
-         f3jPm/rcaShJhuDLP6Jnl3LSDYPkrobeqSKS4+tzu/6VaL7DhGi6jLMU6mySSM0fP43z
-         EByw==
-X-Gm-Message-State: AOAM532n/NCMbVCo+ctMQZn+AD1r7t2t85GDj40X+IzCyCW5wXOFzyoc
-        td+UY9mdvonCP8PjKgZtxi7G7ZKcE1pSqJ/d5e8=
-X-Google-Smtp-Source: ABdhPJy3rSywWLlrRlA3i0ucuEuO0ZcncIrCyV73ZSRe9Ts/0QwHSnh1HJvj1FuMIrBCY+Rt6g7eu8+0KxXy+qOP0cw=
-X-Received: by 2002:a25:e082:0:b0:641:cf5:b91f with SMTP id
- x124-20020a25e082000000b006410cf5b91fmr18196837ybg.482.1649864387664; Wed, 13
- Apr 2022 08:39:47 -0700 (PDT)
+        bh=tgBA8s4Eh6rvde/t7B0/fiNRuz5n6J6jdeQ265aYyH8=;
+        b=Y5JEWuTduvvhBG5Dawv0qmx/xN1TOER30PCspbh6r+b6BuVYygi6E1AyWg8sgReiTK
+         FhxbcKaPpwOvD0O+xIVLvLlwiWhu0LuUd8tzLCUKPKFqc7Vev5jPhp+kpyy6PeYK3VtB
+         M9z5kPKDUKpGDMZUHXFRLRFeuNibDTu8hWXoDFXDr0CmbOADOYVqUTHD2EPEsBrR4cT6
+         yRc2OiOWvK47+FYHOL+1hJ73pQeYOgTFlcWSr0gMypPzS4X/5vT6lLKW1KKxmHZVc3l6
+         4N2pfB2SXT6qTtfdUcO19mAUtGJqKMcSc6rBQ65ZTcW0F12Hee5bWbA0pMo6qtm/mCfX
+         41Hg==
+X-Gm-Message-State: AOAM533ZOjTJAd/V65cvU6C9RbqYyGHmnQ16y4AzSKmRrDutgnZ0w1PY
+        jqzCpFhIB2xbWHjak0UwwEpVRhrDasOlV0jwyDZa7A==
+X-Google-Smtp-Source: ABdhPJxu82n1pQGboxGAUFIx7eeNpvAi4IMWEu1/u0r+gRGn56uFNSTXMnC3B4J/Y4WX0o0oIE2ZIbpRG7C0pPASMwM=
+X-Received: by 2002:a2e:9017:0:b0:24b:6502:d63c with SMTP id
+ h23-20020a2e9017000000b0024b6502d63cmr8831954ljg.426.1649864423326; Wed, 13
+ Apr 2022 08:40:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220407234258.569681-1-yu.c.chen@intel.com> <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
-In-Reply-To: <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 17:39:36 +0200
-Message-ID: <CAJZ5v0jNGYP8zT6_96J6+bxx1p-ngf56GdvXMmscyUCNMMQeSg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency invariance
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Chen Yu <yu.c.chen@intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Len Brown <len.brown@intel.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
+References: <20220411180006.4187548-1-jackyli@google.com>
+In-Reply-To: <20220411180006.4187548-1-jackyli@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 13 Apr 2022 09:40:12 -0600
+Message-ID: <CAMkAt6rzVmi6iFM_phsCEtb1c-r2PYL9SYwSGX6JqWARnDWgWw@mail.gmail.com>
+Subject: Re: [PATCH] crypto: ccp - Fix the INIT_EX data file open failure
+To:     Jacky Li <jackyli@google.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 4:22 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+On Mon, Apr 11, 2022 at 12:00 PM Jacky Li <jackyli@google.com> wrote:
 >
-> On Fri, 2022-04-08 at 07:42 +0800, Chen Yu wrote:
-> > Problem statement:
-> > Once the user has disabled turbo frequency by
-> > echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
-> > the cfs_rq's util_avg becomes quite small when compared with
-> > CPU capacity.
-> >
-> > Step to reproduce:
-> >
-> > echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
-> >
-> > ./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
-> > would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
-> > with a CPU utilization of 99%. [1]
-> >
-> > top result:
-> > %Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-> >
-> > check util_avg:
-> > cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
-> >   .util_avg                      : 611
-> >
-> > So the util_avg/cpu capacity is 611/1024, which is much smaller than
-> > 98.4% shown in the top result.
-> >
-> > This might impact some logic in the scheduler. For example, group_is_overloaded()
-> > would compare the group_capacity and group_util in the sched group, to
-> > check if this sched group is overloaded or not. With this gap, even
-> > when there is a nearly 100% workload, the sched group will not be regarded
-> > as overloaded. Besides group_is_overloaded(), there are also other victims.
-> > There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
-> > The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
-> > This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
-> > domain is overloaded.
-> >
-> > Analysis:
-> > CPU frequency invariance has caused this difference. In summary,
-> > the util_sum of cfs rq would decay quite fast when the CPU is in
-> > idle, when the CPU frequency invariance is enabled.
-> >
-> > The detail is as followed:
-> >
-> > As depicted in update_rq_clock_pelt(), when the frequency invariance
-> > is enabled, there would be two clock variables on each rq, clock_task
-> > and clock_pelt:
-> >
-> >    The clock_pelt scales the time to reflect the effective amount of
-> >    computation done during the running delta time but then syncs back to
-> >    clock_task when rq is idle.
-> >
-> >    absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
-> >    @ max frequency  ------******---------------******---------------
-> >    @ half frequency ------************---------************---------
-> >    clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
-> >
-> > The fast decay of util_sum during idle is due to:
-> > 1. rq->clock_pelt is always behind rq->clock_task
-> > 2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
-> > 3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
-> >    a lot to rq->clock_task
-> > 4. Enters ___update_load_sum() again, the idle period is calculated by
-> >    rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
-> >    The lower the CPU frequency is, the larger the delta =
-> >    rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
-> >    used to decay the util_sum only, the util_sum drops significantly during
-> >    idle period.
-> >
-> > Proposal:
-> > This symptom is not only caused by disabling turbo frequency, but it
-> > would also appear if the user limits the max frequency at runtime. Because
-> > if the frequency is always lower than the max frequency,
-> > CPU frequency invariance would decay the util_sum quite fast during idle.
-> >
-> > As some end users would disable turbo after boot up, this patch aims to
-> > present this symptom and deals with turbo scenarios for now. It might
-> > be ideal if CPU frequency invariance is aware of the max CPU frequency
-> > (user specified) at runtime in the future.
-> >
-> > [Previous patch seems to be lost on LKML, this is a resend, sorry for any
-> > inconvenience]
-> >
-> > Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
-> > Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
-> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> There are 2 common cases when INIT_EX data file might not be
+> opened successfully and fail the sev initialization:
 >
-> Reviewed-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> 1. In user namespaces, normal user tasks (e.g. VMM) can change their
+>    current->fs->root to point to arbitrary directories. While
+>    init_ex_path is provided as a module param related to root file
+>    system. Solution: use the root directory of init_task to avoid
+>    accessing the wrong file.
 >
-> You're right, when turbo is disabled, the frequency invariance code needs to
-> know about it; it calculates freq_curr/freq_max and thinks that freq_max is
-> some turbo level. For example commit 918229cdd5ab ("x86/intel_pstate: Handle
-> runtime turbo disablement/enablement in frequency invariance") takes care of
-> this when global.turbo_disabled changes, but before your patch nothing checks
-> if the user disabled turbo from sysfs. Thanks for the fix!
+> 2. Normal user tasks (e.g. VMM) don't have the privilege to access
+>    the INIT_EX data file. Solution: open the file as root and
+>    restore permissions immediately.
 >
-> Giovanni
+> Signed-off-by: Jacky Li <jackyli@google.com>
 
-Applied as 5.19 material, thanks!
+Reviewed-by: Peter Gonda <pgonda@google.com>
+
+Agreed about the fixes tag.

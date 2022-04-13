@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9EF4FF6E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9C04FF6E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiDMMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 08:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S235507AbiDMMjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiDMMfq (ORCPT
+        with ESMTP id S232694AbiDMMjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 08:35:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED72FFDF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 05:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649853206; x=1681389206;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=uKXYId4oeyUvS0odSH7vXFddeDqo6s8dSY4Wdoinod0=;
-  b=AOF1kidHPzFYx/8syaaS7RsZZKgJEbmOKC7pjkOdF8BU79DCnvuXvEJF
-   3qb+C7U3HVkeSvl3haxXiuBBwoTRVKKsnC8uIye9XtbqccyNw+viW91SD
-   cs5aTB+3RsQ6K5JUtrQNTldRUn5aBTd9X6FySIluq+sskA4ht3NVzJ/dK
-   a46PcirwONmsGUcAC1eAnpNyVaHQlj+udQ1ryiAb7cxRDeD5uUQYQOH1d
-   S15sqB9kELTFa7jt3AEgr11feXUX/9kbY+cV2JWz/DOZl63Nj6lDfc6LM
-   F7wUyZouXQCAlnU7jSw6tQb9Z9tajtiC839/O4aOosOqieXPioh5AmqH8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="261498799"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="261498799"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 05:33:26 -0700
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="552184164"
-Received: from psoltysi-mobl.ger.corp.intel.com (HELO localhost) ([10.249.149.160])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 05:33:21 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
-In-Reply-To: <20220411165121.GA26801@lst.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-6-hch@lst.de> <20220411152508.GH2120790@nvidia.com>
- <87zgkrha7c.fsf@intel.com> <20220411165121.GA26801@lst.de>
-Date:   Wed, 13 Apr 2022 15:33:20 +0300
-Message-ID: <877d7tgo33.fsf@intel.com>
+        Wed, 13 Apr 2022 08:39:31 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14E434B7;
+        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id o14so769167vkf.13;
+        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
+        b=GY+Nx/NLjsUDY2KpKhXCF0f+wm3O1zKwOqSZqRMwSH/56LljWI42nzXFPSbOLyCzgT
+         38WLFUE7x1wXVcgpN+m50/DObAWM4TnxUxxRmFhI/C9OoGZK4NuzYTGMq2Rm5gfC2W59
+         5NLo7/rvy6vTcgAgP/s6fT6oILUlEPqJR7TkH7m5VJYlOAMtELQhO2QUn7l50LFhFp3p
+         v6oSBLHRPNRnN3wVuNHT3YkYnjj2RPzO9KpRP3DWjy1xFP4HW+Br7ccBiLlarZcjMUVS
+         U6i/JaRu2U861B3HZ466iOe9s1qpyrndnCtwiKI+X1ic2HRWNvuQH1WT8I3bhjPSOUIu
+         CFHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
+        b=K/9w5RqodWriEVvuKJ+pEH4qI4xncynenFD3UvhoB/swI2yswB1sTEYy3YcZDN7oQp
+         dYp6UQhjUPh4RABVdSpizJpPeFnPtWiqMSgu2A6bHmtbsKKj4M3wIkjrAlUgo/u+HFRz
+         67kkLnEGxV3x30urhkrXa8/fzukfWgN/czoQT0+Z8TklKwJj3E1ud2+4BOqHRuGQKW2V
+         0r5PSrZoFLN5956z6+DGKX2iIfQoITySOijvaEyOMaA4ovF8Xub5rJgxtULBvXpv8sMF
+         RLmKzmHHQSxZc8kRcY6KWLTOGMyyB22VLlG2ePJ62EpZe/9ZBHi4+JZrIpDZgDcrOh8t
+         kz8A==
+X-Gm-Message-State: AOAM5320VnjBgaWSL1kURKVF/+yVcKOIpCpDMjVMdMz80TE6cqcN+OgO
+        YJGu5KcMZDv24xi8o/Mt1ep0tyZVrO0X7KZK1lg=
+X-Google-Smtp-Source: ABdhPJxGJlkfPgu8vJf3w4y+p8nnMcci1I50j/3AishPt40LSnppecm72DbL0epYWf0Sht2/EZHHGcU9xC0srQzNp3g=
+X-Received: by 2002:a1f:ac95:0:b0:345:2ade:e54b with SMTP id
+ v143-20020a1fac95000000b003452adee54bmr8524580vke.3.1649853428705; Wed, 13
+ Apr 2022 05:37:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220404151036.265901-1-k.kahurani@gmail.com> <20220404153151.GF3293@kadam>
+In-Reply-To: <20220404153151.GF3293@kadam>
+From:   David Kahurani <k.kahurani@gmail.com>
+Date:   Wed, 13 Apr 2022 15:36:57 +0300
+Message-ID: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
+        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+        Pavel Skripkin <paskripkin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022, Christoph Hellwig <hch@lst.de> wrote:
-> On Mon, Apr 11, 2022 at 07:11:03PM +0300, Jani Nikula wrote:
->> > Up to you but I usually sort these lists
->> 
->> Yeah, please do. Otherwise matches what I sent, so ack.
+On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+
+Hi Dan
+
+> >       int ret;
+> >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> >                value, index, data, size);
+> >
+> > -     if (unlikely(ret < 0))
+> > +     if (unlikely(ret < size)) {
+> > +             ret = ret < 0 ? ret : -ENODATA;
+> > +
+> >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+> >                           index, ret);
+> > +     }
+> >
+> >       return ret;
 >
-> Let's just merge your 2 patch series ASAP and I'll rebase on top of
-> that.
+> It would be better to make __ax88179_read_cmd() return 0 on success
+> instead of returning size on success.  Non-standard returns lead to bugs.
+>
 
-I rebased them on top of current gvt-next and resent [1]. Zhenyu, Zhi,
-please pick them up if you approve.
+I don't suppose this would have much effect on the structure of the
+code and indeed plan to do this but just some minor clarification.
 
-> What branch in drm-intel should I use as the base for the next version
-> btw?  Or does gvt go through yet another tree?
+Isn't it standard for reader functions to return the number of bytes read?
 
-It's yet another tree... Basically gvt is developed on top of gvt-next
-(see MAINTAINERS) and Zhenyu and Zhi send pull requests for
-drm-intel-next.
+Regards,
+David.
 
-
-BR,
-Jani.
-
-
-[1] https://lore.kernel.org/all/cover.1649852517.git.jani.nikula@intel.com
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+>
+> > @@ -1060,16 +1151,30 @@ static int ax88179_check_eeprom(struct usbnet *dev)
+> >
+> >               jtimeout = jiffies + delay;
+> >               do {
+> > -                     ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
+> > -                                      1, 1, &buf);
+> > +                 ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
+> > +                                        1, 1, &buf);
+> > +
+> > +                 if (ret < 0) {
+> > +                         netdev_dbg(dev->net,
+> > +                                    "Failed to read SROM_CMD: %d\n",
+> > +                                    ret);
+> > +                         return ret;
+> > +                 }
+> >
+> >                       if (time_after(jiffies, jtimeout))
+> >                               return -EINVAL;
+>
+> The indenting here is wrong.  Run scripts/checkpatch.pl on your patches.
+>
+> regards,
+> dan carpenter
+>

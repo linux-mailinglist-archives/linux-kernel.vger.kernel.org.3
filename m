@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139D74FF2F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E8C4FF2FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbiDMJJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S234249AbiDMJKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiDMJJl (ORCPT
+        with ESMTP id S234236AbiDMJKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:09:41 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA764DF51
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:07:19 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t25so1545095edt.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:07:19 -0700 (PDT)
+        Wed, 13 Apr 2022 05:10:16 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA574D26A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:07:56 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id x3so635351wmj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=z84tQ9PE482BMfOh0tGEWBbuxsfWf7PM713AXwUAt8U=;
-        b=FI4d7X6SsxtqQKnRO595Rrvz+y7TCy5uSYJ1E4ffWmuz2lWCdWKO43S4bMqsVkOxGp
-         ghHiStu6lESL6/iYdJXXxzZYobNuJsIrC1KdLa8PVUStA5DZKFsPrQT8BYrXyhomp21y
-         VSsGIkMvmt3feVHT8TrQzjGBp/5d4bX/0M29dI3FiNAKQmPUT7PD41ZHwWSaslZ/AxrY
-         B0ueTpkUhXjcKuyJ7AnqLgZ0c21j82tT1uVZEeG7Djp64Jfp9EVMsq7Kryz8I4jbiSH4
-         Uo7QMxUVhOzx9CgUOY4N5Tgb0whGI5vAc03PdQWoKlsLvIFHgQgv+V6nQeauHa4eT7Nr
-         tQ1w==
+        d=vrull.eu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D+w+TtMxvv3nKTGIfsbKoASKEHBzjXiu+DU3lDjZKyw=;
+        b=aNCHq15QDaD89o7nVZeY9MurmjKfqtiGJEXZfbfO63x8D5id0i92mVcvuTCuWdSC5S
+         Rho/gfQfwWj0HPpNTNVTQJNCH3CZyFT+h/Z+UyhZ4vF3guqVdCWzF3xChxrz/X6ysA7m
+         585fn/NMR3FLP/+FD8Jrn8XMBByJiMRP5mnUlgf6dxzOjzrnNSWAA9am/GGJYhpmJ//x
+         l6RlZ+QBfpOp4jn28dvkxHg2LHKF/zm+V8ooymEe80uSvuWKmW4X/qm1z1nlu5jYySUU
+         Zju2s6X+IZMVLX069dSJQbsHIAvRWR2Hx60YSjz9p66zma4iLXiBUPEHm6M/vXykn867
+         bUTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z84tQ9PE482BMfOh0tGEWBbuxsfWf7PM713AXwUAt8U=;
-        b=wsh9jVMmpA6qnfB++PZNLsJGkpi0ReEOGSg7fE7T656K5OLGzfarwkz+wt8l6yFHpW
-         gBUc3e+C7Ws81w3+tnEthAg1qO9ffXY2/3D0XlK/Z7UzcYwcRCq/EFrdxpI1k7uz0eBX
-         UI7o8rGE/4i015CH3RDuUZaHBG/NschlkXtXqWH2bxILl18VXtqr7y3PTMbaelGha7WX
-         dS7OJDcrP6r6qSN/xm6RUa7N5+iRfhLtggz4kAncCtqF/7/QvcoUHpFDfBe8bwM+4mC3
-         4KTiMEhf8TRb6pLLP+C63DtAv92thc34blZ5WVwzsk8VTUkJBKcVqUUfSNeIq0sv19Nq
-         P3Fg==
-X-Gm-Message-State: AOAM530Sdhl1AMIfLbqIBHMYfzXGRcmpAkcLGDpEBhuABJfaubPfE+3s
-        sdWLA4AaUXZ16RKwzrqa1X1pRA==
-X-Google-Smtp-Source: ABdhPJybTYoB6hFzkTnGzb9M3CRBUVTSHcKTnFZfrgqbnaYoSiDSY2iH30hdSK5/Q287fVX6yfQFbQ==
-X-Received: by 2002:a50:d4d2:0:b0:410:9fa2:60d6 with SMTP id e18-20020a50d4d2000000b004109fa260d6mr43074728edj.35.1649840838413;
-        Wed, 13 Apr 2022 02:07:18 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a22-20020a50ff16000000b00410d029ea5csm908162edu.96.2022.04.13.02.07.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 02:07:17 -0700 (PDT)
-Message-ID: <02fc797a-190f-3558-5ee1-c9c3320f3d57@linaro.org>
-Date:   Wed, 13 Apr 2022 11:07:16 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D+w+TtMxvv3nKTGIfsbKoASKEHBzjXiu+DU3lDjZKyw=;
+        b=R2vZvnZXygvF0oH2KY/yzDsy/W91D4F14smUT6ifehG6SBel2B4Pmw1HpExYkDkgAz
+         NJzMnZQbw9zMXawVBPaAyLr0zsBmmaxmlsoDFf/G4cPgNN3VWt7Nj8XFqQb0mLT7QxfV
+         fzBxfT5ryUcNOo5BH0DPOZkNb/NMBcQgTdCwit272CrlGoCU/u+sfGgigHdo5yqNRLw4
+         o8Fl1dnn4q17CpFemIZ+IDZ9nGqtYElrj3hoG0xQ3W9ZreK3aMjrHTQ/mETVf9c66PXa
+         QO2idi4jIX+Z2qVqW4GVePe7SZMFwEuzK7ORJpmGeNq1daT1I12voq86ciaMSJI1R69Q
+         1nCQ==
+X-Gm-Message-State: AOAM533+2W5+ZQW8sNnE36yzdMs6/22/bUdstzUR3FhXoh3PoEkUqsLW
+        40eXuVoNXVxOMSq/sCKgnqKwcaeu40wssd7jBR3ZnA==
+X-Google-Smtp-Source: ABdhPJw8ko1FICi2ay6XTVS5LEnfXs5l3CxjK3vAdnQU4/nd5dvTqqqiOB2+3p7m2t3t14PYG58aOewTQWcU4+goHHY=
+X-Received: by 2002:a05:600c:1c9c:b0:38e:3270:373d with SMTP id
+ k28-20020a05600c1c9c00b0038e3270373dmr7623569wms.199.1649840874909; Wed, 13
+ Apr 2022 02:07:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <YlWztZknl4OBmekp@ripper>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YlWztZknl4OBmekp@ripper>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220413030307.133807-1-heiko@sntech.de> <20220413030307.133807-4-heiko@sntech.de>
+In-Reply-To: <20220413030307.133807-4-heiko@sntech.de>
+From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
+Date:   Wed, 13 Apr 2022 11:07:43 +0200
+Message-ID: <CAAeLtUC-RCtaT5fUOhT55uF8TeEV+RzYyqv2_JXBfgPYG_Z9Gw@mail.gmail.com>
+Subject: Re: [PATCH v9 03/12] riscv: implement module alternatives
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,157 +74,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 19:15, Bjorn Andersson wrote:
->>  
->> +	opp_table->clks = kmalloc_array(1, sizeof(*opp_table->clks),
->> +					GFP_KERNEL);
-> 
-> This seems to be 81 chars long, perhaps worth not line breaking?
+On Wed, 13 Apr 2022 at 05:03, Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> This allows alternatives to also be applied when loading modules
+> and follows the implementation of other architectures (e.g. arm64).
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 
-I doubt that it will increase the readability:
-
-	opp_table->clks = kmalloc_array(1,
-					sizeof(*opp_table->clks),
-					GFP_KERNEL);
-
-80-character is not anymore that strict hard limit and in such case
-using 1-2 characters longer improves the code.
-
-> 
->> +	if (!opp_table->clks)
->> +		return ERR_PTR(-ENOMEM);
->> +
->>  	/* Find clk for the device */
->> -	opp_table->clk = clk_get(dev, NULL);
->> +	opp_table->clks[0] = clk_get(dev, NULL);
->>  
->> -	ret = PTR_ERR_OR_ZERO(opp_table->clk);
->> -	if (!ret)
->> +	ret = PTR_ERR_OR_ZERO(opp_table->clks[0]);
->> +	if (!ret) {
->> +		opp_table->clk_count = 1;
->>  		return opp_table;
->> +	}
-> [..]
->> +struct opp_table *dev_pm_opp_set_clknames(struct device *dev,
->> +					  const char * const names[],
->> +					  unsigned int count)
->>  {
->>  	struct opp_table *opp_table;
->> -	int ret;
->> +	struct clk *clk;
->> +	int ret, i;
->>  
->>  	opp_table = _add_opp_table(dev, false);
->>  	if (IS_ERR(opp_table))
->> @@ -2159,70 +2259,92 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
->>  	}
->>  
->>  	/* clk shouldn't be initialized at this point */
->> -	if (WARN_ON(opp_table->clk)) {
->> +	if (WARN_ON(opp_table->clks)) {
->>  		ret = -EBUSY;
->>  		goto err;
->>  	}
->>  
->> -	/* Find clk for the device */
->> -	opp_table->clk = clk_get(dev, name);
->> -	if (IS_ERR(opp_table->clk)) {
->> -		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
->> -				    "%s: Couldn't find clock\n", __func__);
->> +	opp_table->clks = kmalloc_array(count, sizeof(*opp_table->clks),
->> +					GFP_KERNEL);
->> +	if (!opp_table->clks) {
->> +		ret = -ENOMEM;
->>  		goto err;
->>  	}
->>  
->> +	for (i = 0; i < count; i++) {
->> +		clk = clk_get(dev, names[i]);
->> +		if (IS_ERR(clk)) {
->> +			ret =  dev_err_probe(dev, PTR_ERR(clk),
->> +					     "%s: Couldn't find clock %s\n",
->> +					     __func__, names[i]);
->> +			goto free_clks;
->> +		}
->> +
->> +		opp_table->clks[i] = clk;
->> +	}
-> 
-> Wouldn't it be convenient to make clks a struct clk_bulk_data array
-> and use clk_bulk_get()/clk_bulk_put() instead?
-
-I was thinking about this but clk_bulk_get() requires struct
-clk_bulk_data, so the code in "get" is not actually smaller if function
-receives array of clock names.
-
-OTOH, usage of clk_bulk_get() would reduce code in: _put_clocks(). Rest
-of the code would be more-or-less the same, including all corner cases
-when clocks are missing.
-
-> 
->> +
->> +	opp_table->clk_count = count;
->> +
->>  	return opp_table;
->>  
->> +free_clks:
->> +	while (i != 0)
->> +		clk_put(opp_table->clks[--i]);
->> +
->> +	kfree(opp_table->clks);
->> +	opp_table->clks = NULL;
->> +	opp_table->clk_count = -1;
->>  err:
->>  	dev_pm_opp_put_opp_table(opp_table);
->>  
->>  	return ERR_PTR(ret);
->>  }
->> -EXPORT_SYMBOL_GPL(dev_pm_opp_set_clkname);
->> +EXPORT_SYMBOL_GPL(dev_pm_opp_set_clknames);
-> [..]
->> +static int _read_clocks(struct dev_pm_opp *opp, struct opp_table *opp_table,
->> +			struct device_node *np)
->> +{
->> +	int count, ret;
->> +	u64 *freq;
->> +
->> +	count = of_property_count_u64_elems(np, "opp-hz");
->> +	if (count < 0) {
->> +		pr_err("%s: Invalid %s property (%d)\n",
->> +			__func__, of_node_full_name(np), count);
-> 
-> Wouldn't %pOF be convenient to use here, seems like it becomes short
-> enough that you don't have to wrap this line then.
-
-Yes, I forgot about %pOF.
-
-> 
->> +		return count;
->> +	}
->> +
->> +	if (count != opp_table->clk_count) {
->> +		pr_err("%s: number of rates %d does not match number of clocks %d in %s\n",
->> +		       __func__, count, opp_table->clk_count,
->> +		       of_node_full_name(np));
->> +		return -EINVAL;
->> +	}
->> +
->> +	freq = kmalloc_array(count, sizeof(*freq), GFP_KERNEL);
->> +	if (!freq)
->> +		return -ENOMEM;
->> +
->> +	ret = of_property_read_u64_array(np, "opp-hz", freq, count);
->> +	if (ret) {
->> +		pr_err("%s: error parsing %s: %d\n", __func__,
->> +		       of_node_full_name(np), ret);
->> +		ret = -EINVAL;
->> +		goto free_freq;
->> +	}
-> 
-> Regards,
-> Bjorn
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>

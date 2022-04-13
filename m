@@ -2,157 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EC44FFD4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 19:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490E74FFD50
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 20:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbiDMSBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 14:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S237542AbiDMSCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 14:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbiDMSBs (ORCPT
+        with ESMTP id S235990AbiDMSCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 14:01:48 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4B813F75;
-        Wed, 13 Apr 2022 10:59:25 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2eba37104a2so31848017b3.0;
-        Wed, 13 Apr 2022 10:59:25 -0700 (PDT)
+        Wed, 13 Apr 2022 14:02:09 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA8B25596
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:47 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id z5-20020a170902ccc500b0015716eaec65so1533435ple.14
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 10:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=gBJVdHhxm3GylgacmWD4CA/ifDNVdvbWbULAPZqy7VE=;
+        b=sd037rf2A4JxY/GtuAQ7UCl7/Jjdbya15GJrjwsy+a1uDXTrB8Agp7gzicl7WX2K8f
+         lhdo1uHr70KKsqJpPL7YHinTiIn6o8/T9jA4RVjKrm59hZ8q9FcBO0tZARJUeMRyjiJV
+         TalM6uq2LSotD+6t7cdi7Y/b2YeKLGe8xr3UbfEQpWXpOgRVyiKKcm1odgfsTX1yRuq7
+         wGFlYI1xmnKCwXobpnPZOkc/RcDs8OQHeCjMpGmNiR+psCFbs3wI6o5jLQN3xN+TXYhV
+         VsEl7rUutgZZlp2dRZLDDXPOzZen8er/sgG9EBc/WNbyYuWfrRKxMlgv4oTVj95bs+7U
+         nfTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XBIdc2r7ktDJVgL8jFR2huHb3Z5LWfWpJ3rv5dtCkOU=;
-        b=X0EHu8AB3E7C2rMBd7nzhXHMjHG8IK1I9W9Nco1mhr8YXvkzSZHUUw+Or0xEfBAgDl
-         FwKdjduWTZ6ctquCmxaBCx98ePOtwOtshxjqjsfUOP+Nb/CdzGty5JD+dFoZlyIV5m5z
-         NbUmI0BDoh5p9Wv2yaF2XTj7JjtHstmpSxtwB7fQQCzcMh2ODKBTspmnSUh9nKSV8bWx
-         X1eAvxxkabcO12rSOq2YDwn11bGVzYFa45zzsAtCDSZ1onF6YMPMBOk7qaTFXuIoff4M
-         34B9jwH0dCIUzv+96xOPvX9Hyr3VbHjdx13xWIia39r817OwVdzfP5A8vnr1W4vSaLN/
-         JWjQ==
-X-Gm-Message-State: AOAM531bDQul+hbe09WGBAgPLryhodG1tVQm/fYVJJNYK1d13W+kloKR
-        NSyzPiJS7HvNnzEYerNYy6ckBdXb8+R6XO/OoSQ=
-X-Google-Smtp-Source: ABdhPJwBb3XTK/d7JaeiGrBNurZ9a5QDrmx/7nw/Y0BzRDUwJvPFPFQCUiHDJiH6mQyGZ/W729DEj2rvFrNZ6igkwZ8=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr83773ywb.326.1649872765056; Wed, 13
- Apr 2022 10:59:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407105120.1280-1-lorenzo.pieralisi@arm.com> <CAMj1kXEx1JFexVZvd=p3+ra1A7050VfWaZg1uuk-_nFDns4Z4Q@mail.gmail.com>
-In-Reply-To: <CAMj1kXEx1JFexVZvd=p3+ra1A7050VfWaZg1uuk-_nFDns4Z4Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 19:59:14 +0200
-Message-ID: <CAJZ5v0h40xRfPbYoc2yA40yrmR6+sHVAO-ihqDT9czbhSJ-MYA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: osl: Fix BERT error region memory mapping
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Veronika kabatova <vkabatov@redhat.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Aristeu Rozanski <aris@redhat.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=gBJVdHhxm3GylgacmWD4CA/ifDNVdvbWbULAPZqy7VE=;
+        b=B69Ll6mkW9c6l/+Zewr7ZG5OFpDS0xzoFQAbtXiYRzIno4OQ/W68WZ8wIocxLuXr5o
+         ZZLyLJeLv7TAwTpNbyN0f0yBRbvpTSScJ5wTpKKoDEbGTT0F6yLPpOYXVaI+RlbUF7BO
+         GnXJp/pCtad58QlvIsx/Th5f1bj5ZTdf7sF3Wmaf8GmYL4jMTpa1CDIe1T/GLCn/q9x1
+         nTBhN3h1XjERD/dyTktCwdx/uYjwQgpprsRSVTa0sESQcDR4sCoQMDOSiAaLc5NZlHJg
+         1E/4G6XGqfGuc3qAnXemZTPGyfuaHuFkk7cUpnlU+NreCzI1ZddjpInTeAXDSuhsQ4NW
+         bd5w==
+X-Gm-Message-State: AOAM532bkMBRFYNI0lxIxwC8OfAvGds4IcIGDtaIllO/8ce7cjK3vqhM
+        F5oXcwV+I9VnTtoG8w4WhVfxpC3NPT/AlBwDRk92KlQisTVCxgxkrO6GIVxcY1XbU1/SjCqB8fx
+        jpbCv7KGaHYMYaaHjiOjfZmPp1MSBZ5KTKDEx/1E59Jy2eYylZzfqiM0HTEmWTGwAZIXwOOeF
+X-Google-Smtp-Source: ABdhPJyCUNMCRCkM0yKckab2XpWxWrir3hR1dwC9VSUCkx8ZnVXmj9rZdlaYHaJA/gsEl5/kVobEXd7KyAeT
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:c087:f2f2:f5f0:f73])
+ (user=bgardon job=sendgmr) by 2002:a17:902:ec86:b0:156:a032:7cf1 with SMTP id
+ x6-20020a170902ec8600b00156a0327cf1mr43256946plg.40.1649872787285; Wed, 13
+ Apr 2022 10:59:47 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 10:59:34 -0700
+Message-Id: <20220413175944.71705-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v5 00/10] KVM: x86: Add a cap to disable NX hugepages on a VM
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 7:41 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 7 Apr 2022 at 12:51, Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com> wrote:
-> >
-> > Currently the sysfs interface maps the BERT error region as "memory"
-> > (through acpi_os_map_memory()) in order to copy the error records into
-> > memory buffers through memory operations (eg memory_read_from_buffer()).
-> >
-> > The OS system cannot detect whether the BERT error region is part of
-> > system RAM or it is "device memory" (eg BMC memory) and therefore it
-> > cannot detect which memory attributes the bus to memory support (and
-> > corresponding kernel mapping, unless firmware provides the required
-> > information).
-> >
-> > The acpi_os_map_memory() arch backend implementation determines the
-> > mapping attributes. On arm64, if the BERT error region is not present in
-> > the EFI memory map, the error region is mapped as device-nGnRnE; this
-> > triggers alignment faults since memcpy unaligned accesses are not
-> > allowed in device-nGnRnE regions.
-> >
-> > The ACPI sysfs code cannot therefore map by default the BERT error
-> > region with memory semantics but should use a safer default.
-> >
-> > Change the sysfs code to map the BERT error region as MMIO (through
-> > acpi_os_map_iomem()) and use the memcpy_fromio() interface to read the
-> > error region into the kernel buffer.
-> >
-> > Link: https://lore.kernel.org/linux-arm-kernel/31ffe8fc-f5ee-2858-26c5-0fd8bdd68702@arm.com
-> > Link: https://lore.kernel.org/linux-acpi/CAJZ5v0g+OVbhuUUDrLUCfX_mVqY_e8ubgLTU98=jfjTeb4t+Pw@mail.gmail.com
-> > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Hanjun Guo <guohanjun@huawei.com>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
->
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Given the high cost of NX hugepages in terms of TLB performance, it may
+be desirable to disable the mitigation on a per-VM basis. In the case of public
+cloud providers with many VMs on a single host, some VMs may be more trusted
+than others. In order to maximize performance on critical VMs, while still
+providing some protection to the host from iTLB Multihit, allow the mitigation
+to be selectively disabled.
 
-Applied as 5.19 material, thanks!
+Disabling NX hugepages on a VM is relatively straightforward, but I took this
+as an opportunity to add some NX hugepages test coverage and clean up selftests
+infrastructure a bit.
 
-> > ---
-> >  drivers/acpi/sysfs.c | 25 ++++++++++++++++++-------
-> >  1 file changed, 18 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-> > index a4b638bea6f1..cc2fe0618178 100644
-> > --- a/drivers/acpi/sysfs.c
-> > +++ b/drivers/acpi/sysfs.c
-> > @@ -415,19 +415,30 @@ static ssize_t acpi_data_show(struct file *filp, struct kobject *kobj,
-> >                               loff_t offset, size_t count)
-> >  {
-> >         struct acpi_data_attr *data_attr;
-> > -       void *base;
-> > -       ssize_t rc;
-> > +       void __iomem *base;
-> > +       ssize_t size;
-> >
-> >         data_attr = container_of(bin_attr, struct acpi_data_attr, attr);
-> > +       size = data_attr->attr.size;
-> > +
-> > +       if (offset < 0)
-> > +               return -EINVAL;
-> > +
-> > +       if (offset >= size)
-> > +               return 0;
-> >
-> > -       base = acpi_os_map_memory(data_attr->addr, data_attr->attr.size);
-> > +       if (count > size - offset)
-> > +               count = size - offset;
-> > +
-> > +       base = acpi_os_map_iomem(data_attr->addr, size);
-> >         if (!base)
-> >                 return -ENOMEM;
-> > -       rc = memory_read_from_buffer(buf, count, &offset, base,
-> > -                                    data_attr->attr.size);
-> > -       acpi_os_unmap_memory(base, data_attr->attr.size);
-> >
-> > -       return rc;
-> > +       memcpy_fromio(buf, base + offset, count);
-> > +
-> > +       acpi_os_unmap_iomem(base, size);
-> > +
-> > +       return count;
-> >  }
-> >
-> >  static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
-> > --
-> > 2.31.0
-> >
+This series was tested with the new selftest and the rest of the KVM selftests
+on an Intel Haswell machine.
+
+The following tests failed, but I do not believe that has anything to do with
+this series:
+	userspace_io_test
+	vmx_nested_tsc_scaling_test
+	vmx_preemption_timer_test
+
+Changelog:
+v1->v2:
+	Dropped the complicated memslot refactor in favor of Ricardo Koller's
+	patch with a similar effect.
+	Incorporated David Dunn's feedback and reviewed by tag: shortened waits
+	to speed up test.
+v2->v3:
+	Incorporated a suggestion from David on how to build the NX huge pages
+	test.
+	Fixed a build breakage identified by David.
+	Dropped the per-vm nx_huge_pages field in favor of simply checking the
+	global + per-VM disable override.
+	Documented the new capability
+	Separated out the commit to test disabling NX huge pages
+	Removed permission check when checking if the disable NX capability is
+	supported.
+	Added test coverage for the permission check.
+v3->v4:
+	Collected RB's from Jing and David
+	Modified stat collection to reduce a memory allocation [David]
+	Incorporated various improvments to the NX test [David]
+	Changed the NX disable test to run by default [David]
+	Removed some now unnecessary commits
+	Dropped the code to dump KVM stats from the binary stats test, and
+	factor out parts of the existing test to library functions instead.
+	[David, Jing, Sean]
+	Dropped the improvement to a debugging log message as it's no longer
+	relevant to this series.
+v4->v5:
+	Incorporated cleanup suggestions from David and Sean
+	Added a patch with style fixes for the binary stats test from Sean
+	Added a restriction that NX huge pages can only be disabled before
+	vCPUs are created [Sean]
+
+Ben Gardon (9):
+  KVM: selftests: Remove dynamic memory allocation for stats header
+  KVM: selftests: Read binary stats header in lib
+  KVM: selftests: Read binary stats desc in lib
+  KVM: selftests: Read binary stat data in lib
+  KVM: selftests: Add NX huge pages test
+  KVM: x86: Fix errant brace in KVM capability handling
+  KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis
+  KVM: selftests: Factor out calculation of pages needed for a VM
+  KVM: selftests: Test disabling NX hugepages on a VM
+
+Sean Christopherson (1):
+  KVM: selftests: Clean up coding style in binary stats test
+
+ Documentation/virt/kvm/api.rst                |  13 +
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/mmu.h                            |   9 +-
+ arch/x86/kvm/mmu/spte.c                       |   7 +-
+ arch/x86/kvm/mmu/spte.h                       |   3 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   3 +-
+ arch/x86/kvm/x86.c                            |  25 +-
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/testing/selftests/kvm/Makefile          |  10 +
+ .../selftests/kvm/include/kvm_util_base.h     |  13 +
+ .../selftests/kvm/kvm_binary_stats_test.c     | 142 ++++++-----
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 232 ++++++++++++++++--
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c | 206 ++++++++++++++++
+ .../kvm/x86_64/nx_huge_pages_test.sh          |  25 ++
+ 14 files changed, 597 insertions(+), 94 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+ create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+
+-- 
+2.35.1.1178.g4f1659d476-goog
+

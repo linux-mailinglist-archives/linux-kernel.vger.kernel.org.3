@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16E74FF383
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B5A4FF384
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 11:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234443AbiDMJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 05:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S231590AbiDMJcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 05:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiDMJb4 (ORCPT
+        with ESMTP id S230470AbiDMJcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 05:31:56 -0400
+        Wed, 13 Apr 2022 05:32:45 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5178330543
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:29:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4365F344DA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649842173;
+        s=mimecast20190719; t=1649842223;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ss4icJRzT/CRgX0lA3mqnDiaVS28swR/SsJFvAdocPs=;
-        b=FsEp52HG2Pn+Wnra06glss+E/aJhzY8B0XIIl3mZPNGv8Bv6ZB0JeGD8FlyTaRU44dOgBT
-        4I6JegHw1L4cm6D0W0BNF2uAH/nQ5gVvmk1NAXyBsD7tfxK+QZ3/j260E6DI8kpF9F1XCe
-        s92G9QLwUIkbBcVWpfvjLLoaxVO3L5E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=sUAWCEtJ7W8Lp2MMf8nQbTxa4Gjk9+/HNaILcWqE2Ig=;
+        b=eleBN7IQOYNwqhzyp8UOTfP934gm8Gd8zrWmM2UKQtts8In4H47RE5PI4D7pXWRFbLRVQ/
+        lrHjdNldjjBianOZ/MgMjrFCbtrJdM7dMtX4pzVs8Z/xSP5XI2WBw5h5RzQMA88B4KZFOS
+        PCMgiuD6AZswUKdSIZXo00YuNdC9tGg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-OHjYqE3rOxCCBirmZYSY5Q-1; Wed, 13 Apr 2022 05:29:29 -0400
-X-MC-Unique: OHjYqE3rOxCCBirmZYSY5Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33BA1899EC1;
-        Wed, 13 Apr 2022 09:29:29 +0000 (UTC)
-Received: from localhost (ovpn-12-51.pek2.redhat.com [10.72.12.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 11343C27E8E;
-        Wed, 13 Apr 2022 09:29:27 +0000 (UTC)
-Date:   Wed, 13 Apr 2022 17:29:24 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Heiko Carstens <hca@linux.ibm.com>, hch@lst.de
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        yangtiezhu@loongson.cn, amit.kachhap@arm.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
-Message-ID: <YlaX9CxqPUvCN2dS@MiWiFi-R3L-srv>
-References: <20220408090636.560886-1-bhe@redhat.com>
- <Yk//TCkucXiVD3s0@MiWiFi-R3L-srv>
- <YlPt+3R63XYP22um@osiris>
+ us-mta-582-HwBSZAyTNPyHnOcoLml6Kw-1; Wed, 13 Apr 2022 05:30:22 -0400
+X-MC-Unique: HwBSZAyTNPyHnOcoLml6Kw-1
+Received: by mail-wr1-f72.google.com with SMTP id f2-20020a056000036200b00207a14a1f96so210378wrf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 02:30:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=sUAWCEtJ7W8Lp2MMf8nQbTxa4Gjk9+/HNaILcWqE2Ig=;
+        b=nDiu+LTCtry4vVABXlGYbONLPocMkdbJHUPJ+ydIpokvH1APjNWQVmvlBV65Wh6ytc
+         Lu9FRUFO3ORjDg3jm2WKw+F1GJ1kKLGONqXnc0Xuffas2GutfJCi1fvKZk87kvRFFtuC
+         raC2itn+HmEpouHjpmKXSlK6eJZKupPdvl3Z8tiApucY8o3svU5ex/NytV9mSGqmhAPF
+         f9C2ZzOo1Q1MhJL/xX8yUDn8dNTaOFJr9xXejogi8e1a7YrO+OIwJpWtFC2laWp/6z00
+         6czX4jtxiGNotDxoN2v1TJ7LdwqxVcggaZ5Qlg9yupK5qUEac0vhV59lNAxX31ypR9rZ
+         1zGw==
+X-Gm-Message-State: AOAM532JNYMLajuUWG/ELSOolX1pE9Q5nkkiuGP3Gv8OYGmzKPq3rQHT
+        5bIooCW1y+tcYdj5/d4kkQcYnodBQbzD0N8sHw6OjxfR1l4QcoHp0jAnuuOW+/ofejjLeyXbPkH
+        fg4K1DeTlfjW2zPQXGxCn3RWK
+X-Received: by 2002:a05:600c:3ac7:b0:38e:c6ef:ff0 with SMTP id d7-20020a05600c3ac700b0038ec6ef0ff0mr7356601wms.8.1649842220991;
+        Wed, 13 Apr 2022 02:30:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyd3XaLEhPCG4J24HCG8pKWKl8usohh+7J5bIP+p03v6bOndnNfB1jN1ExM+RVo0C4IS9g7NA==
+X-Received: by 2002:a05:600c:3ac7:b0:38e:c6ef:ff0 with SMTP id d7-20020a05600c3ac700b0038ec6ef0ff0mr7356584wms.8.1649842220717;
+        Wed, 13 Apr 2022 02:30:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5800:1078:ebb9:e2c3:ea8c? (p200300cbc70458001078ebb9e2c3ea8c.dip0.t-ipconnect.de. [2003:cb:c704:5800:1078:ebb9:e2c3:ea8c])
+        by smtp.gmail.com with ESMTPSA id i4-20020a05600c354400b0038e9c5924d6sm1958059wmq.29.2022.04.13.02.30.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 02:30:20 -0700 (PDT)
+Message-ID: <374d2be1-e13d-e605-ff80-b9d5eee4c40e@redhat.com>
+Date:   Wed, 13 Apr 2022 11:30:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlPt+3R63XYP22um@osiris>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220329164329.208407-1-david@redhat.com>
+ <20220329164329.208407-2-david@redhat.com>
+ <28142e3e-2556-0ca2-7ac5-7420ef862259@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 1/8] mm/swap: remember PG_anon_exclusive via a swp pte
+ bit
+In-Reply-To: <28142e3e-2556-0ca2-7ac5-7420ef862259@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,39 +86,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/22 at 10:59am, Heiko Carstens wrote:
-> On Fri, Apr 08, 2022 at 05:24:28PM +0800, Baoquan He wrote:
-> > Add Heiko to CC.
-> > 
-> > On 04/08/22 at 05:06pm, Baoquan He wrote:
-> > > Copy the description of v3 cover letter from Willy:
-> > > ===
-> > > For some reason several people have been sending bad patches to fix
-> > > compiler warnings in vmcore recently.  Here's how it should be done.
-> > > Compile-tested only on x86.  As noted in the first patch, s390 should
-> > > take this conversion a bit further, but I'm not inclined to do that
-> > > work myself.
-> > 
-> > Forgot adding Heiko to CC again.
-> > 
-> > Hi Heiko,
-> > 
-> > Andrew worried you may miss the note, "As noted in the first patch,
-> > s390 should take this conversion a bit further, but I'm not inclined
-> > to do that work myself." written in cover letter from willy.
-> > 
-> > I told him you had already known this in v1 discussion. So add you in CC
-> > list as Andrew required. Adding words to explain, just in case confusion.
+On 13.04.22 10:58, Miaohe Lin wrote:
+> On 2022/3/30 0:43, David Hildenbrand wrote:
+>> Currently, we clear PG_anon_exclusive in try_to_unmap() and forget about
+> ...
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 14618f446139..9060cc7f2123 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -792,6 +792,11 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>>  						&src_mm->mmlist);
+>>  			spin_unlock(&mmlist_lock);
+>>  		}
+>> +		/* Mark the swap entry as shared. */
+>> +		if (pte_swp_exclusive(*src_pte)) {
+>> +			pte = pte_swp_clear_exclusive(*src_pte);
+>> +			set_pte_at(src_mm, addr, src_pte, pte);
+>> +		}
+>>  		rss[MM_SWAPENTS]++;
+>>  	} else if (is_migration_entry(entry)) {
+>>  		page = pfn_swap_entry_to_page(entry);
+>> @@ -3559,6 +3564,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>>  	struct page *page = NULL, *swapcache;
+>>  	struct swap_info_struct *si = NULL;
+>>  	rmap_t rmap_flags = RMAP_NONE;
+>> +	bool exclusive = false;
+>>  	swp_entry_t entry;
+>>  	pte_t pte;
+>>  	int locked;
+>> @@ -3724,6 +3730,46 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>>  	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
+>>  	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
+>>  
+>> +	/*
+>> +	 * Check under PT lock (to protect against concurrent fork() sharing
+>> +	 * the swap entry concurrently) for certainly exclusive pages.
+>> +	 */
+>> +	if (!PageKsm(page)) {
+>> +		/*
+>> +		 * Note that pte_swp_exclusive() == false for architectures
+>> +		 * without __HAVE_ARCH_PTE_SWP_EXCLUSIVE.
+>> +		 */
+>> +		exclusive = pte_swp_exclusive(vmf->orig_pte);
+>> +		if (page != swapcache) {
+>> +			/*
+>> +			 * We have a fresh page that is not exposed to the
+>> +			 * swapcache -> certainly exclusive.
+>> +			 */
+>> +			exclusive = true;
+>> +		} else if (exclusive && PageWriteback(page) &&
+>> +			   !(swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
 > 
-> Thanks for letting me know again. I'm still aware of this, but would
-> appreciate if I could be added to cc in the first patch of this
-> series, so I get notified when Andrew sends this Linus.
+> Really sorry for late respond and a newbie question. IIUC, if SWP_STABLE_WRITES is set,
+> it means concurrent page modifications while under writeback is not supported. For these
+> problematic swap backends, exclusive marker is dropped. So the above if statement is to
+> filter out these problematic swap backends which have SWP_STABLE_WRITES set. If so, the
+> above check should be && (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)), i.e. no "!".
+> Or am I miss something?
 
-Right, it's my neglect. I should CC all involved during the discussion.
+Oh, thanks for your careful eyes!
 
-By the way, could both of you, Heiko, Christoph, help check this
-patchset and offer your ack again if it's OK to you? I removed
-Christoph's Reviewed-by because there's some change as per Al's 
-comment, and replace my own 'Acked-by' with 'Signed-off-by' according to
-our posting rule.
+Indeed, SWP_STABLE_WRITES indicates that the backend *requires* stable
+writes, meaning, we must not modify the page while writeback is active.
+
+So if and only if that is set, we must drop the exclusive marker.
+
+This essentially corresponds to previous reuse_swap_page() logic:
+
+bool reuse_swap_page(struct page *page)
+{
+...
+	if (!PageWriteback(page)) {
+		...
+	} else {
+		...
+		if (p->flags & SWP_STABLE_WRITES) {
+			spin_unlock(&p->lock);
+			return false;
+		}
+...
+}
+
+Fortunately, this only affects such backends. For backends without
+SWP_STABLE_WRITES, the current code is simply sub-optimal.
+
+
+So yes, this has to be
+
+} else if (exclusive && PageWriteback(page) &&
+	   (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
+
+
+Let me try finding a way to test this, the tests I was running so far
+were apparently not using a backend with SWP_STABLE_WRITES.
+
+-- 
+Thanks,
+
+David / dhildenb
 

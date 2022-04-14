@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17DA500937
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFB050091F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241531AbiDNJFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S241481AbiDNJCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiDNJCd (ORCPT
+        with ESMTP id S241394AbiDNJBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:02:33 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089052A259
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:00:01 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id t12so4120760pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:00:01 -0700 (PDT)
+        Thu, 14 Apr 2022 05:01:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7186E547
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:14 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s14so4117857plk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B7gcZ2iThFka6LvykgF/itOBPX1z1QotaADm6wrPK4A=;
-        b=aleL4N3zpF/Ea+70rZj2fCuVsct15PZsMcWwS03pX3yQiXe8ck7/m4zT6KNmGYgDvo
-         mqEjk6mtV2uPs6Luaq/+ilfVnpYUeogNBGzEmh3vbyvT3C8ZsU4Qe9Ln6IGBRZeNH7QF
-         6WKwZNbxfUyLSKI2Ta2d+GF0DizhSqXlmAqPm9M0KhFv6bmyxSAigSZKIGWv9jNeETz7
-         44/WOwe7f8uK9yTDF1cWYFv8nFc9ZB590hw1Ka/eRUs/8mXqX2mUh8jIOZGvxxoYrCl/
-         h/O3OsN/P/VTP5eozp7LggK0Y9SO+ja0h87RlxoOuy97ZaBdRfGmt4vHdiCf7pUTz1fq
-         FGnw==
+        d=arista.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0LUCoLOqsjdmuMA9Sv/GTYrqnMUY1MiY7Yfiq4vegQE=;
+        b=HomuRkNsmV7IKhzIJt76YdeNNTkW/NrcqeA7SzFmKUtPaY3/VHAjsS6yZ7zHOBKR8r
+         zCbX6k8iFJINPRJt9zuZu8/CXDMqLnhSxOGqYIJpYeDl+0FvJm/iSC9G3LsO52+Oz2dg
+         rsYn2iXkkOEIHk3i3p7NtE9HPSbQsp1vtXzXF2xhtp8OUDuCvSp+B5vvOv5814PjX+ok
+         4LMXXWwLCY54XIJCI9Ibtxe+l/9oNMHcSY+At3un98WY7TMznKD02N7Wk8UNO8TB52aB
+         47NserAFqEUbjQx9vcfA+BEoQm5QtpTY7JEe5FLzJ5a8cfqTN4598JvJjiu2XQgMRIRQ
+         rsog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B7gcZ2iThFka6LvykgF/itOBPX1z1QotaADm6wrPK4A=;
-        b=CtMKwc0a32ycjw0pWTRpJY7xXHtzbSDAkQ+w/jhDsz7SuB1Qs6V7f5HnqgO+8MkwAo
-         3aXOmxPpzR2xfUjP+EQELKf2FZpbrQfIWdI/+cl+vVYKUYd6yETzSp8prqgObiD38YDl
-         lOluuJpUppPhR1HmUZe/IkLjjocAV5j6CQfPKlkIfr2MeIZ5JWqDkcPl7mORm1UqcTjc
-         AtRjy9anBKvLsqSOF4W3LbB3rB+AIV9z7NXl8gsc62ZOAy6PI89wzb5zO/e1z5Kk1ueR
-         anMw4KOZuXcBX9o1SpNxRk1Z34W4USdAkvDO5j9zLAO05H+rri2hVMwo+woboBs4+qpx
-         fWpg==
-X-Gm-Message-State: AOAM533FJ/Rl9JcHey/H0eWQ0tm5DVCCNWWlZXJf+xKby1o3Tfe0AdBL
-        f/iiu+/MXgD1Ot1yQti9NlI=
-X-Google-Smtp-Source: ABdhPJz+MKOJRhVGRMjYjrgkLtZKyFXNHXy5iSwnzJ2XplH/gav0LkRz1Gf7Zci/tlCcRcywt3k2lg==
-X-Received: by 2002:a17:902:9684:b0:158:b28c:41e0 with SMTP id n4-20020a170902968400b00158b28c41e0mr3854458plp.85.1649926800535;
-        Thu, 14 Apr 2022 02:00:00 -0700 (PDT)
-Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.59.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 01:59:59 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 23/23] mm/sl[au]b: check if large object is valid in __ksize()
-Date:   Thu, 14 Apr 2022 17:57:27 +0900
-Message-Id: <20220414085727.643099-24-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0LUCoLOqsjdmuMA9Sv/GTYrqnMUY1MiY7Yfiq4vegQE=;
+        b=C8qKh1XaJzA+GdxkvA49umTHWin+/X8TPESMXBGn+dZVsp84qVkW3AQCX7xQ38zFN4
+         5UtqTPqRAGQoFL1VfRWNnt1GmFAaBqgH78PX9m0Ug9GLDaIClLKkHbRBStrxpMYI60n3
+         v3EQJnsT2DDWlEbqcYBM0IQQovW9RkveOZFDnsBt/gqz9cEysB8OWvRJiK5961MGddMo
+         /3Bqmow0ocRpvacb5mLYPXQw7jXqFlKingvpseShEpy6HyRLL7DpdMGMrLcDyMOA4Wnp
+         X3p6ljYTPJRULk6f/t7wz+uU2As+v9g5f7MskwZ1FA7ukRKnV1tQBD8s3SIYmyop4LXA
+         Q7PQ==
+X-Gm-Message-State: AOAM531XirlKKSsPIE6KLRmnQpFypBL7hAkk0W2lMBQO3r76IwnC71mQ
+        iijGS6bdJYrXVvIHiEPV7AJs8hXsduXisZeXapGcQA==
+X-Google-Smtp-Source: ABdhPJxlr3HwneXRMQWmwp1QPVtDvPbaeJ6+jvqdb1zomhx1OdLrBeAIymtji6CSi0zshAF41yPRZfFxQZO+hbVuwLs=
+X-Received: by 2002:a17:902:7205:b0:156:1a0a:2c39 with SMTP id
+ ba5-20020a170902720500b001561a0a2c39mr46589099plb.88.1649926754208; Thu, 14
+ Apr 2022 01:59:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220414025609.578-1-aajith@arista.com> <0bf37720-870a-9dde-d825-92e12633ce38@gmail.com>
+In-Reply-To: <0bf37720-870a-9dde-d825-92e12633ce38@gmail.com>
+From:   Arun Ajith S <aajith@arista.com>
+Date:   Thu, 14 Apr 2022 14:29:01 +0530
+Message-ID: <CAOvjArTBoxSnX_ck_pW9Fq1cVXtT1sQ9zVHL207fdwj5v5iygQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] net/ipv6: Introduce accept_unsolicited_na
+ knob to implement router-side changes for RFC9131
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        dsahern@kernel.org, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, prestwoj@gmail.com,
+        gilligan@arista.com, noureddine@arista.com, gk@arista.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ksize() returns size of objects allocated from slab allocator.
-When invalid object is passed to __ksize(), returning zero
-prevents further memory corruption and makes caller be able to
-check if there is an error.
+Thank you.
+Do I have to post a v5 with the fixup ?
 
-If address of large object is not beginning of folio or size of
-the folio is too small, it must be invalid. Return zero in such cases.
+-Arun
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- mm/slab_common.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+-Arun
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 8facade42bdd..a14f9990b159 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -994,8 +994,12 @@ size_t __ksize(const void *object)
- 
- 	folio = virt_to_folio(object);
- 
--	if (unlikely(!folio_test_slab(folio)))
-+	if (unlikely(!folio_test_slab(folio))) {
-+		if (object != folio_address(folio) ||
-+				folio_size(folio) <= KMALLOC_MAX_CACHE_SIZE)
-+			return 0;
- 		return folio_size(folio);
-+	}
- 
- 	return slab_ksize(folio_slab(folio)->slab_cache);
- }
--- 
-2.32.0
 
+On Thu, Apr 14, 2022 at 11:42 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 4/14/22 09:56, Arun Ajith S wrote:
+> > Add a new neighbour cache entry in STALE state for routers on receiving
+> > an unsolicited (gratuitous) neighbour advertisement with
+> > target link-layer-address option specified.
+> > This is similar to the arp_accept configuration for IPv4.
+> > A new sysctl endpoint is created to turn on this behaviour:
+> > /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
+> >
+>
+> Hi,
+>
+> Building the documentation (htmldocs) with this patch, I got:
+>
+> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2475:
+> WARNING: Unexpected indentation.
+> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2477:
+> WARNING: Unexpected indentation.
+> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2481:
+> WARNING: Unexpected indentation.
+> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2482:
+> WARNING: Block quote ends without a blank line; unexpected unindent.
+>
+> I have applied following fixup.
+>
+> ---- 8> ----
+> From 304846b43a9f962f53f3841afabfd597b3b80951 Mon Sep 17 00:00:00 2001
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
+> Date: Thu, 14 Apr 2022 12:59:46 +0700
+> Subject: [PATCH] fixup for "net/ipv6: Introduce accept_unsolicited_na knob to
+>  implement router-side changes for RFC9131"
+>
+> Fix the simple table syntax.
+>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/networking/ip-sysctl.rst | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> index 9e17efe343a..433f2e4a5fe 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+> @@ -2472,13 +2472,17 @@ accept_unsolicited_na - BOOLEAN
+>         unsolicited neighbour advertisement with target link-layer address option
+>         specified. This is as per router-side behavior documented in RFC9131.
+>         This has lower precedence than drop_unsolicited_na.
+> +
+> +        ====   ======  ======  ==============================================
+>          drop   accept  fwding                   behaviour
+>          ----   ------  ------  ----------------------------------------------
+>             1        X       X  Drop NA packet and don't pass up the stack
+>             0        0       X  Pass NA packet up the stack, don't update NC
+>             0        1       0  Pass NA packet up the stack, don't update NC
+>             0        1       1  Pass NA packet up the stack, and add a STALE
+> -                                 NC entry
+> +                               NC entry
+> +        ====   ======  ======  ==============================================
+> +
+>         This will optimize the return path for the initial off-link communication
+>         that is initiated by a directly connected host, by ensuring that
+>         the first-hop router which turns on this setting doesn't have to
+>
+> base-commit: 38e01f46e0e7f88b92ca0b3f52ac6b9909ed413b
+> --
+> An old man doll... just what I always wanted! - Clara
+>
+> Thanks.
+>
+> --
+> An old man doll... just what I always wanted! - Clara

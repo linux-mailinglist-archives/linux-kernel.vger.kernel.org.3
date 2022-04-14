@@ -2,25 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905425008D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD9A5008CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241183AbiDNIyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S241185AbiDNIyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241154AbiDNIyO (ORCPT
+        with ESMTP id S241157AbiDNIyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:54:14 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406EB65798;
-        Thu, 14 Apr 2022 01:51:49 -0700 (PDT)
+        Thu, 14 Apr 2022 04:54:15 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01CC65808;
+        Thu, 14 Apr 2022 01:51:50 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.124]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MXHWM-1nSCZl0ZCA-00YlKM;
- Thu, 14 Apr 2022 10:51:35 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MI55X-1nhO2v2pIV-00FA0Z;
+ Thu, 14 Apr 2022 10:51:39 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
+Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
@@ -32,29 +34,30 @@ Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 05/14] ARM: dts: imx6ull-colibri: add touchscreen device nodes
-Date:   Thu, 14 Apr 2022 10:50:57 +0200
-Message-Id: <20220414085106.18621-6-marcel@ziswiler.com>
+Subject: [PATCH v1 06/14] ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
+Date:   Thu, 14 Apr 2022 10:50:58 +0200
+Message-Id: <20220414085106.18621-7-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220414085106.18621-1-marcel@ziswiler.com>
 References: <20220414085106.18621-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:AzmStBKEEMT8nYa1ZTBmzScuYh2UziRpF/eJmtbuREyQxrNZ6mR
- q70hyNaB9Pm7r7TnNmmmfVc+hRmb1QpCbKYl+5jFlUJQVB+5oo3LEy8hJDFGU3f8vD2QsYl
- p4k2cbwUSztVaigw7edX9iftQ2LA28/+A+R9clv2IIbU3uxm9+qsRCvPQOEpsRJ93hGtg4U
- 9jnBOJiVZbDse4lIbsSBw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jcTR2j4yPIM=:Bx83FwfHBmTwzhvCo4b7l6
- +SAHnIfuhee802teUFXRZGyGJaHo4WfcaqC7HgLke4VrbeS0yfKMkjQIcXkrv66vINpzm1/ib
- lbE7FEEP0X0ZbBjjSu27kExmH+LGTYTA1pwuU4KOPw3mb9IjY0A/JK00uyFEeucFY+AVUQZyW
- Knh5ps0S0aaRu5qne2ZfhPFiR7dUCK7n8hNCkF0xWk4Pgyth3EVcNwJtpcCKJV0KbQKjCDW+c
- qNBTOniKQGBhcFCXs/FSRq1aVAMJo9xx4fD+uByQcJWH1zX3JpqxUA6A6iorw9Y7Km8fwbNSg
- OgA37OmPiGSGVHvC48CT6TbtAeoQIq53Ky6WCVWNSKCW8EbaWHyaJbGobafs3x7WRpelsuTDw
- X/W0N6N+NiHZsi2qzF1OglMz1mmX/mNMpoGWnhHsZ3vE26l9M7jywNWIhTUBcKJJsMKIob6hg
- 1Ru++g//t8ocFbQn8jBnvASq99duSjvODTDqOlGW+opwtbt0g7EWoFwVkXgpy1mNc4KF02f/X
- cA3zyZ/P810rSSZ2jMobIiHo/Fh6Gugm0CthyfHri1bg77Qebn6zsAGjoP3pFn4hgryW9Wi7L
- Assag8dg7b4JwTJQIOXpHzh6n4GCVDgn7uJQjjAloKrGjrORwO/MjpqB3BPN9pOJtPpTaZnLs
- 6+7w54xKdo9UXVk6xAbEfiLO8iyBnriVMAehRaiP/3S/ivrIKHpy7fktC2JO1BDUabO0=
+X-Provags-ID: V03:K1:rUA5RPDRMKJxl21IfvOhcWoZcUa0Z6ba6d0SceNu3GExfI7tLxJ
+ d598Bgjo8pMLwAsLqRCX2B9JB+BOMR1tjm4TCsaMvY8dLG5pD7tbAgtJbxi1hwcBBhwrGjI
+ 8iqlehS1L8D+xTt6io/wnGuXhOZA9huOncLlH7/0C/A8k8DS1ZDZ2qic03Yixw9/1Mb7QLn
+ ZNEEQsKcoQdRBN5L0UsRQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:A5ZMQpW7OKE=:th3ZyW4YUS67+GKgXLL5It
+ I0j4lHkmb2FwaklTMttHU3JYWl5/NlvjMz/Wtv7smsbqMvLynZn5A7Xp9BDLmAyIP9C84LWL4
+ /1ISwSi75O/ksckdwaJEV2BA1nUa0fLFFO/vEO8b4hAt1K1ozOQ2VuZyw+yXem1C1qkcpfXpg
+ pLPyu2rjkJTNb2AqgjO0BrwBqQCnc0u4MstBZK0jSr6dCoTLGoNbKQKDkNg87anUcQAGMLqUj
+ K5MzyycnkiVBC1PjVjb0v75/mUSpBe8ijZVPDcryVRBJn13/oN51o5y6mdmSJQX7XzTxoFPkc
+ +L/otRFg0tHceGdtYupYw7pMMbU4hV163RIN6L/VQm+Xd0OsBwjscA18p3+J7b6wcdgNNzCu2
+ pyBL5U4trLXKnyUheUwDbNvZ0lXlYAmYBvCViSxRrlXZ0q38pOXXvJiKWliYtw3W7A/+6bsGA
+ C/GSOaG3AufesYNFhEaDE56Ar6f4nXaaxmHcFO2Cs91vZO8+GCzYGwRbt6bDNPLFd0uOC+Svt
+ buNh2plOvkRS45Nk/EHlJLrPwLilPrVzgxmSfNLP8MkgowFe+L7IpQbQx9OaIa329XPTOyL1w
+ +FaMgCKUYR0T1XhHom1+YRGXd46aAPcq003IVJNjgnOqrApm7TfsKO8P69ZzOxpkzmq+SeTKK
+ Cb+/o69jeIAl1DrmwCr4mdJedNuqNsEHnZGsp+wwweYNa0YAbIt6ici/FowJLm76wcGwux6cM
+ uGmC1IwngzQLSBzR
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -64,133 +67,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denys Drozdov <denys.drozdov@toradex.com>
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-Move all Atmel nodes from the board-level into the main module-level
-device tree and prepare the device trees for use with Atmel MXT device
-tree overlays. Also, add required pinmux groups.
+Due to many carrier boards pulling the usdhc1 signals up to 3.3 volt we
+need to disable 1.8 volt signaling. Adding the no-1-8-v property
+basically disables UHS-I modes by default.
 
-The common scheme for pin groups in touch screen overlays is as follows:
-- pinctrl_atmel_conn - SODIMM 106/107 pins for INT/RST signals (default)
-- pinctrl_atmel_adap - SODIMM   28/30 pins for INT/RST signals.
+Also pull-up the command and data lines to the +V3.3_1.8_SD rail and
+set them to the 200 MHz speed grade (e.g. pinmux bits 7-6: meaning 11
+SPEED_3_max_200MHz).
 
+Explicitly specify a bus-width of <4> in the module-level device tree
+include file and drop the no-1-8-v property from the carrier boards
+device trees.
+
+Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi |  4 +-
- arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   |  4 +-
- arch/arm/boot/dts/imx6ull-colibri.dtsi        | 39 +++++++++++++------
- 3 files changed, 31 insertions(+), 16 deletions(-)
+ .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi | 14 --------
+ arch/arm/boot/dts/imx6ull-colibri.dtsi        | 36 ++++++++++++-------
+ 2 files changed, 24 insertions(+), 26 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-index 95a11b8bcbdb..5e55a6c820bc 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-@@ -15,10 +15,10 @@ memory@80000000 {
- &iomuxc {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
--		&pinctrl_gpio4 &pinctrl_gpio5 &pinctrl_gpio6 &pinctrl_gpio7>;
-+		&pinctrl_gpio4 &pinctrl_gpio6 &pinctrl_gpio7>;
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+index a78849fd2afa..ea086b305d22 100644
+--- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
++++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+@@ -159,20 +159,6 @@ &usbotg2 {
  };
  
- &iomuxc_snvs {
- 	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio2 &pinctrl_snvs_gpio3>;
-+	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio3>;
+ &usdhc1 {
+-	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
+-	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_cd>;
+-	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_snvs_usdhc1_cd>;
+-	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_snvs_usdhc1_cd>;
+-	pinctrl-3 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_sleep_cd>;
+-	cd-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+-	disable-wp;
+-	wakeup-source;
+-	keep-power-in-suspend;
+ 	vmmc-supply = <&reg_3v3>;
+-	vqmmc-supply = <&reg_sd1_vmmc>;
+-	sd-uhs-sdr12;
+-	sd-uhs-sdr25;
+-	sd-uhs-sdr50;
+-	sd-uhs-sdr104;
+ 	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-index 9f1e38282bee..6e8ddb07e11d 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-@@ -26,13 +26,13 @@ &cpu0 {
- &iomuxc {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
--		&pinctrl_gpio4 &pinctrl_gpio5 &pinctrl_gpio7>;
-+		&pinctrl_gpio4 &pinctrl_gpio7>;
- 
- };
- 
- &iomuxc_snvs {
- 	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio2>;
-+	pinctrl-0 = <&pinctrl_snvs_gpio1>;
- };
- 
- &usdhc2 {
 diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index e619da3b00b3..b2345a5573f4 100644
+index b2345a5573f4..d633288b8ee8 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -124,6 +124,19 @@ &i2c1 {
- 	pinctrl-1 = <&pinctrl_i2c1_gpio>;
- 	sda-gpios = <&gpio1 29 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	scl-gpios = <&gpio1 28 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	status = "okay";
-+
-+	/* Atmel maxtouch controller */
-+	atmel_mxt_ts: touchscreen@4a {
-+		compatible = "atmel,maxtouch";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_atmel_conn>;
-+		reg = <0x4a>;
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;       /* SODIMM_107, INT */
-+		reset-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>;   /* SODIMM_106, RST */
-+		status = "disabled";
-+	};
+@@ -35,7 +35,7 @@ reg_module_3v3_avdd: regulator-module-3v3-avdd {
+ 		regulator-max-microvolt = <3300000>;
+ 	};
+ 
+-	reg_sd1_vmmc: regulator-sd1-vmmc {
++	reg_sd1_vqmmc: regulator-sd1-vqmmc {
+ 		compatible = "regulator-gpio";
+ 		gpios = <&gpio5 9 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+@@ -232,9 +232,21 @@ &usbotg2 {
  };
  
- &i2c2 {
-@@ -241,6 +254,20 @@ MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x3000 /* SODIMM 2 */
+ &usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_cd>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_snvs_usdhc1_cd>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_snvs_usdhc1_cd>;
++	pinctrl-3 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_sleep_cd>;
+ 	assigned-clocks = <&clks IMX6UL_CLK_USDHC1_SEL>, <&clks IMX6UL_CLK_USDHC1>;
+ 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL2_PFD2>;
+ 	assigned-clock-rates = <0>, <198000000>;
++	bus-width = <4>;
++	cd-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
++	disable-wp;
++	keep-power-in-suspend;
++	no-1-8-v;
++	vqmmc-supply = <&reg_sd1_vqmmc>;
++	wakeup-source;
+ };
+ 
+ &wdog1 {
+@@ -550,8 +562,8 @@ MX6UL_PAD_GPIO1_IO02__GPIO1_IO02	0x10b0 /* SODIMM 129 */
+ 
+ 	pinctrl_usdhc1: usdhc1-grp {
+ 		fsl,pins = <
+-			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x17059 /* SODIMM 47 */
+-			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x10059 /* SODIMM 190 */
++			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x10059 /* SODIMM 47 */
++			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x17059 /* SODIMM 190 */
+ 			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x17059 /* SODIMM 192 */
+ 			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x17059 /* SODIMM 49 */
+ 			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x17059 /* SODIMM 51 */
+@@ -561,8 +573,8 @@ MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x17059 /* SODIMM 53 */
+ 
+ 	pinctrl_usdhc1_100mhz: usdhc1-100mhz-grp {
+ 		fsl,pins = <
+-			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x170b9
+-			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x100b9
++			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100b9
++			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170b9
+ 			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170b9
+ 			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170b9
+ 			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170b9
+@@ -572,12 +584,12 @@ MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170b9
+ 
+ 	pinctrl_usdhc1_200mhz: usdhc1-200mhz-grp {
+ 		fsl,pins = <
+-			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x170f9
+-			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x100f9
+-			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170b9
+-			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170b9
+-			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170b9
+-			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170b9
++			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100f9
++			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170f9
++			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170f9
++			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170f9
++			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170f9
++			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170f9
  		>;
  	};
  
-+	pinctrl_atmel_adap: atmel_adap_group {
-+		fsl,pins = <
-+			MX6UL_PAD_NAND_DQS__GPIO4_IO16          0xb0a0  /* SODIMM 28 */
-+			MX6UL_PAD_ENET1_TX_EN__GPIO2_IO05       0xb0a0  /* SODIMM 30 */
-+		>;
-+	};
-+
-+	pinctrl_atmel_conn: atmel_conn_group {
-+		fsl,pins = <
-+			MX6UL_PAD_JTAG_MOD__GPIO1_IO10          0xb0a0  /* SODIMM 106 */
-+			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04     0xb0a0	/* SODIMM 107 */
-+		>;
-+	};
-+
- 	pinctrl_can_int: canint-grp {
- 		fsl,pins = <
- 			MX6UL_PAD_ENET1_TX_DATA1__GPIO2_IO04	0x13010	/* SODIMM 73 */
-@@ -347,12 +374,6 @@ MX6UL_PAD_CSI_DATA07__GPIO4_IO28	0x10b0 /* SODIMM 65 */
- 		>;
- 	};
+@@ -588,7 +600,7 @@ MX6UL_PAD_CSI_DATA01__USDHC2_DATA1	0x17069
+ 			MX6UL_PAD_CSI_DATA02__USDHC2_DATA2	0x17069
+ 			MX6UL_PAD_CSI_DATA03__USDHC2_DATA3	0x17069
+ 			MX6UL_PAD_CSI_HSYNC__USDHC2_CMD		0x17069
+-			MX6UL_PAD_CSI_VSYNC__USDHC2_CLK		0x17069
++			MX6UL_PAD_CSI_VSYNC__USDHC2_CLK		0x10069
  
--	pinctrl_gpio5: gpio5-grp { /* ATMEL MXT TOUCH */
--		fsl,pins = <
--			MX6UL_PAD_JTAG_MOD__GPIO1_IO10		0xb0a0 /* SODIMM 106 */
--		>;
--	};
--
- 	pinctrl_gpio6: gpio6-grp { /* Wifi pins */
- 		fsl,pins = <
- 			MX6UL_PAD_GPIO1_IO03__GPIO1_IO03	0x10b0 /* SODIMM 89 */
-@@ -606,12 +627,6 @@ MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08	0x110a0	/* SODIMM 138 */
+ 			MX6UL_PAD_GPIO1_IO03__OSC32K_32K_OUT	0x10
  		>;
- 	};
- 
--	pinctrl_snvs_gpio2: snvs-gpio2-grp { /* ATMEL MXT TOUCH */
--		fsl,pins = <
--			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04	0xb0a0	/* SODIMM 107 */
--		>;
--	};
--
- 	pinctrl_snvs_gpio3: snvs-gpio3-grp { /* Wifi pins */
- 		fsl,pins = <
- 			MX6ULL_PAD_BOOT_MODE1__GPIO5_IO11	0x130a0	/* SODIMM 127 */
 -- 
 2.35.1
 

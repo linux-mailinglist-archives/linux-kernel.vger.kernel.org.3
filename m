@@ -2,135 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B46501CFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96254501D03
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346679AbiDNVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S1346698AbiDNVC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239824AbiDNVBl (ORCPT
+        with ESMTP id S239824AbiDNVCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:01:41 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8E3ECC70
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=gXaGmOOsB9TGzqUB1QimCayH4bdRjVTZzE3nk7Y91u4=; b=mWmv74Vv0CmWoCcAqKhK+rJDdn
-        TwLeWuS5l0Kf6mCLiWcZD90YM48bvXd8abATpVborWSIN+12/iieJYNfS3ivp5YEaBXbZHJAgfJHt
-        ykpQyBmBVAua+XjyWVZmyQwiaIsb9GPlZvDZXdrR/MHbFAYCsrLtIvkDwrj08ByW70+DWtDFOJQJT
-        QSrYHzvZw8qwh+4WGtd1OaOVorKjSMSf55Zn4drvXnOY6ECo4glHKQ4RTT6/Mazml/3hzUJf6T9tO
-        ahFWWPvArkx4yZ7hvAgb8VRKucNiGVltdNnJIDhHyZJdM5sLEVS8Yh6JG+nikSCXJC2VXHdoR3g/p
-        5i7lnVfg==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nf6YU-0000ac-Gw; Thu, 14 Apr 2022 22:59:06 +0200
-Date:   Thu, 14 Apr 2022 19:58:51 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-Cc:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        andrealmeid@riseup.net
-Subject: Re: [PATCH 1/1] drm/vkms: check plane_composer->map[0] before using
- it
-Message-ID: <20220414205802.f4nkh43por2ohnqo@mail.igalia.com>
-References: <20220411233801.36297-1-tales.aparecida@gmail.com>
- <20220411233801.36297-2-tales.aparecida@gmail.com>
+        Thu, 14 Apr 2022 17:02:25 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F674D1112
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:59:58 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2eba37104a2so68435307b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1aJnO8lXqf7RCGk9jNC6pJ0LNJHRPu30/MOzaQ/zXk4=;
+        b=bFfGgG4u/HF6NPvqJorGGLYVtyq8CxpSSYFYp9SMh0iAVxOgGIPKcOEczvTUEVT0wL
+         oU7HhQrgtHR1O1GcCef3JwMBFqGyqWXUKNCaKp7q+AzDf5Kb8WE1qLopEioDdk3lJGDM
+         0yLQJVpCXhDLLdnG9SQ4W0hWp90RYzdcWMitIqHulfXgwSCeCpXRWuyACyFjOrD5Z9tH
+         na4t7OMrN6u1vqioRcNn1NRVUKz5XADQrvjbC7nP8Fzorf93u43zmHN81RXzkuv8UOYu
+         VYVHaPTpKP4isiO4CnGQBPG2fyTWkYnuINpVoLRGMFu/hd4DQClQigGdkoONSBEsHhLm
+         EDZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1aJnO8lXqf7RCGk9jNC6pJ0LNJHRPu30/MOzaQ/zXk4=;
+        b=YfsWyWTQSpj8PcC+5aj1Zkovz1JyxPxPg4YDmZZpSne0CgBQ2X/hZtTc7bfbMAbRkU
+         lCT349aLd4VpCN9JbqwnDv6EhfC23LOkYp25PJp0vUT4HKTa32tNeTqBT9SxjPt2d+XL
+         Ab3Av+cYHuXSZEPjCjky+kmp50jgW8IObDNGpua7qXdkLvVlKJYIMhxauI/ey9YFuHiV
+         e8VNq9bzSmL5fMdAReYV6lyg1aMHNUoKeMXNNuTk8RGjOKnbKJHLgLC5yz4nPEKokS1E
+         MIT7lJH2VeJKw38Hsu+I38edhi4fUMT8c8xfE6DXEO63iE91ZWFVdqLs+jywm/G7ObJU
+         S+tA==
+X-Gm-Message-State: AOAM532qMJbhXBHqFTc2ucX2z2zzAscMayxBMsbcaOFc2N4RPTWmU+qH
+        VCttJnrgj7AvmTpG9kWa7VbPiiHJc+uyN5kzHi4EIA==
+X-Google-Smtp-Source: ABdhPJxFLLVwzKOpG6dKt6Hjs10nqzigOVCAdPlB4AObBW/cHeev3pnoBZwARfvp8gBsV3S/icbTLKeQgQEM0nT6ZlA=
+X-Received: by 2002:a81:a1c1:0:b0:2eb:fb9c:c4e5 with SMTP id
+ y184-20020a81a1c1000000b002ebfb9cc4e5mr3394257ywg.156.1649969997420; Thu, 14
+ Apr 2022 13:59:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wmzy4nunyg3yxory"
-Content-Disposition: inline
-In-Reply-To: <20220411233801.36297-2-tales.aparecida@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220413175944.71705-1-bgardon@google.com> <20220413175944.71705-7-bgardon@google.com>
+ <YldQOJjqLJxRz6Ea@google.com>
+In-Reply-To: <YldQOJjqLJxRz6Ea@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 14 Apr 2022 13:59:46 -0700
+Message-ID: <CANgfPd-LOxaJSvOhxQQ2MvJauimUHugrKRi0TFxNpq0ShL8rRg@mail.gmail.com>
+Subject: Re: [PATCH v5 06/10] KVM: selftests: Add NX huge pages test
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 13, 2022 at 3:35 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Apr 13, 2022, Ben Gardon wrote:
+> > There's currently no test coverage of NX hugepages in KVM selftests, so
+> > add a basic test to ensure that the feature works as intended.
+>
+> ...
+>
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > new file mode 100644
+> > index 000000000000..7f80e48781fd
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > @@ -0,0 +1,166 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * tools/testing/selftests/kvm/nx_huge_page_test.c
+> > + *
+> > + * Usage: to be run via nx_huge_page_test.sh, which does the necessary
+> > + * environment setup and teardown
+>
+> It would be really nice if this test could either (a) do something useful without
+> having to manually set /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages,
+> or (b) refuse to run unless it's (likely) been invoked by the script.  E.g. maybe
+> add a magic token that must be passed in?  That way just running the bare test
+> will provide a helpful skip message, but someone that wants to fiddle with it can
+> still run it manually.
+>
+> > +int main(int argc, char **argv)
+> > +{
+> > +     struct kvm_vm *vm;
+> > +     struct timespec ts;
+> > +     void *hva;
+>
+> This needs to check if the workaround is actually enabled via module param.  Not
+> as big a deal if there's a magic number, but it's also not too hard to query a
+> module param.  Or at least, it shouldn't be, I'm fairly certain that's one of the
+> things I want to address in the selftests overhaul.
+>
+> Aha! Actually, IIUC, the patch that validates the per-VM override adds full support
+> for the module param being turned off.
+>
+> So, how about pull in the tweaks to the expected number to this patch, and then
+> the per-VM override test just makes disable_nx a logical OR of the module param
+> beyond off or the test using the per-VM override.
+>
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > new file mode 100755
+> > index 000000000000..19fc95723fcb
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > @@ -0,0 +1,25 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +# tools/testing/selftests/kvm/nx_huge_page_test.sh
+> > +# Copyright (C) 2022, Google LLC.
+>
+> This should either check for root or use sudo.
 
---wmzy4nunyg3yxory
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is there not any scenario where the below setup commands could work
+without root?
 
-On 04/11, Tales Lelo da Aparecida wrote:
-> Fix a copypasta error, which resulted in checking repeatedly if the
-> primary_composer->map[0] was null, instead of checking each
-> plane_composer while composing planes.
->=20
-> Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-
-Hi Tales,
-
-Nice catch!
-
-I suggest you detail this issue with more information. The caller of
-compose_plane() already checks primary_composer->map. In constrast,
-plane_composer->map is never verified here before handling.
-Also, add the 'Fixes' tag pointing to the commit that introduced this
-issue.
-
-Can you send a next version addressing these suggestions and already
-adding Andre's reviewed-by tag?
-
-Thanks for your patch.
-
-Melissa
-
-> ---
->  drivers/gpu/drm/vkms/vkms_composer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/=
-vkms_composer.c
-> index c6a1036bf2ea..b47ac170108c 100644
-> --- a/drivers/gpu/drm/vkms/vkms_composer.c
-> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
-> @@ -157,7 +157,7 @@ static void compose_plane(struct vkms_composer *prima=
-ry_composer,
->  	void *vaddr;
->  	void (*pixel_blend)(const u8 *p_src, u8 *p_dst);
-> =20
-> -	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
-> +	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
->  		return;
-> =20
->  	vaddr =3D plane_composer->map[0].vaddr;
-> --=20
-> 2.35.1
->=20
-
---wmzy4nunyg3yxory
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmJYiwoACgkQwqF3j0dL
-ehxEIxAApmAQvIXxU9r0qhgFR0GUE1pY1DkBT0gjMowhRzC2fMlb4ifORJHu+R4k
-ibQZKK/gqC+0ktD+q7vAur5l5zuc2T/4TlLbobxH8utVVpjPiVvGy0dMkEwQFmP8
-PqQStNt367sai+DY7wZc5XfYwuv39ilOdr9HUV5Q9iwuqRrL8r2gun6ugBw4lzDb
-mTpmO+iWVT5KhMJbcmsa2XHUEQrIkqZN7vm73XBgbw40ebvBhJe1YVLBqIwrGkvh
-CGughFZfmncvz17yURvneI0bO8Lzek1AUBm5KKHdyFT4ZCtKKKEpUzMlr2LHqqnc
-EPqdtCXDogQt0SL+DMCxviy4tP+flzOJVsKOKGei6/U6YnTGgwVCaQfHL3iVI3U/
-o/Fu5eoczG7tKMt8ZL9JJ+aDa03rf0oWQsliQiqde3fCuP4cLyRlPMni20VLUwHd
-iJMK6tdM5VjQOUck3+WRe29LcVi2dKEzJyL1WeiBBHgV6EonBq1M9g5Nm6rZWjvG
-4HPNtDR/oa9dLRy77SWQzXUTng6oZgVtK6LGkDR+NCh7f38b7uDmpk34qE/6Z9Ao
-mN5w0TVcV05IeUh9RIIeuC2C7/HWSIArMwP3L4SLmERte9YWYCkplDeDoEHlONmX
-zVe6DB5uEcizY0ax67QB9Azya60lExPHHnK83gPNdQweaam5+0A=
-=7LhH
------END PGP SIGNATURE-----
-
---wmzy4nunyg3yxory--
+>
+> > +NX_HUGE_PAGES=$(cat /sys/module/kvm/parameters/nx_huge_pages)
+> > +NX_HUGE_PAGES_RECOVERY_RATIO=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio)
+> > +NX_HUGE_PAGES_RECOVERY_PERIOD=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
+> > +HUGE_PAGES=$(cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
+> > +
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +./nx_huge_pages_test
+>
+> I would much prefer this find its path and use that to reference the test, e.g. this
+> fails if invoking the script from anything but the x86_64 subdirectory.  I'd provide
+> a snippet of how to do that, but my scripting skills are garbage :-)
+>
+> > +RET=$?
+> > +
+> > +echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo $NX_HUGE_PAGES_RECOVERY_RATIO > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo $NX_HUGE_PAGES_RECOVERY_PERIOD > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo $HUGE_PAGES > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +exit $RET
+> > --
+> > 2.35.1.1178.g4f1659d476-goog
+> >

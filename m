@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330FF501737
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D5A501738
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354211AbiDNPYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S1355638AbiDNPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347497AbiDNN66 (ORCPT
+        with ESMTP id S1347500AbiDNN66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 09:58:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7963E5FC;
-        Thu, 14 Apr 2022 06:49:51 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1573ED2A;
+        Thu, 14 Apr 2022 06:49:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB4561DA0;
-        Thu, 14 Apr 2022 13:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE97CC385A1;
-        Thu, 14 Apr 2022 13:49:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AD5461D93;
+        Thu, 14 Apr 2022 13:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95991C385A1;
+        Thu, 14 Apr 2022 13:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944190;
-        bh=R7RrpTjzQmZF1cuichYrQu6LFJbmbhgx08Zivm3o6K0=;
+        s=korg; t=1649944193;
+        bh=Ur7rnRKD7I0yAumOWBGWGZkPPf4CPiK8FlaCdTnTWQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnywNz6tHOLAobr269ybD0Lk2J6m33V8hEfT/6yr5lDUDTkgnyxXF2+X0okRI1WmO
-         RHKLzO7lQM6y5Gl3NaImyDmJTX9PFJb5bVryfbwabUvWNzNOd65P8AR0SqLoHNr35E
-         xBij3562h9yjNNjhzkcd+EutnN2iOa/xBCre2iOU=
+        b=EYA+uN7cEXJhhPxPWFO78Ub+4K5oBieqEP2jS7a57/+46g0ZvquKiJUsStZOo2Inb
+         rCg1DAP83CI8r59kxcdnnK/E8UnwmtDC2lzXH8iaT9MCmz941ZjCFJD8Ow/wLda8ad
+         mSGr+miz1+UN0Bbs5EY5qkBT5h7mranH8g3/0dzo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 425/475] Drivers: hv: vmbus: Fix potential crash on module unload
-Date:   Thu, 14 Apr 2022 15:13:30 +0200
-Message-Id: <20220414110906.958128956@linuxfoundation.org>
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 426/475] scsi: zorro7xx: Fix a resource leak in zorro7xx_remove_one()
+Date:   Thu, 14 Apr 2022 15:13:31 +0200
+Message-Id: <20220414110906.986846026@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -56,56 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 792f232d57ff28bbd5f9c4abe0466b23d5879dc8 ]
+[ Upstream commit 16ed828b872d12ccba8f07bcc446ae89ba662f9c ]
 
-The vmbus driver relies on the panic notifier infrastructure to perform
-some operations when a panic event is detected. Since vmbus can be built
-as module, it is required that the driver handles both registering and
-unregistering such panic notifier callback.
+The error handling path of the probe releases a resource that is not freed
+in the remove function. In some cases, a ioremap() must be undone.
 
-After commit 74347a99e73a ("x86/Hyper-V: Unload vmbus channel in hv panic callback")
-though, the panic notifier registration is done unconditionally in the module
-initialization routine whereas the unregistering procedure is conditionally
-guarded and executes only if HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE capability
-is set.
+Add the missing iounmap() call in the remove function.
 
-This patch fixes that by unconditionally unregistering the panic notifier
-in the module's exit routine as well.
-
-Fixes: 74347a99e73a ("x86/Hyper-V: Unload vmbus channel in hv panic callback")
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20220315203535.682306-1-gpiccoli@igalia.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Link: https://lore.kernel.org/r/247066a3104d25f9a05de8b3270fc3c848763bcc.1647673264.git.christophe.jaillet@wanadoo.fr
+Fixes: 45804fbb00ee ("[SCSI] 53c700: Amiga Zorro NCR53c710 SCSI")
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/vmbus_drv.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/scsi/zorro7xx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 6b7ab8f234e8..943654ded73d 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2493,10 +2493,15 @@ static void __exit vmbus_exit(void)
- 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
- 		kmsg_dump_unregister(&hv_kmsg_dumper);
- 		unregister_die_notifier(&hyperv_die_block);
--		atomic_notifier_chain_unregister(&panic_notifier_list,
--						 &hyperv_panic_block);
- 	}
+diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
+index 27b9e2baab1a..7acf9193a9e8 100644
+--- a/drivers/scsi/zorro7xx.c
++++ b/drivers/scsi/zorro7xx.c
+@@ -159,6 +159,8 @@ static void zorro7xx_remove_one(struct zorro_dev *z)
+ 	scsi_remove_host(host);
  
-+	/*
-+	 * The panic notifier is always registered, hence we should
-+	 * also unconditionally unregister it here as well.
-+	 */
-+	atomic_notifier_chain_unregister(&panic_notifier_list,
-+					 &hyperv_panic_block);
-+
- 	free_page((unsigned long)hv_panic_page);
- 	unregister_sysctl_table(hv_ctl_table_hdr);
- 	hv_ctl_table_hdr = NULL;
+ 	NCR_700_release(host);
++	if (host->base > 0x01000000)
++		iounmap(hostdata->base);
+ 	kfree(hostdata);
+ 	free_irq(host->irq, host);
+ 	zorro_release_device(z);
 -- 
 2.35.1
 

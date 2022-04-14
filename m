@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D48500C6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831FA500C7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbiDNLz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S242841AbiDNL4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235031AbiDNLz1 (ORCPT
+        with ESMTP id S232035AbiDNL4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:55:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B7C6211D;
-        Thu, 14 Apr 2022 04:53:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03219B82921;
-        Thu, 14 Apr 2022 11:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74976C385A1;
-        Thu, 14 Apr 2022 11:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649937180;
-        bh=CfAU/8BLQZf/z4UTLjwFtFdwDKxtlWOO615gu89IVos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lOMredMovFi2z1Dq2qSiGbT066bYK7ftxLfE7AR+rclIpgNyyeXwZj28HnpI7M3x8
-         Q5Z5x7OjySsPRhaRmLjsJas8dFSyh+/yhmIAfcvMtp3HirnDMB04+hDjJw9jJMh6MO
-         6ur2Gti5yOGsoIA6hI5+Xrwzjq1F4NbZDSNju1WJcEJudR2igCSPqACALJJIURm6ht
-         XMcWy9jiBX5OdJUYYhfwVJCAftMC9sgCJJKWp1j4oWjfDI+GeHqp4bIaOTuxHc81Ta
-         RZHnRVaOzNHb5vN6DYV+I5sVKfBgWmmeSf1CHIp7f1X/2Y7YMiXgJnDHIUxL94NpNd
-         Zml132wL19Fsg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C655440407; Thu, 14 Apr 2022 08:52:57 -0300 (-03)
-Date:   Thu, 14 Apr 2022 08:52:57 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
- event
-Message-ID: <YlgLGb+NkMNKc3+0@kernel.org>
-References: <20220413092317.756022-1-leo.yan@linaro.org>
- <Yld4fzWWY07ksB+5@kernel.org>
- <9ad30442-41f8-6e17-cb4a-ab102b3ebd69@arm.com>
- <20220414110124.GB598831@leoy-ThinkPad-X240s>
+        Thu, 14 Apr 2022 07:56:14 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB5B887AF;
+        Thu, 14 Apr 2022 04:53:49 -0700 (PDT)
+X-UUID: 2a3feb5c5ba6403a8358d36008dc8a07-20220414
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:10da4593-4ebc-457d-a26d-8552cbbea70d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:25,RT:0,SF:95,FILE:0,RULE:Release_Ham,
+        ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.4,REQID:10da4593-4ebc-457d-a26d-8552cbbea70d,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:25,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,
+        ACTION:quarantine,TS:100
+X-CID-META: VersionHash:faefae9,CLOUDID:dade25a9-d103-4e36-82b9-b0e86991b3df,C
+        OID:7a0f8d2109bd,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:5,Fil
+        e:nil,QS:0,BEC:nil
+X-UUID: 2a3feb5c5ba6403a8358d36008dc8a07-20220414
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1247441206; Thu, 14 Apr 2022 19:53:42 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 14 Apr 2022 19:53:41 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
+ 2022 19:53:41 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 19:53:41 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/2] remoteproc: mediatek: allow different SCP firmware names
+Date:   Thu, 14 Apr 2022 19:53:37 +0800
+Message-ID: <20220414115339.5536-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414110124.GB598831@leoy-ThinkPad-X240s>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,91 +69,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 14, 2022 at 07:01:24PM +0800, Leo Yan escreveu:
-> On Thu, Apr 14, 2022 at 11:29:48AM +0100, James Clark wrote:
-> > On 14/04/2022 02:27, Arnaldo Carvalho de Melo wrote:
-> > > Em Wed, Apr 13, 2022 at 05:23:17PM +0800, Leo Yan escreveu:
-> > >> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-> > >> is not available") "perf mem report" and "perf report --mem-mode"
-> > >> don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-> > >> type.
-> > >>
-> > >> The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-> > >> partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-> > >> event, this allows the perf data file generated by kernel v5.18-rc1 or
-> > >> later version can be reported properly.
-> > >>
-> > >> On the other hand, perf tool still fails to be backward compatibility
-> > >> for a data file recorded by an older version's perf which contains Arm
-> > >> SPE trace data.  This patch is a workaround in reporting phase, when
-> > >> detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-> > >> force to set the bit in the sample type and give a warning info.
-> > >>
-> > >> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-> > >> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > >> Tested-by: German Gomez <german.gomez@arm.com>
-> > >> ---
-> > >> v2: Change event name from "arm_spe_" to "arm_spe";
-> > >>     Add German's test tag.
-> > > 
-> > > Tentatively applied, would be great to have James' and Ravi's
-> > > Acked-by/Reviewed-by, which I'll add before pushing this out if provided
-> > > in time.
-> > > 
-> > > - Arnaldo
-> > >  
-> > >>  tools/perf/builtin-report.c | 16 ++++++++++++++++
-> > >>  1 file changed, 16 insertions(+)
-> > >>
-> > >> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> > >> index 1ad75c7ba074..acb07a4a9b67 100644
-> > >> --- a/tools/perf/builtin-report.c
-> > >> +++ b/tools/perf/builtin-report.c
-> > >> @@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
-> > >>  	struct perf_session *session = rep->session;
-> > >>  	u64 sample_type = evlist__combined_sample_type(session->evlist);
-> > >>  	bool is_pipe = perf_data__is_pipe(session->data);
-> > >> +	struct evsel *evsel;
-> > >>  
-> > >>  	if (session->itrace_synth_opts->callchain ||
-> > >>  	    session->itrace_synth_opts->add_callchain ||
-> > >> @@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
-> > >>  	}
-> > >>  
-> > >>  	if (sort__mode == SORT_MODE__MEMORY) {
-> > >> +		/*
-> > >> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-> > >> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-> > >> +		 * compatibility, set the bit if it's an old perf data file.
-> > >> +		 */
-> > >> +		evlist__for_each_entry(session->evlist, evsel) {
-> > >> +			if (strstr(evsel->name, "arm_spe") &&
-> > >> +				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-> > >> +				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
-> > >> +					    "for Arm SPE event.\n");
-> > 
-> > Looks ok to me. Personally I would remove the warning, otherwise people are going to start
-> > thinking that they need to do something about it or something bad has happened.
-> > 
-> > But because we've fixed it up there shouldn't really need to be a warning or any action.
-> 
-> Understand.  The warning is not bad for developers but it might
-> introduce confusion for users, and if we really want to check the sample
-> type then we can use 'perf evlist' command, so it's not very useful for
-> the warning.
-> 
-> I will remove the warning and resend a new patch.
+The SCP needs firmware which differs between platforms and SoCs. Add a new
+property "firmware-name" to allow the DT to specify the platform/board specific
+path to this firmware file.
 
-Waiting then
- 
-> > I don't feel too strongly about this though, so I will leave it up to Leo to make the
-> > final decision:
-> > 
-> > Reviewed-by: James Clark <james.clark@arm.com>
-> 
-> Thanks a lot for reviewing.
-> Leo
+The firmware-name property is optional and the code falls back to the
+old filename if the property isn't present.
+
+Base on tag: next-20220412, linux-next/master
+
+Allen-KH Cheng (2):
+  dt-bindings: remoteproc: mediatek: dd firmware-name property
+  remoteproc: mediatek: allow reading firmware-name from DT
+
+ Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml | 7 +++++++
+ drivers/remoteproc/mtk_scp.c                              | 7 ++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 -- 
+2.18.0
 
-- Arnaldo

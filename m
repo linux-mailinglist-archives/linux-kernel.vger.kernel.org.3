@@ -2,180 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD36D5018B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF8D5018C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236641AbiDNQfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S237117AbiDNQhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiDNQen (ORCPT
+        with ESMTP id S232700AbiDNQhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:34:43 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13973B89
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:03:19 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so9675410pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:03:19 -0700 (PDT)
+        Thu, 14 Apr 2022 12:37:24 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A79DFDE2E;
+        Thu, 14 Apr 2022 09:07:00 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bh17so10952480ejb.8;
+        Thu, 14 Apr 2022 09:06:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gYZcqKE4gPDeEOq6vTanVgpcbt838PrfODIBOARgOwI=;
-        b=4vuqFuX1dWiC5cbQZSo/4Nymm/397TPgn4uZnwxpIHvo7WmsxxQEWcubR+78H9RGkS
-         tqwbnVO6dIGbhVLHh4EcXCkn4PtpZgmVDO8AjkKEKTV+6FOzUGn9o9QzQsE3usQ1Pv8+
-         A9YQHbxVWcxkYB6k98I7dBsIpti/5SF3Vd0xVmKorRrldBywq40dJWsbeFlknWApg2WJ
-         VF9COUCF7DFhm4zkTc3pYEI22QCZF15AThM2bok7ptikUiJT8gV3Sb597vhM9fPDGC7N
-         KqKPx1caag9BIPESKDcKIGKf/EYsZ1xaK5/NXpz7hLRVNX5sx35CNbqmuUJ15M2dk1pY
-         5TZQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JZ9b/z89dch9gLvF5vASMxbmJ/Wzdwmfjy6OZsSqtqA=;
+        b=L5sP55TAgL2AI4FDkJ+eMhfVeG1Y6n+mayllGbh7HAbtrbX8Kq31bKTjMTAqXQRdL+
+         uxf5PF0+vennnKdDh1T5GXF47ae2ZFWslbFdRB1FcgBWFjZOP1tG9QRTiMQ5+OPvrUiI
+         uvKkZBe1bmA87leVgy4H4aHNqAh9Ddz8maIOFpwfFldbi/9KASDbBidQAReNFKsRndjF
+         mLrjHMWmyxtIw+DEVEBY5vPe4CNbEs7P2o7fRt23W0xo0/MlvZIRvflgp+6FVESYhKzj
+         /+fwRMHo3W2c6bb3X30RDhJQAUPQQznabpXEXbKrWgIMGkIjBbescnE/2k5wlzkTPJ5D
+         PnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gYZcqKE4gPDeEOq6vTanVgpcbt838PrfODIBOARgOwI=;
-        b=lyeTLw9oBcwfHBEfaSCQr7gVPD0vLH17XFfBsLmUYcjtEUOHZ6bXqRqI13qKvwmEfP
-         2C+/w1oy3tXH6bFGTJQLBFe/hrTrcyre2q+Z6FGgFalfQ9RI/ZsoF6uP7nnZwrtUqt68
-         gmvmDJZ4/qccjsKuGlSKYip3usAV7XDdErDQwo8NG/DQGr2GcDMJbQtMQw5ApWDlLkvS
-         9xqoEwMsqi1l0Oy4vuEVLmdUCWE9KOPIxos1rM4lEzk72iNV2ggxFV9mXkG56IWufvwr
-         gdGJwTLGHnYRfcLyzw1zNhoYf65r8ibX28EM/OA8ZXRvVRoLRRZHnRyaoMngqCPxEcuL
-         PNPA==
-X-Gm-Message-State: AOAM5308DKQva9kHWzeVuEtJWTh/f4LKlk2Zm7XL4qflTx1mncGcuueR
-        LTksSDhYhQwlwhsTrRVwVWpC9g==
-X-Google-Smtp-Source: ABdhPJxwpB4OEHYX+HrxFPLkb3cIMhFw8/1arc2ZYfNvjukO2q+K0xJUf8EeHiI49j7WNtRMHneGWQ==
-X-Received: by 2002:a17:902:854c:b0:158:35ce:9739 with SMTP id d12-20020a170902854c00b0015835ce9739mr26794439plo.150.1649952198568;
-        Thu, 14 Apr 2022 09:03:18 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm2310922pgn.72.2022.04.14.09.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 09:03:17 -0700 (PDT)
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     netdev@vger.kernel.org
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Shachar Raindel <shacharr@microsoft.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Dimitris Michailidis <d.michailidis@fungible.com>,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] net: restore alpha order to Ethernet devices in config
-Date:   Thu, 14 Apr 2022 09:03:12 -0700
-Message-Id: <20220414160315.105212-1-stephen@networkplumber.org>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JZ9b/z89dch9gLvF5vASMxbmJ/Wzdwmfjy6OZsSqtqA=;
+        b=ZuleybUwTBA2lAYh9087tXpZMu5bAv8vSW5J0fS5vKh+2cGY65D5drKyMMSZODaEcY
+         m9ip1PmLX/3v1IljsMGnrX0kribcegZYUCnfGbf46/XE+NI4tM5uOUXnUER0CR9+fsJ0
+         QJsvT/AaUYUKUBQ8ClCGfhLV+vRXmUw4lyzpLWi5rRrbdPcijJAEH16+hcMcufk6FIof
+         6rstVL/GW2MhhhFF1BtQf5z1JDQzVGEVQ0x0UkKZlnLzGNamfEPYTv9tzyoduwGXrjN7
+         pSixGR5o6BNaA1cAo3nCr3tkEFr8nPOHzLbhllyQBLe6+jU7KdXPDoB8rSLJMMuYTrWb
+         Rfig==
+X-Gm-Message-State: AOAM530D/GyabXimb4hGtd6H+ixCkmZ0v7sOFPKYTSNhC3sKh1zthBCl
+        pF828yM/PYtPJZyRiBQFTWHp0+rmJRqJaqh9xN8=
+X-Google-Smtp-Source: ABdhPJyF91NZOaGxS5Pl0tuT7o0nmwxyK0YmWaO6cyOAzEQDgBQtN5VcAICIZk16A9Jhgd3oPfGbcQ4Yyrca0dRmbw8=
+X-Received: by 2002:a17:906:1692:b0:6e8:d245:44a9 with SMTP id
+ s18-20020a170906169200b006e8d24544a9mr2933455ejd.639.1649952418435; Thu, 14
+ Apr 2022 09:06:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+ <CGME20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9@eucas1p1.samsung.com>
+ <20220401103604.8705-12-andriy.shevchenko@linux.intel.com>
+ <3a24ef01-3231-1bee-7429-dce5680c5682@samsung.com> <CAHp75VfMPpfeMpawRyLo_GtLR8+gVGgm8zW-fatp6=9a9wK18A@mail.gmail.com>
+ <CAFBinCCCtZvdp+01DdEE=-f7rZ8V46O125wKDqE1muA645sdUg@mail.gmail.com>
+In-Reply-To: <CAFBinCCCtZvdp+01DdEE=-f7rZ8V46O125wKDqE1muA645sdUg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Apr 2022 19:06:21 +0300
+Message-ID: <CAHp75VcYaGmEruEsi2UUrLU4=k3OpBn2YV8B0LhyrhtQ=uCTXg@mail.gmail.com>
+Subject: Re: [PATCH v4 11/13] pinctrl: meson: Replace custom code by
+ gpiochip_node_count() call
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The displayed list of Ethernet devices in make menuconfig
-has gotten out of order. This is mostly due to changes in vendor
-names etc, but also because of new Microsoft entry in wrong place.
+On Thu, Apr 14, 2022 at 6:32 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+> On Thu, Apr 14, 2022 at 3:51 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> [...]
+> > > This patch landed in linux next-20220413 as commit 88834c75cae5
+> > > ("pinctrl: meson: Replace custom code by gpiochip_node_count() call").
+> > > Unfortunately it breaks booting of all my Amlogic-based test boards
+> > > (Odroid C4, N2, Khadas VIM3, VIM3l). MMC driver is no longer probed and
+> > > boards are unable to mount rootfs. Reverting this patch on top of
+> > > linux-next fixes the issue.
+> >
+> > Thank you for letting me know, I'll withdraw it and investigate.
+> If needed I can investigate further later today/tomorrow. I think the
+> problem is that our node name doesn't follow the .dts recommendation.
+>
+> For GXL (arch/arm64/boot/dts/amlogic/meson-gxl.dtsi) the GPIO
+> controller nodes are for example:
+>   gpio: bank@4b0 {
+>       ...
+>   }
+> and
+>   gpio_ao: bank@14 {
+>       ...
+>   }
+>
+> See also:
+> $ git grep -C6 gpio-controller arch/arm64/boot/dts/amlogic/*.dtsi
+>
+> Marek did not state which error he's getting but I suspect it fails
+> with "no gpio node found".
 
-This restores so that the display is in order even if the names
-of the sub directories are not.
+Would be interesting to know that, yeah.
 
-Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
----
- drivers/net/ethernet/Kconfig | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+The subtle difference between the patched and unpatched version is
+that the former uses only available nodes, it means that node is not
+available by some reason and then the error would be the one you
+guessed.
 
-diff --git a/drivers/net/ethernet/Kconfig b/drivers/net/ethernet/Kconfig
-index bd4cb9d7c35d..827993022386 100644
---- a/drivers/net/ethernet/Kconfig
-+++ b/drivers/net/ethernet/Kconfig
-@@ -35,15 +35,6 @@ source "drivers/net/ethernet/aquantia/Kconfig"
- source "drivers/net/ethernet/arc/Kconfig"
- source "drivers/net/ethernet/asix/Kconfig"
- source "drivers/net/ethernet/atheros/Kconfig"
--source "drivers/net/ethernet/broadcom/Kconfig"
--source "drivers/net/ethernet/brocade/Kconfig"
--source "drivers/net/ethernet/cadence/Kconfig"
--source "drivers/net/ethernet/calxeda/Kconfig"
--source "drivers/net/ethernet/cavium/Kconfig"
--source "drivers/net/ethernet/chelsio/Kconfig"
--source "drivers/net/ethernet/cirrus/Kconfig"
--source "drivers/net/ethernet/cisco/Kconfig"
--source "drivers/net/ethernet/cortina/Kconfig"
- 
- config CX_ECAT
- 	tristate "Beckhoff CX5020 EtherCAT master support"
-@@ -57,6 +48,14 @@ config CX_ECAT
- 	  To compile this driver as a module, choose M here. The module
- 	  will be called ec_bhf.
- 
-+source "drivers/net/ethernet/broadcom/Kconfig"
-+source "drivers/net/ethernet/cadence/Kconfig"
-+source "drivers/net/ethernet/calxeda/Kconfig"
-+source "drivers/net/ethernet/cavium/Kconfig"
-+source "drivers/net/ethernet/chelsio/Kconfig"
-+source "drivers/net/ethernet/cirrus/Kconfig"
-+source "drivers/net/ethernet/cisco/Kconfig"
-+source "drivers/net/ethernet/cortina/Kconfig"
- source "drivers/net/ethernet/davicom/Kconfig"
- 
- config DNET
-@@ -85,7 +84,6 @@ source "drivers/net/ethernet/huawei/Kconfig"
- source "drivers/net/ethernet/i825xx/Kconfig"
- source "drivers/net/ethernet/ibm/Kconfig"
- source "drivers/net/ethernet/intel/Kconfig"
--source "drivers/net/ethernet/microsoft/Kconfig"
- source "drivers/net/ethernet/xscale/Kconfig"
- 
- config JME
-@@ -128,8 +126,9 @@ source "drivers/net/ethernet/mediatek/Kconfig"
- source "drivers/net/ethernet/mellanox/Kconfig"
- source "drivers/net/ethernet/micrel/Kconfig"
- source "drivers/net/ethernet/microchip/Kconfig"
--source "drivers/net/ethernet/moxa/Kconfig"
- source "drivers/net/ethernet/mscc/Kconfig"
-+source "drivers/net/ethernet/microsoft/Kconfig"
-+source "drivers/net/ethernet/moxa/Kconfig"
- source "drivers/net/ethernet/myricom/Kconfig"
- 
- config FEALNX
-@@ -141,10 +140,10 @@ config FEALNX
- 	  Say Y here to support the Myson MTD-800 family of PCI-based Ethernet
- 	  cards. <http://www.myson.com.tw/>
- 
-+source "drivers/net/ethernet/ni/Kconfig"
- source "drivers/net/ethernet/natsemi/Kconfig"
- source "drivers/net/ethernet/neterion/Kconfig"
- source "drivers/net/ethernet/netronome/Kconfig"
--source "drivers/net/ethernet/ni/Kconfig"
- source "drivers/net/ethernet/8390/Kconfig"
- source "drivers/net/ethernet/nvidia/Kconfig"
- source "drivers/net/ethernet/nxp/Kconfig"
-@@ -164,6 +163,7 @@ source "drivers/net/ethernet/packetengines/Kconfig"
- source "drivers/net/ethernet/pasemi/Kconfig"
- source "drivers/net/ethernet/pensando/Kconfig"
- source "drivers/net/ethernet/qlogic/Kconfig"
-+source "drivers/net/ethernet/brocade/Kconfig"
- source "drivers/net/ethernet/qualcomm/Kconfig"
- source "drivers/net/ethernet/rdc/Kconfig"
- source "drivers/net/ethernet/realtek/Kconfig"
-@@ -171,10 +171,10 @@ source "drivers/net/ethernet/renesas/Kconfig"
- source "drivers/net/ethernet/rocker/Kconfig"
- source "drivers/net/ethernet/samsung/Kconfig"
- source "drivers/net/ethernet/seeq/Kconfig"
--source "drivers/net/ethernet/sfc/Kconfig"
- source "drivers/net/ethernet/sgi/Kconfig"
- source "drivers/net/ethernet/silan/Kconfig"
- source "drivers/net/ethernet/sis/Kconfig"
-+source "drivers/net/ethernet/sfc/Kconfig"
- source "drivers/net/ethernet/smsc/Kconfig"
- source "drivers/net/ethernet/socionext/Kconfig"
- source "drivers/net/ethernet/stmicro/Kconfig"
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

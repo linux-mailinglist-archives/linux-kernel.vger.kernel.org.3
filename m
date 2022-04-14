@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CE35019AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E155019B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbiDNRKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S243317AbiDNRMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347133AbiDNRKH (ORCPT
+        with ESMTP id S245126AbiDNRL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:10:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D91B369CF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649955666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4B1/0zprUHgX3VT2zhq8T9uZ6S7ysF6md7j6hbXhF8M=;
-        b=Dw8CGa7CTv/3Ef6SYfSLyXxUsgoMcd71MDuwZ25MRN64AwYw68kn7Gt+IO29YEAmKdePQZ
-        xbUpREuh0aIdKBbYc0FNz2fOb5H1/z8DgE/rK0RfLu7DQghNKHputl1gS+iseLv2DUNHmA
-        1nHEtOCNHDc3I9YDYnJzSE9rtlKojFU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-7TlB9aR2OnCUYblOC-sKWQ-1; Thu, 14 Apr 2022 13:01:05 -0400
-X-MC-Unique: 7TlB9aR2OnCUYblOC-sKWQ-1
-Received: by mail-qk1-f199.google.com with SMTP id u7-20020ae9d807000000b00680a8111ef6so3649504qkf.17
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:01:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4B1/0zprUHgX3VT2zhq8T9uZ6S7ysF6md7j6hbXhF8M=;
-        b=KC525HSATLW7T5OKD/oAR9TSyXBS+lqv8TH/7nW6lMaVkrcJmOQXVOVs/Oe5f3Wyq/
-         FxtFCk6WQoWaxe1MAgd7vtbevcQVO4t1WdVAHuIiakd2Ipdnjf9xJ0Ka6Qeomgf7rh20
-         bIH0P5apCzN6aSXVOVJpOTDRGuce1vfkTYb2DTqGTxdlotpXvEHiZEOo2c70Bxy/rNxg
-         sptAhn8cSK/TstXx4ZeoORQik+VM3+KVqSNi+FlRfLMYdfTk3vUZei2L6MFbSPlwCX1K
-         Nyj4uY2cT2LU0mSEPdLB4+1MtZs736fgyKMEUMuMZu8qcslt1RNpBra1bip8Wogrj6WD
-         6rZA==
-X-Gm-Message-State: AOAM531dprcAdQLtqS/TNWQzrIyDvvtVIsep+OdG73hPRzzMIiuvhf7o
-        ZHzhfpdL49d4LieZRiks95s5T+M6nr4tgILHwp9NQfzXsLf8atuDPtgA43oFQaPelgbunR66pfH
-        6eXR3ljgaqTTEEhq4yBqwtK1L
-X-Received: by 2002:a05:620a:1903:b0:67d:243b:a8ae with SMTP id bj3-20020a05620a190300b0067d243ba8aemr2608417qkb.142.1649955664664;
-        Thu, 14 Apr 2022 10:01:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwPWnG9sKZnoc4ROrcDaT5+CKtcHx0u44tTJaHAF47tvPdCZfGyVldRbmpYGKCc/3kyEjM3kQ==
-X-Received: by 2002:a05:620a:1903:b0:67d:243b:a8ae with SMTP id bj3-20020a05620a190300b0067d243ba8aemr2608377qkb.142.1649955664121;
-        Thu, 14 Apr 2022 10:01:04 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm1459694qtd.44.2022.04.14.10.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 10:01:03 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 10:01:00 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 02/18] objtool: Support data symbol printing
-Message-ID: <20220414170100.c66rfyvk7dp33bxx@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
- <YlfHy011VP2oPFjV@hirez.programming.kicks-ass.net>
- <20220414152148.cwdefx744kymqcut@treble>
- <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
- <20220414153854.rqkt465xn4vzndr7@treble>
- <YlhNo026PgjJuCIU@hirez.programming.kicks-ass.net>
+        Thu, 14 Apr 2022 13:11:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B91D0AA9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649955749;
+        bh=LdyEq5qQROjPgWrNLXz9QEVAlXZK6Rma+QSMxozyawk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=FvISkBNWW3DJf8aHMuo2J3eF/uD7DdxRmMGn2MZo4sYn71WGM07DkA0Y71TlBYzR4
+         cfpvBFOBO50PnO4k7JkA+Ie8sY94RdqLtQRseZXNsMeHMKeSNTS9pmtjkFe/VQ2w2F
+         IzTzHAE4VDuWDx3NJzHdzEs72A6rf18moxhhqjPo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MlNp7-1oMOt62NtF-00lkAg; Thu, 14
+ Apr 2022 19:02:29 +0200
+Date:   Thu, 14 Apr 2022 19:02:27 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v2] soc: nuvoton: Add SoC info driver for WPCM450
+Message-ID: <YlhTo+F0p7ggPAQb@latitude>
+References: <20220409173319.2491196-1-j.neuschaefer@gmx.net>
+ <67f42821-34ad-cee6-98fb-7086599c4c0f@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CriTeMWGrgldN1YF"
 Content-Disposition: inline
-In-Reply-To: <YlhNo026PgjJuCIU@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <67f42821-34ad-cee6-98fb-7086599c4c0f@molgen.mpg.de>
+X-Provags-ID: V03:K1:HleZRsYeRGlcyquio1uGh5BtUVQnRZObaESvNLFrTwpkwguPN5z
+ jN3UhDqho6+2397VcnM1Jy8c0wFvDjgrpmgq7PXMT/hjw4deakdViknMaI0eLkfGtxtWtv1
+ mYkoi+KOGd6wg55D5GziaKWhFYQ9SVNDEmz/higaX0f7vWCb0ehTs+NOVXMqu0fez61xcds
+ CVEzimHLQhZfVsDUE0BxA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dACZIqHKJrI=:SgpM1icXExh1Ai3XjT47/+
+ VdErA6zZJuGu/fXRKtdHFy+iIM3uxeW7i4B2cdRghb/VpoItiG4CRNRw3lpkdCJa725pt7VKB
+ K5iGvrwS2OL47KsvP4eeD8/TuSlzbHJzJrJGprHfkSiRfCAKmQ+/Pj2zopnE358RC5OJdGpJ4
+ fMZCG0AD3uHwHxD9PUwZrEC0hq2I+ttoo1FA4c92YlZ5GKNIhc2mlY9cvoQcNYglCDBFimG6y
+ 1emSiMJhiBZ4OA0V5M5wK1AUOswPr969ruIQED4lqqcmNPp9tDgjCGVkG/2TglP0rKmXQKVUV
+ 8hMxt4Gm2hubbW2juWFls4aJhrOlU3EoLLC8NS/TfQ664PZUJFTuTR0QF59p/5G2TI1ld/XFd
+ n7a2iUikIv9rJmW0cV+9IMUIs+KJB5YX0WWjVWOjJOQVTP/00VebXbSgy3dFWX8n+h8JfWVsA
+ 4evtvIF/iboCDj5eggsDwhx/mF0T6RCRfGvsCo/nJ5/UqeMaUBsChlBEb+XlALTe9uv2jvFs4
+ 7oob+1RJnQ8rfTri2eM2UB9F8Pf5RH8XSPAxYPjzClvENueJmhq/OpnBeROz3e0Vsk6AWkNMb
+ U95s6XBVPiL2Szo/042ICDz0K73KuuERMmxq+D64bRYKkpgmmhJNJkfVloCFskYp1ViuUFfQV
+ aen7F6I/GxwO7O2u9lo9VpStZmw7aaYrkj+sySQ14oHPo4umYsi5wuVobAp/3fO7mCRwmELCI
+ qwh6W8v+6+2REJ1NyeUkFIM/GDhF4dh+qaKRxzQ68nkSIpggPqMFHlLqvZk6ar15u4uGnuCa2
+ pud1c/FLx8S52Y6WzIO5xhMo7sS82AGwDjbJvAe4F6YghXFohxwttPYz+3vYrwerEBXQrf9Qd
+ DiRBInrkkhuw9Fa4d0WMWzldGgdIWJb71DMlzMxBrZsp23skFQOUhaSt32TrvBSuUcJ1sKtUR
+ Vvpgds1CGD8HmTWYkOloKMqVRFtrSR0KxsGPjiN14pNC0Xzo96zdtmUiKZb/EQtQJgiSNGZsX
+ YuxhzTcKSVMux4bogWWcs86xW27ewD6Kcf2+4/7HEf5bRlThNGGiJUlcMoH/cu8O9W43MTAv3
+ Go8Im7cGbJWehM=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,137 +77,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 06:36:51PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 14, 2022 at 08:38:54AM -0700, Josh Poimboeuf wrote:
-> 
-> > > Yes, I'd not seen that yet, what's that for? The Changelog alludes to
-> > > something, but I don't think it actually does get used later.
-> > 
-> > Nick had asked for something like that, it's just a way to avoid doing
-> > math every time we look at a warning, i.e. to convert func+offset to
-> > sec+offset.
-> > 
-> > But it's kind of ugly and I'm not 100% happy with it.
-> > 
-> > Maybe it should be behind an option (--sec-offsets)?
-> 
-> Can do I suppose... Myself, I have this script:
-> 
-> $ cat objdump-func.sh
-> #!/bin/bash
-> 
-> OBJ=$1; shift
-> FUNC=$1; shift
-> 
-> objdump -wdr $@ $OBJ | awk "/^\$/ { P=0; } /$FUNC[^>]*>:\$/ { P=1; O=strtonum(\"0x\" \$1); } { if (P) { o=strtonum(\"0x\" \$1); printf(\"%04x \", o-O); print \$0; } }"
 
-That is nice, just added to my ~/bin.
+--CriTeMWGrgldN1YF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And how am I just learning about objdump "-w" ?!?!
+On Sat, Apr 09, 2022 at 07:55:09PM +0200, Paul Menzel wrote:
+> Dear Jonathan,
+>=20
+>=20
+> Thank you for your patch.
+>=20
+> Am 09.04.22 um 19:33 schrieb Jonathan Neusch=C3=A4fer:
+> > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+> > information such as the SoC revision.
+>=20
+> Maybe add an example command, how to read the model and revision.
 
-I wrote up a new version of that patch which adds a '--sec-address'
-option (see below), but maybe I'll just drop it for now.  It's not
-really relevant to this set anyway.
+Will do.
 
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [PATCH] objtool: Add option to print section addresses
+>=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > ---
+[...]
+> > +#define GCR_PDID	0
+> > +#define PDID_CHIP(x)	((x) & 0x00ffffff)
+> > +#define CHIP_WPCM450	0x926450
+> > +#define PDID_REV(x)	((x) >> 24)
+> > +
+> > +struct revision {
+> > +	u8 number;
+>=20
+> Can this be just be `unsigned int`s
 
-To help prevent objtool users from having to do math, add an option to
-print the section address in addition to the function address.
+It could be, but it's unnecessary because I'm dealing with a 8-bit value
+here.
 
-Normal:
+The same amount of space is used in the struct whether I declare the
+value as unsigned int or as u8, but with u8 it's clearer that it's
+really (always) just an 8-bit value.
 
-  vmlinux.o: warning: objtool: fixup_exception()+0x2d1: unreachable instruction
+>=20
+> > +	const char *name;
+> > +};
+> > +
+> > +const struct revision revisions[] __initconst =3D {
 
-With '--sec-address':
+Unrelated to your comments, I noticed that this table can and should be
+declared static.
 
-  vmlinux.o: warning: objtool: fixup_exception()+0x2d1 (.text+0x76c51): unreachable instruction
+> > +	{ 0x00, "Z1" },
+> > +	{ 0x03, "Z2" },
+> > +	{ 0x04, "Z21" },
+> > +	{ 0x08, "A1" },
+> > +	{ 0x09, "A2" },
+> > +	{ 0x0a, "A3" },
+> > +	{}
+> > +};
+> > +
+> > +static const char * __init get_revision(u8 rev)
+> > +{
+> > +	int i;
+>=20
+> I=E2=80=99d do `unsigned int`, though it does not make a difference in th=
+e end
+> result.
 
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- tools/objtool/builtin-check.c           |  1 +
- tools/objtool/include/objtool/builtin.h |  1 +
- tools/objtool/include/objtool/warn.h    | 31 ++++++++++++++-----------
- 3 files changed, 19 insertions(+), 14 deletions(-)
+To avoid unexpected silent truncation that sort of makes sense.
+>=20
+> > +
+> > +	for (i =3D 0; revisions[i].name; i++)
+> > +		if (revisions[i].number =3D=3D rev)
+> > +			return revisions[i].name;
+> > +	return NULL;
+> > +}
+> > +
+> > +static int __init wpcm450_soc_init(void)
+> > +{
+[...]
+> > +
+> > +	revision =3D get_revision(PDID_REV(pdid));
+>=20
+> The signature of `get_revision()` is u8, but you pass u32, if I am not
+> mistaken.
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 3df46e9b4b03..2c562e3dec55 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -55,6 +55,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN(0, "module", &opts.module, "object is part of a kernel module"),
- 	OPT_BOOLEAN(0, "no-fp", &opts.no_fp, "skip frame pointer validation"),
- 	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
-+	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
- 	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
- 	OPT_BOOLEAN(0, "vmlinux", &opts.vmlinux, "vmlinux.o validation"),
- 
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 0cac9bd6a97f..e6910a66317a 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -33,6 +33,7 @@ struct opts {
- 	bool module;
- 	bool no_fp;
- 	bool no_unreachable;
-+	bool sec_address;
- 	bool stats;
- 	bool vmlinux;
- };
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index c4bde3e2a79c..a3e79ae75f2e 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -11,30 +11,33 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <fcntl.h>
-+#include <objtool/builtin.h>
- #include <objtool/elf.h>
- 
- extern const char *objname;
- 
- static inline char *offstr(struct section *sec, unsigned long offset)
- {
--	struct symbol *func;
--	char *name, *str;
--	unsigned long name_off;
-+	bool is_text = (sec->sh.sh_flags & SHF_EXECINSTR);
-+	struct symbol *sym = NULL;
-+	char *str;
-+	int len;
- 
--	func = find_func_containing(sec, offset);
--	if (!func)
--		func = find_symbol_containing(sec, offset);
--	if (func) {
--		name = func->name;
--		name_off = offset - func->offset;
-+	if (is_text)
-+		sym = find_func_containing(sec, offset);
-+	if (!sym)
-+		sym = find_symbol_containing(sec, offset);
-+
-+	if (sym) {
-+		str = malloc(strlen(sym->name) + strlen(sec->name) + 40);
-+		len = sprintf(str, "%s+0x%lx", sym->name, offset - sym->offset);
-+		if (opts.sec_address)
-+			sprintf(str+len, " (%s+0x%lx)", sec->name, offset);
- 	} else {
--		name = sec->name;
--		name_off = offset;
-+		str = malloc(strlen(sec->name) + 20);
-+		sprintf(str, "%s+0x%lx", sec->name, offset);
- 	}
- 
--	str = malloc(strlen(name) + 20);
--	sprintf(str, "%s+0x%lx", name, name_off);
--
- 	return str;
- }
- 
--- 
-2.34.1
+The truncation to u8 is fine in this case, because PDID_REV extracts an
+8 bit value and the upper 24 bits of the result of PDID_REV are thus
+always already zero.
 
+>=20
+> > +	if (!revision) {
+> > +		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid=
+));
+> > +		return -ENODEV;
+> > +	}
+[...]
+> >=20
+>=20
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+
+Thank you!
+
+Jonathan
+
+--CriTeMWGrgldN1YF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJYU0QACgkQCDBEmo7z
+X9siGxAAvy8O9oAp5j51Gf3zhjCJBG4fN/W3gS2M4SIQBgXCgR0n6VLOoXd6XI4V
+dR5JOAQece9dMiQvA9X4ByFa/zKM6JL1N9Y2u8WGQoe6ayAWQHhy21+uQ2pABLT9
+O7/7u8qmbrwW2Oi1egpE5Ezym1i211OzjU0R3LhbHlNg5Iuu7BecR6+akuHOjq18
+CcOpPKgYxRrPBISqMmIJBrbo1DVJclBJ5OGrGY+5d5tt3st1dgy3EvOqglj1d1Sm
+QIya1Sx6oCADjuVoUtGpImjF/Xm3NVGnQMu2FXpHkBd5Z++2gaO7RtaHffXyRd7h
+mtfo8NXvuCVfW1mkTSqkV6/EIwOEeRIJiCAbEq1tnxr5NpWjum0hk7cJKJHhkNZ8
+p5apPXVSUpTdU4bmVHwlbMGrhpIfYz5AQIE5Ec8naNiWuLYpUQZRo1F4y8BCZ69G
+geB/n/Od7/NIiIdLOzban1dhbHrVUtfGKUE8/LxpKPxzBVtNMiFB1Fz4FSF23vAV
+9cwZ3Em8pl2C5sy6nfhWg1WGmalUBTvoK4gmy1Lxudd7DbdkRNa9Bryo4VZ7wgjP
+27ug9qFBu4EKUmbGzRczBj73vdsqAKrm6J7saSwqYmxxEDCqQ4KCsm3w0KWKD3k6
+uCd0rQ1fJsdjZu1dVjhCgqa4X3RVmVdDWvxU6BDO4suZwShkNKM=
+=qLqA
+-----END PGP SIGNATURE-----
+
+--CriTeMWGrgldN1YF--

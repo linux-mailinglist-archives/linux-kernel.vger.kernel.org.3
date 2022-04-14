@@ -2,231 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69099500936
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D8250093D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235356AbiDNJGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S241477AbiDNJGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241516AbiDNJFU (ORCPT
+        with ESMTP id S241549AbiDNJFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:05:20 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8390E6D38B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:02:20 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KfD1h4LJqz67xMh;
-        Thu, 14 Apr 2022 17:00:08 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 14 Apr 2022 11:02:17 +0200
-Received: from localhost (10.81.205.215) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
- 2022 10:02:16 +0100
-Date:   Thu, 14 Apr 2022 10:02:14 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <aneesh.kumar@linux.ibm.com>,
-        <baolin.wang@linux.alibaba.com>, <dave.hansen@linux.intel.com>,
-        <ying.huang@intel.com>
-Subject: Re: [PATCH v2 1/5] mm: demotion: Set demotion list differently
-Message-ID: <20220414100214.00005ad8@Huawei.com>
-In-Reply-To: <20220413092206.73974-2-jvgediya@linux.ibm.com>
-References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
-        <20220413092206.73974-2-jvgediya@linux.ibm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 14 Apr 2022 05:05:53 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657E36FA2D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:02:38 -0700 (PDT)
+X-UUID: 7b185c903ded44ab9706603a44f56656-20220414
+X-UUID: 7b185c903ded44ab9706603a44f56656-20220414
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1423811795; Thu, 14 Apr 2022 17:02:32 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 14 Apr 2022 17:02:31 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 17:02:30 +0800
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, kuyo chang <kuyo.chang@mediatek.com>,
+        "Ingo Molnar" <mingo@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/1] [PATCH v3]sched/pelt: Fix the attach_entity_load_avg calculate method
+Date:   Thu, 14 Apr 2022 17:02:20 +0800
+Message-ID: <20220414090229.342-1-kuyo.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.205.215]
-X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 14:52:02 +0530
-Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+From: kuyo chang <kuyo.chang@mediatek.com>
 
-> Sharing used_targets between multiple nodes in a single
-> pass limits some of the opportunities for demotion target
-> sharing.
-> 
-> Don't share the used targets between multiple nodes in a
-> single pass, instead accumulate all the used targets in
-> source nodes shared by all pass, and reset 'used_targets'
-> to source nodes while finding demotion targets for any new
-> node.
-> 
-> This results into some more opportunities to share demotion
-> targets between multiple source nodes, e.g. with below NUMA
-> topology, where node 0 & 1 are cpu + dram nodes, node 2 & 3
-> are equally slower memory only nodes, and node 4 is slowest
-> memory only node,
-> 
-> available: 5 nodes (0-4)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus: 2 3
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus:
-> node 2 size: n MB
-> node 2 free: n MB
-> node 3 cpus:
-> node 3 size: n MB
-> node 3 free: n MB
-> node 4 cpus:
-> node 4 size: n MB
-> node 4 free: n MB
-> node distances:
-> node   0   1   2   3   4
->   0:  10  20  40  40  80
->   1:  20  10  40  40  80
->   2:  40  40  10  40  80
->   3:  40  40  40  10  80
->   4:  80  80  80  80  10
-> 
-> The existing implementation gives below demotion targets,
-> 
-> node    demotion_target
->  0              3, 2
->  1              4
->  2              X
->  3              X
->  4              X
-> 
-> With this patch applied, below are the demotion targets,
-> 
-> node    demotion_target
->  0              3, 2
->  1              3, 2
+I meet the warning message at cfs_rq_is_decayed at below code.
 
-Is there an easy way to make the allocation stateful enough so
-that when it sees two identical choices, it alternates between
-them?  Whilst it's going to be workload dependent, my view
-of 'ideal' for this would be.
+SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+		    cfs_rq->avg.util_avg ||
+		    cfs_rq->avg.runnable_avg)
 
-   0              3
-   1              2
+Following is the calltrace.
 
-Maybe we'll just have to make do with most systems this effects
-having to have some fun userspace code that does cleverer
-balancing - possibly using HMAT info rather than just SLIT
-to give us visibility of interconnect bottlenecks that make
-some migration paths 'unwise'.
-  
-I'm not sure the current HMAT presentation via sysfs gives
-us enough info though so we'll probably need to extend that.
+Call trace:
+__update_blocked_fair
+update_blocked_averages
+newidle_balance
+pick_next_task_fair
+__schedule
+schedule
+pipe_read
+vfs_read
+ksys_read
 
-Jonathan
+After code analyzing and some debug messages, I found it exits a corner
+case at attach_entity_load_avg which will cause load_sum is null but
+load_avg is not.
+Consider se_weight is 88761 according by sched_prio_to_weight table.
+And assume the get_pelt_divider() is 47742, se->avg.load_avg is 1.
+By the calculating for se->avg.load_sum as following will become zero
+as following.
+se->avg.load_sum =
+	div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
+se->avg.load_sum = 1*47742/88761 = 0.
 
->  2              4
->  3              4
->  4              X
-> 
-> e.g. with below NUMA topology, where node 0, 1 & 2 are
-> cpu + dram nodes and node 3 is slow memory node,
-> 
-> available: 4 nodes (0-3)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus: 2 3
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus: 4 5
-> node 2 size: n MB
-> node 2 free: n MB
-> node 3 cpus:
-> node 3 size: n MB
-> node 3 free: n MB
-> node distances:
-> node   0   1   2   3
->   0:  10  20  20  40
->   1:  20  10  20  40
->   2:  20  20  10  40
->   3:  40  40  40  10
-> 
-> The existing implementation gives below demotion targets,
-> 
-> node    demotion_target
->  0              3
->  1              X
->  2              X
->  3              X
-> 
-> With this patch applied, below are the demotion targets,
-> 
-> node    demotion_target
->  0              3
->  1              3
->  2              3
->  3              X
-> 
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> ---
->  mm/migrate.c | 25 ++++++++++++++-----------
->  1 file changed, 14 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index de175e2fdba5..516f4e1348c1 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -2383,7 +2383,7 @@ static void __set_migration_target_nodes(void)
->  {
->  	nodemask_t next_pass	= NODE_MASK_NONE;
->  	nodemask_t this_pass	= NODE_MASK_NONE;
-> -	nodemask_t used_targets = NODE_MASK_NONE;
-> +	nodemask_t source_nodes = NODE_MASK_NONE;
->  	int node, best_distance;
->  
->  	/*
-> @@ -2401,20 +2401,23 @@ static void __set_migration_target_nodes(void)
->  again:
->  	this_pass = next_pass;
->  	next_pass = NODE_MASK_NONE;
-> +
->  	/*
-> -	 * To avoid cycles in the migration "graph", ensure
-> -	 * that migration sources are not future targets by
-> -	 * setting them in 'used_targets'.  Do this only
-> -	 * once per pass so that multiple source nodes can
-> -	 * share a target node.
-> -	 *
-> -	 * 'used_targets' will become unavailable in future
-> -	 * passes.  This limits some opportunities for
-> -	 * multiple source nodes to share a destination.
-> +	 * Accumulate source nodes to avoid the cycle in migration
-> +	 * list.
->  	 */
-> -	nodes_or(used_targets, used_targets, this_pass);
-> +	nodes_or(source_nodes, source_nodes, this_pass);
->  
->  	for_each_node_mask(node, this_pass) {
-> +		/*
-> +		 * To avoid cycles in the migration "graph", ensure
-> +		 * that migration sources are not future targets by
-> +		 * setting them in 'used_targets'. Reset used_targets
-> +		 * to source nodes for each node in this pass so that
-> +		 * multiple source nodes can share a target node.
-> +		 */
-> +		nodemask_t used_targets = source_nodes;
-> +
->  		best_distance = -1;
->  
->  		/*
+After enqueue_load_avg code as below.
+cfs_rq->avg.load_avg += se->avg.load_avg;
+cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+
+Then the load_sum for cfs_rq will be 1 while the load_sum for cfs_rq is 0.
+So it will hit the warning message.
+
+In order to fix the corner case, make sure the se->load_avg|sum is correct
+before enqueue_load_avg.
+
+After long time testing, the kernel warning was gone and the system runs
+as well as before.
+
+Fixes: f207934fb79d ("sched/fair: Align PELT windows between cfs_rq and its se")
+Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+---
+
+ v1->v2:
+ (1)Thanks for suggestion from Peter Zijlstra & Vincent Guittot.
+ (2)By suggestion from Vincent Guittot,
+ rework the se->load_sum calculation method for fix the corner case,
+ make sure the se->load_avg|sum is correct before enqueue_load_avg.
+ (3)Rework changlog.
+
+ v2->v3:
+ (1)Rename Subject. 
+ (1)Add fix tag.
+
+
+ kernel/sched/fair.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index d4bd299d67ab..159274482c4e 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3829,10 +3829,12 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 
+ 	se->avg.runnable_sum = se->avg.runnable_avg * divider;
+ 
+-	se->avg.load_sum = divider;
+-	if (se_weight(se)) {
++	se->avg.load_sum = se->avg.load_avg * divider;
++	if (se_weight(se) < se->avg.load_sum) {
+ 		se->avg.load_sum =
+-			div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
++			div_u64(se->avg.load_sum, se_weight(se));
++	} else {
++		se->avg.load_sum = 1;
+ 	}
+ 
+ 	enqueue_load_avg(cfs_rq, se);
+-- 
+2.18.0
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA38E501642
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6287C5013B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350067AbiDNOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S1346668AbiDNN5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345084AbiDNNpF (ORCPT
+        with ESMTP id S244555AbiDNN1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3032C26577;
-        Thu, 14 Apr 2022 06:41:42 -0700 (PDT)
+        Thu, 14 Apr 2022 09:27:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF6FA1441;
+        Thu, 14 Apr 2022 06:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B3961D68;
-        Thu, 14 Apr 2022 13:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB3EC385A1;
-        Thu, 14 Apr 2022 13:41:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D29CB82985;
+        Thu, 14 Apr 2022 13:20:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE100C385A5;
+        Thu, 14 Apr 2022 13:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943701;
-        bh=/zL59KZRSsOPmiteEbeTcjJdAPvwMkypNSTyMN0PYOU=;
+        s=korg; t=1649942427;
+        bh=OdTVIY+38JMYzWeIyYQmGEnPyKnTH7AnwPweevf/mJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GfmUTbAl9hSq5R+ue2rxgN83sKBa4ISNpoSjaoxUU764NoNTrC5aSrbuxV5UXGqh7
-         krTifu3lfHyFua9GGh/THBO5+dacshQYy9M8Kgab/SdtgeXJ74ZmlCQXUb55HAuCKl
-         LxDe3I0V+0ez46X7QYj4YIlzKAEUlibtSWRSczr0=
+        b=WxRa4+HvEHXLMQ5x+5ipRGteaK7yWw+niT8ykdtk32ERLlMpujbKgtV4tBOWLKZG8
+         9BlA8Yc5vtDb0BGq6vSu48iNbLqPnShIzeQ/KJROrHa++iJmzlhFMNSS8dXHji59Y2
+         HfBphdGvl/mopis6ovqxZ99QYVkD2tmZ13qOo7tQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 249/475] staging: mt7621-dts: fix LEDs and pinctrl on GB-PC1 devicetree
-Date:   Thu, 14 Apr 2022 15:10:34 +0200
-Message-Id: <20220414110902.080844065@linuxfoundation.org>
+Subject: [PATCH 4.19 132/338] scsi: pm8001: Fix abort all task initialization
+Date:   Thu, 14 Apr 2022 15:10:35 +0200
+Message-Id: <20220414110842.657816805@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,134 +56,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 6256e18686158fa49e019297f990f1c1817aabf1 ]
+[ Upstream commit 7f12845c8389855dbcc67baa068b6832dc4a396e ]
 
-Fix LED and pinctrl definitions on the GB-PC1 devicetree. Refer to the
-schematics of the device for more information.
+In pm80xx_send_abort_all(), the n_elem field of the ccb used is not
+initialized to 0. This missing initialization sometimes lead to the task
+completion path seeing the ccb with a non-zero n_elem resulting in the
+execution of invalid dma_unmap_sg() calls in pm8001_ccb_task_free(),
+causing a crash such as:
 
-LED fixes:
-- Change GPIO6 LED label from system to power as GPIO6 is connected to
-PLED.
-- Add default-on default-trigger to power LED.
-- Change GPIO8 LED label from status to system as GPIO8 is connected to
-SYS_LED.
-- Add disk-activity default-trigger to system LED.
-- Switch to the color:function naming scheme.
-- Remove lan1 and lan2 LEDs as they don't exist.
+[  197.676341] RIP: 0010:iommu_dma_unmap_sg+0x6d/0x280
+[  197.700204] RSP: 0018:ffff889bbcf89c88 EFLAGS: 00010012
+[  197.705485] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff83d0bda0
+[  197.712687] RDX: 0000000000000002 RSI: 0000000000000000 RDI: ffff88810dffc0d0
+[  197.719887] RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8881c790098b
+[  197.727089] R10: ffffed1038f20131 R11: 0000000000000001 R12: 0000000000000000
+[  197.734296] R13: ffff88810dffc0d0 R14: 0000000000000010 R15: 0000000000000000
+[  197.741493] FS:  0000000000000000(0000) GS:ffff889bbcf80000(0000) knlGS:0000000000000000
+[  197.749659] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  197.755459] CR2: 00007f16c1b42734 CR3: 0000000004814000 CR4: 0000000000350ee0
+[  197.762656] Call Trace:
+[  197.765127]  <IRQ>
+[  197.767162]  pm8001_ccb_task_free+0x5f1/0x820 [pm80xx]
+[  197.772364]  ? do_raw_spin_unlock+0x54/0x220
+[  197.776680]  pm8001_mpi_task_abort_resp+0x2ce/0x4f0 [pm80xx]
+[  197.782406]  process_oq+0xe85/0x7890 [pm80xx]
+[  197.786817]  ? lock_acquire+0x194/0x490
+[  197.790697]  ? handle_irq_event+0x10e/0x1b0
+[  197.794920]  ? mpi_sata_completion+0x2d70/0x2d70 [pm80xx]
+[  197.800378]  ? __wake_up_bit+0x100/0x100
+[  197.804340]  ? lock_is_held_type+0x98/0x110
+[  197.808565]  pm80xx_chip_isr+0x94/0x130 [pm80xx]
+[  197.813243]  tasklet_action_common.constprop.0+0x24b/0x2f0
+[  197.818785]  __do_softirq+0x1b5/0x82d
+[  197.822485]  ? do_raw_spin_unlock+0x54/0x220
+[  197.826799]  __irq_exit_rcu+0x17e/0x1e0
+[  197.830678]  irq_exit_rcu+0xa/0x20
+[  197.834114]  common_interrupt+0x78/0x90
+[  197.840051]  </IRQ>
+[  197.844236]  <TASK>
+[  197.848397]  asm_common_interrupt+0x1e/0x40
 
-Pinctrl fixes:
-- Claim state_default node under pinctrl node.
-- Change pinctrl0 node name to state-default.
-- Change gpio node name to gpio-pinmux to respect
-Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml.
-- Sort pin groups alphabetically.
+Avoid this issue by always initializing the ccb n_elem field to 0 in
+pm8001_send_abort_all(), pm8001_send_read_log() and
+pm80xx_send_abort_all().
 
-Misc fixes:
-- Fix formatting.
-- Use the status value "okay".
-- Define hexadecimal addresses in lower case.
-- Make hexadecimal addresses for memory easier to read.
-
-Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC1_V1.0_Schematic.pdf
-Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Link: https://lore.kernel.org/r/20220311090320.3068-1-arinc.unal@arinc9.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220220031810.738362-17-damien.lemoal@opensource.wdc.com
+Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-dts/gbpc1.dts | 40 +++++++++++++---------------
- 1 file changed, 18 insertions(+), 22 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/staging/mt7621-dts/gbpc1.dts b/drivers/staging/mt7621-dts/gbpc1.dts
-index 1fb560ff059c..1713283e60d4 100644
---- a/drivers/staging/mt7621-dts/gbpc1.dts
-+++ b/drivers/staging/mt7621-dts/gbpc1.dts
-@@ -11,7 +11,8 @@
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 6c54500237cd..5eabea5ca6a7 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -1748,6 +1748,7 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
  
- 	memory@0 {
- 		device_type = "memory";
--		reg = <0x0 0x1c000000>, <0x20000000 0x4000000>;
-+		reg = <0x00000000 0x1c000000>,
-+		      <0x20000000 0x04000000>;
- 	};
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
  
- 	chosen {
-@@ -37,24 +38,16 @@
- 	gpio-leds {
- 		compatible = "gpio-leds";
+@@ -1810,6 +1811,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
+ 	pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
+ 	pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
  
--		system {
--			label = "gb-pc1:green:system";
-+		power {
-+			label = "green:power";
- 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "default-on";
- 		};
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 2e743dc6b13a..d655f72db51d 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1437,6 +1437,7 @@ static void pm80xx_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->device = pm8001_ha_dev;
+ 	ccb->ccb_tag = ccb_tag;
+ 	ccb->task = task;
++	ccb->n_elem = 0;
  
--		status {
--			label = "gb-pc1:green:status";
-+		system {
-+			label = "green:system";
- 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
--		};
--
--		lan1 {
--			label = "gb-pc1:green:lan1";
--			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
--		};
--
--		lan2 {
--			label = "gb-pc1:green:lan2";
--			gpios = <&gpio 25 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "disk-activity";
- 		};
- 	};
- };
-@@ -94,9 +87,8 @@
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
  
- 		partition@50000 {
- 			label = "firmware";
--			reg = <0x50000 0x1FB0000>;
-+			reg = <0x50000 0x1fb0000>;
- 		};
--
- 	};
- };
- 
-@@ -118,9 +110,12 @@
- };
- 
- &pinctrl {
--	state_default: pinctrl0 {
--		default_gpio: gpio {
--			groups = "wdt", "rgmii2", "uart3";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&state_default>;
-+
-+	state_default: state-default {
-+		gpio-pinmux {
-+			groups = "rgmii2", "uart3", "wdt";
- 			function = "gpio";
- 		};
- 	};
-@@ -129,12 +124,13 @@
- &switch0 {
- 	ports {
- 		port@0 {
-+			status = "okay";
- 			label = "ethblack";
--			status = "ok";
- 		};
-+
- 		port@4 {
-+			status = "okay";
- 			label = "ethblue";
--			status = "ok";
- 		};
- 	};
- };
 -- 
 2.34.1
 

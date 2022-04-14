@@ -2,169 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98521500BF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2320F500BF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242223AbiDNLUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S237246AbiDNLVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233530AbiDNLUp (ORCPT
+        with ESMTP id S229943AbiDNLVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:20:45 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A851875C3D
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso4297913pjv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cApjy1z/WTuYgC0OK2plrpPC0MAtVd0VXO0NPNL/K7k=;
-        b=JRiEcfNcIxdtXaRVoJ49EaIWVLBuPwVwzbNP5U2aJD+SwsDxylVURuBvt0Qv9wNrSd
-         pvXnJY6xxmNXRgWlzyaDe34yc3PwAlKhlHPJUEaXAE3fh2IH63usa7ptt5edKIVeD82P
-         H2Y77Wd5pHy/jEAoSGSRAnZgvg1AOKVY96bkduwWnLjiujAS9wx806bOuQr6sFsDtO0j
-         NxMyJ5bKj1IEBxf49Zby/yQ/lMDtghiPvMGmpjZPkPMkqRMiXqTJcUy+ID320/MmZEfI
-         1x3wqupplKRF5XNO/Gi0kRuCQzIOvb3LZcr+kpEKetyEWeGfXpV/05F7Fp91E3IEI4AB
-         nPGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cApjy1z/WTuYgC0OK2plrpPC0MAtVd0VXO0NPNL/K7k=;
-        b=7gZ3qBQusbTAF6mSFMKy4g2mdITrKGx64vwRZ4K7kaKzBTuoth4XGvlmK3wJUcQzZn
-         tK2BJqnlLCGBs8ZCk9Hu9LwHA4vNnyrXY2sZRRfbXRdPhsqdg1TaXd2VJPqgQB7hdwSw
-         ui+ANtM4eyVoIgfaoX4IFvqaZVQywddTD7cp6rWUGdb+M8Fxd2/OZvJF83KBh9qeqUg6
-         ToqTfkgVxQlYx9zMI1tU6TzfQ4cn2bKJntBwZkViELn9qolF6A8+a/JBo24ZKvgu+XMk
-         JkSfNDd1fqOVauYmq2FUW5YZ30Oomdn7k8a5FhKWYFnj8gU64jHdb03qG0m5QnVL8nKr
-         6DMQ==
-X-Gm-Message-State: AOAM53252DP7gYKtG3jey28lnL+2728Wa3SaiqiJ5V513IeWXd/2qjgp
-        aWbLh2eZqiOajtljFrPYy/BVVQ==
-X-Google-Smtp-Source: ABdhPJy7RRXNPbA+lQVGxBoi5SOBxAGPWUefgr9V+P+8VYZr88w41MNltNvDvmzCwsofV1+Hh9rnFw==
-X-Received: by 2002:a17:90b:4a89:b0:1c7:3933:d802 with SMTP id lp9-20020a17090b4a8900b001c73933d802mr3117701pjb.75.1649935100207;
-        Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
-Received: from localhost ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090a4d8200b001cb41f25148sm1848735pjh.17.2022.04.14.04.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 04:18:19 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 19:18:11 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Steven Price <steven.price@arm.com>, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        lengxujun2007@126.com, arnd@arndb.de, smuchun@gmail.com,
-        duanxiongchun@bytedance.com, quic_qiancai@quicinc.com,
-        aneesh.kumar@linux.ibm.com, linux-arm-kernel@lists.infradead.org,
+        Thu, 14 Apr 2022 07:21:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B271007;
+        Thu, 14 Apr 2022 04:19:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 940A7615B5;
+        Thu, 14 Apr 2022 11:19:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773E6C385A9;
+        Thu, 14 Apr 2022 11:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649935161;
+        bh=uonZmGj6UwVaNb2sM+LihxzgT+rXNF6cANN7BJHZV9c=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=n1vqKXgwsn5BfVgyQom8fQVlCI6EwgTk2SCqLA/GpmsMRE2MYXYzErkvOwG4Ov9Gt
+         VewI5yn8FToHtJjAdre9mIAgINYrNDDqF+bH6doF5sC7ymZ52x+G61mdmsBckpwd9l
+         8P8LEAkzc1cAfLaxoJmodKwyibqjqlal8+/QEm8wNGo4P7CX5a8F5AGf7FrS+4/YRy
+         TKb0PBNrBy3k0gtqRxlJAyRUPmYsVafwIXgU86L0m1pZVNzvitOb74jyJAB7qCJxkx
+         gRhY2y7eUpsWWhMYrQLoTFQRiGFqpsWItQNm352aOn+U0H2SU/iJ+NYk3brEPHoW6C
+         fseNGg2QcTCUg==
+Message-ID: <bf2fcc93babdbf541fffc6cc5f5756f391773a75.camel@kernel.org>
+Subject: Re: [PATCH V4 14/31] x86/sgx: Support VA page allocation without
+ reclaiming
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: mm: fix pmd_leaf()
-Message-ID: <YlgC877mS2LjsqS8@FVFYT0MHHV2J.usts.net>
-References: <20220411122653.40284-1-songmuchun@bytedance.com>
- <20220413101929.GA1229@willie-the-truck>
- <64d4288e-7776-a3fd-5ee4-70486dfd0394@arm.com>
- <20220414100535.GB2298@willie-the-truck>
+Date:   Thu, 14 Apr 2022 14:18:12 +0300
+In-Reply-To: <0ab32196f5056b25c34fb89fcc4dc28a5d875d2e.1649878359.git.reinette.chatre@intel.com>
+References: <cover.1649878359.git.reinette.chatre@intel.com>
+         <0ab32196f5056b25c34fb89fcc4dc28a5d875d2e.1649878359.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414100535.GB2298@willie-the-truck>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:05:35AM +0100, Will Deacon wrote:
-> On Wed, Apr 13, 2022 at 11:39:49AM +0100, Steven Price wrote:
-> > On 13/04/2022 11:19, Will Deacon wrote:
-> > > On Mon, Apr 11, 2022 at 08:26:53PM +0800, Muchun Song wrote:
-> > >> The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-> > >> the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-> > >> caused by this was reported by Qian Cai.
-> > >>
-> > >> Link: https://patchwork.kernel.org/comment/24798260/ [1]
-> > >> Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-> > >> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-> > >> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > >> ---
-> > >> v2:
-> > >> - Replace pmd_present() with pmd_val() since we expect pmd_leaf() works
-> > >>   well on non-present pmd case.
-> > >>
-> > >>  arch/arm64/include/asm/pgtable.h | 2 +-
-> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > >> index ad9b221963d4..00cdd2d895d3 100644
-> > >> --- a/arch/arm64/include/asm/pgtable.h
-> > >> +++ b/arch/arm64/include/asm/pgtable.h
-> > >> @@ -551,7 +551,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-> > >>  				 PMD_TYPE_TABLE)
-> > >>  #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
-> > >>  				 PMD_TYPE_SECT)
-> > >> -#define pmd_leaf(pmd)		pmd_sect(pmd)
-> > >> +#define pmd_leaf(pmd)		(pmd_val(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
-> > >>  #define pmd_bad(pmd)		(!pmd_table(pmd))
-> > > 
-> > > I'm still trying to get my head around the desired semantics here.
-> > > 
-> > > If we want to fix the original report, then we need to take PROT_NONE
-> > > entries into account. The easiest way to do that is, as you originally
-> > > suggested, by using pmd_present():
-> > > 
-> > > #define pmd_leaf(pmd)	(pmd_present(pmd) && !pmd_table(pmd))
-> > > 
-> > > But now you seem to be saying that !pmd_present() entries should also be
-> > > considered as pmd_leaf() -- is there a real need for that?
-> > > 
-> > > If so, then I think this simply becomes:
-> > > 
-> > > #define pmd_leaf(pmd)	(!pmd_table(pmd))
-> > > 
-> > > which is, amusingly, identical to pmd_bad().
-> > > 
-> > > The documentation/comment that Steven referred to also desperately needs
-> > > clarifying as it currently states:
-> > > 
-> > >   "Only meaningful when called on a valid entry."
-> > > 
-> > > whatever that means.
-> > 
-> > The intention at the time is that this had the same meaning as
-> > pmd_huge() (when CONFIG_HUGETLB_PAGE is defined), which would then match
-> > this patch. This is referred in the comment, albeit in a rather weak way:
-> > 
-> > >  * This differs from p?d_huge() by the fact that they are always available (if
-> > >  * the architecture supports large pages at the appropriate level) even
-> > >  * if CONFIG_HUGETLB_PAGE is not defined.
-> > 
-> > However, the real issue here is that the definition of pmd_leaf() isn't
-> > clear. I know what the original uses of it needed but since then it's
-> > been used in other areas, and I'm afraid my 'documentation' isn't
-> > precise enough to actually be useful.
-> > 
-> > At the time I wrote that comment I think I meant "valid" in the AArch64
-> > sense (i.e. the LSB of the entry). PROT_NONE isn't 'valid' by that
-> > definition (and I hadn't considered it). But of course that definition
-> > of 'valid' is pretty meaningless in the cross-architecture case.
-> 
-> arm64 'valid' + PROT_NONE is roughly what 'present' means. So we could say
-> that this only works for present entries, but then Muchun's latest patch
-> wants to work with !present which is why I tried to work this through.
->
+On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
+> struct sgx_encl should be protected with the mutex
+> sgx_encl->lock. One exception is sgx_encl->page_cnt that
+> is incremented (in sgx_encl_grow()) when an enclave page
+> is added to the enclave. The reason the mutex is not held
+> is to allow the reclaimer to be called directly if there are
+> no EPC pages (in support of a new VA page) available at the time.
+>=20
+> Incrementing sgx_encl->page_cnt without sgc_encl->lock held
+> is currently (before SGX2) safe from concurrent updates because
+> all paths in which sgx_encl_grow() is called occur before
+> enclave initialization and are protected with an atomic
+> operation on SGX_ENCL_IOCTL.
+>=20
+> SGX2 includes support for dynamically adding pages after
+> enclave initialization where the protection of SGX_ENCL_IOCTL
+> is not available.
+>=20
+> Make direct reclaim of EPC pages optional when new VA pages
+> are added to the enclave. Essentially the existing "reclaim"
+> flag used when regular EPC pages are added to an enclave
+> becomes available to the caller when used to allocate VA pages
+> instead of always being "true".
+>=20
+> When adding pages without invoking the reclaimer it is possible
+> to do so with sgx_encl->lock held, gaining its protection against
+> concurrent updates to sgx_encl->page_cnt after enclave
+> initialization.
+>=20
+> No functional change.
+>=20
+> Reported-by: Haitao Huang <haitao.huang@intel.com>
+> Tested-by: Haitao Huang <haitao.huang@intel.com>
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 
-My bad. In the previous version, Aneesh seems want to make
-pmd_leaf() works for a not present page table entry, I am
-trying doing this in this version.  Seems like I do the right
-thing in the previous version from your explanation.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I'll use the previos version and fix pud_leaf() as well and
-update the documentation.  Do you think this is okay?
+Nit: I don't think tested-by is in the right patch here. Maybe
+Haitao's tested-by should be moved into patch that actually adds
+support for EAUG? Not something I would NAK this patch, just
+wondering...
 
-Thanks.
+> ---
+> Changes since V3:
+> - New patch prompted by Haitao encountering the
+> =C2=A0 WARN_ON_ONCE(encl->page_cnt % SGX_VA_SLOT_COUNT)
+> =C2=A0 within sgx_encl_grow() during his SGX2 multi-threaded
+> =C2=A0 unit tests.
+>=20
+> =C2=A0arch/x86/kernel/cpu/sgx/encl.c=C2=A0 | 6 ++++--
+> =C2=A0arch/x86/kernel/cpu/sgx/encl.h=C2=A0 | 4 ++--
+> =C2=A0arch/x86/kernel/cpu/sgx/ioctl.c | 8 ++++----
+> =C2=A03 files changed, 10 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/enc=
+l.c
+> index 546423753e4c..92516aeca405 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -869,6 +869,8 @@ void sgx_zap_enclave_ptes(struct sgx_encl *encl, unsi=
+gned long addr)
+> =C2=A0
+> =C2=A0/**
+> =C2=A0 * sgx_alloc_va_page() - Allocate a Version Array (VA) page
+> + * @reclaim: Reclaim EPC pages directly if none available. Enclave
+> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex sho=
+uld not be held if this is set.
+> =C2=A0 *
+> =C2=A0 * Allocate a free EPC page and convert it to a Version Array (VA) =
+page.
+> =C2=A0 *
+> @@ -876,12 +878,12 @@ void sgx_zap_enclave_ptes(struct sgx_encl *encl, un=
+signed long addr)
+> =C2=A0 *=C2=A0=C2=A0 a VA page,
+> =C2=A0 *=C2=A0=C2=A0 -errno otherwise
+> =C2=A0 */
+> -struct sgx_epc_page *sgx_alloc_va_page(void)
+> +struct sgx_epc_page *sgx_alloc_va_page(bool reclaim)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_epc_page *epc_=
+page;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0epc_page =3D sgx_alloc_epc_pag=
+e(NULL, true);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0epc_page =3D sgx_alloc_epc_pag=
+e(NULL, reclaim);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(epc_page))
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return ERR_CAST(epc_page);
+> =C2=A0
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/enc=
+l.h
+> index 253ebdd1c5be..66adb8faec45 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.h
+> +++ b/arch/x86/kernel/cpu/sgx/encl.h
+> @@ -116,14 +116,14 @@ struct sgx_encl_page *sgx_encl_page_alloc(struct sg=
+x_encl *encl,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long offset,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 u64 secinfo_flags);
+> =C2=A0void sgx_zap_enclave_ptes(struct sgx_encl *encl, unsigned long addr=
+);
+> -struct sgx_epc_page *sgx_alloc_va_page(void);
+> +struct sgx_epc_page *sgx_alloc_va_page(bool reclaim);
+> =C2=A0unsigned int sgx_alloc_va_slot(struct sgx_va_page *va_page);
+> =C2=A0void sgx_free_va_slot(struct sgx_va_page *va_page, unsigned int off=
+set);
+> =C2=A0bool sgx_va_page_full(struct sgx_va_page *va_page);
+> =C2=A0void sgx_encl_free_epc_page(struct sgx_epc_page *page);
+> =C2=A0struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 unsigned long addr);
+> -struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl);
+> +struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl, bool reclaim);
+> =C2=A0void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_=
+page);
+> =C2=A0
+> =C2=A0#endif /* _X86_ENCL_H */
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/io=
+ctl.c
+> index bb8cdb2ad0d1..5d41aa204761 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -17,7 +17,7 @@
+> =C2=A0#include "encl.h"
+> =C2=A0#include "encls.h"
+> =C2=A0
+> -struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
+> +struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl, bool reclaim)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_va_page *va_pa=
+ge =3D NULL;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void *err;
+> @@ -30,7 +30,7 @@ struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl=
+)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (!va_page)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+urn ERR_PTR(-ENOMEM);
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0va_page->epc_page =3D sgx_alloc_va_page();
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0va_page->epc_page =3D sgx_alloc_va_page(reclaim);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(va_page->epc_page)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0err=
+ =3D ERR_CAST(va_page->epc_page);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kfr=
+ee(va_page);
+> @@ -64,7 +64,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struc=
+t sgx_secs *secs)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct file *backing;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0long ret;
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0va_page =3D sgx_encl_grow(encl=
+);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0va_page =3D sgx_encl_grow(encl=
+, true);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(va_page))
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return PTR_ERR(va_page);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (va_page)
+> @@ -275,7 +275,7 @@ static int sgx_encl_add_page(struct sgx_encl *encl, u=
+nsigned long src,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return PTR_ERR(epc_page);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0va_page =3D sgx_encl_grow(encl=
+);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0va_page =3D sgx_encl_grow(encl=
+, true);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(va_page)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D PTR_ERR(va_page);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto err_out_free;
 
 
-
- 
+BR, Jarkko

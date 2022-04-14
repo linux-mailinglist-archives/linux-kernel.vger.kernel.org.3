@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB29500F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 15:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CDD500F1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 15:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244331AbiDNN10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S243954AbiDNNYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244183AbiDNNXo (ORCPT
+        with ESMTP id S244147AbiDNNWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:23:44 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E47F939ED;
-        Thu, 14 Apr 2022 06:18:33 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2eafabbc80aso54530987b3.11;
-        Thu, 14 Apr 2022 06:18:33 -0700 (PDT)
+        Thu, 14 Apr 2022 09:22:33 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3277D986CF;
+        Thu, 14 Apr 2022 06:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VSPSHGLNryKTOTOge0ylfTJKLHsA725QG3K5z7xv3vQ=;
-        b=mzWrWwMEQ3pI8mP8YATBmRidCAoh3CfJ3ZEoKRvU/hHhk+epGF0cWiBIe+gMTfRG7M
-         JLofzUCSt7FOvDvWoAd0Cz4EJjHM+vtgdfOyvRV1Df6lpRDHn+ycrgprZg3GPWuVWXw/
-         zDqLZHVkl55JdcERRPvuilaE0ghuLJhV3jYRHp7aQEazFf0h+AZb/OY0BNm7FFikyUh8
-         2OFyH+OSRjSojLe4FzHaaEfUxSsSGF/T8sQZ+6AjO1r5Tk6/4ba7mnJt19a5ITEXX7ms
-         Ig8C1xutmBlhR42x9LIgohdBjS8wRUNKcPCywc2WDCV893IRcfLphbHWbvkYOZtem/KC
-         UJ3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VSPSHGLNryKTOTOge0ylfTJKLHsA725QG3K5z7xv3vQ=;
-        b=hzWdlTmEd4mD9a+12mm17fULW07cK/ocaZ5HT0C1WXqkwnEbIFCnuAitnyUvUZw7H4
-         n8yJxurUfntrDMV6XpHTpf1fKRM3ne3otu8CWupdxlYzBqtHcqjXKz2I3iCzoZV8SNFF
-         ZQHglEnBkPIEOFwwHK4m8SNyWpEE4kPht5Fjl8uGdS/tcHnqaMPuG67OPJrLNgvfjzHO
-         zW1Ux3cIpcjSaUU7APaZedK5J2bjXZ0fMElpzJeO8GyHpenrdtz3af5Gv1aSIGbPeRoM
-         ZhktCPP3aPS48YlbmxMKNAo3fHs8iKQWtTAC4urdjA0bFy1+OK68NY1m+WvfRas7L2Ed
-         Cj0Q==
-X-Gm-Message-State: AOAM531YT/l3FjiBMCQGt8urDFAm9ZIZMO8wcNZJhPzHzIqJCjZ/710+
-        7h8F7HWmLhhitqPRiE26GjNzu/r1RGHaz2RTH6mhr9USvyM=
-X-Google-Smtp-Source: ABdhPJw7JUk3PaMO3ZTIH6MHWMnYDMymlZdf02YIpUqHKqDgK9Ke78x/au9ULwW+2UgR4ORl9VvEyHq2/PIbd6B/AXk=
-X-Received: by 2002:a0d:d702:0:b0:2ef:32f7:b800 with SMTP id
- z2-20020a0dd702000000b002ef32f7b800mr1937878ywd.482.1649942312435; Thu, 14
- Apr 2022 06:18:32 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649942274; x=1681478274;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9DrEjC40Tj4WgLi+0EQZfgUYf1059TdFj1Rn7P1f4VM=;
+  b=H0GHhuwulA+VW7EAl6AgQh+EuQ9veN7EIAqRw5445uDY3RxxUSx8USNr
+   xCzoRmp7Wc3g0CtuEYPT0okxPEwkny+Ww1I6rpfX0SFdnD4Mj5viUChrQ
+   d4rjW9kv/ZWn0gPlJTtiG4gMqxmrbY6KD7+8lRwD5NOblTDOGubIgLzGb
+   Y=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 14 Apr 2022 06:17:54 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:17:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Apr 2022 06:17:53 -0700
+Received: from [10.216.51.243] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Apr
+ 2022 06:17:48 -0700
+Message-ID: <b03ae0d0-070c-fb74-e272-4901fd085008@quicinc.com>
+Date:   Thu, 14 Apr 2022 18:47:45 +0530
 MIME-Version: 1.0
-References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
- <fdb1e0a6-62f9-c0a3-c1db-8857087701a1@redhat.com>
-In-Reply-To: <fdb1e0a6-62f9-c0a3-c1db-8857087701a1@redhat.com>
-From:   =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
-Date:   Thu, 14 Apr 2022 21:16:15 +0800
-Message-ID: <CAGcXWkzZex-XTEoq8H5mc+3Y2BH=cphdpH-815Y+TAq812K=8g@mail.gmail.com>
-Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
-To:     Tom Rix <trix@redhat.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
-        "lh.kuo" <lh.kuo@sunplus.com>, nathan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v9 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1649861047-7811-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649861047-7811-3-git-send-email-quic_srivasam@quicinc.com>
+ <YlcHhhFLcryXqxEC@google.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YlcHhhFLcryXqxEC@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom :
 
-    This SPI driver only handles one transfer at a time.
-That's why locks are not needed.
-
-
-Li-hao Kuo
-
-Tom Rix <trix@redhat.com> =E6=96=BC 2022=E5=B9=B44=E6=9C=8813=E6=97=A5 =E9=
-=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=887:45=E5=AF=AB=E9=81=93=EF=BC=9A
->
->
-> On 4/12/22 6:38 PM, Li-hao Kuo wrote:
-> > - remove spin_lock_irq and spin_unlock_irq in the irq funciton
->
-> function
->
-> I was expecting a statement on why is the lock is not needed.
->
-> Could you add one ?
->
-> Tom
->
-> >
-> > Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> > ---
-> >   drivers/spi/spi-sunplus-sp7021.c | 4 +---
-> >   1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus=
--sp7021.c
-> > index f989f7b..120623c 100644
-> > --- a/drivers/spi/spi-sunplus-sp7021.c
-> > +++ b/drivers/spi/spi-sunplus-sp7021.c
-> > @@ -199,8 +199,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, v=
-oid *dev)
-> >       if (tx_len =3D=3D 0 && total_len =3D=3D 0)
-> >               return IRQ_NONE;
-> >
-> > -     spin_lock_irq(&pspim->lock);
-> > -
-> >       rx_cnt =3D FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
-> >       if (fd_status & SP7021_RX_FULL_FLAG)
-> >               rx_cnt =3D pspim->data_unit;
-> > @@ -239,7 +237,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, v=
-oid *dev)
-> >
-> >       if (isrdone)
-> >               complete(&pspim->isr_done);
-> > -     spin_unlock_irq(&pspim->lock);
-> > +
-> >       return IRQ_HANDLED;
-> >   }
-> >
->
+On 4/13/2022 10:55 PM, Matthias Kaehlcke wrote:
+Thanks for your time Matthias!!!
+> On Wed, Apr 13, 2022 at 08:14:07PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+>> based platforms.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84 ++++++++++++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 +++++++++++++++++++++++++++++++
+>>   2 files changed, 191 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 6e6cfeda..50fea0e 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1987,6 +1987,113 @@
+>>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>>   		};
+>>   
+>> +		lpass_tlmm: pinctrl@33c0000 {
+>> +			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+>> +			reg = <0 0x033c0000 0x0 0x20000>,
+>> +				<0 0x03550000 0x0 0x10000>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&lpass_tlmm 0 0 15>;
+>> +
+>> +			#clock-cells = <1>;
+>> +
+>> +			lpass_dmic01: lpass-dmic01 {
+> For the node names the 'lpass-' prefix is redundant as you remarked
+> earlier, since they are inside the 'lpass_tlmm' node. It's only useful
+> for the labels, which can be used in other .dts[i] files where the
+> context might not be evident.
+Okay. will do accordingly.

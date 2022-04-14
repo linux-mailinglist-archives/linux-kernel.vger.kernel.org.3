@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38B4501C17
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F196501C10
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345782AbiDNTnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S1345719AbiDNTnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345719AbiDNTnB (ORCPT
+        with ESMTP id S235603AbiDNTnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:43:01 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC00549FBD;
-        Thu, 14 Apr 2022 12:40:34 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so6278304fac.7;
-        Thu, 14 Apr 2022 12:40:34 -0700 (PDT)
+        Thu, 14 Apr 2022 15:43:50 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AC1AC050
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:41:24 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id a5so4920957qvx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yL9/UIL982jnwFL4yczTgqRaZlbJCY9QhpIXC00WZqw=;
+        b=SQDCH2eXbnV6ThaqWQZY8N5NxsV2cc0btmkPWX9ZdhfGbQ8negud7uKiAMm6D0enDK
+         GtwUxBUoFT3TkdVQmK7JDQQH7UdrBoxVwwA5CT1SdTP5Fi7xuZ2Tsb4YKQh/2UioZ89d
+         a10kmA4refMtnqO9FcIb9lxA2gFAykJZqK3zqPa8eOd0vQOegR2C//dMDhhUA5y+Sz5D
+         gHmV3Bp/udHH0tUXylkdfBs7dC2BrqJW4FmFSZDGYze+F//D4l/u7AsjOvk1EWD+kdkH
+         Q5aAavNJj5WRZJGdZzJKPK2awBB4GPJmuvy4s561szrhomyBz01wS7V8DjR1iFgfeStc
+         TRXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sTjycxzZ7F3dCMSb/aO9ZF1TYGmB9SbVtqQIGpu1O+I=;
-        b=bSyw+jcovvIvJVR8k0GeVz668v2UTDf3H5QBgq5+yr5nC+xSeiSPcZRinVQ2yIufJU
-         mzoeiVpSkCu+u1kbGxUcsxmklI8JayjwW7pXYBgi6/Yog2Lbm02J5X2BS35c+Y29iUEu
-         hkCiJsqLs0Ei4xDGw2e6xFLa4dGK5+Ron0ycpAsLWlH3OTH+7C4+VzwSmRsUuQhpKvLU
-         higIF45djJMlpYFq6ITCPkRabc0ylMuMmJUeG7MYILz3Lo0AY42l7nj93m0tP54f1DCW
-         lyykKnhfkHrlPCrKhz3cand1rlduRnUj+bTdf4BGrZGYK7ERLU0MPzVZrWZUTG/nWcwG
-         AxuA==
-X-Gm-Message-State: AOAM533Ya7PBWCiviJmNiHuxS0hX+dmGIBd3M6gea17wsZB5xw+YlkY3
-        gz5xsM42sGwJAa9L6vBxFg==
-X-Google-Smtp-Source: ABdhPJx9v0RohJWr9Vyjc3wW8aOTrcqcjT0BSZkNb82DuBUGbueEBvvS9/T8yJ4L8A5ev+ToOzNApg==
-X-Received: by 2002:a05:6870:2216:b0:e2:9dea:4611 with SMTP id i22-20020a056870221600b000e29dea4611mr79826oaf.122.1649965234241;
-        Thu, 14 Apr 2022 12:40:34 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm1095357oae.33.2022.04.14.12.40.33
+        bh=yL9/UIL982jnwFL4yczTgqRaZlbJCY9QhpIXC00WZqw=;
+        b=wfCHKjTuB9mCxEuiVLP/1NW5rlSYzOXR8rqiqf74QdHYW9itOFn9k3VU8doUY+fJpy
+         yZaTtSGC3P4CwxKsGsLnJSnD+CqVTQ9ODBdBDS8JhJT6l8QGeeYYMsIAyE1eiV+2kYqG
+         hsKlUxHOq9QDagSbvJv7gdPii27chaanGIq2w//QNJ0uWpFYuboHX83yTf3anF2pXN9t
+         ZKY0qUp4Lib1PU8utV6IRmFzniZPs9gm4TTuvON37uB38YULL+REK/1UswqrR995Tw8J
+         vMWnkDMJkj58Teyb5t3VS0gHNtuV5zSxpKtakAi/mVly34FAsczybJW5HPMYqb+4ncnU
+         82MQ==
+X-Gm-Message-State: AOAM533FEVwaZl84SQsUgY4K+01sfL7qNQY88aGH36RiBepsU1XNBMQ+
+        +2R+A0qb0qkxfASNHK9MuhnBdcw4d+A0ZDgo
+X-Google-Smtp-Source: ABdhPJzHLQhfEnhSBmgGyGjfuvAueEwWhilK6pSHxGbK1M5Rykq8UmuXwDzGl1xLwxYzk9YF2LdIig==
+X-Received: by 2002:a05:6214:1194:b0:444:45d6:d79d with SMTP id t20-20020a056214119400b0044445d6d79dmr4847812qvv.36.1649965283442;
+        Thu, 14 Apr 2022 12:41:23 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
+        by smtp.gmail.com with ESMTPSA id e126-20020a376984000000b0069c86b28524sm577567qkc.19.2022.04.14.12.41.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 12:40:34 -0700 (PDT)
-Received: (nullmailer pid 2513925 invoked by uid 1000);
-        Thu, 14 Apr 2022 19:40:33 -0000
-Date:   Thu, 14 Apr 2022 14:40:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "wsa@kernel.org" <wsa@kernel.org>, kernel <kernel@axis.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
- detection
-Message-ID: <Ylh4sexTQhAjU3NW@robh.at.kernel.org>
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
- <20220412085046.1110127-2-vincent.whitchurch@axis.com>
- <YlXtobiXIyObF/7+@robh.at.kernel.org>
- <20220414085539.GA7392@axis.com>
+        Thu, 14 Apr 2022 12:41:22 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:41:18 -0400
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH 1/6] staging: r8188eu: remove unnecessary braces in
+ single statement block
+Message-ID: <20220414194118.GA4144553@jaehee-ThinkPad-X1-Extreme>
+References: <cover.1649880454.git.jhpark1013@gmail.com>
+ <4a0f2a0f24321c5b2039f0f8e6132cec4a2ef068.1649880454.git.jhpark1013@gmail.com>
+ <3f4a6c08-4434-1865-bc96-984152af5af1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414085539.GA7392@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <3f4a6c08-4434-1865-bc96-984152af5af1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:55:40AM +0200, Vincent Whitchurch wrote:
-> On Tue, Apr 12, 2022 at 11:22:41PM +0200, Rob Herring wrote:
-> > On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
-> > > diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> > > index fc3dd7ec0445..960d1d5c9362 100644
-> > > --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> > > +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> > > @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
-> > >  	this information to adapt power management to keep the arbitration awake
-> > >  	all the time, for example. Can not be combined with 'single-master'.
-> > >  
-> > > +- no-detect
-> > > +	states that no other devices are present on this bus other than the
-> > > +	ones listed in the devicetree.
-> > 
-> > This belongs in the schema instead:
-> > 
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
+On Wed, Apr 13, 2022 at 11:24:46PM +0300, Pavel Skripkin wrote:
+> Hi Jaehee,
 > 
-> OK, thank you, I've sent a PR[0] now, but I must admit I don't quite
-> understand how this property differs from the other ones in this file
-> which aren't documented there.
+> On 4/13/22 23:11, Jaehee Park wrote:
+> > Remove braces for single statement block to minimize the number of
+> > empty lines, without loss of readability. Issue found with checkpatch.
+> > WARNING: braces {} are not necessary for single statement blocks
+> > 
+> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> > ---
+> >   drivers/staging/r8188eu/core/rtw_mlme.c | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > index 3e9882f89f76..d3f4d7cdfa08 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > @@ -112,9 +112,8 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
+> >   	rtw_free_mlme_priv_ie_data(pmlmepriv);
+> > -	if (pmlmepriv) {
+> > +	if (pmlmepriv)
+> >   		vfree(pmlmepriv->free_bss_buf);
+> > -	}
+> 
+> If pmlmepriv is equal to NULL we would die in rtw_free_mlme_priv_ie_data(),
+> so this check is just redundant
+> 
 
-Thanks.
+Hi Pavel, thank you for your comment! If I'm removing this if statement,
+should I include vfree(pmlmepriv->free_bss_buf) in 
+rtw_free_mlme_priv_ie_data?
 
-The issue in general is we need permission to relicense anything in the 
-kernel tree to move it. In some cases, the schema is written, but the
-descriptions have not been moved (as that's the part needing to be 
-copied. If we missed properties, I'm not sure what happened but they 
-should be in the schema too. Maybe they were added around the same time 
-the schema got written.
-
-Rob
+> 
+> 
+> 
+> With regards,
+> Pavel Skripkin

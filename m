@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDAC500BED
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98521500BF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242586AbiDNLRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S242223AbiDNLUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242581AbiDNLQ7 (ORCPT
+        with ESMTP id S233530AbiDNLUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:16:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8290327B22;
-        Thu, 14 Apr 2022 04:14:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F1D3B828E6;
-        Thu, 14 Apr 2022 11:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE836C385A5;
-        Thu, 14 Apr 2022 11:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649934872;
-        bh=NmetDrxQ+EhR6cSrYu4CXnVLfNx9HrQ/wJn7pNgkRNQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cAOOydwO3ql5oucGvzxYWVmHeQtwnjGuUZe9yX/3fKx7Ie2l8ACcJLd04elVLkCYD
-         UwmpsD479bfr3SYn2pcFEY9MdggMb3lMYHXjxvHV7g4M2AXYsGAA8blffgVJOtZfhV
-         e35oWN0i4nST7+2NCuEqJgtxNoTcgcxbntFhhp1La8j4Qi2EH+w6ZrhaGfqtCbtLxP
-         uBVxcm+uOPm9VraGQw95SyXAaQBKUWW87pVZHVDM61OxlABbH8Q21tld5RNouqvCP1
-         TImh2hYV4MirBJjO82pnDZOY25w2jTjgjHDswMAeesMpws/iOOmhznXLjRahv9qfgZ
-         VbxuO1TA4ykeg==
-Date:   Thu, 14 Apr 2022 13:14:24 +0200
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
+        Thu, 14 Apr 2022 07:20:45 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A851875C3D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso4297913pjv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cApjy1z/WTuYgC0OK2plrpPC0MAtVd0VXO0NPNL/K7k=;
+        b=JRiEcfNcIxdtXaRVoJ49EaIWVLBuPwVwzbNP5U2aJD+SwsDxylVURuBvt0Qv9wNrSd
+         pvXnJY6xxmNXRgWlzyaDe34yc3PwAlKhlHPJUEaXAE3fh2IH63usa7ptt5edKIVeD82P
+         H2Y77Wd5pHy/jEAoSGSRAnZgvg1AOKVY96bkduwWnLjiujAS9wx806bOuQr6sFsDtO0j
+         NxMyJ5bKj1IEBxf49Zby/yQ/lMDtghiPvMGmpjZPkPMkqRMiXqTJcUy+ID320/MmZEfI
+         1x3wqupplKRF5XNO/Gi0kRuCQzIOvb3LZcr+kpEKetyEWeGfXpV/05F7Fp91E3IEI4AB
+         nPGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cApjy1z/WTuYgC0OK2plrpPC0MAtVd0VXO0NPNL/K7k=;
+        b=7gZ3qBQusbTAF6mSFMKy4g2mdITrKGx64vwRZ4K7kaKzBTuoth4XGvlmK3wJUcQzZn
+         tK2BJqnlLCGBs8ZCk9Hu9LwHA4vNnyrXY2sZRRfbXRdPhsqdg1TaXd2VJPqgQB7hdwSw
+         ui+ANtM4eyVoIgfaoX4IFvqaZVQywddTD7cp6rWUGdb+M8Fxd2/OZvJF83KBh9qeqUg6
+         ToqTfkgVxQlYx9zMI1tU6TzfQ4cn2bKJntBwZkViELn9qolF6A8+a/JBo24ZKvgu+XMk
+         JkSfNDd1fqOVauYmq2FUW5YZ30Oomdn7k8a5FhKWYFnj8gU64jHdb03qG0m5QnVL8nKr
+         6DMQ==
+X-Gm-Message-State: AOAM53252DP7gYKtG3jey28lnL+2728Wa3SaiqiJ5V513IeWXd/2qjgp
+        aWbLh2eZqiOajtljFrPYy/BVVQ==
+X-Google-Smtp-Source: ABdhPJy7RRXNPbA+lQVGxBoi5SOBxAGPWUefgr9V+P+8VYZr88w41MNltNvDvmzCwsofV1+Hh9rnFw==
+X-Received: by 2002:a17:90b:4a89:b0:1c7:3933:d802 with SMTP id lp9-20020a17090b4a8900b001c73933d802mr3117701pjb.75.1649935100207;
+        Thu, 14 Apr 2022 04:18:20 -0700 (PDT)
+Received: from localhost ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id m2-20020a17090a4d8200b001cb41f25148sm1848735pjh.17.2022.04.14.04.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 04:18:19 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 19:18:11 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Steven Price <steven.price@arm.com>, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        lengxujun2007@126.com, arnd@arndb.de, smuchun@gmail.com,
+        duanxiongchun@bytedance.com, quic_qiancai@quicinc.com,
+        aneesh.kumar@linux.ibm.com, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
-Message-ID: <20220414131424.744aa842@kernel.org>
-In-Reply-To: <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
-References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
-        <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
+Subject: Re: [PATCH v2] arm64: mm: fix pmd_leaf()
+Message-ID: <YlgC877mS2LjsqS8@FVFYT0MHHV2J.usts.net>
+References: <20220411122653.40284-1-songmuchun@bytedance.com>
+ <20220413101929.GA1229@willie-the-truck>
+ <64d4288e-7776-a3fd-5ee4-70486dfd0394@arm.com>
+ <20220414100535.GB2298@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414100535.GB2298@willie-the-truck>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 15:33:00 -0700 Peilin Ye wrote:
-> The following sequence of events caused the BUG:
+On Thu, Apr 14, 2022 at 11:05:35AM +0100, Will Deacon wrote:
+> On Wed, Apr 13, 2022 at 11:39:49AM +0100, Steven Price wrote:
+> > On 13/04/2022 11:19, Will Deacon wrote:
+> > > On Mon, Apr 11, 2022 at 08:26:53PM +0800, Muchun Song wrote:
+> > >> The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
+> > >> the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
+> > >> caused by this was reported by Qian Cai.
+> > >>
+> > >> Link: https://patchwork.kernel.org/comment/24798260/ [1]
+> > >> Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
+> > >> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+> > >> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > >> ---
+> > >> v2:
+> > >> - Replace pmd_present() with pmd_val() since we expect pmd_leaf() works
+> > >>   well on non-present pmd case.
+> > >>
+> > >>  arch/arm64/include/asm/pgtable.h | 2 +-
+> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > >> index ad9b221963d4..00cdd2d895d3 100644
+> > >> --- a/arch/arm64/include/asm/pgtable.h
+> > >> +++ b/arch/arm64/include/asm/pgtable.h
+> > >> @@ -551,7 +551,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
+> > >>  				 PMD_TYPE_TABLE)
+> > >>  #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
+> > >>  				 PMD_TYPE_SECT)
+> > >> -#define pmd_leaf(pmd)		pmd_sect(pmd)
+> > >> +#define pmd_leaf(pmd)		(pmd_val(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
+> > >>  #define pmd_bad(pmd)		(!pmd_table(pmd))
+> > > 
+> > > I'm still trying to get my head around the desired semantics here.
+> > > 
+> > > If we want to fix the original report, then we need to take PROT_NONE
+> > > entries into account. The easiest way to do that is, as you originally
+> > > suggested, by using pmd_present():
+> > > 
+> > > #define pmd_leaf(pmd)	(pmd_present(pmd) && !pmd_table(pmd))
+> > > 
+> > > But now you seem to be saying that !pmd_present() entries should also be
+> > > considered as pmd_leaf() -- is there a real need for that?
+> > > 
+> > > If so, then I think this simply becomes:
+> > > 
+> > > #define pmd_leaf(pmd)	(!pmd_table(pmd))
+> > > 
+> > > which is, amusingly, identical to pmd_bad().
+> > > 
+> > > The documentation/comment that Steven referred to also desperately needs
+> > > clarifying as it currently states:
+> > > 
+> > >   "Only meaningful when called on a valid entry."
+> > > 
+> > > whatever that means.
+> > 
+> > The intention at the time is that this had the same meaning as
+> > pmd_huge() (when CONFIG_HUGETLB_PAGE is defined), which would then match
+> > this patch. This is referred in the comment, albeit in a rather weak way:
+> > 
+> > >  * This differs from p?d_huge() by the fact that they are always available (if
+> > >  * the architecture supports large pages at the appropriate level) even
+> > >  * if CONFIG_HUGETLB_PAGE is not defined.
+> > 
+> > However, the real issue here is that the definition of pmd_leaf() isn't
+> > clear. I know what the original uses of it needed but since then it's
+> > been used in other areas, and I'm afraid my 'documentation' isn't
+> > precise enough to actually be useful.
+> > 
+> > At the time I wrote that comment I think I meant "valid" in the AArch64
+> > sense (i.e. the LSB of the entry). PROT_NONE isn't 'valid' by that
+> > definition (and I hadn't considered it). But of course that definition
+> > of 'valid' is pretty meaningless in the cross-architecture case.
 > 
-> 1. During ip6gretap device initialization, tunnel->tun_hlen (e.g. 4) is
->    calculated based on old flags (see ip6gre_calc_hlen());
-> 2. packet_snd() reserves header room for skb A, assuming
->    tunnel->tun_hlen is 4;
-> 3. Later (in clsact Qdisc), the eBPF program sets a new tunnel key for
->    skb A using bpf_skb_set_tunnel_key() (see _ip6gretap_set_tunnel());
-> 4. __gre6_xmit() detects the new tunnel key, and recalculates
->    "tun_hlen" (e.g. 12) based on new flags (e.g. TUNNEL_KEY and
->    TUNNEL_SEQ);
-> 5. gre_build_header() calls skb_push() with insufficient reserved header
->    room, triggering the BUG.
-> 
-> As sugguested by Cong, fix it by moving the call to skb_cow_head() after
-> the recalculation of tun_hlen.
-> 
-> Reported-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> Co-developed-by: Cong Wang <cong.wang@bytedance.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-> ---
-> Hi all,
-> 
-> I couldn't find a proper Fixes: tag for this fix; please comment if you
-> have any sugguestions.  Thanks!
+> arm64 'valid' + PROT_NONE is roughly what 'present' means. So we could say
+> that this only works for present entries, but then Muchun's latest patch
+> wants to work with !present which is why I tried to work this through.
+>
 
-What's wrong with
+My bad. In the previous version, Aneesh seems want to make
+pmd_leaf() works for a not present page table entry, I am
+trying doing this in this version.  Seems like I do the right
+thing in the previous version from your explanation.
 
-Fixes: 6712abc168eb ("ip6_gre: add ip6 gre and gretap collect_md mode")
+I'll use the previos version and fix pud_leaf() as well and
+update the documentation.  Do you think this is okay?
 
-?
+Thanks.
 
-> diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-> index b43a46449130..976236736146 100644
-> --- a/net/ipv6/ip6_gre.c
-> +++ b/net/ipv6/ip6_gre.c
-> @@ -733,9 +733,6 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
->  	else
->  		fl6->daddr = tunnel->parms.raddr;
->  
-> -	if (skb_cow_head(skb, dev->needed_headroom ?: tunnel->hlen))
-> -		return -ENOMEM;
-> -
->  	/* Push GRE header. */
->  	protocol = (dev->type == ARPHRD_ETHER) ? htons(ETH_P_TEB) : proto;
->  
-> @@ -763,6 +760,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
->  			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
 
-We should also reject using SEQ with collect_md, but that's a separate
-issue.
 
->  		tun_hlen = gre_calc_hlen(flags);
->  
-> +		if (skb_cow_head(skb, dev->needed_headroom ?: tun_hlen + tunnel->encap_hlen))
-> +			return -ENOMEM;
-> +
->  		gre_build_header(skb, tun_hlen,
->  				 flags, protocol,
->  				 tunnel_id_to_key32(tun_info->key.tun_id),
+ 

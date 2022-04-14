@@ -2,183 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F258B501C75
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B265B501C7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346191AbiDNURt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S1346200AbiDNUT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243237AbiDNURr (ORCPT
+        with ESMTP id S238317AbiDNUTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:17:47 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142BEB08C;
-        Thu, 14 Apr 2022 13:15:15 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.96.207]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MJm8H-1nLeGJ0fAv-00K4sE; Thu, 14 Apr 2022 22:14:10 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id F0BAE3C09D; Thu, 14 Apr 2022 22:14:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1649967248; bh=Y5+nnmHzcrg7jFOuw1SkjjKBoEj4u51ooH34L5VRHzk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NfvBI+2jVnexVnxkHPw4UkgVzyvDVQAUkhCA7Ie0nUitCMGPKveYkFhvNZyfhMZ3A
-         0u7dRSRqiOx89iXnNYasbUqLKyQKkgIcQEpaGATkufgj8da/hy75UO8B7Rz4MH4DDI
-         x/g/UR90CXCymJrlptlgvBsbbHSZ0TxrFWOBLu1A=
-Date:   Thu, 14 Apr 2022 22:14:07 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Yann Droneaud <ydroneaud@opteya.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of
- warning
-Message-ID: <YliAjz/OwW5kXx+r@fjasle.eu>
-References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com>
- <20220408084607.106468-1-ydroneaud@opteya.com>
- <CAK7LNAQZLt_OecOogOQiSu5snW+sffsMoFgVcjPTx_idj_=_tQ@mail.gmail.com>
- <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
- <81585705-6ed8-12e5-1355-332a6a5d2b17@infradead.org>
- <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
- <YlgdF9qmJyYGHKXZ@bergen.fjasle.eu>
- <CAK7LNARVKL4vCRHz5=_sW_oBpkpqhDu5Hp1hfG+Hnwqg-61HVA@mail.gmail.com>
- <YlhfMqQ+ypf4OdkN@fjasle.eu>
+        Thu, 14 Apr 2022 16:19:22 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EBC0AEB094
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:16:56 -0700 (PDT)
+Received: (qmail 460007 invoked by uid 1000); 14 Apr 2022 16:16:55 -0400
+Date:   Thu, 14 Apr 2022 16:16:55 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+Message-ID: <YliBN9sLwj8UOkU8@rowland.harvard.edu>
+References: <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
+ <YlDoSY19HYNJGI50@rowland.harvard.edu>
+ <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
+ <YlRATrMxRWt9gVqt@rowland.harvard.edu>
+ <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
+ <YlWdfWRXYjkfHLIP@rowland.harvard.edu>
+ <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
+ <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+ <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+ <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlhfMqQ+ypf4OdkN@fjasle.eu>
-X-Provags-ID: V03:K1:Y6ud/MyDh4zcSOf3AEgV/WM8ljaiaEjH28dpuDMiBnEg4M6iLvg
- fcI4bA5LaLldtv51wqF9HL4STHwDFGZuPsnh+dm9lrMdWGP6Thw0xyMFUFclqWC1O2oJwxA
- mo2eE8dUiIldIsaQnS7lpqOZ6RI9C4Vh2oayHwOb23TOpdacx1XAMXtO4+jrxO1DmE6inbd
- sahZPt/H2EDeryyO5nWDQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6q18BLTH5Us=:jlm4YMwsE9JQ6htF4M899Q
- CcPaYW5Ge6ibVrhvAcAEy0bay8ZTd72NvyXC8zv/yL+hgGHcwwlKf2Hux/CDtZJl5IaYWQSDR
- /gBoxVo4HwzznjVA/p/sEI1BVQBMumIacuve23loknJhUSSyIbuugxNpv7mgRkMvRdnODuiv9
- 4pfUIZ1mbzcweYRGPf7WdfAwgOQmq4baSN8PZzU2JlhyPS8IfDYn4TDsS9yoIonAo5av4C7ZV
- mGvu+zYa//diH0dt1SI1En3D5+Dtwpi5vCYO7+FEQNKjdOjnAVvUyqhMz6ni0WMz2Rv4y4l+m
- 2xdTL6AwsZNZu7i3e95puXOJhPh2e0YGlV239IxyTlZ+cQC1S7IhfRWl0x0txcct1FAF+jaHH
- TzV1b1mHvETCjIW5bQQWyS+HZCW+ucXRzS1svUKMGjgBxZbPeidsyT37uYx8aUmThXIBBfKEf
- lszf+PE4l08TegKFf/y0HTc9ZG9utbs14rYKJr9zSG021tIo3yJQ687132jdfOmLnRCvMDVZc
- L+VHz99csyTLKncy6di2Hz9RNB04AsK7d5WoK6g1h3kRE6cy3usXPdDqoDtvnuAlzoA1kDa3I
- 2UaG8Fsynp1pJZrvLRAZfrZIJYfjIjiH7W4TDkzb3UzXPQ2JcU2/EvBbyEhbPPC+pCEG3eqXm
- yqpoc9qcLB2S/XkjfLDhgPQfwSCiLpreou9wQYzPjU9MHmaZ1Q+Md2TpEHkg75bvic28=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_MSPIKE_ZBI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 07:51:46PM +0200 Nicolas Schier wrote:
-> On Fri, Apr 15, 2022 at 12:15:40AM +0900 Masahiro Yamada wrote:
-> > On Thu, Apr 14, 2022 at 10:19 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
-> > >
-> > > På lø. 09. april 2022 kl. 10.47 +0000 skrev Masahiro Yamada:
-> > > > On Sat, Apr 9, 2022 at 5:36 AM Randy Dunlap <rdunlap@infradead.org> Wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > On 4/8/22 13:29, Nick Desaulniers wrote:
-> > > > > > On Fri, Apr 8, 2022 at 4:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > >>
-> > > > > >> On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
-> > > > > >>>
-> > > > > >>> When developing new code/feature, CONFIG_WERROR is most
-> > > > > >>> often turned off, especially for people using make W=12 to
-> > > > > >>> get more warnings.
-> > > > > >>>
-> > > > > >>> In such case, turning on -Werror temporarily would require
-> > > > > >>> switching on CONFIG_WERROR in the configuration, building,
-> > > > > >>> then switching off CONFIG_WERROR.
-> > > > > >>>
-> > > > > >>> For this use case, this patch introduces a new 'e' modifier
-> > > > > >>> to W= as a short hand for KCFLAGS+=-Werror" so that -Werror
-> > > > > >>> got added to the kernel (built-in) and modules' CFLAGS.
-> > > > > >>>
-> > > > > >>> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
-> > > > > >>> ---
-> > > > > >>>  Makefile                   |  1 +
-> > > > > >>>  scripts/Makefile.extrawarn | 13 +++++++++++--
-> > > > > >>>  2 files changed, 12 insertions(+), 2 deletions(-)
-> > > > > >>>
-> > > > > >>> Changes since v0[0]:
-> > > > > >>>
-> > > > > >>>  - rebase on top of commit 64a91907c896 ("kbuild: refactor scripts/Makefile.extrawarn")
-> > > > > >>>  - document use case after commit 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
-> > > > > >>>
-> > > > > >>> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email-ydroneaud@opteya.com/
-> > > > > >>
-> > > > > >>
-> > > > > >> I remembered the previous submission, I liked it, but I had lost it.
-> > > > > >>
-> > > > > >> It seems already 7 years ago, (before I became the Kbuild maintainer).
-> > > > > >> Thanks for coming back to this.
-> > > > > >>
-> > > > > >>
-> > > > > >> I like this, but I will wait some time for review comments.
-> > > > > >
-> > > > > > Dunno, this seems pretty simple:
-> > > > > >
-> > > > > > $ ./scripts/config -e WERROR
-> > > > > > $ make ... W=12
-> > > > >
-> > > > > Yeah, that's about what I was thinking too..
-> > > >
-> > > >
-> > > >
-> > > > But, you cannot change the .config
-> > > > when you build external modules.
-> > > >
-> > > > "make W=e" might be useful for people who strive to
-> > > > keep their downstream modules warning-free.
-> > > >
-> > > >
-> > > > W=e is the same pattern.
-> > > > I do not see much downside.
-> > >
-> > > If I set CONFIG_WERROR=y on the make command line, I could have the
-> > > same result, don't I?
-> > >
-> > >   make CONFIG_WERROR=1 ...
-> > >
-> > > no matter if in-tree or for external kernel modules.
+On Thu, Apr 14, 2022 at 08:06:32PM +0300, Mathias Nyman wrote:
+> On 14.4.2022 19.30, Evan Green wrote:
+> > Hi Alan and Mathias,
 > > 
-> > Yes.
+> > On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >> Evan, this discussion suggests that you rewrite your patch as a series
+> >> of three:
+> >>
+> >>      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
+> >>         always disabled.
 > > 
-> > If you can change the kernel configuration,
-> > you can enable CONFIG_WERROR.
-> > 
-> > To build external modules against the read-only
-> > /lib/modules/$(uname -r)/build/,
-> > it is not so feasible to change the .config file, though.
-> 
-> hm, I wanted to point out something different.  When I build an external module
-> against a read-only kbuild-tree, I _can_ change kconfig values by specifying
-> them on the make command line, just as I can add 'W=e':
-> 
->   make -C /lib/modules/$(uname -r)/build M=~+ CONFIG_SAMPLE_KOBJECT=m CONFIG_WERROR=y
-> 
-> Thus, I suspect, that this is the very same as if I'd run
-> 
->   make -C /lib/modules/$(uname -r)/build M=~+ CONFIG_SAMPLE_KOBJECT=m W=e
-> 
-> So, "W=e" is actually just a shortcut for "CONFIG_WERROR=1".  Or have I missed
-> something?
-> 
-> Kind regards,
-> Nicolas
+> > If I understand this correctly, this means potentially runtime
+> > resuming the device so its wakeup setting can be consistently set to
+> > wakeups disabled across a freeze transition.
 
-oh, sorry.  Yann wrote it already in his commit message, please excuse the noise.
+The kernel already does this for you.  All you have to do is change the 
+routine so that it always decides that wakeup should be off for FREEZE.
 
-Kind regards,
-Nicolas
+> >  Got it I think in terms
+> > of the "how".
+
+> >>      2. Change the xhci-hcd interrupt handler so that port-status
+> >>         changes are ignored if the port's root hub is suspended with
+> >>         wakeup disabled.
+> > 
+> > This part confuses me. This would be way deep under
+> > xhci_handle_event(), probably in handle_port_status(), just throwing
+> > away certain events that come in the ring. How would we know to go
+> > back and process those events later?
+
+We wouldn't.  There's no need to process the events later.  When a hub 
+(including a root hub) is resumed, the hub driver checks the state of 
+each port and takes whatever actions are needed to handle any changes 
+that occurred while the hub was suspended.
+
+In fact, processing these events wouldnn't really accomplish very much 
+in any case.  The driver would request that the root hub be resumed, 
+that request would be submitted to a work queue, and then nothing would 
+happen because the work queue, like many other kernel threads, gets 
+frozen during a hibernation transition.
+
+All that's really needed is to guarantee that the root hub would be 
+resumed when we leave hibernation.  And of course, this always happens 
+regardless of what events were received in the meantime.
+
+> >  I think we don't need to do this
+> > if we suspend the controller as in #3 below. The suspended (halted)
+> > controller wouldn't generate event interrupts (since the spec mentions
+> > port status change generation is gated on HCHalted). So we're already
+> > covered against receiving interrupts in this zone by halting the
+> > controller, and the events stay nicely pending for when we restart it
+> > in thaw.
+> 
+> Was thinking the same here. It would be nice to have this to comply with
+> usb spec, keeping roothub from propagating connect/disconnect events
+> immediately after suspending it with wake flags cleared.
+> 
+> But it's a lot of work to implement this, and for this issue, and linux 
+> hibernate point of view I don't think it has any real benefit.
+> The actual device generating the interrupt is the host (parent of roothub),
+> and that will stop once freeze() is called for it in #3 
+
+The only reason that approach works is because we never disable resume 
+requests during runtime suspend.  But okay...
+
+> > Is the goal of #1 purely a setup change for #2, or does it stand on
+> > its own even if we nixed #2? Said differently, is #1 trying to ensure
+> > that wake signaling doesn't occur at all between freeze and thaw, even
+> > when the controller is suspended and guaranteed not to generate
+> > interrupts via its "normal" mechanism? I don't have a crisp mental
+> > picture of how the wake signaling works, but if the controller wake
+> > mechanism sidesteps the original problem of sending an MSI to a dead
+> > CPU (as in, it does not use MSIs), then it might be ok as-is.
+> 
+> #1 is needed because xHCI can generate wake events even when halted if
+> device initiated resume signaling is detected on a roothub port.
+> Just like it can generate wake events on connect/disconnect if wake flags
+> are set. (xhci spec figure 4-34, see PLS=Resume)
+> We want to avoid those wakeups between freeze-thaw
+
+Think of it this way: All USB hubs, including root hubs, always relay 
+a resume request upstream when one is received on a downstream port, no 
+matter what their wakeup setting is.  A hub's wakeup setting only 
+controls whether it generates a resume request on its own in response 
+to a port-status change.
+
+> So just #1 and #3 should probably solve this, and be an easier change. 
+
+Let's try it and see.
+
+Alan Stern

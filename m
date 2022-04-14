@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C73500972
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759DD50098C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241588AbiDNJQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S241622AbiDNJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbiDNJQp (ORCPT
+        with ESMTP id S241358AbiDNJUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:16:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E613B0A;
-        Thu, 14 Apr 2022 02:14:21 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id EFD1D1F746;
-        Thu, 14 Apr 2022 09:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649927659; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=HBZ9ag92vmSkbFZGj+8KyYeKwAJ+IyyeUDHDn026V54=;
-        b=SsizxRShb0DalAHnZsiLhRQUoCZ9HSV0NdQguKLc3u5/6z8lHfxaG7Jznimz/wH0SCII1f
-        qLfZRkfPnG0EtoEz1AFgPhYp3vICKrA/KMuxc4c+NTcBx78UmwUk67QMIwXtWbJsw1CCq2
-        gd2zlZLo74H4vzB/AIT/8EuJXc0Za1w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649927659;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=HBZ9ag92vmSkbFZGj+8KyYeKwAJ+IyyeUDHDn026V54=;
-        b=BOZ9bmdrt8+j0bZ7Hs5lKQKZPoHn2lJ56RtVkGerOwtEllCEM0kw6+TRHIHeRrXHceZsa6
-        pOpKAxCETUJ+EOBA==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B1F8BA3B82;
-        Thu, 14 Apr 2022 09:14:19 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     masahiroy@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH] scripts: dummy-tools, add pahole
-Date:   Thu, 14 Apr 2022 11:14:19 +0200
-Message-Id: <20220414091419.7654-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.35.2
+        Thu, 14 Apr 2022 05:20:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B1A50B34;
+        Thu, 14 Apr 2022 02:18:14 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649927892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VKYOKsNdtO2aGH0r6q2BwEHQC1rQZ88mXZkktgYJ4/M=;
+        b=fMEDdqLD67Im0YAB13eH/+DEbam1jQociwxB96JNa3zPzdM6DQqjoG1jroCoSV2nnnwkBH
+        fLKur5K2WWkZ2qAOtUUboTc/+1T0Dphvz0hHIYbur9ZNZX/pvnAdYRkiEUxMGDvUFsysee
+        siMxqZzxKrO0F4B1YJAGDvM0Vm2GxSEoLNQyOAwiJTjEwUKfu5TmSjAd0y8COHgIUanJ7s
+        fERMeFkrqtIEjBaDl2J/UCGf25sLTQ9kHVlCBdIzVBqq2L0MBrJ5OClTD0n41yxOE5UmFS
+        4u91nEvC4UadJOZslVkHhy416tn1ZXlPGH+cgwH1ZvWgVQG5QSgHmu/9mUizyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649927892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VKYOKsNdtO2aGH0r6q2BwEHQC1rQZ88mXZkktgYJ4/M=;
+        b=sero7Ruh9jP3d3VowrepRmpjg7HgtFyrarLTJ3Ys29MkDnSdA84oPsf2bygzOdsNcBl9de
+        euYeBzXWygmu/5BQ==
+To:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Richard Cochran <richardcochran@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kurt Kanzenbach <kurt@linutronix.de>
+Subject: [PATCH v2 0/3] tracing: Introduce trace clock tai
+Date:   Thu, 14 Apr 2022 11:18:02 +0200
+Message-Id: <20220414091805.89667-1-kurt@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,53 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_PAHOLE_VERSION is a part of a config since the commit below. And
-when multiple people update the config, this value constantly changes.
-Even if they use dummy scripts.
+Hi,
 
-To fix this:
-* add a pahole dummy script returning v99.99 -> 9999
-* call it in Makefile taking CROSS_COMPILE into account.
+the Linux kernel tracing infrastructure has support for using different clocks
+to generate timestamps for trace events. Especially in TSN networks it's useful
+to have TAI as trace clock, because the application scheduling is done in
+accordance to the network time, which is based on TAI. With a tai trace_clock in
+place, it becomes very convenient to correlate network activity with Linux
+kernel application traces.
 
-The latter happens only if $(CROSS_COMPILE)pahole really exists. This is
-because a cross pahole likely exists only in dummy tools now, not in
-real cross tools.
+However, there's no fast accessor for CLOCK_TAI yet. Therefore, patch #1 is
+adding one. Patch #2 introduces the clock and the last one adds documentation
+for it.
 
-Fixes: 613fe1692377 (kbuild: Add CONFIG_PAHOLE_VERSION)
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- Makefile                   | 2 +-
- scripts/dummy-tools/pahole | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
- create mode 100755 scripts/dummy-tools/pahole
+Changes since v1:
 
-diff --git a/Makefile b/Makefile
-index ecbd42f3451a..2ef722ba0a41 100644
---- a/Makefile
-+++ b/Makefile
-@@ -502,7 +502,7 @@ RUSTFMT		= rustfmt
- CLIPPY_DRIVER	= clippy-driver
- BINDGEN		= bindgen
- CARGO		= cargo
--PAHOLE		= pahole
-+PAHOLE		= $(if $(wildcard $(CROSS_COMPILE)pahole),$(CROSS_COMPILE)pahole,pahole)
- RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
- LEX		= flex
- YACC		= bison
-diff --git a/scripts/dummy-tools/pahole b/scripts/dummy-tools/pahole
-new file mode 100755
-index 000000000000..53501a36fa71
---- /dev/null
-+++ b/scripts/dummy-tools/pahole
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+echo v99.99
+ - Add missing data_race() annotation for TAI offset which is accessed without
+   any form of locking for KCSAN (Thomas)
+ - Add missing documentation entry for ktime_get_tai_fast_ns()
+ - Minor changelog tweaks
+
+Previous versions:
+
+ - https://lore.kernel.org/all/20220409081300.4762-1-kurt@linutronix.de/
+
+Thanks,
+Kurt
+
+Kurt Kanzenbach (3):
+  timekeeping: Introduce fast accessor to clock tai
+  tracing: Introduce trace clock tai
+  tracing: Add documentation for trace clock tai
+
+ Documentation/core-api/timekeeping.rst |  1 +
+ Documentation/trace/ftrace.rst         | 12 ++++++++++++
+ include/linux/timekeeping.h            |  1 +
+ kernel/time/timekeeping.c              | 17 +++++++++++++++++
+ kernel/trace/trace.c                   |  1 +
+ 5 files changed, 32 insertions(+)
+
 -- 
-2.35.2
+2.30.2
 

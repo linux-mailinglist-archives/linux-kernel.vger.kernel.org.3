@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06557501785
+	by mail.lfdr.de (Postfix) with ESMTP id 72877501786
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350764AbiDNPk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
+        id S1351588AbiDNPka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245248AbiDNOhQ (ORCPT
+        with ESMTP id S245520AbiDNOh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:37:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E626D205F0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:29:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A994B829D4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CE6C385A1;
-        Thu, 14 Apr 2022 14:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649946592;
-        bh=UPsMWquHq3IrAfXIyMTIbpV2XKwEzf42P41WLBE8r9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pdkEf94dsFHtV5L9H4k3egElvIpweK/+mY9jzCchnVfwPGaPO0XBenkIR4O8rpkzj
-         X88TZVpeb+NoR78SxKTsikGVIBr6rwoSa27jNZSY9oYBnd5UNntUUcOC3T4yyebUvT
-         J+XKXoUqEG76AoEnU2vAJ0AMVEtxX0WiPOT7JEo4=
-Date:   Thu, 14 Apr 2022 16:29:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: Re: [PATCH 0/1] add support for enum module parameters
-Message-ID: <Ylgv3U4HEtpk3sis@kroah.com>
-References: <20220414123033.654198-1-jani.nikula@intel.com>
- <YlgfXxjefuxiXjtC@kroah.com>
- <87a6cneoco.fsf@intel.com>
+        Thu, 14 Apr 2022 10:37:28 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5996FBE38
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:30:27 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b24so6565287edu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yqVUnyTrdGzzp4ZTHGXM3CWg4LdrPaGzwtzosxnpYJw=;
+        b=Xc/aUrg0ahKT8QbRWirSVbjz0aoFXK8HjWAVfiKS3ehuJN7Yl+bYVpxE9rxVTsgxZc
+         jXNR1bI26IdYB1CJDYMpbldCSRFYh3mUSsxr2mn5UmcikLAlCg8Ir5jCmOOxQK/eVFhB
+         AUeOutri3ibGpOx9u3ma0yTAHBxrN/OsByrBSbHKJvSY6hbjeP5Fz8WSf9UJC08hU9gb
+         9WnR3LU5QMyEmAGfudYwKnET7JCVFr9ZN08H5cIjgO1GdBMHi2fPCYRHBYrzTCGTNcAF
+         PRD6ilkJqi53BqJgrhVv112WiIcJCCh5SCfrjQc+UwJj23zXt2cleIHwz7AkLoeRnteF
+         nJWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yqVUnyTrdGzzp4ZTHGXM3CWg4LdrPaGzwtzosxnpYJw=;
+        b=ptpV8ed9ZmEfznkZcQ1/YpB0NwBgjiZIt+Vy8VVNHZ/+31gQFcyxHXoz/YSbEyNSIu
+         3Gbyev0hGgC/3dZgnBne9WLL4Biwdc/BTkdiYvQB5F7ZLoNLIJljlKB3z7pneKgAUYYY
+         cCUNfvuALsYEl8wnMpwgVV2TfqQ4feBb11q7V8eE0IWzzm7esbOeWZsF+F8uXE4l3z/k
+         H/D5lMtKXUhP4uMlxcHSTc6migDmW0qTIZoNi7mp8z4OSU4fJGk+5jguFesFiIOvsNOx
+         VWNsLt10uvrtTfcGA6k77VtjHnn261iKB+2inl9zNutKklXFT1AF2fYA6WtVrRDZ9Ay5
+         IsPw==
+X-Gm-Message-State: AOAM533KH9M6AOWaq32uFrv9CjTVmxb4IUFhLENuwi0X80eag9emLcgU
+        ws2/FT+rZeOcSYhoKv2ixbOXhcGVvcFli7UXFwHVYHhv
+X-Google-Smtp-Source: ABdhPJyg+8Mm6cCLmoGGWAe6/JOhiSWlO4bPWeBmmJ5IUGYdhM3IEnc8QY6wZ8OhdbgdYFJaOMu+DnCCR2SW7nUVQFU=
+X-Received: by 2002:a05:6402:270b:b0:419:3383:7a9f with SMTP id
+ y11-20020a056402270b00b0041933837a9fmr3316555edd.191.1649946625790; Thu, 14
+ Apr 2022 07:30:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6cneoco.fsf@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220331070115.29421-1-bjorn.ardo@axis.com>
+In-Reply-To: <20220331070115.29421-1-bjorn.ardo@axis.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Thu, 14 Apr 2022 09:30:14 -0500
+Message-ID: <CABb+yY1zrHYLBjY_EoC7bkTsWcKOhzCjp-5vgvqP0HEAJicdXQ@mail.gmail.com>
+Subject: Re: [PATCH] mailbox: forward the hrtimer if not queued and under a lock
+To:     =?UTF-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>
+Cc:     kernel@axis.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 05:22:47PM +0300, Jani Nikula wrote:
-> On Thu, 14 Apr 2022, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > On Thu, Apr 14, 2022 at 03:30:32PM +0300, Jani Nikula wrote:
-> >> Hey, I've sent this before, ages ago, but haven't really followed
-> >> through with it. I still think it would be useful for many scenarios
-> >> where a plain number is a clumsy interface for a module param.
-> >> 
-> >> Thoughts?
-> >
-> > We should not be adding new module parameters anyway (they operate on
-> > code, not data/devices), so what would this be used for?
-> 
-> I think it's just easier to use names than random values, and this also
-> gives you range check on the input.
-> 
-> I also keep telling people not to add new module parameters, but it's
-> not like they're going away anytime soon.
+On Thu, Mar 31, 2022 at 2:01 AM Bj=C3=B6rn Ard=C3=B6 <bjorn.ardo@axis.com> =
+wrote:
+>
+> This reverts commit c7dacf5b0f32957b24ef29df1207dc2cd8307743,
+> "mailbox: avoid timer start from callback"
+>
+> The previous commit was reverted since it lead to a race that
+> caused the hrtimer to not be started at all. The check for
+> hrtimer_active() in msg_submit() will return true if the
+> callback function txdone_hrtimer() is currently running. This
+> function could return HRTIMER_NORESTART and then the timer
+> will not be restarted, and also msg_submit() will not start
+> the timer. This will lead to a message actually being submitted
+> but no timer will start to check for its compleation.
+>
+> The original fix that added checking hrtimer_active() was added to
+> avoid a warning with hrtimer_forward. Looking in the kernel
+> another solution to avoid this warning is to check hrtimer_is_queued()
+> before calling hrtimer_forward_now() instead. This however requires a
+> lock so the timer is not started by msg_submit() inbetween this check
+> and the hrtimer_forward() call.
+>
+This is a very dense api used by many use-cases, I am not confident
+making any changes without confirming its a real issue with the common
+code. Please share your client code and traces, that will help me get
+a clearer picture.
 
-Existing ones can not go away (or change), but we do not have to add new
-ones.
-
-> If there's a solution to being able to pass device specific debug
-> parameters at probe time, I'm all ears. At least i915 has a bunch of
-> things which can't really be changed after probe, when debugfs for the
-> device is around. Module parameters aren't ideal, but debugfs doesn't
-> work for this.
-
-configfs?
-
+Thanks.

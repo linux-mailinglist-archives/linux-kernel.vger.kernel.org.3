@@ -2,71 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3EA500806
+	by mail.lfdr.de (Postfix) with ESMTP id 5A638500805
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiDNIMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S240736AbiDNIM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiDNIMR (ORCPT
+        with ESMTP id S240997AbiDNIMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:12:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B67519C08
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p562gwZdESlOTvZY/nqTuWBbEiuD+th1wpA15toB0bM=; b=kAg4Wa6o420+Xcx2dLJY5a4yvh
-        qzRe7XLg96YEfU6YukVu283Ivf3AkzHj9VB9+mVGz2LavJQiWOo2elb/qB/iA0i+yijh9PjUZ8gnn
-        vGRH1PGx1HxA5uJA/fdm7S3sg5qOKxYtpKPbW+ZkWSr10ScQQEaMHzb7YHFklAY9uhYBEEtJGkzA0
-        W6uX7vfFD+ChhLQH/7cVJDZ9hTIKOWu3asmBVob6MaAmMHK/m85NMd9m4PccEeCRDbUnNGFCZ9qnc
-        QRE4/cF1RCvfs6SG9OdOKvIo4iEpYEZzI0tXSad56aZELhBQaw+kxzWV73KcFbaNy4a1JPvvqMEbG
-        0eoX0wQg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neuXz-004x74-SQ; Thu, 14 Apr 2022 08:09:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52DAD3000E3;
-        Thu, 14 Apr 2022 10:09:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3785D2C5BC384; Thu, 14 Apr 2022 10:09:46 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 10:09:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 14/18] objtool: Add toolchain hacks cmdline option
-Message-ID: <YlfWynPt6MGR5BZP@hirez.programming.kicks-ass.net>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <e04ec8f01fcb537675d6bd94ef65103a0a749318.1649891421.git.jpoimboe@redhat.com>
+        Thu, 14 Apr 2022 04:12:46 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E9E26AF7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:10:22 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id h63so4558716iof.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=80GuG9Z2OB5edjjpunkIyc1yhfEaarhhzGyq+14i704=;
+        b=M5KQ7mfZv6mFYhtnrBqG00dB7LnKFIRZKqw/pvrepjt7LV24VvlIxp5D7/Zz+9yyXR
+         pcPjKG43Q7cC/d27eRU9Uby1RPUAJagk37XLqjEYf0jrR3uZ0NTRg/BqxNix5DT830yN
+         blUsYDqUPI6g4xemqC5mcga57q1wFsimEU2d4ClWinFeFdloxNm4+KyNvyrmWGeB7TnC
+         xOngQ5jnzDeIF3XJ7SWRDm7xX90JSeRdnTrSeQO2u/JsNzoe4X1kiUvv2BWKzItBFiOn
+         VNF2kjjlqE1CGO8JP7USrdhkvHGrgL56OIwU5At1X5HRheWcOfAqA91iYGuCnSiVo0A1
+         mlsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=80GuG9Z2OB5edjjpunkIyc1yhfEaarhhzGyq+14i704=;
+        b=zpkxnsQt0zewvphadpXotyciSrRWBEd3carSBvuqT0YsCTLZCalS1xvGuxnsJB1m1F
+         Dou6A+KJKckswPZx0orAQCuay3R9AHq3zEXlv8t/EHYJPPJekTIs2yeRvIfjDrjFYBEF
+         uagWnRwVnzbv4+LhwBkXsumwXLg9lzFWyEXyMoKAMkJMlrOKynLEf4nlx5n4stGkD5e/
+         TnsA18c6siFS/vwda7TNZH39TnWj0b3t4BKdWJcttkc1+MV1a8d86MTXYIaSM0WZgW4W
+         zLII0aY+No1104WiZhCrwMjp03PlwXA2hEUUUcNRN9xhyr6xR9ifwB9K1+Ej3QR3QSFj
+         lLGA==
+X-Gm-Message-State: AOAM530fDRoccZ90GwITE6o6cRtp4369BvBSdCL5Ytb9/+rt0B/KMzmU
+        KUigwuvmZ9FWGLBYrg+7zLYfvfJK+St7FEHrIsAlyw==
+X-Google-Smtp-Source: ABdhPJyQyyUIJu7HSaI/sHH6jgGH90kBT3f1SyDRMUnKe+RNtKh/8DVg+hrLhzrO3qrrF7NYPZxCyZP+Y63gqiTXviI=
+X-Received: by 2002:a05:6638:3e8f:b0:326:72cb:2b49 with SMTP id
+ ch15-20020a0566383e8f00b0032672cb2b49mr715190jab.247.1649923821659; Thu, 14
+ Apr 2022 01:10:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e04ec8f01fcb537675d6bd94ef65103a0a749318.1649891421.git.jpoimboe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220406075612.60298-1-jefflexu@linux.alibaba.com> <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
+In-Reply-To: <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Thu, 14 Apr 2022 16:10:10 +0800
+Message-ID: <CAFQAk7iUuaUL40NGzOkCOL=P9d6PgsDjRoKLs_5KDycaA9RQ4w@mail.gmail.com>
+Subject: Re: Re: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read semantics
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        tianzichen@kuaishou.com, fannaihao@baidu.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:19:49PM -0700, Josh Poimboeuf wrote:
-> Objtool secretly does a few awful hacks to overcome toolchain
-> limitations.  Make those hacks explicit (and optional for other arches)
-> by associating them with a new '--hacks' cmdline option and
-> corresponding CONFIG_HAVE_TOOLCHAIN_HACKS.
+On Sun, Apr 10, 2022 at 8:52 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+>
+> On Wed, Apr 06, 2022 at 03:55:52PM +0800, Jeffle Xu wrote:
+> > changes since v7:
+> > - rebased to 5.18-rc1
+> > - include "cachefiles: unmark inode in use in error path" patch into
+> >   this patchset to avoid warning from test robot (patch 1)
+> > - cachefiles: rename [cookie|volume]_key_len field of struct
+> >   cachefiles_open to [cookie|volume]_key_size to avoid potential
+> >   misunderstanding. Also add more documentation to
+> >   include/uapi/linux/cachefiles.h. (patch 3)
+> > - cachefiles: valid check for error code returned from user daemon
+> >   (patch 3)
+> > - cachefiles: change WARN_ON_ONCE() to pr_info_once() when user daemon
+> >   closes anon_fd prematurely (patch 4/5)
+> > - ready for complete review
+> >
+> >
+> > Kernel Patchset
+> > ---------------
+> > Git tree:
+> >
+> >     https://github.com/lostjeffle/linux.git jingbo/dev-erofs-fscache-v8
+> >
+> > Gitweb:
+> >
+> >     https://github.com/lostjeffle/linux/commits/jingbo/dev-erofs-fscache-v8
+> >
+> >
+> > User Daemon for Quick Test
+> > --------------------------
+> > Git tree:
+> >
+> >     https://github.com/lostjeffle/demand-read-cachefilesd.git main
+> >
+> > Gitweb:
+> >
+> >     https://github.com/lostjeffle/demand-read-cachefilesd
+> >
+>
+> Btw, we've also finished a preliminary end-to-end on-demand download
+> daemon in order to test the fscache on-demand kernel code as a real
+> end-to-end workload for container use cases:
+>
+> User guide: https://github.com/dragonflyoss/image-service/blob/fscache/docs/nydus-fscache.md
+> Video: https://youtu.be/F4IF2_DENXo
+>
+> Thanks,
+> Gao Xiang
 
-Should we either clarify the specific hacks done, or split this in two
-options?
+Hi Xiang,
 
-  --hack-jump_label
-  --hack-noinstr
+I think this feature is interesting and promising. So I have performed
+some tests according to the user guide. Hope it can be an upstream
+feature.
+
+Thanks,
+Jiachen

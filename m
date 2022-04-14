@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3575006E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021145006E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbiDNHbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S240347AbiDNHeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiDNHbv (ORCPT
+        with ESMTP id S240330AbiDNHeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:31:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55629EAE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:29:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id s18so8456812ejr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KKeeqSbZ1oG7uLXWWh5cEBw2putwB1PZbZtwfxmKlRY=;
-        b=WwCMUxOHDNITSrM4BtYsppqYJitSKLXUjG0tKAyUFTpDQOJLA2Zskz6nZjEtOnTTC9
-         VKaq1pNmfPQEuCU3uYoKyuE3biSXM8n/4B0z3BWwDBY2y8/Ms0klBpQaOSb4fGk/DkFD
-         l2H9YStwK5i0QhaP0X7wxPC9T+P6FdrbV4dCpudOai9BquaWrBgHKgCRTjjDY+R+oEnj
-         hawZRhFYjEFpj0zh14M2zreTBmmrd3zAGAAi1G9FhT/dNcoYhlzZWNA3rwECZxBUD76e
-         NkYMvLKxkbe+ydfOYzZyOZK/4UKLNu7e38X1rTLha8609qCKSscd2hWd3yXdWWGvwY7o
-         wMQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KKeeqSbZ1oG7uLXWWh5cEBw2putwB1PZbZtwfxmKlRY=;
-        b=OKYLV7y9/6mem6L+5FZsWoVcxmuVuPLEkvsJGNRfkQj8KZa6BqPZO8K1mebR5Bnzqt
-         uJ3VWSBj/jgSbbmckdKuVW1cZsFD1ohYuBeyk0saZYFaT2fmiaaeI1Df1fBQdO7eBIEI
-         JofJ4V5kTXuRWHCSuDX1T/NFtgYTrjpluj862OBHEghLBaNtSzbFX2cpmctCGMqHwN3Q
-         N3BsxkVzYD6/dEiWjrhyVBvRPf4D5TXU+wl9HYckI/QmghbR2c96aKG+08xMqlotyf16
-         YQZ0/X/yXFW1o7XNCDQD4WIrwOoHW01AArZy4b54AyW2ZDEk4TZ3k5y2SDFOeHeiPq/Y
-         pJlg==
-X-Gm-Message-State: AOAM533IR57/iCR7vZf44Ml2LHlAa9J1l/cdOIwe3hyVegy1vb+5coor
-        mGjRcsnN4eYWBSgzjsqEYgZGEA==
-X-Google-Smtp-Source: ABdhPJxdySU7DfnX49+B4GSgP8fXrJc8+Zb8llYk8og/A6s4E242Mjbgk24wfgWY7MLFL2B1P/e7QQ==
-X-Received: by 2002:a17:906:1798:b0:6e8:94b3:456d with SMTP id t24-20020a170906179800b006e894b3456dmr1192516eje.307.1649921364913;
-        Thu, 14 Apr 2022 00:29:24 -0700 (PDT)
-Received: from [192.168.0.209] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id 25-20020a170906311900b006e87e5dd529sm369242ejx.70.2022.04.14.00.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 00:29:24 -0700 (PDT)
-Message-ID: <0de21e5a-f169-2830-2a8b-e92c2d309260@linaro.org>
-Date:   Thu, 14 Apr 2022 09:29:23 +0200
+        Thu, 14 Apr 2022 03:34:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E4625C57;
+        Thu, 14 Apr 2022 00:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649921507; x=1681457507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xTe/USNWGaWU+a+ifxzMMD7mLSnomvLGY2rXT/S2iZk=;
+  b=OcuDrYV/xMu4I2YGZfIv6bhGHOAR19e9liepVkLFLdGiCvuD9/ZI/ndM
+   MMMhm5XeZkc58OC6Hg/NppGPhZ3Fb7JqpxcUWF/Nu90CDybkORAADFYag
+   4w2tAAebvuzXovyNpB1WIMNCML4Gx6UpZ5IIaUdO9FHZ22gX1iazaGAzP
+   aJoHziDnmGOE0TkcMGjadBFci/WKJyE1IkyyDhSK5i0BUBvdzVwesmVKv
+   sMn9S8kTobsEmZnyZVblhbLOnx5iXqcobcrgjehwZH/06ofYH1I/9eqUM
+   IaSC3DngVjlSmq6g6n73mBMtbghVJF2BkBaJVvejS8lpD2I1srpsIgbLq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262623045"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="262623045"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 00:31:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="624010417"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Apr 2022 00:31:46 -0700
+Received: from linux.intel.com (ssid-ilbpg3-teeminta.png.intel.com [10.88.227.74])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 527075807E8;
+        Thu, 14 Apr 2022 00:31:42 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:29:34 +0800
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Richard Cochran <richardcochran@gmail.com>
+Cc:     Tan Tee Min <tee.min.tan@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: Re: [PATCH net 1/1] net: stmmac: add fsleep() in HW Rx timestamp
+ checking loop
+Message-ID: <20220414072934.GA10025@linux.intel.com>
+References: <20220413040115.2351987-1-tee.min.tan@intel.com>
+ <20220413125915.GA667752@hoboy.vegasvil.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: arm: add bcmbca device tree binding
- document
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Dan Beygelman <dan.beygelman@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220413192645.7067-1-william.zhang@broadcom.com>
- <20220413192645.7067-2-william.zhang@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220413192645.7067-2-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413125915.GA667752@hoboy.vegasvil.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/04/2022 21:26, William Zhang wrote:
-> Add arch bcmbca device tree binding document for Broadcom ARM based
-> broadband SoC chipsets. In this change, only BCM47622 is added. Other
-> chipsets will be added in the future.
+On Wed, Apr 13, 2022 at 05:59:15AM -0700, Richard Cochran wrote:
+> On Wed, Apr 13, 2022 at 12:01:15PM +0800, Tan Tee Min wrote:
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> > index d3b4765c1a5b..289bf26a6105 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> > @@ -279,10 +279,11 @@ static int dwmac4_wrback_get_rx_timestamp_status(void *desc, void *next_desc,
+> >  			/* Check if timestamp is OK from context descriptor */
+> >  			do {
+> >  				ret = dwmac4_rx_check_timestamp(next_desc);
+> > -				if (ret < 0)
+> > +				if (ret <= 0)
+> >  					goto exit;
+> >  				i++;
+> >  
+> > +				fsleep(1);
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> This is nutty.  Why isn't this code using proper deferral mechanisms
+> like work or kthread?
 
-I gave you here an ack. What happened?
+Appreciate your comment.
+The dwmac4_wrback_get_rx_timestamp_status() is called by stmmac_rx()
+function which is scheduled by NAPI framework.
+Do we still need to create deferred work inside NAPI work?
+Would you mind to explain it more in detail?
 
+> 
+> >  			} while ((ret == 1) && (i < 10));
+> >  
+> >  			if (i == 10)
+> > -- 
+> > 2.25.1
+> > 
+> 
+> Thanks,
+> Richard
 
-Best regards,
-Krzysztof
+Thanks,
+Tee Min

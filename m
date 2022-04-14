@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB2E5012DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0D750160B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbiDNNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S245688AbiDNOs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244471AbiDNN1a (ORCPT
+        with ESMTP id S1345116AbiDNNpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:27:30 -0400
+        Thu, 14 Apr 2022 09:45:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F7972E9;
-        Thu, 14 Apr 2022 06:20:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27103387B7;
+        Thu, 14 Apr 2022 06:42:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FDF2B82910;
-        Thu, 14 Apr 2022 13:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EEEC385A1;
-        Thu, 14 Apr 2022 13:20:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CACBEB828F4;
+        Thu, 14 Apr 2022 13:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C86C385A1;
+        Thu, 14 Apr 2022 13:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942411;
-        bh=3X5yPZmDQzoAnMRoFbTlEmaaQNUNd2P8pdHICpsssZU=;
+        s=korg; t=1649943748;
+        bh=BkFxTUPxQZUHZd2JEHMvWObQJpPh8HtE3fB7ATuGBHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MneeXJPOPqm9fY1rgf48Zdg0w5xVBckTSoyaTKvT5GPtDoDOVnhkzdKIgjNSlUI6b
-         UWp7fZBg1CABkygOKpXqp4H0/SUn3BLVUv6e+D7QWU/6o/QSD/AkIxmdn3wKHh9q7u
-         vZJ/rnZuBxmbIlAK4ml8ECS0wTxHEawgmIvnjJ7M=
+        b=X5HhOMc8/yrKd4Yq7ZaljH9IxaVbgUvPr/3ECnLjLrc0m9SQxSlFBQJvcdawPlule
+         Qi+53Ej+hcPfpoQGrr+ORIH9mF18mg+0NlDSrc5ysiilVZv6K5A/7+r5XWWgcuBSwy
+         C28vnBa1K/p72WrmtOzntFSu0WWWIay1124LDcTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 109/338] video: fbdev: omapfb: Add missing of_node_put() in dvic_probe_of
+        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 227/475] mxser: fix xmit_buf leak in activate when LSR == 0xff
 Date:   Thu, 14 Apr 2022 15:10:12 +0200
-Message-Id: <20220414110842.012982380@linuxfoundation.org>
+Message-Id: <20220414110901.473537820@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit a58c22cfbbf62fefca090334bbd35fd132e92a23 ]
+[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+When LSR is 0xff in ->activate() (rather unlike), we return an error.
+Provided ->shutdown() is not called when ->activate() fails, nothing
+actually frees the buffer in this case.
 
-Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fix this by properly freeing the buffer in a designated label. We jump
+there also from the "!info->type" if now too.
+
+Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/mxser.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-index 06e1db34541e..41b0db0cc047 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-@@ -254,6 +254,7 @@ static int dvic_probe_of(struct platform_device *pdev)
- 	adapter_node = of_parse_phandle(node, "ddc-i2c-bus", 0);
- 	if (adapter_node) {
- 		adapter = of_get_i2c_adapter_by_node(adapter_node);
-+		of_node_put(adapter_node);
- 		if (adapter == NULL) {
- 			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
- 			omap_dss_put_device(ddata->in);
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 9d00ff5ef961..085dc8dd1327 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -861,6 +861,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	struct mxser_port *info = container_of(port, struct mxser_port, port);
+ 	unsigned long page;
+ 	unsigned long flags;
++	int ret;
+ 
+ 	page = __get_free_page(GFP_KERNEL);
+ 	if (!page)
+@@ -870,9 +871,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 
+ 	if (!info->ioaddr || !info->type) {
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+-		free_page(page);
+ 		spin_unlock_irqrestore(&info->slock, flags);
+-		return 0;
++		ret = 0;
++		goto err_free_xmit;
+ 	}
+ 	info->port.xmit_buf = (unsigned char *) page;
+ 
+@@ -898,8 +899,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 		if (capable(CAP_SYS_ADMIN)) {
+ 			set_bit(TTY_IO_ERROR, &tty->flags);
+ 			return 0;
+-		} else
+-			return -ENODEV;
++		}
++
++		ret = -ENODEV;
++		goto err_free_xmit;
+ 	}
+ 
+ 	/*
+@@ -944,6 +947,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	spin_unlock_irqrestore(&info->slock, flags);
+ 
+ 	return 0;
++err_free_xmit:
++	free_page(page);
++	info->port.xmit_buf = NULL;
++	return ret;
+ }
+ 
+ /*
 -- 
 2.34.1
 

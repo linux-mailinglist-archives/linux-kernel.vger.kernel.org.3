@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007C35016AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20095015BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241418AbiDNPJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S1344646AbiDNNuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346952AbiDNN6J (ORCPT
+        with ESMTP id S1344047AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAC9B53D2;
-        Thu, 14 Apr 2022 06:48:18 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D4F62CE;
+        Thu, 14 Apr 2022 06:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B5DA0CE2973;
-        Thu, 14 Apr 2022 13:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D008EC385A1;
-        Thu, 14 Apr 2022 13:48:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1183460C14;
+        Thu, 14 Apr 2022 13:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23AF2C385A5;
+        Thu, 14 Apr 2022 13:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944093;
-        bh=MUQIhcZ7wHOqV9bShpydnjC4UGdYVtJ1yXD4aZZYlrA=;
+        s=korg; t=1649942820;
+        bh=xI7yxAPVG8yEPrckyuoQy3QpP3/2Y7j45K3IEDsHzRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CGzwl0umFZiclbcbeIrhozFQihFXyyLB0/ao9XO82qe6I1STueIsQTEKw9kYrjlHh
-         r1p6dvm/DsSHrpW9uyV/D7W4recfLtDTUHcqE2NU9KtugL5UOh5pD9a5i0c4BTgIyN
-         7H9JVxfrq7j0r18mnzm78EQXsUAz8MUBb8J4TRjA=
+        b=QKomvJ0b342f+IycWZaQvM6CUbVCU5CQ2N8a75nC93Tf5FsqvjZ9TRIHdvw4xh6CO
+         ndM3Utb0o5FXYPgBB6i4OBFSaxN1kKXP/Zo9L8y8MJ5YUkZTDwLU8NxUQQlIoQIH0l
+         H5SexR/16oI59MA/ZR7fQkZ/w/UKoN84XrTutEt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Neal Liu <neal_liu@aspeedtech.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 389/475] power: supply: axp288-charger: Set Vhold to 4.4V
-Date:   Thu, 14 Apr 2022 15:12:54 +0200
-Message-Id: <20220414110905.958971013@linuxfoundation.org>
+Subject: [PATCH 4.19 272/338] usb: ehci: add pci device support for Aspeed platforms
+Date:   Thu, 14 Apr 2022 15:12:55 +0200
+Message-Id: <20220414110846.629719603@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit 5ac121b81b4051e7fc83d5b3456a5e499d5bd147 ]
+[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
 
-The AXP288's recommended and factory default Vhold value (minimum
-input voltage below which the input current draw will be reduced)
-is 4.4V. This lines up with other charger IC's such as the TI
-bq2419x/bq2429x series which use 4.36V or 4.44V.
+Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+handshake CMD_RUN instead of STS_HALT") to support Aspeed
+ehci-pci device.
 
-For some reason some BIOS-es initialize Vhold to 4.6V or even 4.7V
-which combined with the typical voltage drop over typically low
-wire gauge micro-USB cables leads to the input-current getting
-capped below 1A (with a 2A capable dedicated charger) based on Vhold.
-
-This leads to slow charging, or even to the device slowly discharging
-if the device is in heavy use.
-
-As the Linux AXP288 drivers use the builtin BC1.2 charger detection
-and send the input-current-limit according to the detected charger
-there really is no reason not to use the recommended 4.4V Vhold.
-
-Set Vhold to 4.4V to fix the slow charging issue on various devices.
-
-There is one exception, the special-case of the HP X2 2-in-1s which
-combine this BC1.2 capable PMIC with a Type-C port and a 5V/3A factory
-provided charger with a Type-C plug which does not do BC1.2. These
-have their input-current-limit hardcoded to 3A (like under Windows)
-and use a higher Vhold on purpose to limit the current when used
-with other chargers. To avoid touching Vhold on these HP X2 laptops
-the code setting Vhold is added to an else branch of the if checking
-for these models.
-
-Note this also fixes the sofar unused VBUS_ISPOUT_VHOLD_SET_MASK
-define, which was wrong.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_charger.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/usb/host/ehci-pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 7d09e49f04d3..2ee6bb7c0804 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -41,11 +41,11 @@
- #define VBUS_ISPOUT_CUR_LIM_1500MA	0x1	/* 1500mA */
- #define VBUS_ISPOUT_CUR_LIM_2000MA	0x2	/* 2000mA */
- #define VBUS_ISPOUT_CUR_NO_LIM		0x3	/* 2500mA */
--#define VBUS_ISPOUT_VHOLD_SET_MASK	0x31
-+#define VBUS_ISPOUT_VHOLD_SET_MASK	0x38
- #define VBUS_ISPOUT_VHOLD_SET_BIT_POS	0x3
- #define VBUS_ISPOUT_VHOLD_SET_OFFSET	4000	/* 4000mV */
- #define VBUS_ISPOUT_VHOLD_SET_LSB_RES	100	/* 100mV */
--#define VBUS_ISPOUT_VHOLD_SET_4300MV	0x3	/* 4300mV */
-+#define VBUS_ISPOUT_VHOLD_SET_4400MV	0x4	/* 4400mV */
- #define VBUS_ISPOUT_VBUS_PATH_DIS	BIT(7)
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index 56e6fd0f0482..42ace9f92ce9 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
+ /* defined here to avoid adding to pci_ids.h for single instance use */
+ #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
  
- #define CHRG_CCCV_CC_MASK		0xf		/* 4 bits */
-@@ -744,6 +744,16 @@ static int charger_init_hw_regs(struct axp288_chrg_info *info)
- 		ret = axp288_charger_vbus_path_select(info, true);
- 		if (ret < 0)
- 			return ret;
-+	} else {
-+		/* Set Vhold to the factory default / recommended 4.4V */
-+		val = VBUS_ISPOUT_VHOLD_SET_4400MV << VBUS_ISPOUT_VHOLD_SET_BIT_POS;
-+		ret = regmap_update_bits(info->regmap, AXP20X_VBUS_IPSOUT_MGMT,
-+					 VBUS_ISPOUT_VHOLD_SET_MASK, val);
-+		if (ret < 0) {
-+			dev_err(&info->pdev->dev, "register(%x) write error(%d)\n",
-+				AXP20X_VBUS_IPSOUT_MGMT, ret);
-+			return ret;
++#define PCI_VENDOR_ID_ASPEED		0x1a03
++#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
++
+ /*-------------------------------------------------------------------------*/
+ #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
+ static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
+@@ -223,6 +226,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 			ehci->has_synopsys_hc_bug = 1;
+ 		}
+ 		break;
++	case PCI_VENDOR_ID_ASPEED:
++		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
++			ehci_info(ehci, "applying Aspeed HC workaround\n");
++			ehci->is_aspeed = 1;
 +		}
++		break;
  	}
  
- 	/* Read current charge voltage and current limit */
+ 	/* optional debug port, normally in the first BAR */
 -- 
 2.35.1
 

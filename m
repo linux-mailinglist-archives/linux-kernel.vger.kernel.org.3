@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108DD500C25
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF87500C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242680AbiDNL3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S242690AbiDNLb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbiDNL3j (ORCPT
+        with ESMTP id S242300AbiDNLbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:29:39 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2A76C1C4;
-        Thu, 14 Apr 2022 04:27:13 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id b15so4578064pfm.5;
-        Thu, 14 Apr 2022 04:27:13 -0700 (PDT)
+        Thu, 14 Apr 2022 07:31:24 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078FD7EB1D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:29:00 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id k17so4236200vsq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1+CoCJrXT14J2VO1tmxeljnPM+sDWGv+iuU5ZAwlMMU=;
-        b=e1K35ZzbeO7sxfFRYtgg0inrZZjUHpWGicmshbnDK7ns9PPX+lP06jf3Om7NR7EKE0
-         dMXHWgFz4Av5Bi+w7uRAFtZoohtO9mmUoTFt5/xCQy+MYTO37SasRJ+6hoOtyxLjL16A
-         dTYHQ5+U7No3QMX0zFNzs+aJsIVB+z7Yosve0O81fzXBk1qQdk6T4BrIIhJe67dFARQS
-         Kr5k6GNcsvUaf1iPxIsYNa4GZf78Mjd23ntIndnoXGPk/Dr8Fi5iupNUPFZlUv+mij4T
-         8DwZt9D7Xc8Rpj9OdMyonzZszka+fF27fkCr4X6B2My9kOkBSIlmmTzSKo3dghFwZg/5
-         FKSQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=VYSsZAXJFvZdvRNT03FxYfigdtS1EW9aZIVl8FLZRw4=;
+        b=im+JZ0CGphKLH2eiW6KMoe2q4DKqPVqbROXEprTkBHLwlget+e0Jhvi/FRqh1eCdXP
+         k4kq1eSDUkPFfOZbThO8oroERgLUpB53HNHmNVfHts4aFFymUuUus9mUQESDJuKSDbqI
+         F0WLBv7ELWaqPVTWgDv79rFNE+bYDq6DFD1tHnzDats/iDf5x+y9MPZUdb5cvMe2qkZt
+         tqThWZ01hxx3kYOsptzAH6H61+HrrvX2RSish0o/S+9ZiujgZQAGRqF/7hNk7G1xbl4k
+         qKjY+esN0SGb6FHdJQwvRyKzoxFANSzHU8giD6XDKjgT3eDbR3gt5tO4GuvUyAtRNq3j
+         PYwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1+CoCJrXT14J2VO1tmxeljnPM+sDWGv+iuU5ZAwlMMU=;
-        b=buaAY46GtMUR34pq03u8qYz3pUPagftzdCt8zEVvFD5FSdiUNTcEt9SinyIrb0GvGC
-         GWdwH2jO+2r4Zi9MK3ynL32zYKuw4+U/nuZgFikPL2UV1GLHhSKDY02F2BPpvX4NJiGp
-         m4BAyfT1yzB3/LJQqT4POzvM6gQEiBKEodFsTP0y07LcdeesDo/157mHbkOPZk2RlVwE
-         iCO3SWtWXd0MF28olW+IrrAEYna4+EOTAurSizSg4U40y7Lv2NbFjPiirs6C9fACLmhV
-         ru1y3ueOO8CugS2puzxg1Rh2DCB3wpuFTkiKAbc8BYDS5UexpEzTooah+R3mgiy0k3DS
-         ok+Q==
-X-Gm-Message-State: AOAM533h2wc3Bp9CdUG+pCjqauBu3NEd865PxkhLIfQkjUL63GR755nX
-        hgUoufbbMff/W7EwPifkjWg=
-X-Google-Smtp-Source: ABdhPJy56GHcI9ZrtvDdcR1S0e9V/P54WAMm6U80IxoScBoYaOttE2ZRCtR/eWM0qXtMQts2mMg5Cw==
-X-Received: by 2002:a65:418b:0:b0:382:250b:4dda with SMTP id a11-20020a65418b000000b00382250b4ddamr1972051pgq.428.1649935633119;
-        Thu, 14 Apr 2022 04:27:13 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-11.three.co.id. [180.214.232.11])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm2134741pfj.146.2022.04.14.04.27.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 04:27:12 -0700 (PDT)
-Message-ID: <0dd9ba0e-712a-37f6-a50d-f5510cd23033@gmail.com>
-Date:   Thu, 14 Apr 2022 18:27:07 +0700
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=VYSsZAXJFvZdvRNT03FxYfigdtS1EW9aZIVl8FLZRw4=;
+        b=HKUAPioC34t0G7uFHQv4OiUHgcFIx176crow1Og1ytB9hPt2AVloQbqw9Guv/KZsmp
+         2Pc+Bse+DkaevLvsJFjbV2o9yNBcVRVXJ0uZgFHpZfdVf0yeMki1owWL7pvQG7EhH4eQ
+         ztRYkEdfJCrNHj44eBAhIdBzK8nObAAExqAXQ16JoazmwF/xr+b027sWv2odnX8z6+me
+         PTBE3Sc5DpmUFi0AKZf6K4sfCD7/hnNV15qFScsRUJhhSexQGkllI4zPKlK09+3AnINy
+         INWyKM+fhcar/4eNHgO3emv7qdXj3tiwd9Hp8f3faWVa9jo5C6hONOZ1qD8yPVpi9A5h
+         bQ+A==
+X-Gm-Message-State: AOAM530XKsSjJ0wMVFHjdNyZCEKFMsPjtzh5J0EbVbxzXQm4YAQmn9V8
+        MF8dr3bsl6vdmfyndXpnJCGXodx3mMnN+8o02cI=
+X-Google-Smtp-Source: ABdhPJyzSBJbA6MvLM9lan07Ko9R4uhsM/pz3SGtYvYBG5JS5QjeAx212N+w4lzxVwY5SA/7uhHThhYOcUZx2ExioBU=
+X-Received: by 2002:a67:ed55:0:b0:31a:9544:cf86 with SMTP id
+ m21-20020a67ed55000000b0031a9544cf86mr1047991vsp.3.1649935739129; Thu, 14 Apr
+ 2022 04:28:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 3/3] tracing: Add documentation for trace clock tai
-Content-Language: en-US
-To:     Kurt Kanzenbach <kurt@linutronix.de>,
-        John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Richard Cochran <richardcochran@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220414091805.89667-1-kurt@linutronix.de>
- <20220414091805.89667-4-kurt@linutronix.de>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220414091805.89667-4-kurt@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:bb52:0:b0:2ab:8088:8447 with HTTP; Thu, 14 Apr 2022
+ 04:28:58 -0700 (PDT)
+Reply-To: orlandomoris56@gmail.com
+From:   Orlando Moris <barristermusa32@gmail.com>
+Date:   Thu, 14 Apr 2022 11:28:58 +0000
+Message-ID: <CA+gLmc8ODaNUs7o+3aj6zqH3xQRSx6K1AHX_8_jtY9BdN4=KnA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 16:18, Kurt Kanzenbach wrote:
-> +	tai:
-> +		This is the tai clock (CLOCK_TAI) and is derived from the wall-
-> +		clock time. However, this clock does not experience
-> +		discontinuities and backwards jumps caused by NTP inserting leap
-> +		seconds. Since the clock access is designed for use in tracing,
-> +		side effects are possible. The clock access may yield wrong
-> +		readouts in case the internal TAI offset is updated e.g., caused
-> +		by setting the system time or using adjtimex() with an offset.
-> +		These effects are rare and post processing should be able to
-> +		handle them. See comments in the ktime_get_tai_fast_ns()
-> +		function for more information.
-> +
-
-In what file are the ktime_get_tai_fast_ns() comments?
-
--- 
-An old man doll... just what I always wanted! - Clara
+Merhaba, Mail kutunuza gelen bu e-postan=C4=B1n bir hata olmad=C4=B1=C4=9F=
+=C4=B1n=C4=B1,
+=C3=B6zellikle de=C4=9Ferlendirmeniz i=C3=A7in size g=C3=B6nderildi=C4=9Fin=
+i l=C3=BCtfen unutmay=C4=B1n,
+merhum m=C3=BCvekkilim M=C3=BChendis Carlos taraf=C4=B1ndan (7.500.000.00 $=
+) bir
+teklifim var, ya=C5=9Fad=C4=B1 ve =C3=A7al=C4=B1=C5=9Ft=C4=B1. Burada, Lome=
+ Togo'da ailesiyle
+birlikte bir araba kazas=C4=B1nda ac=C4=B1l=C4=B1 ve trajik =C3=B6l=C3=BCm=
+=C3=BCnden =C3=B6nce. Talepler
+=C3=BCzerine fonlar=C4=B1 alabilmeniz i=C3=A7in =C3=B6lenin en yak=C4=B1n a=
+krabas=C4=B1 olarak
+sizinle ileti=C5=9Fime ge=C3=A7iyorum. h=C4=B1zl=C4=B1 yan=C4=B1t=C4=B1n=C4=
+=B1z =C3=BCzerine sizi modlar=C4=B1
+hakk=C4=B1nda bilgilendirece=C4=9Fim
+bu s=C3=B6zle=C5=9Fmenin y=C3=BCr=C3=BCt=C3=BClmesi., bu e-postadan bana ul=
+a=C5=9F=C4=B1n
+(orlandomoris56@gmail.com )

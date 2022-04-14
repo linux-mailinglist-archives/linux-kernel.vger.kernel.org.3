@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C221C500ED3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 15:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB29500F73
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 15:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbiDNNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S244331AbiDNN10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243934AbiDNNTS (ORCPT
+        with ESMTP id S244183AbiDNNXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:19:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D392D31;
-        Thu, 14 Apr 2022 06:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649942193; x=1681478193;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xX/cmUcjGxXpG7rPxofxKQoxBKiUs0vSg8GaifSgBio=;
-  b=RZQv5rD+7g1Xz9CvUJO8Z5mBan8rtjPnYbjVgYKhFcGx3zcXRtqKytyt
-   zIP998aMPY7UJT93i17klniMYr+BMMLB85KFk0sIkBSo9eIa2EEXtXjsP
-   3CAS95ZqMgp2ykpqtez2g1+T4Wc9Ih5up98nV/snCJnzkigzkwqdi4zzF
-   JaUX+zrWwQcZQOENz7Ry5sH8SC4Q0lu6hbHtfzziiTzNwVTSrMzClaqX6
-   1gvRs8xuruK3n8NeS5NEjjo2eCieNMqvLZvFilXx16TsNRjzx5ooSCqQ1
-   0ktw5PQnA5QnTUKOyottbmFk2iPVnxs4+ygJKsTB0fKikTSrPJscpCI2r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="242859747"
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="242859747"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:16:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="591187970"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 14 Apr 2022 06:16:01 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 750AD2AE; Thu, 14 Apr 2022 16:16:01 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
-Subject: [PATCH v2 3/3] iio: imu: adis16480: Improve getting the optional clocks
-Date:   Thu, 14 Apr 2022 16:15:59 +0300
-Message-Id: <20220414131559.24694-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220414131559.24694-1-andriy.shevchenko@linux.intel.com>
-References: <20220414131559.24694-1-andriy.shevchenko@linux.intel.com>
+        Thu, 14 Apr 2022 09:23:44 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E47F939ED;
+        Thu, 14 Apr 2022 06:18:33 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2eafabbc80aso54530987b3.11;
+        Thu, 14 Apr 2022 06:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VSPSHGLNryKTOTOge0ylfTJKLHsA725QG3K5z7xv3vQ=;
+        b=mzWrWwMEQ3pI8mP8YATBmRidCAoh3CfJ3ZEoKRvU/hHhk+epGF0cWiBIe+gMTfRG7M
+         JLofzUCSt7FOvDvWoAd0Cz4EJjHM+vtgdfOyvRV1Df6lpRDHn+ycrgprZg3GPWuVWXw/
+         zDqLZHVkl55JdcERRPvuilaE0ghuLJhV3jYRHp7aQEazFf0h+AZb/OY0BNm7FFikyUh8
+         2OFyH+OSRjSojLe4FzHaaEfUxSsSGF/T8sQZ+6AjO1r5Tk6/4ba7mnJt19a5ITEXX7ms
+         Ig8C1xutmBlhR42x9LIgohdBjS8wRUNKcPCywc2WDCV893IRcfLphbHWbvkYOZtem/KC
+         UJ3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VSPSHGLNryKTOTOge0ylfTJKLHsA725QG3K5z7xv3vQ=;
+        b=hzWdlTmEd4mD9a+12mm17fULW07cK/ocaZ5HT0C1WXqkwnEbIFCnuAitnyUvUZw7H4
+         n8yJxurUfntrDMV6XpHTpf1fKRM3ne3otu8CWupdxlYzBqtHcqjXKz2I3iCzoZV8SNFF
+         ZQHglEnBkPIEOFwwHK4m8SNyWpEE4kPht5Fjl8uGdS/tcHnqaMPuG67OPJrLNgvfjzHO
+         zW1Ux3cIpcjSaUU7APaZedK5J2bjXZ0fMElpzJeO8GyHpenrdtz3af5Gv1aSIGbPeRoM
+         ZhktCPP3aPS48YlbmxMKNAo3fHs8iKQWtTAC4urdjA0bFy1+OK68NY1m+WvfRas7L2Ed
+         Cj0Q==
+X-Gm-Message-State: AOAM531YT/l3FjiBMCQGt8urDFAm9ZIZMO8wcNZJhPzHzIqJCjZ/710+
+        7h8F7HWmLhhitqPRiE26GjNzu/r1RGHaz2RTH6mhr9USvyM=
+X-Google-Smtp-Source: ABdhPJw7JUk3PaMO3ZTIH6MHWMnYDMymlZdf02YIpUqHKqDgK9Ke78x/au9ULwW+2UgR4ORl9VvEyHq2/PIbd6B/AXk=
+X-Received: by 2002:a0d:d702:0:b0:2ef:32f7:b800 with SMTP id
+ z2-20020a0dd702000000b002ef32f7b800mr1937878ywd.482.1649942312435; Thu, 14
+ Apr 2022 06:18:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
+ <fdb1e0a6-62f9-c0a3-c1db-8857087701a1@redhat.com>
+In-Reply-To: <fdb1e0a6-62f9-c0a3-c1db-8857087701a1@redhat.com>
+From:   =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
+Date:   Thu, 14 Apr 2022 21:16:15 +0800
+Message-ID: <CAGcXWkzZex-XTEoq8H5mc+3Y2BH=cphdpH-815Y+TAq812K=8g@mail.gmail.com>
+Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
+To:     Tom Rix <trix@redhat.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
+        "lh.kuo" <lh.kuo@sunplus.com>, nathan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The extended clocks are optional and may not be present for some
-configurations supported by this driver. Nevertheless, in case
-the clock is provided but some error happens during its getting,
-that error handling should be done properly.
+Hi Tom :
 
-Use devm_clk_get_optional() API and report possible errors using
-dev_err_probe() to handle properly -EPROBE_DEFER error.
+    This SPI driver only handles one transfer at a time.
+That's why locks are not needed.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Nuno Sá <nuno.sa@analog.com>
----
-v2: added tag (Nuno), massaged commit message (Nuno)
- drivers/iio/imu/adis16480.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/iio/imu/adis16480.c b/drivers/iio/imu/adis16480.c
-index 287914016f28..fe520194a837 100644
---- a/drivers/iio/imu/adis16480.c
-+++ b/drivers/iio/imu/adis16480.c
-@@ -1362,31 +1362,25 @@ static int adis16480_get_ext_clocks(struct adis16480 *st)
- {
- 	struct device *dev = &st->adis.spi->dev;
- 
--	st->clk_mode = ADIS16480_CLK_INT;
--	st->ext_clk = devm_clk_get(dev, "sync");
--	if (!IS_ERR_OR_NULL(st->ext_clk)) {
-+	st->ext_clk = devm_clk_get_optional(dev, "sync");
-+	if (IS_ERR(st->ext_clk))
-+		return dev_err_probe(dev, PTR_ERR(st->ext_clk), "failed to get ext clk\n");
-+	if (st->ext_clk) {
- 		st->clk_mode = ADIS16480_CLK_SYNC;
- 		return 0;
- 	}
- 
--	if (PTR_ERR(st->ext_clk) != -ENOENT) {
--		dev_err(dev, "failed to get ext clk\n");
--		return PTR_ERR(st->ext_clk);
--	}
--
- 	if (st->chip_info->has_pps_clk_mode) {
--		st->ext_clk = devm_clk_get(dev, "pps");
--		if (!IS_ERR_OR_NULL(st->ext_clk)) {
-+		st->ext_clk = devm_clk_get_optional(dev, "pps");
-+		if (IS_ERR(st->ext_clk))
-+			return dev_err_probe(dev, PTR_ERR(st->ext_clk), "failed to get ext clk\n");
-+		if (st->ext_clk) {
- 			st->clk_mode = ADIS16480_CLK_PPS;
- 			return 0;
- 		}
--
--		if (PTR_ERR(st->ext_clk) != -ENOENT) {
--			dev_err(dev, "failed to get ext clk\n");
--			return PTR_ERR(st->ext_clk);
--		}
- 	}
- 
-+	st->clk_mode = ADIS16480_CLK_INT;
- 	return 0;
- }
- 
-@@ -1447,7 +1441,7 @@ static int adis16480_probe(struct spi_device *spi)
- 	if (ret)
- 		return ret;
- 
--	if (!IS_ERR_OR_NULL(st->ext_clk)) {
-+	if (st->ext_clk) {
- 		ret = adis16480_ext_clk_config(st, true);
- 		if (ret)
- 			return ret;
--- 
-2.35.1
+Li-hao Kuo
 
+Tom Rix <trix@redhat.com> =E6=96=BC 2022=E5=B9=B44=E6=9C=8813=E6=97=A5 =E9=
+=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=887:45=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>
+> On 4/12/22 6:38 PM, Li-hao Kuo wrote:
+> > - remove spin_lock_irq and spin_unlock_irq in the irq funciton
+>
+> function
+>
+> I was expecting a statement on why is the lock is not needed.
+>
+> Could you add one ?
+>
+> Tom
+>
+> >
+> > Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> > ---
+> >   drivers/spi/spi-sunplus-sp7021.c | 4 +---
+> >   1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus=
+-sp7021.c
+> > index f989f7b..120623c 100644
+> > --- a/drivers/spi/spi-sunplus-sp7021.c
+> > +++ b/drivers/spi/spi-sunplus-sp7021.c
+> > @@ -199,8 +199,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, v=
+oid *dev)
+> >       if (tx_len =3D=3D 0 && total_len =3D=3D 0)
+> >               return IRQ_NONE;
+> >
+> > -     spin_lock_irq(&pspim->lock);
+> > -
+> >       rx_cnt =3D FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
+> >       if (fd_status & SP7021_RX_FULL_FLAG)
+> >               rx_cnt =3D pspim->data_unit;
+> > @@ -239,7 +237,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, v=
+oid *dev)
+> >
+> >       if (isrdone)
+> >               complete(&pspim->isr_done);
+> > -     spin_unlock_irq(&pspim->lock);
+> > +
+> >       return IRQ_HANDLED;
+> >   }
+> >
+>

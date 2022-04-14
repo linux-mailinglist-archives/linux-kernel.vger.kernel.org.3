@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19C75007B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833FF5007BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238714AbiDNICJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
+        id S240403AbiDNIFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiDNICG (ORCPT
+        with ESMTP id S229911AbiDNIFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:02:06 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE89E3630C;
-        Thu, 14 Apr 2022 00:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649923182;
-  x=1681459182;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uaWL/LQdg91ACApW6dRxuLJ2OqDnSMYWm8FoCaD5BMU=;
-  b=cNgbSXWX9MQIOQLfTpkUVgKP3eV9T4rVs7lBxnX04rNoZfI432+mmueo
-   gUPqyROjePQXbMlOIIXaQiOb0BM6O6iCdAIIvp0vy/1M2cwqNVmKPphnL
-   7oioqj/e7bK+bpN7lkcFajrRbY1hVOEh+b3A4sc5HmHRQfXhNXsHmTqxk
-   zuqFBui2LxIq9c4gcMfUAcCeXIOXCYd2XAoc3MRCjU/9/loT7UoOG1he4
-   tNbMI02Ejo75tmKSqnU61SFP5WSS2WAd2FC5yVN6wasDLXWmuQEkKkQD6
-   B7HfzQk4Oq+/gmlKvEqG8VwMF/We4KUFkxtf6S7R2MiE3grad0Ky+1D3f
-   Q==;
-Message-ID: <d8db3fe0-9847-9045-2cc8-3bfe824f6a1d@axis.com>
-Date:   Thu, 14 Apr 2022 09:59:39 +0200
+        Thu, 14 Apr 2022 04:05:19 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Apr 2022 01:02:54 PDT
+Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE054C43A;
+        Thu, 14 Apr 2022 01:02:54 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 98739FB03;
+        Thu, 14 Apr 2022 09:47:27 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1x8Uot4rq9Or; Thu, 14 Apr 2022 09:47:26 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 09:47:16 +0200
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        robert.chiras@nxp.com, martin.kepplinger@puri.sm,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: Re: [PATCH v7 1/5] drm/bridge: nwl-dsi: Set PHY mode in
+ nwl_dsi_mode_set()
+Message-ID: <YlfRhA305uVcFnFH@qwark.sigxcpu.org>
+References: <20220414064858.405096-1-victor.liu@nxp.com>
+ <20220414064858.405096-2-victor.liu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 0/2] hwmon/tmp401: add support of three advanced
- features
-Content-Language: en-US
-To:     Camel Guo <Camel.Guo@axis.com>, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-References: <20220413114014.2204623-1-camel.guo@axis.com>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <20220413114014.2204623-1-camel.guo@axis.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail03w.axis.com
- (10.20.40.9)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220414064858.405096-2-victor.liu@nxp.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 13:40, Camel Guo wrote:
-> According the their datasheets:
-> - TMP401, TMP411 and TMP43x support extended temperature range;
-> - TMP411 and TMP43x support n-factor correction;
-> - TMP43x support beta compensation.
+Hi,
+On Thu, Apr 14, 2022 at 02:48:54PM +0800, Liu Ying wrote:
+> The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
+> works with a Mixel MIPI DPHY + LVDS PHY combo to support either
+> a MIPI DSI display or a LVDS display.  So, this patch calls
+> phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
+> explicitly.
 > 
-> In order to make it possible for users to enable these features and set 
-> up them
-> based on their needs, this patch series adds the following devicetree 
-> bindings:
-> - ti,extended-range-enable;
-> - ti,n-factor;
-> - ti,beta-compensation.
-> In the meanwhile, tmp401 driver reads them and configures the coressponding
-> registers accordingly.
+> Cc: Guido G�nther <agx@sigxcpu.org>
+> Cc: Robert Chiras <robert.chiras@nxp.com>
+> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Cc: Andrzej Hajda <a.hajda@samsung.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@siol.net>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v6->v7:
+> * No change.
 > 
-> v3:
-> - dt-bindings: remove unused [address|size]_cells and 
-> ti,beta-compensation.items
->    from ti,tmp401.yaml;
-> - dt-bindings: change ti,n-factor range to [-128, 127];
-> - tmp401.c: instead of u32, use s32 for ti,n-factor.
+> v5->v6:
+> * Rebase the series upon v5.17-rc1.
+> * Set PHY mode in ->mode_set() instead of ->pre_enable() in the nwl-dsi
+>   bridge driver due to the rebase.
+> * Drop Guido's R-b tag due to the rebase.
 > 
-> v2:
-> - dt-bindings: fix format and describe hardware properties instead of
->    programming models in ti,tmp401.yaml.
+> v4->v5:
+> * No change.
 > 
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> v3->v4:
+> * No change.
 > 
-> Camel Guo (2):
->    dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
->    hwmon: (tmp401) Add support of three advanced features
+> v2->v3:
+> * No change.
 > 
->   .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 105 ++++++++++++++++++
->   MAINTAINERS                                   |   1 +
->   drivers/hwmon/tmp401.c                        |  44 +++++++-
->   3 files changed, 149 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+> v1->v2:
+> * Add Guido's R-b tag.
 > 
+>  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+> index d5945501a5ee..85bab7372af1 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi *dsi)
+>  		return ret;
+>  	}
+>  
+> +	ret = phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n", ret);
+> +		goto uninit_phy;
+> +	}
+> +
+>  	ret = phy_configure(dsi->phy, phy_cfg);
+>  	if (ret < 0) {
+>  		DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n", ret);
 > -- 
-> 2.30.2
+> 2.25.1
 > 
 
-V4 is out. Please review that series instead.
+Reviewed-by: Guido G�nther <agx@sigxcpu.org>
+
+Cheers,
+ -- Guido

@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8428501455
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386E4501356
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244704AbiDNNfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S1348972AbiDNOPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244417AbiDNN0d (ORCPT
+        with ESMTP id S245554AbiDNNim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:26:33 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70FB9F3B5;
-        Thu, 14 Apr 2022 06:20:01 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id ab2470cf6047be01; Thu, 14 Apr 2022 15:19:59 +0200
-Received: from kreacher.localnet (unknown [213.134.181.101])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 14 Apr 2022 09:38:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FAC92D36;
+        Thu, 14 Apr 2022 06:32:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 210F766BE86;
-        Thu, 14 Apr 2022 15:19:59 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3 3/9] PCI/PM: Rearrange pci_update_current_state()
-Date:   Thu, 14 Apr 2022 15:07:24 +0200
-Message-ID: <1917095.PYKUYFuaPT@kreacher>
-In-Reply-To: <5838942.lOV4Wx5bFT@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher> <5838942.lOV4Wx5bFT@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEFC9B82968;
+        Thu, 14 Apr 2022 13:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1559CC385A5;
+        Thu, 14 Apr 2022 13:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649943169;
+        bh=/vSptA5YddKrMRYEVwozcLIsPiINX27TrXq69pfeqmQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WdT2Ng8OZsniGXWL0ITEEKx/syeANOlNRcTFT8nxwmYEKWMEIf67BYBRzJqAwnIqA
+         +3gJnLRZerWaKh9kDSkz8rjnOK3/s3ZR2f00Va5xUsHLeUXpZvGepBM9gJOQeO9xYS
+         J66hbVY9h4OwUqRcdcrmTf0cqbOWllEN5Fg50sz8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        Anand Jain <anand.jain@oracle.com>
+Subject: [PATCH 5.4 060/475] powerpc/kvm: Fix kvm_use_magic_page
+Date:   Thu, 14 Apr 2022 15:07:25 +0200
+Message-Id: <20220414110856.832208206@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.101
-X-CLIENT-HOSTNAME: 213.134.181.101
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddutddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
- ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-Save one config space access in pci_update_current_state() by
-testing the retireved PCI_PM_CTRL register value against
-PCI_POSSIBLE_ERROR() instead of invoking pci_device_is_present()
-separately.
+commit 0c8eb2884a42d992c7726539328b7d3568f22143 upstream.
 
-While at it, drop a pair of unnecessary parens.
+When switching from __get_user to fault_in_pages_readable, commit
+9f9eae5ce717 broke kvm_use_magic_page: like __get_user,
+fault_in_pages_readable returns 0 on success.
 
-No expected functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 9f9eae5ce717 ("powerpc/kvm: Prefer fault_in_pages_readable function")
+Cc: stable@vger.kernel.org # v4.18+
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
+ arch/powerpc/kernel/kvm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1 -> v3:
-   * Fixed typo in the changelog ("retrieved" spelling).
-   * Added R-by from Mika.
-
----
- drivers/pci/pci.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1201,14 +1201,17 @@ static int pci_raw_set_power_state(struc
-  */
- void pci_update_current_state(struct pci_dev *dev, pci_power_t state)
- {
--	if (platform_pci_get_power_state(dev) == PCI_D3cold ||
--	    !pci_device_is_present(dev)) {
-+	if (platform_pci_get_power_state(dev) == PCI_D3cold) {
- 		dev->current_state = PCI_D3cold;
- 	} else if (dev->pm_cap) {
- 		u16 pmcsr;
+--- a/arch/powerpc/kernel/kvm.c
++++ b/arch/powerpc/kernel/kvm.c
+@@ -669,7 +669,7 @@ static void __init kvm_use_magic_page(vo
+ 	on_each_cpu(kvm_map_magic_page, &features, 1);
  
- 		pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
--		dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-+		if (PCI_POSSIBLE_ERROR(pmcsr)) {
-+			dev->current_state = PCI_D3cold;
-+			return;
-+		}
-+		dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
- 	} else {
- 		dev->current_state = state;
+ 	/* Quick self-test to see if the mapping works */
+-	if (!fault_in_pages_readable((const char *)KVM_MAGIC_PAGE, sizeof(u32))) {
++	if (fault_in_pages_readable((const char *)KVM_MAGIC_PAGE, sizeof(u32))) {
+ 		kvm_patching_worked = false;
+ 		return;
  	}
-
 
 

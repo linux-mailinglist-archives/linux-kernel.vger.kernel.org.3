@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DBD500817
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D6450081D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240476AbiDNIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S240508AbiDNITb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiDNISz (ORCPT
+        with ESMTP id S233330AbiDNITa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:18:55 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B14483B7;
-        Thu, 14 Apr 2022 01:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6YMpm44acphdMuRGEx9DBy3vdiDjBzEpIjiQ/MN8cI8=; b=V9L2VcKqDpUCMVFPhIRU+cC5lb
-        oAwHcN+Gl9Km7FecMITzEBk68MACkuskRzc8YFegR19juSR6D5IlIy5TMpvyvvxryCW3ez4S9ohqW
-        LCCE67T+Osu8LzvuSYSKaMbSy7iJByDg7CZ4WXB2mTnx6fIz2AHiV8wXfEoNWuRPB1Fc=;
-Received: from p200300ccff1771001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff17:7100:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1neudp-0001ui-UW; Thu, 14 Apr 2022 10:15:50 +0200
-Date:   Thu, 14 Apr 2022 10:15:48 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        =?UTF-8?B?T25kxZllag==?= Jirman <x@xff.cz>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Liang Chen <cl@rock-chips.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 02/16] dt-bindings: display: rockchip: Add EBC
- binding
-Message-ID: <20220414101548.2b9c3dad@aktux>
-In-Reply-To: <20220413221916.50995-3-samuel@sholland.org>
-References: <20220413221916.50995-1-samuel@sholland.org>
-        <20220413221916.50995-3-samuel@sholland.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 14 Apr 2022 04:19:30 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A7F49F0A;
+        Thu, 14 Apr 2022 01:17:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649924196; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=AsbspUXkFkn8IT+0dQO6+nAUIXZBWkX3UudduNXGRNXTpwpnad/24gTpkZXU4e6kWLvaXBOd/lXqB01ovdbEgANQtvnESnkRDfYFuKhg2SSP4d/EP9pz65ddBIJNdyc+dzYuysdpUxSAmO7Eqh2iQltHsZvJqWTJlD6reeyq8NM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1649924196; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=DX3FsxaeKDI941g7IHym5WqsNB7za3Lzp+oTtlBrdg0=; 
+        b=VwazXdxxgsDKh5PXsOfE7N4+KzRmOBXQMiVIWkJevXYM+/0pQv23rogmj3atN9ktfwu4KlwVI9aXCshk+2M53vfd+GKuGdiUKGFaveHFX1Ap1R1gyER/F2oJOOs1LQHCJjiU6DNwLWEn5oK3zl4MAy4p97STQwg+4/Y9aUlx/Hw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649924196;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=DX3FsxaeKDI941g7IHym5WqsNB7za3Lzp+oTtlBrdg0=;
+        b=ezOkLB+TYbDZluCEVnRi6RdNfdJBhCMxcsg4a//QBZID7wwzpWbfkbzstNRnWgtG
+        sOk3kAm0FrDmrWAEG996iSmrMTmmlk1OIGMYSpX53Vi7pbnqj6r2Xa7NvFepsC3paGc
+        bikhviBTfHCnxO8C3+s1dvim9mleWqsUql/olEkg=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1649924194390779.7996201062704; Thu, 14 Apr 2022 01:16:34 -0700 (PDT)
+Message-ID: <1023e28e-6523-ea3a-7ac7-fe1d08e5e67f@arinc9.com>
+Date:   Thu, 14 Apr 2022 11:16:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 11/14] dt-bindings: pinctrl: add binding for Ralink MT7620
+ pinctrl
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <20220413060729.27639-12-arinc.unal@arinc9.com>
+ <41fa58ee-728b-7f0d-eea7-448c59641d85@linaro.org>
+ <0dd1da16-232b-d634-3146-bf91e58c9543@arinc9.com>
+ <02953ce1-0a43-5918-d139-35afd5f15b5b@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <02953ce1-0a43-5918-d139-35afd5f15b5b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,67 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+On 14/04/2022 09:33, Krzysztof Kozlowski wrote:
+> On 14/04/2022 03:52, Arınç ÜNAL wrote:
+>>>
+>>>> +  is not supported. There is no pinconf support.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: ralink,mt7620-pinctrl
+>>>> +
+>>>> +patternProperties:
+>>>> +  '-pins$':
+>>>> +    type: object
+>>>> +    patternProperties:
+>>>> +      '^(.*-)?pinmux$':
+>>>
+>>> Why do you have two levels here? pins->pinmux->actual pin configuration?
+>>
+>> Yes, pins->pinmux->pin-configuration is currently how it's done.
+> 
+> It is currently done? Aren't you bringing here new bindings and new
+> driver support?
 
-for comparison, here is my submission for the IMX EPDC bindings:
+I'm submitting bindings for the existing subdrivers. There's nothing new 
+but refactoring and submitting the missing bindings.
 
-https://lore.kernel.org/linux-devicetree/20220206080016.796556-2-andreas@kemnade.info/
-
-On Wed, 13 Apr 2022 17:19:02 -0500
-Samuel Holland <samuel@sholland.org> wrote:
-
-[...]
-we have sy7636a driver in kernel which should be suitable for powering a EPD
-and temperature measurement. So I would expect that to be 
-> +  io-channels:
-> +    maxItems: 1
-> +    description: I/O channel for panel temperature measurement
-> +
-so how would I reference the hwmon/thermal(-zone) of the sy7636a here?
-
-> +  panel-supply:
-> +    description: Regulator supplying the panel's logic voltage
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  vcom-supply:
-> +    description: Regulator supplying the panel's compensation voltage
-> +
-> +  vdrive-supply:
-> +    description: Regulator supplying the panel's gate and source drivers
-> +
-SY7636a has only one logical regulator in kernel for for the latter two.
-
-If we have a separate panel node, than maybe these regulators should go
-there as they belong to the panel as they are powering the panel and
-not the EBC.
-
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description: OF graph port for the attached display panel
-> +
-In my approach for the IMX EPDC, (I will send a better commented one
-soon) I have no separate subnode to avoid messing with additional
-display parameters. Not sure what is really better here.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +  - power-domains
-> +  - panel-supply
-> +  - vcom-supply
-> +  - vdrive-supply
-
-If things differ how the different phyiscally existing regulators are
-mapped into logical ones (even the vdrive supply is still a bunch of
-physical regulators mapped into one logical one), then not everything
-can be required.
-
-Regards,
-Andreas
+Cheers.
+Arınç

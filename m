@@ -2,161 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D05B50178F
+	by mail.lfdr.de (Postfix) with ESMTP id 5582C501790
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358253AbiDNPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S1358297AbiDNPlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354785AbiDNOmi (ORCPT
+        with ESMTP id S1354782AbiDNOmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:42:38 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F5D2AE3C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:39:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nq0ps0pG1XN4svM4/gmdCs/txlPlvw82QLoxTwnLtujghdNq62LMkkIgwVTt2SGUqjfxXpBJKQVuaqTWxrh7DC4yEJf31CfKFtO7IpPOQYJa1xoDlBBXit8pgXQRAOq/VfbHkobkeFxe0nKBQtKwjozDgkJKE86VKo55CMp2KvnqdVojncK7wY5uSy0juo4d3aY4+HeC2qMJBDRs2asd9EnCf0tQfQtX8gOd83drgdth2KgnsYzHrsB7EM0FaZS7IBSE9GzQ502HHcUq3gvKbq+JLDVCa/naPi8DOLPfM8DB14qsfUUs34gNTGKB2guI1G4RPMkeTERG7yNXSnHsVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a/Bfz1PATDvC0oypikSeRFZrtlXcP1bU4HB7kfwj9Sc=;
- b=kF3FPSTwMyD2yCH0lQTE6BlgAlSQjxWIj4Xrn2XZL2ZuWqtHpGhk1GadjwDuzEO6knT0ERysxQTmMULupF9iYTd4DbETaXdgZPmHaAiEri3/a4lXImAz13gRqWTLh8vUPVpgbdmdsSxwDZNt0Zufdv5i6Kc0WHze78VQ30up2W7biduRRS1CDQaX0BBOzvXkNozHgIdnl/PIk9nI0sXgUVnn3i6YPAPJFcn0lKjzeJq2rOyj9FmYWPwptZTw8H3OGtVwDbq2q0xbBwBD3VvdmTh3Ya6qoya67NT2OK+Azjdtf8Myh9JWuHr6pQVVWZDNHl/A6bSDyaJHgKCSJllnWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a/Bfz1PATDvC0oypikSeRFZrtlXcP1bU4HB7kfwj9Sc=;
- b=IVpLwYi17PdvXdvwoVwV0OpHKRO2/zXmLCNdmrp9rJZZYNtHrScZo9eRNmr8TEOg18LHeeZMLUr8etQpI0wwiaRRoRaozhQMu6H8FBVLlPv7QZ08jHw/t3WLe5hIDh78GMf5dVdOgu4IKdcE7+N+XBvr/EJGSqwNS800b0ak0CtgklWcyW12HsYFfnfwrlDMlSiA1eSUR7SiHi1w/YAIR4JdBgo4QuRmhFxea28e5R354tNe7AnMlOzv+zmjb3Q72obzw/b5puiuDR6j3/FurIsQyY8qk+gV3K+ms20oOneufhO4Gicxxd2QyCzL5ecmt+shMFoPORARj7Y63aOUGw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN6PR12MB4719.namprd12.prod.outlook.com (2603:10b6:805:e9::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Thu, 14 Apr
- 2022 14:39:01 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 14:39:01 +0000
-Date:   Thu, 14 Apr 2022 11:38:59 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
-Message-ID: <20220414143859.GE368031@nvidia.com>
-References: <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
- <20220413154642.GA28095@lst.de>
- <871qy1geko.fsf@intel.com>
- <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
- <20220413232053.GA2120790@nvidia.com>
- <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
- <20220414133427.GB2120790@nvidia.com>
- <87ilrbeqbo.fsf@intel.com>
- <20220414134321.GD2120790@nvidia.com>
- <abc0a953-8527-ba25-9987-d2f1284a7430@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abc0a953-8527-ba25-9987-d2f1284a7430@intel.com>
-X-ClientProxiedBy: BLAPR03CA0131.namprd03.prod.outlook.com
- (2603:10b6:208:32e::16) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 14 Apr 2022 10:42:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165DF2B18A;
+        Thu, 14 Apr 2022 07:39:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E25E61FFA;
+        Thu, 14 Apr 2022 14:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D532C385A9;
+        Thu, 14 Apr 2022 14:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649947155;
+        bh=RGUyZXtT7xhmFjEGnsdYrXzQkUtYNpgkCTqBpXWsCdc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PXPTH4Do4dph65ZojAI5Qq+ND5/ZH8bIk8Df1j3ycjHrLlwb2o4NhJRYQmzjCv+6Q
+         j3hJetyHtO8PMcL45cq7Jjech2zK3RVRL6c8ooStBgG+N5F12YluDqgVmWUXYYeob8
+         l2LEnmCmmeHY4cOY6/tezDUZIij1E26Ol+/9NSTozO4OYgNc+znFxT9AhqILfm7YKS
+         ygdgLKLUmaeXuqS3wT5MUiSEvE709ngzpFEYNl7SwP7+xH1CRN8BFvjydnGwJzHA7m
+         vqW5/hEsYGTBHhsjxRC9C8D5L0Mg6ZS2uUckx/FybHO/obxyF080zhQAXACc2bVxJc
+         zMxq9cFC6xq3Q==
+Date:   Thu, 14 Apr 2022 20:09:07 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
+        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, quic_srichara@quicinc.com
+Subject: Re: [PATCH] mtd: rawnand: qcom: fix memory corruption that causes
+ panic
+Message-ID: <20220414143907.GA20493@thinkpad>
+References: <1649914773-22434-1-git-send-email-quic_mdalam@quicinc.com>
+ <20220414101517.7bbc5e9d@xps13>
+ <DM6PR02MB580382FA47C4884AFC1A98D0FAEF9@DM6PR02MB5803.namprd02.prod.outlook.com>
+ <2697e757-f446-9cdb-95e0-ea01a642e6d4@quicinc.com>
+ <20220414144236.4ea54e20@xps13>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bb56b66-d021-4fd6-9b24-08da1e248450
-X-MS-TrafficTypeDiagnostic: SN6PR12MB4719:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB4719D04B56C68210F4E2628BC2EF9@SN6PR12MB4719.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SSGmmUFcJ2RQuZGXFswa7oSIOvY0LUSSv0CuVe6KFh9rfIRN47aed/B/da8LIatR6xhIY2MbjbkYsl9aiayxFhVFmgjZEDvvc4rTD424O51NWU0D1F5VVmEt4RqMPhEwK+8HuUMz0qS+dMtddozrY6q6Y7UjZKlHJelbRrBdktMdCcS/3ry0IIpfec7386L3bVxu7mXUxczczWRi8/3CA57p/B6HS2ZfMUe/FSf9+Mwu279CoPyUp8kXWeQr8UxpqpWMpYQhwrm66Eys0t/qyCNJwpV60Pu71DPYCo3gZBWbLW/EZILGyTZlCKDKgq1D5HKyzPNC0kadyrjOYXwtuMAXT24UdJGNX3ytXmmjT9lDthntqiGV3WsGVLBOt4jceybdkKkF7ZOF2KFu28Veeo+qyFmyw205Honl8n9V1lQaWpbtW8QRmQuUL/ruhdo3+QLEl11hVmPC1DdztO3ig/p1ZmvxF68RSl5jQljfK7FHqLSoAjlwHvCwy8d0fbpnHaF9xxDonh863lDa5F0DooDAtmWviXio/TTyHZSItZFiQnpxEJuZC1BbdaBc5kpyAVRhYtDJWJvDYzAZD4JX6OYkLTg7U6eVwREg5mfOM9upGhMdZRPRm0DbY1Z3+n70od05PCl5YERl2b5vu9f/SDzfp9IiPy20mZQ8sfVrIGXFZZsLOzbtIrqkOSPLUxqkMpHfuUAj1vpq6qBCXmMhMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(5660300002)(8936002)(26005)(6512007)(33656002)(38100700002)(4326008)(86362001)(316002)(66476007)(66556008)(54906003)(8676002)(66946007)(6916009)(6506007)(6486002)(508600001)(2906002)(7416002)(36756003)(1076003)(186003)(83380400001)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m3ExuVKoUKybjs389f97/JJ1nbF168b1Uu+Y36OhTFxlMcZHG4D5PFCl0/jB?=
- =?us-ascii?Q?ZC9JjcIkQ6ePZiA+SX5GrMOUGD1vdGsEM9tjGmbLqW4qcFxyFqWJALOEBBIU?=
- =?us-ascii?Q?C5r4E+sgcmR2aQvZTh7FlEjItRBM+z19dkpTEohsco6Ii4F/adBnx4dghJOh?=
- =?us-ascii?Q?M4m/nZsXT/2OWHs2sO3FjPxKPsvLUz0YU2dDv4Bp9Ffo697w3/CGNGVnL8ig?=
- =?us-ascii?Q?rQg9G04mYPyi/5jyEaIb745hgZFv7IOu8KJi6SdwEOuhqXsYogzgLU3LM4PF?=
- =?us-ascii?Q?fbCsfw7/uZUDopdptzrAMvMZfjwA+XgugdADp5lysq75gidQ+FLjVYXIqb94?=
- =?us-ascii?Q?w5VdidKcYuOtScCCMEOINyhaK4ryG270AsYfAzeryHsYMBEW9IW0MKU5VhrX?=
- =?us-ascii?Q?MIPQnCJb0cAnGAPz4roLZMJsksSvIX9ytLXl3VUtJCjB8OVCoQoqyagG8FX6?=
- =?us-ascii?Q?M52k5ZrEua7dPL6F+us26KYx0CAawbQcZDm3LE2s29AFxe32VFvwwY43Mls1?=
- =?us-ascii?Q?Ub2A1OFfowNqBjyvSpLrWyVY5RNJ6sMeem6PoBxuCTLtNrBZfL/ha0Ef+Xiq?=
- =?us-ascii?Q?6RsxFU/1plTs8pHMpjw0YaeTTEBvim4HvX1Hj8/tOaEqoKGcRhTKfpv6uUsO?=
- =?us-ascii?Q?jQ0r1QxaDXOu7wostkLHJBWV3tVUVvOXh1+r3wP2ecIjtlPeeWHQNDondBeM?=
- =?us-ascii?Q?YforjTrAqJpO3ycTLvq5b33IGkzejOmAtQJp0WXJyNbpIFPOnuP/oljASiWz?=
- =?us-ascii?Q?T3kPnp//1aD94QGJ0meTRBcpCaba/W+TIluKK90MECgb9piQS6fpK9IgTsej?=
- =?us-ascii?Q?kLnJyFf9EpNzgDItZrm+80LGUUx6AUDkVE/qs0h8v4YldZ73U2P3EmuF3LQH?=
- =?us-ascii?Q?Z9pa7WaSGPmIMPwIhZp3O8MZ3wLDBaIPkdAYLqIxRcbVL1g7YpWUb4owTHQG?=
- =?us-ascii?Q?ypwX9SrUE9rJiiTiozDBcjxLPk6pfMTZCkR2rzSahgKsG1Kbh6h9E8+jvYaO?=
- =?us-ascii?Q?7C+OBY6PQnzGKDNRPhHM57y5HBDmx/FyBmN0bizkJK0ht2jpM5nP8iotiz+r?=
- =?us-ascii?Q?2JeM+oxn3C7NgYF2DHAgo5Kb7E4ymJkBRhCWRw+lMbtGanJfdseNM8GBB5om?=
- =?us-ascii?Q?PguvilcAK1RtQ4krvtj0Hx8LjdxBSajV5WDEMAov3VM8iGS7E0795h7W9UnP?=
- =?us-ascii?Q?uYN+zMBBcnhjLP5EcOgiUicviOdeLndy1zsm2wWkRzU8ck79ZGl1/VoGtBbW?=
- =?us-ascii?Q?Yo2YuwyoJsLPPrgohMKaIbzt5DgNjcRlVAs3pDPZU2+ApUHGP4v+B1yvEfaA?=
- =?us-ascii?Q?GvfpOIE01qEwr3cXHhivIMmE4P2X8LfuwyWtrPxa+wUulczzwMPcTFVaWrTw?=
- =?us-ascii?Q?7Brj+s0XcEETKjg8HaAk0HYK3eZIxQhNb/yc2sIEzIRMI9ix4MWGgoPAbtw8?=
- =?us-ascii?Q?+O27gW29DmXZhrXOaAwnuZ+aS6MKUaT8KBz2t78vIXfEahVT8dQNIOKC2Acx?=
- =?us-ascii?Q?oGKrli/6e5RuctpqMRThW0g1aE5OG8CLVmGQUYi9n4QUd1V093J931LnTYr4?=
- =?us-ascii?Q?k8v8Gi0OM2J1lkxZGco0T9mSZtMSYU9nc9Wxz/AfY/0GtvlG+0IOATLh9gxI?=
- =?us-ascii?Q?3PJdgCVa7c3vGxmsMM/Q1akkzN8ZTpzuCG+duH0L7unoNPQAI3N5ywtQo55r?=
- =?us-ascii?Q?B/ySYKIzKWMERruj/lgdVQbPElHhPjDZrR383HgQmfXXklW9rRr/Uv8z04cs?=
- =?us-ascii?Q?vajujAETzg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bb56b66-d021-4fd6-9b24-08da1e248450
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 14:39:01.5752
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wjISa0hfnwjnGt+3NzPHJ9CAjDSBMDurdl0Hs57LT5xxhM0kfaLr6Y2ctcpCwhqw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4719
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414144236.4ea54e20@xps13>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:25:36PM +0000, Wang, Zhi A wrote:
-
-> > So drop the '[DONT PULL]' commit and send a PR to the next DRM tree -
-> > when that is confirmed send the same PR to vfio,
+On Thu, Apr 14, 2022 at 02:42:36PM +0200, Miquel Raynal wrote:
+> Hi Md,
 > 
-> I updated the branch again, but I am confused. What is the purpose of sending
-> the PR to next DRM tree? I suppose all the patches will go through VFIO? If
-> I understand correctly?
+> quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 17:50:48 +0530:
+> 
+> > > Hi Md,
+> > >
+> > > quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 11:09:33 +0530:
+> > >  
+> > >> This patch fixes a memory corruption that occurred in the
+> > >> nand_scan() path for Hynix nand device.
+> > >>
+> > >> On boot, for Hynix nand device will panic at a weird place:
+> > >> | Unable to handle kernel NULL pointer dereference at virtual
+> > >>    address 00000070
+> > >> | [00000070] *pgd=00000000
+> > >> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM Modules linked in:
+> > >> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+> > >>    #38
+> > >> | Hardware name: Generic DT based system PC is at
+> > >> | nandc_set_reg+0x8/0x1c LR is at qcom_nandc_command+0x20c/0x5d0
+> > >> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+> > >> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
+> > >> | r10: 000000a3  r9 : 00000000  r8 : 00000040
+> > >> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+> > >> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+> > >> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+> > >> | Control: 10c5387d  Table: 8020406a  DAC: 00000051 Register r0
+> > >> | information: slab kmalloc-2k start c14ee000 pointer offset
+> > >>    64 size 2048
+> > >> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval)) nandc_set_reg
+> > >> | from qcom_nandc_command+0x20c/0x5d0 qcom_nandc_command from
+> > >> | nand_readid_op+0x198/0x1e8 nand_readid_op from
+> > >> | hynix_nand_has_valid_jedecid+0x30/0x78
+> > >> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+> > >> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+> > >> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+> > >> | qcom_nandc_probe from platform_probe+0x58/0xac
+> > >>
+> > >> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+> > >> is updating the nandc->max_cwperpage from 1 to 4.This causes the
+> > >> sg_init_table of clear_bam_transaction() in the driver's
+> > >> qcom_nandc_command() to memset much more than what was initially
+> > >> allocated by alloc_bam_transaction().  
+> > > Thanks for investigating!
+> > >  
+> > >> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
+> > >> returns, and remove updating nandc->max_cwperpage from
+> > >> qcom_nand_attach_chip call back.  
+> > > The fix does not look right, as far as I understand, this should be properly handled during the attach phase. That is where we have all information about the chip and do the configuration for this chip.
+> > >
+> > > If you update max_cwperpage there you should probably update other internal variables that depend on it as well.  
+> > 
+> >     Currently we are updating max_cwperpage  in qcom_nand_attach_chip(), but we are seeing issue for Hynix nand device since nand_scan_tail() is getting called after nand_attach() and in nand_attach() we are updating max_cwperpage to 4 or 8 based on page size.
+> > 
+> >      From nand_scan_tail() there is a call for nand_manufacturer_init() , specific to Hynix nand read_id is getting called that's why we are seeing this issue only for Hynix nand device. Read id sequence as below
+> > 
+> >     hynix_nand_has_valid_jedecid()
+> > 
+> >                  |
+> > 
+> >     nand_readid_op()
+> > 
+> >               |
+> > 
+> >   qcom_nandc_command()
+> > 
+> >              |
+> > 
+> > pre_command()
+> > 
+> >            |
+> > 
+> > clear_bam_transaction()   --> In this call we are doing sg_init_table() which is calling memset() based on max_cwperpage.Since initially we have allocated bam transaction as per max_cwperpage =1 and , since nand_chip_attach() updated max_cwperpage,  now we are doing memset as per max_cwperpage = 4 or 8.
+> > 
+> > 
+> > So anyway we have to updated max_cwperpage after nand_scan() call only.  Since there is no other dependency on max_cwperpage in nand_attach_chip() and we are using this in bam_alloc() and bam_clear().
+> 
+> Why don't you update the sg table after increasing max_cwperpage?
+> 
 
-pull requests can flow through more than one tree concurrently. The
-purpose of the topic branch is to allow all the commits to be in all
-the trees they need to be in at once.
+Or we could move the bam reallocation inside qcom_nand_attach_chip() as below?
 
-So you should send this branch as a PR to the next logical upstream
-tree gvt patches normally go through, in the usual way that you send
-PRs. Especially in this case where there is a small merge conflict
-internal to DRM to resolve. I'm assuming this is the drm-intel-next
-tree?
+diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+index 7c6efa3b6255..58c16054630f 100644
+--- a/drivers/mtd/nand/raw/qcom_nandc.c
++++ b/drivers/mtd/nand/raw/qcom_nandc.c
+@@ -2653,9 +2653,23 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
+ 
+        mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
+ 
++       /* Free the initially allocated BAM transaction for reading the ONFI params */
++       if (nandc->props->is_bam)
++               free_bam_transaction(nandc);
++
+        nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
+                                     cwperpage);
+ 
++       /* Now allocate the BAM transaction based on updated max_cwperpage */
++       if (nandc->props->is_bam) {
++               nandc->bam_txn = alloc_bam_transaction(nandc);
++               if (!nandc->bam_txn) {
++                       dev_err(nandc->dev,
++                               "failed to allocate bam transaction\n");
++                       return -ENOMEM;
++               }
++       }
++
+        /*
+         * DATA_UD_BYTES varies based on whether the read/write command protects
+         * spare data with ECC too. We protect spare data by default, so we set
+@@ -2956,17 +2970,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+        if (ret)
+                return ret;
+ 
+-       if (nandc->props->is_bam) {
+-               free_bam_transaction(nandc);
+-               nandc->bam_txn = alloc_bam_transaction(nandc);
+-               if (!nandc->bam_txn) {
+-                       dev_err(nandc->dev,
+-                               "failed to allocate bam transaction\n");
+-                       nand_cleanup(chip);
+-                       return -ENOMEM;
+-               }
+-       }
+-
+        ret = mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
+        if (ret)
+                nand_cleanup(chip);
 
-Once DRM is internally happy then VFIO can merge it as well. You can
-view VFIO as the secondary path to Linus, DRM as primary. Alex will
-mention in his pull request that VFIO has a 'shared branch with DRM
-for gvt'.
-
-Jason
+Thanks,
+Mani

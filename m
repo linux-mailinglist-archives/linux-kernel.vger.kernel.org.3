@@ -2,138 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B132B500AC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56433500AC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241074AbiDNKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S242127AbiDNKKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiDNKKc (ORCPT
+        with ESMTP id S240304AbiDNKKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:10:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3CE716C5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:08:04 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id r13so9077585ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fxIhTmf4CWwgx4woI1aX8OoMYh4gMjGvc4MZCp2yYgw=;
-        b=YEKEdaK2CtEeQIFtsW5Q9Pc+PQj3VAR5YyF343GhApd9CcPVM5ZO9W4aORRt64cOKy
-         Ds/mV9HlUsuLDZTZ7K0DrdCW7osI8ZAk0VMdjMen+qb99ZJdTFxYrOr17AKRp/dOmhdM
-         vWhaHluFNt7+cnI1ZOz2ZjJ3OwjNMq2SM8qdQcdLda/y6/xSKElR5E0jlO6wittIJOKW
-         c2tg4tp4S1FIhuRxuSLb1udomqgKf6HFw6RkBYXF4Wj1+/IIhn+JnrUFYDXd8wybRFQx
-         imGIB2kxPw5hJ3i9nXJ2x3r20q/1cTLN7OjJGVuyboGvJF/fXZ4sULOMve5G1jjmkxSz
-         KZVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fxIhTmf4CWwgx4woI1aX8OoMYh4gMjGvc4MZCp2yYgw=;
-        b=QzPpti3yk6f7TIK2lMiarmWUi1oBhRwuRn84Nlb+1dBRk28ZtYENDKyywzrjFIH+Eb
-         qxAbn3c6+8pkYmiBwyE7Ye202v8ThUXf24lPEaiPb2EyFcPQFQ8oSBJih17u8wc6RrZ2
-         XI5+EIwQbVb+h8MbJZRLjF+YceSx7DXCoKlNEdtmrAHw2CMxHB54byCm5AzEuq0+2f9S
-         pCTna0YYdvmupXE63I2ai1Lh9OXnuK9qKoE7XVxMm/jaK96NeilN+88gxEJA70jQlvfG
-         4kzhFQsyydjVcoUkxMHI0eeDl72lXY/uzOvuRU16/gISw2rT5x2dPYTy+uwpZAilyPq5
-         3ttQ==
-X-Gm-Message-State: AOAM532sWzPVgA+5jTU1fqc5lh6s5Q7XHXPUZbEc7je1sxkGCd9uDmOu
-        hT7qUiMSvBH9UvloGz5vSl0=
-X-Google-Smtp-Source: ABdhPJzETc4xu/QQjnhJjmC9SJlm5H2LrT29xVTSDmNt4irFWyS6PjTXFtlJN0fbXqk6uljkSqfdBw==
-X-Received: by 2002:a17:907:3e90:b0:6e8:7fbb:a15c with SMTP id hs16-20020a1709073e9000b006e87fbba15cmr1614234ejc.411.1649930882723;
-        Thu, 14 Apr 2022 03:08:02 -0700 (PDT)
-Received: from [192.168.0.151] (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id qb10-20020a1709077e8a00b006e892cf471asm471890ejc.84.2022.04.14.03.08.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 03:08:02 -0700 (PDT)
-Message-ID: <a40a2a1b-a8f1-e720-be92-48858d4f6678@gmail.com>
-Date:   Thu, 14 Apr 2022 12:08:01 +0200
+        Thu, 14 Apr 2022 06:10:49 -0400
+Received: from out203-205-221-209.mail.qq.com (out203-205-221-209.mail.qq.com [203.205.221.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7365A71A02
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1649930894;
+        bh=AII3mZ4L8bVc9YedtITokvmDF0CoVT2yQ9iSUIZFtv4=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To;
+        b=LzmJAPRE0vROtrkrCX+LAbcOIbg2MY1oZfPMxhCf5iPjN3aGpIYQFWUE/cqYXUoBt
+         L4FvQWqFWxIlt+K+bP2qu8TNdP8zbTWe8fzNgE3YslLgD1vb/sOTjlWz9FooIoBQnH
+         WUPr027+5kGQRiV6hACzplh4SZk8xxf179KuNrbo=
+Received: from [IPv6:240e:362:4f5:2500:edff:6c6a:bd0a:88d3] ([240e:362:4f5:2500:edff:6c6a:bd0a:88d3])
+        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
+        id 20A1246B; Thu, 14 Apr 2022 18:08:10 +0800
+X-QQ-mid: xmsmtpt1649930890t32ewonsv
+Message-ID: <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+X-QQ-XMAILINFO: NSObNE1Kae7ZhoC4JiWo82lT32DZgeLIdKSdlzQzU5ZaBRhx5L47E4F+RUZrEp
+         GrmudGyLVYMz2/9VgWEFP57XNZYt8zGt5qc+IaDLEoyegoJc2Gj7VSN2b8e0tKAcnTr8W3eiG+k+
+         qA1tj6xh0whnnlO/l4BT9KU2A2BkwWxuHj225tdHFGZ0qo0p/MQgwbK0i9yzRKdPDY209hp1viur
+         dCXJTikBaoJc8z8R75IBQv7lLnXxCNZVt/gr5i7cVwq0nZAEAHBwO+POAhvZaUiAgVT1ludyC34R
+         yGsqQ4bRvIvnTblLxMSkwhJtxHbVGmdNCKYg5oRr10TibtuLnHMXcBcKmq3Tfn+6Jmq7sJwuKM8b
+         kSc97/mnnkYLTyK1xTLRgJhEQds+sgg31uRlsjoovuEkPSp4Hz6GkZEW/msFIEtJUDoBTF1QRA1o
+         Zun4I8PvkKOjsZCXXBHWe1AkwQDQtPQ+IQ/CSRnvyJuluj6x/uQaUzy1JRWevrM2GHb5cTebrxk4
+         jaRd2x0V6soAFST35cr01TTgkDQDhOUIszHrOg5F3qG5O5gL06HsLZ3lXrmMJPxITTkInbAy55le
+         gfheV+qOY/nSx33uhL3epUsZLaLSP1eFpd5aU/Lz8aqrK7qE9tl3WDazWz0/ZaJzwyLphsz4uYLg
+         Dk63WJp9UG2or5bO4iP5HX4RRTGpiQffHBBxvfk4UCsHaY/52PxjeYsitvqWpnr1GPMwPuG/W2ns
+         ZIAq+OoqY2+Wv1jl457FBJUwx2Y/A3I3QypAIR6kkny6+LropPCc3g5TICVuNyEtuyn2USCaxsDt
+         hdwnO6Cd94f58Hsjn6R3npuLQjerCNE2sCHfQsPB0/wIPAz8iJ7rCfddmUlqjP1LRIQjwnesDkkn
+         ngcBdPMJhyAwAZWu24ytY9s11E9DO8PansxU/dkC+XCSV0ybbjnX+Ss5jZZJdlargUwd0thCeJXi
+         dPMxVtIcLzaiDPPpY82w==
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220207230254.3342514-1-fenghua.yu@intel.com>
+ <20220207230254.3342514-6-fenghua.yu@intel.com> <Ygt4h0PgYzKOiB38@8bytes.org>
+ <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
+ <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
+ <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+X-OQ-MSGID: <80dfcb87-0cb3-3282-79ba-d6b733f12302@foxmail.com>
+Date:   Thu, 14 Apr 2022 18:08:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: staging: r8188eu: struct rt_firmware_header issues
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
- <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
- <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 10:41, David Laight wrote:
-> From: Michael Straube
->> Sent: 13 April 2022 20:42
+
+On 2022/4/12 下午11:35, zhangfei.gao@foxmail.com wrote:
+> Hi, Fenghua
+>
+> On 2022/4/12 下午9:41, Fenghua Yu wrote:
+>> Hi, Zhangfei,
 >>
->> On 4/13/22 18:27, Michael Straube wrote:
->>> Hi all,
+>> On Tue, Apr 12, 2022 at 03:04:09PM +0800, zhangfei.gao@foxmail.com 
+>> wrote:
 >>>
->>> I think the rt_firmware_hdr structure in rtw_fw.c has some issues.
+>>> On 2022/4/11 下午10:52, Dave Hansen wrote:
+>>>> On 4/11/22 07:44, zhangfei.gao@foxmail.com wrote:
+>>>>> On 2022/4/11 下午10:36, Dave Hansen wrote:
+>>>>>> On 4/11/22 07:20, zhangfei.gao@foxmail.com wrote:
+>>>>>>>> Is there nothing before this call trace?  Usually there will be 
+>>>>>>>> at least
+>>>>>>>> some warning text.
+>>>>>>> I added dump_stack() in ioasid_free.
+>>>>>> Hold on a sec, though...
+>>>>>>
+>>>>>> What's the *problem* here?  Did something break or are you just 
+>>>>>> saying
+>>>>>> that something looks weird to _you_?
+>>>>> After this, nginx is not working at all, and hardware reports error.
+>>>>> Suppose the the master use the ioasid for init, but got freed.
+>>>>>
+>>>>> hardware reports:
+>>>>> [  152.731869] hisi_sec2 0000:76:00.0: qm_acc_do_task_timeout 
+>>>>> [error status=0x20] found
+>>>>> [  152.739657] hisi_sec2 0000:76:00.0: qm_acc_wb_not_ready_timeout 
+>>>>> [error status=0x40] found
+>>>>> [  152.747877] hisi_sec2 0000:76:00.0: sec_fsm_hbeat_rint [error 
+>>>>> status=0x20] found
+>>>>> [  152.755340] hisi_sec2 0000:76:00.0: Controller resetting...
+>>>>> [  152.762044] hisi_sec2 0000:76:00.0: QM mailbox operation timeout!
+>>>>> [  152.768198] hisi_sec2 0000:76:00.0: Failed to dump sqc!
+>>>>> [  152.773490] hisi_sec2 0000:76:00.0: Failed to drain out data 
+>>>>> for stopping!
+>>>>> [  152.781426] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
+>>>>> [  152.787468] hisi_sec2 0000:76:00.0: Failed to dump sqc!
+>>>>> [  152.792753] hisi_sec2 0000:76:00.0: Failed to drain out data 
+>>>>> for stopping!
+>>>>> [  152.800685] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
+>>>>> [  152.806730] hisi_sec2 0000:76:00.0: Failed to dump sqc!
+>>>>> [  152.812017] hisi_sec2 0000:76:00.0: Failed to drain out data 
+>>>>> for stopping!
+>>>>> [  152.819946] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
+>>>>> [  152.825992] hisi_sec2 0000:76:00.0: Failed to dump sqc!
+>>>> That would have been awfully handy information to have in an 
+>>>> initial bug report. :)
+>>>> Is there a chance you could dump out that ioasid alloc *and* free 
+>>>> information in ioasid_alloc/free()?  This could be some kind of 
+>>>> problem with the allocator, or with copying the ioasid at fork.
+>>> The issue is nginx master process init resource, start daemon 
+>>> process, then
+>>> master process quit and free ioasid.
+>>> The daemon nginx process is not the original master process.
 >>>
->>>
->>> struct rt_firmware_hdr {
->>>       /*  8-byte alinment required */
-> 
-> Probably need an __aligned(8) at the bottom then?
-
-I don't see any reason why this is needed. Do I miss something?
-
->>>       /*  LONG WORD 0 ---- */
->>>       __le16        Signature;    /* 92C0: test chip; 92C,
->>>                        * 88C0: test chip; 88C1: MP A-cut;
->>>                        * 92C1: MP A-cut */
->>>       u8        Category;    /*  AP/NIC and USB/PCI */
->>>       u8        Function;    /*  Reserved for different FW function
->>>                        *  indcation, for further use when
->>>                        *  driver needs to download different
->>>                        *  FW for different conditions */
->>>       __le16        Version;    /*  FW Version */
->>>       u8        Subversion;    /*  FW Subversion, default 0x00 */
->>>       u16        Rsvd1;
->>>
->>>       /*  LONG WORD 1 ---- */
->>>       u8        Month;    /*  Release time Month field */
->>>       u8        Date;    /*  Release time Date field */
->>>       u8        Hour;    /*  Release time Hour field */
->>>       u8        Minute;    /*  Release time Minute field */
->>>       __le16        RamCodeSize;    /*  The size of RAM code */
->>>       u8        Foundry;
->>>       u8        Rsvd2;
->>>
->>>       /*  LONG WORD 2 ---- */
->>>       __le32        SvnIdx;    /*  The SVN entry index */
->>>       u32        Rsvd3;
->>>
->>>       /*  LONG WORD 3 ---- */
->>>       u32        Rsvd4;
->>>       u32        Rsvd5;
->>> };
-> ...
+>>> master process:  init resource
+>>> driver -> iommu_sva_bind_device -> ioasid_alloc
+>> Which code in the master process/daemon calls 
+>> driver->iommu_sva_unbind_device?
+> Our calling sequence is nginx -> openssl -> openssl engine ->  kernel 
+> driver
+> The calling entrence should be ngx_ssl_init : OPENSSL_config(NULL);
+>
+> nginx:
+> src/event/ngx_event_openssl.c
+> ngx_ssl_init
+> if (OPENSSL_init_ssl(OPENSSL_INIT_LOAD_CONFIG, NULL) == 0)
+>
+> I add some print.
+>
+> /usr/local/nginx$ sudo sbin/nginx
+> ngx_ssl_init pid=2361
+> bind_fn
+> ngx_openssl_create_conf pid=2361
+> hisi sec init Kunpeng920!
+> ngx_ssl_create pid=2361
+> ngx_ssl_certificates pid=2361
+> ngx_ssl_certificate pid=2361
+> uadk_e_wd_digest_init
+> hisi sec init Kunpeng920!
+> ngx_ssl_ciphers pid=2361
+> ngx_daemon pid=2361 fork daemon
+> master pid=2361 will exit                                // here 
+> master process is exit
+> fork return 0 pid=2364                                       // here 
+> daemon process started
+> ngx_daemon fork ngx_pid=2364, ngx_parent=2361
+> $ ps -aux | grep nginx
+> root        2364  0.0  0.0  31324 15380 ?        Ssl  15:21   0:00 
+> nginx: master process sbin/nginx
+> nobody      2366  0.0  0.0  32304 16448 ?        Sl   15:21   0:00 
+> nginx: worker process
+> linaro      2371  0.0  0.0   7696  2048 pts/0    S+   15:22   0:00 
+> grep --color=auto nginx
+>
+> nginx
+> src/os/unix/ngx_daemon.c
+> ngx_daemon(ngx_log_t *log)
+> {
+>     int  fd;
+>
+>     switch (fork()) {
+>     case -1:
+>         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "fork() failed");
+>         return NGX_ERROR;
+>
+>     case 0:
+>        // here fork daemon process
+>         break;
+>
+>     default:
+>       // master process directly exit, and release mm as well as ioasid
+>         exit(0);
+>     }
+>
+>      // only daemon process
+>     ngx_parent = ngx_pid;
+>     ngx_pid = ngx_getpid();
+>>> Any suggestion?
+>> ioasid is per process or per mm. A daemon process shouldn't share the 
+>> same
+>> ioasid with any other process with even its parent process. Its 
+>> parent gets
+>> an ioasid and frees it on exit. The ioasid is gone and shouldn't be used
+>> by its child process.
 >>
->> Ok, I figured it out by looking at the hexdumps of firmware files. The
->> field Rsvd1 should be u8 instead of u16. I'll prepare a patch for this.
-> 
-> I'd also add a compile-time assert on the size.
+>> Each daemon process should call driver -> iommu_sva_bind_device -> 
+>> ioasid_alloc
+>> to get its own ioasid/PASID. On daemon quit, the ioasid is freed.
+>>
+>> That means nqnix needs to be changed.
+>
+> Agree with Dave, I think user space should not be broken.
+>
+> Thanks
 
-I'll add a patch to the series I recently sent.
+Any plan about this regression?
+Currently I need this patch to workaround the issue.
 
-thanks,
-Michael
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c 
+b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index 22ddd05bbdcd..2d74ac53d11c 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -4,6 +4,7 @@
+   */
+
+  #include <linux/mm.h>
++#include <linux/sched/mm.h>
+  #include <linux/mmu_context.h>
+  #include <linux/mmu_notifier.h>
+  #include <linux/slab.h>
+@@ -363,6 +364,7 @@ arm_smmu_sva_bind(struct device *dev, struct 
+mm_struct *mm, void *drvdata)
+
+         mutex_lock(&sva_lock);
+         handle = __arm_smmu_sva_bind(dev, mm);
++       mmget(mm);
+         mutex_unlock(&sva_lock);
+         return handle;
+  }
+@@ -377,6 +379,7 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+                 arm_smmu_mmu_notifier_put(bond->smmu_mn);
+                 kfree(bond);
+         }
++       mmput(bond->mm);
+         mutex_unlock(&sva_lock);
+  }
+
+Thanks
+

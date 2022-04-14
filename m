@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FBF501B62
+	by mail.lfdr.de (Postfix) with ESMTP id 2901C501B60
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345008AbiDNSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 14:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S1344877AbiDNSwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 14:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238885AbiDNSwY (ORCPT
+        with ESMTP id S239861AbiDNSwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 14:52:24 -0400
-Received: from out28-3.mail.aliyun.com (out28-3.mail.aliyun.com [115.124.28.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9B444A1E;
-        Thu, 14 Apr 2022 11:49:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2269944|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00810461-0.00132846-0.990567;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.NQnX3C._1649962178;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NQnX3C._1649962178)
+Received: from out29-50.mail.aliyun.com (out29-50.mail.aliyun.com [115.124.29.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E6E54BC5;
+        Thu, 14 Apr 2022 11:49:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=SUSPECT;BC=0.6334277|-1;BR=01201311R441b1;CH=blue;DM=|SUSPECT|false|;DS=CONTINUE|ham_system_inform|0.00793506-0.00425178-0.987813;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047202;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.NQnX3DV_1649962180;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NQnX3DV_1649962180)
           by smtp.aliyun-inc.com(33.40.38.164);
-          Fri, 15 Apr 2022 02:49:39 +0800
+          Fri, 15 Apr 2022 02:49:40 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
@@ -27,9 +27,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com, reimu@sudomaker.com
-Subject: [PATCH v5 1/3] dt-bindings: timer: Remove unreasonable binding.
-Date:   Fri, 15 Apr 2022 02:49:23 +0800
-Message-Id: <1649962165-111806-2-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v5 2/3] dt-bindings: timer: Add bindings for new Ingenic SoCs.
+Date:   Fri, 15 Apr 2022 02:49:24 +0800
+Message-Id: <1649962165-111806-3-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649962165-111806-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1649962165-111806-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -46,41 +46,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the hardware of X2000 SoC, the OST has been split into two parts,
-two 32bit timers for clockevent and one 64bit timer for clocksource
-(with different addresses), so it not appropriate to use only one
-"ingenic,x2000-ost", just remove it, "ingenic,x2000-ost32" and
-"ingenic,x2000-ost64" will be introduced in a later commit.
+Add the OST bindings for the X1600 SoC, the X1700 SoC, the X1830 SoC,
+the X2000 SoC and the X2500 SoC from Ingenic.
 
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 Acked-by: Rob Herring <robh@kernel.org>
 ---
 
 Notes:
-    v2:
-    New patch.
+    v1->v2:
+    Remove imcompatible change.
     
     v2->v3:
     Add Rob Herring's Acked-by.
     
     v3->v4:
-    No change.
+    Add bindings for the X1700 SoC.
     
     v4->v5:
     No change.
 
- Documentation/devicetree/bindings/timer/ingenic,sysost.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/timer/ingenic,sysost.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/timer/ingenic,sysost.yaml b/Documentation/devicetree/bindings/timer/ingenic,sysost.yaml
-index 98648bf..ea3f9c4 100644
+index ea3f9c4..1a59ba7 100644
 --- a/Documentation/devicetree/bindings/timer/ingenic,sysost.yaml
 +++ b/Documentation/devicetree/bindings/timer/ingenic,sysost.yaml
-@@ -20,7 +20,6 @@ properties:
+@@ -20,6 +20,13 @@ properties:
    compatible:
      enum:
        - ingenic,x1000-ost
--      - ingenic,x2000-ost
++      - ingenic,x1600-ost
++      - ingenic,x1700-ost
++      - ingenic,x1830-ost
++      - ingenic,x2000-ost64
++      - ingenic,x2000-ost32
++      - ingenic,x2500-ost64
++      - ingenic,x2500-ost32
  
    reg:
      maxItems: 1

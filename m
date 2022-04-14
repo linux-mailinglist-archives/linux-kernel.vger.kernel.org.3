@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E53501638
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B017F5015C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348776AbiDNOwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S233196AbiDNNhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345083AbiDNNpF (ORCPT
+        with ESMTP id S244512AbiDNN1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CD580220;
-        Thu, 14 Apr 2022 06:41:39 -0700 (PDT)
+        Thu, 14 Apr 2022 09:27:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5863A9859A;
+        Thu, 14 Apr 2022 06:20:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD20F61D68;
-        Thu, 14 Apr 2022 13:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9458C385AA;
-        Thu, 14 Apr 2022 13:41:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8373760BAF;
+        Thu, 14 Apr 2022 13:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936BAC385CE;
+        Thu, 14 Apr 2022 13:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943698;
-        bh=Arfw60Miptzt6i32BbzvaPP3x1Zh9Q/A2dHLcEQI/Ws=;
+        s=korg; t=1649942421;
+        bh=yIJgtjhvuhb9uIihcR7f+2DifnWp6QFEjMw7GFZwimg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ma62vxmrXkeeFp2NMljgcbNJa9bxy9xexVYk4/mFAqDr6Fze5PyHSVYZMFIS7+b2i
-         miIXc2hFDyeJd+yOYHLFhsblPcnpkYXmsGyFL2JJVBuRYJBgo0krSMBKclAQJ+aI2b
-         pUSB7p1Ml5y/uL+r6IzFYxMBUyAWJOQkSOGiXzlE=
+        b=c6vNe3kjdGbx7rDbemCbIivxo6apDsC9ML6giuwbrltbIiMrb4hC8czc1cQvMrD7o
+         GwDdwss/5Hll1W5vCUWo8EBjnrvvOIRfmKiyxMwAtA6bKqMxFlZdoDdTUjHyoLlCP4
+         RuYQixOSKrFtXBOexEbojsGmVuHPoj60OIC5PY6k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 248/475] NFS: remove unneeded check in decode_devicenotify_args()
+Subject: [PATCH 4.19 130/338] scsi: pm8001: Fix command initialization in pm8001_chip_ssp_tm_req()
 Date:   Thu, 14 Apr 2022 15:10:33 +0200
-Message-Id: <20220414110902.054043267@linuxfoundation.org>
+Message-Id: <20220414110842.600934890@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Khoroshilov <khoroshilov@ispras.ru>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
+[ Upstream commit cd2268a180117aa8ebb23e090ba204324b2d0e93 ]
 
-[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
+The ds_ads_m field of struct ssp_ini_tm_start_req has the type __le32.
+Assigning a value to it should thus use cpu_to_le32(). This fixes the
+sparse warning:
 
-Overflow check in not needed anymore after we switch to kmalloc_array().
+warning: incorrect type in assignment (different base types)
+   expected restricted __le32 [addressable] [assigned] [usertype] ds_ads_m
+   got int
 
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-7-damien.lemoal@opensource.wdc.com
+Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback_xdr.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
-index 90b5511c4c44..04d27f0ed39a 100644
---- a/fs/nfs/callback_xdr.c
-+++ b/fs/nfs/callback_xdr.c
-@@ -271,10 +271,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 	n = ntohl(*p++);
- 	if (n == 0)
- 		goto out;
--	if (n > ULONG_MAX / sizeof(*args->devs)) {
--		status = htonl(NFS4ERR_BADXDR);
--		goto out;
--	}
- 
- 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
- 	if (!args->devs) {
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index d0f3b65224f5..6c54500237cd 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4727,7 +4727,7 @@ int pm8001_chip_ssp_tm_req(struct pm8001_hba_info *pm8001_ha,
+ 	memcpy(sspTMCmd.lun, task->ssp_task.LUN, 8);
+ 	sspTMCmd.tag = cpu_to_le32(ccb->ccb_tag);
+ 	if (pm8001_ha->chip_id != chip_8001)
+-		sspTMCmd.ds_ads_m = 0x08;
++		sspTMCmd.ds_ads_m = cpu_to_le32(0x08);
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 	ret = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sspTMCmd, 0);
+ 	return ret;
 -- 
 2.34.1
 

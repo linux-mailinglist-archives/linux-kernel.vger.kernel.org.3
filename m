@@ -2,242 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9364A500DE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ACE500DEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243532AbiDNMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S243562AbiDNMsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243578AbiDNMpr (ORCPT
+        with ESMTP id S241889AbiDNMr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:45:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BC6590FDC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:43:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAA3C139F;
-        Thu, 14 Apr 2022 05:43:16 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BEA383F70D;
-        Thu, 14 Apr 2022 05:43:14 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
-        robdclark@gmail.com, m.szyprowski@samsung.com,
-        baolu.lu@linux.intel.com, yong.wu@mediatek.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
-        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] iommu: Clean up bus_set_iommu()
-Date:   Thu, 14 Apr 2022 13:42:42 +0100
-Message-Id: <d8ea4925c96947158981c14a993db2fbc92495b6.1649935679.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-In-Reply-To: <cover.1649935679.git.robin.murphy@arm.com>
-References: <cover.1649935679.git.robin.murphy@arm.com>
+        Thu, 14 Apr 2022 08:47:28 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D220C90270;
+        Thu, 14 Apr 2022 05:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=Q89LmOY4QsQwqDUIV/jiE3VXQh22TbF6MoKNt2t/lbY=; b=Y604GdzeZvrieynRAz3bmrTjl9
+        OUtJvuqb0RUPm1Qod0VyHNsNkJJ3FEzHzva8XTvqyi1oFEhjGBTcbUhydSuofO9sXioNXYXXUEmtw
+        IGMBWoleyc0I4g6OTxrX6U10YrdV734RwH+JqCOJIBxk79AED2nAJqLos4EP8ufaWwwkHTc5cYiaA
+        MILjYXzCZXbEJK5xh9b8h/Kbb+MfEk/VTn3WivVL4KqpNy20kiEMrO1TDOwjlWUHCJlg9MXT9FFmE
+        /Y9Aa3gOHUIlyuy2GjTyfXtZl62J3M35TRE2Y0/vJomIaH/sxFBySnewQKTFIT6+7aA8ojUBxkMbI
+        SzhTheyjRKCpdPsFIlM6SM8RiVd/p3ZAcRezXPnYB12DQo8YdHv+DTbPhgcJFI0WIB7DqWGRxW9/P
+        WF0dGEzdcl2oYyACSlOhD52mZZaa/KdLhsQX+d7MqP4tjPR9rZ8Y5NZxgkvVkRgqDSrMsQ4AR0Mrq
+        OK/oCzKKm/5BxB8YvKb+psouKamIqdxZLScIJ+OkBH9zArk1yrUx+5YR1OEjZaateCXYbonmVk+/2
+        d2hwVLh0IyBR5wHdzb7wgE8Z5k6GHxoqDll6JZ4e43xQufc+8ow5Eh0qHpfbHSIqmx5wHbjEh/7bW
+        bi8LWVNqH31oLZkZgR0TC3hxUVODXDDqf3myvVde0=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     asmadeus@codewreck.org
+Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
+Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected)
+Date:   Thu, 14 Apr 2022 14:44:53 +0200
+Message-ID: <2551609.RCmPuZc3Qn@silver>
+In-Reply-To: <YlX/XRWwQ7eQntLr@codewreck.org>
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+ <3119964.Qa6D4ExsIi@silver> <YlX/XRWwQ7eQntLr@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the remaining trivial bus_set_iommu() callsites along
-with the implementation. Now drivers only have to know and care
-about iommu_device instances, phew!
+On Mittwoch, 13. April 2022 00:38:21 CEST asmadeus@codewreck.org wrote:
+> Christian Schoenebeck wrote on Mon, Apr 11, 2022 at 03:41:45PM +0200:
+> > I get more convinced that it's a bug on Linux kernel side. When guest is
+> > booted I always immediately get a read("/var/log/wtmp") = EBADF error on
+> > guest. And the 9p command sequence sent to QEMU 9p server were:
+> 
+> Yes, I'm not pointing fingers, just trying to understand :)
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/iommu/arm/arm-smmu/qcom_iommu.c |  4 ----
- drivers/iommu/fsl_pamu_domain.c         |  4 ----
- drivers/iommu/intel/iommu.c             |  1 -
- drivers/iommu/iommu.c                   | 24 ------------------------
- drivers/iommu/msm_iommu.c               |  2 --
- drivers/iommu/rockchip-iommu.c          |  2 --
- drivers/iommu/s390-iommu.c              |  6 ------
- drivers/iommu/sprd-iommu.c              |  5 -----
- drivers/iommu/sun50i-iommu.c            |  2 --
- include/linux/iommu.h                   |  1 -
- 10 files changed, 51 deletions(-)
+Don't worry, that was not my impression, nor was it my intention either. I'm 
+jut trying to interpret what I'm seeing here.
 
-diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index 8cd39abade5a..028649203d33 100644
---- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-+++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -845,8 +845,6 @@ static int qcom_iommu_device_probe(struct platform_device *pdev)
- 		goto err_pm_disable;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &qcom_iommu_ops);
--
- 	if (qcom_iommu->local_base) {
- 		pm_runtime_get_sync(dev);
- 		writel_relaxed(0xffffffff, qcom_iommu->local_base + SMMU_INTR_SEL_NS);
-@@ -864,8 +862,6 @@ static int qcom_iommu_device_remove(struct platform_device *pdev)
- {
- 	struct qcom_iommu_dev *qcom_iommu = platform_get_drvdata(pdev);
- 
--	bus_set_iommu(&platform_bus_type, NULL);
--
- 	pm_runtime_force_suspend(&pdev->dev);
- 	platform_set_drvdata(pdev, NULL);
- 	iommu_device_sysfs_remove(&qcom_iommu->iommu);
-diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
-index d03a14386f86..ddf5ab28615c 100644
---- a/drivers/iommu/fsl_pamu_domain.c
-+++ b/drivers/iommu/fsl_pamu_domain.c
-@@ -480,11 +480,7 @@ int __init pamu_domain_init(void)
- 	if (ret) {
- 		iommu_device_sysfs_remove(&pamu_iommu);
- 		pr_err("Can't register iommu device\n");
--		return ret;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &fsl_pamu_ops);
--	bus_set_iommu(&pci_bus_type, &fsl_pamu_ops);
--
- 	return ret;
- }
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 0b24c4977dbe..49d552a96098 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4178,7 +4178,6 @@ int __init intel_iommu_init(void)
- 	}
- 	up_read(&dmar_global_lock);
- 
--	bus_set_iommu(&pci_bus_type, &intel_iommu_ops);
- 	if (si_domain && !hw_pass_through)
- 		register_memory_notifier(&intel_iommu_memory_nb);
- 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 51205c33c426..7800e342d285 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1885,30 +1885,6 @@ static int iommu_bus_init(struct bus_type *bus)
- 	return err;
- }
- 
--/**
-- * bus_set_iommu - set iommu-callbacks for the bus
-- * @bus: bus.
-- * @ops: the callbacks provided by the iommu-driver
-- *
-- * This function is called by an iommu driver to set the iommu methods
-- * used for a particular bus. Drivers for devices on that bus can use
-- * the iommu-api after these ops are registered.
-- * This special function is needed because IOMMUs are usually devices on
-- * the bus itself, so the iommu drivers are not initialized when the bus
-- * is set up. With this function the iommu-driver can set the iommu-ops
-- * afterwards.
-- */
--int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
--{
--	if (bus->iommu_ops && ops && bus->iommu_ops != ops)
--		return -EBUSY;
--
--	bus->iommu_ops = ops;
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(bus_set_iommu);
--
- bool iommu_present(struct bus_type *bus)
- {
- 	return bus->iommu_ops != NULL;
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index 50f57624610f..5b89fb16feb8 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -789,8 +789,6 @@ static int msm_iommu_probe(struct platform_device *pdev)
- 		goto fail;
- 	}
- 
--	bus_set_iommu(&platform_bus_type, &msm_iommu_ops);
--
- 	pr_info("device mapped at %p, irq %d with %d ctx banks\n",
- 		iommu->base, iommu->irq, iommu->ncb);
- 
-diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index ab57c4b8fade..a3fc59b814ab 100644
---- a/drivers/iommu/rockchip-iommu.c
-+++ b/drivers/iommu/rockchip-iommu.c
-@@ -1300,8 +1300,6 @@ static int rk_iommu_probe(struct platform_device *pdev)
- 	if (!dma_dev)
- 		dma_dev = &pdev->dev;
- 
--	bus_set_iommu(&platform_bus_type, &rk_iommu_ops);
--
- 	pm_runtime_enable(dev);
- 
- 	for (i = 0; i < iommu->num_irq; i++) {
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index bd56e21bf754..ea4ba9de04af 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -376,9 +376,3 @@ static const struct iommu_ops s390_iommu_ops = {
- 		.free		= s390_domain_free,
- 	}
- };
--
--static int __init s390_iommu_init(void)
--{
--	return bus_set_iommu(&pci_bus_type, &s390_iommu_ops);
--}
--subsys_initcall(s390_iommu_init);
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index bd409bab6286..6770e6a72283 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -507,9 +507,6 @@ static int sprd_iommu_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto remove_sysfs;
- 
--	if (!iommu_present(&platform_bus_type))
--		bus_set_iommu(&platform_bus_type, &sprd_iommu_ops);
--
- 	ret = sprd_iommu_clk_enable(sdev);
- 	if (ret)
- 		goto unregister_iommu;
-@@ -545,8 +542,6 @@ static int sprd_iommu_remove(struct platform_device *pdev)
- 	iommu_group_put(sdev->group);
- 	sdev->group = NULL;
- 
--	bus_set_iommu(&platform_bus_type, NULL);
--
- 	platform_set_drvdata(pdev, NULL);
- 	iommu_device_sysfs_remove(&sdev->iommu);
- 	iommu_device_unregister(&sdev->iommu);
-diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index c54ab477b8fd..e104543b78d9 100644
---- a/drivers/iommu/sun50i-iommu.c
-+++ b/drivers/iommu/sun50i-iommu.c
-@@ -968,8 +968,6 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_unregister;
- 
--	bus_set_iommu(&platform_bus_type, &sun50i_iommu_ops);
--
- 	return 0;
- 
- err_unregister:
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 46d9e27d49fd..e93e4a42e1a0 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -416,7 +416,6 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
- #define IOMMU_GROUP_NOTIFY_UNBIND_DRIVER	5 /* Pre Driver unbind */
- #define IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER	6 /* Post Driver unbind */
- 
--extern int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops);
- extern int bus_iommu_probe(struct bus_type *bus);
- extern bool iommu_present(struct bus_type *bus);
- extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
--- 
-2.28.0.dirty
+> > ...
+> > v9fs_clunk tag 0 id 120 fid 568
+> > v9fs_walk tag 0 id 110 fid 1 newfid 568 nwnames 1
+> > v9fs_rerror tag 0 id 110 err 2
+> > v9fs_walk tag 0 id 110 fid 26 newfid 568 nwnames 1
+> > v9fs_rerror tag 0 id 110 err 2
+> > v9fs_readlink tag 0 id 22 fid 474
+> > v9fs_readlink_return tag 0 id 22 name /run
+> > v9fs_readlink tag 0 id 22 fid 474
+> > v9fs_readlink_return tag 0 id 22 name /run
+> > v9fs_readlink tag 0 id 22 fid 474
+> > v9fs_readlink_return tag 0 id 22 name /run
+> > v9fs_readlink tag 0 id 22 fid 474
+> > v9fs_readlink_return tag 0 id 22 name /run
+> > v9fs_walk tag 0 id 110 fid 633 newfid 568 nwnames 1
+> > v9fs_rerror tag 0 id 110 err 2
+> > v9fs_walk tag 0 id 110 fid 875 newfid 568 nwnames 0
+> > v9fs_walk_return tag 0 id 110 nwnames 0 qids (nil)
+> > v9fs_open tag 0 id 12 fid 568 mode 32769
+> > v9fs_open_return tag 0 id 12 qid={type 0 version 0 path 820297} iounit
+> > 507904 v9fs_walk tag 0 id 110 fid 875 newfid 900 nwnames 0
+> > v9fs_walk_return tag 0 id 110 nwnames 0 qids (nil)
+> > v9fs_open tag 0 id 12 fid 900 mode 2
+> > v9fs_open_return tag 0 id 12 qid={type 0 version 0 path 820297} iounit
+> > 507904 v9fs_lock tag 0 id 52 fid 568 type 1 start 0 length 0
+> > v9fs_lock_return tag 0 id 52 status 0
+> > v9fs_xattrwalk tag 0 id 30 fid 568 newfid 901 name security.capability
+> > v9fs_rerror tag 0 id 30 err 95
+> > v9fs_read tag 0 id 116 fid 568 off 192512 max_count 256
+> > 
+> > So guest opens /var/log/wtmp with fid=568 mode=32769, which is write-only
+> > mode, and then it tries to read that fid 568, which eventually causes the
+> > read() call on host to error with EBADF. Which makes sense, as the file
+> > was
+> > opened in write-only mode, hence read() is not possible with that file
+> > descriptor.
+> 
+> Oh! That's something we can work on. the vfs code has different caches
+> for read only and read-write fids, perhaps the new netfs code just used
+> the wrong one somewhere. I'll have a look.
+> 
+> > The other things I noticed when looking at the 9p command sequence above:
+> > there is a Twalk on fid 568 before, which is not clunked before reusing
+> > fid
+> > 568 with Topen later. And before that Twalk on fid 568 there is a Tclunk
+> > on
+> > fid 568, but apparently that fid was not used before.
+> 
+> This one though is just weird, I don't see where linux would make up a fid
+> to clunk like this... Could messages be ordered a bit weird through
+> multithreading?
+> e.g. thread 1 opens, thread 2 clunks almost immediately afterwards, and
+> would be printed the other way around?
+
+Yeah, something like that was also my guess.
+
+> Should still be serialized through the virtio ring buffer so I don't
+> believe what I'm saying myself... It might be worth digging further as
+> well.
+> 
+> > > Perhaps backing filesystem dependant? qemu version? virtfs access
+> > > options?
+> > 
+> > I tried with different hardware and different file systems (ext4, btrfs),
+> > same misbehaviours.
+> > 
+> > QEMU is latest git version. I also tried several different QEMU versions,
+> > same thing.
+> > 
+> > QEMU command line used:
+> > 
+> > ~/git/qemu/build/qemu-system-x86_64 \
+> > -machine pc,accel=kvm,usb=off,dump-guest-core=off -m 16384 \
+> > -smp 8,sockets=8,cores=1,threads=1 -rtc base=utc -boot strict=on \
+> > -kernel ~/vm/bullseye/boot/vmlinuz \
+> > -initrd ~/vm/bullseye/boot/initrd.img \
+> > -append 'root=fsRoot rw rootfstype=9p
+> > rootflags=trans=virtio,version=9p2000.L,msize=4186112,cache=loose
+> > console=ttyS0' \ -fsdev
+> > local,security_model=mapped,multidevs=remap,id=fsdev-fs0,path=$HOME/vm/bu
+> > llseye/ \ -device virtio-9p-pci,id=fs0,fsdev=fsdev-fs0,mount_tag=fsRoot \
+> > -sandbox
+> > on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny \
+> > -nographic
+> > 
+> > Important for reproducing this issue:
+> >   * cache=loose
+> >   * -smp N (with N>1)
+> >   * Guest booted with Linux kernel containing commit eb497943fa21
+> >   
+> >     (uname >= 5.16)
+> > 
+> > I'm pretty sure that you can reproduce this issue with the QEMU 9p rootfs
+> > setup HOWTO linked before.
+> 
+> Yes, I'm not sure why I can't reproduce... All my computers are pretty
+> slow but the conditions should be met.
+> I'll try again with a command line closer to what you just gave here.
+
+I'm not surprised that you could not reproduce the EBADF errors yet. To make 
+this more clear, as for the git client errors: I have like 200+ git 
+repositories checked out on that test VM, and only about 5 of them trigger 
+EBADF errors on 'git pull'. But those few repositories reproduce the EBADF 
+errors reliably here.
+
+In other words: these EBADF errors only seem to trigger under certain 
+circumstances, so it requires quite a bunch of test material to get a 
+reproducer.
+
+Like I said though, with the Bullseye installation I immediately get EBADF 
+errors already when booting, whereas with a Buster VM it boots without errors.
+
+> > > It's all extremely slow though... like the final checkout counting files
+> > > at less than 10/s
+> > 
+> > It is VERY slow. And the weird thing is that cache=loose got much slower
+> > than cache=mmap. My worst case expactation would be cache=loose at least
+> > not performing worse than cache=mmap.
+> 
+> Yes, some profiling is also in order, it didn't use to be that slow so
+> it must not be reusing previously open fids as it should have or
+> something..
+
+If somebody has some more ideas what I can try/test, let me know. However ATM 
+I won't be able to review the netfs and vfs code to actually find the cause of 
+these issues.
+
+Best regards,
+Christian Schoenebeck
+
 

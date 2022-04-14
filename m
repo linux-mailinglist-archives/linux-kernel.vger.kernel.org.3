@@ -2,180 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639F500451
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB9F500456
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbiDNCfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S237596AbiDNCf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbiDNCfB (ORCPT
+        with ESMTP id S239505AbiDNCfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:35:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C93193E;
-        Wed, 13 Apr 2022 19:32:34 -0700 (PDT)
-X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:d24d14a9-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1189990021; Thu, 14 Apr 2022 10:32:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Apr 2022 10:32:29 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 10:32:29 +0800
-Message-ID: <12c630946ce9d7b8c80143615496238759323981.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 10:32:29 +0800
-In-Reply-To: <7hlew83blk.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
-         <7hfsmn5m9f.fsf@baylibre.com>
-         <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-         <7hwnfv4hfr.fsf@baylibre.com>
-         <f00e3df2e270e5edc160f8ff1bd8c52a49bf71d5.camel@mediatek.com>
-         <7h5yne3zlx.fsf@baylibre.com>
-         <98957e61b040b6c5b6a6b39e6eb661e07e510277.camel@mediatek.com>
-         <7hlew83blk.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Apr 2022 22:35:23 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CAB53724
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:32:59 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q12so3513193pgj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YSNIpToEpKx9C/PikZnCWZV0FikRekKMo16pPMd1DpA=;
+        b=LGvyFYmBi//2J872dwC4BWvIgavMY42bnfS/6eXxFjyQAxgAIQmx/fj2cZ5NGgLQJ0
+         Vj71Y/5rxksooccCGRxuVyYKJy0Vi/ysD/idUzToiZUWPz9xP526Vjd43hTc3P20brja
+         hMzCaQeubXgiZec4rGfcnX6iqTHx06cDAqA4Xh7ssUrCqd9mXR9fnvZnt4QoZ2Se3lPk
+         g8nY1MnrV2CVGmaTfsV8k2bQAGmQUpjHcwKEvQx8Hn+kYp3uV3prZLcy/41Qt2+ZWt50
+         +GDObPXKuVEPcRlyzFFyTzZOxPL2HWNMJvafbWCfk6g4HkMqj9uHEcPDlsqjpetzgtnW
+         IZng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YSNIpToEpKx9C/PikZnCWZV0FikRekKMo16pPMd1DpA=;
+        b=VXgUVApO8bAikPLbG9HMLLAZqABD/AjM78lDhO0sIHvsd4Z58kAbm4CIJIsIwXTSJ6
+         fAUSXPUlZBxgc26pXxSwyIeT1vF50TZVfMeDWYSO7odk9SgeyVKGuRLYIUTabXH2DiAM
+         +sP9ukxobXKd9sSHI7yruDKG8BPrTdz4GSEOt715KO0+d2uxBw4cuwENMHABTGN4m4Y6
+         oSWV7xS7fevgA8OZCvk93g5TRZR+Knuc1kmVTEvgeN/T36uZugXvEEl35pgoAf7g+euT
+         JgwxDKnM2sVocTk1xrLowNTcQmho8qEHxLTO7r6XTZvVaSj2Q4f0su2+pnh1HAPFWhfQ
+         lTbg==
+X-Gm-Message-State: AOAM531RHZSasRLXxnM6Jzdwkq9EbNnJZQEFc7rDqSAWWkKNlu2NMdus
+        0TvCop1Y9QrSXgNdmD9TOxDbZND2qcIhfFNuOZ5mRg==
+X-Google-Smtp-Source: ABdhPJyJ7+lq6DXzFoR+6irZCG4YAQlpZndZMI7bifxiTNpKl3Ag2MIF6bdalp4DUmMY3P/bAV7PO08efRdZqcY2MLQ=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr522640pgb.74.1649903578582; Wed, 13 Apr
+ 2022 19:32:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-4-jane.chu@oracle.com>
+ <CAPcyv4jx=h+1QiB0NRRQrh1mHcD2TFQx4AH6JxnQDKukZ3KVZA@mail.gmail.com> <b511a483-4260-656a-ab04-2ba319e65ca7@oracle.com>
+In-Reply-To: <b511a483-4260-656a-ab04-2ba319e65ca7@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 13 Apr 2022 19:32:47 -0700
+Message-ID: <CAPcyv4jpwzMPKtzzc=DEbC340+zmzXkj+QtPVxfYbraskLKv8g@mail.gmail.com>
+Subject: Re: [PATCH v7 3/6] mce: fix set_mce_nospec to always unmap the whole page
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-13 at 14:41 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> [...]
-> 
-> > From the Chanwoo's devfreq passive govonor series, it's impossible
-> > to
-> > let cci devreq probed done before cpufreq because the passive
-> > govonor
-> > will search for cpufreq node and use it.
-> > 
-> > Ref: function: cpufreq_passive_register_notifier()
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673__;!!CTRNKA9wMg0ARbw!z58Lc1p9REo88oHn-NkxroN_fBd0TsHYmhscNZwnWwT71ecRkTeqZ6vFl5l7HpkTdM6t$
-> >  
-> 
-> Well this is a problem, because CCI depends on CPUfreq, but CPUfreq
-> depends on CCI, so one of them has to load and then wait for the
-> other.
-> 
-> > After I discuss with Angelo and Jia-wei, we think we are keeping
-> > the
-> > function in target_index and if the cci is not ready we will use
-> > the
-> > voltage which is set by bootloader to prevent high freqeuncy low
-> > voltage crash. And then we can keep seting the target frequency.
-> > 
-> 
->  > We assume the setting of bootloader is correct and we can do this.
-> 
-> I'm still not crazy about this because you're lying to the CPUfreq
-> framework.  It's requesting one OPP, but you're not setting that,
-> you're
-> just keeping the bootloader frequency.
-> 
-> In my earlier reply, I gave two other options for handling this.
-> 
-> 1) set a (temporary) constraint on the voltage regulator so that it
-> cannot change.
-> 
-> or more clean, IMO:
-> 
-> 2) set a CPUfreq policy that restricts available OPPs to ones that
-> will
-> not break CCI.
-> 
-> Either of these solutions allow you to load the CPUfreq driver early,
-> and then wait for the CCI driver to be ready before removing the
-> restrictions.
+On Wed, Apr 13, 2022 at 4:36 PM Jane Chu <jane.chu@oracle.com> wrote:
+>
+> On 4/11/2022 4:27 PM, Dan Williams wrote:
+> > On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
+> >>
+> >> The set_memory_uc() approach doesn't work well in all cases.
+> >> For example, when "The VMM unmapped the bad page from guest
+> >> physical space and passed the machine check to the guest."
+> >> "The guest gets virtual #MC on an access to that page.
+> >>   When the guest tries to do set_memory_uc() and instructs
+> >>   cpa_flush() to do clean caches that results in taking another
+> >>   fault / exception perhaps because the VMM unmapped the page
+> >>   from the guest."
+> >>
+> >> Since the driver has special knowledge to handle NP or UC,
+> >
+> > I think a patch is needed before this one to make this statement true? I.e.:
+> >
+> > diff --git a/drivers/acpi/nfit/mce.c b/drivers/acpi/nfit/mce.c
+> > index ee8d9973f60b..11641f55025a 100644
+> > --- a/drivers/acpi/nfit/mce.c
+> > +++ b/drivers/acpi/nfit/mce.c
+> > @@ -32,6 +32,7 @@ static int nfit_handle_mce(struct notifier_block
+> > *nb, unsigned long val,
+> >           */
+> >          mutex_lock(&acpi_desc_lock);
+> >          list_for_each_entry(acpi_desc, &acpi_descs, list) {
+> > +               unsigned int align = 1UL << MCI_MISC_ADDR_LSB(mce->misc);
+> >                  struct device *dev = acpi_desc->dev;
+> >                  int found_match = 0;
+> >
+> > @@ -63,8 +64,7 @@ static int nfit_handle_mce(struct notifier_block
+> > *nb, unsigned long val,
+> >
+> >                  /* If this fails due to an -ENOMEM, there is little we can do */
+> >                  nvdimm_bus_add_badrange(acpi_desc->nvdimm_bus,
+> > -                               ALIGN(mce->addr, L1_CACHE_BYTES),
+> > -                               L1_CACHE_BYTES);
+> > +                                       ALIGN(mce->addr, align), align);
+> >                  nvdimm_region_notify(nfit_spa->nd_region,
+> >                                  NVDIMM_REVALIDATE_POISON);
+> >
+>
+> Dan, I tried the above change, and this is what I got after injecting 8
+> back-to-back poisons, then read them and received  SIGBUS/BUS_MCEERR_AR,
+> then repair via the v7 patch which works until this change is added.
+>
+> [ 6240.955331] nfit ACPI0012:00: XXX, align = 100
+> [ 6240.960300] nfit ACPI0012:00: XXX, ALIGN(mce->addr,
+> L1_CACHE_BYTES)=1851600400, L1_CACHE_BYTES=40, ALIGN(mce->addr,
+> align)=1851600400
+> [..]
+> [ 6242.052277] nfit ACPI0012:00: XXX, align = 100
+> [ 6242.057243] nfit ACPI0012:00: XXX, ALIGN(mce->addr,
+> L1_CACHE_BYTES)=1851601000, L1_CACHE_BYTES=40, ALIGN(mce->addr,
+> align)=1851601000
+> [..]
+> [ 6244.917198] nfit ACPI0012:00: XXX, align = 1000
+> [ 6244.922258] nfit ACPI0012:00: XXX, ALIGN(mce->addr,
+> L1_CACHE_BYTES)=1851601200, L1_CACHE_BYTES=40, ALIGN(mce->addr,
+> align)=1851602000
+> [..]
+>
+> All 8 poisons remain uncleared.
+>
+> Without further investigation, I don't know why the failure.
+> Could we mark this change to a follow-on task?
 
-Hello Kevin,
+Perhaps a bit more debug before kicking this can down the road...
 
-I think I do not describe this clearly.
-The proposal is:
+I'm worried that this means that the driver is not accurately tracking
+poison data For example, that last case the hardware is indicating a
+full page clobber, but the old code would only track poison from
+1851601200 to 1851601400 (i.e. the first 512 bytes from the base error
+address).
 
-In cpufreq probe:
-we record the voltage value which is set by bootloader.
+Oh... wait, I think there is a second bug here, that ALIGN should be
+ALIGN_DOWN(). Does this restore the result you expect?
 
-In mtk_cpufreq_set_target():
-We do NOT directly return 0.
-Instead, we will find the voltage of target cpufreq and use the value
-max(booting voltage, target cpufreq voltage)
+diff --git a/drivers/acpi/nfit/mce.c b/drivers/acpi/nfit/mce.c
+index ee8d9973f60b..d7a52238a741 100644
+--- a/drivers/acpi/nfit/mce.c
++++ b/drivers/acpi/nfit/mce.c
+@@ -63,8 +63,7 @@ static int nfit_handle_mce(struct notifier_block
+*nb, unsigned long val,
 
-mtk_cpufreq_set_target() {
-	/* NOT return 0 if !is_ccifreq_ready */
-	....
-	vproc = get voltage of target cpufreq from opp.
+                /* If this fails due to an -ENOMEM, there is little we can do */
+                nvdimm_bus_add_badrange(acpi_desc->nvdimm_bus,
+-                               ALIGN(mce->addr, L1_CACHE_BYTES),
+-                               L1_CACHE_BYTES);
++                                       ALIGN_DOWN(mce->addr, align), align);
+                nvdimm_region_notify(nfit_spa->nd_region,
+                                NVDIMM_REVALIDATE_POISON);
 
-	if (ccifreq_supported && !is_ccifreq_ready)
-		vproc = max(vproc, vproc_on_boot)
 
-	//setting voltage and target frequency
-	....
-}
+> The driver knows a lot about how to clear poisons besides hardcoding
+> poison alignment to 0x40 bytes.
 
-> 
-> > For the SoCs that including ci hardware (8183 and 8186), we think
-> > it's
-> > not ok if we don't probe cci correctly.
-> > If we failed to get cci node, I think we sould return -ENODEV and
-> > the
-> > probe of cpufreq failed.
-> > 
-> > What do you think the solution?
-> 
-> I think it would be better if CPUfreq probes sucessfully, but
-> restricts
-> the OPPs available until CCI is ready.  If CCI fails to probe/load,
-> you
-> still have a working CPUfreq driver, it just has a restricted set of
-> OPPs.
-> 
-> Kevin
-
-If we can use the solution.
-I think it will be ok for this situation.
-
-Thanks!
-
-BRs,
-Rex
-
+It does, but the badblocks tracking should still be reliable, and if
+it's not reliable I expect there are cases where recovery_write() will
+not be triggered because the driver will not fail the
+dax_direct_access() attempt.

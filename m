@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C1150045D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26381500460
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbiDNCiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S239579AbiDNCk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiDNCiR (ORCPT
+        with ESMTP id S229671AbiDNCkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:38:17 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897AF1F63E;
-        Wed, 13 Apr 2022 19:35:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n18so3549967plg.5;
-        Wed, 13 Apr 2022 19:35:54 -0700 (PDT)
+        Wed, 13 Apr 2022 22:40:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB15E237C0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:37:58 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bh17so7450437ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:37:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=banPxa9mjLz4QtsVZqr7bQ+Z1tRTpMcXp2eR4D900HQ=;
-        b=IiUKzDWM52iO3GcXKasA41gw4qGcs3Qraiu/Fn1dkvUPCtvPMZO9zGarb8HmUQFBN5
-         oaq05TvWx5a0sDOgjZzGIGZumxQIxriXuZEz2RqQwp0xwGZGoXaOwuBlPCUWT8JKmfVx
-         iYkNzpheF2/u3lfnvFoe2haeGsIHQeJI2ZRO96i+crqh7xM6V1cKzjqJDz24h0JM8NZq
-         chBZUMEfL+8t8B1Ua0ZQdnw9fRiqbBNCdfvk/YuNOHW1UgwdeN41C5HXTZndoTBnogJL
-         XEpTbe5nJt5k2sNJ0dzyBxB1h4VkKD7cimZamCGj3+7fN26aosDGZWwq7cNiEcYXPEKR
-         CVBw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uc7ry7HIsnf2r8nUN2XsM9Cr609Rg9Ev/nf0gRDdVjA=;
+        b=J0EA2TPN5DF45RPQJxsxLx9xc2kpvx4GDfs7GmNxtpSy3srw/qZOuOOnaLJe6pfBYu
+         nJ/8EahmmrlsMrZxJ/kmV6hFdQWckTo0h2YFcNcLs91EfnKG7MFj7PRJwvOvDAC+Qvt5
+         jdt70t/HBqRAc94klhFS82Q1W/wvvCUC9JARqYX130KlM26o7BehHtm056rttE2ManH2
+         2qs+554u0U5lgCRra3W/8vKH7jA61mqurSeavoBH4IQE3BSH2mBVDdWKGKH0Ex4wXrr+
+         IddfVTGZEU/Ef78FbKae3ynglEcgS+Q13QmkIoi0KIZKOiyE9B/6zeEiBRbZO5PsCWMz
+         vQxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=banPxa9mjLz4QtsVZqr7bQ+Z1tRTpMcXp2eR4D900HQ=;
-        b=QnhkIGJtyKDhbqgBH+ORFSfnsNzp2Ov6xpAy3jlZt6hlDsAwogw7MPQZY574ntzYgl
-         VGE7xFLCp3Pd69XMrdtAULZtu6YjtiBLdnDgoNPnszodPXhuwYuymfBRc/oYKPBX5822
-         R6qCxBSTpop1ko0T+YMW9NDRFQPNSWcTppRXLprqyJb3so7BsApGrEEduR2k35qFvgj9
-         FGkcRKZraz95DHkpHQcygGVV2izpUZaVMiduDI/WZ5iwuey4ydXLlDSGb0mH9NaGRolh
-         Zps8GdB+oyJF37boe6eCJeZnKISkVOE69Y/+iswKBzLL5iyH1LvV63FbJuHs55FYo8oC
-         /xxw==
-X-Gm-Message-State: AOAM5322mzE4ImXyQwVaAi32iZIsoXzIEpRBvEIa2A4q6f+/p/qLj3a0
-        SrLWvTFqYmm3HxsUR0V8bW+mEgrMa45u2nMU2w==
-X-Google-Smtp-Source: ABdhPJwTNLMWTa4frWD8F/W1HLZUen2VPTunozndbetzvl6lm/UdmRAGgwMfqaFO7TB+Fsa7mGPFWhfsL6wPIvvBgSg=
-X-Received: by 2002:a17:902:a404:b0:14b:1100:aebc with SMTP id
- p4-20020a170902a40400b0014b1100aebcmr46084837plq.133.1649903754047; Wed, 13
- Apr 2022 19:35:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uc7ry7HIsnf2r8nUN2XsM9Cr609Rg9Ev/nf0gRDdVjA=;
+        b=lDXnL0AfibbtYVWoGXWAu+EraKKl1DpovOhIYhWljyXeoZwTjTZxButPTQu2sawShu
+         EarlrjmtryT7xw3wBXJzyEC1u78+AGcTJtJGr9Vt9qmi1jmnBCQP8Ft4TVAQAK2iVK81
+         z5XBWpPzWIvj9lMBzZgqemf9PWZ3kMscTsjKJHVQoUgxecFGXL7jLSD9JvndVkhlYXkj
+         VbkmLabMQVMiEyoG+e4opXp3QbD3LvvWPnVDJpnCcU29/xnlGZOMAlSOYk84yjREsC1b
+         q0OwCWa5FRN3qkG5sR7KH3WbZpj/RTS3G/XtDK6oyNjkXXHZi7XsnOpbZiqq9nWSAL56
+         n6tg==
+X-Gm-Message-State: AOAM531Xc+psWOcGWM2UeTYG+I5m/47MqYpfkvNZZ3/BN5d1RCYc1gns
+        CQyiszxi1slwNyorbrzOJyFyzA==
+X-Google-Smtp-Source: ABdhPJykhBqOYl/1R7/tZiqUw1EGHPtXtHH5Em+FxWU65fkV7sCECnF78Jm7X+6uOY/+qCV0ESpJ6w==
+X-Received: by 2002:a17:906:7314:b0:6df:839f:af7 with SMTP id di20-20020a170906731400b006df839f0af7mr497470ejc.65.1649903877223;
+        Wed, 13 Apr 2022 19:37:57 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id lg4-20020a170906f88400b006e869103240sm193616ejb.131.2022.04.13.19.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 19:37:56 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 10:37:51 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf arm-spe: Test memory samples
+Message-ID: <20220414023751.GA539224@leoy-ThinkPad-X240s>
+References: <20220413010221.81332-1-leo.yan@linaro.org>
+ <21978774-356b-bc08-ba68-80d877e2b6b4@arm.com>
 MIME-Version: 1.0
-References: <20220409140939.2176161-1-zheyuma97@gmail.com> <Yla9f03/j9sEB2Rc@paasikivi.fi.intel.com>
-In-Reply-To: <Yla9f03/j9sEB2Rc@paasikivi.fi.intel.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Thu, 14 Apr 2022 10:35:42 +0800
-Message-ID: <CAMhUBj=-TWjKFiGf_sE9umW3CtTiazqKPd5XabLhzTk6RiErag@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: dw9714: Register a callback to disable the regulator
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <21978774-356b-bc08-ba68-80d877e2b6b4@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 8:09 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Zheyu,
->
+On Wed, Apr 13, 2022 at 06:17:18PM +0100, German Gomez wrote:
+> 
+> On 13/04/2022 02:02, Leo Yan wrote:
+> > Add a new test to verify the Arm SPE synthesized memory samples with
+> > 'perf mem report' command.
+> >
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> 
+> Reviewed-by: German Gomez <german.gomez@arm.com>
+
+Thanks for reviewing.
+
 > Thanks for the patch.
->
-> On Sat, Apr 09, 2022 at 10:09:39PM +0800, Zheyu Ma wrote:
-> > When the driver fails to probe, we will get the following splat:
-> >
-> > [   59.305988] ------------[ cut here ]------------
-> > [   59.306417] WARNING: CPU: 2 PID: 395 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
-> > [   59.310345] RIP: 0010:_regulator_put+0x3ec/0x4e0
-> > [   59.318362] Call Trace:
-> > [   59.318582]  <TASK>
-> > [   59.318765]  regulator_put+0x1f/0x30
-> > [   59.319058]  devres_release_group+0x319/0x3d0
-> > [   59.319420]  i2c_device_probe+0x766/0x940
-> >
-> > Fix this by adding a callback that will deal with the disabling when the
-> > driver fails to probe.
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > ---
-> >  drivers/media/i2c/dw9714.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
-> > index cd7008ad8f2f..eccd05fc50c7 100644
-> > --- a/drivers/media/i2c/dw9714.c
-> > +++ b/drivers/media/i2c/dw9714.c
-> > @@ -137,6 +137,13 @@ static int dw9714_init_controls(struct dw9714_device *dev_vcm)
-> >       return hdl->error;
-> >  }
-> >
-> > +static void dw9714_disable_regulator(void *arg)
-> > +{
-> > +     struct dw9714_device *dw9714_dev = arg;
-> > +
-> > +     regulator_disable(dw9714_dev->vcc);
-> > +}
-> > +
-> >  static int dw9714_probe(struct i2c_client *client)
-> >  {
-> >       struct dw9714_device *dw9714_dev;
-> > @@ -157,6 +164,10 @@ static int dw9714_probe(struct i2c_client *client)
-> >               return rval;
-> >       }
-> >
-> > +     rval = devm_add_action_or_reset(&client->dev, dw9714_disable_regulator, dw9714_dev);
-> > +     if (rval)
-> > +             return rval;
-> > +
-> >       v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
-> >       dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> >                               V4L2_SUBDEV_FL_HAS_EVENTS;
->
-> Could you instead disable the regulator in error handling in the probe
-> function?
+> 
+> There are some tests for perf_event_attr fields. We added one for SPE
+> recently [1], but it's not checking the sample_type attribute yet.
+> 
+> We could update it from our side and send another patch, to test the
+> DATA_SRC bit is not missing.
 
-OK, I will send a v2 patch.
+Agreed, it's better to update the patch for checking DATA_SRC bit and
+resend it.  Thanks!
 
-Zheyu Ma
+Leo
+
+> [1] https://lore.kernel.org/all/20220126160710.32983-1-german.gomez@arm.com/

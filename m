@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C2C501D33
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16E5501D32
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346832AbiDNVNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S1346844AbiDNVOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239334AbiDNVNv (ORCPT
+        with ESMTP id S239334AbiDNVOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:13:51 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583DBD4C9C;
-        Thu, 14 Apr 2022 14:11:25 -0700 (PDT)
-Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 709731F47CE5;
-        Thu, 14 Apr 2022 22:11:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649970684;
-        bh=5xMkEzAZOGJAMLJhGhAudl6cnOUM32tr6wt4093X+gQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ET0VcdH+/kERMVBvFDuX5GP2+bIBO/hnjxu5R2aRJ1L714Ma6JcvgT8N6CbbE6vjx
-         3WGgpoXR23wdqcgmXX0hLTQ95DDegk+u/kFiMQdeYAR1VuOIDxiPLdWkhe6aQhdTmv
-         wLklu7f9Q2PpGD8U25SBbHv4rzzvAOTHHsd88ONQVx82hi+av3CHPHo/EFCGhT9tEj
-         3voKPmvokc0TD4ftQTkj16ltXfWrZpiBroOkGVrz9YAvdJ1rjm7Wbqj/L+gBj2D/AC
-         hRflNckxeF6lNOyB9WLI4XIwZP12jovSJHy0JY3qGXXhrwyF6Q1r5lNHSZxtl+5dVu
-         P0A4hnOSfjudA==
-Message-ID: <a4059c30-b660-cad4-4c5d-3b100ac164bf@collabora.com>
-Date:   Fri, 15 Apr 2022 00:11:18 +0300
+        Thu, 14 Apr 2022 17:14:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4A4D4CB5;
+        Thu, 14 Apr 2022 14:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t0kR90lwAnP+kfHrPPmywzlT1a0RSvToeleriKjsR2s=; b=2UbJ48VYL4vK73QTj2OMgNcry0
+        68NtsJ94tbzdSmiegtINzjW/PatF+HTZZTsOxUm6Inrt2jCYsiGG1eyIgMccz4Z3rpROWRqs4Lc2D
+        5e8Fwo+N6z/f1Ts4aNtsnUHq5P9h2O1a7lQfnen0bnKP7CcdX2AS5UvW1UmpgRqhyPIE3uJed2rky
+        8U2nhVdXVBkhMqzn+12WL1P0NTC43y/BVYmsggjMEDcdNv8peim+2fGaQgkYJ+DIy2jWbOeTAbQyJ
+        MceLsfqKzoQD3tfWzm7JMzcRkpdF6Seu7npTg/ieIIbEKwiu/uopcb6yfSjQCq6HmHMOkKHIjmwCh
+        VKiO7L4g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nf6kd-007Jom-NH; Thu, 14 Apr 2022 21:11:39 +0000
+Date:   Thu, 14 Apr 2022 14:11:39 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>, imbrenda@linux.ibm.com
+Subject: Re: [PATCH v3 bpf RESEND 3/4] module: introduce module_alloc_huge
+Message-ID: <YliOC455r6XmE24Q@bombadil.infradead.org>
+References: <20220414195914.1648345-1-song@kernel.org>
+ <20220414195914.1648345-4-song@kernel.org>
+ <YliFO2sDv31j5vLb@bombadil.infradead.org>
+ <CAPhsuW42Dn2y9skhdJAK1fp9CFA06tpzG=6gMxeTobBj6xifPg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v7 1/4] memory: tegra: Add memory controller channels
- support
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, digetx@gmail.com,
-        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220413094012.13589-1-amhetre@nvidia.com>
- <20220413094012.13589-2-amhetre@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220413094012.13589-2-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW42Dn2y9skhdJAK1fp9CFA06tpzG=6gMxeTobBj6xifPg@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 12:40, Ashish Mhetre wrote:
->  
-> +static int tegra186_mc_map_regs(struct tegra_mc *mc)
-> +{
-> +	struct platform_device *pdev = to_platform_device(mc->dev);
-> +	int i;
-> +
-> +	mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev, "broadcast");
-> +	if (IS_ERR(mc->bcast_ch_regs)) {
-> +		if (PTR_ERR(mc->bcast_ch_regs) == -EINVAL) {
-> +			dev_warn(&pdev->dev, "Broadcast channel is missing, please update your device-tree\n");
-> +			return 0;
-> +		}
-> +		return PTR_ERR(mc->bcast_ch_regs);
-> +	}
-> +
-> +	mc->ch_regs = devm_kcalloc(mc->dev, mc->soc->num_channels,
-> +				   sizeof(void __iomem *), GFP_KERNEL);
-> +	if (!mc->ch_regs)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < mc->soc->num_channels; i++) {
-> +		char name[4];
-> +
-> +		sprintf(name, "ch%u", i);
+On Thu, Apr 14, 2022 at 02:03:17PM -0700, Song Liu wrote:
+> Hi Luis,
+> 
+> On Thu, Apr 14, 2022 at 1:34 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Thu, Apr 14, 2022 at 12:59:13PM -0700, Song Liu wrote:
+> > > Introduce module_alloc_huge, which allocates huge page backed memory in
+> > > module memory space. The primary user of this memory is bpf_prog_pack
+> > > (multiple BPF programs sharing a huge page).
+> > >
+> > > Signed-off-by: Song Liu <song@kernel.org>
+> >
+> > See modules-next [0], as modules.c has been chopped up as of late.
+> > So if you want this to go throug modules this will need to rebased
+> > on that tree. fortunately the amount of code in question does not
+> > seem like much.
+> >
+> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+> 
+> We are hoping to ship this with to 5.18, as the set addresses some issue with
+> huge page backed vmalloc. I guess we cannot ship it via modules-next branch.
+> 
 
-name[5], otherwise you corrupting stack. Use snprintf(name, sizeof(name)).
+Huh, you intend this to go in as a fix for v5.18 (already released) once
+properly reviewed?  This seems quite large... for a fix.
+
+> How about we ship module_alloc_huge() to 5.18 in module.c for now, and once
+> we update modules-next branch, I will send another patch to clean it up?
+
+I rather set the expectations right about getting such a large fix in
+for v5.18. I haven't even sat down to review all the changes in light of
+this, but a cursorary glance seems to me it's rather "large" for a fix.
+
+  Luis

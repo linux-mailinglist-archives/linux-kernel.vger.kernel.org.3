@@ -2,212 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CBA5003D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84C95003CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235976AbiDNBwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S239504AbiDNBtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbiDNBwj (ORCPT
+        with ESMTP id S239127AbiDNBtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:52:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 927BA220FD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649901015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbIFt/hLvdmgH3emaym9nt7Eav8nywDFZBlv3s8K7FA=;
-        b=B0U81MKWdYdR+ct83RL0WXqDgaCf3o3037cTqkwHl9lRhgyYEHHMJMVpLtTycYNrdbq99Y
-        BaOSlCOUYG/Ikvqq5FADb6G0QFHR03JuFhgswvZwl/VqMEQ75uIfemiPY3Xg+FZyZLpXfU
-        IKhnV1PH5UPlGA9IyURKE2ATsgq0x8c=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-m4fYUIkbOkilLK99beb6bA-1; Wed, 13 Apr 2022 21:50:14 -0400
-X-MC-Unique: m4fYUIkbOkilLK99beb6bA-1
-Received: by mail-pg1-f200.google.com with SMTP id b18-20020a63d812000000b0037e1aa59c0bso1974431pgh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:50:14 -0700 (PDT)
+        Wed, 13 Apr 2022 21:49:09 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE63152F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:46:46 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb58f605aeso32075387b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4qwvYVooM7YaW2143ob33/RDOtgCck3amy1lZ/qZ43Q=;
+        b=a82+8uScUFTY7UVOEcfN1mbnKXdw94mA5rNEPHiinFfjwaAc0yJbWi6EkFclTpOHst
+         EQL1MiawyR2AvJ120Nz3AyPXHpD7fj6H2vkVVeiLn7CkioUhXRh44RGbM4GC87nS8NPA
+         lPCfINqrWTnXWyoCGURkhfEoIgRsuARD3M+PNgy1+0IfXm2TMwdZj03N7A84wURImXGT
+         fq9jiy5h/gdZuBEOBQWpNYqGp7HnNDvyhN8sKkJLPJpcVx3OcmIRXB+KfGePEC7fpI77
+         DJt1T6AClZaJ5hrq6Cg0kDdHpfD+vtGtVuaOMnPtlZz7cpE0NRk5S+HzgKdy3jxIkJnO
+         INzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LbIFt/hLvdmgH3emaym9nt7Eav8nywDFZBlv3s8K7FA=;
-        b=oRZ6SByWI+J7oAgpJCaKOdQv0sGhgU+Pk/VkgyB+uMCY218Jht62TyW9+OncmCV/5n
-         kCx9OB8Y6Yi0ucv+ExCg46wsQul2lGrA6Joh1rYTKHd4er5UpUHWZGEuaPwZsNhxzl2G
-         KQMaQPyF1SVatvv8PK/9eAOrLL54icbptuK8mLx+FBwecagrK2bzisIi1ETyZ8OEjiNo
-         yMmx1pDND25971xqzBSAp+BlRU/wAVT/StxO2E9QSZzPH7DceEo6NhwBpBXlpctBS0JF
-         /JFnuf76EWYXsnShIG5B8awpKEGYRq+GoeSYxlrZ7BIFyY95f1YNc8Myn6GQFWzJ8Pw5
-         JulQ==
-X-Gm-Message-State: AOAM531Lq5mYBgtqngZT+WCeR9WQLkph4ms/B/83jKM4Ep5E0k35aAoD
-        9PdN+v16/QpqH1c3ScFiBIDxnBUSxERey2Xx/OVQkyyY2NKccsWLwcsLUnsycHLdnHU2nzVNg6k
-        TvTLLNM2lQatNolOWIKQ7aBnZ
-X-Received: by 2002:a63:1725:0:b0:39d:7957:7396 with SMTP id x37-20020a631725000000b0039d79577396mr391339pgl.156.1649901013275;
-        Wed, 13 Apr 2022 18:50:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxy8B6dsOxZIo58DE4+eOkMN6SM4w55xIwVO/TCzGYn0DvJ2qrUhkiBU4XfrhpTrC/j2yzOSA==
-X-Received: by 2002:a63:1725:0:b0:39d:7957:7396 with SMTP id x37-20020a631725000000b0039d79577396mr391315pgl.156.1649901012971;
-        Wed, 13 Apr 2022 18:50:12 -0700 (PDT)
-Received: from localhost ([240e:3a1:31c:360:52fc:c968:cb41:efbc])
-        by smtp.gmail.com with ESMTPSA id y3-20020a056a00190300b004fa2411bb92sm345861pfi.93.2022.04.13.18.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 18:50:12 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 09:46:05 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <20220414014605.etdihzqs764v74gf@Rk>
-References: <20220401013118.348084-1-coxu@redhat.com>
- <20220401013118.348084-3-coxu@redhat.com>
- <20220411085411.GZ163591@kunlun.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411085411.GZ163591@kunlun.suse.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4qwvYVooM7YaW2143ob33/RDOtgCck3amy1lZ/qZ43Q=;
+        b=6KGZ3x59uPin0mMJNgrfUwNyMnUxkutvj9yh61bTBiefJWmCQNf5dwer6iAYfwxYor
+         c2LK5LpsDEIsvXnjP9Pm7YwEYOwbzFtWax25SAQ5NzSwEhTD0R4gyv82kpA+qYZ8M+MM
+         FBJLi5WUUdfAJonaMtnhnEsgggsr0oNUVNFA8uB9r2cAf3XLuzBLE1JdvKoJrGu6ZjkL
+         XkMkxMbxnbq5nkaWR05TDcHXWoAsNsXgtzm6N2c0t48B5dFH3TnJfINkzeXGBsbbaMII
+         YrLl4rLcqO25d7iGf0zw3mrG8UaDnMw9UdUxZCU4/6o8cTW2+kDesQ+2qEZtoNSn4Hs/
+         /ghw==
+X-Gm-Message-State: AOAM531otAGTsGZ/P54QuyAgyzZ5exGikuZ/BMdn444ancPWG8MSNKli
+        GuWz3QiKXCZL/WGlSnFpX0NnBdycgp2h
+X-Google-Smtp-Source: ABdhPJy6OxalAJ2viaEkc8iVPXzpVO2fRlZPiZ/UHIAzZTkwwkgrTiWyCENuCg+wbC6JtsqCplrE96jWMF3e
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:9135:da53:a8a2:bf11])
+ (user=irogers job=sendgmr) by 2002:a81:16cb:0:b0:2eb:f4c2:fadd with SMTP id
+ 194-20020a8116cb000000b002ebf4c2faddmr288000yww.475.1649900806080; Wed, 13
+ Apr 2022 18:46:46 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 18:46:40 -0700
+Message-Id: <20220414014642.3308206-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH v2 1/3] perf record: Fix per-thread option.
+From:   Ian Rogers <irogers@google.com>
+To:     Alexey Bayduraev <alexey.bayduraev@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 10:54:11AM +0200, Michal Suchánek wrote:
->On Fri, Apr 01, 2022 at 09:31:17AM +0800, Coiby Xu wrote:
->> The code in bzImage64_verify_sig could make use of system keyrings
->s/could make/makes/
->> including .buitin_trusted_keys, .secondary_trusted_keys and .platform
->> keyring to verify signed kernel image as PE file. Make it generic so
->> both x86_64 and arm64 can use it.
->>
->> Signed-off-by: Coiby Xu <coxu@redhat.com>
->> ---
->>  arch/x86/kernel/kexec-bzimage64.c | 13 +------------
->>  include/linux/kexec.h             |  7 +++++++
->>  kernel/kexec_file.c               | 17 +++++++++++++++++
->>  3 files changed, 25 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
->> index 170d0fd68b1f..f73aab3fde33 100644
->> --- a/arch/x86/kernel/kexec-bzimage64.c
->> +++ b/arch/x86/kernel/kexec-bzimage64.c
->> @@ -17,7 +17,6 @@
->>  #include <linux/kernel.h>
->>  #include <linux/mm.h>
->>  #include <linux/efi.h>
->> -#include <linux/verification.h>
->>
->>  #include <asm/bootparam.h>
->>  #include <asm/setup.h>
->> @@ -531,17 +530,7 @@ static int bzImage64_cleanup(void *loader_data)
->>  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
->>  static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
->>  {
->> -	int ret;
->> -
->> -	ret = verify_pefile_signature(kernel, kernel_len,
->> -				      VERIFY_USE_SECONDARY_KEYRING,
->> -				      VERIFYING_KEXEC_PE_SIGNATURE);
->> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
->> -		ret = verify_pefile_signature(kernel, kernel_len,
->> -					      VERIFY_USE_PLATFORM_KEYRING,
->> -					      VERIFYING_KEXEC_PE_SIGNATURE);
->> -	}
->> -	return ret;
->> +	return kexec_kernel_verify_pe_sig(kernel, kernel_len);
->>  }
->
->Maybe you can completely eliminate bzImage64_verify_sig and directly
->assign kexec_kernel_verify_pe_sig to the fops?
->
->Other than that
->
->Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+From: Alexey Bayduraev <alexey.bayduraev@gmail.com>
 
-Applied, thanks for the suggestion and reviewing the patch!
+Per-thread mode doesn't have specific CPUs for events, add checks for
+this case.
 
->
+Minor fix to a pr_debug by Ian Rogers <irogers@google.com> to avoid an
+out of bound array access.
 
->>  #endif
->>
->> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> index 755fed183224..2fe39e946988 100644
->> --- a/include/linux/kexec.h
->> +++ b/include/linux/kexec.h
->> @@ -19,6 +19,7 @@
->>  #include <asm/io.h>
->>
->>  #include <uapi/linux/kexec.h>
->> +#include <linux/verification.h>
->>
->>  #ifdef CONFIG_KEXEC_CORE
->>  #include <linux/list.h>
->> @@ -196,6 +197,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->>  				 const Elf_Shdr *relsec,
->>  				 const Elf_Shdr *symtab);
->>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
->> +#ifdef CONFIG_KEXEC_SIG
->> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
->> +int kexec_kernel_verify_pe_sig(const char *kernel,
->> +				    unsigned long kernel_len);
->> +#endif
->> +#endif
->>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
->>
->>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
->> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->> index 3720435807eb..754885b96aab 100644
->> --- a/kernel/kexec_file.c
->> +++ b/kernel/kexec_file.c
->> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
->>  }
->>
->>  #ifdef CONFIG_KEXEC_SIG
->> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
->> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
->> +{
->> +	int ret;
->> +
->> +	ret = verify_pefile_signature(kernel, kernel_len,
->> +				      VERIFY_USE_SECONDARY_KEYRING,
->> +				      VERIFYING_KEXEC_PE_SIGNATURE);
->> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
->> +		ret = verify_pefile_signature(kernel, kernel_len,
->> +					      VERIFY_USE_PLATFORM_KEYRING,
->> +					      VERIFYING_KEXEC_PE_SIGNATURE);
->> +	}
->> +	return ret;
->> +}
->> +#endif
->> +
->>  static int kexec_image_verify_sig(struct kimage *image, void *buf,
->>  		unsigned long buf_len)
->>  {
->> --
->> 2.34.1
->>
->
+Reported-by: Ian Rogers <irogers@google.com>
+Fixes: 7954f71689f9 ("perf record: Introduce thread affinity and mmap masks")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Alexey Bayduraev <alexey.bayduraev@gmail.com>
+---
+ tools/perf/builtin-record.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index ba74fab02e62..069825c48d40 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -989,8 +989,11 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+ 	struct mmap *overwrite_mmap = evlist->overwrite_mmap;
+ 	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
+ 
+-	thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
+-					      thread_data->mask->maps.nbits);
++	if (cpu_map__is_dummy(cpus))
++		thread_data->nr_mmaps = nr_mmaps;
++	else
++		thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
++						      thread_data->mask->maps.nbits);
+ 	if (mmap) {
+ 		thread_data->maps = zalloc(thread_data->nr_mmaps * sizeof(struct mmap *));
+ 		if (!thread_data->maps)
+@@ -1007,16 +1010,17 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+ 		 thread_data->nr_mmaps, thread_data->maps, thread_data->overwrite_maps);
+ 
+ 	for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
+-		if (test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
++		if (cpu_map__is_dummy(cpus) ||
++		    test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
+ 			if (thread_data->maps) {
+ 				thread_data->maps[tm] = &mmap[m];
+ 				pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
+-					  thread_data, cpus->map[m].cpu, tm, m);
++					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
+ 			}
+ 			if (thread_data->overwrite_maps) {
+ 				thread_data->overwrite_maps[tm] = &overwrite_mmap[m];
+ 				pr_debug2("thread_data[%p]: cpu%d: ow_maps[%d] -> ow_mmap[%d]\n",
+-					  thread_data, cpus->map[m].cpu, tm, m);
++					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
+ 			}
+ 			tm++;
+ 		}
+@@ -3329,6 +3333,9 @@ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_c
+ {
+ 	int c;
+ 
++	if (cpu_map__is_dummy(cpus))
++		return;
++
+ 	for (c = 0; c < cpus->nr; c++)
+ 		set_bit(cpus->map[c].cpu, mask->bits);
+ }
+@@ -3680,6 +3687,11 @@ static int record__init_thread_masks(struct record *rec)
+ 	if (!record__threads_enabled(rec))
+ 		return record__init_thread_default_masks(rec, cpus);
+ 
++	if (cpu_map__is_dummy(cpus)) {
++		pr_err("--per-thread option is mutually exclusive to parallel streaming mode.\n");
++		return -EINVAL;
++	}
++
+ 	switch (rec->opts.threads_spec) {
+ 	case THREAD_SPEC__CPU:
+ 		ret = record__init_thread_cpu_masks(rec, cpus);
 -- 
-Best regards,
-Coiby
+2.36.0.rc0.470.gd361397f0d-goog
 

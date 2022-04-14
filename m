@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6179C5006D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8947E5006DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbiDNH3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S240320AbiDNHax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiDNH3j (ORCPT
+        with ESMTP id S229527AbiDNHau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:29:39 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780021D30C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:27:15 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id bg24so4365901pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:27:15 -0700 (PDT)
+        Thu, 14 Apr 2022 03:30:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA492CCBF
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:28:26 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u18so5241957eda.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wvguC1MMEnFDh7Qcp5M1R+G1HkoQuUEH5rfx9xpUsnA=;
-        b=jaLoiaYDZ4Z+d3A6bDm17qHMa77+2u7gO7myzhmWgH9KPUtRezWlSrTx3xSO75h6mp
-         g522m5lYP+sbvbO/5i+pf39WI3w84AKwuZDDtWacAvYcjK1/t8405cGYHNkD93IyQ1sr
-         xkqQCvBKxRzFduASufsfU0pf9ZE8Y7Kekwcnhpd4r2pecj9aaELXap50gwrZ/FIiBKTV
-         axTGUy2UyJezhv1PvArIGA2cD/eXxTqSg0AYeVAoZrE+HiELtmfmoiyoLN/6P6V6eTTp
-         flomRUq9GW/WQc66iEMzsRLyby3ySobEp4hJwLZMDnU9bneW7VTijI8kp4+R1EOKv8bH
-         OgvQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=R74GtmZ8/eMYWWCWuYgOVriNQWIHf2AARvZd2OkuZF0=;
+        b=eBxM/YwxID4Ni/TPXYUXJJ73zHPnp4UTyYhQ3sCYniBpv6uNurbjPclVftWHUzSbf9
+         UZ3u0jmE6WZMizp4tddKCCDhc0e0frrhiaULiyDULyM1QDXtPdsFcYCDX0lFc8729v33
+         pVMoUGWX+uzs9MId0hz5dhuhORSQVEWxsj2uY1FrXW4HwTYgCMzvfC1JL3x4LoUb4B4s
+         GWpfLnULMNeIrGIbDe2xqBW7vUgHVMGH/qsOmxIPoGK2gORcH78c4P1lSLXX1yqintcS
+         2asDRRIa8CLlBishtBlGoXb2KMgD2ZM+CM3zKlxlt55tX62+db8+PIJ4yVCLBoDRsUpz
+         3DKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=wvguC1MMEnFDh7Qcp5M1R+G1HkoQuUEH5rfx9xpUsnA=;
-        b=TEYNiq6HYiEEu+w6sL3V22l9u7IKWe99h3YLyPBndr/g824pQXtowYdxhXQksnQtER
-         P3mzLzAdES9+OQyZUT4HyoktdWZ9Sx3Q06vynvp8l7BawyGj6ssWsokUehfzxxiT4tXy
-         fZ5suEELnpdBN87EEW0NyqQ9rFjwohsXk33x6Ecjsi5AhEG4qTLkMPRa2OQxL2pLV29v
-         aupoBJOhUzRMLNsh147G7afMfAJOENeJyfTDrDgPGimx0rjshj/mZinzQXRksYWxh4q8
-         SFd3MyqRcv6hiaNpPiTHPRvQz53cEvORcW2DvLeTzUCdiDoMX8E5SXh9R6gaVQmUIm7K
-         QQCA==
-X-Gm-Message-State: AOAM530yH1zVVYHwfJ6XYJDv7UC1OedUWe4CEhd92Y1JG+akpw8jaJ4u
-        zuLauc24zljAmQM0r+++UKCdow==
-X-Google-Smtp-Source: ABdhPJwb1EhQqtu5NSfeDtyR05g+YYJkKBUDHTScmG8s4MiDd912H4KhZb2gkcPWDOd1UjqETQrmLg==
-X-Received: by 2002:a17:90b:38d1:b0:1c9:ba10:353b with SMTP id nn17-20020a17090b38d100b001c9ba10353bmr2894180pjb.9.1649921234962;
-        Thu, 14 Apr 2022 00:27:14 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id k25-20020aa790d9000000b00508232aecedsm1174002pfk.67.2022.04.14.00.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 00:27:14 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
-        osalvador@suse.de, mike.kravetz@oracle.com, rientjes@google.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, james.morse@arm.com,
-        21cnbao@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH] arm64: mm: hugetlb: restructure the code comment inside flush_dcache_page()
-Date:   Thu, 14 Apr 2022 15:26:46 +0800
-Message-Id: <20220414072646.21910-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        bh=R74GtmZ8/eMYWWCWuYgOVriNQWIHf2AARvZd2OkuZF0=;
+        b=lshuVvPTkPlL9JhxXvrxD2Xa7T9Y7YxPYBihnSNqFL1M9lSindl1uhkVW4od6QUupX
+         DSoqirpmxy268Fi3+LLWkYafUaBLXQcOoMA5tGVZY4T9XmX7IYrdEjLsWOaKjO3QQ3B0
+         yWCP5j3F+1bQS50Rmd+W/2F3B45V7++KfO0tBfMg3+5mdImpZcnGzeFlXBo6IAGmKxGZ
+         qWT9syIiQOqvBI+N5CTGCbux0CXBT/ICJz7+VzOwVU6rX570qiEmb4USqvJpYImqfoVK
+         Q4EZISHNeln5Srxc41jup756MtXT7UvOPixDH2Qp8Xsh+F46Bm0rNBqAA/Djp5A0CRFy
+         DyJQ==
+X-Gm-Message-State: AOAM531vbesQS1mBNttCq78sPAnCNvxVb64Qlx7JFsqbkIIYyEcHSe8r
+        0xYlxqYTqVfQ5YioqolwnzxIQA==
+X-Google-Smtp-Source: ABdhPJyj2kyU0EJnWAQ1cHHp1KDTEzl7iVeNPJETiPaZWyg/RnuYYBxLn6zDHCUMhls1PW0pZNwA+Q==
+X-Received: by 2002:a50:c014:0:b0:41d:5ee9:f354 with SMTP id r20-20020a50c014000000b0041d5ee9f354mr1514653edb.257.1649921304926;
+        Thu, 14 Apr 2022 00:28:24 -0700 (PDT)
+Received: from [192.168.0.209] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05640204d000b0042062f9f0e1sm636450edw.15.2022.04.14.00.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 00:28:24 -0700 (PDT)
+Message-ID: <50714f3e-7561-37fd-7a05-222fd6185c47@linaro.org>
+Date:   Thu, 14 Apr 2022 09:28:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] memory: renesas-rpc-if: Simplify single/double data
+ register access
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <c3b2a8d1a69f1b1e8d1a460148406cfb83e52eb4.1649857740.git.geert+renesas@glider.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c3b2a8d1a69f1b1e8d1a460148406cfb83e52eb4.1649857740.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restructure the code comment inside flush_dcache_page() to make it more
-clear.
+On 13/04/2022 15:49, Geert Uytterhoeven wrote:
+> For manual write and read, factor out the common access to the first
+> data register by keeping track of the current data pointer.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
+This does not apply on a next branch. Maybe because I put "memory:
+renesas-rpc-if: Fix HF/OSPI data transfer in Manual Mode" for fixes?
+Does this patch depend on that fix?
 
-This is based on next-20220407.
 
-Hi Andrew,
-
-Would you mind help me squash this patch into "arm64: mm: hugetlb: Enable
-HUGETLB_PAGE_FREE_VMEMMAP for arm64"?  Because there is some conflicts
-with the patchset of hugetlb_vmemmap releated cleanup when you merge
-if I resend the original patch.
-
- arch/arm64/mm/flush.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
-index 9e39598bbc21..fc4f710e9820 100644
---- a/arch/arm64/mm/flush.c
-+++ b/arch/arm64/mm/flush.c
-@@ -81,9 +81,10 @@ void flush_dcache_page(struct page *page)
- 	 * read-only when CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is enabled (more
- 	 * details can refer to vmemmap_remap_pte()).  Although
- 	 * __sync_icache_dcache() only set PG_dcache_clean flag on the head
--	 * page struct, some tail page structs still can be seen the flag is
--	 * set since the head vmemmap page frame is reused (more details can
--	 * refer to the comments above page_fixed_fake_head()).
-+	 * page struct, there is more than one page struct with PG_dcache_clean
-+	 * associated with the HugeTLB page since the head vmemmap page frame
-+	 * is reused (more details can refer to the comments above
-+	 * page_fixed_fake_head()).
- 	 */
- 	if (hugetlb_optimize_vmemmap_enabled() && PageHuge(page))
- 		page = compound_head(page);
--- 
-2.11.0
-
+Best regards,
+Krzysztof

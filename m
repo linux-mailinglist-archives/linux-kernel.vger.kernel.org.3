@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527F4501692
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9BD501693
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351850AbiDNPD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S1352234AbiDNPEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346567AbiDNN5l (ORCPT
+        with ESMTP id S1346573AbiDNN5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B3C83B38;
-        Thu, 14 Apr 2022 06:47:07 -0700 (PDT)
+        Thu, 14 Apr 2022 09:57:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906AF8C7EA;
+        Thu, 14 Apr 2022 06:47:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A94D761DAB;
-        Thu, 14 Apr 2022 13:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53F0C385A1;
-        Thu, 14 Apr 2022 13:47:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35590B82988;
+        Thu, 14 Apr 2022 13:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E95BC385A1;
+        Thu, 14 Apr 2022 13:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944026;
-        bh=59nRNgDgCe3ne56lbosghpRk61Xrl+tdqC0JaDJz/4I=;
+        s=korg; t=1649944029;
+        bh=Ti6npx+XBz+vRIA0uWfsCsai9jdUGH16snYnLGzhmJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cbUsXXsKjmU2O9X5UR7b8vGYgduLWchkSnkR1U97v5+4+yICGUQ5mfn9rcyaaIMpC
-         GIVq0lnTYPnH5+oNIvh0G+GkFEEi9FizyD0lAVn/4KmtVdG4hmLFsCHRsyDSyBPVwD
-         1EK4ncDWpsTEXYhA1MClsQPrYhOS9SzuZEmNVL00=
+        b=x55zn+BzO/1shpfk3OspEdVsS1/IUxoRsu909mKAZM4uxA36O0Ot1+KdtDNCMqjKf
+         OFjW3Ha7oAgc+WCoxl/xGJCMbusg/4CHGHK/7DOz3f07xRjLqWd32yK2+YDjvD4YJB
+         miQAtnkixTWPHb2vtWFXF6q2MfD166gTRTC4DU0g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.4 367/475] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
-Date:   Thu, 14 Apr 2022 15:12:32 +0200
-Message-Id: <20220414110905.349401010@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 368/475] ubifs: Rectify space amount budget for mkdir/tmpfile operations
+Date:   Thu, 14 Apr 2022 15:12:33 +0200
+Message-Id: <20220414110905.377243078@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -54,73 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
+[ Upstream commit a6dab6607d4681d227905d5198710b575dbdb519 ]
 
-Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
-this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
+UBIFS should make sure the flash has enough space to store dirty (Data
+that is newer than disk) data (in memory), space budget is exactly
+designed to do that. If space budget calculates less data than we need,
+'make_reservation()' will do more work(return -ENOSPC if no free space
+lelf, sometimes we can see "cannot reserve xxx bytes in jhead xxx, error
+-28" in ubifs error messages) with ubifs inodes locked, which may effect
+other syscalls.
 
-Note, it would've been better to forbid writing anything to SYNIC/STIMER
-MSRs, including zeroes, however, at least QEMU tries clearing
-HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
-'special' as writing zero there triggers an action, this also should not
-happen when SynIC wasn't activated.
+A simple way to decide how much space do we need when make a budget:
+See how much space is needed by 'make_reservation()' in ubifs_jnl_xxx()
+function according to corresponding operation.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+It's better to report ENOSPC in ubifs_budget_space(), as early as we can.
+
+Fixes: 474b93704f32163 ("ubifs: Implement O_TMPFILE")
+Fixes: 1e51764a3c2ac05 ("UBIFS: add new flash file system")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |   16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ fs/ubifs/dir.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -205,7 +205,7 @@ static int synic_set_msr(struct kvm_vcpu
- 	struct kvm_vcpu *vcpu = synic_to_vcpu(synic);
- 	int ret;
- 
--	if (!synic->active && !host)
-+	if (!synic->active && (!host || data))
- 		return 1;
- 
- 	trace_kvm_hv_synic_set_msr(vcpu->vcpu_id, msr, data, host);
-@@ -251,6 +251,9 @@ static int synic_set_msr(struct kvm_vcpu
- 	case HV_X64_MSR_EOM: {
- 		int i;
- 
-+		if (!synic->active)
-+			break;
-+
- 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
- 			kvm_hv_notify_acked_sint(vcpu, i);
- 		break;
-@@ -514,6 +517,11 @@ static int stimer_set_config(struct kvm_
+diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
+index 6a49b1ed659d..83a173feb698 100644
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -361,15 +361,18 @@ static int do_tmpfile(struct inode *dir, struct dentry *dentry,
  {
- 	union hv_stimer_config new_config = {.as_uint64 = config},
- 		old_config = {.as_uint64 = stimer->config.as_uint64};
-+	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
-+	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
-+
-+	if (!synic->active && (!host || config))
-+		return 1;
+ 	struct inode *inode;
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1};
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
+ 	struct ubifs_budget_req ino_req = { .dirtied_ino = 1 };
+ 	struct ubifs_inode *ui, *dir_ui = ubifs_inode(dir);
+ 	int err, instantiated = 0;
+ 	struct fscrypt_name nm;
  
- 	trace_kvm_hv_stimer_set_config(stimer_to_vcpu(stimer)->vcpu_id,
- 				       stimer->index, config, host);
-@@ -533,6 +541,12 @@ static int stimer_set_config(struct kvm_
- static int stimer_set_count(struct kvm_vcpu_hv_stimer *stimer, u64 count,
- 			    bool host)
- {
-+	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
-+	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
-+
-+	if (!synic->active && (!host || count))
-+		return 1;
-+
- 	trace_kvm_hv_stimer_set_count(stimer_to_vcpu(stimer)->vcpu_id,
- 				      stimer->index, count, host);
+ 	/*
+-	 * Budget request settings: new dirty inode, new direntry,
+-	 * budget for dirtied inode will be released via writeback.
++	 * Budget request settings: new inode, new direntry, changing the
++	 * parent directory inode.
++	 * Allocate budget separately for new dirtied inode, the budget will
++	 * be released via writeback.
+ 	 */
  
+ 	dbg_gen("dent '%pd', mode %#hx in dir ino %lu",
+@@ -957,7 +960,8 @@ static int ubifs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
+ 	struct ubifs_inode *dir_ui = ubifs_inode(dir);
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+ 	int err, sz_change;
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1 };
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
+ 	struct fscrypt_name nm;
+ 
+ 	/*
+-- 
+2.35.1
+
 
 

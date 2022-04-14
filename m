@@ -2,119 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB52500831
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B003500834
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240796AbiDNIZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S239713AbiDNI1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiDNIZL (ORCPT
+        with ESMTP id S240773AbiDNI1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:25:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9B85F250
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:22:47 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2B04D21618;
-        Thu, 14 Apr 2022 08:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649924566; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kf3xjl8BrBTKoBEu0VHViWW2bRtYjZmKOwW94FdVGl4=;
-        b=YG04xhPZFFb6cki2AIm2z59dtlpDfhUKNVmJZtW3TMVbAurFZlh7k/LujsHpphCNYOR+d0
-        j+9hNXH1GiyjpKs8t3BsCMRdhECCsr59rrOEz4wIXxj/a2Qpx/pDaOybpm3f3pUbFr64SI
-        qJSBcbuH59IlmhRXdkONArlcBtG1kLk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649924566;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kf3xjl8BrBTKoBEu0VHViWW2bRtYjZmKOwW94FdVGl4=;
-        b=hQ+/dbdyVTyV5bsMi5SqXnDGhNLfy8rUlq/T63z59AN+DRZnTAn5jIziZf77zHq+Y6l+ey
-        RG/kw661SaWR5uCg==
-Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 163CDA3B87;
-        Thu, 14 Apr 2022 08:22:46 +0000 (UTC)
-Date:   Thu, 14 Apr 2022 10:22:46 +0200
-Message-ID: <s5hzgko3wh5.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Thu, 14 Apr 2022 04:27:38 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2691C907
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:25:12 -0700 (PDT)
+X-UUID: 74c07084da3747c0af2766e0f5f93cdf-20220414
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:82e3a196-cb36-4adf-888d-439d87def5c9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:51
+X-CID-INFO: VERSION:1.1.4,REQID:82e3a196-cb36-4adf-888d-439d87def5c9,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:51
+X-CID-META: VersionHash:faefae9,CLOUDID:e3e520a9-d103-4e36-82b9-b0e86991b3df,C
+        OID:41f3efc950b8,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: 74c07084da3747c0af2766e0f5f93cdf-20220414
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 215097226; Thu, 14 Apr 2022 16:25:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 14 Apr 2022 16:25:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 16:25:07 +0800
+Message-ID: <59a148c73314ccaa34c4feec5f5c3720f056012d.camel@mediatek.com>
+Subject: Re: [PATCH 1/1] [PATCH v2]sched/pelt: Refine the enqueue_load_avg
+ calculate method
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH -next] sound/oss/dmasound: fix 'dmasound_setup' defined but not used
-In-Reply-To: <20220414081119.30851-1-miles.chen@mediatek.com>
-References: <20220414081119.30851-1-miles.chen@mediatek.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
- FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
- (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 14 Apr 2022 16:25:07 +0800
+In-Reply-To: <CAKfTPtBn-9WWcA3=e0etbq_6cP5O6TXNqZ1B5=2SPe-yaC+PxQ@mail.gmail.com>
+References: <20220414015940.9537-1-kuyo.chang@mediatek.com>
+         <CAKfTPtBn-9WWcA3=e0etbq_6cP5O6TXNqZ1B5=2SPe-yaC+PxQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 10:11:18 +0200,
-Miles Chen wrote:
+On Thu, 2022-04-14 at 09:37 +0200, Vincent Guittot wrote:
+> On Thu, 14 Apr 2022 at 03:59, Kuyo Chang <kuyo.chang@mediatek.com>
+> wrote:
+> > 
+> > From: kuyo chang <kuyo.chang@mediatek.com>
+> > 
+> > I meet the warning message at cfs_rq_is_decayed at below code.
+> > 
+> > SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+> >                     cfs_rq->avg.util_avg ||
+> >                     cfs_rq->avg.runnable_avg)
+> > 
+> > Following is the calltrace.
+> > 
+> > Call trace:
+> > __update_blocked_fair
+> > update_blocked_averages
+> > newidle_balance
+> > pick_next_task_fair
+> > __schedule
+> > schedule
+> > pipe_read
+> > vfs_read
+> > ksys_read
+> > 
+> > After code analyzing and some debug messages, I found it exits a
+> > corner
+> > case at attach_entity_load_avg which will cause load_sum is null
+> > but
+> > load_avg is not.
+> > Consider se_weight is 88761 according by sched_prio_to_weight
+> > table.
+> > And assume the get_pelt_divider() is 47742, se->avg.load_avg is 1.
+> > By the calculating for se->avg.load_sum as following will become
+> > zero
+> > as following.
+> > se->avg.load_sum =
+> >         div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se));
+> > se->avg.load_sum = 1*47742/88761 = 0.
+> > 
+> > After enqueue_load_avg code as below.
+> > cfs_rq->avg.load_avg += se->avg.load_avg;
+> > cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+> > 
+> > Then the load_sum for cfs_rq will be 1 while the load_sum for
+> > cfs_rq is 0.
+> > So it will hit the warning message.
+> > 
+> > In order to fix the corner case, make sure the se->load_avg|sum is
+> > correct
+> > before enqueue_load_avg.
+> > 
+> > After long time testing, the kernel warning was gone and the system
+> > runs
+> > as well as before.
 > 
-> We observed: 'dmasound_setup' defined but not used error with
-> COMPILER=gcc ARCH=m68k DEFCONFIG=allmodconfig build.
+> This needs a fix tag:
+> Fixes: f207934fb79d ("sched/fair: Align PELT windows between cfs_rq
+> and its se")
+
+Thanks for your friendly reminder.
+
+
+> > 
+> > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
 > 
-> __setup() does not work if MODULE is defined.
-> Fix it by warpping dmasound_setup with #ifndef MODULES.
+> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 > 
-> Error(s):
-> sound/oss/dmasound/dmasound_core.c:1431:12: error: 'dmasound_setup' defined but not used [-Werror=unused-function]
-> 
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> > ---
+> > 
+> > v1->v2:
+> > 
+> > (1)Thanks for suggestion from Peter Zijlstra & Vincent Guittot.
+> > (2)By suggestion from Vincent Guittot,
+> > rework the se->load_sum calculation method for fix the corner case,
+> > make sure the se->load_avg|sum is correct before enqueue_load_avg.
+> > (3)Rework changlog.
+> > 
+> >  kernel/sched/fair.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index d4bd299d67ab..159274482c4e 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -3829,10 +3829,12 @@ static void attach_entity_load_avg(struct
+> > cfs_rq *cfs_rq, struct sched_entity *s
+> > 
+> >         se->avg.runnable_sum = se->avg.runnable_avg * divider;
+> > 
+> > -       se->avg.load_sum = divider;
+> > -       if (se_weight(se)) {
+> > +       se->avg.load_sum = se->avg.load_avg * divider;
+> > +       if (se_weight(se) < se->avg.load_sum) {
+> >                 se->avg.load_sum =
+> > -                       div_u64(se->avg.load_avg * se-
+> > >avg.load_sum, se_weight(se));
+> > +                       div_u64(se->avg.load_sum, se_weight(se));
+> > +       } else {
+> > +               se->avg.load_sum = 1;
+> >         }
+> > 
+> >         enqueue_load_avg(cfs_rq, se);
+> > --
+> > 2.18.0
+> > 
 
-This must be a side-effect of the recent fix 9dd7c46346ca
-("sound/oss/dmasound: fix build when drivers are mixed =y/=m").
-Adding Randy to Cc.
-
-IMO, a less uglier way would be to add __maybe_unused to that
-function.  But it's a matter of taste.
-
-
-thanks,
-
-Takashi
-
-> ---
->  sound/oss/dmasound/dmasound_core.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/sound/oss/dmasound/dmasound_core.c b/sound/oss/dmasound/dmasound_core.c
-> index 9c48f3a9e3d1..a1b3e71beadf 100644
-> --- a/sound/oss/dmasound/dmasound_core.c
-> +++ b/sound/oss/dmasound/dmasound_core.c
-> @@ -1428,6 +1428,7 @@ void dmasound_deinit(void)
->  		unregister_sound_dsp(sq_unit);
->  }
->  
-> +#ifndef MODULE
->  static int dmasound_setup(char *str)
->  {
->  	int ints[6], size;
-> @@ -1470,6 +1471,7 @@ static int dmasound_setup(char *str)
->  }
->  
->  __setup("dmasound=", dmasound_setup);
-> +#endif
->  
->      /*
->       *  Conversion tables
-> -- 
-> 2.18.0
-> 

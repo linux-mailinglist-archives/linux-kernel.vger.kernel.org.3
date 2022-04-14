@@ -2,160 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E323350173E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F79E5016D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356991AbiDNPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S1344475AbiDNPNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346981AbiDNN6K (ORCPT
+        with ESMTP id S1347318AbiDNN6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:10 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18C4B3DD9;
-        Thu, 14 Apr 2022 06:48:21 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z12so6456493edl.2;
-        Thu, 14 Apr 2022 06:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gP0+DXghKcf2qXvcW1JZOCtSqa2MqphfThUN2zjo/Q4=;
-        b=HYvpG8UzdAG6LoGZ9qjTgDXsg31DQ7UqcdZiUgRNKT7bAo3UgCHYYkGtZB43Xic69N
-         PAav5JmoT8bzlA5yxVn2ZoQW6A93kIbkMcNikdIWaaUp1+2w4BuyLCtDM2z+kYRC8YZd
-         7F0DghZn4eUEQYRPG4WrgyqKdVXYTQOBwp1futUrCevJPQEy6wqjloPJlWBxIrkh+y2s
-         1yqEM+GlfrfDUyID6a7K7EKY7bYJ+5wuTTDZBVl6U/Eyzqy1wulwmitWkaTJDlPWhDG5
-         z0y0vn6Te0PXE74LCTi49vCMsbbO8KVIlfIkr1UhWJn9QR45GJmxQm7JuAdr7nvqx/bY
-         z2Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gP0+DXghKcf2qXvcW1JZOCtSqa2MqphfThUN2zjo/Q4=;
-        b=1pWYAS6bxh1SXjtVEDtY83FyfYJHTnjVrFvXUxajT3fpfuxjduTjiV70oYTUY4gzfV
-         jCtxTlLkGbeimf9hzTdqsJYDjgE7XE36Xr5e/rxA6aA+zFqzWzBdKZ/VmhCNKpjjKlfv
-         0S0OAnCwTqXQX6g28kY14Z40ANIpFmm2nzsmATfpzpia5IDs75W/l8ORjE5pY+BfME9C
-         uVzctb/uE4LbRrFasyGGru0De4mDHrhfY1JymYsbeAI0pFQTDfEMLQj4C5pMXLy6SEiO
-         nrQZA+jCNBi9vCylv7bfboiaD4PSA1I8VhM5zp4atGuPqQi7nyXRwNt5y0JIpVp6CJVL
-         qLnA==
-X-Gm-Message-State: AOAM533LLEn6+Yhdu2OBeVa51qcG3QyXGOGhpHJ8LUZOtgzrvL3WWQ44
-        hpYjMKgL7L/ovb4zM1Cl+pk=
-X-Google-Smtp-Source: ABdhPJxeXqlrsaTsutnOIVvQkRr7u2i4EUXnV8AW+2cmGmjtpodIFs3uxdOpS1pGJNgEBYYbUo4ZNw==
-X-Received: by 2002:aa7:c40b:0:b0:41d:9886:90a0 with SMTP id j11-20020aa7c40b000000b0041d988690a0mr3003328edq.275.1649944100273;
-        Thu, 14 Apr 2022 06:48:20 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id e35-20020a056402332300b004209638cb94sm1013954eda.6.2022.04.14.06.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 06:48:19 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 16:48:18 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH v2 1/4] drivers: net: dsa: qca8k: drop MTU
- tracking from qca8k_priv
-Message-ID: <20220414134818.xesotjnlbhe4ewvc@skbuf>
-References: <20220412173019.4189-1-ansuelsmth@gmail.com>
- <20220412173019.4189-2-ansuelsmth@gmail.com>
+        Thu, 14 Apr 2022 09:58:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6C924BEC
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:49:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2D03B82986
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:49:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D85C385AA;
+        Thu, 14 Apr 2022 13:49:19 +0000 (UTC)
+Date:   Thu, 14 Apr 2022 14:49:16 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Message-ID: <YlgmXA49frnQKdaT@arm.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <2a2becf1-fc19-a7da-deb7-1c12781d503d@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412173019.4189-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2a2becf1-fc19-a7da-deb7-1c12781d503d@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 07:30:16PM +0200, Ansuel Smith wrote:
-> DSA set the CPU port based on the largest MTU of all the slave ports.
-> Based on this we can drop the MTU array from qca8k_priv and set the
-> port_change_mtu logic on DSA changing MTU of the CPU port as the switch
-> have a global MTU settingfor each port.
+Hi Topi,
+
+On Wed, Apr 13, 2022 at 09:39:37PM +0300, Topi Miettinen wrote:
+> On 13.4.2022 16.49, Catalin Marinas wrote:
+> > The background to this is that systemd has a configuration option called
+> > MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
+> > is to prevent a user task from inadvertently creating an executable
+> > mapping that is (or was) writeable. Since such BPF filter is stateless,
+> > it cannot detect mappings that were previously writeable but
+> > subsequently changed to read-only. Therefore the filter simply rejects
+> > any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
+> > support (Branch Target Identification), the dynamic loader cannot change
+> > an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
+> > For libraries, it can resort to unmapping and re-mapping but for the
+> > main executable it does not have a file descriptor. The original bug
+> > report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
+> > for libraries - [3].
+> > 
+> > Add in-kernel support for such feature as a DENY_WRITE_EXEC personality
+> > flag, inherited on fork() and execve(). The kernel tracks a previously
+> > writeable mapping via a new VM_WAS_WRITE flag (64-bit only
+> > architectures).
+
+BTW, we can avoid the VM_WAS_WRITE tracking if we limit the check to the
+current permissions. It would allow mprotect(PROT_EXEC) only if the
+mapping is already executable. The mmap(PROT_WRITE|PROT_EXEC) would be
+rejected, as expected. The difference from the current BPF filter is
+that mprotect(PROT_EXEC|PROT_BTI) is allowed if the mapping was
+previously mmap(PROT_READ|PROT_EXEC).
+
+I'm open to go in this direction if it fits the systemd requirements
+better. It's also less state to track in the kernel.
+
+> > I went for a personality flag by analogy with the
+> > READ_IMPLIES_EXEC one. However, I'm happy to change it to a prctl() if
+> > we don't want more personality flags. A minor downside with the
+> > personality flag is that there is no way for the user to query which
+> > flags are supported, so in patch 3 I added an AT_FLAGS bit to advertise
+> > this.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
+> With systemd there's a BPF construct to block personality changes
+> (LockPersonality=yes) but I think prctl() would be easier to lock down
+> irrevocably.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+The personality flag is not sticky, so one could inadvertently clear it
+without LockPersonality=yes. We could add a mask of sticky bits to
+sys_personality() (only for new flags), though we might as well go with
+a prctl(), we have more flexibility and finer-grained control if we want
+to expand this to memfd files.
 
->  drivers/net/dsa/qca8k.c | 25 ++++++++-----------------
->  drivers/net/dsa/qca8k.h |  1 -
->  2 files changed, 8 insertions(+), 18 deletions(-)
+Would there be any reason to disable such behaviour for an application,
+once enabled? I don't think it's currently possible with the BPF filter
+but we can add it to a prctl().
+
+> > Posting this as an RFC to start a discussion and cc'ing some of the
+> > systemd guys and those involved in the earlier thread around the glibc
+> > workaround for dynamic libraries [4]. Before thinking of upstreaming
+> > this we'd need the systemd folk to buy into replacing the MDWE SECCOMP
+> > BPF filter with the in-kernel one.
 > 
-> diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-> index d3ed0a7f8077..820eeab19873 100644
-> --- a/drivers/net/dsa/qca8k.c
-> +++ b/drivers/net/dsa/qca8k.c
-> @@ -2367,16 +2367,17 @@ static int
->  qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
->  {
->  	struct qca8k_priv *priv = ds->priv;
-> -	int i, mtu = 0;
->  
-> -	priv->port_mtu[port] = new_mtu;
-> -
-> -	for (i = 0; i < QCA8K_NUM_PORTS; i++)
-> -		if (priv->port_mtu[i] > mtu)
-> -			mtu = priv->port_mtu[i];
-> +	/* We have only have a general MTU setting.
-> +	 * DSA always set the CPU port's MTU to the largest MTU of the salve ports.
+> As the author of this feature in systemd (also similar feature in Firejail),
+> I'd highly prefer in-kernel version to BPF protection. I'd definitely also
+> want to use this in place of BPF on x86_64 and other arches too.
 
-s/salve/slave/
+It is generic, so yes, it can be enabled for other architectures. A
+minor issue with the VM_WAS_WRITE flag is that we ran out of 32-bit vma
+flags. It could be expanded but not sure how much you care about MDWE on
+32-bit architectures. An alternative is to drop the VM_WAS_WRITE
+approach entirely, just use the current protection for the decision.
 
-Also watch for the 80 characters limit.
-
-> +	 * Setting MTU just for the CPU port is sufficient to correctly set a
-> +	 * value for every port.
-> +	 */
-> +	if (!dsa_is_cpu_port(ds, port))
-> +		return 0;
->  
->  	/* Include L2 header / FCS length */
-> -	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
-> +	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
->  }
->  
->  static int
-> @@ -3033,16 +3034,6 @@ qca8k_setup(struct dsa_switch *ds)
->  				  QCA8K_PORT_HOL_CTRL1_WRED_EN,
->  				  mask);
->  		}
-> -
-> -		/* Set initial MTU for every port.
-> -		 * We have only have a general MTU setting. So track
-> -		 * every port and set the max across all port.
-> -		 * Set per port MTU to 1500 as the MTU change function
-> -		 * will add the overhead and if its set to 1518 then it
-> -		 * will apply the overhead again and we will end up with
-> -		 * MTU of 1536 instead of 1518
-> -		 */
-> -		priv->port_mtu[i] = ETH_DATA_LEN;
->  	}
->  
->  	/* Special GLOBAL_FC_THRESH value are needed for ar8327 switch */
-> diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-> index f375627174c8..562d75997e55 100644
-> --- a/drivers/net/dsa/qca8k.h
-> +++ b/drivers/net/dsa/qca8k.h
-> @@ -398,7 +398,6 @@ struct qca8k_priv {
->  	struct device *dev;
->  	struct dsa_switch_ops ops;
->  	struct gpio_desc *reset_gpio;
-> -	unsigned int port_mtu[QCA8K_NUM_PORTS];
->  	struct net_device *mgmt_master; /* Track if mdio/mib Ethernet is available */
->  	struct qca8k_mgmt_eth_data mgmt_eth_data;
->  	struct qca8k_mib_eth_data mib_eth_data;
-> -- 
-> 2.34.1
+> In-kernel version would probably allow covering pretty easily this case
+> (maybe it already does):
 > 
+> 	fd = memfd_create(...);
+> 	write(fd, malicious_code, sizeof(malicious_code));
+> 	mmap(..., PROT_EXEC, ..., fd);
 
+This series doesn't cover it.
+
+> Other memory W^X implementations include S.A.R.A [1] and SELinux
+> EXECMEM/EXECSTACK/EXECHEAP protections [2], [3]. SELinux checks
+> IS_PRIVATE(file_inode(file)) and vma->anon_vma != NULL, which might be
+> useful additions here too (or future extensions if you prefer).
+
+I had a quick look at SELinux and, IIUC, without the execmem permission
+it prevents any anonymous mmap(PROT_EXEC). We could probably do
+something similar here and check the file permission. I had an attempt
+but S_PRIVATE doesn't seem to be set on the memfd_create() allocated
+inode. I have to dig a bit more to see how to detect this. If we keep
+the check for all files, it won't be able to map any ELF text sections
+unless the binary is read-only.
+
+> [1] https://smeso.it/sara/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3708
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/hooks.c#n3787
+
+-- 
+Catalin

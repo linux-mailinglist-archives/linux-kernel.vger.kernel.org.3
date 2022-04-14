@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67E65019B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2D45019B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244442AbiDNRNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S244474AbiDNRNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245499AbiDNRMd (ORCPT
+        with ESMTP id S1344066AbiDNRMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:12:33 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1510C2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:03:17 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id p135so6061517iod.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OllXB12xYj2oLW47j16BPRteV5aGbcg+P8qWGLzVFgo=;
-        b=Sg9Oj6fVMqHx4wGYatrCXwfVrgDCBdgSBuV8CJJEMxfZS8ADhOx0+9774BF3P5+0AX
-         Y8VCnYXOJcbJNV3sIzmP2ZmeMkENdnB0B/S5DbU4fN1Jddewi35fOaiZ/4Vmp721Wefb
-         kPLzUcZIjf8pTCrst7E2EVKghHegWxZZQOxOs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OllXB12xYj2oLW47j16BPRteV5aGbcg+P8qWGLzVFgo=;
-        b=i6YbEoyxhhAAwlKteFibFyxJtdPjq2hh78lDj41OBaq0H9BMfD4AP/SZZkDq0amqgT
-         kS+DF+yoVMVnzPSiPfCRZN1WvD/yxvMvL3slmWWF3n8Ezx3zcPxDFyFoXRXo+Ubi84mh
-         IpINLjx4pKloi685g4koV6E0Xjpgzjib5/vrhkg0uxOJAX5zOSBzT60T8el6i9SOcRgw
-         DcS0L3IorCJUEhWLdzSaGykHtlHPXv6W/JOw81SDfmOy27uc7Beh+a1576ZriP1Zhl8W
-         4f0LvlVEr48je2/hpOI1xp3G/xlFVkWQMDtnk1FF90BRBXUonyMfyHtQV4kb+kQ8RAID
-         SUWQ==
-X-Gm-Message-State: AOAM533pzkZCywHRV2VyxqtLefBIq/F+dxuxzbSsBKe2tqjoc6a8bEpE
-        81v77lb5Lz+2ZP7CrNswlArT0w==
-X-Google-Smtp-Source: ABdhPJwOfVPfya7xmiCQCpcRTJlx+/Ql+vs159c3+lqXwm1y2ZbNR8soXx4bWU1pNLUROi+wtJweeg==
-X-Received: by 2002:a05:6602:c3:b0:64f:d28f:a62c with SMTP id z3-20020a05660200c300b0064fd28fa62cmr926382ioe.212.1649955796950;
-        Thu, 14 Apr 2022 10:03:16 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b12-20020a6be70c000000b00648f61d9652sm1445108ioh.52.2022.04.14.10.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 10:03:16 -0700 (PDT)
-Subject: Re: [PATCH 4.19 000/338] 4.19.238-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fe30f230-f642-ded3-7ca3-f70dffcdd8b9@linuxfoundation.org>
-Date:   Thu, 14 Apr 2022 11:03:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 14 Apr 2022 13:12:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE5DBD1A;
+        Thu, 14 Apr 2022 10:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649955845; x=1681491845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lZrj1oBd0y7HooWyS6SxzdEPNlLGWptWv5QdmhowQ7U=;
+  b=P+sfm98fWQch04JOMmWud8dkMiXG9hQGmuAIM2/Gl8JqfdU221tun8Bo
+   slphqmLF8jSDK2ZOWKF0UrXwc0C1/m+mld7OsZn6LzEp6N4UMJHytM1Ii
+   RXzuGa/07mG4bjuF8cpW3GdATSMBwnSRQKhFw/LZ0Hv1sgTbQ9c7lHXuF
+   6JAgq1/7U5iL3PeLw7dS56Qs1MI/PYASdM2MCTvGSDzFksRLov8jkVy49
+   V8VT2GlqfpM1doiYLXy8OTAlMyrYJaa4kSDEaZEwLSA4NrwCigdgKlSl6
+   i4w8K5ntfvgxYGzotxfVP+XDdqovChjbvbiKBu4cFaneV8IJNIt3rVqIp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="244865045"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="244865045"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:04:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="560269969"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:04:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nf2sy-002PZi-1C;
+        Thu, 14 Apr 2022 20:04:00 +0300
+Date:   Thu, 14 Apr 2022 20:03:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: afe: rescale: Make use of device properties
+Message-ID: <YlhT/yiJSD7pFsF8@smile.fi.intel.com>
+References: <20220413190117.29814-1-andriy.shevchenko@linux.intel.com>
+ <Ylgwhu9zdmwwYnAq@shaak>
 MIME-Version: 1.0
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ylgwhu9zdmwwYnAq@shaak>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 7:08 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.238 release.
-> There are 338 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Apr 14, 2022 at 10:32:38AM -0400, Liam Beguin wrote:
+> Hi Andy,
 > 
-> Responses should be made by Sat, 16 Apr 2022 11:07:54 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.238-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> On Wed, Apr 13, 2022 at 10:01:17PM +0300, Andy Shevchenko wrote:
+> > Convert the module to be property provider agnostic and allow
+> > it to be used on non-OF platforms.
 
-Compiled and booted on my test system. No dmesg regressions.
+> > +#include <linux/mod_devicetable.h>
+> 
+> Is this really needed?
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Yes.
+This header is missed. I can split its addition to a separate patch.
 
-thanks,
--- Shuah
+> device_get_match_data() is already defined in <linux/property.h>
+
+It's indirectly related (just like we do when we clean up of.h). Since
+the original of.h is missed there is no header replacement, just adding.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

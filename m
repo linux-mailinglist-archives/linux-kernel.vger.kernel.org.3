@@ -2,208 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741B9501D84
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D08A501D8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244340AbiDNVfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S1343747AbiDNVhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiDNVfk (ORCPT
+        with ESMTP id S230438AbiDNVhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:35:40 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EDB2E68A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:33:14 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id v4so7938558edl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=SdaPBTjjB0WeNdV957shheo3t5GkE9UUUWqWlLgChQA=;
-        b=iyvty8hJJGC0yB3coux5aqsfjgazdShEQfSPUEfssjrt9Ef8MXvis67tJhUz2BGo6+
-         G6/FLG5+3Hkb1lJkQdjacq+4a1fBHLq7zJPRgqf4hCsTg3n8XNcVw4S2VIEcImDRRShH
-         zGHYXJtnzbEr+I2hDM3kkErAVW0WNbwjetRS6Na8/rEetKe8AjfQt50cQ7HITrp8MAYD
-         o46ViW7NFTKOARjbNPhQwAuvZrWdHzjOsB8IdYNpVmWvuXdgjh0wPQnmNeqlhYNk0ryZ
-         UYTBoXxP+Gjb1Ne79FPoddZODLiSyErIGJpUr58k73vQgsXpOutoxOtgdKNODpWBOMkE
-         uf+g==
+        Thu, 14 Apr 2022 17:37:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC66673F2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649972089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+y0rTsN9NYq4kk+FFTr/ajEtcI961W4Mxu4oUxgLxck=;
+        b=MbMYpQoFDmF9MBsW2Nh2sFZNR/zrp47NLeSFb0ibMffBijDI2jqGnX0bmEXfuE+6P55nAT
+        xs8McMV9h31BvSYIfO4mF+gVNOzNzK2S72zHDRU+7gFjGpsnSABjUewav/1E7Z4AUEwPTO
+        n9G2LPgV1VxRVbUFKlnsFudeVYzgeaw=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-yv0bw-JKOEmuUcxmqaOaMw-1; Thu, 14 Apr 2022 17:34:48 -0400
+X-MC-Unique: yv0bw-JKOEmuUcxmqaOaMw-1
+Received: by mail-il1-f200.google.com with SMTP id i2-20020a056e021d0200b002cac9b3b46cso3759096ila.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:34:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=SdaPBTjjB0WeNdV957shheo3t5GkE9UUUWqWlLgChQA=;
-        b=fhSk+kVwO3tAFEBaz/PgadN8dYLTgkuoWSVbvIgu5g8S0W4cEYl4i74uWWFzOL44Vc
-         ihHwCkE9PoCd4rGdNFHLP5wyjYpU0GS1l4aiZWJe2f6gp40uoM8EN/2Q2FnMccsSijvu
-         Dp+2gUrgr7U978Gv8Sy5Dr0ZLlbiSU0wdISZr31gKiZcS2LD4jIJLMJRx1fYq2IAxyYz
-         v67WSyW1FQJpH7QXpoHvSRxlov4VuOvx6rAq6Zh03lea8zAv30KAe/McFCF7sXnF+NnC
-         MOyl2PinCnFrigqFp2B9Jb/d292qt1B7qes4bO2o97lHICJ+boG74MgcG/lx4nt8Mh7X
-         AMkw==
-X-Gm-Message-State: AOAM530CRsZgA2xVEJLxP3Lh6Sv8k/lC2rKVux0vlDnN77h6x9scmMF5
-        yxnOMsq83nAwjK7Bv1aKRGkqkmjdIwtSRhmJswAy3Q0a+3JFiQ==
-X-Google-Smtp-Source: ABdhPJyYTr3zIx8iXuB6Suqq2nF67E32UesNhw9ppUpy6UwDhip3h0iJ3LObPwP9vurlHdGaAhvbj4idt6RJeVZZqCg=
-X-Received: by 2002:a05:6402:36d:b0:41d:7a5f:8393 with SMTP id
- s13-20020a056402036d00b0041d7a5f8393mr5075133edw.277.1649971992769; Thu, 14
- Apr 2022 14:33:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+y0rTsN9NYq4kk+FFTr/ajEtcI961W4Mxu4oUxgLxck=;
+        b=hd4ofT0CpLZ1CAu7UXFNGe0XZG0eE4DOkW9k4RIOQ6LY9rcVlJzwXU/kU6tYhMrDKW
+         xVwaHb0H9wzT/FY9Vr7EE+43ViGzZ91DYTHPFLBm6CTkDOGjOBuoBk0XhymmfhroCGIa
+         zRkkw5EY+uCFSCRMb0IpcT+wxt2n39Vplo/MqdUJiq9tJzmhbeOBoFFoqAzj81wfz9T0
+         uYlnrPIIBhbzrNZyxRgX5Hsi308J3THfygW/byk5syRIK9G14e5wFBW4+A7nSBoxukrx
+         jc0suaMCP1kIncSQ2NGvWrxgIUyLy7fJjpSvi6+yDJntreyS1ZMy6rpnc8OxX7gx4tb1
+         nKSQ==
+X-Gm-Message-State: AOAM531hFzg6Bx2+eAZcIUTzRqCYEsfYmpf49zu649vaf8baJH7aD881
+        hN5wbeywBOVcBvqtspsp02oHui4tQ3dAB15FFiJhckdlZguEz6ZOwpY+P6HBjNu1F97NQN6ier3
+        vslr8uKgFTYnSS/YriEyU6yIx
+X-Received: by 2002:a05:6638:268a:b0:326:6fab:af6 with SMTP id o10-20020a056638268a00b003266fab0af6mr2056939jat.280.1649972087658;
+        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwsz/H4zEgmUI9w3ohVvbnJW3K1Q3UuNlt8K1nemKc/C6G191ZhUEQeiG0Kzgr3FBEBEPhcSA==
+X-Received: by 2002:a05:6638:268a:b0:326:6fab:af6 with SMTP id o10-20020a056638268a00b003266fab0af6mr2056928jat.280.1649972087404;
+        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id e4-20020a056e020b2400b002ca9ffbb8fesm1825796ilu.72.2022.04.14.14.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 17:34:45 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Subject: Re: [PATCH] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
+Message-ID: <YliTdb1LjfJoIcFc@xz-m1.local>
+References: <20220414010703.72683-1-peterx@redhat.com>
+ <Ylgn/Jw+FMIFqqc0@google.com>
+ <bf15209d-2c50-9957-af24-c4f428f213b1@redhat.com>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 15 Apr 2022 07:33:01 +1000
-Message-ID: <CAPM=9tzmeDfgQ3VhutQWLcgVhodHJhGmzrjMTB=yvXOhwnw0CA@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.18-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bf15209d-2c50-9957-af24-c4f428f213b1@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+On Thu, Apr 14, 2022 at 04:14:22PM +0200, Paolo Bonzini wrote:
+> On 4/14/22 15:56, Sean Christopherson wrote:
+> > > -	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
+> > > +	return ((vm_paddr_t)pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
+> > This is but one of many paths that can get burned by pfn being 40 bits.  The
+> > most backport friendly fix is probably to add a pfn=>gpa helper and use that to
+> > place the myriad "pfn * vm->page_size" instances.
+> > 
+> > For a true long term solution, my vote is to do away with the bit field struct
+> > and use #define'd masks and whatnot.
+> 
+> Yes, bitfields larger than 32 bits are a mess.
 
-Eggs season holidays are among us, and I think I'd expect some smaller
-pulls for 2 weeks then, rc5 having a blow out, as this seems eerily
-quiet. One i915 fix, amdgpu has a bunch and msm. I didn't see a misc
-pull this week, so I expect that will catch up next week.
+It's very interesting to know this..
 
-Dave.
+I just tried out with <32 bits bitfield and indeed gcc will behave
+differently, by having the calculation done with 32bit (eax) rather than
+64bit (rax).
 
-drm-fixes-2022-04-15:
-drm fixes for 5.18-rc3
+The question is for >=32 bits it needs an extra masking instruction, while
+that does not exist for the <32bits bitfield.
 
-i915:
-- Correct legacy mmap disabling to use GRAPHICS_VER_FULL
+---8<---
+#include <stdio.h>
 
-msm:
-- system suspend fix
-- kzalloc return checks
-- misc display fix
-- iommu_present removal
+struct test1 {
+    unsigned long a:${X};
+    unsigned long b:10;
+};
 
-amdgpu:
-- Fix for alpha properly in pre-multiplied mode
-- Fix VCN 3.1.2 firmware name
-- Suspend/resume fix
-- Add a gfxoff quirk for Mac vega20 board
-- DCN 3.1.6 spread spectrum fix
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e=
-:
+int main(void)
+{
+    struct test1 val;
+    val.a = 0x1234;
+    printf("0x%lx\n", val.a * 16);
+    return 0;
+}
+---8<---
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+When X=20:
 
-are available in the Git repository at:
+0000000000401126 <main>:                                                                      
+  401126:       55                      push   %rbp     
+  401127:       48 89 e5                mov    %rsp,%rbp
+  40112a:       48 83 ec 10             sub    $0x10,%rsp
+  40112e:       8b 45 f8                mov    -0x8(%rbp),%eax
+  401131:       25 00 00 f0 ff          and    $0xfff00000,%eax
+  401136:       0d 34 12 00 00          or     $0x1234,%eax
+  40113b:       89 45 f8                mov    %eax,-0x8(%rbp)
+  40113e:       8b 45 f8                mov    -0x8(%rbp),%eax
+  401141:       25 ff ff 0f 00          and    $0xfffff,%eax
+  401146:       c1 e0 04                shl    $0x4,%eax     <----------- calculation (no further masking)
+  401149:       89 c6                   mov    %eax,%esi
+  40114b:       bf 10 20 40 00          mov    $0x402010,%edi
+  401150:       b8 00 00 00 00          mov    $0x0,%eax
+  401155:       e8 d6 fe ff ff          callq  401030 <printf@plt>
 
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-04-15
+When X=40:
 
-for you to fetch changes up to 8e401ff5380a921c309d4c73cacf27b0bdb5f168:
+0000000000401126 <main>:                                                                      
+  401126:       55                      push   %rbp                
+  401127:       48 89 e5                mov    %rsp,%rbp                                      
+  40112a:       48 83 ec 10             sub    $0x10,%rsp      
+  40112e:       48 8b 45 f8             mov    -0x8(%rbp),%rax                                
+  401132:       48 ba 00 00 00 00 00    movabs $0xffffff0000000000,%rdx                       
+  401139:       ff ff ff                                                                      
+  40113c:       48 21 d0                and    %rdx,%rax
+  40113f:       48 0d 34 12 00 00       or     $0x1234,%rax
+  401145:       48 89 45 f8             mov    %rax,-0x8(%rbp)
+  401149:       48 b8 ff ff ff ff ff    movabs $0xffffffffff,%rax
+  401150:       00 00 00 
+  401153:       48 23 45 f8             and    -0x8(%rbp),%rax
+  401157:       48 c1 e0 04             shl    $0x4,%rax    <------------ calculation
+  40115b:       48 ba ff ff ff ff ff    movabs $0xffffffffff,%rdx
+  401162:       00 00 00 
+  401165:       48 21 d0                and    %rdx,%rax    <------------ masking (again)
+  401168:       48 89 c6                mov    %rax,%rsi
+  40116b:       bf 10 20 40 00          mov    $0x402010,%edi
+  401170:       b8 00 00 00 00          mov    $0x0,%eax
+  401175:       e8 b6 fe ff ff          callq  401030 <printf@plt>
 
-  Merge tag 'amd-drm-fixes-5.18-2022-04-13' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-04-15
-07:14:20 +1000)
+That feels a bit less consistent to me, comparing to clang where at least
+the behavior keeps the same for whatever length of bits in the bitfields.
 
-----------------------------------------------------------------
-drm fixes for 5.18-rc3
+Thanks,
 
-i915:
-- Correct legacy mmap disabling to use GRAPHICS_VER_FULL
+-- 
+Peter Xu
 
-msm:
-- system suspend fix
-- kzalloc return checks
-- misc display fix
-- iommu_present removal
-
-amdgpu:
-- Fix for alpha properly in pre-multiplied mode
-- Fix VCN 3.1.2 firmware name
-- Suspend/resume fix
-- Add a gfxoff quirk for Mac vega20 board
-- DCN 3.1.6 spread spectrum fix
-
-----------------------------------------------------------------
-Alex Deucher (1):
-      drm/amdgpu: fix VCN 3.1.2 firmware name
-
-Charlene Liu (1):
-      drm/amd/display: remove dtbclk_ss compensation for dcn316
-
-Dave Airlie (3):
-      Merge tag 'drm-intel-fixes-2022-04-13' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'drm-msm-fixes-2022-04-13' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes
-      Merge tag 'amd-drm-fixes-5.18-2022-04-13' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-
-Dmitry Baryshkov (1):
-      dt-bindings: display/msm: another fix for the dpu-qcm2290 example
-
-Kai-Heng Feng (1):
-      drm/amdgpu: Ensure HDA function is suspended before ASIC reset
-
-Kuogee Hsieh (1):
-      drm/msm/dp: add fail safe mode outside of event_mutex context
-
-Marijn Suijten (1):
-      drm/msm/dpu: Use indexed array initializer to prevent mismatches
-
-Matt Roper (1):
-      drm/i915: Sunset igpu legacy mmap support based on GRAPHICS_VER_FULL
-
-Melissa Wen (1):
-      drm/amd/display: don't ignore alpha property on pre-multiplied mode
-
-Nathan Chancellor (1):
-      drm/msm/gpu: Avoid -Wunused-function with !CONFIG_PM_SLEEP
-
-Rob Clark (5):
-      drm/msm/gpu: Rename runtime suspend/resume functions
-      drm/msm/gpu: Park scheduler threads for system suspend
-      drm/msm/gpu: Remove mutex from wait_event condition
-      drm/msm: Add missing put_task_struct() in debugfs path
-      drm/msm: Fix range size vs end confusion
-
-Robin Murphy (1):
-      drm/msm: Stop using iommu_present()
-
-Stephen Boyd (1):
-      drm/msm/dsi: Use connector directly in msm_dsi_manager_connector_init=
-()
-
-Tomasz Mo=C5=84 (1):
-      drm/amdgpu: Enable gfxoff quirk on MacBook Pro
-
-Xiaoke Wang (2):
-      drm/msm/disp: check the return value of kzalloc()
-      drm/msm/mdp5: check the return of kzalloc()
-
- .../bindings/display/msm/dpu-qcm2290.yaml          |  4 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            | 18 +++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c            |  2 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |  2 +
- .../amd/display/dc/clk_mgr/dce100/dce_clk_mgr.c    |  2 +-
- .../amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c |  4 +-
- drivers/gpu/drm/amd/display/dc/dc.h                |  2 +-
- .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  | 14 ++--
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c | 14 ++--
- drivers/gpu/drm/i915/gem/i915_gem_mman.c           |  2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c              |  2 +-
- drivers/gpu/drm/msm/adreno/adreno_device.c         | 80 +++++++++++++++++-=
-----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c  | 34 ++++-----
- drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c         |  3 +
- drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c  |  2 +
- drivers/gpu/drm/msm/dp/dp_display.c                |  6 ++
- drivers/gpu/drm/msm/dp/dp_panel.c                  | 20 +++---
- drivers/gpu/drm/msm/dp/dp_panel.h                  |  1 +
- drivers/gpu/drm/msm/dsi/dsi_manager.c              |  2 +-
- drivers/gpu/drm/msm/msm_drv.c                      |  2 +-
- drivers/gpu/drm/msm/msm_gem.c                      |  1 +
- 21 files changed, 147 insertions(+), 70 deletions(-)

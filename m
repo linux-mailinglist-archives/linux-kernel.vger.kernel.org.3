@@ -2,112 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60326500385
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE549500387
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239350AbiDNBSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S239374AbiDNBTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235222AbiDNBSn (ORCPT
+        with ESMTP id S232467AbiDNBT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:18:43 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48DF74E38E;
-        Wed, 13 Apr 2022 18:16:20 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id D411B92009C; Thu, 14 Apr 2022 03:16:18 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id C508F92009B;
-        Thu, 14 Apr 2022 02:16:18 +0100 (BST)
-Date:   Thu, 14 Apr 2022 02:16:18 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-In-Reply-To: <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
- <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 13 Apr 2022 21:19:29 -0400
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1F04E38E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:17:06 -0700 (PDT)
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 89E15184A;
+        Thu, 14 Apr 2022 01:17:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 46D6336;
+        Thu, 14 Apr 2022 01:16:59 +0000 (UTC)
+Message-ID: <eda6a3a94b768f06e67581bbc4d9974b391f0651.camel@perches.com>
+Subject: Re: [PATCH 4/6] staging: r8188eu: place constants on the right side
+ of tests
+From:   Joe Perches <joe@perches.com>
+To:     Jaehee Park <jhpark1013@gmail.com>, Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Date:   Wed, 13 Apr 2022 18:16:58 -0700
+In-Reply-To: <d2469155c37b8677a8dcbed28bc0840745d46f76.1649880454.git.jhpark1013@gmail.com>
+References: <cover.1649880454.git.jhpark1013@gmail.com>
+         <d2469155c37b8677a8dcbed28bc0840745d46f76.1649880454.git.jhpark1013@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 46D6336
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: ucutbhqknse6ajuz6ibq95hioue4rq3x
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19QSXj0Gs9SivOGdTGlKjF8xaHxB+z/K+A=
+X-HE-Tag: 1649899019-213656
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Wed, 2022-04-13 at 16:11 -0400, Jaehee Park wrote:
+> To comply with the linux coding style, place constants on the right
+> side of the test in comparisons. Issue found with checkpatch.
+> WARNING: Comparisons should place the constant on the right side of
+> the test.
+[]
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+[]
+> @@ -1997,19 +1998,19 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
+>  	else
+>  		pnetwork = &pmlmepriv->cur_network;
+>  
+> -	if (0 < rtw_to_roaming(padapter)) {
+> +	if (rtw_to_roaming(padapter) > 0) {
 
-> However, one thing that I've been thinking about is that the c0 random
-> register is actually kind of garbage. In my fuzzy decade-old memory of
-> MIPS, I believe the c0 random register starts at the maximum number of
-> TLB entries (16?), and then counts down cyclically, decrementing once
-> per CPU cycle. Is that right?
+Do you think this change is the same test?
 
- Yes, for the relevant CPUs the range is 63-8 << 8 for R3k machines and 
-47-0 (the lower bound can be higher if wired entries are used, which I 
-think we occasionally do) for R4k machines with a buggy CP0 counter.  So 
-there are either 56 or up to 48 distinct CP0 Random register values.
+What happens if rtw_to_roaming returns 0?
 
-> If it is, there are some real pros and cons here to consider:
-> - Pro: decrementing each CPU cycle means pretty good granularity
-> - Con: wrapping at, like, 16 or something really is very limited, to
-> the point of being almost bad
-> 
-> Meanwhile, on systems without the c0 cycles counter, what is the
-> actual resolution of random_get_entropy_fallback()? Is this just
-> falling back to jiffies?
+[]
 
- It depends on the exact system.  Some have a 32-bit high-resolution 
-counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
-resolution, some have nothing but jiffies.
+> -				if (0 < pmlmepriv->to_roaming) {
+> +				if (pmlmepriv->to_roaming > 0) {
 
-> IF (a) the fallback is jiffies AND (b) c0 wraps at 16, then actually,
-> what would be really nice would be something like:
-> 
->     return (jiffies << 4) | read_c0_random();
-> 
-> It seems like that would give us something somewhat more ideal than
-> the status quo. Still crap, of course, but undoubtedly better.
+here too
 
- It seems like a reasonable idea to me, but the details would have to be 
-sorted out, because where a chipset high-resolution counter is available 
-we want to factor it in, and otherwise we need to extract the right bits 
-from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+>  					continue;
+>  				} else {
+>  					rtw_indicate_disconnect(padapter);
 
-  Maciej
+

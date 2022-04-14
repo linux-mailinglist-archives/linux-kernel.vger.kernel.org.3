@@ -2,150 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FED501C54
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1489501C59
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346053AbiDNUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S1346068AbiDNUGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346043AbiDNUGE (ORCPT
+        with ESMTP id S1345049AbiDNUGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:06:04 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF6DEB92
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:03:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r18so7431355ljp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:03:37 -0700 (PDT)
+        Thu, 14 Apr 2022 16:06:47 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4FFDD972;
+        Thu, 14 Apr 2022 13:04:19 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id n17so2469465ljc.11;
+        Thu, 14 Apr 2022 13:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=beqqQMdRDQ9RUWQqne39QWiVSV/dlCi62JNsxM9+crs=;
-        b=tGi1B2Kx0rNnAyl3InWnsf/q3MTIoRbgwNYozMzh2/GDAhUhX/iPuUhSdKNqcjl8ym
-         WaKCTbUIkFORkXGPAUaiv82SDHUJWmhW1y1Y8RpXig6VzkNG2Xyjey+SVAKCWDfLR8zZ
-         lUC3CGaxZI28q+i9ZxPHo7Ig8ELXwRRIL7MSA2BuLlUDnFJ3EzjyqMV3Z/hZ9/hVlEaL
-         QnXBqnlKWI3+kZHauGmY1NQLScQoC1GgSONcDo9VQr4bp3GohNPlX/+UeYOZd+uVXVNC
-         t9ap9ngZR4yFUKz+o7v8NgtZJ6lFtF8++cBrJva0onfGV01qYph3tGbiSiA8psbX6R4t
-         Kxsg==
+         :references:from:in-reply-to;
+        bh=g4kANU1VrK5acPJfKF6VYK1C9MNjlYkxbsqsZ+dk1U8=;
+        b=SbibftoqrxWV6J74m1gNZFi5thbDewd2r8zTQBKR+BB+F+KD+q4rVf05zXQKo9iXTu
+         Y1hQ6MAkc9EKxb7xP2kbsLfiJx+a8AilKBu1O3LQFeA+IDFkS1otQUKWVlUW3FHX/RxW
+         5CPrQxlT+vkGMKlzfqERsvXAmIN9WTsX/hs4qR9CUM1itGAuTz1BQ3Z4yZcqqvPHRu1/
+         aJ4NPcdSqa+wOucLiAJ2gU+fmJkNSy89IeHc4+yOXxCAeM+vWmnGO10L8iRVZkEUHh3t
+         Y20+2oRWK2DnEW7DxSgUZ0ZH3z7tN45+IS6/IR/vhoWNhkZdTvNwA16YJ0TTHmn8ThgL
+         VXNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=beqqQMdRDQ9RUWQqne39QWiVSV/dlCi62JNsxM9+crs=;
-        b=Natm9MlNekDuLXD3gtF4QyxKnPA74hYrYdeERUIHRgqF/QDWgoBMXugGCP+bgkUfMW
-         YVrw1QjtInwDATKKX0DVWJpQnHyDtPatXQZqcEyCv0WM0JDmWSt78mOSEcNQnBlEwDcy
-         bcmhL5nRZz9B7a19erUxtPZ+M0Dcdkc4p4cZiP0pJte9qzbdrPIeelpK5ImYCw/Tsnx2
-         tyYH8oh8t6SMQ5ac5enZF8PajZwdXvcavdHaq2LrbIVcrtklNrAqmcyPBa/zj8wBz+9T
-         rO16bO3P13+DgF1ZiSsWeXjxup/8UJgHRWuDxzTvrohvWBMT1xC9n99AKCvcCe6Vq3Ls
-         ePIA==
-X-Gm-Message-State: AOAM532c9fqLlR8KytRgrlE/fDhLM0cWFXKJPPtvcwUSZJUiUVbzopTI
-        e4p7B+6KMXSRLQoVJ/ICJos7AA==
-X-Google-Smtp-Source: ABdhPJwAs9fOjjGshqLg5XWviayRGs5Tm3QRuhmlg02hwi9L+QMiaB5VyBAX43z8HwLdTai9w0U2FA==
-X-Received: by 2002:a2e:302:0:b0:24a:c997:d34c with SMTP id 2-20020a2e0302000000b0024ac997d34cmr2538120ljd.445.1649966615179;
-        Thu, 14 Apr 2022 13:03:35 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b19-20020a196713000000b0046b911a2ccdsm93716lfc.214.2022.04.14.13.03.34
+         :content-language:to:references:from:in-reply-to;
+        bh=g4kANU1VrK5acPJfKF6VYK1C9MNjlYkxbsqsZ+dk1U8=;
+        b=P/23Wa9qyoNMYvAqEAebEBtUV8hwfyRuIxqfYKOq734NgKwptT2LKSSwYSNAdpqljC
+         6m4Ii3YGYDKWioyMb2qRYRBAoNEtIkmJ9NpKTxeNIDZf4J0ZFBO0WoasPUE5Hs+V6nSt
+         RO6Rj9e/u0BWKwHvdWlGHc73O9gBcTEH2UQjs7Q+6DyO28Sv0ZC0ycDEGCFiehPbXqqt
+         VXMwFSFSn71CFtj4oBSV90L6Wlz752hop7Q5y1SUGgbCoMarul+QaeMNCOWj2+fT+f26
+         Mws1v+u/qRFyC0JlQBUgCFNgQI+cAxUfD7l1d0c0zpqJnttuwqGqWIfSYOy8cubWU2NA
+         QDmA==
+X-Gm-Message-State: AOAM533WVfFqP31Q7cP5Zk9ILApCN2hsXGpOL1smdoBUu3LQJxz/y4yz
+        nm/McD1NJvgXq2L/pPX1/8M=
+X-Google-Smtp-Source: ABdhPJyNduebeKAYirHCHZy0TMHnJfN8W2+1JamFviOCGGg/rCftjpXGvo9ro7uxahUNdMIzmaIoVw==
+X-Received: by 2002:a05:651c:b29:b0:24b:6aaf:f200 with SMTP id b41-20020a05651c0b2900b0024b6aaff200mr2565867ljr.168.1649966657409;
+        Thu, 14 Apr 2022 13:04:17 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.225.17])
+        by smtp.gmail.com with ESMTPSA id z1-20020a0565120c0100b00447a7c10e4dsm96776lfu.31.2022.04.14.13.04.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 13:03:34 -0700 (PDT)
-Message-ID: <2fd4a157-a9de-ca0e-7a47-7bb85199ae91@linaro.org>
-Date:   Thu, 14 Apr 2022 23:03:33 +0300
+        Thu, 14 Apr 2022 13:04:16 -0700 (PDT)
+Message-ID: <88a47762-fac7-6158-1730-344bb2905fc9@gmail.com>
+Date:   Thu, 14 Apr 2022 23:04:15 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Freedreno] [PATCH v7 0/4] Add support for the eDP panel over
- aux_bus
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     quic_kalyant <quic_kalyant@quicinc.com>,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sean Paul <sean@poorly.run>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
-References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=Ui6BAsnTaJ2_TMh1Tnjtaw7FR92aWoUysS+UT=c0qB3Q@mail.gmail.com>
- <20afcd97-4b8d-f770-151a-268b893b7c5a@linaro.org>
- <CAE-0n51fc-b-8VF7XP29=o8Xi86HQALGB-1u8n3b_3NjVyyJYw@mail.gmail.com>
- <e3154f3b-aea4-6961-b409-6b20ff8bf18e@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <e3154f3b-aea4-6961-b409-6b20ff8bf18e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ Thunderbird/91.7.0
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in pvr2_i2c_core_init
+Content-Language: en-US
+To:     syzbot <syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com>,
+        isely@pobox.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000005abf2305dca1b91b@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <0000000000005abf2305dca1b91b@google.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------1f0fk0wUrqaOEQ48gXJZmBL0"
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 23:00, Abhinav Kumar wrote:
-> Hi Dmitry
-> 
-> On 4/14/2022 12:43 PM, Stephen Boyd wrote:
->> Quoting Dmitry Baryshkov (2022-04-14 12:20:31)
->>> On 14/04/2022 19:40, Doug Anderson wrote:
->>>> Hi,
->>>>
->>>> On Thu, Apr 14, 2022 at 5:19 AM Sankeerth Billakanti
->>>> <quic_sbillaka@quicinc.com> wrote:
->>>>>
->>>>> This series adds support for generic eDP panel over aux_bus.
->>>>>
->>>>> These changes are dependent on the following series:
->>>>> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=613654&state=* 
->>>>>
->>>>
->>>> You're basically depending on the last two patches of that series.
->>>> What's the plan there? In patchwork they're marked as "Not
->>>> Applicable". If they're good to go, maybe we should land them? If not,
->>>> maybe you should include them (with Dmitry as the author, of course)
->>>> at the beginning of your series?
->>>
->>> No, please do not resend patches. The patches in question are marked as
->>> 'Not applicable' as they are really not applicable to Bjorn's tree.
->>> It would be better to point to the correct patchwork:
->>>
->>> https://patchwork.freedesktop.org/series/98585/
->>>
->>> Note those patches still lack the R-B tag. I can include them anyway,
->>> basing on Sankeerth's Tested-by tag, but the formal R-B would also be 
->>> good.
->>>
->>
->> Can you resend those as not RFC?
-> 
-> Yes, please resend these, I can ack them.
-> 
-> Previously I held off my ack, as kuogee ran into some issues testing 
-> them which was later concluded to be a mismatch in QC internal trees due 
-> to different versions of the changes.( another reason why we should get 
-> these landed ).
-> 
-> Now, that Sankeerth has tested these, if you can remove RFC and post 
-> them, I can ack the.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------1f0fk0wUrqaOEQ48gXJZmBL0
+Content-Type: multipart/mixed; boundary="------------VmOfhKFvgmUO7hSsgrL0vC8P";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: syzbot <syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com>,
+ isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <88a47762-fac7-6158-1730-344bb2905fc9@gmail.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in pvr2_i2c_core_init
+References: <0000000000005abf2305dca1b91b@google.com>
+In-Reply-To: <0000000000005abf2305dca1b91b@google.com>
 
-Well, you can ack those patches without them being resent. You have 
-already added your Reviewed-by to first three patches (which were merged 
-during last window).
+--------------VmOfhKFvgmUO7hSsgrL0vC8P
+Content-Type: multipart/mixed; boundary="------------KR92So9sVH1iAdRDL7JOqcYI"
 
+--------------KR92So9sVH1iAdRDL7JOqcYI
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
--- 
-With best wishes
-Dmitry
+SGkgU3l6Ym90LA0KDQpPbiA0LzE0LzIyIDIxOjQ3LCBzeXpib3Qgd3JvdGU6DQo+IEhlbGxv
+LA0KPiANCj4gc3l6Ym90IGZvdW5kIHRoZSBmb2xsb3dpbmcgaXNzdWUgb246DQo+IA0KPiBI
+RUFEIGNvbW1pdDogICAgNGVhM2M2NDI1MjY5IE1lcmdlIHRhZyAncG93ZXJwYy01LjE4LTIn
+IG9mIGdpdDovL2dpdC5rZXJuZS4uDQo+IGdpdCB0cmVlOiAgICAgICB1cHN0cmVhbQ0KPiBj
+b25zb2xlIG91dHB1dDogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20veC9sb2cudHh0
+P3g9MTQ4Y2I4MjRmMDAwMDANCj4ga2VybmVsIGNvbmZpZzogIGh0dHBzOi8vc3l6a2FsbGVy
+LmFwcHNwb3QuY29tL3gvLmNvbmZpZz94PTMwN2JhZWNmZDVlODdjZWQNCj4gZGFzaGJvYXJk
+IGxpbms6IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3QuY29tL2J1Zz9leHRpZD0xYTI0N2Uz
+NjE0OWZmZDcwOWE5Yg0KPiBjb21waWxlcjogICAgICAgZ2NjIChEZWJpYW4gMTAuMi4xLTYp
+IDEwLjIuMSAyMDIxMDExMCwgR05VIGxkIChHTlUgQmludXRpbHMgZm9yIERlYmlhbikgMi4z
+NS4yDQo+IHN5eiByZXBybzogICAgICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94
+L3JlcHJvLnN5ej94PTE3Mjc5YTcwZjAwMDAwDQo+IEMgcmVwcm9kdWNlcjogICBodHRwczov
+L3N5emthbGxlci5hcHBzcG90LmNvbS94L3JlcHJvLmM/eD0xMjFkYzEyNGYwMDAwMA0KPiAN
+Cj4gQmlzZWN0aW9uIGlzIGluY29uY2x1c2l2ZTogdGhlIGlzc3VlIGhhcHBlbnMgb24gdGhl
+IG9sZGVzdCB0ZXN0ZWQgcmVsZWFzZS4NCj4gDQo+IGJpc2VjdGlvbiBsb2c6ICBodHRwczov
+L3N5emthbGxlci5hcHBzcG90LmNvbS94L2Jpc2VjdC50eHQ/eD0xNDI3NTNkZjcwMDAwMA0K
+PiBmaW5hbCBvb3BzOiAgICAgaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20veC9yZXBv
+cnQudHh0P3g9MTYyNzUzZGY3MDAwMDANCj4gY29uc29sZSBvdXRwdXQ6IGh0dHBzOi8vc3l6
+a2FsbGVyLmFwcHNwb3QuY29tL3gvbG9nLnR4dD94PTEyMjc1M2RmNzAwMDAwDQo+IA0KPiBJ
+TVBPUlRBTlQ6IGlmIHlvdSBmaXggdGhlIGlzc3VlLCBwbGVhc2UgYWRkIHRoZSBmb2xsb3dp
+bmcgdGFnIHRvIHRoZSBjb21taXQ6DQoNCg0KanVzdCBndWVzc2luZw0KDQoNCiNzeXogdGVz
+dDoNCmdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2
+YWxkcy9saW51eC5naXQgbWFzdGVyDQoNCg0KDQoNCldpdGggcmVnYXJkcywNClBhdmVsIFNr
+cmlwa2luDQo=
+--------------KR92So9sVH1iAdRDL7JOqcYI
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1oZHcuYyBi
+L2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1oZHcuYwppbmRleCBjZDdiMTE4
+ZDU5MjkuLjJhMWEwYTBjYTIyNSAxMDA2NDQKLS0tIGEvZHJpdmVycy9tZWRpYS91c2IvcHZy
+dXNiMi9wdnJ1c2IyLWhkdy5jCisrKyBiL2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZy
+dXNiMi1oZHcuYwpAQCAtMjU2OSw2ICsyNTY5LDkgQEAgc3RydWN0IHB2cjJfaGR3ICpwdnIy
+X2hkd19jcmVhdGUoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAJfSB3aGlsZSAoMCk7
+CiAJbXV0ZXhfdW5sb2NrKCZwdnIyX3VuaXRfbXR4KTsKIAorCWlmIChoZHctPnVuaXRfbnVt
+YmVyID09IC0xKQorCSAgCWdvdG8gZmFpbDsKKwogCWNudDEgPSAwOwogCWNudDIgPSBzY25w
+cmludGYoaGR3LT5uYW1lK2NudDEsc2l6ZW9mKGhkdy0+bmFtZSktY250MSwicHZydXNiMiIp
+OwogCWNudDEgKz0gY250MjsK
+
+--------------KR92So9sVH1iAdRDL7JOqcYI--
+
+--------------VmOfhKFvgmUO7hSsgrL0vC8P--
+
+--------------1f0fk0wUrqaOEQ48gXJZmBL0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJYfj8FAwAAAAAACgkQbk1w61LbBA1S
+2hAAsSCDq9Yv0tQK2KjATljoi6L3CbL9ocJQbncn8VEM/Qk+BAnVT/GcZqiv6sBc2nZSF8GLJR5u
+XXpodO0lGisa/wHLtVMixTxPP9YcSWhoyyY2D5sobEQVjh0Sn5mEXfuGc5y7J1BJJdd/Tpd5DtaM
+GPN+1ic7KS9lwffJ+W3TC8/gES+jDtggcErTIW2juhBPsjrfHm4xyT63wxqrtTcgE3gBiu3+Dwl2
+/wQYhG9jqGvrK8TbaM5e0hhmLq2+fxt5X/wQfpsFHHuYpGee4RsR+PmoOQ7cqsm13Pie5DNg8Pmk
+qRl3jsnyfqnJcB+Q3T1M7mLmvkQ+cRGtHebSL3+VVbjY8A5KgRtsJDZr7tnkAAkfQAvMaIB97J7W
+tX/rGgwNKsdvUMj3bEMN3pD6KDt+NjOIziArRUXqYhQSdINLA/+6QjL/ma5e839VWaeQON2UP77K
+/Fp/eyaXu/rahOcQYSLPnMkntllzKBJfgzuOpNXQCDZt5+huDaB09awG+8hqoYX1LvujBrtf4hgG
+91Cp0SyEM1yPxme0fvLLqxB4DWueYUneBeOLv5cwT+vyPu+ToN28vR0tjpFHm2tReHu78rW09bfx
+Ig4dPfTFFiR0SV5dTso9x60ly3aVcTuAIjND7ecgNv7ejcKYtiebUymkrYVnhGihBVuLndStkoiW
+FG4=
+=NSZE
+-----END PGP SIGNATURE-----
+
+--------------1f0fk0wUrqaOEQ48gXJZmBL0--

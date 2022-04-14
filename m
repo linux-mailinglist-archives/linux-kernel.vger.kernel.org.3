@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2364501173
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33B1501336
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244506AbiDNNgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S244348AbiDNOnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244379AbiDNN0p (ORCPT
+        with ESMTP id S1345048AbiDNNpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:26:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD709F6D1;
-        Thu, 14 Apr 2022 06:20:04 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0196C484;
+        Thu, 14 Apr 2022 06:41:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D292618B8;
-        Thu, 14 Apr 2022 13:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652CDC385A5;
-        Thu, 14 Apr 2022 13:20:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98B3E61D70;
+        Thu, 14 Apr 2022 13:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37B9C385AB;
+        Thu, 14 Apr 2022 13:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942402;
-        bh=HmqK+8Ssv/l7pPAmYxYimKs/FNSOXU2JK7PgAjEZZX8=;
+        s=korg; t=1649943679;
+        bh=F2Gt7S2fF5fK7h44yANFA+WE/crqx+XNgEm9tPuR7og=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dEqNdXzCNSkiHpXBILPE6T0swYh8+I7Hz/g8BeoTQaCcC5l42YntXm2q354VroYR1
-         tcB57/dOocWTYumy3YHyFbORlXVlCXR7mjdQEmi69e+7zK24cFsSdYdEyLSkYJTHqN
-         qjAndFryumVI9MS8+vN7FNA3GqU75KAaVthEZbCI=
+        b=vv+AQhyWxa3plvgcu0jsQuplPn2H+FjMcMC+7Ak3z71NSaXMlc36vpfH2gEbxg0b/
+         Kadv5j4e6GOy5stR8sOgReyxKTm1wnK8lrh8ERF3ywVvjlRMjlDsVjbEb7THSAM/UP
+         zvaKRU9Evi6SgsURaIf99VWu3giIzmhbmoXtgc30=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 124/338] ray_cs: Check ioremap return value
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 242/475] remoteproc: qcom: Fix missing of_node_put in adsp_alloc_memory_region
 Date:   Thu, 14 Apr 2022 15:10:27 +0200
-Message-Id: <20220414110842.432496463@linuxfoundation.org>
+Message-Id: <20220414110901.889026051@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 7e4760713391ee46dc913194b33ae234389a174e ]
+[ Upstream commit 505b5b1616e200042999de715dbe7c1e2735cd65 ]
 
-As the possible failure of the ioremap(), the 'local->sram' and other
-two could be NULL.
-Therefore it should be better to check it in order to avoid the later
-dev_dbg.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20211230022926.1846757-1-jiasheng@iscas.ac.cn
+Fixes: dc160e449122 ("remoteproc: qcom: Introduce Non-PAS ADSP PIL driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308031219.4718-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ray_cs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/remoteproc/qcom_q6v5_adsp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
-index 08c607c031bc..8704bae39e1b 100644
---- a/drivers/net/wireless/ray_cs.c
-+++ b/drivers/net/wireless/ray_cs.c
-@@ -394,6 +394,8 @@ static int ray_config(struct pcmcia_device *link)
- 		goto failed;
- 	local->sram = ioremap(link->resource[2]->start,
- 			resource_size(link->resource[2]));
-+	if (!local->sram)
-+		goto failed;
+diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+index 24e8b7e27177..6b131a490ebf 100644
+--- a/drivers/remoteproc/qcom_q6v5_adsp.c
++++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+@@ -389,6 +389,7 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+ 	}
  
- /*** Set up 16k window for shared memory (receive buffer) ***************/
- 	link->resource[3]->flags |=
-@@ -408,6 +410,8 @@ static int ray_config(struct pcmcia_device *link)
- 		goto failed;
- 	local->rmem = ioremap(link->resource[3]->start,
- 			resource_size(link->resource[3]));
-+	if (!local->rmem)
-+		goto failed;
+ 	ret = of_address_to_resource(node, 0, &r);
++	of_node_put(node);
+ 	if (ret)
+ 		return ret;
  
- /*** Set up window for attribute memory ***********************************/
- 	link->resource[4]->flags |=
-@@ -422,6 +426,8 @@ static int ray_config(struct pcmcia_device *link)
- 		goto failed;
- 	local->amem = ioremap(link->resource[4]->start,
- 			resource_size(link->resource[4]));
-+	if (!local->amem)
-+		goto failed;
- 
- 	dev_dbg(&link->dev, "ray_config sram=%p\n", local->sram);
- 	dev_dbg(&link->dev, "ray_config rmem=%p\n", local->rmem);
 -- 
 2.34.1
 

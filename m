@@ -2,131 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A607950178E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7CF501787
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358232AbiDNPlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
+        id S1352114AbiDNPki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353866AbiDNOl2 (ORCPT
+        with ESMTP id S1353973AbiDNOlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:41:28 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FD9BD7C7;
-        Thu, 14 Apr 2022 07:32:41 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id t207so3995886qke.2;
-        Thu, 14 Apr 2022 07:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=emZ7XYPyCRycoXxp05wXOrh8mpo5yDWCQQvk32Zm7lU=;
-        b=i66eVPB+lzhboiXlRHKgeDJD31kRfFC8OiORnXb0A3xXoW/PqCKD4TLQdQRKImo74R
-         jvMgERqUa9HQ0V/klW+xCXYIQ2PhOHSnbEbDpeuPVluaZvI45kPrPp8HFZMDL+Ut3LrO
-         LuzPH2OgiUu6M4e8zWJcen2EBOw5SNCTGNccvnBPbBwjO6KPGIJDWHGqLYy36lKCkNet
-         QOpD6vMMunKVJh7H3kdQr3MC7P3xkXUzW2t3A/Rdq49mGdlRYc9OrB+T+sB1UG3UF0Eh
-         IGrS0zlEl8lSeNkRiA7KsAxqVztDl2nrd14Pr0RBYmjKrAA/2h1D1SOt2ZlUu/E/BD/N
-         Jh9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=emZ7XYPyCRycoXxp05wXOrh8mpo5yDWCQQvk32Zm7lU=;
-        b=7GE3Nmr83HSBSFQIwqthfwdiLoYwAn9WywWoFY6RDVlTSVZ5XJwGd3pCLo1pAaju17
-         ol6Gfx7lmoRcwLmgMf58wowQsASe9Tm/fKexO3u6MKtt7Po2sXRdhnVoXBpgdN1rNQXW
-         yWod96nFVax0BIyjFveBK/K7aokd7rXbHqcZd6deSrv539yeWIzyI9VtfoY750K2VxUR
-         /n46BDtmcqmKm187MJpScDt7camiX1Cbz3lDNM+1bysuBLJc2pswddmClEewa0mEuRF8
-         lZctmE3GfliAYzeYf/P25FObNq3RllYvEJNenvKk5EU5VcdZrQtrIfCDqU5aZX5lYQhT
-         I4WA==
-X-Gm-Message-State: AOAM5305H6L+mu4sPxh0afZklw67dWOc9aV8XqPAt4gybSp69yl09/dc
-        EiO50+0kbGOZu+iv9xQXhbBTipp3d2Q=
-X-Google-Smtp-Source: ABdhPJxKgOA2wI1T+BJbaHAI6XntjtvHEqwGf3e4MZP/bapA/JyfHEH/H7F7N5yCBjWYEj6tYUQTaw==
-X-Received: by 2002:a05:620a:406:b0:69b:e25c:778c with SMTP id 6-20020a05620a040600b0069be25c778cmr2052455qkp.224.1649946760549;
-        Thu, 14 Apr 2022 07:32:40 -0700 (PDT)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05622a174900b002ee2fed0583sm1331298qtk.27.2022.04.14.07.32.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 07:32:39 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 10:32:38 -0400
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: afe: rescale: Make use of device properties
-Message-ID: <Ylgwhu9zdmwwYnAq@shaak>
-References: <20220413190117.29814-1-andriy.shevchenko@linux.intel.com>
+        Thu, 14 Apr 2022 10:41:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C26C12EC
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649946812; x=1681482812;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a9isROkySwnE11B+AHokM790DJBnMvG/rOrv3n4CWIo=;
+  b=xM5qRN2Vq74VErva/GKDKxLEJ4F2jqS0+gUwUwnrZRQ36UKGNCzhSkGx
+   AClsL8Kvt63IGgW8O1tIBDxy0mo/ZOG2biC0guPpx5kOax3pr1pQeHlqg
+   I0MZnCRbgGkMVRGWpcbKTyhE/lcBY1gH3xmS/hRazj/UquDZ1rbSYNA4f
+   USBvMeV/IF8lZvXggwXOOv1nzCZQJb1Gq+vg1Ce1kt6nF/XUxYISWC0RM
+   nZxLrX+RsHx7o10c+4xe9lmdg++OviIU5RgxfQjggvqCf1i8xqrijIqAw
+   PlZUOFuyUK4GDCWcWAGosj3bBgBWefF7snIzcuCJcOkQzB0QouSTESioi
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,260,1643698800"; 
+   d="scan'208";a="152657359"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2022 07:33:30 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 14 Apr 2022 07:33:30 -0700
+Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 14 Apr 2022 07:33:28 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: fixes for 5.18
+Date:   Thu, 14 Apr 2022 16:33:18 +0200
+Message-ID: <20220414143318.26363-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413190117.29814-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-On Wed, Apr 13, 2022 at 10:01:17PM +0300, Andy Shevchenko wrote:
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/iio/afe/Kconfig       | 1 -
->  drivers/iio/afe/iio-rescale.c | 5 ++---
->  2 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/afe/Kconfig b/drivers/iio/afe/Kconfig
-> index 4fa397822cff..9a1d95c1c7ed 100644
-> --- a/drivers/iio/afe/Kconfig
-> +++ b/drivers/iio/afe/Kconfig
-> @@ -8,7 +8,6 @@ menu "Analog Front Ends"
->  
->  config IIO_RESCALE
->  	tristate "IIO rescale"
-> -	depends on OF || COMPILE_TEST
->  	help
->  	  Say yes here to build support for the IIO rescaling
->  	  that handles voltage dividers, current sense shunts and
-> diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
-> index 7e511293d6d1..c6cf709f0f05 100644
-> --- a/drivers/iio/afe/iio-rescale.c
-> +++ b/drivers/iio/afe/iio-rescale.c
-> @@ -10,9 +10,8 @@
->  
->  #include <linux/err.h>
->  #include <linux/gcd.h>
-> +#include <linux/mod_devicetable.h>
+Arnd, Olof,
 
-Is this really needed?
-device_get_match_data() is already defined in <linux/property.h>
+Here are the fixes for 5.18 addressing DT issues. Please pull.
 
-Cheers,
-Liam
+Thanks, best regards,
+  Nicolas
 
->  #include <linux/module.h>
-> -#include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  
-> @@ -536,7 +535,7 @@ static int rescale_probe(struct platform_device *pdev)
->  
->  	rescale = iio_priv(indio_dev);
->  
-> -	rescale->cfg = of_device_get_match_data(dev);
-> +	rescale->cfg = device_get_match_data(dev);
->  	rescale->numerator = 1;
->  	rescale->denominator = 1;
->  	rescale->offset = 0;
-> -- 
-> 2.35.1
-> 
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.18
+
+for you to fetch changes up to 0c640d9544d0109da3889d71ae77301e556db977:
+
+  ARM: dts: at91: fix pinctrl phandles (2022-04-13 18:48:01 +0200)
+
+----------------------------------------------------------------
+AT91 fixes #1 for 5.18:
+
+Only DT fixes. They cover syntax issues as well as features:
+- fix dtschema check warnings for DMA channel entries, boolean
+  properties and flash names
+- sam9g20ek audio clock and regulator description
+- sama5d[34]_xplained SPI pinctrl
+- align DT with hardware subtleties on sama7g5ek
+
+----------------------------------------------------------------
+Claudiu Beznea (2):
+      ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name
+      ARM: dts: at91: fix pinctrl phandles
+
+Eugen Hristev (1):
+      ARM: dts: at91: sama7g5ek: enable pull-up on flexcom3 console lines
+
+Krzysztof Kozlowski (2):
+      ARM: dts: at91: align SPI NOR node name with dtschema
+      ARM: dts: at91: use generic node name for dataflash
+
+Mark Brown (2):
+      ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
+      ARM: dts: at91: Describe regulators on at91sam9g20ek
+
+Rob Herring (1):
+      ARM: dts: at91: Fix boolean properties with values
+
+Sergiu Moga (1):
+      ARM: dts: at91: sama7g5: Swap `rx` and `tx` for `i2c` nodes
+
+Tudor Ambarus (1):
+      ARM: dts: at91: sama7g5ek: Align the impedance of the QSPI0's HSIO and PCB lines
+
+ .../devicetree/bindings/mfd/atmel-flexcom.txt      |  2 +-
+ arch/arm/boot/dts/at91-dvk_su60_somc.dtsi          |  2 +-
+ arch/arm/boot/dts/at91-kizbox3-hs.dts              |  2 +-
+ arch/arm/boot/dts/at91-kizbox3_common.dtsi         |  2 +-
+ arch/arm/boot/dts/at91-q5xr5.dts                   |  2 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi        |  2 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts      |  2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  2 +-
+ arch/arm/boot/dts/at91-sama5d3_xplained.dts        |  8 ++--
+ arch/arm/boot/dts/at91-sama5d4_ma5d4.dtsi          |  2 +-
+ arch/arm/boot/dts/at91-sama5d4_xplained.dts        |  6 +--
+ arch/arm/boot/dts/at91-sama5d4ek.dts               |  2 +-
+ arch/arm/boot/dts/at91-sama7g5ek.dts               |  4 +-
+ arch/arm/boot/dts/at91-vinco.dts                   |  2 +-
+ arch/arm/boot/dts/at91rm9200ek.dts                 |  4 +-
+ arch/arm/boot/dts/at91sam9260ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9261ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9263ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi        | 45 +++++++++++++++++++++-
+ arch/arm/boot/dts/at91sam9m10g45ek.dts             |  2 +-
+ arch/arm/boot/dts/at91sam9n12ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9rlek.dts                 |  2 +-
+ arch/arm/boot/dts/at91sam9x5ek.dtsi                |  2 +-
+ arch/arm/boot/dts/sama5d3xmb.dtsi                  |  2 +-
+ arch/arm/boot/dts/sama5d3xmb_cmp.dtsi              |  2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                     | 18 ++++-----
+ arch/arm/boot/dts/usb_a9263.dts                    |  2 +-
+ 27 files changed, 85 insertions(+), 42 deletions(-)
+
+-- 
+Nicolas Ferre

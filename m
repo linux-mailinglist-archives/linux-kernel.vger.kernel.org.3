@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B542B501748
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3C35011CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345642AbiDNP0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S1344732AbiDNNvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346678AbiDNN5u (ORCPT
+        with ESMTP id S1344048AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD8DB1A86;
-        Thu, 14 Apr 2022 06:47:59 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BDC218E;
+        Thu, 14 Apr 2022 06:26:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A22A1CE296C;
-        Thu, 14 Apr 2022 13:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6070C385A9;
-        Thu, 14 Apr 2022 13:47:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC4B8B8296A;
+        Thu, 14 Apr 2022 13:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27B0C385A9;
+        Thu, 14 Apr 2022 13:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944076;
-        bh=dZa3E98ZhWwf3GTrSnHKXqkVXwBMM+PdbAZRWOV9OCI=;
+        s=korg; t=1649942806;
+        bh=5G/Wc7dSWzOf0B8dZa+yJxvZsCGskJw/5lWxZ30T0hA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oyca5jJmD//txRfgNIB1PTd2ZVWpOe6F2wegTlOektDUqnv+xbK4M530+xQtqgIpx
-         KWOjtGBzLOaFpo/Tz/Rdmgg91IGH2nvGyreIfFNOe7IXdTcIk4WzB/kbQGYi6G7Swm
-         q4lyF37MR4YlQBOdCSurdZu41jooohlUeFyUM0Kw=
+        b=FtHwRUB+diCDKSBqLqCK7yw1+oUiGLXMTAN+Okehsh4YLAjgTNmRzgxRyeEYs5Bpo
+         78ZU1zF0lUro47ie9Vx/1CZ5VxCOA6/dSANRAWUbAsUVTumMtEKDKshkO3Z70fBmtw
+         YoNTmtCy/AaYjbcWWSzV7WuHoHXP3Dv+WKTwtv8k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        David Yang <davidcomponentone@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 384/475] drm/amdgpu: Fix recursive locking warning
-Date:   Thu, 14 Apr 2022 15:12:49 +0200
-Message-Id: <20220414110905.816645299@linuxfoundation.org>
+Subject: [PATCH 4.19 267/338] scsi: bfa: Replace snprintf() with sysfs_emit()
+Date:   Thu, 14 Apr 2022 15:12:50 +0200
+Message-Id: <20220414110846.488770678@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,136 +57,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-[ Upstream commit 447c7997b62a5115ba4da846dcdee4fc12298a6a ]
+[ Upstream commit 2245ea91fd3a04cafbe2f54911432a8657528c3b ]
 
-Noticed the below warning while running a pytorch workload on vega10
-GPUs. Change to trylock to avoid conflicts with already held reservation
-locks.
+coccinelle report:
+./drivers/scsi/bfa/bfad_attr.c:908:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:860:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:888:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:853:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:808:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:728:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:822:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:927:9-17:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:900:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:874:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:714:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:839:8-16:
+WARNING: use scnprintf or sprintf
 
-[  +0.000003] WARNING: possible recursive locking detected
-[  +0.000003] 5.13.0-kfd-rajneesh #1030 Not tainted
-[  +0.000004] --------------------------------------------
-[  +0.000002] python/4822 is trying to acquire lock:
-[  +0.000004] ffff932cd9a259f8 (reservation_ww_class_mutex){+.+.}-{3:3},
-at: amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000203]
-              but task is already holding lock:
-[  +0.000003] ffff932cbb7181f8 (reservation_ww_class_mutex){+.+.}-{3:3},
-at: ttm_eu_reserve_buffers+0x270/0x470 [ttm]
-[  +0.000017]
-              other info that might help us debug this:
-[  +0.000002]  Possible unsafe locking scenario:
+Use sysfs_emit() instead of scnprintf() or sprintf().
 
-[  +0.000003]        CPU0
-[  +0.000002]        ----
-[  +0.000002]   lock(reservation_ww_class_mutex);
-[  +0.000004]   lock(reservation_ww_class_mutex);
-[  +0.000003]
-               *** DEADLOCK ***
-
-[  +0.000002]  May be due to missing lock nesting notation
-
-[  +0.000003] 7 locks held by python/4822:
-[  +0.000003]  #0: ffff932c4ac028d0 (&process->mutex){+.+.}-{3:3}, at:
-kfd_ioctl_map_memory_to_gpu+0x10b/0x320 [amdgpu]
-[  +0.000232]  #1: ffff932c55e830a8 (&info->lock#2){+.+.}-{3:3}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x64/0xf60 [amdgpu]
-[  +0.000241]  #2: ffff932cc45b5e68 (&(*mem)->lock){+.+.}-{3:3}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0xdf/0xf60 [amdgpu]
-[  +0.000236]  #3: ffffb2b35606fd28
-(reservation_ww_class_acquire){+.+.}-{0:0}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x232/0xf60 [amdgpu]
-[  +0.000235]  #4: ffff932cbb7181f8
-(reservation_ww_class_mutex){+.+.}-{3:3}, at:
-ttm_eu_reserve_buffers+0x270/0x470 [ttm]
-[  +0.000015]  #5: ffffffffc045f700 (*(sspp++)){....}-{0:0}, at:
-drm_dev_enter+0x5/0xa0 [drm]
-[  +0.000038]  #6: ffff932c52da7078 (&vm->eviction_lock){+.+.}-{3:3},
-at: amdgpu_vm_bo_update_mapping+0xd5/0x4f0 [amdgpu]
-[  +0.000195]
-              stack backtrace:
-[  +0.000003] CPU: 11 PID: 4822 Comm: python Not tainted
-5.13.0-kfd-rajneesh #1030
-[  +0.000005] Hardware name: GIGABYTE MZ01-CE0-00/MZ01-CE0-00, BIOS F02
-08/29/2018
-[  +0.000003] Call Trace:
-[  +0.000003]  dump_stack+0x6d/0x89
-[  +0.000010]  __lock_acquire+0xb93/0x1a90
-[  +0.000009]  lock_acquire+0x25d/0x2d0
-[  +0.000005]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000184]  ? lock_is_held_type+0xa2/0x110
-[  +0.000006]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000184]  __ww_mutex_lock.constprop.17+0xca/0x1060
-[  +0.000007]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000183]  ? lock_release+0x13f/0x270
-[  +0.000005]  ? lock_is_held_type+0xa2/0x110
-[  +0.000006]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000183]  amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000185]  ttm_bo_release+0x4c6/0x580 [ttm]
-[  +0.000010]  amdgpu_bo_unref+0x1a/0x30 [amdgpu]
-[  +0.000183]  amdgpu_vm_free_table+0x76/0xa0 [amdgpu]
-[  +0.000189]  amdgpu_vm_free_pts+0xb8/0xf0 [amdgpu]
-[  +0.000189]  amdgpu_vm_update_ptes+0x411/0x770 [amdgpu]
-[  +0.000191]  amdgpu_vm_bo_update_mapping+0x324/0x4f0 [amdgpu]
-[  +0.000191]  amdgpu_vm_bo_update+0x251/0x610 [amdgpu]
-[  +0.000191]  update_gpuvm_pte+0xcc/0x290 [amdgpu]
-[  +0.000229]  ? amdgpu_vm_bo_map+0xd7/0x130 [amdgpu]
-[  +0.000190]  amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x912/0xf60
-[amdgpu]
-[  +0.000234]  kfd_ioctl_map_memory_to_gpu+0x182/0x320 [amdgpu]
-[  +0.000218]  kfd_ioctl+0x2b9/0x600 [amdgpu]
-[  +0.000216]  ? kfd_ioctl_unmap_memory_from_gpu+0x270/0x270 [amdgpu]
-[  +0.000216]  ? lock_release+0x13f/0x270
-[  +0.000006]  ? __fget_files+0x107/0x1e0
-[  +0.000007]  __x64_sys_ioctl+0x8b/0xd0
-[  +0.000007]  do_syscall_64+0x36/0x70
-[  +0.000004]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  +0.000007] RIP: 0033:0x7fbff90a7317
-[  +0.000004] Code: b3 66 90 48 8b 05 71 4b 2d 00 64 c7 00 26 00 00 00
-48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 4b 2d 00 f7 d8 64 89 01 48
-[  +0.000005] RSP: 002b:00007fbe301fe648 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[  +0.000006] RAX: ffffffffffffffda RBX: 00007fbcc402d820 RCX:
-00007fbff90a7317
-[  +0.000003] RDX: 00007fbe301fe690 RSI: 00000000c0184b18 RDI:
-0000000000000004
-[  +0.000003] RBP: 00007fbe301fe690 R08: 0000000000000000 R09:
-00007fbcc402d880
-[  +0.000003] R10: 0000000002001000 R11: 0000000000000246 R12:
-00000000c0184b18
-[  +0.000003] R13: 0000000000000004 R14: 00007fbf689593a0 R15:
-00007fbcc402d820
-
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: Alex Deucher <Alexander.Deucher@amd.com>
-
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://lore.kernel.org/r/def83ff75faec64ba592b867a8499b1367bae303.1643181468.git.yang.guang5@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/bfa/bfad_attr.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-index 532d1842f6a3..4cc0dd494a42 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@ -1305,7 +1305,8 @@ void amdgpu_bo_release_notify(struct ttm_buffer_object *bo)
- 	    !(abo->flags & AMDGPU_GEM_CREATE_VRAM_WIPE_ON_RELEASE))
- 		return;
+diff --git a/drivers/scsi/bfa/bfad_attr.c b/drivers/scsi/bfa/bfad_attr.c
+index 3b84290cf0a7..eaab423a5fd0 100644
+--- a/drivers/scsi/bfa/bfad_attr.c
++++ b/drivers/scsi/bfa/bfad_attr.c
+@@ -719,7 +719,7 @@ bfad_im_serial_num_show(struct device *dev, struct device_attribute *attr,
+ 	char serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
  
--	dma_resv_lock(bo->base.resv, NULL);
-+	if (WARN_ON_ONCE(!dma_resv_trylock(bo->base.resv)))
-+		return;
+ 	bfa_get_adapter_serial_num(&bfad->bfa, serial_num);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", serial_num);
++	return sysfs_emit(buf, "%s\n", serial_num);
+ }
  
- 	r = amdgpu_fill_buffer(abo, AMDGPU_POISON, bo->base.resv, &fence);
- 	if (!WARN_ON(r)) {
+ static ssize_t
+@@ -733,7 +733,7 @@ bfad_im_model_show(struct device *dev, struct device_attribute *attr,
+ 	char model[BFA_ADAPTER_MODEL_NAME_LEN];
+ 
+ 	bfa_get_adapter_model(&bfad->bfa, model);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", model);
++	return sysfs_emit(buf, "%s\n", model);
+ }
+ 
+ static ssize_t
+@@ -813,7 +813,7 @@ bfad_im_model_desc_show(struct device *dev, struct device_attribute *attr,
+ 		snprintf(model_descr, BFA_ADAPTER_MODEL_DESCR_LEN,
+ 			"Invalid Model");
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", model_descr);
++	return sysfs_emit(buf, "%s\n", model_descr);
+ }
+ 
+ static ssize_t
+@@ -827,7 +827,7 @@ bfad_im_node_name_show(struct device *dev, struct device_attribute *attr,
+ 	u64        nwwn;
+ 
+ 	nwwn = bfa_fcs_lport_get_nwwn(port->fcs_port);
+-	return snprintf(buf, PAGE_SIZE, "0x%llx\n", cpu_to_be64(nwwn));
++	return sysfs_emit(buf, "0x%llx\n", cpu_to_be64(nwwn));
+ }
+ 
+ static ssize_t
+@@ -844,7 +844,7 @@ bfad_im_symbolic_name_show(struct device *dev, struct device_attribute *attr,
+ 	bfa_fcs_lport_get_attr(&bfad->bfa_fcs.fabric.bport, &port_attr);
+ 	strlcpy(symname, port_attr.port_cfg.sym_name.symname,
+ 			BFA_SYMNAME_MAXLEN);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", symname);
++	return sysfs_emit(buf, "%s\n", symname);
+ }
+ 
+ static ssize_t
+@@ -858,14 +858,14 @@ bfad_im_hw_version_show(struct device *dev, struct device_attribute *attr,
+ 	char hw_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_pci_chip_rev(&bfad->bfa, hw_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", hw_ver);
++	return sysfs_emit(buf, "%s\n", hw_ver);
+ }
+ 
+ static ssize_t
+ bfad_im_drv_version_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_VERSION);
++	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_VERSION);
+ }
+ 
+ static ssize_t
+@@ -879,7 +879,7 @@ bfad_im_optionrom_version_show(struct device *dev,
+ 	char optrom_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_adapter_optrom_ver(&bfad->bfa, optrom_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", optrom_ver);
++	return sysfs_emit(buf, "%s\n", optrom_ver);
+ }
+ 
+ static ssize_t
+@@ -893,7 +893,7 @@ bfad_im_fw_version_show(struct device *dev, struct device_attribute *attr,
+ 	char fw_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_adapter_fw_ver(&bfad->bfa, fw_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", fw_ver);
++	return sysfs_emit(buf, "%s\n", fw_ver);
+ }
+ 
+ static ssize_t
+@@ -905,7 +905,7 @@ bfad_im_num_of_ports_show(struct device *dev, struct device_attribute *attr,
+ 			(struct bfad_im_port_s *) shost->hostdata[0];
+ 	struct bfad_s *bfad = im_port->bfad;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 			bfa_get_nports(&bfad->bfa));
+ }
+ 
+@@ -913,7 +913,7 @@ static ssize_t
+ bfad_im_drv_name_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_NAME);
++	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_NAME);
+ }
+ 
+ static ssize_t
+@@ -932,14 +932,14 @@ bfad_im_num_of_discovered_ports_show(struct device *dev,
+ 	rports = kcalloc(nrports, sizeof(struct bfa_rport_qualifier_s),
+ 			 GFP_ATOMIC);
+ 	if (rports == NULL)
+-		return snprintf(buf, PAGE_SIZE, "Failed\n");
++		return sysfs_emit(buf, "Failed\n");
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	bfa_fcs_lport_get_rport_quals(port->fcs_port, rports, &nrports);
+ 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 	kfree(rports);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", nrports);
++	return sysfs_emit(buf, "%d\n", nrports);
+ }
+ 
+ static          DEVICE_ATTR(serial_number, S_IRUGO,
 -- 
 2.35.1
 

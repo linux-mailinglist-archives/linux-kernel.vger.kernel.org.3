@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF815016E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B6550171E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348654AbiDNPPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S1344299AbiDNPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347573AbiDNN7U (ORCPT
+        with ESMTP id S1347661AbiDNN7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:20 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D1D424B3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:50:07 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id d9so4023663qvm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DZ02OiwvpoOudfUuXhmFdF/LMUteXQjwkth1cncdRqE=;
-        b=TRd/DJlidLiTENryi8hJOWQ7DbU+V+oJV+aCWm7ID73Is1heA2raX3GCKDUv58xmYs
-         rXfzFch2ZWXj5lPBdzvlcZXULsz+ON8KUQIWuj1IEd8CJQh0Lrq2mf1XjoQ7NRQlyAwA
-         xVoLGZ4D5Du0JlIVo6Bvyr2xQyITzQQzkBrWcbiuHlP45mzbJPhiZAY93fo8uPCpMp1V
-         3U20Cm6H+boQDQEovyKCsV4Xzn/0Gg/lozu6yM0rpm6xuWP6WyD46oBFVKTlrYP1D7K0
-         dUtxo1AoSVsgMQn9u4OdRCZtjLm5f7WULVVUIlGc79nK7Ujhjb8xZvGvOT5H3uQ8oj/4
-         5UWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DZ02OiwvpoOudfUuXhmFdF/LMUteXQjwkth1cncdRqE=;
-        b=5iK3roQE+apMHyTyJewTOGiq9n060J+H2LAcGyDRG/jwjJWc4YWNphoRLZbuXyW0Js
-         0rBsXsj6ow4yw92GkpmJMKtM+Fno2duNwN5+VR1Oy/UW23narpmaSBohSP8CcuuQYjlH
-         Zu1l3QFEUZoYnZOdodqHI3AkSWw4YLZb2XSNg1CQNesY+002Ak2+FY0i+4zlaL7gSc9y
-         Yuuh4Q6DGxOXTQHasza5JKfGu7He8PY+9PekdUPDjv/sa+rqF2tquxlAFWto7kaAAFy1
-         c+hPwLezLAZpvnHi0FjMbAmWkTOzzC+ju0ib7i1jQqAzq+gyj8Aim2qRuoWBPco37Dc0
-         IlYA==
-X-Gm-Message-State: AOAM5305sWo3FLzI5Qe8XX69FP6oq1cwVKG3+JzSNLxNK8T8WPKt9WW3
-        UztWiIewTwIt5cpQZZnE4Zf5C5cEa3TELQ==
-X-Google-Smtp-Source: ABdhPJwCAeRQPqvRqkol66RwYWsGBA2YHqxCqfXW0PhVDSBI90WE7X6BH4PXSunjumR5qg4yyWkNeg==
-X-Received: by 2002:a05:6214:89:b0:444:4e37:9d7a with SMTP id n9-20020a056214008900b004444e379d7amr3390462qvr.119.1649944206719;
-        Thu, 14 Apr 2022 06:50:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05622a198500b002ee933faf83sm1198877qtc.73.2022.04.14.06.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 06:50:05 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nezrJ-0023v3-5t; Thu, 14 Apr 2022 10:50:05 -0300
-Date:   Thu, 14 Apr 2022 10:50:05 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, christian.koenig@amd.com,
-        jhubbard@nvidia.com, rcampbell@nvidia.com
-Subject: Re: [PATCH] mm/mmu_notifier.c: Fix race in
- mmu_interval_notifier_remove()
-Message-ID: <20220414135005.GJ64706@ziepe.ca>
-References: <20220414031810.1787209-1-apopple@nvidia.com>
+        Thu, 14 Apr 2022 09:59:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED6846B3E;
+        Thu, 14 Apr 2022 06:51:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5699A1F747;
+        Thu, 14 Apr 2022 13:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649944259; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gbIphq0QNBqc29zesgzd0IBueAhZON446tUirSSogoI=;
+        b=KU2YavbKNIHGm/F1mZJnwxliny8xpEJ5SHTaYCZenKXiFpwngm93rchLD8c9LC5OdeODJp
+        XjK+kLkflg0K5U/+0jGouCupkKZUdJdEAxKdb00frOy9RbbtugvqucZpyK/lHPDcF+hb0P
+        3KdfFeEnHyP1i1jzz5GN3I/gUOYvBNM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649944259;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gbIphq0QNBqc29zesgzd0IBueAhZON446tUirSSogoI=;
+        b=GRzLswhuJrXY5wgLJh5O0fPWhbaOyZ6eBsVnf1cFVdlkxIR/ay2bzahaN4WmTDrm9W/g90
+        TfaZF4AhuQsHJiCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9D7D132C0;
+        Thu, 14 Apr 2022 13:50:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cjbEMcImWGJnTgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 14 Apr 2022 13:50:58 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 187a4637;
+        Thu, 14 Apr 2022 13:51:24 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [PATCH v4 0/4] ceph: add support for snapshot names encryption
+Date:   Thu, 14 Apr 2022 14:51:18 +0100
+Message-Id: <20220414135122.26821-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414031810.1787209-1-apopple@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 01:18:10PM +1000, Alistair Popple wrote:
-> In some cases it is possible for mmu_interval_notifier_remove() to race
-> with mn_tree_inv_end() allowing it to return while the notifier data
-> structure is still in use. Consider the following sequence:
-> 
-> CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
->                                     spin_lock(subscriptions->lock);
->                                     seq = subscriptions->invalidate_seq;
-> spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
-> subscriptions->invalidate_seq++;
->                                     wait_event(invalidate_seq != seq);
->                                     return;
-> interval_tree_remove(interval_sub); kfree(interval_sub);
-> spin_unlock(subscriptions->lock);
-> wake_up_all();
-> 
-> As the wait_event() condition is true it will return immediately. This
-> can lead to use-after-free type errors if the caller frees the data
-> structure containing the interval notifier subscription while it is
-> still on a deferred list. Fix this by changing invalidate_seq to an
-> atomic type as it is read outside of the lock and moving the increment
-> until after deferred lists have been updated.
+Hi!
 
-Oh, yes, that is a mistake.
+Time for another iteration on the encrypted snapshots names, which is
+mostly a rebase to the wip-fscrypt branch.  To test this, I've used ceph
+with the following PRs:
 
-I would not solve it with more unlocked atomics though, this is just a
-simple case of a missing lock - can you look at this and if you like
-it post it as a patch please?
+  mds: add protection from clients without fscrypt support #45073
+  mds: use the whole string as the snapshot long name #45192
+  mds: support alternate names for snapshots #45224
+  mds: limit the snapshot names to 240 characters #45312
 
-diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
-index 459d195d2ff64b..f45ff1b7626a62 100644
---- a/mm/mmu_notifier.c
-+++ b/mm/mmu_notifier.c
-@@ -1036,6 +1036,18 @@ int mmu_interval_notifier_insert_locked(
- }
- EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
- 
-+static bool
-+mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
-+			  unsigned long seq)
-+{
-+	bool ret;
-+
-+	spin_lock(&subscriptions->lock);
-+	ret = subscriptions->invalidate_seq != seq;
-+	spin_unlock(&subscriptions->lock);
-+	return ret;
-+}
-+
- /**
-  * mmu_interval_notifier_remove - Remove a interval notifier
-  * @interval_sub: Interval subscription to unregister
-@@ -1083,7 +1095,7 @@ void mmu_interval_notifier_remove(struct mmu_interval_notifier *interval_sub)
- 	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
- 	if (seq)
- 		wait_event(subscriptions->wq,
--			   READ_ONCE(subscriptions->invalidate_seq) != seq);
-+			   mmu_interval_seq_released(subscriptions, seq));
- 
- 	/* pairs with mmgrab in mmu_interval_notifier_insert() */
- 	mmdrop(mm);
+Changes since v3:
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+- Fixed WARN_ON() in ceph_encode_encrypted_dname()
+
+- Updated documentation and copyright notice for the base64
+  encoding/decoding implementaiton which was taken from the fscrypt base.
+
+Changes since v2:
+
+- Use ceph_find_inode() instead of ceph_get_inode() for finding a snapshot
+  parent in function parse_longname().  I've also added a fallback to
+  ceph_get_inode() in case we fail to find the inode.  This may happen if,
+  for example, the mount root doesn't include that inode.  The iput() was
+  also complemented by a discard_new_inode() if the inode is in the I_NEW
+  state. (patch 0002)
+
+- Move the check for '_' snapshots further up in the ceph_fname_to_usr()
+  and ceph_encode_encrypted_dname().  This fixes the case pointed out by
+  Xiubo in v2. (patch 0002)
+
+- Use NAME_MAX for tmp arrays (patch 0002)
+
+- Added an extra patch for replacing the base64url encoding by a different
+  encoding standard, the one used for IMAP mailboxes (which uses '+' and
+  ',' instead of '-' and '_').  This should fix the issue with snapshot
+  names starting with '_'. (patch 0003)
+
+Changes since v1:
+
+- Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
+  suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_context()
+  if we're handling a snapshot.
+
+- Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
+  already pointed that out but I forgot to include that change in previous
+  revision).
+
+- Rebased patch 0002 to the latest wip-fscrypt branch.
+
+- Added some documentation regarding snapshots naming restrictions.
+
+
+Luís Henriques (4):
+  ceph: add support for encrypted snapshot names
+  ceph: add support for handling encrypted snapshot names
+  ceph: update documentation regarding snapshot naming limitations
+  ceph: replace base64url by the encoding used for mailbox names
+
+ Documentation/filesystems/ceph.rst |  10 ++
+ fs/ceph/crypto.c                   | 252 +++++++++++++++++++++++++----
+ fs/ceph/crypto.h                   |  14 +-
+ fs/ceph/dir.c                      |   2 +-
+ fs/ceph/inode.c                    |  33 +++-
+ 5 files changed, 273 insertions(+), 38 deletions(-)
+

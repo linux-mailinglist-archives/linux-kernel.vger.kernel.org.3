@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E155016D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1669501093
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242956AbiDNPMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S1347411AbiDNN6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347089AbiDNN61 (ORCPT
+        with ESMTP id S1344405AbiDNNb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6CEB6D3E;
-        Thu, 14 Apr 2022 06:48:47 -0700 (PDT)
+        Thu, 14 Apr 2022 09:31:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C86266;
+        Thu, 14 Apr 2022 06:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70596190F;
-        Thu, 14 Apr 2022 13:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B30C385A1;
-        Thu, 14 Apr 2022 13:48:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4297D61B6D;
+        Thu, 14 Apr 2022 13:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A6AC385A5;
+        Thu, 14 Apr 2022 13:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944126;
-        bh=y1NLtXVKCAF9s4bJUdAgTMySx/PrTvU+WMnIIgND6qU=;
+        s=korg; t=1649942970;
+        bh=Pa5Rj8N96YUSgosKWU4JBXhcDcArV3x5Q4rzc8tyIYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m4E3g97DEwdoJqhFekbGjhtruNxHKO3xVv2PiDlp//kZJpsIgi15KAHjDtS0pUDBO
-         aZGa5CLQI3njMHRY1ybLJVkLAzT6Vlqt36/0S3fVmANo1lGiW5Tx4+y4X/evDHUDOn
-         QovMGWDDJyJddOmrZLc+yaKn6EV3d3ivPK4VM0Oc=
+        b=pEwiL7qfhKMVlka3DNb5lZuafsDrwFiIgTthUaMbKFTJsaXudnk6vZ6Q9h4D8NzSe
+         o6xShNzPEBQlJUW09UeuFtq30yMHZQtW+xe8L6Lq48dCCiuAzgBbmAKrPbSPRFlUPB
+         UR1UjBl81QXocJ6/4uexiaHxR5CPECdPqxnPKzbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?S=C3=B6nke=20Huster?= <soenke.huster@eknoes.de>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 404/475] Bluetooth: Fix use after free in hci_send_acl
-Date:   Thu, 14 Apr 2022 15:13:09 +0200
-Message-Id: <20220414110906.372772980@linuxfoundation.org>
+Subject: [PATCH 4.19 287/338] init/main.c: return 1 from handled __setup() functions
+Date:   Thu, 14 Apr 2022 15:13:10 +0200
+Message-Id: <20220414110847.057592575@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,129 +58,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit f63d24baff787e13b723d86fe036f84bdbc35045 ]
+[ Upstream commit f9a40b0890658330c83c95511f9d6b396610defc ]
 
-This fixes the following trace caused by receiving
-HCI_EV_DISCONN_PHY_LINK_COMPLETE which does call hci_conn_del without
-first checking if conn->type is in fact AMP_LINK and in case it is
-do properly cleanup upper layers with hci_disconn_cfm:
+initcall_blacklist() should return 1 to indicate that it handled its
+cmdline arguments.
 
- ==================================================================
-    BUG: KASAN: use-after-free in hci_send_acl+0xaba/0xc50
-    Read of size 8 at addr ffff88800e404818 by task bluetoothd/142
+set_debug_rodata() should return 1 to indicate that it handled its
+cmdline arguments.  Print a warning if the option string is invalid.
 
-    CPU: 0 PID: 142 Comm: bluetoothd Not tainted
-    5.17.0-rc5-00006-gda4022eeac1a #7
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-    rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-    Call Trace:
-     <TASK>
-     dump_stack_lvl+0x45/0x59
-     print_address_description.constprop.0+0x1f/0x150
-     kasan_report.cold+0x7f/0x11b
-     hci_send_acl+0xaba/0xc50
-     l2cap_do_send+0x23f/0x3d0
-     l2cap_chan_send+0xc06/0x2cc0
-     l2cap_sock_sendmsg+0x201/0x2b0
-     sock_sendmsg+0xdc/0x110
-     sock_write_iter+0x20f/0x370
-     do_iter_readv_writev+0x343/0x690
-     do_iter_write+0x132/0x640
-     vfs_writev+0x198/0x570
-     do_writev+0x202/0x280
-     do_syscall_64+0x38/0x90
-     entry_SYSCALL_64_after_hwframe+0x44/0xae
-    RSP: 002b:00007ffce8a099b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-    Code: 0f 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b8 0f 1f 00 f3
-    0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 14 00 00 00 0f 05
-    <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 89 54 24 1c 48 89 74 24 10
-    RDX: 0000000000000001 RSI: 00007ffce8a099e0 RDI: 0000000000000015
-    RAX: ffffffffffffffda RBX: 00007ffce8a099e0 RCX: 00007f788fc3cf77
-    R10: 00007ffce8af7080 R11: 0000000000000246 R12: 000055e4ccf75580
-    RBP: 0000000000000015 R08: 0000000000000002 R09: 0000000000000001
-    </TASK>
-    R13: 000055e4ccf754a0 R14: 000055e4ccf75cd0 R15: 000055e4ccf4a6b0
+This prevents these strings from being added to the 'init' program's
+environment as they are not init arguments/parameters.
 
-    Allocated by task 45:
-        kasan_save_stack+0x1e/0x40
-        __kasan_kmalloc+0x81/0xa0
-        hci_chan_create+0x9a/0x2f0
-        l2cap_conn_add.part.0+0x1a/0xdc0
-        l2cap_connect_cfm+0x236/0x1000
-        le_conn_complete_evt+0x15a7/0x1db0
-        hci_le_conn_complete_evt+0x226/0x2c0
-        hci_le_meta_evt+0x247/0x450
-        hci_event_packet+0x61b/0xe90
-        hci_rx_work+0x4d5/0xc50
-        process_one_work+0x8fb/0x15a0
-        worker_thread+0x576/0x1240
-        kthread+0x29d/0x340
-        ret_from_fork+0x1f/0x30
-
-    Freed by task 45:
-        kasan_save_stack+0x1e/0x40
-        kasan_set_track+0x21/0x30
-        kasan_set_free_info+0x20/0x30
-        __kasan_slab_free+0xfb/0x130
-        kfree+0xac/0x350
-        hci_conn_cleanup+0x101/0x6a0
-        hci_conn_del+0x27e/0x6c0
-        hci_disconn_phylink_complete_evt+0xe0/0x120
-        hci_event_packet+0x812/0xe90
-        hci_rx_work+0x4d5/0xc50
-        process_one_work+0x8fb/0x15a0
-        worker_thread+0x576/0x1240
-        kthread+0x29d/0x340
-        ret_from_fork+0x1f/0x30
-
-    The buggy address belongs to the object at ffff88800c0f0500
-    The buggy address is located 24 bytes inside of
-    which belongs to the cache kmalloc-128 of size 128
-    The buggy address belongs to the page:
-    128-byte region [ffff88800c0f0500, ffff88800c0f0580)
-    flags: 0x100000000000200(slab|node=0|zone=1)
-    page:00000000fe45cd86 refcount:1 mapcount:0
-    mapping:0000000000000000 index:0x0 pfn:0xc0f0
-    raw: 0000000000000000 0000000080100010 00000001ffffffff
-    0000000000000000
-    raw: 0100000000000200 ffffea00003a2c80 dead000000000004
-    ffff8880078418c0
-    page dumped because: kasan: bad access detected
-    ffff88800c0f0400: 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc
-    Memory state around the buggy address:
-    >ffff88800c0f0500: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-    ffff88800c0f0480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-    ffff88800c0f0580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                ^
-    ==================================================================
-    ffff88800c0f0600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-
-Reported-by: Sönke Huster <soenke.huster@eknoes.de>
-Tested-by: Sönke Huster <soenke.huster@eknoes.de>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Link: https://lkml.kernel.org/r/20220221050901.23985-1-rdunlap@infradead.org
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_event.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ init/main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 082a262ab49c..ff6625493c9f 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4911,8 +4911,9 @@ static void hci_disconn_phylink_complete_evt(struct hci_dev *hdev,
- 	hci_dev_lock(hdev);
+diff --git a/init/main.c b/init/main.c
+index 7baad67c2e93..272ec131211c 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -774,7 +774,7 @@ static int __init initcall_blacklist(char *str)
+ 		}
+ 	} while (str_entry);
  
- 	hcon = hci_conn_hash_lookup_handle(hdev, ev->phy_handle);
--	if (hcon) {
-+	if (hcon && hcon->type == AMP_LINK) {
- 		hcon->state = BT_CLOSED;
-+		hci_disconn_cfm(hcon, ev->reason);
- 		hci_conn_del(hcon);
- 	}
+-	return 0;
++	return 1;
+ }
  
+ static bool __init_or_module initcall_blacklisted(initcall_t fn)
+@@ -1027,7 +1027,9 @@ static noinline void __init kernel_init_freeable(void);
+ bool rodata_enabled __ro_after_init = true;
+ static int __init set_debug_rodata(char *str)
+ {
+-	return strtobool(str, &rodata_enabled);
++	if (strtobool(str, &rodata_enabled))
++		pr_warn("Invalid option string for rodata: '%s'\n", str);
++	return 1;
+ }
+ __setup("rodata=", set_debug_rodata);
+ #endif
 -- 
 2.35.1
 

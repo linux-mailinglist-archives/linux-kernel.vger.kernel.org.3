@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27491501D45
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7239C501D4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344872AbiDNVTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S1346864AbiDNVV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245378AbiDNVTA (ORCPT
+        with ESMTP id S1345666AbiDNVVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:19:00 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559B376648
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:16:34 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id o2so11154389lfu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:16:34 -0700 (PDT)
+        Thu, 14 Apr 2022 17:21:23 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AAFE6159
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:18:56 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id c15so7575134ljr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hzss3S8EAxAsavIN32Nj98tYgxaynKoxCgcASJv0Pw0=;
-        b=Ag5J4ZsKhFsUbTcBi/ywOSYBUgQER+JfhIfmr4GjKadOTYGzy74STykx/t1PHfVakq
-         +0MA+up2r4aVMz2pMRZPUwC7d5IllOi3mg07JwzwlsBwKLe3ZuVWQLhI7gvq/JerptV2
-         ER42tuOnk3b0bH1m1RO1W3qT9boL+kykd56bZe3WP6sVOA2CTA0/O998eiXSPj6PGTQH
-         wInAoPsTLSogY9My5wkVL4qDk7gAMyGK4J6NyNjJah3S72cwlM5R/rBT7rsGu4gvnuKB
-         MvarUb7XtSv/Abdu+VAq8hTBPF/Al82oECmtf5+CATa6CmMO24XTMGYO7R83WCUwKIS2
-         Bb7A==
+        bh=ufxYIOwf0J693O+/j0nztdscn7O3zFr17OcsXCTFd2A=;
+        b=Zk6oHfUomwUd26LNJQK4KaU2ifbDnt/zijM3TxgAahrDWK010devX3SknCi4s/XrEH
+         oy4r8mL84+4zTzAU8VSaWWH5qeRz42KVA783zXnCpTQOlFiG7JkiWfboSGbgaD/PbFuZ
+         Iqv2z1Fwk5hdYim/ya0Pv56zidniWDo88+0xuGJThORubgRolgqNlJtvZxGgYY1N/6wC
+         OjV7LoJiYUq5ZlAOO2jgRUu26sEDg4IWZNskZkc/sUyWFx7N9SSMGLTkfX5ZuSd5Wool
+         pMjJh3Ky2x1xckyyh/zLmbO7BajES4LvZxc5GNrGI2BeQJcRpCYLctVdR+BicaFjigOw
+         u95w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hzss3S8EAxAsavIN32Nj98tYgxaynKoxCgcASJv0Pw0=;
-        b=c/yqE0RPb46SwKHH6OVP4OL+pbtLOomazZkZAVZGn+k5nWwKq4PlkEFRNdcwVKmuuZ
-         HZn8Z7IHGKjGrx4IWHpZ473eeusYMgLhs0fvF1O8WTYrck4Jq1yE9DfgcoclZDOkdtMK
-         ZSIGQJr6zq0WLk6+nL+2dSqOVK4HCGTEkoBoyWUdXNM1WLpnxkzkDrFb58I0X+DTtvz6
-         f1JbYscRoX7sgcBSE2lw5S5ZiC+alO5Z3TukNI/C/jHzjLYoxwXdz2avZ5KtyK41jd9V
-         h3ZsPEZDq8+kE/pnFOnQAlDofhTW2e8hwkrKyfSgynQP3BH/xQML0cHH3Y7yyGuDR1fe
-         5XHA==
-X-Gm-Message-State: AOAM530ppWIME9APCw6dTYH5NF7/yadpo5hCBYRxE4sZShoJnUj9jASv
-        iODzxGmtbvNmMVU9atn01NFPkQ==
-X-Google-Smtp-Source: ABdhPJycipDcCqYIN4cTl0tlH/tKSdyj6F83dqF91tZdGpzTSL4ESHLFODXfSqWZ9c8UMZ2CQ7CAow==
-X-Received: by 2002:a05:6512:39cb:b0:46b:a452:4ca1 with SMTP id k11-20020a05651239cb00b0046ba4524ca1mr3065819lfu.154.1649970992440;
-        Thu, 14 Apr 2022 14:16:32 -0700 (PDT)
+        bh=ufxYIOwf0J693O+/j0nztdscn7O3zFr17OcsXCTFd2A=;
+        b=XjmpZPdO94tYxmMWnAaD+/UwMuKvSICmCdkbBky5+kzDqW/8MJ4PP2aSya9zKFVx1t
+         DL3K3VhG4vB5viqHA7Za2+nPg2pH3lOxuw8trD/HUwaBNRIfHqNegzX5OMx9laW4AU4E
+         +kZ02f2efoMy6huruznh6CQLGp6DKN23/rgX9uo1x9CHplJe57k1frqrgSWp6ohRi8Dp
+         XLuOVNjBGxEr2FWICNVVyYoLoExf/c5EMT9Wez2ofbYQfqycGrBKBfswDGirW037zHnh
+         WNWuI6k9jIPbUtBv041HKGuGW68dzYG6ka5TZkIhXdsmiRPdnwnCOJDAh7Gw5J+J+Jd6
+         ovqQ==
+X-Gm-Message-State: AOAM531eLRfOQqgMtwGInmvraAixO+R17EFRGvjcZ7E2jmwrQBq5BNYw
+        N8yJdhw8jAYHyd4eZJrO/20I9A==
+X-Google-Smtp-Source: ABdhPJyIPE/Lbzs1ZBnIcuuv9dXN0SCDY55qJ+MFI/XPq9gB4WFlhElfu5uB1F9JSt//Cy5lkYATKw==
+X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr2748589ljq.44.1649971134550;
+        Thu, 14 Apr 2022 14:18:54 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id q29-20020a19431d000000b0046bb8d1e4f5sm110614lfa.262.2022.04.14.14.16.31
+        by smtp.gmail.com with ESMTPSA id s6-20020ac25fa6000000b0044313e88020sm111871lfe.202.2022.04.14.14.18.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 14:16:32 -0700 (PDT)
-Message-ID: <56453228-d4b2-c7e4-7b72-6de8637f2def@linaro.org>
-Date:   Fri, 15 Apr 2022 00:16:31 +0300
+        Thu, 14 Apr 2022 14:18:54 -0700 (PDT)
+Message-ID: <d9afa206-7f57-81bb-8c69-5928dccd41b5@linaro.org>
+Date:   Fri, 15 Apr 2022 00:18:53 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH v7 1/4] drm/msm/dp: Add eDP support via aux_bus
+Subject: Re: [PATCH v5 3/5] input: misc: pm8941-pwrkey: add support for PON
+ GEN3 base addresses
 Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>
-References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
- <1649938766-6768-2-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=Wmiv2WGhFCLYmXbWESNOh5FfobjNme85aU6YtN1SLVDA@mail.gmail.com>
- <81c3a9fb-4c92-6969-c715-ca085322f9c6@linaro.org>
- <CAE-0n50obe_aqzwQY-X1yH4emjjOErOJ_wj9sQe=HoWEZ3vjTw@mail.gmail.com>
- <CAD=FV=U4qtst5q--_1794Pdjsc7b_JMRAh+X_vr-9qJx5NtOrw@mail.gmail.com>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
+        robh+dt@kernel.org
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        skakit@codeaurora.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220411200506.22891-1-quic_amelende@quicinc.com>
+ <20220411200506.22891-4-quic_amelende@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=U4qtst5q--_1794Pdjsc7b_JMRAh+X_vr-9qJx5NtOrw@mail.gmail.com>
+In-Reply-To: <20220411200506.22891-4-quic_amelende@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,114 +81,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 23:09, Doug Anderson wrote:
-> Hi,
+On 11/04/2022 23:05, Anjelique Melendez wrote:
+> Currently, PON address is read from the "reg" property. For PON GEN3,
+> which starts with PMK8350, the "reg" property will have both the PON
+> HLOS and PON PBS addesses defined. Add support so that all PON
+> generations can be configured.
 > 
-> On Thu, Apr 14, 2022 at 12:40 PM Stephen Boyd <swboyd@chromium.org> wrote:
->>
->> Quoting Dmitry Baryshkov (2022-04-14 12:16:14)
->>>
->>> I think it's too verbose and a bit incorrect.
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>   drivers/input/misc/pm8941-pwrkey.c | 31 +++++++++++++++++++++++-------
+>   1 file changed, 24 insertions(+), 7 deletions(-)
 > 
-> Not sure which part you're asserting is incorrect, but shorter is OK w/ me too.
+> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+> index e0240db12d4f..43106e4cfd23 100644
+> --- a/drivers/input/misc/pm8941-pwrkey.c
+> +++ b/drivers/input/misc/pm8941-pwrkey.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/log2.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+> +#include <linux/of_address.h>
+>   #include <linux/of_device.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/reboot.h>
+> @@ -44,6 +45,7 @@ struct pm8941_data {
+>   	unsigned int	status_bit;
+>   	bool		supports_ps_hold_poff_config;
+>   	bool		supports_debounce_config;
+> +	bool		has_pon_pbs;
+>   	const char	*name;
+>   	const char	*phys;
+>   };
+> @@ -52,6 +54,7 @@ struct pm8941_pwrkey {
+>   	struct device *dev;
+>   	int irq;
+>   	u32 baseaddr;
+> +	u32 pon_pbs_baseaddr;
+>   	struct regmap *regmap;
+>   	struct input_dev *input;
+>   
+> @@ -167,6 +170,8 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   	struct pm8941_pwrkey *pwrkey;
+>   	bool pull_up;
+>   	struct device *parent;
+> +	struct device_node *regmap_node;
+> +	const __be32 *addr;
+>   	u32 req_delay;
+>   	int error;
+>   
+> @@ -188,8 +193,10 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   	pwrkey->data = of_device_get_match_data(&pdev->dev);
+>   
+>   	parent = pdev->dev.parent;
+> +	regmap_node = pdev->dev.of_node;
+>   	pwrkey->regmap = dev_get_regmap(parent, NULL);
+>   	if (!pwrkey->regmap) {
+> +		regmap_node = parent->of_node;
+>   		/*
+>   		 * We failed to get regmap for parent. Let's see if we are
+>   		 * a child of pon node and read regmap and reg from its
+> @@ -200,15 +207,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   			dev_err(&pdev->dev, "failed to locate regmap\n");
+>   			return -ENODEV;
+>   		}
+> +	}
+>   
+> -		error = of_property_read_u32(parent->of_node,
+> -					     "reg", &pwrkey->baseaddr);
+> -	} else {
+> -		error = of_property_read_u32(pdev->dev.of_node, "reg",
+> -					     &pwrkey->baseaddr);
+> +	addr = of_get_address(regmap_node, 0, NULL, NULL);
+> +	if (!addr) {
+> +		dev_err(&pdev->dev, "reg property missing\n");
+> +		return -EINVAL;
+> +	}
+> +	pwrkey->baseaddr = be32_to_cpup(addr);
+> +
+> +	if (pwrkey->data->has_pon_pbs) {
+> +		/* PON_PBS base address is optional */
+> +		addr = of_get_address(regmap_node, 1, NULL, NULL);
+> +		if (addr)
+> +			pwrkey->pon_pbs_baseaddr = be32_to_cpup(addr);
+>   	}
+> -	if (error)
+> -		return error;
+>   
+>   	pwrkey->irq = platform_get_irq(pdev, 0);
+>   	if (pwrkey->irq < 0)
+> @@ -316,6 +329,7 @@ static const struct pm8941_data pwrkey_data = {
+>   	.phys = "pm8941_pwrkey/input0",
+>   	.supports_ps_hold_poff_config = true,
+>   	.supports_debounce_config = true,
+> +	.has_pon_pbs = false,
+>   };
+>   
+>   static const struct pm8941_data resin_data = {
+> @@ -325,6 +339,7 @@ static const struct pm8941_data resin_data = {
+>   	.phys = "pm8941_resin/input0",
+>   	.supports_ps_hold_poff_config = true,
+>   	.supports_debounce_config = true,
+> +	.has_pon_pbs = false,
 
-I was referring to the "If we don't implement the ops..." part. For some 
-reason I thought that panel implements detect() callback (and thus the 
-DRM will not care because the next bridge takes precedence).
+No need to declare that a field is false. Just skip this completely.
 
-However I was mistaken, please excuse me. Your description was correct 
-and I was wrong. The panel bridge doesn't implement callback. Most 
-probably I mixed it with the display_connector bridge.
+>   };
+>   
+>   static const struct pm8941_data pon_gen3_pwrkey_data = {
+> @@ -333,6 +348,7 @@ static const struct pm8941_data pon_gen3_pwrkey_data = {
+>   	.phys = "pmic_pwrkey/input0",
+>   	.supports_ps_hold_poff_config = false,
+>   	.supports_debounce_config = false,
+> +	.has_pon_pbs = true,
+>   };
+>   
+>   static const struct pm8941_data pon_gen3_resin_data = {
+> @@ -341,6 +357,7 @@ static const struct pm8941_data pon_gen3_resin_data = {
+>   	.phys = "pmic_resin/input0",
+>   	.supports_ps_hold_poff_config = false,
+>   	.supports_debounce_config = false,
+> +	.has_pon_pbs = true,
+>   };
+>   
+>   static const struct of_device_id pm8941_pwr_key_id_table[] = {
 
-So... your description is more correct.
-
-> 
-> 
->>> This is a bit saner:
->>> /*
->>>    * These ops do not make sense for eDP, since they are provided
->>>    * by the panel-bridge corresponding to the attached eDP panel.
->>>    */
->>>
->>> My question was whether we really need to disable them for eDP since for
->>> eDP the detect and and get_modes will be overridden anyway.
-> 
-> Hmm, interesting. Probably for DRM_BRIDGE_OP_MODES that will work?
-> It's definitely worth confirming but from my reading of the code it
-> _probably_ wouldn't hurt.
-> 
-> One thing someone would want to confirm would be what would happen if
-> we move this code and the panel code to implement DRM_BRIDGE_OP_EDID
-> properly. It looks as if both actually ought to be implementing that
-> instead of DRM_BRIDGE_OP_MODES, at least in some cases. A fix for a
-> future day. Could we get into trouble if one moved before the other?
-> Then the panel would no longer override the eDP controller and the eDP
-> controller would try to read from a possibly unpowered panel?
-
-That would depend on the way the get_edid would be implemented in DP 
-driver. Currently the edid is cached via the 
-dp_display_process_hpd_high() -> dp_panel_read_sink_caps() call chain.
-
-With this patchset, the dp_hpd_plug_handle() -> 
-dp_display_usbpd_configure_cb() -> dp_display_process_hpd_high() will be 
-called too late for the get_modes/get_edid (from dp_bridge's enable() op).
-
-There is another issue. drm_panel has only get_modes() callback, so 
-panel_bridge can not implement get_edid() unless we extend the panel 
-interface (which might be a good idea).
-
-> 
-> So I guess in the end my preference would be that we know that driving
-> the EDID read from the controller isn't a great idea for eDP (since we
-> have no way to ensure that the panel is powered) so why risk it and
-> set the bit saying we can do it?
-
-Yep.
-
-
-> For hotplug/detect I'm even less confident that setting the bits would
-> be harmless. I haven't sat down and traced everything, but from what I
-> can see the panel _doesn't_ set these bits, does it? I believe that
-> the rule is that when every bridge in the chain _doesn't_ implement
-> detect/hotplug that the panel is always present. The moment someone
-> says "hey, I can detect" then it suddenly becomes _not_ always
-> present. Yes, I guess we could have the panel implement "detect" and
-> return true, but I'm not convinced that's actually better...
-
-I think it makes sense to implement OP_DETECT in panel bridge (that 
-always returns connector_status_connected) at least to override the 
-possible detect ops in previous bridges.
-
->> And to go further, I'd expect that a bridge should expose the
->> functionality that it supports, regardless of what is connected down the
->> chain. Otherwise we won't be able to mix and match bridges because the
->> code is brittle, making assumptions about what is connected.
-> 
->  From my point of view the bridge simply doesn't support any of the
-> three things when we're in eDP mode. Yes, it's the same driver. Yes,
-> eDP and DP share nearly the same signalling on the wire. Yes, it's
-> easily possible to make a single controller that supports DP and eDP.
-> ...but the rules around detection and power sequencing are simply
-> different for the two cases.
-
-I just hope that during refactoring this can be expressed in a more 
-natural way.
-
-> The controller simply _cannot_ detect
-> whether the panel is connected in the eDP case and it _must_ assume
-> that the panel is always connected. Yes, it has an HPD pin. No, that
-> HPD pin doesn't tell when the panel is present. The panel is always
-> present. The panel is always present.
-
-Yep, I remember regarding the HPD pin. And I still think that panel-edp 
-(and panel bridge) should provide an overriding OP_DETECT.
-
-> So, IMO, it is _incorrect_ to say we can support HPD and DETECT if we
-> know we're in eDP mode.
-
-I see your point. Let's do it this way. Maybe (hopefully) it will become 
-more logical during refactoring. Or maybe I'll just tune myself into the 
-DP/eDP logic :D
 
 -- 
 With best wishes

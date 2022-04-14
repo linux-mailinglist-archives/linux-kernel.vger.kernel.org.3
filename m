@@ -2,172 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99498501DA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6777501DAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346765AbiDNVr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S242185AbiDNVuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241439AbiDNVrW (ORCPT
+        with ESMTP id S232439AbiDNVuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:47:22 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50F13633E;
-        Thu, 14 Apr 2022 14:44:55 -0700 (PDT)
+        Thu, 14 Apr 2022 17:50:14 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EC8939F2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:47:49 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id x9so3934223ilc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:47:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649972696; x=1681508696;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=rq7yUoLN5kZ74ztwyG29HHmd6+Kid7Wc5fWXZhevA0E=;
-  b=ctHaCHRU3YF5OiAcXN5Qu8ufatuiR4+LZFXmievZErVeQjBQXy1njkLk
-   xs2KEFWzBcVBdq8YMojfVSV6YPmtfm1gQKRc8xrrtkN3BI3v0BYDgMZWs
-   GcFjmnOtLVsKrdzvogOd/E9VqQ5RNQ80unIHnGMjtXGVpPRaC6rejPjA3
-   0=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 14 Apr 2022 14:44:55 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 14:44:55 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Apr 2022 14:44:55 -0700
-Received: from [10.110.74.74] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Apr
- 2022 14:44:54 -0700
-Message-ID: <10f77fe4-a1a7-60a2-af98-a6060318ab0d@quicinc.com>
-Date:   Thu, 14 Apr 2022 14:44:53 -0700
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=uODln0vhOum+2TmooGakPEQyd171bQ+mLLWEZrWqTtc=;
+        b=EvbgG93teZuoQFogrfgcb/t3dQ0nNizMxjjAe1NOWX+E1MXm+QCLg+Y96hefcOTRMa
+         aLJjZIuP7eGzJR5Zfng32friME4aRgo68ROrj0xDMgz+M4FxZwW5lZDaSYRXCPEFfm37
+         NOquHBfk4dDuS3EGt45XVo6CWaNJW5kubJkhw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uODln0vhOum+2TmooGakPEQyd171bQ+mLLWEZrWqTtc=;
+        b=q0e5+2DlHLMNdYitBb1R/WiKienKq3lMZWIs1HRpa+lpCXLhkEfdrDpxdXKHRHlPv6
+         Qj4SRYFJOXbpYDe+5Wm+R85f7iJaG6xxirLytiIT4JGmRWiCO0QFd5HoKjx+Jd7lKShA
+         H+WHJ/A/iKPZfnmfXwd7bwSxuseZSfVR55P8ob1EL3yvkRWjPUDR/4XKplH2BnuhhUWR
+         BX4CzJ3x8u8UtFyHMfIL2FW0y/HatXsICcNDrAjR7C65qF+bdTsU2ViQsgrPunfqHmPw
+         jWI3jE9+5vwdUE2kBcoARGp1DzkdMfWEnjNAe/JBfWdqvCi+h6u1nodvwiw4yD6x8+Bu
+         Zd/w==
+X-Gm-Message-State: AOAM532XbSr71rENSX9NO1UDocdcDzHIJcj1mzneZIRql0FeR+J0Vyxp
+        gz9xk+FmJCSBw6EdwO/UfhOCiVpCbZqc6A==
+X-Google-Smtp-Source: ABdhPJwm1f0gSHMWMogFULROo6XpNNk3n4FrlkZHWlqC8j2dQyRz19Hrh73SmO6aqUyxxJLBWVoSNg==
+X-Received: by 2002:a92:640d:0:b0:2ca:ad76:3e88 with SMTP id y13-20020a92640d000000b002caad763e88mr1746974ilb.84.1649972868142;
+        Thu, 14 Apr 2022 14:47:48 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d195-20020a6bb4cc000000b0064fceb8033dsm1318892iof.7.2022.04.14.14.47.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 14:47:47 -0700 (PDT)
+Subject: Re: [PATCH 2/4] selftest/vm: verify remap destination address in
+ mremap_test
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
+ <20220414171529.62058-3-sidhartha.kumar@oracle.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e6cc5cf6-b6bc-2eca-255d-5dd247253255@linuxfoundation.org>
+Date:   Thu, 14 Apr 2022 15:47:46 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: dwc3: EP clear halt leading to incorrect submission
- of delayed_status
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220407015336.19455-1-quic_wcheng@quicinc.com>
- <20220411154803.GA26372@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <20220414171529.62058-3-sidhartha.kumar@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-In-Reply-To: <20220411154803.GA26372@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavan,
+On 4/14/22 11:15 AM, Sidhartha Kumar wrote:
+> Because mremap does not have a NOREPLACE flag,
+> it can destroy existing mappings. This can
+> cause a segfault if regions such as text are
+> destroyed.
 
-On 4/11/2022 8:48 AM, Pavan Kondeti wrote:
-> Hi Wesley,
-> 
-> On Wed, Apr 06, 2022 at 06:53:36PM -0700, Wesley Cheng wrote:
->> The usb_ep_clear_halt() API can be called from the function driver, and
->> translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
->> the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
->> protocol argument.  If the following sequence occurs, there can be a
->> situation where the delayed_status flag is improperly cleared for the wrong
->> SETUP transaction:
->>
->> 1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
->> 2. DWC3 gadget sets dwc->delayed_status to '1'.
->> 3. Another function driver issues a usb_ep_clear_halt() call.
->> 4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
->>     DWC3_EP_PENDING_CLEAR_STALL.
->> 5. EP command complete interrupt triggers for the end transfer, and
->>     dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
->>     is '1' due to step#1.
->> 6. STATUS phase is sent, and delayed_status is cleared.
->> 7. Vendor specific control transfer is finished being handled, and issues
->>     usb_composite_setup_continue().  This results in queuing of a data
->>     phase.
->>
->> Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
->> is due to a SETUP request from the host versus when it is sourced from a
->> function driver.  This allows for the EP command complete interrupt to know
->> if it needs to issue a delayed status phase.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.h   | 1 +
->>   drivers/usb/dwc3/ep0.c    | 1 +
->>   drivers/usb/dwc3/gadget.c | 3 ++-
->>   3 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index 5c9d467195a6..55f98485c54c 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1272,6 +1272,7 @@ struct dwc3 {
->>   	unsigned		connected:1;
->>   	unsigned		softconnect:1;
->>   	unsigned		delayed_status:1;
->> +	unsigned		clear_stall_protocol:1;
->>   	unsigned		ep0_bounced:1;
->>   	unsigned		ep0_expect_in:1;
->>   	unsigned		has_hibernation:1;
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 1064be5518f6..aa8476da222d 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->>   	unsigned int direction = !dwc->ep0_expect_in;
->>   
->>   	dwc->delayed_status = false;
->> +	dwc->clear_stall_protocol = 0;
->>   
->>   	if (dwc->ep0state != EP0_STATUS_PHASE)
->>   		return;
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index ab725d2262d6..c427ddae016f 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2152,6 +2152,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
->>   		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
->>   		    (dep->flags & DWC3_EP_DELAY_STOP)) {
->>   			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
->> +			dwc->clear_stall_protocol = protocol;
->>   			return 0;
->>   		}
->>   
->> @@ -3483,7 +3484,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
->>   		}
->>   
->>   		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
->> -		if (dwc->delayed_status)
->> +		if (dwc->clear_stall_protocol)
->>   			dwc3_ep0_send_delayed_status(dwc);
->>   	}
->>   
-> 
-> Is it safe to maintain clear_stall_protocol per dwc3 instance? What if
-> CLEAR_FEATURE(halt_endpoint) and usb_ep_clear_halt() are interleaved and
-> We come here as part of usb_ep_clear_halt()'s endpoint command complete.
-> We may simply send the delayed status corresponding to the protocol clear
-> stall.
-> 
-> We can still maintain a global flag if we cache endpoint number in it so
-> that we can cross check against the endpoint for which completion received.
-> 
-> Thanks,
-> Pavan
+Please explain the reason for segfault.
+
+Add a blank line here. Makes it easier to read.
+
+Verify the requested mremap destination
+> address does not overlap any existing mappings
+> by using mmap's FIXED_NOREPLACE flag and checking
+
+Spell this out fully - MAP_FIXED_NOREPLACE
+> for the EEXIST error code. Keep incrementing the
+> destination address until a valid mapping is found
+> or max address is reached.
 > 
 
-Thanks for the comments/feedback.  I agree with what you mentioned, and 
-will fix that potential condition.  Will resubmit a new rev, after some 
-testing.
+Essentially mremap() doesn't check for overlaps and removes
+or overwrites existing mappings? The way you are fixing it
+is by verifying by calling mremap() with MAP_FIXED_NOREPLACE
+flag and check for EEXIST.
 
-Thanks
-Wesley Cheng
+What happens when max address is reached?
+
+Same comment on # of chars per line in commit log. Also
+
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> ---
+>   tools/testing/selftests/vm/mremap_test.c | 36 ++++++++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+> index 58600fee4b81..98e9cff34aa7 100644
+> --- a/tools/testing/selftests/vm/mremap_test.c
+> +++ b/tools/testing/selftests/vm/mremap_test.c
+> @@ -10,6 +10,7 @@
+>   #include <string.h>
+>   #include <sys/mman.h>
+>   #include <time.h>
+> +#include <limits.h>
+>   
+>   #include "../kselftest.h"
+>   
+> @@ -65,6 +66,34 @@ enum {
+>   	.expect_failure = should_fail				\
+>   }
+>   
+> +/*
+> + * Returns 0 if the requested remap region overlaps with an
+> + * existing mapping (e.g text, stack) else returns 1.
+> + */
+> +static int remap_region_valid(void *addr, unsigned long long size)
+
+This returns bool 0 (false) 1 (true)
+
+Please name the routine - is_remap_region_valid() and change it to
+return bool.
+
+> +{
+> +	void *remap_addr = NULL;
+> +	int ret = 1;
+> +
+> +	if ((unsigned long long) addr > ULLONG_MAX - size) {
+> +		ksft_print_msg("Can't find a valid region to remap to\n");
+
+Change it to "Couldn't" - also this message doesn't look right. We hav't
+looked for valid region yet and it just exceeds the limits?
+
+
+> +		exit(KSFT_SKIP);> +	}
+> +
+> +	/* Use MAP_FIXED_NOREPLACE flag to ensure region is not mapped */
+> +	remap_addr = mmap(addr, size, PROT_READ | PROT_WRITE,
+> +			MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
+> +			-1, 0);
+
+Alignment should match open parenthesis here and in other places. Makes it
+easier to read the code.
+
+> +	if (remap_addr == MAP_FAILED) {
+> +		if (errno == EEXIST)
+> +			ret = 0;
+> +	} else {
+> +		munmap(remap_addr, size);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>   /* Returns mmap_min_addr sysctl */
+>   static unsigned long long get_mmap_min_addr(void)
+>   {
+> @@ -180,6 +209,13 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+>   	if (!((unsigned long long) addr & c.dest_alignment))
+>   		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
+>   
+> +	/* Don't destroy existing mappings unless expected to overlap */
+> +	while (!remap_region_valid(addr, c.region_size)) {
+> +		if (c.overlapping)
+> +			break;
+> +		addr += c.src_alignment;
+> +	}
+> +
+>   	clock_gettime(CLOCK_MONOTONIC, &t_start);
+>   	dest_addr = mremap(src_addr, c.region_size, c.region_size,
+>   			MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
+> 
+
+thanks,
+-- Shuah

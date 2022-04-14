@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1706A50197C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC42550199B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239158AbiDNREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S244906AbiDNRHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243317AbiDNRDr (ORCPT
+        with ESMTP id S244474AbiDNRFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:03:47 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C75DABF52
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:40:26 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t25so7070672edt.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:40:26 -0700 (PDT)
+        Thu, 14 Apr 2022 13:05:43 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C450DE4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:54 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q14so6751225ljc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uNCknelIIQ0A0jhcGpNkNt/itvQulq3csLsSq+jMi4k=;
-        b=OFD1FNp9YuGu2v7rR5vIDLHqSlz5x0ooKxLOUUFLXVcVscIABJa9XczVMvEG6Hdpic
-         QEwuykdd5CFYaIM4fwYl2u3dNKd7uLY+YmmM3txQhfvMJ2+kl0ds92uwsXIkXH97bUKc
-         WjRgnLpsfAzXQuHotizBIDeTEdVOmrYFEECKE=
+        bh=zX+0Rp8KeI1bu36+dWYbiIQtitTDuR4Sdzxg17DTCMM=;
+        b=N693k4tshoimUMR7PJSOzCwUrqo6jmdbynTTZ5/gGXiI4BUH5YFaTyhChlD1qYPwIv
+         Kh7ugHtuZ2uky5ruCQ6mniUIioKbVQxsbZ/Rnh06noLFOOH9Mi+acFsRtex2XGvkaG4R
+         Q3VlTKcErFU8W0iVIIxODoppOuI9yIftPOgPA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uNCknelIIQ0A0jhcGpNkNt/itvQulq3csLsSq+jMi4k=;
-        b=wxlqL+YGaAGj9ab0bfAk6JfD3ftGtKF6XjT1H4R73qjUJMRBXnEQCiTC8MV+W32zbm
-         Mhl010O8gIaaEFRG7yF4wlziD+CNWBtHw7Wd92edyzXL/f+S5ueOfkh38koaOWsHysXL
-         TdLljoEIBNHnppBQ7tIp0lg5ashNxjQDLPEttDSw5Kc+LBGRf12e7Z93RRZF02M0m9mm
-         PJCTMBF63AgdUWgSztLDzXCDlM+qnBOh2U3wTsTYjDmf4gkyS/RFt6MTYDDZehVdW64C
-         IN4+4GKlj7CTL4YldReIrjV4gQtp6QJRrilTNWsFFE1MEy8WE/2y1bX45NtvgLjbkoh7
-         0AMg==
-X-Gm-Message-State: AOAM5321ZzkXrpvKpTEZ0QjljuZsRqA5xaqMgC08ONtfEQaBP7zZeuJo
-        5iIWbOD+HmlvIpmAlGteFuqYS4IS0uIQPJGw
-X-Google-Smtp-Source: ABdhPJwOGGG1A/5LIUnYG9t+hcGmolpondGmp9eL1r03Ub3mRDnKjE7yQmaEC6+LVHu6dq8YBvo83A==
-X-Received: by 2002:a05:6402:34c8:b0:420:d786:bbcf with SMTP id w8-20020a05640234c800b00420d786bbcfmr4043202edc.73.1649954424478;
-        Thu, 14 Apr 2022 09:40:24 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id e13-20020a1709067e0d00b006e880b53294sm773031ejr.58.2022.04.14.09.40.19
+        bh=zX+0Rp8KeI1bu36+dWYbiIQtitTDuR4Sdzxg17DTCMM=;
+        b=37S/0J0SvWONPX/zFv5LF1rVFyXwXVA0vnNGrP7defSyL/3qa3vkULry1T3+wWtacF
+         A47F0iQQIk3Pz5XvCOUnaRuhzTLcWTgF94UaqlQ6gNxGCapqAixY+HZHqVqOiazdmWar
+         B4NgDrwK7QAqXumCI0+9MhV4XNuGNoHrgYS0PYFsfDoQSsMXG3oIsWfoHoIUz6ek2MR/
+         L0GuyaEOyRRYkD75gYwDfj8/KZU9pTYB6Xg95hhQx2tuYYHYY6sFX3g/Eto6Io47vXQx
+         MKiEtbPg59OjptZl22p7mckiu2f7eKX35nsr1CO2RFcPkENEDkNZgsezzMnV8Tcjg2ui
+         JLPw==
+X-Gm-Message-State: AOAM5326e1FQPwmc/WmJywiw44+HsZHE4l8eoiPSfaatQZddKKizxHIC
+        wCP+n5VwPQDKTPbc7TNvFzmkqJT/EAPCIHMz0So=
+X-Google-Smtp-Source: ABdhPJw+KR23cz3eZ3C2oXT0pZVS/C0afqbq3o8wvRlt0GHY93W5UIskiLKQsfFGyoftLqjfSX2s3Q==
+X-Received: by 2002:a2e:6814:0:b0:24a:f422:e953 with SMTP id c20-20020a2e6814000000b0024af422e953mr2042842lja.527.1649954872347;
+        Thu, 14 Apr 2022 09:47:52 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id i18-20020a056512225200b0044a29058506sm46388lfu.194.2022.04.14.09.47.51
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 09:40:20 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id r13so7680267wrr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:40:19 -0700 (PDT)
-X-Received: by 2002:adf:c14d:0:b0:207:a28f:f5dd with SMTP id
- w13-20020adfc14d000000b00207a28ff5ddmr2647776wre.679.1649954418519; Thu, 14
- Apr 2022 09:40:18 -0700 (PDT)
+        Thu, 14 Apr 2022 09:47:52 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id u19so10130486lff.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:51 -0700 (PDT)
+X-Received: by 2002:a5d:47cf:0:b0:207:ac31:c2ce with SMTP id
+ o15-20020a5d47cf000000b00207ac31c2cemr2734623wrc.422.1649954428907; Thu, 14
+ Apr 2022 09:40:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com> <1649938766-6768-5-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1649938766-6768-5-git-send-email-quic_sbillaka@quicinc.com>
+References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
+In-Reply-To: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 14 Apr 2022 09:40:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xrsnk0PYENn5Een1xdUc9B1DKy8jvd1itKbFkvHAivMg@mail.gmail.com>
-Message-ID: <CAD=FV=Xrsnk0PYENn5Een1xdUc9B1DKy8jvd1itKbFkvHAivMg@mail.gmail.com>
-Subject: Re: [PATCH v7 4/4] Support the eDP modes given by panel
+Date:   Thu, 14 Apr 2022 09:40:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ui6BAsnTaJ2_TMh1Tnjtaw7FR92aWoUysS+UT=c0qB3Q@mail.gmail.com>
+Message-ID: <CAD=FV=Ui6BAsnTaJ2_TMh1Tnjtaw7FR92aWoUysS+UT=c0qB3Q@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] Add support for the eDP panel over aux_bus
 To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
@@ -91,47 +91,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Thu, Apr 14, 2022 at 5:20 AM Sankeerth Billakanti
+On Thu, Apr 14, 2022 at 5:19 AM Sankeerth Billakanti
 <quic_sbillaka@quicinc.com> wrote:
 >
-> The eDP controller does not have a reliable way keep panel
-> powered on to read the sink capabilities. So, the controller
-> driver cannot validate if a mode can be supported by the
-> source. We will rely on the panel driver to populate only
-> the supported modes for now.
+> This series adds support for generic eDP panel over aux_bus.
 >
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index c7277f0..0f18a16 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -998,6 +998,14 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
->                 return -EINVAL;
->         }
->
-> +       /*
-> +        * The eDP controller currently does not have a reliable way of
-> +        * enabling panel power to read sink capabilities. So, we rely
-> +        * on the panel driver to populate only supported modes for now.
-> +        */
-> +       if (dp->is_edp)
-> +               return MODE_OK;
+> These changes are dependent on the following series:
+> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=613654&state=*
 
-As discussed out-of-band, I agree that this is the right thing for now
-and making this assumption won't break anything. In general the set of
-eDP panels is known ahead of time it's fairly unlikely someone would
-set things up so that a panel couldn't use the mode it was reporting.
+You're basically depending on the last two patches of that series.
+What's the plan there? In patchwork they're marked as "Not
+Applicable". If they're good to go, maybe we should land them? If not,
+maybe you should include them (with Dmitry as the author, of course)
+at the beginning of your series?
 
-Longer term we should figure out a way to solve this but it doesn't
-have to be today. To properly implement mode_valid() we've got to
-combine knowledge from the panel (mostly rates supported and number of
-lanes supported) with the controller (rates supported, number of lanes
-supported/hooked up on this board).
 
-In any case:
+> Sankeerth Billakanti (4):
+>   drm/msm/dp: Add eDP support via aux_bus
+>   drm/msm/dp: Support only IRQ_HPD and REPLUG interrupts for eDP
+>   drm/msm/dp: wait for hpd high before aux transaction
+>   Support the eDP modes given by panel
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+One of these things is not like the others. One of these things just
+doesn't belong. Can you spot which patch is missing the prefix by
+looking at the subject line of all 4 patches? ;-)

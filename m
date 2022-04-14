@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EFC5004D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AF65004DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239785AbiDNDyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 23:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S239786AbiDND6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 23:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiDNDyd (ORCPT
+        with ESMTP id S229549AbiDND6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 23:54:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133F1D32B;
-        Wed, 13 Apr 2022 20:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=e2IE6y8upDGME4pq7hb1E5/1es9xH7Kx1EBn5ly2PvM=; b=UB4Z/ZI5nB8gQcPZjqCEIb+ie3
-        FrcHSoXOO/tnKcrJBXaIxDGcyvATD3w66R4GdQneAR/u3gtLWOyISGz5DP0KkeJPP6zchZZBQUgew
-        DchcO2U8tYJ4ySAnqJfKEeeGv+lF38hN4/8nscpdoWu5BClKFySX7IfL3ZSt2fd12To1mMmLNLHHE
-        mXMzKt1mNp5Rc+dATB0pPLgisWuaS8ldhGhmPghcIQr6oyByxkNWxMJQ5SB9wqX95ngpHrm5WBW0A
-        mHMWiAxOqNaKRarlZ4drRj4G6f4fCszti8p874Rpjl0Bs4hm15bX01f6WShUoV27z1Sj6L539fybf
-        NG5HMZFA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1neqWV-004tNH-Bv; Thu, 14 Apr 2022 03:52:00 +0000
-Message-ID: <bc6de555-6fcf-16f3-bdb9-e591b5759e51@infradead.org>
-Date:   Wed, 13 Apr 2022 20:51:54 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: mmotm 2022-04-12-21-05 uploaded (fs/btrfs/raid56.o)
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20220413040610.06AAAC385A4@smtp.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220413040610.06AAAC385A4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 13 Apr 2022 23:58:39 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A011EAD3;
+        Wed, 13 Apr 2022 20:56:16 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id bo5so3754623pfb.4;
+        Wed, 13 Apr 2022 20:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=6JqFeh4navCAkj5rFbxKZvKaVnUhQSiW3dMCYFISCQ0=;
+        b=qA2StoYwKpYFkG4qBYg96eNsK1abtI4aeNFwNiyNnZL8nfFcfVSXduu/NoTlmzrkPn
+         cMIR+H0kgy/XVbdC80vUY+DJAw0J05HbljoF6a6oKLw3rFDefujzna6GnnY+cXEUDan8
+         TSiRr9mdhbYrs7I2XbVwwOHZ7L2tbDr26JlbSvH+YeCBloaiqEYgs9IN2+SHpUUda7t3
+         QD2F+MCYgBxdC8cCH8WQ4u2WzQnNoF/baJZDT9IOaDyfmwbR78Z24btf/TLbFjJzD5eh
+         vTadunXo1Ob0/LcyLdyXoKIijzCKI1qS0q3G1KctL0kjUD3wk2fk/BxzWizGNmD78snh
+         sxWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6JqFeh4navCAkj5rFbxKZvKaVnUhQSiW3dMCYFISCQ0=;
+        b=okfTeKXXY1hllGhlez7NK0yV1Eg75ukz2IZ0qOrhW0pamOYVWmmCWyOSI0PRC1zpfq
+         KRbCx7SLHAy4Df7C6MnYIiffuPxs9XJ6Ye6REP6Yl6Ar6MclJ3jyQYhLqQVgOjJASIvB
+         vCXJT1NDvU5qsWTT/3go26fmht2w51ijo1OfWrhX7QDiHaHWijxNENepvWLnqORxxoAN
+         h3Qgt+c0SDJj+7a1L7Sa5z2Fu+0iAA9WUWlMtVQaOWHwB0dhbgwJ+2PdLXPuQdetgQtX
+         Ngp9YMASxcoK1CRAXCywPN7wD3mGdu9TrtF2GwjvkglohFBplaYoQ5DmEecGOOU4+fZs
+         p0bg==
+X-Gm-Message-State: AOAM530bkGpbhN1kAJVPbfAWT2IiWGvL+GtczA0JT9LM94xdQDSgTukq
+        i/A5t5qOh+JucVCHEcu3M8Y=
+X-Google-Smtp-Source: ABdhPJwamlC67c0gDpeV3po1lICPHaYXmM3aTTHLaNXps5ULDTMUFYVt53myWkTCiI7YtEuBQIZ3EQ==
+X-Received: by 2002:a62:1714:0:b0:505:fbff:fe8e with SMTP id 20-20020a621714000000b00505fbfffe8emr11808137pfx.49.1649908576148;
+        Wed, 13 Apr 2022 20:56:16 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id u22-20020a17090a891600b001cd498dc152sm622918pjn.2.2022.04.13.20.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 20:56:15 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     dinguyen@kernel.org
+Cc:     gregkh@linuxfoundation.org, richard.gong@intel.com,
+        atull@kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [RESEND][PATCH] firmware: stratix10-svc: fix a missing check on list iterator
+Date:   Thu, 14 Apr 2022 11:56:09 +0800
+Message-Id: <20220414035609.2239-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The bug is here:
+	pmem->vaddr = NULL;
 
+The list iterator 'pmem' will point to a bogus position containing
+HEAD if the list is empty or no element is found. This case must
+be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access.
 
-On 4/12/22 21:06, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2022-04-12-21-05 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
+To fix this bug, just gen_pool_free/set NULL/list_del() and return
+when found, otherwise list_del HEAD and return;
 
-on i386:
+Cc: stable@vger.kernel.org
+Fixes: 7ca5ce896524f ("firmware: add Intel Stratix10 service layer driver")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/firmware/stratix10-svc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-ld: fs/btrfs/raid56.o: in function `alloc_rbio':
-raid56.c:(.text+0x2778): undefined reference to `__udivdi3'
-ld: raid56.c:(.text+0x2798): undefined reference to `__udivdi3'
-
-
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index 29c0a616b317..30093aa82b7f 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -941,17 +941,17 @@ EXPORT_SYMBOL_GPL(stratix10_svc_allocate_memory);
+ void stratix10_svc_free_memory(struct stratix10_svc_chan *chan, void *kaddr)
+ {
+ 	struct stratix10_svc_data_mem *pmem;
+-	size_t size = 0;
+ 
+ 	list_for_each_entry(pmem, &svc_data_mem, node)
+ 		if (pmem->vaddr == kaddr) {
+-			size = pmem->size;
+-			break;
++			gen_pool_free(chan->ctrl->genpool,
++				       (unsigned long)kaddr, pmem->size);
++			pmem->vaddr = NULL;
++			list_del(&pmem->node);
++			return;
+ 		}
+ 
+-	gen_pool_free(chan->ctrl->genpool, (unsigned long)kaddr, size);
+-	pmem->vaddr = NULL;
+-	list_del(&pmem->node);
++	list_del(&svc_data_mem);
+ }
+ EXPORT_SYMBOL_GPL(stratix10_svc_free_memory);
+ 
 -- 
-~Randy
+2.17.1
+

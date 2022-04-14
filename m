@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F088501A4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678F4501A54
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235722AbiDNRn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S244058AbiDNRoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343653AbiDNRnC (ORCPT
+        with ESMTP id S1343670AbiDNRnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:43:02 -0400
+        Thu, 14 Apr 2022 13:43:04 -0400
 Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5A3E438E;
-        Thu, 14 Apr 2022 10:40:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649958021; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8397E540D;
+        Thu, 14 Apr 2022 10:40:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649958025; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=g32l+8hgqG2jlHAkGyf2aftxPyygZoQr+oeoLg/pkbWQS1CTnab0pmTIsscpR/uHPd+i0ifVVmeWxnIkMzSjhNkgHzWkQYNsjZTj6kZH6bRWegI+BeYycIb2g9V6GeoAp730suSfvM9GHArRv7Gy6bHO2/l66pHn/d66e5Eh9ok=
+        b=k/q9eXTFM3bj6T0VYQGFHBQF39Z4kjz/0P9AuilBKrcxelVvHddFmuFr5Fp89kh+KwxXptvpan3miGrwRaC6PhCVvHlDecaV0P4ofmGFhRa2QCLKXLRFcKQrMvsTyvSbBOib5sFtC3SIuNMCiizkmp8L+5J3yX+o1U8GuV+pVBY=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649958021; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=IMNM5MdolEKAJtDmJ2L/PHlHBjhgQ3P7ALeEsPMkcPE=; 
-        b=RH3tKHeYfIOaAblCTyjShRpiqA89T3oU8ZQ9fjZdiUy34EyMUJ8LE6dFyMBEFaMqTin8BALWr8pePQyu9K4hyVHR+WZKahh0+WPBYELf5i9Lu43aN1l4zkDGFdlqyXR70sXZ7PWeYyfCHZ83e0Ws0zBvkH4R+V/cC+qHAAJea1Y=
+        t=1649958025; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ThSA3OlMdtKDRied4vhuun5OS9ubpkDQSHM9sks5C/8=; 
+        b=QW9gLR7WsLMzbijBz7E1p+B9Qn4KjJ8hRzd+Z7mcRj1M70V5unUNT+GVOE8HEMqDDA6bTTMyq6My8c/ddiguz0sRYNfCRVzg9xkXAgbpgMZylNdXMTa3mch1l9aoyX/nrkVYPvx4q+/Mofw7xPoiGVN7TeZctG+UUGRW7J4WXTs=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=arinc9.com;
         spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
         dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649958021;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649958025;
         s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
         h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=IMNM5MdolEKAJtDmJ2L/PHlHBjhgQ3P7ALeEsPMkcPE=;
-        b=ZNY/n5JCYx3TQwbAbGTHA3bN5nnjYchtA/08g6NTTxK2q9wmWaQeETBY1bNC6sPZ
-        2e0OoIVfM6FVXbwewDL+fz69UCFLjzXq4hkULiB5heMKwVX6hLwrtAL2poiyrhW5rNi
-        W6PuhSndgYzURR4bcsmbi4/ckvsVT94cpqwr0UgE=
+        bh=ThSA3OlMdtKDRied4vhuun5OS9ubpkDQSHM9sks5C/8=;
+        b=A3yymyo7nniDqwgMIYRccuIexWf6yNALaHsCG/mMt1/DAZaZM3zpBQ9WO3Xfmw9m
+        5HLrji1uXscRN4n47I4kdyAbAo0PV9HGWdBMkpfHzenCk3OZjfShmahy0D/4MHV1Knt
+        6R/+cExkdmZBfZh6FVZ8yueRByY1clcH71Ibc9Ug=
 Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649958020478365.7778123721878; Thu, 14 Apr 2022 10:40:20 -0700 (PDT)
+        with SMTPS id 1649958024558393.88923947858166; Thu, 14 Apr 2022 10:40:24 -0700 (PDT)
 From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
 To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>,
@@ -50,9 +50,9 @@ Cc:     erkin.bozoglu@xeront.com,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH v2 10/14] dt-bindings: pinctrl: rt2880: fix binding name, pin groups and functions
-Date:   Thu, 14 Apr 2022 20:39:12 +0300
-Message-Id: <20220414173916.5552-11-arinc.unal@arinc9.com>
+Subject: [PATCH v2 11/14] dt-bindings: pinctrl: add binding for Ralink MT7620 pinctrl
+Date:   Thu, 14 Apr 2022 20:39:13 +0300
+Message-Id: <20220414173916.5552-12-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220414173916.5552-1-arinc.unal@arinc9.com>
 References: <20220414173916.5552-1-arinc.unal@arinc9.com>
@@ -70,86 +70,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deprecate the old property "ralink,rt2880-pinmux". Add the new property
-"ralink,rt2880-pinctrl". The old property name was inaccurate as the
-hardware block is called pinctrl across the Mediatek/Ralink architecture.
-
-Current pin group and function bindings are for MT7621. Put bindings for
-RT2880 instead.
-
-Add me as a maintainer.
+Add binding for the Ralink MT7620 pin controller for MT7620, MT7628 and
+MT7688 SoCs.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- ...pinmux.yaml => ralink,rt2880-pinctrl.yaml} | 26 +++++++++----------
- 1 file changed, 13 insertions(+), 13 deletions(-)
- rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,rt2880-pinctrl.yaml} (53%)
+ .../pinctrl/ralink,mt7620-pinctrl.yaml        | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-similarity index 53%
-rename from Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
-rename to Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-index 9de8b0c075e2..56e5becabcfd 100644
---- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-@@ -1,21 +1,23 @@
- # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinmux.yaml#
-+$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Ralink rt2880 pinmux controller
-+title: Ralink RT2880 Pin Controller
- 
- maintainers:
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+new file mode 100644
+index 000000000000..4d820df24b89
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+@@ -0,0 +1,91 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/ralink,mt7620-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ralink MT7620 Pin Controller
++
++maintainers:
 +  - Arınç ÜNAL <arinc.unal@arinc9.com>
-   - Sergio Paracuellos <sergio.paracuellos@gmail.com>
- 
- description:
--  The rt2880 pinmux can only set the muxing of pin groups. Muxing indiviual pins
--  is not supported. There is no pinconf support.
-+  Ralink RT2880 pin controller for RT2880 SoC.
++  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
++
++description:
++  Ralink MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
 +  The pin controller can only set the muxing of pin groups. Muxing individual
 +  pins is not supported. There is no pinconf support.
- 
- properties:
-   compatible:
--    const: ralink,rt2880-pinmux
-+    const: ralink,rt2880-pinctrl
- 
- patternProperties:
-   '-pins$':
-@@ -28,14 +30,12 @@ patternProperties:
- 
-         properties:
-           groups:
--            description: Name of the pin group to use for the functions.
--            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi,
--                   uart1, uart2, uart3, wdt]
-+            description: The pin group to select.
-+            enum: [i2c, spi, uartlite, jtag, mdio, sdram, pci]
 +
-           function:
--            description: The mux function to select
--            enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
--                   pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3,
--                   spi, uart1, uart2, uart3, wdt refclk, wdt rst]
++properties:
++  compatible:
++    const: ralink,mt7620-pinctrl
++
++patternProperties:
++  '-pins$':
++    type: object
++    patternProperties:
++      '^(.*-)?pinmux$':
++        type: object
++        description: node for pinctrl.
++        $ref: pinmux-node.yaml#
++
++        properties:
++          groups:
++            description: The pin group to select.
++            enum: [
++              # For MT7620 SoC
++              ephy, i2c, mdio, nd_sd, pa, pcie, rgmii1, rgmii2, spi, spi refclk,
++              uartf, uartlite, wdt, wled,
++
++              # For MT7628 and MT7688 SoCs
++              gpio, i2c, i2s, p0led_an, p0led_kn, p1led_an, p1led_kn, p2led_an,
++              p2led_kn, p3led_an, p3led_kn, p4led_an, p4led_kn, perst, pwm0,
++              pwm1, refclk, sdmode, spi, spi cs1, spis, uart0, uart1, uart2,
++              wdt, wled_an, wled_kn,
++            ]
++
++          function:
 +            description: The mux function to select.
-+            enum: [gpio, i2c, spi, uartlite, jtag, mdio, sdram, pci]
- 
-         required:
-           - groups
-@@ -57,7 +57,7 @@ examples:
-   # Pinmux controller node
-   - |
-     pinctrl {
--      compatible = "ralink,rt2880-pinmux";
-+      compatible = "ralink,rt2880-pinctrl";
- 
-       i2c_pins: i2c0-pins {
-         pinmux {
++            enum: [
++              # For MT7620 SoC
++              ephy, gpio, gpio i2s, gpio uartf, i2c, i2s uartf, mdio, nand, pa,
++              pcie refclk, pcie rst, pcm gpio, pcm i2s, pcm uartf, refclk,
++              rgmii1, rgmii2, sd, spi, spi refclk, uartf, uartlite, wdt refclk,
++              wdt rst, wled,
++
++              # For MT7628 and MT7688 SoCs
++              antenna, debug, gpio, i2c, i2s, jtag, p0led_an, p0led_kn,
++              p1led_an, p1led_kn, p2led_an, p2led_kn, p3led_an, p3led_kn,
++              p4led_an, p4led_kn, pcie, pcm, perst, pwm, pwm0, pwm1, pwm_uart2,
++              refclk, rsvd, sdxc, sdxc d5 d4, sdxc d6, sdxc d7, spi, spi cs1,
++              spis, sw_r, uart0, uart1, uart2, utif, wdt, wled_an, wled_kn, -,
++            ]
++
++        required:
++          - groups
++          - function
++
++        additionalProperties: false
++
++    additionalProperties: false
++
++allOf:
++  - $ref: "pinctrl.yaml#"
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  # Pinmux controller node
++  - |
++    pinctrl {
++      compatible = "ralink,mt7620-pinctrl";
++
++      i2c_pins: i2c0-pins {
++        pinmux {
++          groups = "i2c";
++          function = "i2c";
++        };
++      };
++    };
 -- 
 2.25.1
 

@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C83500DC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA656500DD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243468AbiDNMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S243478AbiDNMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbiDNMmY (ORCPT
+        with ESMTP id S243471AbiDNMpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:42:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8BB3C73C;
-        Thu, 14 Apr 2022 05:39:58 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfJsB50fTzgYp9;
-        Thu, 14 Apr 2022 20:38:06 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 20:39:56 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <bhelgaas@google.com>, <linux-pci@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <prime.zeng@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3] PCI: Make sure the bus bridge powered on when scanning bus
-Date:   Thu, 14 Apr 2022 20:37:36 +0800
-Message-ID: <20220414123736.34150-1-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.31.0
+        Thu, 14 Apr 2022 08:45:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EC358C7C3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:42:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6569139F;
+        Thu, 14 Apr 2022 05:42:47 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B932A3F70D;
+        Thu, 14 Apr 2022 05:42:45 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org, will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
+        robdclark@gmail.com, m.szyprowski@samsung.com,
+        baolu.lu@linux.intel.com, yong.wu@mediatek.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/13] iommu: Retire bus_set_iommu()
+Date:   Thu, 14 Apr 2022 13:42:29 +0100
+Message-Id: <cover.1649935679.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the bus bridge is runtime suspended, we'll fail to rescan
-the devices through sysfs as we cannot access the configuration
-space correctly when the bridge is in D3hot.
-It can be reproduced like:
+Hi all,
 
-$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
-$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
+Here's another chapter in my saga of moving to per-instance IOMMU ops -
+iommu_present() and iommu_capable() cleanups will be ongoing for another
+cycle or two, while this one is at least self-contained within the
+subsystem. The next steps after this are making iommu_domain_alloc()
+instance-aware - which should finish the public API - and pulling the
+fwnode/of_xlate bits into __iommu_probe_device(). And then making sense
+of whatever's left :)
 
-0000:80:00.0 is root port and is runtime suspended and we cannot
-get 0000:81:00.1 after rescan.
+For ease of review here I split out individual driver patches based on
+whether there was any non-trivial change or affect on control flow; the
+straightforward deletions are all lumped together since the whole series
+needs applying together either way, but I'm happy to split the final
+patch up further if anyone would like.
 
-Make bridge powered on when scanning the child bus, by adding
-pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
+Patch #3 for AMD is based on Mario's SWIOTLB patch here:
 
-A similar issue is met and solved by
-d963f6512e15 ("PCI: Power on bridges before scanning new devices")
-which rescan the devices through /sys/bus/pci/devices/0000:80:00.0/rescan.
-The callstack is like:
+https://lore.kernel.org/linux-iommu/20220404204723.9767-1-mario.limonciello@amd.com/
 
-dev_rescan_restore()
-  pci_rescan_bus()
-    pci_scan_bridge_extend()
-      pci_scan_child_bus_extend() /* will wake up the bridge with this patch */
+since that wants merging first as fix material. The series is also based
+contextually (but not functionally) on my device_iommu_capable() patches
+here:
 
-With this patch the issue is also resolved, so let's remove the calls of
-pm_runtime_*() in pci_scan_bridge_extend().
+https://lore.kernel.org/linux-iommu/cover.1649089693.git.robin.murphy@arm.com/
 
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
-Change since v2:
-- just rebase it on v5.18-rc2
-Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
+since those are pretty much good to go now (I'll send a slightly-tweaked
+final version once the iommu/core branch is open).
 
-Change since v1:
-- use an intermediate variable *bridge as suggested
-- remove the pm_runtime_*() calls in pci_scan_bridge_extend()
-Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+Thanks,
+Robin.
 
- drivers/pci/probe.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 17a969942d37..2ca6b4b708e3 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1257,12 +1257,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
- 	u8 fixed_sec, fixed_sub;
- 	int next_busnr;
- 
--	/*
--	 * Make sure the bridge is powered on to be able to access config
--	 * space of devices below it.
--	 */
--	pm_runtime_get_sync(&dev->dev);
--
- 	pci_read_config_dword(dev, PCI_PRIMARY_BUS, &buses);
- 	primary = buses & 0xFF;
- 	secondary = (buses >> 8) & 0xFF;
-@@ -1464,8 +1458,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
- out:
- 	pci_write_config_word(dev, PCI_BRIDGE_CONTROL, bctl);
- 
--	pm_runtime_put(&dev->dev);
--
- 	return max;
- }
- 
-@@ -2859,11 +2851,19 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
- 	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
- 	unsigned int start = bus->busn_res.start;
- 	unsigned int devfn, fn, cmax, max = start;
--	struct pci_dev *dev;
-+	struct pci_dev *dev, *bridge = bus->self;
- 	int nr_devs;
- 
- 	dev_dbg(&bus->dev, "scanning bus\n");
- 
-+	/*
-+	 * Make sure the bus bridge is powered on, otherwise we may not be
-+	 * able to scan the devices as we may fail to access the configuration
-+	 * space of subordinates.
-+	 */
-+	if (bridge)
-+		pm_runtime_get_sync(&bridge->dev);
-+
- 	/* Go find them, Rover! */
- 	for (devfn = 0; devfn < 256; devfn += 8) {
- 		nr_devs = pci_scan_slot(bus, devfn);
-@@ -2976,6 +2976,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
- 		}
- 	}
- 
-+	if (bridge)
-+		pm_runtime_put(&bridge->dev);
-+
- 	/*
- 	 * We've scanned the bus and so we know all about what's on
- 	 * the other side of any bridges that may be on this bus plus
+Robin Murphy (13):
+  iommu: Always register bus notifiers
+  iommu: Move bus setup to IOMMU device registration
+  iommu/amd: Clean up bus_set_iommu()
+  iommu/arm-smmu: Clean up bus_set_iommu()
+  iommu/arm-smmu-v3: Clean up bus_set_iommu()
+  iommu/dart: Clean up bus_set_iommu()
+  iommu/exynos: Clean up bus_set_iommu()
+  iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+  iommu/mtk: Clean up bus_set_iommu()
+  iommu/omap: Clean up bus_set_iommu()
+  iommu/tegra-smmu: Clean up bus_set_iommu()
+  iommu/virtio: Clean up bus_set_iommu()
+  iommu: Clean up bus_set_iommu()
+
+ drivers/iommu/amd/amd_iommu.h               |   1 -
+ drivers/iommu/amd/init.c                    |   9 +-
+ drivers/iommu/amd/iommu.c                   |  21 ----
+ drivers/iommu/apple-dart.c                  |  30 +-----
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  53 +---------
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  84 +--------------
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     |   4 -
+ drivers/iommu/exynos-iommu.c                |   9 --
+ drivers/iommu/fsl_pamu_domain.c             |   4 -
+ drivers/iommu/intel/iommu.c                 |   1 -
+ drivers/iommu/iommu.c                       | 109 +++++++++-----------
+ drivers/iommu/ipmmu-vmsa.c                  |  35 +------
+ drivers/iommu/msm_iommu.c                   |   2 -
+ drivers/iommu/mtk_iommu.c                   |  13 +--
+ drivers/iommu/mtk_iommu_v1.c                |  13 +--
+ drivers/iommu/omap-iommu.c                  |   6 --
+ drivers/iommu/rockchip-iommu.c              |   2 -
+ drivers/iommu/s390-iommu.c                  |   6 --
+ drivers/iommu/sprd-iommu.c                  |   5 -
+ drivers/iommu/sun50i-iommu.c                |   2 -
+ drivers/iommu/tegra-smmu.c                  |  29 ++----
+ drivers/iommu/virtio-iommu.c                |  24 -----
+ include/linux/iommu.h                       |   1 -
+ 23 files changed, 62 insertions(+), 401 deletions(-)
+
 -- 
-2.24.0
+2.28.0.dirty
 

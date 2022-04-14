@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21996501AEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A17501AE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245346AbiDNSUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 14:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S1344413AbiDNSUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 14:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344395AbiDNSUJ (ORCPT
+        with ESMTP id S1344404AbiDNSUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 14:20:09 -0400
+        Thu, 14 Apr 2022 14:20:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA40BE3884
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58C15E38B4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649960262;
+        s=mimecast20190719; t=1649960264;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=azZFyvbXbsRrL2GrJ7PQeirmm3t2q04DjeZIVAP8lC0=;
-        b=JbPSQfAW6ZkXqO8ZJrpaf4NLismXY+/05EP/S37ixzlpKqWD4r+0CCKO9vWRCilCBYpHzT
-        mCO3JQZYi7rN/tlO3pOaQTp528p4zfKHNsLzqLMF44YVx1rSKob/OmkXs04yKNIoUnFtmA
-        i3lGCyHeemk28TaTf3gJ/GyiGsO/q+Q=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zy+BZO4byiGtpgAVtL3WxpyUEL13EpkA7IKsqDx9JAE=;
+        b=JPdlRJ7VSywEe/KXV4Uop8bfG87UORAXcOLICgcQGYip9RUgott2kDp0Dd8iTquXPFWOlT
+        JmwQtg9pm5k6rvbcuY/U36+1tlWBh7sAHcPKd8hR35eLFRm4Mrt1vWDlOF/Qrd5vi/BOc8
+        Xwj8Dt4Ut81PY58h/cBGGD5jks4QFuM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-146-paO6HHR0P-ahh3NnDDWk0A-1; Thu, 14 Apr 2022 14:17:41 -0400
-X-MC-Unique: paO6HHR0P-ahh3NnDDWk0A-1
-Received: by mail-qk1-f198.google.com with SMTP id bk23-20020a05620a1a1700b0067b32f93b90so3794869qkb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:41 -0700 (PDT)
+ us-mta-126-nCvztXz1NmGjXEy7Ez72bw-1; Thu, 14 Apr 2022 14:17:43 -0400
+X-MC-Unique: nCvztXz1NmGjXEy7Ez72bw-1
+Received: by mail-qt1-f199.google.com with SMTP id z3-20020ac86b83000000b002ed0f18c23cso3711026qts.17
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=azZFyvbXbsRrL2GrJ7PQeirmm3t2q04DjeZIVAP8lC0=;
-        b=J8z9fzmF312o3d/aoeE8zXvWpptnwVHJgTUyHNOXyJq8lR4X21pW5cUfpxEi+MaQhu
-         EQpSlsbbF0CkfazViMzqaXbitoFhOf/N/2tPrlWnWneZlEs7UiVoVQznkYL44blCFvfh
-         cm1FFLckzAuZiOS4t+InpL983dFr0fjXA7Ka3cuPKHNhm2u9I2+LbOZiHNWRGfXuxNjI
-         z1QretXAoHaSvInMFV8pdkcqDZKKdKYU1vO9JRSbFOQBhn7hAfO0zjg+6TvKz2puZaCG
-         uIbgVUmUUrJf6UAyVvfgrNmvWVEm9/e0G8Kyy2OduORHXy46bzNy0fTM6p0RvUpzHNif
-         PRPQ==
-X-Gm-Message-State: AOAM533blhVLdmySDikuHj/GLr0n7UvngzFj2XQzyPZvPUQLYTkGTBMg
-        CYJF7Gx0T36Ubw25XC3DVCu6w9DIvJ+PJfAgmd1Si8aUG84pDqXr9csIthjFKmI02iKDuN6C8aI
-        fC4T7XWu9Hg735Cm8iY7DLYWv
-X-Received: by 2002:a05:6214:2607:b0:444:3e1c:9491 with SMTP id gu7-20020a056214260700b004443e1c9491mr4658506qvb.12.1649960261423;
-        Thu, 14 Apr 2022 11:17:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyPFI9LaNCqQ5DDacyUpStgLvPbYlekuXV70UXl0i1kqJef4wmHRnyufxpuU13B2NmCskEb1g==
-X-Received: by 2002:a05:6214:2607:b0:444:3e1c:9491 with SMTP id gu7-20020a056214260700b004443e1c9491mr4658476qvb.12.1649960261204;
-        Thu, 14 Apr 2022 11:17:41 -0700 (PDT)
+        bh=zy+BZO4byiGtpgAVtL3WxpyUEL13EpkA7IKsqDx9JAE=;
+        b=USWfA12yQ+CQ5kKiOaNji52OFMKZQdp80vnoma8P7z5D/qoCCa+uhoYApwCLc0IgA/
+         mWHUrp3S89741fp1GP0n5iQ5hYfxQhY1xnOlimS2xOX9bV9Y8BVguMRNttF19A3s4wy2
+         md5VqNmXrY7pTQGt4E5iRcmBF1cm8kcUHYcPgYD6N9enBJkdCdymW3T/7YppQenAEXdS
+         flWihIETrpjJhJYR4rLiWgx7okF2ikTolHnkqW/Ymv9V78fmg9Md6Vv+0eAJQqtx6vYB
+         PE/Z/txbF3u/9wuY1mzkMzdgtwoBC140uKPwpiJxC01ZsbSCvxZiR/jxyh5DyPGnqC//
+         7V9A==
+X-Gm-Message-State: AOAM530VTmy6AgYk1gIgV9cJXKa45P4i2rmvXsCE+lb/fEb3VZyGaVPt
+        z+PxbcBFP0O4wVJrBHI7NMECHbQqHrr3vbtnT9ZRAuB5E2nOX43ZL1IkulYRPxrMmH4wp+D+jNI
+        6yMB6afLSjISKC8kbQNXBzdrz
+X-Received: by 2002:ac8:7f83:0:b0:2e1:df62:380c with SMTP id z3-20020ac87f83000000b002e1df62380cmr2818248qtj.427.1649960262928;
+        Thu, 14 Apr 2022 11:17:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwulDgYN2XzG/gLG13Jj3INXMKsHc0v0l2aMhB1g0X7v8vggHhHUIziyZIXU72AkWg9yx8ExQ==
+X-Received: by 2002:ac8:7f83:0:b0:2e1:df62:380c with SMTP id z3-20020ac87f83000000b002e1df62380cmr2818235qtj.427.1649960262737;
+        Thu, 14 Apr 2022 11:17:42 -0700 (PDT)
 Received: from fedora.redhat.com (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac85845000000b002edfd4b0503sm1701816qth.88.2022.04.14.11.17.40
+        by smtp.gmail.com with ESMTPSA id h5-20020ac85845000000b002edfd4b0503sm1701816qth.88.2022.04.14.11.17.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 11:17:40 -0700 (PDT)
+        Thu, 14 Apr 2022 11:17:42 -0700 (PDT)
 From:   Adrien Thierry <athierry@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nicolas Saenz Julienne <nsaenz@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     linux-staging@lists.linux.dev,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Adrien Thierry <athierry@redhat.com>
-Subject: [PATCH v2 2/5] staging: bcm2835-audio: fix line ending with '('
-Date:   Thu, 14 Apr 2022 14:16:19 -0400
-Message-Id: <20220414181622.102049-3-athierry@redhat.com>
+Subject: [PATCH v2 3/5] staging: bcm2835-audio: fix unnecessary space after cast
+Date:   Thu, 14 Apr 2022 14:16:20 -0400
+Message-Id: <20220414181622.102049-4-athierry@redhat.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220414181622.102049-1-athierry@redhat.com>
 References: <20220414181622.102049-1-athierry@redhat.com>
@@ -88,28 +88,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fix issue reported by checkpatch:
 
-CHECK: Lines should not end with a '('
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c:85:
+CHECK: No space is necessary after a cast
+FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c:240:
 
 Signed-off-by: Adrien Thierry <athierry@redhat.com>
 ---
- drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
-index f2ef1d641e70..856d3c022f80 100644
+index 856d3c022f80..68e8d491a7ec 100644
 --- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
 +++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
-@@ -82,8 +82,7 @@ void bcm2835_playback_fifo(struct bcm2835_alsa_stream *alsa_stream,
- }
- 
- /* open callback */
--static int snd_bcm2835_playback_open_generic(
--	struct snd_pcm_substream *substream, int spdif)
-+static int snd_bcm2835_playback_open_generic(struct snd_pcm_substream *substream, int spdif)
+@@ -236,7 +236,7 @@ static void snd_bcm2835_pcm_transfer(struct snd_pcm_substream *substream,
  {
- 	struct bcm2835_chip *chip = snd_pcm_substream_chip(substream);
  	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct bcm2835_alsa_stream *alsa_stream = runtime->private_data;
+-	void *src = (void *) (substream->runtime->dma_area + rec->sw_data);
++	void *src = (void *)(substream->runtime->dma_area + rec->sw_data);
+ 
+ 	bcm2835_audio_write(alsa_stream, bytes, src);
+ }
 -- 
 2.35.1
 

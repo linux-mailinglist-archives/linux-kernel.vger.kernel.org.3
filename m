@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5827750169E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5D55013D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242604AbiDNPIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S244945AbiDNNwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346610AbiDNN5p (ORCPT
+        with ESMTP id S1343688AbiDNN3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC013B0D1F;
-        Thu, 14 Apr 2022 06:47:34 -0700 (PDT)
+        Thu, 14 Apr 2022 09:29:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2185E9F6EE;
+        Thu, 14 Apr 2022 06:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8204E612E6;
-        Thu, 14 Apr 2022 13:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC20C385A5;
-        Thu, 14 Apr 2022 13:47:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B216F61B18;
+        Thu, 14 Apr 2022 13:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF205C385A1;
+        Thu, 14 Apr 2022 13:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944053;
-        bh=3GzRujzn6+qIKnSzsNy7VvJRtrBFo1lxvSwl8w7PyVs=;
+        s=korg; t=1649942713;
+        bh=AyLMklGPuJYElFV3GJEcjuGGHBpthjripRp0e51U+I4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2G2ZYmKo5vAxaJaNB1YYxcqjTVkORHYwKJ7pLGTv53ELH58iZBJ1LVt5yAFZ1sNzj
-         5eq7WW3aXA0zaJPpEQfpyrbWPSjAa+eVpFj3cvNvJnpiDs9QEg1JcQaYK1MOC6wmZQ
-         3DYDog3Tqi20IpBUmGV3mEsclnHFmnpemAbyykv8=
+        b=sfimXx5uC7rui1QXbn80N1dKY6UR/chzpMz4hPCi7m6rzC8XTf/BatCRa9uBG3zP1
+         eRfxh6tQmpihNs2e9o0FOEyajmMB8fnR3rqdfOo+TCVH5yB62wT4nzrkE/OdfyaS7M
+         Vq5VJjRjvRVccjFdumWSiyhk49lmakbi8izuYfRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Subject: [PATCH 5.4 350/475] ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
-Date:   Thu, 14 Apr 2022 15:12:15 +0200
-Message-Id: <20220414110904.876203781@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 233/338] ubifs: rename_whiteout: Fix double free for whiteout_ui->data
+Date:   Thu, 14 Apr 2022 15:12:16 +0200
+Message-Id: <20220414110845.521261097@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit 40d8abf364bcab23bc715a9221a3c8623956257b upstream.
+commit 40a8f0d5e7b3999f096570edab71c345da812e3e upstream.
 
-If the NumEntries field in the _CPC return package is less than 2, do
-not attempt to access the "Revision" element of that package, because
-it may not be present then.
+'whiteout_ui->data' will be freed twice if space budget fail for
+rename whiteout operation as following process:
 
-Fixes: 337aadff8e45 ("ACPI: Introduce CPU performance controls using CPPC")
-BugLink: https://lore.kernel.org/lkml/20220322143534.GC32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Huang Rui <ray.huang@amd.com>
+rename_whiteout
+  dev = kmalloc
+  whiteout_ui->data = dev
+  kfree(whiteout_ui->data)  // Free first time
+  iput(whiteout)
+    ubifs_free_inode
+      kfree(ui->data)	    // Double free!
+
+KASAN reports:
+==================================================================
+BUG: KASAN: double-free or invalid-free in ubifs_free_inode+0x4f/0x70
+Call Trace:
+  kfree+0x117/0x490
+  ubifs_free_inode+0x4f/0x70 [ubifs]
+  i_callback+0x30/0x60
+  rcu_do_batch+0x366/0xac0
+  __do_softirq+0x133/0x57f
+
+Allocated by task 1506:
+  kmem_cache_alloc_trace+0x3c2/0x7a0
+  do_rename+0x9b7/0x1150 [ubifs]
+  ubifs_rename+0x106/0x1f0 [ubifs]
+  do_syscall_64+0x35/0x80
+
+Freed by task 1506:
+  kfree+0x117/0x490
+  do_rename.cold+0x53/0x8a [ubifs]
+  ubifs_rename+0x106/0x1f0 [ubifs]
+  do_syscall_64+0x35/0x80
+
+The buggy address belongs to the object at ffff88810238bed8 which
+belongs to the cache kmalloc-8 of size 8
+==================================================================
+
+Let ubifs_free_inode() free 'whiteout_ui->data'. BTW, delete unused
+assignment 'whiteout_ui->data_len = 0', process 'ubifs_evict_inode()
+-> ubifs_jnl_delete_inode() -> ubifs_jnl_write_inode()' doesn't need it
+(because 'inc_nlink(whiteout)' won't be excuted by 'goto out_release',
+ and the nlink of whiteout inode is 0).
+
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/cppc_acpi.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ fs/ubifs/dir.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -738,6 +738,11 @@ int acpi_cppc_processor_probe(struct acp
- 	cpc_obj = &out_obj->package.elements[0];
- 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
- 		num_ent = cpc_obj->integer.value;
-+		if (num_ent <= 1) {
-+			pr_debug("Unexpected _CPC NumEntries value (%d) for CPU:%d\n",
-+				 num_ent, pr->id);
-+			goto out_free;
-+		}
- 	} else {
- 		pr_debug("Unexpected entry type(%d) for NumEntries\n",
- 				cpc_obj->type);
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1442,8 +1442,6 @@ static int do_rename(struct inode *old_d
+ 
+ 		err = ubifs_budget_space(c, &wht_req);
+ 		if (err) {
+-			kfree(whiteout_ui->data);
+-			whiteout_ui->data_len = 0;
+ 			iput(whiteout);
+ 			goto out_release;
+ 		}
 
 

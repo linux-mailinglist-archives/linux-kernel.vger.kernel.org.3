@@ -2,191 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192C501D29
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDA3501D36
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346783AbiDNVKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S1346793AbiDNVMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbiDNVKq (ORCPT
+        with ESMTP id S234903AbiDNVMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:10:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6E7E5BE52
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649970499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=50hb9t2hWQpx3A7gqpiBQ8RZfEOgSrHlGcFbRUMDwYE=;
-        b=a1PxToFf9FiIv0/7j2R0mjkPDOVjYsT/wKhiztBcXuObjxtVSffJWRuyl9qpOvB7tTTX1u
-        40WUVh55yT3jWayhOJOkxIAQ9sycHIqllB7Uvss2yuIkKr537MCsgaXwjHVJG3ZUT6KOZ1
-        2Q5C6fMXkFZ9pZWnk1HkaexJsK53Fqo=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-b166euY0PM-GAz_ve2G3eg-1; Thu, 14 Apr 2022 17:08:18 -0400
-X-MC-Unique: b166euY0PM-GAz_ve2G3eg-1
-Received: by mail-io1-f71.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso3725268ioz.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:08:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=50hb9t2hWQpx3A7gqpiBQ8RZfEOgSrHlGcFbRUMDwYE=;
-        b=5cGUzhpNys0HEsz5hr893HmyDxz+yO6S4aKWr8HGZq5oZ9Z2HiEPuykJBfHYrPtcv8
-         AWkzmwwdAhV0SWtwiTfa2WBQPtSfl8Ke/5H7vIFy0KvdIM0TnNB1X9zmL0KexoTpT/qR
-         TuLw4a515JMQ0rovKHcrFHumkEDceNn2Srg5onnSVPlOa3FiabnLwdbm3swrxGAAzBqq
-         mosLqSpP2qGPXOf0dg9GdyHDx/XnPpaXEBr/3eKZFLIWhx6jUi1Ho/RG5UUDNbG0viny
-         gdxqxjzRyKA1i0wen83Rybm3uZRP95Yq/MxCw7IuOi7rPcyLCadN3YUj6uQuUDoBURw7
-         UBXQ==
-X-Gm-Message-State: AOAM530D9WBL+1jFP4OHffd7NJtqu7GmLD+VZEOHv7QRjws8w3JTZ1wB
-        xaMz4I7J48PkKdrAb1aqv0nU6r1tWRCNq1ytdSzYnFyA3iEYaY/H5NMr5jGXboUuE+07hCm8rOy
-        rTUEAaLA7/oNrIs7ezRxAbA/s
-X-Received: by 2002:a02:a40d:0:b0:326:72dd:feb8 with SMTP id c13-20020a02a40d000000b0032672ddfeb8mr2047809jal.303.1649970498011;
-        Thu, 14 Apr 2022 14:08:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzrSXg03wSwlqNUJEo5bOLrh3rEmDmIMlVB4DukeCQuZK49xyTij9i84kCWVWLY49WnoHGUTQ==
-X-Received: by 2002:a02:a40d:0:b0:326:72dd:feb8 with SMTP id c13-20020a02a40d000000b0032672ddfeb8mr2047790jal.303.1649970497702;
-        Thu, 14 Apr 2022 14:08:17 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm1800923iog.15.2022.04.14.14.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 14:08:17 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 17:08:15 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: Re: [PATCH v8 03/23] mm: Check against orig_pte for finish_fault()
-Message-ID: <YliNP7ADcdc4Puvs@xz-m1.local>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405014836.14077-1-peterx@redhat.com>
- <CGME20220413140330eucas1p167da41e079712b829ef8237dc27b049c@eucas1p1.samsung.com>
- <710c48c9-406d-e4c5-a394-10501b951316@samsung.com>
- <Ylb9rXJyPm8/ao8f@xz-m1.local>
- <6ccf5f5f-8dc5-16cc-f06c-78401b822a54@samsung.com>
- <YlhMDmko0IN82d21@xz-m1.local>
- <20220414135740.42fb26be9e13d2aada35f140@linux-foundation.org>
+        Thu, 14 Apr 2022 17:12:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967528E2C;
+        Thu, 14 Apr 2022 14:09:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAA3BB818EB;
+        Thu, 14 Apr 2022 21:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97246C385A5;
+        Thu, 14 Apr 2022 21:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649970573;
+        bh=K4e1NxHpGoyDCMiTXGChbZesTBHyq3kIDMII4WvrDyQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TsnrUSm/DSRoSCVhBXkyNWwkbSDQ2YoEF3Ad/ZL48tqEOTNT66o0V5Rgl9Tyfr/pO
+         kIRNb4WaE3CrnYsSuISKKMpm5hKyEKAEHGOGQQk5hgyPeuQyra14W4wyOUA7M7Y/8T
+         S53v6sPHjjMwCXJrP5bIhSYACO0nlkfnKwjGD9pVDCp94I+ZF9Kbi48ovle2TMwBtX
+         lTAErt+nam9fhpGz8unU5lUoqVPh+qrEFFvfV/oB8FS+hMw0AFlp78dgHrubFxmKur
+         YbtdqSkAqxUvYTfwVMpnzbW5ii7qNzV4aTVU11f7hpdr0HeBdHcpgJNTNfN5PPTYL9
+         Xmu/p4uuigviw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 31C615C03A5; Thu, 14 Apr 2022 14:09:33 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 14:09:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220414210933.GW4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
+ <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
+ <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
+ <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
+ <20220411154109.GX4285@paulmck-ThinkPad-P17-Gen-1>
+ <Ylhz1LOIf+JyjH7n@google.com>
+ <20220414194204.GU4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YS5b_51tqmdf27QqQHqsgJKbTys1V3h+Bek3XN4FjBmbw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414135740.42fb26be9e13d2aada35f140@linux-foundation.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YS5b_51tqmdf27QqQHqsgJKbTys1V3h+Bek3XN4FjBmbw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 01:57:40PM -0700, Andrew Morton wrote:
-> On Thu, 14 Apr 2022 12:30:06 -0400 Peter Xu <peterx@redhat.com> wrote:
+On Thu, Apr 14, 2022 at 03:49:16PM -0400, Joel Fernandes wrote:
+> On Thu, Apr 14, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Thu, Apr 14, 2022 at 07:19:48PM +0000, Joel Fernandes wrote:
+> > > On Mon, Apr 11, 2022 at 08:41:09AM -0700, Paul E. McKenney wrote:
+> > > [..]
+> > > > > > [4]     All CPUs are offloaded at boot, and any CPU can be de-offloaded
+> > > > > >         and offloaded at runtime.  This is the same behavior that
+> > > > > >         you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
+> > > > > >         rcu_nocbs=0-N.
+> > > > >
+> > > > > Yes, this is the behavior I intend. So then there would not be a need
+> > > > > to pass a mask (and I suspect for a large number of users, it
+> > > > > simplifies boot params).
+> > > >
+> > > > Very good, and from what I can see, this should work for everyone.
+> > >
+> > > Just to clarify, what I am going to do is, if this new option =y, then
+> > > rcu_nocbs effectively wont do anything. i.e. All CPUs are offloaded at boot.
+> > > Let me know if we are not on the same page about it though. I do feel that is
+> > > a sensible choice given =y. If we are on same page, please ignore my comment.
+> >
+> > I was assuming that the rcu_nocbs=??? for non-empty "???" would override
+> > the CONFIG_RCU_NOCB_CPU_ALL=y.  If you choose not to do that, shouldn't
+> > you at least issue some sort of diagnostic?  After all, the sysadmin
+> > gave a kernel-boot parameter asking the code to do something and the
+> > code is choosing not to do that something.
+> >
+> > Of course, such a sysadmin might want the CONFIG_RCU_NOCB_CPU_ALL=y
+> > Kconfig option to affect only the default, that is, when no rcu_nocbs
+> > kernel boot parameter is specified.  This would change the second "[4]"
+> > in my original table to "[2]".
+> >
+> > Thoughts?
 > 
-> > > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > > 
-> > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > 
-> > Thanks, Marek, for the fast feedback!
+> I thought about that. I feel that since we are defaulting the new
+> config option to =n , it is a conscious choice by the distro to set it
+> to =y.  In such a case, they should be Ok with offloading all CPUs. If
+> they decide to selectively offload some CPUs in the future, then they
+> could revisit the config option at that time.
 > 
-> Certainly.
+> I feel the kernel config should override the boot parameter behavior.
+> It is the same effect as a sysadmin passing kernel parameter X
+> assuming the kernel does something but the CONFIG option might not
+> even build code corresponding to X.
 > 
-> > I've also verified it for the uffd-wp case so the whole series keeps
-> > running as usual and nothing else shows up after the new patch replaced.
-> > 
-> > Andrew, any suggestion on how we proceed with the replacement patch?
-> > E.g. do you want me to post it separately to the list?
-> 
-> I turned it into an incremental diff and queued it against [03/23]:
-> 
-> --- a/include/linux/mm_types.h~mm-check-against-orig_pte-for-finish_fault-fix
-> +++ a/include/linux/mm_types.h
-> @@ -814,6 +814,8 @@ typedef struct {
->   * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
->   *                      exclusive) a possibly shared anonymous page that is
->   *                      mapped R/O.
-> + * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
-> + *                        We should only access orig_pte if this flag set.
->   *
->   * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
->   * whether we would allow page faults to retry by specifying these two
-> @@ -850,6 +852,7 @@ enum fault_flag {
->  	FAULT_FLAG_INSTRUCTION =	1 << 8,
->  	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
->  	FAULT_FLAG_UNSHARE =		1 << 10,
-> +	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
->  };
->  
->  #endif /* _LINUX_MM_TYPES_H */
-> --- a/mm/memory.c~mm-check-against-orig_pte-for-finish_fault-fix
-> +++ a/mm/memory.c
-> @@ -4194,6 +4194,15 @@ void do_set_pte(struct vm_fault *vmf, st
->  	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
->  }
->  
-> +static bool vmf_pte_changed(struct vm_fault *vmf)
-> +{
-> +	if (vmf->flags & FAULT_FLAG_ORIG_PTE_VALID) {
-> +		return !pte_same(*vmf->pte, vmf->orig_pte);
-> +	}
-> +
-> +	return !pte_none(*vmf->pte);
-> +}
-> +
->  /**
->   * finish_fault - finish page fault once we have prepared the page to fault
->   *
-> @@ -4252,7 +4261,7 @@ vm_fault_t finish_fault(struct vm_fault
->  				      vmf->address, &vmf->ptl);
->  	ret = 0;
->  	/* Re-check under ptl */
-> -	if (likely(pte_same(*vmf->pte, vmf->orig_pte)))
-> +	if (likely(!vmf_pte_changed(vmf)))
->  		do_set_pte(vmf, page, vmf->address);
->  	else
->  		ret = VM_FAULT_NOPAGE;
-> @@ -4720,13 +4729,7 @@ static vm_fault_t handle_pte_fault(struc
->  		 * concurrent faults and from rmap lookups.
->  		 */
->  		vmf->pte = NULL;
-> -		/*
-> -		 * Always initialize orig_pte.  This matches with below
-> -		 * code to have orig_pte to be the none pte if pte==NULL.
-> -		 * This makes the rest code to be always safe to reference
-> -		 * it, e.g. in finish_fault() we'll detect pte changes.
-> -		 */
-> -		pte_clear(vmf->vma->vm_mm, vmf->address, &vmf->orig_pte);
-> +		vmf->flags &= ~FAULT_FLAG_ORIG_PTE_VALID;
->  	} else {
->  		/*
->  		 * If a huge pmd materialized under us just retry later.  Use
-> @@ -4750,6 +4753,7 @@ static vm_fault_t handle_pte_fault(struc
->  		 */
->  		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
->  		vmf->orig_pte = *vmf->pte;
-> +		vmf->flags |= FAULT_FLAG_ORIG_PTE_VALID;
->  
->  		/*
->  		 * some architectures can have larger ptes than wordsize,
-> _
-> 
+> I feel to address your concern, we can document in kernel command line
+> documentation that rcu_nocbs= does not have an effect if
+> CONFIG_RCU_NOCB_CPU_ALL=y, would that work for you?
 
-I verified the diff, that matches with what I got.  Thanks Andrew.
+Not me so much, because I would just set CONFIG_RCU_NOCB_CPU_ALL=n so
+as to not worry about it.
 
--- 
-Peter Xu
+But I am not at all looking forward to complaints about rcu_nocbs not
+working the way people expect.  So let's take some time to think more
+carefully about this.
 
+							Thanx, Paul
+
+> Thanks,
+> 
+> - Joel
+> 
+> >
+> > > > > > I believe that Steve Rostedt's review would carry weight for ChromeOS,
+> > > > > > however, I am suffering a senior moment on the right person for Android.
+> > > > >
+> > > > > I think for Android, Kalesh Singh is in the kernel team and Tim Murray
+> > > > > is the performance lead. They could appropriately represent their RCU
+> > > > > needs.
+> > > >
+> > > > Sounds good!  Please collect a Reviewed-by from one or both of them.
+> > >
+> > > Ok.
+> >
+> >                                                         Thanx, Paul

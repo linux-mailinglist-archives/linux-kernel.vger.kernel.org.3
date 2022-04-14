@@ -2,169 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97EA5017AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504B55017AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359193AbiDNPms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S1359102AbiDNPmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352566AbiDNPRj (ORCPT
+        with ESMTP id S1352594AbiDNPRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:17:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3EFCBAB95;
-        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 408E1139F;
-        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
-Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9633F5A1;
-        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
-Message-ID: <d5ad3e6f-769d-05d8-3e94-21ec8b5cb3ba@arm.com>
-Date:   Thu, 14 Apr 2022 10:01:30 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.4 222/475] net: bcmgenet: Use stronger register
- read/writes to assure ordering
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 14 Apr 2022 11:17:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FC9BC84F;
+        Thu, 14 Apr 2022 08:01:49 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:01:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649948508;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5TDdmE09S+E9/Bqk8y91Y/tlKrElwL0r7vtr9lMqW9U=;
+        b=InGj8ELY5RkNkL8kloc8CDlSZ1y2WANocZcFCND+1ssigyWALFB/ng6WkUbYbXJiXTBhSL
+        Y20HEGYHEaj+O77omc/5xrq2ww29MpLHuJSv28immg0A5mRJXC5Fl6d/IjNFR0Bsl1QTms
+        CzgoC2WaQNS8SmFj+ViWq40toUj9gm40qvR7r2NgfjLaF1DsF/wntdG0keZU1oRx85HgOn
+        JXKZ+Bx6zUKw3Y8be4BT64yNtaPbJIOCRp2qHvQkehR8PulBsI5mnTl1wYU4jQ5bQESC33
+        3EAlC9GRJWHGX9s+k+vDjjr7QnnndnCoNWvVwFy0JkWRM/JrB1ZXGVr+S7xhcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649948508;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5TDdmE09S+E9/Bqk8y91Y/tlKrElwL0r7vtr9lMqW9U=;
+        b=3/uIJrS7WAhtmU1EGBcKtXPgShejbu9njwq0JTnjtLGRSPOWIF6NFxyVabVWlQBU5fWTgj
+        lIh/ULi630BYpkDA==
+From:   "tip-bot2 for Kurt Kanzenbach" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] timekeeping: Introduce fast accessor to clock tai
+Cc:     Kurt Kanzenbach <kurt@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220414110855.141582785@linuxfoundation.org>
- <20220414110901.335632939@linuxfoundation.org>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <20220414110901.335632939@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220414091805.89667-2-kurt@linutronix.de>
+References: <20220414091805.89667-2-kurt@linutronix.de>
+MIME-Version: 1.0
+Message-ID: <164994850704.4207.9058445142052855306.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following commit has been merged into the timers/core branch of tip:
 
-I would kill this commit since the final conclusion was that underlying 
-problem was a compiler bug (which has now been fixed).
+Commit-ID:     3dc6ffae2da201284cb24af66af77ee0bbb2efaa
+Gitweb:        https://git.kernel.org/tip/3dc6ffae2da201284cb24af66af77ee0bbb2efaa
+Author:        Kurt Kanzenbach <kurt@linutronix.de>
+AuthorDate:    Thu, 14 Apr 2022 11:18:03 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 14 Apr 2022 16:19:30 +02:00
 
-Thanks,
+timekeeping: Introduce fast accessor to clock tai
 
+Introduce fast/NMI safe accessor to clock tai for tracing. The Linux kernel
+tracing infrastructure has support for using different clocks to generate
+timestamps for trace events. Especially in TSN networks it's useful to have TAI
+as trace clock, because the application scheduling is done in accordance to the
+network time, which is based on TAI. With a tai trace_clock in place, it becomes
+very convenient to correlate network activity with Linux kernel application
+traces.
 
+Use the same implementation as ktime_get_boot_fast_ns() does by reading the
+monotonic time and adding the TAI offset. The same limitations as for the fast
+boot implementation apply. The TAI offset may change at run time e.g., by
+setting the time or using adjtimex() with an offset. However, these kind of
+offset changes are rare events. Nevertheless, the user has to be aware and deal
+with it in post processing.
 
-On 4/14/22 08:10, Greg Kroah-Hartman wrote:
-> From: Jeremy Linton <jeremy.linton@arm.com>
-> 
-> [ Upstream commit 8d3ea3d402db94b61075617e71b67459a714a502 ]
-> 
-> GCC12 appears to be much smarter about its dependency tracking and is
-> aware that the relaxed variants are just normal loads and stores and
-> this is causing problems like:
-> 
-> [  210.074549] ------------[ cut here ]------------
-> [  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit queue 1 timed out
-> [  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529 dev_watchdog+0x234/0x240
-> [  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat]
-> [  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
-> [  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G            E     5.17.0-rc7G12+ #58
-> [  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read perf counters
-> [  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
-> [  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [  210.161358] pc : dev_watchdog+0x234/0x240
-> [  210.161364] lr : dev_watchdog+0x234/0x240
-> [  210.161368] sp : ffff8000080a3a40
-> [  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27: ffff8000080a3b20
-> [  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24: ffffcd425af8ec08
-> [  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21: ffff55b142688000
-> [  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18: ffffffffffffffff
-> [  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15: 6d736e617274203a
-> [  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12: ffffcd425b07d5f0
-> [  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 : ffffcd4258bdad9c
-> [  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 : 0000000000000000
-> [  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000001000
-> [  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 : 0000000000000044
-> [  210.269682] Call trace:
-> [  210.272133]  dev_watchdog+0x234/0x240
-> [  210.275811]  call_timer_fn+0x3c/0x15c
-> [  210.279489]  __run_timers.part.0+0x288/0x310
-> [  210.283777]  run_timer_softirq+0x48/0x80
-> [  210.287716]  __do_softirq+0x128/0x360
-> [  210.291392]  __irq_exit_rcu+0x138/0x140
-> [  210.295243]  irq_exit_rcu+0x1c/0x30
-> [  210.298745]  el1_interrupt+0x38/0x54
-> [  210.302334]  el1h_64_irq_handler+0x18/0x24
-> [  210.306445]  el1h_64_irq+0x7c/0x80
-> [  210.309857]  arch_cpu_idle+0x18/0x2c
-> [  210.313445]  default_idle_call+0x4c/0x140
-> [  210.317470]  cpuidle_idle_call+0x14c/0x1a0
-> [  210.321584]  do_idle+0xb0/0x100
-> [  210.324737]  cpu_startup_entry+0x30/0x8c
-> [  210.328675]  secondary_start_kernel+0xe4/0x110
-> [  210.333138]  __secondary_switched+0x94/0x98
-> 
-> The assumption when these were relaxed seems to be that device memory
-> would be mapped non reordering, and that other constructs
-> (spinlocks/etc) would provide the barriers to assure that packet data
-> and in memory rings/queues were ordered with respect to device
-> register reads/writes. This itself seems a bit sketchy, but the real
-> problem with GCC12 is that it is moving the actual reads/writes around
-> at will as though they were independent operations when in truth they
-> are not, but the compiler can't know that. When looking at the
-> assembly dumps for many of these routines its possible to see very
-> clean, but not strictly in program order operations occurring as the
-> compiler would be free to do if these weren't actually register
-> reads/write operations.
-> 
-> Its possible to suppress the timeout with a liberal bit of dma_mb()'s
-> sprinkled around but the device still seems unable to reliably
-> send/receive data. A better plan is to use the safer readl/writel
-> everywhere.
-> 
-> Since this partially reverts an older commit, which notes the use of
-> the relaxed variants for performance reasons. I would suggest that
-> any performance problems with this commit are targeted at relaxing only
-> the performance critical code paths after assuring proper barriers.
-> 
-> Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
-> Reported-by: Peter Robinson <pbrobinson@gmail.com>
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> Acked-by: Peter Robinson <pbrobinson@gmail.com>
-> Tested-by: Peter Robinson <pbrobinson@gmail.com>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> Link: https://lore.kernel.org/r/20220310045358.224350-1-jeremy.linton@arm.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> index 2affdddc12bf..7a8a53807909 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> @@ -80,7 +80,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
->   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
->   		__raw_writel(value, offset);
->   	else
-> -		writel_relaxed(value, offset);
-> +		writel(value, offset);
->   }
->   
->   static inline u32 bcmgenet_readl(void __iomem *offset)
-> @@ -88,7 +88,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
->   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
->   		return __raw_readl(offset);
->   	else
-> -		return readl_relaxed(offset);
-> +		return readl(offset);
->   }
->   
->   static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
+An alternative approach would be to use the same implementation as
+ktime_get_real_fast_ns() does. However, this requires to add an additional u64
+member to the tk_read_base struct. This struct together with a seqcount is
+designed to fit into a single cache line on 64 bit architectures. Adding a new
+member would violate this constraint.
 
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Link: https://lore.kernel.org/r/20220414091805.89667-2-kurt@linutronix.de
+
+---
+ Documentation/core-api/timekeeping.rst |  1 +
+ include/linux/timekeeping.h            |  1 +
+ kernel/time/timekeeping.c              | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)
+
+diff --git a/Documentation/core-api/timekeeping.rst b/Documentation/core-api/timekeeping.rst
+index 729e248..22ec68f 100644
+--- a/Documentation/core-api/timekeeping.rst
++++ b/Documentation/core-api/timekeeping.rst
+@@ -132,6 +132,7 @@ Some additional variants exist for more specialized cases:
+ .. c:function:: u64 ktime_get_mono_fast_ns( void )
+ 		u64 ktime_get_raw_fast_ns( void )
+ 		u64 ktime_get_boot_fast_ns( void )
++		u64 ktime_get_tai_fast_ns( void )
+ 		u64 ktime_get_real_fast_ns( void )
+ 
+ 	These variants are safe to call from any context, including from
+diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
+index 78a98bd..fe1e467 100644
+--- a/include/linux/timekeeping.h
++++ b/include/linux/timekeeping.h
+@@ -177,6 +177,7 @@ static inline u64 ktime_get_raw_ns(void)
+ extern u64 ktime_get_mono_fast_ns(void);
+ extern u64 ktime_get_raw_fast_ns(void);
+ extern u64 ktime_get_boot_fast_ns(void);
++extern u64 ktime_get_tai_fast_ns(void);
+ extern u64 ktime_get_real_fast_ns(void);
+ 
+ /*
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index dcdcb85..2c22023 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -532,6 +532,23 @@ u64 notrace ktime_get_boot_fast_ns(void)
+ }
+ EXPORT_SYMBOL_GPL(ktime_get_boot_fast_ns);
+ 
++/**
++ * ktime_get_tai_fast_ns - NMI safe and fast access to tai clock.
++ *
++ * The same limitations as described for ktime_get_boot_fast_ns() apply. The
++ * mono time and the TAI offset are not read atomically which may yield wrong
++ * readouts. However, an update of the TAI offset is an rare event e.g., caused
++ * by settime or adjtimex with an offset. The user of this function has to deal
++ * with the possibility of wrong timestamps in post processing.
++ */
++u64 notrace ktime_get_tai_fast_ns(void)
++{
++	struct timekeeper *tk = &tk_core.timekeeper;
++
++	return (ktime_get_mono_fast_ns() + ktime_to_ns(data_race(tk->offs_tai)));
++}
++EXPORT_SYMBOL_GPL(ktime_get_tai_fast_ns);
++
+ static __always_inline u64 __ktime_get_real_fast(struct tk_fast *tkf, u64 *mono)
+ {
+ 	struct tk_read_base *tkr;

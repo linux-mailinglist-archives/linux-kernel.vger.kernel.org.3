@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DD4500D8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E62500DA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243329AbiDNMdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S243398AbiDNMex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbiDNMdL (ORCPT
+        with ESMTP id S243423AbiDNMet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:33:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F0286FF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649939445; x=1681475445;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xJ4+CeE8oXm5IbY+WmFWKrb4H4NnB56KjSz1Z/Y/oc4=;
-  b=SXbOaqHcsPXcPm7JCKuzdPPzjnynguClvp9LjETwzRJ+K3mCGBC87+fw
-   XUmC6+hbN0wUc2ZcvwinL1TINuS1ZRTIpZzX3jDQgNxXnhrKmkt9v66ju
-   iWBQq0DSYVlHGgtufgYYgZhYHInPVVWFrL3W4nTDiiKS7yZsSRR6Ni1C7
-   tRYyOOfltmC7BD3QnmHYqBO9woBrkVZxVypJvFUs/ELpUyBEvde+ybKFs
-   Hikmdhiyu6qOkVVousnVnjnmUBom4R0DPECNYR9kkaYedBAEaBRgxP4OE
-   tYRUyZ9hMYc4NQC1+DtXFxu4DfYnsPa++BnUI4aT77hG1WsEa3xssjNZs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="325823635"
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="325823635"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 05:30:45 -0700
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="527379111"
-Received: from nplaweck-mobl.ger.corp.intel.com (HELO localhost) ([10.249.149.236])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 05:30:42 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        jani.nikula@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH 1/1] module: add enum module parameter type to map names to values
-Date:   Thu, 14 Apr 2022 15:30:33 +0300
-Message-Id: <20220414123033.654198-2-jani.nikula@intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220414123033.654198-1-jani.nikula@intel.com>
-References: <20220414123033.654198-1-jani.nikula@intel.com>
+        Thu, 14 Apr 2022 08:34:49 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055AC9026F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:32:18 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id j8so4496302pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lb2k1BEpSa/+z3XM1HtbDM6QVDJOM+So55d/9ulxPRs=;
+        b=zXucu3uxOuHlgBIeFHXTZQcT0f1Nuj2wADtF8qNjEXDePKfd+pTSETelEAYNVGGNqX
+         cSNT0kjY+IZpN4B2azMgW2RVYC4oSo3VKi8nuBDzDfMTMVfzo6/LE1A09jYRYZeibCv+
+         C2sP2CL8XuyNyF5b3tt4E+w3JLurTe6nyqV4xnvVHw3q1LCBhtj2AT5ggSX6ked/ABq5
+         D7shBoM4tTHCpbzmYwilmV14zXLYn/gNKV5PTHSQ7bHjRrnhzjLJ7NJTyCm0TQHvU0MG
+         6x/1dVPvbCIYfWS4Z0gseji7+oynCbJzF34yLOKo+OjQSbpbCY2KwDmIY3MDsLRdXFrx
+         KN3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lb2k1BEpSa/+z3XM1HtbDM6QVDJOM+So55d/9ulxPRs=;
+        b=WLbeVh7PQa4GW8dhlYi5NUNDuOzJp6opOVmC4xaTs+R96J01YtHHXVzZBy+GzBfcBG
+         1n5QxY6qsxAEcYf5tqcydJAAPa2zLx1Q073Nq8Le0FOQZdPlRY3n1anxMQXf9OefAbwo
+         wvo+Rr9ffm23IkkQqA8eY6gaB2FWMalYbq4UgVFmnmp3zcw8jWay4LMdPhEYJAVU5G3Y
+         uKtiWYCaiAmDyoK41RFh8fIQ00TrYoNSS3pjQuqG7GYII8Tlqk2cbAQEteMARvq/IO4g
+         bDEOXXRAh8oHktz3CJQgkt+T0dK8+7Cu1gMmQzPi3hnTYGItzV+zb/DSbvrKPRD4pO1b
+         nYmA==
+X-Gm-Message-State: AOAM5316ytQdYZcAeAAJZ3SKtjSny1+AcPlb1k6YnFZIwxqpCR3/69sF
+        ds7iRNbrvAFwK7vv/RHfTs3e66llWQBn3lO+H+VFkA==
+X-Google-Smtp-Source: ABdhPJxG+RZpvYQH/Y35Vaw1qIbgIm9XNnhKiFxumxGNw7owul1/6rThV1N9MNc3Yq6dBawxaJONWQ==
+X-Received: by 2002:a17:90a:dd46:b0:1b8:8:7303 with SMTP id u6-20020a17090add4600b001b800087303mr4035808pjv.197.1649939537353;
+        Thu, 14 Apr 2022 05:32:17 -0700 (PDT)
+Received: from localhost.localdomain ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id t184-20020a625fc1000000b004fa3bd9bef0sm2160580pfb.110.2022.04.14.05.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 05:32:16 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v3] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE event
+Date:   Thu, 14 Apr 2022 20:32:01 +0800
+Message-Id: <20220414123201.842754-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,202 +77,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add enum module parameter type that's internally an int and externally
-maps names to values. This makes the userspace interface more intuitive
-to use and somewhat easier to document, while also limiting the allowed
-values set by userspace to the defined set.
+Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+is not available") "perf mem report" and "perf report --mem-mode"
+don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
+type.
 
-For example, given this code to define a "mode" in a fictional module
-"foobar":
+The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
+partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
+event, this allows the perf data file generated by kernel v5.18-rc1 or
+later version can be reported properly.
 
-	struct module_param_enumeration modes[] = {
-		{ "foo", 0 },
-		{ "bar", 1 },
-		{ "baz", -1 },
-	};
+On the other hand, perf tool still fails to be backward compatibility
+for a data file recorded by an older version's perf which contains Arm
+SPE trace data.  This patch is a workaround in reporting phase, when
+detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
+force to set the bit in the sample type and give a warning info.
 
-	int mode;
-
-	module_param_enum(mode, modes, 0600);
-
-You can probe foobar with "foobar.mode=bar" in the kernel or modprobe
-command line to set the mode to 1.
-
-Similarly, you can use the sysfs with the names:
-
-	# echo baz > /sys/module/foobar/parameters/mode
-	# cat /sys/module/foobar/parameters/mode
-	baz
-
-With checks:
-
-	# echo nope > /sys/module/foobar/parameters/mode
-	echo: write error: Invalid argument
-
-Of course, the kernel can still internally set the mode variable
-directly to a value that is not defined in the enumerations (obviously
-to be avoided), which will result in unknown key:
-
-	# cat /sys/module/foobar/parameters/mode
-	(unknown)
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: German Gomez <german.gomez@arm.com>
+Reviewed-by: James Clark <james.clark@arm.com>
 ---
- include/linux/moduleparam.h | 64 +++++++++++++++++++++++++++++++++++++
- kernel/params.c             | 41 ++++++++++++++++++++++++
- 2 files changed, 105 insertions(+)
+v3: Remove warning log, add James' review tag.
+v2: Change event name from "arm_spe_" to "arm_spe";
+    Add German's test tag.
 
-diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
-index 962cd41a2cb5..a11fb8f214e5 100644
---- a/include/linux/moduleparam.h
-+++ b/include/linux/moduleparam.h
-@@ -77,6 +77,7 @@ struct kernel_param {
- 		void *arg;
- 		const struct kparam_string *str;
- 		const struct kparam_array *arr;
-+		const struct kparam_enum *enumeration;
- 	};
- };
+ tools/perf/builtin-report.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 1ad75c7ba074..afe4a5539ecc 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
+ 	struct perf_session *session = rep->session;
+ 	u64 sample_type = evlist__combined_sample_type(session->evlist);
+ 	bool is_pipe = perf_data__is_pipe(session->data);
++	struct evsel *evsel;
  
-@@ -98,6 +99,19 @@ struct kparam_array
- 	void *elem;
- };
+ 	if (session->itrace_synth_opts->callchain ||
+ 	    session->itrace_synth_opts->add_callchain ||
+@@ -407,6 +408,19 @@ static int report__setup_sample_type(struct report *rep)
+ 	}
  
-+/* Special ones for enums */
-+struct module_param_enumeration {
-+	const char *key;
-+	int val;
-+};
-+
-+struct kparam_enum
-+{
-+	const struct module_param_enumeration *enums;
-+	unsigned int num_enums;
-+	int *val;
-+};
-+
- /**
-  * module_param - typesafe helper for a module/cmdline parameter
-  * @name: the variable to alter, and exposed parameter name.
-@@ -484,6 +498,11 @@ extern int param_set_bint(const char *val, const struct kernel_param *kp);
- #define param_get_bint param_get_int
- #define param_check_bint param_check_int
- 
-+/* An enumeration */
-+extern const struct kernel_param_ops param_ops_enum;
-+extern int param_set_enum(const char *key, const struct kernel_param *kp);
-+extern int param_get_enum(char *buffer, const struct kernel_param *kp);
-+
- /**
-  * module_param_array - a parameter which is an array of some type
-  * @name: the name of the array variable
-@@ -523,6 +542,51 @@ extern int param_set_bint(const char *val, const struct kernel_param *kp);
- 			    perm, -1, 0);				\
- 	__MODULE_PARM_TYPE(name, "array of " #type)
- 
-+/**
-+ * module_param_enum - a parameter which is an enumeration
-+ * @name: the variable to alter, and exposed parameter name
-+ * @enumerations: array of struct module_param_enumeration defining the enums
-+ * @perm: visibility in sysfs
-+ *
-+ * The userspace input and output are based on the names defined in the
-+ * @enumerations array, which maps the names to values stored in the int
-+ * variable defined by @name.
-+ *
-+ * When initializing or changing the variable @name, ensure the value is defined
-+ * in @enumerations. Otherwise, reading the parameter value via sysfs will
-+ * output "(unknown)".
-+ *
-+ * ARRAY_SIZE(@enumerations) is used to determine the number of elements in the
-+ * enumerations array, so the definition must be visible.
-+ */
-+
-+#define module_param_enum(name, enumerations, perm)			\
-+	module_param_enum_named(name, name, enumerations, perm)
-+
-+/**
-+ * module_param_enum_named - a renamed parameter which is an enumeration
-+ * @name: a valid C identifier which is the parameter name
-+ * @value: the actual lvalue int variable to alter
-+ * @enumerations: array of struct module_param_enumeration defining the enums
-+ * @perm: visibility in sysfs
-+ *
-+ * This exposes a different name than the actual variable name.  See
-+ * module_param_named() for why this might be necessary.
-+ */
-+#define module_param_enum_named(name, value, enumerations, perm)	\
-+	param_check_int(name, &(value));				\
-+	static const struct kparam_enum __param_arr_##name =		\
-+	{								\
-+		.enums = enumerations,					\
-+		.num_enums = ARRAY_SIZE(enumerations),			\
-+		.val = &value						\
-+	};								\
-+	__module_param_call(MODULE_PARAM_PREFIX, name,			\
-+			    &param_ops_enum,				\
-+			    .enumeration = &__param_arr_##name,		\
-+			    perm, -1, 0);				\
-+	__MODULE_PARM_TYPE(name, "enumeration")
-+
- enum hwparam_type {
- 	hwparam_ioport,		/* Module parameter configures an I/O port */
- 	hwparam_iomem,		/* Module parameter configures an I/O mem address */
-diff --git a/kernel/params.c b/kernel/params.c
-index 5b92310425c5..749fe42b1a44 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -534,6 +534,47 @@ const struct kernel_param_ops param_ops_string = {
- };
- EXPORT_SYMBOL(param_ops_string);
- 
-+int param_set_enum(const char *key, const struct kernel_param *kp)
-+{
-+	const struct kparam_enum *e = kp->enumeration;
-+	unsigned int i;
-+
-+	for (i = 0; i < e->num_enums; i++) {
-+		if (sysfs_streq(key, e->enums[i].key)) {
-+			*(e->val) = e->enums[i].val;
-+			return 0;
+ 	if (sort__mode == SORT_MODE__MEMORY) {
++		/*
++		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
++		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
++		 * compatibility, set the bit if it's an old perf data file.
++		 */
++		evlist__for_each_entry(session->evlist, evsel) {
++			if (strstr(evsel->name, "arm_spe") &&
++				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
++				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
++				sample_type |= PERF_SAMPLE_DATA_SRC;
++			}
 +		}
-+	}
 +
-+	pr_err("%s: unknown key %s to enum parameter\n", kp->name, key);
-+
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL(param_set_enum);
-+
-+int param_get_enum(char *buffer, const struct kernel_param *kp)
-+{
-+	const struct kparam_enum *e = kp->enumeration;
-+	unsigned int i;
-+
-+	for (i = 0; i < e->num_enums; i++) {
-+		if (*(e->val) == e->enums[i].val)
-+			return sysfs_emit(buffer, "%s\n", e->enums[i].key);
-+	}
-+
-+	pr_err("%s: enum parameter set to unknown value %d\n",
-+	       kp->name, *(e->val));
-+
-+	return sysfs_emit(buffer, "(unknown)\n");
-+}
-+EXPORT_SYMBOL(param_get_enum);
-+
-+const struct kernel_param_ops param_ops_enum = {
-+	.set = param_set_enum,
-+	.get = param_get_enum,
-+};
-+EXPORT_SYMBOL(param_ops_enum);
-+
- /* sysfs output in /sys/modules/XYZ/parameters/ */
- #define to_module_attr(n) container_of(n, struct module_attribute, attr)
- #define to_module_kobject(n) container_of(n, struct module_kobject, kobj)
+ 		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
+ 			ui__error("Selected --mem-mode but no mem data. "
+ 				  "Did you call perf record without -d?\n");
 -- 
-2.30.2
+2.25.1
 

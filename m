@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1498D501099
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CE650136A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345152AbiDNNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S236332AbiDNNl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245713AbiDNN3U (ORCPT
+        with ESMTP id S245124AbiDNN2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE85AFADD;
-        Thu, 14 Apr 2022 06:23:42 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D996EAA006;
+        Thu, 14 Apr 2022 06:21:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E696C61158;
-        Thu, 14 Apr 2022 13:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1016C385A1;
-        Thu, 14 Apr 2022 13:23:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FA1CB8296A;
+        Thu, 14 Apr 2022 13:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BDFC385A1;
+        Thu, 14 Apr 2022 13:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942621;
-        bh=UrBSlRoOCOoEUuJvpCbVil7flWo3aCem0EwIk8iWF+A=;
+        s=korg; t=1649942502;
+        bh=C2h0BP6DiXXyixkU1UrKrKCZG8mtbJkjW/PyCs0prik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WUMV7qcYNF1/2Podr/BAag61oN0+PORCWMHMXxwG8SslcmzYDTlV3iDBaso2e+yiV
-         v0BvUC3yXqjEpVHWIwQ9vVPGu89W1Wt6O6M0c1bDsgPykgKLNLh+ykIUiE+n+uefbe
-         iv9iNjYzATdjR6XFVeO6GVeskzyDRPfE6BLC+B8w=
+        b=zd2GrAhqGEgdqwL6SUcyjln/BA85jARZVKnSs3dChX7r2YFcAWsvcZrDbQHO9ofR3
+         q3qT/GOk6zhVaXMMQIkcE3+XX1XiMFCHj9tMtzXPCJdarPINh2SsPufr70SWT82Wt1
+         MQ962+IT82M5NA6QGEr9EI0pqpkMUXsGjuTVZNKU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 151/338] USB: storage: ums-realtek: fix error code in rts51x_read_mem()
-Date:   Thu, 14 Apr 2022 15:10:54 +0200
-Message-Id: <20220414110843.201559759@linuxfoundation.org>
+Subject: [PATCH 4.19 152/338] af_netlink: Fix shift out of bounds in group mask calculation
+Date:   Thu, 14 Apr 2022 15:10:55 +0200
+Message-Id: <20220414110843.229271398@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -55,36 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit b07cabb8361dc692522538205552b1b9dab134be ]
+[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
 
-The rts51x_read_mem() function should return negative error codes.
-Currently if the kmalloc() fails it returns USB_STOR_TRANSPORT_ERROR (3)
-which is treated as success by the callers.
+When a netlink message is received, netlink_recvmsg() fills in the address
+of the sender. One of the fields is the 32-bit bitfield nl_groups, which
+carries the multicast group on which the message was received. The least
+significant bit corresponds to group 1, and therefore the highest group
+that the field can represent is 32. Above that, the UB sanitizer flags the
+out-of-bounds shift attempts.
 
-Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220304073504.GA26464@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Which bits end up being set in such case is implementation defined, but
+it's either going to be a wrong non-zero value, or zero, which is at least
+not misleading. Make the latter choice deterministic by always setting to 0
+for higher-numbered multicast groups.
+
+To get information about membership in groups >= 32, userspace is expected
+to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
+socket option.
+[0] https://lwn.net/Articles/147608/
+
+The way to trigger this issue is e.g. through monitoring the BRVLAN group:
+
+	# bridge monitor vlan &
+	# ip link add name br type bridge
+
+Which produces the following citation:
+
+	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
+	shift exponent 32 is too large for 32-bit type 'int'
+
+Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/realtek_cr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netlink/af_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-index 1d9ce9cbc831..9c2a1eda3f4f 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -364,7 +364,7 @@ static int rts51x_read_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index a7497361e4d7..5c6241964637 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -152,6 +152,8 @@ static const struct rhashtable_params netlink_rhashtable_params;
  
- 	buf = kmalloc(len, GFP_NOIO);
- 	if (buf == NULL)
--		return USB_STOR_TRANSPORT_ERROR;
-+		return -ENOMEM;
- 
- 	usb_stor_dbg(us, "addr = 0x%x, len = %d\n", addr, len);
+ static inline u32 netlink_group_mask(u32 group)
+ {
++	if (group > 32)
++		return 0;
+ 	return group ? 1 << (group - 1) : 0;
+ }
  
 -- 
 2.34.1

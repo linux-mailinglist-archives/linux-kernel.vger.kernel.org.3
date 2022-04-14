@@ -2,194 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1D1501C50
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FED501C54
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346041AbiDNUF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S1346053AbiDNUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiDNUFv (ORCPT
+        with ESMTP id S1346043AbiDNUGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:05:51 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00063.outbound.protection.outlook.com [40.107.0.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D940DCE06;
-        Thu, 14 Apr 2022 13:03:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Er/Mo08jcgrqMcFXKrgpXyHMg8cx+M4xWPb2J0a+wjWLazDDZ0XCm5o7SudVvzfDe4NyIbM5XF06qMkDb+IZNOUWiss39Ui6FxkhQ2VKnchJeizPanh35Wc9+EeemLpTXy8wfWAUN7EztRqcYelrNgPWQxnxHQmwK736oprH2Y49dez2Vix2x1BIdniOpy0pymvEYMBfl44dWamyIw5yBHVob1iK6+npFCaBl9WOU1AQEIrTbstimb6XpVa9JJnaAzp71PAiPnGXUklbkQ7UkfEJcwvEd2e3xEJQlImnDWiB8kLVgpFHBYrSu7NxkFhLeAX4SSGqs28HaiJAzb15tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LeJMUfKp59VeicrTlZ9ZSNUa8D6hF5BNzKqGsTwWzx0=;
- b=L2tgg5bnboqmeqtK3DFIm8IPgP8uAMhKYon8lqbWs+FVnd6oIk9p3CkbVfuB259IQ/BW5iJSk3Tmpieb9+OcBltgnWB8CuZ3vY4AWm3p7+9YR0fPSANjcoh/kuHpERn9CUjjbjb0P5vWp/ViSMz9N6k7A/0ZqmBMdhyFGrW7g/jjQt2LoM0wrV4v0NXt4b1x9n8iyhuE5JnsOgEixdlVq6Bv+OVnMbxyq6TDrOozxypDAyS7K6yqpf/atnPDrmkBSRIU9Bz7M42nXt3BOdYMXa9Gtuk7L0FzmFO1INYxvatzbmuG5uG+M94PQP5bwrZvsRJ8oHBmuoxsaJ3rEdHTXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeJMUfKp59VeicrTlZ9ZSNUa8D6hF5BNzKqGsTwWzx0=;
- b=Y8ZZsUwBAYrK4TszPNOg9n5dP48jU/DB2s/yQuO9NMcF3zRgsNfbX99gbA4lNeT3Z30jnoMlgmI9fld2+dM6SBvfk5qCYaWsG7ZAi2Df68NtYsXRGLlY8NmRfJ5rEFI9EopMWgVLBeAu3FDRJAwVnmwXqFm1AtYCYDRqWje3Nz8=
-Received: from AS8PR04MB8946.eurprd04.prod.outlook.com (2603:10a6:20b:42d::18)
- by AM9PR04MB8400.eurprd04.prod.outlook.com (2603:10a6:20b:3e9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Thu, 14 Apr
- 2022 20:03:23 +0000
-Received: from AS8PR04MB8946.eurprd04.prod.outlook.com
- ([fe80::7481:f0a2:5c7d:3484]) by AS8PR04MB8946.eurprd04.prod.outlook.com
- ([fe80::7481:f0a2:5c7d:3484%7]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 20:03:23 +0000
-From:   Leo Li <leoyang.li@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Rob Herring <robh@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 1/4] dt-bindings: pci: layerscape-pci: Add a optional
- property big-endian
-Thread-Topic: [PATCH v3 1/4] dt-bindings: pci: layerscape-pci: Add a optional
- property big-endian
-Thread-Index: AQHYUDW0fDUPXyGu0ECMPrAb9noz5Kzvzw9Q
-Date:   Thu, 14 Apr 2022 20:03:23 +0000
-Message-ID: <AS8PR04MB89460EF821A142C8BF2303588FEF9@AS8PR04MB8946.eurprd04.prod.outlook.com>
-References: <20220311234938.8706-2-leoyang.li@nxp.com>
- <20220414192730.GA763552@bhelgaas>
-In-Reply-To: <20220414192730.GA763552@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1fcd298e-678b-41cf-a438-08da1e51d478
-x-ms-traffictypediagnostic: AM9PR04MB8400:EE_
-x-microsoft-antispam-prvs: <AM9PR04MB840015B1BC7CD639203F885C8FEF9@AM9PR04MB8400.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NVk5zPvRUuO206ObFxFNdIBoO5iLFl55wm2I7WyPlAeWa6L64IZM46SG2B2syxbi2yqHVKsSkcVxaGz1ZXz1ikgaE1XURGkWvRHFGPnBXfGc+jmkbc1EYQoghCgiL047Jip4Lm22UJRJ67t851fCU5bZGn2bZFVstibBc1bZthUIfTTUGnBow3Cx/PogsWG73Y7brRRP+04wChroTb6MIF7tSrrFHgF2v4AONC4mIpo45PFR6gvunumnn1HVfBwWLGVV2/2Qs+q0BPFnhYtTZpCuMqdlBzuGJ5Ncj3vrWDebrZr9wuiy74voSkM7Lyn3qUvJrSJfuK/vdKTpqzHpVE3zv4HCO0/p2btzoPJdWuD8HZE+wjGjxYlKXQeo5AMCv0k3XGLd4vq5SJc0/CFT7tXYlDCTSNprdTCToUivsNpfQs0fSSt9sisoJTqqa4s8QqDwPF+1s6TzNHyooY7Mf7wV9BHk6msMQzfQAQ+PKSRf16ZQvjv6W+jx1S0km9ubJkl9IDxGxglC8VWgd5Jsc9a+qqBbifPSDYmOZ14B+r1h/bdIKMxkiZ6+/ITvPfudCuHtqBZy1xwGKHEWD9JshSLG1GjZYBtoha9wQsAmENms3PWzlfYVOtirT7WPGxpXa9GJHqTz7dXVyMEKdmAdBuAxOl3lbkiga+V5ZBLX7tGznRaHtQRq6Rxzaej+K11C0ozDdzP0hBl2vKzy/xPFyw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8946.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(66446008)(86362001)(76116006)(6506007)(38100700002)(122000001)(66556008)(66476007)(66946007)(55236004)(71200400001)(54906003)(6916009)(4326008)(8676002)(316002)(7696005)(9686003)(186003)(26005)(83380400001)(38070700005)(508600001)(53546011)(52536014)(55016003)(8936002)(2906002)(33656002)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K2lpfLnmP1JPjAVMMm/VwAqmPQBIGhgfJVUDDvfhC21dZeyzFNm22ta8sZBX?=
- =?us-ascii?Q?Jp1ajzQoJbNqRUfPgDZqz65by/lR8O/sJmZ9J03NqCKkZfP+hPN5U+LnLGYG?=
- =?us-ascii?Q?KQTj1nHZhE9mhMOShIGiit87C3xUOuo0pWiUX1zLK9pDAXFdHuiwlQ8ZO2/Y?=
- =?us-ascii?Q?T21ZOq/saLy8AfMpk5ooH2kIxKIJlKTxdMjOz/G6AWzB49JuF3R2Rh/OX+YG?=
- =?us-ascii?Q?P3pKm/hJCtwzlKwtUWiRvc8GjqBvbrcAyq0tfZAEswBzyc/Is1FLGW2PgMQb?=
- =?us-ascii?Q?ghNAls3ELuLpKiPPQr6jUyrILZ7jpzStVPObeYLuXTsa2jyBUmdTco+0R6QX?=
- =?us-ascii?Q?H2+KM8/NTBrfG9LLpx4dCz6hc3gSylNAgJlFfj1k3VGADwpnSVS44oISzi3V?=
- =?us-ascii?Q?RzkKvTe2Bo5QdA3jT7nsOgdoNc/LuEAun4LgGRPojmJ1JpAwJm4uZXbb4Xp5?=
- =?us-ascii?Q?72TlZGP9xhODq0UplZFCyy0z93czluHPO13KOqYI30x2LWhAO7K7VG03jzYP?=
- =?us-ascii?Q?9q8NqJ8JVCyOz+jSLT6b/evK4YWC1oSAF21Os/eWWJTTGB0GIUDWlks+r1AY?=
- =?us-ascii?Q?JNO/MjTyvgjW8OXEILNt+iJ20BPdkizcFSXyNG7yoWmn17lWkf6GtwRMI+eR?=
- =?us-ascii?Q?QEDXZ+T6nQ8lFFHKdAf8mpW9rJ20EDxhdu8LG00N91RcEcoC/vaatsY8pbPQ?=
- =?us-ascii?Q?dNu18hsMI0OsTVx+H3B9UPFq9x23WElUWRjdbZJP/PPuLGm6AQMr8udX6l2s?=
- =?us-ascii?Q?7tqGJg+J3Y7kipNT3U6000O+eM6taqpZ+kmyntT8tuPCIAPNTils/0BFrST9?=
- =?us-ascii?Q?evT1B/avaS67alHCQ2rjCMzZ4yY/GmgdndzY5SVlgfNu2rG385nopjN40uo9?=
- =?us-ascii?Q?wABgXYnlDhU30TCmjUqc4DS52YNn5wenrudLYB3jB8ph0NYTOxoKll9bcNwq?=
- =?us-ascii?Q?RiW4bvHq+yDkFkRnLAUdthbYI3HGgeepigczBOrNCfZn1wyJpvR1/6CUMh+M?=
- =?us-ascii?Q?f5N1vmuNaw24SkJw1zeSYNw5DjEoQelRuCCd9DsUkQbCXdHjWFxMGIbzlNTa?=
- =?us-ascii?Q?ppizwaNfHecEgqC/nKS+OZGQR60SHYiAWWIAb1NP819SoLLZCKj2Gp3xUO5u?=
- =?us-ascii?Q?tcn5mUfhSiVLTHsOAXpZG4KrtOLbsj4qaYRGXYTrtklyWs80ZPI6hzwFPMIz?=
- =?us-ascii?Q?XWwSQgkMxT/HW3liIK8hsazT/5VM91f0Vja0nEIiqfB+g3wfrzkbcZgByixJ?=
- =?us-ascii?Q?/UKPhhDiS44W1SVfnnqrPYV2OhPZ3CzVSFlYZqdw47Iklst/JSJRkhJJzJS4?=
- =?us-ascii?Q?UeJ9PHhfBaCwRCiMQ+ni9nieUqCnJ5iVyGxXHIKCzthaKyO9Q0ljBEKdnxtD?=
- =?us-ascii?Q?rY1qKdbBpQ0txHSMr8owQ10FiPY3mueFhZV8WuVFPgiD1fimW614fLkSUbVA?=
- =?us-ascii?Q?133pamnTiaeUF7/sS6xGRVcl/UFrKDsZnavodjKPYFPYsR5hOZZEiYst+42Y?=
- =?us-ascii?Q?MmovRYHcwQUZAh/9fqsYhVb59ujjrkYzYDcOeHJqARE88tHuY3PGqqCx+seK?=
- =?us-ascii?Q?Th5ZLGL6G8pbxyBGaygUUp1RhawDFqAvQMbna8RKtvv7ocYXM6AEMohc4QLq?=
- =?us-ascii?Q?pBdu60Tx6j7I2UVZQOdHEiyQhE/bumeKLnYbSbg/Jyvk1bSyBT6ysH6bwRI/?=
- =?us-ascii?Q?3SNTeBTot7oO50NI114I7yOTc00LNDyQx1XHrRnZz/8ITwYcolgpuvNNWxFv?=
- =?us-ascii?Q?Cjb/V7FSZQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 14 Apr 2022 16:06:04 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF6DEB92
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:03:37 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id r18so7431355ljp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=beqqQMdRDQ9RUWQqne39QWiVSV/dlCi62JNsxM9+crs=;
+        b=tGi1B2Kx0rNnAyl3InWnsf/q3MTIoRbgwNYozMzh2/GDAhUhX/iPuUhSdKNqcjl8ym
+         WaKCTbUIkFORkXGPAUaiv82SDHUJWmhW1y1Y8RpXig6VzkNG2Xyjey+SVAKCWDfLR8zZ
+         lUC3CGaxZI28q+i9ZxPHo7Ig8ELXwRRIL7MSA2BuLlUDnFJ3EzjyqMV3Z/hZ9/hVlEaL
+         QnXBqnlKWI3+kZHauGmY1NQLScQoC1GgSONcDo9VQr4bp3GohNPlX/+UeYOZd+uVXVNC
+         t9ap9ngZR4yFUKz+o7v8NgtZJ6lFtF8++cBrJva0onfGV01qYph3tGbiSiA8psbX6R4t
+         Kxsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=beqqQMdRDQ9RUWQqne39QWiVSV/dlCi62JNsxM9+crs=;
+        b=Natm9MlNekDuLXD3gtF4QyxKnPA74hYrYdeERUIHRgqF/QDWgoBMXugGCP+bgkUfMW
+         YVrw1QjtInwDATKKX0DVWJpQnHyDtPatXQZqcEyCv0WM0JDmWSt78mOSEcNQnBlEwDcy
+         bcmhL5nRZz9B7a19erUxtPZ+M0Dcdkc4p4cZiP0pJte9qzbdrPIeelpK5ImYCw/Tsnx2
+         tyYH8oh8t6SMQ5ac5enZF8PajZwdXvcavdHaq2LrbIVcrtklNrAqmcyPBa/zj8wBz+9T
+         rO16bO3P13+DgF1ZiSsWeXjxup/8UJgHRWuDxzTvrohvWBMT1xC9n99AKCvcCe6Vq3Ls
+         ePIA==
+X-Gm-Message-State: AOAM532c9fqLlR8KytRgrlE/fDhLM0cWFXKJPPtvcwUSZJUiUVbzopTI
+        e4p7B+6KMXSRLQoVJ/ICJos7AA==
+X-Google-Smtp-Source: ABdhPJwAs9fOjjGshqLg5XWviayRGs5Tm3QRuhmlg02hwi9L+QMiaB5VyBAX43z8HwLdTai9w0U2FA==
+X-Received: by 2002:a2e:302:0:b0:24a:c997:d34c with SMTP id 2-20020a2e0302000000b0024ac997d34cmr2538120ljd.445.1649966615179;
+        Thu, 14 Apr 2022 13:03:35 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b19-20020a196713000000b0046b911a2ccdsm93716lfc.214.2022.04.14.13.03.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 13:03:34 -0700 (PDT)
+Message-ID: <2fd4a157-a9de-ca0e-7a47-7bb85199ae91@linaro.org>
+Date:   Thu, 14 Apr 2022 23:03:33 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8946.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fcd298e-678b-41cf-a438-08da1e51d478
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 20:03:23.1269
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4oUVMHQZiRQL6qmGKPXR7L8LAK9vzLVO5vDRn5+nMtboGquSR+4IxysswA6DMSSRaJMFrpJgpWXv88RhHc0qIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8400
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [Freedreno] [PATCH v7 0/4] Add support for the eDP panel over
+ aux_bus
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     quic_kalyant <quic_kalyant@quicinc.com>,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sean Paul <sean@poorly.run>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=Ui6BAsnTaJ2_TMh1Tnjtaw7FR92aWoUysS+UT=c0qB3Q@mail.gmail.com>
+ <20afcd97-4b8d-f770-151a-268b893b7c5a@linaro.org>
+ <CAE-0n51fc-b-8VF7XP29=o8Xi86HQALGB-1u8n3b_3NjVyyJYw@mail.gmail.com>
+ <e3154f3b-aea4-6961-b409-6b20ff8bf18e@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <e3154f3b-aea4-6961-b409-6b20ff8bf18e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/04/2022 23:00, Abhinav Kumar wrote:
+> Hi Dmitry
+> 
+> On 4/14/2022 12:43 PM, Stephen Boyd wrote:
+>> Quoting Dmitry Baryshkov (2022-04-14 12:20:31)
+>>> On 14/04/2022 19:40, Doug Anderson wrote:
+>>>> Hi,
+>>>>
+>>>> On Thu, Apr 14, 2022 at 5:19 AM Sankeerth Billakanti
+>>>> <quic_sbillaka@quicinc.com> wrote:
+>>>>>
+>>>>> This series adds support for generic eDP panel over aux_bus.
+>>>>>
+>>>>> These changes are dependent on the following series:
+>>>>> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=613654&state=* 
+>>>>>
+>>>>
+>>>> You're basically depending on the last two patches of that series.
+>>>> What's the plan there? In patchwork they're marked as "Not
+>>>> Applicable". If they're good to go, maybe we should land them? If not,
+>>>> maybe you should include them (with Dmitry as the author, of course)
+>>>> at the beginning of your series?
+>>>
+>>> No, please do not resend patches. The patches in question are marked as
+>>> 'Not applicable' as they are really not applicable to Bjorn's tree.
+>>> It would be better to point to the correct patchwork:
+>>>
+>>> https://patchwork.freedesktop.org/series/98585/
+>>>
+>>> Note those patches still lack the R-B tag. I can include them anyway,
+>>> basing on Sankeerth's Tested-by tag, but the formal R-B would also be 
+>>> good.
+>>>
+>>
+>> Can you resend those as not RFC?
+> 
+> Yes, please resend these, I can ack them.
+> 
+> Previously I held off my ack, as kuogee ran into some issues testing 
+> them which was later concluded to be a mismatch in QC internal trees due 
+> to different versions of the changes.( another reason why we should get 
+> these landed ).
+> 
+> Now, that Sankeerth has tested these, if you can remove RFC and post 
+> them, I can ack the.
+
+Well, you can ack those patches without them being resent. You have 
+already added your Reviewed-by to first three patches (which were merged 
+during last window).
 
 
-> -----Original Message-----
-> From: Bjorn Helgaas <helgaas@kernel.org>
-> Sent: Thursday, April 14, 2022 2:28 PM
-> To: Leo Li <leoyang.li@nxp.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>; Z.Q. Hou
-> <zhiqiang.hou@nxp.com>; Rob Herring <robh@kernel.org>; linux-
-> pci@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [PATCH v3 1/4] dt-bindings: pci: layerscape-pci: Add a optio=
-nal
-> property big-endian
->=20
-> On Fri, Mar 11, 2022 at 05:49:35PM -0600, Li Yang wrote:
-> > From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-> >
-> > This property is to indicate the endianness when accessing the PEX_LUT
-> > and PF register block, so if these registers are implemented in
-> > big-endian, specify this property.
-> >
-> > Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/pci/layerscape-pci.txt | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > index f36efa73a470..215d2ee65c83 100644
-> > --- a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > +++ b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > @@ -40,6 +40,10 @@ Required properties:
-> >    of the data transferred from/to the IP block. This can avoid the sof=
-tware
-> >    cache flush/invalid actions, and improve the performance significant=
-ly.
-> >
-> > +Optional properties:
-> > +- big-endian: If the PEX_LUT and PF register block is in big-endian,
-> > +specify
-> > +  this property.
->=20
-> What's the purpose of this?  I don't see any code that uses this property=
-.
->=20
-> I guess this might be related to of_device_is_big_endian()?  I do see som=
-e
-> code that uses of_device_is_big_endian(), but nothing that looks relevant=
- to
-> layerscape in particular.
-
-These two register blocks are not used in basic operation but are needed fo=
-r the power management support.  There is patch in review from Zhiqiang ("P=
-CI: layerscape: Add power management support") that need to use these regis=
-ters.
-
-But since this is an intrinsic property of the hardware, I think we should =
-include it in the binding and dtses before the code using it hit the mainli=
-ne.
-
->=20
-> >  Example:
-> >
-> >  	pcie@3400000 {
-> > --
-> > 2.25.1
-> >
+-- 
+With best wishes
+Dmitry

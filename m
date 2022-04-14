@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7855002E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 02:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C048D5002EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 02:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238045AbiDNALO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 20:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S238233AbiDNAMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 20:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiDNALM (ORCPT
+        with ESMTP id S231599AbiDNAMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 20:11:12 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DC9554A7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 17:08:48 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id m132so6653089ybm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 17:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KRjESF5FJIppkqvq7rWvqVyiT3uWKLMco+KRyugPGuY=;
-        b=bL8WjOj97hcTkM3aWTWjot6/IEfmif43UxKTHCD8UiyXMbdT1G05tw7JE+5DJDIiDT
-         4OkR3EJYpd0Skz6FhTbv9fwuSsEPniUelRLmy6pn58XwX1bReuKb/eJ6DQOeV3Pw7eyI
-         pyxCTUWSysLQHJ4g4+xfgZqSw4R/76YX8XuvPGLstjWPhqTP35JvlOVDNfIYYYS2QF9X
-         l86l9p5I0pRfZfpp1MS63SsJfeVWtWYRSVRjXZH8op+5hOSe5ZdSrDGviJN6JJ/xyNfn
-         j+F2/LfRfk5BW2PH44Q4T4oB5chqnDjanpPLeGce2mkfStni3RrNBvJQUm5gShUi/zL1
-         0v2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KRjESF5FJIppkqvq7rWvqVyiT3uWKLMco+KRyugPGuY=;
-        b=YHrn3m6NXEiiiTBmn4eXl862nxcfuBZtuTOrs1PlLbs8Ae+HZbW0dlIbIdW7FhpSVY
-         4k2WeJew5AcMJ3cbtRf5dNVQYcQCvS+ydy1blouDGViQl/IvKd4yJ9Re6M0W+ux+IDLJ
-         DYEZgvhk0SRQidAzOXu4m684sxumSIOVcVDIb7EZZIhI5TkRJHQ4a1pwOr3rOB3jTAsn
-         BYhU+SHsXBfGIMdIDO6k72goKHyISe7a5/AC8LXIC/+9bNXki19LhA3v3ml27hgZ9FsZ
-         h4mSaP25aguF2YmuWWKx4UVdSnZJt9OR8yosCL/jmWZ8rzMNdezZ4l3nsXKzo7VdaNKH
-         /cKQ==
-X-Gm-Message-State: AOAM531kdiUtKTqIzuRdhroFk1OgrnohPdTfDmVo67M8NRYsBsAnkbiP
-        t3XyyS6NEBNGH9jigi4uEhNSi1bUlY3pzuZWWlRGFw==
-X-Google-Smtp-Source: ABdhPJzW/dDw/Hsb3IEmOz2O/HeynYs0/0G7haokqptUKTA4rWSGKT6X3OtLVB+WpFnMycjX8kuX+ga4ZIXjrBZg/ow=
-X-Received: by 2002:a25:41cf:0:b0:641:1857:ac7c with SMTP id
- o198-20020a2541cf000000b006411857ac7cmr19703yba.281.1649894927444; Wed, 13
- Apr 2022 17:08:47 -0700 (PDT)
+        Wed, 13 Apr 2022 20:12:14 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B9120B0;
+        Wed, 13 Apr 2022 17:09:49 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8B86E5C020A;
+        Wed, 13 Apr 2022 20:09:47 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 13 Apr 2022 20:09:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649894987; x=1649981387; bh=EOJgXwczx3Vjm6TzLyaxLENE2
+        ryJMOOvfK5s3AOiSPY=; b=JXvcQwatb7sNB8VTI1v7K7C4Aa8LvMyGJZr0eKAaG
+        5m0NbE72ybXA0slhi/1dz6HZX3hNokgIxRAPtjsL3zxll0gOpigZxvz5j0vrQKnO
+        LnyJfaw+y+ADddC3WDG/5+qbZ0MfvlCvdpnujXqOipfVPxDnt3oqQqXW8XueqmC0
+        IDtkBIbqXmTfGRB2fDEBixp3pU5+9KNztrS3b6/0V2K+4eGuNOcKeLUgpPZwIqft
+        qzDUPJky9V6nBQRf7AmoW9m+qWmxDtMNPusxjBPGw/9lcRUEp/hbvez0/SIpE0Tu
+        AjxGuj/FWkZ14GpzAhZMRV7ZRls2A6CH2Oaf9DJy4YUyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1649894987; x=1649981387; bh=E
+        OJgXwczx3Vjm6TzLyaxLENE2ryJMOOvfK5s3AOiSPY=; b=e7EXW59Df3iBiANyk
+        OQmUnZ8UEeHtqnsN9UBdjvQbSPwVYZjpky9YbIkLr1+FYmtPbm1w9TvSxJEofM4f
+        Uq6OfL+eRJvuzIIXeUx/aWTgO7DaZxUVlyhnJhKnNESCWNkBXJ/K/NLOuWBem/OP
+        Uupqq+ml+lFHH3riGkvymEhqaj9tc0/KKhr0hFkpjKtQ4zbUSg319lqJLdgCcXHl
+        mqiOoqFHLYNO/ezIJVRYEhBlJpLFagdjgiBL7PELD8COgQkoNZVASZB+3pF+6uwa
+        Ml9GPxSGESnod1rsYyEZU6kvP2uqQQSID7H6oc2d9zAcilCzJvdUY4XqozIxI5hQ
+        kmPYA==
+X-ME-Sender: <xms:SWZXYjqsJQRME26XZdKplHgNSPjoABGmCKLhYZtJOiGMpe1jqoJSHA>
+    <xme:SWZXYtqMNPa3Th_CkLCGlAAEhICGS0qxm7kLr7T1gssTPQ7017z9zVzAl4LhKhDl_
+    RtN5csF4hdFCD2RZA>
+X-ME-Received: <xmr:SWZXYgMtROeWTgCI1BEdPV8jkITAxcL96omh7QI4QdpStPC9AMK7CfF7M0fgbVY03S3N8eijWfJlFt9BGEuGMJAaQmu2u_bSdz2eakE6lkF1XsE7eFPAhIXo9fG1g2lk0Xa8YQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudelvddgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:SWZXYm5IHxa4Ff82jsI8C7AviOP37U98R-PORU6GlhfI7rFXO9AWdQ>
+    <xmx:SWZXYi5vEOxs6yFcWGxWTT4DPlVzBVuHU-w6SB-cJtSUAYC6efvFeg>
+    <xmx:SWZXYuhGMSpgCdk4qw4PoTUFnGvP-NIf5oQNm-zlicbF_t7V48ueAw>
+    <xmx:S2ZXYktctP2op4tCR2gNuqYE-rxE_Kjo4bTOtcM_DYuI8BQueX2KEw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Apr 2022 20:09:45 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Ondrej Jirman <megous@megous.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH resend v4] Input: sun4i-lradc-keys -  Add wakup support
+Date:   Wed, 13 Apr 2022 19:09:44 -0500
+Message-Id: <20220414000944.43388-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-3-wuyun.abel@bytedance.com> <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
- <801da029-6bbe-2a0c-7de0-afffc3d5de02@bytedance.com>
-In-Reply-To: <801da029-6bbe-2a0c-7de0-afffc3d5de02@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Wed, 13 Apr 2022 17:08:36 -0700
-Message-ID: <CABk29Nu9QTUKHP3cyx3qpiGcNM-PbaSxCvfhvBvOs++67KeXCw@mail.gmail.com>
-Subject: Re: [RFC v2 2/2] sched/fair: introduce sched-idle balance
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >>   /*
-> >>    * Use locality-friendly rq->overloaded to cache the status of the rq
-> >>    * to minimize the heavy cost on LLC shared data.
-> >> @@ -7837,6 +7867,22 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
-> >>          if (kthread_is_per_cpu(p))
-> >>                  return 0;
-> >>
-> >> +       if (unlikely(task_h_idle(p))) {
-> >> +               /*
-> >> +                * Disregard hierarchically idle tasks during sched-idle
-> >> +                * load balancing.
-> >> +                */
-> >> +               if (env->idle == CPU_SCHED_IDLE)
-> >> +                       return 0;
-> >> +       } else if (!static_branch_unlikely(&sched_asym_cpucapacity)) {
-> >> +               /*
-> >> +                * It's not gonna help if stacking non-idle tasks on one
-> >> +                * cpu while leaving some idle.
-> >> +                */
-> >> +               if (cfs_rq_busy(env->src_rq) && !need_pull_cfs_task(env->dst_rq))
-> >> +                       return 0;
-> >
-> > These checks don't involve the task at all, so this kind of check
-> > should be pushed into the more general load balance function. But, I'm
-> > not totally clear on the motivation here. If we have cpu A with 1
-> > non-idle task and 100 idle tasks, and cpu B with 1 non-idle task, we
-> > should definitely try to load balance some of the idle tasks from A to
-> > B. idle tasks _do_ get time to run (although little), and this can add
-> > up and cause antagonism to the non-idle task if there are a lot of
-> > idle threads.
->
-> CPU_SCHED_IDLE means triggered by sched_idle_balance() in which pulls
-> a non-idle task for the unoccupied cpu from the overloaded ones, so
-> idle tasks are not the target and should be skipped.
->
-> The second part is: if we have cpu A with 1 non-idle task and 100 idle
-> tasks, and B with >=1 non-idle task, we don't migrate the last non-idle
-> task on A to B.
+From: Ondrej Jirman <megous@megous.com>
 
-It could be possible that we do want to migrate the last non-idle task
-from A to B, if the weight sum of idle tasks on A is very high (easily
-possible with affinity restrictions). So I think we should leave
-regular load balance alone here if it really wants to move the
-non-idle task, and wrap this entire block in an if (env->idle ==
-CPU_SCHED_IDLE).
+Allow the driver to wake the system on key press if the "wakeup-source"
+property is provided in the device tree. Using the LRADC as a wakeup
+source requires keeping the AVCC domain active during sleep. Since this
+has a nontrivial impact on power consumption (sometimes doubling it),
+disable the LRADC wakeup source by default.
 
-Thanks,
-Josh
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+
+Changes in v4:
+  - Only mark device as wakeup capable if setting the wakeirq succeeds
+  - An entirely different, but equivalent, DT binding patch was merged,
+    so there is only one patch left
+
+Changes in v3:
+  - Dropped unnecessary pr_err in platform_get_irq() error path
+  - Dropped patch 3 (DT update) as it was merged
+  - Added Acked-by/Reviewed-by tags
+
+Changes in v2:
+  - Add requisite DT binding change
+  - Only add wakeup capability if "wakeup-source" is present
+  - Warn but do not error out if setting the wake IRQ fails
+  - Add "wakeup-source" property to PinePhone device tree
+
+ drivers/input/keyboard/sun4i-lradc-keys.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/input/keyboard/sun4i-lradc-keys.c b/drivers/input/keyboard/sun4i-lradc-keys.c
+index 4a796bed48ac..781f9b053115 100644
+--- a/drivers/input/keyboard/sun4i-lradc-keys.c
++++ b/drivers/input/keyboard/sun4i-lradc-keys.c
+@@ -22,6 +22,8 @@
+ #include <linux/module.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_wakeirq.h>
++#include <linux/pm_wakeup.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ 
+@@ -226,8 +228,7 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
+ {
+ 	struct sun4i_lradc_data *lradc;
+ 	struct device *dev = &pdev->dev;
+-	int i;
+-	int error;
++	int error, i, irq;
+ 
+ 	lradc = devm_kzalloc(dev, sizeof(struct sun4i_lradc_data), GFP_KERNEL);
+ 	if (!lradc)
+@@ -272,8 +273,11 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(lradc->base))
+ 		return PTR_ERR(lradc->base);
+ 
+-	error = devm_request_irq(dev, platform_get_irq(pdev, 0),
+-				 sun4i_lradc_irq, 0,
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	error = devm_request_irq(dev, irq, sun4i_lradc_irq, 0,
+ 				 "sun4i-a10-lradc-keys", lradc);
+ 	if (error)
+ 		return error;
+@@ -282,6 +286,14 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
+ 	if (error)
+ 		return error;
+ 
++	if (device_property_read_bool(dev, "wakeup-source")) {
++		error = dev_pm_set_wake_irq(dev, irq);
++		if (error)
++			dev_warn(dev, "Failed to set wake IRQ\n");
++		else
++			device_set_wakeup_capable(dev, true);
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.35.1
+

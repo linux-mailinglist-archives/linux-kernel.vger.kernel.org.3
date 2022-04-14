@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578BF501757
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5BE501512
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356259AbiDNP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S244658AbiDNOGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346525AbiDNN52 (ORCPT
+        with ESMTP id S1344010AbiDNNaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:28 -0400
+        Thu, 14 Apr 2022 09:30:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C46C9BBAC;
-        Thu, 14 Apr 2022 06:47:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF6091AD9;
+        Thu, 14 Apr 2022 06:26:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD841B8298A;
-        Thu, 14 Apr 2022 13:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1247CC385A1;
-        Thu, 14 Apr 2022 13:47:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC2FFB82941;
+        Thu, 14 Apr 2022 13:26:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B00FC385A1;
+        Thu, 14 Apr 2022 13:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944037;
-        bh=ITigphVQFmh5JxYzbL8+UnueKu6Qw9t5JBKsneFXQbc=;
+        s=korg; t=1649942762;
+        bh=WpbV/kui7UuD8bM1N5stKLj/lbS2sxBNhDGAcSvyodg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yyvMDR2zITE4fE/P5Ho4nVwQB9X8pUZIt2Bl61wFbY5pUEBwqibjHDCkNBRqzGLD8
-         aesrzvZ4eFjOqKBKd924aFV678CEUVza755QwFvluRfP4WWjPYDADai1ZQikuoCX14
-         84MyJbg4WvinX5PVIFPSwz6REi4xX3DiDu1Nunvk=
+        b=HTDtUYofVo1oKplaTbnEe2IOfNl8tPHnDdxZ69o1IPG/Ett0e/gLDf+Sqtw8z/ybu
+         JTDNv/K9th80L2KXv559GNXX0imFjTrVJZdSHsUuU+DgfZOWP+rNw1kA2fiYsrqfYR
+         uvio//SsywvugSape2l7Ikks/yJoNldEM3PY4PAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 371/475] ARM: 9187/1: JIVE: fix return value of __setup handler
+        stable@vger.kernel.org,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 253/338] um: Fix uml_mconsole stop/go
 Date:   Thu, 14 Apr 2022 15:12:36 +0200
-Message-Id: <20220414110905.459586471@linuxfoundation.org>
+Message-Id: <20220414110846.092114486@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,61 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
-[ Upstream commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa ]
+commit 1a3a6a2a035bb6c3a7ef4c788d8fd69a7b2d6284 upstream.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from jive_mtdset().
+Moving to an EPOLL based IRQ controller broke uml_mconsole stop/go
+commands. This fixes it and restores stop/go functionality.
 
-Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ben Dooks <ben-linux@fluff.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ff6a17989c08 ("Epoll based IRQ controller")
+Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-s3c24xx/mach-jive.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/um/drivers/mconsole_kern.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-s3c24xx/mach-jive.c b/arch/arm/mach-s3c24xx/mach-jive.c
-index 885e8f12e4b9..eedc9f8ed210 100644
---- a/arch/arm/mach-s3c24xx/mach-jive.c
-+++ b/arch/arm/mach-s3c24xx/mach-jive.c
-@@ -237,11 +237,11 @@ static int __init jive_mtdset(char *options)
- 	unsigned long set;
+--- a/arch/um/drivers/mconsole_kern.c
++++ b/arch/um/drivers/mconsole_kern.c
+@@ -218,7 +218,7 @@ void mconsole_go(struct mc_request *req)
  
- 	if (options == NULL || options[0] == '\0')
--		return 0;
-+		return 1;
- 
- 	if (kstrtoul(options, 10, &set)) {
- 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
--		return 0;
-+		return 1;
- 	}
- 
- 	switch (set) {
-@@ -256,7 +256,7 @@ static int __init jive_mtdset(char *options)
- 		       "using default.", set);
- 	}
- 
--	return 0;
-+	return 1;
+ void mconsole_stop(struct mc_request *req)
+ {
+-	deactivate_fd(req->originating_fd, MCONSOLE_IRQ);
++	block_signals();
+ 	os_set_fd_block(req->originating_fd, 1);
+ 	mconsole_reply(req, "stopped", 0, 0);
+ 	for (;;) {
+@@ -242,6 +242,7 @@ void mconsole_stop(struct mc_request *re
+ 	os_set_fd_block(req->originating_fd, 0);
+ 	reactivate_fd(req->originating_fd, MCONSOLE_IRQ);
+ 	mconsole_reply(req, "", 0, 0);
++	unblock_signals();
  }
  
- /* parse the mtdset= option given to the kernel command line */
--- 
-2.35.1
-
+ static DEFINE_SPINLOCK(mc_devices_lock);
 
 

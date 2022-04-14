@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922E7500B41
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22163500B44
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242383AbiDNKjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S231320AbiDNKkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241898AbiDNKjV (ORCPT
+        with ESMTP id S229876AbiDNKkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:39:21 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E512374860;
-        Thu, 14 Apr 2022 03:36:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r13so6281489wrr.9;
-        Thu, 14 Apr 2022 03:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+H9uo8jaDQ+kAk6GpwLVDlfJtlk/SgUkV35P9NpXgY=;
-        b=l9ztUzpU2wRO+hzdBfUprIPjKonUiQxgtSHxGQCjqNQn/2qVyihMV1BTV6Yp1hLgWV
-         JKfjhMoWW+g4zIVo9QKAVW+t02X0RwnJ/OzdUEFcQ83XHDBLeWM68ALhAq8McUfQY4Uj
-         5Yr+QVJ1HSWKZ3WEF/J7NuRboDG01MN1gnXUmGXrFrPvP3VqfMo4TfcUhxg7+VX7gZBG
-         ll/x5T8M6Jk2iTMNqSUOX/0O7/XKREyrDUXOnVtTOhYi0JrvAIV28kOlprJDJgB5p0cu
-         V5V7zxxkHSPMixnUGqN+XuTBGlsEl7n5xvDuf162O8b1rfOlUL3knPt0tQEVA/LTMxlw
-         Qo2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+H9uo8jaDQ+kAk6GpwLVDlfJtlk/SgUkV35P9NpXgY=;
-        b=gyuhfQ2QfMqhERyo2DRoZ/xnod5PpU9p7obJP5MJQxj9wH9LZUCHvQnaamm69pe1K8
-         iDiVkBHyLlBGSTz64qmjqvJtXBrmjFH0oISAchBwGbz3e3f2CL3wYohSdQFn2aoxeaa0
-         aUlof/8656NMbXAGaK8xC2S3pLAoHTO9yKqQyjUuJE1CWlzPFNSjO2Q09qJS6xSfeCwM
-         UcuzwDE2Mjl6JqZLRqibcCqnEjQqS34SHA+Ix1L4/WZnqs9y40IQn5+UX4lxbCp0hnID
-         9BwV0rn45TL9B7oPG2r7OIqWgj9inCZn48gyZIwuaqXJC41EyVt/NN76w5TGPAIp7iDC
-         v8qw==
-X-Gm-Message-State: AOAM530Oo43lClsIQ+swilNCyzdMtWo0j26A8tr8U/dYHyICDobc+Dw6
-        t3JrciLOiHidxdbg1SOrtfE=
-X-Google-Smtp-Source: ABdhPJwXV3YcP+8w+S0kD0SJTZ0cELq2D30GQr5G2hcFvNyGEpDonekUEQKh7+KK4uvvTBtW/681Vw==
-X-Received: by 2002:adf:f348:0:b0:207:a696:db82 with SMTP id e8-20020adff348000000b00207a696db82mr1641280wrp.292.1649932611540;
-        Thu, 14 Apr 2022 03:36:51 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p15-20020a5d59af000000b0020858885fd7sm1830260wrr.9.2022.04.14.03.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 03:36:51 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] staging: rtl8192u: make read-only array EWC11NHTCap static const
-Date:   Thu, 14 Apr 2022 11:36:50 +0100
-Message-Id: <20220414103650.297396-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 14 Apr 2022 06:40:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FAB76E07
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:38:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649932693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X7e5ZzPkHK9QOZm4nJmcXHhBGDf8hlvT6sPGCcVRYlE=;
+        b=LhH123nqtQFrvb7Bc6vNeG+oLVx3w52cQrHKqBZV+VKbg8VsH6x6Hw2//Ifwu0z2tD2fOo
+        OW4uEOsViDfEu7m9K0k/zO2mp8wa/J2wY/kHZwRO6IJH9WvW0pmL21TJ7O4l44m5hRIE9V
+        lEme73zQaQuHdPdfogvfjj0QthfMnHHVRNxIwwZoSJlnYoXJ5BR13FbJNAC7ddsg7fHo2C
+        pf98tGh81+HZCo1D1Gfpr4mj3CEb1Nvoqa073Z+ykmPUtHiIX4vSoAHcVnK7ahktZGvaaE
+        2NUv1qJAyXzRP5B9z9hNu7KT08pm4ctw8jkFKS0DpQTDmjH1e8Uxmyhqa8hoEQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649932693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X7e5ZzPkHK9QOZm4nJmcXHhBGDf8hlvT6sPGCcVRYlE=;
+        b=xqrcZ+HuKzc3eBQspe8fQxWo6vAsy1o+iHyrYAaxx7MAA/2TsGpz6d34aNZj2kbeJvhvpK
+        Rn3Lu3vMo58pLABA==
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        johannes@sipsolutions.net, rafael@kernel.org
+Subject: Re: Possible race in dev_coredumpm()-del_timer() path
+In-Reply-To: <Ylas6F75Y7O6R87U@kroah.com>
+References: <2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com>
+ <YlZg4KkiAgODr45d@kroah.com>
+ <20220413101639.GA24349@hu-mojha-hyd.qualcomm.com>
+ <Ylas6F75Y7O6R87U@kroah.com>
+Date:   Thu, 14 Apr 2022 12:38:13 +0200
+Message-ID: <87pmlkdk6i.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array EWC11NHTCap on the stack but instead
-make it static const. Also makes the object code a little smaller.
-Remove comment.
+On Wed, Apr 13 2022 at 12:58, Greg KH wrote:
+> On Wed, Apr 13, 2022 at 03:46:39PM +0530, Mukesh Ojha wrote:
+>> 	p1 					p2(X)
+>> 
+>>    dev_coredump() uevent sent to userspace
+>>    device_add()  =========================> userspace process X reads the uevents
+>>                                             writes to devcd fd which
+>>                                             results into writes to
+>> 
+>>                                             devcd_data_write()
+>> 					      mod_delayed_work()
+>>                                                 try_to_grab_pending()
+>> 						  del_timer()
+>> 						   debug_assert_init()
+>>   INIT_DELAYED_WORK 
+>>   schedule_delayed_work
+>> 						    debug_object_fixup()
+>
+> Why do you have object debugging enabled?  That's going to take a LONG
+> time, and will find bugs in your code.  Perhaps like this one?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
+It's not finding bugs in his code. It finds bug in the upstream
+dev_coredump code.
 
-V2: remove unnecessary comment as per Greg's request
+> And if you turn object debugging off, what happens?
 
----
- drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The debugobject splat goes away, but the problem persists.
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-index 358c35d9589c..a93f09033d9d 100644
---- a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-@@ -480,7 +480,7 @@ void HTConstructCapabilityElement(struct ieee80211_device *ieee, u8 *posHTCap, u
- 	}
- 	memset(posHTCap, 0, *len);
- 	if (pHT->ePeerHTSpecVer == HT_SPEC_VER_EWC) {
--		u8	EWC11NHTCap[] = {0x00, 0x90, 0x4c, 0x33};	// For 11n EWC definition, 2007.07.17, by Emily
-+		static const u8	EWC11NHTCap[] = {0x00, 0x90, 0x4c, 0x33};
- 
- 		memcpy(posHTCap, EWC11NHTCap, sizeof(EWC11NHTCap));
- 		pCapELE = (struct ht_capability_ele *)&posHTCap[4];
--- 
-2.35.1
+    device_add()        -> uevent
 
+Preemption or concurrency:
+
+    devcd_data_write()
+       mod_delayed_work(..., w, 0);      <- Uninitialized.
+
+The dev_coredump code exposes the device before it is fully initialized
+and a write ending up in devcd_data_write() touches uninitialized work.
+
+It does not help to move the initialization before device_add() as that
+creates another problem:
+
+    INIT_DELAYED_WORK(w)
+    ...
+    device_add()        -> uevent
+
+Preemption or concurrency:
+
+    devcd_data_write()
+      mod_delayed_work(..., w, 0);      <- Schedules work immediately
+
+    work_queue_runs()
+      devcd_del(w)
+        device_del()
+        put_device()                    <- Drops the last reference
+
+    initialization continues...
+    
+So, yes this needs serialization of some sort.
+
+Same problem vs. disabled_store().
+
+Thanks,
+
+        tglx

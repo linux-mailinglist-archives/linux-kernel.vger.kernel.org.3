@@ -2,219 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E14501969
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EB750198A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243888AbiDNRDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S243326AbiDNRGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245324AbiDNRCv (ORCPT
+        with ESMTP id S244060AbiDNRFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:02:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34D9A38BC6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649954353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Hk3S1Buv3yyod0QHK3mlOCiTiU1ixm5RRzrGyqKGjmQ=;
-        b=VubzGTwbYzVTB/CD9mAJZikBVFlKoOJvV+PVw78K5iFw2YTXlFtUMpgCH2D1zLokaN5len
-        4HwhLwtHmgWYSJ1GnzeyS8hI4RsxjEZvYnmQvKuUntr5UMbuSSvwTXZxVZ9Hy6pEXbW0eU
-        IKgjD7o9j0XtEII9IG1nI1TejkW5TT4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-jgLjM6qaPdKjCmeseOWosg-1; Thu, 14 Apr 2022 12:39:10 -0400
-X-MC-Unique: jgLjM6qaPdKjCmeseOWosg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42C6986B8A1;
-        Thu, 14 Apr 2022 16:39:10 +0000 (UTC)
-Received: from ceranb.redhat.com (unknown [10.40.194.169])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2906140BAEE;
-        Thu, 14 Apr 2022 16:39:08 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     poros@redhat.com, mschmidt@redhat.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Dave Ertman <david.m.ertman@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] ice: Fix race during aux device (un)plugging
-Date:   Thu, 14 Apr 2022 18:39:06 +0200
-Message-Id: <20220414163907.1456925-1-ivecera@redhat.com>
+        Thu, 14 Apr 2022 13:05:42 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2F63BBED
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:19 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bj36so901517ljb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/81+PkkPmPe/TTQwrTB+sxyYxn9iTbpRvnVkvTg+pC8=;
+        b=B9wDWH42g9YW9AI0Nss9bPg2ke9AcgJPM27MaTf5FcLd2cYA8sez9IWCsZ1KH5qcqa
+         Lu+dH/ZYnrkVAhHHkskGQMRfl28OXKQ8/hvdgxC+Gd1N0dqNrZq14l0edVEEzLsBFvGP
+         IU9Ox5r96ULPR95h7HSZz6dMttqUaACHn8hkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/81+PkkPmPe/TTQwrTB+sxyYxn9iTbpRvnVkvTg+pC8=;
+        b=QauKxiT80RS7ILj63nyTWD/7Zj0lrcW7FJDDeXys2maKwI2QN93/4fECsAqQMokxB7
+         0wXE1hCjFJRnjrB2PxGQ5jJVbnjSSVDO4TQ8qEcpy6ddlyDAquRuLUozbJusRolHi4HV
+         r2wwb1ukS0FIDBUZQgNqYtwbGSNLzU84692FABmm30bP/NH6RzjggMCkZApmBgth4S+1
+         d0fiTYoMbjo9jOITdgqHl4GUH8nj/g0GOw7DOcvicnJnlgRujC6pWhAsKbkETqQGdrhv
+         qyCx88LjZUBmmHAIGJAboPGNHfr3g1ZfEh+q0r3BEF5ECEvx1NnT2JEfjJ+OuZww8w4e
+         LQmQ==
+X-Gm-Message-State: AOAM530WttkQa1UesKNegDHYYx21XIDGQLdQerkKUFJEzXQefuYO43Mi
+        iepFJlDY3AYtWGlZuTuAfMne5Zabx2BUyoEds+s=
+X-Google-Smtp-Source: ABdhPJyX1/xgcmXdpzdtsJVtk74bhwzcSa9bR4LUVKHXX+QxGuPvS89nbK7a5YenSZnPZ3z8jrTYwg==
+X-Received: by 2002:a05:651c:1a0e:b0:24c:83e3:14f3 with SMTP id by14-20020a05651c1a0e00b0024c83e314f3mr2070810ljb.376.1649954837606;
+        Thu, 14 Apr 2022 09:47:17 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id n9-20020a196f49000000b0046bbeb8c242sm46751lfk.171.2022.04.14.09.47.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 09:47:17 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id 17so6801420lji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:47:17 -0700 (PDT)
+X-Received: by 2002:a05:6000:1c15:b0:207:849a:648b with SMTP id
+ ba21-20020a0560001c1500b00207849a648bmr2610564wrb.513.1649954370738; Thu, 14
+ Apr 2022 09:39:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com> <1649938766-6768-2-git-send-email-quic_sbillaka@quicinc.com>
+In-Reply-To: <1649938766-6768-2-git-send-email-quic_sbillaka@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 14 Apr 2022 09:39:18 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wmiv2WGhFCLYmXbWESNOh5FfobjNme85aU6YtN1SLVDA@mail.gmail.com>
+Message-ID: <CAD=FV=Wmiv2WGhFCLYmXbWESNOh5FfobjNme85aU6YtN1SLVDA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] drm/msm/dp: Add eDP support via aux_bus
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function ice_plug_aux_dev() assigns pf->adev field too early prior
-aux device initialization and on other side ice_unplug_aux_dev()
-starts aux device deinit and at the end assigns NULL to pf->adev.
-This is wrong and can causes a crash when ice_send_event_to_aux()
-call occurs during these operations because that function depends
-on non-NULL value of pf->adev and does not assume that aux device
-is half-initialized or half-destroyed.
+Hi,
 
-Modify affected functions so pf->adev field is set after aux device
-init and prior aux device destroy.
+On Thu, Apr 14, 2022 at 5:20 AM Sankeerth Billakanti
+<quic_sbillaka@quicinc.com> wrote:
+>
+> @@ -1530,6 +1532,60 @@ void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>         }
+>  }
+>
+> +static int dp_display_get_next_bridge(struct msm_dp *dp)
+> +{
+> +       int rc;
+> +       struct dp_display_private *dp_priv;
+> +       struct device_node *aux_bus;
+> +       struct device *dev;
+> +
+> +       dp_priv = container_of(dp, struct dp_display_private, dp_display);
+> +       dev = &dp_priv->pdev->dev;
+> +       aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
+> +
+> +       if (aux_bus && dp->is_edp) {
+> +               dp_display_host_init(dp_priv);
+> +               dp_catalog_ctrl_hpd_config(dp_priv->catalog);
+> +               dp_display_host_phy_init(dp_priv);
+> +               enable_irq(dp_priv->irq);
+> +
+> +               rc = devm_of_dp_aux_populate_ep_devices(dp_priv->aux);
+> +               of_node_put(aux_bus);
+> +               if (rc) {
+> +                       disable_irq(dp_priv->irq);
+> +                       dp_display_host_phy_exit(dp_priv);
+> +                       dp_display_host_deinit(dp_priv);
+> +                       return rc;
+> +               }
+> +       } else if (dp->is_edp) {
+> +               DRM_ERROR("eDP aux_bus not found\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       /*
+> +        * External bridges are mandatory for eDP interfaces: one has to
+> +        * provide at least an eDP panel (which gets wrapped into panel-bridge).
+> +        *
+> +        * For DisplayPort interfaces external bridges are optional, so
+> +        * silently ignore an error if one is not present (-ENODEV).
+> +        */
+> +       rc = dp_parser_find_next_bridge(dp_priv->parser);
 
-Reproducer:
-cycle=1
-while :;do
-        echo "#### Cycle: $cycle"
+This gets into the same problem that Dmitry pointed out that ps8640
+has that's addressed by my recent series [1].  Namely it's not
+guaranteed that the panel will have finished probing by the time
+devm_of_dp_aux_populate_ep_devices() finishes probing. I don't think
+it's going to be really solvable without the bigger rewrite that we've
+been discussing, though. ...it's probably OK to land something like
+what you have here, but it might at least deserve a comment in the
+code?
 
-        ip link set ens7f0 mtu 9000
-        ip link add bond0 type bond mode 1 miimon 100
-        ip link set bond0 up
-        ifenslave bond0 ens7f0
-        ip link set bond0 mtu 9000
-        ethtool -L ens7f0 combined 1
-        ip link del bond0
-        ip link set ens7f0 mtu 1500
-        sleep 1
+[1] https://lore.kernel.org/r/20220409023628.2104952-1-dianders@chromium.org
 
-        let cycle++
-done
 
-In short when the device is added/removed to/from bond the aux device
-is unplugged/plugged. When MTU of the device is changed an event is
-sent to aux device asynchronously. This can race with (un)plugging
-operation and because pf->adev is set too early (plug) or too late
-(unplug) and the function ice_send_event_to_aux() can touch
-uninitialized or destroyed fields (e.g. pf->adev->dev.mutex like
-in the following crash)
+> +       if (rc == -ENODEV) {
+> +               if (dp->is_edp) {
+> +                       DRM_ERROR("eDP: next bridge is not present\n");
+> +                       return rc;
+> +               }
+> +       } else if (rc) {
+> +               if (rc != -EPROBE_DEFER)
+> +                       DRM_ERROR("DP: error parsing next bridge: %d\n", rc);
+> +               return rc;
 
-[   53.372066] bond0: (slave ens7f0): making interface the new active one
-[   53.378622] bond0: (slave ens7f0): Enslaving as an active interface with an u
-p link
-[   53.386294] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes ready
-[   53.549104] bond0: (slave ens7f1): Enslaving as a backup interface with an up
- link
-[   54.118906] ice 0000:ca:00.0 ens7f0: Number of in use tx queues changed inval
-idating tc mappings. Priority traffic classification disabled!
-[   54.233374] ice 0000:ca:00.1 ens7f1: Number of in use tx queues changed inval
-idating tc mappings. Priority traffic classification disabled!
-[   54.248204] bond0: (slave ens7f0): Releasing backup interface
-[   54.253955] bond0: (slave ens7f1): making interface the new active one
-[   54.274875] bond0: (slave ens7f1): Releasing backup interface
-[   54.289153] bond0 (unregistering): Released all slaves
-[   55.383179] MII link monitoring set to 100 ms
-[   55.398696] bond0: (slave ens7f0): making interface the new active one
-[   55.405241] BUG: kernel NULL pointer dereference, address: 0000000000000080
-[   55.405289] bond0: (slave ens7f0): Enslaving as an active interface with an u
-p link
-[   55.412198] #PF: supervisor write access in kernel mode
-[   55.412200] #PF: error_code(0x0002) - not-present page
-[   55.412201] PGD 25d2ad067 P4D 0
-[   55.412204] Oops: 0002 [#1] PREEMPT SMP NOPTI
-[   55.412207] CPU: 0 PID: 403 Comm: kworker/0:2 Kdump: loaded Tainted: G S
-           5.17.0-13579-g57f2d6540f03 #1
-[   55.429094] bond0: (slave ens7f1): Enslaving as a backup interface with an up
- link
-[   55.430224] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 1.4.4 10/07/
-2021
-[   55.430226] Workqueue: ice ice_service_task [ice]
-[   55.468169] RIP: 0010:mutex_unlock+0x10/0x20
-[   55.472439] Code: 0f b1 13 74 96 eb e0 4c 89 ee eb d8 e8 79 54 ff ff 66 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 65 48 8b 04 25 40 ef 01 00 31 d2 <f0> 48 0f b1 17 75 01 c3 e9 e3 fe ff ff 0f 1f 00 0f 1f 44 00 00 48
-[   55.491186] RSP: 0018:ff4454230d7d7e28 EFLAGS: 00010246
-[   55.496413] RAX: ff1a79b208b08000 RBX: ff1a79b2182e8880 RCX: 0000000000000001
-[   55.503545] RDX: 0000000000000000 RSI: ff4454230d7d7db0 RDI: 0000000000000080
-[   55.510678] RBP: ff1a79d1c7e48b68 R08: ff4454230d7d7db0 R09: 0000000000000041
-[   55.517812] R10: 00000000000000a5 R11: 00000000000006e6 R12: ff1a79d1c7e48bc0
-[   55.524945] R13: 0000000000000000 R14: ff1a79d0ffc305c0 R15: 0000000000000000
-[   55.532076] FS:  0000000000000000(0000) GS:ff1a79d0ffc00000(0000) knlGS:0000000000000000
-[   55.540163] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   55.545908] CR2: 0000000000000080 CR3: 00000003487ae003 CR4: 0000000000771ef0
-[   55.553041] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   55.560173] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   55.567305] PKRU: 55555554
-[   55.570018] Call Trace:
-[   55.572474]  <TASK>
-[   55.574579]  ice_service_task+0xaab/0xef0 [ice]
-[   55.579130]  process_one_work+0x1c5/0x390
-[   55.583141]  ? process_one_work+0x390/0x390
-[   55.587326]  worker_thread+0x30/0x360
-[   55.590994]  ? process_one_work+0x390/0x390
-[   55.595180]  kthread+0xe6/0x110
-[   55.598325]  ? kthread_complete_and_exit+0x20/0x20
-[   55.603116]  ret_from_fork+0x1f/0x30
-[   55.606698]  </TASK>
+In both of your two error returns here isn't it a problem that you don't do:
 
-Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/ice/ice_idc.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+  disable_irq(dp_priv->irq);
+  dp_display_host_phy_exit(dp_priv);
+  dp_display_host_deinit(dp_priv);
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_idc.c b/drivers/net/ethernet/intel/ice/ice_idc.c
-index 25a436d342c2..4d889049231b 100644
---- a/drivers/net/ethernet/intel/ice/ice_idc.c
-+++ b/drivers/net/ethernet/intel/ice/ice_idc.c
-@@ -290,7 +290,6 @@ int ice_plug_aux_dev(struct ice_pf *pf)
- 		return -ENOMEM;
- 
- 	adev = &iadev->adev;
--	pf->adev = adev;
- 	iadev->pf = pf;
- 
- 	adev->id = pf->aux_idx;
-@@ -300,18 +299,18 @@ int ice_plug_aux_dev(struct ice_pf *pf)
- 
- 	ret = auxiliary_device_init(adev);
- 	if (ret) {
--		pf->adev = NULL;
- 		kfree(iadev);
- 		return ret;
- 	}
- 
- 	ret = auxiliary_device_add(adev);
- 	if (ret) {
--		pf->adev = NULL;
- 		auxiliary_device_uninit(adev);
- 		return ret;
- 	}
- 
-+	pf->adev = adev;
-+
- 	return 0;
- }
- 
-@@ -320,12 +319,14 @@ int ice_plug_aux_dev(struct ice_pf *pf)
-  */
- void ice_unplug_aux_dev(struct ice_pf *pf)
- {
--	if (!pf->adev)
-+	struct auxiliary_device *adev = pf->adev;
-+
-+	if (!adev)
- 		return;
- 
--	auxiliary_device_delete(pf->adev);
--	auxiliary_device_uninit(pf->adev);
- 	pf->adev = NULL;
-+	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
- }
- 
- /**
--- 
-2.35.1
+Should probably at least fix that clear error before landing, unless
+I'm misunderstanding and there's some reason not to do that?
 
+
+As discussed previously, I'm not convinced that we've covered every
+corner case for properly doing and undoing the above things. I'm
+hoping that once we do the cleanup and move to pm_runtime() management
+that it will be cleaned up?
+
+
+> @@ -114,10 +114,12 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
+>         bridge->funcs = &dp_bridge_ops;
+>         bridge->type = dp_display->connector_type;
+>
+> -       bridge->ops =
+> -               DRM_BRIDGE_OP_DETECT |
+> -               DRM_BRIDGE_OP_HPD |
+> -               DRM_BRIDGE_OP_MODES;
+> +       if (!dp_display->is_edp) {
+> +               bridge->ops =
+> +                       DRM_BRIDGE_OP_DETECT |
+> +                       DRM_BRIDGE_OP_HPD |
+> +                       DRM_BRIDGE_OP_MODES;
+
+Given that Dmitry had questions about why eDP has different ops in his
+previous review of this code, the above probably deserves an inline
+code comment. If you want to use my wording, you could paste this into
+your code:
+
+  /*
+   * Many ops only make sense for DP. Why?
+   * - Detect/HPD are used by DRM to know if a display is _physically_
+   *   there, not whether the display is powered on / finished initting.
+   *   On eDP we assume the display is always there because you can't
+   *   know until power is applied. If we don't implement the ops DRM will
+   *   assume our display is always there.
+   * - Currently eDP mode reading is driven by the panel driver. This
+   *   allows the panel driver to properly power itself on to read the
+   *   modes.
+   */
+
+
+Overall: as discussed, I think that the current implementation is a
+bit fragile and might have some wrong corner cases since it's hard for
+me to reason about exactly when we init/de-init things. Even if it
+works great, the fact that it's hard to reason about isn't wonderful.
+That being said, I honestly believe that would benefit upstream to get
+this landed and iterate on it. I don't think this should be causing
+any existing behavior to be _worse_ and getting it landed upstream
+will keep more people focused on the same codebase.
+
+
+-Doug

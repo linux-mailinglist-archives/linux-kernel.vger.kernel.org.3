@@ -2,431 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350C1500BCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB99F500BD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbiDNLJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S241989AbiDNLLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242508AbiDNLJY (ORCPT
+        with ESMTP id S233401AbiDNLL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:09:24 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E78A75E46;
-        Thu, 14 Apr 2022 04:06:59 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r13so9340161ejd.5;
-        Thu, 14 Apr 2022 04:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h6li49GO+Yuu8/Gu2RI9P4F8EHFsoe8mNrfNFsBoaEQ=;
-        b=J3YiI/Aduboip8Fe/28g3PUO0GxjjT1udJyJ+kDkob1fp32qgS0b45o4jIC5YyhP87
-         QIt8pk1VLkhLgU5BfghAJVunD1smiKzrQ427WKNHjrwtrYdUzc0q7/t4DkP/Dm8+JLsL
-         WiaaNaxfsB0C2TTN3/mxf5v2/wDPBb51uuUYpACeI3ScRNdXCBkjDH9jxN0gLlmkZSXU
-         KYm27G3sBbT3LIzRF6LZFF/30/G9x63iLchy2dfpRkPWnAo2LFxQPhe11D+YDY6APiZa
-         WT7MVck1Cml+wdKJmVPPCc2oj0DuzGPO2jglwGgNY0zr16ruflQrEDQUGKRNFVNs4a1z
-         DIRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h6li49GO+Yuu8/Gu2RI9P4F8EHFsoe8mNrfNFsBoaEQ=;
-        b=YWVd19RAL6z8VeVv7M4qq4l4BNSmclDSPQ1wpeYX/p4tiqjY7zlUvNqbfZ3owO0KVk
-         0UpX8J5fhD8h3NX4DVnJ2uGcw5NFyeHdzOvKRGP8HGwIWnEoCtvs6AVVcVsQCaHtFwnj
-         zUaoCMD4lUdIz3QidymmcWMrdJtr4SIjgpuEL/78kbUKatdzAQN2nh5wN+ywGnRT5wiA
-         GoI017/QVFp5CoBn1jtWJiXE3L406Ul0tTgD+0793nVqQ2L9bljEk5IpF0NgH4xtFPJ1
-         j1wsqRTyVYp8K1AWRjE29g1Npy7IsZuKZYspAjTWmmPzPExY2QH7J5Rh4aD1Ic7kuake
-         OuYQ==
-X-Gm-Message-State: AOAM530QrS2UKoIU96FArVyTSgX0Ch1nK5aDQSfIIduQk93QWid6atyP
-        G8dlcP2FTqtScyPuH6JiJsk=
-X-Google-Smtp-Source: ABdhPJwzG01/rI+lB+WNrI4o/gRYNsXqeU+tovc3Necnl1+JDkWbcxz+TUTkCiPGGL+vawI5WStPUg==
-X-Received: by 2002:a17:906:d54e:b0:6db:b241:c0e2 with SMTP id cr14-20020a170906d54e00b006dbb241c0e2mr1771665ejc.724.1649934417588;
-        Thu, 14 Apr 2022 04:06:57 -0700 (PDT)
-Received: from [192.168.0.182] ([188.24.22.234])
-        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm871029edt.70.2022.04.14.04.06.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 04:06:57 -0700 (PDT)
-Message-ID: <80196942-4c33-7625-3945-86ce5b7b347f@gmail.com>
-Date:   Thu, 14 Apr 2022 14:06:56 +0300
+        Thu, 14 Apr 2022 07:11:28 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B37E08D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:09:01 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220414110855euoutp02bf5135fb943a6d8ec7b2748aeb5a208a~lvrfM5MeP3048230482euoutp02R
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:08:55 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220414110855euoutp02bf5135fb943a6d8ec7b2748aeb5a208a~lvrfM5MeP3048230482euoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649934535;
+        bh=l8T412n44Yp8hAPgEFINj7TZEYgRQmaaW9IgQHPhOAg=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=RYMYV1izqrtEXKoUVB3GtlD83LSfg4jVU7wvdy5U1bY15gEibntszAjAjqTgbeCrC
+         9s0GhNda9h2Q2l74xxjidMbyXrhNGxIVihBCzpiJBGuuIJlzdeoBbU3XSfbbbYo/xL
+         iCArvU5RHDmdoIcdZzln0C1xwxWwVJs4Ew6VZu8E=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220414110854eucas1p25898fff27fdc75b3bf54e9ac29134c32~lvre57xW12774927749eucas1p2X;
+        Thu, 14 Apr 2022 11:08:54 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 3F.4B.10009.6C008526; Thu, 14
+        Apr 2022 12:08:54 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220414110854eucas1p2a037d45634218755b6a3c9bbfdb802ad~lvref1gT01069910699eucas1p2k;
+        Thu, 14 Apr 2022 11:08:54 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220414110854eusmtrp1c883916e5468b2e625e1e91a5cf6cc74~lvrefFM2k2806528065eusmtrp1l;
+        Thu, 14 Apr 2022 11:08:54 +0000 (GMT)
+X-AuditID: cbfec7f2-e7fff70000002719-e6-625800c68830
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id FD.0A.09522.6C008526; Thu, 14
+        Apr 2022 12:08:54 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220414110853eusmtip277fdf49fb3793be6fb8c58261ef21493~lvrd-WfX-1076510765eusmtip2O;
+        Thu, 14 Apr 2022 11:08:53 +0000 (GMT)
+Message-ID: <39f69dfe-32e5-4cb3-118b-5c02b28cbcff@samsung.com>
+Date:   Thu, 14 Apr 2022 13:08:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 3/3] iio: adc: ad4130: add AD4130 driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v3 2/3] genirq: Always limit the affinity to online CPUs
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
- <20220413094011.185269-3-cosmin.tanislav@analog.com>
- <CAHp75VfzX8u45J3634yN5p-QTeT7w0Bos27OxeWOsb3MQ2VRVw@mail.gmail.com>
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-In-Reply-To: <CAHp75VfzX8u45J3634yN5p-QTeT7w0Bos27OxeWOsb3MQ2VRVw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        David Decotigny <ddecotig@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <877d7sar5k.wl-maz@kernel.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPKsWRmVeSWpSXmKPExsWy7djPc7rHGCKSDGYd0rO41LqJ3WLT/iZW
+        i/PnN7BbXN41h81ixvl9TBY755xktdi8aSqzxdTXWxgdODwWbCr1aDnyltVj06pONo93586x
+        e3zeJBfAGsVlk5Kak1mWWqRvl8CVsXbVPKaCe0IVcw92sTcwLufvYuTkkBAwkVjRtJu5i5GL
+        Q0hgBaPEzmdNTBDOF0aJK+23WSGcz4wSixs/s8C0dO+8wgpiCwksZ5Q4+SEOougjo8SLdX/Z
+        QRK8AnYSKx+8BitiEVCV+PplGyNEXFDi5MwnYINEBZIk5u67xwxiCwv4SEy5eAKshllAXOLW
+        k/lMILaIgKLEpwsnoeJbmCQ2b8gCsdkEDCW63naxgdicAtoShz9/YIGokZfY/nYO2D8SAk84
+        JF58PQV1tYvEg0lX2SBsYYlXx7ewQ9gyEqcn9wDVcADZ+RJ/ZxhDhCskrr1ewwxhW0vcOfeL
+        DaSEWUBTYv0ufYiwo0T70efMEJ18EjfeCkJcwCcxadt0qDCvREebEES1msSs4+vgdh68cIl5
+        AqPSLKQwmYXk91lIfpmFsHcBI8sqRvHU0uLc9NRiw7zUcr3ixNzi0rx0veT83E2MwDR0+t/x
+        TzsY5776qHeIkYmD8RCjBAezkgjvzf7wJCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8yZkbEoUE
+        0hNLUrNTUwtSi2CyTBycUg1MDF6fzO9P++Ay/cTRDyb28xbJhjG6bT33rpz9SshH1g/rLe23
+        a91bvipf0KmpuaP6z4EX8x29pJYbaQgZSyRKveJdL/H61dq2sAsPDBPnLmfI93QRuF3kt9mg
+        4PN1zo1HrB51uT8778b6tl66L1PybcGHnF1zHL5OFD4+deOWhaz3Zz/UlXS55Oy1vjy+9d/l
+        b0/+82RZvD9rylCoqaR1wVv5UofeniUCG3nXi5/d0XhsizXT33U/TI0n81q46hpHHCzsnvZC
+        0sNduOZbz3lDnmbPjo0sC4WuHrG/EiSrf9KurmTqWcs9WR5XeoOrU/sNl4pobWafr3FrvUEB
+        3/U5fP4rjnrqhyr25qQuYvZRYinOSDTUYi4qTgQAMN/dg7IDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsVy+t/xe7rHGCKSDC6+E7C41LqJ3WLT/iZW
+        i/PnN7BbXN41h81ixvl9TBY755xktdi8aSqzxdTXWxgdODwWbCr1aDnyltVj06pONo93586x
+        e3zeJBfAGqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRv
+        l6CXsXbVPKaCe0IVcw92sTcwLufvYuTkkBAwkejeeYW1i5GLQ0hgKaPExz1djBAJGYmT0xpY
+        IWxhiT/Xutggit4zSnybc5ANJMErYCex8sFrsCIWAVWJr1+2MULEBSVOznzCAmKLCiRJvNj2
+        HCwuLOAjMeXiCTCbWUBc4taT+UwgtoiAosSnCycZQRYwC2xhkji4axcjxLb7TBLndz4Dq2IT
+        MJToetsFtplTQFvi8OcPLBCTzCS6tnZBTZWX2P52DvMERqFZSA6ZhWThLCQts5C0LGBkWcUo
+        klpanJueW2yoV5yYW1yal66XnJ+7iREYgduO/dy8g3Heq496hxiZOBgPMUpwMCuJ8N7sD08S
+        4k1JrKxKLcqPLyrNSS0+xGgKDI2JzFKiyfnAFJBXEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQ
+        nliSmp2aWpBaBNPHxMEp1cCkGVYXedmWJayt9M03/x2/JFZcFrdfXbRENsl3l2aiO0tlzuG2
+        m0Hrf/6a0S6qtpGPJeyy+IfZR+6u7drjstT41OWlcdlLw4wVV8+RzLm9k6vmd9+3w76Hv1kJ
+        cM5wPnLr9sKZzkb82UXu4W7O2/0d2U+7G4tM/rDy8RJzZnnpPVN/MHRWSKzQrfDN4Jn5Ycui
+        6sfqCaLWT68niTxw2XHkaPb2vy6WR2c5HZxdodF840+l8GM2fVZ9wSUTOBOu2ax8WOJqa7zv
+        6NMFDxTDRM15VvNop1ZKySeIuoZPtErSC+71Cm6YkX4n6IzqPPYVE/vT/wgV1f/OubTg2ZTy
+        hbUnDrI+uLhrSpvCa5mrneJKLMUZiYZazEXFiQBm0/mGSQMAAA==
+X-CMS-MailID: 20220414110854eucas1p2a037d45634218755b6a3c9bbfdb802ad
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220413145922eucas1p2dc46908354f4d2b48db79978d086a838
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220413145922eucas1p2dc46908354f4d2b48db79978d086a838
+References: <20220405185040.206297-1-maz@kernel.org>
+        <20220405185040.206297-3-maz@kernel.org>
+        <CGME20220413145922eucas1p2dc46908354f4d2b48db79978d086a838@eucas1p2.samsung.com>
+        <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
+        <878rs8c2t2.wl-maz@kernel.org>
+        <5dcf8d22-e9b3-f306-4c5f-256707e08fbf@samsung.com>
+        <877d7sar5k.wl-maz@kernel.org>
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Marc,
 
-
-On 4/13/22 18:41, Andy Shevchenko wrote:
-> On Wed, Apr 13, 2022 at 1:41 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> >
->> +#include <linux/property.h>
->> +#include <linux/regmap.h>
->> +#include <linux/regulator/consumer.h>
->> +#include <linux/spi/spi.h>
->> +
->> +#include <linux/iio/iio.h>
->> +#include <linux/iio/sysfs.h>
-> 
-> ...
-> 
->> +#define AD4130_8_NAME                  "ad4130-8"
-> 
-> What the meaning of -8 ? Is it number of channels? Or is it part of
-> the official model (part number)? Can we see, btw, Datasheet: tag with
-> a corresponding link in the commit message?
-> 
-
-That's just the name specified in the datasheet. I honestly don't have
-much of an idea about why it is like that. Also, I already put the
-datasheet in the .yaml documentation. Do you really also want it
-in each commit message too?
-
-> 
->> +#define AD4130_RESET_CLK_COUNT         64
->> +#define AD4130_RESET_BUF_SIZE          (AD4130_RESET_CLK_COUNT / 8)
-> 
-> To be more precise shouldn't the above need to have DIV_ROUND_UP() ?
-> 
-
-Does it look like 64 / 8 needs any rounding?
-
-> ...
-> 
->> +#define AD4130_FREQ_FACTOR             1000000000ull
->> +#define AD4130_DB3_FACTOR              1000
-> 
-> Ditto.
-
-AD4130_DB3_FACTOR is unit-less. In the datasheet, the relation between
-sampling frequency and 3db frequency is represented as a 0.xyz value,
-hence why the db3_div values and 1000 factor.
-
-> 
->> +enum ad4130_fifo_mode {
->> +       AD4130_FIFO_MODE_DISABLED = 0b00,
->> +       AD4130_FIFO_MODE_WATERMARK = 0b01,
->> +};
->> +
->> +enum ad4130_mode {
->> +       AD4130_MODE_CONTINUOUS = 0b0000,
->> +       AD4130_MODE_IDLE = 0b0100,
->> +};
-> 
-> 0b?! Hmm... Not that this is bad, just not so usual :-)
-> 
-
-I always use 0b to be consistent with the datasheet values which are
-represented in binary. I think it makes it easier to not mess up
-when initially translating the datasheet into code and later when
-cross-checking with the datasheet.
-
-> 
->> +struct ad4130_filter_config {
->> +       enum ad4130_filter_mode         filter_mode;
->> +       unsigned int                    odr_div;
->> +       unsigned int                    fs_max;
->> +       unsigned int                    db3_div;
->> +       enum iio_available_type         samp_freq_avail_type;
->> +       int                             samp_freq_avail_len;
->> +       int                             samp_freq_avail[3][2];
->> +       enum iio_available_type         db3_freq_avail_type;
->> +       int                             db3_freq_avail_len;
->> +       int                             db3_freq_avail[3][2];
-> 
-> These 3:s can be defined?
+On 14.04.2022 12:35, Marc Zyngier wrote:
+> On Thu, 14 Apr 2022 10:09:31 +0100,
+> Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>> On 13.04.2022 19:26, Marc Zyngier wrote:
+>>> On Wed, 13 Apr 2022 15:59:21 +0100,
+>>> Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>>>> On 05.04.2022 20:50, Marc Zyngier wrote:
+>>>>> When booting with maxcpus=<small number> (or even loading a driver
+>>>>> while most CPUs are offline), it is pretty easy to observe managed
+>>>>> affinities containing a mix of online and offline CPUs being passed
+>>>>> to the irqchip driver.
+>>>>>
+>>>>> This means that the irqchip cannot trust the affinity passed down
+>>>>> from the core code, which is a bit annoying and requires (at least
+>>>>> in theory) all drivers to implement some sort of affinity narrowing.
+>>>>>
+>>>>> In order to address this, always limit the cpumask to the set of
+>>>>> online CPUs.
+>>>>>
+>>>>> Signed-off-by: Marc Zyngier <maz@kernel.org>
+>>>> This patch landed in linux next-20220413 as commit 33de0aa4bae9
+>>>> ("genirq: Always limit the affinity to online CPUs"). Unfortunately it
+>>>> breaks booting of most ARM 32bit Samsung Exynos based boards.
+>>>>
+>>>> I don't see anything specific in the log, though. Booting just hangs at
+>>>> some point. The only Samsung Exynos boards that boot properly are those
+>>>> Exynos4412 based.
+>>>>
+>>>> I assume that this is related to the Multi Core Timer IRQ configuration
+>>>> specific for that SoCs. Exynos4412 uses PPI interrupts, while all other
+>>>> Exynos SoCs have separate IRQ lines for each CPU.
+>>>>
+>>>> Let me know how I can help debugging this issue.
+>>> Thanks for the heads up. Can you pick the last working kernel, enable
+>>> CONFIG_GENERIC_IRQ_DEBUGFS, and dump the /sys/kernel/debug/irq/irqs/
+>>> entries for the timer IRQs?
+>> Exynos4210, Trats board, next-20220411:
+> Thanks for all of the debug, super helpful. The issue is that we don't
+> handle the 'force' case, which a handful of drivers are using when
+> bringing up CPUs (and doing so before the CPUs are marked online).
 >
-I could define IIO_AVAIL_RANGE_LEN and IIO_AVAIL_SINGLE_LEN and then
-define another IIO_AVAIL_LEN that is the max between the two.
-But that's just over-complicating it, really.
+> Can you please give the below hack a go?
 
-> ...
-> 
-> 
->> +static int ad4130_get_reg_size(struct ad4130_state *st, unsigned int reg,
->> +                              unsigned int *size)
->> +{
-> 
->> +       if (reg >= ARRAY_SIZE(ad4130_reg_size))
->> +               return -EINVAL;
-> 
-> When this condition is true?
+This patch fixed the issue. Thanks! Feel free to add my:
 
-When the user tries reading a register from direct_reg_access
-that hasn't had its size defined.
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-> 
->> +       regmap_update_bits(st->regmap, AD4130_REG_IO_CONTROL, mask,
->> +                          value ? mask : 0);
-> 
-> One line?
-> 
-> No error check?
-> 
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-I actually can't think of a scenario where this would fail. It doesn't
-if the chip is not even connected.
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-> 
->> +       if (setup_info->enabled_channels)
->> +               return -EINVAL;
-> 
-> -EBUSY?
-> 
-
-Eh, I don't think so. It would be pretty impossible for the code to hit
-this if statement, taking into account the ad4130_find_slot() logic.
-I could as well not have it at all.
-
-> 
->> +static void ad4130_freq_to_fs(enum ad4130_filter_mode filter_mode,
->> +                             int val, int val2, unsigned int *fs, bool db3)
->> +{
->> +       const struct ad4130_filter_config *filter_config =
->> +               &ad4130_filter_configs[filter_mode];
->> +       unsigned long long dividend, divisor;
->> +       int temp;
->> +
->> +       dividend = filter_config->fs_max * filter_config->odr_div *
->> +                  (val * AD4130_FREQ_FACTOR + val2);
->> +       divisor = AD4130_MAX_ODR * AD4130_FREQ_FACTOR;
->> +
->> +       if (db3) {
->> +               dividend *= AD4130_DB3_FACTOR;
->> +               divisor *= filter_config->db3_div;
->> +       }
->> +
->> +       temp = AD4130_FS_MIN + filter_config->fs_max -
->> +              DIV64_U64_ROUND_CLOSEST(dividend, divisor);
->> +
->> +       if (temp < AD4130_FS_MIN)
->> +               temp = AD4130_FS_MIN;
->> +       else if (temp > filter_config->fs_max)
->> +               temp = filter_config->fs_max;
->> +
->> +       *fs = temp;
-> 
-> Would be nice to put a comment explaining the math behind this code.
-> 
->> +}
->> +
->> +static void ad4130_fs_to_freq(enum ad4130_filter_mode filter_mode,
->> +                             unsigned int fs, int *val, int *val2, bool db3)
->> +{
->> +       const struct ad4130_filter_config *filter_config =
->> +               &ad4130_filter_configs[filter_mode];
->> +       unsigned int dividend, divisor;
->> +       u64 temp;
->> +
->> +       dividend = (filter_config->fs_max - fs + AD4130_FS_MIN) *
->> +                  AD4130_MAX_ODR;
->> +       divisor = filter_config->fs_max * filter_config->odr_div;
->> +
->> +       if (db3) {
->> +               dividend *= filter_config->db3_div;
->> +               divisor *= AD4130_DB3_FACTOR;
->> +       }
->> +
->> +       temp = div_u64(dividend * AD4130_FREQ_FACTOR, divisor);
->> +       *val = div_u64_rem(temp, AD4130_FREQ_FACTOR, val2);
-> 
-> 
-> Ditto.
-> 
-I'll see what I can come up with.
-
-> 
->> + out:
-> 
-> out_unlock: ?
-> Ditto for similar cases.
-
-There's a single label in the function, and there's a mutex being
-taken, and, logically, the mutex must be released on the exit path.
-It's clear what the label is for to me.
-
-> 
->> +               *val = st->bipolar ? -(1 << (chan->scan_type.realbits - 1)) : 0;
-> 
-> Hmm... It seems like specific way to have a sign_extended, or actually
-> reduced) mask.
-> Can you rewrite it with the (potential)UB-free approach?
-> 
-> (Note, that if realbits == 32, this will have a lot of fun in
-> accordance with C standard.)
-> 
-
-Can you elaborate on this? The purpose of this statement is to shift the
-results so that, when bipolar configuration is enabled, the raw value is
-offset with 1 << (realbits - 1) towards negative.
-
-For the 24bit chips, 0x800000 becomes 0x000000.
-
-Maybe you misread it as left shift on a negative number? The number
-is turned negative only after the shift...
-
-> ...
-> 
->> +               *vals = (int *)st->scale_tbls[setup_info->ref_sel];
-> 
-> Can we get rid of casting here and in the similar cases?
-> 
-
-I feel like scale_tbls is best defined as an array of two-element
-arrays. Because its type is IIO_VAL_FRACTIONAL.
-But obviously the IIO framework can't take this case into account by
-itself, so we cast it so it receives what it wants.
-
-> 
->> +
->> +       if (val > AD4130_FIFO_SIZE)
->> +               return -EINVAL;
->> +
->> +       /*
->> +        * Always set watermark to a multiple of the number of enabled channels
->> +        * to avoid making the FIFO unaligned.
->> +        */
->> +       eff = rounddown(val, st->num_enabled_channels);
->> +
->> +       mutex_lock(&st->lock);
->> +
->> +       ret = regmap_update_bits(st->regmap, AD4130_REG_FIFO_CONTROL,
->> +                                AD4130_WATERMARK_MASK,
->> +                                FIELD_PREP(AD4130_WATERMARK_MASK,
->> +                                           ad4130_watermark_reg_val(eff)));
-> 
-> Temporary variable for mask?
-> 
-
-You mean for value?
-
-> 
->> +static int ad4130_get_ref_voltage(struct ad4130_state *st,
->> +                                 enum ad4130_ref_sel ref_sel,
->> +                                 unsigned int *ref_uv)
->> +{
->> +       struct device *dev = &st->spi->dev;
->> +       int ret;
->> +
->> +       switch (ref_sel) {
->> +       case AD4130_REF_REFIN1:
->> +               ret = regulator_get_voltage(st->regulators[2].consumer);
->> +               break;
->> +       case AD4130_REF_REFIN2:
->> +               ret = regulator_get_voltage(st->regulators[3].consumer);
->> +               break;
->> +       case AD4130_REF_AVDD_AVSS:
->> +               ret = regulator_get_voltage(st->regulators[0].consumer);
->> +               break;
->> +       case AD4130_REF_REFOUT_AVSS:
-> 
->> +               if (!st->int_ref_en) {
->> +                       ret = -EINVAL;
->> +                       break;
->> +               }
->> +
->> +               ret = st->int_ref_uv;
->> +               break;
-> 
-> Can be one if-else instead.
-> 
->> +       default:
->> +               ret = -EINVAL;
->> +               break;
->> +       }
->> +
->> +       if (ret <= 0)
-> 
-> = 0 ?! Can you elaborate, please, this case taking into account below?
-> 
-
-I guess I just did it because voltage = 0 doesn't make sense and would
-make scale be 0.0.
-
-
->> +               return dev_err_probe(dev, ret, "Cannot use reference %u\n",
->> +                                    ref_sel);
->> +
->> +       if (ref_uv)
->> +               *ref_uv = ret;
->> +
->> +       return 0;
->> +}
-> 
-
-> 
->> +       fwnode_property_read_u32(child, "adi,excitation-pin-0",
->> +                                &chan_info->iout0);
-> 
-> No default and/or error check?
-> 
-> ...
-> 
->> +       fwnode_property_read_u32(child, "adi,excitation-pin-1",
->> +                                &chan_info->iout1);
-> 
-> Ditto.
-
-Default is 0, just like the register defaults.
-
-> 
-> ...
-> 
->> +static int ad4130_parse_fw_children(struct iio_dev *indio_dev)
->> +{
->> +       struct ad4130_state *st = iio_priv(indio_dev);
->> +       struct device *dev = &st->spi->dev;
->> +       struct fwnode_handle *child;
->> +       int ret;
->> +
->> +       indio_dev->channels = st->chans;
->> +
->> +       device_for_each_child_node(dev, child) {
->> +               ret = ad4130_parse_fw_channel(indio_dev, child);
->> +               if (ret)
->> +                       break;
->> +       }
-> 
->> +       fwnode_handle_put(child);
-> 
-> There is no need to put fwnode if child is NULL. Moreover, the above
-> pattern might be percepted wrongly, i.e. one may think that
-> fwnode_handle_put() is a must after a loop.
-> 
-
-fwnode_handle_put already checks if the child is NULL. Why do the same
-check twice?
-
-> 
-> Can you explain why regmap locking is needed?
-> 
-
-Am I supposed to set .disable_locking = true since SPI has its own
-locking?

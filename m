@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B21C50066E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3532950066F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbiDNGxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 02:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S240154AbiDNGxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 02:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233525AbiDNGxT (ORCPT
+        with ESMTP id S240084AbiDNGxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 02:53:19 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BA54505F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 23:50:55 -0700 (PDT)
+        Thu, 14 Apr 2022 02:53:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FDC488B1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 23:51:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 38AABCE2897
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50978C385A1;
-        Thu, 14 Apr 2022 06:50:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BA5661EAD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422DFC385A7;
+        Thu, 14 Apr 2022 06:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649919052;
-        bh=cYbubK9AB57IFaxLKwKzOx65Ex6FmM9jG7A94onuncM=;
+        s=korg; t=1649919070;
+        bh=JkilULHevFIfJrxY8jNAk6p2FJfGE3znPacyac70Oy8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SCpkEhdDMNx5PuGypTqsLr6YhwAlVEb7wjTyEeJL92fkhiZipeCeD3RQhGJv2rA5Q
-         TgduuJjGeTOoUK1jilZd+XvUvcsctqYVq9kds3qkbRtKeI4TfI+nac6amNyV9Vs8NQ
-         yB+q+ZdF0snVRJsZYWo4tiXIvV2LVBYYQiM+LswE=
-Date:   Wed, 13 Apr 2022 23:50:51 -0700
+        b=iFmSLkrvAI2ASG47Ak9njvHuM5LsHUGkJvl59/qtFaWftlxK291CEAP5Pop76HOPj
+         FkpEJzAHyuI3SUtYmboh1zj1uH/ySfZRow+qCkCh6qUt4eL4gJPIQM/rH3yE/lhvqJ
+         gjl1HY+JOrQvj81Req4Q2ElZl2mYu2fAVJmYvV5w=
+Date:   Wed, 13 Apr 2022 23:51:09 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liam Howlett <liam.howlett@oracle.com>, Yu Zhao <yuzhao@google.com>
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        Yang Shi <shy828301@gmail.com>
 Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 00/70] Introducing the Maple Tree
-Message-Id: <20220413235051.3a4eb7c86d31656c7aea250c@linux-foundation.org>
-In-Reply-To: <20220404143501.2016403-1-Liam.Howlett@oracle.com>
+Subject: Re: [PATCH v7 26/70] mm/mmap: Use advanced maple tree API for
+ mmap_region()
+Message-Id: <20220413235109.132da02b3c2a883332ada39c@linux-foundation.org>
+In-Reply-To: <20220404143501.2016403-27-Liam.Howlett@oracle.com>
 References: <20220404143501.2016403-1-Liam.Howlett@oracle.com>
+        <20220404143501.2016403-27-Liam.Howlett@oracle.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -53,67 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 14:35:26 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On Mon, 4 Apr 2022 14:35:43 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
 
-> Please add this patch set to your branch.  They are based on v5.18-rc1.
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Changing mmap_region() to use the maple tree state and the advanced
+> maple tree interface allows for a lot less tree walking.
+> 
+> This change removes the last caller of munmap_vma_range(), so drop this
+> unused function.
+> 
+> Add vma_expand() to expand a VMA if possible by doing the necessary
+> hugepage check, uprobe_munmap of files, dcache flush, modifications then
+> undoing the detaches, etc.
+> 
 
-Do we get a nice [0/n] cover letter telling us all about this?
+Merging this with Yang Shi's "mm: mmap: register suitable readonly file
+vmas for khugepaged"
+(https://lkml.kernel.org/r/20220404200250.321455-9-shy828301@gmail.com)
 
-I have that all merged up and it compiles.
+> ...
+>
+> @@ -1741,13 +1868,28 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+>  			goto free_vma;
+>  	}
+>  
+> -	vma_link(mm, vma, prev);
+> +	if (vma->vm_file)
+> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+> +
+> +	vma_mas_store(vma, &mas);
+> +	__vma_link_list(mm, vma, prev);
+> +	mm->map_count++;
+> +	if (vma->vm_file) {
+> +		if (vma->vm_flags & VM_SHARED)
+> +			mapping_allow_writable(vma->vm_file->f_mapping);
+> +
+> +		flush_dcache_mmap_lock(vma->vm_file->f_mapping);
+> +		vma_interval_tree_insert(vma, &vma->vm_file->f_mapping->i_mmap);
+> +		flush_dcache_mmap_unlock(vma->vm_file->f_mapping);
+> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+> +	}
+> +
+>  	/* Once vma denies write, undo our temporary denial count */
+>  unmap_writable:
+>  	if (file && vm_flags & VM_SHARED)
+>  		mapping_unmap_writable(file->f_mapping);
 
-https://lkml.kernel.org/r/20220402094550.129-1-lipeifeng@oppo.com and
-https://lkml.kernel.org/r/20220412081014.399-1-lipeifeng@oppo.com are
-disabled for now.
-
-
-Several patches were marked
-
-From: Liam
-Signed-off-by: Matthew
-Signed-off-by: Liam
-
-Which makes me wonder whether the attribution was correct.  Please
-double-check.
-
-
-
-I made a lame attempt to fix up mglru's get_next_vma(), and it probably
-wants a revisit in the maple-tree world anyway.  Please check this and
-send me a better version ;)
-
---- a/mm/vmscan.c~mglru-vs-maple-tree
-+++ a/mm/vmscan.c
-@@ -3704,7 +3704,7 @@ static bool get_next_vma(struct mm_walk
- 
- 	while (walk->vma) {
- 		if (next >= walk->vma->vm_end) {
--			walk->vma = walk->vma->vm_next;
-+			walk->vma = find_vma(walk->mm, walk->vma->vm_end);
- 			continue;
- 		}
- 
-@@ -3712,7 +3712,7 @@ static bool get_next_vma(struct mm_walk
- 			return false;
- 
- 		if (should_skip_vma(walk->vma->vm_start, walk->vma->vm_end, walk)) {
--			walk->vma = walk->vma->vm_next;
-+			walk->vma = find_vma(walk->mm, walk->vma->vm_end);
- 			continue;
- 		}
- 
-@@ -4062,7 +4062,7 @@ static void walk_mm(struct lruvec *lruve
- 		/* the caller might be holding the lock for write */
- 		if (mmap_read_trylock(mm)) {
- 			unsigned long start = walk->next_addr;
--			unsigned long end = mm->highest_vm_end;
-+			unsigned long end = TASK_SIZE;
- 
- 			err = walk_page_range(mm, start, end, &mm_walk_ops, walk);
- 
+I'm unsure whether this hunk should be inside or outside the call to
+the cheerfully undocumented khugepaged_enter_vma()?
 
 
-I flung a tree up at
-git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mmtemp containing
-mglru and mapletree and a few other things.  Could the mglru and
-mapletree people please runtime test it, send any fixes?
+Code snippet as I presently have it:
 
+	if (vma->vm_file)
+		i_mmap_lock_write(vma->vm_file->f_mapping);
+
+	vma_mas_store(vma, &mas);
+	mm->map_count++;
+	if (vma->vm_file) {
+		if (vma->vm_flags & VM_SHARED)
+			mapping_allow_writable(vma->vm_file->f_mapping);
+
+		flush_dcache_mmap_lock(vma->vm_file->f_mapping);
+		vma_interval_tree_insert(vma, &vma->vm_file->f_mapping->i_mmap);
+		flush_dcache_mmap_unlock(vma->vm_file->f_mapping);
+		i_mmap_unlock_write(vma->vm_file->f_mapping);
+	}
+
+	/*
+	 * vma_merge() calls khugepaged_enter_vma() either, the below
+	 * call covers the non-merge case.
+	 */
+	khugepaged_enter_vma(vma, vma->vm_flags);
+
+	/* Once vma denies write, undo our temporary denial count */
+unmap_writable:
+	if (file && vm_flags & VM_SHARED)
+		mapping_unmap_writable(file->f_mapping);
+
+btw, "vma_merge() calls khugepaged_enter_vma() either" isn't
+understandable.  Should that be "also"?

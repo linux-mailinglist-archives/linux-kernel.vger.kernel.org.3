@@ -2,206 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053055019E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE285019EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245740AbiDNRUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S245729AbiDNRVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245714AbiDNRTw (ORCPT
+        with ESMTP id S245318AbiDNRVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:19:52 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF9B630B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:17:25 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n18so5192420plg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/xHnbfO/6RDF2V6Som/YOPdX7GJf70J0XIxAV0SFUKc=;
-        b=Wef1YPrL1c82H3OcohFJZHkyqYM2Pgnp2Sn52/3jc6OyRc8jdnkyLjTL51mZzDG7iS
-         gVutqtKgia4gJQ5EEyjlTYUR3ODJEipRJNWsbiQ0yudFxRHvicckNTd/GfWrm08L85lS
-         aBACkHBXM8GMvdgOOTIMZ3ZvAzVYixwiSc99ZxMC5dC9BUrunqd7d261XZgCoQaBITnn
-         8u0DxF80r31+6VmgTSdrBgwcr7aR/GHKLIGlE47CIz2l1Fdwu3vmnHEgI2bf6lkgMp7+
-         Iff3SMIPnA7Yx/57gV9xT7jh9zms1F38kmOOthyEBN5GroPrDmG4ChoCHraavRNiks5o
-         9vnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/xHnbfO/6RDF2V6Som/YOPdX7GJf70J0XIxAV0SFUKc=;
-        b=IdJPhGO+m7hRT5v9eL1zhts0H8SSWlfv3P43dZXy8ZT7Xvco1dNHfOgdS/NGtjJv9x
-         mNcAirC1BrzrsF21Dg/WzyVNbIBxZQmSgi6EW7BAizxES9fvzB3F4pLOehj3FfCH4eP5
-         cMT/xG8DfMHYEe4DIf8wfpN4uoN4LNH4/g0renJg29Tq1Xn+0hjXG9T7luHrGiZ+L1/7
-         8UTxpXD8+wo42Iz6ajJka7wROR/oYi48Zk2lXKfnY7E1YDPs28oDINRwWybZ8ghSLX/y
-         /zrl/ayEb4RHCO+9wDIF9w0o1yAawmCbuURfh8XdEEhlfevh8+ilfLTyDpi3TkFABTfD
-         LJnQ==
-X-Gm-Message-State: AOAM5313ex9NTV7yfEDPcGGn7A0eUNKIytaKK7uxazdz72GHbPpFzqJc
-        I9plClr40q+m2tV4pFrHUep9fSErYZRtpsDylyUtyQ==
-X-Google-Smtp-Source: ABdhPJwCsQXpHY2XnN7Do9HE7onV49GxLhA2Lxccz9/ExwvX5ViFV1e6weDfJfzTsSUR0Tvdqll6UALmEGgpLmUAWQw=
-X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
- q13-20020a17090a430d00b001bcf3408096mr4655205pjg.93.1649956644554; Thu, 14
- Apr 2022 10:17:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <164982968798.684294.15817853329823976469.stgit@dwillia2-desk3.amr.corp.intel.com>
- <164982969858.684294.17819743973041389492.stgit@dwillia2-desk3.amr.corp.intel.com>
- <20220413084309.GV2731@worktop.programming.kicks-ass.net> <CAPcyv4huZVNkxa7-rQ_J=nVN77+5F1AJg5vi6kLHp8t5khcwHA@mail.gmail.com>
- <Ylf0dewci8myLvoW@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ylf0dewci8myLvoW@hirez.programming.kicks-ass.net>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 14 Apr 2022 10:17:13 -0700
-Message-ID: <CAPcyv4hFabn6H064HTrH8=GQ-cxsOk4xEK8s66JQxQavfgAzGw@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] device-core: Add dev->lock_class to enable
- device_lock() lockdep validation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-cxl@vger.kernel.org,
+        Thu, 14 Apr 2022 13:21:02 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B229BC9;
+        Thu, 14 Apr 2022 10:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649956682;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=KshZXEHhcUQEnHixAwZGv5dR1rFkLqEAD5Zz92eTH5M=;
+    b=M6ktt3FArDL5yCIRbKdklWskTNy9KYDspOm4TEZoOjmU/oBkD7CsChI9LSCTGmrTPJ
+    etNdz4Jhm5iVlUU47iuCN2Dx/vxbtmRU0SOZ1apGmdQQ4CxgnU1DHWqB4q9LZnBQeKZ8
+    6bLh3NLbMxMn2iVzqH2BBjpp6SrfBF620MZYzoIGE19lJCp1nYOf88H6umsXLhMBjrSE
+    9S5R6dumEu/Cukn7zI7Jsb0g3OM7J5D17AG0B8dGGtQ9QniMJDVK18oGXQofPxTdAZS1
+    4/J18TdMCkotOD6KR+thF6YF/TEzUxjogSVVMsUJEbfhdHkA32KOwgOsQEsxn8kzIbJC
+    JScg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47uAiI="
+X-RZG-CLASS-ID: mo00
+Received: from mbp-13-nikolaus.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy3EHI1Gaw
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 14 Apr 2022 19:18:01 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <40d34f8b-4ab7-5ced-b533-da1f4b501cdc@wanyeetech.com>
+Date:   Thu, 14 Apr 2022 19:18:00 +0200
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
+        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
+        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D0853601-C9FA-45E9-95FA-6E05897DA328@goldelico.com>
+References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
+ <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
+ <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
+ <76ea346b-0645-97b5-f8fb-5b46b4bcc80b@linaro.org>
+ <F6929BAA-D552-4C34-B392-33AEA263F0C9@goldelico.com>
+ <40d34f8b-4ab7-5ced-b533-da1f4b501cdc@wanyeetech.com>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Apr 13, 2022 at 03:01:21PM -0700, Dan Williams wrote:
->
-> > > That's not an obvious conclusion; lockdep has lots of funny annotations,
-> > > subclasses is just one.
-> > >
-> > > I think the big new development in lockdep since that time with Alan
-> > > Stern is that lockdep now has support for dynamic keys; that is lock
-> > > keys in heap memory (as opposed to static storage).
-> >
-> > Ah, I was not aware of that, that should allow for deep cleanups of
-> > this proposal.
->
-> > > If you want lockdep validation for one (or more) dev->mutex instances,
-> > > why not pull them out of the no_validate class and use the normal
-> > > locking?
-> >
-> > Sounds perfect, just didn't know how to do that with my current
-> > understanding of how to communicate this to lockdep.
-> >
-> > >
-> > > This is all quite insane.
-> >
-> > Yes, certainly in comparison to your suggestion on the next patch.
-> > That looks much more sane, and even better I think it allows for
-> > optional lockdep validation without even needing to touch
-> > include/linux/device.h.
->
-> Right, so lockdep has:
->
->  - classes, based off of lock_class_key address;
->
->    * lock_class_key should be static storage; except now we also have:
->
->        lockdep_{,un}register_key()
->
->      which allows dynamic memory (aka. heap) to be used for classes,
->      important to note that lockdep memory usage is still static storage
->      because the memory allocators use locks too. So if you register too
->      many dynamic keys, you'll run out of lockdep memory etc.. so be
->      careful.
->
->    * things like mutex_init() have a static lock_class_key per site
->      and hence every lock initialized by the same code ends up in the
->      same class by default.
->
->    * can be trivially changed at any time, assuming the lock isn't held,
->      using lockdep_set_class*() family.
->
->      (extensively used all over the kernel, for example by the vfs to
->       give each filesystem type their own locking order rules)
->
->    * lockdep_set_no_validate_class() is a magical variant of
->      lockdep_set_class() that sets a magical lock_class_key.
+Hi,
 
-Golden, thanks Peter!
+> Am 14.04.2022 um 19:11 schrieb Zhou Yanjie =
+<zhouyanjie@wanyeetech.com>:
+>=20
+> Hi,
+>=20
+> On 2022/4/14 =E4=B8=8B=E5=8D=886:00, H. Nikolaus Schaller wrote:
+>>=20
+>>> Am 14.04.2022 um 09:32 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>>>=20
+>>> On 13/04/2022 21:30, H. Nikolaus Schaller wrote:
+>>>> So we need "snps,dwc2" to get any driver match and I thought the =
+"ingenic,jz4780-otg" is redundant.
+>>>>=20
+>>>> But maintainers convinced me to keep it as a dummy compatible in =
+the .dtsi for potential future
+>>>> specialization (which does not exist and seems not to be =
+necessary).
+>>> Isn't exactly the next patch 2/2 using such specialization?
+>>>=20
+>>>> Unless I can convince them
+>>>> that this is never ever needed. Which is beyond my knowledge and =
+almost everyone.
+>>>>=20
+>>>> So we can't remove the "snps,dwc2" here.
+>>>>=20
+>>>> Well, we can with more work elsewhere.
+>>>> You have to extend the dwc2_of_match_table to include all ingenic =
+devices.
+>>>>=20
+>>>> Therefore we now know 3 potential solutions:
+>>>> a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
+>>>> b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" =
+(your proposal + my suggestion here)
+>>>> c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match =
+table in drivers//usb/dwc2/params.c (new proposals)
+>>>>=20
+>>>> =46rom consistency point of view I think variant b) is the right =
+one. a) was rejected and c) only adds redundant code.
+>>> c) was already proposed by Zhou, so if you think the code is not =
+correct
+>>> (the params for jz4780) maybe nack it there, so we will know that =
+driver
+>>> needs fixes.
+>> Ah, ok. Now I see. I was just focussed on this patch and related =
+dtbscheck
+>> messages and did not read patch 2/2.
+>>=20
+>> Yes, looking at both, they are variant c). Sorry that I didn't see it =
+earlier.
+>=20
+> It looks like we need a [3/3] to remove "snps,dwc2", which not only =
+solves
+> the dtbscheck complaining problem, but also doesn't affect normal use =
+after
+> removing "snps,dwc2".
 
->
->    * can be changed while held using lock_set_class()
+Yes, that seems to be the right thing to do.
 
-One more sanity check... So in driver subsystems there are cases where
-a device on busA hosts a topology on busB. When that happens there's a
-need to set the lock class late in a driver since busA knows nothing
-about the locking rules of busB. Since the device has a longer
-lifetime than a driver when the driver exits it must set dev->mutex
-back to the novalidate class, otherwise it sets up a use after free of
-the static lock_class_key. I came up with this and it seems to work,
-just want to make sure I'm properly using the lock_set_class() API and
-it is ok to transition back and forth from the novalidate case:
+BR and thanks,
+Nikolaus
 
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 990b6670222e..32673e1a736d 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -405,6 +405,29 @@ struct cxl_nvdimm_bridge
-*cxl_find_nvdimm_bridge(struct cxl_nvdimm *cxl_nvd);
- #define __mock static
- #endif
-
-+#ifdef CONFIG_PROVE_LOCKING
-+static inline void cxl_lock_reset_class(void *_dev)
-+{
-+       struct device *dev = _dev;
-+
-+       lock_set_class(&dev->mutex.dep_map, "__lockdep_no_validate__",
-+                      &__lockdep_no_validate__, 0, _THIS_IP_);
-+}
-+
-+static inline int cxl_lock_set_class(struct device *dev, const char *name,
-+                                    struct lock_class_key *key)
-+{
-+       lock_set_class(&dev->mutex.dep_map, name, key, 0, _THIS_IP_);
-+       return devm_add_action_or_reset(dev, cxl_lock_reset_class, dev);
-+}
-+#else
-+static inline int cxl_lock_set_class(struct device *dev, const char *name,
-+                                    struct lock_class_key *key)
-+{
-+       return 0;
-+}
-+#endif
-+
- #ifdef CONFIG_PROVE_CXL_LOCKING
- enum cxl_lock_class {
-        CXL_ANON_LOCK,
-
->      ( from a lockdep pov it unlocks the held stack,
->        changes the class of your lock, and re-locks the
->        held stack, now with a different class nesting ).
->
->      Be carefule! It doesn't forget the old nesting order, so you
->      can trivally generate cycles.
->
->  - subclasses, basically distinct addresses inside above mentioned
->    lock_class_key object, limited to 8. Normally used with
->    *lock_nested() family of functions. Typically used to lock multiple
->    instances of a single lock class where there is defined order between
->    instances (see for instance: double_rq_lock()).
->
->  - nest_lock; eg. mutex_lock_nest_lock(), which allows expressing things
->    like: multiple locks of class A can be taken in any order, provided
->    we hold lock B.
->
-> With many of these, it's possible to get it wrong and annotate real
-> deadlocks away, so be careful :-)
-
-Noted.

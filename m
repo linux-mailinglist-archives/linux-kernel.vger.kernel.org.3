@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B50501031
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB00650165B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245422AbiDNNib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S1346214AbiDNOum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244673AbiDNN17 (ORCPT
+        with ESMTP id S1344908AbiDNNov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:27:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5675DA2071;
-        Thu, 14 Apr 2022 06:20:42 -0700 (PDT)
+        Thu, 14 Apr 2022 09:44:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30C956415;
+        Thu, 14 Apr 2022 06:40:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 619AD618FE;
-        Thu, 14 Apr 2022 13:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A26CC385A5;
-        Thu, 14 Apr 2022 13:20:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EA6A4CE29B0;
+        Thu, 14 Apr 2022 13:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4D1C385A5;
+        Thu, 14 Apr 2022 13:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942440;
-        bh=oYuw4mPYXpnVQt2LjPBguXjejJ1z5wVWhetTmZbca/0=;
+        s=korg; t=1649943637;
+        bh=sWy0e/18JWbVs46Eodi28jgo6Ubg6qIZHedHHPj0BUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGugzzNxKoR0Ajnppr62aYgowoSiEYEApJ+Om7f1HdRKDl8GFHQDwVxoTm13CYqu7
-         vw/yKGjxX5NZZgPJmDGoAYbE/eCtwJNzNrEPsIF/6jFdOurtOB+7G/PEJ8ETi770/9
-         fybfD2sPcN6KTyI8t2zmVFkJw1IPjiC/e59yzJ2A=
+        b=gfdqK5E3vwKk48Va2jxeGLFyQRFxgYLRRaDfeGyTLv4IeqhnQKX0YAr3uq71q2MDM
+         qDe+Wj+78oa6q7vc6Luc8x7pPldjfluP4UfrNcnuGfJn+5Ef9sP0uEaYzTuzUS5t94
+         QfIp1a4vvO++87GZpdYVvXB701P1RoSCVCaPKzHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 110/338] ASoC: dmaengine: do not use a NULL prepare_slave_config() callback
+Subject: [PATCH 5.4 228/475] pwm: lpc18xx-sct: Initialize driver data and hardware before pwmchip_add()
 Date:   Thu, 14 Apr 2022 15:10:13 +0200
-Message-Id: <20220414110842.040827448@linuxfoundation.org>
+Message-Id: <20220414110901.500914263@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 9a1e13440a4f2e7566fd4c5eae6a53e6400e08a4 ]
+[ Upstream commit 0401f24cd238ae200a23a13925f98de3d2c883b8 ]
 
-Even if struct snd_dmaengine_pcm_config is used, prepare_slave_config()
-callback might not be set. Check if this callback is set before using it.
+When a driver calls pwmchip_add() it has to be prepared to immediately
+get its callbacks called. So move allocation of driver data and hardware
+initialization before the call to pwmchip_add().
 
-Fixes: fa654e085300 ("ASoC: dmaengine-pcm: Provide default config")
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220307122202.2251639-2-codrin.ciubotariu@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This fixes a potential NULL pointer exception and a race condition on
+register writes.
+
+Fixes: 841e6f90bb78 ("pwm: NXP LPC18xx PWM/SCT driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-generic-dmaengine-pcm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pwm/pwm-lpc18xx-sct.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/sound/soc/soc-generic-dmaengine-pcm.c b/sound/soc/soc-generic-dmaengine-pcm.c
-index 232df04ca586..45cce7376191 100644
---- a/sound/soc/soc-generic-dmaengine-pcm.c
-+++ b/sound/soc/soc-generic-dmaengine-pcm.c
-@@ -91,10 +91,10 @@ static int dmaengine_pcm_hw_params(struct snd_pcm_substream *substream,
+diff --git a/drivers/pwm/pwm-lpc18xx-sct.c b/drivers/pwm/pwm-lpc18xx-sct.c
+index 5ff11145c1a3..9b15b6a79082 100644
+--- a/drivers/pwm/pwm-lpc18xx-sct.c
++++ b/drivers/pwm/pwm-lpc18xx-sct.c
+@@ -400,12 +400,6 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_LIMIT,
+ 			   BIT(lpc18xx_pwm->period_event));
  
- 	memset(&slave_config, 0, sizeof(slave_config));
+-	ret = pwmchip_add(&lpc18xx_pwm->chip);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
+-		goto disable_pwmclk;
+-	}
+-
+ 	for (i = 0; i < lpc18xx_pwm->chip.npwm; i++) {
+ 		struct lpc18xx_pwm_data *data;
  
--	if (!pcm->config)
--		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
--	else
-+	if (pcm->config && pcm->config->prepare_slave_config)
- 		prepare_slave_config = pcm->config->prepare_slave_config;
-+	else
-+		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+@@ -415,14 +409,12 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 				    GFP_KERNEL);
+ 		if (!data) {
+ 			ret = -ENOMEM;
+-			goto remove_pwmchip;
++			goto disable_pwmclk;
+ 		}
  
- 	if (prepare_slave_config) {
- 		ret = prepare_slave_config(substream, params, &slave_config);
+ 		pwm_set_chip_data(pwm, data);
+ 	}
+ 
+-	platform_set_drvdata(pdev, lpc18xx_pwm);
+-
+ 	val = lpc18xx_pwm_readl(lpc18xx_pwm, LPC18XX_PWM_CTRL);
+ 	val &= ~LPC18XX_PWM_BIDIR;
+ 	val &= ~LPC18XX_PWM_CTRL_HALT;
+@@ -430,10 +422,16 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 	val |= LPC18XX_PWM_PRE(0);
+ 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_CTRL, val);
+ 
++	ret = pwmchip_add(&lpc18xx_pwm->chip);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
++		goto disable_pwmclk;
++	}
++
++	platform_set_drvdata(pdev, lpc18xx_pwm);
++
+ 	return 0;
+ 
+-remove_pwmchip:
+-	pwmchip_remove(&lpc18xx_pwm->chip);
+ disable_pwmclk:
+ 	clk_disable_unprepare(lpc18xx_pwm->pwm_clk);
+ 	return ret;
 -- 
 2.34.1
 

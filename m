@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2626500B23
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5614F500B2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242296AbiDNKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S242306AbiDNKe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiDNKd1 (ORCPT
+        with ESMTP id S242302AbiDNKev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:33:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E232354186
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:31:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 722AAB82893
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CD5C385A9;
-        Thu, 14 Apr 2022 10:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649932261;
-        bh=anlZExuz/RXUpLpMBn9p6PwQT+FCiIUgNRUHvHy6288=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wpx5v7klIT/k74ydnZ5+cTvjax9JDVP1wgsofhEur3Hi0gHlxURy5AS37Pr0lO7HV
-         aXAM/0qVQRakT9t6m4mKV+61iangNeqtTGPT3v1mfc6JKmoSnanBbLAeCk33TzLsvC
-         K8Me60uQnCKb63y9wKIMAP2IGoloakUdVuN4iwN28SLCEDWmQ79JwWynb5ro/bPiSL
-         1XKWKziRmbhuWmgc7L7jLnE0TjWmG/Vav5RgPwhGUEro5NvdMCS3dlxs4tR5I/+08+
-         +pJwW+E/aVt/xRtA9eaN7ayBdgJq5ku+XW18+54BXEdMVSzftQQz8ZfbNqM776y3K3
-         QSs1PT9HVd9aQ==
-From:   Will Deacon <will@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang
-Date:   Thu, 14 Apr 2022 11:30:52 +0100
-Message-Id: <164992995404.58572.4358662722112998061.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220413181420.3522187-1-nathan@kernel.org>
-References: <20220413181420.3522187-1-nathan@kernel.org>
+        Thu, 14 Apr 2022 06:34:51 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B986542D;
+        Thu, 14 Apr 2022 03:32:26 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23EAWGiU118299;
+        Thu, 14 Apr 2022 05:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649932336;
+        bh=ddddJ7TATIJxXslnlLmWzV1vziFazwEocG5NL9EQV8w=;
+        h=From:To:CC:Subject:Date;
+        b=u+5BGrV0RJ0I4Nq7AtT0at+I6eVFcsc2qPSfWGj3sfe/fsu0jb177oD5c2LlmMMLi
+         ys3Evv1PgJo2fmtKHyB+pbsS1s+FurjWflz/KME0bLxFLjJo0Z1Lj6jvI9n9SU5nWY
+         U6isoXamIMgGfMiVRNpNbLQqhEO+BG81lyxS230w=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23EAWGOY011608
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 14 Apr 2022 05:32:16 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 14
+ Apr 2022 05:32:16 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 14 Apr 2022 05:32:16 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23EAWC6W097041;
+        Thu, 14 Apr 2022 05:32:13 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] AM62: Add support for AM62 USB wrapper driver
+Date:   Thu, 14 Apr 2022 16:02:07 +0530
+Message-ID: <20220414103211.16202-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 11:14:21 -0700, Nathan Chancellor wrote:
-> Will and Anders reported that using just 'CC=clang' with CONFIG_FTRACE=y
-> and CONFIG_STACK_TRACER=y would result in an error while linking:
-> 
->   aarch64-linux-gnu-ld: .init.data has both ordered [`__patchable_function_entries' in init/main.o] and unordered [`.meminit.data' in mm/sparse.o] sections
->   aarch64-linux-gnu-ld: final link failed: bad value
-> 
-> This error was exposed by commit f12b034afeb3 ("scripts/Makefile.clang:
-> default to LLVM_IAS=1") in combination with binutils older than 2.36.
-> 
-> [...]
+The following series of patches add support for AM62 USB wrapper driver
+and its corresponding bindings.
 
-Applied to arm64 (for-next/fixes), thanks!
+changes since v3:
+- Removed the VBUS_VALID interrupt servicing as mode valid bit
+  need not be switched based on the connect/disconnect event.
+  The mode valid bit is being set during probe and cleared
+  during remove
+- As VBUS_VALID interrupt is not being used, removed the interrupts
+  property from the bindings. As there is change in the dt-bindings
+  I did not pick the reviewed-by tags from the earlier version of
+  the series.
 
-[1/1] arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang
-      https://git.kernel.org/arm64/c/45bd8951806e
+changes since v2:
+- Removed the implementation of detecting the role from the wrapper
+  driver and moved the implementation to using linux,extcon-usb-gpio
+  driver for role detection.
+- Updated the binding documentation and example to reflect the same.
 
-Cheers,
+changes since v1:
+- Fixed the error with dev_pm_ops uninitialization, in patch 2.
+  This was reported by kernel test bot
+- In patch 1, made correction in grammer of clocks property description
+  and added maxItems in the interrupts property based on comments
+  received from Roger
+- In patch 1, corrected the title, fixed the description of
+  ti,syscon-phy-pll-refclk, added pattern properties and child node
+  in the example based on the comments from Krzysztof. 
+
+Aswath Govindraju (2):
+  dt-bindings: usb: Add documentation for AM62 USB Wrapper module
+  drivers: usb: dwc3: Add AM62 USB wrapper driver
+
+ .../devicetree/bindings/usb/ti,am62-usb.yaml  | 103 ++++++
+ drivers/usb/dwc3/Kconfig                      |   9 +
+ drivers/usb/dwc3/Makefile                     |   1 +
+ drivers/usb/dwc3/dwc3-am62.c                  | 332 ++++++++++++++++++
+ 4 files changed, 445 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-am62.c
+
 -- 
-Will
+2.17.1
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev

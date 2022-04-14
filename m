@@ -2,164 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D011F50095C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FC2500953
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241512AbiDNJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S241544AbiDNJKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241325AbiDNJKH (ORCPT
+        with ESMTP id S241521AbiDNJKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:10:07 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B7E6D962;
-        Thu, 14 Apr 2022 02:07:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 148F51F4778C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649927262;
-        bh=SGjdvm2jxn/wrvUxD5fVBXM2K5YNhQcQ079/GSOHMTM=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=m1VxcuIEimr1pL6AXUPBpixE9KfydqWy+Yvf7QNvQCWgfZo4BqCHbv/VeS0fgkaK7
-         1ce043sto+XbA7wCsuXlYMm46Pjr3b0K6ijEEEcnMa6OIa5IhG6naZZ0B0mS1aC/qL
-         2ufKmOPdsV2BBhhBlrzCxZjPMf+FDyA8YmhcGALPXXotqpUQEmZcuWAtJiz6ZUdJAy
-         Uh0QoNEw2Z//xRPlNnYNYWhQ9ZlX6/aPt4WMKtsKe5/fejMMQn6EujuyDQtbjSCmqE
-         Lzbad2vaSYyKkCJMUe1hKffhFCSqfhhPys50gVT1hhVV6JWn0OCVD5fngPfWivyCTN
-         jgs2mwU7cXpgQ==
-Message-ID: <fdd5ac4e-bff1-af65-23f8-d73d6b5306e7@collabora.com>
-Date:   Thu, 14 Apr 2022 14:07:30 +0500
+        Thu, 14 Apr 2022 05:10:11 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3176D962;
+        Thu, 14 Apr 2022 02:07:47 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso48363707b3.10;
+        Thu, 14 Apr 2022 02:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=du9kKSyZ8/iyPYFYOsIaQUov6kGR9ZIsAFs+iWQKGeE=;
+        b=F1Zm9GWuALLdmCRFLyjKZXBMImjjZWjGYMZa6T0Lvy+l/3R+klqHuyhvmq57oK8ilf
+         D/Rf57UIwsxvUSzPtnI7z/BubVJwUyl7Zoq854nzvjQyjPgA2Q3jNsqBX3RcUVU8G3ki
+         ekM+iscNfZ0wSf8eDe3O+raroMVcz4XNrng1odjeirUcoxWjy+b/omiaH35wUDIteTvr
+         sUkHP1tj2SQb0/QoeRF677h5wYes1Hll8MK7HAAA2dbMW8/MQGaVrUotcwyF71Glb58W
+         t2IQM2BfsxiMws/TmWvrZA9nIwNwU8/C300ULYgPGOQRmvaMmlNFSDv9FJVDFVh2p27I
+         gQUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=du9kKSyZ8/iyPYFYOsIaQUov6kGR9ZIsAFs+iWQKGeE=;
+        b=GSlIQyNRZqebljdSSUvTmD3zlydwlsdKi9Fnw9j/YeZRo6M3BKOHHzNNPQbnciJUm4
+         Gx5DUU8VhkwlT9ZTJIIPuaD1SWvKfVp8Ni41ab3mhlqn9EBz0A28zcSILgfQI1muZU1t
+         ziItnSHPlIlOeYDbaQdWQr/b1uk1PjkE5tdlHJ02kPdyvHmJsAoMvtyNx3iN97Z/kP9F
+         uxbSoa0LlMB7RvS+yPt8gBCtZtOPzzlzZrEtfu6gJNgtPjdjWOp9olOdBDl55UDaAhtP
+         dCUxNSk+qdofpuL2oPaXGxAGMDTf++Jsr+Y+imOPST8AjYGRiSYc7o6+3IpRxDjB6P7l
+         Eyyg==
+X-Gm-Message-State: AOAM531e75HaGsJrLvu/yLomCKPJrI3YdJewN2/bI2JBzdi/TMzCIRPA
+        dh8o4lE/g0PDhQh0WX3fZfjmEZOI2V6Sl6DcxtSV/lrWXI0=
+X-Google-Smtp-Source: ABdhPJyDWj6uTxEyHSC/A79SvoyTUflzd7mvIcnj3ZJm/Gun9HLsmkI18Cg5MvBTXESQMQuygmpOwEErmMRyqfKOLXI=
+X-Received: by 2002:a81:178e:0:b0:2eb:ed49:8241 with SMTP id
+ 136-20020a81178e000000b002ebed498241mr1166903ywx.417.1649927266264; Thu, 14
+ Apr 2022 02:07:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     usama.anjum@collabora.com, Len Brown <lenb@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH RESEND v6] platform: x86: Add ChromeOS ACPI device driver
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <Yk7aeAcKIBrTupcq@debian-BULLSEYE-live-builder-AMD64>
- <708fb1ec-4e57-7a1d-b0a0-a3a10b3cacf3@redhat.com>
- <CAJZ5v0g2UDOR3mYsdqnPcpYgmecY706YQcTKTWMRtezkK0sfaQ@mail.gmail.com>
- <e25f5599-10f5-90b7-227a-01616f722cca@redhat.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <e25f5599-10f5-90b7-227a-01616f722cca@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220330132152.4568-1-jiangshanlai@gmail.com> <20220330132152.4568-4-jiangshanlai@gmail.com>
+ <YlXrshJa2Sd1WQ0P@google.com>
+In-Reply-To: <YlXrshJa2Sd1WQ0P@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 14 Apr 2022 17:07:34 +0800
+Message-ID: <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 6:40 PM, Hans de Goede wrote:
-> Hi,
-> 
-> On 4/11/22 15:37, Rafael J. Wysocki wrote:
->> On Mon, Apr 11, 2022 at 3:26 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>>
->>> Hi,
->>>
->>> On 4/7/22 14:35, Muhammad Usama Anjum wrote:
->>>> From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
->>>>
->>>> The x86 Chromebooks have ChromeOS ACPI device. This driver attaches to
->>>> the ChromeOS ACPI device and exports the values reported by ACPI in a
->>>> sysfs directory. This data isn't present in ACPI tables when read
->>>> through ACPI tools, hence a driver is needed to do it. The driver gets
->>>> data from firmware using ACPI component of the kernel. The ACPI values
->>>> are presented in string form (numbers as decimal values) or binary
->>>> blobs, and can be accessed as the contents of the appropriate read only
->>>> files in the standard ACPI device's sysfs directory tree. This data is
->>>> consumed by the ChromeOS user space.
->>>>
->>>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->>>> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>>
->>>
->>> Thanks overall this looks pretty good to me.  The only remark which
->>> I have is that I would like to see the Kconfig symbol changed
->>> from CONFIG_ACPI_CHROMEOS to CONFIG_CHROMEOS_ACPI to match the
->>> filename.
->>>
+On Wed, Apr 13, 2022 at 5:14 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Mar 30, 2022, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> >
+> > Currently pae_root is special root page, this patch adds facility to
+> > allow using kvm_mmu_get_page() to allocate pae_root shadow page.
+>
+> I don't think this will work for shadow paging.  CR3 only has to be 32-byte aligned
+> for PAE paging.  Unless I'm missing something subtle in the code, KVM will incorrectly
+> reuse a pae_root if the guest puts multiple PAE CR3s on a single page because KVM's
+> gfn calculation will drop bits 11:5.
 
-I'll rename in next version.
+I forgot about it.
 
->>> CONFIG_ACPI_CHROMEOS to me suggests that this is an ACPI subsystem
->>> Kconfig option which, with the driver living under
->>> drivers/platform/x86 it is not.
->>>
->>> There is no need to send a new version for this, if you agree
->>> with the change let me know and I can change this while merging
->>> the driver.
->>>
->>> Rafael, before I merge this do you have any (more) remarks
->>> about this driver?
->>
->> I'm not sure why it has to be an acpi_driver.
->>
->> I think that the generic enumeration code creates a platform device
->> for this ACPI device object, so why can't it bind to that platform
->> device?
->>
->> Generally speaking, IMV we should avoid adding drivers binding
->> directly to ACPI device objects, because that is confusing (it is kind
->> of like binding directly to an of_node) and it should be entirely
->> avoidable.
-> 
-> Ah I missed that, good point.
-> 
-> Muhammad can you give turning this into a platform driver a try please?
-> 
-> Note this will change all the sysfs attribute paths from:
-> 
-> /sys/bus/acpi/devices/GGL0001:00/...
-> 
-> to:
-> 
-> /sys/bus/platform/devices/GGL0001:00/...
-> 
-> and the ABI documentation should be updated accordingly.
-> 
+>
+> Handling this as a one-off is probably easier.  For TDP, only 32-bit KVM with NPT
+> benefits from reusing roots, IMO and shaving a few pages in that case is not worth
+> the complexity.
+>
 
-Thank you for comments and directions. They mean a lot. I'll make the
-changes in next version.
+I liked the one-off idea yesterday and started trying it.
 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
+But things were not going as smoothly as I thought.  There are too
+many corner cases to cover.  Maybe I don't get what you envisioned.
 
--- 
-Muhammad Usama Anjum
+one-off shadow pages must not be in the hash, must be freed
+immediately in kvm_mmu_free_roots(), taken care in
+kvm_mmu_prepare_zap_page() and so on.
+
+When the guest is 32bit, the host has to free and allocate sp
+every time when the guest changes cr3.  It will be a regression
+when !TDP.
+
+one-off shadow pages are too distinguished from others.
+
+When using one-off shadow pages, role.passthough can be one
+bit and be used only for 5-level NPT L0 for 4-level NPT L1,
+which is neat.  And role.pae_root can be removed.
+
+I want the newly added shadow pages to fit into the current
+shadow page management and root management.
+
+I'm going to add sp->pae_off (u16) which is 11:5 of the cr3
+when the guest is PAE paging. It needs only less than 10 lines
+of code.
+
+Thanks.
+Lai

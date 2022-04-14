@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4710A501D7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB06D501D7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344874AbiDNVeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S1345625AbiDNVeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiDNVeA (ORCPT
+        with ESMTP id S1345484AbiDNVeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:34:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C311F63B;
-        Thu, 14 Apr 2022 14:31:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B98DB82B9B;
-        Thu, 14 Apr 2022 21:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2A8C385A5;
-        Thu, 14 Apr 2022 21:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649971892;
-        bh=h2CDvJ935gRrph03sTEfqDjtYnF3c4eTNU0nFlpfIDo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Up+6imjj/eMa46S04EnplwZ72nsvjrSC5YV3qyxm9pnrLsp0mdQ9TwX76ocqJ9SCY
-         RP41SFqMTmrf7d7o/c7ShVRxoKW3EC9uUAfSkKoWpBQfRHXPPbxPkrQPltJGvM9bR4
-         wiaW63XvgREN8QkBXQm0zq/s1P3AzVEpNgGynS1p5oae98C+ORn7KaXpDKfGt9kxVY
-         k5jBjt+lwHx9FoUd/bZUZzXlR3CQYV3Jky0J9IOyhRmg9Zi0046/J7ck5QJ+F9xS2t
-         JUJJVirrbVrZLo0SNKw3xtfcr0L27RHJBF39WbXPgHKE8DHvTWGKzhYI7EkRcP5WJM
-         eagGITeKrI4qQ==
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ebf4b91212so68378327b3.8;
-        Thu, 14 Apr 2022 14:31:31 -0700 (PDT)
-X-Gm-Message-State: AOAM531AmBzhdjlFVgDK6Fq5mN7BxnGgOHZdy4Bye61l9RIye5f75eL2
-        VIRnHp9QvZy+rRGZGZTSdZImsaWiH+kUhQNEaFo=
-X-Google-Smtp-Source: ABdhPJwoOdn0th0XbdegVRBdNkqRR9sYSJqbu0HlnrvstgzzLo278bhR6okJlsLL7beUIEU1zwYtNny56Ms3lI7RT/4=
-X-Received: by 2002:a81:5087:0:b0:2ef:33c1:fccd with SMTP id
- e129-20020a815087000000b002ef33c1fccdmr3664971ywb.73.1649971891018; Thu, 14
- Apr 2022 14:31:31 -0700 (PDT)
+        Thu, 14 Apr 2022 17:34:17 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F7323BF3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:31:51 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 2so6245010pjw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tgK86hMG//HjfRr9J5TwzgXURgYX1s8RvV8/jTvjJYw=;
+        b=YN3OVTQL8wtJWgsUgLD1/s3/NtlwJPIYw5qezMLHAXOyRjBYCcewUPYCgLhO7alpbP
+         AOtcg8+0Pqksl8l8ezIrKM8G6UyaJ/Aogz8EYeSOZbX1sfQIDaCnCPLInwX9+F0OnXS3
+         A3Mn7KodlK3jPPdJon2blcRiw7xfl9E86Lczx5dvlod2ueoHLUSi0UzVGLrI/F6KKGBt
+         buoC8oui8cD86jyJQJvI1EjnqZPMwxsgNCo88hYFptVqUEZJNozyaMPhfHQCggK4K67g
+         lXUit/i3AOyy/UvGb6GWNo/nTqxBahLOPr7bLeT3YbLLiM32D9Q34D1Q7Ax1lFBXGS6v
+         F0PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tgK86hMG//HjfRr9J5TwzgXURgYX1s8RvV8/jTvjJYw=;
+        b=L2i4S/Hld1hlgGgQpkLTAM8ABwiiLyeSGNEMaZS8B1qMevDLmafmfIlKBeMJ3StnsY
+         OiQS+hhUcXWZT2xh7ngM65MryFdXcE3pz60d3UqeIMgDMaVKn3LKpV+4rc/KzpzlxCtd
+         b4Lrd6RQ+E7Xyneh6GNjWbEv6eNgUnf6/ydPWyywwVTdZiiM6MT1uBOBU2dK8csuJEH4
+         cXiwJv631pbr+FGkeT08yjMzqp4c6heX0B5OG0nsqSu5dBEcZ7XZ3iFZs/L8V9kb/iww
+         aU6Yh1w7bOacHqtgDxakAp2JL1PsVBPPnGVcTo9pm/+SHW558/uwWk9sfMzF3VjBtMKY
+         +uyQ==
+X-Gm-Message-State: AOAM532MIhPzslFS+WpP2DUf5THOf0uvLwB77QvFMuED0I5UQlGjlpcC
+        plXkBCfIhbbfv3weNtKmYsRlr9EILI3FWQ==
+X-Google-Smtp-Source: ABdhPJxJlElCuqPlYrpiKX7K8Z+B9LpesYf90WrnsrpSabzgcIMmc2ZEW/cyieCHqlD4vlTe0A7+Dw==
+X-Received: by 2002:a17:90a:e7cf:b0:1cd:3eb9:ce79 with SMTP id kb15-20020a17090ae7cf00b001cd3eb9ce79mr589946pjb.88.1649971910824;
+        Thu, 14 Apr 2022 14:31:50 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.64.97])
+        by smtp.gmail.com with ESMTPSA id 5-20020a631045000000b0039d942d18f0sm2673706pgq.48.2022.04.14.14.31.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 14:31:50 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 0/2] arm64: dts/qcom: Enable uSD card support for SA8155p-ADP board
+Date:   Fri, 15 Apr 2022 03:01:37 +0530
+Message-Id: <20220414213139.476240-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220414195914.1648345-1-song@kernel.org> <20220414195914.1648345-4-song@kernel.org>
- <YliFO2sDv31j5vLb@bombadil.infradead.org> <CAPhsuW42Dn2y9skhdJAK1fp9CFA06tpzG=6gMxeTobBj6xifPg@mail.gmail.com>
- <YliOC455r6XmE24Q@bombadil.infradead.org>
-In-Reply-To: <YliOC455r6XmE24Q@bombadil.infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 14 Apr 2022 14:31:18 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5=BfCoWqFgnsLu-X+8FriJCxQ80+aS_9t6fFB1eGCvRQ@mail.gmail.com>
-Message-ID: <CAPhsuW5=BfCoWqFgnsLu-X+8FriJCxQ80+aS_9t6fFB1eGCvRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf RESEND 3/4] module: introduce module_alloc_huge
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>, imbrenda@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,43 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 2:11 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Thu, Apr 14, 2022 at 02:03:17PM -0700, Song Liu wrote:
-> > Hi Luis,
-> >
-> > On Thu, Apr 14, 2022 at 1:34 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Thu, Apr 14, 2022 at 12:59:13PM -0700, Song Liu wrote:
-> > > > Introduce module_alloc_huge, which allocates huge page backed memory in
-> > > > module memory space. The primary user of this memory is bpf_prog_pack
-> > > > (multiple BPF programs sharing a huge page).
-> > > >
-> > > > Signed-off-by: Song Liu <song@kernel.org>
-> > >
-> > > See modules-next [0], as modules.c has been chopped up as of late.
-> > > So if you want this to go throug modules this will need to rebased
-> > > on that tree. fortunately the amount of code in question does not
-> > > seem like much.
-> > >
-> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
-> >
-> > We are hoping to ship this with to 5.18, as the set addresses some issue with
-> > huge page backed vmalloc. I guess we cannot ship it via modules-next branch.
-> >
->
-> Huh, you intend this to go in as a fix for v5.18 (already released) once
-> properly reviewed?  This seems quite large... for a fix.
->
-> > How about we ship module_alloc_huge() to 5.18 in module.c for now, and once
-> > we update modules-next branch, I will send another patch to clean it up?
->
-> I rather set the expectations right about getting such a large fix in
-> for v5.18. I haven't even sat down to review all the changes in light of
-> this, but a cursorary glance seems to me it's rather "large" for a fix.
+Changes since v1:
+-----------------
+- v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20220403144151.92572-1-bhupesh.sharma@linaro.org/
+- Fixed the IOMMU sid value, to ensure that no ADMA error is observed
+  when the microSD card is detected on the board.
 
-Yes, I agree this is a little too big for a fix. I guess we can discuss whether
-some of the set need to wait until 5.19.
+This patchset enables the microSD card support for SA8155p-ADP board
+via the SDHC2 controller found on the SoC.
 
-Thanks,
-Song
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
+
+Bhupesh Sharma (2):
+  arm64: dts: qcom: sm8150: Add support for SDC2
+  arm64: dts: qcom: sa8155p-adp: Add support for uSD card
+
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 68 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi     | 45 ++++++++++++++++
+ 2 files changed, 113 insertions(+)
+
+-- 
+2.35.1
+

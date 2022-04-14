@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4696E500C52
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E1B500C56
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiDNLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S242758AbiDNLrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiDNLpf (ORCPT
+        with ESMTP id S230187AbiDNLrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:45:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B0A56407
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:43:10 -0700 (PDT)
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M5fQq-1nYvTD28fS-007AXW for <linux-kernel@vger.kernel.org>; Thu, 14 Apr
- 2022 13:43:09 +0200
-Received: by mail-wm1-f46.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso2987745wml.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:43:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533DzTwEJ6tneHnpMJqWZckocWPQ/b33zL1UuOSeeuJXtzfR9NZ8
-        aP+iqp6WNCneTnmxMePpIO7q/307lVssxZtD/N0=
-X-Google-Smtp-Source: ABdhPJwyuaHiBqp25K63KJ94LjNVOLjmoQMGgnJK2Uo34IKm32rZZPdlVgnEeNBcFHyaIKdZ+bFPSxjnzUfcUiKGIBA=
-X-Received: by 2002:a05:600c:25c5:b0:38f:f0b9:4c8c with SMTP id
- 5-20020a05600c25c500b0038ff0b94c8cmr2925041wml.20.1649936588976; Thu, 14 Apr
- 2022 04:43:08 -0700 (PDT)
+        Thu, 14 Apr 2022 07:47:23 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD6C3CA49
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:44:58 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id t25so5976049edt.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zx0fCIbKblbyaHSD8kB0xZUv7itAhP6P0FADRJhSr/k=;
+        b=SJxJ6GD0fYnPbXn2N7hL3uJALox98ts/6qgKxJmGny5r7fLefAfzlrvSFV081uRwkh
+         igkYes+yS4TN/C/KyYcXWz+qm5g2tJfqgCCLh3VHgSobaNs0/kfZGA6Rhwfsj3g68Deb
+         1Vt9zhQDQYwj5YuWqJ3ucVCYj6T73P2SA32pCk2WCTwTfx7K+UvhDdpb/qlG/MnY3QNx
+         BuEAbyq67D2e0kqsIiPA3c10YI/zauzJhYoleZNgJ2PhbZ7aiNVGxDUzYaLx+roguxKw
+         kT6iSbJceueLTywTbw3xD8//cC8ulehh5mSshPRLg1E8iS2ZVchp90UifjeRoZh8flQx
+         w3zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zx0fCIbKblbyaHSD8kB0xZUv7itAhP6P0FADRJhSr/k=;
+        b=ImB63Vi7dNQHPnEfBaOJUdx0H+qOOnCOIK2YuAaAZVhUcEIbTl5S2+2/nLy8zU0w+U
+         A9Y4IrY7x9iehT7ICcnbxuLZw9tCuh/0H4LJCY1+WMoLz8rzym1f1ZnwvT6MvWE+miX/
+         xp3RZ35+PYEEK129WvvlHR4hK9YQHf9ksbqT485kpKP/bvh8ik0M/qggF7E9Jsz7WjKL
+         wMNvERjq+tuR8yeHb5KlCD5V9AcmZf76rNGNRFgCVRHsWlt6jUwj0Z0gbgB8HvGTDe9R
+         lglxudADkpenXqodb+wNvscJ1h/1rTfJFbLEaUtb/sCpO1oFMXWdbeAa/2Zw7MSThSff
+         aX3A==
+X-Gm-Message-State: AOAM533aM5bLHqqmZqjgFU/iK43CmPXBRaCAW6b9CGABc1wmkr4e/tJm
+        UQuVKakXCAGgEyUlDQ6mrOY6tg==
+X-Google-Smtp-Source: ABdhPJyJE+BERDLwaYd0zLhEJkQhTKTg9UHFI3rbNm0KybcLkz4RcpahDLrS/C2g4PN1uwKcG5Ydsw==
+X-Received: by 2002:a05:6402:d0a:b0:421:10e6:2ecc with SMTP id eb10-20020a0564020d0a00b0042110e62eccmr2087217edb.329.1649936697069;
+        Thu, 14 Apr 2022 04:44:57 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id h22-20020a056402281600b004206bd9d0c6sm917388ede.8.2022.04.14.04.44.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 04:44:56 -0700 (PDT)
+Message-ID: <9d35e76e-5d98-b2d8-a22c-293adcbaadf0@linaro.org>
+Date:   Thu, 14 Apr 2022 13:44:55 +0200
 MIME-Version: 1.0
-References: <20220414014010.28110-1-palmer@rivosinc.com>
-In-Reply-To: <20220414014010.28110-1-palmer@rivosinc.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Apr 2022 13:42:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=iBLDC5X-+OEUUvQmcWpPXkuBnk__6g9GNORo9k0zBg@mail.gmail.com>
-Message-ID: <CAK8P3a1=iBLDC5X-+OEUUvQmcWpPXkuBnk__6g9GNORo9k0zBg@mail.gmail.com>
-Subject: Re: [PATCH v2] RISC-V: Add CONFIG_{NON,}PORTABLE
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:sS96UWakCliuiVL0Dcsz2HDVK1h7JTR/Mw6cbsokzcgqz3hszSd
- cEmSlArl3DYs5H0AfujQ/iioPY/zED7zz5tHHLUQDMDYH6OhV+oRH39yETn0hvsBlqtsNY9
- 5V+wvq9rOCLXyTbw+v02yBiB/dL9Iw4ZbtM/s9nM2LYGaRl5m1tQfhJmDclRG2WGglXsbSe
- Rens9/gQtM3HyTQygoIPg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZKIcZz3zqxI=:Zleej6AauDnsnh/Wya29W4
- wet80YXpLQs13XBRkESsHQodQ7yCfgnJuEd1CxjIJEa5h0RZJ9T2j71L30ait5ytrwaJz2c9g
- mCEGMZb/dhFCzS2I4F+WgbEAGM3GLbrWy/63oOY77nEEPCk3m36icLLy4vvagMYWb25D8KqdL
- xFpZ6BPISTV8HEGGcaGK21xjNxy5uzryAaDi84wv6BdDjxawpxVKlsU5iX5oYN2GfPr/GM+09
- E2o5CeF3Hg3zDXhvmMuy65l4uRBklpL++olMExOwKoZl2RfXOLIRGSOMTv0uGvc+QOpm57XFv
- qRuT6LlRPz7Zhb3tbmMIpbmwfF/lGIJuHoesy4Ivsa8vBxFuvKtL1V1WG2wNrB45WKW5c7Mlr
- JOdeS20th7iCVVPUUjdCQYlUsw0U3H07RLGLYd+lmy+ysVmx4R4wYz5GZ7mV01ZXY5Ym6FNt6
- fGd+ANsQLxrkBCKLk57Ih+lksCBHVZa6+aCZhulwbyM2ZL8MOfH7dfQV5qEqXTyRvBHVzGJ9/
- H/6h9JOWbGUjaIG80163WQymNDIArRMiA0W6zbXczM/Yb1D+9BQJgYQC48ZluycYCMGmbEksZ
- WAu/koDMVLIRsN7/L561yj9bxEK8ua1DJ8JxFOOsFk9tp7whBhFehVCV+kifhTZUjPLi8xjFU
- Ueg7iEppAQQntmDQsC6FLQUAyED1ZUsbJz1ylHp8O/+txhY4Hf9YOFLmiZ/nMg3RO1X18mybZ
- Vt+26q1Q03uhW2o0GZrkatdw/whmfMW5cq4Q47HINkN9C3HYazAjffFxJpQ9flhhdyF8kqMMj
- gUiMNIFjnG/6ntegQFCVZv6VeMmADUoDyNHVdHAENE5OelF3WE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_MSPIKE_ZBI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: dmaengine: qcom: gpi: Add minItems for
+ interrupts
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220414064235.1182195-1-vkoul@kernel.org>
+ <0598d1bb-cd7c-1414-910c-ae6bedc8295d@linaro.org> <Ylf2gsJ+Ks0wz6i3@matsya>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Ylf2gsJ+Ks0wz6i3@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:40 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> The RISC-V port has collected a handful of options that are
-> fundamentally non-portable.  To prevent users from shooting themselves
-> in the foot, hide them all behind a config entry that explicitly calls
-> out that non-portable binaries may be produced.
->
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+On 14/04/2022 12:25, Vinod Koul wrote:
+>>>        Interrupt lines for each GPI instance
+>>> +    minItems: 1
+>>
+>> This should be some real case minimum, not just 1. Unless really only
+>> one interrupt is also possible in existing variations?
+> 
+> So that depends on the channels available to use which can be worst case
+> of 1. Maximum is 13.. Most of the controllers are between 12-13, but we
+> dont want to change binding in future if controller has lesser channels
+> right?
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+If the choice is per SoC-controller, then the best would be to limit in
+allOf:if:then. However maybe the number of channels depends also on
+other factor (e.g. secure world configuration)?
+
+
+Best regards,
+Krzysztof

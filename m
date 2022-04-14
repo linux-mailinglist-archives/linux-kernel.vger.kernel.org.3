@@ -2,132 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E545013B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D675012B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240590AbiDNNeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S1346490AbiDNN5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244335AbiDNN0B (ORCPT
+        with ESMTP id S244763AbiDNN2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:26:01 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655519D4F4;
-        Thu, 14 Apr 2022 06:19:53 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 6c1f1628fb082c6b; Thu, 14 Apr 2022 15:19:51 +0200
-Received: from kreacher.localnet (unknown [213.134.181.101])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6971B66BE88;
-        Thu, 14 Apr 2022 15:19:46 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3 8/9] PCI/PM: Avoid redundant current_state update
-Date:   Thu, 14 Apr 2022 15:18:15 +0200
-Message-ID: <1844408.CQOukoFCf9@kreacher>
-In-Reply-To: <5838942.lOV4Wx5bFT@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher> <5838942.lOV4Wx5bFT@kreacher>
+        Thu, 14 Apr 2022 09:28:06 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39B3A5E95;
+        Thu, 14 Apr 2022 06:20:52 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id t67so9385826ybi.2;
+        Thu, 14 Apr 2022 06:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Q/gbAEREb62A8JevuFxQMwwR0Kq1AX0d797Hsd3s/CI=;
+        b=h+0BbF6sL4P9IeOcFTP3fUX4pLFM2G+jWWL7otAPjya+NOFgkW/ui40SHY/sZAhHS4
+         qmoS/HCiMFZ4xJbootTmWiqv5CVvquVUizsFTmMAXk6R9UMr+wniH/k+IO1f54So0cBk
+         hKGJe6FmDckivfj3yze2asz/Dp13VnroJOR7SM/s/a28Ejtw/dK5n6cQLTSmQuBb6F9G
+         1jN+nNtyU2+tHCYV8Zyq0uptEJkrXSBpLVvthDv6On6WtT49dlHByS2f/X/sWnODoKrc
+         C1QQuvIS2R2U9J4wfIj+juph9RscMlH9ugpiNc70/1F2gfgO8AibxxY9/lZgIHHdnCM8
+         LKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Q/gbAEREb62A8JevuFxQMwwR0Kq1AX0d797Hsd3s/CI=;
+        b=7kRkR3LXLvwsMY4kfT462LGssc46rn3d+KPvRN6HN9CikvnaHk++5o9pmRkkhQX+jt
+         d8UFZGTUEmvn1mFsqKrSDEJPBxjc48TMZxOmZloN7JVt02fuBC/JRNpzhRtrj8ujP7NL
+         A/41t+y/vAMSioS6rTedU31gJG+QK7Q/EKm64HHThjgV4XcOff5v8ULtRzJsX0wo7VgO
+         ENh+iuucop/3zKT8LHZwVW+CpGnLFVvkiBTDwtYjqJwQGBEkp+EGqO81I1Z/DXSiXRB4
+         s4fcp4hd5vv2ep6/kr7l9UjUxAJjVGHmVqcr8uRFbCv9FDAAOV7gFhjN0SdwczsFG7vS
+         vGDA==
+X-Gm-Message-State: AOAM530TMKM0bgjPOolEFPdQyInm/+DxODjpojtnY61etFzqjfo7DNUn
+        6XPqY+G4kziEwvyBgEiNOytF8L2/XJDc8nGakP0=
+X-Google-Smtp-Source: ABdhPJzA/6wH5wYipanebt4UPB8IhFL/56DXJMDetAOQZrPeoPqghdPu3W8hC1001/DfVHUEum/cKtygewIJYc7kpes=
+X-Received: by 2002:a25:cf11:0:b0:641:bfc8:4fc7 with SMTP id
+ f17-20020a25cf11000000b00641bfc84fc7mr1733774ybg.366.1649942451985; Thu, 14
+ Apr 2022 06:20:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
+ <Yla01C6MJbaieIwR@sirena.org.uk>
+In-Reply-To: <Yla01C6MJbaieIwR@sirena.org.uk>
+From:   =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
+Date:   Thu, 14 Apr 2022 21:18:34 +0800
+Message-ID: <CAGcXWkx6fZZ3kMnGuXtAA+WatJMf1dq_vd6fiFAocH9b03CWcg@mail.gmail.com>
+Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
+        "lh.kuo" <lh.kuo@sunplus.com>, nathan@kernel.org,
+        Tom Rix <trix@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.101
-X-CLIENT-HOSTNAME: 213.134.181.101
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddutddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
- ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Mr.Mark :
 
-Notice that if pci_power_up() returns success early, without updating
-the given device's PCI_PM_CTRL register, because it has verified that
-the power state of the device is D0 already at that point, the
-pci_update_current_state() invocation in pci_pm_default_resume_early()
-is redundant.
+I will remove the variable "psim->lock" in the next patch
 
-Avoid that redundant call by making pci_power_up() return 1 when it
-has updated the device's PCI_PM_CTRL register and checking its return
-value in pci_pm_default_resume_early().
+Li-hao Kuo
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-
-v2 -> v3:
-   * Added R-by from Mika.
-
----
- drivers/pci/pci-driver.c |    5 +++--
- drivers/pci/pci.c        |   10 ++++++++--
- 2 files changed, 11 insertions(+), 4 deletions(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -553,8 +553,9 @@ static void pci_pm_default_resume(struct
- 
- static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
- {
--	pci_power_up(pci_dev);
--	pci_update_current_state(pci_dev, PCI_D0);
-+	if (pci_power_up(pci_dev))
-+		pci_update_current_state(pci_dev, PCI_D0);
-+
- 	pci_restore_state(pci_dev);
- 	pci_pme_restore(pci_dev);
- }
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1189,6 +1189,12 @@ static int pci_dev_wait(struct pci_dev *
- /**
-  * pci_power_up - Put the given device into D0
-  * @dev: PCI device to power up
-+ *
-+ * Use the platform firmware and the PCI_PM_CTRL register to put @dev into D0.
-+ *
-+ * Return 0 if invoking the platform firmware was sufficient to put @dev into D0
-+ * (and so the PCI_PM_CTRL register was not updated), or 1 if it was necessary to
-+ * update the PCI_PM_CTRL register, or -ENODEV if the device was not accessible.
-  */
- int pci_power_up(struct pci_dev *dev)
- {
-@@ -1244,7 +1250,7 @@ int pci_power_up(struct pci_dev *dev)
- 		udelay(PCI_PM_D2_DELAY);
- 
- 	dev->current_state = PCI_D0;
--	return 0;
-+	return 1;
- 
- fail:
- 	pci_err(dev, "Unable to change power state to D0, device inaccessible\n");
-@@ -1294,7 +1300,7 @@ static int pci_set_full_power_state(stru
- 	int ret;
- 
- 	ret = pci_power_up(dev);
--	if (ret)
-+	if (ret < 0)
- 		return ret;
- 
- 	if (!dev->pm_cap)
-
-
-
+Mark Brown <broonie@kernel.org> =E6=96=BC 2022=E5=B9=B44=E6=9C=8813=E6=97=
+=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=887:32=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, Apr 13, 2022 at 09:38:00AM +0800, Li-hao Kuo wrote:
+> > - remove spin_lock_irq and spin_unlock_irq in the irq funciton
+>
+> It looks like this is the only use of the lock so the variable can be
+> removed as well?

@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2064C501E3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BCA501E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346977AbiDNW2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S1347002AbiDNWaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiDNW2h (ORCPT
+        with ESMTP id S237769AbiDNWaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:28:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DBAAC1CB5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:26:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D47D23A;
-        Thu, 14 Apr 2022 15:26:10 -0700 (PDT)
-Received: from airbuntu (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C56E63F73B;
-        Thu, 14 Apr 2022 15:26:07 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 23:26:02 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
-        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        Wei Wang <wvw@google.com>
-Subject: Re: Scheduling tasks on idle cpu
-Message-ID: <20220414222412.r5gn66lyg6zo4gq3@airbuntu>
-References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
- <20220411233447.rcencjivkhyltyxm@airbuntu>
- <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
- <20220413235121.tzefvdvnwcipzo7p@airbuntu>
- <c831736b76c3411baea48a7c3e18cf4d@AcuMS.aculab.com>
+        Thu, 14 Apr 2022 18:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6539EC31EE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:27:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3A6062065
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:27:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58097C385A1;
+        Thu, 14 Apr 2022 22:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649975273;
+        bh=MBpl4HASgDpuvBWW8bIayulVJij/OO6OxIU8/eMItNk=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=kwwYvAT+hUOeQb0j1ryMOpbBwfOD21wxL6GIIXByq+gISY9JYbGitjpLXLszqCwNr
+         B+bd4+kIf4uv1QSDMYk2fZPmJEvf4qrOQeHKQ6jSJSS1GuQxkglkQX7kRSXRC8hhIO
+         R0z4vzbsjAONZnH50yPVMdwSZ3D8DIfQRupX9v9dQmsuELx3bwhRrnFq2SxxgFJsuW
+         VYORu+sYRFw3RgKp/2ZB8DIrHx+0EZDWGRYAbRORTb9bN30sCenA3g1623JcmFhQws
+         8JhlhFZmQJulqT6Awt1Nl1TukwrIFYS3Da7Dtr/PUwMq4hoMJEtbD/TvOsb8EiOR7J
+         57fiAL1muf6vQ==
+Date:   Thu, 14 Apr 2022 15:27:51 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 2/2 v2] f2fs: avoid infinite loop to flush node pages
+Message-ID: <Ylif523qTzL9eq1C@google.com>
+References: <20220411212141.1775589-1-jaegeuk@kernel.org>
+ <20220411212141.1775589-2-jaegeuk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c831736b76c3411baea48a7c3e18cf4d@AcuMS.aculab.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220411212141.1775589-2-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,142 +54,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/14/22 06:09, David Laight wrote:
+xfstests/generic/475 can give EIO all the time which give an infinite loop
+to flush node page like below. Let's avoid it.
 
-[...]
+[16418.518551] Call Trace:
+[16418.518553]  ? dm_submit_bio+0x48/0x400
+[16418.518574]  ? submit_bio_checks+0x1ac/0x5a0
+[16418.525207]  __submit_bio+0x1a9/0x230
+[16418.525210]  ? kmem_cache_alloc+0x29e/0x3c0
+[16418.525223]  submit_bio_noacct+0xa8/0x2b0
+[16418.525226]  submit_bio+0x4d/0x130
+[16418.525238]  __submit_bio+0x49/0x310 [f2fs]
+[16418.525339]  ? bio_add_page+0x6a/0x90
+[16418.525344]  f2fs_submit_page_bio+0x134/0x1f0 [f2fs]
+[16418.525365]  read_node_page+0x125/0x1b0 [f2fs]
+[16418.525388]  __get_node_page.part.0+0x58/0x3f0 [f2fs]
+[16418.525409]  __get_node_page+0x2f/0x60 [f2fs]
+[16418.525431]  f2fs_get_dnode_of_data+0x423/0x860 [f2fs]
+[16418.525452]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
+[16418.525458]  ? __mod_memcg_state.part.0+0x2a/0x30
+[16418.525465]  ? __mod_memcg_lruvec_state+0x27/0x40
+[16418.525467]  ? __xa_set_mark+0x57/0x70
+[16418.525472]  f2fs_do_write_data_page+0x10e/0x7b0 [f2fs]
+[16418.525493]  f2fs_write_single_data_page+0x555/0x830 [f2fs]
+[16418.525514]  ? sysvec_apic_timer_interrupt+0x4e/0x90
+[16418.525518]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
+[16418.525523]  f2fs_write_cache_pages+0x303/0x880 [f2fs]
+[16418.525545]  ? blk_flush_plug_list+0x47/0x100
+[16418.525548]  f2fs_write_data_pages+0xfd/0x320 [f2fs]
+[16418.525569]  do_writepages+0xd5/0x210
+[16418.525648]  filemap_fdatawrite_wbc+0x7d/0xc0
+[16418.525655]  filemap_fdatawrite+0x50/0x70
+[16418.525658]  f2fs_sync_dirty_inodes+0xa4/0x230 [f2fs]
+[16418.525679]  f2fs_write_checkpoint+0x16d/0x1720 [f2fs]
+[16418.525699]  ? ttwu_do_wakeup+0x1c/0x160
+[16418.525709]  ? ttwu_do_activate+0x6d/0xd0
+[16418.525711]  ? __wait_for_common+0x11d/0x150
+[16418.525715]  kill_f2fs_super+0xca/0x100 [f2fs]
+[16418.525733]  deactivate_locked_super+0x3b/0xb0
+[16418.525739]  deactivate_super+0x40/0x50
+[16418.525741]  cleanup_mnt+0x139/0x190
+[16418.525747]  __cleanup_mnt+0x12/0x20
+[16418.525749]  task_work_run+0x6d/0xa0
+[16418.525765]  exit_to_user_mode_prepare+0x1ad/0x1b0
+[16418.525771]  syscall_exit_to_user_mode+0x27/0x50
+[16418.525774]  do_syscall_64+0x48/0xc0
+[16418.525776]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-> > > That seems to be something different.
-> > > Related to something else I've seen where a RT process is scheduled
-> > > on its old cpu (to get the hot cache) but the process running on
-> > > that cpu is looping in kernel - so the RT process doesn't start.
-> > 
-> > I *think* you're hitting softirq latencies. Most likely it's the network RX
-> > softirq processing the packets. If this latency is a problem, then PREEMPT_RT
-> > [1] should help with this. For Android we hit this issue and there's a long
-> > living out of tree patch that I'm trying to find an upstream replacement for.
-> 
-> I suspect the costs of PREEMPT_RT would slow things down too much.
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
 
-It shouldn't.. If it did it's worth reporting to the RT folks, or consider
-whether some bad usage in userspace is causing the problem.
+Change log from v1:
+ - cover one more error case
 
-linux-rt-users mailing list is a good place to ask questions. The details are
-in the link to linuxfoundation realtime wiki page.
+ fs/f2fs/checkpoint.c |  8 +-------
+ fs/f2fs/f2fs.h       | 20 ++++++++++++++++----
+ fs/f2fs/node.c       |  2 ++
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
-> This test system has 40 cpu, 35 of them are RT and processing the same 'jobs'.
-> It doesn't really matter if one is delayed by the network irq + softirq code.
-> The problems arise if they all stop.
-> The 'job' list was protected by a mutex - usually not too bad.
-> But if a network irq interrupts the code while it holds the mutex then all
-> the RT tasks stall until the softirq code completes.
-> I've replaced the linked list with an array and used atomic_inc().
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 909085a78f9c..319903c2b34f 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -98,13 +98,7 @@ static struct page *__get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index,
+ 	}
+ 
+ 	if (unlikely(!PageUptodate(page))) {
+-		if (page->index == sbi->metapage_eio_ofs) {
+-			if (sbi->metapage_eio_cnt++ == MAX_RETRY_META_PAGE_EIO)
+-				set_ckpt_flags(sbi, CP_ERROR_FLAG);
+-		} else {
+-			sbi->metapage_eio_ofs = page->index;
+-			sbi->metapage_eio_cnt = 0;
+-		}
++		f2fs_handle_page_eio(sbi, page->index, META);
+ 		f2fs_put_page(page, 1);
+ 		return ERR_PTR(-EIO);
+ 	}
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index cd1e65bcf0b0..977826a22568 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -579,8 +579,8 @@ enum {
+ /* maximum retry quota flush count */
+ #define DEFAULT_RETRY_QUOTA_FLUSH_COUNT		8
+ 
+-/* maximum retry of EIO'ed meta page */
+-#define MAX_RETRY_META_PAGE_EIO			100
++/* maximum retry of EIO'ed page */
++#define MAX_RETRY_PAGE_EIO			100
+ 
+ #define F2FS_LINK_MAX	0xffffffff	/* maximum link count per file */
+ 
+@@ -1621,8 +1621,8 @@ struct f2fs_sb_info {
+ 	/* keep migration IO order for LFS mode */
+ 	struct f2fs_rwsem io_order_lock;
+ 	mempool_t *write_io_dummy;		/* Dummy pages */
+-	pgoff_t metapage_eio_ofs;		/* EIO page offset */
+-	int metapage_eio_cnt;			/* EIO count */
++	pgoff_t page_eio_ofs[NR_PAGE_TYPE];	/* EIO page offset */
++	int page_eio_cnt[NR_PAGE_TYPE];		/* EIO count */
+ 
+ 	/* for checkpoint */
+ 	struct f2fs_checkpoint *ckpt;		/* raw checkpoint pointer */
+@@ -4543,6 +4543,18 @@ static inline void f2fs_io_schedule_timeout(long timeout)
+ 	io_schedule_timeout(timeout);
+ }
+ 
++static inline void f2fs_handle_page_eio(struct f2fs_sb_info *sbi, pgoff_t ofs,
++					enum page_type type)
++{
++	if (ofs == sbi->page_eio_ofs[type]) {
++		if (sbi->page_eio_cnt[type]++ == MAX_RETRY_PAGE_EIO)
++			set_ckpt_flags(sbi, CP_ERROR_FLAG);
++	} else {
++		sbi->page_eio_ofs[type] = ofs;
++		sbi->page_eio_cnt[type] = 0;
++	}
++}
++
+ #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
+ #define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+ 
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index c45d341dcf6e..c280f482c741 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -1416,6 +1416,7 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
+ 
+ 	err = read_node_page(page, 0);
+ 	if (err < 0) {
++		f2fs_handle_page_eio(sbi, page->index, NODE);
+ 		f2fs_put_page(page, 1);
+ 		return ERR_PTR(err);
+ 	} else if (err == LOCKED_PAGE) {
+@@ -1452,6 +1453,7 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
+ 		err = -EINVAL;
+ out_err:
+ 		ClearPageUptodate(page);
++		f2fs_handle_page_eio(sbi, page->index, NODE);
+ 		f2fs_put_page(page, 1);
+ 		return ERR_PTR(err);
+ 	}
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
 
-I see. So an interrupt that happens in the wrong time could block everything.
-
-You can try 'threadirqs' kernel parameter to see if this helps. PREEMPT_RT will
-help with softirq latencies too. So I think this problem should be handled by
-PREEMPT_RT.
-
-There's _probably_ room for improving how userspace manages the job list too..
-Do the readers have to block?
-
-You can use irq affinities and task affinities to ensure the two never happen
-on the same cpu.
-
-> I can imagine that a PREEMPT_RT kernel will have the same problem
-> because (I think) all the spin locks get replaced by sleep locks.
-
-I don't think so. The point of PREEMPT_RT is to not block that RT tasks. With
-PREEMPT_RT + threadirqs, irqs and softirqs will run as kernel threads. I think
-they run as RT tasks, so you can manage which is more important by assigning
-the right priorities to your tasks vs irq/softirqs kthreads priorities.
-
-> 
-> > 
-> > There's a new knob to reduce how long netdev spends in the loop. Might be worth
-> > a try:
-> > 
-> > 	https://lore.kernel.org/netdev/1492619830-7561-1-git-send-email-tedheadster@gmail.com/
-> > 
-> > [1] https://wiki.linuxfoundation.org/realtime/start
-> 
-> I think the patch that runs the softirq in a separate thread might help.
-> But it probably needs a test to only to that if it would 'stall' a RT process.
-
-I think people have been using this in rt-kernels for a long time now.
-I believe you'd just need to be mindful about priorities since they'll run as
-RT tasks.
-
-threadirqs kernel parameter is available in mainline kernel too. But the
-softirqs part still didn't get merged, last I checked which was a while ago.
-So in mainline irqs will get threaded, but not softirqs - when I last checked.
-
-You might find good info here about tuning systems for RT from Red Hat:
-
-	https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/interrupt_and_process_binding
-
-There's lots of advise regarding various aspects of the system, so worth
-exploring if you didn't come across it before.
-
-> 
-> > > I've avoided most of the pain that caused by not using a single
-> > > cv_broadcast() to wake up the 34 RT threads (in this config).
-> > > (Each kernel thread seemed to wake up the next one, so the
-> > > delays were cumulative.)
-> > > Instead there is a separate cv for each RT thread.
-> > > I actually want the 'herd of wildebeest' :-)
-> > 
-> > It seems you have a big RT app running in userspace. I thought initially you're
-> > hitting issues with random kthreads or something. If you have control over
-> > these tasks, then that should be easier to handle (as you suggest at the end).
-> 
-> I've a big app with a lot of RT threads doing network send/receive.
-> (All the packets as ~200 byte UDP, 50/sec on 1000+ port numbers.)
-> But there are other things going on as well.
-> 
-> > I'm not sure about the delays when using cv_broadcast(). Could it be the way
-> > this library is implemented is causing the problem rather than a kernel
-> > limitation?
-> 
-> I was definitely seeing the threads wake up one by one.
-> Every 10ms one of the RT threads wakes up and then wakes up all the others.
-> There weren't any 'extra' system calls, once one thread was running
-> in kernel the next one got woken up.
-> Most (and always) noticeable were the delays getting each cpu out
-> of its sleep state.
-
-Oh, yeah idle states and dvfs are known sources of latencies. You can prevent
-the cpus from going into deep idle states.
-
-	https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/8/html-single/optimizing_rhel_8_for_real_time_for_low_latency_operation/index#con_power-saving-states_assembly_controlling-power-management-transitions
-
-> But if one of the required cpu was (eg) running the softint code
-> none of the latter ones would wake up.
-> 
-
-[...]
-
-> > If you make it an RT task (which I think is a good idea), then the RT scheduler
-> > will handle it in the push/pull remark that seem to have started this
-> > discussion and get pushed/pulled to another CPU that is running lower priority
-> > task.
-> 
-> The problem is that while I'd like this thread to start immediately
-> what it is doing isn't THAT important.
-> There are other things that might run on the CFS scheduler that are
-> more important.
-> I can make it RT for experiments.
-
-You can isolate 35 cpus if you like to run your RT app and keep the remaining
-5 cpus for everything else. Depends what else you use the system for. The red
-hat guide I pasted above have a section on using isolated cpus feature.
-
-	https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/isolating_cpus_using_tuned-profiles-realtime
-
-Although this seems a bit of a stretch for your use case. You can still use
-irq and task affinities to ensure certain things don't happen on the same CPU.
-
-Cheers
-
---
-Qais Yousef

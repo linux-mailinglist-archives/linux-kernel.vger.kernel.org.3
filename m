@@ -2,119 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B870501CC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF656501CD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244546AbiDNUiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S1345963AbiDNUiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346680AbiDNUhz (ORCPT
+        with ESMTP id S1346712AbiDNUiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:37:55 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF3A9E9C7;
-        Thu, 14 Apr 2022 13:35:28 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id e10so5116014qka.6;
-        Thu, 14 Apr 2022 13:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+6tya+7Pipp+G6uiG0uiTPHOi0maM1UZVUL8Hqjtezc=;
-        b=hjtqVqLFstSFSKzQuFhXglK+JAMGuth9p83fpMWUzU1KBc9qysdV65pFA7YbGu2dRH
-         qMhOuRdkclAdsEz6j4D8QtuhrNiLxOX06dYRv/nXY3BOQE9v+I8S/W+ohoMSLLTZ6j0A
-         YraYd9cncwS+aGRtVazuHLnVhsjRu7cSgAq9vCpxJq7NEFmkbFhQJIt2SLcrwyMukeEZ
-         eNVZTo+B2ywpbkIhoX6lGc8AUXpg4HQZwO4Si39CFlCLn2PrC5PBBax9qHbVDpY+INGG
-         WDojRuNMNk7U1zXQ3YMmT+MLVfUcGd5M2AVkz6dBFvBrU5+DOBRanTKzdAvNg4jlko1c
-         oOpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+6tya+7Pipp+G6uiG0uiTPHOi0maM1UZVUL8Hqjtezc=;
-        b=PyAXF9oa1crjxZogbtreKz91y55pPsRZT162UKNiH8dj3iLTzEFVQr0AUpT8CEtqBh
-         74hHC87SfvkqLBsPzXPN2d7Mb3EjNBByHtn//AlLQEsYErYgzG+o6nXT+q1pZv4wtxJp
-         dLoebA88ta0+JtYDMomU85JBN022L8wtMpKH2qwHBIks0EG4mMPQQMSwTdz6E04d/FBV
-         3U3vsFX15NHRU3ONyPBna7SlxaEyBo2lzJT1+IipijpHl7F2NzzSogKP681t9ObdrXN9
-         40Yncr2CixBi3MUqvFjDgg5PMKoJTNOYHm5SMYDbZ1mhBKcKJEFoVGnT4/bBums+40Uz
-         W/Ag==
-X-Gm-Message-State: AOAM5325vsuJj1Wy6j+ujAwgmaFNPKpJgjD5N5+GG49DrT9YAIR8wJSg
-        +a5DjjG6LBMZ0seBfoDzIwjOd9TMRA==
-X-Google-Smtp-Source: ABdhPJz/MAwi4rkTcjb+Wvt+whIxOdZdH//Ta0n2eUHs00k22g9r+gkuCJ8ff2G9GHCTx9h92+Xrmg==
-X-Received: by 2002:a05:620a:4620:b0:69c:486c:efd2 with SMTP id br32-20020a05620a462000b0069c486cefd2mr3198584qkb.277.1649968527581;
-        Thu, 14 Apr 2022 13:35:27 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id c23-20020a05620a201700b0069c7c8d1b9fsm1048404qka.21.2022.04.14.13.35.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 13:35:27 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        William Tu <u9012063@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net 1/2] ip6_gre: Avoid updating tunnel->tun_hlen in __gre6_xmit()
-Date:   Thu, 14 Apr 2022 13:34:26 -0700
-Message-Id: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649967496.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 16:38:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B85D76FE;
+        Thu, 14 Apr 2022 13:35:33 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8B4C81F47BB7;
+        Thu, 14 Apr 2022 21:35:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649968532;
+        bh=qrJuq+TdBPOPEgxeXMIXpPq14MtpTaIIqGv7fMzG5N0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KEy3Jfazo178h+z/RcU4grXOmPu8axeJ8ZF+U54D6fCrNr5G3sXQtBGIUhsS4PUZC
+         baGS/JB99l8PxMYJk2P7b7dG4jAp7xYGuHznHLt7Bv3WxvyAEV11oKWY3HhBik3SPT
+         QJE5xn0vI8zBGgCMgTOINpluymHHTkts+sERPsOeaBrGVv5xu5CP/81udK+YoPxzRK
+         i0Yuv2PX4jpaVgsYJSoAoQvMKzviYUHZ00mHw7q8ORAkrxZ6a3icGRMyXmLqof8BO9
+         YD8hxRqtoq3XYlxJozl9K5J+iZHAaly9rLZ/t0GEFzsv5DIjTzrWj1mcyf9L15A9M0
+         fDlY2OiOtMYNw==
+Message-ID: <49b6c8f6-7c77-b503-7d1a-f0edf89dadac@collabora.com>
+Date:   Thu, 14 Apr 2022 23:35:28 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v7 3/4] dt-bindings: memory: Update reg/reg-names
+ validation
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     digetx@gmail.com, krzysztof.kozlowski@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220413094012.13589-1-amhetre@nvidia.com>
+ <20220413094012.13589-4-amhetre@nvidia.com>
+ <YlbSGEBKgpVC51dZ@robh.at.kernel.org>
+ <b050247d-a62c-62e7-7750-24cefcc93506@collabora.com>
+ <71fc3efb-5110-287e-0422-10c1ae90139c@nvidia.com>
+ <ae1d1098-f8b5-f41a-c33b-0f4863a43d5e@collabora.com>
+ <e0faf79f-99e6-a0b6-0842-ec9de644f7f3@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <e0faf79f-99e6-a0b6-0842-ec9de644f7f3@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
 
-Do not update tunnel->tun_hlen in data plane code.  Use a local variable
-instead, just like "tunnel_hlen" in net/ipv4/ip_gre.c:gre_fb_xmit().
+On 4/14/22 07:07, Ashish Mhetre wrote:
+> 
+> 
+> On 4/14/2022 2:39 AM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 4/13/22 19:17, Ashish Mhetre wrote:
+>>>
+>>>
+>>> On 4/13/2022 7:34 PM, Dmitry Osipenko wrote:
+>>>> External email: Use caution opening links or attachments
+>>>>
+>>>>
+>>>> On 4/13/22 16:37, Rob Herring wrote:
+>>>>> On Wed, Apr 13, 2022 at 03:10:11PM +0530, Ashish Mhetre wrote:
+>>>>>>   From tegra186 onwards, memory controller support multiple channels.
+>>>>>> Reg items are updated with address and size of these channels.
+>>>>>> Tegra186 has overall 5 memory controller channels. Tegra194 and
+>>>>>> tegra234
+>>>>>> have overall 17 memory controller channels each.
+>>>>>> There is 1 reg item for memory controller stream-id registers.
+>>>>>> So update the reg maxItems to 18 in tegra186 devicetree
+>>>>>> documentation.
+>>>>>> Also update validation for reg-names added for these corresponding
+>>>>>> reg
+>>>>>> items.
+>>>>>
+>>>>> Somehow your subject should indicate this is for Tegra.
+>>>>>
+>>>>>>
+>>>>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>>>>> ---
+>>>>>>    .../nvidia,tegra186-mc.yaml                   | 80
+>>>>>> +++++++++++++++++--
+>>>>>>    1 file changed, 74 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git
+>>>>>> a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>>>
+>>>>>> b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>>>
+>>>>>>
+>>>>>> index 13c4c82fd0d3..c7cfa6c2cd81 100644
+>>>>>> ---
+>>>>>> a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>>>
+>>>>>>
+>>>>>> +++
+>>>>>> b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+>>>>>>
+>>>>>>
+>>>>>> @@ -34,8 +34,12 @@ properties:
+>>>>>>              - nvidia,tegra234-mc
+>>>>>>
+>>>>>>      reg:
+>>>>>> -    minItems: 1
+>>>>>> -    maxItems: 3
+>>>>>> +    minItems: 6
+>>>>>
+>>>>> You just broke current users.
+>>>>>
+>>>>>> +    maxItems: 18
+>>>>>> +
+>>>>>> +  reg-names:
+>>>>>> +    minItems: 6
+>>>>>> +    maxItems: 18
+>>>>>>
+>>>>>>      interrupts:
+>>>>>>        items:
+>>>>>> @@ -142,7 +146,18 @@ allOf:
+>>>>>>        then:
+>>>>>>          properties:
+>>>>>>            reg:
+>>>>>> -          maxItems: 1
+>>>>>> +          maxItems: 6
+>>>>>> +          description: 5 memory controller channels and 1 for
+>>>>>> stream-id registers
+>>>>>> +
+>>>>>> +        reg-names:
+>>>>>> +          maxItems: 6
+>>>>>> +          items:
+>>>>>> +            - const: sid
+>>>>>> +            - const: broadcast
+>>>>>> +            - const: ch0
+>>>>>> +            - const: ch1
+>>>>>> +            - const: ch2
+>>>>>> +            - const: ch3
+>>>>>>
+>>>>>>      - if:
+>>>>>>          properties:
+>>>>>> @@ -151,7 +166,30 @@ allOf:
+>>>>>>        then:
+>>>>>>          properties:
+>>>>>>            reg:
+>>>>>> -          minItems: 3
+>>>>>> +          minItems: 18
+>>>>>> +          description: 17 memory controller channels and 1 for
+>>>>>> stream-id registers
+>>>>>> +
+>>>>>> +        reg-names:
+>>>>>> +          minItems: 18
+>>>>>> +          items:
+>>>>>> +            - const: sid
+>>>>>> +            - const: broadcast
+>>>>>> +            - const: ch0
+>>>>>> +            - const: ch1
+>>>>>> +            - const: ch2
+>>>>>> +            - const: ch3
+>>>>>> +            - const: ch4
+>>>>>> +            - const: ch5
+>>>>>> +            - const: ch6
+>>>>>> +            - const: ch7
+>>>>>> +            - const: ch8
+>>>>>> +            - const: ch9
+>>>>>> +            - const: ch10
+>>>>>> +            - const: ch11
+>>>>>> +            - const: ch12
+>>>>>> +            - const: ch13
+>>>>>> +            - const: ch14
+>>>>>> +            - const: ch15
+>>>>>>
+>>>>>>      - if:
+>>>>>>          properties:
+>>>>>> @@ -160,13 +198,37 @@ allOf:
+>>>>>>        then:
+>>>>>>          properties:
+>>>>>>            reg:
+>>>>>> -          minItems: 3
+>>>>>> +          minItems: 18
+>>>>>> +          description: 17 memory controller channels and 1 for
+>>>>>> stream-id registers
+>>>>>> +
+>>>>>> +        reg-names:
+>>>>>> +          minItems: 18
+>>>>>> +          items:
+>>>>>> +            - const: sid
+>>>>>> +            - const: broadcast
+>>>>>> +            - const: ch0
+>>>>>> +            - const: ch1
+>>>>>> +            - const: ch2
+>>>>>> +            - const: ch3
+>>>>>> +            - const: ch4
+>>>>>> +            - const: ch5
+>>>>>> +            - const: ch6
+>>>>>> +            - const: ch7
+>>>>>> +            - const: ch8
+>>>>>> +            - const: ch9
+>>>>>> +            - const: ch10
+>>>>>> +            - const: ch11
+>>>>>> +            - const: ch12
+>>>>>> +            - const: ch13
+>>>>>> +            - const: ch14
+>>>>>> +            - const: ch15
+>>>>>>
+>>>>>>    additionalProperties: false
+>>>>>>
+>>>>>>    required:
+>>>>>>      - compatible
+>>>>>>      - reg
+>>>>>> +  - reg-names
+>>>>>
+>>>>> New, added properties cannot be required. That's an ABI break.
+>>>>>
+>>>>>>      - interrupts
+>>>>>>      - "#address-cells"
+>>>>>>      - "#size-cells"
+>>>>>> @@ -182,7 +244,13 @@ examples:
+>>>>>>
+>>>>>>            memory-controller@2c00000 {
+>>>>>>                compatible = "nvidia,tegra186-mc";
+>>>>>> -            reg = <0x0 0x02c00000 0x0 0xb0000>;
+>>>>>> +            reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
+>>>>>> +                  <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast
+>>>>>> channel */
+>>>>>> +                  <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
+>>>>>> +                  <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
+>>>>>> +                  <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
+>>>>>> +                  <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
+>>>>>> +            reg-names = "sid", "broadcast", "ch0", "ch1", "ch2",
+>>>>>> "ch3";
+>>>>>>                interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>
+>>>>>>                #address-cells = <2>;
+>>>>>> -- 
+>>>>>> 2.17.1
+>>>>>>
+>>>>
+>>>> Oh, wait.. I didn't notice that the new reg ranges are only
+>>>> splitting up
+>>>> the old ranges. Previously it appeared to me that these are the new
+>>>> ranges.
+>>>>   > Ashish, in this case you don't need to change the regs in the DT at
+>>>> all.
+>>>> Instead, you need to specify the per-channel reg-base offsets in the
+>>>> driver code.
+>>>
+>>> Yes, it's kind of splitting up the old ranges and straight forward for
+>>> Tegra186. But on Tegra194 and Tegra234 the old address is not in single
+>>> range. It's already split across 3 ranges. We have to choose right range
+>>> and add channel offsets to that range in order to read interrupts.
+>>> So I went with the approach of splitting the regs in DT itself as per
+>>> the channels because that way they can be mapped in a single loop and
+>>> used easily.
+>>> If we want to specify per-channel reg-base offsets then that would be
+>>> per-SOC. Also we would need to choose correct reg-range for Tegra194 and
+>>> Tegra234 and have a way to maintain offsets of channels from those
+>>> respective reg-ranges.
+>>
+>> That is not nice too. Should be better to switch to the new DT scheme,
+>> since those channels weren't used by older kernels. It's okay to change
+>> the binding ABI in this case then, driver will continue to work for the
+>> older dtbs.
+> 
+> So the current DTS and binding changes are fine?
 
-Co-developed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-v1: https://lore.kernel.org/netdev/c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com
+It's fine to me. Doesn't hurt to explain in the commit message that the
+ABI change is intended and it's compatible with the previous ABI.
 
-(no change since v1)
+>> Have you tested driver using the older dtbs?
+> 
+> Yes, the driver is tested with old dtb and it's working fine.
 
- net/ipv6/ip6_gre.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index 8753e9cec326..b43a46449130 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -743,6 +743,7 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 		struct ip_tunnel_info *tun_info;
- 		const struct ip_tunnel_key *key;
- 		__be16 flags;
-+		int tun_hlen;
- 
- 		tun_info = skb_tunnel_info_txcheck(skb);
- 		if (IS_ERR(tun_info) ||
-@@ -760,9 +761,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 		dsfield = key->tos;
- 		flags = key->tun_flags &
- 			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
--		tunnel->tun_hlen = gre_calc_hlen(flags);
-+		tun_hlen = gre_calc_hlen(flags);
- 
--		gre_build_header(skb, tunnel->tun_hlen,
-+		gre_build_header(skb, tun_hlen,
- 				 flags, protocol,
- 				 tunnel_id_to_key32(tun_info->key.tun_id),
- 				 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
--- 
-2.20.1
-
+Ok

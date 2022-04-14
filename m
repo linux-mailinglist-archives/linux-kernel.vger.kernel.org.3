@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FA2501770
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D84C50176F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242179AbiDNPiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S237561AbiDNPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350144AbiDNOVs (ORCPT
+        with ESMTP id S1350468AbiDNOWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:21:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BB3BF019;
-        Thu, 14 Apr 2022 07:13:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18ED061EDE;
-        Thu, 14 Apr 2022 14:13:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A964C385A9;
-        Thu, 14 Apr 2022 14:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649945598;
-        bh=O2j8QmGGCbxSuuXx/g5kDa3DRaSfCxpFwD5IxKqExPA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OGCariBz9xUcR/9uWegnuZoa0AJblOM4su4snkh/cWQLrco1Hy3xxkJQ4un8mKZKI
-         slaFL0BugVW9yG2QtLMjCJ9U74kc7ap/CwqSflHQg4uIYVcH0yq8GHpnvPmKeFmY7d
-         A2v3Edpg+VDTOUYGQ/CL/Vwh3lG0zzm+nib2ZwQpS5j6+P58DRC6d+GXhRMhFLBEgC
-         SPQvuM+GDuq6FDQePWpO/n80jdTym6xnHNGocNCxrTdUfrn7g+c/C19qwhF+UzbMAH
-         kaB/xmPujNPsTiDuSKEKQjhSz9/qNPe234q0sOscj9yK7uE4KsMKoiFR16htrl36z0
-         ZaGtvj0IEZeOQ==
-Received: by mail-oo1-f50.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so891714oos.9;
-        Thu, 14 Apr 2022 07:13:18 -0700 (PDT)
-X-Gm-Message-State: AOAM531ZbIm7hXnU8BTmRUgbGrLEJBV4AsTIdoyfSt8pGUfqtlNMIxBS
-        tLtBnb6qw7RzXwveBIxNb0hCcCsBkC7Y3n5TK+Y=
-X-Google-Smtp-Source: ABdhPJzVObenFOQNGcxYgE0aDD4jEL5N64ZkM2Y91EDfGvnxH0aONGXpmnq0C6XLW//uOxlJxjSE12Xnef7TjPDpE6s=
-X-Received: by 2002:a4a:95f3:0:b0:331:3e74:ed5d with SMTP id
- p48-20020a4a95f3000000b003313e74ed5dmr795426ooi.60.1649945597626; Thu, 14 Apr
- 2022 07:13:17 -0700 (PDT)
+        Thu, 14 Apr 2022 10:22:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0059C559C;
+        Thu, 14 Apr 2022 07:14:16 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 14:14:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649945654;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zIr4M3QpkhZ27uYr8qH26LQUlJTGuaEdmvLzEra2awI=;
+        b=DQcQ0wBmY5ZEPT3/sRn62sx9BzIOfd6C24/BPV99lB4dKwkfSq+Tl+A0m1UOwWUjdnuv8x
+        CGm6tcs0C4I+PYmp5cmw8F0UZNI+Iy81NKUGobY79sthLFIWBnZ9Ly7D2bQoBdEXJK6Mrs
+        P5RNJPzjvlytUrNO8mMn9SjYvgOtfaTkQqmKMfAzRSQVWKwXaesfd/Q+cyNibkie8S/azx
+        da2KiPOs7jOm/hljdjfI+CFhaRCUeeVp3PIuYMPB7ciqRWMNX3WRPtOKteYuesrb2Wrflj
+        i/Wm9AL3IPjpt6jvBKY0GbT5UieaCavDUcxtYXhP+bKePISGq90c4cgoYBKWmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649945654;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zIr4M3QpkhZ27uYr8qH26LQUlJTGuaEdmvLzEra2awI=;
+        b=6mejPmbqNLlHFxDkB+3xJWMIrs32bqTE5xGhGMSZ2DxVixMOP0FYhT0mXsO8TJYGUF8UvP
+        VVGCp5SECrMO6zDw==
+From:   "tip-bot2 for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] genirq: Take the proposed affinity at face value if
+ force==true
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
+References: <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
 MIME-Version: 1.0
-References: <20220414110838.883074566@linuxfoundation.org> <20220414110844.817011928@linuxfoundation.org>
- <CAMj1kXG9ibOZfo60_pjwqACWhfPt8=38MDJD8C_CBoLrTYmCOw@mail.gmail.com> <Ylgi3Nh8mbAOvXi6@kroah.com>
-In-Reply-To: <Ylgi3Nh8mbAOvXi6@kroah.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 Apr 2022 16:13:06 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFwQ+WrM4G=xa5+1CVd0z3RDLRUbFnpYRirWVHwbtvXGg@mail.gmail.com>
-Message-ID: <CAMj1kXFwQ+WrM4G=xa5+1CVd0z3RDLRUbFnpYRirWVHwbtvXGg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 208/338] ARM: ftrace: avoid redundant loads or
- clobbering IP
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164994565359.4207.6678120431812780133.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 at 15:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Apr 14, 2022 at 03:25:29PM +0200, Ard Biesheuvel wrote:
-> > On Thu, 14 Apr 2022 at 15:23, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > [ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
-> > >
-> >
-> > NAK. Please don't backport these patches to -stable, I thought I had
-> > been clear on this.
->
-> I dropped the patches you asked to be dropped, but this is a different
-> one and is already in the following releases:
->         5.10.110 5.15.33 5.16.19 5.17.2
->
-> I can also drop it from here and the 5.4 queue if you do not want it
-> there.
->
+The following commit has been merged into the irq/core branch of tip:
 
-This is not how I remember it:
+Commit-ID:     c48c8b829d2b966a6649827426bcdba082ccf922
+Gitweb:        https://git.kernel.org/tip/c48c8b829d2b966a6649827426bcdba082ccf922
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Thu, 14 Apr 2022 15:00:11 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 14 Apr 2022 16:11:25 +02:00
 
-On Tue, 5 Apr 2022 at 18:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Apr 05, 2022 at 12:01:19PM +0200, Ard Biesheuvel wrote:
-> > On Tue, 5 Apr 2022 at 11:54, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > [ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
-> > >
-..
-> >
-> > Please drop all the 32-bit ARM patches authored by me from the stable
-> > queues except the ones that have fixes tags. These are highly likely
-> > to cause an explosion of regressions, and they should have never been
-> > selected, as I don't remember anyone proposing these for stable.
->
-> From what I can tell, that is only this commit.  I'll go drop it from
-> all trees, thanks.
->
+genirq: Take the proposed affinity at face value if force==true
 
-Can you *please* exclude all patches authored by me from consideration
-by this bot? Consider this a blanket NAK to all AUTOSEL patches cc'ed
-to me.
+Although setting the affinity of an interrupt to a set of CPUs that doesn't
+have any online CPU is generally frowned apon, there are a few limited
+cases where such affinity is set from a CPUHP notifier, setting the
+affinity to a CPU that isn't online yet.
+
+The saving grace is that this is always done using the 'force' attribute,
+which gives a hint that the affinity setting can be outside of the online
+CPU mask and the callsite set this flag with the knowledge that the
+underlying interrupt controller knows to handle it.
+
+This restores the expected behaviour on Marek's system.
+
+Fixes: 33de0aa4bae9 ("genirq: Always limit the affinity to online CPUs")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Link: https://lore.kernel.org/r/4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com
+Link: https://lore.kernel.org/r/20220414140011.541725-1-maz@kernel.org
+
+---
+ kernel/irq/manage.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index f71ecc1..f1d5a94 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -266,10 +266,16 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
+ 		prog_mask = mask;
+ 	}
+ 
+-	/* Make sure we only provide online CPUs to the irqchip */
++	/*
++	 * Make sure we only provide online CPUs to the irqchip,
++	 * unless we are being asked to force the affinity (in which
++	 * case we do as we are told).
++	 */
+ 	cpumask_and(&tmp_mask, prog_mask, cpu_online_mask);
+-	if (!cpumask_empty(&tmp_mask))
++	if (!force && !cpumask_empty(&tmp_mask))
+ 		ret = chip->irq_set_affinity(data, &tmp_mask, force);
++	else if (force)
++		ret = chip->irq_set_affinity(data, mask, force);
+ 	else
+ 		ret = -EINVAL;
+ 

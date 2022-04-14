@@ -2,304 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B1A500C4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395CA500C50
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242738AbiDNLnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S242750AbiDNLn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242395AbiDNLnQ (ORCPT
+        with ESMTP id S242395AbiDNLn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:43:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BEF53E09
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:40:49 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KfHXx2Z8czgYkd;
-        Thu, 14 Apr 2022 19:38:57 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 19:40:47 +0800
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 19:40:47 +0800
-Message-ID: <58223bd3-b63b-0c2b-abcc-e1136090d060@huawei.com>
-Date:   Thu, 14 Apr 2022 19:40:47 +0800
+        Thu, 14 Apr 2022 07:43:56 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9209F53E09;
+        Thu, 14 Apr 2022 04:41:31 -0700 (PDT)
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mnq4Q-1oH5wx3Dq6-00pNtq; Thu, 14 Apr 2022 13:41:29 +0200
+Received: by mail-wr1-f51.google.com with SMTP id g18so6495999wrb.10;
+        Thu, 14 Apr 2022 04:41:27 -0700 (PDT)
+X-Gm-Message-State: AOAM530lsz7qu7JrhcQrSVUm+lY5oqOj72y+Br0tngOpP1f0at7J6mTx
+        Kn9IH5VnpKG/T3fF4JJfxYLqrGELB7OTymIL1sA=
+X-Google-Smtp-Source: ABdhPJxDkbKKBQkTpfl/Oj838rv2VbzeElx6+NcSFuTvJBfQ5J//st0GmYuZABtNrIuj+4aYSg8U+Kt7cb2jJl5ZcKQ=
+X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
+ e12-20020a056000178c00b002040648b4c4mr1676626wrg.219.1649936487384; Thu, 14
+ Apr 2022 04:41:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-Subject: Re: Question about kill a process group
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-References: <aff07d75-622c-9bab-863c-0917c79da3c4@huawei.com>
- <fff65bc3-0b73-3c5e-0f31-bd5404f75353@huawei.com>
- <e70b350e-abfc-7f8d-4590-d18801a9a722@huawei.com>
- <87ilrd2dfj.fsf@email.froward.int.ebiederm.org>
-CC:     lkml <linux-kernel@vger.kernel.org>, <keescook@chromium.org>,
-        <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
-        <elver@google.com>, <legion@kernel.org>, <oleg@redhat.com>,
-        <brauner@kernel.org>
-In-Reply-To: <87ilrd2dfj.fsf@email.froward.int.ebiederm.org>
+References: <20220412231508.32629-1-libo.chen@oracle.com> <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org> <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+ <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org> <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+ <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org> <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
+ <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org> <c2e6bb8b-c9d9-ad39-7a8e-3df6849b2fb2@oracle.com>
+ <CAK8P3a3wgbYPY6CxbkkFkEboXYLWREaL3oUmHyet5wPYpc4Vng@mail.gmail.com> <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+In-Reply-To: <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 14 Apr 2022 13:41:11 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0uy8JcHP_G_ebz61AMB-Mx6jr5+vuzJHmWbDCajTdTfQ@mail.gmail.com>
+Message-ID: <CAK8P3a0uy8JcHP_G_ebz61AMB-Mx6jr5+vuzJHmWbDCajTdTfQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+To:     Libo Chen <libo.chen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:Y7bjTG5yZhKSo0QonGX0bjrqMCV8FqCn2Jc/gpu9j2TXS37tuEO
+ BsIiZ4BZNvTNt3uzFLgJmA8czEw6WM4HOxMsyMinuRUWTaiR3RjjgsT5cdWzfOrFldN0Vee
+ n1hj4S2GZ5L1NZlkSgHlxKnJxgOK/meswZDx1TcQtRtX7Io3YXXqfNh0p4St2r37C/7/6lr
+ lPqD22Ms77jBo7mprkeFA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T3O8cO2vhA4=:mkttKl+5Zwfmc0W5nvAZUV
+ uOXYKowyLJD1OMsdExf7wHc7GYnDPvXMrAIGHU4rR9JXbPiHRWNuTL4elvflyp4w6cBBm25rs
+ ERAUXp0NX8nAsNqmnC6f1d1/JRQMtXlsCSDO44B6t5+gs0U+/3U3AgwMdu49vq5OdQ02zwJxF
+ UbcYTMjp5yUPN7eYGHHk05PO/euvy5411NxYcQu8wlONf9uiPxV9tfDEQuJEp1Gvf2PNPHifM
+ JH2WxgoW6aZunT97R7Yras0K20Uz8BOHqY5Eca6EU7c4itA6fRncAToEiFCWmRU6+RRdfEOGV
+ 6gTqpHULbtUtJ0YXDSFGWFZGOSJ0UL0hNfKAP2M07OaSJigsuifhsOHh86sqPwXsulHu0E5js
+ YNL9IbKWMdO3V4ORkBiUxCUkOe2z/VvdaJBgiBVMELrxLAFLYrhpgxmVV9tYXtAXJESV75g7O
+ N9o2S6mnWmINmL4UkiVuSWcGtrvf3pXPQ/nmnjuRzewfy1WdYPvXn/dyL/MDwD7XKwsvgzomx
+ SgHx2rYBbno3F2zSef4vQhv6QyK9YiQnlyJ4AQGn6ZQuJv8q0hA5bpr607fhAdmHJZ/5H3qom
+ +RpYteJe8AkPdx1NhQo7QKtPbJmG40lyWAkH5V/RYc57un7mfmZBn+a158wSEc3p1YFL3WDuP
+ zwJ63bsnaAdHeK5FVLjR6Lz7a03A/IHLusR01Y8Hy/VkCKvtx96Fv8dXR3LevJEUPfSNAxzUd
+ 0vohc3fwuhkjjMbOo0K3Z6YoSqUzj+B4lkYO7af+w2beJ7EOuLLTKnrrtM8H3Tletes5j/9C5
+ NMKzytmJXEdE1lcSBo/FTYnL1QDXHMqs8eqeAUQ+5kgCN9q5Uk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 13, 2022 at 11:50 PM Libo Chen <libo.chen@oracle.com> wrote:
+> On 4/13/22 13:52, Arnd Bergmann wrote:
+> >>> Yes, it is. I don't know that the problem is...
+> >> Masahiro explained that CPUMASK_OFFSTACK can only be configured by
+> >> options not users if DEBUG_PER_CPU_MASK is not enabled. This doesn't
+> >> seem to be what we want.
+> > I think the correct way to do it is to follow x86 and powerpc, and tying
+> > CPUMASK_OFFSTACK to "large" values of CONFIG_NR_CPUS.
+> > For smaller values of NR_CPUS, the onstack masks are obviously
+> > cheaper, we just need to decide what the cut-off point is.
+>
+> I agree. It appears enabling CPUMASK_OFFSTACK breaks kernel builds on
+> some architectures such as parisc and nios2 as reported by kernel test
+> robot. Maybe it makes sense to use DEBUG_PER_CPU_MAPS as some kind of
+> guard on CPUMASK_OFFSTACK.
 
+NIOS2 does not support SMP builds at all, so it should never be possible to
+select CPUMASK_OFFSTACK there. We may want to guard
+DEBUG_PER_CPU_MAPS by adding a 'depends on SMP' in order to
+prevent it from getting selected.
 
-在 2022/4/13 23:47, Eric W. Biederman 写道:
-> Zhang Qiao <zhangqiao22@huawei.com> writes:
-> 
->> Gentle ping. Any comments on this problem?
-> 
-> Is fork12 a new test?
+For PARISC, the largest configuration is 32-way SMP, so CPUMASK_OFFSTACK
+is clearly pointless there as well, even though it should technically
+be possible
+to support. What is the build error on parisc?
 
+> > In x86, the onstack masks can be selected for normal SMP builds with
+> > up to 512 CPUs, while CONFIG_MAXSMP=y raises the limit to 8192
+> > CPUs while selecting CPUMASK_OFFSTACK.
+> > PowerPC does it the other way round, selecting CPUMASK_OFFSTACK
+> > implicitly whenever NR_CPUS is set to 8192 or more.
+> >
+> > I think we can easily do the same as powerpc on arm64. With the
+> I am leaning more towards x86's way because even NR_CPUS=160 is too
+> expensive for 4-core arm64 VMs according to apachebench. I highly doubt
+> that there is a good cut-off point to make everybody happy (or not unhappy).
 
- The fork12 is a ltp testcase.
-(https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/fork/fork12.c)
+It seems surprising that you would see any improvement for offstack masks
+when using NR_CPUS=160, that is just three 64-bit words worth of data, but
+it requires allocating the mask dynamically, which takes way more memory
+to initialize.
 
+> > ApacheBench test you cite in the patch description, what is the
+> > value of NR_CPUS at which you start seeing a noticeable
+> > benefit for offstack masks? Can you do the same test for
+> > NR_CPUS=1024 or 2048?
+>
+> As mentioned above, a good cut-off point moves depends on the actual
+> number of CPUs. But yeah I can do the same test for 1024 or even smaller
+> NR_CPUs values on the same 64-core arm64 VM setup.
 
-> 
-> Is there a real world use case that connects to this?
-> 
-> How many children are being created in this test?  Several million?
+If you see an improvement for small NR_CPUS values using offstack masks,
+it's possible that the actual difference is something completely
+different and we
+can just make the on-stack case faster, possibly the cause is something about
+cacheline alignment or inlining decisions using your specific kernel config.
 
-  There are about 300,000+ processes.
+Are you able to compare the 'perf report' output between runs with either
+size to see where the extra time gets spent?
 
-> 
-> I would like to blame this on the old issue that tasklist_lock being
-> a global lock.  Given the number of child processes (as many as can be
-> created) I don't think we are hurt much by using a global lock.  The
-> problem for solubility is that we have a lock.
-> 
-> Fundamentally there must be a lock taken to maintain the parent's
-> list of children.
-> 
-> I only see SIGQUIT being called once in the parent process so that
-> should not be an issue.
-
-
-  In fork12, every child will call kill(0, SIGQUIT) at cleanup().
-There are a lot of kill(0, SIGQUIT) calls.
-
-> 
-> There is a minor issue in fork12 that it calls exit(0) instead of
-> _exit(0) in the children.  Not the problem you are dealing with
-> but it does look like it can be a distraction.
-> 
-> I suspect the issue really is the thundering hurd of a million+
-> processes synchronizing on a single lock.
-> 
-> I don't think this is a hard lockup, just a global slow down.
-> I expect everything will eventually exit.
-> 
-
- But according to the vmcore, this is a hardlockup issue, and i think
-there may be the following scenarios:
-
-rl = read_lock(tasklist_lock);
-ru = read_unlock(tasklist_lock);
-wl = write_lock_irq(tasklist_lock);
-wu = write_unlock_irq(tasklist_lock);
-
-	t0 t1 t2 t3 t4 t5 t6 t7 t8 ......
-cpu0: rl<------------speed 1s ----------->ru   // a fork12 call kill(0, SIGQUIT) at t0 on cpu0,
-						 taking tasklist read lock at __kill_pgrp_info()
-					
-cpu1: 	 wl<-----wait lock---------------->|<--get lock-->wu  // a fork12 exit, and will disable irq, spin for waiting
-								   tasklist write lock at exit_notify() util cpu0 unlock.
-
-cpu2: 	    rl<---- wait readlock---------------------.....-->ru  // a fork12 call kill(0, SIGQUIT), spin for waiting cpu1 unlock.
-
-cpu3:		wl<-----------------------------......-------->wu  // a fork12 do exit, spin for waiting cpu2 unlock...
-
-.....
-
-cpux: 		     rl<-------------------......-------------------->ru  // a fork12 call kill(0, SIGQUIT), spin for waiting other cpu unlock.
-
-cpux+1: 		     wl<-------------------......-------------------->wu  // a fork12 do exit, spin for waiting cpux unlock. The cpu may
-										   trigger a hardlockup if too many fork12 are spining to acquire
-										  the tasklist read/write lock.
-
-
-As above，the fork12 will take a lot of time to send the signal to the child process at
-__kill_pgrp_info(), the whole process will take more than a second(more than 300000+ children).
-
-when the fork12 hold tasklist read lock over one sencond at __kill_pgrp_info(), there may be a
-large number of chilren do exit and kill(0, SIGQUIT), they will alternately acquire the tasklist
-lock(queued spinlock) and spin on waitqueue.
-
- Because the process that call __kill_pgrp_info() on the queue takes a lot of time, the exiting process
-at the tail of waitqueue will wait for long time at exit_notify(), it will cause a hardlockup issue.
-
-
-> 
-> To do something about this is going to take a deep and fundamental
-> redesign of how we maintain process lists to handle a parent
-> with millions of children well.
-> 
-> Is there any real world reason to care about this case?  Without
-> real world motivation I am inclined to just note that this is
-
-I just foune it while i ran ltp test.
-
-
-thanks！
-
-qiao.
-
-> something that is handled poorly, and leave it as is.
-
-
-
-
-> 
-> Eric
-> 
->>
->> 在 2022/4/2 10:22, Zhang Qiao 写道:
->>> ping...
->>>
->>> Any suggestions for this problem？
->>>
->>> thank!
->>> Qiao
->>>
->>>
->>> 在 2022/3/29 16:07, Zhang Qiao 写道:
->>>> hello everyone,
->>>>
->>>> I got a hradlockup panic when run the ltp syscall testcases.
->>>>
->>>> 348439.713178] NMI watchdog: Watchdog detected hard LOCKUP on cpu 32
->>>> [348439.713236] irq event stamp: 0
->>>> [348439.713237] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
->>>> [348439.713238] hardirqs last disabled at (0): [<ffffffff87cd1ea5>] copy_process+0x7f5/0x2160
->>>> [348439.713239] softirqs last  enabled at (0): [<ffffffff87cd1ea5>] copy_process+0x7f5/0x2160
->>>> [348439.713240] softirqs last disabled at (0): [<0000000000000000>] 0x0
->>>> [348439.713241] CPU: 32 PID: 1151212 Comm: fork12 Kdump: loaded Tainted: G S                5.10.0+ #1
->>>> [348439.713242] Hardware name: Huawei RH2288H V3/BC11HGSA0, BIOS 3.35 10/20/2016
->>>> [348439.713243] RIP: 0010:queued_write_lock_slowpath+0x4d/0x80
->>>> [348439.713245] RSP: 0018:ffffa3a6bed4fe60 EFLAGS: 00000006
->>>> [348439.713246] RAX: 0000000000000500 RBX: ffffffff892060c0 RCX: 00000000000000ff
->>>> [348439.713247] RDX: 0000000000000500 RSI: 0000000000000100 RDI: ffffffff892060c0
->>>> [348439.713248] RBP: ffffffff892060c4 R08: 0000000000000001 R09: 0000000000000000
->>>> [348439.713249] R10: ffffa3a6bed4fde8 R11: 0000000000000000 R12: ffff96dfd3b68001
->>>> [348439.713250] R13: ffff96dfd3b68000 R14: ffff96dfd3b68c38 R15: ffff96e2cf1f51c0
->>>> [348439.713251] FS:  0000000000000000(0000) GS:ffff96edbc200000(0000) knlGS:0000000000000000
->>>> [348439.713252] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>> [348439.713253] CR2: 0000000000416ea0 CR3: 0000002d91812004 CR4: 00000000001706e0
->>>> [348439.713254] Call Trace:
->>>> [348439.713255]  do_raw_write_lock+0xa9/0xb0
->>>> [348439.713256]  _raw_write_lock_irq+0x5a/0x70
->>>> [348439.713256]  do_exit+0x429/0xd00
->>>> [348439.713257]  do_group_exit+0x39/0xb0
->>>> [348439.713258]  __x64_sys_exit_group+0x14/0x20
->>>> [348439.713259]  do_syscall_64+0x33/0x40
->>>> [348439.713260]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>> [348439.713260] RIP: 0033:0x7f59295a7066
->>>> [348439.713261] Code: Unable to access opcode bytes at RIP 0x7f59295a703c.
->>>> [348439.713262] RSP: 002b:00007fff0afeac38 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
->>>> [348439.713264] RAX: ffffffffffffffda RBX: 00007f5929694530 RCX: 00007f59295a7066
->>>> [348439.713265] RDX: 0000000000000002 RSI: 000000000000003c RDI: 0000000000000002
->>>> [348439.713266] RBP: 0000000000000002 R08: 00000000000000e7 R09: ffffffffffffff80
->>>> [348439.713267] R10: 0000000000000002 R11: 0000000000000246 R12: 00007f5929694530
->>>> [348439.713268] R13: 0000000000000001 R14: 00007f5929697f68 R15: 0000000000000000
->>>> [348439.713269] Kernel panic - not syncing: Hard LOCKUP
->>>> [348439.713270] CPU: 32 PID: 1151212 Comm: fork12 Kdump: loaded Tainted: G S                5.10.0+ #1
->>>> [348439.713272] Hardware name: Huawei RH2288H V3/BC11HGSA0, BIOS 3.35 10/20/2016
->>>> [348439.713272] Call Trace:
->>>> [348439.713273]  <NMI>
->>>> [348439.713274]  dump_stack+0x77/0x97
->>>> [348439.713275]  panic+0x10c/0x2fb
->>>> [348439.713275]  nmi_panic+0x35/0x40
->>>> [348439.713276]  watchdog_hardlockup_check+0xeb/0x110
->>>> [348439.713277]  __perf_event_overflow+0x52/0xf0
->>>> [348439.713278]  handle_pmi_common+0x21a/0x320
->>>> [348439.713286]  intel_pmu_handle_irq+0xc9/0x1b0
->>>> [348439.713287]  perf_event_nmi_handler+0x24/0x40
->>>> [348439.713288]  nmi_handle+0xc3/0x2a0
->>>> [348439.713289]  default_do_nmi+0x49/0xf0
->>>> [348439.713289]  exc_nmi+0x146/0x160
->>>> [348439.713290]  end_repeat_nmi+0x16/0x55
->>>> [348439.713291] RIP: 0010:queued_write_lock_slowpath+0x4d/0x80
->>>> [348439.713293] RSP: 0018:ffffa3a6bed4fe60 EFLAGS: 00000006
->>>> [348439.713295] RAX: 0000000000000500 RBX: ffffffff892060c0 RCX: 00000000000000ff
->>>> [348439.713296] RDX: 0000000000000500 RSI: 0000000000000100 RDI: ffffffff892060c0
->>>> [348439.713296] RBP: ffffffff892060c4 R08: 0000000000000001 R09: 0000000000000000
->>>> [348439.713297] R10: ffffa3a6bed4fde8 R11: 0000000000000000 R12: ffff96dfd3b68001
->>>> [348439.713298] R13: ffff96dfd3b68000 R14: ffff96dfd3b68c38 R15: ffff96e2cf1f51c0
->>>> [348439.713300]  </NMI>
->>>> [348439.713301]  do_raw_write_lock+0xa9/0xb0
->>>> [348439.713302]  _raw_write_lock_irq+0x5a/0x70
->>>> [348439.713303]  do_exit+0x429/0xd00
->>>> [348439.713303]  do_group_exit+0x39/0xb0
->>>> [348439.713304]  __x64_sys_exit_group+0x14/0x20
->>>> [348439.713305]  do_syscall_64+0x33/0x40
->>>> [348439.713306]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>> [348439.713307] RIP: 0033:0x7f59295a7066
->>>> [348439.713308] Code: Unable to access opcode bytes at RIP 0x7f59295a703c.
->>>>
->>>>
->>>> when analyzing vmcore, i notice lots of fork12 processes are waiting for tasklist read lock or write
->>>> lock (see the attachment file all_cpu_stacks.log)，and every fork12 process(belongs to the same
->>>> process group) call kill(0, SIGQUIT) in their signal handler()[1], it will traverse all the processes in the
->>>> same process group and send signal to them one by one, which is a very time-costly work and hold tasklist
->>>> read lock long time. At the same time, other processes will exit after receive signal, they try to get
->>>> the tasklist write lock at exit_notify().
->>>>
->>>> [1] fork12 testcase: https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/fork/fork12.c
->>>>
->>>> some processes call kill(0, SIGQUIT), wait for tasklist read lock:
->>>>
->>>>  #5 [ffff972a9b16fd78] native_queued_spin_lock_slowpath at ffffffff9931ed47
->>>>  #6 [ffff972a9b16fd78] queued_read_lock_slowpath at ffffffff99320a58
->>>>  #7 [ffff972a9b16fd90] do_wait at ffffffff992bc17d
->>>>  #8 [ffff972a9b16fdd0] kernel_wait4 at ffffffff992bd88d
->>>>  #9 [ffff972a9b16fe58] __do_sys_wait4 at ffffffff992bd9e5
->>>> #10 [ffff972a9b16ff30] do_syscall_64 at ffffffff9920432d
->>>> #11 [ffff972a9b16ff50] entry_SYSCALL_64_after_hwframe at ffffffff99c000ad
->>>>
->>>> As the same time, some processes are exiting, wait for tasklist write lock:
->>>>
->>>>  #5 [ffff972aa49a7e60] native_queued_spin_lock_slowpath at ffffffff9931ecb0
->>>>  #6 [ffff972aa49a7e60] queued_write_lock_slowpath at ffffffff993209e4
->>>>  #7 [ffff972aa49a7e78] do_raw_write_lock at ffffffff99320834
->>>>  #8 [ffff972aa49a7e88] do_exit at ffffffff992bcd78
->>>>  #9 [ffff972aa49a7f00] do_group_exit at ffffffff992bd719
->>>> #10 [ffff972aa49a7f28] __x64_sys_exit_group at ffffffff992bd7a4
->>>> #11 [ffff972aa49a7f30] do_syscall_64 at ffffffff9920432d
->>>> #12 [ffff972aa49a7f50] entry_SYSCALL_64_after_hwframe at ffffffff99c000ad
->>>>
->>>> In this scenario,there are lots of process are waiting for tasklist read lock or the tasklist
->>>> write lock, so they will queue. if the wait queue is long enough, it might cause a hardlockup issue when a
->>>> process wait for taking the write lock at exit_notify().
->>>>
->>>> I tried to solve this problem by avoiding traversing the process group multiple times when kill(0, xxxx)
->>>> is called multiple times form the same process group, but it doesn't look like a good solution.
->>>>
->>>> Is there any good idea for fixing this problem ?
->>>>
->>>> Thanks!
->>>>
->>>> Qiao
->>>> .
->>>>
->>> .
->>>
-> .
-> 
+        Arnd

@@ -2,204 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDAF500D14
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F03500D12
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbiDNMX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S243164AbiDNMXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243163AbiDNMXY (ORCPT
+        with ESMTP id S243173AbiDNMXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:23:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD3888CE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649938845; x=1681474845;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=d3PI2EUQrMBb3H7rnJy8aM/01H8LXVFM1h7kUFGJGHs=;
-  b=EgwkLLlU/XnKOVFRhnPfYVBaHOS/e6ks+TL8OMSJFPsVgysd8TmnlYCB
-   DG2EA+fIwCKFk+x4uqYx2bMefMyVrhmVXW5N755TgKMbJaIW2I3C6h67t
-   M7NMHCzy2/7wXS5c1T+H3wILSvsiv1+TGXAiQUwQWGfnzgTUxJT9mFQ7k
-   zY0CDbtbNt61NeNOiiJp0FjpE8tAvT1Zgr7C3zM6er+PmF8B4IGYFehZ3
-   cD9THRyAoWZdxjzq5I5iwav2zIV0sAZKJHKPvQFF6aXeYDIJfRn2aFRyL
-   3A3fuzRw3DpTZkERU8VUnYBxXccEJA5XAdNNUuMqIk14kaMFSbU7z9UWv
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262360751"
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="262360751"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 05:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="560188827"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Apr 2022 05:20:44 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 05:20:44 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 05:20:44 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Apr 2022 05:20:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VF73QpMIr5dfSR+FtlnCqkos6VAiKbFzifTX/iZvtKk1W7SVnX//Fd0/6Wp+A9XLqiXn0U41ah6e/OXkRl4Cf3Da9w5Xk3ppGE64TcDL3wlo+rFiF8N3K5TgYRGtG2FaiRxbbCEbIymn39tmO/cF903rXTaUFEVq4GIZLQrql4+Jvr6IrrBGIXz0ZZsc6BMYmYczudqVnZIhha+ylGaP6wjrTatl0YBnP8bfEvUVO4SuH9l33Mmejtr88pMGNMDeTr6aQIdQrHwnKU1qubZIrk6x9jGI7IW4efO9FsAydtW0gKvfSIqEhTzYou6uDMmO9cfviyhNLUhAEtqCnPDWMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o57R8T8G7sZGollan/SSnvWrzR8TT1I2wE90xKXY8zA=;
- b=SaXFkwRzKekEnJIhk5rofKeC/NuyOJ6PaxvH5emR1K0DRX+xmm1iUXcUqEOsLFYKqHLBfYs/YKpGJaaae9HOZkkuI6D4kP3JB0ASUg5MGlc6GsK/AGPZmlxz4jkfxCf/U3IZj1eMNd+5GPrFpg9fWwgMol5YTfVmvxU/UtgIpPD+ILDuF4/yeQABvolD4zsseI80J2eITmf3BMgk2zsJXxUEADoKfhObW7NNGFHH3gxRdndM/wPWg1nrP6i2Mzcr4C3sXebng7VfP0gvN/GVXo5WZZGBd/T3A39eZwuxTW9Skxr/WyItF54zuCJnZ/XX0KXJsbdq3KXFHo98LBuJog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
- MN2PR11MB4534.namprd11.prod.outlook.com (2603:10b6:208:265::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 12:20:42 +0000
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab]) by DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab%6]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 12:20:42 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alex Williamson" <alex.williamson@redhat.com>
-Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
-Thread-Topic: refactor the i915 GVT support and move to the modern mdev API v3
-Thread-Index: AQHYTa50HopuXX46aU+QxtIWwnq/0azt3o0AgAAhbQCAAANggIAAeVIAgAACNICAANnfgA==
-Date:   Thu, 14 Apr 2022 12:20:42 +0000
-Message-ID: <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
- <20220413154642.GA28095@lst.de> <871qy1geko.fsf@intel.com>
- <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
- <20220413232053.GA2120790@nvidia.com>
-In-Reply-To: <20220413232053.GA2120790@nvidia.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 60080133-c8e3-4ceb-3b1b-08da1e1131d4
-x-ms-traffictypediagnostic: MN2PR11MB4534:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN2PR11MB45349B3AE82167952D47E99BCAEF9@MN2PR11MB4534.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TNChmHB6yJkZ3eUfb68j0evA8VgCBDt9pZQqJjNQdms4ZSDABxvfa69cMkOR228VKMsOhtbtMyEV8GBKPAwxFbfqUh7NEKbMIZXdlroU1S+A+Lz/defzHpX92B50NTBE6PeYwim/yIecBICBSJgrYns8Nbvrn+C3+kiCerSiDK+anjMFLLUmjm9kyoxGHUWmT7DfgYFJkF5aOSv2q5qVI/78COP9c0uPYN41QYe/wyTNRFO8RXwq74MVGmUqGrezcRs44fAWLZGoJnlIW5yHz6dxWjZVkfhHY3KkyDDpluzpxCNrxxSd5tX6HDJM2HkM6/1viz94XqhgKbTRjqvHpvw2lP1GtgBpjM8WHJtmxXu6NYToKll+cLtux149/zJL3TlMTmIKSFS8hmSgGUov6L2Zkabc/VTo7/1hUGH223PhwPcFRka3RmMTWmY/4dIV6SXP/miNfGQbLluvu6dTyGjyTMXH4soTmcMhX+Eq/U3J9pvP/OJ/31RBaCMSxJhFGUYhwTxNYo7ys9FLZsmMwrhCnjhRzS28aGtqwayAHsH4PdOt0M48A/N9KcuZ8sffu1A8N83ZjLKGMyoEhmSN6Ba4vg5W8hZMo+uYwqZ0dcHZ5U6JqykiWRVnF+CbssxR1lXzKjmNR6auuoqS70Ss4SAdj5X3WaZxx+Ku69fkItcB6f7Ls9k7+MjxC+cIQdokiW1uyPSMohzCmxs/AmPJIqTUe1K/Oue5qRu/9keE97Y8/bQsmcasJ/YIjxSJmKEv/4fYhmQh2A5Et/HMDl1ZhtSmQR6Wudp/P4EvtvIK2YfFUex8WCbJcoES2XKmufUiM1+3KGjRfZ393UkStbGWoBNB/fs/5ql4CdmrOA812oo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(71200400001)(91956017)(2616005)(508600001)(26005)(54906003)(6486002)(966005)(76116006)(66446008)(64756008)(66556008)(8676002)(6512007)(4326008)(66476007)(66946007)(82960400001)(122000001)(6916009)(4744005)(38100700002)(53546011)(5660300002)(86362001)(83380400001)(31686004)(186003)(316002)(2906002)(38070700005)(36756003)(8936002)(31696002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?LPVsX6v+WKTvluWLExLeXmk1e/35OrOoceMyMMbC/grFJlbEmQ54DIEC?=
- =?Windows-1252?Q?JfSisZ0UQgibLtDeKPF5HYcBOpqtN8qCeUTPAOSPsUaFnAsJvVeEW0Gj?=
- =?Windows-1252?Q?Tw3ErdnE9ayR2Gopes5FPcEQGArJBs699/RsCY9WfwGLTytAOIo8EQDv?=
- =?Windows-1252?Q?mh5KflmJ3CCpa8IQ7FwNpLhsjqLY29bAKsjxP1HPz5hkH70m8Weql1aI?=
- =?Windows-1252?Q?QRre1dRLUdHFwGGBlHv8bvoY4ybFDmwk/4ts/bkudlRPTck1M0Aexx9I?=
- =?Windows-1252?Q?Lxgc1CwMjnCHGETBqyZMxBbaK/nI3A+RiHBl0jkCrl71HCAOWqA8cbGu?=
- =?Windows-1252?Q?XwZsq+zD87wp8KouvSBZcx3cReZgSq+vUwBQeoWsB/rdy9ZsMWZeMvEX?=
- =?Windows-1252?Q?2NOvK1n5F2FTe8vC11JrKlIkE6ay3xEdZUXbhqcSJVWjiGLfTp56eF47?=
- =?Windows-1252?Q?sSENKR/phsWh//h/BFPgYwYK2V/wnlVaDyacmUJ+Vncr/JKOT0thqo4w?=
- =?Windows-1252?Q?14p5EeSmAOVuCbmw7t7UQx1oJKGRdh/hwIIlbghC0YOY41FcSM+SGg8V?=
- =?Windows-1252?Q?Ww+RTWLQLpDHIZHxSTxWd9YPAdAeZ5mxoKubfLVJ6KzV/H9RvkfxurPN?=
- =?Windows-1252?Q?CIjpd9EMoQgUjygIz1G0uq/zePMVIN3ztyX+fstSczv7pWh9RqOp1Cb6?=
- =?Windows-1252?Q?48hWt6hy9+d9XywHTjz+SxWta1r8E3Qvvkr5L12lj+YpzhdigiBvlRf0?=
- =?Windows-1252?Q?3qNLoA/VtGh7t1qJ3JomzRG37KLRjrAa9qTFKnIHIYh88l4pK1bzm7YX?=
- =?Windows-1252?Q?u6DXBQW5GeI+HwBNjbAUedCTMvNBM2m9CFP73mDTmEWzBWYLuJdNa3Ge?=
- =?Windows-1252?Q?8JD3lcX1Ib0y/fKePRDfIvWa6MuUwulieCtXbm49L+Yl2e8jSd2e0+4Z?=
- =?Windows-1252?Q?N8EwjS+sDos/edox8gZDfO6K5u0zXeJzEGIYam4uhhvo8qEc2usmAYwL?=
- =?Windows-1252?Q?hqxe8kbuxKcqxD+lwIHkDFa8aT5U3vJHrA0NLmjnV8Do3QtkCuld+chw?=
- =?Windows-1252?Q?IE35RuL6+iWhcUgtY7BhMFM+5mljwg5CcKK4dExrwRkZ9XeUAww9GKbn?=
- =?Windows-1252?Q?bV3psEwQJqVsVf/lR43XN4MSHoOPzcJGnpTmyiSO20uWdyVNDXKTL2SE?=
- =?Windows-1252?Q?uerm+u+kT6w08s5hQjEjSFYc/1kUHdPFzInBj/A8NQWA+6mFQj3xtaqG?=
- =?Windows-1252?Q?jzTJesAUQp8ZiIttjqVFPJuRCTQ7Tg2DhYQ7bEc8gwliYhEmDVMtY+1g?=
- =?Windows-1252?Q?4sltzLAz/CIYBfg4CWGfFV3PHyq2+U7XdhVK3gxHisu7jdEXCdEQrty9?=
- =?Windows-1252?Q?hVJj15r6GY+gtl7JF7/Sj2rVLQ3f+XuJIwXGALmXiUiZzGbywH2eJIrn?=
- =?Windows-1252?Q?6TOCSURC1m59wYtjr6T5TRITttmKJdgLUSMhI82g7rem8aYYwh4wqxy9?=
- =?Windows-1252?Q?DfN/NA5unzFv2WEFrW4U5CdiPBZj/Wd5Oid7WgKpysFXl4LzQd0RpyX0?=
- =?Windows-1252?Q?2/NvVIJQGynUEtn0KctFIoNATJ1GK+ZecENXyMOZWmxKatQt0VM4jNwM?=
- =?Windows-1252?Q?g4b/V78MHXEZkTDCT3HBr0k7L2RfHxhRg+ds5Ff01RYRIb2c3kLILt9l?=
- =?Windows-1252?Q?tBfR3Ux5mlcj8fWIp216/dcR78cBXq+7gGdKtDr2HswS0f/x/zp4qY0U?=
- =?Windows-1252?Q?4GcgWeKjDWPsUqwSSwF2H3RgcRO3f9kGR9CNqgEjHWxX2uMel70Q0/Ni?=
- =?Windows-1252?Q?i4+AZEdSKYOhr6fltfxQka0r3YVZjgZVpnlQZDXC3Yl6oTOYtV+2BOoO?=
- =?Windows-1252?Q?/qxEPSQuHPy8Kg=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <AAA45BA1F77A3141B9CB70C5B3A82B84@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 14 Apr 2022 08:23:25 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC7D8C7C2;
+        Thu, 14 Apr 2022 05:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649938856; x=1681474856;
+  h=message-id:date:mime-version:subject:references:from:to:
+   in-reply-to:content-transfer-encoding;
+  bh=XQzkMr/Z8ZY/1F9whxA7rLJIz5j5Y5jxd67801ew3pM=;
+  b=flEL6NI2NMVmPAw9N7DN+Egkwh2wjmK7vYvSFuNovjRoxwUEkBw/FcZs
+   3plCQ4Sp5KTWW1cQVuGcNQpyKIkyxlm7Ph52kX6AzFSX+cuOMgOVNwUyP
+   f55uylSYDW/cCUpInAV3N5Zh0w3XyFt1fqznKshzT8xzmoUlVajLWO1av
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Apr 2022 05:20:55 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 05:20:55 -0700
+Received: from [10.201.2.159] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Apr
+ 2022 05:20:51 -0700
+Message-ID: <2697e757-f446-9cdb-95e0-ea01a642e6d4@quicinc.com>
+Date:   Thu, 14 Apr 2022 17:50:48 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60080133-c8e3-4ceb-3b1b-08da1e1131d4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 12:20:42.4991
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 28I4S6F+KX8NMSjT0ki5Mu3kZsd+mTBtSSC3qPiHBEBz9WmjvmPVs2B3YnPQVG6YyUJhGI26xvI+YODalZtvfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4534
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: FW: [PATCH] mtd: rawnand: qcom: fix memory corruption that causes
+ panic
+Content-Language: en-US
+References: <1649914773-22434-1-git-send-email-quic_mdalam@quicinc.com>
+ <20220414101517.7bbc5e9d@xps13>
+ <DM6PR02MB580382FA47C4884AFC1A98D0FAEF9@DM6PR02MB5803.namprd02.prod.outlook.com>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     <miquel.raynal@bootlin.com>, <mani@kernel.org>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>, <quic_srichara@quicinc.com>,
+        <quic_mdalam@quicinc.com>
+In-Reply-To: <DM6PR02MB580382FA47C4884AFC1A98D0FAEF9@DM6PR02MB5803.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 11:20 PM, Jason Gunthorpe wrote:
-> On Wed, Apr 13, 2022 at 11:13:06PM +0000, Wang, Zhi A wrote:
->> Hi folks:
+> Hi Md,
+>
+> quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 11:09:33 +0530:
+>
+>> This patch fixes a memory corruption that occurred in the
+>> nand_scan() path for Hynix nand device.
 >>
->> Thanks so much for the efforts. I prepared a branch which contains all o=
-ur patches.The aim of the branch is for the VFIO maintainers to pull the wh=
-ole bunch easily after the drm-intel-next got merged through drm (as one of=
- the MMIO patches depends on a patch in drm-intel-next).
+>> On boot, for Hynix nand device will panic at a weird place:
+>> | Unable to handle kernel NULL pointer dereference at virtual
+>>    address 00000070
+>> | [00000070] *pgd=00000000
+>> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM Modules linked in:
+>> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+>>    #38
+>> | Hardware name: Generic DT based system PC is at
+>> | nandc_set_reg+0x8/0x1c LR is at qcom_nandc_command+0x20c/0x5d0
+>> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+>> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
+>> | r10: 000000a3  r9 : 00000000  r8 : 00000040
+>> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+>> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+>> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+>> | Control: 10c5387d  Table: 8020406a  DAC: 00000051 Register r0
+>> | information: slab kmalloc-2k start c14ee000 pointer offset
+>>    64 size 2048
+>> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval)) nandc_set_reg
+>> | from qcom_nandc_command+0x20c/0x5d0 qcom_nandc_command from
+>> | nand_readid_op+0x198/0x1e8 nand_readid_op from
+>> | hynix_nand_has_valid_jedecid+0x30/0x78
+>> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+>> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+>> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+>> | qcom_nandc_probe from platform_probe+0x58/0xac
 >>
->> I dropped patch 4 and patch 5 as they have been covered by Jani's patche=
-s. Some conflicts was solved.
->> QA is going to test it today.=20
->>
->> You can find it here:
->>
->> git clone https://github.com/intel/gvt-linux -b for-christoph
->=20
-> There are alot of extra commits on there - is it possible to base this
-> straight on rc1 not on some kind of existing DRM tree?
->=20
-> Why did you choose drm/i915/fbc: Call intel_fbc_activate() directly
-> from frontbuffer flush  as a base?
->=20
-> Jason
->=20
+>> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+>> is updating the nandc->max_cwperpage from 1 to 4.This causes the
+>> sg_init_table of clear_bam_transaction() in the driver's
+>> qcom_nandc_command() to memset much more than what was initially
+>> allocated by alloc_bam_transaction().
+> Thanks for investigating!
+>
+>> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
+>> returns, and remove updating nandc->max_cwperpage from
+>> qcom_nand_attach_chip call back.
+> The fix does not look right, as far as I understand, this should be properly handled during the attach phase. That is where we have all information about the chip and do the configuration for this chip.
+>
+> If you update max_cwperpage there you should probably update other internal variables that depend on it as well.
 
-Hi Jason:
+    Currently we are updating max_cwperpage  in qcom_nand_attach_chip(), 
+but we are seeing issue for Hynix nand device since nand_scan_tail() is 
+getting called after nand_attach() and in nand_attach() we are updating 
+max_cwperpage to 4 or 8 based on page size.
 
-I updated the branch. You can check if those are what you are expecting. :)
+     From nand_scan_tail() there is a call for nand_manufacturer_init() 
+, specific to Hynix nand read_id is getting called that's why we are 
+seeing this issue only for Hynix nand device. Read id sequence as below
 
-Thanks,
-Zhi.
+    hynix_nand_has_valid_jedecid()
+
+                 |
+
+    nand_readid_op()
+
+              |
+
+  qcom_nandc_command()
+
+             |
+
+pre_command()
+
+           |
+
+clear_bam_transaction()   --> In this call we are doing sg_init_table() 
+which is calling memset() based on max_cwperpage.Since initially we have 
+allocated bam transaction as per max_cwperpage =1 and , since 
+nand_chip_attach() updated max_cwperpage,  now we are doing memset as 
+per max_cwperpage = 4 or 8.
+
+
+So anyway we have to updated max_cwperpage after nand_scan() call only.  
+Since there is no other dependency on max_cwperpage in 
+nand_attach_chip() and we are using this in bam_alloc() and bam_clear().
+
+>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+>> ---
+>>   drivers/mtd/nand/raw/qcom_nandc.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c
+>> b/drivers/mtd/nand/raw/qcom_nandc.c
+>> index 1a77542..aa3ec45 100644
+>> --- a/drivers/mtd/nand/raw/qcom_nandc.c
+>> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+>> @@ -2652,9 +2652,6 @@ static int qcom_nand_attach_chip(struct
+>> nand_chip *chip)
+>>
+>>        mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
+>>
+>> -     nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
+>> -                                  cwperpage);
+>> -
+>>        /*
+>>         * DATA_UD_BYTES varies based on whether the read/write command protects
+>>         * spare data with ECC too. We protect spare data by default, so
+>> we set @@ -2909,7 +2906,7 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+>>        struct nand_chip *chip = &host->chip;
+>>        struct mtd_info *mtd = nand_to_mtd(chip);
+>>        struct device *dev = nandc->dev;
+>> -     int ret;
+>> +     int ret, cwperpage;
+>>
+>>        ret = of_property_read_u32(dn, "reg", &host->cs);
+>>        if (ret) {
+>> @@ -2955,6 +2952,9 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+>>        if (ret)
+>>                return ret;
+>>
+>> +     cwperpage = mtd->writesize / NANDC_STEP_SIZE;
+>> +     nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
+>> +                                  cwperpage);
+>>        if (nandc->props->is_bam) {
+>>                free_bam_transaction(nandc);
+>>                nandc->bam_txn = alloc_bam_transaction(nandc);
+>
+> Thanks,
+> Miquèl

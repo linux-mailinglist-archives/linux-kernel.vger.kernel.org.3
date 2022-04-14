@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9CD50170E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CB65016E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356502AbiDNPTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S1348262AbiDNPPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347396AbiDNN6t (ORCPT
+        with ESMTP id S1347563AbiDNN7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E6836E21;
-        Thu, 14 Apr 2022 06:49:36 -0700 (PDT)
+        Thu, 14 Apr 2022 09:59:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D998E41317;
+        Thu, 14 Apr 2022 06:50:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9914CB828F4;
-        Thu, 14 Apr 2022 13:49:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03136C385A5;
-        Thu, 14 Apr 2022 13:49:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DDE061D29;
+        Thu, 14 Apr 2022 13:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C204C385A9;
+        Thu, 14 Apr 2022 13:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944173;
-        bh=snVegn9YinnM8bNgLdpLWwdwpJdSlaBGPByMBjwpuwg=;
+        s=korg; t=1649944203;
+        bh=Q/SpDShfMss9VqbWYb4EgrcpKPzSvLkkplVBgVsTLB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TIIPWtcWdKCg7uQgwUarCEQjHtqPTGxzA88jeq0SZWDxGr612IIbC/EsTnXNCB0ZK
-         VVggPhmTayCYbOwL+tTn4KkqMqQoOnVZNf8DiJJmwlNxvtrtyrqleNdLlM1U0En4Zv
-         xjPQ23f3H78Ap9+8DIVGP+xcEIEtt6+AHaCALFpU=
+        b=SXY88CeHqWfIBa/ZZduoI/8s4Xv82Oru8CB57asgovmnvj0gi5NuhpGe2No4bAeT/
+         ZExlXqbyae161PceWEC23vfUYPIxFCqQcBtJepk6jGp2ojgQrpzEh35fctz5tn4n0A
+         HvkN6nUfhw7XyDgVI1pGZ3xBYYXksRarK079XEbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 393/475] scsi: pm8001: Fix pm8001_mpi_task_abort_resp()
-Date:   Thu, 14 Apr 2022 15:12:58 +0200
-Message-Id: <20220414110906.070024648@linuxfoundation.org>
+Subject: [PATCH 5.4 394/475] scsi: aha152x: Fix aha152x_setup() __setup handler return value
+Date:   Thu, 14 Apr 2022 15:12:59 +0200
+Message-Id: <20220414110906.097665887@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -56,43 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 7e6b7e740addcea450041b5be8e42f0a4ceece0f ]
+[ Upstream commit cc8294ec4738d25e2bb2d71f7d82a9bf7f4a157b ]
 
-The call to pm8001_ccb_task_free() at the end of
-pm8001_mpi_task_abort_resp() already frees the ccb tag. So when the device
-NCQ_ABORT_ALL_FLAG is set, the tag should not be freed again.  Also change
-the hardcoded 0xBFFFFFFF value to ~NCQ_ABORT_ALL_FLAG as it ought to be.
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; doing so just pollutes init's
+environment with strings that are not init arguments/parameters).
 
-Link: https://lore.kernel.org/r/20220220031810.738362-19-damien.lemoal@opensource.wdc.com
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Return 1 from aha152x_setup() to indicate that the boot option has been
+handled.
+
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220223000623.5920-1-rdunlap@infradead.org
+Cc: "Juergen E. Fischer" <fischer@norbit.de>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/scsi/aha152x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index fe5d996bf069..fec653b54307 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -3775,12 +3775,11 @@ int pm8001_mpi_task_abort_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 	mb();
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index eb466c2e1839..fdd9f1a5100c 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -3368,13 +3368,11 @@ static int __init aha152x_setup(char *str)
+ 	setup[setup_count].synchronous = ints[0] >= 6 ? ints[6] : 1;
+ 	setup[setup_count].delay       = ints[0] >= 7 ? ints[7] : DELAY_DEFAULT;
+ 	setup[setup_count].ext_trans   = ints[0] >= 8 ? ints[8] : 0;
+-	if (ints[0] > 8) {                                                /*}*/
++	if (ints[0] > 8)
+ 		printk(KERN_NOTICE "aha152x: usage: aha152x=<IOBASE>[,<IRQ>[,<SCSI ID>"
+ 		       "[,<RECONNECT>[,<PARITY>[,<SYNCHRONOUS>[,<DELAY>[,<EXT_TRANS>]]]]]]]\n");
+-	} else {
++	else
+ 		setup_count++;
+-		return 0;
+-	}
  
- 	if (pm8001_dev->id & NCQ_ABORT_ALL_FLAG) {
--		pm8001_tag_free(pm8001_ha, tag);
- 		sas_free_task(t);
--		/* clear the flag */
--		pm8001_dev->id &= 0xBFFFFFFF;
--	} else
-+		pm8001_dev->id &= ~NCQ_ABORT_ALL_FLAG;
-+	} else {
- 		t->task_done(t);
-+	}
- 
- 	return 0;
+ 	return 1;
  }
 -- 
 2.35.1

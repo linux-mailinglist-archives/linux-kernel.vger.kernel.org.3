@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9CD501570
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA38E501642
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245002AbiDNNiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S1350067AbiDNOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244521AbiDNN1g (ORCPT
+        with ESMTP id S1345084AbiDNNpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:27:36 -0400
+        Thu, 14 Apr 2022 09:45:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EA5A0BD5;
-        Thu, 14 Apr 2022 06:20:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3032C26577;
+        Thu, 14 Apr 2022 06:41:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D2A4618F8;
-        Thu, 14 Apr 2022 13:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D467C385A9;
-        Thu, 14 Apr 2022 13:20:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B3961D68;
+        Thu, 14 Apr 2022 13:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB3EC385A1;
+        Thu, 14 Apr 2022 13:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942424;
-        bh=i4IVF2b3uFlJ29VJ5FhjGZ5Tzc030PhifJs3cdijxs0=;
+        s=korg; t=1649943701;
+        bh=/zL59KZRSsOPmiteEbeTcjJdAPvwMkypNSTyMN0PYOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V6vBmkC9awEMLeQbCML1w8NdCUGJMtWTxA78/+TZ4tYP6B0UGc4zsYfhYpkwrtxEq
-         LMI+NsJhhVVS8ClgHrtepCE1eK6RzYs/wigjoTOrs6R5JlRMjupuzcUfMxAssMYiKx
-         O1hyGPntHQ+mF9kesl69wDGklZ+L1UD4QVtPid9c=
+        b=GfmUTbAl9hSq5R+ue2rxgN83sKBa4ISNpoSjaoxUU764NoNTrC5aSrbuxV5UXGqh7
+         krTifu3lfHyFua9GGh/THBO5+dacshQYy9M8Kgab/SdtgeXJ74ZmlCQXUb55HAuCKl
+         LxDe3I0V+0ez46X7QYj4YIlzKAEUlibtSWRSczr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 131/338] scsi: pm8001: Fix payload initialization in pm80xx_set_thermal_config()
+Subject: [PATCH 5.4 249/475] staging: mt7621-dts: fix LEDs and pinctrl on GB-PC1 devicetree
 Date:   Thu, 14 Apr 2022 15:10:34 +0200
-Message-Id: <20220414110842.628926456@linuxfoundation.org>
+Message-Id: <20220414110902.080844065@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +56,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit bb225b12dbcc82d53d637d10b8d70b64494f8c16 ]
+[ Upstream commit 6256e18686158fa49e019297f990f1c1817aabf1 ]
 
-The fields of the set_ctrl_cfg_req structure have the __le32 type, so use
-cpu_to_le32() to assign them. This removes the sparse warnings:
+Fix LED and pinctrl definitions on the GB-PC1 devicetree. Refer to the
+schematics of the device for more information.
 
-warning: incorrect type in assignment (different base types)
-    expected restricted __le32
-    got unsigned int
+LED fixes:
+- Change GPIO6 LED label from system to power as GPIO6 is connected to
+PLED.
+- Add default-on default-trigger to power LED.
+- Change GPIO8 LED label from status to system as GPIO8 is connected to
+SYS_LED.
+- Add disk-activity default-trigger to system LED.
+- Switch to the color:function naming scheme.
+- Remove lan1 and lan2 LEDs as they don't exist.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-8-damien.lemoal@opensource.wdc.com
-Fixes: 842784e0d15b ("pm80xx: Update For Thermal Page Code")
-Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Pinctrl fixes:
+- Claim state_default node under pinctrl node.
+- Change pinctrl0 node name to state-default.
+- Change gpio node name to gpio-pinmux to respect
+Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml.
+- Sort pin groups alphabetically.
+
+Misc fixes:
+- Fix formatting.
+- Use the status value "okay".
+- Define hexadecimal addresses in lower case.
+- Make hexadecimal addresses for memory easier to read.
+
+Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC1_V1.0_Schematic.pdf
+Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220311090320.3068-1-arinc.unal@arinc9.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/staging/mt7621-dts/gbpc1.dts | 40 +++++++++++++---------------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index c73a365da1d8..2e743dc6b13a 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -881,9 +881,11 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *pm8001_ha)
- 	else
- 		page_code = THERMAL_PAGE_CODE_8H;
+diff --git a/drivers/staging/mt7621-dts/gbpc1.dts b/drivers/staging/mt7621-dts/gbpc1.dts
+index 1fb560ff059c..1713283e60d4 100644
+--- a/drivers/staging/mt7621-dts/gbpc1.dts
++++ b/drivers/staging/mt7621-dts/gbpc1.dts
+@@ -11,7 +11,8 @@
  
--	payload.cfg_pg[0] = (THERMAL_LOG_ENABLE << 9) |
--				(THERMAL_ENABLE << 8) | page_code;
--	payload.cfg_pg[1] = (LTEMPHIL << 24) | (RTEMPHIL << 8);
-+	payload.cfg_pg[0] =
-+		cpu_to_le32((THERMAL_LOG_ENABLE << 9) |
-+			    (THERMAL_ENABLE << 8) | page_code);
-+	payload.cfg_pg[1] =
-+		cpu_to_le32((LTEMPHIL << 24) | (RTEMPHIL << 8));
+ 	memory@0 {
+ 		device_type = "memory";
+-		reg = <0x0 0x1c000000>, <0x20000000 0x4000000>;
++		reg = <0x00000000 0x1c000000>,
++		      <0x20000000 0x04000000>;
+ 	};
  
- 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload, 0);
- 	if (rc)
+ 	chosen {
+@@ -37,24 +38,16 @@
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
+-		system {
+-			label = "gb-pc1:green:system";
++		power {
++			label = "green:power";
+ 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "default-on";
+ 		};
+ 
+-		status {
+-			label = "gb-pc1:green:status";
++		system {
++			label = "green:system";
+ 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+-		};
+-
+-		lan1 {
+-			label = "gb-pc1:green:lan1";
+-			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
+-		};
+-
+-		lan2 {
+-			label = "gb-pc1:green:lan2";
+-			gpios = <&gpio 25 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "disk-activity";
+ 		};
+ 	};
+ };
+@@ -94,9 +87,8 @@
+ 
+ 		partition@50000 {
+ 			label = "firmware";
+-			reg = <0x50000 0x1FB0000>;
++			reg = <0x50000 0x1fb0000>;
+ 		};
+-
+ 	};
+ };
+ 
+@@ -118,9 +110,12 @@
+ };
+ 
+ &pinctrl {
+-	state_default: pinctrl0 {
+-		default_gpio: gpio {
+-			groups = "wdt", "rgmii2", "uart3";
++	pinctrl-names = "default";
++	pinctrl-0 = <&state_default>;
++
++	state_default: state-default {
++		gpio-pinmux {
++			groups = "rgmii2", "uart3", "wdt";
+ 			function = "gpio";
+ 		};
+ 	};
+@@ -129,12 +124,13 @@
+ &switch0 {
+ 	ports {
+ 		port@0 {
++			status = "okay";
+ 			label = "ethblack";
+-			status = "ok";
+ 		};
++
+ 		port@4 {
++			status = "okay";
+ 			label = "ethblue";
+-			status = "ok";
+ 		};
+ 	};
+ };
 -- 
 2.34.1
 

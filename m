@@ -2,89 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A926B5006E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C145006E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240327AbiDNHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S240343AbiDNHdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240346AbiDNHci (ORCPT
+        with ESMTP id S240330AbiDNHdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:32:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4DC338AF;
-        Thu, 14 Apr 2022 00:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBA5DB8289B;
-        Thu, 14 Apr 2022 07:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 700FCC385A7;
-        Thu, 14 Apr 2022 07:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649921411;
-        bh=OuNLvEJ8aXMqTJPv7jVEIV7+W6+riGS+XbsjZV8uTL4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GZ8nxhM0UxgDVBIo3qzVBxVKyFF9gnn+e+BtnrxoGHZIoRNAsgvqY2SrxJsQOFNOr
-         CtYG2oWUFMqyAE1y1amWltHFJdh/8bdSOePY9eChLAKlLIqUx7iL/rM8J3qXig3mCK
-         3FAlGAHUtjadULG0IGTDZ8E9ZI2l+OwHuU9QkIdQXEV2GBQKM1QFBmPFCEyUrRUjmX
-         T47NVwWAeED/qUhd4bAuVpbEe74IknXXNGq4b1tc4cXRX7gKTX9UhkL0e17VUVhjcZ
-         zq6tnHfPBYvCqrbeE2pzIRhmnnT701upwXYi2BCDXD68OwdCMxydi5xeeRzzFw6prh
-         g9mL9wbdewrkQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 511ABE85D15;
-        Thu, 14 Apr 2022 07:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 14 Apr 2022 03:33:04 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD6F5418B;
+        Thu, 14 Apr 2022 00:30:38 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1netw2-001Q8x-MV; Thu, 14 Apr 2022 09:30:34 +0200
+Received: from p57bd9a34.dip0.t-ipconnect.de ([87.189.154.52] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1netw2-002qc5-7P; Thu, 14 Apr 2022 09:30:34 +0200
+Message-ID: <aa1e5107-22b6-3225-bad0-a2036782ce61@physik.fu-berlin.de>
+Date:   Thu, 14 Apr 2022 09:30:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: bcmgenet: Revert "Use stronger register read/writes to
- assure ordering"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164992141132.21485.14435114290874521938.git-patchwork-notify@kernel.org>
-Date:   Thu, 14 Apr 2022 07:30:11 +0000
-References: <20220412210420.1129430-1-jeremy.linton@arm.com>
-In-Reply-To: <20220412210420.1129430-1-jeremy.linton@arm.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     netdev@vger.kernel.org, opendmb@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        pbrobinson@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PING^3][PATCH] Alpha: Remove redundant local asm header
+ redirections
+Content-Language: en-US
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <alpine.DEB.2.21.2202131944000.34636@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2204132104530.9383@angie.orcam.me.uk>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <alpine.DEB.2.21.2204132104530.9383@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.154.52
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Maciej!
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 12 Apr 2022 16:04:20 -0500 you wrote:
-> It turns out after digging deeper into this bug, that it was being
-> triggered by GCC12 failing to call the bcmgenet_enable_dma()
-> routine. Given that a gcc12 fix has been merged [1] and the genet
-> driver now works properly when built with gcc12, this commit should
-> be reverted.
+On 4/14/22 00:53, Maciej W. Rozycki wrote:
+> On Sun, 13 Feb 2022, Maciej W. Rozycki wrote:
 > 
-> [1]
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
-> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=aabb9a261ef060cf24fd626713f1d7d9df81aa57
+>> Remove a number of asm headers locally redirected to the respective 
+>> generic or generated versions.
 > 
-> [...]
+>  Ping for:
+> <https://lore.kernel.org/lkml/alpine.DEB.2.21.2202131944000.34636@angie.orcam.me.uk/>
 
-Here is the summary with links:
-  - net: bcmgenet: Revert "Use stronger register read/writes to assure ordering"
-    https://git.kernel.org/netdev/net/c/2df3fc4a84e9
+Maybe Andrew Morton could pick the fix up if the original maintainer is currently
+not responding?
 
-You are awesome, thank you!
+Adrian
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 

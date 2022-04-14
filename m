@@ -2,169 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B5E5017B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97EA5017AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359376AbiDNPoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S1359193AbiDNPms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352570AbiDNPRj (ORCPT
+        with ESMTP id S1352566AbiDNPRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 11:17:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CAEBB927
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 426C861976
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1059C385B0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649948499;
-        bh=uLBpQvyEuj7UIyisLgnSpnl7dIxguh1LQBJxeQR74JA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P03NZEvLNnl/qHpOe9RZzVKFIzmSB+T7HTapxwWoFBMr87YqR9pQXB6kyXdbkBnMG
-         6j7qWLQm6ZrhqYn00VggYn4pO0puIBKuEuz5eL6Z17s2PYTJdwAHhIy8F/tG/GW75F
-         HEJdWdHnvhU9GQGobD4788L1uXVxbtNjZMnpe+VKm2mhlsBEG8dBkZkCzJf8CKxBIS
-         MLda3oVzcMK+hZGtmkKwyZ0t4QQ4T4OKZEIftdJSKGOOV1Z3PghS0w3Y/pPlnff8vR
-         3yAK/vBB8PS7JWhhI7MOAjLrFE8aeJDbZ0T+CrBF4pfh48C5D0ehFDeieE/OBWdS8y
-         h+B2AkLfQx9yw==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-de3eda6b5dso5563247fac.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:01:39 -0700 (PDT)
-X-Gm-Message-State: AOAM533wPb40cU9oNguMN21mPibzeIIv3U6sPz172t+Uh/u4shjnsVLv
-        SJ0ZdNF5KCh3miqWWFGy15mvxYrvMpCA3CozhzI=
-X-Google-Smtp-Source: ABdhPJxUjc8busUYfEAzwkSfVarMQKKFF1JAZIwr0b7vsKNuetnUhoU+WD81T7eb9a9ehBbm8Yl6laFqxdnsnRNQZJQ=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr1774023oap.228.1649948498648; Thu, 14
- Apr 2022 08:01:38 -0700 (PDT)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3EFCBAB95;
+        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 408E1139F;
+        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9633F5A1;
+        Thu, 14 Apr 2022 08:01:31 -0700 (PDT)
+Message-ID: <d5ad3e6f-769d-05d8-3e94-21ec8b5cb3ba@arm.com>
+Date:   Thu, 14 Apr 2022 10:01:30 -0500
 MIME-Version: 1.0
-References: <YlVOTsaTVkBOxthG@arm.com> <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
- <YlVxGAHHD/j6lW3c@arm.com> <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
- <YlezcPbFOkSUygBJ@kroah.com> <CAMj1kXFWJXbT+fMEx=wzX1wS6xW1DeGxZ+mWBbY8Z4hj4kc_dw@mail.gmail.com>
- <YlgvaSozV5jU49Y0@kroah.com> <CAMj1kXGAd7s1GU=uH+iLOwvbn1zG-=TNXw02Bf-AdiHOQvh02Q@mail.gmail.com>
- <Ylg1SCBA6lJM/k4h@kroah.com>
-In-Reply-To: <Ylg1SCBA6lJM/k4h@kroah.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 Apr 2022 17:01:26 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHeYQ0=oDYT8uaHxFt1dFe3pR+H9psF8ohv5HC351NTKQ@mail.gmail.com>
-Message-ID: <CAMj1kXHeYQ0=oDYT8uaHxFt1dFe3pR+H9psF8ohv5HC351NTKQ@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.4 222/475] net: bcmgenet: Use stronger register
+ read/writes to assure ordering
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220414110855.141582785@linuxfoundation.org>
+ <20220414110901.335632939@linuxfoundation.org>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <20220414110901.335632939@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 at 16:53, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Apr 14, 2022 at 04:36:46PM +0200, Ard Biesheuvel wrote:
-> > On Thu, 14 Apr 2022 at 16:27, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Apr 14, 2022 at 03:52:53PM +0200, Ard Biesheuvel wrote:
-...
-> > > > What we might do, given the fact that only inbound non-cache coherent
-> > > > DMA is problematic, is dropping the kmalloc alignment to 8 like on
-> > > > x86, and falling back to bounce buffering when a misaligned, non-cache
-> > > > coherent inbound DMA mapping is created, using the SWIOTLB bounce
-> > > > buffering code that we already have, and is already in use on most
-> > > > affected systems for other reasons (i.e., DMA addressing limits)
-> > >
-> > > Ick, that's a mess.
-> > >
-> > > > This will cause some performance regressions, but in a way that seems
-> > > > fixable to me: taking network drivers as an example, the RX buffers
-> > > > that are filled using inbound DMA are typically owned by the driver
-> > > > itself, which could be updated to round up its allocations and DMA
-> > > > mappings. Block devices typically operate on quantities that are
-> > > > aligned sufficiently already. In other cases, we will likely notice
-> > > > if/when this fallback is taken on a hot path, but if we don't, at
-> > > > least we know a bounce buffer is being used whenever we cannot perform
-> > > > the DMA safely in-place.
-> > >
-> > > We can move to having an "allocator-per-bus" for memory like this to
-> > > allow the bus to know if this is a DMA requirement or not.
-> > >
-> > > So for all USB drivers, we would have:
-> > >         usb_kmalloc(size, flags);
-> > > and then it might even be easier to verify with static tools that the
-> > > USB drivers are sending only properly allocated data.  Same for SPI and
-> > > other busses.
-> > >
-> >
-> > As I pointed out earlier in the thread, alignment/padding requirements
-> > for non-coherent DMA are a property of the CPU's cache hierarchy, not
-> > of the device. So I'm not sure I follow how a per-subsystem
-> > distinction would help here. In the case of USB especially, would that
-> > mean that block, media and networking subsystems would need to be
-> > aware of the USB-ness of the underlying transport?
->
-> That's what we have required today, yes.  That's only because we knew
-> that for some USB controllers, that was a requirement and we had no way
-> of passing that information back up the stack so we just made it a
-> requirement.
->
-> But I do agree this is messy.  It's even messier for things like USB
-> where it's not the USB device itself that matters, it's the USB
-> controller that the USB device is attached to.  And that can be _way_ up
-> the device hierarchy.  Attach something like a NFS mount over a PPP
-> network connection on a USB to serial device and ugh, where do you
-> begin?  :)
->
+Hi,
 
-Exactly.
+I would kill this commit since the final conclusion was that underlying 
+problem was a compiler bug (which has now been fixed).
 
-> And is this always just an issue of the CPU cache hierarchy?  And not the
-> specific bridge that a device is connected to that CPU on?  Or am I
-> saying the same thing here?
->
+Thanks,
 
-Yes, this is a system property not a device property, and the driver
-typically doesn't have any knowledge of this. For example, if a PCI
-host bridge happens to be integrated in a non-cache coherent way, any
-PCI device plugged into it becomes non-coherent, and the associated
-driver needs to do the right thing. This is why we rely on the DMA
-layer to take care of this.
 
-> I mean take a USB controller for example.  We could have a system where
-> one USB controller is on a PCI bus, while another is on a "platform"
-> bus.  Both of those are connected to the CPU in different ways and so
-> could have different DMA rules.  Do we downgrade everything in the
-> system for the worst connection possible?
->
 
-No, we currently support a mix of coherent and non-coherent just fine,
-and this shouldn't change. It's just that the mere fact that
-non-coherent devices might exist is increasing the memory footprint of
-all kmalloc allocations.
+On 4/14/22 08:10, Greg Kroah-Hartman wrote:
+> From: Jeremy Linton <jeremy.linton@arm.com>
+> 
+> [ Upstream commit 8d3ea3d402db94b61075617e71b67459a714a502 ]
+> 
+> GCC12 appears to be much smarter about its dependency tracking and is
+> aware that the relaxed variants are just normal loads and stores and
+> this is causing problems like:
+> 
+> [  210.074549] ------------[ cut here ]------------
+> [  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit queue 1 timed out
+> [  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529 dev_watchdog+0x234/0x240
+> [  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat]
+> [  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
+> [  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G            E     5.17.0-rc7G12+ #58
+> [  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read perf counters
+> [  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
+> [  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  210.161358] pc : dev_watchdog+0x234/0x240
+> [  210.161364] lr : dev_watchdog+0x234/0x240
+> [  210.161368] sp : ffff8000080a3a40
+> [  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27: ffff8000080a3b20
+> [  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24: ffffcd425af8ec08
+> [  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21: ffff55b142688000
+> [  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18: ffffffffffffffff
+> [  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15: 6d736e617274203a
+> [  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12: ffffcd425b07d5f0
+> [  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 : ffffcd4258bdad9c
+> [  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 : 0000000000000000
+> [  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000001000
+> [  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 : 0000000000000044
+> [  210.269682] Call trace:
+> [  210.272133]  dev_watchdog+0x234/0x240
+> [  210.275811]  call_timer_fn+0x3c/0x15c
+> [  210.279489]  __run_timers.part.0+0x288/0x310
+> [  210.283777]  run_timer_softirq+0x48/0x80
+> [  210.287716]  __do_softirq+0x128/0x360
+> [  210.291392]  __irq_exit_rcu+0x138/0x140
+> [  210.295243]  irq_exit_rcu+0x1c/0x30
+> [  210.298745]  el1_interrupt+0x38/0x54
+> [  210.302334]  el1h_64_irq_handler+0x18/0x24
+> [  210.306445]  el1h_64_irq+0x7c/0x80
+> [  210.309857]  arch_cpu_idle+0x18/0x2c
+> [  210.313445]  default_idle_call+0x4c/0x140
+> [  210.317470]  cpuidle_idle_call+0x14c/0x1a0
+> [  210.321584]  do_idle+0xb0/0x100
+> [  210.324737]  cpu_startup_entry+0x30/0x8c
+> [  210.328675]  secondary_start_kernel+0xe4/0x110
+> [  210.333138]  __secondary_switched+0x94/0x98
+> 
+> The assumption when these were relaxed seems to be that device memory
+> would be mapped non reordering, and that other constructs
+> (spinlocks/etc) would provide the barriers to assure that packet data
+> and in memory rings/queues were ordered with respect to device
+> register reads/writes. This itself seems a bit sketchy, but the real
+> problem with GCC12 is that it is moving the actual reads/writes around
+> at will as though they were independent operations when in truth they
+> are not, but the compiler can't know that. When looking at the
+> assembly dumps for many of these routines its possible to see very
+> clean, but not strictly in program order operations occurring as the
+> compiler would be free to do if these weren't actually register
+> reads/write operations.
+> 
+> Its possible to suppress the timeout with a liberal bit of dma_mb()'s
+> sprinkled around but the device still seems unable to reliably
+> send/receive data. A better plan is to use the safer readl/writel
+> everywhere.
+> 
+> Since this partially reverts an older commit, which notes the use of
+> the relaxed variants for performance reasons. I would suggest that
+> any performance problems with this commit are targeted at relaxing only
+> the performance critical code paths after assuring proper barriers.
+> 
+> Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
+> Reported-by: Peter Robinson <pbrobinson@gmail.com>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> Acked-by: Peter Robinson <pbrobinson@gmail.com>
+> Tested-by: Peter Robinson <pbrobinson@gmail.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> Link: https://lore.kernel.org/r/20220310045358.224350-1-jeremy.linton@arm.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> index 2affdddc12bf..7a8a53807909 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -80,7 +80,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
+>   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>   		__raw_writel(value, offset);
+>   	else
+> -		writel_relaxed(value, offset);
+> +		writel(value, offset);
+>   }
+>   
+>   static inline u32 bcmgenet_readl(void __iomem *offset)
+> @@ -88,7 +88,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
+>   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>   		return __raw_readl(offset);
+>   	else
+> -		return readl_relaxed(offset);
+> +		return readl(offset);
+>   }
+>   
+>   static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
 
-> Again, consider a USB driver allocating memory to transfer stuff, should
-> it somehow know the cache hierarchy that it is connected to?  Right now
-> we punt and do not do that at the expense of a bit of potentially
-> wasted memory for small allocations.
->
-
-This whole discussion is based on the premise that this is an expense
-we would prefer to avoid. Currently, every kmalloc allocation is
-rounded up to 128 bytes on arm64, while x86 uses only 8.

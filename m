@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECDD500DE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65F2500DE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243604AbiDNMpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S243609AbiDNMp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243515AbiDNMph (ORCPT
+        with ESMTP id S243512AbiDNMpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:45:37 -0400
+        Thu, 14 Apr 2022 08:45:45 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8912290CFB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:43:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B962D8FE5D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:43:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 593231650;
-        Thu, 14 Apr 2022 05:43:12 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88EA31424;
+        Thu, 14 Apr 2022 05:43:14 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5C9D53F70D;
-        Thu, 14 Apr 2022 05:43:10 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8E4143F70D;
+        Thu, 14 Apr 2022 05:43:12 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
@@ -30,9 +30,9 @@ Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
         zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
         jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 11/13] iommu/tegra-smmu: Clean up bus_set_iommu()
-Date:   Thu, 14 Apr 2022 13:42:40 +0100
-Message-Id: <6f70390dadc0fe0adcfa9caf99d57f1442b48e47.1649935679.git.robin.murphy@arm.com>
+Subject: [PATCH 12/13] iommu/virtio: Clean up bus_set_iommu()
+Date:   Thu, 14 Apr 2022 13:42:41 +0100
+Message-Id: <4db34a35e07f3741a658465045b78c96a569c591.1649935679.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.28.0.dirty
 In-Reply-To: <cover.1649935679.git.robin.murphy@arm.com>
 References: <cover.1649935679.git.robin.murphy@arm.com>
@@ -52,61 +52,58 @@ the probe failure path accordingly.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- drivers/iommu/tegra-smmu.c | 29 ++++++-----------------------
- 1 file changed, 6 insertions(+), 23 deletions(-)
+ drivers/iommu/virtio-iommu.c | 24 ------------------------
+ 1 file changed, 24 deletions(-)
 
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 1fea68e551f1..2e4d2e4c65bb 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -1086,8 +1086,8 @@ struct tegra_smmu *tegra_smmu_probe(struct device *dev,
+diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+index 25be4b822aa0..371f8657c0ce 100644
+--- a/drivers/iommu/virtio-iommu.c
++++ b/drivers/iommu/virtio-iommu.c
+@@ -7,7 +7,6 @@
  
- 	/*
- 	 * This is a bit of a hack. Ideally we'd want to simply return this
--	 * value. However the IOMMU registration process will attempt to add
--	 * all devices to the IOMMU when bus_set_iommu() is called. In order
-+	 * value. However iommu_device_register() will attempt to add
-+	 * all devices to the IOMMU before we get that far. In order
- 	 * not to rely on global variables to track the IOMMU instance, we
- 	 * set it here so that it can be looked up from the .probe_device()
- 	 * callback via the IOMMU device's .drvdata field.
-@@ -1141,32 +1141,15 @@ struct tegra_smmu *tegra_smmu_probe(struct device *dev,
- 		return ERR_PTR(err);
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- 	err = iommu_device_register(&smmu->iommu, &tegra_smmu_ops, dev);
--	if (err)
--		goto remove_sysfs;
--
--	err = bus_set_iommu(&platform_bus_type, &tegra_smmu_ops);
--	if (err < 0)
--		goto unregister;
--
+-#include <linux/amba/bus.h>
+ #include <linux/delay.h>
+ #include <linux/dma-iommu.h>
+ #include <linux/dma-map-ops.h>
+@@ -1146,26 +1145,6 @@ static int viommu_probe(struct virtio_device *vdev)
+ 
+ 	iommu_device_register(&viommu->iommu, &viommu_ops, parent_dev);
+ 
 -#ifdef CONFIG_PCI
--	err = bus_set_iommu(&pci_bus_type, &tegra_smmu_ops);
--	if (err < 0)
--		goto unset_platform_bus;
+-	if (pci_bus_type.iommu_ops != &viommu_ops) {
+-		ret = bus_set_iommu(&pci_bus_type, &viommu_ops);
+-		if (ret)
+-			goto err_unregister;
+-	}
 -#endif
-+	if (err) {
-+		iommu_device_sysfs_remove(&smmu->iommu);
-+		return ERR_PTR(err);
-+	}
- 
- 	if (IS_ENABLED(CONFIG_DEBUG_FS))
- 		tegra_smmu_debugfs_init(smmu);
- 
- 	return smmu;
+-#ifdef CONFIG_ARM_AMBA
+-	if (amba_bustype.iommu_ops != &viommu_ops) {
+-		ret = bus_set_iommu(&amba_bustype, &viommu_ops);
+-		if (ret)
+-			goto err_unregister;
+-	}
+-#endif
+-	if (platform_bus_type.iommu_ops != &viommu_ops) {
+-		ret = bus_set_iommu(&platform_bus_type, &viommu_ops);
+-		if (ret)
+-			goto err_unregister;
+-	}
 -
--unset_platform_bus: __maybe_unused;
--	bus_set_iommu(&platform_bus_type, NULL);
--unregister:
--	iommu_device_unregister(&smmu->iommu);
--remove_sysfs:
--	iommu_device_sysfs_remove(&smmu->iommu);
--
--	return ERR_PTR(err);
- }
+ 	vdev->priv = viommu;
  
- void tegra_smmu_remove(struct tegra_smmu *smmu)
+ 	dev_info(dev, "input address: %u bits\n",
+@@ -1174,9 +1153,6 @@ static int viommu_probe(struct virtio_device *vdev)
+ 
+ 	return 0;
+ 
+-err_unregister:
+-	iommu_device_sysfs_remove(&viommu->iommu);
+-	iommu_device_unregister(&viommu->iommu);
+ err_free_vqs:
+ 	vdev->config->del_vqs(vdev);
+ 
 -- 
 2.28.0.dirty
 

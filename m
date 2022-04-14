@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463445017AC
+	by mail.lfdr.de (Postfix) with ESMTP id CBE545017AD
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359244AbiDNPmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S241037AbiDNPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352724AbiDNPRm (ORCPT
+        with ESMTP id S1354587AbiDNPSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:17:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33418AF1DC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649948729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lm2KX6xCsFISk/1YBbLurDta6IDegO+AQCRb/5z8eAw=;
-        b=RY8UCyLYf/+ALTdlAOtoZ0Qif8gUflDU8Nvd0L7iB5PbzyFeD0bk9+p5g7/vNKGgT+Gifw
-        hPrGwAMtITvlpCRqy31kw9CWuj5epao4z6CRdNTjSvtSVTFMDp4/QcnoGxBYTBbivySCS5
-        t/AaVCzw272rg1Tu0F3TriP+z4e2JGM=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-VA1BYmkxPsiaNcQ2IOAFBQ-1; Thu, 14 Apr 2022 11:05:28 -0400
-X-MC-Unique: VA1BYmkxPsiaNcQ2IOAFBQ-1
-Received: by mail-il1-f198.google.com with SMTP id j16-20020a056e02219000b002cbe5b76195so1060560ila.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:05:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lm2KX6xCsFISk/1YBbLurDta6IDegO+AQCRb/5z8eAw=;
-        b=kMjFrEp/qNvskz3taRVns5ghqWAzX6kwnbLZT+CogO2jaYvOFHnb/OB10yG8hlxfxy
-         vm0uL1my1iliToy7BWzyjoSjr5hAJ55jNrOo6ww23gt5Us/mTjYisuZ/9Xns4ntGR0M5
-         PnEkFoadQeze0SuUuQzGJ38n+FNSBH81k40WdGLdhwbH8zN9AZ7jQbLI/yHntLBPurUh
-         3d7mBMOk5fVHAuJAQJii7DHIOE5lJACxjvp6R2FxUxyX6XJdhthKPFn4UZ6/kjrGQB/r
-         RFF9xahrAgPGT6wkw0My/RcOIE7AL2TsoY398t/Sg6C9zZNF1LVhugQgELd4FjVz7uzI
-         5VUw==
-X-Gm-Message-State: AOAM5331L3m6pij7EZBInpWGTG0+obHpbGSstI2L85YQ+q1Y66r3oHLq
-        MLvJnu9R4SdZ9k0s/WYG5zSJTdFUtef9srFlt1lG9kEQHISoAshg0L55722sv7LyRzQnCT4120q
-        8siOr0DEUWyTtWPD/7nW/jtkO
-X-Received: by 2002:a05:6638:16d2:b0:323:7285:474b with SMTP id g18-20020a05663816d200b003237285474bmr1492755jat.61.1649948726970;
-        Thu, 14 Apr 2022 08:05:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyc/BZT0Z5C+G+l+ZYXKVVuTF4wLTQtkTki4+46inVlgigZB8yoPfeQABUizixqViIdsYjoWQ==
-X-Received: by 2002:a05:6638:16d2:b0:323:7285:474b with SMTP id g18-20020a05663816d200b003237285474bmr1492738jat.61.1649948726653;
-        Thu, 14 Apr 2022 08:05:26 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id v11-20020a92d24b000000b002caacf87598sm1177280ilg.1.2022.04.14.08.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:05:26 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 11:05:25 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Subject: Re: [PATCH] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
-Message-ID: <Ylg4Nel3rDpHUzKT@xz-m1.local>
-References: <20220414010703.72683-1-peterx@redhat.com>
- <Ylgn/Jw+FMIFqqc0@google.com>
+        Thu, 14 Apr 2022 11:18:23 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBD7ECB3B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:06:50 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 218D21F47B07;
+        Thu, 14 Apr 2022 16:06:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649948808;
+        bh=UpSLyopnlq5YAkIaxL8rC/z8gQiFGUjISBXjuDV87YA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b0pwOTmW+kxJoLFq5v97T8FjTuaAb8wrqPxesw6cwS+6nTA86EsvdR+Chu26nEWCy
+         Xf3qKjda/0QTX/bFoVGdrjagui6XsSTSQ1L9HwCXh74Rm5w5x0DiRSjHVb0JxxNPNQ
+         bqWf+vIKAbX/hVQfy7h2oTN2Iy0IZKRAebF+sd41nSxF4QV0psAsLqbKE2uWE8/WlE
+         qcVEUlR3nJwD01Nq3MxUmpUKrKWr2rLCJUC36537UvTZAn/x0R6pehthyq6/P2TqtC
+         xv6GBdR7477RO7wlrat+EGIYskHD8T4Xr1PPPiqCP99itD0GSaDanjiPUTpFkJP+5h
+         qVJgqOvlkKTAA==
+Date:   Thu, 14 Apr 2022 17:06:44 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH 1/2] mtd: spinand: add support for detection with param
+ page
+Message-ID: <20220414170644.4a53484f@collabora.com>
+In-Reply-To: <20220414143426.723168-2-gch981213@gmail.com>
+References: <20220414143426.723168-1-gch981213@gmail.com>
+        <20220414143426.723168-2-gch981213@gmail.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ylgn/Jw+FMIFqqc0@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,173 +63,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 01:56:12PM +0000, Sean Christopherson wrote:
-> On Wed, Apr 13, 2022, Peter Xu wrote:
-> > Our QE team reported test failure on access_tracking_perf_test:
-> > 
-> > Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
-> > guest physical test memory offset: 0x3fffbffff000
-> > 
-> > Populating memory             : 0.684014577s
-> > Writing to populated memory   : 0.006230175s
-> > Reading from populated memory : 0.004557805s
-> > ==== Test Assertion Failure ====
-> >   lib/kvm_util.c:1411: false
-> >   pid=125806 tid=125809 errno=4 - Interrupted system call
-> >      1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
-> >      2   (inlined by) addr_gpa2hva at kvm_util.c:1405
-> >      3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
-> >      4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
-> >      5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
-> >      6  0x00007fefe9ff81ce: ?? ??:0
-> >      7  0x00007fefe9c64d82: ?? ??:0
-> >   No vm physical memory at 0xffbffff000
-> > 
-> > And I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46
-> > bits PA.
-> > 
-> > It turns out that the address translation for clearing idle page tracking
-> > returned wrong result, in which addr_gva2gpa()'s last step should have
+On Thu, 14 Apr 2022 22:34:25 +0800
+Chuanhong Guo <gch981213@gmail.com> wrote:
+
+> SPI-NAND detection using chip ID isn't always reliable.
+> Here are two known cases:
+> 1. ESMT uses JEDEC ID from other vendors. This may collapse with future
+>    chips.
+
+Really?! So the manufacturer id matching is not even possible?
+
+> 2. Winbond W25N01KV uses the exact same JEDEC ID as W25N01GV while
+>    having completely different chip parameters.
 > 
-> "should have" is very misleading, that makes it sound like the address was
-> intentionally truncated.  Or did you mean "should have been treated as 64-bit
-> value"?
+> Recent SPI-NANDs have a parameter page which is stored in the same
+> format as raw NAND ONFI data. There are strings for chip manufacturer
+> and chip model. Chip ECC requirement and memory organization are
+> available too.
+> This patch adds support for detecting SPI-NANDs with the parameter page
+> after ID matching failed. In this detection, memory organization and
+> ECC requirements are taken from the parameter page, and other SPI-NAND
+> specific parameters are obtained by matching chip model string with
+> a separated table.
 
-No I was purely lazy yesterday as it was late, sorry.  Obviously I should
-have hold-off the patch until this morning because I do plan to look at
-this into more details.
-
-So sadly it's only gcc that's not working properly with the bitfields.. at
-least in my minimum test here.
-
----8<---
-$ cat a.c
-#include <stdio.h>
-
-struct test1 {
-    unsigned long a:24;
-    unsigned long b:40;
-};
-
-int main(void)
-{
-    struct test1 val;
-    val.b = 0x123456789a;
-    printf("0x%lx\n", val.b * 16);
-    return 0;
-}
-$ gcc -o a.gcc a.c
-$ clang -o a.clang a.c
-$ ./a.gcc
-0x23456789a0
-$ ./a.clang
-0x123456789a0
-$ objdump -d a.gcc | grep -A20 -w main
-0000000000401126 <main>:
-  401126:       55                      push   %rbp
-  401127:       48 89 e5                mov    %rsp,%rbp
-  40112a:       48 83 ec 10             sub    $0x10,%rsp
-  40112e:       48 8b 45 f8             mov    -0x8(%rbp),%rax
-  401132:       25 ff ff ff 00          and    $0xffffff,%eax
-  401137:       48 89 c2                mov    %rax,%rdx
-  40113a:       48 b8 00 00 00 9a 78    movabs $0x123456789a000000,%rax
-  401141:       56 34 12
-  401144:       48 09 d0                or     %rdx,%rax
-  401147:       48 89 45 f8             mov    %rax,-0x8(%rbp)
-  40114b:       48 8b 45 f8             mov    -0x8(%rbp),%rax
-  40114f:       48 c1 e8 18             shr    $0x18,%rax
-  401153:       48 c1 e0 04             shl    $0x4,%rax
-  401157:       48 ba ff ff ff ff ff    movabs $0xffffffffff,%rdx
-  40115e:       00 00 00
-  401161:       48 21 d0                and    %rdx,%rax     <-------------------
-  401164:       48 89 c6                mov    %rax,%rsi
-  401167:       bf 10 20 40 00          mov    $0x402010,%edi
-  40116c:       b8 00 00 00 00          mov    $0x0,%eax
-  401171:       e8 ba fe ff ff          callq  401030 <printf@plt>
-$ objdump -d a.clang | grep -A20 -w main
-0000000000401130 <main>:
-  401130:       55                      push   %rbp
-  401131:       48 89 e5                mov    %rsp,%rbp
-  401134:       48 83 ec 10             sub    $0x10,%rsp
-  401138:       c7 45 fc 00 00 00 00    movl   $0x0,-0x4(%rbp)
-  40113f:       48 8b 45 f0             mov    -0x10(%rbp),%rax
-  401143:       48 25 ff ff ff 00       and    $0xffffff,%rax
-  401149:       48 b9 00 00 00 9a 78    movabs $0x123456789a000000,%rcx
-  401150:       56 34 12 
-  401153:       48 09 c8                or     %rcx,%rax
-  401156:       48 89 45 f0             mov    %rax,-0x10(%rbp)
-  40115a:       48 8b 75 f0             mov    -0x10(%rbp),%rsi
-  40115e:       48 c1 ee 18             shr    $0x18,%rsi
-  401162:       48 c1 e6 04             shl    $0x4,%rsi
-  401166:       48 bf 10 20 40 00 00    movabs $0x402010,%rdi
-  40116d:       00 00 00 
-  401170:       b0 00                   mov    $0x0,%al
-  401172:       e8 b9 fe ff ff          callq  401030 <printf@plt>
-  401177:       31 c0                   xor    %eax,%eax
-  401179:       48 83 c4 10             add    $0x10,%rsp
-  40117d:       5d                      pop    %rbp
----8<---
+Oh come on! Looks like they never learn from their mistakes...
 
 > 
-> > treated "pte[index[0]].pfn" to be a 32bit value.
-> 
-> It didn't get treated as a 32-bit value, it got treated as a 40-bit value, because
-> the pfn is stored as 40 bits.
-> 
-> struct pageTableEntry {
-> 	uint64_t present:1;
-> 	uint64_t writable:1;
-> 	uint64_t user:1;
-> 	uint64_t write_through:1;
-> 	uint64_t cache_disable:1;
-> 	uint64_t accessed:1;
-> 	uint64_t dirty:1;
-> 	uint64_t reserved_07:1;
-> 	uint64_t global:1;
-> 	uint64_t ignored_11_09:3;
-> 	uint64_t pfn:40;  <================
-> 	uint64_t ignored_62_52:11;
-> 	uint64_t execute_disable:1;
-> };
-> 
-> > In above case the GPA
-> > address 0x3fffbffff000 got cut-off into 0xffbffff000, then it caused
-> > further lookup failure in the gpa2hva mapping.
-> > 
-> > I didn't yet check any other test that may fail too on some hosts, but
-> > logically any test using addr_gva2gpa() could suffer.
-> > 
-> > Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > index 9f000dfb5594..6c356fb4a9bf 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > @@ -587,7 +587,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
-> >  	if (!pte[index[0]].present)
-> >  		goto unmapped_gva;
-> >  
-> > -	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> > +	return ((vm_paddr_t)pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> 
-> This is but one of many paths that can get burned by pfn being 40 bits.  The
-> most backport friendly fix is probably to add a pfn=>gpa helper and use that to
-> place the myriad "pfn * vm->page_size" instances.
+> It's common for vendors to release a series of SPI-NANDs with the same
+> SPI-NAND parameters in different voltages and/or capacities. The chip
+> table defined in this patch supports multiple model strings in one
+> entry, and multiple chip models can be covered using only one entry.
 
-Yes, I'll respin.
+That's really disappointing. And I guess the ONFI-page read commands are
+not even standard, and each vendor will come with its own sequence to
+read it. What's bothering me the most is the fact that ONFI parameter
+pages are not even designed for SPI NANDs. They have a bunch of
+parameters that don't really apply to SPI NANDs, and we're still
+lacking SPI-specific info, like the read/write/erase command variants,
+the maximum SPI bus width (AKA SPI modes)...
+
+To sum-up, if we have to support reading the ONFI parameter page, I'd
+rather keep it vendor-private (but that's assuming the vendor ID
+detection works, and you seem to imply ESMT cheats on that too), and
+use it only as a way to distinguish between 2 chip variants.
 
 > 
-> For a true long term solution, my vote is to do away with the bit field struct
-> and use #define'd masks and whatnot.
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> ---
+> 
+> I'm not brave enough to touch raw nand code without testing, so
+> sanitize_string, onfi_crc16 and nand_bit_wise_majority are
+> duplicated from raw/nand_onfi.c into spi/onfi.c
+> 
+>  drivers/mtd/nand/spi/Makefile |   2 +-
+>  drivers/mtd/nand/spi/core.c   |  23 +--
+>  drivers/mtd/nand/spi/onfi.c   | 296 ++++++++++++++++++++++++++++++++++
 
-I agree.
-
-Thanks,
-
--- 
-Peter Xu
-
+Please, no. Try to move the common code to drivers/mtd/nand/onfi.c
+instead of duplicating it. AFAICT, the only thing that's spinand
+specific is spinand_onfi_read() and the last part of
+spinand_onfi_detect(). I'm sure we can find a way to expose
+generic onfi_parsing() helpers.

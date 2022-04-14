@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE2E5003B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6245003BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239436AbiDNBmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S239465AbiDNBqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiDNBmq (ORCPT
+        with ESMTP id S232083AbiDNBq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:42:46 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0951D0DC
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:40:22 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so7930752pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1GTkIm7HStAc9gISyIdz9zOgOj80mUvQQlfaws8tnP8=;
-        b=zrIHDWNah59SopJx/pXT/znwLqBVjjm8ZR5vXA8K3E3FWIhSEfbP0LTyspbGwHYTVF
-         Py3Us8QAOBoxkm7fiR7mDKLn9r96kOmjcmThavue5Os3Cf+A/1lXSot6lNI2WkPR1+zv
-         WLpwC5hUI8uWTvslZeNFi2dElnURjicHNdluiU7mFcaFOwh5o18moHLfy0ZXGeU+y7EF
-         jTe9vNiMRw/TjjO/ER5aSiIsgrO34wUn7sRLm1N5MQeOYad9SbPZQ8IA2spZhZw89Z5Z
-         iLDQ5lszreHP/hj9hfHw8BhzHNXaAiAP2K0ouxwV0UZqvIdst6qD9RRqY2cSxCaqcBp3
-         jwPA==
+        Wed, 13 Apr 2022 21:46:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70CE420F78
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649900644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUo4znEOkRrWRs1sMxG9XXTvdlj/WDC4ky0CeyyLoSA=;
+        b=U1XWFI22c0P7MXu7LDxVvtBwEAHilUr6vSYRqsG2+1jTyav5OUbne0h15ROkgu6Uc396Ts
+        hMzdjY0EaQNxE12oQM0+75liUqBiEIUhBz0FbkKtI5t2e+av9t7+CNbFaqTqVQBQkWGLE3
+        w2PcpDxk1niKjdk81oId4Y+DvazpQ90=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-RM-rfOzbOkqYhnnCwFcizQ-1; Wed, 13 Apr 2022 21:44:03 -0400
+X-MC-Unique: RM-rfOzbOkqYhnnCwFcizQ-1
+Received: by mail-pg1-f200.google.com with SMTP id l6-20020a637006000000b003811a27370aso1980020pgc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:44:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=1GTkIm7HStAc9gISyIdz9zOgOj80mUvQQlfaws8tnP8=;
-        b=btBiWzvjKB3NuW5q103GzypYP2C4yOtX9qO8E10X+fOhefWxs4j/L+dcvAlQxpwYbD
-         VIwJ0KbdSb++Jgl1KLcwh44gjd7h0Ke82m29IJoun6Yap55nH2npyoK00JE6OvDMuIE9
-         q9RzG4gTGkZedc3idkUpViHeg8EhfNMqhO3MDPczwdst9CWdtPc0vLo1EJgR5Wdp0cZD
-         IYJPH5o9YoRC4iHliPJ9iKVCcFUPw3AuwonWphGPzfwCF73dW/yVoVRLY34pGEG10CVq
-         HerPFYDtJv8UuMJ8swUQk7zXC1Q/+qpONfpAu4tx7LPjq5QtYMFIJ6X6Thqkg46Duc7k
-         jdWw==
-X-Gm-Message-State: AOAM532AgCnxrU72Z2Csl6OjziTF31bde9rnRPjYebBxQQkvAMwuV6yc
-        mPviZYevEsxET8bA/sCho+/XLA==
-X-Google-Smtp-Source: ABdhPJzPpbeJLgJM0CyvcbCgUGx0PqKArxjGcoN8BWa16o+NJVMZdXfu6AFNf6Ey6eCq5yErlcywyQ==
-X-Received: by 2002:a17:902:d4c3:b0:158:a79e:9bf with SMTP id o3-20020a170902d4c300b00158a79e09bfmr4457768plg.40.1649900422092;
-        Wed, 13 Apr 2022 18:40:22 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b0050591e66508sm328567pfj.220.2022.04.13.18.40.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jUo4znEOkRrWRs1sMxG9XXTvdlj/WDC4ky0CeyyLoSA=;
+        b=0zMprhfkK0RSYd/Hn8v6AIfStMaw4ja9XVLWiXtesaWvSN843PmVyHb5w3qkMsDkQc
+         z31ffXfCJn1DxPoM4IJ+D5lbRIsVk6m+9+veuJBszEFARPNIYbuDA2/ZxumI/jkMB7QE
+         Ms2+U2gCtd2nO1dloVkzaS58jyM3MGMoPSc6zLSMXYXFuZdQepV1hhZ9MSVGS6lMFv/9
+         mLAcbSC9mep1HSpgdkzJaDd9lee5WQsXvVobDaOOzudnda34h832QK/dYMiDu5Z8oHfX
+         7JXZ+4AkDW90WyxnD8QoNh7em6WboQ6ZDzwxjX8E0PJPffgMHxq/DFoFKAE6DFcmDdDF
+         ygHA==
+X-Gm-Message-State: AOAM533ALHm0L01Fm24N6Z2Wxuuo82qk6J9lnC9XhZQzVLauX5puZ02j
+        skIO3z0/4rWzpNXcFW6ORzEw9XACPs9afpE+53eTHGW1BFHjPfXR5bTgtpx2GSM9QvmVLubu6jP
+        0TGeW/2QIyiTLhq/UcoGFXk4I
+X-Received: by 2002:a05:6a00:4211:b0:506:5061:3e38 with SMTP id cd17-20020a056a00421100b0050650613e38mr1591784pfb.74.1649900642604;
+        Wed, 13 Apr 2022 18:44:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwPUPsdDaV0SaXNU950qh/kHth5bPSWxu8nmDnhrsKNKGWJouIJSJ3+yN9qcKr5KVKvb/41OA==
+X-Received: by 2002:a05:6a00:4211:b0:506:5061:3e38 with SMTP id cd17-20020a056a00421100b0050650613e38mr1591763pfb.74.1649900642367;
+        Wed, 13 Apr 2022 18:44:02 -0700 (PDT)
+Received: from localhost ([240e:3a1:31c:360:52fc:c968:cb41:efbc])
+        by smtp.gmail.com with ESMTPSA id ml1-20020a17090b360100b001cd40539cd9sm311141pjb.1.2022.04.13.18.44.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 18:40:21 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 18:40:21 -0700 (PDT)
-X-Google-Original-Date: Wed, 13 Apr 2022 18:39:07 PDT (-0700)
-Subject:     Re: [PATCH] RISC-V: Add CONFIG_{NON,}PORTABLE
-In-Reply-To: <CAK8P3a0gqTNX7zNneE6NX1aXvnO77oY2nYyGK4KbwEYdFS8F9Q@mail.gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-f3ab3915-9ccf-423a-9bf4-d49167b22f80@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 13 Apr 2022 18:44:01 -0700 (PDT)
+From:   Coiby Xu <coxu@redhat.com>
+To:     kexec@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        stable@kernel.org, linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v6 1/4] kexec: clean up arch_kexec_kernel_verify_sig
+Date:   Thu, 14 Apr 2022 09:43:41 +0800
+Message-Id: <20220414014344.228523-2-coxu@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220414014344.228523-1-coxu@redhat.com>
+References: <20220414014344.228523-1-coxu@redhat.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,183 +82,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 10:59:42 PST (-0800), Arnd Bergmann wrote:
-> On Thu, Mar 10, 2022 at 6:08 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->>
->> From: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> The RISC-V port has collected a handful of options that are
->> fundamentally non-portable.  To prevent users from shooting themselves
->> in the foot, hide them all behind a config entry that explicitly calls
->> out that non-portable binaries may be produced.
->>
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> ---
->> This came up in the context of the no-M patch:
->> https://lore.kernel.org/lkml/CAK8P3a3mzax-OiaxBcxM_RgKNsd6N8HW0odRmw38u2jKE5aYaQ@mail.gmail.com/
->>
->> I'm not sure I strictly need both PORTABLE and NONPORTABLE, but it's the
->> only way I could come up with to force things like EFI.  I'll poke
->> around Kconfig a bit more, but I figured this is going to lead to a
->> discussion so it'd be better to just send this crusty version so we at
->> least have something concrete to talk about.
->>
->> I've only given this a smoke test (ie, defconfig looks OK).  I'll go
->> through all the configs if folks think this is the right way to go -- I
->> figure it's better to have the discussion on a more focused patch than
->> on that M patch, as this is really an orthogonal issue.
->>
->> I'm not really sure what the right option is here: I'm not selecting
->> things like errata and basic drivers, but I could buy the argument that
->> disabling those results in non-portable systems.  I am selecting EFI,
->> that might not be strictly required now but it's the direction we're
->> going so I figure we might as well start now.  I've also hidden 32BIT
->> behind this, I could see that going either way but my guess is that
->> users of 32-bit systems won't care about portable binaries.
->
-> These are all things I would have suggested as well, sounds good.
->
->>  I'm also
->> not sure if this should be tied to something like EMBEDDED or EXPERT.
->
-> CONFIG_EMBEDDED is weird, it's better to avoid interacting with
-> it, because it tends to not do what one expects. Hiding it behind
-> CONFIG_EXPERT would make sense, but it's also a rather strong
-> guard, so it's probably better to leave it the way you have it.
->
->> My biggest worry with this is that users might get the feeling that
->> current kernels will be compatible with new hardware, that's just not
->> how RISC-V works.  I tried to write the help text indicating that, I'm
->> not sure I like how it reads so I'll almost certainly take another shot
->> at it (though suggestions are, of course, welcome).
->>
->> I'm also a bit worried that vendors might get the feeling we're not
->> going to support systems that need modifications to these portablity
->> requirements.  That's also not the case, as there's really no way for
->> vendors to make sure their systems continue to run portable kernels
->> aside from just releasing them publicly so we can test them.
->> ---
->>  arch/riscv/Kconfig | 28 ++++++++++++++++++++++++++--
->>  1 file changed, 26 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 5adcbd9b5e88..de0916d7aca7 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -9,6 +9,7 @@ config 64BIT
->>
->>  config 32BIT
->>         bool
->> +       depends on NONPORTABLE
->
-> This 'depends on is in the wrong place, you need to move it below
-> ARCH_RV32I, or possibly rework that "Base ISA" choice statement
-> into something else.
->
->>  config RISCV
->>         def_bool y
->> @@ -485,6 +486,7 @@ config STACKPROTECTOR_PER_TASK
->>
->>  config PHYS_RAM_BASE_FIXED
->>         bool "Explicitly specified physical RAM address"
->> +       depends on NONPORTABLE
->>         default n
->>
->>  config PHYS_RAM_BASE
->> @@ -498,7 +500,7 @@ config PHYS_RAM_BASE
->>
->>  config XIP_KERNEL
->>         bool "Kernel Execute-In-Place from ROM"
->> -       depends on MMU && SPARSEMEM
->> +       depends on MMU && SPARSEMEM && NONPORTABLE
->>         # This prevents XIP from being enabled by all{yes,mod}config, which
->>         # fail to build since XIP doesn't support large kernels.
->>         depends on !COMPILE_TEST
->> @@ -538,9 +540,31 @@ endmenu
->>
->>  config BUILTIN_DTB
->>         bool
->> -       depends on OF
->> +       depends on OF && NONPORTABLE
->>         default y if XIP_KERNEL
->>
->> +config NONPORTABLE
->> +       bool "Allow configurations that result in non-portable kernels"
->> +       help
->> +         RISC-V kernel binaries are compatibile between all known systems
->
-> typo: compatible
->
->> +         whenever possible, but there are some use cases that can only be
->> +         satisfied by configurations that result in kernel binaries that are
->> +         not portable between systems.
->> +
->> +         Selecting N does not guarntee kernels will be portable to all knows
->
-> typo: guarantee
->
->> +         systems.  Selecting any of the options guarded by NONPORTABLE will
->> +         result in kernel binaries that are unlikely to be portable between
->> +         systems.
->> +
->> +         If unsure, say N.
->> +
->> +config PORTABLE
->> +       bool
->> +       default !NONPORTABLE
->> +       select EFI
->> +       select OF
->> +       select MMU
->
-> A nice trick I would use here is to make PORTABLE/NONPORTABLE
-> into a 'choice' statement that defaults to PORTABLE. That way, both
-> allnoconfig and allmodconfig/allyesconfig end up testing the portable case.
->
-> Ideally both allnoconfig and allmodconfig would be able to boot the
-> same (virtual) machine, but getting to that point likely requires addressing
-> further issues.
->
-> If someone can come up with a better naming system, the
-> portable/nonportable choice could even be integrated into the
-> "Base ISA" choice, giving the user a list of the possible targets,
-> like:
+Currently there is no arch-specific implementation of
+arch_kexec_kernel_verify_sig. Even if we want to add an implementation
+for an architecture in the future, we can simply use "(struct
+kexec_file_ops*)->verify_sig". So clean it up.
 
-That's a really nice trick to know.  We're a lot farther from this than 
-making an allnoconfig build, at least some of that is the Kconfig.socs 
-brokenness.  IMO that's sort of just its own problem, and while it 
-should get fixed if I try to roll it up into this one we're going to get 
-the simple thing stuck on a bigger thing.
+Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+Cc: stable@kernel.org
+Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+---
+ include/linux/kexec.h |  4 ----
+ kernel/kexec_file.c   | 34 +++++++++++++---------------------
+ 2 files changed, 13 insertions(+), 25 deletions(-)
 
-> choice
->       prompt "System type"
->       default ARCH_RV64I
->
-> config ARCH_RV64I
->        bool "Generic portable RV64GC system"
->        select 64BIT
->        select EFI
->        select OF
->        select MMU
->
-> config ARCH_RV64I_NONPORTABLE
->         bool "Custom RV64I machine, nonportable"
->         select 64BIT
->         select MMU
->
-> config ARCH_RV32I_NONPORTABLE
->         bool "Custom RV64I machine, nonportable"
->         select 64BIT
->         select MMU
->
-> config ARCH_RV64_NOMMU
->         bool "Custom RV64I machine without MMU"
->         select 64BIT
->
-> endchoice
->
-> Not sure if that is more or less confusing than what you have
-> here, just putting it out there as another way to handle the
-> top-level platform selection.
->
->          Arnd
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index 58d1b58a971e..413235c6c797 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -202,10 +202,6 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+ 				 const Elf_Shdr *relsec,
+ 				 const Elf_Shdr *symtab);
+ int arch_kimage_file_post_load_cleanup(struct kimage *image);
+-#ifdef CONFIG_KEXEC_SIG
+-int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+-				 unsigned long buf_len);
+-#endif
+ int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+ 
+ extern int kexec_add_buffer(struct kexec_buf *kbuf);
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 8347fc158d2b..3720435807eb 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
+ 	return kexec_image_post_load_cleanup_default(image);
+ }
+ 
+-#ifdef CONFIG_KEXEC_SIG
+-static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
+-					  unsigned long buf_len)
+-{
+-	if (!image->fops || !image->fops->verify_sig) {
+-		pr_debug("kernel loader does not support signature verification.\n");
+-		return -EKEYREJECTED;
+-	}
+-
+-	return image->fops->verify_sig(buf, buf_len);
+-}
+-
+-int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+-					unsigned long buf_len)
+-{
+-	return kexec_image_verify_sig_default(image, buf, buf_len);
+-}
+-#endif
+-
+ /*
+  * arch_kexec_apply_relocations_add - apply relocations of type RELA
+  * @pi:		Purgatory to be relocated.
+@@ -184,13 +165,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+ }
+ 
+ #ifdef CONFIG_KEXEC_SIG
++static int kexec_image_verify_sig(struct kimage *image, void *buf,
++		unsigned long buf_len)
++{
++	if (!image->fops || !image->fops->verify_sig) {
++		pr_debug("kernel loader does not support signature verification.\n");
++		return -EKEYREJECTED;
++	}
++
++	return image->fops->verify_sig(buf, buf_len);
++}
++
+ static int
+ kimage_validate_signature(struct kimage *image)
+ {
+ 	int ret;
+ 
+-	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
+-					   image->kernel_buf_len);
++	ret = kexec_image_verify_sig(image, image->kernel_buf,
++			image->kernel_buf_len);
+ 	if (ret) {
+ 
+ 		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
+-- 
+2.34.1
+

@@ -2,88 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3DC500CCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0FB500CD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243011AbiDNMLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S243028AbiDNMLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbiDNMLH (ORCPT
+        with ESMTP id S243012AbiDNMLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:11:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88BBC1F61E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649938121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GWdoIzKa55+GJDLFWdqzW9nhtvvqYhC7BmkK6QUgeQ8=;
-        b=FQWESL3iHnb/PX+vo0UbKgiXCEyIWb3qdAmFjksB3KgvbsLmaTo+12RhCDbEby3Xs314+l
-        8CJq2378LGpXmTA9JavgUoLGnXIdUJSg1dz5ls/B2zqo0EDC57U44+oUK6e2uWSKyh9msA
-        3csn2dSROKKMfQG+XAEtFcLy/7Ovatg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-Ju0YXrAyOISCLufSTPlYvQ-1; Thu, 14 Apr 2022 08:08:37 -0400
-X-MC-Unique: Ju0YXrAyOISCLufSTPlYvQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 14 Apr 2022 08:11:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB0F218E;
+        Thu, 14 Apr 2022 05:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5CCF811E78;
-        Thu, 14 Apr 2022 12:08:36 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.235])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 90CFC1454556;
-        Thu, 14 Apr 2022 12:08:33 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 14 Apr 2022 14:08:36 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 14:08:32 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220414120831.GB32752@redhat.com>
-References: <20220412114421.691372568@infradead.org>
- <20220412114853.842942162@infradead.org>
- <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A9E261F15;
+        Thu, 14 Apr 2022 12:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97284C385A1;
+        Thu, 14 Apr 2022 12:09:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649938159;
+        bh=gq/D+Mkzw9tcvLZwoAzZSJCZAQ+Lu0I2TXKxw6zM0SU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m2Y9vEGL3UbVQhH276MK9EwWeX6UQljcb/Hbp0uCzSWGQ4gPvvLU5Wo1uB0DqMQEa
+         CdM7j/OkqdZ3sGzitlFOuUR1HEUZ1U0QAnqJgQyJjsTjxp9136wVjFqMQHsmAvlfro
+         JhZ7ts7MstIGXjunk8ttEVkNujNWmVipC3a0L/x62Ow1JbQ2hpCY5LhS+K/TpnCdb6
+         RFHnJMTaPNqyYaq9Lm/wzP/TkoI9e+0VfDOM2/vffO35INcjn3uk9TXCVzo69C+SuM
+         bKjpfbE/MkO0bINu82rVvxtKgJEt0Uc2NMCjVjxrN2Y2KFCaSQ059B0mWglewcs6dr
+         kAfle6405SQSw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C908D40407; Thu, 14 Apr 2022 09:09:16 -0300 (-03)
+Date:   Thu, 14 Apr 2022 09:09:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Alexey Bayduraev <alexey.bayduraev@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 1/3] perf record: Fix per-thread option.
+Message-ID: <YlgO7Dz/siOeDMTm@kernel.org>
+References: <20220414014642.3308206-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414115410.GA32752@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220414014642.3308206-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this doesn't really matter, just for completeness:
+Em Wed, Apr 13, 2022 at 06:46:40PM -0700, Ian Rogers escreveu:
+> From: Alexey Bayduraev <alexey.bayduraev@gmail.com>
+> 
+> Per-thread mode doesn't have specific CPUs for events, add checks for
+> this case.
+> 
+> Minor fix to a pr_debug by Ian Rogers <irogers@google.com> to avoid an
+> out of bound array access.
 
-On 04/14, Oleg Nesterov wrote:
->
-> 	if (wait_on_bit(&task->jobctl, JOBCTL_TRACED_XXX_BIT, TASK_KILLABLE))
-> 		return -EINTR;
->
-> this is fine,
+Thanks, applied to perf/urgent.
 
-No, this is wrong too. wake_up_bit() does exclusive wakeup.
+- Arnaldo
 
-Oleg.
+ 
+> Reported-by: Ian Rogers <irogers@google.com>
+> Fixes: 7954f71689f9 ("perf record: Introduce thread affinity and mmap masks")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Alexey Bayduraev <alexey.bayduraev@gmail.com>
+> ---
+>  tools/perf/builtin-record.c | 22 +++++++++++++++++-----
+>  1 file changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index ba74fab02e62..069825c48d40 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -989,8 +989,11 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+>  	struct mmap *overwrite_mmap = evlist->overwrite_mmap;
+>  	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
+>  
+> -	thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
+> -					      thread_data->mask->maps.nbits);
+> +	if (cpu_map__is_dummy(cpus))
+> +		thread_data->nr_mmaps = nr_mmaps;
+> +	else
+> +		thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
+> +						      thread_data->mask->maps.nbits);
+>  	if (mmap) {
+>  		thread_data->maps = zalloc(thread_data->nr_mmaps * sizeof(struct mmap *));
+>  		if (!thread_data->maps)
+> @@ -1007,16 +1010,17 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+>  		 thread_data->nr_mmaps, thread_data->maps, thread_data->overwrite_maps);
+>  
+>  	for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
+> -		if (test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
+> +		if (cpu_map__is_dummy(cpus) ||
+> +		    test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
+>  			if (thread_data->maps) {
+>  				thread_data->maps[tm] = &mmap[m];
+>  				pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
+> -					  thread_data, cpus->map[m].cpu, tm, m);
+> +					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
+>  			}
+>  			if (thread_data->overwrite_maps) {
+>  				thread_data->overwrite_maps[tm] = &overwrite_mmap[m];
+>  				pr_debug2("thread_data[%p]: cpu%d: ow_maps[%d] -> ow_mmap[%d]\n",
+> -					  thread_data, cpus->map[m].cpu, tm, m);
+> +					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
+>  			}
+>  			tm++;
+>  		}
+> @@ -3329,6 +3333,9 @@ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_c
+>  {
+>  	int c;
+>  
+> +	if (cpu_map__is_dummy(cpus))
+> +		return;
+> +
+>  	for (c = 0; c < cpus->nr; c++)
+>  		set_bit(cpus->map[c].cpu, mask->bits);
+>  }
+> @@ -3680,6 +3687,11 @@ static int record__init_thread_masks(struct record *rec)
+>  	if (!record__threads_enabled(rec))
+>  		return record__init_thread_default_masks(rec, cpus);
+>  
+> +	if (cpu_map__is_dummy(cpus)) {
+> +		pr_err("--per-thread option is mutually exclusive to parallel streaming mode.\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	switch (rec->opts.threads_spec) {
+>  	case THREAD_SPEC__CPU:
+>  		ret = record__init_thread_cpu_masks(rec, cpus);
+> -- 
+> 2.36.0.rc0.470.gd361397f0d-goog
 
+-- 
+
+- Arnaldo

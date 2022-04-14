@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DB3501691
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E72E501300
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350408AbiDNPDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S1343497AbiDNNs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346572AbiDNN5m (ORCPT
+        with ESMTP id S1344004AbiDNNaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23148CDAE;
-        Thu, 14 Apr 2022 06:47:12 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2B791557;
+        Thu, 14 Apr 2022 06:26:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9064E61D73;
-        Thu, 14 Apr 2022 13:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70AFDC385A1;
-        Thu, 14 Apr 2022 13:47:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32CDBB82941;
+        Thu, 14 Apr 2022 13:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816FCC385A1;
+        Thu, 14 Apr 2022 13:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944032;
-        bh=t0g3o+vjO6oyTmJLg+UH2gahFuYs6k7jNgBfmjGR/W4=;
+        s=korg; t=1649942759;
+        bh=cOWNMoWg3qlnPk/yhEttGH1oR7VfOw0Ae+GeojOdPBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xukP+4mtal+m8n9gxBz6mrd6YcFhVHL0kmL1cfLONE1zGIFY2gcOLIqawhzb3xAjK
-         zdXtt7N01jH4/ovDSPn5+C10ipBR26+CCJhSc8XXxaH3H7J25d2YAiVsPnwpLkPMVt
-         Ui66FF936W9qEUl+J+qu9fkQYj3ZwYf5xZ+2gH0c=
+        b=sNn9zgyitU+xs+FHw9ENgnTkvDhYCv3GDGBUgizZZvIcMNYYvRzhS0jnyiRu9hOEk
+         yZkNDiHy0lDgRM82193a3gQYBHlCj5LVEsy88nWYIVvJU5kpLUZWmlyDbg7WDPPNvE
+         4mqhsvIIlMjFnY651bX/x94Lr6qQVZETEh0FDh24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 369/475] rtc: wm8350: Handle error for wm8350_register_irq
-Date:   Thu, 14 Apr 2022 15:12:34 +0200
-Message-Id: <20220414110905.404559971@linuxfoundation.org>
+        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 4.19 252/338] ARM: dts: spear13xx: Update SPI dma properties
+Date:   Thu, 14 Apr 2022 15:12:35 +0200
+Message-Id: <20220414110846.063809742@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-[ Upstream commit 43f0269b6b89c1eec4ef83c48035608f4dcdd886 ]
+commit 31d3687d6017c7ce6061695361598d9cda70807a upstream.
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, it need not free 'wm_rtc->rtc' since it will be freed
-automatically.
+Reorder dmas and dma-names property for spi controller node to make it
+compliant with bindings.
 
-Fixes: 077eaf5b40ec ("rtc: rtc-wm8350: add support for WM8350 RTC")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220303085030.291793-1-jiasheng@iscas.ac.cn
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20220326042313.97862-2-singh.kuldeep87k@gmail.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-wm8350.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/spear13xx.dtsi |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-wm8350.c b/drivers/rtc/rtc-wm8350.c
-index 2018614f258f..6eaa9321c074 100644
---- a/drivers/rtc/rtc-wm8350.c
-+++ b/drivers/rtc/rtc-wm8350.c
-@@ -432,14 +432,21 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+--- a/arch/arm/boot/dts/spear13xx.dtsi
++++ b/arch/arm/boot/dts/spear13xx.dtsi
+@@ -290,9 +290,9 @@
+ 				#size-cells = <0>;
+ 				interrupts = <0 31 0x4>;
+ 				status = "disabled";
+-				dmas = <&dwdma0 4 0 0>,
+-					<&dwdma0 5 0 0>;
+-				dma-names = "tx", "rx";
++				dmas = <&dwdma0 5 0 0>,
++					<&dwdma0 4 0 0>;
++				dma-names = "rx", "tx";
+ 			};
  
--	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
- 			    wm8350_rtc_update_handler, 0,
- 			    "RTC Seconds", wm8350);
-+	if (ret)
-+		return ret;
-+
- 	wm8350_mask_irq(wm8350, WM8350_IRQ_RTC_SEC);
- 
--	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
- 			    wm8350_rtc_alarm_handler, 0,
- 			    "RTC Alarm", wm8350);
-+	if (ret) {
-+		wm8350_free_irq(wm8350, WM8350_IRQ_RTC_SEC, wm8350);
-+		return ret;
-+	}
- 
- 	return 0;
- }
--- 
-2.35.1
-
+ 			rtc@e0580000 {
 
 

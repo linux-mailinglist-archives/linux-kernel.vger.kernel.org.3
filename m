@@ -2,234 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0523F50179E
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBB650179F
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359046AbiDNPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S1359149AbiDNPmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350431AbiDNPQd (ORCPT
+        with ESMTP id S1352584AbiDNPRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:16:33 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E017DFFBE;
-        Thu, 14 Apr 2022 07:59:15 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1EDD31BF206;
-        Thu, 14 Apr 2022 14:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649948353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FAf8yLi3lQ6imgrUHohSJNasrVq7HVgTeNQSDWU87gs=;
-        b=lEnYzDaWqAHzINN5jDYX7d7Mfkuiz7OUjP//NPHNqOqSmv5dr81IDkm5DKEELYlo4EWrjs
-        Aee598u3irhAsKOiSlyPJapwDYZ7iQkNM1ViK5rvwLoNFNEzTSq3XAIJElcvofC/Lz459k
-        TOsDc/Tjgx/qSKVoeNriDf3NubHCUx1AmNYGp+xn8pMXCtmuBfiLBBu7n3pwzi1/gi7cYq
-        2iwqNlK+diZNt+VmC6zzBTmnNEAgTr7G2hVOlxqN6inxqqjDlVLAE+/OAO28Oo/GmyovGG
-        ORnjovIcReNJ3Gn0dYc94m/YrJQOhA15j4PNcQaRI0ux2yrcHT7A7szjE0JAKw==
-Date:   Thu, 14 Apr 2022 16:59:09 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Md Sadre Alam <quic_mdalam@quicinc.com>, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH] mtd: rawnand: qcom: fix memory corruption that causes
- panic
-Message-ID: <20220414165909.249c2325@xps13>
-In-Reply-To: <20220414143907.GA20493@thinkpad>
-References: <1649914773-22434-1-git-send-email-quic_mdalam@quicinc.com>
-        <20220414101517.7bbc5e9d@xps13>
-        <DM6PR02MB580382FA47C4884AFC1A98D0FAEF9@DM6PR02MB5803.namprd02.prod.outlook.com>
-        <2697e757-f446-9cdb-95e0-ea01a642e6d4@quicinc.com>
-        <20220414144236.4ea54e20@xps13>
-        <20220414143907.GA20493@thinkpad>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 14 Apr 2022 11:17:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E82DAE1272;
+        Thu, 14 Apr 2022 08:02:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5CF9139F;
+        Thu, 14 Apr 2022 08:02:01 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 921B63F5A1;
+        Thu, 14 Apr 2022 08:02:01 -0700 (PDT)
+Message-ID: <2c2ecd15-72c7-ced9-8092-eb375a426cd8@arm.com>
+Date:   Thu, 14 Apr 2022 10:02:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4.19 155/338] net: bcmgenet: Use stronger register
+ read/writes to assure ordering
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220414110838.883074566@linuxfoundation.org>
+ <20220414110843.312864762@linuxfoundation.org>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <20220414110843.312864762@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manivannan,
+Hi,
 
-mani@kernel.org wrote on Thu, 14 Apr 2022 20:09:07 +0530:
-
-> On Thu, Apr 14, 2022 at 02:42:36PM +0200, Miquel Raynal wrote:
-> > Hi Md,
-> >=20
-> > quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 17:50:48 +0530:
-> >  =20
-> > > > Hi Md,
-> > > >
-> > > > quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 11:09:33 +0530:
-> > > >   =20
-> > > >> This patch fixes a memory corruption that occurred in the
-> > > >> nand_scan() path for Hynix nand device.
-> > > >>
-> > > >> On boot, for Hynix nand device will panic at a weird place:
-> > > >> | Unable to handle kernel NULL pointer dereference at virtual
-> > > >>    address 00000070
-> > > >> | [00000070] *pgd=3D00000000
-> > > >> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM Modules linked in:
-> > > >> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769=
-cfb0
-> > > >>    #38
-> > > >> | Hardware name: Generic DT based system PC is at
-> > > >> | nandc_set_reg+0x8/0x1c LR is at qcom_nandc_command+0x20c/0x5d0
-> > > >> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-> > > >> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
-> > > >> | r10: 000000a3  r9 : 00000000  r8 : 00000040
-> > > >> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-> > > >> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-> > > >> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-> > > >> | Control: 10c5387d  Table: 8020406a  DAC: 00000051 Register r0
-> > > >> | information: slab kmalloc-2k start c14ee000 pointer offset
-> > > >>    64 size 2048
-> > > >> | Process swapper/0 (pid: 1, stack limit =3D 0x(ptrval)) nandc_set=
-_reg
-> > > >> | from qcom_nandc_command+0x20c/0x5d0 qcom_nandc_command from
-> > > >> | nand_readid_op+0x198/0x1e8 nand_readid_op from
-> > > >> | hynix_nand_has_valid_jedecid+0x30/0x78
-> > > >> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-> > > >> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-> > > >> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-> > > >> | qcom_nandc_probe from platform_probe+0x58/0xac
-> > > >>
-> > > >> The problem is that the nand_scan()'s qcom_nand_attach_chip callba=
-ck
-> > > >> is updating the nandc->max_cwperpage from 1 to 4.This causes the
-> > > >> sg_init_table of clear_bam_transaction() in the driver's
-> > > >> qcom_nandc_command() to memset much more than what was initially
-> > > >> allocated by alloc_bam_transaction().   =20
-> > > > Thanks for investigating!
-> > > >   =20
-> > > >> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan=
-()
-> > > >> returns, and remove updating nandc->max_cwperpage from
-> > > >> qcom_nand_attach_chip call back.   =20
-> > > > The fix does not look right, as far as I understand, this should be=
- properly handled during the attach phase. That is where we have all inform=
-ation about the chip and do the configuration for this chip.
-> > > >
-> > > > If you update max_cwperpage there you should probably update other =
-internal variables that depend on it as well.   =20
-> > >=20
-> > >  =C2=A0=C2=A0 Currently we are updating max_cwperpage=C2=A0 in qcom_n=
-and_attach_chip(), but we are seeing issue for Hynix nand device since nand=
-_scan_tail() is getting called after nand_attach() and in nand_attach() we =
-are updating max_cwperpage to 4 or 8 based on page size.
-> > >=20
-> > >  =C2=A0=C2=A0=C2=A0 From nand_scan_tail() there is a call for nand_ma=
-nufacturer_init() , specific to Hynix nand read_id is getting called that's=
- why we are seeing this issue only for Hynix nand device. Read id sequence =
-as below
-> > >=20
-> > >  =C2=A0=C2=A0 hynix_nand_has_valid_jedecid()
-> > >=20
-> > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 |
-> > >=20
-> > >  =C2=A0=C2=A0 nand_readid_op()
-> > >=20
-> > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |
-> > >=20
-> > >  =C2=A0qcom_nandc_command()
-> > >=20
-> > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > >=20
-> > > pre_command()
-> > >=20
-> > >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > >=20
-> > > clear_bam_transaction()=C2=A0=C2=A0 --> In this call we are doing sg_=
-init_table() which is calling memset() based on max_cwperpage.Since initial=
-ly we have allocated bam transaction as per max_cwperpage =3D1 and , since =
-nand_chip_attach() updated max_cwperpage,=C2=A0 now we are doing memset as =
-per max_cwperpage =3D 4 or 8.
-> > >=20
-> > >=20
-> > > So anyway we have to updated max_cwperpage after nand_scan() call onl=
-y.=C2=A0 Since there is no other dependency on max_cwperpage in nand_attach=
-_chip() and we are using this in bam_alloc() and bam_clear(). =20
-> >=20
-> > Why don't you update the sg table after increasing max_cwperpage?
-> >  =20
->=20
-> Or we could move the bam reallocation inside qcom_nand_attach_chip() as b=
-elow?
-
-Much better approach, yes.
-
->=20
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
-m_nandc.c
-> index 7c6efa3b6255..58c16054630f 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -2653,9 +2653,23 @@ static int qcom_nand_attach_chip(struct nand_chip =
-*chip)
-> =20
->         mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
-> =20
-> +       /* Free the initially allocated BAM transaction for reading the O=
-NFI params */
-> +       if (nandc->props->is_bam)
-> +               free_bam_transaction(nandc);
-> +
->         nandc->max_cwperpage =3D max_t(unsigned int, nandc->max_cwperpage,
->                                      cwperpage);
-> =20
-> +       /* Now allocate the BAM transaction based on updated max_cwperpag=
-e */
-> +       if (nandc->props->is_bam) {
-> +               nandc->bam_txn =3D alloc_bam_transaction(nandc);
-> +               if (!nandc->bam_txn) {
-> +                       dev_err(nandc->dev,
-> +                               "failed to allocate bam transaction\n");
-> +                       return -ENOMEM;
-> +               }
-> +       }
-> +
->         /*
->          * DATA_UD_BYTES varies based on whether the read/write command p=
-rotects
->          * spare data with ECC too. We protect spare data by default, so =
-we set
-> @@ -2956,17 +2970,6 @@ static int qcom_nand_host_init_and_register(struct=
- qcom_nand_controller *nandc,
->         if (ret)
->                 return ret;
-> =20
-> -       if (nandc->props->is_bam) {
-> -               free_bam_transaction(nandc);
-> -               nandc->bam_txn =3D alloc_bam_transaction(nandc);
-> -               if (!nandc->bam_txn) {
-> -                       dev_err(nandc->dev,
-> -                               "failed to allocate bam transaction\n");
-> -                       nand_cleanup(chip);
-> -                       return -ENOMEM;
-> -               }
-> -       }
-> -
->         ret =3D mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
->         if (ret)
->                 nand_cleanup(chip);
->=20
-> Thanks,
-> Mani
-
+I would kill this commit too, since the final conclusion was that 
+underlying problem was a compiler bug (which has now been fixed).
 
 Thanks,
-Miqu=C3=A8l
+
+
+
+On 4/14/22 08:10, Greg Kroah-Hartman wrote:
+> From: Jeremy Linton <jeremy.linton@arm.com>
+> 
+> [ Upstream commit 8d3ea3d402db94b61075617e71b67459a714a502 ]
+> 
+> GCC12 appears to be much smarter about its dependency tracking and is
+> aware that the relaxed variants are just normal loads and stores and
+> this is causing problems like:
+> 
+> [  210.074549] ------------[ cut here ]------------
+> [  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit queue 1 timed out
+> [  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529 dev_watchdog+0x234/0x240
+> [  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat]
+> [  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
+> [  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G            E     5.17.0-rc7G12+ #58
+> [  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read perf counters
+> [  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
+> [  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  210.161358] pc : dev_watchdog+0x234/0x240
+> [  210.161364] lr : dev_watchdog+0x234/0x240
+> [  210.161368] sp : ffff8000080a3a40
+> [  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27: ffff8000080a3b20
+> [  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24: ffffcd425af8ec08
+> [  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21: ffff55b142688000
+> [  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18: ffffffffffffffff
+> [  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15: 6d736e617274203a
+> [  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12: ffffcd425b07d5f0
+> [  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 : ffffcd4258bdad9c
+> [  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 : 0000000000000000
+> [  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000001000
+> [  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 : 0000000000000044
+> [  210.269682] Call trace:
+> [  210.272133]  dev_watchdog+0x234/0x240
+> [  210.275811]  call_timer_fn+0x3c/0x15c
+> [  210.279489]  __run_timers.part.0+0x288/0x310
+> [  210.283777]  run_timer_softirq+0x48/0x80
+> [  210.287716]  __do_softirq+0x128/0x360
+> [  210.291392]  __irq_exit_rcu+0x138/0x140
+> [  210.295243]  irq_exit_rcu+0x1c/0x30
+> [  210.298745]  el1_interrupt+0x38/0x54
+> [  210.302334]  el1h_64_irq_handler+0x18/0x24
+> [  210.306445]  el1h_64_irq+0x7c/0x80
+> [  210.309857]  arch_cpu_idle+0x18/0x2c
+> [  210.313445]  default_idle_call+0x4c/0x140
+> [  210.317470]  cpuidle_idle_call+0x14c/0x1a0
+> [  210.321584]  do_idle+0xb0/0x100
+> [  210.324737]  cpu_startup_entry+0x30/0x8c
+> [  210.328675]  secondary_start_kernel+0xe4/0x110
+> [  210.333138]  __secondary_switched+0x94/0x98
+> 
+> The assumption when these were relaxed seems to be that device memory
+> would be mapped non reordering, and that other constructs
+> (spinlocks/etc) would provide the barriers to assure that packet data
+> and in memory rings/queues were ordered with respect to device
+> register reads/writes. This itself seems a bit sketchy, but the real
+> problem with GCC12 is that it is moving the actual reads/writes around
+> at will as though they were independent operations when in truth they
+> are not, but the compiler can't know that. When looking at the
+> assembly dumps for many of these routines its possible to see very
+> clean, but not strictly in program order operations occurring as the
+> compiler would be free to do if these weren't actually register
+> reads/write operations.
+> 
+> Its possible to suppress the timeout with a liberal bit of dma_mb()'s
+> sprinkled around but the device still seems unable to reliably
+> send/receive data. A better plan is to use the safer readl/writel
+> everywhere.
+> 
+> Since this partially reverts an older commit, which notes the use of
+> the relaxed variants for performance reasons. I would suggest that
+> any performance problems with this commit are targeted at relaxing only
+> the performance critical code paths after assuring proper barriers.
+> 
+> Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
+> Reported-by: Peter Robinson <pbrobinson@gmail.com>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> Acked-by: Peter Robinson <pbrobinson@gmail.com>
+> Tested-by: Peter Robinson <pbrobinson@gmail.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> Link: https://lore.kernel.org/r/20220310045358.224350-1-jeremy.linton@arm.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> index d4be107ea4cd..c78b687a1443 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -83,7 +83,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
+>   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>   		__raw_writel(value, offset);
+>   	else
+> -		writel_relaxed(value, offset);
+> +		writel(value, offset);
+>   }
+>   
+>   static inline u32 bcmgenet_readl(void __iomem *offset)
+> @@ -91,7 +91,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
+>   	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>   		return __raw_readl(offset);
+>   	else
+> -		return readl_relaxed(offset);
+> +		return readl(offset);
+>   }
+>   
+>   static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
+

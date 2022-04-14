@@ -2,189 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BD05017BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111DA5017BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344561AbiDNPsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S242507AbiDNPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243690AbiDNPi0 (ORCPT
+        with ESMTP id S1344633AbiDNPjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:38:26 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E295F1FA61;
-        Thu, 14 Apr 2022 08:15:40 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D88736000C;
-        Thu, 14 Apr 2022 15:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649949339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kldf5IEa3yAZkGIRecTUUIoT+f9V5tcdBTTm3Fj/R0E=;
-        b=KfauuI8udm5OMo/y2S7FtmFocxXA/lFKzTmOSteFep9LasMRYCoO3NSxkZE/5aLMkW9nYR
-        MQkfXzScE5Qe31vWvX6SmMQFEQtHou+UGO9iyU+1WMmzn+8yFEGDSI4rFKMrSQ1WJU7I89
-        qqiDNFx3A7qIX03nL2GLRHuCXQJyfQedxYH+ikaozYt5a3f9UOHhgbTQLgmbWMCYRa2nJw
-        O22a9HqvWw7copMKG1nxE0KIBJB+emaChGyGyM9kW1PK1zbpF8ndwOqhDt9CCN6vjH5mXD
-        SvAQrt4vE/GDbBNdMOCqt/b0Qh45nyOyrfG5u6I5pfjsy4U14AQ2gUhpRxgnqg==
-Date:   Thu, 14 Apr 2022 17:14:08 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 04/12] net: pcs: add Renesas MII converter
- driver
-Message-ID: <20220414171408.59716a52@fixe.home>
-In-Reply-To: <YlgYRGVuHQCwp7FQ@shell.armlinux.org.uk>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-5-clement.leger@bootlin.com>
-        <YlgYRGVuHQCwp7FQ@shell.armlinux.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Thu, 14 Apr 2022 11:39:20 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA0433B2;
+        Thu, 14 Apr 2022 08:16:51 -0700 (PDT)
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 23EFGbYq018720;
+        Fri, 15 Apr 2022 00:16:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 23EFGbYq018720
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649949398;
+        bh=pZAJtygSVmbKTNXuD7l5zcPaOSLqBFoMTTpuCRaKmGM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=immBGPKVEDIH9IfeoELrfMaGJ3K2KY9zHUDGtuJs406kRjHFl0yLRrEQALD4u1vAg
+         rahtDxTVGxwcn9rU7/3d/Fv9vSCMx3C4iYz2Hhx0hMcc6Xydc7bsoHcKw3KG6ggH4S
+         HDUJ62jqUwq0gIFISRWTxIRzRqgT/SxkQLTAammL+5+w4Tjdsf8oCnosTMI5nfEtjN
+         EuZmz9+u9cbq+ltHoqY/NskG+uRKCXMOlA1gcnAwv6lWUHrYnogFwz6eMFYdD9Agx5
+         uig6mtJ5/5r3Xqo/7nrYmEY5BXF26dDqRHuMR8ylKSYLtSsgG5fR55GRuDwCJS8SWe
+         MejJ3DVPaSTpg==
+X-Nifty-SrcIP: [209.85.216.48]
+Received: by mail-pj1-f48.google.com with SMTP id ll10so5408404pjb.5;
+        Thu, 14 Apr 2022 08:16:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531Hf6iTmruMkHe3sLeF0FuZejsTeagOz+mDSr+334hfRukJomzb
+        RKsc4YLeq13C/GmTrR0LxA4kLZJ/5wL3X8HDM2k=
+X-Google-Smtp-Source: ABdhPJwuMbF3kddDumdFdhCpEaX4B4g32YDZWW1V2vN9meXzaTcb8eNHOvNDjHrqamfqkeA9z9BV3ZENmi456uYXtxM=
+X-Received: by 2002:a17:902:7083:b0:158:41f2:3a83 with SMTP id
+ z3-20020a170902708300b0015841f23a83mr25282827plk.99.1649949396808; Thu, 14
+ Apr 2022 08:16:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com>
+ <20220408084607.106468-1-ydroneaud@opteya.com> <CAK7LNAQZLt_OecOogOQiSu5snW+sffsMoFgVcjPTx_idj_=_tQ@mail.gmail.com>
+ <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
+ <81585705-6ed8-12e5-1355-332a6a5d2b17@infradead.org> <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
+ <YlgdF9qmJyYGHKXZ@bergen.fjasle.eu>
+In-Reply-To: <YlgdF9qmJyYGHKXZ@bergen.fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 15 Apr 2022 00:15:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARVKL4vCRHz5=_sW_oBpkpqhDu5Hp1hfG+Hnwqg-61HVA@mail.gmail.com>
+Message-ID: <CAK7LNARVKL4vCRHz5=_sW_oBpkpqhDu5Hp1hfG+Hnwqg-61HVA@mail.gmail.com>
+Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of warning
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Yann Droneaud <ydroneaud@opteya.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 14 Apr 2022 13:49:08 +0100,
-"Russell King (Oracle)" <linux@armlinux.org.uk> a =C3=A9crit :
+On Thu, Apr 14, 2022 at 10:19 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> P=C3=A5 l=C3=B8. 09. april 2022 kl. 10.47 +0000 skrev Masahiro Yamada:
+> > On Sat, Apr 9, 2022 at 5:36 AM Randy Dunlap <rdunlap@infradead.org> Wro=
+te:
+> > >
+> > >
+> > >
+> > > On 4/8/22 13:29, Nick Desaulniers wrote:
+> > > > On Fri, Apr 8, 2022 at 4:06 AM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+> > > >>
+> > > >> On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com=
+> wrote:
+> > > >>>
+> > > >>> When developing new code/feature, CONFIG_WERROR is most
+> > > >>> often turned off, especially for people using make W=3D12 to
+> > > >>> get more warnings.
+> > > >>>
+> > > >>> In such case, turning on -Werror temporarily would require
+> > > >>> switching on CONFIG_WERROR in the configuration, building,
+> > > >>> then switching off CONFIG_WERROR.
+> > > >>>
+> > > >>> For this use case, this patch introduces a new 'e' modifier
+> > > >>> to W=3D as a short hand for KCFLAGS+=3D-Werror" so that -Werror
+> > > >>> got added to the kernel (built-in) and modules' CFLAGS.
+> > > >>>
+> > > >>> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
+> > > >>> ---
+> > > >>>  Makefile                   |  1 +
+> > > >>>  scripts/Makefile.extrawarn | 13 +++++++++++--
+> > > >>>  2 files changed, 12 insertions(+), 2 deletions(-)
+> > > >>>
+> > > >>> Changes since v0[0]:
+> > > >>>
+> > > >>>  - rebase on top of commit 64a91907c896 ("kbuild: refactor script=
+s/Makefile.extrawarn")
+> > > >>>  - document use case after commit 3fe617ccafd6 ("Enable '-Werror'=
+ by default for all kernel builds")
+> > > >>>
+> > > >>> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email=
+-ydroneaud@opteya.com/
+> > > >>
+> > > >>
+> > > >> I remembered the previous submission, I liked it, but I had lost i=
+t.
+> > > >>
+> > > >> It seems already 7 years ago, (before I became the Kbuild maintain=
+er).
+> > > >> Thanks for coming back to this.
+> > > >>
+> > > >>
+> > > >> I like this, but I will wait some time for review comments.
+> > > >
+> > > > Dunno, this seems pretty simple:
+> > > >
+> > > > $ ./scripts/config -e WERROR
+> > > > $ make ... W=3D12
+> > >
+> > > Yeah, that's about what I was thinking too..
+> >
+> >
+> >
+> > But, you cannot change the .config
+> > when you build external modules.
+> >
+> > "make W=3De" might be useful for people who strive to
+> > keep their downstream modules warning-free.
+> >
+> >
+> > W=3De is the same pattern.
+> > I do not see much downside.
+>
+> If I set CONFIG_WERROR=3Dy on the make command line, I could have the
+> same result, don't I?
+>
+>   make CONFIG_WERROR=3D1 ...
+>
+> no matter if in-tree or for external kernel modules.
 
-> On Thu, Apr 14, 2022 at 02:22:42PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Add PCS driver for the MII converter that is present on Renesas RZ/N1
-> > SoC. This MII converter is reponsible of converting MII to RMII/RGMII
-> > or act as a MII passtrough. Exposing it as a PCS allows to reuse it
-> > in both the switch driver and the stmmac driver. Currently, this driver
-> > only allows the PCS to be used by the dual Cortex-A7 subsystem since
-> > the register locking system is not used. =20
->=20
-> Hi,
->=20
-> > +#define MIIC_CONVCTRL_CONV_MODE		GENMASK(4, 0)
-> > +#define CONV_MODE_MII			0
-> > +#define CONV_MODE_RMII			BIT(2)
-> > +#define CONV_MODE_RGMII			BIT(3)
-> > +#define CONV_MODE_10MBPS		0
-> > +#define CONV_MODE_100MBPS		BIT(0)
-> > +#define CONV_MODE_1000MBPS		BIT(1) =20
->=20
-> Is this really a single 4-bit wide field? It looks like two 2-bit fields
-> to me.
+Yes.
 
-You are right, the datasheet presents that as a single bitfield but
-that can be split.
+If you can change the kernel configuration,
+you can enable CONFIG_WERROR.
 
->=20
-> > +#define phylink_pcs_to_miic_port(pcs) container_of((pcs), struct miic_=
-port, pcs) =20
->=20
-> I prefer a helper function to a preprocessor macro for that, but I'm not
-> going to insist on that point.
+To build external modules against the read-only
+/lib/modules/$(uname -r)/build/,
+it is not so feasible to change the .config file, though.
 
-Acked.
 
->=20
-> > +static void miic_link_up(struct phylink_pcs *pcs, unsigned int mode,
-> > +			 phy_interface_t interface, int speed, int duplex)
-> > +{
-> > +	struct miic_port *miic_port =3D phylink_pcs_to_miic_port(pcs);
-> > +	struct miic *miic =3D miic_port->miic;
-> > +	int port =3D miic_port->port;
-> > +	u32 val =3D 0;
-> > +
-> > +	if (duplex =3D=3D DUPLEX_FULL)
-> > +		val |=3D MIIC_CONVCTRL_FULLD;
-> > +
-> > +	switch (interface) {
-> > +	case PHY_INTERFACE_MODE_RMII:
-> > +		val |=3D CONV_MODE_RMII;
-> > +		break;
-> > +	case PHY_INTERFACE_MODE_RGMII:
-> > +		val |=3D CONV_MODE_RGMII;
-> > +		break;
-> > +	case PHY_INTERFACE_MODE_MII:
-> > +		val |=3D CONV_MODE_MII;
-> > +		break;
-> > +	default:
-> > +		dev_err(miic->dev, "Unsupported interface %s\n",
-> > +			phy_modes(interface));
-> > +		return;
-> > +	} =20
->=20
-> Why are you re-decoding the interface mode? The interface mode won't
-> change as a result of a call to link-up. Changing the interface mode
-> is a major configuration event that will always see a call to your
-> miic_config() function first.
+>
+> Kind regards,
+> Nicolas
 
-Indeed, seems stupid, I will simply keep the mode bits once split from
-speed.
 
-[...]
-
-> > +};
-> > +
-> > +struct phylink_pcs *miic_create(struct device_node *np)
-> > +{
-> > +	struct platform_device *pdev;
-> > +	struct miic_port *miic_port;
-> > +	struct device_node *pcs_np;
-> > +	u32 port;
-> > +
-> > +	if (of_property_read_u32(np, "reg", &port))
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	if (port >=3D MIIC_MAX_NR_PORTS)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	/* The PCS pdev is attached to the parent node */
-> > +	pcs_np =3D of_get_parent(np);
-> > +	if (!pcs_np)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	pdev =3D of_find_device_by_node(pcs_np);
-> > +	if (!pdev || !platform_get_drvdata(pdev))
-> > +		return ERR_PTR(-EPROBE_DEFER); =20
->=20
-> It would be a good idea to have a comment in the probe function to say
-> that this relies on platform_set_drvdata() being the very last thing
-> after a point where initialisation is complete and we won't fail.
-
-Yep, sounds like a good idea.
-
->=20
-> Thanks!
->=20
-
-Thanks for the review,
 
 --=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Best Regards
+Masahiro Yamada

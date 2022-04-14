@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44E950133D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ABD501619
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345545AbiDNNxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S1345408AbiDNOuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245695AbiDNN3Q (ORCPT
+        with ESMTP id S1345197AbiDNNpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA44AFAD4;
-        Thu, 14 Apr 2022 06:23:36 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7142DE0;
+        Thu, 14 Apr 2022 06:42:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5D1619FC;
-        Thu, 14 Apr 2022 13:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBC9C385A9;
-        Thu, 14 Apr 2022 13:23:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD85B82894;
+        Thu, 14 Apr 2022 13:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2FAAC385A1;
+        Thu, 14 Apr 2022 13:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942615;
-        bh=vrr9yOlm8FE3cGTKPSJUOj69XGFkfbaYIYMtWeMhDG0=;
+        s=korg; t=1649943777;
+        bh=pdKfEaBhOdEPnMMQxO73HzHu2frf8YGJH9jaef0S/A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x92zr2nhWsOYHTK6xiz0Pe4V892EwHUyTf8fuNzEwRs8Jb2xh42Y9dCxIzRSHnpDd
-         DMoGMbi8EJ3DqyAeU8wXx71l5ntw6nqAlbh9RRJgCHRvJjE+X1KvG74iROOmM3FLHQ
-         PE0/YWHR2f6AP6axtLC5IkbfC7epVtCn6mnQVsaA=
+        b=HkU9HOS7WlY/6kISETeny0s/D4Xdh07PmxvJkS3iGpKU4hxGMjIPFp64aIDQTZH3Z
+         xhE9DtCd3Y6ROwN5YI8xGz5ixqUjGE/NLd0wTN5NEtVp3qjgohD9sTWeiIOU8/AbBU
+         5To2dkjNHE216sde3uYwBYbxRF3C1xlyJrFC7WCQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 159/338] pwm: lpc18xx-sct: Initialize driver data and hardware before pwmchip_add()
-Date:   Thu, 14 Apr 2022 15:11:02 +0200
-Message-Id: <20220414110843.426315036@linuxfoundation.org>
+        stable@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 278/475] loop: use sysfs_emit() in the sysfs xxx show()
+Date:   Thu, 14 Apr 2022 15:11:03 +0200
+Message-Id: <20220414110902.882092924@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,77 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Chaitanya Kulkarni <kch@nvidia.com>
 
-[ Upstream commit 0401f24cd238ae200a23a13925f98de3d2c883b8 ]
+[ Upstream commit b27824d31f09ea7b4a6ba2c1b18bd328df3e8bed ]
 
-When a driver calls pwmchip_add() it has to be prepared to immediately
-get its callbacks called. So move allocation of driver data and hardware
-initialization before the call to pwmchip_add().
+sprintf does not know the PAGE_SIZE maximum of the temporary buffer
+used for outputting sysfs content and it's possible to overrun the
+PAGE_SIZE buffer length.
 
-This fixes a potential NULL pointer exception and a race condition on
-register writes.
+Use a generic sysfs_emit function that knows the size of the
+temporary buffer and ensures that no overrun is done for offset
+attribute in
+loop_attr_[offset|sizelimit|autoclear|partscan|dio]_show() callbacks.
 
-Fixes: 841e6f90bb78 ("pwm: NXP LPC18xx PWM/SCT driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
+Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Link: https://lore.kernel.org/r/20220215213310.7264-2-kch@nvidia.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pwm/pwm-lpc18xx-sct.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ drivers/block/loop.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lpc18xx-sct.c b/drivers/pwm/pwm-lpc18xx-sct.c
-index d7f5f7de030d..8b3aad06e236 100644
---- a/drivers/pwm/pwm-lpc18xx-sct.c
-+++ b/drivers/pwm/pwm-lpc18xx-sct.c
-@@ -406,12 +406,6 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
- 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_LIMIT,
- 			   BIT(lpc18xx_pwm->period_event));
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index ffbe792410d1..6b3e27b8cd24 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -794,33 +794,33 @@ static ssize_t loop_attr_backing_file_show(struct loop_device *lo, char *buf)
  
--	ret = pwmchip_add(&lpc18xx_pwm->chip);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
--		goto disable_pwmclk;
--	}
--
- 	for (i = 0; i < lpc18xx_pwm->chip.npwm; i++) {
- 		struct lpc18xx_pwm_data *data;
+ static ssize_t loop_attr_offset_show(struct loop_device *lo, char *buf)
+ {
+-	return sprintf(buf, "%llu\n", (unsigned long long)lo->lo_offset);
++	return sysfs_emit(buf, "%llu\n", (unsigned long long)lo->lo_offset);
+ }
  
-@@ -421,14 +415,12 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
- 				    GFP_KERNEL);
- 		if (!data) {
- 			ret = -ENOMEM;
--			goto remove_pwmchip;
-+			goto disable_pwmclk;
- 		}
+ static ssize_t loop_attr_sizelimit_show(struct loop_device *lo, char *buf)
+ {
+-	return sprintf(buf, "%llu\n", (unsigned long long)lo->lo_sizelimit);
++	return sysfs_emit(buf, "%llu\n", (unsigned long long)lo->lo_sizelimit);
+ }
  
- 		pwm_set_chip_data(pwm, data);
- 	}
+ static ssize_t loop_attr_autoclear_show(struct loop_device *lo, char *buf)
+ {
+ 	int autoclear = (lo->lo_flags & LO_FLAGS_AUTOCLEAR);
  
--	platform_set_drvdata(pdev, lpc18xx_pwm);
--
- 	val = lpc18xx_pwm_readl(lpc18xx_pwm, LPC18XX_PWM_CTRL);
- 	val &= ~LPC18XX_PWM_BIDIR;
- 	val &= ~LPC18XX_PWM_CTRL_HALT;
-@@ -436,10 +428,16 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
- 	val |= LPC18XX_PWM_PRE(0);
- 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_CTRL, val);
+-	return sprintf(buf, "%s\n", autoclear ? "1" : "0");
++	return sysfs_emit(buf, "%s\n", autoclear ? "1" : "0");
+ }
  
-+	ret = pwmchip_add(&lpc18xx_pwm->chip);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
-+		goto disable_pwmclk;
-+	}
-+
-+	platform_set_drvdata(pdev, lpc18xx_pwm);
-+
- 	return 0;
+ static ssize_t loop_attr_partscan_show(struct loop_device *lo, char *buf)
+ {
+ 	int partscan = (lo->lo_flags & LO_FLAGS_PARTSCAN);
  
--remove_pwmchip:
--	pwmchip_remove(&lpc18xx_pwm->chip);
- disable_pwmclk:
- 	clk_disable_unprepare(lpc18xx_pwm->pwm_clk);
- 	return ret;
+-	return sprintf(buf, "%s\n", partscan ? "1" : "0");
++	return sysfs_emit(buf, "%s\n", partscan ? "1" : "0");
+ }
+ 
+ static ssize_t loop_attr_dio_show(struct loop_device *lo, char *buf)
+ {
+ 	int dio = (lo->lo_flags & LO_FLAGS_DIRECT_IO);
+ 
+-	return sprintf(buf, "%s\n", dio ? "1" : "0");
++	return sysfs_emit(buf, "%s\n", dio ? "1" : "0");
+ }
+ 
+ LOOP_ATTR_RO(backing_file);
 -- 
 2.34.1
 

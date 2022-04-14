@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9D2501311
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66BE501710
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347192AbiDNOLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
+        id S1356589AbiDNPTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344232AbiDNNbQ (ORCPT
+        with ESMTP id S1347585AbiDNN7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:31:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F109E6;
-        Thu, 14 Apr 2022 06:28:51 -0700 (PDT)
+        Thu, 14 Apr 2022 09:59:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CAF3E0F4;
+        Thu, 14 Apr 2022 06:50:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56028B82941;
-        Thu, 14 Apr 2022 13:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A533AC385A5;
-        Thu, 14 Apr 2022 13:28:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F92061DAA;
+        Thu, 14 Apr 2022 13:50:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E3ABC385A5;
+        Thu, 14 Apr 2022 13:50:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942929;
-        bh=UQOJQUi4iWDpbVkJGYblS6j+kLS1BBB77zDXwNgSVTI=;
+        s=korg; t=1649944206;
+        bh=+AkGY8+PhTH+ThLmE3nSHtM39Y6w3htVNAPSTX1ghcM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TPAh4YykaAkZneqP+f5G+W+i1d7ekz2Eh2QCI6c4B92BQ0ObliV7kaYYN4aFyRtNn
-         ftxj96rY0o46aIXFh1V5KU/giGzOXOXtntcsTewy9rdLDuraqJBZUmq1KaWG7MNlaT
-         gqJo9JrKQL2+WhycjipDcY0OHzT+O8mU6Z1UlqUc=
+        b=uqLKbm0N9jKm+HPT+TUPnXS725NLGS4NcIGsImTh7kbF5dj9ggWRQFc4xLgla7obh
+         l5JMvzfA9nVj3a7UOL/F9rSJOzVATKKTIjOXpVhg0R1iXTBuNA3VM8uunZuxR1e3qE
+         YC3EX73n01YRf+JmDToGmviaGgUuORikZVmDa4Xc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 311/338] spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
-Date:   Thu, 14 Apr 2022 15:13:34 +0200
-Message-Id: <20220414110847.732388711@linuxfoundation.org>
+Subject: [PATCH 5.4 430/475] drm/imx: Fix memory leak in imx_pd_connector_get_modes
+Date:   Thu, 14 Apr 2022 15:13:35 +0200
+Message-Id: <20220414110907.097967340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kamal Dasu <kdasu.kdev@gmail.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 2c7d1b281286c46049cd22b43435cecba560edde ]
+[ Upstream commit bce81feb03a20fca7bbdd1c4af16b4e9d5c0e1d3 ]
 
-This fixes case where MSPI controller is used to access spi-nor
-flash and BSPI block is not present.
+Avoid leaking the display mode variable if of_get_drm_display_mode
+fails.
 
-Fixes: 5f195ee7d830 ("spi: bcm-qspi: Implement the spi_mem interface")
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220328142442.7553-1-kdasu.kdev@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 76ecd9c9fb24 ("drm/imx: parallel-display: check return code from of_get_drm_display_mode()")
+Addresses-Coverity-ID: 1443943 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220108165230.44610-1-jose.exposito89@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-bcm-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/imx/parallel-display.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 82c24c85f45b..3f291db7b39a 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -970,7 +970,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	addr = op->addr.val;
- 	len = op->data.nbytes;
+diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
+index be55548f352a..e24272428744 100644
+--- a/drivers/gpu/drm/imx/parallel-display.c
++++ b/drivers/gpu/drm/imx/parallel-display.c
+@@ -68,8 +68,10 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
+ 		ret = of_get_drm_display_mode(np, &imxpd->mode,
+ 					      &imxpd->bus_flags,
+ 					      OF_USE_NATIVE_MODE);
+-		if (ret)
++		if (ret) {
++			drm_mode_destroy(connector->dev, mode);
+ 			return ret;
++		}
  
--	if (bcm_qspi_bspi_ver_three(qspi) == true) {
-+	if (has_bspi(qspi) && bcm_qspi_bspi_ver_three(qspi) == true) {
- 		/*
- 		 * The address coming into this function is a raw flash offset.
- 		 * But for BSPI <= V3, we need to convert it to a remapped BSPI
-@@ -989,7 +989,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	    len < 4)
- 		mspi_read = true;
- 
--	if (mspi_read)
-+	if (!has_bspi(qspi) || mspi_read)
- 		return bcm_qspi_mspi_exec_mem_op(spi, op);
- 
- 	ret = bcm_qspi_bspi_set_mode(qspi, op, 0);
+ 		drm_mode_copy(mode, &imxpd->mode);
+ 		mode->type |= DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
 -- 
 2.35.1
 

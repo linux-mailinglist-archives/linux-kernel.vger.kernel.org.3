@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6425015C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B1F5014D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344259AbiDNOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S1344526AbiDNOJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344429AbiDNNcE (ORCPT
+        with ESMTP id S1344078AbiDNNaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:32:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA2BF54;
-        Thu, 14 Apr 2022 06:29:38 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4F3117D;
+        Thu, 14 Apr 2022 06:27:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FC8EB82893;
-        Thu, 14 Apr 2022 13:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52DFC385A1;
-        Thu, 14 Apr 2022 13:29:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEEEE6190F;
+        Thu, 14 Apr 2022 13:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DACCFC385A1;
+        Thu, 14 Apr 2022 13:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942976;
-        bh=WuMbpQJqPc+BMU+TWM9FmX46rYyb+WkfYBs1d+P81t0=;
+        s=korg; t=1649942864;
+        bh=pq5Hkm5sFmOw4+bSV+L9OhXIlFKnUqlcIn+go98fDOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ccndDuVZjSI2IpsQQHxglszlTxZ4cUhqYESXWwhO5sS4SAv0VD1ExS1MBHb7mOYF7
-         rx/3Ukob06rgIsSPuisuk7N3NwAWwpgA+Uy8HJwHkhsldg93c4mGNtWYigYnzE3Fpn
-         7ngTLXKawR6t7v+JEdz5t1L7v3JJ62UfpZ1tblps=
+        b=ijCF15l19Sqi4SZIlgeVvJja3RBJwnbyJirewikgVEWeHEEp9aIO2Qhu/yoAmCskC
+         ViOVDNp9eYj/7R76OhGCVQVePuYE7EjCRXqAtQaXsRhK31YJ3cXeNDouzbtxrugYwq
+         zKjDTkPXX0DNP99h6mYXOKoKXG1HpilcWP7nLcbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Denefle <lucas.denefle@converge.io>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 289/338] w1: w1_therm: fixes w1_seq for ds28ea00 sensors
-Date:   Thu, 14 Apr 2022 15:13:12 +0200
-Message-Id: <20220414110847.115509822@linuxfoundation.org>
+Subject: [PATCH 4.19 290/338] NFSv4: Protect the state recovery thread against direct reclaim
+Date:   Thu, 14 Apr 2022 15:13:13 +0200
+Message-Id: <20220414110847.143408909@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -54,50 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Denefle <lucas.denefle@converge.io>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 41a92a89eee819298f805c40187ad8b02bb53426 ]
+[ Upstream commit 3e17898aca293a24dae757a440a50aa63ca29671 ]
 
-w1_seq was failing due to several devices responding to the
-CHAIN_DONE at the same time. Now properly selects the current
-device in the chain with MATCH_ROM. Also acknowledgment was
-read twice.
+If memory allocation triggers a direct reclaim from the state recovery
+thread, then we can deadlock. Use memalloc_nofs_save/restore to ensure
+that doesn't happen.
 
-Signed-off-by: Lucas Denefle <lucas.denefle@converge.io>
-Link: https://lore.kernel.org/r/20220223113558.232750-1-lucas.denefle@converge.io
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/w1/slaves/w1_therm.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ fs/nfs/nfs4state.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
-index 3c350dfbcd0b..aba727294bc8 100644
---- a/drivers/w1/slaves/w1_therm.c
-+++ b/drivers/w1/slaves/w1_therm.c
-@@ -693,16 +693,20 @@ static ssize_t w1_seq_show(struct device *device,
- 		if (sl->reg_num.id == reg_num->id)
- 			seq = i;
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index 9c98547fcefc..30576a10a1f4 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -49,6 +49,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/bitops.h>
+ #include <linux/jiffies.h>
++#include <linux/sched/mm.h>
  
-+		if (w1_reset_bus(sl->master))
-+			goto error;
+ #include <linux/sunrpc/clnt.h>
+ 
+@@ -2505,9 +2506,17 @@ static int nfs4_bind_conn_to_session(struct nfs_client *clp)
+ 
+ static void nfs4_state_manager(struct nfs_client *clp)
+ {
++	unsigned int memflags;
+ 	int status = 0;
+ 	const char *section = "", *section_sep = "";
+ 
++	/*
++	 * State recovery can deadlock if the direct reclaim code tries
++	 * start NFS writeback. So ensure memory allocations are all
++	 * GFP_NOFS.
++	 */
++	memflags = memalloc_nofs_save();
 +
-+		/* Put the device into chain DONE state */
-+		w1_write_8(sl->master, W1_MATCH_ROM);
-+		w1_write_block(sl->master, (u8 *)&rn, 8);
- 		w1_write_8(sl->master, W1_42_CHAIN);
- 		w1_write_8(sl->master, W1_42_CHAIN_DONE);
- 		w1_write_8(sl->master, W1_42_CHAIN_DONE_INV);
--		w1_read_block(sl->master, &ack, sizeof(ack));
+ 	/* Ensure exclusive access to NFSv4 state */
+ 	do {
+ 		clear_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
+@@ -2600,6 +2609,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 				goto out_error;
+ 		}
  
- 		/* check for acknowledgment */
- 		ack = w1_read_8(sl->master);
- 		if (ack != W1_42_SUCCESS_CONFIRM_BYTE)
- 			goto error;
--
- 	}
++		memalloc_nofs_restore(memflags);
+ 		nfs4_end_drain_session(clp);
+ 		nfs4_clear_state_manager_bit(clp);
  
- 	/* Exit from CHAIN state */
+@@ -2616,6 +2626,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 			return;
+ 		if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
+ 			return;
++		memflags = memalloc_nofs_save();
+ 	} while (refcount_read(&clp->cl_count) > 1 && !signalled());
+ 	goto out_drain;
+ 
+@@ -2627,6 +2638,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 			clp->cl_hostname, -status);
+ 	ssleep(1);
+ out_drain:
++	memalloc_nofs_restore(memflags);
+ 	nfs4_end_drain_session(clp);
+ 	nfs4_clear_state_manager_bit(clp);
+ }
 -- 
 2.35.1
 

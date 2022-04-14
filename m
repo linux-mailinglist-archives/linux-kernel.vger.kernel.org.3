@@ -2,161 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A53C501E7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9068B501E82
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347054AbiDNWja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S1347110AbiDNWoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbiDNWj2 (ORCPT
+        with ESMTP id S239245AbiDNWoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:39:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BDEC6B54;
-        Thu, 14 Apr 2022 15:37:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D66B620B1;
-        Thu, 14 Apr 2022 22:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F1DC385A1;
-        Thu, 14 Apr 2022 22:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649975821;
-        bh=nZQEIAbV5ImpOLfoFMOS/d41QAE77juoAmcn5Yjj7tA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=B/Hf6TyRY7JsgqhNQ3nTtIGf3lGpUXrfXJW678cB0qzeQLDuY9H2g2EcImCya6n3R
-         hGHP4XHgAb4/CLP9O1kJDkKunKQlBlsu2Rdh/aRs/zDUwD1ZDrnFkqHHEj9g2q7ls7
-         jFGvG6p106PbNw76zvltWV9HNgCgGg3leAcMof7J7tFGXSLijjmsNPPT/bIXmeWKbU
-         aUoVz+eG27Zel9GOyAdtTi60sxVGkQ9pwgNO5zDPHPSqPmP3eWFQ8MGS8jRfgskDaS
-         X/LJUcDIoJFtG/PcYd5IPFbBQH28crgO+fe0eZVdoBXROd+7ZoS8lC4dsXQYMLSEvT
-         3dHw8s92/hbxQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 158315C013A; Thu, 14 Apr 2022 15:37:01 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 15:37:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
- RCU_NOCB_CPU=y
-Message-ID: <20220414223701.GD4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
- <20220411154109.GX4285@paulmck-ThinkPad-P17-Gen-1>
- <Ylhz1LOIf+JyjH7n@google.com>
- <20220414194204.GU4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YS5b_51tqmdf27QqQHqsgJKbTys1V3h+Bek3XN4FjBmbw@mail.gmail.com>
- <20220414210933.GW4285@paulmck-ThinkPad-P17-Gen-1>
- <YliOnZC6gva5WZrG@google.com>
- <20220414213156.GZ4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YT0CDp7kqKVeqGRT8YfXiCYuL0ZgRwz05MQrmns2Yp+2Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YT0CDp7kqKVeqGRT8YfXiCYuL0ZgRwz05MQrmns2Yp+2Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 18:44:05 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D0E2A8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:41:39 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id a16-20020a056902057000b00641c83f82f5so5415494ybt.22
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=rAQUyFFCAm9hAIpMthk09aJ6bzB1j1wIgJVRYFh3f58=;
+        b=E3GbblU9eh7nB1JiPymsjFnwzoT6TbQMf8ldul6KS4xO2fQSx1uK7JVhfC4can/CSz
+         7V3LtWsBoV+qeu9UUPZaLqIeOXV5EyYsNzOkhQTey1XvrEyokJJ9QU5U+uLqMhdgZtbp
+         p9yBKq2F+QtfzHyUFMsCjoo6rUMGGkcTpV3of2gXzgwOnyDUXdpqlzV03XFTgetPnHte
+         hPHGZIlI+HqWxTTk19bBAEzEPP6x9R92M6n5jSuGU3sHRHY69QwA0MTCGQKiMFRPpuG2
+         Y8ARNaB2Czz6794TSC/U4ORN2ewJpmEP0d03K7ypNDwXgC455icI9HQupJDXoB9fThr6
+         9v7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=rAQUyFFCAm9hAIpMthk09aJ6bzB1j1wIgJVRYFh3f58=;
+        b=WPKV/OAKlixGcC32gPI9zZeRo9n0eRIX1W2umntx8GawnnV6tIJwl6Sun2hp+Bq9K1
+         /mbmBbGTVpxmfwaPg7OnFAi3uF47JZangBh3gW3rI9/H2Fm7o+LdT9xMxr3zXBDvk991
+         8nllbGM8E7lKymMOXSGRq9RvOOI3AppR8FbSZBPIuH9KjEsFE7F5fvq7FstTm4AVwjg4
+         fy/zUHDvyhUooupTWktLHJsmDj+Fbiw7ddKTnDQQgzAqicX1BAPsEc07UsrlS8A5+KRe
+         y4TBMlLftBYunTEogQ99vMYgkAPYuQOZbX8v7OZyjGeGZc3i99UoX3NOxlMVI1NuC6MC
+         5NPA==
+X-Gm-Message-State: AOAM5328yIPbu9uIbpzCKm4MwCFPb3re+A3uIvkAjc4xZucXZXMBs05k
+        1z3FtQwEkXM/41GQb9+MMS2YNNW4kkQ=
+X-Google-Smtp-Source: ABdhPJyPRB6aS2hvABaRs4E8OHt+HsAC7x01q5HuMRBlfWdcx4tIhTOoY3h76+73rpRKld3Mv/x1LMEEXx8=
+X-Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2cd:202:a4e5:c402:edee:ce9e])
+ (user=khazhy job=sendgmr) by 2002:a81:9ca:0:b0:2eb:f567:217f with SMTP id
+ 193-20020a8109ca000000b002ebf567217fmr3782016ywj.322.1649976099028; Thu, 14
+ Apr 2022 15:41:39 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:40:56 -0700
+In-Reply-To: <20220408234707.2562835-1-khazhy@google.com>
+Message-Id: <20220414224056.2875681-1-khazhy@google.com>
+Mime-Version: 1.0
+References: <20220408234707.2562835-1-khazhy@google.com>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH v2] block/compat_ioctl: fix range check in BLKGETSIZE
+From:   Khazhismel Kumykov <khazhy@google.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khazhismel Kumykov <khazhy@google.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 05:38:08PM -0400, Joel Fernandes wrote:
-> On Thu, Apr 14, 2022 at 5:31 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Thu, Apr 14, 2022 at 09:14:05PM +0000, Joel Fernandes wrote:
-> > > On Thu, Apr 14, 2022 at 02:09:33PM -0700, Paul E. McKenney wrote:
-> > > > On Thu, Apr 14, 2022 at 03:49:16PM -0400, Joel Fernandes wrote:
-> > > > > On Thu, Apr 14, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Apr 14, 2022 at 07:19:48PM +0000, Joel Fernandes wrote:
-> > > > > > > On Mon, Apr 11, 2022 at 08:41:09AM -0700, Paul E. McKenney wrote:
-> > > > > > > [..]
-> > > > > > > > > > [4]     All CPUs are offloaded at boot, and any CPU can be de-offloaded
-> > > > > > > > > >         and offloaded at runtime.  This is the same behavior that
-> > > > > > > > > >         you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
-> > > > > > > > > >         rcu_nocbs=0-N.
-> > > > > > > > >
-> > > > > > > > > Yes, this is the behavior I intend. So then there would not be a need
-> > > > > > > > > to pass a mask (and I suspect for a large number of users, it
-> > > > > > > > > simplifies boot params).
-> > > > > > > >
-> > > > > > > > Very good, and from what I can see, this should work for everyone.
-> > > > > > >
-> > > > > > > Just to clarify, what I am going to do is, if this new option =y, then
-> > > > > > > rcu_nocbs effectively wont do anything. i.e. All CPUs are offloaded at boot.
-> > > > > > > Let me know if we are not on the same page about it though. I do feel that is
-> > > > > > > a sensible choice given =y. If we are on same page, please ignore my comment.
-> > > > > >
-> > > > > > I was assuming that the rcu_nocbs=??? for non-empty "???" would override
-> > > > > > the CONFIG_RCU_NOCB_CPU_ALL=y.  If you choose not to do that, shouldn't
-> > > > > > you at least issue some sort of diagnostic?  After all, the sysadmin
-> > > > > > gave a kernel-boot parameter asking the code to do something and the
-> > > > > > code is choosing not to do that something.
-> > > > > >
-> > > > > > Of course, such a sysadmin might want the CONFIG_RCU_NOCB_CPU_ALL=y
-> > > > > > Kconfig option to affect only the default, that is, when no rcu_nocbs
-> > > > > > kernel boot parameter is specified.  This would change the second "[4]"
-> > > > > > in my original table to "[2]".
-> > > > > >
-> > > > > > Thoughts?
-> > > > >
-> > > > > I thought about that. I feel that since we are defaulting the new
-> > > > > config option to =n , it is a conscious choice by the distro to set it
-> > > > > to =y.  In such a case, they should be Ok with offloading all CPUs. If
-> > > > > they decide to selectively offload some CPUs in the future, then they
-> > > > > could revisit the config option at that time.
-> > > > >
-> > > > > I feel the kernel config should override the boot parameter behavior.
-> > > > > It is the same effect as a sysadmin passing kernel parameter X
-> > > > > assuming the kernel does something but the CONFIG option might not
-> > > > > even build code corresponding to X.
-> > > > >
-> > > > > I feel to address your concern, we can document in kernel command line
-> > > > > documentation that rcu_nocbs= does not have an effect if
-> > > > > CONFIG_RCU_NOCB_CPU_ALL=y, would that work for you?
-> > > >
-> > > > Not me so much, because I would just set CONFIG_RCU_NOCB_CPU_ALL=n so
-> > > > as to not worry about it.
-> > > >
-> > > > But I am not at all looking forward to complaints about rcu_nocbs not
-> > > > working the way people expect.  So let's take some time to think more
-> > > > carefully about this.
-> > >
-> > > That's a fair concern. But we are defaulting it to 'n' so I think if it is
-> > > unconsciously enabled without someone reading documentation, then that's a
-> > > slightly different issue.
-> >
-> > Suppose that one group decides to change to CONFIG_RCU_NOCB_CPU_ALL=y,
-> > and some other group on some other continent happens to be using the
-> > rcu_nocbs boot parameter (having read the documentation).  And suppose
-> > that the level of communication between the two groups is typical,
-> > that is to say, nonexistent.
-> >
-> > Sure, we can argue that groups should communicate, but our making that
-> > argument won't necessarily prevent the group using rcu_nocbs from taking
-> > us to task in the course of their debugging effort.
-> >
-> > > On the other hand, I can also make it such that if rcu_nocbs= is passed, then
-> > > the CONFIG does not take effect. That's quite a bit weird/quirky IMHO.
-> >
-> > Not at all.  We can simply say that CONFIG_RCU_NOCB_CPU_ALL controls
-> > only the default situation, that is, when rcu_nocbs is not specified.
-> 
-> Then it should be called: CONFIG_RCU_NOCB_CPU_DEFAULT_ALL , or
-> something. Otherwise I can tell you that I will be the first one to be
-> confused by menuconfig unless I also read the code :-D
+kernel ulong and compat_ulong_t may not be same width. Use type directly
+to eliminate mismatches.
 
-I am OK with CONFIG_RCU_NOCB_CPU_DEFAULT_ALL.
+This would result in truncation rather than EFBIG for 32bit mode for
+large disks.
 
-							Thanx, Paul
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+---
+ block/ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+v2: addressed bart's comment
+
+diff --git a/block/ioctl.c b/block/ioctl.c
+index 4a86340133e4..f8703db99c73 100644
+--- a/block/ioctl.c
++++ b/block/ioctl.c
+@@ -629,7 +629,7 @@ long compat_blkdev_ioctl(struct file *file, unsigned cmd, unsigned long arg)
+ 		return compat_put_long(argp,
+ 			(bdev->bd_disk->bdi->ra_pages * PAGE_SIZE) / 512);
+ 	case BLKGETSIZE:
+-		if (bdev_nr_sectors(bdev) > ~0UL)
++		if (bdev_nr_sectors(bdev) > ~(compat_ulong_t)0)
+ 			return -EFBIG;
+ 		return compat_put_ulong(argp, bdev_nr_sectors(bdev));
+ 
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

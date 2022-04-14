@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336FE5016E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE5C50158F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348978AbiDNPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S1343834AbiDNOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347609AbiDNN7W (ORCPT
+        with ESMTP id S1344065AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:22 -0400
+        Thu, 14 Apr 2022 09:30:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6734443FD;
-        Thu, 14 Apr 2022 06:50:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9247A29B;
+        Thu, 14 Apr 2022 06:27:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCCB461DF9;
-        Thu, 14 Apr 2022 13:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2FF0C385A1;
-        Thu, 14 Apr 2022 13:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F39C60C14;
+        Thu, 14 Apr 2022 13:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9CAC385A1;
+        Thu, 14 Apr 2022 13:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944218;
-        bh=BVwhw/vsPc94UD/xc3eUv1VUazf0vJXdMXaQJa9Kgyg=;
+        s=korg; t=1649942842;
+        bh=vj3ncfI3Ru8CtjnT1vco8kX9pfKvkDPvtJog+Y28LS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=doPUwSdnIBO4DizWWAfBEIi4yPUpD+GlsgHwbfRSQFMsYyVqqtnVKTf5DrxGplTz8
-         xmwfhWdk1O9G7AMgSdO3GEr/1Wz65X7ogrx4JMQQ06DdDWiTAZz0N3KmtGUm9O/b5M
-         SvLn0qFjfmBcjGiKE6fCJzgLtPvDxCIZ46gDDXk4=
+        b=DlKcODIzUiP6zjnB6hA+afQbdjnT9AozNPgvKYJMYNxOP3wyUPmLVKo7RuU6NgZDI
+         UYwxg3FNgI5eT4t4CpJTeYJ+j1BK0G1mcGwvVHOj/WlKJMaqhGPcOIwbzpTcgqiVm4
+         BMHYutaaj+7VX3jW7BbOEy5zTgH8k33Z1ZO92bqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 396/475] mips: ralink: fix a refcount leak in ill_acc_of_setup()
-Date:   Thu, 14 Apr 2022 15:13:01 +0200
-Message-Id: <20220414110906.152543941@linuxfoundation.org>
+Subject: [PATCH 4.19 279/338] net/smc: correct settings of RMB window update limit
+Date:   Thu, 14 Apr 2022 15:13:02 +0200
+Message-Id: <20220414110846.828149919@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Dust Li <dust.li@linux.alibaba.com>
 
-[ Upstream commit 4a0a1436053b17e50b7c88858fb0824326641793 ]
+[ Upstream commit 6bf536eb5c8ca011d1ff57b5c5f7c57ceac06a37 ]
 
-of_node_put(np) needs to be called when pdev == NULL.
+rmbe_update_limit is used to limit announcing receive
+window updating too frequently. RFC7609 request a minimal
+increase in the window size of 10% of the receive buffer
+space. But current implementation used:
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+  min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2)
+
+and SOCK_MIN_SNDBUF / 2 == 2304 Bytes, which is almost
+always less then 10% of the receive buffer space.
+
+This causes the receiver always sending CDC message to
+update its consumer cursor when it consumes more then 2K
+of data. And as a result, we may encounter something like
+"TCP silly window syndrome" when sending 2.5~8K message.
+
+This patch fixes this using max(rmbe_size / 10, SOCK_MIN_SNDBUF / 2).
+
+With this patch and SMC autocorking enabled, qperf 2K/4K/8K
+tcp_bw test shows 45%/75%/40% increase in throughput respectively.
+
+Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/ralink/ill_acc.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/smc/smc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
-index 0ddeb31afa93..45ca2b84f096 100644
---- a/arch/mips/ralink/ill_acc.c
-+++ b/arch/mips/ralink/ill_acc.c
-@@ -61,6 +61,7 @@ static int __init ill_acc_of_setup(void)
- 	pdev = of_find_device_by_node(np);
- 	if (!pdev) {
- 		pr_err("%pOFn: failed to lookup pdev\n", np);
-+		of_node_put(np);
- 		return -EINVAL;
- 	}
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index 6add3094ea9e..4d421407d6fc 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -709,7 +709,7 @@ static struct smc_buf_desc *smc_buf_get_slot(int compressed_bufsize,
+  */
+ static inline int smc_rmb_wnd_update_limit(int rmbe_size)
+ {
+-	return min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
++	return max_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
+ }
  
+ static struct smc_buf_desc *smcr_new_buf_create(struct smc_link_group *lgr,
 -- 
 2.35.1
 

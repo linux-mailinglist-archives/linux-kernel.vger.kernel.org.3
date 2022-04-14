@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AD3501615
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A1D5010E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344757AbiDNOtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S1346506AbiDNN5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345112AbiDNNpI (ORCPT
+        with ESMTP id S244765AbiDNN2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1DF2F000;
-        Thu, 14 Apr 2022 06:42:05 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A7A5EA2;
+        Thu, 14 Apr 2022 06:20:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BE2EB82968;
-        Thu, 14 Apr 2022 13:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC076C385A1;
-        Thu, 14 Apr 2022 13:42:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B756125A;
+        Thu, 14 Apr 2022 13:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC330C385A5;
+        Thu, 14 Apr 2022 13:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943723;
-        bh=ZVmDmmOcyD/n4hyXks1S0zNHFQzx5OWlZINxrVdHSdE=;
+        s=korg; t=1649942452;
+        bh=M17IKYJWhPg4SFCSQnJGvSE2qWIo5R3jjaDEMUuAmuQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hWG0gk8mLxu1KDCRaJNy2eJi6fO7RwMXxq7nTO/VqntJzdEUHUEd3Ew5n+xzzHzld
-         WnojhgioHk6rZ+/L5RjZjyPZEOvFX1N+3dfEkOL6Nbl6ptWZYHX6IV34ZwSMr+DJh/
-         L7AsezaWiIJulY1QIjgs46IaJTdMSm9q3G9Brzfc=
+        b=Jmq2h6g8hjBkv//V6hW/Qy/4KYvlhay1EwhH4myl0DxVPTytJ08gdGdnO3g91jUqY
+         Nqolv/LVgiEEkZqXuOch1Tlq31GV1f634eCHUME18U7zKZofQW4RAJyU/L4wR4BX+8
+         2G7MNMeqOwY/j2D7UJiX6hl3eUVbJdG5NgXJCPpU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 257/475] kgdbts: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:10:42 +0200
-Message-Id: <20220414110902.303177714@linuxfoundation.org>
+Subject: [PATCH 4.19 140/338] KVM: x86/emulator: Defer not-present segment check in __load_segment_descriptor()
+Date:   Thu, 14 Apr 2022 15:10:43 +0200
+Message-Id: <20220414110842.889901588@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,63 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
+[ Upstream commit ca85f002258fdac3762c57d12d5e6e401b6a41af ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled. A return of 0 causes the boot option/value to be
-listed as an Unknown kernel parameter and added to init's (limited)
-environment strings. So return 1 from kgdbts_option_setup().
+Per Intel's SDM on the "Instruction Set Reference", when
+loading segment descriptor, not-present segment check should
+be after all type and privilege checks. But the emulator checks
+it first, then #NP is triggered instead of #GP if privilege fails
+and segment is not present. Put not-present segment check after
+type and privilege checks in __load_segment_descriptor().
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
-
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 38ba30ba51a00 (KVM: x86 emulator: Emulate task switch in emulator.c)
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <52573c01d369f506cadcf7233812427cf7db81a7.1644292363.git.houwenlong.hwl@antgroup.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/kgdbts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/emulate.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index 8d18f19c99c4..2f8858105733 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -1060,10 +1060,10 @@ static int kgdbts_option_setup(char *opt)
- {
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		printk(KERN_ERR "kgdbts: config string too long\n");
--		return -ENOSPC;
-+		return 1;
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 3e182c7ae771..63754d248dfb 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1669,11 +1669,6 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		goto exception;
  	}
- 	strcpy(config, opt);
--	return 0;
-+	return 1;
- }
  
- __setup("kgdbts=", kgdbts_option_setup);
+-	if (!seg_desc.p) {
+-		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
+-		goto exception;
+-	}
+-
+ 	dpl = seg_desc.dpl;
+ 
+ 	switch (seg) {
+@@ -1713,6 +1708,10 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 	case VCPU_SREG_TR:
+ 		if (seg_desc.s || (seg_desc.type != 1 && seg_desc.type != 9))
+ 			goto exception;
++		if (!seg_desc.p) {
++			err_vec = NP_VECTOR;
++			goto exception;
++		}
+ 		old_desc = seg_desc;
+ 		seg_desc.type |= 2; /* busy */
+ 		ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
+@@ -1737,6 +1736,11 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		break;
+ 	}
+ 
++	if (!seg_desc.p) {
++		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
++		goto exception;
++	}
++
+ 	if (seg_desc.s) {
+ 		/* mark segment as accessed */
+ 		if (!(seg_desc.type & 1)) {
 -- 
 2.34.1
 

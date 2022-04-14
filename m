@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5E0501C33
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6F5501C37
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345951AbiDNTwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S1344888AbiDNTxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345914AbiDNTwO (ORCPT
+        with ESMTP id S234107AbiDNTxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:52:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5C63CA7B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:49:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE17CB82BAB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A81FC385A1;
-        Thu, 14 Apr 2022 19:49:43 +0000 (UTC)
-Date:   Thu, 14 Apr 2022 20:49:40 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Ylh61CCMkESmurIp@arm.com>
-References: <Yk/6ts5sVDMDpKj3@arm.com>
- <Yk/8QExHlggU8KgC@gondor.apana.org.au>
- <YlVHSvkyUBXZPUr2@arm.com>
- <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
- <YlVOTsaTVkBOxthG@arm.com>
- <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
- <YlVxGAHHD/j6lW3c@arm.com>
- <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com>
- <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
+        Thu, 14 Apr 2022 15:53:21 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0C6DA09C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:50:55 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id p10so10842451lfa.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=TdxkH2djTgZuMcjVKrm/SY7bnf6WgvoV4fF2I+4K2jA=;
+        b=QNoOWdhcQK0IvmGTfBjoDqreiKJE/oFCC61Uuba9orHB8IThwi59sLhp+G9fbxfsdR
+         hgMi/+832NTkV9ghFrqA7HEJw3awgLjqF0PMatdcHBtsjp4lSETGtt5NO4bN77CnYSAp
+         njlhG6xO7L5ji202LnuM7gUPGc6d4lZ/l0Pa4Qg2DchNqN1wqin5zTge1QKDjrZYON+L
+         1rJxW+uvfm3vyVDINyuGdsEkrTbwE37as3LtFMhFbsK+vO2jawKD1zs55y7m85bz3zM/
+         cBvQ+9ZY73Nn6ZNWhUz7A1E2mVN7Tsnr1PREBOJWPWhZqxWoMJElRdAmWVl5cfCg2Xq4
+         6MLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=TdxkH2djTgZuMcjVKrm/SY7bnf6WgvoV4fF2I+4K2jA=;
+        b=w4E3EOOLNaj8+NjkNDBZpuvlO21l0U8hlnet5K6gnYCGktFj7C7dlIDazjVI5GKSkj
+         xJ2XBkTb+ZXVAZkwoBA17fLZb6iivpd3u0jjUbef/bVG665kTeC1qZQUZUCkjfBWtOJG
+         IabJVckciZSNr1ybvWrpJNNevwunYsbz8bKwCrEXBIHlfOjf+xccj5al7ciT9W7purg3
+         9sgg30lOjxa37OrJ1FQ+PZjXmVcapnhFZvcs1iuQjAT+LiYxZ0k3OC8puGJi4nxS9T1f
+         kI3iHxwquXTWwWaDPDjC/XOvKBj6GwDwc3NpbHprv3N/cMcuqjfogTDUNrzJgUoPyebe
+         7aeg==
+X-Gm-Message-State: AOAM5337iLJcuAeqkXohLGzrrchj6v3zuy9b0NAC6180z7m5uLH/BdMw
+        TOwiH5nLttg97GDtWp7BfCkC7uSSPdajIA==
+X-Google-Smtp-Source: ABdhPJz2ad/ZU205Y5+H2UWRdUffCIUQQJjXTSCsyj+hG1X5TVN7eGRxzHbPZg4d3fsD+DMf5/gSrA==
+X-Received: by 2002:a05:6512:2242:b0:46b:92d3:e2e9 with SMTP id i2-20020a056512224200b0046b92d3e2e9mr2828599lfu.290.1649965854054;
+        Thu, 14 Apr 2022 12:50:54 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.225.17])
+        by smtp.gmail.com with ESMTPSA id h24-20020a2eb0f8000000b0024b578bba76sm83428ljl.26.2022.04.14.12.50.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 12:50:53 -0700 (PDT)
+Message-ID: <8bd1cc3c-c28b-b30f-d9ff-04f9a3c79646@gmail.com>
+Date:   Thu, 14 Apr 2022 22:50:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/6] staging: r8188eu: remove unnecessary braces in single
+ statement block
+Content-Language: en-US
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+References: <cover.1649880454.git.jhpark1013@gmail.com>
+ <4a0f2a0f24321c5b2039f0f8e6132cec4a2ef068.1649880454.git.jhpark1013@gmail.com>
+ <3f4a6c08-4434-1865-bc96-984152af5af1@gmail.com>
+ <20220414194118.GA4144553@jaehee-ThinkPad-X1-Extreme>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220414194118.GA4144553@jaehee-ThinkPad-X1-Extreme>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------nB6Pa0fPnHpxIEUshLzMoYZL"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:53:24AM -1000, Linus Torvalds wrote:
-> On Tue, Apr 12, 2022 at 10:47 PM Catalin Marinas
-> <catalin.marinas@arm.com> wrote:
-> > I agree. There is also an implicit expectation that the DMA API works on
-> > kmalloc'ed buffers and that's what ARCH_DMA_MINALIGN is for (and the
-> > dynamic arch_kmalloc_minalign() in this series). But the key point is
-> > that the driver doesn't need to know the CPU cache topology, coherency,
-> > the DMA API and kmalloc() take care of these.
-> 
-> Honestly, I think it would probably be worth discussing the "kmalloc
-> DMA alignment" issues.
-> 
-> 99.9% of kmalloc users don't want to do DMA.
-> 
-> And there's actually a fair amount of small kmalloc for random stuff.
-> Right now on my laptop, I have
-> 
->     kmalloc-8          16907  18432      8  512    1 : ...
-> 
-> according to slabinfo, so almost 17 _thousand_ allocations of 8 bytes.
-> 
-> It's all kinds of sad if those allocations need to be 64 bytes in size
-> just because of some silly DMA alignment issue, when none of them want
-> it.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------nB6Pa0fPnHpxIEUshLzMoYZL
+Content-Type: multipart/mixed; boundary="------------9hX0rWtZTks0Hqcd23Ni7pPC";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: Jaehee Park <jhpark1013@gmail.com>
+Cc: Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+ gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+ linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Message-ID: <8bd1cc3c-c28b-b30f-d9ff-04f9a3c79646@gmail.com>
+Subject: Re: [PATCH 1/6] staging: r8188eu: remove unnecessary braces in single
+ statement block
+References: <cover.1649880454.git.jhpark1013@gmail.com>
+ <4a0f2a0f24321c5b2039f0f8e6132cec4a2ef068.1649880454.git.jhpark1013@gmail.com>
+ <3f4a6c08-4434-1865-bc96-984152af5af1@gmail.com>
+ <20220414194118.GA4144553@jaehee-ThinkPad-X1-Extreme>
+In-Reply-To: <20220414194118.GA4144553@jaehee-ThinkPad-X1-Extreme>
 
-It's a lot worse, ARCH_KMALLOC_MINALIGN is currently 128 bytes on arm64.
-I want to at least get it down to 64 with this series while preserving
-the current kmalloc() semantics.
+--------------9hX0rWtZTks0Hqcd23Ni7pPC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-If we know the SoC is fully coherent (a bit tricky with late probed
-devices), we could get the alignment down to 8. In the mobile space,
-unfortunately, most DMA is non-coherent.
+SGkgSmFlaGVlLA0KDQpPbiA0LzE0LzIyIDIyOjQxLCBKYWVoZWUgUGFyayB3cm90ZToNCj4+
+ID4gQEAgLTExMiw5ICsxMTIsOCBAQCB2b2lkIF9ydHdfZnJlZV9tbG1lX3ByaXYoc3RydWN0
+IG1sbWVfcHJpdiAqcG1sbWVwcml2KQ0KPj4gPiAgIAlydHdfZnJlZV9tbG1lX3ByaXZfaWVf
+ZGF0YShwbWxtZXByaXYpOw0KPj4gPiAtCWlmIChwbWxtZXByaXYpIHsNCj4+ID4gKwlpZiAo
+cG1sbWVwcml2KQ0KPj4gPiAgIAkJdmZyZWUocG1sbWVwcml2LT5mcmVlX2Jzc19idWYpOw0K
+Pj4gPiAtCX0NCj4+IA0KPj4gSWYgcG1sbWVwcml2IGlzIGVxdWFsIHRvIE5VTEwgd2Ugd291
+bGQgZGllIGluIHJ0d19mcmVlX21sbWVfcHJpdl9pZV9kYXRhKCksDQo+PiBzbyB0aGlzIGNo
+ZWNrIGlzIGp1c3QgcmVkdW5kYW50DQo+PiANCj4gDQo+IEhpIFBhdmVsLCB0aGFuayB5b3Ug
+Zm9yIHlvdXIgY29tbWVudCEgSWYgSSdtIHJlbW92aW5nIHRoaXMgaWYgc3RhdGVtZW50LA0K
+PiBzaG91bGQgSSBpbmNsdWRlIHZmcmVlKHBtbG1lcHJpdi0+ZnJlZV9ic3NfYnVmKSBpbg0K
+PiBydHdfZnJlZV9tbG1lX3ByaXZfaWVfZGF0YT8NCj4gDQoNCkhtDQoNClNpbXBsZSBncmVw
+IHNob3dzLCB0aGF0IHRoaXMgbWVtYmVyIGlzIGp1c3QgdW51c2VkDQoNCjEgZHJpdmVycy9z
+dGFnaW5nL3I4MTg4ZXUvY29yZS9ydHdfbWxtZS5jfDY0IGNvbCAxM3wgDQpwbWxtZXByaXYt
+PmZyZWVfYnNzX2J1ZiA9IHBidWY7DQoyIGRyaXZlcnMvc3RhZ2luZy9yODE4OGV1L2NvcmUv
+cnR3X21sbWUuY3wxMTYgY29sIDIwfCANCnZmcmVlKHBtbG1lcHJpdi0+ZnJlZV9ic3NfYnVm
+KTsNCjMgZHJpdmVycy9zdGFnaW5nL3I4MTg4ZXUvaW5jbHVkZS9ydHdfbWxtZS5ofDMyMiBj
+b2wgNnwgdTggKmZyZWVfYnNzX2J1ZjsNCg0Kc28gbG9va3MgbGlrZSB5b3UgY2FuIGp1c3Qg
+cmVtb3ZlIGZyZWVfYnNzX2J1ZiBhbmQgYWxsIHJlbGF0ZWQgbGluZXMuDQoNCkkgaG9wZSBJ
+IGhhdmVuJ3Qgb3Zlcmxvb2tlZCBzb21ldGhpbmcNCg0KDQoNCldpdGggcmVnYXJkcywNClBh
+dmVsIFNrcmlwa2luDQo=
 
-I think it's worth investigating the __dma annotations that Greg
-suggested, though I have a suspicion it either is too difficult to track
-or we just end up with this annotation everywhere. There are cases where
-the memory is allocated outside the driver that knows the DMA needs,
-though I guess these are either full page allocations or
-kmem_cache_alloc() (e.g. page cache pages, skb).
+--------------9hX0rWtZTks0Hqcd23Ni7pPC--
 
-There's also Ard's suggestion to bounce the (inbound DMA) buffer if not
-aligned. That's doable but dma_map_single(), for example, only gets the
-size of some random structure/buffer. If the size is below
-ARCH_DMA_MINALIGN (or cache_line_size()), the DMA API implementation
-would have to retrieve the slab cache, check the real allocation size
-and then bounce if necessary.
+--------------nB6Pa0fPnHpxIEUshLzMoYZL
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Irrespective of which option we go for, I think at least part of this
-series decoupling ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINALIGN is still
-needed since currently the minalign is used in some compile time
-attributes. Even getting the kmalloc() size down to 64 is a significant
-improvement over 128.
+-----BEGIN PGP SIGNATURE-----
 
-Subsequently I'd attempt Ard's bouncing idea as a quick workaround and
-assess the bouncing overhead on some real platforms. This may be needed
-before we track down all places to use dma_kmalloc().
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJYexwFAwAAAAAACgkQbk1w61LbBA0t
+DQ//TVj2tLGoN0T2zaDleQcCNigtX/Ni3eW0Nozeevmon7zqjdfs/1yNgU12AmGD5Eok6ZTnUb1e
+CC1XhxYHSvbj8Zva2h6MQDSJgzbQq7Hn4UbNgtQMDLIUlkNTjQBojzuL2XnbKHZEJBAPOkmT210I
+JHLSmDC0AATaTn8wQUNDaH+aNe9fn3G2x/YHxwUZnnsysJpRWmRB024bgJ0dMSgy0M5vBxVoAuj9
+gzBcXqEGDfxw38l1iNM/mEU4lfhjbQqikK6rnKLaQcXvc1/EeBhvzA3GWNQo4y6qu7p53Eu8rYnC
+mUVBJGTc7EY8iAElJ2z4nOfSinId/Wg/K1tVii1X0s1W4Ur5TTWvlYYNYf8Q8wKmKOtC31aFB0p/
+SLRsgmT1VQZG0W2wJasmeiFZ0nNcwdp7RUayhOtpNXu2RB/5z8uFxpXNlVxeR76/fXV8BI4EiuyA
+oiurW5TcxRUBdRZbkEKc+fssvIEpTF24KrFFB5rBtJV5SfmfWR+N/K/RRXPgoruUIpbkA/BFDD4f
+XEn+dAfTAR4fjVaFeTin/t41afwAKy5MqseZ4ohpPCzAVMpGZQ2puyCRmPXI5dHBGfartEIEP1f4
+pHpV8gaPKBxrWgMFPQIk2XzbdSdAIGJt8QmcWoM+xQnja6rEbjs+r4PcPe3WAPEdQmgnFNZgWY9B
+L4A=
+=R8Pp
+-----END PGP SIGNATURE-----
 
-I need to think some more on Greg's __dma annotation, as I said the
-allocation may be decoupled from the driver in some cases.
-
--- 
-Catalin
+--------------nB6Pa0fPnHpxIEUshLzMoYZL--

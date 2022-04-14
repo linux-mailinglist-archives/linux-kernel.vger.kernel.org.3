@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F240500CCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3DC500CCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243005AbiDNMKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S243011AbiDNMLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiDNMKs (ORCPT
+        with ESMTP id S238441AbiDNMLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:10:48 -0400
+        Thu, 14 Apr 2022 08:11:07 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 603CA1DA7A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:08:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88BBC1F61E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649938103;
+        s=mimecast20190719; t=1649938121;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TdEPQ+wG3Peh5GfZ+GSOH74X+dUYxypPpelcJ9DVnmI=;
-        b=acEDEdm+HFnuC97MmBobahhZ0VEJUrg/DQLfiHhQkPZKCeubXN2nwxrnj+n0RxF/g4fjQJ
-        XPVwJ5X75yDSiYoWmF6Z5QxaT7Rv4LF0XVDu6b6jbdZvn/2nj6tfbTvypgaw+A6YAD86+G
-        GjXMFpP/oa6vLPs0N7iWaivDvBl2qNY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=GWdoIzKa55+GJDLFWdqzW9nhtvvqYhC7BmkK6QUgeQ8=;
+        b=FQWESL3iHnb/PX+vo0UbKgiXCEyIWb3qdAmFjksB3KgvbsLmaTo+12RhCDbEby3Xs314+l
+        8CJq2378LGpXmTA9JavgUoLGnXIdUJSg1dz5ls/B2zqo0EDC57U44+oUK6e2uWSKyh9msA
+        3csn2dSROKKMfQG+XAEtFcLy/7Ovatg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-voyoePxYMLyGW1g6vnbVMQ-1; Thu, 14 Apr 2022 08:08:22 -0400
-X-MC-Unique: voyoePxYMLyGW1g6vnbVMQ-1
-Received: by mail-wr1-f70.google.com with SMTP id p18-20020adfba92000000b001e8f7697cc7so792694wrg.20
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:08:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TdEPQ+wG3Peh5GfZ+GSOH74X+dUYxypPpelcJ9DVnmI=;
-        b=6SSFoaNc1LONoUtg/HiWbFyCEQy6co6Q7JJRboviF5g8LryQwyxzX6ZhWNeKIICNED
-         SYX4vkc+QsRxwHIlQlYPLG3b//oTOUvPeTEiquB72DT8/ejhQ3dkDMTcz+gu8sYmGmVv
-         Zzrv5+QgwbVD/GqYWoca3Ob5f+M0FCwjk72OnVzczP11l/rMB3o0tbSuKa8aQlpIMQDP
-         06iZuEfXeJbv7lDXSoVbh3wnXip8SbirMmyRe6XmDKjx4PSUNNvJ3RMZWoMrjarp66bh
-         D6LCqKkxMb3LmrHzd+qSopoaIz8LkHYAgTqLZV+vkoUxlB+XyASgCsNE+HVCtzCqVt6k
-         6pCg==
-X-Gm-Message-State: AOAM532542ikwmxxDUJaKOoN+YKTvOBdh8VZTheU6u0R2FHNt2Hux0b5
-        qzSe+W9xb6OUv3F0Sb71/hfZ2UHeWvHAMY6izaRWsufzP78aE0hcsoYvDCClTSqlQ89Q4Ct+WLm
-        v2/ADB9q/uwF/7dxbElzBFI3J
-X-Received: by 2002:a5d:5982:0:b0:207:aba9:663 with SMTP id n2-20020a5d5982000000b00207aba90663mr1891749wri.670.1649938100996;
-        Thu, 14 Apr 2022 05:08:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwUhSzTr++Kzbz2LwNG/6DzQYVDbN5UKzODQH5RchAHdnNaseLGeV/0xMg0Ul5vY1VzNfHloA==
-X-Received: by 2002:a5d:5982:0:b0:207:aba9:663 with SMTP id n2-20020a5d5982000000b00207aba90663mr1891731wri.670.1649938100771;
-        Thu, 14 Apr 2022 05:08:20 -0700 (PDT)
-Received: from [10.33.192.232] (nat-pool-str-t.redhat.com. [149.14.88.106])
-        by smtp.gmail.com with ESMTPSA id m7-20020adfe0c7000000b002060e7bbe49sm2042226wri.45.2022.04.14.05.08.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 05:08:20 -0700 (PDT)
-Message-ID: <03f62ec7-2f7f-1f90-3029-d93713ab5afc@redhat.com>
-Date:   Thu, 14 Apr 2022 14:08:19 +0200
+ us-mta-659-Ju0YXrAyOISCLufSTPlYvQ-1; Thu, 14 Apr 2022 08:08:37 -0400
+X-MC-Unique: Ju0YXrAyOISCLufSTPlYvQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5CCF811E78;
+        Thu, 14 Apr 2022 12:08:36 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.235])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 90CFC1454556;
+        Thu, 14 Apr 2022 12:08:33 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 14 Apr 2022 14:08:36 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 14:08:32 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
+Message-ID: <20220414120831.GB32752@redhat.com>
+References: <20220412114421.691372568@infradead.org>
+ <20220412114853.842942162@infradead.org>
+ <20220413132451.GA27281@redhat.com>
+ <20220413185704.GA30360@redhat.com>
+ <20220413185909.GB30360@redhat.com>
+ <20220413192053.GY2731@worktop.programming.kicks-ass.net>
+ <20220413195612.GC2762@worktop.programming.kicks-ass.net>
+ <20220414115410.GA32752@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the tprot
- test
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220414105322.577439-1-thuth@redhat.com>
- <20220414105322.577439-4-thuth@redhat.com>
- <20220414135110.6b2baead@p-imbrenda>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220414135110.6b2baead@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414115410.GA32752@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,98 +74,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 13.51, Claudio Imbrenda wrote:
-> On Thu, 14 Apr 2022 12:53:21 +0200
-> Thomas Huth <thuth@redhat.com> wrote:
-> 
->> The tprot test currently does not have any output (unless one of
->> the TEST_ASSERT statement fails), so it's hard to say for a user
->> whether a certain new sub-test has been included in the binary or
->> not. Let's make this a little bit more user-friendly and include
->> some TAP output via the kselftests.h interface.
->>
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>   tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
->>   1 file changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
->> index c097b9db495e..a714b4206e95 100644
->> --- a/tools/testing/selftests/kvm/s390x/tprot.c
->> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
->> @@ -8,6 +8,7 @@
->>   #include <sys/mman.h>
->>   #include "test_util.h"
->>   #include "kvm_util.h"
->> +#include "kselftest.h"
->>   
->>   #define PAGE_SHIFT 12
->>   #define PAGE_SIZE (1 << PAGE_SHIFT)
->> @@ -69,6 +70,7 @@ enum stage {
->>   	STAGE_INIT_FETCH_PROT_OVERRIDE,
->>   	TEST_FETCH_PROT_OVERRIDE,
->>   	TEST_STORAGE_PROT_OVERRIDE,
->> +	NUM_STAGES			/* this must be the last entry */
->>   };
->>   
->>   struct test {
->> @@ -196,6 +198,7 @@ static void guest_code(void)
->>   	}									\
->>   	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
->>   	ASSERT_EQ(uc.args[1], __stage);						\
->> +	ksft_test_result_pass("" #stage "\n");					\
->>   })
->>   
->>   int main(int argc, char *argv[])
->> @@ -204,6 +207,9 @@ int main(int argc, char *argv[])
->>   	struct kvm_run *run;
->>   	vm_vaddr_t guest_0_page;
->>   
->> +	ksft_print_header();
->> +	ksft_set_plan(NUM_STAGES - 1);	/* STAGE_END is not counted, thus - 1 */
->> +
->>   	vm = vm_create_default(VCPU_ID, 0, guest_code);
->>   	run = vcpu_state(vm, VCPU_ID);
->>   
->> @@ -213,7 +219,7 @@ int main(int argc, char *argv[])
->>   
->>   	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
->>   	if (guest_0_page != 0)
->> -		print_skip("Did not allocate page at 0 for fetch protection override tests");
->> +		ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
-> 
-> will this print a skip, though?
+this doesn't really matter, just for completeness:
 
-No, it's now only a message.
+On 04/14, Oleg Nesterov wrote:
+>
+> 	if (wait_on_bit(&task->jobctl, JOBCTL_TRACED_XXX_BIT, TASK_KILLABLE))
+> 		return -EINTR;
+>
+> this is fine,
 
-> or you don't want to print a skip because then the numbering in the
-> planning doesn't match anymore?
+No, this is wrong too. wake_up_bit() does exclusive wakeup.
 
-Right.
-
-> in which case, is there an easy way to fix it?
-
-Honestly, this part of the code is a little bit of a riddle to me - I wonder 
-why this was using "print_skip()" at all, since the HOST_SYNC below is 
-executed anyway... so this sounds rather like a warning message to me that 
-says that the following test might not work as expected, instead of a real 
-test-is-skipped message?
-
-Janis, could you please clarify the intention here?
-
-  Thomas
-
->>   	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
->>   	if (guest_0_page == 0)
->>   		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
->> @@ -224,4 +230,8 @@ int main(int argc, char *argv[])
->>   	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
->>   	run->kvm_dirty_regs = KVM_SYNC_CRS;
->>   	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
->> +
->> +	kvm_vm_free(vm);
->> +
->> +	ksft_finished();
->>   }
-> 
+Oleg.
 

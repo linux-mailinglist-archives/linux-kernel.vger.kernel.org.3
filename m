@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27404500DDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37117500DE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiDNMpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S243510AbiDNMpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243520AbiDNMpc (ORCPT
+        with ESMTP id S243532AbiDNMpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:45:32 -0400
+        Thu, 14 Apr 2022 08:45:36 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 198E18D6B1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:43:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57D1A90CC3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:43:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD4A815DB;
-        Thu, 14 Apr 2022 05:43:07 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27B36139F;
+        Thu, 14 Apr 2022 05:43:10 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CA21F3F70D;
-        Thu, 14 Apr 2022 05:43:05 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 201C33F70D;
+        Thu, 14 Apr 2022 05:43:08 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
@@ -30,9 +30,9 @@ Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
         zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
         jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 09/13] iommu/mtk: Clean up bus_set_iommu()
-Date:   Thu, 14 Apr 2022 13:42:38 +0100
-Message-Id: <cad5008c73c0d3ee1b31daa456f901ee9fbb8409.1649935679.git.robin.murphy@arm.com>
+Subject: [PATCH 10/13] iommu/omap: Clean up bus_set_iommu()
+Date:   Thu, 14 Apr 2022 13:42:39 +0100
+Message-Id: <3627bf678a72065bc9c09f0d22db09583702ad87.1649935679.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.28.0.dirty
 In-Reply-To: <cover.1649935679.git.robin.murphy@arm.com>
 References: <cover.1649935679.git.robin.murphy@arm.com>
@@ -48,84 +48,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Stop calling bus_set_iommu() since it's now unnecessary, and simplify
-the probe failure paths accordingly.
+the init failure path accordingly.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- drivers/iommu/mtk_iommu.c    | 13 +------------
- drivers/iommu/mtk_iommu_v1.c | 13 +------------
- 2 files changed, 2 insertions(+), 24 deletions(-)
+ drivers/iommu/omap-iommu.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 6fd75a60abd6..4278d9e032ad 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -920,19 +920,11 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 	spin_lock_init(&data->tlb_lock);
- 	list_add_tail(&data->list, &m4ulist);
+diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+index d9cf2820c02e..07ee2600113c 100644
+--- a/drivers/iommu/omap-iommu.c
++++ b/drivers/iommu/omap-iommu.c
+@@ -1776,14 +1776,8 @@ static int __init omap_iommu_init(void)
+ 		goto fail_driver;
+ 	}
  
--	if (!iommu_present(&platform_bus_type)) {
--		ret = bus_set_iommu(&platform_bus_type, &mtk_iommu_ops);
--		if (ret)
--			goto out_list_del;
--	}
+-	ret = bus_set_iommu(&platform_bus_type, &omap_iommu_ops);
+-	if (ret)
+-		goto fail_bus;
 -
- 	ret = component_master_add_with_match(dev, &mtk_iommu_com_ops, match);
- 	if (ret)
--		goto out_bus_set_null;
-+		goto out_list_del;
+ 	return 0;
+ 
+-fail_bus:
+-	platform_driver_unregister(&omap_iommu_driver);
+ fail_driver:
+ 	kmem_cache_destroy(iopte_cachep);
  	return ret;
- 
--out_bus_set_null:
--	bus_set_iommu(&platform_bus_type, NULL);
- out_list_del:
- 	list_del(&data->list);
- 	iommu_device_unregister(&data->iommu);
-@@ -952,9 +944,6 @@ static int mtk_iommu_remove(struct platform_device *pdev)
- 	iommu_device_sysfs_remove(&data->iommu);
- 	iommu_device_unregister(&data->iommu);
- 
--	if (iommu_present(&platform_bus_type))
--		bus_set_iommu(&platform_bus_type, NULL);
--
- 	clk_disable_unprepare(data->bclk);
- 	device_link_remove(data->smicomm_dev, &pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index ecff800656e6..7d17d6a21803 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -660,19 +660,11 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_sysfs_remove;
- 
--	if (!iommu_present(&platform_bus_type)) {
--		ret = bus_set_iommu(&platform_bus_type,  &mtk_iommu_ops);
--		if (ret)
--			goto out_dev_unreg;
--	}
--
- 	ret = component_master_add_with_match(dev, &mtk_iommu_com_ops, match);
- 	if (ret)
--		goto out_bus_set_null;
-+		goto out_dev_unreg;
- 	return ret;
- 
--out_bus_set_null:
--	bus_set_iommu(&platform_bus_type, NULL);
- out_dev_unreg:
- 	iommu_device_unregister(&data->iommu);
- out_sysfs_remove:
-@@ -687,9 +679,6 @@ static int mtk_iommu_remove(struct platform_device *pdev)
- 	iommu_device_sysfs_remove(&data->iommu);
- 	iommu_device_unregister(&data->iommu);
- 
--	if (iommu_present(&platform_bus_type))
--		bus_set_iommu(&platform_bus_type, NULL);
--
- 	clk_disable_unprepare(data->bclk);
- 	devm_free_irq(&pdev->dev, data->irq, data);
- 	component_master_del(&pdev->dev, &mtk_iommu_com_ops);
 -- 
 2.28.0.dirty
 

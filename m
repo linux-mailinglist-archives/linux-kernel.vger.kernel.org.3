@@ -2,148 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C970500785
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03C550078E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237395AbiDNHuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S239889AbiDNHwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiDNHuA (ORCPT
+        with ESMTP id S240796AbiDNHwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:50:00 -0400
+        Thu, 14 Apr 2022 03:52:39 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57EF7F3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:47:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1E5621E14
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649922455;
+        s=mimecast20190719; t=1649922612;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLR76CNlBvCn367FjMy29XVyfR2fU9onpgPKm9lbY1c=;
-        b=FoYcpcek4jNw7gnECGN/Ahvt2hYuRMKnsy7i2N62Cdnru0tKzGyRAzvWraaJmakEOF09Cr
-        3fJTnyOr60ncWahryny60DuDQjhAUmhxnN1LIn7iYq3Bu9UlRLJqp5vQxNTZjVDXHApNFT
-        xXwdEBH0jzgReDKEcb4XPCGQJm0m/A8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=1Y+vrudYuOScug1x3eREZTNTaJiy+mJqX5LykZZBtpI=;
+        b=JTniA15eTOg43+ebqQDZRHk/pgiVO/Nm9LAW6j9+eFrrZdXy+Yb5j4rprAI24El2axUfUk
+        mXUCtmhMPfCfUpiU+y2NC0KkM/cvkoUs643qTscG8gi5rePiUI1VJWmwKi84B0tA7T0ToK
+        NRIjzS6+rDZRNQ7tQJbTNhuOwkXIUD0=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-jW501v1YM2iaK6Rhjm3NxQ-1; Thu, 14 Apr 2022 03:47:34 -0400
-X-MC-Unique: jW501v1YM2iaK6Rhjm3NxQ-1
-Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1853361wmj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:47:34 -0700 (PDT)
+ us-mta-613-4IwiZOY4O4qhw5xOJEg4aw-1; Thu, 14 Apr 2022 03:50:11 -0400
+X-MC-Unique: 4IwiZOY4O4qhw5xOJEg4aw-1
+Received: by mail-lf1-f70.google.com with SMTP id v13-20020ac2592d000000b0046bc30fe894so1997439lfi.14
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:50:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=hLR76CNlBvCn367FjMy29XVyfR2fU9onpgPKm9lbY1c=;
-        b=mXUDCeS9yErnxgq+hKrAUt47zGlXPNgcT0vo0LjTKVxwl5/xC1JtMETbfDHIChtNsg
-         RSfEsWq7nibC56xu++JxAEFr1Rz6DnYMT+XfyKMBd89ZmQ0jTLhwKl7hS6N8AE3s/ljE
-         qY6HD9SiiXOFqSAKCA0/SRTeYuQkmHNdHAzd6v9bvYFfwYoTa0Pva6KbrjHg+Cll2Tri
-         EDFgZxI8b+6IllGEOL1Xp+nVVC1DNdZZ3u1OeHXqhf0gD3iYVTo12IcJ3h8wCS/HsXXB
-         cf1UtsZb1hCEIrnxuWuVOpYSLYU79EC+dQynIkqMi5bSKF7rsnSmztDrtG5G7SPvVzei
-         UWMQ==
-X-Gm-Message-State: AOAM531iqKUg+QT9JbxQf9O5XnsQyHtfeIwmoyAybMp1Ag9ZlhZDgbsm
-        yxiqIj/OLBgQvh8Fef8U8j1FGu6+N5kSVToCy0r48lHnMYNAKoTImL9q3GILmzQcjpAZrn27W3e
-        Dkw+EwviHNC/1ecjUTfFkuYuDiU8k0+t3TDztJajTn6WMUymlWb1zL/oNLu2mm52LONms6bPQMO
-        0S
-X-Received: by 2002:a05:6000:1684:b0:209:7fda:e3a with SMTP id y4-20020a056000168400b002097fda0e3amr996962wrd.709.1649922452719;
-        Thu, 14 Apr 2022 00:47:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyEJVPZguqe+57EiWbrcBRp0bTCz82V4YapmfmKU9u/wpnFSTs9cs8DetLk5K/Yq5vV4Bkr4Q==
-X-Received: by 2002:a05:6000:1684:b0:209:7fda:e3a with SMTP id y4-20020a056000168400b002097fda0e3amr996947wrd.709.1649922452438;
-        Thu, 14 Apr 2022 00:47:32 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id n42-20020a05600c3baa00b0038ffadd6e4asm169831wms.30.2022.04.14.00.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 00:47:31 -0700 (PDT)
-Message-ID: <2939c0cb-8e0c-7de4-7143-2df303bbb542@redhat.com>
-Date:   Thu, 14 Apr 2022 09:47:31 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1Y+vrudYuOScug1x3eREZTNTaJiy+mJqX5LykZZBtpI=;
+        b=sx+gW/R2tKhPjGehEMC0DuwkgDWO5/s7asE/bBGJkKGM+tYTiK92/ekDSEvaOUn+4e
+         JuJxBj0qmbKza82S7RWouCXrO/cDygK0cSJgygbjmiQiXgTWtI4KlzIECzkofrywM3zI
+         OeXI+LPumgbuWhujOlT2l9CdcRqziAU0zT+jgY33EBNR7jNQ6e/Z7WWfLLBqJt4thq1b
+         YlE87OMl3qdyZrT28DmlNJhVvhAifyyisHQ0esmShy9NLVjYtPG8sRcZ6PomRjt5rgBH
+         GOfEZ4m6rSFWFXvAYJ4hd4wiCsQOoPjmvHq1Y5tN3dy6pkSV9nFskSkm2XApwnPtGUH/
+         Ef+Q==
+X-Gm-Message-State: AOAM5322lwl61OjWvhF6Iq8z9AJqwJUDAQcZ5ertZouxWDgepTDtHXec
+        xIJ1naJQFvWdt2MsuU93xWEWwE8iDEJV9VovdVFaRwjAOJlb3db2/GowYlFDk6KnkMGXudEdbxS
+        EmWBkNYGfzL5ZNlgfclzmRU6Q1+rUsZC0M9IwX9z2
+X-Received: by 2002:a05:651c:451:b0:24b:626d:7b20 with SMTP id g17-20020a05651c045100b0024b626d7b20mr909792ljg.333.1649922609651;
+        Thu, 14 Apr 2022 00:50:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyoX/VLz7iTlARKUVkS321BZXmFkijVyh4oN8/MDT5jXLJnnQQHsn7ZID68qP3+f1a4DWhnfBTPV74z8wBO4Fc=
+X-Received: by 2002:a05:651c:451:b0:24b:626d:7b20 with SMTP id
+ g17-20020a05651c045100b0024b626d7b20mr909784ljg.333.1649922609477; Thu, 14
+ Apr 2022 00:50:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 00/22] https://www.spinics.net/lists/kvm/msg267878.html
-Content-Language: en-US
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com
-References: <20220414074000.31438-1-pbonzini@redhat.com>
-In-Reply-To: <20220414074000.31438-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Bruno Goncalves <bgoncalv@redhat.com>
+Date:   Thu, 14 Apr 2022 09:49:58 +0200
+Message-ID: <CA+QYu4oi-Lmfj1uh0f-JE0WRmmyjtU94xP8OpbLxAGjPkm69Ew@mail.gmail.com>
+Subject: testing/radix-tree: undefined reference to `kmem_cache_alloc_lru'
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     CKI Project <cki-project@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uh-oh, wrong subject.  Should be "KVM MMU refactoring part 2: role changes".
+Hello,
 
-Supersedes: <20220221162243.683208-1-pbonzini@redhat.com>
+Trying to build testing/radix-tree on mainline kernel fails with:
 
-Paolo
+make -C tools/testing/radix-tree/
+<snip>
+cc -fsanitize=address -fsanitize=undefined  main.o xarray.o
+radix-tree.o idr.o linux.o test.o find_bit.o bitmap.o slab.o
+regression1.o regression2.o regression3.o regression4.o tag_check.o
+multiorder.o idr-test.o iteration_check.o iteration_check_2.o
+benchmark.o  -lpthread -lurcu -o main
+/usr/bin/ld: xarray.o: in function `xas_split_alloc':
+/root/linux/tools/testing/radix-tree/../../../lib/xarray.c:1019:
+undefined reference to `kmem_cache_alloc_lru'
+/usr/bin/ld: xarray.o: in function `xas_nomem':
+/root/linux/tools/testing/radix-tree/../../../lib/xarray.c:305:
+undefined reference to `kmem_cache_alloc_lru'
+/usr/bin/ld: xarray.o: in function `xas_alloc':
+/root/linux/tools/testing/radix-tree/../../../lib/xarray.c:374:
+undefined reference to `kmem_cache_alloc_lru'
+/usr/bin/ld: xarray.o: in function `__xas_nomem':
+/root/linux/tools/testing/radix-tree/../../../lib/xarray.c:337:
+undefined reference to `kmem_cache_alloc_lru'
+/usr/bin/ld: /root/linux/tools/testing/radix-tree/../../../lib/xarray.c:340:
+undefined reference to `kmem_cache_alloc_lru'
+collect2: error: ld returned 1 exit status
+make: *** [<builtin>: main] Error 1
 
-On 4/14/22 09:39, Paolo Bonzini wrote:
-> Right now the "MMU role" is a messy mix of the shadow page table format
-> and the CPU paging mode (CR0/CR4/EFER, SMM, guest mode, etc).  Whenever
-> something is different between the MMU and the CPU, it is stored as an
-> extra field in struct kvm_mmu; for extra bonus complication, sometimes
-> the same thing is stored in both the role and an extra field.
-> 
-> This series cleans up things by putting the two in separate fields,
-> so that the "MMU role" represents exactly the role of the root page.
-> This in turn makes it possible to eliminate various fields that are
-> now redundant with either the CPU or te MMU role.
-> 
-> These patches have mostly been posted and reviewed already[1], and I
-> have now retested them on top of kvm/next.
-> 
-> Paolo
-> 
-> [1] https://patchew.org/linux/20220221162243.683208-1-pbonzini@redhat.com/
-> 
-> Paolo Bonzini (21):
->    KVM: x86/mmu: nested EPT cannot be used in SMM
->    KVM: x86/mmu: constify uses of struct kvm_mmu_role_regs
->    KVM: x86/mmu: pull computation of kvm_mmu_role_regs to kvm_init_mmu
->    KVM: x86/mmu: rephrase unclear comment
->    KVM: x86/mmu: remove "bool base_only" arguments
->    KVM: x86/mmu: split cpu_role from mmu_role
->    KVM: x86/mmu: do not recompute root level from kvm_mmu_role_regs
->    KVM: x86/mmu: remove ept_ad field
->    KVM: x86/mmu: remove kvm_calc_shadow_root_page_role_common
->    KVM: x86/mmu: cleanup computation of MMU roles for two-dimensional
->      paging
->    KVM: x86/mmu: cleanup computation of MMU roles for shadow paging
->    KVM: x86/mmu: store shadow EFER.NX in the MMU role
->    KVM: x86/mmu: remove extended bits from mmu_role, rename field
->    KVM: x86/mmu: rename kvm_mmu_role union
->    KVM: x86/mmu: remove redundant bits from extended role
->    KVM: x86/mmu: remove valid from extended role
->    KVM: x86/mmu: simplify and/or inline computation of shadow MMU roles
->    KVM: x86/mmu: pull CPU mode computation to kvm_init_mmu
->    KVM: x86/mmu: replace shadow_root_level with root_role.level
->    KVM: x86/mmu: replace root_level with cpu_role.base.level
->    KVM: x86/mmu: replace direct_map with root_role.direct
-> 
-> Sean Christopherson (1):
->    KVM: x86: Clean up and document nested #PF workaround
-> 
->   arch/x86/include/asm/kvm_host.h |  19 +-
->   arch/x86/kvm/mmu.h              |   2 +-
->   arch/x86/kvm/mmu/mmu.c          | 376 ++++++++++++++------------------
->   arch/x86/kvm/mmu/paging_tmpl.h  |  14 +-
->   arch/x86/kvm/mmu/tdp_mmu.c      |   4 +-
->   arch/x86/kvm/svm/nested.c       |  18 +-
->   arch/x86/kvm/svm/svm.c          |   2 +-
->   arch/x86/kvm/vmx/nested.c       |  15 +-
->   arch/x86/kvm/vmx/vmx.c          |   2 +-
->   arch/x86/kvm/x86.c              |  33 ++-
->   10 files changed, 219 insertions(+), 266 deletions(-)
-> 
+Thanks,
+Bruno Goncalves
 

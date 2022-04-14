@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB10D501641
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB2E5012DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349999AbiDNOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S233511AbiDNNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345117AbiDNNpJ (ORCPT
+        with ESMTP id S244471AbiDNN1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBA037BC2;
-        Thu, 14 Apr 2022 06:42:26 -0700 (PDT)
+        Thu, 14 Apr 2022 09:27:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F7972E9;
+        Thu, 14 Apr 2022 06:20:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB3F61D68;
-        Thu, 14 Apr 2022 13:42:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5870EC385A1;
-        Thu, 14 Apr 2022 13:42:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FDF2B82910;
+        Thu, 14 Apr 2022 13:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EEEC385A1;
+        Thu, 14 Apr 2022 13:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943745;
-        bh=STE1V4eBIELbzwjKqO/RVxava5O5udGBwQKcKktC430=;
+        s=korg; t=1649942411;
+        bh=3X5yPZmDQzoAnMRoFbTlEmaaQNUNd2P8pdHICpsssZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zIir5VVFGmiYWOODiBuInrQDu4XMT2tlDaKwDeJGRgbXDS9PRFxJhfTq0a5+mPE4M
-         C+rVEs+E2SkdeaYlXCaRxhHIsW6LhoOjJzv3HUmsWoEwAV/iUhTKZao2g2Awlu7nUr
-         lYYFaCt4Y5sdZYB/lwR41WS+PyxTxRfXqBvEaxBI=
+        b=MneeXJPOPqm9fY1rgf48Zdg0w5xVBckTSoyaTKvT5GPtDoDOVnhkzdKIgjNSlUI6b
+         UWp7fZBg1CABkygOKpXqp4H0/SUn3BLVUv6e+D7QWU/6o/QSD/AkIxmdn3wKHh9q7u
+         vZJ/rnZuBxmbIlAK4ml8ECS0wTxHEawgmIvnjJ7M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 226/475] mfd: asic3: Add missing iounmap() on error asic3_mfd_probe
-Date:   Thu, 14 Apr 2022 15:10:11 +0200
-Message-Id: <20220414110901.445759182@linuxfoundation.org>
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 109/338] video: fbdev: omapfb: Add missing of_node_put() in dvic_probe_of
+Date:   Thu, 14 Apr 2022 15:10:12 +0200
+Message-Id: <20220414110842.012982380@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +56,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit e84ee1a75f944a0fe3c277aaa10c426603d2b0bc ]
+[ Upstream commit a58c22cfbbf62fefca090334bbd35fd132e92a23 ]
 
-Add the missing iounmap() before return from asic3_mfd_probe
-in the error handling case.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 64e8867ba809 ("mfd: tmio_mmc hardware abstraction for CNF area")
+Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220307072947.5369-1-linmq006@gmail.com
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/asic3.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mfd/asic3.c b/drivers/mfd/asic3.c
-index a6bd2134cea2..14e4bbe6a9da 100644
---- a/drivers/mfd/asic3.c
-+++ b/drivers/mfd/asic3.c
-@@ -914,14 +914,14 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
- 		ret = mfd_add_devices(&pdev->dev, pdev->id,
- 			&asic3_cell_ds1wm, 1, mem, asic->irq_base, NULL);
- 		if (ret < 0)
--			goto out;
-+			goto out_unmap;
- 	}
- 
- 	if (mem_sdio && (irq >= 0)) {
- 		ret = mfd_add_devices(&pdev->dev, pdev->id,
- 			&asic3_cell_mmc, 1, mem_sdio, irq, NULL);
- 		if (ret < 0)
--			goto out;
-+			goto out_unmap;
- 	}
- 
- 	ret = 0;
-@@ -935,8 +935,12 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
- 		ret = mfd_add_devices(&pdev->dev, 0,
- 			asic3_cell_leds, ASIC3_NUM_LEDS, NULL, 0, NULL);
- 	}
-+	return ret;
- 
-- out:
-+out_unmap:
-+	if (asic->tmio_cnf)
-+		iounmap(asic->tmio_cnf);
-+out:
- 	return ret;
- }
- 
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+index 06e1db34541e..41b0db0cc047 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+@@ -254,6 +254,7 @@ static int dvic_probe_of(struct platform_device *pdev)
+ 	adapter_node = of_parse_phandle(node, "ddc-i2c-bus", 0);
+ 	if (adapter_node) {
+ 		adapter = of_get_i2c_adapter_by_node(adapter_node);
++		of_node_put(adapter_node);
+ 		if (adapter == NULL) {
+ 			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
+ 			omap_dss_put_device(ddata->in);
 -- 
 2.34.1
 

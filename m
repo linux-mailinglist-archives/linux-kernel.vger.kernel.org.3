@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1339B5019C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EB25019C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244251AbiDNROw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S245193AbiDNRPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245261AbiDNRO1 (ORCPT
+        with ESMTP id S245248AbiDNRO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 13:14:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114EE219
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649955973; x=1681491973;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bGxfBawqL+IYMNEP8r3qx3wlLa1xc1GcPYIrjdfLzIE=;
-  b=MSyehod/rY4AmV8X9P3Ld8aEtm9y1HoHh53YHMR9LOKKKdXufEAxWsHu
-   hCBKkClnPN1uWfxf3G6rn+aDkm/xDxtg1KE7iFcHUFg8ufud5/2iwgT7c
-   xeRWikUredzUWsga8vHnMIJH9s5rLg4hl3e/0bhEYE5DtW8S+95KECjEi
-   Zt2Upf4vbq9YOMKDS9btpp5yoNGqWylySR3Wjd2kuodE0LIaqDEhAljz8
-   pACzY+yXBm9/lUIThLpbuVD3XzvWUS1kuxg/n7krG9wwcezlTQc+SvkEL
-   4GafphFaYVJhMmETh1CnKjaU+XiBNkuSAUb7m4g5zLxtJb7C59DVLLrhX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="263157125"
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="263157125"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:06:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="526989778"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 10:06:10 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nf2v3-00019l-TX;
-        Thu, 14 Apr 2022 17:06:09 +0000
-Date:   Fri, 15 Apr 2022 01:05:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no
- previous prototype for '__bswapdi2'
-Message-ID: <202204150055.OrZCCMZl-lkp@intel.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9FB3D79
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649955955;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nBhx5wysQrY6D6fszl8D8rXczIbbbgncZbi9tNPkiCQ=;
+        b=YHGmuCP6+bbpUsCdi+GHJoCkqXtn+DTwW4yaBMXeApcTqryW6h4Fyf1CzCtcw+UYjz83/F
+        sfNtuYp/g4/gxDNQFFE39tJAuc9+XKp01Xi7f4ilAZ3+m3LbTQA6cDY5l2egMazV7UaQQL
+        b9uu+d9U7JyqWT/ntitj2/VJjVHXFsc=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-3SaWySQXP3qAUJInBm-VIQ-1; Thu, 14 Apr 2022 13:05:54 -0400
+X-MC-Unique: 3SaWySQXP3qAUJInBm-VIQ-1
+Received: by mail-qt1-f199.google.com with SMTP id ay36-20020a05622a22a400b002f1d1702432so3438784qtb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:05:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nBhx5wysQrY6D6fszl8D8rXczIbbbgncZbi9tNPkiCQ=;
+        b=zIC/YOXmirtSXQK5neMGH6oXQ/ckLrelC3gJC/N39ly7vYIqfBY3g4pXdkxrjFHqoR
+         xMbDtnn0GnGzYpTK+X8DtxLhscZozgH1KgS3OrDXVEElXQTeN9jTmk1OApR3r7z28Wov
+         g7qbwjhQi0kqt4c77EM0WQGESI4vLEh45tooqg9Bg73lr1AY0MQ5g1E/pYsk3SKWQrgi
+         vxAfy/yfLpXmDqx4+dFfvaU+paMbefGpRJn7FTduHPg6ndgBv/+YO2cdYw0c9V3Bo7RZ
+         GHHOoKIIayfmOIagjSEo2kAyBaqDltaT2Vt8G9REIVE7U1Poc/WLL8oCL/7a5bHDPet3
+         Verg==
+X-Gm-Message-State: AOAM531J/Xo/xWbhRAQpU8c1CCLU3dRJ2yEpnpT1gxJ2odUbgQzSqZew
+        LSru7Shbv5dGNSL2LsrlrFsUnahjdRpMuiG+x8hZ0h/i+RCsVcg+Bf2OzWUo8rRDn2qKCfeCVIW
+        JdvnfO7vpIhpNTQDdqHmEoXcY
+X-Received: by 2002:a05:6214:c83:b0:441:51c7:9dc9 with SMTP id r3-20020a0562140c8300b0044151c79dc9mr4234704qvr.83.1649955953863;
+        Thu, 14 Apr 2022 10:05:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsLfcv9b/CX+hJLgRu8qgUX5aJuQ+q/0sUtEN62VU6+15rBzy5BCoh4f97BCUOEU8LJK3NHQ==
+X-Received: by 2002:a05:6214:c83:b0:441:51c7:9dc9 with SMTP id r3-20020a0562140c8300b0044151c79dc9mr4234673qvr.83.1649955953609;
+        Thu, 14 Apr 2022 10:05:53 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id s3-20020a05622a1a8300b002f15bb78651sm1411780qtc.38.2022.04.14.10.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 10:05:53 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 10:05:50 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 10/18] objtool: Extricate ibt from stack validation
+Message-ID: <20220414170550.v2jmdfhmz7zbuug6@treble>
+References: <cover.1649891421.git.jpoimboe@redhat.com>
+ <44a73f724b51c4a994edc43536b7a7ee5e972b40.1649891421.git.jpoimboe@redhat.com>
+ <YlfS7twQVCHGgtCV@hirez.programming.kicks-ass.net>
+ <20220414154449.5moa7xsczwybbqhd@treble>
+ <YlhN+GFZlycwydSv@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YlhN+GFZlycwydSv@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Thu, Apr 14, 2022 at 06:38:16PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 14, 2022 at 08:44:49AM -0700, Josh Poimboeuf wrote:
+> 
+> > Ok.  That was subtle, it needs a comment or two.  I had the distinct
+> > feeling I was introducing a bug, then I got distracted ;-)
+> 
+> Right, lemme try and not forget to write one ;-)
 
-FYI, the error/warning still remains.
+I'm rewriting the code anyway, I'll add some comments.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a19944809fe9942e6a96292490717904d0690c21
-commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
-date:   5 months ago
-config: mips-randconfig-r016-20220414 (https://download.01.org/0day-ci/archive/20220415/202204150055.OrZCCMZl-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+> > Doesn't the compiler give those special cases ENDBR anyway?  Just
+> > wondering why we avoid the warning for those.
+> 
+> Sure, but this is about not scribbling that ENDBR with a NOP.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right, but it only prints warnings for data sections, despite marking
+others:
 
-All warnings (new ones prefixed by >>):
+-                       dest = validate_ibt_reloc(file, reloc);
+-                       if (is_data && dest && !dest->noendbr)
+-                               warn_noendbr("data ", sec, reloc->offset, dest);
 
-   In file included from arch/mips/boot/compressed/bswapdi.c:2:
->> arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no previous prototype for '__bswapdi2' [-Wmissing-prototypes]
-       5 | unsigned long long notrace __bswapdi2(unsigned long long u)
-         |                            ^~~~~~~~~~
-
-
-vim +/__bswapdi2 +5 arch/mips/boot/compressed/../../lib/bswapdi.c
-
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   4  
-aedcfbe06558a9 Harvey Hunt  2016-05-25  @5  unsigned long long notrace __bswapdi2(unsigned long long u)
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   6  {
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   7  	return (((u) & 0xff00000000000000ull) >> 56) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   8  	       (((u) & 0x00ff000000000000ull) >> 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   9  	       (((u) & 0x0000ff0000000000ull) >> 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  10  	       (((u) & 0x000000ff00000000ull) >>  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  11  	       (((u) & 0x00000000ff000000ull) <<  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  12  	       (((u) & 0x0000000000ff0000ull) << 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  13  	       (((u) & 0x000000000000ff00ull) << 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  14  	       (((u) & 0x00000000000000ffull) << 56);
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  15  }
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  16  
-
-:::::: The code at line 5 was first introduced by commit
-:::::: aedcfbe06558a9f53002e82d5be64c6c94687726 MIPS: lib: Mark intrinsics notrace
-
-:::::: TO: Harvey Hunt <harvey.hunt@imgtec.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Josh
+

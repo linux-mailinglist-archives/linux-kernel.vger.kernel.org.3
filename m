@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B4750039D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709D850039F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbiDNB0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S239432AbiDNB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiDNB0A (ORCPT
+        with ESMTP id S229875AbiDNB1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:26:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C562152B39
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:23:37 -0700 (PDT)
+        Wed, 13 Apr 2022 21:27:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8568B17A9C;
+        Wed, 13 Apr 2022 18:24:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B83961AA0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82050C385A3;
-        Thu, 14 Apr 2022 01:23:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 291ECB8269B;
+        Thu, 14 Apr 2022 01:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D812C385A6;
+        Thu, 14 Apr 2022 01:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649899416;
-        bh=2gDG2+FMjzNamReNAqV/v1d3JwqgZuw1ddRLn9TCjhw=;
+        s=k20201202; t=1649899486;
+        bh=dIFSmQFvO+u7t69e2aunIFG5AulvQBr/ncUxbYb4pcQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eOLqVMdQAa9hywnzp6hidDX7SZjrL2PvjXbDmgj/MeqKs5LUxYS0nPuwGOGBe5KlA
-         UsZzVcJzY4gQn2tr0Qb3MVcADCqFWMbdY1A2YRNWLXPFPVAabJgNoHgNN2KUQPeA13
-         YMjvC4qB8K6kODvg9diqAMs8uXGGCGIVgqLGBkFGVfV+lsrMM5vuj9h2ouSUUx5udb
-         R0Wjh/2BuMqgnPzvKrLFVA9EJB5owanBIXR+DixRTLZ9kRPxU2X2oizJ3z8kaXAIWS
-         hdjVbC22Q3IvOS3JCc90L1y4tBcLZ7yXe2J/UiDuO2CWx7LOIV4dL/yePdkRHEHIto
-         7McIuBe3prSeQ==
+        b=EenLTlV8oLBhvDxw/C5592woP0nHbx1g4nwECBVKHSC/o02vajjJANuWetn+Z/kQu
+         5ioz/SWtxy34O6ZJQme/aCO0BxQEEIsagqF721tnH1SaLdYs/dTSutV6qQnZvC7nFT
+         fCV8djjesWXIVBom7AxrOuIFP39jUjC7Fw/iL9YwwE9b6sNFgE8F8U8AGn8efJx4G4
+         vcZgEe5UByw4rdOpQeN6V1NJPvBesSBqj/wkgXvj7nqgSu2GqxWQ6924MjLmj/6w5c
+         c7c9SO1I1kFPA8SEzGYxciSLIC29AdrMZNGuAordDjm7JUqGDO1edku6S0j49aMc75
+         DeOA1UK6aboDg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A4DB640407; Wed, 13 Apr 2022 22:23:32 -0300 (-03)
-Date:   Wed, 13 Apr 2022 22:23:32 -0300
+        id 5A23140407; Wed, 13 Apr 2022 22:24:43 -0300 (-03)
+Date:   Wed, 13 Apr 2022 22:24:43 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Fix segfault accessing sample_id xyarray
-Message-ID: <Yld3lFmtBqmTscSs@kernel.org>
-References: <20220413114232.26914-1-adrian.hunter@intel.com>
- <CAP-5=fUWHb=fSVQmURbxqOO=DvhjeczzJpuXbR2ebtEsmhf7TQ@mail.gmail.com>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     German Gomez <german.gomez@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
+ event
+Message-ID: <Yld324cGySbCPF9i@kernel.org>
+References: <20220413075124.635589-1-leo.yan@linaro.org>
+ <c21b3409-a8a0-aae7-7634-5e648f0a49b1@arm.com>
+ <20220413084941.GB521036@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fUWHb=fSVQmURbxqOO=DvhjeczzJpuXbR2ebtEsmhf7TQ@mail.gmail.com>
+In-Reply-To: <20220413084941.GB521036@leoy-ThinkPad-X240s>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,75 +68,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Apr 13, 2022 at 02:11:41PM -0700, Ian Rogers escreveu:
-> On Wed, Apr 13, 2022 at 4:42 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > perf_evsel sample_id is an xyarray which can cause a segfault when
-> > accessed beyond its size. e.g.
-> >
-> >  # perf record -e intel_pt// -C 1 sleep 1
-> >  Segmentation fault (core dumped)
-> >
-> > That is happening because a dummy event is opened to capture text poke
-> > events accoss all CPUs, however the mmap logic is allocating according
-> > to the number of user_requested_cpus.
+Em Wed, Apr 13, 2022 at 04:49:41PM +0800, Leo Yan escreveu:
+> On Wed, Apr 13, 2022 at 09:15:40AM +0100, German Gomez wrote:
 > 
-> Nit: typo on 'accoss'
+> [...]
+> 
+> > >  	if (sort__mode == SORT_MODE__MEMORY) {
+> > > +		/*
+> > > +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
+> > > +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
+> > > +		 * compatibility, set the bit if it's an old perf data file.
+> > > +		 */
+> > > +		evlist__for_each_entry(session->evlist, evsel) {
+> > > +			if (strstr(evsel->name, "arm_spe_") &&
+> > 
+> > This didn't work for me when the file recorded "-e arm_spe//" instead of
+> > "-e arm_spe_0//". Could you remove the trailing _? With that:
+> 
+> Sure, will change to "arm_spe".  Just curious, if there any local
+> change at your side so we have the different event name?
 
-Fixed
+Ok, waiting for v2
  
-> > In general, perf sometimes uses the evsel cpus to open events, and
-> > sometimes the evlist user_requested_cpus. However, it is not necessary
-> > to determine which case is which because the opened event file
-> > descriptors are also in an xyarray, the size of whch can be used
-> > to correctly allocate the size of the sample_id xyarray, because there
-> > is one ID per file descriptor. Note, in the affected code path,
-> > perf_evsel fd array is subsequently used to get the file descriptor for
-> > the mmap, so it makes sense for the xyarrays to be the same size there.
-> >
-> > Fixes: 246eba8e9041c4 ("perf tools: Add support for PERF_RECORD_TEXT_POKE")
-> > Fixes: d1a177595b3a82 ("libperf: Adopt perf_evlist__mmap()/munmap() from tools/perf")
-> > Cc: stable@vger.kernel.org # 5.5+
-> > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> > Tested-by: German Gomez <german.gomez@arm.com>
 > 
-> Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Thanks,
-> Ian
+> Thanks a lot, German!
 > 
-> > ---
-> >  tools/lib/perf/evlist.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> > index 1b15ba13c477..a09315538a30 100644
-> > --- a/tools/lib/perf/evlist.c
-> > +++ b/tools/lib/perf/evlist.c
-> > @@ -577,7 +577,6 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
-> >  {
-> >         struct perf_evsel *evsel;
-> >         const struct perf_cpu_map *cpus = evlist->user_requested_cpus;
-> > -       const struct perf_thread_map *threads = evlist->threads;
-> >
-> >         if (!ops || !ops->get || !ops->mmap)
-> >                 return -EINVAL;
-> > @@ -589,7 +588,7 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
-> >         perf_evlist__for_each_entry(evlist, evsel) {
-> >                 if ((evsel->attr.read_format & PERF_FORMAT_ID) &&
-> >                     evsel->sample_id == NULL &&
-> > -                   perf_evsel__alloc_id(evsel, perf_cpu_map__nr(cpus), threads->nr) < 0)
-> > +                   perf_evsel__alloc_id(evsel, evsel->fd->max_x, evsel->fd->max_y) < 0)
-> >                         return -ENOMEM;
-> >         }
-> >
-> > --
-> > 2.25.1
-> >
+> Leo
 
 -- 
 

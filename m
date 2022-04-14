@@ -2,126 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0A15009FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0E1500A04
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241877AbiDNJiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S241849AbiDNJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241846AbiDNJiI (ORCPT
+        with ESMTP id S229759AbiDNJkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:38:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245FB21833;
-        Thu, 14 Apr 2022 02:35:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CEAB221618;
-        Thu, 14 Apr 2022 09:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649928942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8qDVaL2jPaWpmlSthq0L6C2U2xFcML4OEXNxlcThRDk=;
-        b=qISJ71ttkLKnBPgGjDPSWPE9eMdsa/ryOsdMWsGEtJd+WYe86gyK9G4PP47b3VNRD6k6jM
-        sSW95joWe4gnys3VAIaBc/1ofE1qze1O5zan16gAKEur4kqwkXq1E+HoQaCVjNOo3oZfkD
-        85UXosrtmIf2LgeOrq4Oh4jBIsBzLns=
-Received: from suse.cz (unknown [10.100.224.162])
+        Thu, 14 Apr 2022 05:40:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6076F4B7;
+        Thu, 14 Apr 2022 02:37:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id ACA28A3B82;
-        Thu, 14 Apr 2022 09:35:42 +0000 (UTC)
-Date:   Thu, 14 Apr 2022 11:35:42 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [RFC PATCH v6 02/12] kbuild: Support for symbols.klp creation
-Message-ID: <Ylfq7t0uOP7gCPEO@alley>
-References: <20220216163940.228309-1-joe.lawrence@redhat.com>
- <20220216163940.228309-3-joe.lawrence@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4334561CAB;
+        Thu, 14 Apr 2022 09:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E33C385A5;
+        Thu, 14 Apr 2022 09:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649929077;
+        bh=6f2Gh2D/BBGsLckHTbJXAaHIeaELvJTaaKPlpBlXXMM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fl9e/KRWXdNyIUt/RhqzwYuUGi4p3tZFhJgg0pmv7mHQWJEZd5G2V7fL7kxmNnrVD
+         NKmbsHJei5Q/ceZNhebxFpKpBiC2i4ro2ewJr/WcNopkLZ4RRLI49oWjZF08yQjE99
+         1tTOfXOkn9r1LBVxwJdE9Kck+6vgwCMe1sn0UJU9OCe29+hnGpoZka2f9dftoqvjD0
+         stjzRPMBYxE8xGnwuPguIaz5srkwwACUoQ5bXpn1tmg0A2bc0kiJYA8AwVpotBvXM7
+         HF5BM5h33Z+BPhibJR4yHRf+uHH/CDgzFZgFtpy4hothPe5wRkMnV5pY9vBqpmANd7
+         RlF7m+6kO553Q==
+Date:   Thu, 14 Apr 2022 11:37:50 +0200
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     krzk@kernel.org, linux-kernel@vger.kernel.org, davem@davemloft.net,
+        netdev@vger.kernel.org, linma@zju.edu.cn
+Subject: Re: [PATCH 0/3] Fix double free bugs and UAF bug in nfcmrvl module
+Message-ID: <20220414113750.046e7a77@kernel.org>
+In-Reply-To: <cover.1649913521.git.duoming@zju.edu.cn>
+References: <cover.1649913521.git.duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216163940.228309-3-joe.lawrence@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-02-16 11:39:30, Joe Lawrence wrote:
-> From: Joao Moreira <jmoreira@suse.de>
-> 
-> For automatic resolution of livepatch relocations, a file called
-> symbols.klp is used. This file maps symbols within every compiled kernel
-> object allowing the identification of symbols whose name is unique, thus
-> relocation can be automatically inferred, or providing information that
-> helps developers when code annotation is required for solving the
-> matter.
-> 
-> Add support for creating symbols.klp in the main Makefile. First, ensure
-> that built-in is compiled when CONFIG_LIVEPATCH is enabled (as required
-> to achieve a complete symbols.klp file). Define the command to build
-> symbols.klp (cmd_klp_map) and hook it in the modules rule.
-> 
-> As it is undesirable to have symbols from livepatch objects inside
-> symbols.klp, make livepatches discernible by modifying
-> scripts/Makefile.build to create a .livepatch file for each livepatch in
-> $(MODVERDIR). This file then used by cmd_klp_map to identify and bypass
-> livepatches.
->
-> For identifying livepatches during the build process, a flag variable
-> LIVEPATCH_$(basetarget).o is considered in scripts/Makefile.build. This
-> way, set this flag for the livepatch sample Makefile in
-> samples/livepatch/Makefile.
+On Thu, 14 Apr 2022 13:31:19 +0800 Duoming Zhou wrote:
+> We add lock and check in fw_dnld_over() and nfcmrvl_fw_dnld_start(),
+> in order to synchronize among different threads that operate on
+> firmware.
 
-I do not see the related code in scripts/Makefile.build.
+All the patches must have the same version in the tag.
 
-> Finally, Add a clean rule to ensure that symbols.klp is removed during
-> clean.
-> 
-> Notes:
-> 
-> To achieve a correct symbols.klp file, all kernel objects must be
-> considered, thus, its construction require these objects to be priorly
-> built. On the other hand, invoking scripts/Makefile.modpost without
-> having a complete symbols.klp in place would occasionally lead to
-> in-tree livepatches being post-processed incorrectly.
+Also you are CCing a number of people who likely have no interest 
+in NFC patches.
 
-Honestly, I do not understand what it exactly means that "in-tree
-livepatches would occasionally be post-processed incorrectly".
-
-Is it the problem that modpost is not able to handle the unresolved
-symbols that have to be updated by klp-convert?
-
-> To prevent this
-> from becoming a circular dependency, the construction of symbols.klp
-> uses non-post-processed kernel objects and such does not cause harm as
-> the symbols normally referenced from within livepatches are visible at
-> this stage. Also due to these requirements, the spot in-between modules
-> compilation and the invocation of scripts/Makefile.modpost was picked
-> for hooking cmd_klp_map.
-> 
-> The approach based on .livepatch files was proposed as an alternative to
-> using MODULE_INFO statements. This approach was originally proposed by
-> Miroslav Benes as a workaround for identifying livepathes without
-> depending on modinfo during the modpost stage. It was moved to this
-> patch as the approach also shown to be useful while building
-> symbols.klp.
-
-All the tricky code is removed in the 5th patch. My understanding is
-that the problem causing the cyclic dependency is solved by modifying
-modpost.
-
-It looks like this patch is outdated and mostly obsoleted. On the
-other hand, the commit message in 5th patch is too short.
-
-What about merging the two patches and updating the commit message?
-
-Best Regards,
-Petr
+Please improve your postings, I've been silently dropping a lot of your
+patches because you keep posting them in unusual ways and patchwork is
+unable to group them properly :(

@@ -2,117 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F74D501DB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38B4501DBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbiDNVwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S245501AbiDNVyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiDNVwR (ORCPT
+        with ESMTP id S236602AbiDNVx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:52:17 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E51C13CDB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:49:51 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id f5so3920916ilj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:49:51 -0700 (PDT)
+        Thu, 14 Apr 2022 17:53:56 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBCB31DCD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:51:30 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id k23so12491423ejd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=q0JHKXPIUQwXKIyQID2uNw8AWiNJuyCq0B2NuHEUdjw=;
-        b=dv9D5fNYDGcObkc1VhdDNV3GXjucyxDSnq8AFxBOd4Ons3E2R04iKBRBObfrlte5Xd
-         KWo1msVoXlM72zJxXJj9OjCnEHb5QPDwTL8l5vZsIwbhhOdEp0nriEZ20xAt/MT7H61x
-         oPJ5/FMYlbmLuywl6Jyn2lT+zDeQzb5mhxNhY=
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IWv2Ppbp50uTzsTbYA0OggS+HfcMIlPvUJ7mUKY3HEI=;
+        b=jpVPYefQu+vId/3f5egszIn+HK5nNmft6hktSoVVoMwB7NsgD6J+XSQn5+0NH/VWpy
+         VXjCbtOuADG+DrniheywOPAuqHUYmIbMlmpQM4SZTG2ymrScPAO9N3TVG4g4LXgCf37m
+         1z3OH2jWXmMbPBBx9Yi2sjclyIwaE72EoZKY4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=q0JHKXPIUQwXKIyQID2uNw8AWiNJuyCq0B2NuHEUdjw=;
-        b=5MozBL7WKIDciSEdg7/nNlR1lLCrhHqBKVYozYKTV2UkNAbFD0y9aM5Uwi7jj9kBlX
-         ZjCzYtQzg2j9PG0ZzppjH1nVNkFtwxyZiVn71PD1piI2dJkKpsiEcmUrteQ/+OHkTgFt
-         34Kyi84SDnWQOBW6sDi9kAaWGeLfWI4jjdb+CvP1FOIAXY1GN0Ihu4xOyqrShDCIYJ2X
-         zh3JyGPbtluiSXrMPE38/fFymltMlpkJuOaVJZvb1oKfxJRonMp1j2llEkIWEPi91k2n
-         MpjCt+TCq2J6mbBb2znrPKvNqy9YU3BUrhtOqftW1aMtvPnQMvG3rfFTRkESJqyKsgOi
-         9IpA==
-X-Gm-Message-State: AOAM533FY1su4rfSxWchIHfKxQy/FD7E40OlBTyX0Ak1tCjindfkOMvX
-        9fVwQFhVOYQ85/1q6Gqq1KfZnw==
-X-Google-Smtp-Source: ABdhPJxzMy3EDhRCosc7hcDTPIL3RBmm5BQ8HqWic0WC9oy4qeJYkXOIMPf9IS63ZcjhoaqKzpnvXg==
-X-Received: by 2002:a92:6c08:0:b0:2c6:123f:48c9 with SMTP id h8-20020a926c08000000b002c6123f48c9mr1972848ilc.22.1649972990653;
-        Thu, 14 Apr 2022 14:49:50 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id v11-20020a92d24b000000b002caacf87598sm1657423ilg.1.2022.04.14.14.49.50
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IWv2Ppbp50uTzsTbYA0OggS+HfcMIlPvUJ7mUKY3HEI=;
+        b=Ep4dlBP6FC3O8nQst4fiEPazFtQ2EcP/XiDt3rmiSEuTMRpjQlAuL4Sr8FFIH2w6k0
+         gKQ4qoKpzOCDqbwVw2kQI7TPEFbH8O8cQ/jui5SSp2ZrW/Bbcc8aexS/RRXS4QXYIgY2
+         hUjL3se29/cLLdgSpKpDugbnFDnZ5pbdw6vMC8xbeNtUqc6OsPwHKL1zmhfDEhdoHjcl
+         ewkzoih6oqLHCZxlxGFoiemORntKCBSbKXGMGNnR2DsmqXtey79fzSH3umnJmP5yaOLO
+         JgQW4lq+IStHtUOxkP/8ENn9Ag5gyFFpw5qANztwNrjkLWzECjnWpogjy0NwVfUQMgk0
+         LcVQ==
+X-Gm-Message-State: AOAM530t1zoZgtCFeNVfT4iR6H8A+QtkGEqeyS3N5HShduz24HPClYOB
+        X+YqEsiZdcvRbH1SANgQv2KC7FckDb79HaKHLRw=
+X-Google-Smtp-Source: ABdhPJxX6N1Ri/uxpK5i5yXymBsax9HZ++3bY3PKc3hTgYG7xfTuKjAFgIqqT78UfgoWAANR8+SuFQ==
+X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr4049318eje.21.1649973088875;
+        Thu, 14 Apr 2022 14:51:28 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id b12-20020a17090630cc00b006dfdfe15cf8sm1040691ejb.196.2022.04.14.14.51.28
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 14:49:50 -0700 (PDT)
-Subject: Re: [PATCH 4/4] selftest/vm: add skip support to mremap_test
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
- <20220414171529.62058-5-sidhartha.kumar@oracle.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ae52647e-8d14-b86b-eea3-24331ad488b0@linuxfoundation.org>
-Date:   Thu, 14 Apr 2022 15:49:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 14 Apr 2022 14:51:28 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso4044556wmz.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:51:28 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f10:b0:38c:ae36:d305 with SMTP id
+ l16-20020a05600c4f1000b0038cae36d305mr499148wmq.34.1649973087758; Thu, 14 Apr
+ 2022 14:51:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220414171529.62058-5-sidhartha.kumar@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1649938766-6768-2-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=Wmiv2WGhFCLYmXbWESNOh5FfobjNme85aU6YtN1SLVDA@mail.gmail.com>
+ <81c3a9fb-4c92-6969-c715-ca085322f9c6@linaro.org> <CAE-0n50obe_aqzwQY-X1yH4emjjOErOJ_wj9sQe=HoWEZ3vjTw@mail.gmail.com>
+ <CAD=FV=U4qtst5q--_1794Pdjsc7b_JMRAh+X_vr-9qJx5NtOrw@mail.gmail.com> <56453228-d4b2-c7e4-7b72-6de8637f2def@linaro.org>
+In-Reply-To: <56453228-d4b2-c7e4-7b72-6de8637f2def@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 14 Apr 2022 14:51:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XjVb7tP4acjOQgg2_8oCbOxqTopJE1PUKdf2noQCHg=Q@mail.gmail.com>
+Message-ID: <CAD=FV=XjVb7tP4acjOQgg2_8oCbOxqTopJE1PUKdf2noQCHg=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] drm/msm/dp: Add eDP support via aux_bus
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 11:15 AM, Sidhartha Kumar wrote:
-> Allow the mremap test to be skipped due to errors
-> such as failing to find a valid remap region and
-> failure to parse the mmap_min_addr sysctl.
-> 
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> ---
->   tools/testing/selftests/vm/run_vmtests.sh | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index 88e15fbb5027..eae98f5de2cc 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -272,11 +272,16 @@ echo "-------------------"
->   echo "running mremap_test"
->   echo "-------------------"
->   ./mremap_test
-> -if [ $? -ne 0 ]; then
-> +ret_val=$?
-> +
-> +if [ $ret_val -eq 0 ]; then
-> +	echo "[PASS]"
-> +elif [ $ret_val -eq $ksft_skip ]; then
-> +	 echo "[SKIP]"
-> +	 exitcode=$ksft_skip
-> +else
->   	echo "[FAIL]"
->   	exitcode=1
-> -else
-> -	echo "[PASS]"
->   fi
->   
->   echo "-----------------"
-> 
+Hi,
 
-Thank you. Looks good to me.
+On Thu, Apr 14, 2022 at 2:16 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> > Hmm, interesting. Probably for DRM_BRIDGE_OP_MODES that will work?
+> > It's definitely worth confirming but from my reading of the code it
+> > _probably_ wouldn't hurt.
+> >
+> > One thing someone would want to confirm would be what would happen if
+> > we move this code and the panel code to implement DRM_BRIDGE_OP_EDID
+> > properly. It looks as if both actually ought to be implementing that
+> > instead of DRM_BRIDGE_OP_MODES, at least in some cases. A fix for a
+> > future day. Could we get into trouble if one moved before the other?
+> > Then the panel would no longer override the eDP controller and the eDP
+> > controller would try to read from a possibly unpowered panel?
+>
+> That would depend on the way the get_edid would be implemented in DP
+> driver. Currently the edid is cached via the
+> dp_display_process_hpd_high() -> dp_panel_read_sink_caps() call chain.
+>
+> With this patchset, the dp_hpd_plug_handle() ->
+> dp_display_usbpd_configure_cb() -> dp_display_process_hpd_high() will be
+> called too late for the get_modes/get_edid (from dp_bridge's enable() op).
+>
+> There is another issue. drm_panel has only get_modes() callback, so
+> panel_bridge can not implement get_edid() unless we extend the panel
+> interface (which might be a good idea).
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Ah, that makes sense and explains why the current panel code does the
+EDID reading in its get_modes() function even though get_modes() is
+_documented_ that it doesn't read the EDID. ;-) I guess it's another
+of the "let's move some people over to the new way but we'll keep the
+old code working". Definitely makes it hard to understand at times.
 
-thanks,
--- Shuah
+
+> > For hotplug/detect I'm even less confident that setting the bits would
+> > be harmless. I haven't sat down and traced everything, but from what I
+> > can see the panel _doesn't_ set these bits, does it? I believe that
+> > the rule is that when every bridge in the chain _doesn't_ implement
+> > detect/hotplug that the panel is always present. The moment someone
+> > says "hey, I can detect" then it suddenly becomes _not_ always
+> > present. Yes, I guess we could have the panel implement "detect" and
+> > return true, but I'm not convinced that's actually better...
+>
+> I think it makes sense to implement OP_DETECT in panel bridge (that
+> always returns connector_status_connected) at least to override the
+> possible detect ops in previous bridges.
+
+So I truly don't know the right answer, but are you sure that's the
+best design? I _think_ that panel_bridge is used for all kinds of
+panels, right? So what if there's some type of display that uses a
+panel but there's still a mechanism that supports physical detection
+of the panel? By implementing "detect" in the generic panel_bridge
+then you're _preventing_ anyone higher up in the chain from
+implementing it and you're forcing it to be "always connected".
+
+For instance, we could come up with a new display standard called
+"pluggable eDP" that is just like eDP except that you can physically
+detect it. This imaginary new display standard is different from DP
+because it has eDP power sequencing (fully powers the display off when
+the screen is off) but it's hot pluggable! It introduces a new pin
+that goes to the DP controller called RT-HPD for "really, truly hot
+plug detect" that works even when the panel is off. The existing "HPD"
+pin continues to mean that the panel is read to communicate. If the
+drm_panel hardcodes "always connected" then I can't implement my
+"pluggable eDP" system, right? However, if we leave it just like it is
+today then my new system would be easy to implement. ;-)
+
+The above example is obviously not truly a real one but I guess my
+point is that I find it more intuitive / useful to say that we should
+only implement "detect" if we truly think we can detect and that if
+nobody says they can detect then we must be always connected.
+
+As an aside; I think in general it's not always easy to fit every
+possible graphics system into these "bridge chains" and the simple
+sequence of pre-enable, enable, etc, so we have to do our best and
+accept the fact that sometimes we'll need special cases. Dave
+Stephenson's patches [1] should tell us that, at least.
+
+[1] https://lore.kernel.org/all/cover.1646406653.git.dave.stevenson@raspberrypi.com/
+
+
+-Doug

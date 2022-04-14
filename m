@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE765012B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27986501371
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343761AbiDNOJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S1343619AbiDNOJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344069AbiDNNaR (ORCPT
+        with ESMTP id S1343977AbiDNNaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB62E87;
-        Thu, 14 Apr 2022 06:27:39 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E96BA2046;
+        Thu, 14 Apr 2022 06:25:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 495BD60C14;
-        Thu, 14 Apr 2022 13:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCBDC385A1;
-        Thu, 14 Apr 2022 13:27:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6D74B82985;
+        Thu, 14 Apr 2022 13:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C71C385AA;
+        Thu, 14 Apr 2022 13:25:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942858;
-        bh=qUoHhxm8c6MY+CT2TztA03prbPlOAEVB7sisnsz2cM8=;
+        s=korg; t=1649942743;
+        bh=DfWn7v/m6DQzQCD1f1qIdQ8MDA8tM/XY3TK+NAT8MHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s/Em8c2KAyPiFMqyPRbnsSPnbLKdEXNlQgJ8v/FTD5wCIIUaOoJskX6wNnquNpwkW
-         XELM2e3HGv3QQws3NMWP03V0gAMbKoGmmDDFm5OQfpw37zXs+0yUYFH27mAyEPlDJw
-         kVMYqYfAbXMutgMRgSKklf2C8EZlo2C1HIzETqh0=
+        b=oWKtKhc2H7Gb3u0+lGgooI6H4qA8PcXupM/JZnyyrDLHbkwj8wuCIrvTsgCgiozw7
+         djfTeV2NM5TjIwYITGt1229q0ljLeBWnGv70buRvy7pFlcjpmUSPhtFu91DfATvSBk
+         KI9Ez/XaDzvVq8e18hEyMfveZwqkT8mzOX3Bml+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chengsong Ke <kechengsong@huawei.com>,
-        Zhihao Cheng <chengzhihao1@huawei.com>,
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
         Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.19 237/338] ubifs: Fix read out-of-bounds in ubifs_wbuf_write_nolock()
-Date:   Thu, 14 Apr 2022 15:12:20 +0200
-Message-Id: <20220414110845.632867618@linuxfoundation.org>
+Subject: [PATCH 4.19 238/338] ubifs: rename_whiteout: correct old_dir size computing
+Date:   Thu, 14 Apr 2022 15:12:21 +0200
+Message-Id: <20220414110845.666973691@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -55,109 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit 4f2262a334641e05f645364d5ade1f565c85f20b upstream.
+commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
 
-Function ubifs_wbuf_write_nolock() may access buf out of bounds in
-following process:
+When renaming the whiteout file, the old whiteout file is not deleted.
+Therefore, we add the old dentry size to the old dir like XFS.
+Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
+in check_indes.
 
-ubifs_wbuf_write_nolock():
-  aligned_len = ALIGN(len, 8);   // Assume len = 4089, aligned_len = 4096
-  if (aligned_len <= wbuf->avail) ... // Not satisfy
-  if (wbuf->used) {
-    ubifs_leb_write()  // Fill some data in avail wbuf
-    len -= wbuf->avail;   // len is still not 8-bytes aligned
-    aligned_len -= wbuf->avail;
-  }
-  n = aligned_len >> c->max_write_shift;
-  if (n) {
-    n <<= c->max_write_shift;
-    err = ubifs_leb_write(c, wbuf->lnum, buf + written,
-                          wbuf->offs, n);
-    // n > len, read out of bounds less than 8(n-len) bytes
-  }
-
-, which can be catched by KASAN:
-  =========================================================
-  BUG: KASAN: slab-out-of-bounds in ecc_sw_hamming_calculate+0x1dc/0x7d0
-  Read of size 4 at addr ffff888105594ff8 by task kworker/u8:4/128
-  Workqueue: writeback wb_workfn (flush-ubifs_0_0)
-  Call Trace:
-    kasan_report.cold+0x81/0x165
-    nand_write_page_swecc+0xa9/0x160
-    ubifs_leb_write+0xf2/0x1b0 [ubifs]
-    ubifs_wbuf_write_nolock+0x421/0x12c0 [ubifs]
-    write_head+0xdc/0x1c0 [ubifs]
-    ubifs_jnl_write_inode+0x627/0x960 [ubifs]
-    wb_workfn+0x8af/0xb80
-
-Function ubifs_wbuf_write_nolock() accepts that parameter 'len' is not 8
-bytes aligned, the 'len' represents the true length of buf (which is
-allocated in 'ubifs_jnl_xxx', eg. ubifs_jnl_write_inode), so
-ubifs_wbuf_write_nolock() must handle the length read from 'buf' carefully
-to write leb safely.
-
-Fetch a reproducer in [Link].
-
-Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214785
-Reported-by: Chengsong Ke <kechengsong@huawei.com>
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
 Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/io.c |   34 ++++++++++++++++++++++++++++++----
- 1 file changed, 30 insertions(+), 4 deletions(-)
+ fs/ubifs/dir.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/ubifs/io.c
-+++ b/fs/ubifs/io.c
-@@ -810,16 +810,42 @@ int ubifs_wbuf_write_nolock(struct ubifs
- 	 */
- 	n = aligned_len >> c->max_write_shift;
- 	if (n) {
--		n <<= c->max_write_shift;
-+		int m = n - 1;
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1379,6 +1379,9 @@ static int do_rename(struct inode *old_d
+ 			iput(whiteout);
+ 			goto out_release;
+ 		}
 +
- 		dbg_io("write %d bytes to LEB %d:%d", n, wbuf->lnum,
- 		       wbuf->offs);
--		err = ubifs_leb_write(c, wbuf->lnum, buf + written,
--				      wbuf->offs, n);
-+
-+		if (m) {
-+			/* '(n-1)<<c->max_write_shift < len' is always true. */
-+			m <<= c->max_write_shift;
-+			err = ubifs_leb_write(c, wbuf->lnum, buf + written,
-+					      wbuf->offs, m);
-+			if (err)
-+				goto out;
-+			wbuf->offs += m;
-+			aligned_len -= m;
-+			len -= m;
-+			written += m;
-+		}
-+
-+		/*
-+		 * The non-written len of buf may be less than 'n' because
-+		 * parameter 'len' is not 8 bytes aligned, so here we read
-+		 * min(len, n) bytes from buf.
-+		 */
-+		n = 1 << c->max_write_shift;
-+		memcpy(wbuf->buf, buf + written, min(len, n));
-+		if (n > len) {
-+			ubifs_assert(c, n - len < 8);
-+			ubifs_pad(c, wbuf->buf + len, n - len);
-+		}
-+
-+		err = ubifs_leb_write(c, wbuf->lnum, wbuf->buf, wbuf->offs, n);
- 		if (err)
- 			goto out;
- 		wbuf->offs += n;
- 		aligned_len -= n;
--		len -= n;
-+		len -= min(len, n);
- 		written += n;
++		/* Add the old_dentry size to the old_dir size. */
++		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
  	}
  
+ 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
 
 

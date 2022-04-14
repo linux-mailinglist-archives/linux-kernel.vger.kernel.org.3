@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE7F501851
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A975750183C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241870AbiDNQHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S236752AbiDNQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349688AbiDNP5A (ORCPT
+        with ESMTP id S1349704AbiDNP5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 11:57:00 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1F5E65
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:38:11 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso6004403pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Qq44QcgUTvrM0yR0uIBFO4qbEgfmXFTn9DFwrR1re2U=;
-        b=DJcQZgGgCMSdEr73OHf4KjCFWkfmLDjCW6J+MKp7+BvlAxQbpy3LWtQHsiJRMomLKf
-         QQy/cDZGSi7hIsxhUMiBI2sSOMqZ94VJvI/zsS2or5jz3Okd9ZEENLtR9gfrUpM0GVt1
-         wf5lYwEClRX+nU8oJkVa/PZ6nob4NgW5hiLs929efgHRtERBFzIt/30LvL5O1hf84NLO
-         J1aRow7aurhrwwZWPNAfNAdaBqJISM1rd9EWMkjWuFN0GW8inMXzIqEAYbHBU4FruJQq
-         4rljZH0IKyhkSVXPeLRNiubyEjXunPkdPDp4YbCCgq/50ckpd/IrjcxSC19Vqx6P+aJH
-         QzKw==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D56D25EA
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649950739;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t3cZ/yakMUfrN5XmUvj9bTbScCTr9kRRHTB7H1tbd/s=;
+        b=WWuDMi3UL5jTTVJS0MdT8nnlQK2ptmtPb/n99RW5j9jq5ELEEWJeVoyIi3ZwK3+3c6cOs7
+        cFHh2mmUSQOTF3ps9W1B6Nca6xxAF3Z0GwPFwpsoezLYEV0jHCQuyAc4igfMM6ZLd3ha8z
+        jWUJz+UsJnlu5m/5WxKVd+NKPllO21Q=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-6-ePcWycZjNDCIoKapxmrgQg-1; Thu, 14 Apr 2022 11:38:58 -0400
+X-MC-Unique: ePcWycZjNDCIoKapxmrgQg-1
+Received: by mail-qv1-f70.google.com with SMTP id j7-20020a05621419c700b004461f75de48so2603045qvc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:38:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Qq44QcgUTvrM0yR0uIBFO4qbEgfmXFTn9DFwrR1re2U=;
-        b=ow+aUYJxS0+E2LpYoCjWJ35qAKIONERYePNRqRNllFxTz8gVqOt+7cxUP2R/E4hBWJ
-         lbr3yG+0pWcmlr4AUWwOCQpkCDSz59ETCgHj/kqCQQjWaLZXw+JuY7S00PidswxEiwGH
-         MauftWpWBR99osUHLKDrN1oaoGQGS/2Ff9UhQ5pQ78ISjBmCyzZgCw5zGZtJuGByNm6i
-         H1Ak43C+LMcw/nbT2bXyNuesgvT83oy/VUVKGUyiQNv7nc/gxzQXetYjSBF+LE1H7EGe
-         O17uVdIngQxpgVKAbKpM70dGqFMe7MfgAV/ShClkoM9LHKfCd73Yffaf/NLKoAtlMdJA
-         XGKA==
-X-Gm-Message-State: AOAM533JbzYzs4FBv+ogdYt1nEHda25BXYNxyS2hCNbo4RJiCO8p/hFU
-        kZqawFV0hIeKdPShLXYGAYX4Tw==
-X-Google-Smtp-Source: ABdhPJyhlJFCjRIXFLlqIT5zK8kOE8XYJzsA83tVovosUIggNLpD+sH0kv/J9kuxtWvD3ngjbfHtbg==
-X-Received: by 2002:a17:903:2ca:b0:156:f1cc:7cb6 with SMTP id s10-20020a17090302ca00b00156f1cc7cb6mr41777445plk.174.1649950691276;
-        Thu, 14 Apr 2022 08:38:11 -0700 (PDT)
-Received: from [10.255.214.21] ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id d14-20020a65620e000000b003a1112c6cbesm1779587pgv.39.2022.04.14.08.38.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 08:38:10 -0700 (PDT)
-Message-ID: <60cbd089-f514-44eb-a629-62556936be35@bytedance.com>
-Date:   Thu, 14 Apr 2022 23:38:06 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t3cZ/yakMUfrN5XmUvj9bTbScCTr9kRRHTB7H1tbd/s=;
+        b=27nlpNnImtNbmyhRHdAUHnE84e1i/OQBLMdRMksx20BgBPoT/AXbANvtUu9s8RnxKZ
+         Q4NgcQzW/igR3iYylSy+we75Z4dJlcsLBfcvMRADQB/Yn9rLwrRGflMOWsGKEQEA4BHM
+         CleN8zo/L7OmCKJ86wCTpRuVIFgnAuPQg1l+G/7hdK0tNyWhAKhK3iNUslVPIj1jv2em
+         0MKaXxz+/AsnLuStzDFiA5LmnRwNeX+3UJRtluUpiKMbxBbCG+7KchJkC+xbMBxopngF
+         /1bFrt85fzP2xEKkqWztOKFw1pFvQwqvDESHkT1T47OwTQuECFoMyVK3p1jMZ/Uil+LG
+         sD3Q==
+X-Gm-Message-State: AOAM533FTpLW2JFC1es1dhFkX39/R6uqezXtaell2l1WC+qc1xjhJBpK
+        okoLLtCYnWLiET6BbmkYMhVPGY55Nf664hwOySoWg3KTBZTSWjP9p99QydKjzp2tmwt/JswOoNw
+        gLVS9MaAZP746EnI59LqdWUX9
+X-Received: by 2002:a0c:a68a:0:b0:443:d22b:cdff with SMTP id t10-20020a0ca68a000000b00443d22bcdffmr3789363qva.47.1649950737892;
+        Thu, 14 Apr 2022 08:38:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJze8W46NbV6/9Tp9r6j9MjY3E2Hv+NCeywBGGSwJGOsm+zY4ZuLFFBm5i+ghYIJgBO5EZamqQ==
+X-Received: by 2002:a0c:a68a:0:b0:443:d22b:cdff with SMTP id t10-20020a0ca68a000000b00443d22bcdffmr3789344qva.47.1649950737666;
+        Thu, 14 Apr 2022 08:38:57 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id a4-20020a37b104000000b0069c2ba88bdasm1130550qkf.85.2022.04.14.08.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 08:38:57 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 08:38:54 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 02/18] objtool: Support data symbol printing
+Message-ID: <20220414153854.rqkt465xn4vzndr7@treble>
+References: <cover.1649891421.git.jpoimboe@redhat.com>
+ <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
+ <YlfHy011VP2oPFjV@hirez.programming.kicks-ass.net>
+ <20220414152148.cwdefx744kymqcut@treble>
+ <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [RFC v2 2/2] sched/fair: introduce sched-idle balance
-Content-Language: en-US
-To:     Josh Don <joshdon@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Abel Wu <wuyun.abel@bytedance.com>
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-3-wuyun.abel@bytedance.com>
- <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
- <801da029-6bbe-2a0c-7de0-afffc3d5de02@bytedance.com>
- <CABk29Nu9QTUKHP3cyx3qpiGcNM-PbaSxCvfhvBvOs++67KeXCw@mail.gmail.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <CABk29Nu9QTUKHP3cyx3qpiGcNM-PbaSxCvfhvBvOs++67KeXCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 8:08 AM, Josh Don Wrote:
->>>>    /*
->>>>     * Use locality-friendly rq->overloaded to cache the status of the rq
->>>>     * to minimize the heavy cost on LLC shared data.
->>>> @@ -7837,6 +7867,22 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
->>>>           if (kthread_is_per_cpu(p))
->>>>                   return 0;
->>>>
->>>> +       if (unlikely(task_h_idle(p))) {
->>>> +               /*
->>>> +                * Disregard hierarchically idle tasks during sched-idle
->>>> +                * load balancing.
->>>> +                */
->>>> +               if (env->idle == CPU_SCHED_IDLE)
->>>> +                       return 0;
->>>> +       } else if (!static_branch_unlikely(&sched_asym_cpucapacity)) {
->>>> +               /*
->>>> +                * It's not gonna help if stacking non-idle tasks on one
->>>> +                * cpu while leaving some idle.
->>>> +                */
->>>> +               if (cfs_rq_busy(env->src_rq) && !need_pull_cfs_task(env->dst_rq))
->>>> +                       return 0;
->>>
->>> These checks don't involve the task at all, so this kind of check
->>> should be pushed into the more general load balance function. But, I'm
->>> not totally clear on the motivation here. If we have cpu A with 1
->>> non-idle task and 100 idle tasks, and cpu B with 1 non-idle task, we
->>> should definitely try to load balance some of the idle tasks from A to
->>> B. idle tasks _do_ get time to run (although little), and this can add
->>> up and cause antagonism to the non-idle task if there are a lot of
->>> idle threads.
->>
->> CPU_SCHED_IDLE means triggered by sched_idle_balance() in which pulls
->> a non-idle task for the unoccupied cpu from the overloaded ones, so
->> idle tasks are not the target and should be skipped.
->>
->> The second part is: if we have cpu A with 1 non-idle task and 100 idle
->> tasks, and B with >=1 non-idle task, we don't migrate the last non-idle
->> task on A to B.
+On Thu, Apr 14, 2022 at 05:31:57PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 14, 2022 at 08:21:48AM -0700, Josh Poimboeuf wrote:
+> > On Thu, Apr 14, 2022 at 09:05:47AM +0200, Peter Zijlstra wrote:
+> > > On Wed, Apr 13, 2022 at 04:19:37PM -0700, Josh Poimboeuf wrote:
+> > > 
+> > > > @@ -34,8 +37,8 @@ static inline char *offstr(struct section *sec, unsigned long offset)
+> > > >  
+> > > >  	str = malloc(strlen(name) + 20);
+> > > >  
+> > > > -	if (func)
+> > > > -		sprintf(str, "%s()+0x%lx", name, name_off);
+> > > > +	if (sym)
+> > > > +		sprintf(str, "%s%s+0x%lx", name, is_text ? "()" : "", name_off);
+> > > >  	else
+> > > >  		sprintf(str, "%s+0x%lx", name, name_off);
+> > > 
+> > > So I like the patch, except that "()" thing is something where we differ
+> > > from the kernel's %ps format and I've cursed it a number of times
+> > > because I then have to manually edit (iow remove) things when pasting it
+> > > in various scripts etc..
+> > 
+> > Oh, hm, that's true.  I can remove them if you prefer.
 > 
-> It could be possible that we do want to migrate the last non-idle task
-> from A to B, if the weight sum of idle tasks on A is very high (easily
-> possible with affinity restrictions). So I think we should leave
-> regular load balance alone here if it really wants to move the
-> non-idle task, and wrap this entire block in an if (env->idle ==
-> CPU_SCHED_IDLE).
+> Yeah, I think taking it out is best, easier if we're consistent with %ps
+> for everybody.
 
-Makes sense. I will fix it in next version.
+Will do.
 
-Thanks & BR,
-Abel
+> > > That said, it totally makes sense to differentiate between a text and
+> > > data symbol this way :/
+> > 
+> > Yes, but if we're keeping the "Add sec+offset to warnings" patch then
+> > that distinction is already (kind of) being made by showing the data
+> > section name.  And the data symbol warnings should be rare.
+> 
+> Yes, I'd not seen that yet, what's that for? The Changelog alludes to
+> something, but I don't think it actually does get used later.
+
+Nick had asked for something like that, it's just a way to avoid doing
+math every time we look at a warning, i.e. to convert func+offset to
+sec+offset.
+
+But it's kind of ugly and I'm not 100% happy with it.
+
+Maybe it should be behind an option (--sec-offsets)?
+
+-- 
+Josh
 

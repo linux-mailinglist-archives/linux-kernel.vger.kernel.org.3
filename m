@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE10501714
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C6E501732
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239942AbiDNPTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S1343701AbiDNPXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347775AbiDNN7c (ORCPT
+        with ESMTP id S242410AbiDNN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:32 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508E0A94E2;
-        Thu, 14 Apr 2022 06:53:34 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-de3eda6b5dso5358057fac.0;
-        Thu, 14 Apr 2022 06:53:34 -0700 (PDT)
+        Thu, 14 Apr 2022 09:59:33 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B412018A;
+        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id c64so6433544edf.11;
+        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
+        b=JY+wyiniWXODIB9ip+nO+wz7WCk7mIMRSrne8Efqpq6QArFTFLkSy1HHHAcMyfO5Lh
+         7c1+uBsd4DXxMgKgAzuhJTQ0T9kSCP/aKmZ/hIqrpZTi8d3M3czgJv7aRJNpJ66uwW63
+         BDRAZJPH/yW0iqGp3y8Hz29qbByy24RMCqzS22Jv3/MJqFu5JTzVRgfIJ5fQLRGVOKGe
+         Xr5vqtVVMEhDZeplv7OUiuwOGeVEm7ycntN+Frp3W/awvwq20P3gmiVwW14Qpmv4N7aj
+         Zwyk166RqpMzhj/c31zjd7lwvBFPdn/RyZVLjjZ/ofxopRqmY5+oBYmQyLX5EBnMvwah
+         ZvXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b1fmOcvfq0NdewvcCb3vlwr8j3wXB3tS/OMfuj5UtlU=;
-        b=B4G9li+gyic+mSIfiDt75rSpudFsnOWwJ7ui948V4BCvvQ9ogMh576WM3NT7WVQawS
-         qH7jiCfqSLZHNzxzb2VglvSjOMPdXLFiscWNQSBiw7abCELKFIFBii7QbntOdMGIfIIt
-         fhKtB1hw9sumOC28HIv9OCu9rJeVV/CCKxwEr1QSjX2q/6AQF6bRmT3czZKIWyHGhOWF
-         Z6CBdz6+aF/m07kkftdrnMK+Wphqobs0Uz55I9kb3RFt1Xbb0ow2cDboF7V1tswoz2tR
-         YO25DI9Vr/YXVeURLOCnW41JQ1gwzW2O4VmTzgLOegLtGsEpcEXUylrTl7JFguScQFef
-         y5gg==
-X-Gm-Message-State: AOAM533q/uDNCmCuldrfwio48l45CZOY9PB6AdNMAj95uQraIkC0ItCA
-        G6QUtFuiUMt0sxNRwXPS4JDMFURt0w==
-X-Google-Smtp-Source: ABdhPJww3qRkZtGwfjpNEzvqRQvkbI1fLP9z/+5tzeS5Pt2GbgkyVjc2xc9Y0mylgugZ+aaXYPsliQ==
-X-Received: by 2002:a05:6870:5712:b0:de:2cbd:c39b with SMTP id k18-20020a056870571200b000de2cbdc39bmr1331317oap.180.1649944413585;
-        Thu, 14 Apr 2022 06:53:33 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05683014ce00b005b23657f66esm30059otq.31.2022.04.14.06.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 06:53:33 -0700 (PDT)
-Received: (nullmailer pid 1898802 invoked by uid 1000);
-        Thu, 14 Apr 2022 13:53:32 -0000
-Date:   Thu, 14 Apr 2022 08:53:32 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     jassisinghbrar@gmail.com, krzk+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: tegra186-hsp: add type for shared
- mailboxes
-Message-ID: <YlgnXKGHqcCgItlb@robh.at.kernel.org>
-References: <1649921757-16919-1-git-send-email-kkartik@nvidia.com>
- <1649921757-16919-3-git-send-email-kkartik@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
+        b=VzsQjve0imrdIA5pTjN/xdTpcH8ZCY9eRvqNTrZwHFFG8SkSE5Z3bw4DNjt20CSlWi
+         0UPINHOxSs3DctGS5K6Bzy22gF/UA2tBrFt/P/Ajp7vreKD260LWRl/HwGFWyVwGiGTC
+         OeqbJg31v4ZpRtsV+QyDt13jqkIyVwwhD3HTjg/thMHFBqLZYzpw3F4mIUEr+giiCieO
+         D6BwqkNiHIg2lYE0J2LTka2s6MlW9XJpqgpBdUPmUwQgYAsuLFHglgQT2o9k6TyHmyxv
+         TCCWUYsztgtUYCYDhDPX/hHFNBkBOWHVobQzRwUrQ+GiKnMp5gsviaqSYkZFjXGrmvCZ
+         caTg==
+X-Gm-Message-State: AOAM531eb0WkOPEpBG0GzPdUeNOFSa5XO2Fholrwn9BhvIxILPoSXPoq
+        J3VkVnnlnKjaK6yU2/MSxHrBGebf2bqJDwQHbaY=
+X-Google-Smtp-Source: ABdhPJwyww3e7aXwVAs5W5XjFg3dukyYoKr1v4cFU96Oyg0QAXFlpH1HVg2jgzcNDXhZb66cB0aqELroxq5jSc7mxQ4=
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
+ z22-20020a50e696000000b00419998d5febmr3188574edm.122.1649944543309; Thu, 14
+ Apr 2022 06:55:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649921757-16919-3-git-send-email-kkartik@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2204132103190.9383@angie.orcam.me.uk> <CAHp75VdOf3+j8yQh=-f6iCN_gRhisgoQjov2kK1fhgv7xaBJRg@mail.gmail.com>
+ <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Apr 2022 16:55:07 +0300
+Message-ID: <CAHp75Vcb0JBQoNrb=ABCsPeM1U2zmHLw0P7Haa-Z=6D__VuqWA@mail.gmail.com>
+Subject: Re: [PING][PATCH v3 0/2] serial: 8250: Fixes for Oxford Semiconductor
+ 950 UARTs
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 01:05:56PM +0530, Kartik wrote:
-> Tegra234 supports sending/receiving 32-bit and 128-bit data over
-> a shared mailbox. Based on the data size to be used, clients need
-> to specify the type of shared mailbox in the device tree.
-> 
-> Add a macro for 128-bit shared mailbox. Mailbox clients can use this
-> macro as a flag in device tree to enable 128-bit data support for a
-> shared mailbox.
-> 
-> Signed-off-by: Kartik <kkartik@nvidia.com>
+On Thu, Apr 14, 2022 at 4:47 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> On Thu, 14 Apr 2022, Andy Shevchenko wrote:
 
-Need a full name here.
+>  I fail to understand really why a piece of code to correct and improve
+> broken UART baud rate calculation has to be stuck in limbo for almost a
+> year.  There is nothing wrong with this code and it has a proper change
+> description and my observation has been that actually broken code often
+> with half a sentence serving as justification gets accepted with no fuss
+> all the time. :(
 
-> ---
->  .../devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml | 9 +++++++++
->  include/dt-bindings/mailbox/tegra186-hsp.h               | 5 +++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml b/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
-> index 9f7a7296b57f..a3e87516d637 100644
-> --- a/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
-> @@ -26,6 +26,15 @@ description: |
->    second cell is used to identify the mailbox that the client is going
->    to use.
->  
-> +  For shared mailboxes, the first cell composed of two fields:
-> +    - bits 15..8:
-> +        A bit mask of flags that further specifies the type of shared
-> +        mailbox to be used (based on the data size). If no flag is
-> +        specified then, 32-bit shared mailbox is used.
-> +    - bits 7..0:
-> +        Defines the type of the mailbox to be used. This field should be
-> +        TEGRA_HSP_MBOX_TYPE_SM for shared mailboxes.
-> +
->    For doorbells, the second cell specifies the index of the doorbell to
->    use.
->  
-> diff --git a/include/dt-bindings/mailbox/tegra186-hsp.h b/include/dt-bindings/mailbox/tegra186-hsp.h
-> index 3bdec7a84d35..b9ccae2aa9e2 100644
-> --- a/include/dt-bindings/mailbox/tegra186-hsp.h
-> +++ b/include/dt-bindings/mailbox/tegra186-hsp.h
-> @@ -15,6 +15,11 @@
->  #define TEGRA_HSP_MBOX_TYPE_SS 0x2
->  #define TEGRA_HSP_MBOX_TYPE_AS 0x3
->  
-> +/*
-> + * These define the types of shared mailbox supported based on data size.
-> + */
-> +#define TEGRA_HSP_MBOX_TYPE_SM_128BIT (1 << 8)
-> +
->  /*
->   * These defines represent the bit associated with the given master ID in the
->   * doorbell registers.
-> -- 
-> 2.17.1
-> 
-> 
+If you remove those 3 or so lines of the code (that are pushing old
+SPD_CUST hack) I would be happy to Ack your patches immediately.
+Otherwise it's up to maintainers, if they are fine on that. I think
+it's a step back advertising something that should have not existed
+from day 1.
+
+-- 
+With Best Regards,
+Andy Shevchenko

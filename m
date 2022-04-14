@@ -2,162 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0694750077B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3635D500784
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240496AbiDNHqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S240662AbiDNHtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240816AbiDNHqL (ORCPT
+        with ESMTP id S241436AbiDNHsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:46:11 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFFF60CC5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:42:03 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id c10so5743152wrb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wXL/FLXJjbsCX0S4WtQaLaMwmMlertvo/nGS0JKpv+g=;
-        b=jZRSFCQHl8B8+IHjwqdy0iEeXh84zus7J1ebKC6Liq6Hw20IpG0YCsAZxl80iBfNZf
-         eJdFDY8Y1rXA8LUW1maZ+RIM//Bv/IA+YowQvi10K2PMXpTLvVXNJ9XCuYJaI9A2n9Im
-         4YL+Za/pehPUcfDVIH6tFFGcd+TKT6gWeLV2bnwvh3NMVOzIhEB1mniDjiMp/4v9fBaf
-         Pe0FLIrukireUxeLZGye5dk+LgXeG8FcIuJMGiDmy9mNemQHHU8aCBGAgKlHQI3BVrZ5
-         tKfeMClFZ0QFRce9P+yIgtkw/Ol+LT1wyliNzXHVVuKaitD5iOzM744UiP1Wnoj4LE5R
-         RaJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wXL/FLXJjbsCX0S4WtQaLaMwmMlertvo/nGS0JKpv+g=;
-        b=uEpRJM/ydgl3Qi7Cqpd7EBJwvaSWwb53Nx5g3hGhlyPg2m/QNSs47RaJe3pwwETuey
-         SDRfhDyHqGt9QedFqt7wCAKk3S5OvuEujrttdnGeDpQpHy8r9K4287PfkpCkjksGBBMr
-         8nxG1xvnzCvXBEeBSS5HS/PgTeDk0U1OQoImSb7L+uAVQQNfU6RgQu9RMQEp+pyKaxne
-         iyFjP8tII7HV0FOa+PPAIeqstzi55YmWaFDcTF4w78CaFqUhVRJFikoeys3fU+PThuvC
-         mWdmro2fuuA3UvoPB9hVigXRtnfNARhXQkHDZy5mC00hKVKeH3ciUJ6/5ZEPzc6LXNpk
-         HFQA==
-X-Gm-Message-State: AOAM53346gGgQK5LmKbljFm6zwjokRY16Bo28kPBtS7sgSIxTU+R/LfK
-        vAUzYCsx7DlwYtsSBorzQbHOKQ==
-X-Google-Smtp-Source: ABdhPJz5AfWKmdXuoZrULNxOfDYOoVflfMymsZWBulEYwj8w6Php6ilkbuuiH6mMHLl/snQ46lPQqQ==
-X-Received: by 2002:a05:6000:8b:b0:207:b80e:c711 with SMTP id m11-20020a056000008b00b00207b80ec711mr1074827wrx.178.1649922121839;
-        Thu, 14 Apr 2022 00:42:01 -0700 (PDT)
-Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id e16-20020a05600c2dd000b0038ed449cbdbsm4643142wmh.3.2022.04.14.00.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 00:42:01 -0700 (PDT)
-Message-ID: <df69e901-8e50-852f-84de-4158e97e653b@linaro.org>
-Date:   Thu, 14 Apr 2022 09:42:00 +0200
+        Thu, 14 Apr 2022 03:48:19 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B1B5BD25;
+        Thu, 14 Apr 2022 00:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QUIdS
+        H5S9XcWXxCUY4HCK2YAdAec2apaxrqVFd637JQ=; b=F+PaiP0/jxp/dEZUiKzM2
+        RoAx++fZzG5XUF8RCoaIZn6BumMkO3VsDGCvHZa3GE287s+fPDbM78/8eYRFsbUX
+        tpND4r6tUnMlUoTlYNnTTHxtSXbAMOuFyEIk+Cy3D6XszSpmDapzaLctanzSsmW5
+        KUYBMq0ZRUhao0iDRKd/sQ=
+Received: from localhost.localdomain (unknown [223.104.68.55])
+        by smtp8 (Coremail) with SMTP id DMCowAAHBv3r0FdiwljaBA--.54991S2;
+        Thu, 14 Apr 2022 15:44:45 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] USB: serial: option: Adding support for Cinterion MV32-WA/MV32-WB
+Date:   Thu, 14 Apr 2022 15:44:34 +0800
+Message-Id: <20220414074434.5699-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] thermal: exynos: fix masking value for exynos7
- temp_error
-Content-Language: en-US
-To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220401002153.62648-1-hypmean.kim@samsung.com>
- <CGME20220401002131epcas2p320f8513a9bd1413af0ace6c20f2caba6@epcms2p6>
- <20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DMCowAAHBv3r0FdiwljaBA--.54991S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4fZr45AF18XF1xXF1DJrb_yoW5Zr1rpF
+        W5AFW3ZFyUGF47ZF9rtF1fCF95uan7K3yIkanrAwsIvFWIyrnFq3yUt3yxAF12gw1SgrsF
+        vF4DK34UGa95C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRpc_cUUUUU=
+X-Originating-IP: [223.104.68.55]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQ7iZGAJnZatEQAAsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adding support for Cinterion device MV32-WA/MV32-WB.
+MV32-WA PID is 0x00F1, and MV32-WB PID is 0x00F2.
 
-Hi,
+Test evidence as below:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f1 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F1 USB Mobile Broadband
+S:  SerialNumber=78ada8c4
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-I'm unable to apply your patch, whatever the method:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f2 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F2 USB Mobile Broadband
+S:  SerialNumber=cdd06a78
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-git b4 20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6
+Interface 0&1: MBIM, 2:Modem, 3: GNSS, 4: NMEA, 5: Diag
+GNSS port don't use serial driver.
 
-Applying: thermal: exynos: fix masking value for exynos7 temp_error
-error: unrecognized input
-Patch failed at 0001 thermal: exynos: fix masking value for exynos7 
-temp_error
-hint: Use 'git am --show-current-patch' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/usb/serial/option.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-
-
-On 01/04/2022 02:27, Sang Min Kim wrote:
-> Modify mask value for the temp_error in the sanitize_temp_error() function.
->   
-> sanitize_temp_error masks temp_error2 with EXYNOS_TMU_TEMP_MASK(0xff) value
-> even in the case of EXYNOS7. In addition, when entering the if statement,
-> both temp_error1 and 2 are masked with EXYNOS_TMU_TEMP_MASK(0xff).
-> By modifying to use the previously declared local variable tmu_temp_mask,
-> the mask value suitable for the SOC can be applied.
->   
-> Fixes: aef27b658b43 ("thermal: exynos: use sanitize_temp_error() in exynos7_tmu_initialize()")
-> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   V2 -> V3: Modify the location of fixes tag and add reviewed tag
->   V1 -> V2: Add fixes tag
->   
->   drivers/thermal/samsung/exynos_tmu.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->   
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index f4ab4c5b4b62..08c63fe5566e 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -243,17 +243,17 @@ static void sanitize_temp_error(struct exynos_tmu_data *data, u32 trim_info)
->   
->           data->temp_error1 = trim_info & tmu_temp_mask;
->           data->temp_error2 = ((trim_info >> EXYNOS_TRIMINFO_85_SHIFT) &
-> -                                EXYNOS_TMU_TEMP_MASK);
-> +                                tmu_temp_mask);
->   
->           if (!data->temp_error1 ||
->               (data->min_efuse_value > data->temp_error1) ||
->               (data->temp_error1 > data->max_efuse_value))
-> -                data->temp_error1 = data->efuse_value & EXYNOS_TMU_TEMP_MASK;
-> +                data->temp_error1 = data->efuse_value & tmu_temp_mask;
->   
->           if (!data->temp_error2)
->                   data->temp_error2 =
->                           (data->efuse_value >> EXYNOS_TRIMINFO_85_SHIFT) &
-> -                        EXYNOS_TMU_TEMP_MASK;
-> +                        tmu_temp_mask;
->   }
->   
->   static int exynos_tmu_initialize(struct platform_device *pdev)
-> --
-> 2.9.5
->   
->   
-
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e7755d9cfc61..d947357881c3 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -432,7 +432,8 @@ static void option_instat_callback(struct urb *urb);
+ #define CINTERION_PRODUCT_CLS8			0x00b0
+ #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
+ #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
+-
++#define CINTERION_PRODUCT_MV32_WA		0x00f1
++#define CINTERION_PRODUCT_MV32_WB		0x00f2
+ /* Olivetti products */
+ #define OLIVETTI_VENDOR_ID			0x0b3c
+ #define OLIVETTI_PRODUCT_OLICARD100		0xc000
+@@ -1969,6 +1970,10 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
+ 	  .driver_info = RSVD(0)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
++	  .driver_info = RSVD(3)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
++	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C518501613
+	by mail.lfdr.de (Postfix) with ESMTP id 11072501612
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344446AbiDNOtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S1344346AbiDNOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345126AbiDNNpJ (ORCPT
+        with ESMTP id S1345134AbiDNNpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2811FB874;
-        Thu, 14 Apr 2022 06:42:44 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464715805;
+        Thu, 14 Apr 2022 06:42:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B62A361BA7;
-        Thu, 14 Apr 2022 13:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17C3C385A1;
-        Thu, 14 Apr 2022 13:42:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7038E61D29;
+        Thu, 14 Apr 2022 13:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80846C385AA;
+        Thu, 14 Apr 2022 13:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943763;
-        bh=69LG3LRf0yfNZTzLYNNB0TPVKM9hryNAVfUJeGF9CKM=;
+        s=korg; t=1649943765;
+        bh=KLq3MPkjNx7wkx1Me1htQFQREd2ARzbMTWYEu7Q2FxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lPgUmK4Wi+lcjNjJ65KhqgEVxcbR9sG5w4cSYzTJaayViK8DLtGUcVA8u3YLHoO4W
-         yO8Gc0PQT6joZHp1kNV7zJDRtHfhm01pjGRvY1w6GAYGx5Z4G38XpcrxZWsh9OJIz/
-         Zo8h6OFNpCTeuR0EkC5Mtx1sWhFFEhlWYJBFf/tY=
+        b=IdlL7yhIFe/oBXeBmESkaIg59DslmSszl1c76Nl3VZ6Ic187biSQd72y8Z32xuZkI
+         92g8JJhtioM8mVLi8eaDARI7/Y+ctKwNGuKuBp2FyPCKjPInX0ir4+VqqpMzAf65jb
+         HdR4m2plVvvMRvniv5oP3nE4mtIfkUtn7QFWnmBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Paul Moore <paul@paul-moore.com>,
+        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 273/475] LSM: general protection fault in legacy_parse_param
-Date:   Thu, 14 Apr 2022 15:10:58 +0200
-Message-Id: <20220414110902.745020175@linuxfoundation.org>
+Subject: [PATCH 5.4 274/475] gcc-plugins/stackleak: Exactly match strings instead of prefixes
+Date:   Thu, 14 Apr 2022 15:10:59 +0200
+Message-Id: <20220414110902.772069629@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -58,76 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Casey Schaufler <casey@schaufler-ca.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit ecff30575b5ad0eda149aadad247b7f75411fd47 ]
+[ Upstream commit 27e9faf415dbf94af19b9c827842435edbc1fbbc ]
 
-The usual LSM hook "bail on fail" scheme doesn't work for cases where
-a security module may return an error code indicating that it does not
-recognize an input.  In this particular case Smack sees a mount option
-that it recognizes, and returns 0. A call to a BPF hook follows, which
-returns -ENOPARAM, which confuses the caller because Smack has processed
-its data.
+Since STRING_CST may not be NUL terminated, strncmp() was used for check
+for equality. However, this may lead to mismatches for longer section
+names where the start matches the tested-for string. Test for exact
+equality by checking for the presences of NUL termination.
 
-The SELinux hook incorrectly returns 1 on success. There was a time
-when this was correct, however the current expectation is that it
-return 0 on success. This is repaired.
-
-Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Acked-by: James Morris <jamorris@linux.microsoft.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Cc: Alexander Popov <alex.popov@linux.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/security.c      | 17 +++++++++++++++--
- security/selinux/hooks.c |  5 ++---
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ scripts/gcc-plugins/stackleak_plugin.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/security/security.c b/security/security.c
-index c34ec4c7d98c..f633717311a3 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -802,9 +802,22 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
- 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
+diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
+index dbd37460c573..f46abb315010 100644
+--- a/scripts/gcc-plugins/stackleak_plugin.c
++++ b/scripts/gcc-plugins/stackleak_plugin.c
+@@ -262,6 +262,23 @@ static unsigned int stackleak_cleanup_execute(void)
+ 	return 0;
  }
  
--int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param)
-+int security_fs_context_parse_param(struct fs_context *fc,
-+				    struct fs_parameter *param)
++/*
++ * STRING_CST may or may not be NUL terminated:
++ * https://gcc.gnu.org/onlinedocs/gccint/Constant-expressions.html
++ */
++static inline bool string_equal(tree node, const char *string, int length)
++{
++	if (TREE_STRING_LENGTH(node) < length)
++		return false;
++	if (TREE_STRING_LENGTH(node) > length + 1)
++		return false;
++	if (TREE_STRING_LENGTH(node) == length + 1 &&
++	    TREE_STRING_POINTER(node)[length] != '\0')
++		return false;
++	return !memcmp(TREE_STRING_POINTER(node), string, length);
++}
++#define STRING_EQUAL(node, str)	string_equal(node, str, strlen(str))
++
+ static bool stackleak_gate(void)
  {
--	return call_int_hook(fs_context_parse_param, -ENOPARAM, fc, param);
-+	struct security_hook_list *hp;
-+	int trc;
-+	int rc = -ENOPARAM;
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
-+			     list) {
-+		trc = hp->hook.fs_context_parse_param(fc, param);
-+		if (trc == 0)
-+			rc = 0;
-+		else if (trc != -ENOPARAM)
-+			return trc;
-+	}
-+	return rc;
- }
+ 	tree section;
+@@ -271,13 +288,13 @@ static bool stackleak_gate(void)
+ 	if (section && TREE_VALUE(section)) {
+ 		section = TREE_VALUE(TREE_VALUE(section));
  
- int security_sb_alloc(struct super_block *sb)
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 56418cf72069..d9f15c84aab7 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2855,10 +2855,9 @@ static int selinux_fs_context_parse_param(struct fs_context *fc,
- 		return opt;
- 
- 	rc = selinux_add_opt(opt, param->string, &fc->security);
--	if (!rc) {
-+	if (!rc)
- 		param->string = NULL;
--		rc = 1;
--	}
-+
- 	return rc;
- }
+-		if (!strncmp(TREE_STRING_POINTER(section), ".init.text", 10))
++		if (STRING_EQUAL(section, ".init.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".devinit.text", 13))
++		if (STRING_EQUAL(section, ".devinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".cpuinit.text", 13))
++		if (STRING_EQUAL(section, ".cpuinit.text"))
+ 			return false;
+-		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
++		if (STRING_EQUAL(section, ".meminit.text"))
+ 			return false;
+ 	}
  
 -- 
 2.34.1

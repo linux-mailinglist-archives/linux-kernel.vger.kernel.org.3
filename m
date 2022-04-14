@@ -2,291 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357AA50042D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2639F500451
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239070AbiDNCaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S239427AbiDNCfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiDNCaX (ORCPT
+        with ESMTP id S237639AbiDNCfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:30:23 -0400
-Received: from smtp233.corp-email.com (smtp233.corp-email.com [222.73.234.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5883844A07
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:27:53 -0700 (PDT)
-Received: from ([114.119.32.142])
-        by smtp233.corp-email.com ((D)) with ASMTP (SSL) id IWP00146;
-        Thu, 14 Apr 2022 10:27:46 +0800
-Received: from [172.16.35.4] (172.16.35.4) by GCY-MBS-28.TCL.com (10.136.3.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 14 Apr
- 2022 10:27:45 +0800
-Message-ID: <ba76460f-4e22-634a-d46f-78e1fd4ac10e@tcl.com>
-Date:   Thu, 14 Apr 2022 10:27:44 +0800
+        Wed, 13 Apr 2022 22:35:01 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C93193E;
+        Wed, 13 Apr 2022 19:32:34 -0700 (PDT)
+X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:d24d14a9-d103-4e36-82b9-b0e86991b3df,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1189990021; Thu, 14 Apr 2022 10:32:31 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 14 Apr 2022 10:32:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 10:32:29 +0800
+Message-ID: <12c630946ce9d7b8c80143615496238759323981.camel@mediatek.com>
+Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 14 Apr 2022 10:32:29 +0800
+In-Reply-To: <7hlew83blk.fsf@baylibre.com>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
+         <7hfsmn5m9f.fsf@baylibre.com>
+         <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
+         <7hwnfv4hfr.fsf@baylibre.com>
+         <f00e3df2e270e5edc160f8ff1bd8c52a49bf71d5.camel@mediatek.com>
+         <7h5yne3zlx.fsf@baylibre.com>
+         <98957e61b040b6c5b6a6b39e6eb661e07e510277.camel@mediatek.com>
+         <7hlew83blk.fsf@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-CC:     <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <tang.ding@tcl.com>
-References: <660530eb62e71fb6520d3596704162e5@sslemail.net>
- <YlcBxSA5qYN4z1ia@google.com> <39c4ded0-09c0-3e38-85cb-5535099b177d@tcl.com>
- <YleEXOHl1Vhlr3x3@google.com>
-From:   Wu Yan <wu-yan@tcl.com>
-In-Reply-To: <YleEXOHl1Vhlr3x3@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.35.4]
-X-ClientProxiedBy: GCY-EXS-25.TCL.com (10.74.128.65) To GCY-MBS-28.TCL.com
- (10.136.3.28)
-tUid:   20224141027462c065553eb15e849b85c1fd0b57e91a8
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 10:18, Jaegeuk Kim wrote:
-> On 04/14, Wu Yan wrote:
->> On 4/14/22 01:00, Jaegeuk Kim wrote:
->>> On 04/13, Rokudo Yan wrote:
->>>> There is a potential deadlock in gc thread may happen
->>>> under low memory as below:
->>>>
->>>> gc_thread_func
->>>>    -f2fs_gc
->>>>     -do_garbage_collect
->>>>      -gc_data_segment
->>>>       -move_data_block
->>>>        -set_page_writeback(fio.encrypted_page);
->>>>        -f2fs_submit_page_write
->>>> as f2fs_submit_page_write try to do io merge when possible, so the
->>>> encrypted_page is marked PG_writeback but may not submit to block
->>>> layer immediately, if system enter low memory when gc thread try
->>>> to move next data block, it may do direct reclaim and enter fs layer
->>>> as below:
->>>>      -move_data_block
->>>>       -f2fs_grab_cache_page(index=?, for_write=false)
->>>>        -grab_cache_page
->>>>         -find_or_create_page
->>>>          -pagecache_get_page
->>>>           -__page_cache_alloc --  __GFP_FS is set
->>>>            -alloc_pages_node
->>>>             -__alloc_pages
->>>>              -__alloc_pages_slowpath
->>>>               -__alloc_pages_direct_reclaim
->>>>                -__perform_reclaim
->>>>                 -try_to_free_pages
->>>>                  -do_try_to_free_pages
->>>>                   -shrink_zones
->>>>                    -mem_cgroup_soft_limit_reclaim
->>>>                     -mem_cgroup_soft_reclaim
->>>>                      -mem_cgroup_shrink_node
->>>>                       -shrink_node_memcg
->>>>                        -shrink_list
->>>>                         -shrink_inactive_list
->>>>                          -shrink_page_list
->>>>                           -wait_on_page_writeback -- the page is marked
->>>>                          writeback during previous move_data_block call
->>>>
->>>> the gc thread wait for the encrypted_page writeback complete,
->>>> but as gc thread held sbi->gc_lock, the writeback & sync thread
->>>> may blocked waiting for sbi->gc_lock, so the bio contain the
->>>> encrypted_page may nerver submit to block layer and complete the
->>>> writeback, which cause deadlock. To avoid this deadlock condition,
->>>> we mark the gc thread with PF_MEMALLOC_NOFS flag, then it will nerver
->>>> enter fs layer when try to alloc cache page during move_data_block.
->>>>
->>>> Signed-off-by: Rokudo Yan <wu-yan@tcl.com>
->>>> ---
->>>>    fs/f2fs/gc.c | 6 ++++++
->>>>    1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->>>> index e020804f7b07..cc71f77b98c8 100644
->>>> --- a/fs/f2fs/gc.c
->>>> +++ b/fs/f2fs/gc.c
->>>> @@ -38,6 +38,12 @@ static int gc_thread_func(void *data)
->>>>    	wait_ms = gc_th->min_sleep_time;
->>>> +	/*
->>>> +	 * Make sure that no allocations from gc thread will ever
->>>> +	 * recurse to the fs layer to avoid deadlock as it will
->>>> +	 * hold sbi->gc_lock during garbage collection
->>>> +	 */
->>>> +	memalloc_nofs_save();
->>>
->>> I think this cannot cover all the f2fs_gc() call cases. Can we just avoid by:
->>>
->>> --- a/fs/f2fs/gc.c
->>> +++ b/fs/f2fs/gc.c
->>> @@ -1233,7 +1233,7 @@ static int move_data_block(struct inode *inode, block_t bidx,
->>>                                   CURSEG_ALL_DATA_ATGC : CURSEG_COLD_DATA;
->>>
->>>           /* do not read out */
->>> -       page = f2fs_grab_cache_page(inode->i_mapping, bidx, false);
->>> +       page = f2fs_grab_cache_page(inode->i_mapping, bidx, true);
->>>           if (!page)
->>>                   return -ENOMEM;
->>>
->>> Thanks,
->>>
->>>>    	set_freezable();
->>>>    	do {
->>>>    		bool sync_mode, foreground = false;
->>>> -- 
->>>> 2.25.1
->>
->> Hi, Jaegeuk
->>
->> I'm not sure if any other case may trigger the issue, but the stack traces I
->> have caught so far are all the same as below:
->>
->> f2fs_gc-253:12  D 226966.808196 572 302561 150976 0x1200840 0x0 572
->> 237207473347056
->> <ffffff889d88668c> __switch_to+0x134/0x150
->> <ffffff889e764b6c> __schedule+0xd5c/0x1100
->> <ffffff889e76554c> io_schedule+0x90/0xc0
->> <ffffff889d9fb880> wait_on_page_bit+0x194/0x208
->> <ffffff889da167b4> shrink_page_list+0x62c/0xe74
->> <ffffff889da1d354> shrink_inactive_list+0x2c0/0x698
->> <ffffff889da181f4> shrink_node_memcg+0x3dc/0x97c
->> <ffffff889da17d44> mem_cgroup_shrink_node+0x144/0x218
->> <ffffff889da6610c> mem_cgroup_soft_limit_reclaim+0x188/0x47c
->> <ffffff889da17a40> do_try_to_free_pages+0x204/0x3a0
->> <ffffff889da176c8> try_to_free_pages+0x35c/0x4d0
->> <ffffff889da05d60> __alloc_pages_nodemask+0x7a4/0x10d0
->> <ffffff889d9fc82c> pagecache_get_page+0x184/0x2ec
+On Wed, 2022-04-13 at 14:41 -0700, Kevin Hilman wrote:
+> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 > 
-> Is this deadlock trying to grab a lock, instead of waiting for writeback?
-> Could you share all the backtraces of the tasks?
+> [...]
 > 
-> For writeback above, looking at the code, f2fs_gc uses three mappings, meta,
-> node, and data, and meta/node inodes are masking GFP_NOFS in f2fs_iget(),
-> while data inode does not. So, the above f2fs_grab_cache_page() in
-> move_data_block() is actually calling w/o NOFS.
+> > From the Chanwoo's devfreq passive govonor series, it's impossible
+> > to
+> > let cci devreq probed done before cpufreq because the passive
+> > govonor
+> > will search for cpufreq node and use it.
+> > 
+> > Ref: function: cpufreq_passive_register_notifier()
+> > 
+> > 
+https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673__;!!CTRNKA9wMg0ARbw!z58Lc1p9REo88oHn-NkxroN_fBd0TsHYmhscNZwnWwT71ecRkTeqZ6vFl5l7HpkTdM6t$
+> >  
 > 
->> <ffffff889dbf8860> do_garbage_collect+0xfe0/0x2828
->> <ffffff889dbf7434> f2fs_gc+0x4a0/0x8ec
->> <ffffff889dbf6bf4> gc_thread_func+0x240/0x4d4
->> <ffffff889d8de9b0> kthread+0x17c/0x18c
->> <ffffff889d88567c> ret_from_fork+0x10/0x18
->>
->> Thanks
->> yanwu
+> Well this is a problem, because CCI depends on CPUfreq, but CPUfreq
+> depends on CCI, so one of them has to load and then wait for the
+> other.
+> 
+> > After I discuss with Angelo and Jia-wei, we think we are keeping
+> > the
+> > function in target_index and if the cci is not ready we will use
+> > the
+> > voltage which is set by bootloader to prevent high freqeuncy low
+> > voltage crash. And then we can keep seting the target frequency.
+> > 
+> 
+>  > We assume the setting of bootloader is correct and we can do this.
+> 
+> I'm still not crazy about this because you're lying to the CPUfreq
+> framework.  It's requesting one OPP, but you're not setting that,
+> you're
+> just keeping the bootloader frequency.
+> 
+> In my earlier reply, I gave two other options for handling this.
+> 
+> 1) set a (temporary) constraint on the voltage regulator so that it
+> cannot change.
+> 
+> or more clean, IMO:
+> 
+> 2) set a CPUfreq policy that restricts available OPPs to ones that
+> will
+> not break CCI.
+> 
+> Either of these solutions allow you to load the CPUfreq driver early,
+> and then wait for the CCI driver to be ready before removing the
+> restrictions.
 
-Hi, Jaegeuk
+Hello Kevin,
 
-The gc thread is blocked on wait_on_page_writeback(encrypted page submit 
-before) when it try grab data inode page, the parsed stack traces as below:
+I think I do not describe this clearly.
+The proposal is:
 
-ppid=572 pid=572 D cpu=1 prio=120 wait=378s f2fs_gc-253:12
-    Native callstack:
-	vmlinux  wait_on_page_bit_common(page=0xFFFFFFBF7D2CD700, state=2, 
-lock=false) + 304 
-                                <mm/filemap.c:1035>
-	vmlinux  wait_on_page_bit(page=0xFFFFFFBF7D2CD700, bit_nr=15) + 400 
- 
-                             <mm/filemap.c:1074>
-	vmlinux  wait_on_page_writeback(page=0xFFFFFFBF7D2CD700) + 36 
- 
-                             <include/linux/pagemap.h:557>
-	vmlinux  shrink_page_list(page_list=0xFFFFFF8011E83418, 
-pgdat=contig_page_data, sc=0xFFFFFF8011E835B8, ttu_flags=0, 
-stat=0xFFFFFF8011E833F0, force_reclaim=false) + 1576  <mm/vmscan.c:1171>
-	vmlinux  shrink_inactive_list(lruvec=0xFFFFFFE003C304C0, 
-sc=0xFFFFFF8011E835B8, lru=LRU_INACTIVE_FILE) + 700 
-                                          <mm/vmscan.c:1966>
-	vmlinux  shrink_list(lru=LRU_INACTIVE_FILE, lruvec=0xFFFFFF8011E834B8, 
-sc=0xFFFFFF8011E835B8) + 128 
-                            <mm/vmscan.c:2350>
-	vmlinux  shrink_node_memcg(pgdat=contig_page_data, 
-memcg=0xFFFFFFE003C1A300, sc=0xFFFFFF8011E835B8, 
-lru_pages=0xFFFFFF8011E835B0) + 984 
-<mm/vmscan.c:2726>
-	vmlinux  mem_cgroup_shrink_node(memcg=0xFFFFFFE003C1A300, 
-gfp_mask=21102794, noswap=false, pgdat=contig_page_data, 
-nr_scanned=0xFFFFFF8011E836A0) + 320                   <mm/vmscan.c:3416>
-	vmlinux  mem_cgroup_soft_reclaim(root_memcg=0xFFFFFFE003C1A300, 
-pgdat=contig_page_data) + 164 
-                                   <mm/memcontrol.c:1643>
-	vmlinux  mem_cgroup_soft_limit_reclaim(pgdat=contig_page_data, order=0, 
-gfp_mask=21102794, total_scanned=0xFFFFFF8011E83720) + 388 
-                           <mm/memcontrol.c:2913>
-	vmlinux  shrink_zones(zonelist=contig_page_data + 14784, 
-sc=0xFFFFFF8011E83790) + 352 
-                                          <mm/vmscan.c:3094>
-	vmlinux  do_try_to_free_pages(zonelist=contig_page_data + 14784, 
-sc=0xFFFFFF8011E83790) + 512 
-                                  <mm/vmscan.c:3164>
-	vmlinux  try_to_free_pages(zonelist=contig_page_data + 14784, order=0, 
-gfp_mask=21102794, nodemask=0) + 856 
-                            <mm/vmscan.c:3370>
-	vmlinux  __perform_reclaim(gfp_mask=300431548, order=0, 
-ac=0xFFFFFF8011E83900) + 60 
-                                           <mm/page_alloc.c:3831>
-	vmlinux  __alloc_pages_direct_reclaim(gfp_mask=300431548, order=0, 
-alloc_flags=300431604, ac=0xFFFFFF8011E83900) + 60 
-                                <mm/page_alloc.c:3853>
-	vmlinux  __alloc_pages_slowpath(gfp_mask=300431548, order=0, 
-ac=0xFFFFFF8011E83900) + 1244 
-                                      <mm/page_alloc.c:4240>
-	vmlinux  __alloc_pages_nodemask() + 1952 
- 
-                             <mm/page_alloc.c:4463>
-	vmlinux  __alloc_pages(gfp_mask=21102794, order=0, preferred_nid=0) + 
-16 
-                             <include/linux/gfp.h:515>
-	vmlinux  __alloc_pages_node(nid=0, gfp_mask=21102794, order=0) + 16 
- 
-                             <include/linux/gfp.h:528>
-	vmlinux  alloc_pages_node(nid=0, gfp_mask=21102794, order=0) + 16 
- 
-                             <include/linux/gfp.h:542>
-	vmlinux  __page_cache_alloc(gfp=21102794) + 16 
- 
-                             <include/linux/pagemap.h:226>
-	vmlinux  pagecache_get_page() + 384 
- 
-                             <mm/filemap.c:1520>
-	vmlinux  find_or_create_page(offset=209) + 112 
- 
-                             <include/linux/pagemap.h:333>
-	vmlinux  grab_cache_page(index=209) + 112 
- 
-                             <include/linux/pagemap.h:399>
-	vmlinux  f2fs_grab_cache_page(index=209, for_write=false) + 112 
- 
-                             <fs/f2fs/f2fs.h:2429>
-	vmlinux  move_data_block(inode=0xFFFFFFDFD578EEA0, gc_type=300432152, 
-segno=21904, off=145) + 3584 
-                             <fs/f2fs/gc.c:1119>
-	vmlinux  gc_data_segment(sbi=0xFFFFFFE007C03000, 
-sum=0xFFFFFF8011E83B10, gc_list=0xFFFFFF8011E83AB8, segno=21904, 
-gc_type=300432152) + 3644                               <fs/f2fs/gc.c:1475>
-	vmlinux  do_garbage_collect(sbi=0xFFFFFFE007C03000, start_segno=21904, 
-gc_list=0xFFFFFF8011E83CF0, gc_type=0) + 4060 
-                            <fs/f2fs/gc.c:1592>
-	vmlinux  f2fs_gc(sbi=0xFFFFFFE007C03000, background=true, 
-segno=4294967295) + 1180 
-                                         <fs/f2fs/gc.c:1684>
-	vmlinux  gc_thread_func(data=0xFFFFFFE007C03000) + 572 
- 
-                             <fs/f2fs/gc.c:118>
-	vmlinux  kthread() + 376 
- 
-                             <kernel/kthread.c:232>
-	vmlinux  ret_from_fork() +
+In cpufreq probe:
+we record the voltage value which is set by bootloader.
 
-Thanks
-yanwu
+In mtk_cpufreq_set_target():
+We do NOT directly return 0.
+Instead, we will find the voltage of target cpufreq and use the value
+max(booting voltage, target cpufreq voltage)
+
+mtk_cpufreq_set_target() {
+	/* NOT return 0 if !is_ccifreq_ready */
+	....
+	vproc = get voltage of target cpufreq from opp.
+
+	if (ccifreq_supported && !is_ccifreq_ready)
+		vproc = max(vproc, vproc_on_boot)
+
+	//setting voltage and target frequency
+	....
+}
+
+> 
+> > For the SoCs that including ci hardware (8183 and 8186), we think
+> > it's
+> > not ok if we don't probe cci correctly.
+> > If we failed to get cci node, I think we sould return -ENODEV and
+> > the
+> > probe of cpufreq failed.
+> > 
+> > What do you think the solution?
+> 
+> I think it would be better if CPUfreq probes sucessfully, but
+> restricts
+> the OPPs available until CCI is ready.  If CCI fails to probe/load,
+> you
+> still have a working CPUfreq driver, it just has a restricted set of
+> OPPs.
+> 
+> Kevin
+
+If we can use the solution.
+I think it will be ok for this situation.
+
+Thanks!
+
+BRs,
+Rex
+

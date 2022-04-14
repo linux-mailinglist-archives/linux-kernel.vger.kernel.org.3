@@ -2,169 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5387D500E03
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496E6500E17
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243582AbiDNMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S243588AbiDNMvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243563AbiDNMuL (ORCPT
+        with ESMTP id S233036AbiDNMvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:50:11 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BEF91AC2;
-        Thu, 14 Apr 2022 05:47:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aK07gZPBhd2jWSLzDr8sOnNHpw9Zz6/+43hunoqvL8T9bhnmQLKMYBtBq7khVzkgbWYz8HLzT9FJNFm4dFKDdJ6F+qEYFL8ZLhQDQTf98IIx/FAL8Y/MTZm/HdLdNWmNB3Ai+LC2yePhDojwNqTVWh2eEK/PvTQ2MyRNydVZeGoabvknJdmL7K+QsQT7fcCiviTACYRHDz7vQutfFxhrm4aV/jXLoESwHPZLB0X/CKhwLr9SOlXHYP4L1AJWipjKyifgB6Gc1pwQHVcFxqMEU33/j+kpVlIZFJT/sBRPdQBjBz2HShp231yxYBJu9mJeR0yyWTOMPiS3Ec6wvGualw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u5XDkrmTrmwLfgc8QGPzKhcXE/R05iaR/IWvD6t6Hh0=;
- b=U3zENpHq4zPKToFRkP/NSdPlja9xomkHBwTWfggVHN2XvB/aXyH5fsH2Xb6Ccf9RBBjT9z3dIPKaAr5YXMuJeJgaTLlikRqlrmMp52919Dl+mykcsmE9HaDkixfn+ExU3cQoPWj2DiXAIoOGGYaJ+XxtAXYY8vuW/YSu+O517pMY/dr9xN3ux5EMg9fvokYiQbhbZ9TohJmf6dx5fuul+Ok5DvJ5P9RaQCk4MO4HXmdu/PCCXKi3nubjXFLJAeGod9KmKPONdBb9zYhRql8a4oNvB2czBlr1pnSwoNhZiLbPPcCyck2dMe8t/08qfRGSSaNkEC27gfayCFdCGWW8Xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u5XDkrmTrmwLfgc8QGPzKhcXE/R05iaR/IWvD6t6Hh0=;
- b=Y/usIBym6yoh2hRgaa2WWvupDXf+SoXpHiAp9L22dXp/UgwPue7X3SeVZBwqevteyRyzzlW11Se3rGclAKJN3fqhy8ix0CufvxLyklSHQVsc9pSwtvjXr64dloc6nsxe7xfQj/9VfIteQ51m/cSsiKhz4fCN8HPerjOT8S0oaC8=
-Received: from BN0PR10CA0019.namprd10.prod.outlook.com (2603:10b6:408:143::8)
- by SN4PR0201MB3534.namprd02.prod.outlook.com (2603:10b6:803:44::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 12:47:44 +0000
-Received: from BN1NAM02FT023.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:143:cafe::d0) by BN0PR10CA0019.outlook.office365.com
- (2603:10b6:408:143::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
- Transport; Thu, 14 Apr 2022 12:47:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT023.mail.protection.outlook.com (10.13.2.137) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5164.19 via Frontend Transport; Thu, 14 Apr 2022 12:47:43 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 14 Apr 2022 05:47:42 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 14 Apr 2022 05:47:42 -0700
-Envelope-to: linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- lorenzo.pieralisi@arm.com,
- bhelgaas@google.com,
- robh@kernel.org
-Received: from [10.254.241.50] (port=41198)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1neysw-000A4m-KX; Thu, 14 Apr 2022 05:47:42 -0700
-Message-ID: <3a16e5fc-e1a8-4a6c-d0bf-244376fae168@xilinx.com>
-Date:   Thu, 14 Apr 2022 14:47:40 +0200
+        Thu, 14 Apr 2022 08:51:11 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23D49157B;
+        Thu, 14 Apr 2022 05:48:42 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EC48ZL008872;
+        Thu, 14 Apr 2022 12:48:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QA7gBG0Vqb6X4lCe7FycL06CwTbFrS+3RDRfZYSVa1Q=;
+ b=mKfOz03GtPgM/CUR7U7FJY0T6kWbL0TZdTdVGbkfbiil7VrASOFOjf3k2Uuf+HHQXVr5
+ 1PzqYVcgenAe27Ry6SSY1YDU2Msg8gw6NJpjT/a2n1aHyAzpTa00yiJMHGO/UNqg0SCx
+ MF44QX+0PipXbx5zpYgT1OqhE2Fme2RhgQuU/Eq2I9g+VEFK3GKKTxIJSamLcf6sjL76
+ Jwvp0EBEWHVzOUo3fExGvCxk11lBjXllFVqUTEcvCbgMIHpRgRyTPG3nlgcyadK+yGsw
+ 1JEVCeEfaW1r3ZN7Dv2+7n8DumE3/3Hq9FbaBkCiUiVL/d62EnLwTn6ZlZtM1vIL95DR 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3febpbsxgg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:48:39 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23ECSbDo017078;
+        Thu, 14 Apr 2022 12:48:39 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3febpbsxfx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:48:39 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EClepd013947;
+        Thu, 14 Apr 2022 12:48:37 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3fbsj05t08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:48:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23ECmYjF25952534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 12:48:34 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 394CF42041;
+        Thu, 14 Apr 2022 12:48:34 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7A5C4203F;
+        Thu, 14 Apr 2022 12:48:33 +0000 (GMT)
+Received: from [9.171.78.130] (unknown [9.171.78.130])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 12:48:33 +0000 (GMT)
+Message-ID: <3c627856-5e66-3cbe-adab-464ae573e23d@linux.ibm.com>
+Date:   Thu, 14 Apr 2022 14:48:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 3/3] dt-bindings: PCI: xilinx-cpm: Change reg property
- order
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] KVM: s390: selftests: Use TAP interface in the memop
+ test
 Content-Language: en-US
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
-        <robh@kernel.org>
-References: <20220414092252.12174-1-bharat.kumar.gogada@xilinx.com>
- <20220414092252.12174-4-bharat.kumar.gogada@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220414092252.12174-4-bharat.kumar.gogada@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220414105322.577439-1-thuth@redhat.com>
+ <20220414105322.577439-2-thuth@redhat.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <20220414105322.577439-2-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a90f18dc-d7b0-40f7-a89d-08da1e14f84d
-X-MS-TrafficTypeDiagnostic: SN4PR0201MB3534:EE_
-X-Microsoft-Antispam-PRVS: <SN4PR0201MB35340FC6DCA956EFC85D8950C6EF9@SN4PR0201MB3534.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iG8EEv/BI8OeuvOrWqZWU5Dps+sAf/FzDPGa7MPEudixSXXU5KUePa1OXXqdxnacoV712O0IqgeQgxsL7sEQBZk9G9OQkRMuuHzCihk5ubzFVsJIO+uL2DDhYDmpC7261354CqJ3+OBInmmJEVGXrJlxExQm/2dkqh0QShCsapIpyZYeqATEGcJQj/5nOZ0ccZ2jNcFYDS1d0n8+MDBFoB57XfRZm6esRENfWlpO3FaJgf+V3Mq9zUEVLD+BovDGQF6LVGDYoa7MbIk/nCpiV/qyRoB+ZOxO/4c9rXQzBBPvGi+g6cdl2ul0ulEWclTT7PpiyyEHhhbbLOkvvDP2dY95M8K4/58bvD5NhjZuy7DLnWNXv4kVv9r0KzfOxCrGbuaHnYjC5LthM6lVCBCE4dAxTCpPwQLCGX/OLJOKj6RrCn11S/7efs0+elYCwH38fX1S2nzLe3GcblFamoHtdSoYRRDvrmgpt/SPdbdnc0zKesqB2qo1wYg73b0MZgRutYWuhrYa8fKazMBqL48yDOcgVSsAU1MX9FpoKSWEUMktJ7ttZyJjKwu5ErgA6E50oHLkJ0ehlrIFMrXWBDn0gr9/bEsrVofHILEXyXTk7gC019pFlaDk1oK735RWr9JZD/a4K+9Ek4rPs1LAvNsflWAK0+k9cEsC8tjzRL7+bdGpaiwEhhvwI/jhm1VqWjjyURJSKurkhV+fdsupYhNGI8ZGfJcUWyc/WTHQciwQNaA=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(26005)(31696002)(186003)(5660300002)(356005)(2616005)(44832011)(83380400001)(8936002)(9786002)(36860700001)(31686004)(7636003)(47076005)(8676002)(70586007)(70206006)(4326008)(36756003)(426003)(336012)(82310400005)(508600001)(316002)(40460700003)(53546011)(54906003)(110136005)(2906002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 12:47:43.9114
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a90f18dc-d7b0-40f7-a89d-08da1e14f84d
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT023.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3534
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hpLZtOw-PYvrQbNwLUGCQ_XTNFvLSYxn
+X-Proofpoint-ORIG-GUID: vu21Wmc0awv14lNgwkJxxc60la1ShQLl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_04,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140068
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/14/22 11:22, Bharat Kumar Gogada wrote:
-> Describe cpm reg property name before cfg reg property to align with
-> node name.
+On 4/14/22 12:53, Thomas Huth wrote:
+> The memop test currently does not have any output (unless one of the
+> TEST_ASSERT statement fails), so it's hard to say for a user whether
+> a certain new sub-test has been included in the binary or not. Let's
+> make this a little bit more user-friendly and include some TAP output
+> via the kselftests.h interface.
 > 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 > ---
->   .../devicetree/bindings/pci/xilinx-versal-cpm.yaml     | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+>  tools/testing/selftests/kvm/s390x/memop.c | 90 ++++++++++++++++++-----
+>  1 file changed, 73 insertions(+), 17 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index 4ebcc838a1f6..a3bc6ed9cf95 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -18,13 +18,13 @@ properties:
->   
->     reg:
->       items:
-> -      - description: Configuration space region and bridge registers.
->         - description: CPM system level control and status registers.
-> +      - description: Configuration space region and bridge registers.
->   
->     reg-names:
->       items:
-> -      - const: cfg
->         - const: cpm_slcr
-> +      - const: cfg
->   
->     interrupts:
->       maxItems: 1
-> @@ -86,9 +86,9 @@ examples:
->                          ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
->                                   <0x43000000 0x80 0x00000000 0x80 0x00000000 0x0 0x80000000>;
->                          msi-map = <0x0 &its_gic 0x0 0x10000>;
-> -                       reg = <0x6 0x00000000 0x0 0x10000000>,
-> -                             <0x0 0xfca10000 0x0 0x1000>;
-> -                       reg-names = "cfg", "cpm_slcr";
-> +                       reg = <0x0 0xfca10000 0x0 0x1000>,
-> +                             <0x6 0x00000000 0x0 0x10000000>;
-> +                       reg-names = "cpm_slcr", "cfg";
->                          pcie_intc_0: interrupt-controller {
->                                  #address-cells = <0>;
->                                  #interrupt-cells = <1>;
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index b04c2c1b3c30..a2783d9afcac 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -12,6 +12,7 @@
+>  
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+> +#include "kselftest.h"
+>  
+>  enum mop_target {
+>  	LOGICAL,
+> @@ -648,33 +649,88 @@ static void test_errors(void)
+>  	kvm_vm_free(t.kvm_vm);
+>  }
+>  
+> +struct testdef {
+> +	const char *name;
+> +	void (*test)(void);
+> +	bool needs_extension;
 
+Please make this numeric. You could also rename it to required_extension or similar.
 
-Acked-by: Michal Simek <michal.simek@xilinx.com>
+> +} testlist[] = {
+> +	{
+> +		.name = "simple copy",
+> +		.test = test_copy,
+> +		.needs_extension = false,
+> +	},
+> +	{
+> +		.name = "copy with storage keys",
+> +		.test = test_copy_key,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "copy with key storage protection override",
+> +		.test = test_copy_key_storage_prot_override,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "copy with key fetch protection",
+> +		.test = test_copy_key_fetch_prot,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "copy with key fetch protection override",
+> +		.test = test_copy_key_fetch_prot_override,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "error checks with key",
+> +		.test = test_errors_key,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "error checks with key storage protection override",
+> +		.test = test_errors_key_storage_prot_override,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "error checks without key fetch prot override",
+> +		.test = test_errors_key_fetch_prot_override_not_enabled,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "error checks with key fetch prot override",
+> +		.test = test_errors_key_fetch_prot_override_enabled,
+> +		.needs_extension = true,
+> +	},
+> +	{
+> +		.name = "generic error checks",
+> +		.test = test_errors,
+> +		.needs_extension = false,
+> +	},
+> +};
+> +
+>  int main(int argc, char *argv[])
+>  {
+> -	int memop_cap, extension_cap;
+> +	int memop_cap, extension_cap, idx;
+>  
+>  	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+>  
+> +	ksft_print_header();
+> +
+>  	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
+>  	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+>  	if (!memop_cap) {
+> -		print_skip("CAP_S390_MEM_OP not supported");
+> -		exit(KSFT_SKIP);
+> +		ksft_exit_skip("CAP_S390_MEM_OP not supported.\n");
+>  	}
+>  
+> -	test_copy();
+> -	if (extension_cap > 0) {
+> -		test_copy_key();
+> -		test_copy_key_storage_prot_override();
+> -		test_copy_key_fetch_prot();
+> -		test_copy_key_fetch_prot_override();
+> -		test_errors_key();
+> -		test_errors_key_storage_prot_override();
+> -		test_errors_key_fetch_prot_override_not_enabled();
+> -		test_errors_key_fetch_prot_override_enabled();
+> -	} else {
+> -		print_skip("storage key memop extension not supported");
+> +	ksft_set_plan(ARRAY_SIZE(testlist));
+> +
+> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
+> +		if (!testlist[idx].needs_extension || extension_cap) {
 
-Thanks,
-Michal
+Then check here that extension_cap >= the required extension.
+This way the test can easily be adapted in case of future extensions.
+> +			testlist[idx].test();
+> +			ksft_test_result_pass("%s\n", testlist[idx].name);
+> +		} else {
+> +			ksft_test_result_skip("%s - storage key memop not supported\n",
+> +					      testlist[idx].name);
+> +		}
+>  	}
+> -	test_errors();
+>  
+> -	return 0;
+> +	ksft_finished();
+>  }
+

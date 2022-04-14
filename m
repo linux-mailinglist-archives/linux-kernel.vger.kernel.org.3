@@ -2,193 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF05501941
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3572150193F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242393AbiDNQ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
+        id S241443AbiDNQ6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343506AbiDNQ6P (ORCPT
+        with ESMTP id S1343879AbiDNQ60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:58:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0D08326E1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649953813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dS40yRI9Iu4mpulttk/yT5UkW6FhfFYXK4U+vMF3mEE=;
-        b=ddHgCh+0WqFjzDKa8wsIw50w5AQBYBrc+5guymIVpcew1Oe2+UDAoQ+MsaSLxD00Ccbtxu
-        wAzivf/L8vxgn7lNIApkPzPYoM8P1qFVKY4dpmRCkurAaTRvOWF86/FtftLd2w6/Rog5hP
-        ei28+qZI3SdZStfwdTSM7GAg6wtWR8M=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-JlQrL9D6Pg6s5MhnPKmdxQ-1; Thu, 14 Apr 2022 12:30:11 -0400
-X-MC-Unique: JlQrL9D6Pg6s5MhnPKmdxQ-1
-Received: by mail-il1-f198.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so3273139ilc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:30:11 -0700 (PDT)
+        Thu, 14 Apr 2022 12:58:26 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A6D14B856
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:07 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id b188so5925168oia.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
+        b=AFJ0ednJxVwEVa8ibNzKw/zNCLJmlAKPerqWu/u+AY66jzOv4zx/Oesal+C140g0H0
+         SuB4t0aZsJKwV7aL4NCyotrpd2DhcWfCCAdG0BvTPA5/fVu/bLyZqerILW1RprlCifdD
+         qLqxjtAHsRLIYO4nB3X5MjYmJNtkw1UEHcxWk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dS40yRI9Iu4mpulttk/yT5UkW6FhfFYXK4U+vMF3mEE=;
-        b=RRCcas1gubGYJI0g66l99oB8IuFes6defc+suKe/kfZ/zyH4IWRug0iymALtmmHUJ4
-         rt967XGPj3xqcmjA+/q5G6PtvkJWTADARuLGrmXkCA9DQaXC6RtDrGpihs+FtOsdRN9+
-         NOustGyB76gJBkbPdwiyPtw1cTJAedj91SrjXmIsPpYwxMGdIZB9aTvQ3M3gYf3ixwKo
-         Ygdjnbt1PUm2CpQ8datIg2sB1UNAXi+scVLcpvtNS12OtOIYAPLqmPXDH7Wc6e7EC8rc
-         BKZUbt07whZEIT8ek72d61LxNPAlwr6Xy4Jr+kPqs/CC6ePdSFvXLdtaBtepiOnaeZy8
-         vu2A==
-X-Gm-Message-State: AOAM5328WrKSDfLlaq0uW50uEIk1AIDRudpr8edzl6CrFrB6oec19qRg
-        wppsajd2Xn7V3YXqE1vGlkM4fibBoOq/eeQQskiQ0PIgSQ7qnWSNR3W4/4rxOK20tmEMvDUX2UB
-        EblpDcG5gTtvl0qy28tw/mAin
-X-Received: by 2002:a05:6602:29ce:b0:609:4f60:59cb with SMTP id z14-20020a05660229ce00b006094f6059cbmr1503818ioq.183.1649953809940;
-        Thu, 14 Apr 2022 09:30:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9A8AHSrxgnUVEj2v/S1hhEfJFkeDyEN0WflKOfoPSETwnRHxI6kA8LxPjlmWrc/2uv8jWQg==
-X-Received: by 2002:a05:6602:29ce:b0:609:4f60:59cb with SMTP id z14-20020a05660229ce00b006094f6059cbmr1503809ioq.183.1649953809695;
-        Thu, 14 Apr 2022 09:30:09 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05660215ca00b0064d25228248sm1525884iow.11.2022.04.14.09.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 09:30:08 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 12:30:06 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: Re: [PATCH v8 03/23] mm: Check against orig_pte for finish_fault()
-Message-ID: <YlhMDmko0IN82d21@xz-m1.local>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405014836.14077-1-peterx@redhat.com>
- <CGME20220413140330eucas1p167da41e079712b829ef8237dc27b049c@eucas1p1.samsung.com>
- <710c48c9-406d-e4c5-a394-10501b951316@samsung.com>
- <Ylb9rXJyPm8/ao8f@xz-m1.local>
- <6ccf5f5f-8dc5-16cc-f06c-78401b822a54@samsung.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
+        b=MlMjrJ75MH+wObXbu60eG6Kb7vT8V74LBOlmiOl3POzVFxsYvnJqAeF34nJJkQnpNW
+         44c/TFCgu4GZOiDcDswB26cUKp9j9uhSs7P5izWfPpFk3Tfeki9hyqz+Rxeh2jJx8FJx
+         127sYvR93DJGQqtyeE4PCZ8FE9xWu/D2Q21KAdzpknsuVEJp01aFWtPmy3T6meB9d6UG
+         mGICvHn8gYIb8ExRpBp2hhdTgLvMcIR+TL7+2Y9ashkg3Dm/6ri9PSBIRZdzKibbk12R
+         ApzkaOSeF8XrN8ZI9qwkS6Jjv3/ibxPYpyVbFzsnHlcMcoD9IayCM/4LC01wbzs8Y6bE
+         VHTQ==
+X-Gm-Message-State: AOAM533zhYFjHhsiVBI5PWIbt1UKG8+Qo3NlRb1UHzHY+KfdaMhKCNrk
+        h0MYthqdGz8gi25TTaDR6kuamRHApnvuJg==
+X-Google-Smtp-Source: ABdhPJwkrmZEM1yq4ZxzD3/nSKjdSA+/kHGiDSf7f6Na7EoPK7vMaoO1XDmx+sZXRnOHJQ5wUJOvrw==
+X-Received: by 2002:a05:6808:1a2a:b0:2fa:6517:6510 with SMTP id bk42-20020a0568081a2a00b002fa65176510mr1745272oib.152.1649953866142;
+        Thu, 14 Apr 2022 09:31:06 -0700 (PDT)
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com. [209.85.160.42])
+        by smtp.gmail.com with ESMTPSA id ed22-20020a056870b79600b000da32eab691sm811364oab.23.2022.04.14.09.31.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 09:31:04 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e2afb80550so5810387fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:03 -0700 (PDT)
+X-Received: by 2002:a05:6870:f295:b0:e1:ea02:2001 with SMTP id
+ u21-20020a056870f29500b000e1ea022001mr1597770oap.241.1649953863199; Thu, 14
+ Apr 2022 09:31:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6ccf5f5f-8dc5-16cc-f06c-78401b822a54@samsung.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+ <YlBGvFFSp/R2CBmh@rowland.harvard.edu> <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
+ <YlDoSY19HYNJGI50@rowland.harvard.edu> <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
+ <YlRATrMxRWt9gVqt@rowland.harvard.edu> <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
+ <YlWdfWRXYjkfHLIP@rowland.harvard.edu> <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
+ <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+In-Reply-To: <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 14 Apr 2022 09:30:26 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 09:51:01AM +0200, Marek Szyprowski wrote:
-> Hi Peter,
-> 
-> On 13.04.2022 18:43, Peter Xu wrote:
-> > On Wed, Apr 13, 2022 at 04:03:28PM +0200, Marek Szyprowski wrote:
-> >> On 05.04.2022 03:48, Peter Xu wrote:
-> >>> We used to check against none pte in finish_fault(), with the assumption
-> >>> that the orig_pte is always none pte.
-> >>>
-> >>> This change prepares us to be able to call do_fault() on !none ptes.  For
-> >>> example, we should allow that to happen for pte marker so that we can restore
-> >>> information out of the pte markers.
-> >>>
-> >>> Let's change the "pte_none" check into detecting changes since we fetched
-> >>> orig_pte.  One trivial thing to take care of here is, when pmd==NULL for
-> >>> the pgtable we may not initialize orig_pte at all in handle_pte_fault().
-> >>>
-> >>> By default orig_pte will be all zeros however the problem is not all
-> >>> architectures are using all-zeros for a none pte.  pte_clear() will be the
-> >>> right thing to use here so that we'll always have a valid orig_pte value
-> >>> for the whole handle_pte_fault() call.
-> >>>
-> >>> Signed-off-by: Peter Xu <peterx@redhat.com>
-> >> This patch landed in today's linux next-202204213 as commit fa6009949163
-> >> ("mm: check against orig_pte for finish_fault()"). Unfortunately it
-> >> causes serious system instability on some ARM 32bit machines. I've
-> >> observed it on all tested boards (various Samsung Exynos based,
-> >> Raspberry Pi 3b and 4b, even QEMU's virt 32bit machine) when kernel was
-> >> compiled from multi_v7_defconfig.
-> > Thanks for the report.
-> >
-> >> Here is a crash log from QEMU's ARM 32bit virt machine:
-> >>
-> >> 8<--- cut here ---
-> >> Unable to handle kernel paging request at virtual address e093263c
-> >> [e093263c] *pgd=42083811, *pte=00000000, *ppte=00000000
-> >> Internal error: Oops: 807 [#1] SMP ARM
-> >> Modules linked in:
-> >> CPU: 1 PID: 37 Comm: kworker/u4:0 Not tainted
-> >> 5.18.0-rc2-00176-gfa6009949163 #11684
-> >> Hardware name: Generic DT based system
-> >> PC is at cpu_ca15_set_pte_ext+0x4c/0x58
-> >> LR is at handle_mm_fault+0x46c/0xbb0
-> > I had a feeling that for some reason the pte_clear() isn't working right
-> > there when it's applying to a kernel stack variable for arm32.  I'm totally
-> > newbie to arm32, so what I'm reading is this:
-> >
-> > https://people.kernel.org/linusw/arm32-page-tables
-> >
-> > Especially:
-> >
-> > https://protect2.fireeye.com/v1/url?k=35bc90ac-6a27a9bd-35bd1be3-0cc47a31cdbc-b032cb1d178dc691&q=1&e=c82daefb-c86b-4ca1-8db1-cadbdc124ed2&u=https%3A%2F%2Fdflund.se%2F%7Etriad%2Fimages%2Fclassic-mmu-page-table.jpg
-> >
-> > It does match with what I read from arm32's proc-v7-2level.S of it, where
-> > from the comment above cpu_v7_set_pte_ext:
-> >
-> >    * - ptep  - pointer to level 2 translation table entry
-> >    *    (hardware version is stored at +2048 bytes)        <----------
-> >
-> > So it seems to me that arm32 needs to store some metadata at offset 0x800
-> > of any pte_t* pointer passed over to pte_clear(), then it must be a real
-> > pgtable or it'll write to random places in the kernel, am I correct?
-> >
-> > Does it mean that all pte_*() operations upon a kernel stack var will be
-> > wrong?  I thought it could happen easily in the rest of mm too but I didn't
-> > yet check much.  The fact shows that it's mostly possible the current code
-> > just work well with arm32 and no such violation occured yet.
-> >
-> > That does sound a bit tricky, IMHO.  But I don't have an immediate solution
-> > to make it less tricky.. though I have a thought of workaround, by simply
-> > not calling pte_clear() on the stack var.
-> >
-> > Would you try the attached patch to replace this problematic patch? So we
-> > need to revert commit fa6009949163 and apply the new one.  Please let me
-> > know whether it'll solve the problem, so far I only compile tested it, but
-> > I'll run some more test to make sure the uffd-wp scenarios will be working
-> > right with the new version.
-> 
-> I've reverted fa6009949163 and applied the attached patch on top of 
-> linux next-20220314. The ARM 32bit issues went away. :)
-> 
-> Feel free to add:
-> 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Hi Alan and Mathias,
 
-Thanks, Marek, for the fast feedback!
+On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Thu, Apr 14, 2022 at 05:00:12PM +0300, Mathias Nyman wrote:
+> > On 12.4.2022 18.40, Alan Stern wrote:
+> > > On Tue, Apr 12, 2022 at 05:56:42PM +0300, Mathias Nyman wrote:
+> > >> On 11.4.2022 17.50, Alan Stern wrote:
+> > >>> For example, what would happen if the user unplugs a device right in the
+> > >>> middle of the freeze transition, after the root hub has been frozen but
+> > >>> before the controller is frozen?  We don't want such an unplug event to
+> > >>> prevent the system from going into hibernation -- especially if the root
+> > >>> hub was not enabled for wakeup.
+> > >>
+> > >> We should be able to let system go to hibernate even if we get a disconnect
+> > >> interrupt between roothub and host controller freeze.
+> > >> Host is not yet suspended so no PME# wake is generated, only an interrupt.
+> > >>
+> > >> From Linux PM point of view it should be ok as well as the actual xhci
+> > >> device that is generating the interrupt is hasnt completer freeze()
+> > >>
+> > >> The xhci interrupt handler just needs to make sure that the disconnect
+> > >> isn't propagated if roothub is suspended and wake on disconnect
+> > >> is not set. And definitely make sure xhci doesn't start roothub polling.
+> > >>
+> > >> When freeze() is called for the host we should prevent the host from
+> > >> generating interrupts.
+> > >
+> > > I guess that means adding a new callback.  Or we could just suspend the
+> > > controller, like Evan proposed originally
+> >
+> > Suspending the host in freeze should work.
+> > It will do an extra xhci controller state save stage, but that should be harmless.
+> >
+> > But is there really a need for the suggested noirq part?
+> >
+> > +     .freeze_noirq   = hcd_pci_suspend_noirq,
+> >
+> > That will try to set the host to PCI D3 state.
+> > It seems a bit unnecessary for freeze.
+>
+> Agreed.
+>
+> > >>> (If the root hub _is_ enabled for wakeup then it's questionable.
+> > >>> Unplugging a device would be a wakeup event, so you could easily argue
+> > >>> that it _should_ prevent the system from going into hibernation.  After
+> > >>> all, if the unplug happened a few milliseconds later, after the system
+> > >>> had fully gone into hibernation, then it would cause the system to wake
+> > >>> up.)
+> > >>>
+> > >>>> Would it make sense prevent xHCI interrupt generation in the host
+> > >>>> freeze() stage, clearing the xHCI EINT bit in addition to calling
+> > >>>> check_roothub_suspend()?
+> > >>>> Then enable it back in thaw()
+> > >>>
+> > >>> That won't fully eliminate the problem mentioned in the preceding
+> > >>> paragraphs, although I guess it would help somewhat.
+> > >>
+> > >> Would the following steps solve this?
+> > >>
+> > >> 1. Disable device initiated resume for connected usb devices in freeze()
+> > >>
+> > >> 2. Don't propagate connect or OC changes if roothub is suspended and port wake
+> > >>    flags are disabled. I.E don't kick roothub polling in xhci interrupt
+> > >>    handler here.
+> > >
+> > > I guess you can't just halt the entire host controller when only one of
+> > > the root hubs is suspended with wakeup disabled.  That does complicate
+> > > things.  But you could halt it as soon as both of the root hubs are
+> > > frozen.  Wouldn't that prevent interrupt generation?
+> >
+> > True, but probably easier to just suspend host in freeze() as you stated above.
+>
+> Okay.
+>
+> Evan, this discussion suggests that you rewrite your patch as a series
+> of three:
+>
+>      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
+>         always disabled.
 
-I've also verified it for the uffd-wp case so the whole series keeps
-running as usual and nothing else shows up after the new patch replaced.
+If I understand this correctly, this means potentially runtime
+resuming the device so its wakeup setting can be consistently set to
+wakeups disabled across a freeze transition. Got it I think in terms
+of the "how".
 
-Andrew, any suggestion on how we proceed with the replacement patch?
-E.g. do you want me to post it separately to the list?
+>
+>      2. Change the xhci-hcd interrupt handler so that port-status
+>         changes are ignored if the port's root hub is suspended with
+>         wakeup disabled.
 
-Please let me know your preference, thanks.
+This part confuses me. This would be way deep under
+xhci_handle_event(), probably in handle_port_status(), just throwing
+away certain events that come in the ring. How would we know to go
+back and process those events later? I think we don't need to do this
+if we suspend the controller as in #3 below. The suspended (halted)
+controller wouldn't generate event interrupts (since the spec mentions
+port status change generation is gated on HCHalted). So we're already
+covered against receiving interrupts in this zone by halting the
+controller, and the events stay nicely pending for when we restart it
+in thaw.
 
--- 
-Peter Xu
+Is the goal of #1 purely a setup change for #2, or does it stand on
+its own even if we nixed #2? Said differently, is #1 trying to ensure
+that wake signaling doesn't occur at all between freeze and thaw, even
+when the controller is suspended and guaranteed not to generate
+interrupts via its "normal" mechanism? I don't have a crisp mental
+picture of how the wake signaling works, but if the controller wake
+mechanism sidesteps the original problem of sending an MSI to a dead
+CPU (as in, it does not use MSIs), then it might be ok as-is.
 
+>
+>      3. As in the original patch, make the .freeze and .thaw callbacks
+>         in hcd-pci.c call the appropriate suspend and resume routines,
+>         but don't do anything for .freeze_noirq and .thaw_noirq.
+
+Sure. I had made the _noirq paths match suspend for consistency, I
+wasn't sure if those could mix n match without issues. I'll try it out
+leaving the _noirq callbacks alone.
+-Evan
+
+>
+> How does that sound?
+>
+> Alan Stern

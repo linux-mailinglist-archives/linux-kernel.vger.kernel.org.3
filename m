@@ -2,183 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721AE50178A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D05B50178F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354226AbiDNPlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S1358253AbiDNPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354747AbiDNOmc (ORCPT
+        with ESMTP id S1354785AbiDNOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:42:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD83B10C8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:37:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 624E7B829D3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B1FC385B1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649947020;
-        bh=+fX+vlRMAcznpaPYe+5+kaIB//YIVMxZzI5CN9IWnKk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hM9js4sAaVKeo0JTYlLJrCyTzbqHy/v2hSWeLGqbHzWtUpoVmjsVg6T0KUA8Sdjg5
-         iAlYJ8vWQ0bDJmXbEL0Q9gz6qZvMI58e+U/9c9P0cwGvnjJGQ6wFe4FIXaLgkKxh3y
-         veCga6zMwU6fZOJT3HF6I7uBXP+obIx2J+NBYlK5LIhXv0UMt5iSzCnGlIB614PWJZ
-         4BZs8hD4bdGkOBTFA7hnTv9TV2GqR7RApWRC5RsHCsd4F3T29iSfHBHt2GoXdywbqw
-         vcAx4IkZWMbLwBX5w8+Cq9XxWYaimrX37Sj0Or1B89NmMlingHkMjPw0UReqn0acNs
-         88jTwjYyIzoRQ==
-Received: by mail-oi1-f175.google.com with SMTP id q189so5568331oia.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:37:00 -0700 (PDT)
-X-Gm-Message-State: AOAM531sUCKTvvd2irkdoa0FHuSCtxaKiL5iXC+KB3lslK/I372aDixJ
-        TbeayN5X91tmOqfZP4J6fF7iWex0vWul/vTLHx4=
-X-Google-Smtp-Source: ABdhPJyTt2gRZUSwoRqlYJLw8enun9rICcduOgNbY1CMkVli4eENqZIykyCUn6xJ3oVAVvpPmZtM2U7NAFwzYvNOYLM=
-X-Received: by 2002:a05:6808:1596:b0:2f7:5d89:eec7 with SMTP id
- t22-20020a056808159600b002f75d89eec7mr1828415oiw.228.1649947019047; Thu, 14
- Apr 2022 07:36:59 -0700 (PDT)
+        Thu, 14 Apr 2022 10:42:38 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F5D2AE3C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:39:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nq0ps0pG1XN4svM4/gmdCs/txlPlvw82QLoxTwnLtujghdNq62LMkkIgwVTt2SGUqjfxXpBJKQVuaqTWxrh7DC4yEJf31CfKFtO7IpPOQYJa1xoDlBBXit8pgXQRAOq/VfbHkobkeFxe0nKBQtKwjozDgkJKE86VKo55CMp2KvnqdVojncK7wY5uSy0juo4d3aY4+HeC2qMJBDRs2asd9EnCf0tQfQtX8gOd83drgdth2KgnsYzHrsB7EM0FaZS7IBSE9GzQ502HHcUq3gvKbq+JLDVCa/naPi8DOLPfM8DB14qsfUUs34gNTGKB2guI1G4RPMkeTERG7yNXSnHsVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a/Bfz1PATDvC0oypikSeRFZrtlXcP1bU4HB7kfwj9Sc=;
+ b=kF3FPSTwMyD2yCH0lQTE6BlgAlSQjxWIj4Xrn2XZL2ZuWqtHpGhk1GadjwDuzEO6knT0ERysxQTmMULupF9iYTd4DbETaXdgZPmHaAiEri3/a4lXImAz13gRqWTLh8vUPVpgbdmdsSxwDZNt0Zufdv5i6Kc0WHze78VQ30up2W7biduRRS1CDQaX0BBOzvXkNozHgIdnl/PIk9nI0sXgUVnn3i6YPAPJFcn0lKjzeJq2rOyj9FmYWPwptZTw8H3OGtVwDbq2q0xbBwBD3VvdmTh3Ya6qoya67NT2OK+Azjdtf8Myh9JWuHr6pQVVWZDNHl/A6bSDyaJHgKCSJllnWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a/Bfz1PATDvC0oypikSeRFZrtlXcP1bU4HB7kfwj9Sc=;
+ b=IVpLwYi17PdvXdvwoVwV0OpHKRO2/zXmLCNdmrp9rJZZYNtHrScZo9eRNmr8TEOg18LHeeZMLUr8etQpI0wwiaRRoRaozhQMu6H8FBVLlPv7QZ08jHw/t3WLe5hIDh78GMf5dVdOgu4IKdcE7+N+XBvr/EJGSqwNS800b0ak0CtgklWcyW12HsYFfnfwrlDMlSiA1eSUR7SiHi1w/YAIR4JdBgo4QuRmhFxea28e5R354tNe7AnMlOzv+zmjb3Q72obzw/b5puiuDR6j3/FurIsQyY8qk+gV3K+ms20oOneufhO4Gicxxd2QyCzL5ecmt+shMFoPORARj7Y63aOUGw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SN6PR12MB4719.namprd12.prod.outlook.com (2603:10b6:805:e9::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Thu, 14 Apr
+ 2022 14:39:01 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
+ 14:39:01 +0000
+Date:   Thu, 14 Apr 2022 11:38:59 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
+Message-ID: <20220414143859.GE368031@nvidia.com>
+References: <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
+ <20220413154642.GA28095@lst.de>
+ <871qy1geko.fsf@intel.com>
+ <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
+ <20220413232053.GA2120790@nvidia.com>
+ <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
+ <20220414133427.GB2120790@nvidia.com>
+ <87ilrbeqbo.fsf@intel.com>
+ <20220414134321.GD2120790@nvidia.com>
+ <abc0a953-8527-ba25-9987-d2f1284a7430@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abc0a953-8527-ba25-9987-d2f1284a7430@intel.com>
+X-ClientProxiedBy: BLAPR03CA0131.namprd03.prod.outlook.com
+ (2603:10b6:208:32e::16) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <YlVHSvkyUBXZPUr2@arm.com> <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
- <YlVOTsaTVkBOxthG@arm.com> <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
- <YlVxGAHHD/j6lW3c@arm.com> <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
- <YlezcPbFOkSUygBJ@kroah.com> <CAMj1kXFWJXbT+fMEx=wzX1wS6xW1DeGxZ+mWBbY8Z4hj4kc_dw@mail.gmail.com>
- <YlgvaSozV5jU49Y0@kroah.com>
-In-Reply-To: <YlgvaSozV5jU49Y0@kroah.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 Apr 2022 16:36:46 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGAd7s1GU=uH+iLOwvbn1zG-=TNXw02Bf-AdiHOQvh02Q@mail.gmail.com>
-Message-ID: <CAMj1kXGAd7s1GU=uH+iLOwvbn1zG-=TNXw02Bf-AdiHOQvh02Q@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7bb56b66-d021-4fd6-9b24-08da1e248450
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4719:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB4719D04B56C68210F4E2628BC2EF9@SN6PR12MB4719.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SSGmmUFcJ2RQuZGXFswa7oSIOvY0LUSSv0CuVe6KFh9rfIRN47aed/B/da8LIatR6xhIY2MbjbkYsl9aiayxFhVFmgjZEDvvc4rTD424O51NWU0D1F5VVmEt4RqMPhEwK+8HuUMz0qS+dMtddozrY6q6Y7UjZKlHJelbRrBdktMdCcS/3ry0IIpfec7386L3bVxu7mXUxczczWRi8/3CA57p/B6HS2ZfMUe/FSf9+Mwu279CoPyUp8kXWeQr8UxpqpWMpYQhwrm66Eys0t/qyCNJwpV60Pu71DPYCo3gZBWbLW/EZILGyTZlCKDKgq1D5HKyzPNC0kadyrjOYXwtuMAXT24UdJGNX3ytXmmjT9lDthntqiGV3WsGVLBOt4jceybdkKkF7ZOF2KFu28Veeo+qyFmyw205Honl8n9V1lQaWpbtW8QRmQuUL/ruhdo3+QLEl11hVmPC1DdztO3ig/p1ZmvxF68RSl5jQljfK7FHqLSoAjlwHvCwy8d0fbpnHaF9xxDonh863lDa5F0DooDAtmWviXio/TTyHZSItZFiQnpxEJuZC1BbdaBc5kpyAVRhYtDJWJvDYzAZD4JX6OYkLTg7U6eVwREg5mfOM9upGhMdZRPRm0DbY1Z3+n70od05PCl5YERl2b5vu9f/SDzfp9IiPy20mZQ8sfVrIGXFZZsLOzbtIrqkOSPLUxqkMpHfuUAj1vpq6qBCXmMhMg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(5660300002)(8936002)(26005)(6512007)(33656002)(38100700002)(4326008)(86362001)(316002)(66476007)(66556008)(54906003)(8676002)(66946007)(6916009)(6506007)(6486002)(508600001)(2906002)(7416002)(36756003)(1076003)(186003)(83380400001)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m3ExuVKoUKybjs389f97/JJ1nbF168b1Uu+Y36OhTFxlMcZHG4D5PFCl0/jB?=
+ =?us-ascii?Q?ZC9JjcIkQ6ePZiA+SX5GrMOUGD1vdGsEM9tjGmbLqW4qcFxyFqWJALOEBBIU?=
+ =?us-ascii?Q?C5r4E+sgcmR2aQvZTh7FlEjItRBM+z19dkpTEohsco6Ii4F/adBnx4dghJOh?=
+ =?us-ascii?Q?M4m/nZsXT/2OWHs2sO3FjPxKPsvLUz0YU2dDv4Bp9Ffo697w3/CGNGVnL8ig?=
+ =?us-ascii?Q?rQg9G04mYPyi/5jyEaIb745hgZFv7IOu8KJi6SdwEOuhqXsYogzgLU3LM4PF?=
+ =?us-ascii?Q?fbCsfw7/uZUDopdptzrAMvMZfjwA+XgugdADp5lysq75gidQ+FLjVYXIqb94?=
+ =?us-ascii?Q?w5VdidKcYuOtScCCMEOINyhaK4ryG270AsYfAzeryHsYMBEW9IW0MKU5VhrX?=
+ =?us-ascii?Q?MIPQnCJb0cAnGAPz4roLZMJsksSvIX9ytLXl3VUtJCjB8OVCoQoqyagG8FX6?=
+ =?us-ascii?Q?M52k5ZrEua7dPL6F+us26KYx0CAawbQcZDm3LE2s29AFxe32VFvwwY43Mls1?=
+ =?us-ascii?Q?Ub2A1OFfowNqBjyvSpLrWyVY5RNJ6sMeem6PoBxuCTLtNrBZfL/ha0Ef+Xiq?=
+ =?us-ascii?Q?6RsxFU/1plTs8pHMpjw0YaeTTEBvim4HvX1Hj8/tOaEqoKGcRhTKfpv6uUsO?=
+ =?us-ascii?Q?jQ0r1QxaDXOu7wostkLHJBWV3tVUVvOXh1+r3wP2ecIjtlPeeWHQNDondBeM?=
+ =?us-ascii?Q?YforjTrAqJpO3ycTLvq5b33IGkzejOmAtQJp0WXJyNbpIFPOnuP/oljASiWz?=
+ =?us-ascii?Q?T3kPnp//1aD94QGJ0meTRBcpCaba/W+TIluKK90MECgb9piQS6fpK9IgTsej?=
+ =?us-ascii?Q?kLnJyFf9EpNzgDItZrm+80LGUUx6AUDkVE/qs0h8v4YldZ73U2P3EmuF3LQH?=
+ =?us-ascii?Q?Z9pa7WaSGPmIMPwIhZp3O8MZ3wLDBaIPkdAYLqIxRcbVL1g7YpWUb4owTHQG?=
+ =?us-ascii?Q?ypwX9SrUE9rJiiTiozDBcjxLPk6pfMTZCkR2rzSahgKsG1Kbh6h9E8+jvYaO?=
+ =?us-ascii?Q?7C+OBY6PQnzGKDNRPhHM57y5HBDmx/FyBmN0bizkJK0ht2jpM5nP8iotiz+r?=
+ =?us-ascii?Q?2JeM+oxn3C7NgYF2DHAgo5Kb7E4ymJkBRhCWRw+lMbtGanJfdseNM8GBB5om?=
+ =?us-ascii?Q?PguvilcAK1RtQ4krvtj0Hx8LjdxBSajV5WDEMAov3VM8iGS7E0795h7W9UnP?=
+ =?us-ascii?Q?uYN+zMBBcnhjLP5EcOgiUicviOdeLndy1zsm2wWkRzU8ck79ZGl1/VoGtBbW?=
+ =?us-ascii?Q?Yo2YuwyoJsLPPrgohMKaIbzt5DgNjcRlVAs3pDPZU2+ApUHGP4v+B1yvEfaA?=
+ =?us-ascii?Q?GvfpOIE01qEwr3cXHhivIMmE4P2X8LfuwyWtrPxa+wUulczzwMPcTFVaWrTw?=
+ =?us-ascii?Q?7Brj+s0XcEETKjg8HaAk0HYK3eZIxQhNb/yc2sIEzIRMI9ix4MWGgoPAbtw8?=
+ =?us-ascii?Q?+O27gW29DmXZhrXOaAwnuZ+aS6MKUaT8KBz2t78vIXfEahVT8dQNIOKC2Acx?=
+ =?us-ascii?Q?oGKrli/6e5RuctpqMRThW0g1aE5OG8CLVmGQUYi9n4QUd1V093J931LnTYr4?=
+ =?us-ascii?Q?k8v8Gi0OM2J1lkxZGco0T9mSZtMSYU9nc9Wxz/AfY/0GtvlG+0IOATLh9gxI?=
+ =?us-ascii?Q?3PJdgCVa7c3vGxmsMM/Q1akkzN8ZTpzuCG+duH0L7unoNPQAI3N5ywtQo55r?=
+ =?us-ascii?Q?B/ySYKIzKWMERruj/lgdVQbPElHhPjDZrR383HgQmfXXklW9rRr/Uv8z04cs?=
+ =?us-ascii?Q?vajujAETzg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bb56b66-d021-4fd6-9b24-08da1e248450
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 14:39:01.5752
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wjISa0hfnwjnGt+3NzPHJ9CAjDSBMDurdl0Hs57LT5xxhM0kfaLr6Y2ctcpCwhqw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4719
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 at 16:27, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Apr 14, 2022 at 03:52:53PM +0200, Ard Biesheuvel wrote:
-> > On Thu, 14 Apr 2022 at 07:38, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Wed, Apr 13, 2022 at 09:53:24AM -1000, Linus Torvalds wrote:
-...
-> > > > Honestly, I think it would probably be worth discussing the "kmalloc
-> > > > DMA alignment" issues.
-> > > >
-> > > > 99.9% of kmalloc users don't want to do DMA.
-> > > >
-> > > > And there's actually a fair amount of small kmalloc for random stuff.
-> > > > Right now on my laptop, I have
-> > > >
-> > > >     kmalloc-8          16907  18432      8  512    1 : ...
-> > > >
-> > > > according to slabinfo, so almost 17 _thousand_ allocations of 8 bytes.
-> > > >
-> > > > It's all kinds of sad if those allocations need to be 64 bytes in size
-> > > > just because of some silly DMA alignment issue, when none of them want
-> > > > it.
-> > > >
-> >
-> > Actually, the alignment for non-cache coherent DMA is 128 bytes on
-> > arm64, not 64 bytes.
-> >
-> > > > Yeah, yeah, wasting a megabyte of memory is "just a megabyte" these
-> > > > days. Which is crazy. It's literally memory that could have been used
-> > > > for something much more useful than just pure and utter waste.
-> > > >
-> > > > I think we could and should just say "people who actually require DMA
-> > > > accesses should say so at kmalloc time". We literally have that
-> > > > GFP_DMA and ZOME_DMA for various historical reasons, so we've been
-> > > > able to do that before.
-> > > >
-> > > > No, that historical GFP_DMA isn't what arm64 wants - it's the old
-> > > > crazy "legacy 16MB DMA" thing that ISA DMA used to have.
-> > > >
-> > > > But the basic issue was true then, and is true now - DMA allocations
-> > > > are fairly special, and should not be that hard to just mark as such.
-> > >
-> > > "fairly special" == "all USB transactions", so it will take a lot of
-> > > auditing here.  I think also many SPI controllers require this and maybe
-> > > I2C?  Perhaps other bus types do as well.
-> > >
-> > > So please don't make this change without some way of figuring out just
-> > > what drivers need to be fixed up, as it's going to be a lot...
-> > >
-> >
-> > Yeah, the current de facto contract of being able to DMA map anything
-> > that was allocated via the linear map makes it quite hard to enforce
-> > the use of dma_kmalloc() for this.
-> >
-> > What we might do, given the fact that only inbound non-cache coherent
-> > DMA is problematic, is dropping the kmalloc alignment to 8 like on
-> > x86, and falling back to bounce buffering when a misaligned, non-cache
-> > coherent inbound DMA mapping is created, using the SWIOTLB bounce
-> > buffering code that we already have, and is already in use on most
-> > affected systems for other reasons (i.e., DMA addressing limits)
->
-> Ick, that's a mess.
->
-> > This will cause some performance regressions, but in a way that seems
-> > fixable to me: taking network drivers as an example, the RX buffers
-> > that are filled using inbound DMA are typically owned by the driver
-> > itself, which could be updated to round up its allocations and DMA
-> > mappings. Block devices typically operate on quantities that are
-> > aligned sufficiently already. In other cases, we will likely notice
-> > if/when this fallback is taken on a hot path, but if we don't, at
-> > least we know a bounce buffer is being used whenever we cannot perform
-> > the DMA safely in-place.
->
-> We can move to having an "allocator-per-bus" for memory like this to
-> allow the bus to know if this is a DMA requirement or not.
->
-> So for all USB drivers, we would have:
->         usb_kmalloc(size, flags);
-> and then it might even be easier to verify with static tools that the
-> USB drivers are sending only properly allocated data.  Same for SPI and
-> other busses.
->
+On Thu, Apr 14, 2022 at 02:25:36PM +0000, Wang, Zhi A wrote:
 
-As I pointed out earlier in the thread, alignment/padding requirements
-for non-coherent DMA are a property of the CPU's cache hierarchy, not
-of the device. So I'm not sure I follow how a per-subsystem
-distinction would help here. In the case of USB especially, would that
-mean that block, media and networking subsystems would need to be
-aware of the USB-ness of the underlying transport?
+> > So drop the '[DONT PULL]' commit and send a PR to the next DRM tree -
+> > when that is confirmed send the same PR to vfio,
+> 
+> I updated the branch again, but I am confused. What is the purpose of sending
+> the PR to next DRM tree? I suppose all the patches will go through VFIO? If
+> I understand correctly?
 
-> https://lore.kernel.org/r/230a9486fc68ea0182df46255e42a51099403642.1648032613.git.christophe.leroy@csgroup.eu
-> is an example of a SPI driver that has been there "for forever" yet
-> always got it wrong.  If we could have had some way to know "only memory
-> allocated with this function is allowed on the bus" that would have
-> fixed the issue a long time ago.
->
-> Anyway, just an idea, it's up to you all if this is worth it or not.
-> Adding performance regressions at the expense of memory size feels like
-> a rough trade-off to go through until things are fixed up.
->
+pull requests can flow through more than one tree concurrently. The
+purpose of the topic branch is to allow all the commits to be in all
+the trees they need to be in at once.
 
-Yeah, I hear you. But we already have distinct classes of memory,
-i.e., vmalloc vs kmalloc, where only the latter is permitted for DMA
-(which is why VMAP stack broke that SPI driver), and I'm not sure
-adding more types is going to make this tractable going forward.
+So you should send this branch as a PR to the next logical upstream
+tree gvt patches normally go through, in the usual way that you send
+PRs. Especially in this case where there is a small merge conflict
+internal to DRM to resolve. I'm assuming this is the drm-intel-next
+tree?
+
+Once DRM is internally happy then VFIO can merge it as well. You can
+view VFIO as the secondary path to Linus, DRM as primary. Alex will
+mention in his pull request that VFIO has a 'shared branch with DRM
+for gvt'.
+
+Jason

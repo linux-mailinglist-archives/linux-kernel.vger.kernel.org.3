@@ -2,241 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEAB6500684
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE49500686
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbiDNHEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S240210AbiDNHGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiDNHEu (ORCPT
+        with ESMTP id S231582AbiDNHGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:04:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF6127CC9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:02:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15C35139F;
-        Thu, 14 Apr 2022 00:02:26 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.73.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3444A3F70D;
-        Thu, 14 Apr 2022 00:02:23 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 08:02:16 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH v2 0/4] kasan, arm64, scs, stacktrace: collect stack
- traces from Shadow Call Stack
-Message-ID: <YlfG+LJPz1gRWWUI@FVFF77S0Q05N>
-References: <cover.1648049113.git.andreyknvl@google.com>
- <YkV6QG+VtO7b0H7g@FVFF77S0Q05N>
- <YkWg5dCulxknhyZn@FVFF77S0Q05N>
- <CA+fCnZeQ6UnpM9qEQ4q5Y95U3XVwrsD-g7OX=Qxr1U1OR_KCsQ@mail.gmail.com>
- <Yk8wbx7/4+9pMLGE@FVFF77S0Q05N>
- <CA+fCnZcv6PtR5eT-hbJ54hkH7Kr+CUM4DU2S5nbU4Lp2OnG8dQ@mail.gmail.com>
+        Thu, 14 Apr 2022 03:06:06 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA5028997;
+        Thu, 14 Apr 2022 00:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=te3lUagj3c47Lhqa09adCixkLUiFDVwxje5+ZhtzTcc=;
+  b=ZASy1r346Mf9/Cf0kmRziXpUVf6qit22lb/QCPcpntA5YPeNpys/9yss
+   +r3cSRWU5lrgL2Gzhdvntutg1//7VyFGSOf/3xmlMhXo95ptouQ9cF73G
+   PzgxDkvWRuTg/88ntufeuK3/eu3DrboKB1TcJDD/tza/Jq8Wbx3Zf/kX8
+   Y=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,259,1643670000"; 
+   d="scan'208";a="31625224"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 09:03:41 +0200
+Date:   Thu, 14 Apr 2022 09:03:40 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Ira Weiny <ira.weiny@intel.com>
+cc:     Alison Schofield <alison.schofield@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: media: atomisp: Use kmap_local_page() in
+ hmm_store()
+In-Reply-To: <Yld+wpMe1C51bKU3@iweiny-desk3>
+Message-ID: <alpine.DEB.2.22.394.2204140902030.3023@hadrien>
+References: <20220413225531.9425-1-fmdefrancesco@gmail.com> <20220414004454.GA1243697@alison-desk> <Yld+wpMe1C51bKU3@iweiny-desk3>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+fCnZcv6PtR5eT-hbJ54hkH7Kr+CUM4DU2S5nbU4Lp2OnG8dQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:28:00PM +0200, Andrey Konovalov wrote:
-> On Thu, Apr 7, 2022 at 8:42 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > I'm afraid from local testing (atop v5.18-rc1), with your config, I still can't
-> > get anywhere near your figures. I've tried to match toolchain versions with
-> > what was in your .config file, so I'm using clang 12.0.0 from the llvm.org
-> > binary releases, and binutils from the kernel.org crosstool 11.1.0 release.
-> >
-> > I took baselines with defconfig and defconfig + SHADOW_CALL_STACK, with console
-> > output completely suppressed with 'quiet loglevel=0':
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-defconfig/Image
-> > |
-> > |  Performance counter stats for
-> > |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-defconfig/Image -append
-> > |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
-> > |
-> > |        0.512626031 seconds time elapsed                                          ( +-  0.26% )
-> > |
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-defconfig+scs/Image
-> > |
-> > |  Performance counter stats for
-> > |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-defconfig+scs/Image -append
-> > |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
-> > |
-> > |        0.523245952 seconds time elapsed                                          ( +-  0.18% )
-> >
-> > Then I tried the same with your config, without your patches:
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image
-> > |
-> > |  Performance counter stats for
-> > |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image -append
-> > |  loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
-> > |
-> > |        1.994692366 seconds time elapsed                                          ( +-  0.05% )
-> >
-> > Then with your config, without your patches, with the stacktrace hacked out:
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
-> > |
-> > |  Performance counter stats for
-> > | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > | /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
-> > | -append loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
-> > |
-> > |        1.861823869 seconds time elapsed                                          ( +-  0.05% )
-> >
-> > If I use those number to estimate the proportion of time spent stacktracing,
-> > with the baseline SCS number discounted to remove the hypervisor+VMM overheads,
-> > I get:
-> >
-> >         (1.994692366 - 0.523245952) - (1.861823869 - 0.523245952)
-> >         ---------------------------------------------------------  = 0.09029788358
-> >         (1.994692366 - 0.523245952)
-> >
-> > So roughly 9% when I try to maximize that figure. When actually poking hardware
-> > and doing real work, that figure goes down. For example, if just using "quiet":
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image > /dev/null
-> > |
-> > |  Performance counter stats for
-> > | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > | /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config/Image -append
-> > | loglevel=9 earlycon panic=-1 quiet' (50 runs):
-> > |
-> > |        4.653286475 seconds time elapsed                                          ( +-  0.06% )
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image > /dev/null
-> > |
-> > |  Performance counter stats for
-> > |  '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > |  -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > |  /home/mark/kernel-images/andrey-unwind-v5.18-rc1-andrey.config-nostacktrace/Image
-> > |  -append loglevel=9 earlycon panic=-1 quiet' (50 runs):
-> > |
-> > |        4.585750154 seconds time elapsed                                          ( +-  0.05% )
-> >
-> > Which gives an estimate of:
-> >
-> >         (4.653286475 - 0.523245952) - (4.585750154 - 0.523245952)
-> >         ---------------------------------------------------------  = 0.01635245964
-> >         (4.653286475 - 0.523245952)
-> >
-> > ... or ~1.6% time spent backtracing:
-> >
-> > FWIW, applying your patches do show some benefit, but not as drastic as I was
-> > expecting:
-> >
-> > With console output suprressed:
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -s -k ~/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
-> > |
-> > |  Performance counter stats for
-> > | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > | /home/mark/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
-> > | -append loglevel=9 earlycon panic=-1 quiet loglevel=0' (50 runs):
-> > |
-> > |        1.920300410 seconds time elapsed                                          ( +-  0.05% )
-> >
-> > ... down from ~9% to ~4%
-> >
-> > With console output merely reduced:
-> >
-> > | [mark@gravadlaks:~/repro]% taskset -c 64 ./vmboot.sh --perf-trials 50 -q -k ~/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image > /dev/null
-> > |
-> > |  Performance counter stats for
-> > | '/home/mark/.opt/apps/qemu/bin/qemu-system-aarch64 -m 2048 -smp 1 -nographic
-> > | -no-reboot -machine virt,accel=kvm,gic-version=host -cpu host -kernel
-> > | /home/mark/kernel-images/andrey-unwind-v5.18-rc1+scs-unwind-andrey.config/Image
-> > | -append loglevel=9 earlycon panic=-1 quiet' (50 runs):
-> > |
-> > |        4.611277833 seconds time elapsed                                          ( +-  0.04% )
-> >
-> > ... down from 1.6% to 0.6%
-> >
-> > Given the above I still think we need to understand this a bit better before we
-> > consider pursuing the SCS unwinder, given the issues I laid out in my prior mails.
-> >
-> > My hope is that we can improve the regular unwinder or other code such that
-> > this becomes moot. I'm aware of a few things we could try, but given it's very
-> > easy to sink a lot of time and effort into this, I'd like to first get some
-> > more details, as above.
-> 
-> Hi Mark,
-> 
-> I'm about to publish v3, where I'll include a detailed description of
-> how I measured the performance.
-> 
-> Perhaps we see different performance numbers because you're using
-> KVM-enabled VM on an Arm host and I'm using QEMU on x86-64 host.
 
-Hold on; are you using QEMU in TCG mode? If so that's in no way representative
-of real HW performance, and there are operations it simply cannot make as fast
-as HW can (e.g. pointer authentication using the architected QARMA variants).
 
-> Although, it's suspicious that the difference is so drastic.
+On Wed, 13 Apr 2022, Ira Weiny wrote:
 
-I'm not surprised at all. Some operations can be *orders of magnitude slower*
-under TCG than on real HW even when considered relative to other operations,
-and this can drasticaly skew benchmarks. We recently hit a case when PACIASP
-and AUTIASP were so slow under TCG mode they appeared to be causing a boot
-hang, and we eventually figured out that they were just *very* slow, adding
-minutes to the boot time. Richard Henderson added options to QEMU to mitigate
-that (either disabling authentication, or using an IMPLEMENTATION DEFINED
-algorithm).
+> On Wed, Apr 13, 2022 at 05:44:54PM -0700, Alison Schofield wrote:
+> > On Thu, Apr 14, 2022 at 12:55:31AM +0200, Fabio M. De Francesco wrote:
+> > > The use of kmap() is being deprecated in favor of kmap_local_page()
+> > > where it is feasible. The same is true for kmap_atomic().
+> > >
+> > > In file pci/hmm/hmm.c, function hmm_store() test if we are in atomic
+> > > context and, if so, it calls kmap_atomic(), if not, it calls kmap().
+> > >
+> > > First of all, in_atomic() shouldn't be used in drivers. This macro
+> > > cannot always detect atomic context; in particular, it cannot know
+> > > about held spinlocks in non-preemptible kernels.
+> > >
+> > > Notwithstanding what it is said above, this code doesn't need to care
+> > > whether or not it is executing in atomic context. It can simply use
+> > > kmap_local_page() / kunmap_local() that can instead do the mapping /
+> > > unmapping regardless of the context.
+> > >
+> > > With kmap_local_page(), the mapping is per thread, CPU local and not
+> > > globally visible. Therefore, hmm_store()() is a function where the use
+> > > of kmap_local_page() in place of both kmap() and kmap_atomic() is
+> > > correctly suited.
+> > >
+> > > Convert the calls of kmap() / kunmap() and kmap_atomic() /
+> > > kunmap_atomic() to kmap_local_page() / kunmap_local() and drop the
+> > > unnecessary tests which test if the code is in atomic context.
+> > >
+> >
+> > Not specifically about this patch, but more generally about all
+> > such conversions - is there a 'proof' that shows this just works
+>
+> Just code inspection.  Most of them that I have done have been compile tested
+> only.  Part of the key is that des is a local variable and is not aliased by
+> anything outside this function.
 
-The bottom line is that QEMU TCG mode is in no way representative of real-world
-performance, and *cannot* be used for benchmarking.
+Typically, the concern about being in atomic context has to do with
+whether GFP_KERNEL or GFP_ATOMIC should be used, ie whether allocation can
+sleep.  It doesn't have to do with whether some data can be shared.  Is
+that the concern here?
 
-I think we first need to understand *what* is so slow under QEMU TCG mode, and
-*why* TCG mode performance matters. I suspect there are other ways we could
-avoid this overhead *without* adding another unwinder, but even then we need a
-justification for *why* we should care.
+julia
 
-> I'll try to get my hands on some Arm hardware in the next few days and do the
-> measurements there.
-> 
-> This new version also will not be making any changes to the entry
-> code, as these changes add unwanted additional slowdown. That would be
-> great, if you could check the performance impact of v3 with your
-> setup.
-
-I'll take a look at the series, but as before I do not think we should add
-another unwinder. As above, I *certainly* do not think we should add another
-unwinder based on TCG performance.
-
-Thanks,
-Mark.
+>
+> > or do we need to test each one. If the latter, then how?
+>
+> Generally there is no test if we don't have the hardware.  Some of the more
+> difficult conversions will probably need to have some testing done but that
+> will need to be discussed with the subsystem maintainers at the time.
+>
+> Ira
+>
+> >
+> >
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > >  drivers/staging/media/atomisp/pci/hmm/hmm.c | 14 ++------------
+> > >  1 file changed, 2 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> > > index 46ac082cd3f1..54188197c3dc 100644
+> > > --- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> > > +++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> > > @@ -482,10 +482,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+> > >  		idx = (virt - bo->start) >> PAGE_SHIFT;
+> > >  		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
+> > >
+> > > -		if (in_atomic())
+> > > -			des = (char *)kmap_atomic(bo->page_obj[idx].page);
+> > > -		else
+> > > -			des = (char *)kmap(bo->page_obj[idx].page);
+> > > +		des = (char *)kmap_local_page(bo->page_obj[idx].page);
+> > >
+> > >  		if (!des) {
+> > >  			dev_err(atomisp_dev,
+> > > @@ -512,14 +509,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+> > >
+> > >  		clflush_cache_range(des, len);
+> > >
+> > > -		if (in_atomic())
+> > > -			/*
+> > > -			 * Note: kunmap_atomic requires return addr from
+> > > -			 * kmap_atomic, not the page. See linux/highmem.h
+> > > -			 */
+> > > -			kunmap_atomic(des - offset);
+> > > -		else
+> > > -			kunmap(bo->page_obj[idx].page);
+> > > +		kunmap_local(des);
+> > >  	}
+> > >
+> > >  	return 0;
+> > > --
+> > > 2.34.1
+> > >
+> > >
+>
+>

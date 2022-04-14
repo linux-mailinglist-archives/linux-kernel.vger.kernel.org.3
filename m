@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143304FF855
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 16:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDE44FF6F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 14:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbiDMOEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 10:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S235566AbiDMMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 08:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiDMOEH (ORCPT
+        with ESMTP id S230223AbiDMMlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:04:07 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A75D488BD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:01:45 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso4043820wml.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 07:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DTI5aKv+Llz9a6eH5cPOwZke9qYbkp9XtBDCcwx/bdw=;
-        b=oS95j73fR3+vosP7yR0hB/NfaUUiMsI9CRzXH79noDkneJGFCGDr7U501avBE0sDkD
-         w5vXv+3LHyeZpWp5UpIvj325ThHw25LCeWJZncZti/wuUKpWPVsD1YzrdH4WFQi1T+6q
-         IBwN77JR7evl8svl0PemG7rOF6eNwAHU5QJHqhKBu3rK9GGHngA7ljOTvPAxidIC5EpL
-         wA/BpDkA1RopEXQyPfUPg0QMjSk3Cxo8B2PC6+0Ao1rLTdI6nLA7+qOwR2SBhN4qzrrv
-         zhSrASTig7N0m+mUeCV7s+cWYF+GcGW8iwi3wx4LTfPDjDO+zhE+u3o2SsAKMh74E2TJ
-         uRDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DTI5aKv+Llz9a6eH5cPOwZke9qYbkp9XtBDCcwx/bdw=;
-        b=Gfle4T8H+EZxe3N4A7J/eBMjJgIercepfnNLEGK8vIzrcdlwPTO7ue0+xG8cMD+yX8
-         RtI1b9DP5km2KBIyzAKJJLk2scaHMjgGJSu5WW1F0uuOcqQpXB2exlUnNOZy3epjwdNF
-         FLTOLx8YcE6kbdQf3vTq08rE5swwCN2mffWU02gyOSO0Q4Rf48fllfY5/0bEp28eXnqp
-         I27PQN7BiSJjyqFMmm3GEf4CiPPqT33YbG5RMOUe6CQIQG39XyY/Op8LejC0Mh6czAR/
-         rnWssdn+lcICC7ciS1DLdofQAIR3lEwmjnxP804gYpUL3N7kYY7unqrcpspkQ1xQVcr6
-         4Lmg==
-X-Gm-Message-State: AOAM533tAMUZ98XosnfDiqrbGBR3iME4PDPc+ooM65mNJciWAq2rfCQP
-        9HoiRR9/QXwcit2SJTbiMppYzQ==
-X-Google-Smtp-Source: ABdhPJzgc2lgi92TiqfkjIvUbTtRFT8RLl3JsThFjpis+TU/Z+jZb74O4DrydZ+C81HbiU8wLdQ69w==
-X-Received: by 2002:a05:600c:1d18:b0:38f:f19c:37ee with SMTP id l24-20020a05600c1d1800b0038ff19c37eemr60529wms.88.1649858503913;
-        Wed, 13 Apr 2022 07:01:43 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:756e:dffc:3f22:6bcd])
-        by smtp.gmail.com with ESMTPSA id v1-20020adf9e41000000b00205c3d212easm32745997wre.51.2022.04.13.07.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 07:01:43 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>, stable@vger.kernel.org
-Subject: [PATCH] gpio: sim: fix setting and getting multiple lines
-Date:   Wed, 13 Apr 2022 16:01:32 +0200
-Message-Id: <20220413140132.286848-1-brgl@bgdev.pl>
+        Wed, 13 Apr 2022 08:41:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E4949FBC;
+        Wed, 13 Apr 2022 05:38:55 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kdhsm2FKqzFpfj;
+        Wed, 13 Apr 2022 20:36:28 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Apr 2022 20:38:53 +0800
+Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
+ (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 20:38:52 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH 0/2] Fix multiple iscsi session unbind event sent to userspace
+Date:   Wed, 13 Apr 2022 21:49:45 -0400
+Message-ID: <20220414014947.4168447-1-haowenchao@huawei.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to take mask into account in the set/get_multiple() callbacks.
-Use bitmap_replace() instead of bitmap_copy().
+kernel would send ISCSI_KEVENT_UNBIND_SESSION twice to userspace, for
+open-iscsi, this would trigger iscsi_stop twice. We should fix this issue.
 
-Fixes: cb8c474e79be ("gpio: sim: new testing module")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- drivers/gpio/gpio-sim.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Here introduced a new session state ISCSI_SESSION_UNBOUND to address it.
+Once session state is ISCSI_KEVENT_UNBIND_SESSION, it means
+__iscsi_unbind_session() has been called for this session and do not need
+to execute any more.
 
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index 8e5d87984a48..41c31b10ae84 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -134,7 +134,7 @@ static int gpio_sim_get_multiple(struct gpio_chip *gc,
- 	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
- 
- 	mutex_lock(&chip->lock);
--	bitmap_copy(bits, chip->value_map, gc->ngpio);
-+	bitmap_replace(bits, bits, chip->value_map, mask, gc->ngpio);
- 	mutex_unlock(&chip->lock);
- 
- 	return 0;
-@@ -146,7 +146,7 @@ static void gpio_sim_set_multiple(struct gpio_chip *gc,
- 	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
- 
- 	mutex_lock(&chip->lock);
--	bitmap_copy(chip->value_map, bits, gc->ngpio);
-+	bitmap_replace(chip->value_map, chip->value_map, bits, mask, gc->ngpio);
- 	mutex_unlock(&chip->lock);
- }
- 
+Reference:https://github.com/open-iscsi/open-iscsi/issues/338
+
+Wenchao Hao (2):
+  scsi: iscsi: introduce session UNBOUND state to avoid multiple unbind
+    event
+  iscsi: set session to FREE state after unbind session in remove
+    session
+
+ drivers/scsi/scsi_transport_iscsi.c | 45 +++++++++++++++++++++--------
+ include/scsi/scsi_transport_iscsi.h |  1 +
+ 2 files changed, 34 insertions(+), 12 deletions(-)
+
 -- 
 2.32.0
 

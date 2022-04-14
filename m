@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BDF500B22
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2626500B23
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242290AbiDNKdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S242296AbiDNKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239652AbiDNKdE (ORCPT
+        with ESMTP id S231349AbiDNKd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:33:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D3BC59A63
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649932239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Vf8insFKsm0H/Xa5O9Bfm1akCLF8f2bCQgFw5dYlces=;
-        b=PeBDsObnsl+9Qj/nqwvPCuBXeeWK7m/RiN7jfK8rarZP+SRsc3G+aaVAQN1ZRGrmBN6J/c
-        QPKjvZc6J5LzslKENtVf5Eb+P3OvB0bb2rrUzZGz/BiCmpnBNv8ATtGADuRM1z0AhMdJ/Q
-        AL4IoUb7rrHd22BkuTFk0D9d6s9vbPY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-hAC-ND9RORqzAfxDFTvCPw-1; Thu, 14 Apr 2022 06:30:35 -0400
-X-MC-Unique: hAC-ND9RORqzAfxDFTvCPw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 14 Apr 2022 06:33:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E232354186
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:31:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C1B438009EB;
-        Thu, 14 Apr 2022 10:30:35 +0000 (UTC)
-Received: from thuth.com (dhcp-192-232.str.redhat.com [10.33.192.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E707B434844;
-        Thu, 14 Apr 2022 10:30:33 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: [PATCH] KVM: selftests: Silence compiler warning in the kvm_page_table_test
-Date:   Thu, 14 Apr 2022 12:30:31 +0200
-Message-Id: <20220414103031.565037-1-thuth@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 722AAB82893
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:31:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CD5C385A9;
+        Thu, 14 Apr 2022 10:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649932261;
+        bh=anlZExuz/RXUpLpMBn9p6PwQT+FCiIUgNRUHvHy6288=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Wpx5v7klIT/k74ydnZ5+cTvjax9JDVP1wgsofhEur3Hi0gHlxURy5AS37Pr0lO7HV
+         aXAM/0qVQRakT9t6m4mKV+61iangNeqtTGPT3v1mfc6JKmoSnanBbLAeCk33TzLsvC
+         K8Me60uQnCKb63y9wKIMAP2IGoloakUdVuN4iwN28SLCEDWmQ79JwWynb5ro/bPiSL
+         1XKWKziRmbhuWmgc7L7jLnE0TjWmG/Vav5RgPwhGUEro5NvdMCS3dlxs4tR5I/+08+
+         +pJwW+E/aVt/xRtA9eaN7ayBdgJq5ku+XW18+54BXEdMVSzftQQz8ZfbNqM776y3K3
+         QSs1PT9HVd9aQ==
+From:   Will Deacon <will@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang
+Date:   Thu, 14 Apr 2022 11:30:52 +0100
+Message-Id: <164992995404.58572.4358662722112998061.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220413181420.3522187-1-nathan@kernel.org>
+References: <20220413181420.3522187-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compiling kvm_page_table_test.c, I get this compiler warning
-with gcc 11.2:
+On Wed, 13 Apr 2022 11:14:21 -0700, Nathan Chancellor wrote:
+> Will and Anders reported that using just 'CC=clang' with CONFIG_FTRACE=y
+> and CONFIG_STACK_TRACER=y would result in an error while linking:
+> 
+>   aarch64-linux-gnu-ld: .init.data has both ordered [`__patchable_function_entries' in init/main.o] and unordered [`.meminit.data' in mm/sparse.o] sections
+>   aarch64-linux-gnu-ld: final link failed: bad value
+> 
+> This error was exposed by commit f12b034afeb3 ("scripts/Makefile.clang:
+> default to LLVM_IAS=1") in combination with binutils older than 2.36.
+> 
+> [...]
 
-kvm_page_table_test.c: In function 'pre_init_before_test':
-../../../../tools/include/linux/kernel.h:44:24: warning: comparison of
- distinct pointer types lacks a cast
-   44 |         (void) (&_max1 == &_max2);              \
-      |                        ^~
-kvm_page_table_test.c:281:21: note: in expansion of macro 'max'
-  281 |         alignment = max(0x100000, alignment);
-      |                     ^~~
+Applied to arm64 (for-next/fixes), thanks!
 
-Fix it by adjusting the type of the absolute value.
+[1/1] arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang
+      https://git.kernel.org/arm64/c/45bd8951806e
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
-index ba1fdc3dcf4a..2c4a7563a4f8 100644
---- a/tools/testing/selftests/kvm/kvm_page_table_test.c
-+++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
-@@ -278,7 +278,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
- 	else
- 		guest_test_phys_mem = p->phys_offset;
- #ifdef __s390x__
--	alignment = max(0x100000, alignment);
-+	alignment = max(0x100000UL, alignment);
- #endif
- 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
- 
+Cheers,
 -- 
-2.27.0
+Will
 
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev

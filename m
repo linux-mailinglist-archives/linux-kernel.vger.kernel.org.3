@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0D750160B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B50501031
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245688AbiDNOs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S245422AbiDNNib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345116AbiDNNpJ (ORCPT
+        with ESMTP id S244673AbiDNN17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27103387B7;
-        Thu, 14 Apr 2022 06:42:31 -0700 (PDT)
+        Thu, 14 Apr 2022 09:27:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5675DA2071;
+        Thu, 14 Apr 2022 06:20:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CACBEB828F4;
-        Thu, 14 Apr 2022 13:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C86C385A1;
-        Thu, 14 Apr 2022 13:42:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 619AD618FE;
+        Thu, 14 Apr 2022 13:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A26CC385A5;
+        Thu, 14 Apr 2022 13:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943748;
-        bh=BkFxTUPxQZUHZd2JEHMvWObQJpPh8HtE3fB7ATuGBHs=;
+        s=korg; t=1649942440;
+        bh=oYuw4mPYXpnVQt2LjPBguXjejJ1z5wVWhetTmZbca/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X5HhOMc8/yrKd4Yq7ZaljH9IxaVbgUvPr/3ECnLjLrc0m9SQxSlFBQJvcdawPlule
-         Qi+53Ej+hcPfpoQGrr+ORIH9mF18mg+0NlDSrc5ysiilVZv6K5A/7+r5XWWgcuBSwy
-         C28vnBa1K/p72WrmtOzntFSu0WWWIay1124LDcTo=
+        b=KGugzzNxKoR0Ajnppr62aYgowoSiEYEApJ+Om7f1HdRKDl8GFHQDwVxoTm13CYqu7
+         vw/yKGjxX5NZZgPJmDGoAYbE/eCtwJNzNrEPsIF/6jFdOurtOB+7G/PEJ8ETi770/9
+         fybfD2sPcN6KTyI8t2zmVFkJw1IPjiC/e59yzJ2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        stable@vger.kernel.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 227/475] mxser: fix xmit_buf leak in activate when LSR == 0xff
-Date:   Thu, 14 Apr 2022 15:10:12 +0200
-Message-Id: <20220414110901.473537820@linuxfoundation.org>
+Subject: [PATCH 4.19 110/338] ASoC: dmaengine: do not use a NULL prepare_slave_config() callback
+Date:   Thu, 14 Apr 2022 15:10:13 +0200
+Message-Id: <20220414110842.040827448@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
+[ Upstream commit 9a1e13440a4f2e7566fd4c5eae6a53e6400e08a4 ]
 
-When LSR is 0xff in ->activate() (rather unlike), we return an error.
-Provided ->shutdown() is not called when ->activate() fails, nothing
-actually frees the buffer in this case.
+Even if struct snd_dmaengine_pcm_config is used, prepare_slave_config()
+callback might not be set. Check if this callback is set before using it.
 
-Fix this by properly freeing the buffer in a designated label. We jump
-there also from the "!info->type" if now too.
-
-Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fa654e085300 ("ASoC: dmaengine-pcm: Provide default config")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220307122202.2251639-2-codrin.ciubotariu@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/mxser.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ sound/soc/soc-generic-dmaengine-pcm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 9d00ff5ef961..085dc8dd1327 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -861,6 +861,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	struct mxser_port *info = container_of(port, struct mxser_port, port);
- 	unsigned long page;
- 	unsigned long flags;
-+	int ret;
+diff --git a/sound/soc/soc-generic-dmaengine-pcm.c b/sound/soc/soc-generic-dmaengine-pcm.c
+index 232df04ca586..45cce7376191 100644
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -91,10 +91,10 @@ static int dmaengine_pcm_hw_params(struct snd_pcm_substream *substream,
  
- 	page = __get_free_page(GFP_KERNEL);
- 	if (!page)
-@@ -870,9 +871,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	memset(&slave_config, 0, sizeof(slave_config));
  
- 	if (!info->ioaddr || !info->type) {
- 		set_bit(TTY_IO_ERROR, &tty->flags);
--		free_page(page);
- 		spin_unlock_irqrestore(&info->slock, flags);
--		return 0;
-+		ret = 0;
-+		goto err_free_xmit;
- 	}
- 	info->port.xmit_buf = (unsigned char *) page;
+-	if (!pcm->config)
+-		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+-	else
++	if (pcm->config && pcm->config->prepare_slave_config)
+ 		prepare_slave_config = pcm->config->prepare_slave_config;
++	else
++		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
  
-@@ -898,8 +899,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 		if (capable(CAP_SYS_ADMIN)) {
- 			set_bit(TTY_IO_ERROR, &tty->flags);
- 			return 0;
--		} else
--			return -ENODEV;
-+		}
-+
-+		ret = -ENODEV;
-+		goto err_free_xmit;
- 	}
- 
- 	/*
-@@ -944,6 +947,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	spin_unlock_irqrestore(&info->slock, flags);
- 
- 	return 0;
-+err_free_xmit:
-+	free_page(page);
-+	info->port.xmit_buf = NULL;
-+	return ret;
- }
- 
- /*
+ 	if (prepare_slave_config) {
+ 		ret = prepare_slave_config(substream, params, &slave_config);
 -- 
 2.34.1
 

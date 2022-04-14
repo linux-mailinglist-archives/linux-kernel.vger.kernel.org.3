@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A504F500D2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357BF500D60
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243229AbiDNM10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S243361AbiDNMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243184AbiDNM1I (ORCPT
+        with ESMTP id S242775AbiDNMaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:27:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D9F32CE34
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649939083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w3YBdRKJUuRVoqjsuVYs7FMkqCpz3SW587vkpc0Rrvg=;
-        b=iUnN5q0ZbfakU7j4xFu2WGxledK1F5TrxOwEkwu7yKVTwIUcljoXDjRw3tfN400vzoUVqT
-        EY2jcWeDv4fy/ZxdgAcskxaFOGRIISW7WGhlv1AaBnaNUxvL08CD82tXJriYafZAkutKwd
-        mQ6i49pxNNSVi20ilznqkBlL6vImKtk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-sCsyIxa4MsaOEEwzBbrRTg-1; Thu, 14 Apr 2022 08:24:42 -0400
-X-MC-Unique: sCsyIxa4MsaOEEwzBbrRTg-1
-Received: by mail-wm1-f69.google.com with SMTP id g13-20020a1c4e0d000000b0038eba16aa46so2160341wmh.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:24:41 -0700 (PDT)
+        Thu, 14 Apr 2022 08:30:12 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5634E90CC6;
+        Thu, 14 Apr 2022 05:27:20 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c12so4508799plr.6;
+        Thu, 14 Apr 2022 05:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hgmXgR00QIvN0EExWeBXD0io2j2TnCvQ61c8fzNW+rY=;
+        b=lBhx+rdb4hdC3YMcxjpgviIlzjH0B9ZCqf6Ct2MgxT6NghOvYjqU/940zldXEfAO19
+         znO6rFvRm5qAn4o3HeiO/V4nGgKVwz7szCyvQLz7t3izCfFxpwXGk8JcQ6MGD32qpPib
+         9dX0ACO7neSZP56wSm2/RKkt2YLUCWLoqY2zo3UPOcv0lZ0eWknBFoqwBLH/yiL6DmdG
+         bsYFyJP8IcPQKQGhhEFgLOwkD1H4eiYctXBaMR+VqANA5qQJUke0MQTS6A4sAlFyXKaT
+         GmgRKADylZasl7QhsHQ6e7ykXicekGuaUyQwpQaYbxz5VtYFQAnhx7h9EC1L1H0GYQXg
+         qSMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=w3YBdRKJUuRVoqjsuVYs7FMkqCpz3SW587vkpc0Rrvg=;
-        b=M6MkUW98yVYG5S35uqxMCLDPxkWMofglFTOKK9R5ioObbcXf+HwD/CzpDAMWtEifiI
-         078pJ0hnZRZrqUlvulo63NJ8TuXxlmhllkW9qUSZdZXQ2t85iR3VLR2mswSBlXgciqyX
-         edhQ4fb8sh5SbQ7wDKXkaSukbXy6DoM8/LUHuz/bg8gun6SxB9hBDpKpen/9/8CPh5UE
-         7VV0VDJH1Gh7F6fi1zmFWd0hL/RWWGjk0jSbpV8qqHVJEIPypSr8rFyDP6N4WE+Vf1dS
-         bCMoMDP0iSJQUqFflLiQiKJGvxAwRBmdEaqc2hDuRypGvbKBHc15s0ajzzWlN8nHbxya
-         +uBA==
-X-Gm-Message-State: AOAM531hsNaeCFX7xjrjiP6N9w7+TsRhe4Q5GXwSB35rCy1sFJYu4vcy
-        iuKQoRC7O+3hxEZMFdIhFNXsot/1x6WE9mZcWUZRCEg2yQY59hWLGzJcyMGl0s3V5mJ6gTkdRLC
-        FdjxXrlxAFVU6CnmRDHbryh3/+yxvPzk1D4J3A7k3BiZPjykJUHkNE5aldp4fDBzj3CB7tgkyZR
-        Wn
-X-Received: by 2002:a05:6000:1acf:b0:203:fe67:a8dc with SMTP id i15-20020a0560001acf00b00203fe67a8dcmr1939010wry.212.1649939080930;
-        Thu, 14 Apr 2022 05:24:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzzXxuDleRxU9n7P7jE2XBRIfRSmIzpph4ijPoFszyxobCWls/GbBpEwYTZXs/vLQg4+4xeFg==
-X-Received: by 2002:a05:6000:1acf:b0:203:fe67:a8dc with SMTP id i15-20020a0560001acf00b00203fe67a8dcmr1938985wry.212.1649939080646;
-        Thu, 14 Apr 2022 05:24:40 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id r14-20020a0560001b8e00b00205918bd86esm1671555wru.78.2022.04.14.05.24.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hgmXgR00QIvN0EExWeBXD0io2j2TnCvQ61c8fzNW+rY=;
+        b=SOtLp/61/dhu1HYa7LMDJJjfO/S+2IdwvRqHgMOqdHWJdVSr9vn+xVPxkdlspdpZpD
+         x65jimiydVbtP9PtchDjGBlgDBwg76n+N+emRY1PFg1mu0vtjpWbx9MTEt19c5SmJ1BL
+         0Fm72z6QfaQitMZN1yMia22DrX8sYxZCi9tHWMTmPOQHWN3WnvuiZzPicsGh2wHoM61T
+         +kXbUadqEvNaIsEFChX1rD45NN0r+bmzUWMMuoI/9RX6ymJsJ4o6W1khR6Rge2dFtqum
+         oi8g9TLGBvX11Sd9G13O/elRJuCWu+5oFlRi7l3dz0IISExYAD9q+UZ8EApjNCAoi5R4
+         XsbQ==
+X-Gm-Message-State: AOAM530k6dRqKHK4C/aVSA3QtwJVictcoWQ+kELwVlUk9jmCSzAD3ygW
+        RP7XZwWAy2g6QUqQbIgqRnHaOGhaVQA=
+X-Google-Smtp-Source: ABdhPJwaCAGXUNk5NBVP//O6IYwtnSgFoauuQgLqwkJQkCTYfcsq+wKr4HFi6STjucSyAflguiB0/w==
+X-Received: by 2002:a17:90b:1d11:b0:1cd:9d72:3f40 with SMTP id on17-20020a17090b1d1100b001cd9d723f40mr3442196pjb.99.1649939239780;
+        Thu, 14 Apr 2022 05:27:19 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm6265826pjb.23.2022.04.14.05.27.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 05:24:39 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Thu, 14 Apr 2022 05:27:19 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/31] KVM: x86: hyper-v: Direct TLB flush
-In-Reply-To: <Yk8tDHc5E8SkOVqB@google.com>
-References: <20220407155645.940890-1-vkuznets@redhat.com>
- <20220407155645.940890-14-vkuznets@redhat.com>
- <Yk8tDHc5E8SkOVqB@google.com>
-Date:   Thu, 14 Apr 2022 14:24:38 +0200
-Message-ID: <87lew76eex.fsf@redhat.com>
+Subject: [PATCH V2 0/3] Add ums512 clocks and relative bindings file
+Date:   Thu, 14 Apr 2022 20:26:54 +0800
+Message-Id: <20220414122657.526406-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-> On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
->> Handle Direct TLB flush requests from L2 by going through all vCPUs
->
-> What is a "Direct TLB flush request" in this context?  I can't tell if "direct"
-> refers to the MMU being direct, or if it has some other Hyper-V specific meaning.
->
-> Ewww, it looks to be Hyper-V terminology.  Now I see that @direct=true is getting
-> L2's ring, not L1's ring.  That's all kinds of evil.  That confusion goes away with
-> my suggestion below, but this shortlog and changelog (and the ones for nVMX and
-> nSVM enabling) absolutely need to clarify "direct" since it conflicts mightily
-> with KVM's "direct" terminology.
->
-> In fact, unless I'm missing a patch where "Direct" doesn't mean "From L2", I vote
-> to not use the "Direct TLB flush" terminology in any of the shortlogs or changelogs
-> and only add a footnote to this first changelog to call out that the TLFS (or
-> wherever this terminology came from) calls these types of flushes
-> "Direct".
+This patchset is add the UMS512 clocks support
 
-In soon-to-be-sent-out v3 I got rid of 'Direct TLB flush' completely.
-Note, in addition to what gets introduced in this series, there are
-two other Hyper-V specific places which overload 'direct' already:
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-- Direct TLB flush for KVM-on-Hyper-V (enable_direct_tlbflush()). I'm
-getting rid of it too.
+Cixi Geng (3):
+  dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+  clk: sprd: Add dt-bindings include file for UMS512
+  clk: sprd: Add clocks support for UMS512
 
-- Direct synthetic timers. 'Direct' in this case means that the timer
-signal is delivered via dedicated IRQ 'directly' and not through Vmbus
-message. This stays as I can't think of how we can rename it (and if we
-should, in the first place).
+ .../bindings/clock/sprd,ums512-clk.yaml       |  108 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+ include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+ 5 files changed, 2711 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
 
 -- 
-Vitaly
+2.25.1
 

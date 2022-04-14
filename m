@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00529501047
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AE850160C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343582AbiDNNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S1343666AbiDNOsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244808AbiDNN2I (ORCPT
+        with ESMTP id S1345111AbiDNNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC42898F65;
-        Thu, 14 Apr 2022 06:20:57 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE66A0BE4;
+        Thu, 14 Apr 2022 06:42:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F91CB82982;
-        Thu, 14 Apr 2022 13:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B252C385A1;
-        Thu, 14 Apr 2022 13:20:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32AF061D68;
+        Thu, 14 Apr 2022 13:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B40C385A5;
+        Thu, 14 Apr 2022 13:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942454;
-        bh=kDceHqvyArUPANotiiYKKyfdr6f/z/Gql7fVtwkyhwU=;
+        s=korg; t=1649943731;
+        bh=B7iP0fhFtuzC5RIPTN4X4kWqSQBwh3wnlKttlydx0YM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IJgW5Ld6LKWMM1Fm1EVszlh7SPuLcO0oJcUAUsQOBwFbG7BMVEcnjMvOBDcrkYsvg
-         gpYeRa4S5lHgr1NjBt3dW8mWNVnaFPwMdo/TY6qU1XeyrQJa6pcQIFEHrLeKrL21hI
-         gnriTlIIREUhzGKMZHEuQBLuIWlTye4Lz2jDJh9M=
+        b=lxWas5vD2jJ2xA8P5A2IyfJdDe0/dDTMBmvWeeHJLFva9iJQUcA1iaCStxl9YLj9g
+         7gNbR4qcixbFNH7hxegkSsiQeoPkb3zbcYDD16AyDylLubYFBBmOKy68t0vGE5lYYj
+         4J3t4HCuBqcL+IA/GWzPWzDQ43V86RGR4bQcJRKU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 141/338] hv_balloon: rate-limit "Unhandled message" warning
+        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 259/475] driver core: dd: fix return value of __setup handler
 Date:   Thu, 14 Apr 2022 15:10:44 +0200
-Message-Id: <20220414110842.918803617@linuxfoundation.org>
+Message-Id: <20220414110902.358734880@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anssi Hannula <anssi.hannula@bitwise.fi>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 1d7286729aa616772be334eb908e11f527e1e291 ]
+[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
 
-For a couple of times I have encountered a situation where
+When "driver_async_probe=nulltty" is used on the kernel boot command line,
+it causes an Unknown parameter message and the string is added to init's
+environment strings, polluting them.
 
-  hv_balloon: Unhandled message: type: 12447
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
+  driver_async_probe=nulltty", will be passed to user space.
 
-is being flooded over 1 million times per second with various values,
-filling the log and consuming cycles, making debugging difficult.
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc6
+     driver_async_probe=nulltty
 
-Add rate limiting to the message.
+Change the return value of the __setup function to 1 to indicate
+that the __setup option has been handled.
 
-Most other Hyper-V drivers already have similar rate limiting in their
-message callbacks.
-
-The cause of the floods in my case was probably fixed by 96d9d1fa5cd5
-("Drivers: hv: balloon: account for vmbus packet header in
-max_pkt_size").
-
-Fixes: 9aa8b50b2b3d ("Drivers: hv: Add Hyper-V balloon driver")
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20220222141400.98160-1-anssi.hannula@bitwise.fi
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Reviewed-by: Feng Tang <feng.tang@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/hv_balloon.c | 2 +-
+ drivers/base/dd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index e5fc719a34e7..d442a8d2332e 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1548,7 +1548,7 @@ static void balloon_onchannelcallback(void *context)
- 			break;
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index cf7e5b4afc1b..26cd4ce3ac75 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -747,7 +747,7 @@ static int __init save_async_options(char *buf)
+ 			"Too long list of driver names for 'driver_async_probe'!\n");
  
- 		default:
--			pr_warn("Unhandled message: type: %d\n", dm_hdr->type);
-+			pr_warn_ratelimited("Unhandled message: type: %d\n", dm_hdr->type);
+ 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
+-	return 0;
++	return 1;
+ }
+ __setup("driver_async_probe=", save_async_options);
  
- 		}
- 	}
 -- 
 2.34.1
 

@@ -2,141 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E62500DA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE61F500DA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243398AbiDNMex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S243363AbiDNMgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243423AbiDNMet (ORCPT
+        with ESMTP id S229724AbiDNMga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:34:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055AC9026F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:32:18 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id j8so4496302pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lb2k1BEpSa/+z3XM1HtbDM6QVDJOM+So55d/9ulxPRs=;
-        b=zXucu3uxOuHlgBIeFHXTZQcT0f1Nuj2wADtF8qNjEXDePKfd+pTSETelEAYNVGGNqX
-         cSNT0kjY+IZpN4B2azMgW2RVYC4oSo3VKi8nuBDzDfMTMVfzo6/LE1A09jYRYZeibCv+
-         C2sP2CL8XuyNyF5b3tt4E+w3JLurTe6nyqV4xnvVHw3q1LCBhtj2AT5ggSX6ked/ABq5
-         D7shBoM4tTHCpbzmYwilmV14zXLYn/gNKV5PTHSQ7bHjRrnhzjLJ7NJTyCm0TQHvU0MG
-         6x/1dVPvbCIYfWS4Z0gseji7+oynCbJzF34yLOKo+OjQSbpbCY2KwDmIY3MDsLRdXFrx
-         KN3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lb2k1BEpSa/+z3XM1HtbDM6QVDJOM+So55d/9ulxPRs=;
-        b=WLbeVh7PQa4GW8dhlYi5NUNDuOzJp6opOVmC4xaTs+R96J01YtHHXVzZBy+GzBfcBG
-         1n5QxY6qsxAEcYf5tqcydJAAPa2zLx1Q073Nq8Le0FOQZdPlRY3n1anxMQXf9OefAbwo
-         wvo+Rr9ffm23IkkQqA8eY6gaB2FWMalYbq4UgVFmnmp3zcw8jWay4LMdPhEYJAVU5G3Y
-         uKtiWYCaiAmDyoK41RFh8fIQ00TrYoNSS3pjQuqG7GYII8Tlqk2cbAQEteMARvq/IO4g
-         bDEOXXRAh8oHktz3CJQgkt+T0dK8+7Cu1gMmQzPi3hnTYGItzV+zb/DSbvrKPRD4pO1b
-         nYmA==
-X-Gm-Message-State: AOAM5316ytQdYZcAeAAJZ3SKtjSny1+AcPlb1k6YnFZIwxqpCR3/69sF
-        ds7iRNbrvAFwK7vv/RHfTs3e66llWQBn3lO+H+VFkA==
-X-Google-Smtp-Source: ABdhPJxG+RZpvYQH/Y35Vaw1qIbgIm9XNnhKiFxumxGNw7owul1/6rThV1N9MNc3Yq6dBawxaJONWQ==
-X-Received: by 2002:a17:90a:dd46:b0:1b8:8:7303 with SMTP id u6-20020a17090add4600b001b800087303mr4035808pjv.197.1649939537353;
-        Thu, 14 Apr 2022 05:32:17 -0700 (PDT)
-Received: from localhost.localdomain ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id t184-20020a625fc1000000b004fa3bd9bef0sm2160580pfb.110.2022.04.14.05.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 05:32:16 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE event
-Date:   Thu, 14 Apr 2022 20:32:01 +0800
-Message-Id: <20220414123201.842754-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 08:36:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876238D6BC;
+        Thu, 14 Apr 2022 05:34:05 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EC5IWv029780;
+        Thu, 14 Apr 2022 12:34:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fiwlBWLOFq5oL0tobKxxQ4iltTjdOXEPJXlvllyuO4w=;
+ b=kxrXgazTAoSpI5JLseaOkexWWOdD2WXyhElOiHax73RGDQdox78vzVMouu0hyXlWmz2q
+ Xn8pNUAAD+pjGqXNTmTb70oCcXD7Hc+f/xEeBaYKreuIys+qBHAlhB+KZwUICIMhmZ5j
+ o3mG3CS2R8S9fGMn+ZBSYNaWRUUj7qmpf9JV/iufvknDtzQY64QTijx449bW0JIrEUxO
+ 5nP/sDbFGVuyi+vhNWIH0N2rHqlc8VEthNFxwIQYHekOzMwsvEcUjG7lpopPq5g9uV1D
+ 6OBZ+6oRtJrFXrgolgHwmTwhAhbLe7tYIvgL1Gt0Ban26fA0+PzTWzY90/ZlazBnPIZ7 aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fef2mnpw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:34:01 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23ECY1T2025809;
+        Thu, 14 Apr 2022 12:34:01 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fef2mnpvh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:34:01 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23ECRr0q014463;
+        Thu, 14 Apr 2022 12:33:59 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3fb1s8pvbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 12:33:59 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23ECY5xO25035230
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 12:34:05 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 414FF42041;
+        Thu, 14 Apr 2022 12:33:56 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF7B24203F;
+        Thu, 14 Apr 2022 12:33:55 +0000 (GMT)
+Received: from [9.171.78.130] (unknown [9.171.78.130])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 12:33:55 +0000 (GMT)
+Message-ID: <baa53445-b4de-7a05-24f5-46fa38e61666@linux.ibm.com>
+Date:   Thu, 14 Apr 2022 14:33:55 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the tprot
+ test
+Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220414105322.577439-1-thuth@redhat.com>
+ <20220414105322.577439-4-thuth@redhat.com>
+ <20220414135110.6b2baead@p-imbrenda>
+ <03f62ec7-2f7f-1f90-3029-d93713ab5afc@redhat.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <03f62ec7-2f7f-1f90-3029-d93713ab5afc@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sVebo3Zlhuz3arkf1Wo4usjhuJGbPUl0
+X-Proofpoint-GUID: mUCFAyuncBa_4o60m4fzRfF62s25-nZZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_04,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 clxscore=1015 suspectscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140068
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-is not available") "perf mem report" and "perf report --mem-mode"
-don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-type.
+On 4/14/22 14:08, Thomas Huth wrote:
+> On 14/04/2022 13.51, Claudio Imbrenda wrote:
+>> On Thu, 14 Apr 2022 12:53:21 +0200
+>> Thomas Huth <thuth@redhat.com> wrote:
+>>
+>>> The tprot test currently does not have any output (unless one of
+>>> the TEST_ASSERT statement fails), so it's hard to say for a user
+>>> whether a certain new sub-test has been included in the binary or
+>>> not. Let's make this a little bit more user-friendly and include
+>>> some TAP output via the kselftests.h interface.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>   tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
+>>>   1 file changed, 11 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
+>>> index c097b9db495e..a714b4206e95 100644
+>>> --- a/tools/testing/selftests/kvm/s390x/tprot.c
+>>> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
+>>> @@ -8,6 +8,7 @@
+>>>   #include <sys/mman.h>
+>>>   #include "test_util.h"
+>>>   #include "kvm_util.h"
+>>> +#include "kselftest.h"
+>>>     #define PAGE_SHIFT 12
+>>>   #define PAGE_SIZE (1 << PAGE_SHIFT)
+>>> @@ -69,6 +70,7 @@ enum stage {
+>>>       STAGE_INIT_FETCH_PROT_OVERRIDE,
+>>>       TEST_FETCH_PROT_OVERRIDE,
+>>>       TEST_STORAGE_PROT_OVERRIDE,
+>>> +    NUM_STAGES            /* this must be the last entry */
 
-The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-event, this allows the perf data file generated by kernel v5.18-rc1 or
-later version can be reported properly.
+You could move STAGE_END down and use that instead.
 
-On the other hand, perf tool still fails to be backward compatibility
-for a data file recorded by an older version's perf which contains Arm
-SPE trace data.  This patch is a workaround in reporting phase, when
-detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-force to set the bit in the sample type and give a warning info.
+>>>   };
+>>>     struct test {
+>>> @@ -196,6 +198,7 @@ static void guest_code(void)
+>>>       }                                    \
+>>>       ASSERT_EQ(uc.cmd, UCALL_SYNC);                        \
+>>>       ASSERT_EQ(uc.args[1], __stage);                        \
+>>> +    ksft_test_result_pass("" #stage "\n");                    \
+>>>   })
+>>>     int main(int argc, char *argv[])
+>>> @@ -204,6 +207,9 @@ int main(int argc, char *argv[])
+>>>       struct kvm_run *run;
+>>>       vm_vaddr_t guest_0_page;
+>>>   +    ksft_print_header();
+>>> +    ksft_set_plan(NUM_STAGES - 1);    /* STAGE_END is not counted, thus - 1 */
+>>> +
+>>>       vm = vm_create_default(VCPU_ID, 0, guest_code);
+>>>       run = vcpu_state(vm, VCPU_ID);
+>>>   @@ -213,7 +219,7 @@ int main(int argc, char *argv[])
+>>>         guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
+>>>       if (guest_0_page != 0)
+>>> -        print_skip("Did not allocate page at 0 for fetch protection override tests");
+>>> +        ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
+>>
+>> will this print a skip, though?
+> 
+> No, it's now only a message.
+> 
+>> or you don't want to print a skip because then the numbering in the
+>> planning doesn't match anymore?
+> 
+> Right.
+> 
+>> in which case, is there an easy way to fix it?
+> 
+> Honestly, this part of the code is a little bit of a riddle to me - I wonder why this was using "print_skip()" at all, since the HOST_SYNC below is executed anyway... so this sounds rather like a warning message to me that says that the following test might not work as expected, instead of a real test-is-skipped message?
+> 
+> Janis, could you please clarify the intention here?
 
-Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Tested-by: German Gomez <german.gomez@arm.com>
-Reviewed-by: James Clark <james.clark@arm.com>
----
-v3: Remove warning log, add James' review tag.
-v2: Change event name from "arm_spe_" to "arm_spe";
-    Add German's test tag.
-
- tools/perf/builtin-report.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 1ad75c7ba074..afe4a5539ecc 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
- 	struct perf_session *session = rep->session;
- 	u64 sample_type = evlist__combined_sample_type(session->evlist);
- 	bool is_pipe = perf_data__is_pipe(session->data);
-+	struct evsel *evsel;
- 
- 	if (session->itrace_synth_opts->callchain ||
- 	    session->itrace_synth_opts->add_callchain ||
-@@ -407,6 +408,19 @@ static int report__setup_sample_type(struct report *rep)
- 	}
- 
- 	if (sort__mode == SORT_MODE__MEMORY) {
-+		/*
-+		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-+		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-+		 * compatibility, set the bit if it's an old perf data file.
-+		 */
-+		evlist__for_each_entry(session->evlist, evsel) {
-+			if (strstr(evsel->name, "arm_spe") &&
-+				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-+				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
-+				sample_type |= PERF_SAMPLE_DATA_SRC;
-+			}
-+		}
-+
- 		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
- 			ui__error("Selected --mem-mode but no mem data. "
- 				  "Did you call perf record without -d?\n");
--- 
-2.25.1
+Both the host and the guest check the same condition independently, the host just to print the message,
+then the guest is run and skips those stages.
+> 
+>  Thomas
+> 
+>>>       HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
+>>>       if (guest_0_page == 0)
+>>>           mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
+>>> @@ -224,4 +230,8 @@ int main(int argc, char *argv[])
+>>>       run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
+>>>       run->kvm_dirty_regs = KVM_SYNC_CRS;
+>>>       HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
+>>> +
+>>> +    kvm_vm_free(vm);
+>>> +
+>>> +    ksft_finished();
+>>>   }
+>>
+> 
 

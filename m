@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6B150199C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFA9501984
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243041AbiDNRHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S244974AbiDNRGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242707AbiDNRFa (ORCPT
+        with ESMTP id S243806AbiDNRFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:05:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C903EFE430;
-        Thu, 14 Apr 2022 09:44:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 14 Apr 2022 13:05:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE0D321;
+        Thu, 14 Apr 2022 09:45:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7CDCF1F747;
-        Thu, 14 Apr 2022 16:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649954651; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fAh1doWqdu+T5/UcndhANWk7kmOrXizHJ0CC+YKJ3Ek=;
-        b=ItvkKqTJave9fRovg0ydCzfpuP8dusozKz3WSWTw4xyCZGYtm401PRaOw3A7tKtn195ttV
-        70Iq3LASPYGaaQFBLo3dZiZFNeqlNkqtTdFBwMkiE/Frdb4DB0+Mp2kc/s0DQAGgLyu5/I
-        Vu6vxdwLlPRhTE1WJ+UxARYAK7bzTjw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 30A0813A86;
-        Thu, 14 Apr 2022 16:44:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rl0ZC1tPWGKBDgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 14 Apr 2022 16:44:11 +0000
-Date:   Thu, 14 Apr 2022 18:44:09 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
- pending
-Message-ID: <20220414164409.GA5404@blackbody.suse.cz>
-References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7D3AB82A63;
+        Thu, 14 Apr 2022 16:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B115C385A1;
+        Thu, 14 Apr 2022 16:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649954710;
+        bh=EHvHZqQ8PezYz6tH8c5/n0Zz580GmorgdpGMD73yBpk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=TO5HgoWM2HCijQiMf5Ii/ai+Kas9SijrS4oMSyTpooBg865KZgLZiFnhKSA8ywfy0
+         Ko1YN1MrXPWhfLoaF0lldsMksAUOOFy5/Pb/SrlhYoBjJFxh6wFPLDYvj0LyfYBwJc
+         nMDfGSXxRatFMyJhltgGTRz5AGhQtFti5l+tsIyXMpjaC1JQb6sNwq91H6vt4+Ucj+
+         TZg1+M7Y3PNLHPIDiIIHh7PSnjhvHQIZ/pJ0cMBVUWXhpPbRP2src72ieWbaFJqT1j
+         HAaozkfr4cwBHUBSklLd67JwQ6KBzSSifw0SMwkP2SmzgRWcsFEtrntio6fFnbOU+C
+         TzwVezm93bULA==
+Date:   Thu, 14 Apr 2022 11:45:08 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, robh@kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: xilinx-cpm: Remove version
+ number in compatible string
+Message-ID: <20220414164508.GA753109@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412192459.227740-1-tadeusz.struk@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <91ef84f9-4cac-c0aa-c717-7f1b3bc566fb@xilinx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tadeusz.
+On Thu, Apr 14, 2022 at 02:46:25PM +0200, Michal Simek wrote:
+> On 4/14/22 11:22, Bharat Kumar Gogada wrote:
+> > Removing unnecessary version number in compatible string.
+> 
+> I am missing reason for this in commit message.
 
-Thanks for analyzing this syzbot report. Let me provide my understanding
-of the test case and explanation why I think your patch fixes it but is
-not fully correct.
+Agreed.  The commit log for the pcie-xilinx-cpm.c change also needs to
+explain why removing the version is useful and safe.
 
-On Tue, Apr 12, 2022 at 12:24:59PM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> Syzbot found a corrupted list bug scenario that can be triggered from
-> cgroup css_create(). The reproduces writes to cgroup.subtree_control
-> file, which invokes cgroup_apply_control_enable(), css_create(), and
-> css_populate_dir(), which then randomly fails with a fault injected -ENOMEM.
-
-The reproducer code makes it hard for me to understand which function
-fails with ENOMEM.
-But I can see your patch fixes the reproducer and your additional debug
-patch which proves that css->destroy_work is re-queued.
-
-> In such scenario the css_create() error path rcu enqueues css_free_rwork_fn
-> work for an css->refcnt initialized with css_release() destructor,
-
-Note that css_free_rwork_fn() utilizes css->destroy_*r*work.
-The error path in css_create() open codes relevant parts of
-css_release_work_fn() so that css_release() can be skipped and the
-refcnt is eventually just percpu_ref_exit()'d.
-
-> and there is a chance that the css_release() function will be invoked
-> for a cgroup_subsys_state, for which a destroy_work has already been
-> queued via css_create() error path.
-
-But I think the problem is css_populate_dir() failing in
-cgroup_apply_control_enable(). (Is this what you actually meant?
-css_create() error path is then irrelevant, no?)
-
-The already created csses should then be rolled back via 
-	cgroup_restore_control(cgrp);
-	cgroup_apply_control_disable(cgrp);
-	   ...
-	   kill_css(css)
-
-I suspect the double-queuing is a result of the fact that there exists
-only the single reference to the css->refcnt. I.e. it's
-percpu_ref_kill_and_confirm()'d and released both at the same time.
-
-(Normally (when not killing the last reference), css->destroy_work reuse
-is not a problem because of the sequenced chain
-css_killed_work_fn()->css_put()->css_release().)
-
-> This can be avoided by adding a check to css_release() that checks
-> if it has already been enqueued.
-
-If that's what's happening, then your patch omits the final
-css_release_work_fn() in favor of css_killed_work_fn() but both should
-be run during the rollback upon css_populate_dir() failure.
-
-So an alternative approach to tackle this situation would be to split
-css->destroy_work into two work work_structs (one for killing, one for
-releasing) at the cost of inflating cgroup_subsys_state.
-
-Take my hypothesis with a grain of salt maybe the assumption (last
-reference == initial reference) is not different from normal operation.
-
-Regards,
-Michal
+> > Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> > ---
+> >   Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> > index 32f4641085bc..4ebcc838a1f6 100644
+> > --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> > @@ -14,7 +14,7 @@ allOf:
+> >   properties:
+> >     compatible:
+> > -    const: xlnx,versal-cpm-host-1.00
+> > +    const: xlnx,versal-cpm-host
+> 
+> And this is likely breaking compatibility for existing DTs.
+> 
+> M
+> 
+> >     reg:
+> >       items:
+> > @@ -70,7 +70,7 @@ examples:
+> >                  #address-cells = <2>;
+> >                  #size-cells = <2>;
+> >                  cpm_pcie: pcie@fca10000 {
+> > -                       compatible = "xlnx,versal-cpm-host-1.00";
+> > +                       compatible = "xlnx,versal-cpm-host";
+> >                          device_type = "pci";
+> >                          #address-cells = <3>;
+> >                          #interrupt-cells = <1>;

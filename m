@@ -2,211 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3572150193F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E6B501943
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241443AbiDNQ6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S238215AbiDNQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343879AbiDNQ60 (ORCPT
+        with ESMTP id S1343870AbiDNQ6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:58:26 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A6D14B856
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:07 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id b188so5925168oia.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
-        b=AFJ0ednJxVwEVa8ibNzKw/zNCLJmlAKPerqWu/u+AY66jzOv4zx/Oesal+C140g0H0
-         SuB4t0aZsJKwV7aL4NCyotrpd2DhcWfCCAdG0BvTPA5/fVu/bLyZqerILW1RprlCifdD
-         qLqxjtAHsRLIYO4nB3X5MjYmJNtkw1UEHcxWk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
-        b=MlMjrJ75MH+wObXbu60eG6Kb7vT8V74LBOlmiOl3POzVFxsYvnJqAeF34nJJkQnpNW
-         44c/TFCgu4GZOiDcDswB26cUKp9j9uhSs7P5izWfPpFk3Tfeki9hyqz+Rxeh2jJx8FJx
-         127sYvR93DJGQqtyeE4PCZ8FE9xWu/D2Q21KAdzpknsuVEJp01aFWtPmy3T6meB9d6UG
-         mGICvHn8gYIb8ExRpBp2hhdTgLvMcIR+TL7+2Y9ashkg3Dm/6ri9PSBIRZdzKibbk12R
-         ApzkaOSeF8XrN8ZI9qwkS6Jjv3/ibxPYpyVbFzsnHlcMcoD9IayCM/4LC01wbzs8Y6bE
-         VHTQ==
-X-Gm-Message-State: AOAM533zhYFjHhsiVBI5PWIbt1UKG8+Qo3NlRb1UHzHY+KfdaMhKCNrk
-        h0MYthqdGz8gi25TTaDR6kuamRHApnvuJg==
-X-Google-Smtp-Source: ABdhPJwkrmZEM1yq4ZxzD3/nSKjdSA+/kHGiDSf7f6Na7EoPK7vMaoO1XDmx+sZXRnOHJQ5wUJOvrw==
-X-Received: by 2002:a05:6808:1a2a:b0:2fa:6517:6510 with SMTP id bk42-20020a0568081a2a00b002fa65176510mr1745272oib.152.1649953866142;
-        Thu, 14 Apr 2022 09:31:06 -0700 (PDT)
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com. [209.85.160.42])
-        by smtp.gmail.com with ESMTPSA id ed22-20020a056870b79600b000da32eab691sm811364oab.23.2022.04.14.09.31.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 09:31:04 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e2afb80550so5810387fac.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:31:03 -0700 (PDT)
-X-Received: by 2002:a05:6870:f295:b0:e1:ea02:2001 with SMTP id
- u21-20020a056870f29500b000e1ea022001mr1597770oap.241.1649953863199; Thu, 14
- Apr 2022 09:31:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
- <YlBGvFFSp/R2CBmh@rowland.harvard.edu> <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
- <YlDoSY19HYNJGI50@rowland.harvard.edu> <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
- <YlRATrMxRWt9gVqt@rowland.harvard.edu> <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
- <YlWdfWRXYjkfHLIP@rowland.harvard.edu> <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
- <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
-In-Reply-To: <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Thu, 14 Apr 2022 09:30:26 -0700
-X-Gmail-Original-Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
-Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
-Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+        Thu, 14 Apr 2022 12:58:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4142914B852;
+        Thu, 14 Apr 2022 09:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649953863; x=1681489863;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=yH4d9hMX9GCOinN5uLWqcnW7zl5RaY9KVGr/Hrl9dZo=;
+  b=S0nkxfXTcx7eRRNS5ZUyq7hWTOiTdaCTocD+jqDAtGOHuZ+q5er8sqTZ
+   STYJ8Q8E7EpMNCZrbusyZ7lm5YlKwb7MMkyHuGmrAsi3KoTOvq1704clF
+   3OJxmtP+bzgYimKh65/sFiaMysfV1zyHBUzzi5c608phMVKXbxN+CCjfj
+   82WlJbsKVPhkkKSgUcZbyit4Oom2znHVH6GJ6DEC4VFvICiL/O8cT/1Iz
+   YNFMTprMU5Gtzn8pOYbnrfrjHMesWI6jcM1h9NbyKmEpU+5MwBREQ82A+
+   V0wjrpw9XJoWW47fpO1tW3/uZ8ap0oCnuUUaJuTfWZUGSc+siwKPTBfAZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262415282"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="262415282"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 09:30:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="527455879"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2022 09:30:42 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Apr 2022 09:30:41 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 09:30:41 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 14 Apr 2022 09:30:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KD47kknTg4523tmThuAuh4dM5UsEQ/vSPCw8TI4m1tK/Wj1hHQ+kw8TZR0HI68qeK9l6q9lrAYUYGjlZfxK7bqWtRgJtlOH5J4/dvgG5EbXPjP755ZPDbvHvJWFPnqcEWgdJWuAaEfK0U80Xr1etUZiqpif/ablkWUYcZg/nqkMmQw45HCIYos1yJvrp1XNNZMQE7M5rtF7GpN447fsYg2KICGpMOgd39EhvgNlpjY7/fIXPHVOPIMGdebdbXYf4XO26tJ++q24opLMpoT2XFV2osgOOlVA8wJnu6i3VNYjgAygOUCvOn9wuwRHgiQFGpPOzdHYoITn1CZ93D9iI8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/M7ZaAHJa2K8LkNyeLMddLrH4fI2MxewlRq//V6TzYQ=;
+ b=gINXEynbX5vjPkvqj94wQyIMGF+IUSm6bGaSnL5+gLalPOzCige3fB5PNT718W6voiuKZCXbbsUDth4H5k1H/lv0mDCkB/4c2XC5DVO48EZOCdW7bx++HnJppYobbvAAGvS+BvtBSZW8Mk3g3NCve8jwWT0r7EoyVvuXMn4t4bN9wbEzPXAYcECrkRJEwWZ1bqEvG3ib7Pz2XeQTr03kEntLoWq8Y8uaQ17fSgdaXGaXKm8XUV24f0vKPMRbC2r88TvCwsAawkGtY/b+yemjpQyecppD8MwYjYN5aG/V/9RsbFbjnDjRZeP7whcXvVx9h5SiV+BxWVy9OUoDBu12IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN6PR11MB1443.namprd11.prod.outlook.com (2603:10b6:405:8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Thu, 14 Apr
+ 2022 16:30:39 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
+ 16:30:39 +0000
+Message-ID: <767b99c5-f28e-4b8f-5147-6e1d290ca5c6@intel.com>
+Date:   Thu, 14 Apr 2022 09:30:34 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.0
+Subject: Re: [PATCH V4 14/31] x86/sgx: Support VA page allocation without
+ reclaiming
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, <dave.hansen@linux.intel.com>,
+        <tglx@linutronix.de>, <bp@alien8.de>, <luto@kernel.org>,
+        <mingo@redhat.com>, <linux-sgx@vger.kernel.org>, <x86@kernel.org>,
+        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+CC:     <seanjc@google.com>, <kai.huang@intel.com>,
+        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
+        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
+        <vijay.dhanraj@intel.com>, <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1649878359.git.reinette.chatre@intel.com>
+ <0ab32196f5056b25c34fb89fcc4dc28a5d875d2e.1649878359.git.reinette.chatre@intel.com>
+ <bf2fcc93babdbf541fffc6cc5f5756f391773a75.camel@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <bf2fcc93babdbf541fffc6cc5f5756f391773a75.camel@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0133.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::18) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca457455-f9f5-4121-7dec-08da1e341c57
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1443:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN6PR11MB14436DE1BBFF41EAE333CA82F8EF9@BN6PR11MB1443.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2yIg0mWz5Y0tSt82WNcket26NiFlhko4u0DXDxAo/EJZFW6kZOMZlSqpJ62UVkR/GvG9yKlmtvJgmqxrxzcLed4a4WSxkxxQqCLIlyZlx70GBXlm5rIz1J2YFcvkMRnftpGl2e14FMyt0QXnPwVZTXmHFoAWFT3k/CwHzONRBwNTnF1W1jNVBldaLFgZobMglll2g2UkfiVAJPKFBNa1DHwUBVYxkxkxxjZFzHL4Gq+4f2MRgnH/AinNx3tnGqdyRVL12p+kqHn4FZ9evEX+5ePORlL8XvRsPu36qGBX4A/f+QpJEJAs7tZWLYePqgZ1RCfSFr5mjOMvrSQWGto9/8aakYcosb4B9Xe5Mb7cpkxVfFAti9TjyU6IupSGuQzD9niAA6aYt4uS1bMWmRL5XXAQu0Mpv6xZ5hAlPSeEZ7RYmhImODktX9OZq4p+gx/vdQ6dJuhQc7FyPUM2YRlolfJk+roqavesjf0UxuHNheF5/L4d5e7L/mqSdmuDiPw0eTUUwVH+sXS/BHfuqSnmxUKgvNdjC7U7nn+4ZvZxsMseM9xcJ13U36xMVmWRJRoMcoUOtDbs2uW+Bfa60bv2+DcuzgYpsPRv8/a+WjxV/1tQPbpy9gqw9N3qA0yvLK4lOBFTdLX45SVh5RnjFBrVKLqsERLIp+0//Jv9QADbIshV8eTWXXE8fmFxYwiU6+quGAUSYEyhYbZhkUuwAQJ2G2mac1ezHus997J0oocq907G9wxKn0FNWmxTu/vDQBDJJsfcy2mVvhU5qog93xa6dA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(8676002)(5660300002)(6666004)(66476007)(66946007)(86362001)(31696002)(66556008)(186003)(2616005)(36756003)(83380400001)(8936002)(31686004)(44832011)(7416002)(2906002)(921005)(26005)(53546011)(6506007)(82960400001)(316002)(38100700002)(6486002)(508600001)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzVHU2V3Vjh6QnpaZ0Nyc0FBbThWczVyVmFlQWh0NU9IdXkvRXEwRHNyWVp1?=
+ =?utf-8?B?dXVSYU0rdWZWTWFiMmlRc0h1bE5XeVZEQ0NtTGlxN0M1K3grYkRMa0hiZWx2?=
+ =?utf-8?B?TEQrK3BBQUpOOG9UOW1FWFB3L1BTQVNBZW9LSVBlQzFHRCtlektCaW05U0tC?=
+ =?utf-8?B?TEkzenlFcXVFZFpTNGJNSUVHbGdZVStmYmJCREtPdU9QNG5RZEZRL3BKL05j?=
+ =?utf-8?B?RFZEV2VQb3hWQ0Z5ZG05RkFhVEZGTnJmaDVpRzJhbmZQWlhBbUV3eG9aZndS?=
+ =?utf-8?B?QnNEYm9pU05yY0pmbDdKSzFBcWIxRzN6d1hRbEJXK0Q0SjE0Z0REemREalZO?=
+ =?utf-8?B?TG91WTlnaGRKRU1kYWNHTEtVaG96WVFTYTc3QzhseVlqZ1k0M04vZVpzYTdT?=
+ =?utf-8?B?WVdSaGg5enB5bDhHd2RMeGNaaXFqTWVoQ3NrUi9EQkVRaHk3U0VXU2xVVFVZ?=
+ =?utf-8?B?Tjh0VHYwRnhzdS93ODhGK0JqVHc4WEFLcDF4ai9SamFwcVhHWVFMZlRMWGRT?=
+ =?utf-8?B?a3lEN21BOWtuNkhBQ0U5RzFzbk9GbXc1alFsWnhDSnlYalQzT2htNDE5b1Vw?=
+ =?utf-8?B?ZCt1eUhNTDZMOGYyYW03dDdHZ1lrM2ZlNmdCVFpROW4wc2MxWTZzRHpCM2hV?=
+ =?utf-8?B?QkcyREVLNVhJQkZhZlF1TEZKVExaRWFIajNwTEpYOGphbEpjMVpicUJpUHN3?=
+ =?utf-8?B?T1ZENHBpbjh3S3d6TU8vYXJoeHBRbnFFazFDMmxKak91WXoyd3VVNFRpNmQr?=
+ =?utf-8?B?VU1ZM1BMOElvZkE2eHphUGZUb2QzZVI5aU9YQ0JwVmlkeGh0TFhHdmpxYUxm?=
+ =?utf-8?B?Rm1ZMktiazVTL0pSNnowV2RwODR0REt2aUM2b1FsRzBpTUhQN0VobTh1aWZY?=
+ =?utf-8?B?dnBqOGtJa2hkOHBFaEE4K2t6aEEzU21jY0hJMFlKaUZhSWQyRzdZQVpkYjRt?=
+ =?utf-8?B?bFdObG4rbk1SYzk4WXQ5aTc4bSs1OW12dHNpK3VSbjZ6Z2VxYk9sTnR6WnBx?=
+ =?utf-8?B?ZlI0dDF2Y2JJYjZkVHAyaFVISVdXWThoa0twYk9SNENrdEdXQUVja051VUxa?=
+ =?utf-8?B?UEgzUjNqSEtiZEsxZXZ0OVUyQ3gzVy9wazhVRjI2cHZmYU9nS0NCbERsMEdE?=
+ =?utf-8?B?a0RkQ1NIN0tOeDk1ZzdlMEh0YjBEdVE5dXRVUGJWWEVDam9FWXFQbjZ5djZq?=
+ =?utf-8?B?UzVDSDJPUzN2czNPOENER0M0a0FFciswMkxTK3JDMU1IZ3ZLVWtya05JUXNi?=
+ =?utf-8?B?Z2F3aWpXUHZoTUo4NGV6ZnJmTm1VZU04Q25YMnhiaDBLWUVIVndmREUrYjdx?=
+ =?utf-8?B?TlRSSVhDQWhDL1M1UGVWLytMa2JOVGQyYlE4WFVSRFM1ZHlJRVIxNDBheDk2?=
+ =?utf-8?B?MysvRWdrZVVXWUN4QzhQRngyTlBrMjMxNVNCVEFGMlkxcjM2NWxibndXRlNl?=
+ =?utf-8?B?WFFIb3UxTmtPbkY5ajc5WHR1dkIrVTgzRlI0QVZPTFFHVnR2UmJvS0ZraTN4?=
+ =?utf-8?B?S0E4UW9ua0tRU25uUlJkVlVCUVlYTGVBeGlMU2Y4dm9oVE5RditnVWQyM0Y3?=
+ =?utf-8?B?b0hQVHBpVENvdzdTUm1uNDAwZEYzRnY3NitvMkdtdU02a1ZuRDZZQnNva21m?=
+ =?utf-8?B?WWU4b21vQVN4WS9SVUdFZjZRRXlOMTBjbndzVlBVcXJiaXJua2t2NlA4ZytD?=
+ =?utf-8?B?MGg5Y2EyNEdqalNhRnNSRkhTOVdBcnV1cE0wTzgwQkhuYUVROVpjQkM0WEJp?=
+ =?utf-8?B?UFhnWGFNNXI1Y3FKQXFZeWxZWEJJbVVpcHNLODdlMTFhVmYrbVk0aDNOd3gr?=
+ =?utf-8?B?SjIyRTdYM1RaSnVvK3VlN2RnL1pnOHNGb1NKOWdTcU5UWURoMGFlWDVIZEJP?=
+ =?utf-8?B?TkIyVlU0QjdjNlBVQXg5WTBEMmhiWC85OGdURUlhb0gzUnJBWmRUTHoreWZq?=
+ =?utf-8?B?NmJieElQZm1OZWZqYmFIYjNua0JWZEhQYkhOVU8xZXkzV0I1L093bzdDZWtk?=
+ =?utf-8?B?TnZDTk1VYTMzMWh5L3NZaWE2eEd6cG9ZVUhIc2tlUjJNNHpld0t1WXZNMDJ0?=
+ =?utf-8?B?clNpaElaRk5LZ2dtV0tneENhR1N3cTNOL3FuanlFclRFQVB4dGxZWlNvME1y?=
+ =?utf-8?B?L3hDUWRoRkluUXFsdkFCbXhuSnRnVnlZWlY5eEVJcUg0RUsrQys3L09PeDE3?=
+ =?utf-8?B?a2xZTjVUSkZwTGlRWWhkLzlQekZySTNGQTBCUmVvZ3JMSldGK2ZYVTl0Y0Zi?=
+ =?utf-8?B?QW14ZjdxZnQ5c21OakY0Vi9GUk01NXlLa2JncTNZM1Z1anQ3bWhrSDlOSnRI?=
+ =?utf-8?B?RnloQ1FCNUxzUS9XNkxzclBKaEhSV1dsVzlkUFFRZ29YM3FqR25UNFhNb05T?=
+ =?utf-8?Q?wxUdDQ3nydDIUYXo=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca457455-f9f5-4121-7dec-08da1e341c57
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 16:30:39.1162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nyDmmKXoEyhEeeClMWlkoqMKyT6UEYElcoLC2mQjdaU6FvcJOUYAut/YThLwfT0e46wFtCZ+JGbBq+MZIjNWxYAakSI+2/dnOTcV90y2Kb4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1443
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan and Mathias,
+Hi Jarkko,
 
-On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, Apr 14, 2022 at 05:00:12PM +0300, Mathias Nyman wrote:
-> > On 12.4.2022 18.40, Alan Stern wrote:
-> > > On Tue, Apr 12, 2022 at 05:56:42PM +0300, Mathias Nyman wrote:
-> > >> On 11.4.2022 17.50, Alan Stern wrote:
-> > >>> For example, what would happen if the user unplugs a device right in the
-> > >>> middle of the freeze transition, after the root hub has been frozen but
-> > >>> before the controller is frozen?  We don't want such an unplug event to
-> > >>> prevent the system from going into hibernation -- especially if the root
-> > >>> hub was not enabled for wakeup.
-> > >>
-> > >> We should be able to let system go to hibernate even if we get a disconnect
-> > >> interrupt between roothub and host controller freeze.
-> > >> Host is not yet suspended so no PME# wake is generated, only an interrupt.
-> > >>
-> > >> From Linux PM point of view it should be ok as well as the actual xhci
-> > >> device that is generating the interrupt is hasnt completer freeze()
-> > >>
-> > >> The xhci interrupt handler just needs to make sure that the disconnect
-> > >> isn't propagated if roothub is suspended and wake on disconnect
-> > >> is not set. And definitely make sure xhci doesn't start roothub polling.
-> > >>
-> > >> When freeze() is called for the host we should prevent the host from
-> > >> generating interrupts.
-> > >
-> > > I guess that means adding a new callback.  Or we could just suspend the
-> > > controller, like Evan proposed originally
-> >
-> > Suspending the host in freeze should work.
-> > It will do an extra xhci controller state save stage, but that should be harmless.
-> >
-> > But is there really a need for the suggested noirq part?
-> >
-> > +     .freeze_noirq   = hcd_pci_suspend_noirq,
-> >
-> > That will try to set the host to PCI D3 state.
-> > It seems a bit unnecessary for freeze.
->
-> Agreed.
->
-> > >>> (If the root hub _is_ enabled for wakeup then it's questionable.
-> > >>> Unplugging a device would be a wakeup event, so you could easily argue
-> > >>> that it _should_ prevent the system from going into hibernation.  After
-> > >>> all, if the unplug happened a few milliseconds later, after the system
-> > >>> had fully gone into hibernation, then it would cause the system to wake
-> > >>> up.)
-> > >>>
-> > >>>> Would it make sense prevent xHCI interrupt generation in the host
-> > >>>> freeze() stage, clearing the xHCI EINT bit in addition to calling
-> > >>>> check_roothub_suspend()?
-> > >>>> Then enable it back in thaw()
-> > >>>
-> > >>> That won't fully eliminate the problem mentioned in the preceding
-> > >>> paragraphs, although I guess it would help somewhat.
-> > >>
-> > >> Would the following steps solve this?
-> > >>
-> > >> 1. Disable device initiated resume for connected usb devices in freeze()
-> > >>
-> > >> 2. Don't propagate connect or OC changes if roothub is suspended and port wake
-> > >>    flags are disabled. I.E don't kick roothub polling in xhci interrupt
-> > >>    handler here.
-> > >
-> > > I guess you can't just halt the entire host controller when only one of
-> > > the root hubs is suspended with wakeup disabled.  That does complicate
-> > > things.  But you could halt it as soon as both of the root hubs are
-> > > frozen.  Wouldn't that prevent interrupt generation?
-> >
-> > True, but probably easier to just suspend host in freeze() as you stated above.
->
-> Okay.
->
-> Evan, this discussion suggests that you rewrite your patch as a series
-> of three:
->
->      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
->         always disabled.
+On 4/14/2022 4:18 AM, Jarkko Sakkinen wrote:
+> On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
+>> struct sgx_encl should be protected with the mutex
+>> sgx_encl->lock. One exception is sgx_encl->page_cnt that
+>> is incremented (in sgx_encl_grow()) when an enclave page
+>> is added to the enclave. The reason the mutex is not held
+>> is to allow the reclaimer to be called directly if there are
+>> no EPC pages (in support of a new VA page) available at the time.
+>>
+>> Incrementing sgx_encl->page_cnt without sgc_encl->lock held
+>> is currently (before SGX2) safe from concurrent updates because
+>> all paths in which sgx_encl_grow() is called occur before
+>> enclave initialization and are protected with an atomic
+>> operation on SGX_ENCL_IOCTL.
+>>
+>> SGX2 includes support for dynamically adding pages after
+>> enclave initialization where the protection of SGX_ENCL_IOCTL
+>> is not available.
+>>
+>> Make direct reclaim of EPC pages optional when new VA pages
+>> are added to the enclave. Essentially the existing "reclaim"
+>> flag used when regular EPC pages are added to an enclave
+>> becomes available to the caller when used to allocate VA pages
+>> instead of always being "true".
+>>
+>> When adding pages without invoking the reclaimer it is possible
+>> to do so with sgx_encl->lock held, gaining its protection against
+>> concurrent updates to sgx_encl->page_cnt after enclave
+>> initialization.
+>>
+>> No functional change.
+>>
+>> Reported-by: Haitao Huang <haitao.huang@intel.com>
+>> Tested-by: Haitao Huang <haitao.huang@intel.com>
+>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> 
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-If I understand this correctly, this means potentially runtime
-resuming the device so its wakeup setting can be consistently set to
-wakeups disabled across a freeze transition. Got it I think in terms
-of the "how".
+Thank you.
 
->
->      2. Change the xhci-hcd interrupt handler so that port-status
->         changes are ignored if the port's root hub is suspended with
->         wakeup disabled.
+> 
+> Nit: I don't think tested-by is in the right patch here. Maybe
+> Haitao's tested-by should be moved into patch that actually adds
+> support for EAUG? Not something I would NAK this patch, just
+> wondering...
 
-This part confuses me. This would be way deep under
-xhci_handle_event(), probably in handle_port_status(), just throwing
-away certain events that come in the ring. How would we know to go
-back and process those events later? I think we don't need to do this
-if we suspend the controller as in #3 below. The suspended (halted)
-controller wouldn't generate event interrupts (since the spec mentions
-port status change generation is gated on HCHalted). So we're already
-covered against receiving interrupts in this zone by halting the
-controller, and the events stay nicely pending for when we restart it
-in thaw.
+Yes, that is a good point. While this is the bulk of the fix where
+the new API is introduced, the test is only applicable when this API
+is used and that is in "x86/sgx: Support adding of pages to an
+initialized enclave". I will move the "Tested-by" to that patch.
 
-Is the goal of #1 purely a setup change for #2, or does it stand on
-its own even if we nixed #2? Said differently, is #1 trying to ensure
-that wake signaling doesn't occur at all between freeze and thaw, even
-when the controller is suspended and guaranteed not to generate
-interrupts via its "normal" mechanism? I don't have a crisp mental
-picture of how the wake signaling works, but if the controller wake
-mechanism sidesteps the original problem of sending an MSI to a dead
-CPU (as in, it does not use MSIs), then it might be ok as-is.
-
->
->      3. As in the original patch, make the .freeze and .thaw callbacks
->         in hcd-pci.c call the appropriate suspend and resume routines,
->         but don't do anything for .freeze_noirq and .thaw_noirq.
-
-Sure. I had made the _noirq paths match suspend for consistency, I
-wasn't sure if those could mix n match without issues. I'll try it out
-leaving the _noirq callbacks alone.
--Evan
-
->
-> How does that sound?
->
-> Alan Stern
+Reinette

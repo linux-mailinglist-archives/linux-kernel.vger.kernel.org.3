@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD8C5009D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A86A5009E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241791AbiDNJcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S241198AbiDNJcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbiDNJcB (ORCPT
+        with ESMTP id S241807AbiDNJcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:32:01 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5456316;
-        Thu, 14 Apr 2022 02:29:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VA1uGiX_1649928564;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VA1uGiX_1649928564)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 14 Apr 2022 17:29:27 +0800
-Date:   Thu, 14 Apr 2022 17:29:24 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
-        tianzichen@kuaishou.com, fannaihao@baidu.com
-Subject: Re: Re: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read
- semantics
-Message-ID: <YlfpdAjfRclK4aLQ@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
-        tianzichen@kuaishou.com, fannaihao@baidu.com
-References: <20220406075612.60298-1-jefflexu@linux.alibaba.com>
- <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
- <CAFQAk7iUuaUL40NGzOkCOL=P9d6PgsDjRoKLs_5KDycaA9RQ4w@mail.gmail.com>
+        Thu, 14 Apr 2022 05:32:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE7D64CD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:29:34 -0700 (PDT)
+X-UUID: a1734ec1a9c849708e20aea0a5f7ee0e-20220414
+X-UUID: a1734ec1a9c849708e20aea0a5f7ee0e-20220414
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1359392002; Thu, 14 Apr 2022 17:29:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 14 Apr 2022 17:29:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 17:29:28 +0800
+Message-ID: <f2579de9b0555568eff94ff83f8695af7b218349.camel@mediatek.com>
+Subject: Re: [PATCH 1/1] [PATCH v2]sched/pelt: Refine the enqueue_load_avg
+ calculate method
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 14 Apr 2022 17:29:28 +0800
+In-Reply-To: <f7913fea-d110-9140-6dfa-72561c3fbefd@arm.com>
+References: <20220414015940.9537-1-kuyo.chang@mediatek.com>
+         <f7913fea-d110-9140-6dfa-72561c3fbefd@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAFQAk7iUuaUL40NGzOkCOL=P9d6PgsDjRoKLs_5KDycaA9RQ4w@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiachen,
-
-On Thu, Apr 14, 2022 at 04:10:10PM +0800, Jiachen Zhang wrote:
-> On Sun, Apr 10, 2022 at 8:52 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
-> >
-> > On Wed, Apr 06, 2022 at 03:55:52PM +0800, Jeffle Xu wrote:
-> > > changes since v7:
-> > > - rebased to 5.18-rc1
-> > > - include "cachefiles: unmark inode in use in error path" patch into
-> > >   this patchset to avoid warning from test robot (patch 1)
-> > > - cachefiles: rename [cookie|volume]_key_len field of struct
-> > >   cachefiles_open to [cookie|volume]_key_size to avoid potential
-> > >   misunderstanding. Also add more documentation to
-> > >   include/uapi/linux/cachefiles.h. (patch 3)
-> > > - cachefiles: valid check for error code returned from user daemon
-> > >   (patch 3)
-> > > - cachefiles: change WARN_ON_ONCE() to pr_info_once() when user daemon
-> > >   closes anon_fd prematurely (patch 4/5)
-> > > - ready for complete review
-> > >
-> > >
-> > > Kernel Patchset
-> > > ---------------
-> > > Git tree:
-> > >
-> > >     https://github.com/lostjeffle/linux.git jingbo/dev-erofs-fscache-v8
-> > >
-> > > Gitweb:
-> > >
-> > >     https://github.com/lostjeffle/linux/commits/jingbo/dev-erofs-fscache-v8
-> > >
-> > >
-> > > User Daemon for Quick Test
-> > > --------------------------
-> > > Git tree:
-> > >
-> > >     https://github.com/lostjeffle/demand-read-cachefilesd.git main
-> > >
-> > > Gitweb:
-> > >
-> > >     https://github.com/lostjeffle/demand-read-cachefilesd
-> > >
-> >
-> > Btw, we've also finished a preliminary end-to-end on-demand download
-> > daemon in order to test the fscache on-demand kernel code as a real
-> > end-to-end workload for container use cases:
-> >
-> > User guide: https://github.com/dragonflyoss/image-service/blob/fscache/docs/nydus-fscache.md
-> > Video: https://youtu.be/F4IF2_DENXo
-> >
-> > Thanks,
-> > Gao Xiang
+On Thu, 2022-04-14 at 11:02 +0200, Dietmar Eggemann wrote:
+> On 14/04/2022 03:59, Kuyo Chang wrote:
+> > From: kuyo chang <kuyo.chang@mediatek.com>
 > 
-> Hi Xiang,
+> [...]
 > 
-> I think this feature is interesting and promising. So I have performed
-> some tests according to the user guide. Hope it can be an upstream
-> feature.
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index d4bd299d67ab..159274482c4e 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -3829,10 +3829,12 @@ static void attach_entity_load_avg(struct
+> > cfs_rq *cfs_rq, struct sched_entity *s
+> >  
+> >  	se->avg.runnable_sum = se->avg.runnable_avg * divider;
+> >  
+> > -	se->avg.load_sum = divider;
+> > -	if (se_weight(se)) {
+> > +	se->avg.load_sum = se->avg.load_avg * divider;
+> > +	if (se_weight(se) < se->avg.load_sum) {
+> >  		se->avg.load_sum =
+> > -			div_u64(se->avg.load_avg * se->avg.load_sum,
+> > se_weight(se));
+> > +			div_u64(se->avg.load_sum, se_weight(se));
+> 
+> Seems that this will fit on one line now. No braces needed then.
 
-Many thanks for the feedback. We're doing our best to form/stablize it
-now. Still struggle with some specific cases.
-
-Thanks,
-Gao Xiang
-
+Thanks for your friendly reminder.
 
 > 
-> Thanks,
-> Jiachen
+> > +	} else {
+> > +		se->avg.load_sum = 1;
+> >  	}
+> >  
+> >  	enqueue_load_avg(cfs_rq, se);
+> 
+> Looks like taskgroups are not affected since they get always online
+> with cpu.shares/weight = 1024 (cgroup v1):
+> 
+> cpu_cgroup_css_online() -> online_fair_sched_group() ->
+> attach_entity_cfs_rq() -> attach_entity_load_avg()
+> 
+> And reweight_entity() does not have this issue.
+> 
+> Tested with `qemu-system-x86_64 ... cores=64 ... -enable-kvm` and
+> weight=88761 for nice=0 tasks plus forcing se->avg.load_avg = 1
+> before
+> the div_u64() in attach_entity_load_avg().
+> 
+> Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+

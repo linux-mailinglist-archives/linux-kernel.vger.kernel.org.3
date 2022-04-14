@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700AC5017B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3165017AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359362AbiDNPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S1348446AbiDNPni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352656AbiDNPRk (ORCPT
+        with ESMTP id S1352692AbiDNPRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:17:40 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A627F61A35;
-        Thu, 14 Apr 2022 08:02:35 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u15so10544016ejf.11;
-        Thu, 14 Apr 2022 08:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NaW3uwRS/6FaXBKfVrvwdBzKWMrtN62MAAhE0D3p16s=;
-        b=Ftmn2tslRoFo5kjZZYcZh376SNswuFaAST8TXXySj1EQZyxHD/y2bW4tGghR0A6pfi
-         TP6wVNRcGA0ZENqH6SN3h1Jrxlc19ZJa3qeVQs8hu1iLq0WPWehSREUluuICNIDkvPTd
-         CQuwy7NS5c3v571sugYalQ3qxjjt/HUKyt0ddL+suHPyPl/N0XIwxBrxJJ5YqBvoJyTI
-         WTFH5x5Nc6Q/DbGAY+BLdbSD8oG4QWfU2UigHgSPVDALH+dsEGEmeuNZ9HpFAz0LgU8C
-         i1pEdHZb3Jjb5g1b3vJds6l+/dWEow0QWj37myQqXHCgZKBT34dyrqMPz1oUOsq1656l
-         d5Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NaW3uwRS/6FaXBKfVrvwdBzKWMrtN62MAAhE0D3p16s=;
-        b=RlZYhJDYkKvgPOsNLVRKzKDGzjvriXKINLF9g6/eRfpOO1di35xIO38TR1Di8H7cCk
-         Jaa9HxWTssVtRW7aq7lGc+XogTYHekvYv6YCrI8lDtTLnWyIJzotEJydIZf/s5GqUBYH
-         f3s0q07SZIerYQWLtCQtnnMP17m+jc8zYJEyR6BO6YMPQdVn7qGpUwXF/CYWoDTH77hv
-         lfjf0a1o+GTa92rsE7E6y07+RraKCwKgVQqWtzr5QNRd6V98AUTyrXanW1j8rMjCKEcl
-         c3hgLIz09eMLx4e5FB9WFJzUj1zHkuBsxxv/0dPJx3rmt54gVXY6piDAxtHBmdiAr4GX
-         eI7g==
-X-Gm-Message-State: AOAM533W95JoXOVLTc9txkL8WDYlE2oQuGkYtvTw8e8/Tv+rbOOCaD/c
-        xS7rxKcXrYJRt1xU/sgd75YSKJ2oNOsriOnN3S4=
-X-Google-Smtp-Source: ABdhPJxsfCiDGHoztilISww5idTIll6LpIs4Gm/tQhfvSoxH+J/SSbqV2+n5Tfdxyh4VfsvxmoLehq2tfeBEWE0xEU8=
-X-Received: by 2002:a17:907:8a14:b0:6e8:9691:62f7 with SMTP id
- sc20-20020a1709078a1400b006e8969162f7mr2720540ejc.497.1649948554022; Thu, 14
- Apr 2022 08:02:34 -0700 (PDT)
+        Thu, 14 Apr 2022 11:17:42 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B253939E4;
+        Thu, 14 Apr 2022 08:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649948586; x=1681484586;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=/VBlTs3jL1nxbmcrZIkwzXIXkP2p4Qd9Cgidy2UuOOY=;
+  b=Yn8zFvGHL+4eYN3VxM/LSQ0xlmE/L8jysmkHJMpv+RVGZGiiJyhbciZi
+   btaipoEOC0ISsh/d36HlUBc7Rn/WyuaRfymR52s6RwHT5ICm8DNFA9vwy
+   DxPEfRswD3sWYhO64PdAzA0OGtG5zpP2Nb029A6V0bxfbfdwOM11yCJnX
+   3cqBckhvcf7oFopQigkb6v+Ke+rGdAuOE8BIrD3f3Sshn1JUhnxcs9Tib
+   6gO7sFws0cnH0TE9kyjCvN5K6QzrUpe+tLQ7C19cyVA50m4oy/1MH8VvA
+   La+zdQYvjck+cDBnkeEDPgNP/xl7D/fql9B1voYeCKHasxfKJ3bPoNvPa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="263126626"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="263126626"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 08:03:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="725392121"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 14 Apr 2022 08:03:05 -0700
+Received: from [10.209.96.223] (kliang2-MOBL.ccr.corp.intel.com [10.209.96.223])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 811035805BD;
+        Thu, 14 Apr 2022 08:03:04 -0700 (PDT)
+Message-ID: <368c5b92-f035-41cc-96a8-4908f1325462@linux.intel.com>
+Date:   Thu, 14 Apr 2022 11:03:03 -0400
 MIME-Version: 1.0
-References: <20220409120901.267526-1-dzm91@hust.edu.cn> <YlQbqnYP/jcYinvz@hovoldconsulting.com>
-In-Reply-To: <YlQbqnYP/jcYinvz@hovoldconsulting.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Apr 2022 18:01:57 +0300
-Message-ID: <CAHp75VeTqmdLhavZ+VbBYSFMDHr0FG4iKFGdbzE-wo5MCNikAA@mail.gmail.com>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-To:     Johan Hovold <johan@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 03/14] perf vendor events intel: Add sapphirerapids events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220413210503.3256922-1-irogers@google.com>
+ <20220413210503.3256922-3-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220413210503.3256922-3-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 9:33 PM Johan Hovold <johan@kernel.org> wrote:
-> On Sat, Apr 09, 2022 at 08:09:00PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> > with ctx. However, in the unbind function - cdc_ncm_unbind,
-> > it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> > a dangling pointer. The following ioctl operation will trigger
-> > the UAF in the function cdc_ncm_set_dgram_size.
-> >
-> > Fix this by setting dev->data[0] as zero.
->
-> This sounds like a poor band-aid. Please explain how this prevent the
-> ioctl() from racing with unbind().
 
-Good question. Isn't it the commit 2c9d6c2b871d ("usbnet: run unbind()
-before unregister_netdev()") which changed the ordering of the
-interface shutdown and basically makes this race happen? I don't see
-how we can guarantee that IOCTL won't be called until we quiescence
-the network device =E2=80=94 my understanding that on device surprise remov=
-al
-we have to first shutdown what it created and then unbind the device.
-If I understand the original issue correctly then the problem is in
-usbnet->unbind and it should actually be split to two hooks, otherwise
-it seems every possible IOCTL callback must have some kind of
-reference counting and keep an eye on the surprise removal.
 
-Johan, can you correct me if my understanding is wrong?
+On 4/13/2022 5:04 PM, Ian Rogers wrote:
+> Events were generated from 01.org using:
+> https://github.com/intel/event-converter-for-linux-perf
+> 
+> Signed-off-by: Ian Rogers<irogers@google.com>
+> ---
+>   tools/perf/pmu-events/arch/x86/mapfile.csv    |    1 +
+>   .../arch/x86/sapphirerapids/cache.json        | 1083 ++++++++++++++
+>   .../x86/sapphirerapids/floating-point.json    |  218 +++
+>   .../arch/x86/sapphirerapids/frontend.json     |  471 ++++++
+>   .../arch/x86/sapphirerapids/memory.json       |  415 ++++++
+>   .../arch/x86/sapphirerapids/other.json        |  329 +++++
+>   .../arch/x86/sapphirerapids/pipeline.json     | 1271 +++++++++++++++++
+>   .../x86/sapphirerapids/virtual-memory.json    |  225 +++
 
---=20
-With Best Regards,
-Andy Shevchenko
+Thank you very much Ian for the patches. They all looks good to me.
+
+     Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+BTW: I think the uncore events for SPR are also published in 01.org.
+Do you have plan to add them later?
+
+Thanks,
+Kan

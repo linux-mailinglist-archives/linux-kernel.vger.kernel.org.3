@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF23501EFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626B5501EFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347549AbiDNXYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S1347546AbiDNX0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347525AbiDNXYi (ORCPT
+        with ESMTP id S229991AbiDNXZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:24:38 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DE8B898C;
-        Thu, 14 Apr 2022 16:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=zzvntft6UsUQT5hhGRbUCOlsUm9Ih4Jht3dftOFpyio=; b=nf
-        6a9fRxI+KDu9/pGRWCO2CT9Zecg/5lDF4AL4QWZ9dV7NnJKL2zsS5AlqEA0HCcfrqIhn27lisetAR
-        o88QcKKSmSq4Ibrnzn+khvL999eVqteRLqtpDxp9qEKW/o4CymabnzcNB9eHjnED+iRNYwTkH9y5M
-        J1+KzazPJmXbx70=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nf8mn-00Ft58-Ak; Fri, 15 Apr 2022 01:22:01 +0200
-Date:   Fri, 15 Apr 2022 01:22:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
- converter
-Message-ID: <YlismVi8y3Vf6PZ0@lunn.ch>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
- <20220414122250.158113-10-clement.leger@bootlin.com>
+        Thu, 14 Apr 2022 19:25:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB7EB898B;
+        Thu, 14 Apr 2022 16:23:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF618B82762;
+        Thu, 14 Apr 2022 23:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F750C385A1;
+        Thu, 14 Apr 2022 23:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649978609;
+        bh=7tRW0rE5UC55+IymPZVk7biWmaN3JlYQe5vs90QpsMs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=b10SPq1xObHjVgrTTzouDybJFobX/tmlHZCE+xPukgETRF7ws5p0ev0y6kBVeoz6G
+         H/VuXi/V02mpfR2XHSshBnOYDSDB4QsHVfq1qZyACpfS4TT4zOyeFKRpAFsQtvjWUI
+         vUfc0+krpph1Sy0IUJX/4jzCRcLoeAY9ZNijzrilBWBASX5T3n49+t3wiSabhIHAbm
+         hPPrHg3h0PwL5wrZ4XaFwCtxGQG5RMwYnfYubJTa1PE1fv1Kz/1MGo3HdbtXlzTpGA
+         O1SOvBQ9Jy2Z3988HTpfTCx8eTNChalDNWwbGHVvlsmbyUU8jQg4zy13b0dHDzqG4E
+         T8/dMdVE86QYg==
+Date:   Thu, 14 Apr 2022 18:23:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>, a@bhelgaas
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: Avoid handing out address 0 to devices
+Message-ID: <20220414232328.GA770621@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220414122250.158113-10-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2204142111010.9383@angie.orcam.me.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:22:47PM +0200, Clément Léger wrote:
-> Add the MII converter node which describes the MII converter that is
-> present on the RZ/N1 SoC.
+On Thu, Apr 14, 2022 at 09:22:42PM +0100, Maciej W. Rozycki wrote:
+> On Thu, 14 Apr 2022, Bjorn Helgaas wrote:
+> 
+> > > > > Address 0 is treated specially however in many places, for
+> > > > > example in `pci_iomap_range' and `pci_iomap_wc_range' we
+> > > > > require that the start address is non-zero, and even if we
+> > > > > let such an address through, then individual device drivers
+> > > > > could reject a request to handle a device at such an
+> > > > > address, such as in `uart_configure_port'.  Consequently
+> > > > > given devices configured as shown above only one is actually
+> > > > > usable:
+> > > > 
+> > > > pci_iomap_range() tests the resource start, i.e., the CPU
+> > > > address.  I guess the implication is that on RISC-V, the
+> > > > CPU-side port address is the same as the PCI bus port address?
+> > > 
+> > >  Umm, for all systems I came across except x86, which have
+> > >  native port I/O access machine instructions, a port I/O
+> > >  resource records PCI bus addresses of the device rather than
+> > >  its CPU addresses, which encode the location of an MMIO window
+> > >  the PCI port I/O space is accessed through.
+> > 
+> > My point is only that it is not necessary for the PCI bus address
+> > and the struct resource address, i.e., the argument to inb(), to
+> > be the same.
+> 
+>  Sure, but I have yet to see a system where it is the case.
+> 
+>  Also in principle peer PCI buses could have their own port I/O
+>  address spaces each mapped via distinct MMIO windows in the CPU
+>  address space, but I haven't heard of such a system.  That of
+>  course doesn't mean there's no such system in existence.
 
-Do you have a board which actually uses this? I just noticed that
-renesas,miic-cfg-mode is missing, it is a required property, but maybe
-the board .dts file provides it?
+They do exist, but are probably rare.  Even on x86 where multiple host
+bridges are now fairly common, and the hardware probably supports a
+separate 64K port space for each, the ones I've seen split up a single
+64K I/O port space so each bridge only gets a fraction of it.  I'm not
+sure Linux would even support multiple spaces.  I do know ia64
+supports multiple port spaces (see __ia64_mk_io_addr()), so we could
+have something like this:
 
-    Andrew
+  pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+  pci_bus 0001:00: root bus resource [io  0x10000-0x1ffff] (bus address [0x0000-0xffff])
+
+I guess the question is whether we want to reserve port 0 and MMIO
+address 0 as being "invalid".  That makes the first space smaller than
+the others, but it's not *much* smaller and it's an unlikely
+configuration to begin with.
+
+But at the same time, it adds another slightly weird special case in
+the already full-of-special-cases alloc code, and I'm somewhat averse
+to things like that.
+
+We do have the IORESOURCE_UNSET flag bit that could possibly be used
+in pci_iomap_range() instead of testing for "!start".  Or maybe
+there's a way to allocate address 0 instead of special-casing the
+allocator?  Just thinking out loud here.
+
+Bjorn

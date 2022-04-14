@@ -2,232 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BD7501F48
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451FC501F4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347756AbiDNXoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S1347760AbiDNXqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236256AbiDNXo2 (ORCPT
+        with ESMTP id S230191AbiDNXqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:44:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFAB2479
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:42:02 -0700 (PDT)
+        Thu, 14 Apr 2022 19:46:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC67B53D0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649979722; x=1681515722;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=t9imTj+NnhVlR1XaERtBpLNxZXhz9ZjCOCTbL/uvPxQ=;
-  b=USV2hLZTHwDEXXX8bRmkqiUIKLQdv3/2FRhe8uz1PWF3PLfYwtq3qW40
-   1v/3hlC/Eel3YeAWQxArG0SOVkK1Fyg+BOzJLrFnO1385rCRV/BabczKW
-   4g6IoOm/a0YhA6/XRimlXRoCYKaVXqLGLHWU3RW7kUnYZEATd0jyx94/r
-   xp6kKO5HhXte5WZCfDyHrnpcqskxfoq1i1miPjT7z+C+51BiCk8P1vC/0
-   QoohJ1HXvcQLEgRIMketGCNwFIIM1nQzQX4Q6AAi4Pd89SEsQ9N8S3kBR
-   +Kh7a6EZWlVwK4zdmHYBsux85zzExB13Ke1uwjJ6ovSLBi5Vi3bIAuxeT
+  t=1649979832; x=1681515832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0IUhWj+DA/vCGWmzK8INQH8Jud0K/gNfGVfy/BfNSHA=;
+  b=Zw11r+nYhA6yTaH1avcclPEw0Oq7AZdbowLM/4oV85YrsZ0qboXUIjHQ
+   82ZRThatbniTG1LH6W3XuH4JzbLNG3m3zkaSXPeYAsIibhLaxDrnRPPFF
+   e6XlnFy7U5fOgfqMwMe6B1WsrXA/5/FrHgTyRcc0SiCzbsUCi2Tn3e5Kg
+   x7w+O4r5MQlhvT7zUA+gJZHBWlUzaojdcR7TmwmH0xt5AlQtSb428aY2U
+   4nCKHUcH5PdzVHHrRShJSraF6eLKx3WzXreuNiStp06agEI0DtdwgjnKT
+   5lY+l+P9/hPW51ZszqigaV/YVFUWKQFMXkTy6ty1b8rZUPzBgPcfBk0q3
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="325959811"
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243640838"
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="325959811"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 16:42:01 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="243640838"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 16:43:52 -0700
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="612520215"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Apr 2022 16:42:01 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 16:42:01 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 16:42:00 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 16:42:00 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Apr 2022 16:42:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWOtgEgp+E9CfsKr+7AUChM9gde6wwjqRPHE0bl6oVG8Xxn7zql+C9Ms0oW4Tal/OC2nAH8pB4rTteeeuHeMsrZFum915u3vO+vEjwJ/u+Sa+BIjuu1Uw7Cb5ZbcmkU1itwHcUvAWQAJrB4u6lPe2btet1YwRNfPfK51UX5C7CmIUm+1E8o17CCjXC82DbRrMsryAYA4zr1STbD+msrnCcYNTD2hWjSj/X8oInMUZhEZu3ME5ZBbPkLca9dezl5YsSDJ+CyD5wZCDA6XCJxbg1AREvec1qiXtNZramyoRpscxjO+G78ZkVFyzh6fIFL9lfeOUING60pu3XyzFnbknA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t9imTj+NnhVlR1XaERtBpLNxZXhz9ZjCOCTbL/uvPxQ=;
- b=ga9LHeM6XF9e5QLkoJaj9Xlh85zz1W5rGtaN8s9gtpJGHyYwvpBhq2YfpkObJelsKOS4c7u6erdml9F+fatOFdc/gJHM6/WhBc+DTDmkR6zkB5CQfMWHp3csecMJIMEInFGVPzIkq/ZxQOillHRZ4bFohfdM3NvBmCibeYriRR8fM0Id4N7U3Oninln+BlTZmJ7Lnau2LwADJ5spD1PyWWCKL5AWkcr8bNU4XyzvpFyq9hjnk3fgf0bChr92r+jB8H8u+NKU1po3GlqMUk4fmuzbart5kuhgg6k1ONNODW26fH/Mn+ZaMOoce74ae8XLcDIqyI/GdjgS8N5HLuLwGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
- by DM4PR11MB5439.namprd11.prod.outlook.com (2603:10b6:5:39b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 23:41:58 +0000
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::b105:318:79c9:1606]) by DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::b105:318:79c9:1606%9]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
- 23:41:58 +0000
-Message-ID: <03e8a254-51ff-9eb9-78a5-10ac76c3b3da@intel.com>
-Date:   Thu, 14 Apr 2022 16:41:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [RESEND PATCH v1 2/8] firmware_loader: Check fw_state_is_done in
- loading_store
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, <mcgrof@kernel.org>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <lgoncalv@redhat.com>, <yilun.xu@intel.com>, <hao.wu@intel.com>,
-        <matthew.gerlach@intel.com>, <basheer.ahmed.muddebihal@intel.com>,
-        <tianfei.zhang@intel.com>
-References: <20220323233331.155121-1-russell.h.weight@intel.com>
- <20220323233331.155121-3-russell.h.weight@intel.com>
- <0dc2d770-176f-9c58-e875-cb65ff38509c@redhat.com>
-From:   Russ Weight <russell.h.weight@intel.com>
-In-Reply-To: <0dc2d770-176f-9c58-e875-cb65ff38509c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4P222CA0011.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:114::16) To DM5PR11MB1899.namprd11.prod.outlook.com
- (2603:10b6:3:10b::14)
+   d="scan'208";a="591371274"
+Received: from aimeehax-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.113.132])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 16:43:51 -0700
+Date:   Thu, 14 Apr 2022 16:43:51 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] staging: r8188eu: use sizeof(*pvar) for allocating
+ structs
+Message-ID: <Ylixt2gxhcmDJq11@iweiny-desk3>
+References: <cover.1649233201.git.remckee0@gmail.com>
+ <5b526d8c178d89328de935ff4ff57651bdd8379b.1649233201.git.remckee0@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 642b651d-4447-4178-30f4-08da1e705d86
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5439:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM4PR11MB54394935B24A1B0E2B8FB071C5EF9@DM4PR11MB5439.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q1vHmvuyx436cpuAKeU9I/4m1ImQAfKASjSI+kKutQb3JSjuhai7TEdtT3OCOHZFbIEg4DHEuEBX+8nTqtzE4Ja4A0gz49Ss8TN1R6/BF89WI/FVyO3KOudiDRRH3n8krXk6scey2G/vSIasvWCoEZSnnfRippqSDpyxhteppFtDrzFqaeDIXHhOqEIjEK1+9fLojRO7IDg5p52mf9IFGSrUNjGTINQ0vXnSnO9JZPv4q7rvVIo0PQ/HRQcW7RJD74/vjHNU1zPdlHVNU4RLV3OxO/q2+EDN3dXzU6mRbZyX/jex7yajnBEyR5/U9gO8ctBf5sjI3Zv8DG3S0e558wNEXe3x+/XSnS39SQ7iONqFotuaseTO8SjkpVFluI7YxiDAD5IrtilPhIbsXfzm8sqvvK74dJtcBJqpKFeJmqmYeX8coYdUF19oxYN6HZx+ZAml68Fljdia6dVC3Hv1MOCsgqmoMMVlqSBJF0ghw4yBk0NTLKcTw15d2EJlawJueGbr7tHyPPbUB7efgVQ64+HjCikYurLY79zVTuh7bKXnfsC2TIVXQlQY/VkVlo0RNzlzeMgKmftLfjAjsMNl75UJSId9M+qHBVdJnCY4fHvHqVB7sH6ZEIohYXGETrj8lMKRXvzUX8iyUT7FBUR6wylAscUBUDlLEFjLwJZeniGljhxBjct3fVgmNZCDFzK+VhFfy6rzePbyy9emn/l1EMZYuZ35KhSys9lQz2gMLl0dYZZfrCnbNsyKt8rEKBaz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31696002)(8936002)(107886003)(8676002)(2616005)(4326008)(5660300002)(26005)(186003)(2906002)(36756003)(31686004)(508600001)(6486002)(86362001)(66946007)(83380400001)(66476007)(66556008)(6512007)(82960400001)(6506007)(53546011)(6666004)(38100700002)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UzB1cnJZTjVmREpZRTFwWUFRU25jQ2ZXeGVSUTJuclpxWUQ1MWtqekRyZWdF?=
- =?utf-8?B?M0NBMUJGajhTZ1l2VEhESGt0RDlLS3lSeVFLUEdxdGRLcTFVVXJ3N1lJK3p2?=
- =?utf-8?B?b3pRQm84NG4zdjRlOGNDUHlvWm00eGZNRGtVMTlWUjhwMzV3UGdubHlDT2FD?=
- =?utf-8?B?VHNqbmtDQUJQMmJBczdrV1FmZXlTWWVQdG9pZ1ExZElpWW5FbXZkdllBZ3Fv?=
- =?utf-8?B?UDVRQWl5NU5VcVdiQXlHbTdQQ1R0by80ZnFSQzBOaW1MSFVQUUZmT3RNalVs?=
- =?utf-8?B?eE0wbzVaYXJyYnZUYWpPeVp4TS9LUEEvUzhrd1BJU1lWVzBPdVVvaE1xZEU1?=
- =?utf-8?B?dzJ0ejNIRG5pM3Zzay9zaE5pV0V3OTh1a25mb0hUU2hhUllhQSt1M2dJWmNU?=
- =?utf-8?B?RWtYSHdYYjg0RXRzSUtoRGhEd055RkozaGkwQkY5UkNNUTZLUkVKWXZHL1k2?=
- =?utf-8?B?R1JUWWZ1eWQ1MWhjZE9BdWdVOERnYk5iZ0U5TE9STlZ3ejZFQUROREJvTksr?=
- =?utf-8?B?emNRSEM3TmJsTkJkblYwalo1bVdBUzhWb3lkZ0dYUG12cmFhYzM1Y1FRSFAz?=
- =?utf-8?B?OUVkUmtpOVR3L05BQzIvN252eGxCaWNNVGFIdGRyTnBJclNaSDJMNzlUS2gy?=
- =?utf-8?B?cmgwQ0VsMldtMGhZUjl6N0ZQZEhqL2RlZmNOMXR0dWdqbTlOb2l5WTFKZ2lG?=
- =?utf-8?B?cWFzQVcyYmRUbmd6eWZTSks2SGlaYS81UFliVzZUTUloNm8rWk9QK0hPSmFD?=
- =?utf-8?B?dTZQRXpUUmZVZENMY29VMm83NWk2b3VxQnZBa0ptKzRkMjRZWlR2WWRWK2du?=
- =?utf-8?B?QXdmM2ozeUYzU2h1Ui83R1NmRWo3Ty9aalFDaFpJaytyMFNvRndyeWxXWWtP?=
- =?utf-8?B?SEd1Y3NybUtoOXFSaG12SW9qT2J0N2lHT210ZXlVS214L0d5TnVaUVZzUkRN?=
- =?utf-8?B?RTJUNksxcU5RME1RN3lGN3hOTk1hellxWEI0RkdPVElRZFF2UEVpYU5uQURC?=
- =?utf-8?B?cVU2NEVKUkhLZmRYVmNUMHdRNWw2NTdWSzkyckV4SE9iNG9qSjMwV3R6OFZt?=
- =?utf-8?B?aWNYeUVCSi9sTUxNQmRlUjZKS0VGS1Zob2VGYjVSTTc4cVVNdXRPUEh4UDk1?=
- =?utf-8?B?djBRZllCR1pReUlZcUNFSFFyK0ZrbDN5dGtIbnp5dFB6ZDdLQ1pzMnRiZmxr?=
- =?utf-8?B?RkdobDVUTlhtVU9FL1gvd3VHYVNTQm9pQ2NUdDFUaHcvTVd2RHhUNU5JZFZu?=
- =?utf-8?B?eFg5MlVTUXVJbitYZUZvem9ndC9mYis5aHpDa3NOMnVQMnk1Q1RlVjNOd1JV?=
- =?utf-8?B?SE5uTVBtdmNUMlV3U3BmWERZdTBVTjVWMHQ2Y0tqZS9xMVdKeUdXNkJ5c01v?=
- =?utf-8?B?a1RxMVhLUGR1WmhQa1N2UDU1a0J1OUE5eGR6U2daWTJHSVFCTm5nTUlKaDFL?=
- =?utf-8?B?cWU1dHhCV01VcS9UalNrUW5mZ1JBQm5FL24vMFgzdTNsZEFaRjRaRnpHN1h2?=
- =?utf-8?B?YTB2RlErdFJEcFVzQUpuSGpWK0VwREN5aEVPaE5PYmRRb3lwekJRejNIc0RW?=
- =?utf-8?B?bUxSckVLSXgwaWZFSXFNcG5vZ2pQMS9pOStqZ0xnQjR2VUJHR05CaUVNVGhP?=
- =?utf-8?B?bERoK0NmMzVHYnE2cmlpRmk3akJaYTgrL21jZHA5MGtXWC92RWJkSGQrOGs2?=
- =?utf-8?B?VCt2VHZiTEU4clBZejR1Q1p3aWx1ZSthSDJPcC9tYnA0OUtMNXFiNmtQdWtP?=
- =?utf-8?B?c2xGSmp6YUhvWDVXMGQvMFNZejczTFhzcHBGUEYzOFBCaDgrZG81QnFNTW45?=
- =?utf-8?B?Y1kwUFV2aERZQ1FLWDl1VWwvZzhiMGRwZDRBUzhXVEd2clFpSCszdTlTTkky?=
- =?utf-8?B?NER6NnNLU0hLalQvVDRlcEtzbjFXTVpmbWErL2dLRXVkYWcxMU01T3dRejFJ?=
- =?utf-8?B?ZlluNm1LYUNUU1BqbzdDMksrYThqV1RCZUYvcU43RVVWbTRGZzVFTWg2ZEln?=
- =?utf-8?B?RElqekgvaDhwRS94aHFKNjBjWGdCQVdPMmJDTGU4VElUUXYvenVCbnUwakF0?=
- =?utf-8?B?TWVVMk8rcytzclV3bXhKYk9ENS9yNUJ6RUYzejZ4ZVBqZXQ5TlJ4QXQyZ0Mv?=
- =?utf-8?B?VXNTZnRDOTc3UVFrdVh5dUJiZGtlSWlDUk4vSExFcUQ1ZkRHZlVualJMZHhQ?=
- =?utf-8?B?c1dFZDlHdWNrRkxQY0JiN0hQaGVHOUJCcFBPQWQ5NWJVV21aVnFISkxQMUtE?=
- =?utf-8?B?VmY1VTVzeGx0emorNWR2QmErT2VYN1VqVy8ybC9oMmRJbWM3c2gzbCtyVzhj?=
- =?utf-8?B?WjZZYWpRK0RvaFRoQ3NTZWV1RlNUYk01bW1mS08xZVg4aGVzRHBLS2RJbXNW?=
- =?utf-8?Q?aEPS5Z1VBPS5sIkg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 642b651d-4447-4178-30f4-08da1e705d86
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 23:41:58.3248
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bTv0rIBRS7Thgp5irCw7ADaMCs8m0Z4kVVDloZ5sUIdLHzscBgObphMi5lx1o0G5aqHquynAtgB3OAdnjgsz7F5PbqFW5Hfny20xvm2usxY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5439
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b526d8c178d89328de935ff4ff57651bdd8379b.1649233201.git.remckee0@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 06, 2022 at 03:31:00AM -0500, Rebecca Mckeever wrote:
+> Use sizeof(*pvar) instead of sizeof(struct var) when allocating memory.
+> This conforms to Linux kernel coding style, improves readability,
+> and decreases the opportunity for bugs if the pointer variable type is
+> changed. Issue found by checkpatch messages of the following format:
+> 
+> CHECK: Prefer kzalloc(sizeof(*pvar)...) over kzalloc(sizeof(struct var)...)
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-On 4/2/22 07:47, Tom Rix wrote:
->
-> On 3/23/22 4:33 PM, Russ Weight wrote:
->> Add the fw_state_is_done() function and exit early from
->> firmware_loading_store() if the state is already "done". This is being done
->> in preparation for supporting persistent sysfs nodes to allow userspace to
->> upload firmware to a device, potentially reusing the sysfs loading and data
->> files multiple times.
->>
->> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
->> ---
->> v1:
->>    - No change from RFC patch
->> ---
->>   drivers/base/firmware_loader/fallback.c | 2 +-
->>   drivers/base/firmware_loader/firmware.h | 5 +++++
->>   2 files changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/firmware_loader/fallback.c b/drivers/base/firmware_loader/fallback.c
->> index 4afb0e9312c0..d82e055a4297 100644
->> --- a/drivers/base/firmware_loader/fallback.c
->> +++ b/drivers/base/firmware_loader/fallback.c
->> @@ -250,7 +250,7 @@ static ssize_t firmware_loading_store(struct device *dev,
->>         mutex_lock(&fw_lock);
->>       fw_priv = fw_sysfs->fw_priv;
->> -    if (fw_state_is_aborted(fw_priv))
->> +    if (fw_state_is_aborted(fw_priv) || fw_state_is_done(fw_priv))
->>           goto out;
->>         switch (loading) {
->> diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
->> index 2889f446ad41..58768d16f8df 100644
->> --- a/drivers/base/firmware_loader/firmware.h
->> +++ b/drivers/base/firmware_loader/firmware.h
->> @@ -149,6 +149,11 @@ static inline void fw_state_done(struct fw_priv *fw_priv)
->>       __fw_state_set(fw_priv, FW_STATUS_DONE);
->>   }
->>   +static inline bool fw_state_is_done(struct fw_priv *fw_priv)
->> +{
->> +    return __fw_state_check(fw_priv, FW_STATUS_DONE);
->
-> This looks like the fw_sysfs_done() in fallback.c
->
-> IMO this one and similar wrappers should move to firmware.h and use the *_is_* naming.
-
-Thanks for catching that Tom. Yes, the new fw_state_is_done() function is exactly
-the same as fw_sysfs_done(). I'll follow your suggestion and move fw_sysfs_done()
-and fw_sysfs_loading() to firmware.h as fw_state_is_done() and fw_state_is_loading().
-
-- Russ
->
-> Tom
->
->> +}
->> +
->>   int assign_fw(struct firmware *fw, struct device *device);
->>     #ifdef CONFIG_FW_LOADER
->
-
+> ---
+>  drivers/staging/r8188eu/core/rtw_cmd.c | 68 +++++++++++++-------------
+>  1 file changed, 34 insertions(+), 34 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> index f4a277e6b654..110959148648 100644
+> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> @@ -334,11 +334,11 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+>  	if (check_fwstate(pmlmepriv, _FW_LINKED))
+>  		p2p_ps_wk_cmd(padapter, P2P_PS_SCAN, 1);
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c)
+>  		return _FAIL;
+>  
+> -	psurveyPara = kzalloc(sizeof(struct sitesurvey_parm), GFP_ATOMIC);
+> +	psurveyPara = kzalloc(sizeof(*psurveyPara), GFP_ATOMIC);
+>  	if (!psurveyPara) {
+>  		kfree(ph2c);
+>  		return _FAIL;
+> @@ -399,13 +399,13 @@ u8 rtw_setdatarate_cmd(struct adapter *padapter, u8 *rateset)
+>  	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pbsetdataratepara = kzalloc(sizeof(struct setdatarate_parm), GFP_ATOMIC);
+> +	pbsetdataratepara = kzalloc(sizeof(*pbsetdataratepara), GFP_ATOMIC);
+>  	if (!pbsetdataratepara) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> @@ -438,7 +438,7 @@ u8 rtw_createbss_cmd(struct adapter  *padapter)
+>  
+>  	rtw_led_control(padapter, LED_CTL_START_TO_LINK);
+>  
+> -	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	pcmd = kzalloc(sizeof(*pcmd), GFP_ATOMIC);
+>  	if (!pcmd) {
+>  		res = _FAIL;
+>  		goto exit;
+> @@ -475,7 +475,7 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network *pnetwork)
+>  
+>  	rtw_led_control(padapter, LED_CTL_START_TO_LINK);
+>  
+> -	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	pcmd = kzalloc(sizeof(*pcmd), GFP_ATOMIC);
+>  	if (!pcmd) {
+>  		res = _FAIL;
+>  		goto exit;
+> @@ -624,12 +624,12 @@ u8 rtw_setopmode_cmd(struct adapter  *padapter, enum ndis_802_11_network_infra n
+>  	struct	cmd_priv   *pcmdpriv = &padapter->cmdpriv;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_KERNEL);
+>  	if (!ph2c) {
+>  		res = false;
+>  		goto exit;
+>  	}
+> -	psetop = kzalloc(sizeof(struct setopmode_parm), GFP_KERNEL);
+> +	psetop = kzalloc(sizeof(*psetop), GFP_KERNEL);
+>  
+>  	if (!psetop) {
+>  		kfree(ph2c);
+> @@ -659,20 +659,20 @@ u8 rtw_setstakey_cmd(struct adapter *padapter, u8 *psta, u8 unicast_key)
+>  	struct sta_info *sta = (struct sta_info *)psta;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_KERNEL);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	psetstakey_para = kzalloc(sizeof(struct set_stakey_parm), GFP_KERNEL);
+> +	psetstakey_para = kzalloc(sizeof(*psetstakey_para), GFP_KERNEL);
+>  	if (!psetstakey_para) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	psetstakey_rsp = kzalloc(sizeof(struct set_stakey_rsp), GFP_KERNEL);
+> +	psetstakey_rsp = kzalloc(sizeof(*psetstakey_rsp), GFP_KERNEL);
+>  	if (!psetstakey_rsp) {
+>  		kfree(ph2c);
+>  		kfree(psetstakey_para);
+> @@ -718,13 +718,13 @@ u8 rtw_clearstakey_cmd(struct adapter *padapter, u8 *psta, u8 entry, u8 enqueue)
+>  	if (!enqueue) {
+>  		clear_cam_entry(padapter, entry);
+>  	} else {
+> -		ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +		ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  		if (!ph2c) {
+>  			res = _FAIL;
+>  			goto exit;
+>  		}
+>  
+> -		psetstakey_para = kzalloc(sizeof(struct set_stakey_parm),
+> +		psetstakey_para = kzalloc(sizeof(*psetstakey_para),
+>  					  GFP_ATOMIC);
+>  		if (!psetstakey_para) {
+>  			kfree(ph2c);
+> @@ -732,7 +732,7 @@ u8 rtw_clearstakey_cmd(struct adapter *padapter, u8 *psta, u8 entry, u8 enqueue)
+>  			goto exit;
+>  		}
+>  
+> -		psetstakey_rsp = kzalloc(sizeof(struct set_stakey_rsp),
+> +		psetstakey_rsp = kzalloc(sizeof(*psetstakey_rsp),
+>  					 GFP_ATOMIC);
+>  		if (!psetstakey_rsp) {
+>  			kfree(ph2c);
+> @@ -765,13 +765,13 @@ u8 rtw_addbareq_cmd(struct adapter *padapter, u8 tid, u8 *addr)
+>  	struct addBaReq_parm *paddbareq_parm;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	paddbareq_parm = kzalloc(sizeof(struct addBaReq_parm), GFP_ATOMIC);
+> +	paddbareq_parm = kzalloc(sizeof(*paddbareq_parm), GFP_ATOMIC);
+>  	if (!paddbareq_parm) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> @@ -798,13 +798,13 @@ u8 rtw_dynamic_chk_wk_cmd(struct adapter *padapter)
+>  	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> @@ -839,7 +839,7 @@ u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan)
+>  	}
+>  
+>  	/* prepare cmd parameter */
+> -	setChannelPlan_param = kzalloc(sizeof(struct SetChannelPlan_param),
+> +	setChannelPlan_param = kzalloc(sizeof(*setChannelPlan_param),
+>  				       GFP_KERNEL);
+>  	if (!setChannelPlan_param) {
+>  		res = _FAIL;
+> @@ -848,7 +848,7 @@ u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan)
+>  	setChannelPlan_param->channel_plan = chplan;
+>  
+>  	/* need enqueue, prepare cmd_obj and enqueue */
+> -	pcmdobj = kzalloc(sizeof(struct	cmd_obj), GFP_KERNEL);
+> +	pcmdobj = kzalloc(sizeof(*pcmdobj), GFP_KERNEL);
+>  	if (!pcmdobj) {
+>  		kfree(setChannelPlan_param);
+>  		res = _FAIL;
+> @@ -1010,13 +1010,13 @@ u8 rtw_lps_ctrl_wk_cmd(struct adapter *padapter, u8 lps_ctrl_type, u8 enqueue)
+>  	/*	return res; */
+>  
+>  	if (enqueue) {
+> -		ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +		ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  		if (!ph2c) {
+>  			res = _FAIL;
+>  			goto exit;
+>  		}
+>  
+> -		pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm),
+> +		pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm),
+>  					     GFP_ATOMIC);
+>  		if (!pdrvextra_cmd_parm) {
+>  			kfree(ph2c);
+> @@ -1056,13 +1056,13 @@ u8 rtw_rpt_timer_cfg_cmd(struct adapter *padapter, u16 min_time)
+>  
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm),
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm),
+>  				     GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ph2c);
+> @@ -1109,13 +1109,13 @@ u8 rtw_antenna_select_cmd(struct adapter *padapter, u8 antenna, u8 enqueue)
+>  		return res;
+>  
+>  	if (enqueue) {
+> -		ph2c = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
+> +		ph2c = kzalloc(sizeof(*ph2c), GFP_KERNEL);
+>  		if (!ph2c) {
+>  			res = _FAIL;
+>  			goto exit;
+>  		}
+>  
+> -		pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm),
+> +		pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm),
+>  					     GFP_KERNEL);
+>  		if (!pdrvextra_cmd_parm) {
+>  			kfree(ph2c);
+> @@ -1148,13 +1148,13 @@ u8 p2p_protocol_wk_cmd(struct adapter *padapter, int intCmdType)
+>  	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
+>  		return res;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> @@ -1182,13 +1182,13 @@ u8 rtw_ps_cmd(struct adapter *padapter)
+>  
+>  	u8	res = _SUCCESS;
+>  
+> -	ppscmd = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ppscmd = kzalloc(sizeof(*ppscmd), GFP_ATOMIC);
+>  	if (!ppscmd) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ppscmd);
+>  		res = _FAIL;
+> @@ -1253,13 +1253,13 @@ u8 rtw_chk_hi_queue_cmd(struct adapter *padapter)
+>  	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> @@ -1284,13 +1284,13 @@ u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt)
+>  	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
+>  	u8	res = _SUCCESS;
+>  
+> -	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
+> +	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
+>  	if (!ph2c) {
+>  		res = _FAIL;
+>  		goto exit;
+>  	}
+>  
+> -	pdrvextra_cmd_parm = kzalloc(sizeof(struct drvextra_cmd_parm), GFP_ATOMIC);
+> +	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
+>  	if (!pdrvextra_cmd_parm) {
+>  		kfree(ph2c);
+>  		res = _FAIL;
+> -- 
+> 2.32.0
+> 

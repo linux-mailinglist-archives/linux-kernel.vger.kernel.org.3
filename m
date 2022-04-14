@@ -2,168 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C845003AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E1B5003B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiDNBdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S239457AbiDNBmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiDNBdl (ORCPT
+        with ESMTP id S232083AbiDNBmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:33:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C400522F1;
-        Wed, 13 Apr 2022 18:31:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8077CCE27EB;
-        Thu, 14 Apr 2022 01:31:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849B7C385A3;
-        Thu, 14 Apr 2022 01:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649899874;
-        bh=pXA3UcvmQhe78Hg2wD2xtbuY0R4lUU4THOixPj3r68Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u++qsKMzV6jk9yB2AqTiqhYcOboL2TMX1glvdTxM+ZZuV40ix3zj7Z5NVRbaKq8oh
-         zO/LkfW63vSukVKzS2riw8V7/JSh24VvjQxi9EcS7zPtgEek91WxBC22N1+zFeaBns
-         hrArs1zAeWWpSbsljO2jibI8NDTzgT/UuQEX6AWxV852n6cVOlW9MsSC9l+da0BCp8
-         fj7xqjt/YCg9oQMPMbxGrBVkquwG9uwLVev3WBIx+Ws6ouvY0RGPMhl47TaVEYp5nw
-         Z6g4vaEFXPAQR7irwQJDL0d2Z9F00FXNQGGzgVaJsrQHn867iNXgabYjhf25rdiinH
-         DLx1ZtsJKeSOw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E76A740407; Wed, 13 Apr 2022 22:31:11 -0300 (-03)
-Date:   Wed, 13 Apr 2022 22:31:11 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.bayduraev@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/3] perf record: Fix per-thread option.
-Message-ID: <Yld5X7sPshUEUgBT@kernel.org>
-References: <20220412062133.2546080-1-irogers@google.com>
- <e1ce0d93-88cc-af79-e67e-d3c79d166ca6@gmail.com>
+        Wed, 13 Apr 2022 21:42:46 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189E20F70
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:40:23 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id t4so3458460pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=RdayCDxEwJD59KqBdusCEOpxaJASjBt83sSueeG1AHo=;
+        b=ycMC/7bYjbOcLcEX2Tt8VKIilnYKeWYE2bx96R/lFO0m6rchL4vLEVtbx4DIHM3ORk
+         UBDoEhJBvmkZ1TigC5xaY+u+GfFf+KjYS1ZNKjjfcj2SGDdkH3LMRQjQpTd2QexjnxFN
+         tiicpxYwhRWaqtFUTgMbq7IG+Gtk4bo5ggk+L2LbhgUNmU4gFkofLgn07fI7ltWhQZm2
+         CHPxSxMUyO+Z6yE8Nyhyq5/jerzahPX/ibsw4W/GWHCi8BeZg/ET8xiatEvsvv8GYWb/
+         xDTA5AkCl+Rba/02rycJF0AWURAb834y4CuWXOSXPZLrej6FrILXK5HxFb6eMIm4CcF0
+         WcQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=RdayCDxEwJD59KqBdusCEOpxaJASjBt83sSueeG1AHo=;
+        b=Yv/N7geduT5nXPIe0G7TUQZcsNdta+FiFggX8OvEJDrSnXOoJS4ewAxM/zrGvwoCVT
+         xG+TzFbKFSFO8IyRaXzds6XU8yXO/3Oe2zgtHi6USDJSDTkJlUySFObh2qD5nCR+VOhs
+         gPQCb5ZU55YAr4Kl5C4IzX7gZnantyam5oRB4CLCUAmUbOXhvAfOiNmZKl5onRX1+kiH
+         2aeZX1xTsHOjW6zWEIXyggD5aP6Yru1SBpRR3dqi2Bhc542EIWd7ACLxwk9yXJFKVbxY
+         9hJGhgYam6+g0032tZUkH9zli7jrxQ6ObuwwFb109t5qZTGX9zNls2z4buVMqvPt19u5
+         kvWQ==
+X-Gm-Message-State: AOAM5308dkI11PQN/wQPXpZ0Kq4xThYgP+41eyjxuNiTcy0jS4Ai5mWm
+        cohCJ//Ef+SG4AhGaN7fHS0QkQ==
+X-Google-Smtp-Source: ABdhPJwSA5lCtRjpiMXmwO58f+FjMqudVsOkIGa/B9oWV7MmYVdot6tpFhxuZ3a6QrC+ya7+j4hS+g==
+X-Received: by 2002:a63:e442:0:b0:398:c06b:169c with SMTP id i2-20020a63e442000000b00398c06b169cmr380503pgk.170.1649900423449;
+        Wed, 13 Apr 2022 18:40:23 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id w14-20020a17090a4f4e00b001cb510021ecsm4203901pjl.49.2022.04.13.18.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 18:40:23 -0700 (PDT)
+Subject: [PATCH v2] RISC-V: Add CONFIG_{NON,}PORTABLE
+Date:   Wed, 13 Apr 2022 18:40:10 -0700
+Message-Id: <20220414014010.28110-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1ce0d93-88cc-af79-e67e-d3c79d166ca6@gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Apr 13, 2022 at 04:42:07AM +0300, Alexey Bayduraev escreveu:
-> On 12.04.2022 09:21, Ian Rogers wrote:
-> 
-> > From: Alexey Bayduraev <alexey.bayduraev@gmail.com>
-> 
-> Thanks,
-> 
-> The tag
-> Signed-off-by: Alexey Bayduraev <alexey.bayduraev@gmail.com>
-> can be added to this patch.
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-Thanks, will add that to the cset,
+The RISC-V port has collected a handful of options that are
+fundamentally non-portable.  To prevent users from shooting themselves
+in the foot, hide them all behind a config entry that explicitly calls
+out that non-portable binaries may be produced.
 
-Best regards,
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-- Arnaldo
+---
+
+Changes since v1:
+
+* Fix a bunch of spelling mistakes.
+* Move NONPORTABLE under the "Platform type" sub-heading.
+* Fix the rv32i dependency.
+---
+ arch/riscv/Kconfig | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..3d8eb44eb889 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -213,6 +213,21 @@ source "arch/riscv/Kconfig.erratas"
  
-> Regards,
-> Alexey
-> 
-> > 
-> > Per-thread mode doesn't have specific CPUs for events, add checks for
-> > this case.
-> > 
-> > Minor fix to a pr_debug by Ian Rogers <irogers@google.com> to avoid an
-> > out of bound array access.
-> > 
-> > Reported-by: Ian Rogers <irogers@google.com>
-> > Fixes: 7954f71689f9 ("perf record: Introduce thread affinity and mmap masks")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-record.c | 22 +++++++++++++++++-----
-> >  1 file changed, 17 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index ba74fab02e62..069825c48d40 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -989,8 +989,11 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
-> >  	struct mmap *overwrite_mmap = evlist->overwrite_mmap;
-> >  	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
-> >  
-> > -	thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
-> > -					      thread_data->mask->maps.nbits);
-> > +	if (cpu_map__is_dummy(cpus))
-> > +		thread_data->nr_mmaps = nr_mmaps;
-> > +	else
-> > +		thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
-> > +						      thread_data->mask->maps.nbits);
-> >  	if (mmap) {
-> >  		thread_data->maps = zalloc(thread_data->nr_mmaps * sizeof(struct mmap *));
-> >  		if (!thread_data->maps)
-> > @@ -1007,16 +1010,17 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
-> >  		 thread_data->nr_mmaps, thread_data->maps, thread_data->overwrite_maps);
-> >  
-> >  	for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
-> > -		if (test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
-> > +		if (cpu_map__is_dummy(cpus) ||
-> > +		    test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
-> >  			if (thread_data->maps) {
-> >  				thread_data->maps[tm] = &mmap[m];
-> >  				pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
-> > -					  thread_data, cpus->map[m].cpu, tm, m);
-> > +					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
-> >  			}
-> >  			if (thread_data->overwrite_maps) {
-> >  				thread_data->overwrite_maps[tm] = &overwrite_mmap[m];
-> >  				pr_debug2("thread_data[%p]: cpu%d: ow_maps[%d] -> ow_mmap[%d]\n",
-> > -					  thread_data, cpus->map[m].cpu, tm, m);
-> > +					  thread_data, perf_cpu_map__cpu(cpus, m).cpu, tm, m);
-> >  			}
-> >  			tm++;
-> >  		}
-> > @@ -3329,6 +3333,9 @@ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_c
-> >  {
-> >  	int c;
-> >  
-> > +	if (cpu_map__is_dummy(cpus))
-> > +		return;
-> > +
-> >  	for (c = 0; c < cpus->nr; c++)
-> >  		set_bit(cpus->map[c].cpu, mask->bits);
-> >  }
-> > @@ -3680,6 +3687,11 @@ static int record__init_thread_masks(struct record *rec)
-> >  	if (!record__threads_enabled(rec))
-> >  		return record__init_thread_default_masks(rec, cpus);
-> >  
-> > +	if (cpu_map__is_dummy(cpus)) {
-> > +		pr_err("--per-thread option is mutually exclusive to parallel streaming mode.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> >  	switch (rec->opts.threads_spec) {
-> >  	case THREAD_SPEC__CPU:
-> >  		ret = record__init_thread_cpu_masks(rec, cpus);
-> > 
-
+ menu "Platform type"
+ 
++config NONPORTABLE
++	bool "Allow configurations that result in non-portable kernels"
++	help
++	  RISC-V kernel binaries are compatible between all known systems
++	  whenever possible, but there are some use cases that can only be
++	  satisfied by configurations that result in kernel binaries that are
++	  not portable between systems.
++
++	  Selecting N does not guarantee kernels will be portable to all knows
++	  systems.  Selecting any of the options guarded by NONPORTABLE will
++	  result in kernel binaries that are unlikely to be portable between
++	  systems.
++
++	  If unsure, say N.
++
+ choice
+ 	prompt "Base ISA"
+ 	default ARCH_RV64I
+@@ -222,6 +237,7 @@ choice
+ 
+ config ARCH_RV32I
+ 	bool "RV32I"
++	depends on NONPORTABLE
+ 	select 32BIT
+ 	select GENERIC_LIB_ASHLDI3
+ 	select GENERIC_LIB_ASHRDI3
+@@ -485,6 +501,7 @@ config STACKPROTECTOR_PER_TASK
+ 
+ config PHYS_RAM_BASE_FIXED
+ 	bool "Explicitly specified physical RAM address"
++	depends on NONPORTABLE
+ 	default n
+ 
+ config PHYS_RAM_BASE
+@@ -498,7 +515,7 @@ config PHYS_RAM_BASE
+ 
+ config XIP_KERNEL
+ 	bool "Kernel Execute-In-Place from ROM"
+-	depends on MMU && SPARSEMEM
++	depends on MMU && SPARSEMEM && NONPORTABLE
+ 	# This prevents XIP from being enabled by all{yes,mod}config, which
+ 	# fail to build since XIP doesn't support large kernels.
+ 	depends on !COMPILE_TEST
+@@ -538,9 +555,16 @@ endmenu
+ 
+ config BUILTIN_DTB
+ 	bool
+-	depends on OF
++	depends on OF && NONPORTABLE
+ 	default y if XIP_KERNEL
+ 
++config PORTABLE
++	bool
++	default !NONPORTABLE
++	select EFI
++	select OF
++	select MMU
++
+ menu "Power management options"
+ 
+ source "kernel/power/Kconfig"
 -- 
+2.34.1
 
-- Arnaldo

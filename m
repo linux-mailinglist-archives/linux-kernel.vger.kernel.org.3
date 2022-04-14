@@ -2,183 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B23500DC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C83500DC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243457AbiDNMlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S243468AbiDNMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiDNMlK (ORCPT
+        with ESMTP id S235273AbiDNMmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:41:10 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EB19027D;
-        Thu, 14 Apr 2022 05:38:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JVCgdsjCuAsd20+Y44d0vR3fPsyHgb3nCxbFK+qoRpiPNqLsVVMcK+EOFQEaYHgTIxC+SpbEezR7sU5GcAzA5qLuc8uCW+Zi19I2wWZ3IVfX+rgwp+dV+poZVrPqtEh4PTWMqIcBOokgiKv0NjPPo3cU9RTRhjo0p0lQzcQ/zpcSrKHGV8uX0kouZUgb8EPNcB31DwxBJ/i3RYsTKUlFHNuqhla3a0k2wGXccE0dRLN6LrNG5us4PWTK5gtHteh9Ynmxjrkb0KTHzoGflkZzyWjK1ov6JKxtOxUXKdJbVm7Dw93drwLOlIBl9ySG3gXyWwztLJiJGsi09dZbaKT5TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ERScTANQNWWzuRaQXEXf9XcN7vExEMh0K9W4dzjHkmA=;
- b=MDizmhRcB9z5a05sxm7pZgkXula7lQZJ8+fls6er+WToS2Yig4ANDCRMAB8tNmFfmp0itjPG02fxUdSFk4Yp53EDSVXlOUtiE9PsTB/GH038rVpYbeaObplMrhaMHPNiHY+kZD/zDd/S+zMoDZmumB2bB29WOJyzsD6QIwrdh8hCEqLCokGFn/3hOOoMnovE5WD1Cu5jnuXsABZhYBAt7TEbU+5yWI2BV5O7JGi252f5h4smeNj16U6CsxEZyNneJwQkQ6kkaWQnwYrNDnyg3eZ322bw9a7ORU/+OJudW06ZZrhaHMPwcDSksk77vHVjCOSx1Fw1/u8QulePNXHoEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=davemloft.net smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ERScTANQNWWzuRaQXEXf9XcN7vExEMh0K9W4dzjHkmA=;
- b=s4GeB4IxnPvqwCy0W7mymEsJ/ZzLiW48smUPaYqYWrmS497602JgtDIAzTK/bQLJd/la4NbNBO9sKWS/WmiNOIFrs/d+2eGN/RPGfIcdtaQu8/rDYLwKW77/uBQhIo1iu3t8BqO2wGgom48cQEMij8el7Pj9aMWzbHcD/Jnsk90=
-Received: from BN9PR03CA0543.namprd03.prod.outlook.com (2603:10b6:408:138::8)
- by MWHPR0201MB3596.namprd02.prod.outlook.com (2603:10b6:301:79::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 12:38:42 +0000
-Received: from BN1NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:138:cafe::c0) by BN9PR03CA0543.outlook.office365.com
- (2603:10b6:408:138::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
- Transport; Thu, 14 Apr 2022 12:38:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT013.mail.protection.outlook.com (10.13.2.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5164.19 via Frontend Transport; Thu, 14 Apr 2022 12:38:41 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+        Thu, 14 Apr 2022 08:42:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8BB3C73C;
+        Thu, 14 Apr 2022 05:39:58 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfJsB50fTzgYp9;
+        Thu, 14 Apr 2022 20:38:06 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 14 Apr 2022 05:37:59 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 14 Apr 2022 05:37:59 -0700
-Envelope-to: git@xilinx.com,
- davem@davemloft.net,
- kuba@kernel.org,
- linux-arm-kernel@lists.infradead.org,
- andrew@lunn.ch,
- pabeni@redhat.com,
- linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-Received: from [172.23.64.6] (port=53841 helo=xhdvnc106.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <radhey.shyam.pandey@xilinx.com>)
-        id 1neyjX-0006t9-CM; Thu, 14 Apr 2022 05:37:59 -0700
-Received: by xhdvnc106.xilinx.com (Postfix, from userid 13245)
-        id 05E7661070; Thu, 14 Apr 2022 18:07:19 +0530 (IST)
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <andrew@lunn.ch>
-CC:     <michal.simek@xilinx.com>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Shravya Kumbham <shravya.kumbham@xilinx.com>,
-        "Radhey Shyam Pandey" <radhey.shyam.pandey@xilinx.com>
-Subject: [PATCH net-next 3/3] net: emaclite: Remove custom BUFFER_ALIGN macro
-Date:   Thu, 14 Apr 2022 18:07:11 +0530
-Message-ID: <1649939831-14901-4-git-send-email-radhey.shyam.pandey@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1649939831-14901-1-git-send-email-radhey.shyam.pandey@xilinx.com>
-References: <1649939831-14901-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+ 15.1.2375.24; Thu, 14 Apr 2022 20:39:56 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <bhelgaas@google.com>, <linux-pci@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <prime.zeng@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v3] PCI: Make sure the bus bridge powered on when scanning bus
+Date:   Thu, 14 Apr 2022 20:37:36 +0800
+Message-ID: <20220414123736.34150-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1a08b520-d528-4439-9122-08da1e13b502
-X-MS-TrafficTypeDiagnostic: MWHPR0201MB3596:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR0201MB3596934057498E9BFE2FEAD8C7EF9@MWHPR0201MB3596.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sJqx79BPMXIHxuiLb+cwBLiVDzctVjNLhtORUXMSX+hAJKWo2oGqpsAxu3RjZn10LaJ6GNEE1nwJLNzujukFlc1bYP6aNOZNUeBsE+lQdHWWMYnYwJBqrTjxV/scBJXA5DD4Ok5WCaJjIGTCvv6Y0VbRy5qkdyy4b901wAEA0CBirB18a8yRHOclrTaBcvJlOHDK/4pKkqRUSaDRsDzg8ZGtlv+5Puk50UxPWUtvKUwEXxyGUJjv2sb35ECR048Vz0gKku+0/BK1e+Txkdc9fgb+CULDfkExVHEId2Rngyr5HHLWfDc9PO/8EEiCtdGN1oGFdTPdM1PA10inUnhWZhcItDHFjckjIDXjuld5mjXwbVq4S9s3cdgrM83PeyTfTHsh+l1ZHI0rsWdvwwXu5tRzNlm6nOBS0yS1qdOc8At6wwonvjpRPhetuvbnKQ2OP7xWPpnfV+8/rqbbOvOCawAounecXzCa59bGE85MMGBsAkqX7HBV8S1NqWRLjhqQCzsxk/kNHnsQF3FsJTJuvydrMAbI13SwrRRxmUkeOBztSVhXJrqAnnwGepXh3IKnDQaoQJjRxfjWQ9UOchO2HvF6pazu9uGudg27DI07YDwOszP0fBCbXoEgM+AU7kPGWh0IFXpFBUSWFkyn7DCuu32stiFuVPn1nh+UUF6LOY3W9oirhdKKJGosavr1YHRXCvYAbghkUD0VCZSVl4A2Gg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(47076005)(82310400005)(70586007)(508600001)(6666004)(83380400001)(426003)(336012)(42186006)(7636003)(36756003)(316002)(36860700001)(356005)(110136005)(8936002)(54906003)(70206006)(5660300002)(2906002)(186003)(40460700003)(2616005)(8676002)(26005)(107886003)(4326008)(6266002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 12:38:41.4996
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a08b520-d528-4439-9122-08da1e13b502
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT013.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0201MB3596
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+When the bus bridge is runtime suspended, we'll fail to rescan
+the devices through sysfs as we cannot access the configuration
+space correctly when the bridge is in D3hot.
+It can be reproduced like:
 
-BUFFER_ALIGN macro is used to calculate the number of bytes
-required for the next alignment. Instead of this, we can directly
-use the skb_reserve(skb, NET_IP_ALIGN) to make the protocol header
-buffer aligned on at least a 4-byte boundary, where the NET_IP_ALIGN
-is by default defined as 2. So removing the BUFFER_ALIGN and its
-related defines which it can be done by the skb_reserve() itself.
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
 
-Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+0000:80:00.0 is root port and is runtime suspended and we cannot
+get 0000:81:00.1 after rescan.
+
+Make bridge powered on when scanning the child bus, by adding
+pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
+
+A similar issue is met and solved by
+d963f6512e15 ("PCI: Power on bridges before scanning new devices")
+which rescan the devices through /sys/bus/pci/devices/0000:80:00.0/rescan.
+The callstack is like:
+
+dev_rescan_restore()
+  pci_rescan_bus()
+    pci_scan_bridge_extend()
+      pci_scan_child_bus_extend() /* will wake up the bridge with this patch */
+
+With this patch the issue is also resolved, so let's remove the calls of
+pm_runtime_*() in pci_scan_bridge_extend().
+
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- drivers/net/ethernet/xilinx/xilinx_emaclite.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+Change since v2:
+- just rebase it on v5.18-rc2
+Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-index bb9c3ebde522..7a86ae82fcc1 100644
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -91,10 +91,6 @@
- #define XEL_HEADER_IP_LENGTH_OFFSET	16	/* IP Length Offset */
+Change since v1:
+- use an intermediate variable *bridge as suggested
+- remove the pm_runtime_*() calls in pci_scan_bridge_extend()
+Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+
+ drivers/pci/probe.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37..2ca6b4b708e3 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -1257,12 +1257,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
+ 	u8 fixed_sec, fixed_sub;
+ 	int next_busnr;
  
- #define TX_TIMEOUT		(60 * HZ)	/* Tx timeout is 60 seconds. */
--#define ALIGNMENT		4
+-	/*
+-	 * Make sure the bridge is powered on to be able to access config
+-	 * space of devices below it.
+-	 */
+-	pm_runtime_get_sync(&dev->dev);
 -
--/* BUFFER_ALIGN(adr) calculates the number of bytes to the next alignment. */
--#define BUFFER_ALIGN(adr) ((ALIGNMENT - ((uintptr_t)adr)) % ALIGNMENT)
+ 	pci_read_config_dword(dev, PCI_PRIMARY_BUS, &buses);
+ 	primary = buses & 0xFF;
+ 	secondary = (buses >> 8) & 0xFF;
+@@ -1464,8 +1458,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
+ out:
+ 	pci_write_config_word(dev, PCI_BRIDGE_CONTROL, bctl);
  
- #ifdef __BIG_ENDIAN
- #define xemaclite_readl		ioread32be
-@@ -595,11 +591,10 @@ static void xemaclite_rx_handler(struct net_device *dev)
- {
- 	struct net_local *lp = netdev_priv(dev);
- 	struct sk_buff *skb;
--	unsigned int align;
- 	u32 len;
+-	pm_runtime_put(&dev->dev);
+-
+ 	return max;
+ }
  
- 	len = ETH_FRAME_LEN + ETH_FCS_LEN;
--	skb = netdev_alloc_skb(dev, len + ALIGNMENT);
-+	skb = netdev_alloc_skb(dev, len + NET_IP_ALIGN);
- 	if (!skb) {
- 		/* Couldn't get memory. */
- 		dev->stats.rx_dropped++;
-@@ -607,16 +602,7 @@ static void xemaclite_rx_handler(struct net_device *dev)
- 		return;
+@@ -2859,11 +2851,19 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+ 	unsigned int start = bus->busn_res.start;
+ 	unsigned int devfn, fn, cmax, max = start;
+-	struct pci_dev *dev;
++	struct pci_dev *dev, *bridge = bus->self;
+ 	int nr_devs;
+ 
+ 	dev_dbg(&bus->dev, "scanning bus\n");
+ 
++	/*
++	 * Make sure the bus bridge is powered on, otherwise we may not be
++	 * able to scan the devices as we may fail to access the configuration
++	 * space of subordinates.
++	 */
++	if (bridge)
++		pm_runtime_get_sync(&bridge->dev);
++
+ 	/* Go find them, Rover! */
+ 	for (devfn = 0; devfn < 256; devfn += 8) {
+ 		nr_devs = pci_scan_slot(bus, devfn);
+@@ -2976,6 +2976,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 		}
  	}
  
--	/* A new skb should have the data halfword aligned, but this code is
--	 * here just in case that isn't true. Calculate how many
--	 * bytes we should reserve to get the data to start on a word
--	 * boundary
--	 */
--	align = BUFFER_ALIGN(skb->data);
--	if (align)
--		skb_reserve(skb, align);
--
--	skb_reserve(skb, 2);
-+	skb_reserve(skb, NET_IP_ALIGN);
- 
- 	len = xemaclite_recv_data(lp, (u8 *)skb->data, len);
- 
++	if (bridge)
++		pm_runtime_put(&bridge->dev);
++
+ 	/*
+ 	 * We've scanned the bus and so we know all about what's on
+ 	 * the other side of any bridges that may be on this bus plus
 -- 
-2.7.4
+2.24.0
 

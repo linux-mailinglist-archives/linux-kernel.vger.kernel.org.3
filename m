@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB4150108A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9169B501517
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbiDNOos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S235449AbiDNNhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345071AbiDNNpE (ORCPT
+        with ESMTP id S244502AbiDNN1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:04 -0400
+        Thu, 14 Apr 2022 09:27:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96CE24087;
-        Thu, 14 Apr 2022 06:41:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387A597BA9;
+        Thu, 14 Apr 2022 06:20:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE86B8296A;
-        Thu, 14 Apr 2022 13:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC531C385A1;
-        Thu, 14 Apr 2022 13:41:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E44BDB82910;
+        Thu, 14 Apr 2022 13:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B61C385A5;
+        Thu, 14 Apr 2022 13:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943690;
-        bh=3A6/wr4Ruqir6XPiFN7OjrQqY55f8efY1tUO+dql6NQ=;
+        s=korg; t=1649942416;
+        bh=iQtxJ56id/+EmDG8JKDb8NZeezi+pYDMNN57Cf0Csr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JoIdTnBkKrTbXeVEYndkorIZytBeYckHMZZmuMBVEmdAJp7bejAIV5scp4U7X9Np+
-         V9VLNYEt49GbOobE3tFIzNRj/H0xCWAec6hhxSSIJYHCZE8ZSz6R40RyuXK2XJmEXg
-         BKvhiCtmJcDgpmeMbyGLk24WaxElGpr1fqwePWoE=
+        b=0yBv8aDXnAxUs3J9euX2DJ9bOpuMzW3Gp6Jg4nxemrhxcGeDvivdm9G8kdZ34i/bh
+         O7Up/XqBxQ1kKn+D3AcHWVIVWD8OMEFQobym3hOH/4xnSiidC78pF8Krag6AW5C2/9
+         rSRljxppOSvslhwYQS167LCCMFc1qoxubfCnSP3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
+        Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 246/475] clk: clps711x: Terminate clk_div_table with sentinel element
+Subject: [PATCH 4.19 128/338] dm crypt: fix get_key_size compiler warning if !CONFIG_KEYS
 Date:   Thu, 14 Apr 2022 15:10:31 +0200
-Message-Id: <20220414110901.999582650@linuxfoundation.org>
+Message-Id: <20220414110842.544912086@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+From: Aashish Sharma <shraash@google.com>
 
-[ Upstream commit 8bed4ed5aa3431085d9d27afc35d684856460eda ]
+[ Upstream commit 6fc51504388c1a1a53db8faafe9fff78fccc7c87 ]
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div = 0).
+Explicitly convert unsigned int in the right of the conditional
+expression to int to match the left side operand and the return type,
+fixing the following compiler warning:
 
-Fixes: 631c53478973d ("clk: Add CLPS711X clk driver")
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Link: https://lore.kernel.org/r/20220218000922.134857-5-j.neuschaefer@gmx.net
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
+type in conditional expression [-Wsign-compare]
+
+Fixes: c538f6ec9f56 ("dm crypt: add ability to use keys from the kernel key retention service")
+Signed-off-by: Aashish Sharma <shraash@google.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk-clps711x.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/dm-crypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/clk-clps711x.c b/drivers/clk/clk-clps711x.c
-index a2c6486ef170..f8417ee2961a 100644
---- a/drivers/clk/clk-clps711x.c
-+++ b/drivers/clk/clk-clps711x.c
-@@ -28,11 +28,13 @@ static const struct clk_div_table spi_div_table[] = {
- 	{ .val = 1, .div = 8, },
- 	{ .val = 2, .div = 2, },
- 	{ .val = 3, .div = 1, },
-+	{ /* sentinel */ }
- };
+diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+index a6a26f8e4d8e..3441ad140b58 100644
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -2107,7 +2107,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
  
- static const struct clk_div_table timer_div_table[] = {
- 	{ .val = 0, .div = 256, },
- 	{ .val = 1, .div = 1, },
-+	{ /* sentinel */ }
- };
+ static int get_key_size(char **key_string)
+ {
+-	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
++	return (*key_string[0] == ':') ? -EINVAL : (int)(strlen(*key_string) >> 1);
+ }
  
- struct clps711x_clk {
+ #endif
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A6B5011C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B935F501655
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343992AbiDNNjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S1354311AbiDNOzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244898AbiDNN2P (ORCPT
+        with ESMTP id S1344004AbiDNNuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E172091557;
-        Thu, 14 Apr 2022 06:21:16 -0700 (PDT)
+        Thu, 14 Apr 2022 09:50:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D380E1FCFE;
+        Thu, 14 Apr 2022 06:44:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97B7DB82910;
-        Thu, 14 Apr 2022 13:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09458C385A5;
-        Thu, 14 Apr 2022 13:21:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C31DB82968;
+        Thu, 14 Apr 2022 13:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1F1C385A1;
+        Thu, 14 Apr 2022 13:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942474;
-        bh=vyCVv6qJIsnjkSaHv0zFcCe681Rag8sg95z3AiB6Fuk=;
+        s=korg; t=1649943856;
+        bh=iWKH1mlMdsZhiA9X2sK2oDiy++NEq5LxR0fY3wTNPow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IUyUmTV8RyFy1D1yZ1kohxIwHlM1JHKmjcHoXjmqau3e7CAhvN9DWagdeAcAX1FVt
-         5AkwNn5l3Ldbuj98nN7NbxXnYqUrjaYBGM2KA2c1H4shJP4VO6N3U2ne1jK8RTMBl0
-         F3zMFkhz/jbH6t9/gDKqb/3TZFYPDbMLQxqjaseo=
+        b=OfvWoC8XJMDeqKFYJzKqyscSvOIr/8JCeWaaIYrpJCOgGg/U6+HvzLbpJ/WuVhdjj
+         iL/ys1I9/M7IUD/YePyKegJaZJd/Y2fj5lwZ24wvoxA6hJ4qmZw2PuHPgVWc5OwK10
+         /YB0TEeTXqxxTzXmpWnv7km61/H7tAY6J0MIpKBk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 147/338] mfd: mc13xxx: Add check for mc13xxx_irq_request
-Date:   Thu, 14 Apr 2022 15:10:50 +0200
-Message-Id: <20220414110843.088144094@linuxfoundation.org>
+Subject: [PATCH 5.4 266/475] net: phy: broadcom: Fix brcm_fet_config_init()
+Date:   Thu, 14 Apr 2022 15:10:51 +0200
+Message-Id: <20220414110902.552177180@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit e477e51a41cb5d6034f3c5ea85a71ad4613996b9 ]
+[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value of the
-mc13xxx_irq_request() and return error if fails.
+A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
+Broadcom UniMAC MDIO controller as not completing the turn around
+properly since the PHY expects 65 MDC clock cycles to complete a write
+cycle, and the MDIO controller was only sending 64 MDC clock cycles as
+determined by looking at a scope shot.
 
-Fixes: 8e00593557c3 ("mfd: Add mc13892 support to mc13xxx")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220224022331.3208275-1-jiasheng@iscas.ac.cn
+This would make the subsequent read fail with the UniMAC MDIO controller
+command field having MDIO_READ_FAIL set and we would abort the
+brcm_fet_config_init() function and thus not probe the PHY at all.
+
+After issuing a software reset, wait for at least 1ms which is well
+above the 1us reset delay advertised by the datasheet and issue a dummy
+read to let the PHY turn around the line properly. This read
+specifically ignores -EIO which would be returned by MDIO controllers
+checking for the line being turned around.
+
+If we have a genuine reaad failure, the next read of the interrupt
+status register would pick it up anyway.
+
+Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/mc13xxx-core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/mfd/mc13xxx-core.c b/drivers/mfd/mc13xxx-core.c
-index d0bf50e3568d..dcbb969af5f4 100644
---- a/drivers/mfd/mc13xxx-core.c
-+++ b/drivers/mfd/mc13xxx-core.c
-@@ -326,8 +326,10 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx, unsigned int mode,
- 		adc1 |= MC13783_ADC1_ATOX;
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index c23fec34b50e..7be75a611e9e 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -11,6 +11,7 @@
+  */
  
- 	dev_dbg(mc13xxx->dev, "%s: request irq\n", __func__);
--	mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
-+	ret = mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
- 			mc13xxx_handler_adcdone, __func__, &adcdone_data);
-+	if (ret)
-+		goto out;
+ #include "bcm-phy-lib.h"
++#include <linux/delay.h>
+ #include <linux/module.h>
+ #include <linux/phy.h>
+ #include <linux/brcmphy.h>
+@@ -479,6 +480,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
- 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC0, adc0);
- 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC1, adc1);
++	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
++	 * build some slack here.
++	 */
++	usleep_range(1000, 2000);
++
++	/* The PHY requires 65 MDC clock cycles to complete a write operation
++	 * and turnaround the line properly.
++	 *
++	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
++	 * may flag the lack of turn-around as a read failure. This is
++	 * particularly true with this combination since the MDIO controller
++	 * only used 64 MDC cycles. This is not a critical failure in this
++	 * specific case and it has no functional impact otherwise, so we let
++	 * that one go through. If there is a genuine bus error, the next read
++	 * of MII_BRCM_FET_INTREG will error out.
++	 */
++	err = phy_read(phydev, MII_BMCR);
++	if (err < 0 && err != -EIO)
++		return err;
++
+ 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
+ 	if (reg < 0)
+ 		return reg;
 -- 
 2.34.1
 

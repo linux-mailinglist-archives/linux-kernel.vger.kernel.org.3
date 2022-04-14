@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72E7501B73
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033C5501B90
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344883AbiDNTCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S243356AbiDNTEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240201AbiDNTCN (ORCPT
+        with ESMTP id S234302AbiDNTEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:02:13 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A17335DD1;
-        Thu, 14 Apr 2022 11:59:47 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id w23-20020a056830111700b00603c6d1ce73so38341otq.9;
-        Thu, 14 Apr 2022 11:59:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=pHUh2xfElfPjM6pU2gjEs6VjREPddKoYEwJGkBqvcYE=;
-        b=DO9xEE1dpXZLuubX7Tbh9FEKQbcdE61dH8UxxFLS+u1pOemX52edHM1SYV6xHWSn5o
-         Y07ZeNcZKwxV+ml2FHWAkoZgSp6qFOxsG9J6upWqGlpHaZVlBt9eTXzNG6Rdqr5qcO8J
-         UH0mfEWrk1+485wUsdsseiYBrCyMQAR3FXOkTRgYGfjzaJxwBKG9CzMyfvA2FTf5J5EU
-         4xXX33zGqoYSy1UxHICri3wJ9ORsRqkekqGC0A1DGmaKbQcEMToZEBxSw3lmS7PQv7KY
-         9i3YxLzMfX2TqS1tuhQT9HFX6K2zxQx4qe9Fi3LKG2eIf1ri7UMsU1ef92loDayWbC/9
-         fCvA==
-X-Gm-Message-State: AOAM530FtZzIjnznOfoqusi6kwVt+LNDfLfYVsXG8YtbRX7ktX/f/Qe9
-        XxcvLoTEGdPhKxEZNI0hSA==
-X-Google-Smtp-Source: ABdhPJwxFAMtv8DAm3ujwrIJQGNBj431vuTsaLB8T0RGyUluEn6mJTkhlDsvH5C1eCLdJS3pLptDFQ==
-X-Received: by 2002:a05:6830:245e:b0:601:8b3:65e2 with SMTP id x30-20020a056830245e00b0060108b365e2mr1424662otr.255.1649962786597;
-        Thu, 14 Apr 2022 11:59:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm308728ota.70.2022.04.14.11.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 11:59:46 -0700 (PDT)
-Received: (nullmailer pid 2441851 invoked by uid 1000);
-        Thu, 14 Apr 2022 18:59:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org,
-        Herve Codina <herve.codina@bootlin.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-renesas-soc@vger.kernel.org,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-In-Reply-To: <20220414122250.158113-4-clement.leger@bootlin.com>
-References: <20220414122250.158113-1-clement.leger@bootlin.com> <20220414122250.158113-4-clement.leger@bootlin.com>
-Subject: Re: [PATCH net-next 03/12] dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
-Date:   Thu, 14 Apr 2022 13:59:45 -0500
-Message-Id: <1649962785.207360.2441850.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Thu, 14 Apr 2022 15:04:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0797E9CA6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7Gtvh+XmNw/2pO9Tbmi5/yhRnGmCojLBbzbV+uUaWf8=; b=kQm1JgtPjs9+xaYrSz0aiArWG3
+        KtdN0jXjEoD1aSFEyuaGkmqgyVOfrqiilYJPfkG1Efm9n9qZGiQWejb+fVdbYPNGwB30EjpBwvTh9
+        v/ERxSnDjHk+oyA06/MsLO5I0e0ufv9ybcQlmdKZkj1VNq1pQfRHEnTguR8Z2iUhryk/eN1oW4jho
+        EvE/eVbqsHkC4Og0BwEB/HGwgHVBnbfBTwg/twtW7oQVeH72Q3syjbtwhND3aRJBaj5UzMaN4vQkp
+        N++sRJinIj8TDPWb8u5GLJugM3mBSL5VTuAQEeBpYs/I36zfTgNkwUWRPi1dhjBdoJFxUVYmQwSVP
+        JJA1fqlw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nf4j8-0056RV-Pl; Thu, 14 Apr 2022 19:01:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D565130027B;
+        Thu, 14 Apr 2022 21:01:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B555A322A1704; Thu, 14 Apr 2022 21:01:56 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 21:01:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 10/18] objtool: Extricate ibt from stack validation
+Message-ID: <YlhvpGsUFIOLByhp@hirez.programming.kicks-ass.net>
+References: <cover.1649891421.git.jpoimboe@redhat.com>
+ <44a73f724b51c4a994edc43536b7a7ee5e972b40.1649891421.git.jpoimboe@redhat.com>
+ <YlfS7twQVCHGgtCV@hirez.programming.kicks-ass.net>
+ <20220414154449.5moa7xsczwybbqhd@treble>
+ <YlhN+GFZlycwydSv@hirez.programming.kicks-ass.net>
+ <20220414170550.v2jmdfhmz7zbuug6@treble>
+ <20220414182505.oirx3znjl7ceozq3@treble>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414182505.oirx3znjl7ceozq3@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,41 +64,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 14:22:41 +0200, Clément Léger wrote:
-> This MII converter can be found on the RZ/N1 processor family. The MII
-> converter ports are declared as subnodes which are then referenced by
-> users of the PCS driver such as the switch.
+On Thu, Apr 14, 2022 at 11:25:05AM -0700, Josh Poimboeuf wrote:
+> On Thu, Apr 14, 2022 at 10:05:53AM -0700, Josh Poimboeuf wrote:
+> > On Thu, Apr 14, 2022 at 06:38:16PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Apr 14, 2022 at 08:44:49AM -0700, Josh Poimboeuf wrote:
+> > > 
+> > > > Ok.  That was subtle, it needs a comment or two.  I had the distinct
+> > > > feeling I was introducing a bug, then I got distracted ;-)
+> > > 
+> > > Right, lemme try and not forget to write one ;-)
+> > 
+> > I'm rewriting the code anyway, I'll add some comments.
+> > 
+> > > > Doesn't the compiler give those special cases ENDBR anyway?  Just
+> > > > wondering why we avoid the warning for those.
+> > > 
+> > > Sure, but this is about not scribbling that ENDBR with a NOP.
+> > 
+> > Right, but it only prints warnings for data sections, despite marking
+> > others:
+> > 
+> > -                       dest = validate_ibt_reloc(file, reloc);
+> > -                       if (is_data && dest && !dest->noendbr)
+> > -                               warn_noendbr("data ", sec, reloc->offset, dest);
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/pcs/renesas,rzn1-miic.yaml   | 95 +++++++++++++++++++
->  include/dt-bindings/net/pcs-rzn1-miic.h       | 19 ++++
->  2 files changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
->  create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
+> 
+> How about this?  This way it doesn't silence warnings for non
+> .data/.rodata, as other sections (including ksymtab) can also have valid
+> function pointers.  It also caught a bug(?) in putuser.S, as some of the
+> exported inner labels didn't have ENDBR.
+> 
+> 
+> diff --git a/arch/x86/include/asm/static_call.h b/arch/x86/include/asm/static_call.h
+> index 2455d721503e..2d8dacd02643 100644
+> --- a/arch/x86/include/asm/static_call.h
+> +++ b/arch/x86/include/asm/static_call.h
+> @@ -26,6 +26,7 @@
+>  	    ".align 4						\n"	\
+>  	    ".globl " STATIC_CALL_TRAMP_STR(name) "		\n"	\
+>  	    STATIC_CALL_TRAMP_STR(name) ":			\n"	\
+> +	    ANNOTATE_NOENDBR						\
+>  	    insns "						\n"	\
+>  	    ".byte 0x53, 0x43, 0x54				\n"	\
+>  	    ".type " STATIC_CALL_TRAMP_STR(name) ", @function	\n"	\
+
+Right, that makes more sense than hard-coding that exclusion, no idea
+what I was thinking ;-)
+
+> diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
+> index ecb2049c1273..b7dfd60243b7 100644
+> --- a/arch/x86/lib/putuser.S
+> +++ b/arch/x86/lib/putuser.S
+> @@ -48,6 +48,7 @@ SYM_FUNC_START(__put_user_1)
+>  	cmp %_ASM_BX,%_ASM_CX
+>  	jae .Lbad_put_user
+>  SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
+> +	ENDBR
+>  	ASM_STAC
+>  1:	movb %al,(%_ASM_CX)
+>  	xor %ecx,%ecx
+> @@ -62,6 +63,7 @@ SYM_FUNC_START(__put_user_2)
+>  	cmp %_ASM_BX,%_ASM_CX
+>  	jae .Lbad_put_user
+>  SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
+> +	ENDBR
+>  	ASM_STAC
+>  2:	movw %ax,(%_ASM_CX)
+>  	xor %ecx,%ecx
+> @@ -76,6 +78,7 @@ SYM_FUNC_START(__put_user_4)
+>  	cmp %_ASM_BX,%_ASM_CX
+>  	jae .Lbad_put_user
+>  SYM_INNER_LABEL(__put_user_nocheck_4, SYM_L_GLOBAL)
+> +	ENDBR
+>  	ASM_STAC
+>  3:	movl %eax,(%_ASM_CX)
+>  	xor %ecx,%ecx
+> @@ -90,6 +93,7 @@ SYM_FUNC_START(__put_user_8)
+>  	cmp %_ASM_BX,%_ASM_CX
+>  	jae .Lbad_put_user
+>  SYM_INNER_LABEL(__put_user_nocheck_8, SYM_L_GLOBAL)
+> +	ENDBR
+>  	ASM_STAC
+>  4:	mov %_ASM_AX,(%_ASM_CX)
+>  #ifdef CONFIG_X86_32
+
+Hmm, how did those go missing?
+
+> diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+> index 5f87bab4fb8d..b2b2366885a2 100644
+> --- a/arch/x86/lib/retpoline.S
+> +++ b/arch/x86/lib/retpoline.S
+> @@ -31,6 +31,7 @@
+>  	.align RETPOLINE_THUNK_SIZE
+>  SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR
+>  
+>  	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+>  		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+> @@ -55,7 +56,6 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+>  
+>  	.align RETPOLINE_THUNK_SIZE
+>  SYM_CODE_START(__x86_indirect_thunk_array)
+> -	ANNOTATE_NOENDBR // apply_retpolines
+>  
+>  #define GEN(reg) THUNK reg
+>  #include <asm/GEN-for-each-reg.h>
+
+Hmm, where does that come from? Do you have commit be8a096521ca
+("x86,bpf: Avoid IBT objtool warning")?
+
+> diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+> index ac17196e2518..3a2cd93bf059 100644
+> --- a/arch/x86/xen/xen-head.S
+> +++ b/arch/x86/xen/xen-head.S
+> @@ -45,6 +45,7 @@ SYM_CODE_END(hypercall_page)
+>  	__INIT
+>  SYM_CODE_START(startup_xen)
+>  	UNWIND_HINT_EMPTY
+> +	ANNOTATE_NOENDBR
+>  	cld
+>  
+>  	/* Clear .bss */
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index b09c416432b6..10e375c84088 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -3794,7 +3794,10 @@ static int validate_ibt_data_reloc(struct objtool_file *file,
+>  	return 1;
+>  }
+>  
+> -
+> +/*
+> + * Validate IBT rules and mark used ENDBR instructions so the non-used ones can
+> + * be sealed later by create_ibt_endbr_seal_sections().
+> + */
+>  static int validate_ibt(struct objtool_file *file)
+>  {
+>  	struct section *sec;
+> @@ -3807,12 +3810,36 @@ static int validate_ibt(struct objtool_file *file)
+>  
+>  	for_each_sec(file, sec) {
+>  
+> -		if (!strstr(sec->name, ".data") && !strstr(sec->name, ".rodata"))
+> +		/* Already done by validate_ibt_insn() */
+> +		if (sec->sh.sh_flags & SHF_EXECINSTR)
+>  			continue;
+>  
+>  		if (!sec->reloc)
+>  			continue;
+>  
+> +		/*
+> +		 * These sections can reference text addresses, but not with
+> +		 * the intent to indirect branch to them.
+> +		 */
+> +		if (!strncmp(sec->name, ".discard", 8)			||
+> +		    !strncmp(sec->name, ".debug", 6)			||
+> +		    !strcmp(sec->name, ".altinstructions")		||
+> +		    !strcmp(sec->name, ".ibt_endbr_seal")		||
+> +		    !strcmp(sec->name, ".orc_unwind_ip")		||
+> +		    !strcmp(sec->name, ".parainstructions")		||
+> +		    !strcmp(sec->name, ".retpoline_sites")		||
+> +		    !strcmp(sec->name, ".smp_locks")			||
+> +		    !strcmp(sec->name, ".static_call_sites")		||
+> +		    !strcmp(sec->name, ".static_call_tramp_key")	||
+> +		    !strcmp(sec->name, "_error_injection_whitelist")	||
+> +		    !strcmp(sec->name, "_kprobe_blacklist")		||
+> +		    !strcmp(sec->name, "__bug_table")			||
+> +		    !strcmp(sec->name, "__ex_table")			||
+> +		    !strcmp(sec->name, "__jump_table")			||
+> +		    !strcmp(sec->name, "__mcount_loc")			||
+> +		    !strcmp(sec->name, "__tracepoints"))
+> +			continue;
+> +
+>  		list_for_each_entry(reloc, &sec->reloc->reloc_list, list)
+>  			warnings += validate_ibt_data_reloc(file, reloc);
+>  	}
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml:18:7: [warning] wrong indentation: expected 4 but found 6 (indentation)
-./Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml:95:7: [error] no new line character at the end of file (new-line-at-end-of-file)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Yes, looks good, Thanks!

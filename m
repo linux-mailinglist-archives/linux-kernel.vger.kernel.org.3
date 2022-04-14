@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635D500784
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5C4500783
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240662AbiDNHtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S240614AbiDNHtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241436AbiDNHsT (ORCPT
+        with ESMTP id S241541AbiDNHso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:48:19 -0400
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B1B5BD25;
-        Thu, 14 Apr 2022 00:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QUIdS
-        H5S9XcWXxCUY4HCK2YAdAec2apaxrqVFd637JQ=; b=F+PaiP0/jxp/dEZUiKzM2
-        RoAx++fZzG5XUF8RCoaIZn6BumMkO3VsDGCvHZa3GE287s+fPDbM78/8eYRFsbUX
-        tpND4r6tUnMlUoTlYNnTTHxtSXbAMOuFyEIk+Cy3D6XszSpmDapzaLctanzSsmW5
-        KUYBMq0ZRUhao0iDRKd/sQ=
-Received: from localhost.localdomain (unknown [223.104.68.55])
-        by smtp8 (Coremail) with SMTP id DMCowAAHBv3r0FdiwljaBA--.54991S2;
-        Thu, 14 Apr 2022 15:44:45 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] USB: serial: option: Adding support for Cinterion MV32-WA/MV32-WB
-Date:   Thu, 14 Apr 2022 15:44:34 +0800
-Message-Id: <20220414074434.5699-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 03:48:44 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD62F3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:46:20 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so5273596edw.6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wZACf14Zs4ghmlGixfvY80XJb14X/TIhq2Zk1CXUc0Q=;
+        b=I0cbF59t7ZCgQYA0kYGOfxw8nnELP/Q6b+FdU3FMQbe/xZxZwQFZ7VUB/O7k+z5KBH
+         fYPZBuEhgsM36w+2Epeykb7Jr+LyTR4iOXRi7cj2hiW4b66x/yggUVkERvM2eAKYtZNL
+         Yez+IJXTiMQ4HS2qQOAP3ol++6KDw9W3wi1VkZL9gD74j3Xx3dy8XOgob0AHXXt47ud2
+         ByfYBlBI/Lpq8PQ5QoJA9ZfHl1TQ6CLY995X1GH5P4ts85S0P8+Ardjs+AfBE6bOviK1
+         QDK3qtYOlUeNlx/RVezsf1imLPNGSX9inx/ZAB9i1CwbCtk5GOys+zxfYaFICwlM5b7Z
+         ywHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wZACf14Zs4ghmlGixfvY80XJb14X/TIhq2Zk1CXUc0Q=;
+        b=RQ+JJ1uxD+lj8hZVKx5+/PHo5yuTaWKvv63v8JUjHxzG/rofB/CyPyzR3rjwq75qmJ
+         CpRvrdpxyMx2gedAtY3/GNYY2KurxfyLH+M+6oD4e9ZhlRgoVPj73NiSYyRSiJYSrYwp
+         0KGbC9hlPlBl5lPEL96yS+Sq9i7M7NyWIudIwq5tUN2cuM3PN0dAfUGfP8Ykqe98TpBZ
+         r97+zjKgnalvkZdixZhTJJ/fqb9CXyjWGzxaOsV7MDMc5XX8xui5npzLYP1U9HJCqAlp
+         u/US+jvi+mfREZX5DTIGH2UiTIhRYfL8iBaZDugIuzCpK3Z2STsBtieTGnQBIbxkp8Lx
+         8Oig==
+X-Gm-Message-State: AOAM530DOMNpthEAWHRQSAcPsJcUMUHjqLo96lpLz99Ev1BWMQh+f8Ty
+        vwGverirb5hoUKp0lhpntFSlLg==
+X-Google-Smtp-Source: ABdhPJxyI8NKQhnAT+jqKW9ekCZzczQuBZwb175SSCOVY7zS38N987C/oKEs+Y+lRdq0VCGCzW2r5A==
+X-Received: by 2002:aa7:c793:0:b0:408:4a69:90b4 with SMTP id n19-20020aa7c793000000b004084a6990b4mr1606455eds.58.1649922379386;
+        Thu, 14 Apr 2022 00:46:19 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906310a00b006e834953b55sm375111ejx.27.2022.04.14.00.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 00:46:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-mtd@lists.infradead.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        linux-kernel@vger.kernel.org,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v2] memory: renesas-rpc-if: Simplify single/double data register access
+Date:   Thu, 14 Apr 2022 09:46:17 +0200
+Message-Id: <164992231509.17172.5871980426499229486.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <c3b2a8d1a69f1b1e8d1a460148406cfb83e52eb4.1649857740.git.geert+renesas@glider.be>
+References: <c3b2a8d1a69f1b1e8d1a460148406cfb83e52eb4.1649857740.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowAAHBv3r0FdiwljaBA--.54991S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4fZr45AF18XF1xXF1DJrb_yoW5Zr1rpF
-        W5AFW3ZFyUGF47ZF9rtF1fCF95uan7K3yIkanrAwsIvFWIyrnFq3yUt3yxAF12gw1SgrsF
-        vF4DK34UGa95C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRpc_cUUUUU=
-X-Originating-IP: [223.104.68.55]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQ7iZGAJnZatEQAAsz
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding support for Cinterion device MV32-WA/MV32-WB.
-MV32-WA PID is 0x00F1, and MV32-WB PID is 0x00F2.
+On Wed, 13 Apr 2022 15:49:21 +0200, Geert Uytterhoeven wrote:
+> For manual write and read, factor out the common access to the first
+> data register by keeping track of the current data pointer.
+> 
+> 
 
-Test evidence as below:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f1 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F1 USB Mobile Broadband
-S:  SerialNumber=78ada8c4
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+Applied, thanks!
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f2 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F2 USB Mobile Broadband
-S:  SerialNumber=cdd06a78
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+[1/1] memory: renesas-rpc-if: Simplify single/double data register access
+      commit: 1f26a60b55aa654c73b5b9eb9eab8a7d687d429d
 
-Interface 0&1: MBIM, 2:Modem, 3: GNSS, 4: NMEA, 5: Diag
-GNSS port don't use serial driver.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/option.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+You can double check if hunks matched correctly:
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index e7755d9cfc61..d947357881c3 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -432,7 +432,8 @@ static void option_instat_callback(struct urb *urb);
- #define CINTERION_PRODUCT_CLS8			0x00b0
- #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
- #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
--
-+#define CINTERION_PRODUCT_MV32_WA		0x00f1
-+#define CINTERION_PRODUCT_MV32_WB		0x00f2
- /* Olivetti products */
- #define OLIVETTI_VENDOR_ID			0x0b3c
- #define OLIVETTI_PRODUCT_OLICARD100		0xc000
-@@ -1969,6 +1970,10 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(3)},
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
- 	  .driver_info = RSVD(0)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
-+	  .driver_info = RSVD(3)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
-+	  .driver_info = RSVD(3)},
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git/commit/?h=mem-ctrl-next&id=1f26a60b55aa654c73b5b9eb9eab8a7d687d429d
+
+Best regards,
 -- 
-2.25.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

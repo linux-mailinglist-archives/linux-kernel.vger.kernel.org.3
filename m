@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACFA5013E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA32650166F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346030AbiDNNzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S1355210AbiDNO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245541AbiDNN3D (ORCPT
+        with ESMTP id S1345991AbiDNNzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3753AD12D;
-        Thu, 14 Apr 2022 06:23:09 -0700 (PDT)
+        Thu, 14 Apr 2022 09:55:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57748393D1;
+        Thu, 14 Apr 2022 06:45:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75FC7B82983;
-        Thu, 14 Apr 2022 13:23:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD78FC385A1;
-        Thu, 14 Apr 2022 13:23:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCE5061D73;
+        Thu, 14 Apr 2022 13:45:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE436C385A5;
+        Thu, 14 Apr 2022 13:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942587;
-        bh=utaBIuZOLBtXiQN4N4Zh4kTBVWVw5hJbIvn9YJrb1B0=;
+        s=korg; t=1649943934;
+        bh=6AvQhmZay7l8OY1NEdYZlMis6d54HR6V8iJoPokq7+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbi7heLSvQ/cdPT2kvEvpzHodMgdF6nylAu++us3mPUEDeAK8y/PxW/JIqsRomCsW
-         m8O5AiiZRKVtOEUJI7oqlKoFIcBy4IgSjoBZj4sEVh68KcwDCvE1if6ROIh2dXBrHR
-         5RdxXdrQg08BUYK4XW3bWbrcZjkcSuildBccXERE=
+        b=O+H0vV7NH07fn3HDGvLB2yKGEAQ87YeuaYl7roqEbmNSTaauFrTK8nX6958sA/dlY
+         iVoM5dGFV5LyTmZ5YRWsEIV3TbiuBhw+eYdbM/tGTXT5zvW8LSlsZTGOGesn8Xq3GN
+         ZMknB8GkmC6pl4B0skqDhZhywoSuFWU/lhSfYGcg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 188/338] selinux: use correct type for context length
-Date:   Thu, 14 Apr 2022 15:11:31 +0200
-Message-Id: <20220414110844.248047303@linuxfoundation.org>
+Subject: [PATCH 5.4 307/475] media: Revert "media: em28xx: add missing em28xx_close_extension"
+Date:   Thu, 14 Apr 2022 15:11:32 +0200
+Message-Id: <20220414110903.682584519@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Göttsche <cgzones@googlemail.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit b97df7c098c531010e445da88d02b7bf7bf59ef6 ]
+[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
 
-security_sid_to_context() expects a pointer to an u32 as the address
-where to store the length of the computed context.
+This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
 
-Reported by sparse:
+Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
+reported [1]. Since quick solution didn't come up let's just revert it
+to make this device work with upstream kernels.
 
-    security/selinux/xfrm.c:359:39: warning: incorrect type in arg 4
-                                    (different signedness)
-    security/selinux/xfrm.c:359:39:    expected unsigned int
-                                       [usertype] *scontext_len
-    security/selinux/xfrm.c:359:39:    got int *
+Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-[PM: wrapped commit description]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/xfrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/security/selinux/xfrm.c b/security/selinux/xfrm.c
-index 91dc3783ed94..9e803d2a687a 100644
---- a/security/selinux/xfrm.c
-+++ b/security/selinux/xfrm.c
-@@ -349,7 +349,7 @@ int selinux_xfrm_state_alloc_acquire(struct xfrm_state *x,
- 	int rc;
- 	struct xfrm_sec_ctx *ctx;
- 	char *ctx_str = NULL;
--	int str_len;
-+	u32 str_len;
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index 885ccb840ab0..5ae13ee9272d 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -4035,11 +4035,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
  
- 	if (!polsec)
- 		return 0;
+ 	em28xx_close_extension(dev);
+ 
+-	if (dev->dev_next) {
+-		em28xx_close_extension(dev->dev_next);
++	if (dev->dev_next)
+ 		em28xx_release_resources(dev->dev_next);
+-	}
+-
+ 	em28xx_release_resources(dev);
+ 
+ 	if (dev->dev_next) {
 -- 
 2.34.1
 

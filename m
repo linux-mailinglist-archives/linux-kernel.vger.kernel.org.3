@@ -2,164 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26ED501C92
+	by mail.lfdr.de (Postfix) with ESMTP id 6903B501C91
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346253AbiDNUXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S1346273AbiDNUXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346245AbiDNUXb (ORCPT
+        with ESMTP id S1346258AbiDNUXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:23:31 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B36C6B79
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:21:05 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 15so7412796ljw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:21:05 -0700 (PDT)
+        Thu, 14 Apr 2022 16:23:45 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80119.outbound.protection.outlook.com [40.107.8.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC10C6B79;
+        Thu, 14 Apr 2022 13:21:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AyEhBdOYEbM0yRhI5+nr1MGyPyhnxRJiIDnZuJfBLedTlRh6VvPVQ9kpDF6Yn6VJoc3yGiw8YpWCDElkla2FQmxTg8Qo/whT+DPf4HUC+inK48z2iVH2KMoZyx5za58bbR4GBYlqlyWspalZ6Hi3k0jc49ObWR3MzklAUcCrnS7Z8tOd7jVjO0DtEBtMj9KuoP8slv533/SmkiV6B8c91wStChmR6uEWefMCmf2K42nbEX63plml86fMY6aNn5rJoi7HaMhsGGfnbe7Wy2YnaweVGeLB+oG/ZeejQhTyLgXsQG1j8wTYBWtylgScnwkMFQTJXMtuLlhCH7t8bJV2xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a+wHA5EI11JerEr5o/Vhk8DA5Zqvje8Co8z0AHceqvw=;
+ b=jdJUe2tcFrxYol2zLlWbCunfm/J3gpEfk8iPQZHc9a83dn12Zijxxqc3E+s7LNBuUEqgo59yTK16682VuQpJoVgi79++mJl6IhazbnfbyeD7W+Wkvkbj1zXyE6E8GBa9irDd0Ely+wcyUPh9PfMwmyLmELGsYviVKKsBeg1/gRuE/i6I9c4MKS3WWVFdm16kZqQ3nZVgTp1pYUUD7amufW8aomjjJMwyOGhizJfqKUOJCgi2FPSkcOBNkDLlIZyq4W9oEQVmL0TrwPrVfVj4MmRZ1tUT8u1buC9G17bdW5Z5LaYNg4MQO+FCpOaxCGmvgJyl1EfkuU4TVgF+tcX6Og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
+ header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=W3Tk74L2ir68zakq4v8zlWdg5BrR7HZyOAvpDgySkc4=;
-        b=ABYSQIEkXuWiJt6eDgMBaIhFrF6vy5f62wq+5X9uwXzBujfUD/V+Frqyu4X5V62jSS
-         TXd3MAa0wYWVU/7nqaJE+DHSyQovq/bDUk+COAF1qJp8Om9bT+2iPdrzkVmO6Ad/FfAI
-         kDWkkcR97WyhvBhJTIZZxBIPpqAFGsWM5bn1Sx0tHFPg7VIRmRu68yu7i1Ms3Q2z1aqD
-         XGXuFd3V7EL1qBt/mkun8X3lEX3paECWJ+FVAOcs+BNcohR21jvuLTxNCpALXSQZeWpK
-         qnG8cxwAslWb77Qy1NHvpoCwHnWaqUtXM+1fHb6R4BT0z9OHQdmHHqFW6xDPo/FrACb7
-         Scsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W3Tk74L2ir68zakq4v8zlWdg5BrR7HZyOAvpDgySkc4=;
-        b=1AjWSukhD5qjQx7nv+3oEWBwhbYhzsL0SdynWgFNp8GfPKWTcLaT9+koewm9MmaDYc
-         i7cyNCFI17PprKsschN4Rb1OoAouZkU9qkDuRiq2B0m7uPCbpgM2JPs5p1g0ftvUKM/F
-         /0xn15pxZXtY+822gMNE4CyDUdyMtZy9eTz28yVBrRMtfMYvdZ7v9A6KC5bL8Lu1llyi
-         enK/EnPmzO8+czW1le+75sKI/qfvaiHbDS1X2MSoZnOUzOSzOyOgdkXSF8+Cl+apKoKI
-         aRiDgwW2E8qrSmrtcCGK+XnBaoW1+CiGX12UJkRBNd0ZZtx2GB5SK/19G1lvBNg8XDrA
-         bB5w==
-X-Gm-Message-State: AOAM530zHrvIpJ2nBB6x0WMEAJY9gP8qHG/QNI/RmJ5riYAYIcocnNO8
-        vcY079UjsxLzKuf3kLx4nssnKg==
-X-Google-Smtp-Source: ABdhPJwq6E9Dm9JeRvDM83qfLCCNL3VKPy7UV1MWmncbBh5UHeTupvI8MtlR29m8KOd7amcA61BLDA==
-X-Received: by 2002:a2e:97d2:0:b0:24b:5802:9ebc with SMTP id m18-20020a2e97d2000000b0024b58029ebcmr2544323ljj.521.1649967663374;
-        Thu, 14 Apr 2022 13:21:03 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k40-20020a0565123da800b0044aa117f1aasm99577lfv.119.2022.04.14.13.21.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 13:21:03 -0700 (PDT)
-Message-ID: <71582688-d26a-04f0-350b-38a4fcaf86c2@linaro.org>
-Date:   Thu, 14 Apr 2022 23:21:02 +0300
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a+wHA5EI11JerEr5o/Vhk8DA5Zqvje8Co8z0AHceqvw=;
+ b=gcHHbD3zhB8Y3Ji/8iFiCYB0kUNNWkIvPPThSAoX52ijRjNXf0Wued6EyoEQAbUMudsmBizBEVGEinbyJc3pDP8g8HPThyuVrkIe2V0pgF39D/CEAO/yQBfoNCN+eeABtFsyrolgo9vM7c64nk4OsJ3GpSCP1GTrA4JF4zlcA80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=silicom-usa.com;
+Received: from VI1PR0402MB3517.eurprd04.prod.outlook.com (2603:10a6:803:b::16)
+ by AS8PR04MB7654.eurprd04.prod.outlook.com (2603:10a6:20b:290::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Thu, 14 Apr
+ 2022 20:21:17 +0000
+Received: from VI1PR0402MB3517.eurprd04.prod.outlook.com
+ ([fe80::5dd5:47e1:1cef:cc4e]) by VI1PR0402MB3517.eurprd04.prod.outlook.com
+ ([fe80::5dd5:47e1:1cef:cc4e%6]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
+ 20:21:17 +0000
+From:   Jeff Daly <jeffd@silicom-usa.com>
+To:     intel-wired-lan@osuosl.org
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] ixgbe: Fix module_param allow_unsupported_sfp type
+Date:   Thu, 14 Apr 2022 16:21:04 -0400
+Message-Id: <20220414202104.900-1-jeffd@silicom-usa.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR13CA0015.namprd13.prod.outlook.com
+ (2603:10b6:208:160::28) To VI1PR0402MB3517.eurprd04.prod.outlook.com
+ (2603:10a6:803:b::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Freedreno] [PATCH v7 0/4] Add support for the eDP panel over
- aux_bus
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     quic_kalyant <quic_kalyant@quicinc.com>,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sean Paul <sean@poorly.run>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
-References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=Ui6BAsnTaJ2_TMh1Tnjtaw7FR92aWoUysS+UT=c0qB3Q@mail.gmail.com>
- <20afcd97-4b8d-f770-151a-268b893b7c5a@linaro.org>
- <CAE-0n51fc-b-8VF7XP29=o8Xi86HQALGB-1u8n3b_3NjVyyJYw@mail.gmail.com>
- <e3154f3b-aea4-6961-b409-6b20ff8bf18e@quicinc.com>
- <2fd4a157-a9de-ca0e-7a47-7bb85199ae91@linaro.org>
- <bc3a3162-b34d-bff3-2109-e2fd0bc65bb4@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <bc3a3162-b34d-bff3-2109-e2fd0bc65bb4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a09b88a0-0ac4-4df4-177d-08da1e5454c1
+X-MS-TrafficTypeDiagnostic: AS8PR04MB7654:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR04MB7654171EB586ED58CDCE3DB7EAEF9@AS8PR04MB7654.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B6itvDrv6MDsnKdwbmb4jevLo9XsCCjH6uv/xVpD/5tvu9ixBppTtZF1DUs4l/x+jfZhnuNPURNdSbPTgb2cckEX0aylUHa6sr1nKrsHpLIhrLOpwUJrs9d/8zy6ttfOOmAXbM120lGtDSGokJK1aahYGT7AU17HVB9at99bZFI39ep3LMPB47yG1tBLSP67+yH+VlY9LGH4pbLdtuj5bS4kiXKQkwl6aDGXT3RMlUG2WbgAmsTfvTwcYoNXJlHWScitaNbigdPQL77xpgo8+jdPvCas8VFIrciqKInIXQubTl4IOu34u9tNQCpXbjo1X9QynwKhJDIpPa+vWfu32Z+4oTzqMxlcd6e/8fNZb73KeKLgw3fvwJOhTE5wb+88lVBvmUFQgalIJVGtrjDE2MlQeIjrmp+MANTXzMy0TkY0a1JYDAoHhnP/hQdAkc8AE8BoNvmmBZ5aLWY14cINQp2VYP8D+gkmuBjrgKfUNIjbkwHUMxPTrgZxjEufvvauPXOi6XUN6vC+ifwN7u04B9yvBqH/PG5gQdRty7NGEAYIqexc3cDohknQMr4JNJV36kXVjik4SUXLuQqvm//G6V3Mc7qzppq2xOrxUkoYlTflW/rYgZSg5JqOMlsBrdWfibYWaYk0iTQHeBMIthe5Wu4oC0wDWZgKwsNxKHRJkV+2v8/v32wic9DWlp5dNgpcRwfiO8sHi25wXEG58au+3Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3517.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(38100700002)(38350700002)(5660300002)(36756003)(2906002)(6512007)(1076003)(186003)(26005)(6916009)(6506007)(54906003)(2616005)(8676002)(508600001)(66476007)(316002)(52116002)(66556008)(4326008)(6486002)(6666004)(66946007)(83380400001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7W/HxFiF52icMbcaUWhLZnZVAoMo+qWZ75eu/5K4jUzOUA7J980JrVfUdz1u?=
+ =?us-ascii?Q?qUQqqRhhAlt2HNWdySnepwC/zS3nIFNarFYKK9S+DoO1wnOSQvuj8db4AgT8?=
+ =?us-ascii?Q?6PG9C6HMxt5ZytX4a2JfilHuXhKEqdIcYCCRHUNhNEOnpgp9adLurj122sWU?=
+ =?us-ascii?Q?GwtT+fC+sA966u0pYSMjki0UlpvOReYNIWaemsNtP8GNFvHWIujyKaL8BEAm?=
+ =?us-ascii?Q?SBxnlpbK83w5YM8a3Id5nw+IPwen6BbMpJ19FTB++bDCX4Xx1U5OqrzG1TI4?=
+ =?us-ascii?Q?K0pAXaUHorM9I9rJxWymi2CP78iGj8EzljElmoLW6jokz2VnPVC1gp8RRp7F?=
+ =?us-ascii?Q?ch3iQuAR5HIJ+9+EFARZkq5ipjTR9F8c6+sj7EVEWqYx4boZ8ZoQcPV0asxF?=
+ =?us-ascii?Q?KfMxIQb783Z5BBZetly3aITdLVrnA+ai7BnpzkU0CyWsiQU356XPO2ykXTux?=
+ =?us-ascii?Q?YgnkTfwNO4LB0fWNb+QgDtaYhi+WRZXKGVA1pBCnqPYE1yAewtujmw+X4ckI?=
+ =?us-ascii?Q?4/kceGEkKpIrSfe3ftq36Qg+g30kAsDjsar/mbb99+f+leUq/Tl86FfdsRDX?=
+ =?us-ascii?Q?2ew6lhVwpZdEppL6uTUH2hGLGe4k/jsnFaIkTlxkrfEYvBTqjZ4ZM4eMlgGr?=
+ =?us-ascii?Q?NuR7L+e9xpzhQzs3qHfUYDx8zJQy1t41+FZtLkjqhY5XlRPmBhyKgfEYfik9?=
+ =?us-ascii?Q?Lqw+eKrX6lP7ysahpJGeWQMxXCxZ4jbZioRgZXi/yCcni9XKgLrp21V7Ta+9?=
+ =?us-ascii?Q?qJSUg7m2QRrp/hWSCHxgs0w2iZ8P2nCEYh8MZEiGBEr4BNIi7rRNj01u2yeE?=
+ =?us-ascii?Q?TKcVdvLQ3ESLo8K7kCe6MucGnXM2HxiCVDmhrZuxOGLSgQKdMgyT5+zA1DV5?=
+ =?us-ascii?Q?MP7YkFeRT82EKBtAWDXnEQEVESnoiBlQLpp3LEmuoULpKKm/VbBlHUVDEbKK?=
+ =?us-ascii?Q?VdAMnKriYncNEDe162t5SAJF+qXdy1i4Ko0aOCT9eLj77uy+ekLvB7D9AkPz?=
+ =?us-ascii?Q?ffKvckQg/ILCBUv5qoaOaMnFCqfgmcqchFO9p8zfBFVx0mpBKfGoAc0AmGlw?=
+ =?us-ascii?Q?IUaPc5o1h5t3ZLjsGopIl9TUDT9hSbZXGXtXDNcNdQkSxyBt1G6/GLsKf10D?=
+ =?us-ascii?Q?6gwN/LFoiroZQAh6tRbfbmh7ftAlStp/XmPjO9ciZoYVWfgSJba9zf2gGLZ6?=
+ =?us-ascii?Q?Ok41BorNKy2tMz/VqGw03s3LzZSTZkMqzkFKFq7o/w0x6ZQUGo/O5dt/F6Ev?=
+ =?us-ascii?Q?Yura+cDYoHJzM2m08CjO7S80O6PPe0jHRmAegx+qGTB/gKKsaeOqj31iXFvm?=
+ =?us-ascii?Q?9XuRfNjJ+N5rVcmiyl0XHa5Tio22l42asaKJSgVeRhVJCXgRZX9xt6RL2+eh?=
+ =?us-ascii?Q?U8hmQ16IFgPQIM8YJU94cJVPZUeiluUsVKrFVc0dFIqC5iuEOxMiQ6QGZkU8?=
+ =?us-ascii?Q?bUln8oc6O+2pjpXpqEGRrpBNw04LHrbXtbZlBmkvaEYBMv8+QUr28XXe2FvX?=
+ =?us-ascii?Q?FlLDgCvj5ISGDBaA3qaBHlGM4s6Tk//FD7SApykyU8Hib2InjKsAKrNdIFrg?=
+ =?us-ascii?Q?MQfxZou1aBSXEIuWV+myqwxyiyQhDLAmB3vd9/N4lQGlzEimPf04eCzSwiQX?=
+ =?us-ascii?Q?FwQIorQ2cS6IOkXrfr5UAA3iAatIzQVEqZndBd+6MV8fdMTVaewNfHw3Gl2c?=
+ =?us-ascii?Q?OwK5LKMjShE43lrJrsHRfSQYQMkb26JRyp43rbiBhAb3sVYlLuvvUAe077jP?=
+ =?us-ascii?Q?H6qLqndl8A=3D=3D?=
+X-OriginatorOrg: silicom-usa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a09b88a0-0ac4-4df4-177d-08da1e5454c1
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3517.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 20:21:17.6873
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lfeRH/enCZy+UXTUB44pP0UoK8oQIeU+UY7DGNXfqXEFQQkdIUy+oS+QU9sFNQT2Trj+/Xn+ixb54IjyEmJTgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7654
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 23:19, Abhinav Kumar wrote:
-> 
-> 
-> On 4/14/2022 1:03 PM, Dmitry Baryshkov wrote:
->> On 14/04/2022 23:00, Abhinav Kumar wrote:
->>> Hi Dmitry
->>>
->>> On 4/14/2022 12:43 PM, Stephen Boyd wrote:
->>>> Quoting Dmitry Baryshkov (2022-04-14 12:20:31)
->>>>> On 14/04/2022 19:40, Doug Anderson wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On Thu, Apr 14, 2022 at 5:19 AM Sankeerth Billakanti
->>>>>> <quic_sbillaka@quicinc.com> wrote:
->>>>>>>
->>>>>>> This series adds support for generic eDP panel over aux_bus.
->>>>>>>
->>>>>>> These changes are dependent on the following series:
->>>>>>> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=613654&state=* 
->>>>>>>
->>>>>>
->>>>>> You're basically depending on the last two patches of that series.
->>>>>> What's the plan there? In patchwork they're marked as "Not
->>>>>> Applicable". If they're good to go, maybe we should land them? If 
->>>>>> not,
->>>>>> maybe you should include them (with Dmitry as the author, of course)
->>>>>> at the beginning of your series?
->>>>>
->>>>> No, please do not resend patches. The patches in question are 
->>>>> marked as
->>>>> 'Not applicable' as they are really not applicable to Bjorn's tree.
->>>>> It would be better to point to the correct patchwork:
->>>>>
->>>>> https://patchwork.freedesktop.org/series/98585/
->>>>>
->>>>> Note those patches still lack the R-B tag. I can include them anyway,
->>>>> basing on Sankeerth's Tested-by tag, but the formal R-B would also 
->>>>> be good.
->>>>>
->>>>
->>>> Can you resend those as not RFC?
->>>
->>> Yes, please resend these, I can ack them.
->>>
->>> Previously I held off my ack, as kuogee ran into some issues testing 
->>> them which was later concluded to be a mismatch in QC internal trees 
->>> due to different versions of the changes.( another reason why we 
->>> should get these landed ).
->>>
->>> Now, that Sankeerth has tested these, if you can remove RFC and post 
->>> them, I can ack the.
->>
->> Well, you can ack those patches without them being resent. You have 
->> already added your Reviewed-by to first three patches (which were 
->> merged during last window).
->>
-> I thought you might have to rebase them :) that way you could have 
-> resent the rebased patch with the RFC tag removed.
-> 
-> If you dont, you now have my R-b.
+The module_param allow_unsupported_sfp should be a boolean to match the
+type in the ixgbe_hw struct.
 
-Thank you!
+Signed-off-by: Jeff Daly <jeffd@silicom-usa.com>
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index c4a4954aa317..e5732a058bec 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -151,8 +151,8 @@ MODULE_PARM_DESC(max_vfs,
+ 		 "Maximum number of virtual functions to allocate per physical function - default is zero and maximum value is 63. (Deprecated)");
+ #endif /* CONFIG_PCI_IOV */
+ 
+-static unsigned int allow_unsupported_sfp;
+-module_param(allow_unsupported_sfp, uint, 0);
++static bool allow_unsupported_sfp;
++module_param(allow_unsupported_sfp, bool, 0);
+ MODULE_PARM_DESC(allow_unsupported_sfp,
+ 		 "Allow unsupported and untested SFP+ modules on 82599-based adapters");
+ 
 -- 
-With best wishes
-Dmitry
+2.25.1
+

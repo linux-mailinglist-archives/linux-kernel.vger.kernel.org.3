@@ -2,157 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E9E501B96
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC516501B98
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344238AbiDNTKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S242012AbiDNTOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236418AbiDNTKX (ORCPT
+        with ESMTP id S232417AbiDNTOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:10:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DEC7EB0B6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649963277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uv9Qj3cLySglZpILz1Tg747BYV9bj/hX2QO10CjQwo0=;
-        b=RAsRoQoQP/oSN7ncZqBiXMoBIOwZB3t8frjZF48wOFUG6F2AFMP79lMqypvu/UpuB2tfh3
-        yFytMtdKgmlTZdsx1F2rsO/fV8jVpbMilhNJdkd4q0BTTWghqviKD6TOfIPgFh06ByEwQ2
-        Ig5Qw3SgZPSeiB7BkEVqpmMKllBouQI=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-cb6joba6O2agJy3-7OElrg-1; Thu, 14 Apr 2022 15:07:56 -0400
-X-MC-Unique: cb6joba6O2agJy3-7OElrg-1
-Received: by mail-qv1-f72.google.com with SMTP id m15-20020a0562141bcf00b00443ddcd8a0fso5129425qvc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:07:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Uv9Qj3cLySglZpILz1Tg747BYV9bj/hX2QO10CjQwo0=;
-        b=fB1sQEMtOJe2OLUku7Vvlwka0JUYN03MyWDAcV7rKaj7T86CjGk3KhL3fg5DTfe5OZ
-         d8fFcYaukBNKzQ/TBd9Rohu9j4dg3zw5HiZ/2jD8+p6oxVqAkd0VabKOQlSGiWgYpqo4
-         cNFcU0aGiElvpcG9CGY3neC72oID972ZnBBTPbKKkWdwpvdAVBw3OlAFxf5Po7MdfRJB
-         kN7iNUCc7FOQ27pFjTtv2SWP1pccWSiQ/QVTds8t7I1FG7VIlEZzCR9OrzzLy1lmUUKt
-         DVZ1aaV6q2lPO9Avuikc6qozzzo6iBY2oKV+jgrEqYYsx62Gv3lXPSOeXyTv+ytGNiHu
-         bZVQ==
-X-Gm-Message-State: AOAM532xRtjUsp/KhxNATRPa6YcC04NQez/7fxUI8KugkddY0XH6OwdF
-        pA6/PHtZbfG91u2/82JrpN5k9SAwCXWHANFpmGZ0M47XzsPTRgMtseqyIYuKAjLgrD0bnY1gsz4
-        QFIltD0dZjq99+rv59I20Zwmu
-X-Received: by 2002:ac8:7ca1:0:b0:2ed:f4a:1bb8 with SMTP id z1-20020ac87ca1000000b002ed0f4a1bb8mr2947160qtv.369.1649963275545;
-        Thu, 14 Apr 2022 12:07:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx435TXg1mwzy4U6UXp8SD9bkXfcRNCWBOp+MQZn9mMUywZ4VMDfqZvpuPesRIcFZdECBRp3A==
-X-Received: by 2002:ac8:7ca1:0:b0:2ed:f4a:1bb8 with SMTP id z1-20020ac87ca1000000b002ed0f4a1bb8mr2947141qtv.369.1649963275296;
-        Thu, 14 Apr 2022 12:07:55 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id 193-20020a3703ca000000b0069bf950dd20sm1413370qkd.43.2022.04.14.12.07.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 12:07:54 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 12:07:51 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 10/18] objtool: Extricate ibt from stack validation
-Message-ID: <20220414190526.klnrtc3behsbxftb@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <44a73f724b51c4a994edc43536b7a7ee5e972b40.1649891421.git.jpoimboe@redhat.com>
- <YlfS7twQVCHGgtCV@hirez.programming.kicks-ass.net>
- <20220414154449.5moa7xsczwybbqhd@treble>
- <YlhN+GFZlycwydSv@hirez.programming.kicks-ass.net>
- <20220414170550.v2jmdfhmz7zbuug6@treble>
- <20220414182505.oirx3znjl7ceozq3@treble>
- <YlhvpGsUFIOLByhp@hirez.programming.kicks-ass.net>
+        Thu, 14 Apr 2022 15:14:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD8BE996B;
+        Thu, 14 Apr 2022 12:11:46 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id A99041F47C76
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649963504;
+        bh=QzazdTkJUyPxoWMBQtS0j3+6PWTkOSNi4bctVgjyFy4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SnxNYl7LNmTWZVkOCTGlL6LmjkwXInzk0zIBF9kXMlaKKZ8bMWzDBl9BjJe0BVjKe
+         4Yud9mz9d8h9Ed6luJlZTVHyY2QuBGZ+EQKjZHaJzQY34tCqeRJ68MZuVebpKzH188
+         t9v7fC7/VFJQGn3jmAtrU6bFFFwQKeRZU+CxwDKL9VQY5u3iP2b/qDteB4k+wo6Q6U
+         zI9ON8nPLrsMHmiXEcSF07pTqx9zWj7E0DAsuHm4Bo1GWzrUgFxGeun3PFfwJm/Nxm
+         +iqsnGNFnXMRInUdaAGKhp0pHMP59zrA9uVbBt1Sfy0IvYDZEYNjMj79TjUC4tLcWT
+         U0lPYUwffoP5w==
+Message-ID: <207d6171-173a-3d77-4b13-ea6f7476478d@collabora.com>
+Date:   Fri, 15 Apr 2022 00:41:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YlhvpGsUFIOLByhp@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Basavaraj.Natikar@amd.com, Richard.Gong@amd.com,
+        stable@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        gabriel Krisman Bertazi <krisman@collabora.com>,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <20220414025705.598-1-mario.limonciello@amd.com>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <20220414025705.598-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 09:01:56PM +0200, Peter Zijlstra wrote:
-> > diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
-> > index ecb2049c1273..b7dfd60243b7 100644
-> > --- a/arch/x86/lib/putuser.S
-> > +++ b/arch/x86/lib/putuser.S
-> > @@ -48,6 +48,7 @@ SYM_FUNC_START(__put_user_1)
-> >  	cmp %_ASM_BX,%_ASM_CX
-> >  	jae .Lbad_put_user
-> >  SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
-> > +	ENDBR
-> >  	ASM_STAC
-> >  1:	movb %al,(%_ASM_CX)
-> >  	xor %ecx,%ecx
-> > @@ -62,6 +63,7 @@ SYM_FUNC_START(__put_user_2)
-> >  	cmp %_ASM_BX,%_ASM_CX
-> >  	jae .Lbad_put_user
-> >  SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
-> > +	ENDBR
-> >  	ASM_STAC
-> >  2:	movw %ax,(%_ASM_CX)
-> >  	xor %ecx,%ecx
-> > @@ -76,6 +78,7 @@ SYM_FUNC_START(__put_user_4)
-> >  	cmp %_ASM_BX,%_ASM_CX
-> >  	jae .Lbad_put_user
-> >  SYM_INNER_LABEL(__put_user_nocheck_4, SYM_L_GLOBAL)
-> > +	ENDBR
-> >  	ASM_STAC
-> >  3:	movl %eax,(%_ASM_CX)
-> >  	xor %ecx,%ecx
-> > @@ -90,6 +93,7 @@ SYM_FUNC_START(__put_user_8)
-> >  	cmp %_ASM_BX,%_ASM_CX
-> >  	jae .Lbad_put_user
-> >  SYM_INNER_LABEL(__put_user_nocheck_8, SYM_L_GLOBAL)
-> > +	ENDBR
-> >  	ASM_STAC
-> >  4:	mov %_ASM_AX,(%_ASM_CX)
-> >  #ifdef CONFIG_X86_32
-> 
-> Hmm, how did those go missing?
 
-Because the current code only warns about references from .data/.rodata.
-This patch changes that.
+On 14/04/22 08:27, Mario Limonciello wrote:
+> commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before
+> initialization") attempted to fix a race condition that lead to a NULL
+> pointer, but in the process caused a regression for _AEI/_EVT declared
+> GPIOs. This manifests in messages showing deferred probing while trying
+> to allocate IRQs like so:
+>
+> [    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
+> [    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
+> [    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
+> [    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003E to IRQ, err -517
+> [    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003A to IRQ, err -517
+> [    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003B to IRQ, err -517
+> [    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0002 to IRQ, err -517
+> [    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0011 to IRQ, err -517
+> [    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0012 to IRQ, err -517
+> [    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0007 to IRQ, err -517
+>
+> The code for walking _AEI doesn't handle deferred probing and so this leads
+> to non-functional GPIO interrupts.
+>
+> Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` to
+> occur after gc->irc.initialized is set.
 
-> > diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
-> > index 5f87bab4fb8d..b2b2366885a2 100644
-> > --- a/arch/x86/lib/retpoline.S
-> > +++ b/arch/x86/lib/retpoline.S
-> > @@ -31,6 +31,7 @@
-> >  	.align RETPOLINE_THUNK_SIZE
-> >  SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
-> >  	UNWIND_HINT_EMPTY
-> > +	ANNOTATE_NOENDBR
-> >  
-> >  	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
-> >  		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
-> > @@ -55,7 +56,6 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
-> >  
-> >  	.align RETPOLINE_THUNK_SIZE
-> >  SYM_CODE_START(__x86_indirect_thunk_array)
-> > -	ANNOTATE_NOENDBR // apply_retpolines
-> >  
-> >  #define GEN(reg) THUNK reg
-> >  #include <asm/GEN-for-each-reg.h>
-> 
-> Hmm, where does that come from? Do you have commit be8a096521ca
-> ("x86,bpf: Avoid IBT objtool warning")?
 
-Same answer as above, this patch now warns about exported symbols with
-missing ENDBR.
+Thanks Mario for sending a fix for this issue, I didn't realize 
+gpiod_to_irq() was also
+being called through acpi_gpiochip_request_interrupts().
+Change looks good to me.
+Reviewed-by: Shreeya Patel <shreeya.patel@collabora.com>
 
--- 
-Josh
-
+> Cc: Shreeya Patel <shreeya.patel@collabora.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
+> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+> Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>   drivers/gpio/gpiolib.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 085348e08986..b7694171655c 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+>   
+>   	gpiochip_set_irq_hooks(gc);
+>   
+> -	acpi_gpiochip_request_interrupts(gc);
+> -
+>   	/*
+>   	 * Using barrier() here to prevent compiler from reordering
+>   	 * gc->irq.initialized before initialization of above
+> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+>   
+>   	gc->irq.initialized = true;
+>   
+> +	acpi_gpiochip_request_interrupts(gc);
+> +
+>   	return 0;
+>   }
+>   

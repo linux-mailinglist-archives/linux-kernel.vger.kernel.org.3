@@ -2,133 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0B7501E22
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A02D501E37
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346946AbiDNWSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S1346964AbiDNW1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiDNWSA (ORCPT
+        with ESMTP id S229769AbiDNW1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:18:00 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026444742
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:15:32 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id v133so2230123vsv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:15:32 -0700 (PDT)
+        Thu, 14 Apr 2022 18:27:14 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49125AECE;
+        Thu, 14 Apr 2022 15:24:47 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EKvuFn014133;
+        Thu, 14 Apr 2022 22:24:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=E7kQgRSLVqahKmxKZzLWMGfXKfPKTjxNOfxmojvXUZg=;
+ b=kfqFMWhnolvEoXfRn7Mrb/DBN4Ra29zbVGjkYmDnz3EaR3ZPv070l18eHINLJ/AwVMgy
+ CPV5U1SjVY+sDfzE4JsmtuprPRKjVCkh1a0hVxeA8TqlnFu/XAPsWCxREPEaXQn8yfQ2
+ friX+T511wj+90VVm8rPMOhbG752lcGOdiZLoMDZGfGcXJFFOcjIksHkZNShjpv/lNOc
+ /QmisqOD23tIzqldgS0MuZrH11PFZ9GFxIDd+E1rej9ze2xsyCkhJfC+663eNsCpzvNi
+ S31OwxnvNkRhhTL5xug4QmBE270fT6nBAaHKh1S3IZEuTiSN34JVSBASSz4PMz3eIQcv og== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2pu6be9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 22:24:40 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23EMHQPL020978;
+        Thu, 14 Apr 2022 22:24:39 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k57ddj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 22:24:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dzRsxf8v5EiU91Z88pjDL0NWlRzFvg0S9s/wdycCq1e3FQPR/3S0Egkjsu81iTQqdcQ8rptglT9AnYhIqJ9BizaJZmea6m9y/PBuicBQ5AXDD8/Bh9t7kCaBHEIdzyy6nAinAFtRMPKdnvlMapKml2iO/VewqXgFAFKxzFCu/T481OpGv4Oj/YuCX6+dxagqUVBdSixRjgdMX54G76jv5Xpd0SKD4YR5BQ4m2rSGMvYXwXX0saObE0xqZr1S3p/Of1CCnKkryqyr63MZaxf3P3P5FbpWlPc1Kr1k+EBEm02GisUgENqo82J4Ygm+QEtPYtp0PtASOdWu8cJFvd/BqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E7kQgRSLVqahKmxKZzLWMGfXKfPKTjxNOfxmojvXUZg=;
+ b=Hh+MhdCy1HjciqnBQgm6emcf5AtPEvlTNeMwgtHM2khIViNF95nPjPl6owPIp1JyzrTBeKJIbax/X75pUU5pXoDRyepKluqITBo6nrHLqBBbnEOve46ldwKg/Wor2Ar/7pW3G6FYobGAjQyWqudOVg0JZIG73rCbxTPu6iWxhRTx19+lNgxxEJESChmG/kxFoy7iFnCFn5iGktv+kLk87113kPwG7MmP1+IcU8llX+aifWy3uPzaCKvEJlQot2uO5xDwj/GNSnuCHjHDkDBw/yO8nuKaNjGE1ABGZVCpyUu5BC+busp7qr/uibHf+indyyLLmz5U0yGbNiK/q+zgvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gHW02OLiilkH2/+Tws3AW48zmC2lykajHWPQE7KEVbE=;
-        b=cX6Ui3wEnVf9lN85AlE0FUWBTpgPIOpS5e99y4DrkVKNYMrdgCzmfdADxyijNbm6X1
-         fz6WHCq5ohnl6+yC1UncZ1WpwyrihRAm9+jQSz6roUqF3/rjYSLROEUKjtqFyl9yjNIW
-         7FHHbh6ObMLZbvzOvy94zur3rSlaNpITjBE+UFhtNiStA7J4ErpcYT5A2sbt7UjAeoXn
-         CFYFmnrc3yVx9SOLuvGYpNrGFN2pqix/LOPwZbkZ1gQjNN9YpJqXxPcCKI75QgCXcLF9
-         RG1ruAr+T6nchpqowA3VtEiWGkXX+PzH5Wqrqn1mPSxULozp8gPcvMGiuZyRLtL1yhVy
-         3n0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gHW02OLiilkH2/+Tws3AW48zmC2lykajHWPQE7KEVbE=;
-        b=oSwD4s84llDNPYk4TWw80GMgbnycjUEHQ82YESEZM7g3XYKP8DMj4KIz/E3La/1Wi3
-         bLTSCKdAMpBmZ8J8r/baxWBZB0tL7L6fp8dG5lzTPMnMIG7pSMDf1O6OOMReys9eicby
-         RM5e4W6y+Ug3quZQuDC14fFZci8UT6tpqXXL1W9fZVP2yeC33FyACntHyr7bo3efIyWJ
-         AOjhlb2Ie//jkZvdhgyTRxWzsyowL7v1jlRstGMksjeVQdb/LENIZaQg2bBbqNHIRb9o
-         vFfSymTR316fXzzeBKzthoFZpMh0ZPFnPr6l3/GQUllk9OvYPea9BsEXK6u844SpHZVk
-         tpiw==
-X-Gm-Message-State: AOAM531j7YlNVhtabtXmy5Rh/HwBPpDWWc3Lf+A654ONmSZAbao6/OPb
-        Cqkzv3b/+TGUh8kYwvxMgh/JUXTI4gDjd2WOqvKxKQ==
-X-Google-Smtp-Source: ABdhPJwseL3VhTE0AoGeVMgj+ftKNkyXKHXFohiK3nY6OH3s/IVxakxl8Gh+bQzen5ztytFfSWNkxCPOFoJ/uG2ezQg=
-X-Received: by 2002:a05:6102:5cc:b0:320:9bd2:3823 with SMTP id
- v12-20020a05610205cc00b003209bd23823mr2297960vsf.81.1649974531117; Thu, 14
- Apr 2022 15:15:31 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E7kQgRSLVqahKmxKZzLWMGfXKfPKTjxNOfxmojvXUZg=;
+ b=lVsTBgpR5q+YfSHJnqgYq8MCxw8tjER4GKEAwdExx/0bLvrsefh3hY3EyP/Nj2OTGF+WCgGWRymXnR0UHSMRyqR2xYhEUoNzFvRQOxT50/4n9khZ55HhfVFQFUNyZaaiBdhtkZH8dnjmky1bN3CYvE9xtmXIDgaGP3IP+peZ6ko=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by DM6PR10MB3962.namprd10.prod.outlook.com (2603:10b6:5:1fb::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
+ 2022 22:24:36 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::a8c2:7a0b:5845:1675]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::a8c2:7a0b:5845:1675%8]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
+ 22:24:36 +0000
+Message-ID: <7b1c0a82-f7c3-4f60-ccb3-893caf4221f9@oracle.com>
+Date:   Thu, 14 Apr 2022 15:24:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/4] selftest/vm: verify remap destination address in
+ mremap_test
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
+ <20220414171529.62058-3-sidhartha.kumar@oracle.com>
+ <e6cc5cf6-b6bc-2eca-255d-5dd247253255@linuxfoundation.org>
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+In-Reply-To: <e6cc5cf6-b6bc-2eca-255d-5dd247253255@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR08CA0010.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::23) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-7-yuzhao@google.com>
- <CAGsJ_4xqm4L4E4dW4PPHos8Ed9ej6hph28tSGy21Re3u7WiuOA@mail.gmail.com>
- <YliFs3NOHeo2LeXl@google.com> <20220414143959.0daf4534613f2511b9b27f11@linux-foundation.org>
-In-Reply-To: <20220414143959.0daf4534613f2511b9b27f11@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 14 Apr 2022 16:14:55 -0600
-Message-ID: <CAOUHufYmEYa4c7v4ATv+cHKu7uN7Lx7agMwWyPERyfMxDyFwoQ@mail.gmail.com>
-Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Barry Song <21cnbao@gmail.com>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d94769d-e8c5-434f-c1d7-08da1e658eaf
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3962:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB39620664DA03464CD816DA2E95EF9@DM6PR10MB3962.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fuIzb9b2ZsxSX84JRzRDn8irtihm51gyXBaouwVDqzGwoR1bIK4anw57xZkbEhKRgUV1Cb9uiZRJLwGwFIpcXLyMcOc+CPk/BKmJKF0256ElDjTGP00jPxkBEHueAizoAdYvpxsFgA3nw/KUQ82e3Oiu8DTMRI9/wHlkHL+BJ4cwLnn9gmNUxnVLC7M1R0zzMPYff7pHd8nMSK1lvxU5niQke2Yq5Sf9ZY/LQaRhl+tR1vnv2uH3HMKV7QWa3JXFWKe8VIl0W5R9aUw7J2947D+kkm6viAbLW6zXxvxhj1tEnOouqv30PSkZGiNzP2Veg5h91CclJNOlam1OaNMAxdQssrmS5M4Fix09YRViPs6JRew7wn4F3B7Rp+uvGcrL9UQyMWLvS1zZI98NHmld4DFDozdULlTeWgCofr9BRi3ZwgW8h9+yvEUkWGnKrMMoscF/XO5zljpxbAX/1NKjIpRJ6JOKXJdxuLIYmkGQBSVq7i+u21etKgP+0w9sZckWQ/VJWTLurUo+ag9hMDyCtsCzfsQfhevCn6h/HHRP2cKTd1GCRdV2QcvoSGnFiqcjqEs8EB8yAucu6Choq3KortUbSrxmi0ykVnjLN2tU9M87eGyZm2EC10phUf/XdxNtjGqw1R0aKU703BCqIDYblrH4xStrY1nm4eW+klz5Eh4pros4JWVaJXnQ8cd4EkXFPEJn8hialkBttG9RO2gh4JrKt327Dth6BT9CFQ5B+ywkBr1TnM/i/5W9z6DN8Gr6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(66476007)(66946007)(44832011)(186003)(86362001)(4326008)(31696002)(36756003)(508600001)(5660300002)(15650500001)(6486002)(38100700002)(2616005)(8936002)(83380400001)(8676002)(316002)(6506007)(6512007)(53546011)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?amlGVmxtN01McXF2SXhlZXlwMnorcFROREVma1RGQmkwN0RERnFQUklrblhF?=
+ =?utf-8?B?WnlXZXFOSGFQSDJLaUE2MTlRY1Ayd3ljRzdoT2ZmOFFUb3BoUFN5emxXYTBa?=
+ =?utf-8?B?M0s5cjdzdG1PTjNiMkFxa29SdFFIbU95cGtlNllza1llL0R0ckZtQ1E1L2R3?=
+ =?utf-8?B?dnZSKzBMTVAveVFSc3YxdGs0MkphUU5lL2FKd21QQzFBRGs0cmw5WXI2Wkdv?=
+ =?utf-8?B?dmJHU1dPSHRzVnU2SVZSYlU4U2Zwc0U0dG1nSHAybzV5TlpXUDdrYk14dXRU?=
+ =?utf-8?B?UUM0MVFxc1J5eVJ6bnNvZHZxUVZzVFg0Q2FadVlhdXNLVlllbldLMUVSTytO?=
+ =?utf-8?B?QkplQlpCSmJhWHpRek9nMDJsbC9IWG9jTEtwTk5EUFBxdXRIaGRFMTVpaWNj?=
+ =?utf-8?B?TFlJZ0laQkhwYXJVOVl3SWVKYmRoNHFHUkpVVDFWdTFJcHdhcmQ0aGhJT3o4?=
+ =?utf-8?B?TG9ZK09CUzhsVGtLbmdPMStjSFhKQTYvUktBc05rMXZUakJlZllYaTI2bXp6?=
+ =?utf-8?B?aG53NU5EWEkwMWI4bzhEZHVSYWtuL0Y3ZmZNTXFZa0c3YWZrYTdCeXRJU2t4?=
+ =?utf-8?B?Z3dTTGIya3I1QW5qQ1YrR0x0bVdhRkN0RzBlalViR0RCZ0VLaVBVZlNaM3V6?=
+ =?utf-8?B?Q3cyam1BWEJyaVQxRmtIbmZ0cko0Q2hIRzFKU2loZFJFL285ZWgvL2Zpakdl?=
+ =?utf-8?B?NWtjUWcvRVZBSzY4MUpZcHBhTTJrYzJ2QVFvbHhsK0xsTHBRcVVTSmY5M05k?=
+ =?utf-8?B?SUhwL05lbjAyTDVSNUc1MTJuaGF1Z0VLWkpQSklnRlBSWS9lTE1TRU53ZzBD?=
+ =?utf-8?B?Y052UFJ5REZ1TU9rWDBJdDBpTUxJelU3NkhDMzJRUHBZenN5VGVTbmpMVUpa?=
+ =?utf-8?B?M0pQSlI0RGsxbHFwRmt3TjgxS2k1YnVXVkUxQkZBL3ZGZ0JCK01wVVZKUk1s?=
+ =?utf-8?B?YUNDMWN3TE5uOXlaeEhEZTQzUjZ5aldyQTBnSUxrMnRiR0J3UlY1OG8zRExn?=
+ =?utf-8?B?dmdxZzI4Mk4rY3B2NVhjcGx4WTJVV09iamlKWStQa3lPYkEwK3FiZ20rRTli?=
+ =?utf-8?B?bkNPVlJyM0xKWFhrNVAwMWRGTzh6c3FyUmFacjd4Wi95VUlSWlAwdFU5U3E0?=
+ =?utf-8?B?eDFtMUQzTWdZM3haTm8vTDVKVDhJK2NCam5XZkxBZW5ndG5xWmJIMGZqSHhP?=
+ =?utf-8?B?Ull3cnJVbFpaQlQzeDAwQWRsZmE2djVOK0lCZnJIWkxNL0hLRUdPeTRWd04r?=
+ =?utf-8?B?MjVadktGQ3k1M3p6MVI4VVl6ekRKSjJzSmp1UC8vZWV4OGVzK0ljUnhHMm0y?=
+ =?utf-8?B?OVhKU2VtTDVhWVRzL2QvRGpJL3JwRkFqZUFsZG5Sa3AxSEdiZ2tSem5QK25J?=
+ =?utf-8?B?clNrK0dVOURTSnV4OGQra0kzdGFMaWRJVzVJazhqOVJNSFB5eitZeUVtaENK?=
+ =?utf-8?B?RUl1SVNEMnF6bkUzRlE5T0hMMHBRSVNQWVBTVVNydU53SHJrbFpHZ1J2Rzht?=
+ =?utf-8?B?aWwwVDU1OGpLYXVjR1hYaWt1SWZNUFdqU1RwQjdjb0o0amVLdWtrcFhwSUQ3?=
+ =?utf-8?B?WnhudnNPY3pzY3JPU3VVNjZxemlmMWFMYytoME9ETmZwemtQQlBqMHlScnlU?=
+ =?utf-8?B?cVBhNEt4a0R5N1JYVWxNVzNjNDd1R3J0Q0tmaG53WVZwbW83VWRPM2s5bXoz?=
+ =?utf-8?B?RTVFYi91Q1ZUUjNDUU9ibHlseFgzUDQ2UmJrVllTUG5BQXZFc242WWd6aXly?=
+ =?utf-8?B?YkE2Q0hiMFpMeElwdWFPRExFVjRIdUVTN3JYdHltUlBSajNZV3dEaEpJSGsw?=
+ =?utf-8?B?NXBWOGZJc3hROWJVa3FPMTFNbnlQdmdrNm53amZRdGk4Q2pMdDQ5TVBqU2Zp?=
+ =?utf-8?B?dU5VWGlaL0lncjJUc016azZXblFVeWFIQTlvU29YNHIxV2FDZ050QkxsbTA4?=
+ =?utf-8?B?MWZXVktKS1lDYXhqN3dGMTZvdjVJaDZuOG9EOU9yRVJJZmdwWHpQRzlpa3VJ?=
+ =?utf-8?B?aXlkYXpReGVjWjN4U1Y5a3QxS1ZwOWVsL3dUYUJyYmtrNTQzcFZwRkFhb0ow?=
+ =?utf-8?B?azl2R3I4bWxGNDh6bUNSdTd4ZDFQTFpmSXJoZzcwSnJRV0hJZG03R2xDWkxI?=
+ =?utf-8?B?NER1UDliaEMxYzZNaGF5b1VOcG9LN2gyeklZdzYza21FZmJrN2c4S2lTaTFh?=
+ =?utf-8?B?TmZmcGhqcEFiMFpOUnhZcHZQYThCendHbkNIdjAxUUVyVTVId2pua0YxK2Yr?=
+ =?utf-8?B?SDlBR2hDSlJzdmpya1d5SDBHaWJWMDZ3WGt1dUlja2wzNjFnbys4YlVzdkNX?=
+ =?utf-8?B?RVdnYlR5bEgxZmtqeDZPQmZ5c2l6WUxYVGNtMGQ1ajVOaGFUTVd3ZWw0WFVF?=
+ =?utf-8?Q?OSRJYmypHnEsCWDJKOOiNVuqNbQFXdYFRZmxffc+dwq1f?=
+X-MS-Exchange-AntiSpam-MessageData-1: za1A6eNIi1c2Mw==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d94769d-e8c5-434f-c1d7-08da1e658eaf
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 22:24:36.2634
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t8SBliPv+q74M66zDCgvpndLKXcMFgcIuJCgNhhXAAIAfMHvBs41S6LaGMT500htC1sMGee2uQyr7DQwchoVHBh0DySApNBc0v6DuziJJR8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3962
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-14_07:2022-04-14,2022-04-14 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 mlxscore=0
+ bulkscore=0 phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140116
+X-Proofpoint-ORIG-GUID: qx4X9w1kie0SV8_fi8JsLn8LYfW4NSjL
+X-Proofpoint-GUID: qx4X9w1kie0SV8_fi8JsLn8LYfW4NSjL
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:40 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu, 14 Apr 2022 14:36:03 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > > or it is only something
-> > > meaningful for the internal code?
-> >
-> > This is how swappiness is interpreted.
-> >
-> > > if so, can we rename it to
-> > > something else? otherwise, it is quite confusing.
-> >
-> > Feel free to suggest something.
->
-> It is confusing,   swap_preference?
 
-It's still largely swappiness -- the original swappiness is twisted a
-bit around the corners (0, 1 and 200) to make it more suitable for
-internal use.
 
-I vote for __swappiness or lrugen_swappiness, which look ugly to me
-but it captures what this variable actually is, i.e., an overridden
-version of the original swappiness. And similar for lru_gen_mm_walk
-*walk vs mm_walk *walk.
+On 4/14/22 2:47 PM, Shuah Khan wrote:
+> On 4/14/22 11:15 AM, Sidhartha Kumar wrote:
+>> Because mremap does not have a NOREPLACE flag,
+>> it can destroy existing mappings. This can
+>> cause a segfault if regions such as text are
+>> destroyed.
+>
+> Please explain the reason for segfault.
+>
+With the MREMAP_FIXED flag used by the test,
+the text region, which fell in the range of the remap
+region, got unmapped. This caused a segfault when
+trying to fetch the next instruction after the mremap()
+call.
+> Add a blank line here. Makes it easier to read.
+>
+> Verify the requested mremap destination
+>> address does not overlap any existing mappings
+>> by using mmap's FIXED_NOREPLACE flag and checking
+>
+> Spell this out fully - MAP_FIXED_NOREPLACE
+>> for the EEXIST error code. Keep incrementing the
+>> destination address until a valid mapping is found
+>> or max address is reached.
+>>
+>
+> Essentially mremap() doesn't check for overlaps and removes
+> or overwrites existing mappings? The way you are fixing it
+> is by verifying by calling mremap() with MAP_FIXED_NOREPLACE
+> flag and check for EEXIST.
+>
+Yes, with the MREMAP_FIXED flag that the test uses, any previous
+mapping in the address range of the remap region gets unmapped.
+Yes, fixing this issue by calling mmap() with MAP_FIXED_NOREPLACE
+flag and checking for EEXIST.
 
-In other languages where polymorphism is supported, there are
-established naming conversions. In this patchset, I just used the same
-variable name when two things are closely related but distinguishable
-from the _contexts_ they are used.
+> What happens when max address is reached?
+>
+That is covered by the check if (addr > ULLONG_MAX - region size)
+in the remap_region_valid() function.
+> Same comment on # of chars per line in commit log. Also
+>
+>> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+>> ---
+>>   tools/testing/selftests/vm/mremap_test.c | 36 ++++++++++++++++++++++++
+>>   1 file changed, 36 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/vm/mremap_test.c 
+>> b/tools/testing/selftests/vm/mremap_test.c
+>> index 58600fee4b81..98e9cff34aa7 100644
+>> --- a/tools/testing/selftests/vm/mremap_test.c
+>> +++ b/tools/testing/selftests/vm/mremap_test.c
+>> @@ -10,6 +10,7 @@
+>>   #include <string.h>
+>>   #include <sys/mman.h>
+>>   #include <time.h>
+>> +#include <limits.h>
+>>     #include "../kselftest.h"
+>>   @@ -65,6 +66,34 @@ enum {
+>>       .expect_failure = should_fail                \
+>>   }
+>>   +/*
+>> + * Returns 0 if the requested remap region overlaps with an
+>> + * existing mapping (e.g text, stack) else returns 1.
+>> + */
+>> +static int remap_region_valid(void *addr, unsigned long long size)
+>
+> This returns bool 0 (false) 1 (true)
+>
+> Please name the routine - is_remap_region_valid() and change it to
+> return bool.
+>
+>> +{
+>> +    void *remap_addr = NULL;
+>> +    int ret = 1;
+>> +
+>> +    if ((unsigned long long) addr > ULLONG_MAX - size) {
+>> +        ksft_print_msg("Can't find a valid region to remap to\n");
+>
+> Change it to "Couldn't" - also this message doesn't look right. We hav't
+> looked for valid region yet and it just exceeds the limits?
+>
+Because this function is called in a loop in remap_region() and addr is 
+being
+incremented continuously, we could enter this function with addr high 
+enough that
+another increment would cause overflow.
+>
+>> +        exit(KSFT_SKIP);> +    }
+>> +
+>> +    /* Use MAP_FIXED_NOREPLACE flag to ensure region is not mapped */
+>> +    remap_addr = mmap(addr, size, PROT_READ | PROT_WRITE,
+>> +            MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
+>> +            -1, 0);
+>
+> Alignment should match open parenthesis here and in other places. 
+> Makes it
+> easier to read the code.
+>
+>> +    if (remap_addr == MAP_FAILED) {
+>> +        if (errno == EEXIST)
+>> +            ret = 0;
+>> +    } else {
+>> +        munmap(remap_addr, size);
+>> +    }
+>> +
+>> +    return ret;
+>> +}
+>> +
+>>   /* Returns mmap_min_addr sysctl */
+>>   static unsigned long long get_mmap_min_addr(void)
+>>   {
+>> @@ -180,6 +209,13 @@ static long long remap_region(struct config c, 
+>> unsigned int threshold_mb,
+>>       if (!((unsigned long long) addr & c.dest_alignment))
+>>           addr = (void *) ((unsigned long long) addr | 
+>> c.dest_alignment);
+>>   +    /* Don't destroy existing mappings unless expected to overlap */
+>> +    while (!remap_region_valid(addr, c.region_size)) {
+>> +        if (c.overlapping)
+>> +            break;
+>> +        addr += c.src_alignment;
+>> +    }
+>> +
+>>       clock_gettime(CLOCK_MONOTONIC, &t_start);
+>>       dest_addr = mremap(src_addr, c.region_size, c.region_size,
+>>               MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
+>>
+>
+> thanks,
+> -- Shuah
+>
+

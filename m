@@ -2,154 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD455006B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA42A5006B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbiDNHOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S240296AbiDNHOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbiDNHOn (ORCPT
+        with ESMTP id S233492AbiDNHOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 03:14:43 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2118.outbound.protection.outlook.com [40.107.117.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52248554BE;
-        Thu, 14 Apr 2022 00:12:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GiWFOREYODPh9eYuDj8IBvRf40F/Fl/wOrYLv2GncFUcPCl1ZrhthWnTlf7ZCuyICuT9OVVzzHan9iSds6J+hKs3wO10wlK8dvbhlUaPIZxE5NmhkoVk2DeIXRVh0Tx0BHi5rZ7PU67KTSJsGGAjbturt3WFQd5ZpPj4KTUgzKdQ+aGlNYvKoHOQFCx54uCmfWuFx8syH6HdbsJzem4atq2Rme5xpmS88kfSYNF9vs/v+l0UvraBl/w0+4wpiT/3kM5zVIEfkElvR7/7YOkNo1veJTfZ216mRJ3tML0LeirSBXbMWdGSDVMxNWdKuECq7LaVWCS03y0B5GqWjEwr2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YwsnkV8JxLx48pZfm//sInmlM0t0Uk+Yi8EAFIIq6U4=;
- b=c1bjXDn+AWrq3SO9k19zQZZyVb7c5JBEM61cJqI5y4tfkZCbDbhlhFZ63sKs/J7GCFwd+cMJLCC02/YWBDScSX19X8cDvJrswPphhOPVOJf2IaC9lfjhUOD/dxsM+lZZPQurn0hFgMER+GXZhYxOM7tRfe6HPL4D7f7e3Gm1CfHSdHzpOyGBTGiOF/4E6nDg5ffUfC4OrLgG5dz1MAEGMApcCHtzwWyq6jy8k2KYiQF6PW9OvZa8ZR3fMZxqfJxJUxnmWGCCVEJHvaHmGRXC2qSXH6l6u+Wago6x8Za0Ej1dMeRiD/3CfNnoIXaU5NLWn2uQYZv2PO8wJsf0kaZnwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YwsnkV8JxLx48pZfm//sInmlM0t0Uk+Yi8EAFIIq6U4=;
- b=bhiehbUlFEdmPmQKoFRnmtYqss9EKIsMkxpdSIpHhM7yzE21S+8HhDmMGKF+xYyQXlvbTOJ3Tt3bARNIcusVBhruTr9PzqUXqwmpTy7yOCCZRGd8CtOr7tZuuikW0Ab6GlL1AGh/+x+rKQ+uA7hJYJs8I6JIWCL/Ag+BJ9+3u9s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by KL1PR0601MB4323.apcprd06.prod.outlook.com (2603:1096:820:75::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Thu, 14 Apr
- 2022 07:12:13 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb%4]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 07:12:13 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH] ima: simplify if-if to if-else
-Date:   Thu, 14 Apr 2022 00:11:58 -0700
-Message-Id: <20220414071159.77501-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: HKAPR04CA0003.apcprd04.prod.outlook.com
- (2603:1096:203:d0::13) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35FB15A24
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:12:18 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id i20so5591194wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dCJ1KboKpQ4PJ5jQsLTtGQGQXlAWxcagYMhUrW9HAic=;
+        b=oJ17x9e47tqvew1pe+2e6aGlgBDU8Tkricf6mjcdYk74yZUlzrEvYfFoG69wM6CmR5
+         rYr3+oQXjyzokgt4YMmdeEhi63lw3b6VytJg+D7DE/hdkzkzWMur2GYuS9QpXU9yCDOQ
+         kYNrCDoEdV/KmtfNk5aOYFPgGao14Epbgm1F/giK5mtQ8NUsLIInmlfonFUwDB9hHzeb
+         mQaMTNZ61gNjmyAjruRQXik9uXhwaTOtrenGYTPAdbEmY4+7kd3NC0uoiqc8dwpwQrgL
+         nIeaNAIJsFETj3YdF9uahTZJnooBMgBmw3D7UMbBX6ZHtWUq8zYXtn3Y8RJVahW6mPQQ
+         qvWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dCJ1KboKpQ4PJ5jQsLTtGQGQXlAWxcagYMhUrW9HAic=;
+        b=da83kQbbfz02Tk2QZGpjp/BBaUlYpWA3egmsnjupc7P1eXhLAoskebIXsPP9lRGRkn
+         3EpUuvtP+88OHEOJV/cIRbfTaIPeT5ieYzHH8mowJfrAPQBJfjhZb7Gfs4T6BNc/0LL2
+         qlwRR4goK/RUUC5EMVCtvya0LfcDhup77N2/WqJyppF8RkBw/16C+im6VvX8aW4dg2w8
+         RYio5esOPObARzf7s7iretARCxveFtGcX0gNjv8ZuiI4I5GQLTjhZllwWct2f/Bv4R5q
+         nTvOMjjeEGlZjZh+HW4SK9isaHQBoAzxk6ak39FjXdfvnNtf8FjoptDBG5Kl0+aPclWg
+         pxpw==
+X-Gm-Message-State: AOAM531nGVg01Kc3+hih1mKRMaeyYghf0gZBwJsEcDZH1b1RN8W7KqXa
+        OhfY3g0mk13XFnMk9UdsPwGf6Q==
+X-Google-Smtp-Source: ABdhPJz2T3ggR3EfQcyK8DZzQ70TOwRDF0jFwIKD4Leh6qiISJ4TwbdD+/EurpSgsibrMvFkRCc6nw==
+X-Received: by 2002:adf:d1e2:0:b0:204:1a8c:7498 with SMTP id g2-20020adfd1e2000000b002041a8c7498mr979932wrd.530.1649920337169;
+        Thu, 14 Apr 2022 00:12:17 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm6267917wmq.27.2022.04.14.00.12.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 00:12:16 -0700 (PDT)
+Message-ID: <5ddeb940-670f-2eda-6ba0-567c28406a61@linaro.org>
+Date:   Thu, 14 Apr 2022 09:12:14 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ea438ac3-1ad1-43b9-5893-08da1de6190c
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB4323:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR0601MB4323E95849559CED4188DE1AA2EF9@KL1PR0601MB4323.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 39rA4IeKd+THTXLc5/4YaPuVtjwXWGjGP26yddwVtsUNfT0BCCJ1oDf6CQtxV1rcjSUX5QvNaSAUIEab9L8f4QulToiHgj+NMKSljY+lAZvZA3G1t/SNcVsmBdjEghlaKVaU/8tdN9m6bRzxv4Wk9MJ+OULgazuznKU5gJRFxU1bgp1XzHdr2+8+vd4zIclKu3bF3eonpgykLRuHGNV+UL96Y/ltkfY9oGEWxW+rZDW7th8mqlCnCdCTRUaLrJYDM76WibXlWvPepB+uquznBg9TMcc+ibDYhtIrftTFRIO4vWR0vqGfug4Fr1ZerNl229cmkq8TyOaNSoiTX53xMx5IDPM92H+FEGTo8JfAHGdoLpXHUkBAeddcpkfSnMeAstVpXsEbIMZKJGDEof4wXaHj/XZJk030g08wBS4/Rcx3eolgjJ5wdoSZw1msPul4OzSmlZ4/eg+ej4ZCmWqbX6fnDO54sTSpSAMRGeXyOZb1eFKUWoAVaoZHKjI+zTmREhjd07NI5sXA173y/1cFpX5bYvWIGZHxcBmmo6EKtWjsUzhH+aZEeu76kQTykQv+nTnNpKqFmD/DvtfNJtxr7ssm7yTwCd79rRZj0S+X47jttebPSUYGnLYHoQGPumHNmszrdXZPzELTuYkHfIPceWXLj16fFg+uPNjYHIHZHGvhZKHYjDCJvleqHgtBmp1uPmlWz9quzTZlqN1C8/bdbe2Sx8aHp9DETWBlAnp5XcBa7wtfF5lVaHq5giFKm7A6eP3v1Ib5P1athHvARDWGcg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(316002)(86362001)(6512007)(52116002)(1076003)(2906002)(66476007)(8676002)(66556008)(36756003)(4326008)(66946007)(110136005)(6506007)(38100700002)(38350700002)(966005)(6486002)(508600001)(5660300002)(8936002)(2616005)(186003)(26005)(83380400001)(107886003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xr/3qb6j4t8k4CDCqb0ER+1UaRX3rHIZi0aoEgNrQc/eImIy/Gs8rWjvoP9X?=
- =?us-ascii?Q?t1d2NbmbcQj4085/Iwos4edVUBKE8O6S1z31CtU673Caglcmha3MQ2tr5V5S?=
- =?us-ascii?Q?cBLjNqAtwAZfO2K6xCViIzc47qc5OxZGgDMUCFy2JPDP6grZdkVSIMxfq5S2?=
- =?us-ascii?Q?WYZwIISpP57ZA5ICjzIbfxbgjXx1mg/nlsZ1K48oz2ihE6sgpryK7uS9yItw?=
- =?us-ascii?Q?5GVcJCR+kjwgr+FgCp/xfb6wjIojk3YXdHgVms6X2RZFYv2yBOERtVp5UX2v?=
- =?us-ascii?Q?1yCi3NCb6okByl/RGsNnrGkpWm4QiR9f4nonETw+m7dlCQq8+WLLhT29az4d?=
- =?us-ascii?Q?vLHn+7KUiZIh3eVpygx5snBfN403S7qXUFVYXDP8Zd5YXfOBYTTo8KbshR53?=
- =?us-ascii?Q?Y1rEMt0A3AGDtOjiP7y0qM4yf6ZPj9zeO5oyjGF33/FCnc+0+fy89M8RJCut?=
- =?us-ascii?Q?Jf2iJt+cTag5u7dVSWD+fpXwmx09cyX9eZZR8smknovy+HaNo4kL8WsVY8AE?=
- =?us-ascii?Q?xkReLuPAIc7MStUZguabKSY/jrhC2CfukX+wW6Z2TboYVIHf7z7JWI4OLpu/?=
- =?us-ascii?Q?GYtXxzy0ULWYFxZe8wI8hm6MSYvt/LsbniJIaZsoDl9euIEsyGdNhlLOtQXq?=
- =?us-ascii?Q?QRgd3RrejJL/n7yzIy+E+v8fQ2E6ttlSA/oH1fF6AVjvMwVRsM8QIHgvn+bP?=
- =?us-ascii?Q?N/UIxztjgD9IpmGWG1qV1vqIR9XSnK4tW3eBRgzWUH15tDNyfHmiCoIt7g/I?=
- =?us-ascii?Q?mpuhoQX4qAFWiMEw17NUOi9DKjXqjd4pyCGZomzXZfTv+knwf7ddultfW1p2?=
- =?us-ascii?Q?2MPmWYkAp8/tmT1yQXlXJ5zp4xy+B+wMXdAcp4f7yxHKp90Q+nqQvzBqTkmA?=
- =?us-ascii?Q?/zkmDCCJ1o0JZF/uYdPgXg5so4tsUVDPTd33tRteEL/EPxxKyxXRnOfgPDpZ?=
- =?us-ascii?Q?hHrkQDRKecYGFCYILFjBTp9VhdgRSBPKdBKwMAms0jXjPICYMRqJcE+p1XsF?=
- =?us-ascii?Q?h3+K+M04U2MyZufqtQ9Q0OvFFNwz3GPZWXU4wHWNDYhxmy5QWeS6iwh+GeGW?=
- =?us-ascii?Q?eVC0VkZvoKq2uRlsIGgfZbn4PXw2Yyd+2K4RvDrNe6qcsXIN3bNPq3OWUq/v?=
- =?us-ascii?Q?zIaKXMqsV/pGvjHq6mDLv7u1jvBgh6I0VfSqEZke76q3WSRg0kPnQlu7iPbY?=
- =?us-ascii?Q?WkrikOsWdVztR9sTYj3roZWHAtS7M/zYgmfGR8XYczqotwvA3mS0CVYkbJIy?=
- =?us-ascii?Q?oRrmuk1u1B2HuyNG9HZpLV+AW9lbt5nRh9YH/0/UUd44kIAJS8dg/w3v+EwK?=
- =?us-ascii?Q?Yin/XO/Ctx8eBZ+LVNtghEWKzpXLy0fLMP7HfWgN84SZ85Qzw1ciBb+mdXDS?=
- =?us-ascii?Q?IWNZC2WrXA7Fabcx2kW5qIHOB0FLJZeVkkw+SMCTQII9lnIMEdJzj1l+uSX2?=
- =?us-ascii?Q?Yu6BuVyoOW+sjw+UD3+Iom9g+sCWtUsUHHUp8//vDVw1JuUidArRMw9xJzjX?=
- =?us-ascii?Q?E58+bvBuCU0bK8U8cmcMIr6too2zKX6rB5jEbB97DDvZ7Tg7LU9pHjJBy34W?=
- =?us-ascii?Q?lpApeIH5lqgT3JUlrAy7P//OS0sFZTmjvNfGbQGyCAIxRTHs/RbhC2903t79?=
- =?us-ascii?Q?7Im98wSMrqzVBx2xlvZ46x2e31+mIYDxR2WMcJ9Gv6j+MONCOrKpHnUUjs9t?=
- =?us-ascii?Q?gf5HXcgV7Gw8zBcZSAHb+ggH3RXE+crHQ/GUVhGW5cQplpQ+PwvgumdB0RuR?=
- =?us-ascii?Q?9deTVz8kuw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea438ac3-1ad1-43b9-5893-08da1de6190c
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 07:12:12.9081
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +B+K4hwuhyVBDgUYiaImI92+2O76xST6GtnT0+IzP/7a8DSx+WaoUSDdcwZKH+I+IhsTU+2SQfIxf72ZgH7QgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4323
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 1/2] thermal: Add thermal driver for Sunplus SP7021
+Content-Language: en-US
+To:     Li-hao Kuo <lhjeff911@gmail.com>, krzk@kernel.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
+References: <cover.1649662002.git.lhjeff911@gmail.com>
+ <c59e0a5c53f055b7159bc896083538d1f8ac9ad8.1649662002.git.lhjeff911@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <c59e0a5c53f055b7159bc896083538d1f8ac9ad8.1649662002.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace `if (!error)` with `else` for simplification
-and add curly brackets according to the kernel coding style:
+On 11/04/2022 10:52, Li-hao Kuo wrote:
+> Add thermal driver for Sunplus SP7021.
 
-"Do not unnecessarily use braces where a single statement will do."
+Already asked previously : please give a more detailed description of 
+the sensor
 
-...
+I've commented again this patch. There are some comments which are not 
+taken into account from my previous review on v4
 
-"This does not apply if only one branch of a conditional statement is
-a single statement; in the latter case use braces in both branches"
 
-Please refer to:
-https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v7:
+>   - Modify yaml file.
+> 
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 139 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 156 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 61d9f11..307570c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18885,6 +18885,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>   F:	drivers/spi/spi-sunplus-sp7021.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUNPLUS UART DRIVER
+>   M:	Hammer Hsieh <hammerh0314@gmail.com>
+>   S:	Maintained
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e37691e..66316c3 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -502,4 +502,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021 || COMPILE_TEST
+> +	help
+> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1..38a76f9 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..9a9b348
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,139 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911@gmail.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- security/integrity/ima/ima_main.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Already commented, check the headers above.
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 1aebf63ad7a6..b2e43aad496c 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -1068,8 +1068,7 @@ static int __init init_ima(void)
- 	error = register_blocking_lsm_notifier(&ima_lsm_policy_notifier);
- 	if (error)
- 		pr_warn("Couldn't register LSM notifier, error %d\n", error);
--
--	if (!error)
-+	else
- 		ima_update_policy_flags();
- 
- 	return error;
+> +#define DISABLE_THERMAL		(BIT(31) | BIT(15))
+> +#define ENABLE_THERMAL		BIT(31)
+> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +#define SP_TCODE_HIGH_MASK	GENMASK(10, 8)
+> +#define SP_TCODE_LOW_MASK	GENMASK(7, 0)
+> +
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+
+field not used outside of the function checking the return code of 
+sensor register
+
+> +	struct platform_device *pdev;
+
+field not used
+
+> +	enum thermal_device_mode mode;
+
+field not used
+
+> +	void __iomem *regs;
+> +	int otp_temp0;
+> +	u32 id;
+> +};
+> +
+> +static int sp7021_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
+> +{
+> +	struct nvmem_cell *cell;
+> +	ssize_t otp_l;
+> +	char *otp_v;
+> +
+> +	cell = nvmem_cell_get(dev, "calib");
+> +	if (IS_ERR(cell))
+> +		return PTR_ERR(cell);
+> +
+> +	otp_v = nvmem_cell_read(cell, &otp_l);
+> +	nvmem_cell_put(cell);
+
+See my previous comments in v4, this is wrong. Move the nvmem_cell_put() 
+after FIELD_PREP() ... below where otp_v is no longer used.
+
+> +	if (otp_l < 3)
+> +		return -EINVAL;
+
+Please replace '3' by a macro
+
+Why this check is needed by the way ? Sounds like only 0 and 1 indexes 
+are used here.
+
+> +	sp_data->otp_temp0 = FIELD_PREP(SP_TCODE_LOW_MASK, otp_v[0]) |
+> +			     FIELD_PREP(SP_TCODE_HIGH_MASK, otp_v[1]);
+> +	if (sp_data->otp_temp0 == 0)
+> +		sp_data->otp_temp0 = TEMP_OTP_BASE;
+> +	return 0;
+> +}
+> +
+> +/*
+> + *When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
+> + *TEMP_RATE is the SP7021 temperature slope.
+> + *T_CODE : 11 digits in total
+> + */
+
+nit: space after '*'
+
+Please elaborate the comment, it is still unclear
+
+> +
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
+> +
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
+> +	*temp = ((sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +	.get_temp = sp_thermal_get_sensor_temp,
+> +};
+> +
+> +static int sp_thermal_register_sensor(struct platform_device *pdev,
+> +				      struct sp_thermal_data *data, int index)
+
+Adding a function to wrap another function is pointless in this case. It 
+is simpler to directly call devm_thermal_zone_of_sensor_register() from 
+the probe function
+
+> +{
+> +	data->id = index;
+> +	data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							    data->id,
+> +							    data, &sp_of_thermal_ops);
+> +	if (IS_ERR_OR_NULL(data->pcb_tz))
+> +		return PTR_ERR(data->pcb_tz);
+> +	return 0;
+> +}
+> +
+> +static int sp7021_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	sp_data = devm_kzalloc(&pdev->dev, sizeof(*sp_data), GFP_KERNEL);
+> +	if (!sp_data)
+> +		return -ENOMEM;
+> +
+> +	sp_data->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(sp_data->regs)) {
+> +		dev_err(&pdev->dev, "resource get fail\n");
+> +		return PTR_ERR(sp_data->regs);
+> +	}
+> +
+> +	writel(ENABLE_THERMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
+> +
+> +	platform_set_drvdata(pdev, sp_data);
+> +	ret = sp7021_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	if (ret)
+> +		return ret;
+
+Add some space to let the code easier to read
+
+> +	ret = sp_thermal_register_sensor(pdev, sp_data, 0);
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id of_sp7021_thermal_ids[] = {
+> +	{ .compatible = "sunplus,sp7021-thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_sp7021_thermal_ids);
+> +
+> +static struct platform_driver sp7021_thermal_driver = {
+> +	.probe	= sp7021_thermal_probe,
+
+and .remove ?
+
+> +	.driver	= {
+> +		.name	= "sp7021-thermal",
+> +		.of_match_table = of_sp7021_thermal_ids,
+> +		},
+> +};
+> +module_platform_driver(sp7021_thermal_driver);
+> +
+> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911@gmail.com>");
+> +MODULE_DESCRIPTION("Thermal driver for SP7021 SoC");
+> +MODULE_LICENSE("GPL");
+
+
 -- 
-2.17.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

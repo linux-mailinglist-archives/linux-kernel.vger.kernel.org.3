@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAF4500C59
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B77500C63
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242765AbiDNLt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S242774AbiDNLvF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 14 Apr 2022 07:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiDNLt0 (ORCPT
+        with ESMTP id S230187AbiDNLvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:49:26 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4013CA55
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:47:02 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so9077467pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I4Ax15jC8NnVZwecST708pDmHH3endbmV/A+QAcQDXk=;
-        b=VTKGC4GU/h3jcWzqni4siu6RzvhvBschAcPdHBRc9lvYS1SrLmAs6BsOib0sOOC9n9
-         mPAvQhcYfa/SaI3Vy2SUKGJTBOWljBuEvQuqxIAS+PIYLjY+DJBtcExbtVRxxottNg22
-         W2fZJthM/suuUQTulb1/oCvYpDRXsmSrysTzxtK9gwzlz3hSm10tb0AcvNa2lyCC6vpd
-         diZX7L4Ti6YA0P9RvIPxXpfBaxn0uqV0MLAwtWvyWcvEA1ARVvCZKziZUsYALiZBo3Kz
-         h8LarTqCDePq0UgHtwIQ1s/lLxD2pnWwf2JVUpGgDtIQ6XlQ0+TQDIyHXOdLc4Q+d9MB
-         Uruw==
+        Thu, 14 Apr 2022 07:51:01 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9125B6E55C;
+        Thu, 14 Apr 2022 04:48:36 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id s6so3339571qta.1;
+        Thu, 14 Apr 2022 04:48:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I4Ax15jC8NnVZwecST708pDmHH3endbmV/A+QAcQDXk=;
-        b=Ufhx5t0ttipVf6RoEfZ23Qz/2jnvFQmBlCdxg/sdQVyzJ2GROIhTvbKWIjbRm6sFw0
-         Ik191hCIxVgE6UwqyG/Lhc2kQ1xPVltUaMjSKu314z1GYTvIcECZe+TUUNp0DfifpcTI
-         qdewfod0HOxlqSV70YZOIpyRClMghIrpJZMGk3mJU4PTb/DmRT3pvPZdLXDdRiS/IXMw
-         eIL+CA0ENT6vIA+4SUw5aS1vPPAQJeGSq0EB+2ANTsJfrvC6J933G7nF4cgZGqBidkTL
-         FmFcaTUzUHWsBEAEXml5SfqsJbiT4mN7MB/gJKTI9YomnIJ/MdCb7bUZfw/F+I6HXb0U
-         eJUg==
-X-Gm-Message-State: AOAM53240cnICQjjTryhu2I6DwfxXVVbZLPffn8eyY60lfoBO9Af1iHl
-        tuxYWQo/RVFD7egbh4nkSTs=
-X-Google-Smtp-Source: ABdhPJzsQvDicR9vwSUGgBVhv/HT7C7tQGE07WXlBZk/XE2dqgREhp4zs+OMYXlmvsED1JY9uw6BDw==
-X-Received: by 2002:a17:90a:fac:b0:1ca:5eb8:f3b2 with SMTP id 41-20020a17090a0fac00b001ca5eb8f3b2mr3340533pjz.37.1649936822021;
-        Thu, 14 Apr 2022 04:47:02 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id g15-20020aa7818f000000b00505ce2e4640sm1959117pfi.100.2022.04.14.04.46.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 04:47:00 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 20:46:54 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 23/23] mm/sl[au]b: check if large object is valid in
- __ksize()
-Message-ID: <YlgJrjDcfQDKqHym@hyeyoo>
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
- <20220414085727.643099-24-42.hyeyoo@gmail.com>
- <alpine.DEB.2.22.394.2204141156160.690844@gentwo.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=u1n9GOW0yI2Xuk8uj5WutPFnUGPTBI0EWcn0eDo3zKI=;
+        b=4cWtk7WDrXtMx1JyYIuu65cF0EAkHh5dnddCcaJo7Z5A0YQb0QZVY91yABedymVPfk
+         nFhRuK882Lp7iWDQ31IRxMZl9lPk8zfNxgjBnW1tfi+RYO9WNHVHFKkGYrb6bKUcpJpB
+         PPi9tw+6i0O4PU3PW6Dzz7e0Fm6X9IbpI2sDaHhgF4wIQDORQKE8O0OK3LKHg20Weccb
+         qDNJ08TXCfQUFzk3dYMmCO/aUgEGTupIrJ5KRmIqwlHORhczTZ0ay+1GPmGJuYY8AeVQ
+         EC8jMbuED89XdiwCMtczJLNc6iRcW/W84haHYlZa+6DVnfZtxBKYmJdonjpUxC2iIzEu
+         E6KA==
+X-Gm-Message-State: AOAM5330TzT5VpFbivc96Pl2yCOCNPbtm/oQSIxEiryU/x9J2qiCjk/I
+        XucmtqykbUwUlkgL+pJGREnsVS+PSBn6iA==
+X-Google-Smtp-Source: ABdhPJz3kQMm7DHNw3fwdn/MIQDSdanb61P6+K6dJ3Cwlw1ivA1XR7XRtjhjiqre+jDKUCZ09pbg9A==
+X-Received: by 2002:a05:622a:1f8c:b0:2ef:9ec3:e176 with SMTP id cb12-20020a05622a1f8c00b002ef9ec3e176mr1345650qtb.39.1649936915392;
+        Thu, 14 Apr 2022 04:48:35 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id 64-20020a370743000000b0069a0cb6e4d5sm849676qkh.81.2022.04.14.04.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 04:48:34 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ebebe631ccso52425077b3.4;
+        Thu, 14 Apr 2022 04:48:34 -0700 (PDT)
+X-Received: by 2002:a81:413:0:b0:2ec:31d7:7e60 with SMTP id
+ 19-20020a810413000000b002ec31d77e60mr1650211ywe.62.1649936914141; Thu, 14 Apr
+ 2022 04:48:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2204141156160.690844@gentwo.de>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220414074011.500533-1-herve.codina@bootlin.com>
+ <20220414074011.500533-2-herve.codina@bootlin.com> <CAMuHMdW8q5AjDtTE83yVPfmgnQy02UgLSns33z06WMFBUULWEw@mail.gmail.com>
+ <20220414132534.35467781@bootlin.com>
+In-Reply-To: <20220414132534.35467781@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 14 Apr 2022 13:48:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUCvJ6rAwnV=w9iFqnm=c0U_BpGiYEw109shsrWAeUJCA@mail.gmail.com>
+Message-ID: <CAMuHMdUCvJ6rAwnV=w9iFqnm=c0U_BpGiYEw109shsrWAeUJCA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] PCI: rcar-gen2: Add support for clocks
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:58:01AM +0200, Christoph Lameter wrote:
-> On Thu, 14 Apr 2022, Hyeonggon Yoo wrote:
-> 
-> > If address of large object is not beginning of folio or size of
-> > the folio is too small, it must be invalid. Return zero in such cases.
-> 
-> This looks like a slab usage error on the part of the caller that would
-> benefit from a kernel log entry. A warning or an error?
+Hi Hervé,
 
+On Thu, Apr 14, 2022 at 1:29 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> On Thu, 14 Apr 2022 10:45:54 +0200
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, Apr 14, 2022 at 9:40 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > > The PCI rcar-gen2 does not call any clk_prepare_enable().
+> >
+> > Correct, this driver manages the clocks indirectly through Runtime PM.
+> >
+> > > This lead to an access failure when the driver tries to access
+> > > the IP (at least on a RZ/N1D platform).
+> >
+> > I expect adding
+> >
+> >     power-domans = <&sysctrl>;
+> >
+> > to the pci_usb node makes this patch redundant.
+>
+> Seems not enough.
+> I tried what you suggest :
+>  - Added 'power-domains = <&systrl>;' to the pci_usb node
+>  - Added missing '#power-domain-cells = <0>;' to sysctrl node
+>  - Reverted my patch.
+>
+> The system crashed at boot:
 
-I think a WARN_ON() would be sufficient. here, will do in v3.
-Thanks!
+> [    0.832958] Unhandled fault: external abort on non-linefetch (0x1008) at 0x90b5f848
 
--- 
-Thanks,
-Hyeonggon
+That's indeed a typical symptom of accessing a module's registers
+while the module's clock is disabled.
+
+> I also added a trace printk in r9a06g032-clocks.c and
+> r9a06g032_attach_dev() was never called.
+>
+> Did I miss to set something ?
+
+Do you have CONFIG_PM and CONFIG_PM_GENERIC_DOMAINS
+enabled?
+Apparently ARCH_RZN1 does not select these options yet.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

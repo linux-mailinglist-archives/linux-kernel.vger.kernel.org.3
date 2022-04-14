@@ -2,169 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34759501953
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BA5501952
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiDNRAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S239787AbiDNRAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240933AbiDNQ5P (ORCPT
+        with ESMTP id S245596AbiDNQ6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:57:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED61456E0;
-        Thu, 14 Apr 2022 09:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649953649; x=1681489649;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=KaCyqeoWauqoGX9FGkcO6yjVPaj3bCqpPQt2gFDaRq0=;
-  b=Sc6mEPKedIwSR7kTMJy9Q9eowSI1VL2RYTNtezTrZIuRwPkQYEvI21aA
-   oyP4XQixrzVV7M7vnOq+41ZtapeJy05BTS4UtoQHoZIKl35rClM0ezQzQ
-   LNDpyzZqmrspwp2dmbCZUzOOKYHeSvOEjfm6HoaMHDck7ekgMYKBvNp5s
-   9uutWNWk+GhtmAg4BrOfCqXQ+d4qGU7FPiCQ8XvEeJUQU7buoTS6vhAim
-   8TYNiOp+oqTgTUKrrAt804cSpT/Jw79rFceFHczNr9Nl6ShPXTBNDqNBP
-   b7XIlN16B7WgbcikCqkiTYqGkmTcKY2YEamuyzm+zWy3Vt/Cr80m2EtEM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="244855769"
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="244855769"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 09:27:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="803188831"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2022 09:27:28 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 09:27:28 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 09:27:27 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 09:27:27 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Apr 2022 09:27:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U0Wb6DDcNSEvgxb2AwbwF5iAtyY873OvhMrwX7wufbZN49TdjmsueroAE+lDOWDxhuskFiZaSbB/03rwXZGdLOdkNZDOpXYDecbMqN4I9UmTnejNr+MUKIXyJstAcYiwB/KRsj0VZZyiynySFdPKu1eIvyLARmnKH1rUFY66ZYs//41Hw0/bxazOpQSaOkfXwVfC0NhL3qMEZNXbZ3FALVfJFGijTUXdyj6i0CbIW0f+dGsUs9Qj03XGX9xt2m15+f2ml51AGcxXkeb3dEIcC2pUgluAaHS0TG1YpUwqs0cFj6/+TSWZ6L1d6R08uUvTaAZ+syX8Bna2Ucs0HGpHfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ld2nFeAdJPB3lMRS9uhAg2PbFf3Pa80u0Pfu1rnR4Vw=;
- b=EVVjRQbtzNzHZSv9GqWJaNGc/zRpCZzJL2duAop/RgtO0ycR2BlFsmrVXMzGQrLCn/BhLbDOIIypYiJxiVZpPWnjsH3HD/n0L9ozs1HhX7whTOfoPfk6t6b7R+sxn4PqV9NnIevVHV7xql+H9yDcir+FU1GB9YJgNPOkgiEXwfv7FAmQnF2H0eYEWyDUVp2NCit4gFXEukMTZZUeKl2Fz72oG2YKb8wlmmTXOdRQEPDU6XdO4WOMQOFgb1mr3G37ZzqA/cqSk0veiYjQbBH259F/Icl5kB/1YIjSxE2VUhKWG+xKT+9vvXYXFXzCay31KtXEqMX1FInJj9SAOQ+oRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by DM6PR11MB4044.namprd11.prod.outlook.com (2603:10b6:5:6::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Thu, 14 Apr 2022 16:27:25 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
- 16:27:25 +0000
-Message-ID: <9664ee1d-ce4f-11b5-2623-456cde0baa0f@intel.com>
-Date:   Thu, 14 Apr 2022 09:27:20 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.0
-Subject: Re: [PATCH V4 11/31] x86/sgx: Keep record of SGX page type
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, <dave.hansen@linux.intel.com>,
-        <tglx@linutronix.de>, <bp@alien8.de>, <luto@kernel.org>,
-        <mingo@redhat.com>, <linux-sgx@vger.kernel.org>, <x86@kernel.org>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <seanjc@google.com>, <kai.huang@intel.com>,
-        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
-        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
-        <vijay.dhanraj@intel.com>, <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
- <9978af37f51fa45c8878a3c05ceaf44f35806bb8.1649878359.git.reinette.chatre@intel.com>
- <7a24b43f4d3d568ccd61117df4a3f6ec25ae1941.camel@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <7a24b43f4d3d568ccd61117df4a3f6ec25ae1941.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0039.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::16) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        Thu, 14 Apr 2022 12:58:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74D6C6258;
+        Thu, 14 Apr 2022 09:30:03 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EENBAj029780;
+        Thu, 14 Apr 2022 16:30:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=9IQFbuSyMLorbXY7Ut29J0DgE7z3TV3b6uIMPnJ2p/I=;
+ b=XEZdN9vFhzgZiC2L1+5qIZVv8j7uMq4OaDBpMbnyRyCs4MkjIMypzK0geO2Id9nLCmlZ
+ 3BnXeprkpmv9vaSUi1gqUdoop/s67iTdl1Tvj29KSPBPXzSdEwzFTgBtXJTRzJTrDhfb
+ jbl7cxhZiegzG7v6wvyCp+1WT43ER+Jv7YHs/SHDAgwzBJrk2eUBtJzi9Q1h+Fspck2d
+ IGcKjbPfP30IA0qxGA+b6Xt9JEQjc1pxr6EdMFKuElkPziWHG7lhlIXeDUdgyLDlzZO2
+ XtU4ExDwu+FBbvAJD0XaUpAJtGTbdsfKGzICOcNMWCyI0RerewDoxeZXW9kBNCVaKRlB ow== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fef2mtwbb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 16:30:02 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EGIW8Q005729;
+        Thu, 14 Apr 2022 16:30:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fb1s90ycd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 16:30:00 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EGTvk339846392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 16:29:57 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81C384C04A;
+        Thu, 14 Apr 2022 16:29:57 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36B4F4C040;
+        Thu, 14 Apr 2022 16:29:57 +0000 (GMT)
+Received: from osiris (unknown [9.145.172.147])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 14 Apr 2022 16:29:57 +0000 (GMT)
+Date:   Thu, 14 Apr 2022 18:29:55 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 5.18-rc3
+Message-ID: <YlhMA5GB1dkKyu8k@osiris>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wVbfbQDVOwrHLcypmMMHchzIweztIo7A
+X-Proofpoint-GUID: wVbfbQDVOwrHLcypmMMHchzIweztIo7A
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 26d164ba-d65b-4baa-ac47-08da1e33a87c
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4044:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR11MB40440C09466334FC839ACEDAF8EF9@DM6PR11MB4044.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3lciD2peI/EzZvKvig0XeiOL04maLebwmiosqkM1p0UGhJIY8ucLAeFEzmyustwfD2iaVjpKdQVNW/NdodxLY3fK32tvjctp6XghToxbJX/EbcBsTT4FDvf49VU6NhTcA3KcYQXYrSv0bAWBJvQ0Rm9B7WY1TbyBgdf0afN/8RVpV7nUXxjg2S9ZYKvkQWvN+b4+N1n70/Hq/9f7Iqsu9z+r16hkZmuQR1DHxBg+L+bDgLU6tJDy2JXcaiqha6jJvwOrJEIKYJz1AvvUEalxWVDIaXKY8akiJPyGWKvG4RV/2qiCqEbaQwOimN9SG9DJAyTX4JfBeOwGuVWFtgasfNYANeMJmPr1u74a95Mnyv7+rTp/SJQG+yflWLG3lXfgtB5fOzG7oJg1+qiDcNEfF3UTawNMditd4UXKsPnbZhaPk6D09rgD06dJZGfAK0PaqZYdWcxp2D8nAhyCgyv0Lgrkh/34DQbmqBkF983NXmyEBS07o9tgaIZqDvpDl1oXD5Db9k8waf0ZiyImsRgS879bAWqhfGfQHCBEo1h+YhSv65SdqKL0slhfdwWOBjSJcNCbs6w5WdoC/k83IZBxRzVR0Pv9OYKzkE4A2CREnDnecDPazt+9XTKV/ZUA3GS1sWXY/8GplfJGygrw9tNCJbQeXP4yqrbC3taRZaG+A7XP3Z2rS2ljBhXjTFujNDNp3jVvuYkWVkPIihP5/duOnO+qxXHUHaFIjvQAliZxRCgLRPM3mYc+lms75dtEC3IM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(8676002)(2906002)(86362001)(8936002)(921005)(66476007)(66556008)(2616005)(6486002)(508600001)(6666004)(82960400001)(4326008)(38100700002)(316002)(53546011)(6506007)(44832011)(6512007)(26005)(186003)(83380400001)(31696002)(7416002)(5660300002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUpVMkFMcGpCQ1BGVFg0MHJyOWprSmg4R05qZHNCNy9rOUxlNzhCeEZaQk92?=
- =?utf-8?B?cU5GdVViWFlUcDFJRldIdzlQTmNrNlVBZXhENEZtV0RrbjlFdmh1WHFRM1NN?=
- =?utf-8?B?ZVFVTnJYdkNRZTIrbTJXd0hiM1FsblhEaEJZbStwb1RxTURDN1ZvRU52UDUx?=
- =?utf-8?B?ZHI4SDhrTkxxUXhRKzBqbWk2V0NtVUJhMkFJT1ZHcWdPSFZkRDY0Ui9GeXBO?=
- =?utf-8?B?Qlc1N2IrWXdlOXR6UmpsMVM3OTR0bmsvTDUzWitPZkFIRFJ3OVpHWFdnblBI?=
- =?utf-8?B?ZmhZRmhiSG1Mam50NEFzQjhod2F6RHg1STBEYTEyUUtncHZPU1dEczM4cXhE?=
- =?utf-8?B?MnVtZWVTdi9DZzZoRHNxYzZkRzZJdXlYRjlpRURPMHhOZU8zSTZnNlA2SFB5?=
- =?utf-8?B?bzhvUHpyK2FGRGxlNzdCTEtXeVU3NExaQ0ZPMVMwY0RtdlZlY0VkNHord2VQ?=
- =?utf-8?B?U3doa2phai9hb1F5QmRqVUQ1eW1EMS9McUM0MzMwajhSZEFYZklzdk55Mm9B?=
- =?utf-8?B?SEROZCtYcVk1VG1MK2NodmF4NXVPSVF1dzBVeStUbkdqSi9VN3F1aVNaOU5h?=
- =?utf-8?B?UXd4R1huU3lvVHl0WWtOampCWG5uL2xaOU5xTVRrb0RRN1V3T3V6eXVtNTRI?=
- =?utf-8?B?TXY4RDNoNDgwRDkxVGxYaEMxbGYrU1MvTzVncUErNkdiMGpvS1hPZXZBKzF1?=
- =?utf-8?B?QlY3ejdHSGdDMVV4dnhwY085cUtleDBiU0EyOVNyWHVnZWw3eHhsMnQvRjh3?=
- =?utf-8?B?cE80TkhUSVRzQTBqeUNXRVRWdCtCSllmWGRxbTNualQrbkdWQlpvTDUraXN3?=
- =?utf-8?B?Y0tvUFJtRXVmUTN2d2xyS1lCZXV4STZPZ2J5QmVVbXplYUNvUmQ2ZEhFVy9o?=
- =?utf-8?B?QStOaTJWNEpocFFpQUk1a2J0SWdGdGlXeUp6TzhWUDlWSjhGMXFPdWlDWE1Z?=
- =?utf-8?B?dE1oWDJWWFYyNmtCMTVNMVdxeFVTYm04My9WR2xmYXdzN3NFbWZPL0lZa3RR?=
- =?utf-8?B?Ykg2MkdKY0RKOE5FWm9pSWVROGduUzZ6K0paQXhVWW1LNjhlb0k0UHlyeUdv?=
- =?utf-8?B?WDlha09BTFBuUENPcXJHQWRlNXN1aHQvWXVFemtGUEdqNVBoQXI1YWtZYzVt?=
- =?utf-8?B?ZDBoYWNzWm15YURxUGszZnphbUFJcjFKWEZhN3FiS0xMb01LK3ZHWmVHODAv?=
- =?utf-8?B?YmpzbHBqa29kR25jMDd2L0dBSng1Y0NaVFpRV2F5a09GbnFHZjI1UFIzSzVK?=
- =?utf-8?B?M3BSc29SV0tsL2RoRFhjTjFLcU9YeXk5Tk5KaFJsY3Y2V3J3OGZJNHk0T01Z?=
- =?utf-8?B?SGgxT3p2MDhUSkg3a2tIRU4rb2pCSDNEVlRSN0RDVVdVTkhZZGpjdzllNzRC?=
- =?utf-8?B?aEljeFM1Z2REQXVZL1I1NExzSjlzRTBjcmdkT3FkOFhrNFdoUURDTjlYVFcr?=
- =?utf-8?B?LzNsVEtFNEMzQ3pXMmNLSDJrVkpqZlBjcEdaeUxhYk9MZU5ZcXovY3lGY01y?=
- =?utf-8?B?ZHRYWmpCeldvZ0hld2V4cnU4dXh0aWM4elQ3NlJSV0VRSGMvci8wNXlENk5H?=
- =?utf-8?B?TFBmUXJ0UDArNmxYR0R4dUFDU3RoZDV6MkNiVFBIdTlodWNETHBmaDhTYjJQ?=
- =?utf-8?B?RXJ6MDdnbDhzRS8rYVB0eEsraWQxRlc4dGczb2tJVmU4b0tGYnREeUNBV0h5?=
- =?utf-8?B?b0QwdjN4OHAyT2IvS1hGMms5RHF2VnROV29Qb0FxSHMvWk9zZloxc3ZBTDZX?=
- =?utf-8?B?UHY5Yi9lNmMyUTFINjVtcUVQN0p0QWZyZWRWUVlHQ09BWXVZNzdFQkpwNTFt?=
- =?utf-8?B?N1VFc0hKVnl5TjlxWGNDdk5yby9BUWloaWsvMlZVQnFBaGMwMW1DQkY5SW9n?=
- =?utf-8?B?MmJrQzIreElkQ1pYMmk0TDlSZjhSbnlqTUIyMmRIMUZWYTBRczFNL0grZm8y?=
- =?utf-8?B?UEVOdUI5Y1pMbzl0dHpqVVRoTjJRZHZuRFRCRFRNR241YmZLVXBsT0U5Nnhy?=
- =?utf-8?B?L2V1WkZjd3ZXdWRuMWQrY3VUK1BkZDc1cTYxbHZzVzlvY2dTUFVVZkRvbDNi?=
- =?utf-8?B?MGxsdW0yeHMvVyttZjdIL1pQbFZqNG9WcmxDQUJyZWlnRlZaZW8xai84TG5X?=
- =?utf-8?B?MUhsTE5yNy85bXo4cFVxekFlQ21WU0JxZXJ1TXhLUVJFNkh0UE15ODAySXM4?=
- =?utf-8?B?UGFzWGd4dVpUZ2F1SEhnRHladFBnMDBDYTBZOHJ4cjVyNXdSS3cyK09YZU9v?=
- =?utf-8?B?cGxuUFlXTHBMOFZBRU5ZbGpqYWRRRkNPa3hEa3Y5Y3poK2tVY3EvdEF3RVJU?=
- =?utf-8?B?YTRKY0FwdXo0U1kxTUhYOElyeU4reFlRSnFRaEJlY2FIVTUvN3dWUlUvUkc0?=
- =?utf-8?Q?wVrwYXuh42oYijio=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26d164ba-d65b-4baa-ac47-08da1e33a87c
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 16:27:24.8691
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y6D1vog8zD0OP4FnvgMnpoU1U4U+jxt7K0Vz/fYGGS8zRyk/hDLzfDUzlKv1YFzOwbweQpFAy7Ak9Q5vR3bPj8MpCWFpcdoRMdeiQhg++sk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4044
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_04,2022-04-14_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 clxscore=1011 suspectscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,41 +83,364 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+Hi Linus,
 
-On 4/14/2022 4:12 AM, Jarkko Sakkinen wrote:
-> On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
->> SGX2 functions are not allowed on all page types. For example,
->> ENCLS[EMODPR] is only allowed on regular SGX enclave pages and
->> ENCLS[EMODPT] is only allowed on TCS and regular pages. If these
->> functions are attempted on another type of page the hardware would
->> trigger a fault.
->>
->> Keep a record of the SGX page type so that there is more
->> certainty whether an SGX2 instruction can succeed and faults
->> can be treated as real failures.
->>
->> The page type is a property of struct sgx_encl_page
->> and thus does not cover the VA page type. VA pages are maintained
->> in separate structures and their type can be determined in
->> a different way. The SGX2 instructions needing the page type do not
->> operate on VA pages and this is thus not a scenario needing to
->> be covered at this time.
->>
->> struct sgx_encl_page hosting this information is maintained for each
->> enclave page so the space consumed by the struct is important.
->> The existing sgx_encl_page->vm_max_prot_bits is already unsigned long
->> while only using three bits. Transition to a bitfield for the two
->> members to support the additional information without increasing
->> the space consumed by the struct.
->>
->> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> 
-> Nit: reviewed-by overrides acked-by so you can remove acked-by and
-> keep reviewed-by.
+please pull some s390 updates for 5.18-rc3.
 
-Understood. I'll do so in the next version.
+Thanks,
+Heiko
 
-Reinette
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.18-3
+
+for you to fetch changes up to c68c63429319a923a3f23db64810ba608f5d20f7:
+
+  s390: enable CONFIG_HARDENED_USERCOPY in debug_defconfig (2022-04-12 11:56:08 +0200)
+
+----------------------------------------------------------------
+s390 updates for 5.18-rc3
+
+- Convert current_stack_pointer to a register alias like it is assumed if
+  ARCH_HAS_CURRENT_STACK_POINTER is selected. The existing implementation
+  as a function breaks CONFIG_HARDENED_USERCOPY sanity-checks.
+
+- Get rid of -Warray-bounds warning within kexec code.
+
+- Add minimal IBM z16 support by reporting a proper elf platform, and
+  adding compile options.
+
+- Update defconfigs.
+
+----------------------------------------------------------------
+Heiko Carstens (4):
+      s390: add z16 elf platform
+      s390: allow to compile with z16 optimizations
+      s390/kexec: silence -Warray-bounds warning
+      s390: update defconfigs
+
+Sven Schnelle (2):
+      s390: current_stack_pointer shouldn't be a function
+      s390: enable CONFIG_HARDENED_USERCOPY in debug_defconfig
+
+ arch/s390/Kconfig                    | 19 +++++++++++++++++++
+ arch/s390/Makefile                   |  2 ++
+ arch/s390/configs/debug_defconfig    |  8 ++++++--
+ arch/s390/configs/defconfig          |  6 ++++--
+ arch/s390/configs/zfcpdump_defconfig |  6 +++---
+ arch/s390/include/asm/entry-common.h |  2 +-
+ arch/s390/include/asm/processor.h    |  8 +-------
+ arch/s390/include/asm/stacktrace.h   |  2 +-
+ arch/s390/kernel/machine_kexec.c     |  2 +-
+ arch/s390/kernel/processor.c         |  4 ++++
+ arch/s390/lib/test_unwind.c          |  2 +-
+ 11 files changed, 43 insertions(+), 18 deletions(-)
+
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 77b5a03de13a..e084c72104f8 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -255,6 +255,10 @@ config HAVE_MARCH_Z15_FEATURES
+ 	def_bool n
+ 	select HAVE_MARCH_Z14_FEATURES
+ 
++config HAVE_MARCH_Z16_FEATURES
++	def_bool n
++	select HAVE_MARCH_Z15_FEATURES
++
+ choice
+ 	prompt "Processor type"
+ 	default MARCH_Z196
+@@ -312,6 +316,14 @@ config MARCH_Z15
+ 	  and 8561 series). The kernel will be slightly faster but will not
+ 	  work on older machines.
+ 
++config MARCH_Z16
++	bool "IBM z16"
++	select HAVE_MARCH_Z16_FEATURES
++	depends on $(cc-option,-march=z16)
++	help
++	  Select this to enable optimizations for IBM z16 (3931 and
++	  3932 series).
++
+ endchoice
+ 
+ config MARCH_Z10_TUNE
+@@ -332,6 +344,9 @@ config MARCH_Z14_TUNE
+ config MARCH_Z15_TUNE
+ 	def_bool TUNE_Z15 || MARCH_Z15 && TUNE_DEFAULT
+ 
++config MARCH_Z16_TUNE
++	def_bool TUNE_Z16 || MARCH_Z16 && TUNE_DEFAULT
++
+ choice
+ 	prompt "Tune code generation"
+ 	default TUNE_DEFAULT
+@@ -372,6 +387,10 @@ config TUNE_Z15
+ 	bool "IBM z15"
+ 	depends on $(cc-option,-mtune=z15)
+ 
++config TUNE_Z16
++	bool "IBM z16"
++	depends on $(cc-option,-mtune=z16)
++
+ endchoice
+ 
+ config 64BIT
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index 7a65bca1e5af..e441b60b1812 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -42,6 +42,7 @@ mflags-$(CONFIG_MARCH_ZEC12)  := -march=zEC12
+ mflags-$(CONFIG_MARCH_Z13)    := -march=z13
+ mflags-$(CONFIG_MARCH_Z14)    := -march=z14
+ mflags-$(CONFIG_MARCH_Z15)    := -march=z15
++mflags-$(CONFIG_MARCH_Z16)    := -march=z16
+ 
+ export CC_FLAGS_MARCH := $(mflags-y)
+ 
+@@ -54,6 +55,7 @@ cflags-$(CONFIG_MARCH_ZEC12_TUNE)	+= -mtune=zEC12
+ cflags-$(CONFIG_MARCH_Z13_TUNE)		+= -mtune=z13
+ cflags-$(CONFIG_MARCH_Z14_TUNE)		+= -mtune=z14
+ cflags-$(CONFIG_MARCH_Z15_TUNE)		+= -mtune=z15
++cflags-$(CONFIG_MARCH_Z16_TUNE)		+= -mtune=z16
+ 
+ cflags-y += -Wa,-I$(srctree)/arch/$(ARCH)/include
+ 
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index 498bed9b261b..f6dfde577ce8 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -499,11 +499,13 @@ CONFIG_NLMON=m
+ # CONFIG_NET_VENDOR_CHELSIO is not set
+ # CONFIG_NET_VENDOR_CISCO is not set
+ # CONFIG_NET_VENDOR_CORTINA is not set
++# CONFIG_NET_VENDOR_DAVICOM is not set
+ # CONFIG_NET_VENDOR_DEC is not set
+ # CONFIG_NET_VENDOR_DLINK is not set
+ # CONFIG_NET_VENDOR_EMULEX is not set
+ # CONFIG_NET_VENDOR_ENGLEDER is not set
+ # CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_FUNGIBLE is not set
+ # CONFIG_NET_VENDOR_GOOGLE is not set
+ # CONFIG_NET_VENDOR_HUAWEI is not set
+ # CONFIG_NET_VENDOR_INTEL is not set
+@@ -588,13 +590,13 @@ CONFIG_MLX5_INFINIBAND=m
+ CONFIG_SYNC_FILE=y
+ CONFIG_VFIO=m
+ CONFIG_VFIO_PCI=m
++CONFIG_MLX5_VFIO_PCI=m
+ CONFIG_VFIO_MDEV=m
+ CONFIG_VIRTIO_PCI=m
+ CONFIG_VIRTIO_BALLOON=m
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VHOST_NET=m
+ CONFIG_VHOST_VSOCK=m
+-# CONFIG_SURFACE_PLATFORMS is not set
+ CONFIG_S390_CCW_IOMMU=y
+ CONFIG_S390_AP_IOMMU=y
+ CONFIG_EXT4_FS=y
+@@ -690,6 +692,7 @@ CONFIG_ENCRYPTED_KEYS=m
+ CONFIG_KEY_NOTIFICATIONS=y
+ CONFIG_SECURITY=y
+ CONFIG_SECURITY_NETWORK=y
++CONFIG_HARDENED_USERCOPY=y
+ CONFIG_FORTIFY_SOURCE=y
+ CONFIG_SECURITY_SELINUX=y
+ CONFIG_SECURITY_SELINUX_BOOTPARAM=y
+@@ -733,6 +736,7 @@ CONFIG_CRYPTO_MD5=y
+ CONFIG_CRYPTO_MICHAEL_MIC=m
+ CONFIG_CRYPTO_RMD160=m
+ CONFIG_CRYPTO_SHA3=m
++CONFIG_CRYPTO_SM3=m
+ CONFIG_CRYPTO_WP512=m
+ CONFIG_CRYPTO_AES_TI=m
+ CONFIG_CRYPTO_ANUBIS=m
+@@ -786,7 +790,6 @@ CONFIG_DMA_CMA=y
+ CONFIG_CMA_SIZE_MBYTES=0
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF4=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+@@ -814,6 +817,7 @@ CONFIG_DEBUG_MEMORY_INIT=y
+ CONFIG_MEMORY_NOTIFIER_ERROR_INJECT=m
+ CONFIG_DEBUG_PER_CPU_MAPS=y
+ CONFIG_KFENCE=y
++CONFIG_KFENCE_DEFERRABLE=y
+ CONFIG_KFENCE_STATIC_KEYS=y
+ CONFIG_DEBUG_SHIRQ=y
+ CONFIG_PANIC_ON_OOPS=y
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index 61e36b999f67..706df3a4a867 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -490,11 +490,13 @@ CONFIG_NLMON=m
+ # CONFIG_NET_VENDOR_CHELSIO is not set
+ # CONFIG_NET_VENDOR_CISCO is not set
+ # CONFIG_NET_VENDOR_CORTINA is not set
++# CONFIG_NET_VENDOR_DAVICOM is not set
+ # CONFIG_NET_VENDOR_DEC is not set
+ # CONFIG_NET_VENDOR_DLINK is not set
+ # CONFIG_NET_VENDOR_EMULEX is not set
+ # CONFIG_NET_VENDOR_ENGLEDER is not set
+ # CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_FUNGIBLE is not set
+ # CONFIG_NET_VENDOR_GOOGLE is not set
+ # CONFIG_NET_VENDOR_HUAWEI is not set
+ # CONFIG_NET_VENDOR_INTEL is not set
+@@ -578,13 +580,13 @@ CONFIG_MLX5_INFINIBAND=m
+ CONFIG_SYNC_FILE=y
+ CONFIG_VFIO=m
+ CONFIG_VFIO_PCI=m
++CONFIG_MLX5_VFIO_PCI=m
+ CONFIG_VFIO_MDEV=m
+ CONFIG_VIRTIO_PCI=m
+ CONFIG_VIRTIO_BALLOON=m
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VHOST_NET=m
+ CONFIG_VHOST_VSOCK=m
+-# CONFIG_SURFACE_PLATFORMS is not set
+ CONFIG_S390_CCW_IOMMU=y
+ CONFIG_S390_AP_IOMMU=y
+ CONFIG_EXT4_FS=y
+@@ -720,6 +722,7 @@ CONFIG_CRYPTO_MD5=y
+ CONFIG_CRYPTO_MICHAEL_MIC=m
+ CONFIG_CRYPTO_RMD160=m
+ CONFIG_CRYPTO_SHA3=m
++CONFIG_CRYPTO_SM3=m
+ CONFIG_CRYPTO_WP512=m
+ CONFIG_CRYPTO_AES_TI=m
+ CONFIG_CRYPTO_ANUBIS=m
+@@ -772,7 +775,6 @@ CONFIG_DMA_CMA=y
+ CONFIG_CMA_SIZE_MBYTES=0
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF4=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+diff --git a/arch/s390/configs/zfcpdump_defconfig b/arch/s390/configs/zfcpdump_defconfig
+index c55c668dc3c7..a87fcc45e307 100644
+--- a/arch/s390/configs/zfcpdump_defconfig
++++ b/arch/s390/configs/zfcpdump_defconfig
+@@ -26,6 +26,7 @@ CONFIG_CRASH_DUMP=y
+ # CONFIG_S390_GUEST is not set
+ # CONFIG_SECCOMP is not set
+ # CONFIG_GCC_PLUGINS is not set
++# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
+ CONFIG_PARTITION_ADVANCED=y
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ # CONFIG_COMPACTION is not set
+@@ -60,7 +61,6 @@ CONFIG_ZFCP=y
+ # CONFIG_HID is not set
+ # CONFIG_VIRTIO_MENU is not set
+ # CONFIG_VHOST_MENU is not set
+-# CONFIG_SURFACE_PLATFORMS is not set
+ # CONFIG_IOMMU_SUPPORT is not set
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
+@@ -71,10 +71,10 @@ CONFIG_LSM="yama,loadpin,safesetid,integrity"
+ CONFIG_XZ_DEC_MICROLZMA=y
+ CONFIG_PRINTK_TIME=y
+ # CONFIG_SYMBOLIC_ERRNAME is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_KERNEL=y
++CONFIG_DEBUG_INFO_DWARF4=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_FS=y
+-CONFIG_DEBUG_KERNEL=y
+ CONFIG_PANIC_ON_OOPS=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_RCU_CPU_STALL_TIMEOUT=60
+diff --git a/arch/s390/include/asm/entry-common.h b/arch/s390/include/asm/entry-common.h
+index eabab24b71dd..2f0a1cacdf85 100644
+--- a/arch/s390/include/asm/entry-common.h
++++ b/arch/s390/include/asm/entry-common.h
+@@ -58,7 +58,7 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
+ 
+ static inline bool on_thread_stack(void)
+ {
+-	return !(((unsigned long)(current->stack) ^ current_stack_pointer()) & ~(THREAD_SIZE - 1));
++	return !(((unsigned long)(current->stack) ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
+ }
+ 
+ #endif
+diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor.h
+index eee8d96fb38e..ff1e25d515a8 100644
+--- a/arch/s390/include/asm/processor.h
++++ b/arch/s390/include/asm/processor.h
+@@ -200,13 +200,7 @@ unsigned long __get_wchan(struct task_struct *p);
+ /* Has task runtime instrumentation enabled ? */
+ #define is_ri_task(tsk) (!!(tsk)->thread.ri_cb)
+ 
+-static __always_inline unsigned long current_stack_pointer(void)
+-{
+-	unsigned long sp;
+-
+-	asm volatile("la %0,0(15)" : "=a" (sp));
+-	return sp;
+-}
++register unsigned long current_stack_pointer asm("r15");
+ 
+ static __always_inline unsigned short stap(void)
+ {
+diff --git a/arch/s390/include/asm/stacktrace.h b/arch/s390/include/asm/stacktrace.h
+index 275f4258fbd5..f8500191993d 100644
+--- a/arch/s390/include/asm/stacktrace.h
++++ b/arch/s390/include/asm/stacktrace.h
+@@ -46,7 +46,7 @@ struct stack_frame {
+ };
+ 
+ /*
+- * Unlike current_stack_pointer() which simply returns current value of %r15
++ * Unlike current_stack_pointer which simply contains the current value of %r15
+  * current_frame_address() returns function stack frame address, which matches
+  * %r15 upon function invocation. It may differ from %r15 later if function
+  * allocates stack for local variables or new stack frame to call other
+diff --git a/arch/s390/kernel/machine_kexec.c b/arch/s390/kernel/machine_kexec.c
+index b2ef014a9287..6ebf02e15c85 100644
+--- a/arch/s390/kernel/machine_kexec.c
++++ b/arch/s390/kernel/machine_kexec.c
+@@ -54,7 +54,7 @@ static void __do_machine_kdump(void *image)
+ 	 * This need to be done *after* s390_reset_system set the
+ 	 * prefix register of this CPU to zero
+ 	 */
+-	memcpy((void *) __LC_FPREGS_SAVE_AREA,
++	memcpy(absolute_pointer(__LC_FPREGS_SAVE_AREA),
+ 	       (void *)(prefix + __LC_FPREGS_SAVE_AREA), 512);
+ 
+ 	__load_psw_mask(PSW_MASK_BASE | PSW_DEFAULT_KEY | PSW_MASK_EA | PSW_MASK_BA);
+diff --git a/arch/s390/kernel/processor.c b/arch/s390/kernel/processor.c
+index 7a74ea5f7531..aa0e0e7fc773 100644
+--- a/arch/s390/kernel/processor.c
++++ b/arch/s390/kernel/processor.c
+@@ -283,6 +283,10 @@ static int __init setup_elf_platform(void)
+ 	case 0x8562:
+ 		strcpy(elf_platform, "z15");
+ 		break;
++	case 0x3931:
++	case 0x3932:
++		strcpy(elf_platform, "z16");
++		break;
+ 	}
+ 	return 0;
+ }
+diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+index 9bb067321ab4..5a053b393d5c 100644
+--- a/arch/s390/lib/test_unwind.c
++++ b/arch/s390/lib/test_unwind.c
+@@ -147,7 +147,7 @@ static __always_inline struct pt_regs fake_pt_regs(void)
+ 	struct pt_regs regs;
+ 
+ 	memset(&regs, 0, sizeof(regs));
+-	regs.gprs[15] = current_stack_pointer();
++	regs.gprs[15] = current_stack_pointer;
+ 
+ 	asm volatile(
+ 		"basr	%[psw_addr],0\n"

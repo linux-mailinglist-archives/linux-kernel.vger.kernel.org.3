@@ -2,172 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424AB501D37
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6585501D3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244913AbiDNVQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S1345468AbiDNVRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237304AbiDNVQd (ORCPT
+        with ESMTP id S237304AbiDNVRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:16:33 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1E1D64DF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:14:07 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id a11so4792171qtb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uKVGoGbrYEyx0k0CgPBfM6msY5l8yZ5p4Lnz2+Cc2cQ=;
-        b=DABf8MAEYkJJzsAYNNXHuzixYW/Fr8D2oycj5oA/SFoVD9byDD6rPX8GszkCthofMf
-         jfeIpswuW6KCZ4D7K06NHctGis3ItS0pW3Q70M4yZVkao52NTuCP561ozdv/uEu2W+PF
-         MweF+VAwWzO6AOoaZnzPieoJs6Q15/llDNcPc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uKVGoGbrYEyx0k0CgPBfM6msY5l8yZ5p4Lnz2+Cc2cQ=;
-        b=fjIojsgBGczsma/+hww4E4keyGPcjcxvyS8HPhtCe92JFro4wDt9FVDK0NqddlX3Le
-         hEGdq6lT8XMT0UGCufZgXscNiTWe02uMqtw/9gyE7Mmnocbak3NeGMptI4WOZuytfEf3
-         348jqCRyMe+YPP8em7JVVGB0CxsIwnch/eW8kqrgqKEw19uvDhxngs9LsZ6F/ozvEpNw
-         UJwLuUyQPPdkkV3x4p8qkr0mNgHV3sKkftwQVGKxKaBtf4Ib0Jsi4xpwYb+7kRtHflI3
-         ytdjR+sYidAExsX+r0kfyH7rEWedPakAK+rEwdXbrMqwmPLKAtz2QIS3nyJ9Y0j3VvTE
-         Sxdw==
-X-Gm-Message-State: AOAM530507uW/ZeLxyAns4nj34lo1ZYQCPBNvcqmzu+IxY1Ra/9UZ2o9
-        oe4d7dy3OLVJcVldkeQb/1EGEQ==
-X-Google-Smtp-Source: ABdhPJx1tNCMWhjWY+hhHDbkYJYxh1X6Fc13wV9da89uHjZElQ08EW1QmpdXf6UabPq1F0Ycdc4/rA==
-X-Received: by 2002:a05:622a:3c7:b0:2e1:d537:a15a with SMTP id k7-20020a05622a03c700b002e1d537a15amr3398221qtx.522.1649970846282;
-        Thu, 14 Apr 2022 14:14:06 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id b3-20020a05620a270300b0069c5f9304e6sm1432563qkp.48.2022.04.14.14.14.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 14:14:05 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 21:14:05 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
- RCU_NOCB_CPU=y
-Message-ID: <YliOnZC6gva5WZrG@google.com>
-References: <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
- <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
- <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
- <20220411154109.GX4285@paulmck-ThinkPad-P17-Gen-1>
- <Ylhz1LOIf+JyjH7n@google.com>
- <20220414194204.GU4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YS5b_51tqmdf27QqQHqsgJKbTys1V3h+Bek3XN4FjBmbw@mail.gmail.com>
- <20220414210933.GW4285@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 14 Apr 2022 17:17:21 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2A1C6EE9;
+        Thu, 14 Apr 2022 14:14:55 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 54D001F47CE5;
+        Thu, 14 Apr 2022 22:14:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649970894;
+        bh=45lr61m9iGCAZVul+Bks15jmw1Puw71mKHjjKMgF/kM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Z1NujI6mIKhUzAdDTLgfe8GrUrwpKOSR6x8xb5pLrzSROOZ3WVyixGEZewDfcBvnD
+         P063OzaVG/nS32pSgW2G+PASJqmH+kkKOxtrga3gqPlpZuj7dKiJ2pJPGTzVbEhgl3
+         iq6LpeR7t/3zcsxh9OvEpdEj1mPR7VIUUS3Bc8vYvVxGCmrG1R+sZpqRNCxU5h69lh
+         z2zqC2s4wGNkyrcZNtZ8nxNAMls04YXtSQhrjpyjLEwfcmvXr/KciGv62UvQoqwd3z
+         qxReZqmSGaVfC9deQI+E8mU2/q/bO2G2vPP2w4iVrZukDQ1WtTTV3hKVDfHJp0ABwm
+         +3QvheM+aNOAA==
+Message-ID: <274d09f6-2d07-920b-661b-95d899262c9b@collabora.com>
+Date:   Fri, 15 Apr 2022 00:14:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414210933.GW4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v7 2/4] memory: tegra: Add MC error logging on tegra186
+ onward
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, digetx@gmail.com,
+        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220413094012.13589-1-amhetre@nvidia.com>
+ <20220413094012.13589-3-amhetre@nvidia.com>
+ <eeb513c9-f010-c45b-bca6-a10c96691147@collabora.com>
+ <534dbd19-b43b-63e6-69e0-3441dd224ef0@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <534dbd19-b43b-63e6-69e0-3441dd224ef0@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:09:33PM -0700, Paul E. McKenney wrote:
-> On Thu, Apr 14, 2022 at 03:49:16PM -0400, Joel Fernandes wrote:
-> > On Thu, Apr 14, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >
-> > > On Thu, Apr 14, 2022 at 07:19:48PM +0000, Joel Fernandes wrote:
-> > > > On Mon, Apr 11, 2022 at 08:41:09AM -0700, Paul E. McKenney wrote:
-> > > > [..]
-> > > > > > > [4]     All CPUs are offloaded at boot, and any CPU can be de-offloaded
-> > > > > > >         and offloaded at runtime.  This is the same behavior that
-> > > > > > >         you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
-> > > > > > >         rcu_nocbs=0-N.
-> > > > > >
-> > > > > > Yes, this is the behavior I intend. So then there would not be a need
-> > > > > > to pass a mask (and I suspect for a large number of users, it
-> > > > > > simplifies boot params).
-> > > > >
-> > > > > Very good, and from what I can see, this should work for everyone.
-> > > >
-> > > > Just to clarify, what I am going to do is, if this new option =y, then
-> > > > rcu_nocbs effectively wont do anything. i.e. All CPUs are offloaded at boot.
-> > > > Let me know if we are not on the same page about it though. I do feel that is
-> > > > a sensible choice given =y. If we are on same page, please ignore my comment.
-> > >
-> > > I was assuming that the rcu_nocbs=??? for non-empty "???" would override
-> > > the CONFIG_RCU_NOCB_CPU_ALL=y.  If you choose not to do that, shouldn't
-> > > you at least issue some sort of diagnostic?  After all, the sysadmin
-> > > gave a kernel-boot parameter asking the code to do something and the
-> > > code is choosing not to do that something.
-> > >
-> > > Of course, such a sysadmin might want the CONFIG_RCU_NOCB_CPU_ALL=y
-> > > Kconfig option to affect only the default, that is, when no rcu_nocbs
-> > > kernel boot parameter is specified.  This would change the second "[4]"
-> > > in my original table to "[2]".
-> > >
-> > > Thoughts?
-> > 
-> > I thought about that. I feel that since we are defaulting the new
-> > config option to =n , it is a conscious choice by the distro to set it
-> > to =y.  In such a case, they should be Ok with offloading all CPUs. If
-> > they decide to selectively offload some CPUs in the future, then they
-> > could revisit the config option at that time.
-> > 
-> > I feel the kernel config should override the boot parameter behavior.
-> > It is the same effect as a sysadmin passing kernel parameter X
-> > assuming the kernel does something but the CONFIG option might not
-> > even build code corresponding to X.
-> > 
-> > I feel to address your concern, we can document in kernel command line
-> > documentation that rcu_nocbs= does not have an effect if
-> > CONFIG_RCU_NOCB_CPU_ALL=y, would that work for you?
+On 4/14/22 08:31, Ashish Mhetre wrote:
 > 
-> Not me so much, because I would just set CONFIG_RCU_NOCB_CPU_ALL=n so
-> as to not worry about it.
 > 
-> But I am not at all looking forward to complaints about rcu_nocbs not
-> working the way people expect.  So let's take some time to think more
-> carefully about this.
-
-That's a fair concern. But we are defaulting it to 'n' so I think if it is
-unconsciously enabled without someone reading documentation, then that's a
-slightly different issue.
-
-On the other hand, I can also make it such that if rcu_nocbs= is passed, then
-the CONFIG does not take effect. That's quite a bit weird/quirky IMHO.
-
-thanks,
-
- - Joel
-
-
-
-> 							Thanx, Paul
+> On 4/14/2022 2:43 AM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 4/13/22 12:40, Ashish Mhetre wrote:
+>>> +irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>>   {
+>>>        struct tegra_mc *mc = data;
+>>> +     unsigned int bit, channel;
+>>>        unsigned long status;
+>>> -     unsigned int bit;
+>>>
+>>> -     /* mask all interrupts to avoid flooding */
+>>> -     status = mc_readl(mc, MC_INTSTATUS) & mc->soc->intmask;
+>>> +     if (mc->soc->num_channels) {
+>>> +             u32 global_status;
+>>> +             int err;
+>>> +
+>>> +             global_status = mc_ch_readl(mc, MC_BROADCAST_CHANNEL,
+>>> MC_GLOBAL_INTSTATUS);
+>>
+>> This will crash if mc->bcast_ch_regs = ERR_PTR(-EINVAL) for older dtbs.
 > 
-> > Thanks,
-> > 
-> > - Joel
-> > 
-> > >
-> > > > > > > I believe that Steve Rostedt's review would carry weight for ChromeOS,
-> > > > > > > however, I am suffering a senior moment on the right person for Android.
-> > > > > >
-> > > > > > I think for Android, Kalesh Singh is in the kernel team and Tim Murray
-> > > > > > is the performance lead. They could appropriately represent their RCU
-> > > > > > needs.
-> > > > >
-> > > > > Sounds good!  Please collect a Reviewed-by from one or both of them.
-> > > >
-> > > > Ok.
-> > >
-> > >                                                         Thanx, Paul
+> Actually interrupts won't occur till we write MC_INTMASK register from
+> broadcast channel with appropriate intmask value. I have added check in
+> tegra_mc_probe() while registering irq which will write MC_INTMASK from
+> broadcast only when mc->bcast_ch_regs is initialized i.e.
+> !IS_ERR(mc->bcast_ch_regs).
+> So interrupt handler won't be triggered at all if
+> mc->bcast_ch_regs = ERR_PTR(-EINVAL).
+> 
+
+Should be cleaner to set mc->bcast_ch_regs to NULL anyways. The ERR_PTR
+doesn't add much value and only makes code less readable.

@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BD05017A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A8D501795
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358536AbiDNPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S1358665AbiDNPmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347629AbiDNOwO (ORCPT
+        with ESMTP id S1354224AbiDNOzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:52:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0094FBD7ED
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649947293; x=1681483293;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/nmAQuF8uidNgq7HJ/eFp9m+rY8zxzb44tZes2w07Zo=;
-  b=UpKBXCqJf9KBli+bRNFRD1zGSrTZFxES9EAiVQNqcA7GPGlhwUtsgLdY
-   Gitj/aG1M7BIC/JVSzQrvUcgqUe8y325hyuol/9mVxVC9eSlezRWWxNWN
-   NGl/w33m9ttIvaYh4cgJrtwvQURw0SmvT5jBTlcBjJpUZ6pr1tdmrIbVE
-   WEn/90lX7qGOo/g/UwYjz9wgy0qAPRyZDfvZLpRSJDknt4Pp29sG4aIxc
-   b5+5HIo51RpxjtvaEXYoL7RT5FT67uPsJWlIPnBL+w7MUPnOg+STwtv/e
-   X74ZLJjtuEJyXT5jeAjgus9NLZB1m8pae9HPy9tMw5IX1+rK6qj30fHO5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="244828908"
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="244828908"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:41:32 -0700
-X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
-   d="scan'208";a="725385705"
-Received: from aviljane-mobl.ger.corp.intel.com (HELO [10.249.254.86]) ([10.249.254.86])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:41:25 -0700
-Message-ID: <94ddf51a-90ae-dee8-5d6a-45ee2cd1e584@linux.intel.com>
-Date:   Thu, 14 Apr 2022 16:41:23 +0200
+        Thu, 14 Apr 2022 10:55:08 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC1DDBD29
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:42:59 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso4791564pjv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qwcuBgImCmXIPh4KovD6yz7yJbjBcIk++srxxrgHoVk=;
+        b=PqcPSgK5KCFX0ypEAiiuQ48djSg+e6hRlUoxyQKm5+csfnsgcYel8pbIACDPKdIjKR
+         iHjm7BMJeqGyI/nEfPUqUFojs9W5pKDLHiOS5tTpfTgnzcLHRbQoPplRp4MSG2FubYVv
+         KJ/sOzMF9j6eDYKI9fm40PvgwjEB8UXsEx0pOCKujwLNY528/tgdDAs2+HcUzJ46A7Mk
+         b9kflZvhS0PZbSS+HVeVy4/Zjud0oNXTtCGCdZ8zs7rXuSahBGjWZIxMibg0vEHnJxav
+         6HrSLaAsH5Cugsnm62jDxshYpQ46yXTkT2wfGTJk4FYp3Tsukla7/SlJG3Ud0J9oGyjG
+         PSPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qwcuBgImCmXIPh4KovD6yz7yJbjBcIk++srxxrgHoVk=;
+        b=NxLFkKLZzIdiil1t9OutSKP4mI2mDNwI0OFDo28JZc5X1jCrdPDHU3vmIlyJw/+HYn
+         gBhQXtvZnKHIwZsfaGC+tr4DHRzIlrR30jOUhXNrcdtkmHIMrbnUTyo6jAL/TyVRjQ4Q
+         6BlUMLzT7x0N+N4xF2pYFE9Rec0fKSy07FTl9HJ4kk3Zri5f4GHiu9FJsZC+Ci830/Db
+         aI4gMJYtdIuO/RE0UhMj4h4ffvFVwk1f7QtnstQ7W9K+lb3+Xs5R2OjDy00UFzDF5ZRP
+         0wruWnBwL2umhbRDgXli6WSbupgMLqGvX6sCF9dJ4hcdlkvg6nyksl3cndVGiIs0rdUs
+         3pJg==
+X-Gm-Message-State: AOAM532fN/+ErPUjGtdOWhKbhi8Ccp2DsqEZJDkaAwrlfc5a1Jfu2IMb
+        AVXp8Luu1KWG0mm5BKW/YpMp5g==
+X-Google-Smtp-Source: ABdhPJy2PeIS61cClFOl7u9zD2LzLkl4mWHXZ+aCyR9ZnSEJKTwasVdmpha8K+eK6URzneRvPCXonQ==
+X-Received: by 2002:a17:902:ecc1:b0:158:6e96:83a7 with SMTP id a1-20020a170902ecc100b001586e9683a7mr18008752plh.79.1649947378972;
+        Thu, 14 Apr 2022 07:42:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e12-20020a056a0000cc00b00508343a6f9esm194233pfj.5.2022.04.14.07.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 07:42:58 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 14:42:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+Message-ID: <Ylgy7tnQAKqyV22K@google.com>
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-4-jiangshanlai@gmail.com>
+ <YlXrshJa2Sd1WQ0P@google.com>
+ <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+ <683974e7-5801-e289-8fa4-c8a8d21ec1b2@redhat.com>
+ <CAJhGHyCgo-FEgvuRfuLZikgJSyo7HGm1OfU3gme35-WBmqo7yQ@mail.gmail.com>
+ <658729a1-a4a1-a353-50d6-ef71e83a4375@redhat.com>
+ <CAJhGHyDYeQGUWmco=c4TA1uu=33ccW7z0fDLuYjvkGFW5WnDSQ@mail.gmail.com>
+ <77699a19-65bd-5088-2f25-1be59364f5ee@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 5/5] drm/i915: stolen memory use ttm backend
-Content-Language: en-US
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>, linux-kernel@vger.kernel.org
-References: <20220412193817.2098308-1-bob.beckett@collabora.com>
- <20220412193817.2098308-6-bob.beckett@collabora.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-In-Reply-To: <20220412193817.2098308-6-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77699a19-65bd-5088-2f25-1be59364f5ee@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Apr 14, 2022, Paolo Bonzini wrote:
+> On 4/14/22 13:06, Lai Jiangshan wrote:
+> > > Right, but then load_pdptrs only needs to zap the page before (or
+> > > instead of) calling kvm_mmu_free_roots().
+> > > 
+> > 
+> > Guest PAE page is write-protected instead now (see patch4) and
+> > kvm_mmu_pte_write() needs to handle this special write operation
+> > with respect to sp->pae_off (todo).
+> > And load_pdptrs() doesn't need to check if the pdptrs are changed.
+> 
+> Write-protecting the PDPTR page is unnecessary, the PDPTRs cannot change
+> without another CR3.  That should be easy to do in account_shadowed and
+> unaccount_shadowed
 
+Technically that's not true under SVM?
 
-On 4/12/22 21:38, Robert Beckett wrote:
-> +struct ttm_resource *
-> +i915_gem_stolen_reserve_range(struct drm_i915_private *i915,
-> +			      resource_size_t size,
-> +			      u64 start, u64 end)
->   {
-> -	int ret;
-> +	struct intel_memory_region *mem = i915->mm.stolen_region;
->   
-> -	if (!drm_mm_initialized(&i915->mm.stolen))
-> -		return -ENODEV;
-> -
-> -	/* WaSkipStolenMemoryFirstPage:bdw+ */
-> -	if (GRAPHICS_VER(i915) >= 8 && start < 4096)
-> -		start = 4096;
-
-Did we lose this Workaround?
-
-Need to continue reviewing this patchnext week.
-
-
-Thx,
-
-Thomas
-
-
-
-
-> -
-> -	mutex_lock(&i915->mm.stolen_lock);
-> -	ret = drm_mm_insert_node_in_range(&i915->mm.stolen, node,
-> -					  size, alignment, 0,
-> -					  start, end, DRM_MM_INSERT_BEST);
-> -	mutex_unlock(&i915->mm.stolen_lock);
-> +	if (!mem)
-> +		return ERR_PTR(-ENODEV);
-> +	return intel_region_ttm_resource_alloc(mem, size, start, end, I915_BO_ALLOC_CONTIGUOUS);
-> +}
->   
-> -	
+  Under SVM, however, when the processor is in guest mode with PAE enabled, the
+  guest PDPT entries are not cached or validated at this point, but instead are
+  loaded and checked on demand in the normal course of address translation, just
+  like page directory and page table entries

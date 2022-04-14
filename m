@@ -2,411 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9612C501864
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE411501884
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239413AbiDNQLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S231224AbiDNQL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347039AbiDNQJv (ORCPT
+        with ESMTP id S1347185AbiDNQJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:09:51 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AF1066E7;
-        Thu, 14 Apr 2022 08:51:02 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id g17-20020a9d6191000000b005e8d8583c36so3656510otk.8;
-        Thu, 14 Apr 2022 08:51:02 -0700 (PDT)
+        Thu, 14 Apr 2022 12:09:54 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61B0F9FBD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:51:19 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r66so5114327pgr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=528GGcT5AuLjlTi8kLrr8eu7nKa2Q0My6OrpHPfCZvA=;
+        b=EWbqny0Pp93YFKhLpC9HjurNJEBnJu/IiR1ictMdTGdNxsCMPbekhaGAJHZFo6854D
+         sTUz0E9PG8/4aCqXzd6e5m9xIknSuyKGaVI39k7wQup+5jVZnniFUu2Kuo/CKlsEd04k
+         Y34LLML4cNd4U44GaF8ptP/ww7/3Agi3AhnLRjL2vL+PKs3xTqXhm25hcwrS5phGMdi6
+         /9gTW9JE7U2HfOrs+Mr7RKQhe66kAxnIfBaA7GC83kQBx9J+GyZiujAHBFUjnbP/WqOS
+         avSyNZZHZBQ5GpHl+A017y+mHcSx0QQaSHP+5rGLDN4KHFisMaGKgGjiM4JXCK3W6tpa
+         IGfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4MPg8OKyiyQeA31rFhxzDutjNV/rxmutM88qSYThi0Q=;
-        b=cmeKPHSuGAvlUiLjhKr5VhXht4RbIR+mFbCgdQV4ZUa+w39FC0+WJdQox1qUaKn387
-         yNxY6Vu/ozTd96F2DSF4J4csQHybgP0Re4p3ioIMQ2CLFe44acUZQ1aR8HLCVSlYoRIw
-         WMidwBSu35ptWlMUD0EEEuZ20ayjOMeIyZK3RP5kfiBMhTET7NNW4zs74Ws5GZgX53xY
-         aR/p0eTGWYSSVaM7l1MhRrkFtYVQvOCX1XnTavfr5PGIF/M558LQDMo6PzoY+016fDDs
-         ryDzxtlP0wlu2fmEA+oLw5995ndC2oKWuNk7gS9bcuOHb+sgXeArNSPL5oPcxtHCTVA0
-         4MlQ==
-X-Gm-Message-State: AOAM531Hw0C02FENDJlCv7PcprjluYpvzg5gtW5RVpg0vMxjaI1W+6Mk
-        KZGw4hFObKNGNq5NvErATg==
-X-Google-Smtp-Source: ABdhPJxaEQz1K8lTJldqv9W54iJUO61jQZMSCTCf5cNn3IbLcn1CiQu0r0tV09L5oyhV2z9QqA/3cA==
-X-Received: by 2002:a9d:71c8:0:b0:602:3f40:f9ec with SMTP id z8-20020a9d71c8000000b006023f40f9ecmr381662otj.224.1649951461743;
-        Thu, 14 Apr 2022 08:51:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a19-20020a0568301dd300b0060131a30a1dsm133704otj.67.2022.04.14.08.51.01
+        bh=528GGcT5AuLjlTi8kLrr8eu7nKa2Q0My6OrpHPfCZvA=;
+        b=nNr1YgeK+pooA6tBSlV6FGcFhA4nhQsqsgBmL4qsXAr+BqSkNG7tvGXr+isdqSqe1g
+         tMlKLFrlOv/6ZMXauWoD0ZmjCz27SfEuly1vHXmn5kvROgsQa3m0ziOQaeJ4edAwqfXe
+         IVSXoK5u3rHSDL1MNDk+Wj2//GPKboIUtybkey/OPVbnv3vK4il5yFxV0hbsO2el33gw
+         mFCxDGyetjDG73u8B67uzp3mF+Y1IQecAYkamE+E9ntVlrDAMXaVWSxIvZ7akMRSelsL
+         YBUcCcqx6E2rkZR+IKhU8uslsbpum56JyA93OBncodGCV/AvR4iXNTkGbMhCFu5tLykm
+         gj4Q==
+X-Gm-Message-State: AOAM532zPPanzVo8ypFlP12QB+FNDgoyW7C/XPtxnMhtl7AAdQh//rOX
+        EUgYsrzgfLJnhJ7fmCFDa489pw==
+X-Google-Smtp-Source: ABdhPJzK6IWgENAWqUpuayzeQ0Ry7DOQhMd2mRcARy4VtSmd0Ni8fcUdG/deU1VWXaPUnB9HOk8w3A==
+X-Received: by 2002:a05:6a00:b89:b0:505:dead:db1d with SMTP id g9-20020a056a000b8900b00505deaddb1dmr4598474pfj.74.1649951479140;
+        Thu, 14 Apr 2022 08:51:19 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm302572pfc.190.2022.04.14.08.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:51:01 -0700 (PDT)
-Received: (nullmailer pid 2120315 invoked by uid 1000);
-        Thu, 14 Apr 2022 15:51:00 -0000
-Date:   Thu, 14 Apr 2022 10:51:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] regulator: dt-bindings: qcom,rpmh: document
- supplies per variant
-Message-ID: <YlhC5B+ZaNn9wUuB@robh.at.kernel.org>
-References: <20220412073123.27229-1-krzysztof.kozlowski@linaro.org>
- <20220412073123.27229-2-krzysztof.kozlowski@linaro.org>
+        Thu, 14 Apr 2022 08:51:18 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:51:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH V3 2/4] KVM: X86: Introduce role.glevel for level
+ expanded pagetable
+Message-ID: <YlhC86CFDRghdd5v@google.com>
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-3-jiangshanlai@gmail.com>
+ <YlXvtMqWpyM9Bjox@google.com>
+ <caffa434-5644-ee73-1636-45a87517bae2@redhat.com>
+ <YlbhVov4cvM26FnC@google.com>
+ <d2122fb0-7327-0490-9077-c69bbfba4830@redhat.com>
+ <YlbtEorfabzkRucF@google.com>
+ <e549d4c4-ca56-da1d-cc50-1a73621ba487@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412073123.27229-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e549d4c4-ca56-da1d-cc50-1a73621ba487@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 09:31:22AM +0200, Krzysztof Kozlowski wrote:
-> The RPMH regulator binding covers several devices with different
-> regulator supplies, so it uses patterns matching broad range of these
-> supplies.  This works fine but is not specific and might miss actual
-> mistakes when a wrong supply property is used for given variant.
+On Wed, Apr 13, 2022, Paolo Bonzini wrote:
+> On 4/13/22 17:32, Sean Christopherson wrote:
+> > > > Are we planning on removing direct?
+> > > 
+> > > I think so, it's redundant and the code almost always checks
+> > > direct||passthrough (which would be passthrough_delta > 0 with your scheme).
+> > 
+> > I'm ok dropping direct and rolling it into target_level, just so long as we add
+> > helpers, e.g. IIUC they would be
+> > 
+> > static inline bool is_sp_direct(...)
+> > {
+> > 	return !sp->role.target_level;
+> > }
+> > 
+> > static inline bool is_sp_direct_or_passthrough(...)
+> > {
+> > 	return sp->role.target_level != sp->role.level;
+> > }
 > 
-> Describe the supplies depending on the compatible, using a defs-allOf
-> method.
+> Yes of course.  Or respectively:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../regulator/qcom,rpmh-regulator.yaml        | 290 +++++++++++++++++-
->  1 file changed, 276 insertions(+), 14 deletions(-)
+> 	return sp->role.passthrough_levels == s->role.level;
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> index 842ccef691b8..773536fe37c7 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> @@ -95,35 +95,297 @@ properties:
->    vdd-rgb-supply:
->      description: Input supply phandle of rgb.
->  
-> -  vin-lvs-1-2-supply:
-> -    description: Input supply phandle of one or more regulators.
-> -
-> -  vdd-bob-supply:
-> -    description: BOB regulator parent supply phandle.
-> -
->    bob:
->      type: object
->      $ref: "regulator.yaml#"
->      description: BOB regulator node.
->  
->  patternProperties:
-> -  "^vdd-s([0-9]+)-supply$":
-> -    description: Input supply phandle(s) of one or more regulators.
-> -
-> -  "^vdd-(l[0-9]+[-]){1,5}supply$":
-> -    description: Input supply phandle(s) of one or more regulators.
-> -
->    "^(smps|ldo|lvs)[0-9]+$":
->      type: object
->      $ref: "regulator.yaml#"
->      description: smps/ldo regulator nodes(s).
->  
-> -additionalProperties: false
-> -
->  required:
->    - compatible
->    - qcom,pmic-id
->  
-> +allOf:
-> +  - $ref: "#/$defs/pm6150"
-> +  - $ref: "#/$defs/pm6150l"
-> +  - $ref: "#/$defs/pm7325"
-> +  - $ref: "#/$defs/pm8005"
-> +  - $ref: "#/$defs/pm8009"
-> +  - $ref: "#/$defs/pm8150"
-> +  - $ref: "#/$defs/pm8150l"
-> +  - $ref: "#/$defs/pm8350"
-> +  - $ref: "#/$defs/pm8350c"
-> +  - $ref: "#/$defs/pm8450"
-> +  - $ref: "#/$defs/pm8998"
-> +  - $ref: "#/$defs/pmg1110"
-> +  - $ref: "#/$defs/pmi8998"
-> +  - $ref: "#/$defs/pmr735a"
-> +  - $ref: "#/$defs/pmx55"
-> +  - $ref: "#/$defs/pmx65"
-> +
-> +unevaluatedProperties: false
-> +
-> +$defs:
+> 	return sp->role.passthrough_levels > 0;
+> 
+> I'm not sure about a more concise name for the latter.  Maybe
+> sp_has_gpt(...) but I haven't thought it through very much.
+> 
+> > > > Hmm, it's not a raw level though.
+> > > 
+> > > Hence the plural. :)
+> > 
+> > LOL, I honestly thought that was a typo.  Making it plural sounds like it's passing
+> > through to multiple levels.
+> 
+> I meant it as number of levels being passed through.  I'll leave that to
+> Jiangshan, either target_level or passthrough_levels will do for me.
 
-I'm not following on why you need $defs here rather than putting the 
-if/then schemas under the 'allOf'. $defs should primarily only be used 
-where it saves duplicating a schema 2 or more times. That could be the 
-case here if there's a case that's a subset of another case.
+It took me until like 9pm last night to finally understand what you meant by
+"passthrough level".   Now that I actually have my head wrapped around this...
 
+Stepping back, "glevel" and any of its derivations is actually just a combination
+of CR0.PG, CR4.PAE, EFER.LMA, and CR4.LA57.  And "has_4_byte_gpte" is CR0.PG && !CR4.PAE.
+When running with !tdp_enabled, CR0.PG is tracked by "direct".  And with TDP enabled,
+CR0.PG is either a don't care (L1 or nested EPT), or is guaranteed to be '1' (nested NPT).
 
-> +  pm6150:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm6150-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l2-l3-supply: true
-> +        vdd-l4-l7-l8-supply: true
-> +        vdd-l5-l16-l17-l18-l19-supply: true
-> +        vdd-l10-l14-l15-supply: true
-> +        vdd-l11-l12-l13-supply: true
-> +      patternProperties:
-> +        "^vdd-l[169]-supply$": true
-> +        "^vdd-s[1-5]-supply$": true
-> +
-> +  pm6150l:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm6150l-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-bob-supply:
-> +          description: BOB regulator parent supply phandle.
-> +        vdd-l1-l8-supply: true
-> +        vdd-l2-l3-supply: true
-> +        vdd-l4-l5-l6-supply: true
-> +        vdd-l7-l11-supply: true
-> +        vdd-l9-l10-supply: true
-> +      patternProperties:
-> +        "^vdd-s[1-8]-supply$": true
-> +
-> +  pm7325:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm7325-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l4-l12-l15-supply: true
-> +        vdd-l2-l7-supply: true
-> +        vdd-l6-l9-l10-supply: true
-> +        vdd-l11-l17-l18-l19-supply: true
-> +        vdd-l13-supply: true
-> +        vdd-l14-l16-supply: true
-> +      patternProperties:
-> +        "^vdd-l[358]-supply$": true
-> +        "^vdd-s[1-8]-supply$": true
-> +
-> +  pm8005:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8005-rpmh-regulators
-> +    then:
-> +      patternProperties:
-> +        "^vdd-s[1-4]-supply$": true
-> +
-> +  pm8009:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8009-rpmh-regulators
-> +            - qcom,pm8009-1-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l5-l6-supply: true
-> +      patternProperties:
-> +        "^vdd-l[1-47]-supply$": true
-> +        "^vdd-s[1-2]-supply$": true
-> +
-> +  pm8150:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8150-rpmh-regulators
-> +            - qcom,pmm8155au-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l8-l11-supply: true
-> +        vdd-l2-l10-supply: true
-> +        vdd-l3-l4-l5-l18-supply: true
-> +        vdd-l6-l9-supply: true
-> +        vdd-l7-l12-l14-l15-supply: true
-> +        vdd-l13-l16-l17-supply: true
-> +      patternProperties:
-> +        "^vdd-s([1-9]|10)-supply$": true
-> +
-> +  pm8150l:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8150l-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-bob-supply:
-> +          description: BOB regulator parent supply phandle.
-> +        vdd-l1-l8-supply: true
-> +        vdd-l2-l3-supply: true
-> +        vdd-l4-l5-l6-supply: true
-> +        vdd-l7-l11-supply: true
-> +        vdd-l9-l10-supply: true
-> +      patternProperties:
-> +        "^vdd-s[1-8]-supply$": true
-> +
-> +  pm8350:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8350-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l4-supply: true
-> +        vdd-l2-l7-supply: true
-> +        vdd-l3-l5-supply: true
-> +        vdd-l6-l9-l10-supply: true
-> +        vdd-l8-supply: true
-> +      patternProperties:
-> +        "^vdd-s([1-9]|1[0-2])-supply$": true
-> +
-> +  pm8350c:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8350c-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-bob-supply:
-> +          description: BOB regulator parent supply phandle.
-> +        vdd-l1-l12-supply: true
-> +        vdd-l2-l8-supply: true
-> +        vdd-l3-l4-l5-l7-l13-supply: true
-> +        vdd-l6-l9-l11-supply: true
-> +        vdd-l10-supply: true
-> +      patternProperties:
-> +        "^vdd-s([1-9]|10)-supply$": true
-> +
-> +  pm8450:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8450-rpmh-regulators
-> +    then:
-> +      patternProperties:
-> +        "^vdd-l[1-4]-supply$": true
-> +        "^vdd-s[1-6]-supply$": true
-> +
-> +  pm8998:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pm8998-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l27-supply: true
-> +        vdd-l2-l8-l17-supply: true
-> +        vdd-l3-l11-supply: true
-> +        vdd-l4-l5-supply: true
-> +        vdd-l6-supply: true
-> +        vdd-l7-l12-l14-l15-supply: true
-> +        vdd-l9-supply: true
-> +        vdd-l10-l23-l25-supply: true
-> +        vdd-l13-l19-l21-supply: true
-> +        vdd-l16-l28-supply: true
-> +        vdd-l18-l22-supply: true
-> +        vdd-l20-l24-supply: true
-> +        vdd-l26-supply: true
-> +        vin-lvs-1-2-supply: true
-> +      patternProperties:
-> +        "^vdd-s([1-9]|1[0-3])-supply$": true
-> +
-> +  pmg1110:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pmg1110-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-s1-supply: true
-> +
-> +  pmi8998:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pmi8998-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-bob-supply:
-> +          description: BOB regulator parent supply phandle.
-> +
-> +  pmr735a:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pmr735a-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l2-supply: true
-> +        vdd-l3-supply: true
-> +        vdd-l4-supply: true
-> +        vdd-l5-l6-supply: true
-> +      patternProperties:
-> +        "^vdd-s[1-3]-supply$": true
-> +
-> +  pmx55:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pmx55-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l1-l2-supply: true
-> +        vdd-l3-l9-supply: true
-> +        vdd-l4-l12-supply: true
-> +        vdd-l5-l6-supply: true
-> +        vdd-l7-l8-supply: true
-> +        vdd-l10-l11-l13-supply: true
-> +      patternProperties:
-> +        "^vdd-l1[4-6]-supply$": true
-> +        "^vdd-s[1-7]-supply$": true
-> +
-> +  pmx65:
-> +    if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,pmx65-rpmh-regulators
-> +    then:
-> +      properties:
-> +        vdd-l2-l18-supply: true
-> +        vdd-l5-l6-l16-supply: true
-> +        vdd-l8-l9-supply: true
-> +        vdd-l11-l13-supply: true
-> +      patternProperties:
-> +        "^vdd-l[1347]-supply$": true
-> +        "^vdd-l1[0245789]-supply$": true
-> +        "^vdd-l2[01]-supply$": true
-> +        "^vdd-s[1-8]-supply$": true
-> +
->  examples:
->    - |
->      #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> -- 
-> 2.32.0
-> 
-> 
+So, rather than add yet more synthetic information to the role, what about using
+the info we already have?  I don't think it changes the number of bits that need to
+be stored, but I think the result would be easier for people to understand, at
+least superficially, e.g. "oh, the mode matters, got it".  We'd need a beefy comment
+to explain the whole "passthrough levels" thing, but I think it the code would be
+more approachable for most people.
+
+If we move efer_lma and cr4_la57 from kvm_mmu_extended_role to kvm_mmu_page_role,
+and rename has_4_byte_gpte to cr4_pae, then we don't need passthrough_levels.
+If needed for performance, we could still have a "passthrough" bit, but otherwise
+detecting a passthrough SP would be
+
+static inline bool is_passthrough_sp(struct kvm_mmu_page *sp)
+{
+	return !sp->role.direct && sp->role.level > role_to_root_level(sp->role);
+}
+
+where role_to_root_level() is extracted from kvm_calc_cpu_role() is Paolo's series.
+
+Or, if we wanted to optimize "is passthrough", then cr4_la57 could be left in
+the extended role, because passthrough is guaranteed to be '0' if CR4.LA57=1.
+
+That would prevent reusing shadow pages between 64-bit paging and PAE paging, but
+in practice no sane guest is going to reuse page tables between those mode, so who
+cares.

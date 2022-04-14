@@ -2,250 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2238500475
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F61550045F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239655AbiDNC4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S239430AbiDNCkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiDNC4O (ORCPT
+        with ESMTP id S229671AbiDNCkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:56:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D09A3F30A;
-        Wed, 13 Apr 2022 19:53:50 -0700 (PDT)
-X-UUID: 951cb7785ab044a8a5e4e2f9daa1c869-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:c4ce3310-c820-4909-a37c-50db0c739702,OB:20,L
-        OB:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:108
-X-CID-INFO: VERSION:1.1.4,REQID:c4ce3310-c820-4909-a37c-50db0c739702,OB:20,LOB
-        :0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:108
-X-CID-META: VersionHash:faefae9,CLOUDID:d5b35178-0afa-4dca-bdec-ca54c998425a,C
-        OID:ff9dd2f348b6,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 951cb7785ab044a8a5e4e2f9daa1c869-20220414
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <nick.fan@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 806534880; Thu, 14 Apr 2022 10:53:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Apr 2022 10:53:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 10:53:43 +0800
-From:   Nick Fan <Nick.Fan@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <fshao@chromium.org>,
-        <wenst@chromium.org>, <alyssa.rosenzweig@collabora.com>,
-        <nick.fan@mediatek.com>, Nick Fan <Nick.Fan@mediatek.com>
-Subject: [PATCH v6 2/2] arm64: dts: mt8192: Add node for the Mali GPU
-Date:   Thu, 14 Apr 2022 10:50:23 +0800
-Message-ID: <20220414025023.11516-2-Nick.Fan@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220414025023.11516-1-Nick.Fan@mediatek.com>
-References: <20220414025023.11516-1-Nick.Fan@mediatek.com>
+        Wed, 13 Apr 2022 22:40:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D022B0F;
+        Wed, 13 Apr 2022 19:37:54 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kf3Rf2hPLzCqwc;
+        Thu, 14 Apr 2022 10:33:34 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
+ 2022 10:37:52 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] ext4: fix use-after-free in ext4_rename_dir_prepare
+Date:   Thu, 14 Apr 2022 10:52:23 +0800
+Message-ID: <20220414025223.4113128-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a basic GPU node for mt8192.
+We got issue as follows:
+EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
+ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
+ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
+==================================================================
+BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
+Read of size 4 at addr ffff88810beee6ae by task rep/1895
 
-Signed-off-by: Nick Fan <Nick.Fan@mediatek.com>
+CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
+Call Trace:
+ dump_stack+0xbe/0xf9
+ print_address_description.constprop.0+0x1e/0x220
+ kasan_report.cold+0x37/0x7f
+ ext4_rename_dir_prepare+0x152/0x220
+ ext4_rename+0xf44/0x1ad0
+ ext4_rename2+0x11c/0x170
+ vfs_rename+0xa84/0x1440
+ do_renameat2+0x683/0x8f0
+ __x64_sys_renameat+0x53/0x60
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f45a6fc41c9
+RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
+RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
+R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
+R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
+
+The buggy address belongs to the page:
+page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
+flags: 0x200000000000000()
+raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                  ^
+ ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+Disabling lock debugging due to kernel taint
+ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
+ext4_rename_dir_prepare: [3] dir=0xffff888124170140
+ext4_rename_dir_prepare: [4] ino=2
+ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+
+Reason is first directory entry which 'rec_len' is 34478, then will get illegal
+parent entry. Now, we do not check directory entry after read directory block
+in 'ext4_get_first_dir_block'.
+To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
-This patch depends on MediaTek power and regulator support.
+ fs/ext4/namei.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-Listed as following.
-
-[1]https://patchwork.kernel.org/project/linux-mediatek/patch/1612678457-11548-4-git-send-email-hsin-hsiung.wang@mediatek.com/
-[2]https://patchwork.kernel.org/project/linux-mediatek/patch/1622011927-359-9-git-send-email-hsin-hsiung.wang@mediatek.com/
-[3]https://patchwork.kernel.org/project/linux-mediatek/patch/20220318144534.17996-3-allen-kh.cheng@mediatek.com/
-[4]https://patchwork.kernel.org/project/linux-mediatek/patch/1605700894-32699-6-git-send-email-hsin-hsiung.wang@mediatek.com/
----
----
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts |   7 ++
- arch/arm64/boot/dts/mediatek/mt8192.dtsi    | 124 ++++++++++++++++++++
- 2 files changed, 131 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 3369cd962f11..e232089688b8 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -5,6 +5,7 @@
-  */
- /dts-v1/;
- #include "mt8192.dtsi"
-+#include "mt6359.dtsi"
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index e37da8d5cd0c..2f78544b1d47 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -3455,6 +3455,9 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
+ 	struct buffer_head *bh;
  
- / {
- 	model = "MediaTek MT8192 evaluation board";
-@@ -69,6 +70,12 @@
- 	};
- };
+ 	if (!ext4_has_inline_data(inode)) {
++		struct ext4_dir_entry_2 *de;
++		unsigned int offset;
++
+ 		/* The first directory block must not be a hole, so
+ 		 * treat it as DIRENT_HTREE
+ 		 */
+@@ -3463,9 +3466,28 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
+ 			*retval = PTR_ERR(bh);
+ 			return NULL;
+ 		}
+-		*parent_de = ext4_next_entry(
+-					(struct ext4_dir_entry_2 *)bh->b_data,
+-					inode->i_sb->s_blocksize);
++
++		de = (struct ext4_dir_entry_2 *) bh->b_data;
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, 0) ||
++		    le32_to_cpu(de->inode) != inode->i_ino ||
++		    strcmp(".", de->name)) {
++			ext4_warning_inode(inode, "directory missing '.'");
++			brelse(bh);
++			return NULL;
++		}
++		offset = ext4_rec_len_from_disk(de->rec_len,
++						inode->i_sb->s_blocksize);
++		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, offset) ||
++		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
++			ext4_warning_inode(inode, "directory missing '..'");
++			brelse(bh);
++			return NULL;
++		}
++		*parent_de = de;
++
+ 		return bh;
+ 	}
  
-+&gpu {
-+	supply-names = "mali","sram";
-+	mali-supply = <&mt6315_7_vbuck1>;
-+	sram-supply = <&mt6359_vsram_others_ldo_reg>;
-+};
-+
- &uart0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 6150f99a9b87..5514f31f1aa2 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -899,6 +899,130 @@
- 			#clock-cells = <1>;
- 		};
- 
-+		gpu: mali@13000000 {
-+			compatible = "mediatek,mt8192-mali", "arm,mali-valhall";
-+			reg = <0 0x13000000 0 0x4000>;
-+			interrupts =
-+				<GIC_SPI 363 IRQ_TYPE_LEVEL_HIGH 0>,
-+				<GIC_SPI 364 IRQ_TYPE_LEVEL_HIGH 0>,
-+				<GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH 0>;
-+			interrupt-names =
-+				"gpu",
-+				"mmu",
-+				"job";
-+
-+			clocks =
-+				<&apmixedsys CLK_APMIXED_MFGPLL>,
-+				<&topckgen CLK_TOP_MFG_PLL_SEL>,
-+				<&topckgen CLK_TOP_MFG_REF_SEL>,
-+				<&mfgcfg CLK_MFG_BG3D>;
-+			clock-names =
-+				"clk_main_parent",
-+				"clk_mux",
-+				"clk_sub_parent",
-+				"subsys_mfg_cg";
-+
-+			power-domains =
-+				<&spm MT8192_POWER_DOMAIN_MFG2>,
-+				<&spm MT8192_POWER_DOMAIN_MFG3>,
-+				<&spm MT8192_POWER_DOMAIN_MFG4>,
-+				<&spm MT8192_POWER_DOMAIN_MFG5>,
-+				<&spm MT8192_POWER_DOMAIN_MFG6>;
-+			power-domain-names = "core0",
-+					     "core1",
-+					     "core2",
-+					     "core3",
-+					     "core4";
-+
-+			operating-points-v2 = <&gpu_opp_table>;
-+			#cooling-cells = <2>;
-+
-+			gpu_opp_table: opp_table0 {
-+				compatible = "operating-points-v2";
-+				opp-shared;
-+
-+				opp-358000000 {
-+					opp-hz = /bits/ 64 <358000000>;
-+					opp-microvolt = <606250>, <750000>;
-+				};
-+
-+				opp-399000000 {
-+					opp-hz = /bits/ 64 <399000000>;
-+					opp-microvolt = <618750>, <750000>;
-+				};
-+
-+				opp-440000000 {
-+					opp-hz = /bits/ 64 <440000000>;
-+					opp-microvolt = <631250>, <750000>;
-+				};
-+
-+				opp-482000000 {
-+					opp-hz = /bits/ 64 <482000000>;
-+					opp-microvolt = <643750>, <750000>;
-+				};
-+
-+				opp-523000000 {
-+					opp-hz = /bits/ 64 <523000000>;
-+					opp-microvolt = <656250>, <750000>;
-+				};
-+
-+				opp-564000000 {
-+					opp-hz = /bits/ 64 <564000000>;
-+					opp-microvolt = <668750>, <750000>;
-+				};
-+
-+				opp-605000000 {
-+					opp-hz = /bits/ 64 <605000000>;
-+					opp-microvolt = <681250>, <750000>;
-+				};
-+
-+				opp-647000000 {
-+					opp-hz = /bits/ 64 <647000000>;
-+					opp-microvolt = <693750>, <750000>;
-+				};
-+
-+				opp-688000000 {
-+					opp-hz = /bits/ 64 <688000000>;
-+					opp-microvolt = <706250>, <750000>;
-+				};
-+
-+				opp-724000000 {
-+					opp-hz = /bits/ 64 <724000000>;
-+					opp-microvolt = <725000>, <750000>;
-+				};
-+
-+				opp-748000000 {
-+					opp-hz = /bits/ 64 <748000000>;
-+					opp-microvolt = <743750>, <750000>;
-+				};
-+
-+				opp-772000000 {
-+					opp-hz = /bits/ 64 <772000000>;
-+					opp-microvolt = <750000>, <750000>;
-+				};
-+
-+				opp-795000000 {
-+					opp-hz = /bits/ 64 <795000000>;
-+					opp-microvolt = <762500>, <762500>;
-+				};
-+
-+				opp-819000000 {
-+					opp-hz = /bits/ 64 <819000000>;
-+					opp-microvolt = <775000>, <775000>;
-+				};
-+
-+				opp-843000000 {
-+					opp-hz = /bits/ 64 <843000000>;
-+					opp-microvolt = <787500>, <787500>;
-+				};
-+
-+				opp-866000000 {
-+					opp-hz = /bits/ 64 <866000000>;
-+					opp-microvolt = <800000>, <800000>;
-+				};
-+			};
-+		};
-+
- 		mfgcfg: clock-controller@13fbf000 {
- 			compatible = "mediatek,mt8192-mfgcfg";
- 			reg = <0 0x13fbf000 0 0x1000>;
 -- 
-2.18.0
+2.31.1
 

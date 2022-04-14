@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4615008CB
+	by mail.lfdr.de (Postfix) with ESMTP id 33A525008CA
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241164AbiDNIyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S241161AbiDNIyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiDNIyG (ORCPT
+        with ESMTP id S238425AbiDNIyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 04:54:06 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E23EA94;
-        Thu, 14 Apr 2022 01:51:41 -0700 (PDT)
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60B353E2D;
+        Thu, 14 Apr 2022 01:51:42 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.124]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N7AIq-1o1oFJ2LiG-017Xqa;
- Thu, 14 Apr 2022 10:51:22 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MtwtU-1nxQW10pX2-00uKRE;
+ Thu, 14 Apr 2022 10:51:25 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
         Denys Drozdov <denys.drozdov@toradex.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
@@ -31,89 +31,69 @@ Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 01/14] ARM: dts: imx6ull-colibri: use pull-down for adc pins
-Date:   Thu, 14 Apr 2022 10:50:53 +0200
-Message-Id: <20220414085106.18621-2-marcel@ziswiler.com>
+Subject: [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc regulator
+Date:   Thu, 14 Apr 2022 10:50:54 +0200
+Message-Id: <20220414085106.18621-3-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220414085106.18621-1-marcel@ziswiler.com>
 References: <20220414085106.18621-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:BhzF50BZrqTaFPK0TpbYgRjwA8MPxd+Lqnmvn5FVujauxewFtUF
- HIYR6EiL014ufeAi6FnMd7jSE3ANCnQRdmnGKq+uinhcoF7f8toXm3a7Yl5MBXVrmCRqbC4
- qGjoImiiAZdwibOei2tdiE8by+QASeY5nBpZluVd4hvudr7KT5JpDLI6s7nAOXJtWLIxmGX
- F4eA+tZ/McnYoxpO7rY/A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h4t6I8We6k4=:4GFKaWyaB/ahbiT3gHFgFZ
- Qnd0pkV+bN2I9uH2u4P3PmOKo6HPLP31ToGdVSUnLT0LKUoR6SqF9y6V5OpCaqQzngg7uVk92
- oOZiEswCcIhS8XeN3mQsdOdx8Kym/Jw8HyrsN31x0AEFSEHYnZ6DTU3oR2BwU7hafDwJZEnmU
- g+riishafP+AVs3mkD6SkT2IFmknINJZVmN8Txysi7qVPH0N53WmVdC7FAl0CzMnwargWAG6X
- EID03O3P5LtUuVBn0yKsQPE10kQExCW9CnccsfCG/rP+BeLLxLxGubwv75skpLID+TGWoXhut
- Q3wmKOhDgIrzCS8QhsCP1dUR6KBWVSBCy65zK97SCgCev3kmqozmsjv4s94qq3lgYp1Cckaut
- Z5TYFzHRw8Y8EhKmjCauLHHvGZPru5ZPDvQCYHXdlDw7+pcKvRQOj+uyBlU5yKS/xfRWz7OGw
- NaO5w0R2RCRWAUh5tDt2pqr3FOWbwxhX1No/OSXPLiJOyVUDVRetNQ8O492AhwH/eCAR732Kn
- knHYMKuxiVE7SgBQdFw3XnLvvcJD2aD/lyt6pG0b9lx6n64qx2GUxcWlPkCFM1v9b/aQG0lmx
- +8Ffw02RIR3FEzN5oS7OKqmk6e4XCVUHaEQuevWUo8E779969kR423hzY+fu531fmhOwElLkO
- AE1QZJvD44qxTgdc/fhbD+JFJOwF2yCOG0uZ6WhqJ/iTc7gF/hsS7Iz1bmY1Sc5S85W4=
+X-Provags-ID: V03:K1:9g+6LZTA59EY2u8QJDsvNnL4DnkE6vAD6PPNCALvJFoS/aw78RS
+ SS8WD64lr2iA748OroF/hnkzpJU/fWrHK+1VG0OhrTHYh3AZ4Ul9F73pW1CSvcRI+y7I8i+
+ 7IL5iSCgSTeAhFYT/Stx3GvXvRnWdfoFs4RAbj+yfLkQ+5d+u+hQTsavyo71IBD35RspRnH
+ tAHwummRfJppyZ6VW/4KQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PWRvpDk5y2M=:cwmC9SOSmrzvfyar94IA7u
+ A3xiE47abBORsnl7t8FdsP8NJoeRjJh9OplbY0L0VKIFZ9FGKb1/CeYbCbtZWFeZSDd3TVlao
+ m67lobgCy1CcxynCObAawL0rvoYcPyk24s1d6Z1uM688M266k4HvUnLNKXJdZxVQA7x/C/WPM
+ rE0CjM0j6Yq2i54RnfOddqjgAqe4XPJki6d92ZqRDtyjTLGk2mJ0DoAdl9qRnCHY2HRMURTr+
+ VESwwKkFHfAhdyL84cjVdINkNoNztCKlyeTdQ1oSz+GQaPRK0rmjYjiwAHT51J2cHj1Q9VldA
+ b31q+Y0990Z7QMmQ/xwBVVJ+aQjJhA201vRwP6y6GzJJH2B5fuaKh3upqKekyai4QAMswEHES
+ MhM9gMJZpduDIQ/CioVvdAZlcOYp4iZCHYi5L+RZf+UZlMm2EPYPhdObtuYFNf9fZd637dBq8
+ KE6hQ2oB6TC+YM65tL3nPc9dyhqoppvpUSD+9jPw6j0GiIzCobJUKsLNR//HXiDlYotKkAoa0
+ B/c/8hHAdbItrFkFp909JVQiHba6mW8/RIuCpyczaM3emjRJ1WyYhfrT8YRROGvTj3mvrK4r4
+ zxNAXtfSUEY2sT8ZXcU6Bn6F10h2vCpOtawCN8edJXsUunP+jOGUXjjYQUG/QR3wcsPxGg7Kq
+ ocZgDtzSTSY14Nma6WISJomHz3gzlTSXY+dYg7b+yc22U8SLMgwWldWlSeoxG6nHjmqk=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Disable the keeper and enable a 100k pull-down on the ADC pins as per
-the following note in section 13.2 of the i.MX 6ULL Application
-Processor Reference Manual, Rev. 1, 11/2017 [1]:
+The correct spelling for the property is gpios. Otherwise, the regulator
+will neither reserve nor control any GPIOs. Thus, any SD/MMC card which
+can use UHS-I modes will fail.
 
-The keeper causes an undesired jump behavior in ADC. To avoid the
-problem, disable keeper before starting ADC.
-
-[1] https://www.nxp.com/webapp/Download?colCode=IMX6ULLRM
-
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+Fixes: c2e4987e ("ARM: dts: imx6ull: add Toradex Colibri iMX6ULL support")
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm/boot/dts/imx6ull-colibri.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 7f35a06dff95..84bb7574d211 100644
+index 84bb7574d211..eb13ed60d2e4 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -52,6 +52,8 @@ reg_sd1_vmmc: regulator-sd1-vmmc {
- &adc1 {
- 	num-channels = <10>;
- 	vref-supply = <&reg_module_3v3_avdd>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc1>;
- };
+@@ -37,7 +37,7 @@ reg_module_3v3_avdd: regulator-module-3v3-avdd {
  
- &can1 {
-@@ -214,6 +216,16 @@ &wdog1 {
- };
- 
- &iomuxc {
-+
-+	pinctrl_adc1: adc1grp {
-+		fsl,pins = <
-+			MX6UL_PAD_GPIO1_IO00__GPIO1_IO00        0x3000 /* SODIMM 8 */
-+			MX6UL_PAD_GPIO1_IO01__GPIO1_IO01        0x3000 /* SODIMM 6 */
-+			MX6UL_PAD_GPIO1_IO08__GPIO1_IO08        0x3000 /* SODIMM 4 */
-+			MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x3000 /* SODIMM 2 */
-+		>;
-+	};
-+
- 	pinctrl_can_int: canint-grp {
- 		fsl,pins = <
- 			MX6UL_PAD_ENET1_TX_DATA1__GPIO2_IO04	0x13010	/* SODIMM 73 */
+ 	reg_sd1_vmmc: regulator-sd1-vmmc {
+ 		compatible = "regulator-gpio";
+-		gpio = <&gpio5 9 GPIO_ACTIVE_HIGH>;
++		gpios = <&gpio5 9 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_snvs_reg_sd>;
+ 		regulator-always-on;
 -- 
 2.35.1
 

@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83255015D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F921501759
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344982AbiDNNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S1357108AbiDNP3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344074AbiDNNaR (ORCPT
+        with ESMTP id S1346523AbiDNN52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0528BE80;
-        Thu, 14 Apr 2022 06:27:37 -0700 (PDT)
+        Thu, 14 Apr 2022 09:57:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E4122B18;
+        Thu, 14 Apr 2022 06:47:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94BA460C14;
-        Thu, 14 Apr 2022 13:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798DDC385A5;
-        Thu, 14 Apr 2022 13:27:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8230B82969;
+        Thu, 14 Apr 2022 13:46:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47211C385A1;
+        Thu, 14 Apr 2022 13:46:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942856;
-        bh=aHK5wxk0SLdxv9PPPG+tllBNNnQqv2K6I4/kn/MaBC4=;
+        s=korg; t=1649944017;
+        bh=mOj9P46YKzgpldyCc6jmRDbLtvWPuPzscmMKmln6W18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XEAE5TMnyTKWDLTrF+q7sUVM8slDKu2BSMtBmTTDgj2PXJOvH0MwzGlc6cxGb04+T
-         RpMwE6oF6bTvPdVAL189h/XXufLSHWFQdsQlsjZjaVeaME0RTlYB7G186rjgC8Qe/2
-         bwiXR/O4ycLyOMrjnS9fWEbVwbRh2PrublomMNlM=
+        b=GR+JAWolLBwJqf4kbWqAEsRzWFR6w5N4Pf5UjPyzlG2pTpnZG6EiACnjU2Tc2WeF8
+         WXP556gXxvTHdx9EBTJnvlm+VaomrXFex8yMi431KCVvhOvqeOpqIaOSo3XDp1DRko
+         dTGq4bLh++t+1uVON5na+pOQpPcvZr4CceksizjU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.19 246/338] mm/memcontrol: return 1 from cgroup.memory __setup() handler
-Date:   Thu, 14 Apr 2022 15:12:29 +0200
-Message-Id: <20220414110845.892498241@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Martin Varghese <martin.varghese@nokia.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.4 365/475] openvswitch: Fixed nd target mask field in the flow dump.
+Date:   Thu, 14 Apr 2022 15:12:30 +0200
+Message-Id: <20220414110905.293928920@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,55 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Martin Varghese <martin.varghese@nokia.com>
 
-commit 460a79e18842caca6fa0c415de4a3ac1e671ac50 upstream.
+commit f19c44452b58a84d95e209b847f5495d91c9983a upstream.
 
-__setup() handlers should return 1 if the command line option is handled
-and 0 if not (or maybe never return 0; it just pollutes init's
-environment).
+IPv6 nd target mask was not getting populated in flow dump.
 
-The only reason that this particular __setup handler does not pollute
-init's environment is that the setup string contains a '.', as in
-"cgroup.memory".  This causes init/main.c::unknown_boottoption() to
-consider it to be an "Unused module parameter" and ignore it.  (This is
-for parsing of loadable module parameters any time after kernel init.)
-Otherwise the string "cgroup.memory=whatever" would be added to init's
-environment strings.
+In the function __ovs_nla_put_key the icmp code mask field was checked
+instead of icmp code key field to classify the flow as neighbour discovery.
 
-Instead of relying on this '.' quirk, just return 1 to indicate that the
-boot option has been handled.
+ufid:bdfbe3e5-60c2-43b0-a5ff-dfcac1c37328, recirc_id(0),dp_hash(0/0),
+skb_priority(0/0),in_port(ovs-nm1),skb_mark(0/0),ct_state(0/0),
+ct_zone(0/0),ct_mark(0/0),ct_label(0/0),
+eth(src=00:00:00:00:00:00/00:00:00:00:00:00,
+dst=00:00:00:00:00:00/00:00:00:00:00:00),
+eth_type(0x86dd),
+ipv6(src=::/::,dst=::/::,label=0/0,proto=58,tclass=0/0,hlimit=0/0,frag=no),
+icmpv6(type=135,code=0),
+nd(target=2001::2/::,
+sll=00:00:00:00:00:00/00:00:00:00:00:00,
+tll=00:00:00:00:00:00/00:00:00:00:00:00),
+packets:10, bytes:860, used:0.504s, dp:ovs, actions:ovs-nm2
 
-Note that there is no warning message if someone enters:
-	cgroup.memory=anything_invalid
-
-Link: https://lkml.kernel.org/r/20220222005811.10672-1-rdunlap@infradead.org
-Fixes: f7e1cb6ec51b0 ("mm: memcontrol: account socket memory in unified hierarchy memory controller")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: e64457191a25 (openvswitch: Restructure datapath.c and flow.c)
+Signed-off-by: Martin Varghese <martin.varghese@nokia.com>
+Link: https://lore.kernel.org/r/20220328054148.3057-1-martinvarghesenokia@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memcontrol.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/openvswitch/flow_netlink.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6404,7 +6404,7 @@ static int __init cgroup_memory(char *s)
- 		if (!strcmp(token, "nokmem"))
- 			cgroup_memory_nokmem = true;
- 	}
--	return 0;
-+	return 1;
- }
- __setup("cgroup.memory=", cgroup_memory);
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -2179,8 +2179,8 @@ static int __ovs_nla_put_key(const struc
+ 			icmpv6_key->icmpv6_type = ntohs(output->tp.src);
+ 			icmpv6_key->icmpv6_code = ntohs(output->tp.dst);
  
+-			if (icmpv6_key->icmpv6_type == NDISC_NEIGHBOUR_SOLICITATION ||
+-			    icmpv6_key->icmpv6_type == NDISC_NEIGHBOUR_ADVERTISEMENT) {
++			if (swkey->tp.src == htons(NDISC_NEIGHBOUR_SOLICITATION) ||
++			    swkey->tp.src == htons(NDISC_NEIGHBOUR_ADVERTISEMENT)) {
+ 				struct ovs_key_nd *nd_key;
+ 
+ 				nla = nla_reserve(skb, OVS_KEY_ATTR_ND, sizeof(*nd_key));
 
 

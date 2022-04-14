@@ -2,93 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFED3501A6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9803D501A6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343852AbiDNRwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S1343904AbiDNRxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbiDNRwt (ORCPT
+        with ESMTP id S234563AbiDNRw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:52:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032D4B62
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:50:24 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id x17so10371761lfa.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=DEbyqe5T1fF6VgFja/FH+cT3MjyU6Qe5ms7Et35C47I=;
-        b=enRFJPN2ry3oLW9Nu5JotbGGsHR7ByeR1DibeBcVvutB5c5vKiYOunirRxVMIU6gSP
-         8VzrpgJ4KulhydUE1oyN9Kg2vpoufZ90jQ6sdPbZ3YRiC2uaSo5o2bFMGcI/DEOSoyfm
-         udgRJWxheBJznlvkIj0zcpZ/xiHnHKIMx8nAk=
+        Thu, 14 Apr 2022 13:52:58 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940A8EA378;
+        Thu, 14 Apr 2022 10:50:33 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-e2a00f2cc8so6007059fac.4;
+        Thu, 14 Apr 2022 10:50:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=DEbyqe5T1fF6VgFja/FH+cT3MjyU6Qe5ms7Et35C47I=;
-        b=bd07gG03pUXM3Nxzv1PvDZXs3N9enDiMbzH4xA/PqaosVY5S/XsRcJeKKIntyippmq
-         1SJWkaCZjd7lQuo6CMxYHECJUJrI3YLj0ismepUA1SKDOSj80Cz3bGCR1vb9eMmMCLGv
-         P5UuBCzegIexlw3Oog6TkyQal8pw2Frjz+LSGMXsJunOVGivgf+XWjXSgorNfkJVHgul
-         HEwJ/O0eyePOAaNJGQ07RGCdCxcMSucfGtuTrOxoEttcp4tGATEIBUlXDgAVLUcmOU5N
-         PQ6cZbrxzsTvuU/+huaSyd5YTwdyHz4kgAFhaZM/bjjNLGY/fAQYbUQCOqzCrXJ9AbNI
-         m0eg==
-X-Gm-Message-State: AOAM533zGFpVN8JYIhkZHwuA1RMAIAnjKpGngVhlsIg3+eStKM/tF8B2
-        eWVtSvPPgToJfDumjkmuOuNp9QndjwleNc26
-X-Google-Smtp-Source: ABdhPJzDtLf6B+USkRjSLjYqXS2TrjGuEXjmS+9fWTcmCWllDpt+hLZzYj0wfWv6rpyqAnRvX0x5+w==
-X-Received: by 2002:a05:6512:33aa:b0:46d:1828:1ca9 with SMTP id i10-20020a05651233aa00b0046d18281ca9mr1527172lfg.51.1649958621770;
-        Thu, 14 Apr 2022 10:50:21 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id i28-20020a198c5c000000b0046b99e316f7sm61460lfj.114.2022.04.14.10.50.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 10:50:20 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id u19so10407992lff.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:50:20 -0700 (PDT)
-X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
- h19-20020a0565123c9300b0044b04bac334mr2598700lfv.27.1649958619851; Thu, 14
- Apr 2022 10:50:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZlR/D0/otHvTlY+2pMZcbIUNYFJQyXUlIqHiCaoR55I=;
+        b=ErrRq5GIstsA7cHWWt8eBDPL3/Lh8wsdhSCHtS4HPlbLvZw7/4rfGVuzgetUVTYG/F
+         TG/v+hBG67PCHvjRw3P2LSPdwMN48ZSlqCOO0n1ZpOH7u1M0WlVt1ueJdkLRYF7nxWnc
+         ztulODcCg0y5g8dCKUGNQV+Xd2WkRYoqcBJHjRDuhsMfe8NjdnGykw0jFRqUZuDQkMwx
+         eDaQwYQg/JiSQ9eTG0zNaoy6jnbp0Rsabm1dQ1xkSsJY0wu1sPUcSaYwQVPjjd7FeQNY
+         amdRFnYBtS2lXSw9Odm13DcKENjE200EOMtv9PWYfbRh63XBpbiBwabxSmED7V+R0q7U
+         Y4cQ==
+X-Gm-Message-State: AOAM5311yey1KF3k+RkXRIfG4m20PLYY2wn1z+QO+2Uizr0/pwMArC0P
+        Md512rsMHyLW8dHkuDkalg==
+X-Google-Smtp-Source: ABdhPJypy7mWmJNc9/QEldUq576HOU25RTupCocThXERn6C1nt+ragKXT7nAwRK3TsE76ih0pgog5w==
+X-Received: by 2002:a05:6870:e30e:b0:de:ab76:eed7 with SMTP id z14-20020a056870e30e00b000deab76eed7mr2022092oad.101.1649958632925;
+        Thu, 14 Apr 2022 10:50:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm256305otu.30.2022.04.14.10.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 10:50:32 -0700 (PDT)
+Received: (nullmailer pid 2302839 invoked by uid 1000);
+        Thu, 14 Apr 2022 17:50:31 -0000
+Date:   Thu, 14 Apr 2022 12:50:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Fabio Estevam <fabio.estevam@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, netdev@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v6 11/13] dt-bindings: phy: mxs-usb-phy: Add i.MX8DXL
+ compatible string
+Message-ID: <Ylhe5/7DWU1DPly7@robh.at.kernel.org>
+References: <20220413103356.3433637-1-abel.vesa@nxp.com>
+ <20220413103356.3433637-12-abel.vesa@nxp.com>
 MIME-Version: 1.0
-References: <cover.1649705056.git.dsterba@suse.com> <20220414143729.GP3658@twin.jikos.cz>
-In-Reply-To: <20220414143729.GP3658@twin.jikos.cz>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 14 Apr 2022 10:50:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg5m1uDfeGQ=rRA7Kvz=hQe4p3jVKcXc40-zBKqwTiU0g@mail.gmail.com>
-Message-ID: <CAHk-=wg5m1uDfeGQ=rRA7Kvz=hQe4p3jVKcXc40-zBKqwTiU0g@mail.gmail.com>
-Subject: Re: [GIT PULL] Btrfs fixes for 5.18-rc3
-To:     dave@jikos.cz, David Sterba <dsterba@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413103356.3433637-12-abel.vesa@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 7:37 AM David Sterba <dave@jikos.cz> wrote:
->
-> I'm sending this from a different mail address after 2 days of no reply
-> and no merge of the btrfs updates (message body deleted in case it
-> triggers the spam filter). The mail is in lore archives at
-> https://lore.kernel.org/all/cover.1649705056.git.dsterba@suse.com/
+On Wed, 13 Apr 2022 13:33:54 +0300, Abel Vesa wrote:
+> Add compatible for i.MX8DXL USB PHY.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/phy/mxs-usb-phy.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Indeed, I don't see that email in my inbox, and I must have apparently
-missed it and deleted it from spam too.
-
-gmail *really* hates email from suse.cz these days, I had multiple
-emails from Vlastimil about the page pinning series go into the spam
-folder too.
-
-I've explicitly added you as a contact in the hopes that it will help.
-
-Thanks for re-sending,
-
-             Linus
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763D650173D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD075014B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356958AbiDNPZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S245680AbiDNNsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347011AbiDNN6L (ORCPT
+        with ESMTP id S1344013AbiDNNaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E85B6461;
-        Thu, 14 Apr 2022 06:48:28 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524992876;
+        Thu, 14 Apr 2022 06:26:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D52561D73;
-        Thu, 14 Apr 2022 13:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5402C385A5;
-        Thu, 14 Apr 2022 13:48:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41CF8612B3;
+        Thu, 14 Apr 2022 13:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 540C8C385A1;
+        Thu, 14 Apr 2022 13:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944107;
-        bh=oxsOU/TAsc8GDoHYex7Rew1S22SyhzlHMySjRQ0/IvQ=;
+        s=korg; t=1649942773;
+        bh=jpf1n49PwEk7KXAiKU/xbsttVCN7nX+VUnABwoWLeKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZUaXUSC0I2iIrs/nr7JXnWTWDRqL36Gfioit3i7fGv7OLAqcPsGBPMjbU0FhusXf6
-         GuVRESF8mH79rwMDca33ev/P73D46tjWC8W/gryQ87fjVJRHgG78AuCX8aBookPnVX
-         Yom7jF4xQzec6qI759LJ9ohQzAn0Yo7eqmsrhPRk=
+        b=xqPwYPCRQsqkcCWTn058u4UXywuWn1gPi4c2dCPgnYeb7mFKbonN5jNH0YCo4RhKs
+         AwcTYD8Ck2UD2J54LqjrFlLD7ptCoYCSi58gLOwuYn2LKYwmMjqcOzLSmGT+TS4qdP
+         KsxcVIjyBl2cWShHVN2vQ3UdG77NICmYp/b830x0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH 5.4 356/475] bpf: Fix comment for helper bpf_current_task_under_cgroup()
-Date:   Thu, 14 Apr 2022 15:12:21 +0200
-Message-Id: <20220414110905.044233670@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 239/338] can: mcba_usb: mcba_usb_start_xmit(): fix double dev_kfree_skb in error path
+Date:   Thu, 14 Apr 2022 15:12:22 +0200
+Message-Id: <20220414110845.695262825@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hengqi Chen <hengqi.chen@gmail.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 58617014405ad5c9f94f464444f4972dabb71ca7 upstream.
+commit 04c9b00ba83594a29813d6b1fb8fdc93a3915174 upstream.
 
-Fix the descriptions of the return values of helper bpf_current_task_under_cgroup().
+There is no need to call dev_kfree_skb() when usb_submit_urb() fails
+because can_put_echo_skb() deletes original skb and
+can_free_echo_skb() deletes the cloned skb.
 
-Fixes: c6b5fb8690fa ("bpf: add documentation for eBPF helpers (42-50)")
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220310155335.1278783-1-hengqi.chen@gmail.com
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Link: https://lore.kernel.org/all/20220311080208.45047-1-hbh25y@gmail.com
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/bpf.h       |    4 ++--
- tools/include/uapi/linux/bpf.h |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/can/usb/mcba_usb.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1294,8 +1294,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * int bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1294,8 +1294,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * int bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -379,7 +379,6 @@ static netdev_tx_t mcba_usb_start_xmit(s
+ xmit_failed:
+ 	can_free_echo_skb(priv->netdev, ctx->ndx);
+ 	mcba_usb_free_ctx(ctx);
+-	dev_kfree_skb(skb);
+ 	stats->tx_dropped++;
+ 
+ 	return NETDEV_TX_OK;
 
 

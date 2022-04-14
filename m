@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9C85009C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBE35009CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241742AbiDNJaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S241763AbiDNJbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiDNJ37 (ORCPT
+        with ESMTP id S229733AbiDNJa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:29:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EAD50E2A;
-        Thu, 14 Apr 2022 02:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F56861CB7;
-        Thu, 14 Apr 2022 09:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F941C385A1;
-        Thu, 14 Apr 2022 09:27:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iCKw8U+B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649928448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jitaCCQ2e/PpJGSBhLHWsevtZEgEekS1b3Wk73klyKA=;
-        b=iCKw8U+BX0unZDHdCqu1WEQPpDnLVael4IDVYgWvfW7w0XcoPFz96Q+X7Oh/HXcBDfoQgf
-        relkkKJiqLUs0hWWbJBeLDEdKmFO5iYlsrmp12SxDsveaByJUqA4gI9QfV6k/NrhryczGl
-        YX1t4UDjk8/egPtL7ZCNgWMOfE4aDFg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ff3c9dc5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 14 Apr 2022 09:27:27 +0000 (UTC)
-Date:   Thu, 14 Apr 2022 11:27:22 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-Message-ID: <YlfoeGRM6w2O+eXA@zx2c4.com>
-References: <20220413115411.21489-1-Jason@zx2c4.com>
- <20220413115411.21489-5-Jason@zx2c4.com>
- <20220413122546.GA11860@alpha.franken.de>
- <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
- <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
- <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
+        Thu, 14 Apr 2022 05:30:59 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9055D5ED
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:28:35 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e21so6060983wrc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VQ1Ns6exvywbj5YVrqChmYabRv4bnzV6d00OZRotDxk=;
+        b=hTP08ZMDNByzNE+rOxyiJkLh1x9yUlo716JKFvue1wfejnxuRwmCzb7ZFTk/YjVQ12
+         o0vKMBgoU7iyS3t3bwVhu8mymoFVKPqcLc+2zW4wk+RKx8fYE1YrW8DF/2m6HL9s4cqc
+         GuuuZMODv27K+4dioFQboC6aH4spw0V4bj74Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VQ1Ns6exvywbj5YVrqChmYabRv4bnzV6d00OZRotDxk=;
+        b=iFBs0L9BjGLRhOTCCcMhLpG42ywXievF3Y3HJbDwevCcxejLj00410EAqEX4eeObip
+         5G/Z6/cYt5vx+/VJpA4k47hClInlBplsI9B6dyOfzdk9hQZUzinRLpz/PN0RAreE2haB
+         hycsYMeUQq1sRUV4MLx3AmNByvDMr7Xf6KJY8jQJxHLJpAGqSupeIu11VzhHeU5AG4/i
+         fw9MiHdRzujFN2BPIo4XbOtLp/QVErhTL4+cC5d9fTGpK9L890C2gxH9/thVK00ePMGM
+         b4oOIx917gujIJVqm74vOaE6d9Ejg+Fe9EfN5seypKUGWRzMuE1iP4cQbM7phHfdGx1y
+         h3Vg==
+X-Gm-Message-State: AOAM533bfMtEEEIJFgjJxeLbDNiWR+FjAaSov3I2K6DRWUe/Sh3pQJ2N
+        mPkbmot71HhNQ8c2/6ZK13LY3Q==
+X-Google-Smtp-Source: ABdhPJxNm30rXQDMpWZpc08ebVbqvKPBKcHSxDG4T9G3LivzhKHgSKTkBAvQOg/b3BVjtkQeWuwuEA==
+X-Received: by 2002:a05:6000:1202:b0:207:a5f6:fc0 with SMTP id e2-20020a056000120200b00207a5f60fc0mr1410782wrx.438.1649928513656;
+        Thu, 14 Apr 2022 02:28:33 -0700 (PDT)
+Received: from fabiobaltieri-linux.lan ([37.228.205.1])
+        by smtp.gmail.com with ESMTPSA id bg8-20020a05600c3c8800b0038e4c5967besm1698099wmb.3.2022.04.14.02.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 02:28:33 -0700 (PDT)
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabio Baltieri <fabiobaltieri@chromium.org>
+Subject: [PATCH v4 0/4] Add channel type support to pwm-cros-ec
+Date:   Thu, 14 Apr 2022 09:28:27 +0000
+Message-Id: <20220414092831.3717684-1-fabiobaltieri@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
+Hi,
 
-On Thu, Apr 14, 2022 at 02:16:18AM +0100, Maciej W. Rozycki wrote:
->  Yes, for the relevant CPUs the range is 63-8 << 8 for R3k machines and 
-> 47-0 (the lower bound can be higher if wired entries are used, which I 
-> think we occasionally do) for R4k machines with a buggy CP0 counter.  So 
-> there are either 56 or up to 48 distinct CP0 Random register values.
+The ChromiumOS EC PWM host command protocol supports specifying the
+requested PWM by type rather than channel. [1]
 
-Ahh interesting, so it varies a bit, but it remains rather small.
+This series adds support for specifying PWM by type rather than channel
+number in the pwm-cros-ec driver, which abstracts the node definitions
+from the actual hardware configuration from the kernel perspective,
+aligns the API with the one used by the bootloader, and allows removing
+some dtsi overrides.
 
->  It depends on the exact system.  Some have a 32-bit high-resolution 
-> counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
-> resolution, some have nothing but jiffies.
+Tested on a sc7180-trogdor board, build tested on x86.
 
-Alright, so there _are_ machines with no c0 cycles but with a good
-clock. Yet, 25MHz is still less than the cpu cycle, so this c0 random
-ORing trick remains useful perhaps.
+Changes from v3:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=631131)
+- actually reworded patch 2 commit description
+- reworked patch 2 to use of_device_is_compatible() instead of compatible .data
 
->  It seems like a reasonable idea to me, but the details would have to be 
-> sorted out, because where a chipset high-resolution counter is available 
-> we want to factor it in, and otherwise we need to extract the right bits 
-> from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+Changes from v2:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=627837)
+- reworded patch 2 commit description
+- reworked the driver and dt documentation to use a new compatible rather than
+  boolean property
+- dropped the comment about build test only, tested on actual hardware
+  (trogdor), build test on x86 (with CONFIG_OF=n).
 
-One thing we could do here that would seemingly cover all the cases
-without losing _that_ much would be:
+Changes from v1:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=625182)
+- fixed the dt include file license
+- fixed the property name (s/_/-/)
+- rebased on current linus tree (few dts files changed from a soc tree
+  pull, so patch 4 needs a recent base to apply correctly)
 
-    return (random_get_entropy_fallback() << 13) | ((1<<13) - read_c0_random());
+[1] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/pwm.c;l=24
+[2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/depthcharge/src/drivers/ec/cros/ec.c;l=1271-1273
 
-Or in case the 13 turns out to be wrong on some hardware, we could
-mitigate the effect with:
+Fabio Baltieri (4):
+  dt-bindings: add mfd/cros_ec definitions
+  pwm: pwm-cros-ec: add channel type support
+  dt-bindings: update google,cros-ec-pwm documentation
+  arm64: dts: address cros-ec-pwm channels by type
 
-    return (random_get_entropy_fallback() << 13) ^ ((1<<13) - read_c0_random());
+ .../bindings/pwm/google,cros-ec-pwm.yaml      |  9 +-
+ .../mt8183-kukui-jacuzzi-fennel-sku1.dts      |  4 +-
+ .../dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  4 +-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  4 -
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  9 +-
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |  4 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    |  7 +-
+ .../boot/dts/rockchip/rk3399-gru-bob.dts      |  4 -
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  5 +-
+ .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  4 -
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  1 +
+ drivers/pwm/pwm-cros-ec.c                     | 82 +++++++++++++++----
+ include/dt-bindings/mfd/cros_ec.h             | 18 ++++
+ 16 files changed, 121 insertions(+), 49 deletions(-)
+ create mode 100644 include/dt-bindings/mfd/cros_ec.h
 
-As mentioned in the 1/xx patch of this series,
-random_get_entropy_fallback() should call the highest resolution thing.
-We then shave off the least-changing bits and stuff in the
-faster-changing bits from read_c0_random(). Then, in order to keep it
-counting up instead of down, we do the subtraction there.
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-What do you think of this plan?
-
-Jason

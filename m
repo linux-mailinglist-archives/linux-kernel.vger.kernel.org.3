@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBE15015AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9F6501525
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244791AbiDNNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S230116AbiDNOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244416AbiDNN0d (ORCPT
+        with ESMTP id S1345042AbiDNNpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:26:33 -0400
+        Thu, 14 Apr 2022 09:45:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86D49F3AA;
-        Thu, 14 Apr 2022 06:19:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F4083B38;
+        Thu, 14 Apr 2022 06:41:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5781AB82968;
-        Thu, 14 Apr 2022 13:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA77BC385A1;
-        Thu, 14 Apr 2022 13:19:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A0DDB82984;
+        Thu, 14 Apr 2022 13:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC18C385A1;
+        Thu, 14 Apr 2022 13:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942397;
-        bh=D0Ij6xLb5n4AnWQowEXOPRxZpdjQiNMbmIzlsTRfg6s=;
+        s=korg; t=1649943676;
+        bh=IGB/UJzh5YXKauEiwxgVNtXY1PR8N9MSsiL+OL6DO9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0/cOvQhdVNxq9NzZx4RQGtVp32afYcYjoQdWXeWNz6mmgCfSZAJNrjfPBMqT7FYeQ
-         H55dpE0qiMvcoxC/sCAEpX/8co5Hwp11OBW7nipFeTMouhZSngFSMeJqaW61oojP1q
-         pM/NI6AcX134Zlwd0Ve+4Ip/lMC3gMWKq8vLjEc8=
+        b=muyda40asjQVbs2AXzMPoSqN4vfRZEFfv9rMwGmvLkhKfRlAEvDc6GlGajArBy6OA
+         NKHdfWo+LE63DIeElK6qOHZ1DO3SOHc1RHKQP25P7bZGPGRdP9WOmL7DI2TTm1f4j9
+         90RwkI+ixLgOUlE0NVz9CV99A4ZVYgFzWikMztbc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 122/338] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
-Date:   Thu, 14 Apr 2022 15:10:25 +0200
-Message-Id: <20220414110842.376479310@linuxfoundation.org>
+Subject: [PATCH 5.4 241/475] clk: qcom: clk-rcg2: Update the frac table for pixel clock
+Date:   Thu, 14 Apr 2022 15:10:26 +0200
+Message-Id: <20220414110901.861794057@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabiano Rosas <farosas@linux.ibm.com>
+From: Taniya Das <tdas@codeaurora.org>
 
-[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
+[ Upstream commit b527358cb4cd58a8279c9062b0786f1fab628fdc ]
 
-The MMIO emulation code for vector instructions is duplicated between
-VSX and VMX. When emulating VMX we should check the VMX copy size
-instead of the VSX one.
+Support the new numerator and denominator for pixel clock on SM8350 and
+support rgb101010, RGB888 use cases on SM8450.
 
-Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
-Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
+Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220227175536.3131-2-tdas@codeaurora.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/powerpc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/clk-rcg2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index ad5a871a6cbf..dd352842a1c7 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -1479,7 +1479,7 @@ int kvmppc_handle_vmx_load(struct kvm_run *run, struct kvm_vcpu *vcpu,
- {
- 	enum emulation_result emulated = EMULATE_DONE;
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index d86c9ad3f6e8..89c1adeb84d4 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -647,6 +647,7 @@ static const struct frac_entry frac_table_pixel[] = {
+ 	{ 2, 9 },
+ 	{ 4, 9 },
+ 	{ 1, 1 },
++	{ 2, 3 },
+ 	{ }
+ };
  
--	if (vcpu->arch.mmio_vsx_copy_nums > 2)
-+	if (vcpu->arch.mmio_vmx_copy_nums > 2)
- 		return EMULATE_FAIL;
- 
- 	while (vcpu->arch.mmio_vmx_copy_nums) {
-@@ -1576,7 +1576,7 @@ int kvmppc_handle_vmx_store(struct kvm_run *run, struct kvm_vcpu *vcpu,
- 	unsigned int index = rs & KVM_MMIO_REG_MASK;
- 	enum emulation_result emulated = EMULATE_DONE;
- 
--	if (vcpu->arch.mmio_vsx_copy_nums > 2)
-+	if (vcpu->arch.mmio_vmx_copy_nums > 2)
- 		return EMULATE_FAIL;
- 
- 	vcpu->arch.io_gpr = rs;
 -- 
 2.34.1
 

@@ -2,46 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B88C501182
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB495016F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347930AbiDNOBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S1352351AbiDNPRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344522AbiDNNc0 (ORCPT
+        with ESMTP id S1347689AbiDNN71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:32:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAAD22298;
-        Thu, 14 Apr 2022 06:30:01 -0700 (PDT)
+        Thu, 14 Apr 2022 09:59:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22C94AE03;
+        Thu, 14 Apr 2022 06:51:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46B15B82968;
-        Thu, 14 Apr 2022 13:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B51C385A5;
-        Thu, 14 Apr 2022 13:29:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67970B828F4;
+        Thu, 14 Apr 2022 13:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4AEC385A5;
+        Thu, 14 Apr 2022 13:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942999;
-        bh=rlaneQ0YOzDcUvUt7fuOk35MKkmROE8Xm/bHgGDTzDk=;
+        s=korg; t=1649944277;
+        bh=vLVOPMognLMhpE0ZDdF5GInYSFaFskp/cxYu91KQCHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XrHIMMld74JLK7O8Q8BfhtK6GcPKKEy7wK+0WeVmydpU3rggGS6VvcuHjTg9PorrS
-         HQWdvRX5w7RLD+i6JOJbczcYl+OFwjTv4Dzj0TW3Z+nz2HbuKRYRFHnF7e4sL676VI
-         tVAcrWDIPD1mE5QA5Fy1Y4TKuqupH2LatmHDuiA8=
+        b=ISFgsdhmajIyTqPU2CbTxxXpB9eXzcp2gI9NPnXv1+aME41CsolO420ulUBSCtRe0
+         fyZS9/bguiGhVakHYfEzTKXan53dRDpaCqi87T5L/qGbEdDmKHpOUO/bPGQPEUzvkm
+         nNrsydEKalovNVfpEE4c47ZBs2MoeeD89FCkwql0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
-        Philip Yang <philip.yang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 4.19 338/338] drm/amdkfd: Use drm_priv to pass VM from KFD to amdgpu
-Date:   Thu, 14 Apr 2022 15:14:01 +0200
-Message-Id: <20220414110848.512603150@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: [PATCH 5.4 457/475] tools build: Filter out options and warnings not supported by clang
+Date:   Thu, 14 Apr 2022 15:14:02 +0200
+Message-Id: <20220414110907.845945743@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +63,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Kuehling <Felix.Kuehling@amd.com>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit b40a6ab2cf9213923bf8e821ce7fa7f6a0a26990 upstream.
+commit 41caff459a5b956b3e23ba9ca759dd0629ad3dda upstream.
 
-amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu needs the drm_priv to allow mmap
-to access the BO through the corresponding file descriptor. The VM can
-also be extracted from drm_priv, so drm_priv can replace the vm parameter
-in the kfd2kgd interface.
+These make the feature check fail when using clang, so remove them just
+like is done in tools/perf/Makefile.config to build perf itself.
 
-Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Reviewed-by: Philip Yang <philip.yang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-[ This is a partial cherry-pick of the commit. ]
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Adding -Wno-compound-token-split-by-macro to tools/perf/Makefile.config
+when building with clang is also necessary to avoid these warnings
+turned into errors (-Werror):
+
+    CC      /tmp/build/perf/util/scripting-engines/trace-event-perl.o
+  In file included from util/scripting-engines/trace-event-perl.c:35:
+  In file included from /usr/lib64/perl5/CORE/perl.h:4085:
+  In file included from /usr/lib64/perl5/CORE/hv.h:659:
+  In file included from /usr/lib64/perl5/CORE/hv_func.h:34:
+  In file included from /usr/lib64/perl5/CORE/sbox32_hash.h:4:
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: error: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
+      ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:80:38: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
+  #define ZAPHOD32_SCRAMBLE32(v,prime) STMT_START {  \
+                                       ^~~~~~~~~~
+  /usr/lib64/perl5/CORE/perl.h:737:29: note: expanded from macro 'STMT_START'
+  #   define STMT_START   (void)( /* gcc supports "({ STATEMENTS; })" */
+                                ^
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: note: '{' token is here
+      ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:80:49: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
+  #define ZAPHOD32_SCRAMBLE32(v,prime) STMT_START {  \
+                                                  ^
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: error: '}' and ')' tokens terminating statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
+      ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:87:41: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
+      v ^= (v>>23);                       \
+                                          ^
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:150:5: note: ')' token is here
+      ZAPHOD32_SCRAMBLE32(state[0],0x9fade23b);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /usr/lib64/perl5/CORE/zaphod32_hash.h:88:3: note: expanded from macro 'ZAPHOD32_SCRAMBLE32'
+  } STMT_END
+    ^~~~~~~~
+  /usr/lib64/perl5/CORE/perl.h:738:21: note: expanded from macro 'STMT_END'
+  #   define STMT_END     )
+                          ^
+
+Please refer to the discussion on the Link: tag below, where Nathan
+clarifies the situation:
+
+<quote>
+acme> And then get to the problems at the end of this message, which seem
+acme> similar to the problem described here:
+acme>
+acme> From  Nathan Chancellor <>
+acme> Subject	[PATCH] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+acme>
+acme> https://lkml.org/lkml/2020/9/1/135
+acme>
+acme> So perhaps in this case its better to disable that
+acme> -Werror,-Wcompound-token-split-by-macro when building with clang?
+
+Yes, I think that is probably the best solution. As far as I can tell,
+at least in this file and context, the warning appears harmless, as the
+"create a GNU C statement expression from two different macros" is very
+much intentional, based on the presence of PERL_USE_GCC_BRACE_GROUPS.
+The warning is fixed in upstream Perl by just avoiding creating GNU C
+statement expressions using STMT_START and STMT_END:
+
+  https://github.com/Perl/perl5/issues/18780
+  https://github.com/Perl/perl5/pull/18984
+
+If I am reading the source code correctly, an alternative to disabling
+the warning would be specifying -DPERL_GCC_BRACE_GROUPS_FORBIDDEN but it
+seems like that might end up impacting more than just this site,
+according to the issue discussion above.
+</quote>
+
+Based-on-a-patch-by: Sedat Dilek <sedat.dilek@gmail.com>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Debian/Selfmade LLVM-14 (x86-64)
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Keeping <john@metanate.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Link: http://lore.kernel.org/lkml/YkxWcYzph5pC1EK8@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/build/feature/Makefile |    7 +++++++
+ tools/perf/Makefile.config   |    3 +++
+ 2 files changed, 10 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1044,11 +1044,15 @@ int amdgpu_amdkfd_gpuvm_acquire_process_
- 					   struct dma_fence **ef)
- {
- 	struct amdgpu_device *adev = get_amdgpu_device(kgd);
--	struct drm_file *drm_priv = filp->private_data;
--	struct amdgpu_fpriv *drv_priv = drm_priv->driver_priv;
--	struct amdgpu_vm *avm = &drv_priv->vm;
-+	struct amdgpu_fpriv *drv_priv;
-+	struct amdgpu_vm *avm;
- 	int ret;
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -207,6 +207,13 @@ PERL_EMBED_LIBADD = $(call grep-libs,$(P
+ PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+ FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
  
-+	ret = amdgpu_file_to_fpriv(filp, &drv_priv);
-+	if (ret)
-+		return ret;
-+	avm = &drv_priv->vm;
++ifeq ($(CC_NO_CLANG), 0)
++  PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
++  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
++  PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
++  FLAGS_PERL_EMBED += -Wno-compound-token-split-by-macro
++endif
 +
- 	/* Already a compute VM? */
- 	if (avm->process_info)
- 		return -EINVAL;
+ $(OUTPUT)test-libperl.bin:
+ 	$(BUILD) $(FLAGS_PERL_EMBED)
+ 
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -706,6 +706,9 @@ else
+     LDFLAGS += $(PERL_EMBED_LDFLAGS)
+     EXTLIBS += $(PERL_EMBED_LIBADD)
+     CFLAGS += -DHAVE_LIBPERL_SUPPORT
++    ifeq ($(CC_NO_CLANG), 0)
++      CFLAGS += -Wno-compound-token-split-by-macro
++    endif
+     $(call detected,CONFIG_LIBPERL)
+   endif
+ endif
 
 

@@ -2,380 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1581850179A
+	by mail.lfdr.de (Postfix) with ESMTP id 81E9150179B
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358898AbiDNPmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S1358944AbiDNPm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343875AbiDNPM6 (ORCPT
+        with ESMTP id S1343815AbiDNPM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 11:12:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C931B18A7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:53:14 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u3so7283510wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:53:14 -0700 (PDT)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4395BB2458;
+        Thu, 14 Apr 2022 07:53:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r13so10549201ejd.5;
+        Thu, 14 Apr 2022 07:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QI8lD7XbQk1BfveDDmKDIM0YNm1W3OSAHogkwLnpMQU=;
-        b=EMUEZKxmHdzg4BJgKlszWLPR+Neo6BXumorjAZTczAnbAShqVdhSyG8CszhVE5NiuB
-         ilp7AyG8cc1Zv8cxgln1N4PqF1k958y9TXlFf/XeBRopTgtD+zZXtZpz6XiD0RInIZ9E
-         3hZhKUHlU/80qNoSOOSnAHbrJRABVnOR1OZpSPmdSnVFx3wJlpA7EEJUtAUkjvyZf7N0
-         NhKTcBxilrTfmM+rrnVflkPC4ARhdy2oLNxLr2zgLksl4XS0qXCIgj557caEunQX+Ppy
-         W7GxpYj5iGLv0+W+7IMQe+Vm/dZQGUZ0X3vsNB3+4V1cM0kt60BSIa0/LlqZ5/fgu8eh
-         NDVQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/vd0ABk9Uv8CXGT1XhdmltOBRajCrHaBdNTPR8s2GVs=;
+        b=M/nwcxed74Z1zu5KFnuL9OThA4kgtL9BN+Nd2OJ6JOv9UEmmNp97n2cI2JPnSThPWz
+         pjLc3vWl8+7VHuhc5zC09DNeEZBsGm5SeVUJLN/KeFbC05WJrJA9HVE5chu4rU+P9NPK
+         fz4Q6mO60wLys08v4twAIpoZqgKAEH4fUrsMVoOnBx3kwZgh0SAsnirvP0zV52pEdGVX
+         bId/2PlR1d0ZNAtV5hrrHw7c/geSq760P7B1CpN5ffZkCX+8J2Vhs/x06E5/2M9wK1dF
+         StjGH4qg2ZiKCIAEwwktQqcqu9sJi0kqFFEkq3oQOWZ3K6KF0nUhKb3UpAOQST/XZFdk
+         KiiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QI8lD7XbQk1BfveDDmKDIM0YNm1W3OSAHogkwLnpMQU=;
-        b=mxSPKbBB7HCtrQ66G+RNv8AEMTJIeOb6M7AtAER2ykikLG4Id07Yx8HAinI70MoZxr
-         +3JVvwYNhUQIsb8gnI86/tUz/x5TrT9krW+Z9ODXSpLOF3mayWI4nTbyZp2TMzb5MP73
-         /EVXa9eFG/nrmNfG7bgRamUDbAKvFmdnrjFeLCOCJCuym6YXiQ4pNvEv0ut2ikezUxPC
-         Fov9S41d5qHEaBUgkM4rgqXdPj3z4p9OkYRDWMLNhXZdcqrxIV2hKi8Ut5cGp8li90m3
-         /GbziiEFJlvh2MS+fdlvVIv+ttjOZ4FS93v0XG1uXw6OZq0SnB/92TJ9GfEdPIVa+udn
-         ULmg==
-X-Gm-Message-State: AOAM530X9nRak5gqKh7q6F3HSvt6MxHoEITFGCF0ECNIjvzbw9h5xnZA
-        CkjSMvNDgTJUVEuzThRIvQTxpFDBbhAVos0NZ/xmeA==
-X-Google-Smtp-Source: ABdhPJz4XnDor898w0IMTEXyJPfrIZWgND6L+p6n6wYtRU+XZqv2HA09vg7AQfgI0AM2HpoVhUwE8FiDDNpHakUu3ec=
-X-Received: by 2002:adf:cd87:0:b0:207:b0ad:6d8 with SMTP id
- q7-20020adfcd87000000b00207b0ad06d8mr2395716wrj.111.1649947992773; Thu, 14
- Apr 2022 07:53:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/vd0ABk9Uv8CXGT1XhdmltOBRajCrHaBdNTPR8s2GVs=;
+        b=FQgSKkJfi9UuPwGZrOP0dymU6wt/Bnh64zgj1Gd6N0NrSxpdO6fb4ZV6ytQWyvTlTm
+         BN28fzrwfJXvumXRtlj5DEVpurDd/zEbXUj4Vr5DDMvr6fiD4Zz7T837ZofOUvBtiDGP
+         LHW1pZwe5C1Whj8Oz+6AlIgX7RD2jppsCmjiiMt2dkt5BxvsG5N7L0rZms7nAZ8OjClV
+         2bg3CVaP6VSZAjfEKCWMSxpgUnsBC+n4iCRVoGZtCdaDJHsfWG73WmAel1sQDRUF9hHb
+         S9kQusWEbsbWHi78Vm9HHV+7FfHkzmwvATKFmafpWkc16WDtRSZFZm7qUX+EGJdPTGOQ
+         bzRQ==
+X-Gm-Message-State: AOAM531NIVuckt7jQeVcVqA77LYx08n3eG00F4nnrR3Jnd7pobzDjUlA
+        3NasFnW1J260FKLh603zguvHssejrJo=
+X-Google-Smtp-Source: ABdhPJzgdkmpc3tsESRQhUW79TqGI55xbBqkctA/XrPrQuFxglGd93qrbFGXtzkvlk0ncMjIpSVSIw==
+X-Received: by 2002:a17:907:94c1:b0:6e6:f038:9993 with SMTP id dn1-20020a17090794c100b006e6f0389993mr2685986ejc.238.1649947990464;
+        Thu, 14 Apr 2022 07:53:10 -0700 (PDT)
+Received: from [192.168.0.182] ([188.24.22.234])
+        by smtp.gmail.com with ESMTPSA id ee17-20020a056402291100b0041fe1e4e342sm1077630edb.27.2022.04.14.07.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 07:53:10 -0700 (PDT)
+Message-ID: <0823cf19-60b5-3050-0e26-04b87a7ce5c0@gmail.com>
+Date:   Thu, 14 Apr 2022 17:53:09 +0300
 MIME-Version: 1.0
-References: <20220412125035.40312-1-quic_jinlmao@quicinc.com> <20220412125035.40312-3-quic_jinlmao@quicinc.com>
-In-Reply-To: <20220412125035.40312-3-quic_jinlmao@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 14 Apr 2022 15:53:01 +0100
-Message-ID: <CAJ9a7ViS+waaw+wAVVYvisM4ObfsMZCG6+DGJBNX92+PJ9MHug@mail.gmail.com>
-Subject: Re: [PATCH v5 02/10] Coresight: Add coresight TPDM source driver
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 3/3] iio: adc: ad4130: add AD4130 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
+ <20220413094011.185269-3-cosmin.tanislav@analog.com>
+ <CAHp75VfzX8u45J3634yN5p-QTeT7w0Bos27OxeWOsb3MQ2VRVw@mail.gmail.com>
+ <80196942-4c33-7625-3945-86ce5b7b347f@gmail.com>
+ <CAHp75VfAjvJz2KHYfDM+-8D+hSBtdKJm521EBY3VgCfUsAgt8Q@mail.gmail.com>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <CAHp75VfAjvJz2KHYfDM+-8D+hSBtdKJm521EBY3VgCfUsAgt8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, 12 Apr 2022 at 13:51, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
->
-> Add driver to support Coresight device TPDM (Trace, Profiling and
-> Diagnostics Monitor). TPDM is a monitor to collect data from
-> different datasets. This change is to add probe/enable/disable
-> functions for tpdm source.
->
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->  drivers/hwtracing/coresight/Kconfig          |  13 ++
->  drivers/hwtracing/coresight/Makefile         |   1 +
->  drivers/hwtracing/coresight/coresight-core.c |   5 +-
->  drivers/hwtracing/coresight/coresight-tpdm.c | 145 +++++++++++++++++++
->  drivers/hwtracing/coresight/coresight-tpdm.h |  26 ++++
->  include/linux/coresight.h                    |   1 +
->  6 files changed, 190 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->
-> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-> index 514a9b8086e3..5c506a1cd08f 100644
-> --- a/drivers/hwtracing/coresight/Kconfig
-> +++ b/drivers/hwtracing/coresight/Kconfig
-> @@ -201,4 +201,17 @@ config CORESIGHT_TRBE
->
->           To compile this driver as a module, choose M here: the module will be
->           called coresight-trbe.
-> +
-> +config CORESIGHT_TPDM
-> +       tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
-> +       select CORESIGHT_LINKS_AND_SINKS
-> +       help
-> +         This driver provides support for configuring monitor. Monitors are
-> +         primarily responsible for data set collection and support the
-> +         ability to collect any permutation of data set types. Monitors are
-> +         also responsible for interaction with system cross triggering.
-> +
-> +         To compile this driver as a module, choose M here: the module will be
-> +         called coresight-tpdm.
-> +
->  endif
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index 329a0c704b87..6bb9b1746bc7 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -25,5 +25,6 @@ obj-$(CONFIG_CORESIGHT_CPU_DEBUG) += coresight-cpu-debug.o
->  obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
->  obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->  obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
-> +obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
->  coresight-cti-y := coresight-cti-core.o        coresight-cti-platform.o \
->                    coresight-cti-sysfs.o
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 23ab16dd9b5d..75fe1781df20 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1047,7 +1047,8 @@ static int coresight_validate_source(struct coresight_device *csdev,
->         }
->
->         if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
-> -           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE) {
-> +           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
-> +           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY) {
->                 dev_err(&csdev->dev, "wrong device subtype in %s\n", function);
->                 return -EINVAL;
->         }
-> @@ -1116,6 +1117,7 @@ int coresight_enable(struct coresight_device *csdev)
->                 per_cpu(tracer_path, cpu) = path;
->                 break;
->         case CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE:
-> +       case CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY:
->                 /*
->                  * Use the hash of source's device name as ID
->                  * and map the ID to the pointer of the path.
-> @@ -1165,6 +1167,7 @@ void coresight_disable(struct coresight_device *csdev)
->                 per_cpu(tracer_path, cpu) = NULL;
->                 break;
->         case CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE:
-> +       case CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY:
->                 hash = hashlen_hash(hashlen_string(NULL, dev_name(&csdev->dev)));
->                 /* Find the path by the hash. */
->                 path = idr_find(&path_idr, hash);
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> new file mode 100644
-> index 000000000000..3900ae50670a
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -0,0 +1,145 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/amba/bus.h>
-> +#include <linux/bitmap.h>
-> +#include <linux/coresight.h>
-> +#include <linux/coresight-pmu.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/fs.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +
-> +#include "coresight-priv.h"
-> +#include "coresight-tpdm.h"
-> +
-> +DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
-> +
-> +/* TPDM enable operations */
-> +static int tpdm_enable(struct coresight_device *csdev,
-> +                      struct perf_event *event, u32 mode)
-> +{
-> +       struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +       mutex_lock(&drvdata->lock);
-> +       if (drvdata->enable) {
-> +               mutex_unlock(&drvdata->lock);
-> +               return -EBUSY;
-> +       }
-> +
-> +       drvdata->enable = true;
-> +       mutex_unlock(&drvdata->lock);
-> +
-> +       dev_info(drvdata->dev, "TPDM tracing enabled\n");
-> +       return 0;
-> +}
-> +
-> +/* TPDM disable operations */
-> +static void tpdm_disable(struct coresight_device *csdev,
-> +                        struct perf_event *event)
-> +{
-> +       struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +       mutex_lock(&drvdata->lock);
-> +       if (!drvdata->enable) {
-> +               mutex_unlock(&drvdata->lock);
-> +               return;
-> +       }
-> +
-> +       drvdata->enable = false;
-> +       mutex_unlock(&drvdata->lock);
-> +
-> +       dev_info(drvdata->dev, "TPDM tracing disabled\n");
-> +}
-> +
-> +static const struct coresight_ops_source tpdm_source_ops = {
-> +       .enable         = tpdm_enable,
-> +       .disable        = tpdm_disable,
-> +};
-> +
-> +static const struct coresight_ops tpdm_cs_ops = {
-> +       .source_ops     = &tpdm_source_ops,
-> +};
-> +
-> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
-> +{
-> +       struct device *dev = &adev->dev;
-> +       struct coresight_platform_data *pdata;
-> +       struct tpdm_drvdata *drvdata;
-> +       struct coresight_desc desc = { 0 };
-> +
-> +       pdata = coresight_get_platform_data(dev);
-> +       if (IS_ERR(pdata))
-> +               return PTR_ERR(pdata);
-> +       adev->dev.platform_data = pdata;
-> +
-> +       /* driver data*/
-> +       drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +       if (!drvdata)
-> +               return -ENOMEM;
-> +       drvdata->dev = &adev->dev;
-> +       dev_set_drvdata(dev, drvdata);
-> +
-> +       drvdata->base = devm_ioremap_resource(dev, &adev->res);
-> +       if (!drvdata->base)
-> +               return -ENOMEM;
-> +
-> +       mutex_init(&drvdata->lock);
-> +
-> +       /* Set up coresight component description */
-> +       desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
-> +       if (!desc.name)
-> +               return -ENOMEM;
-> +       desc.type = CORESIGHT_DEV_TYPE_SOURCE;
-> +       desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY;
-> +       desc.ops = &tpdm_cs_ops;
-> +       desc.pdata = adev->dev.platform_data;
-> +       desc.dev = &adev->dev;
-> +       drvdata->csdev = coresight_register(&desc);
-> +       if (IS_ERR(drvdata->csdev))
-> +               return PTR_ERR(drvdata->csdev);
-> +
-> +       /* Decrease pm refcount when probe is done.*/
-> +       pm_runtime_put(&adev->dev);
-> +
-> +       return 0;
-> +}
-> +
-> +static void __exit tpdm_remove(struct amba_device *adev)
-> +{
-> +       struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-> +
-> +       coresight_unregister(drvdata->csdev);
-> +}
-
-How is this function called? The other coresight devices set the
-.remove function pointer in the amba_driver structure.
 
 
-> +/*
-> + * Different TPDM has different periph id.
-> + * The difference is 0-7 bits' value. So ignore 0-7 bits.
-> + */
-> +static struct amba_id tpdm_ids[] = {
-> +       {
-> +               .id = 0x000f0e00,
-> +               .mask = 0x000fff00,
-> +       },
-> +       { 0, 0},
-> +};
-> +
-> +static struct amba_driver tpdm_driver = {
-> +       .drv = {
-> +               .name   = "coresight-tpdm",
-> +               .owner  = THIS_MODULE,
-> +               .suppress_bind_attrs = true,
-> +       },
-> +       .probe          = tpdm_probe,
+On 4/14/22 16:45, Andy Shevchenko wrote:
+> On Thu, Apr 14, 2022 at 2:06 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+>> On 4/13/22 18:41, Andy Shevchenko wrote:
+>>> On Wed, Apr 13, 2022 at 1:41 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+>>>> +#define AD4130_RESET_CLK_COUNT         64
+>>>> +#define AD4130_RESET_BUF_SIZE          (AD4130_RESET_CLK_COUNT / 8)
+>>>
+>>> To be more precise shouldn't the above need to have DIV_ROUND_UP() ?
+>>
+>> Does it look like 64 / 8 needs any rounding?
+> 
+> Currently no, but if someone puts 63 there or 65, what would be the outcome?
+> OTOH, you may add a static assert to guarantee that CLK_COUNT is multiple of 8.
+> 
 
-Do you need:-
-       .remove = tpdm_remove;
-in here?
+No one will. 64 is defined in the datasheet and will never change. I'm
+not gonna do anything about it. Actually, I can do something about it.
+Remove AD4130_RESET_CLK_COUNT and only define AD4130_RESET_BUF_SIZE as
+8.
 
-Regards
+>>>> +       int                             samp_freq_avail_len;
+>>>> +       int                             samp_freq_avail[3][2];
+> 
+>>>> +       int                             db3_freq_avail_len;
+>>>> +       int                             db3_freq_avail[3][2];
+>>>
+>>> These 3:s can be defined?
+>>>
+>> I could define IIO_AVAIL_RANGE_LEN and IIO_AVAIL_SINGLE_LEN and then
+>> define another IIO_AVAIL_LEN that is the max between the two.
+>> But that's just over-complicating it, really.
+> 
+> I was talking only about 3:s (out array). IIRC I saw 3 hard coded in
+> the driver, but not sure if its meaning is the same. Might be still
+> good to define
+Actually I just checked, and it's not even needed. The framework
+always expects 3 elements for IIO_AVAIL_RANGE. I'll keep those two
+3s as they are.
 
-Mike
+>>>> +       if (reg >= ARRAY_SIZE(ad4130_reg_size))
+>>>> +               return -EINVAL;
+>>>
+>>> When this condition is true?
+>>
+>> When the user tries reading a register from direct_reg_access
+>> that hasn't had its size defined.
+> 
+> But how is it possible? Is the reg parameter taken directly from the user?
+> 
 
-> +       .id_table       = tpdm_ids,
-> +};
-> +
-> +module_amba_driver(tpdm_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> new file mode 100644
-> index 000000000000..94a7748a5426
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -0,0 +1,26 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
-> +#define _CORESIGHT_CORESIGHT_TPDM_H
-> +
-> +/**
-> + * struct tpdm_drvdata - specifics associated to an TPDM component
-> + * @base:       memory mapped base address for this component.
-> + * @dev:        The device entity associated to this component.
-> + * @csdev:      component vitals needed by the framework.
-> + * @lock:       lock for the enable value.
-> + * @enable:     enable status of the component.
-> + */
-> +
-> +struct tpdm_drvdata {
-> +       void __iomem            *base;
-> +       struct device           *dev;
-> +       struct coresight_device *csdev;
-> +       struct mutex            lock;
-> +       bool                    enable;
-> +};
-> +
-> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index 247147c11231..a9efac55029d 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -61,6 +61,7 @@ enum coresight_dev_subtype_source {
->         CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
->         CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
->         CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
-> +       CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
->  };
->
->  enum coresight_dev_subtype_helper {
-> --
-> 2.17.1
->
+Users can write whatever they want to direct_reg_access. Unless I add
+max_register to the regmap_config, the register that the user selects
+will just be passed to our reg_read and reg_write callbacks.
 
+Then it will be checked against the register size table.
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+>>>> +       regmap_update_bits(st->regmap, AD4130_REG_IO_CONTROL, mask,
+>>>> +                          value ? mask : 0);
+>>>
+>>> One line?
+>>>
+>>> No error check?
+>>
+>> I actually can't think of a scenario where this would fail. It doesn't
+>> if the chip is not even connected.
+> 
+> Why to check errors in many other cases then? Be consistent one way or
+> the other.
+> 
+
+Yeah, right. I didn't add any error checking because the callback can't
+handle errors, so all I can do is print a message to dmesg.
+
+>>>> + out:
+>>>
+>>> out_unlock: ?
+>>> Ditto for similar cases.
+>>
+>> There's a single label in the function, and there's a mutex being
+>> taken, and, logically, the mutex must be released on the exit path.
+>> It's clear what the label is for to me.
+> 
+> Wasn't clear to me until I went to the end of each of them (who
+> guarantees that's the case for all of them?).
+> 
+
+Let's hope other people looking at that code will be able to figure out
+what that label does then.
+
+>>>> +               *val = st->bipolar ? -(1 << (chan->scan_type.realbits - 1)) : 0;
+>>>
+>>> Hmm... It seems like specific way to have a sign_extended, or actually
+>>> reduced) mask.
+>>> Can you rewrite it with the (potential)UB-free approach?
+>>>
+>>> (Note, that if realbits == 32, this will have a lot of fun in
+>>> accordance with C standard.)
+>>
+>> Can you elaborate on this? The purpose of this statement is to shift the
+>> results so that, when bipolar configuration is enabled, the raw value is
+>> offset with 1 << (realbits - 1) towards negative.
+>>
+>> For the 24bit chips, 0x800000 becomes 0x000000.
+>>
+>> Maybe you misread it as left shift on a negative number? The number
+>> is turned negative only after the shift...
+> 
+> 1 << 31 is UB in accordance with the C standard.
+> 
+> And the magic above seems to me the opposite to what sign_extend()
+> does. Maybe even providing a general function for sign_comact() or so
+> (you name it) would be also nice to have.
+> 
+
+I'm not trying to comact (I guess you meant compact) the sign of any
+value. Please try to understand what is written in there. It's not
+magic. If the chip is 24bit, and it's set up as bipolar, the raw value
+must be offset by -0x800000, to account for 0x800000 being the
+zero-scale value. For 16 bits, it's 0x8000.
+
+>>>> +       ret = regmap_update_bits(st->regmap, AD4130_REG_FIFO_CONTROL,
+>>>> +                                AD4130_WATERMARK_MASK,
+>>>> +                                FIELD_PREP(AD4130_WATERMARK_MASK,
+>>>> +                                           ad4130_watermark_reg_val(eff)));
+>>>
+>>> Temporary variable for mask?
+>>
+>> You mean for value?
+> 
+>        mask = AD4130_WATERMARK_MASK;
+> 
+>        ret = regmap_update_bits(st->regmap, AD4130_REG_FIFO_CONTROL,
+>                                 mask, FIELD_PREP(mask,
+> ad4130_watermark_reg_val(eff)));
+> 
+
+Please bother reading the macro definition next-time. The mask argument
+to FIELD_PREP must be a compile-time constant.
+
+>>>> +       if (ret <= 0)
+>>>
+>>> = 0 ?! Can you elaborate, please, this case taking into account below?
+>>>
+>>
+>> I guess I just did it because voltage = 0 doesn't make sense and would
+>> make scale be 0.0.
+> 
+> Again, what's the meaning of having it in the conjunction with
+> dev_err_probe() call?
+> 
+>>>> +               return dev_err_probe(dev, ret, "Cannot use reference %u\n",
+>>>> +                                    ref_sel);
+> 
+> It's confusing. I believe you need two different messages if you want
+> to handle the 0 case.
+> 
+
+Why would I? The chip can't possibly use regulators with a voltage of 0,
+right? Or dummy regulators, since these return negative. I think it's
+fine as it is.

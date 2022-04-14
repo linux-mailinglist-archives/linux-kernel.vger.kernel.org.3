@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49257500BEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDAC500BED
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242145AbiDNLQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S242586AbiDNLRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242126AbiDNLQd (ORCPT
+        with ESMTP id S242581AbiDNLQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:16:33 -0400
+        Thu, 14 Apr 2022 07:16:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CBE7E088;
-        Thu, 14 Apr 2022 04:14:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8290327B22;
+        Thu, 14 Apr 2022 04:14:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A66E0B82929;
-        Thu, 14 Apr 2022 11:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63C6C385A1;
-        Thu, 14 Apr 2022 11:14:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F1D3B828E6;
+        Thu, 14 Apr 2022 11:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE836C385A5;
+        Thu, 14 Apr 2022 11:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649934846;
-        bh=ARnKmsLb/FeMb+3q8jlM7sCoXZOPbhPetPD+tJfanP4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=L6oG0egpWFGlYtJdzaduqSGhHMP3oZpBH9XaKbeXQF0kYjqiEpuKaiREQMpSLdXer
-         0+5ljY5UJITCrDJeG2xEIO01kUM+0a51j612tNf8QlmgTNS6Cyh825wtT7YP7kE2VV
-         zCz6BFF+CoHr1jq3a1wVfL86txiEXuzdX+i9IfzuhC4jhpLXfbbC1srQo4qzcpEyPw
-         RjHNjuifO2GA3aZpa2Zy3UzFk1BiaFtGDn6VaNuOeiQXJAiwnKNB/CxCMRRhAM0DDD
-         RFRez74yF52RGF03Qnta5BxNW5rT1xGuDf3wHk8wvx2LLTN/KiUCvnmKv+Z/J1mKHO
-         VtN0LxfXbQgbw==
-Message-ID: <7a24b43f4d3d568ccd61117df4a3f6ec25ae1941.camel@kernel.org>
-Subject: Re: [PATCH V4 11/31] x86/sgx: Keep record of SGX page type
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        s=k20201202; t=1649934872;
+        bh=NmetDrxQ+EhR6cSrYu4CXnVLfNx9HrQ/wJn7pNgkRNQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cAOOydwO3ql5oucGvzxYWVmHeQtwnjGuUZe9yX/3fKx7Ie2l8ACcJLd04elVLkCYD
+         UwmpsD479bfr3SYn2pcFEY9MdggMb3lMYHXjxvHV7g4M2AXYsGAA8blffgVJOtZfhV
+         e35oWN0i4nST7+2NCuEqJgtxNoTcgcxbntFhhp1La8j4Qi2EH+w6ZrhaGfqtCbtLxP
+         uBVxcm+uOPm9VraGQw95SyXAaQBKUWW87pVZHVDM61OxlABbH8Q21tld5RNouqvCP1
+         TImh2hYV4MirBJjO82pnDZOY25w2jTjgjHDswMAeesMpws/iOOmhznXLjRahv9qfgZ
+         VbxuO1TA4ykeg==
+Date:   Thu, 14 Apr 2022 13:14:24 +0200
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Thu, 14 Apr 2022 14:12:57 +0300
-In-Reply-To: <9978af37f51fa45c8878a3c05ceaf44f35806bb8.1649878359.git.reinette.chatre@intel.com>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
-         <9978af37f51fa45c8878a3c05ceaf44f35806bb8.1649878359.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+Subject: Re: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
+Message-ID: <20220414131424.744aa842@kernel.org>
+In-Reply-To: <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
+References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
+        <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,120 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
-> SGX2 functions are not allowed on all page types. For example,
-> ENCLS[EMODPR] is only allowed on regular SGX enclave pages and
-> ENCLS[EMODPT] is only allowed on TCS and regular pages. If these
-> functions are attempted on another type of page the hardware would
-> trigger a fault.
->=20
-> Keep a record of the SGX page type so that there is more
-> certainty whether an SGX2 instruction can succeed and faults
-> can be treated as real failures.
->=20
-> The page type is a property of struct sgx_encl_page
-> and thus does not cover the VA page type. VA pages are maintained
-> in separate structures and their type can be determined in
-> a different way. The SGX2 instructions needing the page type do not
-> operate on VA pages and this is thus not a scenario needing to
-> be covered at this time.
->=20
-> struct sgx_encl_page hosting this information is maintained for each
-> enclave page so the space consumed by the struct is important.
-> The existing sgx_encl_page->vm_max_prot_bits is already unsigned long
-> while only using three bits. Transition to a bitfield for the two
-> members to support the additional information without increasing
-> the space consumed by the struct.
->=20
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-
-Nit: reviewed-by overrides acked-by so you can remove acked-by and
-keep reviewed-by.
-
+On Mon, 11 Apr 2022 15:33:00 -0700 Peilin Ye wrote:
+> The following sequence of events caused the BUG:
+> 
+> 1. During ip6gretap device initialization, tunnel->tun_hlen (e.g. 4) is
+>    calculated based on old flags (see ip6gre_calc_hlen());
+> 2. packet_snd() reserves header room for skb A, assuming
+>    tunnel->tun_hlen is 4;
+> 3. Later (in clsact Qdisc), the eBPF program sets a new tunnel key for
+>    skb A using bpf_skb_set_tunnel_key() (see _ip6gretap_set_tunnel());
+> 4. __gre6_xmit() detects the new tunnel key, and recalculates
+>    "tun_hlen" (e.g. 12) based on new flags (e.g. TUNNEL_KEY and
+>    TUNNEL_SEQ);
+> 5. gre_build_header() calls skb_push() with insufficient reserved header
+>    room, triggering the BUG.
+> 
+> As sugguested by Cong, fix it by moving the call to skb_cow_head() after
+> the recalculation of tun_hlen.
+> 
+> Reported-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> Co-developed-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 > ---
-> Changes since V3:
-> - Add Jarkko's Reviewed-by tag.
->=20
-> Changes since V2:
-> - Update changelog to motivate transition to bitfield that
-> =C2=A0 was previously done when (now removed) vm_run_prot_bits was
-> =C2=A0 added.
->=20
-> Changes since V1:
-> - Add Acked-by from Jarkko.
->=20
-> =C2=A0arch/x86/include/asm/sgx.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 +++
-> =C2=A0arch/x86/kernel/cpu/sgx/encl.h=C2=A0 | 3 ++-
-> =C2=A0arch/x86/kernel/cpu/sgx/ioctl.c | 2 ++
-> =C2=A03 files changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
-> index d67810b50a81..eae20fa52b93 100644
-> --- a/arch/x86/include/asm/sgx.h
-> +++ b/arch/x86/include/asm/sgx.h
-> @@ -239,6 +239,9 @@ struct sgx_pageinfo {
-> =C2=A0 * %SGX_PAGE_TYPE_REG:=C2=A0a regular page
-> =C2=A0 * %SGX_PAGE_TYPE_VA:=C2=A0=C2=A0a VA page
-> =C2=A0 * %SGX_PAGE_TYPE_TRIM:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0a page in trimmed state
-> + *
-> + * Make sure when making changes to this enum that its values can still =
-fit
-> + * in the bitfield within &struct sgx_encl_page
-> =C2=A0 */
-> =C2=A0enum sgx_page_type {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SGX_PAGE_TYPE_SECS,
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/enc=
-l.h
-> index 1b15d22f6757..07abfc70c8e3 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.h
-> +++ b/arch/x86/kernel/cpu/sgx/encl.h
-> @@ -27,7 +27,8 @@
-> =C2=A0
-> =C2=A0struct sgx_encl_page {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long desc;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long vm_max_prot_bits=
-;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long vm_max_prot_bits=
-:8;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum sgx_page_type type:16;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_epc_page *epc_=
-page;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_encl *encl;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_va_page *va_pa=
-ge;
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/io=
-ctl.c
-> index a66795e0b685..21078c6643f7 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -107,6 +107,7 @@ static int sgx_encl_create(struct sgx_encl *encl, str=
-uct sgx_secs *secs)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0set_bit(SGX_ENCL_DEBUG, &encl->flags);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->secs.encl =3D encl;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->secs.type =3D SGX_PAGE_T=
-YPE_SECS;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->base =3D secs->base=
-;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->size =3D secs->size=
-;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->attributes =3D secs=
-->attributes;
-> @@ -344,6 +345,7 @@ static int sgx_encl_add_page(struct sgx_encl *encl, u=
-nsigned long src,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl_page->encl =3D encl;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl_page->epc_page =3D e=
-pc_page;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl_page->type =3D (secinfo->=
-flags & SGX_SECINFO_PAGE_TYPE_MASK) >> 8;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0encl->secs_child_cnt++;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (flags & SGX_PAGE_MEAS=
-URE) {
+> Hi all,
+> 
+> I couldn't find a proper Fixes: tag for this fix; please comment if you
+> have any sugguestions.  Thanks!
 
-BR, Jarkko
+What's wrong with
+
+Fixes: 6712abc168eb ("ip6_gre: add ip6 gre and gretap collect_md mode")
+
+?
+
+> diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+> index b43a46449130..976236736146 100644
+> --- a/net/ipv6/ip6_gre.c
+> +++ b/net/ipv6/ip6_gre.c
+> @@ -733,9 +733,6 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+>  	else
+>  		fl6->daddr = tunnel->parms.raddr;
+>  
+> -	if (skb_cow_head(skb, dev->needed_headroom ?: tunnel->hlen))
+> -		return -ENOMEM;
+> -
+>  	/* Push GRE header. */
+>  	protocol = (dev->type == ARPHRD_ETHER) ? htons(ETH_P_TEB) : proto;
+>  
+> @@ -763,6 +760,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+>  			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
+
+We should also reject using SEQ with collect_md, but that's a separate
+issue.
+
+>  		tun_hlen = gre_calc_hlen(flags);
+>  
+> +		if (skb_cow_head(skb, dev->needed_headroom ?: tun_hlen + tunnel->encap_hlen))
+> +			return -ENOMEM;
+> +
+>  		gre_build_header(skb, tun_hlen,
+>  				 flags, protocol,
+>  				 tunnel_id_to_key32(tun_info->key.tun_id),

@@ -2,814 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD23501622
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8E15015BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346576AbiDNOu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S1353316AbiDNOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344853AbiDNNoo (ORCPT
+        with ESMTP id S1344799AbiDNNol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:44:44 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC739158
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:40:22 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id q8so2889510wmc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iAc7lpd+4nLmuT0cGiCP3JMhHZxoF8IqIslQp63gOcM=;
-        b=M4QmYbEs3ZdWGSqViwM60QQLjNJ4jPBVlG63bnzHv/f2mL/yBHKqPeOhbjwDn9piDb
-         +ZkV3hQx+ZIygp/hzjBYvXsO2aIDCuYQjfGANiMJXx8Rfcf5Fo/htBFGmvU0sRbuAt39
-         /V05QXFHvwYcIsgDX0qeE9JoqXQbwJMA5XBp+QAaDjUK4zn4rPQVIwBWHOwJBLsYT9Za
-         T2OY8FSKNGeICkg5+cuRyNi0lsB/4zgUOyAmyXEPFjNVcnubbRXYazdaW9WNA4oNWQuU
-         o6cSU7275vmhmPYyx/sUW4qVw+Bx73CPl9iW49/VDSr7Xl075cW9KsVH+BFmwwkdRR9i
-         uNdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iAc7lpd+4nLmuT0cGiCP3JMhHZxoF8IqIslQp63gOcM=;
-        b=W3IG+nBQ7lwN65zPnxih03HysDWk7AHVj8eKCAT0VL2NS16I9BQ+3g0OuTcSQFOGCN
-         DO6vS2KZ3Wpkc+pwr0/JwKN8YgcWxrpmBVYgeEOJuoDXgvStTZUZLBn4vCKkMcbqmkzX
-         A6G3zZqMYZwKqoGRAZjCpx0l55A/I4pMnwfhtdvgkYlbncap/DI0wp4TFzhRQx1vBhah
-         e9RN+JQKbGmRG0CFGI4IygcxA+j49VznAwt53OeTXOumKjNQo5lD24L/zd6Wh8MhrnSG
-         nzSA/KaQwW9vWBTtt7J725fS31SmTeUaLPlckDFbINZMVCnweJ1Byw3WhDTfU9thKJ1h
-         gnKA==
-X-Gm-Message-State: AOAM533iuixay7qjegpT6KLxkr+ErItPQ4eh4C9hoiM7K3VJiuyF3Dqc
-        PJmDiqbrG8T6zPDrNyvAFcQ1Hi/YaIQq0DnV0fI3iQ==
-X-Google-Smtp-Source: ABdhPJze+2iSsIxbpwLJh/dAt3QDZrZaU/uh5h8iGzqYbY30zMgO5wurSSRsVfFk95cyQy4Soc6bZaHF4g9cMmC10/8=
-X-Received: by 2002:a7b:cbc2:0:b0:388:faec:2036 with SMTP id
- n2-20020a7bcbc2000000b00388faec2036mr3309643wmi.190.1649943621373; Thu, 14
- Apr 2022 06:40:21 -0700 (PDT)
+        Thu, 14 Apr 2022 09:44:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0374387B7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649943616; x=1681479616;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=oe/BJrwW4pAsB1nX950gAS+RLvGZsHho+J6bPq9fR/s=;
+  b=f7Oqqruip+H+RCFFbU4imMnNvJdYuksQFLYUgS3rJoRrhHB9fOUOh9JA
+   z7O6FK7ThLtJMwKA9PoQOKRubhl+5jakIHSVKmi2pGvL9RCcp09xBrk7y
+   qqqfum/RT0+PWij3GlybrYlkHkC4m+zSvDuciyzLdJybTfStNxMiQH9ly
+   /5L5qT46N1VSH6ItZeX1YIPRNWYg4W0vI5bO/CHk9LYxh3Qqy69eU0/3d
+   hjtW6907LjEm0XgqafmkyXbdbuW4+KoHqRyP5iQ5w+agPFKf0B1N2CIj5
+   t9n+byLJxvx9ujNDhMhtn4k26GSYQubg+Q+opUL/8M4lKXK5MtEuQsWZm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="260526415"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="260526415"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:40:16 -0700
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="573800067"
+Received: from nplaweck-mobl.ger.corp.intel.com (HELO localhost) ([10.249.149.236])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:40:11 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
+In-Reply-To: <20220414133427.GB2120790@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220411141403.86980-1-hch@lst.de>
+ <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
+ <20220413154642.GA28095@lst.de> <871qy1geko.fsf@intel.com>
+ <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
+ <20220413232053.GA2120790@nvidia.com>
+ <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
+ <20220414133427.GB2120790@nvidia.com>
+Date:   Thu, 14 Apr 2022 16:40:11 +0300
+Message-ID: <87ilrbeqbo.fsf@intel.com>
 MIME-Version: 1.0
-References: <20220412125035.40312-1-quic_jinlmao@quicinc.com>
- <20220412125035.40312-10-quic_jinlmao@quicinc.com> <f8c758a0-8e6d-85e6-3af2-640b33a92ce9@gmail.com>
- <4464bd92-c104-3c3c-d077-d1b8ced76410@quicinc.com>
-In-Reply-To: <4464bd92-c104-3c3c-d077-d1b8ced76410@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 14 Apr 2022 14:40:10 +0100
-Message-ID: <CAJ9a7VhxPiA_arCg2LRki8eqx-OyipTxLp7TbiVfe2Dajm3wig@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] ARM: dts: msm: Add coresight components for SM8250
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>
-Cc:     Konrad Dybcio <konradybcio@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On Wed, 13 Apr 2022 at 17:45, Jinlong Mao <quic_jinlmao@quicinc.com> wrote:
+On Thu, 14 Apr 2022, Jason Gunthorpe <jgg@nvidia.com> wrote:
+> On Thu, Apr 14, 2022 at 12:20:42PM +0000, Wang, Zhi A wrote:
+>> On 4/13/22 11:20 PM, Jason Gunthorpe wrote:
+>> > On Wed, Apr 13, 2022 at 11:13:06PM +0000, Wang, Zhi A wrote:
+>> >> Hi folks:
+>> >>
+>> >> Thanks so much for the efforts. I prepared a branch which contains all our patches.The aim of the branch is for the VFIO maintainers to pull the whole bunch easily after the drm-intel-next got merged through drm (as one of the MMIO patches depends on a patch in drm-intel-next).
+>> >>
+>> >> I dropped patch 4 and patch 5 as they have been covered by Jani's patches. Some conflicts was solved.
+>> >> QA is going to test it today. 
+>> >>
+>> >> You can find it here:
+>> >>
+>> >> git clone https://github.com/intel/gvt-linux -b for-christoph
+>> > 
+>> > There are alot of extra commits on there - is it possible to base this
+>> > straight on rc1 not on some kind of existing DRM tree?
+>> > 
+>> > Why did you choose drm/i915/fbc: Call intel_fbc_activate() directly
+>> > from frontbuffer flush  as a base?
+>> > 
+>> > Jason
+>> > 
+>> 
+>> Hi Jason:
+>> 
+>> I updated the branch. You can check if those are what you are expecting. :)
 >
-> Hi Konrad,
+> This is better, except for the first commit:
 >
-> Thank you for the review.
+>  [DON'T PULL] drm/i915/dmc: split out dmc registers to a separate file
+>  THIS PATCH WILL GO THROUGH DRM-INTEL-NEXT TO UPSTREAM
 >
-> On 4/13/2022 5:58 PM, Konrad Dybcio wrote:
-> > Hi,
-> >
-> >
-> > I added Bjorn, the linux-arm-msm maintainer to CC as he was missing
-> > for some reason.
-> >
-> >
-> > On 12/04/2022 14:50, Mao Jinlong wrote:
-> >> Add coresight device tree for sm8250. STM/ETM are added.
-> >>
-> >> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> >> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> >> ---
-> >>   .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 526 ++++++++++++++++++
-> >>   arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
-> >>   2 files changed, 528 insertions(+)
-> >>   create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
-> >> b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
-> >> new file mode 100644
-> >> index 000000000000..1de42fd39248
-> >> --- /dev/null
-> >> +++ b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
-> >> @@ -0,0 +1,526 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >
-> > sm8250.dtsi is BSD-3-Clause. Please consider relicensing.
-> >
-> >
-> >> +/*
-> >> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights
-> >> reserved.
-> >> + */
-> >> +
-> >> +&soc {
-> >> +
-> >> +    stm@6002000 {
-> >> +        compatible = "arm,coresight-stm", "arm,primecell";
-> >> +        reg = <0 0x06002000 0 0x1000>,
-> >
-> > You don't need to break the line at so few characters.
-> >
-> >
-> >> +              <0 0x16280000 0 0x180000>;
-> >> +        reg-names = "stm-base", "stm-stimulus-base";
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                stm_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&funnel0_in7>;
-> >
-> > Same here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    funnel@6041000 {
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        reg = <0 0x06041000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                funnel0_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&merge_funnel_in0>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@7 {
-> >> +                reg = <7>;
-> >> +                funnel0_in7: endpoint {
-> >> +                    remote-endpoint = <&stm_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    funnel@6042000 {
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        reg = <0 0x06042000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                funnel2_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&merge_funnel_in2>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@2 {
-> >> +                reg = <4>;
-> >> +                funnel2_in5: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_merge_funnel_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    funnel@6b04000 {
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        arm,primecell-periphid = <0x000bb908>;
-> >> +
-> >> +        reg = <0 0x6b04000 0 0x1000>;
-> >> +        reg-names = "funnel-base";
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                merge_funnel_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                        <&etf_in>;
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@7 {
-> >> +                reg = <7>;
-> >> +                funnel_swao_in_funnel_merg: endpoint {
-> >> +                    remote-endpoint=
-> >
-> > And here.
-> >
-> >
-> >> + <&funnel_merg_out_funnel_swao>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +    };
-> >> +
-> >> +    funnel@6045000 {
-> >
-> > The nodes are not sorted properly (by address). Please fix that.
-> >
-> >
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        reg = <0 0x06045000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                funnel_merg_out_funnel_swao: endpoint {
-> >> +                    remote-endpoint = <&funnel_swao_in_funnel_merg>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@1 {
-> >> +                reg = <0>;
-> >> +                merge_funnel_in0: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&funnel0_out>;
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@2 {
-> >> +                reg = <1>;
-> >> +                merge_funnel_in2: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&funnel2_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    replicator@6046000 {
-> >> +        compatible = "arm,coresight-dynamic-replicator",
-> >> "arm,primecell";
-> >> +        reg = <0 0x06046000 0 0x1000>;
-> >> +
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                replicator_out: endpoint {
-> >> +                    remote-endpoint = <&etr_in>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            port {
-> >> +                replicator_cx_in_swao_out: endpoint {
-> >> +                    remote-endpoint = <&replicator_swao_out_cx_in>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    replicator@6b06000 {
-> >> +        compatible = "arm,coresight-dynamic-replicator",
-> >> "arm,primecell";
-> >> +        reg = <0 0x06b06000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                replicator_swao_out_cx_in: endpoint {
-> >> +                    remote-endpoint = <&replicator_cx_in_swao_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            port {
-> >> +                replicator_in: endpoint {
-> >> +                    remote-endpoint = <&etf_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etf@6b05000 {
-> >> +        compatible = "arm,coresight-tmc", "arm,primecell";
-> >> +        reg = <0 0x6b05000 0 0x1000>;
-> >
-> > Please pad the address to 8 chars.
-> >
-> >
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etf_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&replicator_in>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@1 {
-> >> +                reg = <0>;
-> >> +                etf_in: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&merge_funnel_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etr@6048000 {
-> >> +        compatible = "arm,coresight-tmc", "arm,primecell";
-> >> +        reg = <0 0x06048000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,scatter-gather;
-> >> +
-> >> +        in-ports {
-> >> +            port {
-> >> +                etr_in: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&replicator_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7040000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07040000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU0>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm0_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in0>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7140000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07140000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU1>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm1_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in1>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7240000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07240000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU2>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm2_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in2>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7340000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07340000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU3>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm3_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in3>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7440000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07440000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU4>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm4_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in4>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7540000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07540000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU5>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm5_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in5>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7640000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07640000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU6>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm6_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in6>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    etm@7740000 {
-> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
-> >> +        reg = <0 0x07740000 0 0x1000>;
-> >> +
-> >> +        cpu = <&CPU7>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +        arm,coresight-loses-context-with-cpu;
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                etm7_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_in7>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    funnel@7800000 {
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        reg = <0 0x07800000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                apss_funnel_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_merge_funnel_in>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            port@0 {
-> >> +                reg = <0>;
-> >> +                apss_funnel_in0: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm0_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@1 {
-> >> +                reg = <1>;
-> >> +                apss_funnel_in1: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm1_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@2 {
-> >> +                reg = <2>;
-> >> +                apss_funnel_in2: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm2_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@3 {
-> >> +                reg = <3>;
-> >> +                apss_funnel_in3: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm3_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@4 {
-> >> +                reg = <4>;
-> >> +                apss_funnel_in4: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm4_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@5 {
-> >> +                reg = <5>;
-> >> +                apss_funnel_in5: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm5_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@6 {
-> >> +                reg = <6>;
-> >> +                apss_funnel_in6: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm6_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +
-> >> +            port@7 {
-> >> +                reg = <7>;
-> >> +                apss_funnel_in7: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&etm7_out>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +    funnel@7810000 {
-> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> >> +        reg = <0 0x07810000 0 0x1000>;
-> >> +
-> >> +        clocks = <&aoss_qmp>;
-> >> +        clock-names = "apb_pclk";
-> >> +
-> >> +        out-ports {
-> >> +            port {
-> >> +                apss_merge_funnel_out: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&funnel2_in5>;
-> >
-> > And here.
-> >
-> >
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +
-> >> +        in-ports {
-> >> +            port@1 {
-> >> +                reg = <0>;
-> >> +                apss_merge_funnel_in: endpoint {
-> >> +                    remote-endpoint =
-> >> +                      <&apss_funnel_out>;
-> >> +                };
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +};
-> >> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> >> b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> >> index af8f22636436..115623392183 100644
-> >> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> >> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> >> @@ -5434,3 +5434,5 @@
-> >>           };
-> >>       };
-> >>   };
-> >> +
-> >> +#include "sm8250-coresight.dtsi"
-> >
-> > Why should everybody want coresight? It's not enabled on (most)
-> > production devices and may cause a platform crash when you try to use
-> > it on such ones.
-> >
-> >
-> > These nodes should probably be added to sm8250.dtsi, all with status =
-> > "disabled" by default, so that they don't break the devices that do
-> > not support it due to fuse configuration.
-> >
-> I will address your comments above.
-> I create coresight dtsi because of that there are dozens of coresight
-> nodes for qualcomm HW.
-> Add all the nodes in a separate file is easy to maintain.
-> For disabling all the nodes by default, i will check internally and get
-> back to you.
+>  Clean up the massive i915_reg.h a bit with this isolated set of
+>  registers.
 >
-
-If the nodes are "disabled", then the base .dts files for platforms
-that do include coresight would have to be updated to enable all those
-nodes - which leaves potential for errors if nodes are accidentally
-omitted.
-
-Because sm8250-coresight.dtsi contains only Coresight devices, would
-it not be better to include this directly in the base .dts file for
-platforms that do have Coresight, and omit it from those that do not.
-
-Regards
-
-Mike
-
-
+>  v2: Remove stale comment (Lucas)
 >
-> Thanks
-> Jinlong Mao
->
->
-> >
-> > Konrad
-> >
+> Clean the commit message and send that as a proper PR to
+> drm-intel-next, then everything else is OK.
 
+It's already in drm-intel-next, I guess the problem is basing the branch
+on something that doesn't have it. I'd probably just base everything
+cleanly on -rc1, and whoever does the merge between the two will need to
+account for the missing include in the result. It's just adding one line
+in the right place.
+
+BR,
+Jani.
 
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Jani Nikula, Intel Open Source Graphics Center

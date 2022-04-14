@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AE7500951
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D011F50095C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiDNJKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        id S241512AbiDNJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241260AbiDNJJ5 (ORCPT
+        with ESMTP id S241325AbiDNJKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:09:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358046E353;
-        Thu, 14 Apr 2022 02:07:33 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so8702029pjb.4;
-        Thu, 14 Apr 2022 02:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eJF41dR8CM5e2ZZW3grRLN20zsR7Q9ZeigZpuEaXzjc=;
-        b=PubBcYCaKM0TfK3rk/m2r16WsUX8fa9v1AhUKvdN6Sx81eAbuEmzphFhmpikmLvSGQ
-         P55ZWsJ20a5BdLwO3FPv0wSO6uE1LM3zYzC+spSetN5hv8t1rKcnEyXC4WYdLnBjXkSc
-         WMgvWXJd+YtwCtuXcm/megCYH2TMcv4Y4kQU5DBafqSo2J8MVHvPOYQcevC8gfQqBVWN
-         ELiRpmcpdkmAsRCOASft5VvyaQ5duU8WRpV/vmvCelJ3HEebYTGuhv7pIu/9gutUvpKI
-         z23PR96nsLXLjgtQ0LUftCTRs3ZmdLCGGjdYvhgNxkSM9d9SpLTy3gl2v4+x2KqvpvEr
-         y93w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eJF41dR8CM5e2ZZW3grRLN20zsR7Q9ZeigZpuEaXzjc=;
-        b=tkIZG9WAYJhxIPFuAR1wPbdrG2R9xcKaZaidVYe/TM06lB4S8QB0a9lHQ/VuoXd2Fa
-         LLQeUCyiSSygryesbQYhl6k2Giwlvq78yNL4PgX63kA+MiJjIkbzBBKqxiUjCS3V2xSd
-         6oN5ASsa3fOpXGC8eo4TPwrgboo7UV7oGUhuLivb74lrwdsiN0oteIDs/wEAL6eUPkXW
-         hZJeQwa/6f9j2UCjfqqp5KI6qwjbncA1pqvzQQbBdhbFKnOBZ1bvFG5G6xU/r7612PKG
-         7MaHU2wosUSZaWBJUFFTT/LKHPP4uyUuHpDJ0cBFj1sCBtFtAWzvjd7twX2f/fpuQMLZ
-         c18w==
-X-Gm-Message-State: AOAM531HvGC+Ce3C4Sj29XVWo8UEQ8I4QgpxkDvnx5Zn6cB+tza3QQIP
-        H6Ec15gfjlt4xF8FYqpV/FVxmjickcE=
-X-Google-Smtp-Source: ABdhPJwUezP4/bTL7XIUAOgjBJ7RfzEbgDwelq3f6M1v5m7V18kS9wnJoX334HNzeNQ0xaUxsCd9ng==
-X-Received: by 2002:a17:903:2045:b0:158:c130:31b7 with SMTP id q5-20020a170903204500b00158c13031b7mr560517pla.154.1649927252796;
-        Thu, 14 Apr 2022 02:07:32 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm5368836pjl.39.2022.04.14.02.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 02:07:32 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     nsekhar@ti.com
-Cc:     brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] i2c: i2c-davinci: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Thu, 14 Apr 2022 09:07:27 +0000
-Message-Id: <20220414090727.2542000-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 05:10:07 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B7E6D962;
+        Thu, 14 Apr 2022 02:07:43 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 148F51F4778C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649927262;
+        bh=SGjdvm2jxn/wrvUxD5fVBXM2K5YNhQcQ079/GSOHMTM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=m1VxcuIEimr1pL6AXUPBpixE9KfydqWy+Yvf7QNvQCWgfZo4BqCHbv/VeS0fgkaK7
+         1ce043sto+XbA7wCsuXlYMm46Pjr3b0K6ijEEEcnMa6OIa5IhG6naZZ0B0mS1aC/qL
+         2ufKmOPdsV2BBhhBlrzCxZjPMf+FDyA8YmhcGALPXXotqpUQEmZcuWAtJiz6ZUdJAy
+         Uh0QoNEw2Z//xRPlNnYNYWhQ9ZlX6/aPt4WMKtsKe5/fejMMQn6EujuyDQtbjSCmqE
+         Lzbad2vaSYyKkCJMUe1hKffhFCSqfhhPys50gVT1hhVV6JWn0OCVD5fngPfWivyCTN
+         jgs2mwU7cXpgQ==
+Message-ID: <fdd5ac4e-bff1-af65-23f8-d73d6b5306e7@collabora.com>
+Date:   Thu, 14 Apr 2022 14:07:30 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     usama.anjum@collabora.com, Len Brown <lenb@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
+        Andy Shevchenko <andy@infradead.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH RESEND v6] platform: x86: Add ChromeOS ACPI device driver
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <Yk7aeAcKIBrTupcq@debian-BULLSEYE-live-builder-AMD64>
+ <708fb1ec-4e57-7a1d-b0a0-a3a10b3cacf3@redhat.com>
+ <CAJZ5v0g2UDOR3mYsdqnPcpYgmecY706YQcTKTWMRtezkK0sfaQ@mail.gmail.com>
+ <e25f5599-10f5-90b7-227a-01616f722cca@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <e25f5599-10f5-90b7-227a-01616f722cca@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 4/11/22 6:40 PM, Hans de Goede wrote:
+> Hi,
+> 
+> On 4/11/22 15:37, Rafael J. Wysocki wrote:
+>> On Mon, Apr 11, 2022 at 3:26 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>>
+>>> Hi,
+>>>
+>>> On 4/7/22 14:35, Muhammad Usama Anjum wrote:
+>>>> From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>>>>
+>>>> The x86 Chromebooks have ChromeOS ACPI device. This driver attaches to
+>>>> the ChromeOS ACPI device and exports the values reported by ACPI in a
+>>>> sysfs directory. This data isn't present in ACPI tables when read
+>>>> through ACPI tools, hence a driver is needed to do it. The driver gets
+>>>> data from firmware using ACPI component of the kernel. The ACPI values
+>>>> are presented in string form (numbers as decimal values) or binary
+>>>> blobs, and can be accessed as the contents of the appropriate read only
+>>>> files in the standard ACPI device's sysfs directory tree. This data is
+>>>> consumed by the ChromeOS user space.
+>>>>
+>>>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>>>> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>
+>>>
+>>> Thanks overall this looks pretty good to me.  The only remark which
+>>> I have is that I would like to see the Kconfig symbol changed
+>>> from CONFIG_ACPI_CHROMEOS to CONFIG_CHROMEOS_ACPI to match the
+>>> filename.
+>>>
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
+I'll rename in next version.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/i2c/busses/i2c-davinci.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+>>> CONFIG_ACPI_CHROMEOS to me suggests that this is an ACPI subsystem
+>>> Kconfig option which, with the driver living under
+>>> drivers/platform/x86 it is not.
+>>>
+>>> There is no need to send a new version for this, if you agree
+>>> with the change let me know and I can change this while merging
+>>> the driver.
+>>>
+>>> Rafael, before I merge this do you have any (more) remarks
+>>> about this driver?
+>>
+>> I'm not sure why it has to be an acpi_driver.
+>>
+>> I think that the generic enumeration code creates a platform device
+>> for this ACPI device object, so why can't it bind to that platform
+>> device?
+>>
+>> Generally speaking, IMV we should avoid adding drivers binding
+>> directly to ACPI device objects, because that is confusing (it is kind
+>> of like binding directly to an of_node) and it should be entirely
+>> avoidable.
+> 
+> Ah I missed that, good point.
+> 
+> Muhammad can you give turning this into a platform driver a try please?
+> 
+> Note this will change all the sysfs attribute paths from:
+> 
+> /sys/bus/acpi/devices/GGL0001:00/...
+> 
+> to:
+> 
+> /sys/bus/platform/devices/GGL0001:00/...
+> 
+> and the ABI documentation should be updated accordingly.
+> 
 
-diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
-index e9d07323c604..9e09db31a937 100644
---- a/drivers/i2c/busses/i2c-davinci.c
-+++ b/drivers/i2c/busses/i2c-davinci.c
-@@ -539,10 +539,9 @@ i2c_davinci_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 
- 	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
- 
--	ret = pm_runtime_get_sync(dev->dev);
-+	ret = pm_runtime_resume_and_get(dev->dev);
- 	if (ret < 0) {
- 		dev_err(dev->dev, "Failed to runtime_get device: %d\n", ret);
--		pm_runtime_put_noidle(dev->dev);
- 		return ret;
- 	}
- 
-@@ -821,10 +820,9 @@ static int davinci_i2c_probe(struct platform_device *pdev)
- 
- 	pm_runtime_enable(dev->dev);
- 
--	r = pm_runtime_get_sync(dev->dev);
-+	r = pm_runtime_resume_and_get(dev->dev);
- 	if (r < 0) {
- 		dev_err(dev->dev, "failed to runtime_get device: %d\n", r);
--		pm_runtime_put_noidle(dev->dev);
- 		return r;
- 	}
- 
-@@ -898,11 +896,9 @@ static int davinci_i2c_remove(struct platform_device *pdev)
- 
- 	i2c_del_adapter(&dev->adapter);
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
- 
+Thank you for comments and directions. They mean a lot. I'll make the
+changes in next version.
+
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+
 -- 
-2.25.1
-
-
+Muhammad Usama Anjum

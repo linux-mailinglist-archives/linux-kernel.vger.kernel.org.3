@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FA550180C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94B9501806
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347686AbiDNQAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S1347485AbiDNP75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348917AbiDNPkL (ORCPT
+        with ESMTP id S1348944AbiDNPkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:40:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60441C4E33
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:18:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DD5611F748;
-        Thu, 14 Apr 2022 15:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649949533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dkqemCFNSh+ZhebkGa09gVt5pLy70xI4ZccBTAffCZc=;
-        b=DxIcnPfo0yw48SFmUwgjqknFyxwyu9/5UOHIYjR/u80AC8WwvWRGi19AYn+UYzYlcaoNFm
-        CmQuiS7GljV5MGuYtMBDIvPfEBYHaazqJwzzLT7Wl43ZR5M2cXEu5m7luqUOjgoKzt5BeY
-        +SPMS8Hzt2pXydg7/qwdO1v7ZXlbNBc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649949533;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dkqemCFNSh+ZhebkGa09gVt5pLy70xI4ZccBTAffCZc=;
-        b=6P/o1p51DiXtaKeb2Y1dqvIQdSv7sHqoEAyyddZ9KCmHveSbw389Nrh5g+x7lf3P2bOOQc
-        xjqZhKB2ey364hCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8432C13A86;
-        Thu, 14 Apr 2022 15:18:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VJi8H107WGJFbwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 14 Apr 2022 15:18:53 +0000
-Message-ID: <08c355b4-fa21-8716-bf05-3331914f150e@suse.cz>
-Date:   Thu, 14 Apr 2022 17:18:53 +0200
+        Thu, 14 Apr 2022 11:40:12 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BFBC5583;
+        Thu, 14 Apr 2022 08:19:00 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id 12so5699020oix.12;
+        Thu, 14 Apr 2022 08:19:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=rTnbii0TkfiP0IgylH+LPQeyfK4chNSMZIeQMu2dlZ0=;
+        b=44Lvk3aKbxtOBzPkD6hHm1CjWoWpgA2QoNMfqHRlgXnizhX3EsCyxHVnWDrEIuFXZm
+         OKSKF4h0xAwKNpzt8GbSoFbgZsmTbNDz1GtOV5S0ZkB8M6fFedYV8Yz1LTp4NzMNlmml
+         xLJz1eR0hN8/+MRc9t087Y/+QNhiOgMIcu5YLWG8cbXEiAuZyW8Ppp1zRBKBwRvjQ1MK
+         0Jsf1Uj/PGGIz/+qgviNF3h9+NwbCYm7YkPEWVCnDNuA9oGJ/maWtdjJWYj7LG2wQlNb
+         WDaNDTnh3Jr4cjrm68uhWtIzKOxNPXp0zM+QPN45OyFobk68bnRaT3N6NATyVEBQPWmi
+         cG1A==
+X-Gm-Message-State: AOAM5337BI4i00pmA/TgLak4RiYeZCtyuB0uTv8alrQdJGGz8JsgKKAy
+        sPCyM5TH9XBS6myCBshuMg==
+X-Google-Smtp-Source: ABdhPJx97/FQcjk9Be6OMKujrhUC85sEPYMS6H5cAeRSjdGYelkOgG068e0xOR/WfxQnx5K/o4EfsQ==
+X-Received: by 2002:aca:2418:0:b0:2ee:f7da:795f with SMTP id n24-20020aca2418000000b002eef7da795fmr1833724oic.276.1649949539942;
+        Thu, 14 Apr 2022 08:18:59 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c19-20020a9d7853000000b005cdbc0f02ccsm106314otm.68.2022.04.14.08.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 08:18:59 -0700 (PDT)
+Received: (nullmailer pid 2073887 invoked by uid 1000);
+        Thu, 14 Apr 2022 15:18:58 -0000
+Date:   Thu, 14 Apr 2022 10:18:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v13 4/9] dt-bindings: clock: Add bindings for SP7021
+ clock driver
+Message-ID: <Ylg7Yl9GmgpOFipk@robh.at.kernel.org>
+References: <cover.1649659095.git.qinjian@cqplus1.com>
+ <f8d5675d1bc32962af6379f78a171ed35b181ebc.1649659095.git.qinjian@cqplus1.com>
+ <c2a7f2e0-1a21-bb0c-9221-c184cfaa3626@linaro.org>
+ <b1b85440f7d647a0adf014b091e31c10@cqplus1.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 13/16] mm/gup: disallow follow_page(FOLL_PIN)
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-14-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220329160440.193848-14-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b1b85440f7d647a0adf014b091e31c10@cqplus1.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,25 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 18:04, David Hildenbrand wrote:
-> We want to change the way we handle R/O pins on anonymous pages that
-> might be shared: if we detect a possibly shared anonymous page --
-> mapped R/O and not !PageAnonExclusive() -- we want to trigger unsharing
-> via a page fault, resulting in an exclusive anonymous page that can be
-> pinned reliably without getting replaced via COW on the next write
-> fault.
+On Thu, Apr 14, 2022 at 07:06:12AM +0000, qinjian[覃健] wrote:
 > 
-> However, the required page fault will be problematic for follow_page():
-> in contrast to ordinary GUP, follow_page() doesn't trigger faults
-> internally. So we would have to end up failing a R/O pin via
-> follow_page(), although there is something mapped R/O into the page
-> table, which might be rather surprising.
+> > > +#ifndef _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> > > +#define _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> > > +
+> > > +#define XTAL            27000000
+> > 
+> > This looks like frequency which usually does not belong to bindings. Why
+> > do you need it here?
+> > 
 > 
-> We don't seem to have follow_page(FOLL_PIN) users, and it's a purely
-> internal MM function. Let's just make our life easier and the semantics of
-> follow_page() clearer by just disallowing FOLL_PIN for follow_page()
-> completely.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> OK, I'll remove it.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+If that's the input frequency to the clock controller and it could 
+possibly change, then it should be defined in DT with a 'fixed-clock' 
+node and 'clocks' property in the clock controller.
+
+Rob
+

@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA0E50176D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BE650176E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236715AbiDNPgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S1345588AbiDNPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349957AbiDNOVc (ORCPT
+        with ESMTP id S1350007AbiDNOVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:21:32 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48001B82E2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:12:28 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d15so4720452pll.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=7EpAfNCEgcjmMHpykH3TTrAGaZYl2tMEUW4c00yTRbk=;
-        b=h4T2hdpkgg4QKMBMoMcADynwg/A6DzzCrtjGmEgj2Fi82w9eUKnEFLAYzEziAbFt0i
-         B7E3lW5t9uDWrEEkQUJHsD+lv0SaRayBvAQTLxIn6Uhx+mhQV6F2ZSlVHp6OU4hNVU8R
-         nfD/yqbhibiEMO8Nqlw7mWaRGuFtL3Ox+XPcIsrf3YI2uhW2RUV2PwqBcSjvL3dAOgOM
-         eJ6Z+7QZQayQ93Gynm5wF4G7bMV2R4ZSSud0Hu0wriFWWx48MyUwrBw75x5ZjMcwEEui
-         7NLq0pAtGiyp/7i8fFh531UY4+fec9AUsXoIdIzEo71L+9kpyS3am+V80rPp0oe0DS9f
-         aTOQ==
+        Thu, 14 Apr 2022 10:21:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FB86BD2C3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649945562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j1PUWoxND9yB/RqRBJNB2R/kkEVrgsT3WEOw5xZ9hqE=;
+        b=Nt2MaKwlGvnjl5bOyEEtGsRITCXyVBPlbjKjbFPitqLbXL9INs7SyQKnE5FvY4Xqmo7ZLF
+        y87eDiLY2s1LL45XmgQ1YQeCpRnkMoleL6ANxF/+i80MXrbQ38vYAIbP1a2ymEUVJPDI4u
+        wsFx6KzaA0xiDI1OmmN4224fADfXhvQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-4OraD1QlMHGUQuuyvBEbMg-1; Thu, 14 Apr 2022 10:12:41 -0400
+X-MC-Unique: 4OraD1QlMHGUQuuyvBEbMg-1
+Received: by mail-ed1-f72.google.com with SMTP id eg29-20020a056402289d00b0041d6db0fbc9so3084395edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:12:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=7EpAfNCEgcjmMHpykH3TTrAGaZYl2tMEUW4c00yTRbk=;
-        b=sZ5+4nBH8IKmGtqTo15RbHKxJE9A2m04B9IEVMexE29XduUSIwKrKfkXjfC21ytVdo
-         D0X117LS8gg2SPuaF0XeZp9rdYG8PPg1e6tQarN7TOxsTGKuqhxLCH2+KW2XHb6HY8W1
-         Tb67AZrJ4FFfYyVV/CMCel2JTWh8ZXOE1UFt+9lqGrulZpzrlBtS10pNb/NQsLBqlsi8
-         hO88+p+tvXhL520P5cddXJAWVMkTf1HqR03R52gbYbLoRQxZN0j/HDFf8HhajodnlPoe
-         zlZoc23iHrQt3cGBuVOcuVyXwvULkoKkotmiBjfb9PBd+QIASwQPiiVegfZYdLBlnlsZ
-         OLaw==
-X-Gm-Message-State: AOAM530Ab2bQfgAcGfXO2QpUJlpAME+7NR2kiqYBMu6zA6acHE+2Z3ao
-        pFmI6Ptd88weZUdCHDK7mfY=
-X-Google-Smtp-Source: ABdhPJylqSJGou81MV7kgJts2um3oarMvR48TsZvT5mqcQRgN2bKORRcwc8oFX4yUTHCWE3aj8lLGg==
-X-Received: by 2002:a17:902:ef47:b0:156:646b:58e7 with SMTP id e7-20020a170902ef4700b00156646b58e7mr46865578plx.57.1649945548405;
-        Thu, 14 Apr 2022 07:12:28 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004fae885424dsm137106pfx.72.2022.04.14.07.12.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 07:12:27 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 22:12:23 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
-Message-ID: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j1PUWoxND9yB/RqRBJNB2R/kkEVrgsT3WEOw5xZ9hqE=;
+        b=ye2pczJUj1UWLlbQSy/PEPR9eisTvy8vf08454UHRt8w9CSuSNOZoQQscV+jacR2YY
+         ezlhlPBBiXi2ZCrxKXn9NAqw2Wna1JA42hJ/cVp947L1URMdUt96zMUxYEfA2Otg/EQN
+         UC1qBWMA6S2GmGVsRW5dDY7lbQh+PezrBRZuuPtPwMu6AzU831qDYQ9w47euB4O/H0hK
+         14dt+biKGtJ0KDCh2mMOwdILXu4H0aAr4nBbCFMsD6QLbN5GV5E0ob+WIKm/PNYe++d8
+         V3cIBuHWvapMJd4yULDNpsdXgOB027g3IzA/x54j2BO8PKO+YmR+0HFfL78LX8nzFnBI
+         I+Rw==
+X-Gm-Message-State: AOAM5329KHvKi5/OqEPrdxJU1O+5BRp6p8rvmJmb1TVavBSpGBsfPBt7
+        QxnM36cZdqNlszZlxCoCCbOl2VqpgIAC9oJ7Q7IlDRTAMA0o/aXXLTdfDDtG9chmGufYJoNkjRb
+        4W0aA7qaEMk3HB1fEO6kDzT+a
+X-Received: by 2002:a17:907:d16:b0:6d6:e3b6:9cd8 with SMTP id gn22-20020a1709070d1600b006d6e3b69cd8mr2431086ejc.94.1649945560320;
+        Thu, 14 Apr 2022 07:12:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxzpmBaUrfDVV7d9ZOREkhEyKHyJVyB5pXUAJ4fe06+V64NEb8u+mjFbLOmP1i+mBi6Xh9zRQ==
+X-Received: by 2002:a17:907:d16:b0:6d6:e3b6:9cd8 with SMTP id gn22-20020a1709070d1600b006d6e3b69cd8mr2431066ejc.94.1649945560128;
+        Thu, 14 Apr 2022 07:12:40 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm672870ejm.188.2022.04.14.07.12.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 07:12:39 -0700 (PDT)
+Message-ID: <77699a19-65bd-5088-2f25-1be59364f5ee@redhat.com>
+Date:   Thu, 14 Apr 2022 16:12:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+Content-Language: en-US
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-4-jiangshanlai@gmail.com> <YlXrshJa2Sd1WQ0P@google.com>
+ <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+ <683974e7-5801-e289-8fa4-c8a8d21ec1b2@redhat.com>
+ <CAJhGHyCgo-FEgvuRfuLZikgJSyo7HGm1OfU3gme35-WBmqo7yQ@mail.gmail.com>
+ <658729a1-a4a1-a353-50d6-ef71e83a4375@redhat.com>
+ <CAJhGHyDYeQGUWmco=c4TA1uu=33ccW7z0fDLuYjvkGFW5WnDSQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAJhGHyDYeQGUWmco=c4TA1uu=33ccW7z0fDLuYjvkGFW5WnDSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the case that "requesttype == 0x01 && status <= 0"
-isn't handled in r8712_usbctrl_vendorreq(),
-"data" (drivers/staging/rtl8712/usb_ops.c:32)
-will be returned without initialization.
+On 4/14/22 13:06, Lai Jiangshan wrote:
+>> Right, but then load_pdptrs only needs to zap the page before (or
+>> instead of) calling kvm_mmu_free_roots().
+>>
+> 
+> Guest PAE page is write-protected instead now (see patch4) and
+> kvm_mmu_pte_write() needs to handle this special write operation
+> with respect to sp->pae_off (todo).
+> And load_pdptrs() doesn't need to check if the pdptrs are changed.
 
-When "tmpU1b" (drivers/staging/rtl8712/usb_intf.c:395)
-is 0, mac[6] (usb_intf.c:394) won't be initialized,
-which leads to accessing uninit-value on usb_intf.c:541.
+Write-protecting the PDPTR page is unnecessary, the PDPTRs cannot change 
+without another CR3.  That should be easy to do in account_shadowed and 
+unaccount_shadowed
 
-Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
----
- drivers/staging/rtl8712/usb_intf.c      |  6 +++---
- drivers/staging/rtl8712/usb_ops_linux.c | 14 ++++++++------
- 2 files changed, 11 insertions(+), 9 deletions(-)
+> I think role.guest_pae_root is needed to distinguish it from
+> a sp for a level-3 guest page in a 4-level pagetable.
+>
+> Or just role.guest_root_level(or role.root_level) and it can replace
+> role.passthrough_depth and role.guest_pae_root and role.pae_root.
 
-diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-index ee4c61f85a07..50dcd3ecb685 100644
---- a/drivers/staging/rtl8712/usb_intf.c
-+++ b/drivers/staging/rtl8712/usb_intf.c
-@@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
- 		} else {
- 			AutoloadFail = false;
- 		}
--		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
-+		if ((!AutoloadFail) ||
-+		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
- 		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
- 		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
- 		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
- 		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
--		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
--		     (!AutoloadFail)) {
-+		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
- 			mac[0] = 0x00;
- 			mac[1] = 0xe0;
- 			mac[2] = 0x4c;
-diff --git a/drivers/staging/rtl8712/usb_ops_linux.c b/drivers/staging/rtl8712/usb_ops_linux.c
-index f984a5ab2c6f..e321ca4453ca 100644
---- a/drivers/staging/rtl8712/usb_ops_linux.c
-+++ b/drivers/staging/rtl8712/usb_ops_linux.c
-@@ -495,12 +495,14 @@ int r8712_usbctrl_vendorreq(struct intf_priv *pintfpriv, u8 request, u16 value,
- 	}
- 	status = usb_control_msg(udev, pipe, request, reqtype, value, index,
- 				 pIo_buf, len, 500);
--	if (status > 0) {  /* Success this control transfer. */
--		if (requesttype == 0x01) {
--			/* For Control read transfer, we have to copy the read
--			 * data from pIo_buf to pdata.
--			 */
--			memcpy(pdata, pIo_buf,  status);
-+	/* For Control read transfer, copy the read data from pIo_buf to pdata
-+	 * when control transfer success; otherwise init *pdata with 0.
-+	 */
-+	if (requesttype == 0x01) {
-+		if (status > 0)
-+			memcpy(pdata, pIo_buf, status);
-+		else
-+			*(u32 *)pdata = 0;
- 		}
- 	}
- 	kfree(palloc_buf);
--- 
-2.33.1
+Yes, I agree.  Though this would also get change patch 1 substantially, 
+so I'll wait for you to respin.
+
+Paolo
 

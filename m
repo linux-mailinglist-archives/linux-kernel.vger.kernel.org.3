@@ -2,251 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3483D500CBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F53B500CBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242977AbiDNME4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S242984AbiDNMFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238797AbiDNMEy (ORCPT
+        with ESMTP id S242991AbiDNMFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:04:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83827BE38
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649937748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z3FMxX8GyVoS8mf6ZxYvPq6BenaD/e/QdsrS7P4PzMs=;
-        b=VghNnlGJ5Y+6ARhdv2X5z3j4n7GK1u+uKUVbWMAcGrRoYKc8zIYO+0JJtBMuzEchkNV33p
-        UF+D8Su/u9EZ3xWd3rY3FHUNs4kL/gNwS1ywUwx5YXtLoolCVtcHbb0l/0i7eJPBoKFCE7
-        N6R0suo+CG7rc33p24/eVm/EFVBTz8w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-534-c0RMrK6zPlGclMPSuRZRlQ-1; Thu, 14 Apr 2022 08:02:27 -0400
-X-MC-Unique: c0RMrK6zPlGclMPSuRZRlQ-1
-Received: by mail-wr1-f71.google.com with SMTP id p18-20020adf9592000000b00207bc12decbso513883wrp.21
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:02:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z3FMxX8GyVoS8mf6ZxYvPq6BenaD/e/QdsrS7P4PzMs=;
-        b=R/MChfKvdU9WMSbSZKCUF7gYIb/0T2LeRchk2AR8tGhap09HvNaKTzxrbL2/k7tEEo
-         Zj7y3lClOf8irES3AXvUwHwXjMF5B0UNLYVAEurEuU7hntzz5f93ySW1TwJWyAYSxoAW
-         0L4gVIBlKwoH60Ba81IrasUkk3+M136jNR9EkCOtMPH+/kqnzOa1jcdnNcSOsxybVQMX
-         kP8tRkxJ1mN8Dl+99mFm0alSIbJDgKmxXRYZ/cGAQY39FWq0PjUIQTbjiNw8UqmqNUEk
-         AhM0QDvYNRycY/oNTAkt7GmBBuwA5sX2O0bFvhHfg28VWXo6OM9JExsDJiqEmc2+wJj7
-         LcrQ==
-X-Gm-Message-State: AOAM532Bk8k3TUA9ypd4JkVNb2bZm3BewLhQr3Bg0tpr5zAXcoA17bjE
-        sUmR1n1L1+t5WT/J1Jp5CFKSl57h0Rdf7UBUyKVhBtA8S2VRqHZpDTYducj2NZqWqenEnnohSRp
-        o6gdmK4EBFDB/E27wCj3STMof
-X-Received: by 2002:a5d:434e:0:b0:207:a48e:a99a with SMTP id u14-20020a5d434e000000b00207a48ea99amr1881974wrr.250.1649937746189;
-        Thu, 14 Apr 2022 05:02:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwnemt8GV6C+iUV4Xujnf7yfMt3Y2E26lDSV3mnOBMJsHfd0I9Yp1JsK0iCHFs148mOqJpc6A==
-X-Received: by 2002:a5d:434e:0:b0:207:a48e:a99a with SMTP id u14-20020a5d434e000000b00207a48ea99amr1881947wrr.250.1649937745864;
-        Thu, 14 Apr 2022 05:02:25 -0700 (PDT)
-Received: from [10.33.192.232] (nat-pool-str-t.redhat.com. [149.14.88.106])
-        by smtp.gmail.com with ESMTPSA id n32-20020a05600c3ba000b0038ed068052fsm1920811wms.19.2022.04.14.05.02.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 05:02:25 -0700 (PDT)
-Message-ID: <20d27b46-fe1f-4a80-0dba-e0ce5df934c9@redhat.com>
-Date:   Thu, 14 Apr 2022 14:02:24 +0200
+        Thu, 14 Apr 2022 08:05:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F5B1DF;
+        Thu, 14 Apr 2022 05:02:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D557DB82930;
+        Thu, 14 Apr 2022 12:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B367FC385A8;
+        Thu, 14 Apr 2022 12:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649937762;
+        bh=8YmqxUbtiJbDtgg9GE40m6V0ysQjrfb2uFIJyqmLqcI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aKValRNE2RLplvHpyVdwwRamA2mKT9aTVateGdX2HoLuZagE+G5FXLXpoloKmXPbc
+         KVcuRq8V300NSWnoEGf6cvmsE4BqP1NXaJByx2krhez2MA1Oy7bAm75yZfWB6aBzDC
+         hhTt2T3U6iFMcRW8C0KqLm7viGUqoODEvf7GHSHHB70Y4oBfWnXE21MP0EgUdIP12l
+         zXMikHwRkRM686lIKdSKRHxDwSm3ecQ8kQUCDJ64PrExOI/5gRyhSpZx9AmsODJr59
+         8hzn2ih++hcfstxAffxw1tsagWoKan4Zd9IgQPztZOtsq1V897DYuz9fXnw14X+Dfn
+         B3o36TDjK/DLw==
+Date:   Thu, 14 Apr 2022 13:02:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/sme: Add hwcap for Scalable Matrix Extension
+Message-ID: <YlgNW0/ji6KlkyZo@sirena.org.uk>
+References: <20220414115544.36204-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/4] KVM: s390: selftests: Use TAP interface in the
- sync_regs test
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-References: <20220414105322.577439-1-thuth@redhat.com>
- <20220414105322.577439-3-thuth@redhat.com>
- <20220414133950.20a84eef@p-imbrenda>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220414133950.20a84eef@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+rYMHzJdtMjheiS/"
+Content-Disposition: inline
+In-Reply-To: <20220414115544.36204-1-tianjia.zhang@linux.alibaba.com>
+X-Cookie: Available while quantities last.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 13.39, Claudio Imbrenda wrote:
-> On Thu, 14 Apr 2022 12:53:20 +0200
-> Thomas Huth <thuth@redhat.com> wrote:
-> 
->> The sync_regs test currently does not have any output (unless one
->> of the TEST_ASSERT statement fails), so it's hard to say for a user
->> whether a certain new sub-test has been included in the binary or
->> not. Let's make this a little bit more user-friendly and include
->> some TAP output via the kselftests.h interface.
->> To be able to distinguish the different sub-tests more easily, we
->> also break up the huge main() function here in more fine grained
->> parts.
->>
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>   .../selftests/kvm/s390x/sync_regs_test.c      | 86 ++++++++++++++-----
->>   1 file changed, 65 insertions(+), 21 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
->> index caf7b8859a94..d5ddcbb82d12 100644
->> --- a/tools/testing/selftests/kvm/s390x/sync_regs_test.c
->> +++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
->> @@ -21,6 +21,7 @@
->>   #include "test_util.h"
->>   #include "kvm_util.h"
->>   #include "diag318_test_handler.h"
->> +#include "kselftest.h"
->>   
->>   #define VCPU_ID 5
->>   
->> @@ -74,27 +75,9 @@ static void compare_sregs(struct kvm_sregs *left, struct kvm_sync_regs *right)
->>   #define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS|KVM_SYNC_DIAG318)
->>   #define INVALID_SYNC_FIELD 0x80000000
->>   
->> -int main(int argc, char *argv[])
->> +void test_read_invalid(struct kvm_vm *vm, struct kvm_run *run)
->>   {
->> -	struct kvm_vm *vm;
->> -	struct kvm_run *run;
->> -	struct kvm_regs regs;
->> -	struct kvm_sregs sregs;
->> -	int rv, cap;
->> -
->> -	/* Tell stdout not to buffer its content */
->> -	setbuf(stdout, NULL);
->> -
->> -	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
->> -	if (!cap) {
->> -		print_skip("CAP_SYNC_REGS not supported");
->> -		exit(KSFT_SKIP);
->> -	}
->> -
->> -	/* Create VM */
->> -	vm = vm_create_default(VCPU_ID, 0, guest_code);
->> -
->> -	run = vcpu_state(vm, VCPU_ID);
->> +	int rv;
->>   
->>   	/* Request reading invalid register set from VCPU. */
->>   	run->kvm_valid_regs = INVALID_SYNC_FIELD;
->> @@ -110,6 +93,11 @@ int main(int argc, char *argv[])
->>   		    "Invalid kvm_valid_regs did not cause expected KVM_RUN error: %d\n",
->>   		    rv);
->>   	vcpu_state(vm, VCPU_ID)->kvm_valid_regs = 0;
->> +}
->> +
->> +void test_set_invalid(struct kvm_vm *vm, struct kvm_run *run)
->> +{
->> +	int rv;
->>   
->>   	/* Request setting invalid register set into VCPU. */
->>   	run->kvm_dirty_regs = INVALID_SYNC_FIELD;
->> @@ -125,6 +113,13 @@ int main(int argc, char *argv[])
->>   		    "Invalid kvm_dirty_regs did not cause expected KVM_RUN error: %d\n",
->>   		    rv);
->>   	vcpu_state(vm, VCPU_ID)->kvm_dirty_regs = 0;
->> +}
->> +
->> +void test_req_and_verify_all_valid_regs(struct kvm_vm *vm, struct kvm_run *run)
->> +{
->> +	struct kvm_sregs sregs;
->> +	struct kvm_regs regs;
->> +	int rv;
->>   
->>   	/* Request and verify all valid register sets. */
->>   	run->kvm_valid_regs = TEST_SYNC_FIELDS;
->> @@ -146,6 +141,13 @@ int main(int argc, char *argv[])
->>   
->>   	vcpu_sregs_get(vm, VCPU_ID, &sregs);
->>   	compare_sregs(&sregs, &run->s.regs);
->> +}
->> +
->> +void test_set_and_verify_various_reg_values(struct kvm_vm *vm, struct kvm_run *run)
->> +{
->> +	struct kvm_sregs sregs;
->> +	struct kvm_regs regs;
->> +	int rv;
->>   
->>   	/* Set and verify various register values */
->>   	run->s.regs.gprs[11] = 0xBAD1DEA;
->> @@ -180,6 +182,11 @@ int main(int argc, char *argv[])
->>   
->>   	vcpu_sregs_get(vm, VCPU_ID, &sregs);
->>   	compare_sregs(&sregs, &run->s.regs);
->> +}
->> +
->> +void test_clear_kvm_dirty_regs_bits(struct kvm_vm *vm, struct kvm_run *run)
->> +{
->> +	int rv;
->>   
->>   	/* Clear kvm_dirty_regs bits, verify new s.regs values are
->>   	 * overwritten with existing guest values.
->> @@ -200,8 +207,45 @@ int main(int argc, char *argv[])
->>   	TEST_ASSERT(run->s.regs.diag318 != 0x4B1D,
->>   		    "diag318 sync regs value incorrect 0x%llx.",
->>   		    run->s.regs.diag318);
->> +}
->> +
->> +struct testdef {
->> +	const char *name;
->> +	void (*test)(struct kvm_vm *vm, struct kvm_run *run);
->> +} testlist[] = {
->> +	{ "read invalid", test_read_invalid },
->> +	{ "set invalid", test_set_invalid },
->> +	{ "request+verify all valid regs", test_req_and_verify_all_valid_regs },
->> +	{ "set+verify various regs", test_set_and_verify_various_reg_values },
->> +	{ "clear kvm_dirty_regs bits", test_clear_kvm_dirty_regs_bits },
->> +};
->> +
->> +int main(int argc, char *argv[])
->> +{
->> +	static struct kvm_run *run;
->> +	static struct kvm_vm *vm;
->> +	int idx;
->> +
->> +	/* Tell stdout not to buffer its content */
->> +	setbuf(stdout, NULL);
->> +
->> +	if (!kvm_check_cap(KVM_CAP_SYNC_REGS))
->> +		ksft_exit_skip("CAP_SYNC_REGS not supported");
-> 
-> I'm not an expert on the TAP format, but wouldn't it be more meaningful
-> to print the header first? (like you do in the previous patch)
 
-It shouldn't matter much, without the header, TAP version 12 will be used:
+--+rYMHzJdtMjheiS/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  https://testanything.org/tap-specification.html
+On Thu, Apr 14, 2022 at 07:55:44PM +0800, Tianjia Zhang wrote:
 
-With header, it switches to version 13:
+> Allow userspace to detect support for SME (Scalable Matrix Extension)
+> by providing a hwcap for it, using the official feature name FEAT_SME,
+> declared in ARM DDI 0487H.a specification.
 
-  https://testanything.org/tap-version-13-specification.html
+There's already a hwcap for the core feature and all the subfeatures
+added as part of the series I've been posting for SME:
 
-But the "1..0" lines (which signal a complete skip) are part of both 
-versions, so we should be fine here.
+   https://lore.kernel.org/linux-arm-kernel/20220408114328.1401034-1-broonie@kernel.org/
 
-(but I can also move it in case I have to respin anyway)
+Why add something independently, especially given that there is no way
+for userspace to do anything constructive with the feature without the
+rest of the kernel support?  Any attempt to use SME instructions without
+kernel support will trap and generate a SIGILL even if the feature is
+present in hardware.
 
-  Thomas
+Do you have a system with SME that you're trying to use?  Review/testing
+on the current series would be appreciated.
 
+--+rYMHzJdtMjheiS/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJYDVoACgkQJNaLcl1U
+h9C6fwf/dCBmg/zhXRJuqkE6TkDJhHFIVir86wHs+dD172jNkEN03cI131CuQrlc
+rot+y4RI9226F9cCcLAdUmywlicGsMbHujJyKF2C0oG5MoKZ6FuiR4Z3RNymubzE
+oE7BQZ7iHR3hHZF1mkH9pYkuUm4by/jnGwurrxN5oUpum1p1+CsyWWPuytdMRfBh
+n3vf+v1Su7WvNZCmwOu7geR+JysQnVTOEzgU9VSnkUU2sDLUaADc1LXEvNGl3Wmr
+6i8V27uiy3DmzdNH7PU4J7m/Uv3ANOS4K+mkzS0SOkEa0MmvgxIiJtgDQupe6XsG
+9B+81gF30PY0rmuIQe2l3iG91D1BPg==
+=dqIZ
+-----END PGP SIGNATURE-----
+
+--+rYMHzJdtMjheiS/--

@@ -2,119 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767645018BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD36D5018B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiDNQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S236641AbiDNQfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239452AbiDNQeg (ORCPT
+        with ESMTP id S232479AbiDNQen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:34:36 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB26DF1EB1;
-        Thu, 14 Apr 2022 09:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=XNjGhdRc5rgm9FzJSGOEdNif3xZg8UrHYjqABxVus/c=; b=LOXPXb4yWDQhvDn6IVISE4zjvL
-        oyuO1vIPwaFqgLqlyhd7g9vuHEeK35IqKEI1JCt4JiLRH4L/tcP3g9p9IBUhGjgI1z8ipBLyrxki8
-        v+aFvc6EI97OwOF11f5onuj1KxHxJ2aV2hT1j43mBFQvaQJCD2L4ogtebYIk0VlLLwxlQXesMP655
-        MlUxYdejpEobFsL2JmqnVwlO0LvY7ZyTF1+fUqE8+3Cn5xafqJu4UjVAKjon9frz5/esQFOXY6gUd
-        vqFMzjFmY66GmavTi4wFJzzBVTem28rTEXabT+UTXjyalf/jMTjD6b2tT6WO7rKHOQwog8NW1t3CG
-        yRnNUCkw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nf1vB-0053Wm-Ud; Thu, 14 Apr 2022 16:02:14 +0000
-Message-ID: <5f2712c2-9fc1-679d-b196-e7b7f8f4540d@infradead.org>
-Date:   Thu, 14 Apr 2022 09:02:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 4.19 003/338] hv: utils: add PTP_1588_CLOCK to Kconfig to
- fix build
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Thu, 14 Apr 2022 12:34:43 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13973B89
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:03:19 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so9675410pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gYZcqKE4gPDeEOq6vTanVgpcbt838PrfODIBOARgOwI=;
+        b=4vuqFuX1dWiC5cbQZSo/4Nymm/397TPgn4uZnwxpIHvo7WmsxxQEWcubR+78H9RGkS
+         tqwbnVO6dIGbhVLHh4EcXCkn4PtpZgmVDO8AjkKEKTV+6FOzUGn9o9QzQsE3usQ1Pv8+
+         A9YQHbxVWcxkYB6k98I7dBsIpti/5SF3Vd0xVmKorRrldBywq40dJWsbeFlknWApg2WJ
+         VF9COUCF7DFhm4zkTc3pYEI22QCZF15AThM2bok7ptikUiJT8gV3Sb597vhM9fPDGC7N
+         KqKPx1caag9BIPESKDcKIGKf/EYsZ1xaK5/NXpz7hLRVNX5sx35CNbqmuUJ15M2dk1pY
+         5TZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gYZcqKE4gPDeEOq6vTanVgpcbt838PrfODIBOARgOwI=;
+        b=lyeTLw9oBcwfHBEfaSCQr7gVPD0vLH17XFfBsLmUYcjtEUOHZ6bXqRqI13qKvwmEfP
+         2C+/w1oy3tXH6bFGTJQLBFe/hrTrcyre2q+Z6FGgFalfQ9RI/ZsoF6uP7nnZwrtUqt68
+         gmvmDJZ4/qccjsKuGlSKYip3usAV7XDdErDQwo8NG/DQGr2GcDMJbQtMQw5ApWDlLkvS
+         9xqoEwMsqi1l0Oy4vuEVLmdUCWE9KOPIxos1rM4lEzk72iNV2ggxFV9mXkG56IWufvwr
+         gdGJwTLGHnYRfcLyzw1zNhoYf65r8ibX28EM/OA8ZXRvVRoLRRZHnRyaoMngqCPxEcuL
+         PNPA==
+X-Gm-Message-State: AOAM5308DKQva9kHWzeVuEtJWTh/f4LKlk2Zm7XL4qflTx1mncGcuueR
+        LTksSDhYhQwlwhsTrRVwVWpC9g==
+X-Google-Smtp-Source: ABdhPJxwpB4OEHYX+HrxFPLkb3cIMhFw8/1arc2ZYfNvjukO2q+K0xJUf8EeHiI49j7WNtRMHneGWQ==
+X-Received: by 2002:a17:902:854c:b0:158:35ce:9739 with SMTP id d12-20020a170902854c00b0015835ce9739mr26794439plo.150.1649952198568;
+        Thu, 14 Apr 2022 09:03:18 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm2310922pgn.72.2022.04.14.09.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 09:03:17 -0700 (PDT)
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     netdev@vger.kernel.org
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Shachar Raindel <shacharr@microsoft.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Dimitris Michailidis <d.michailidis@fungible.com>,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Dexuan Cui <decui@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        =?UTF-8?Q?Petr_=c5=a0tetiar?= <ynezz@true.cz>
-References: <20220414110838.883074566@linuxfoundation.org>
- <20220414110838.987014792@linuxfoundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220414110838.987014792@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] net: restore alpha order to Ethernet devices in config
+Date:   Thu, 14 Apr 2022 09:03:12 -0700
+Message-Id: <20220414160315.105212-1-stephen@networkplumber.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The displayed list of Ethernet devices in make menuconfig
+has gotten out of order. This is mostly due to changes in vendor
+names etc, but also because of new Microsoft entry in wrong place.
 
+This restores so that the display is in order even if the names
+of the sub directories are not.
 
-On 4/14/22 06:08, Greg Kroah-Hartman wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
-> 
-> commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 upstream.
-> 
-> The hyperv utilities use PTP clock interfaces and should depend a
-> a kconfig symbol such that they will be built as a loadable module or
-> builtin so that linker errors do not happen.
-> 
-> Prevents these build errors:
-> 
-> ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
-> hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
-> ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
-> hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
-> 
-> Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: linux-hyperv@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> Cc: Petr Štetiar <ynezz@true.cz>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/hv/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- a/drivers/hv/Kconfig
-> +++ b/drivers/hv/Kconfig
-> @@ -16,6 +16,7 @@ config HYPERV_TSCPAGE
->  config HYPERV_UTILS
->  	tristate "Microsoft Hyper-V Utilities driver"
->  	depends on HYPERV && CONNECTOR && NLS
-> +	depends on PTP_1588_CLOCK_OPTIONAL
->  	help
->  	  Select this option to enable the Hyper-V Utilities.
+Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
+Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+---
+ drivers/net/ethernet/Kconfig | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-Please drop this one also. PTP_1588_CLOCK_OPTIONAL is not present
-in 4.x kernels.
-
-Sorry for the problem.
-
+diff --git a/drivers/net/ethernet/Kconfig b/drivers/net/ethernet/Kconfig
+index bd4cb9d7c35d..827993022386 100644
+--- a/drivers/net/ethernet/Kconfig
++++ b/drivers/net/ethernet/Kconfig
+@@ -35,15 +35,6 @@ source "drivers/net/ethernet/aquantia/Kconfig"
+ source "drivers/net/ethernet/arc/Kconfig"
+ source "drivers/net/ethernet/asix/Kconfig"
+ source "drivers/net/ethernet/atheros/Kconfig"
+-source "drivers/net/ethernet/broadcom/Kconfig"
+-source "drivers/net/ethernet/brocade/Kconfig"
+-source "drivers/net/ethernet/cadence/Kconfig"
+-source "drivers/net/ethernet/calxeda/Kconfig"
+-source "drivers/net/ethernet/cavium/Kconfig"
+-source "drivers/net/ethernet/chelsio/Kconfig"
+-source "drivers/net/ethernet/cirrus/Kconfig"
+-source "drivers/net/ethernet/cisco/Kconfig"
+-source "drivers/net/ethernet/cortina/Kconfig"
+ 
+ config CX_ECAT
+ 	tristate "Beckhoff CX5020 EtherCAT master support"
+@@ -57,6 +48,14 @@ config CX_ECAT
+ 	  To compile this driver as a module, choose M here. The module
+ 	  will be called ec_bhf.
+ 
++source "drivers/net/ethernet/broadcom/Kconfig"
++source "drivers/net/ethernet/cadence/Kconfig"
++source "drivers/net/ethernet/calxeda/Kconfig"
++source "drivers/net/ethernet/cavium/Kconfig"
++source "drivers/net/ethernet/chelsio/Kconfig"
++source "drivers/net/ethernet/cirrus/Kconfig"
++source "drivers/net/ethernet/cisco/Kconfig"
++source "drivers/net/ethernet/cortina/Kconfig"
+ source "drivers/net/ethernet/davicom/Kconfig"
+ 
+ config DNET
+@@ -85,7 +84,6 @@ source "drivers/net/ethernet/huawei/Kconfig"
+ source "drivers/net/ethernet/i825xx/Kconfig"
+ source "drivers/net/ethernet/ibm/Kconfig"
+ source "drivers/net/ethernet/intel/Kconfig"
+-source "drivers/net/ethernet/microsoft/Kconfig"
+ source "drivers/net/ethernet/xscale/Kconfig"
+ 
+ config JME
+@@ -128,8 +126,9 @@ source "drivers/net/ethernet/mediatek/Kconfig"
+ source "drivers/net/ethernet/mellanox/Kconfig"
+ source "drivers/net/ethernet/micrel/Kconfig"
+ source "drivers/net/ethernet/microchip/Kconfig"
+-source "drivers/net/ethernet/moxa/Kconfig"
+ source "drivers/net/ethernet/mscc/Kconfig"
++source "drivers/net/ethernet/microsoft/Kconfig"
++source "drivers/net/ethernet/moxa/Kconfig"
+ source "drivers/net/ethernet/myricom/Kconfig"
+ 
+ config FEALNX
+@@ -141,10 +140,10 @@ config FEALNX
+ 	  Say Y here to support the Myson MTD-800 family of PCI-based Ethernet
+ 	  cards. <http://www.myson.com.tw/>
+ 
++source "drivers/net/ethernet/ni/Kconfig"
+ source "drivers/net/ethernet/natsemi/Kconfig"
+ source "drivers/net/ethernet/neterion/Kconfig"
+ source "drivers/net/ethernet/netronome/Kconfig"
+-source "drivers/net/ethernet/ni/Kconfig"
+ source "drivers/net/ethernet/8390/Kconfig"
+ source "drivers/net/ethernet/nvidia/Kconfig"
+ source "drivers/net/ethernet/nxp/Kconfig"
+@@ -164,6 +163,7 @@ source "drivers/net/ethernet/packetengines/Kconfig"
+ source "drivers/net/ethernet/pasemi/Kconfig"
+ source "drivers/net/ethernet/pensando/Kconfig"
+ source "drivers/net/ethernet/qlogic/Kconfig"
++source "drivers/net/ethernet/brocade/Kconfig"
+ source "drivers/net/ethernet/qualcomm/Kconfig"
+ source "drivers/net/ethernet/rdc/Kconfig"
+ source "drivers/net/ethernet/realtek/Kconfig"
+@@ -171,10 +171,10 @@ source "drivers/net/ethernet/renesas/Kconfig"
+ source "drivers/net/ethernet/rocker/Kconfig"
+ source "drivers/net/ethernet/samsung/Kconfig"
+ source "drivers/net/ethernet/seeq/Kconfig"
+-source "drivers/net/ethernet/sfc/Kconfig"
+ source "drivers/net/ethernet/sgi/Kconfig"
+ source "drivers/net/ethernet/silan/Kconfig"
+ source "drivers/net/ethernet/sis/Kconfig"
++source "drivers/net/ethernet/sfc/Kconfig"
+ source "drivers/net/ethernet/smsc/Kconfig"
+ source "drivers/net/ethernet/socionext/Kconfig"
+ source "drivers/net/ethernet/stmicro/Kconfig"
 -- 
-~Randy
+2.35.1
+

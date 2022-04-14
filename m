@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AF8501689
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83255015D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240767AbiDNPCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S1344982AbiDNNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346518AbiDNN52 (ORCPT
+        with ESMTP id S1344074AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911CE7F224;
-        Thu, 14 Apr 2022 06:46:57 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0528BE80;
+        Thu, 14 Apr 2022 06:27:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46212B82986;
-        Thu, 14 Apr 2022 13:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A5EC385A5;
-        Thu, 14 Apr 2022 13:46:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94BA460C14;
+        Thu, 14 Apr 2022 13:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798DDC385A5;
+        Thu, 14 Apr 2022 13:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944014;
-        bh=RHNxGL7bcbwJZEtC99Uv4qm7qx/UvaOnhh+E7nDBd/I=;
+        s=korg; t=1649942856;
+        bh=aHK5wxk0SLdxv9PPPG+tllBNNnQqv2K6I4/kn/MaBC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PJU+Knla58A3dpAopwckhUp9sXdjuu1lQxCIIfRClSMXYTIJ25CRNrKr5za1vJGo7
-         /rx0MnqoWVPTh4GEoYXtEYbSzIctyg+Gpom1JIzTcTzWPAY0fL1lHNayKP6xtfuN/l
-         XrfN+HKRiunGDzwfBpwAK2fXD5C0E6pMaJeB1Q5c=
+        b=XEAE5TMnyTKWDLTrF+q7sUVM8slDKu2BSMtBmTTDgj2PXJOvH0MwzGlc6cxGb04+T
+         RpMwE6oF6bTvPdVAL189h/XXufLSHWFQdsQlsjZjaVeaME0RTlYB7G186rjgC8Qe/2
+         bwiXR/O4ycLyOMrjnS9fWEbVwbRh2PrublomMNlM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.4 364/475] um: Fix uml_mconsole stop/go
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.19 246/338] mm/memcontrol: return 1 from cgroup.memory __setup() handler
 Date:   Thu, 14 Apr 2022 15:12:29 +0200
-Message-Id: <20220414110905.266701449@linuxfoundation.org>
+Message-Id: <20220414110845.892498241@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 1a3a6a2a035bb6c3a7ef4c788d8fd69a7b2d6284 upstream.
+commit 460a79e18842caca6fa0c415de4a3ac1e671ac50 upstream.
 
-Moving to an EPOLL based IRQ controller broke uml_mconsole stop/go
-commands. This fixes it and restores stop/go functionality.
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; it just pollutes init's
+environment).
 
-Fixes: ff6a17989c08 ("Epoll based IRQ controller")
-Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+The only reason that this particular __setup handler does not pollute
+init's environment is that the setup string contains a '.', as in
+"cgroup.memory".  This causes init/main.c::unknown_boottoption() to
+consider it to be an "Unused module parameter" and ignore it.  (This is
+for parsing of loadable module parameters any time after kernel init.)
+Otherwise the string "cgroup.memory=whatever" would be added to init's
+environment strings.
+
+Instead of relying on this '.' quirk, just return 1 to indicate that the
+boot option has been handled.
+
+Note that there is no warning message if someone enters:
+	cgroup.memory=anything_invalid
+
+Link: https://lkml.kernel.org/r/20220222005811.10672-1-rdunlap@infradead.org
+Fixes: f7e1cb6ec51b0 ("mm: memcontrol: account socket memory in unified hierarchy memory controller")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/um/drivers/mconsole_kern.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/memcontrol.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/um/drivers/mconsole_kern.c
-+++ b/arch/um/drivers/mconsole_kern.c
-@@ -217,7 +217,7 @@ void mconsole_go(struct mc_request *req)
- 
- void mconsole_stop(struct mc_request *req)
- {
--	deactivate_fd(req->originating_fd, MCONSOLE_IRQ);
-+	block_signals();
- 	os_set_fd_block(req->originating_fd, 1);
- 	mconsole_reply(req, "stopped", 0, 0);
- 	for (;;) {
-@@ -240,6 +240,7 @@ void mconsole_stop(struct mc_request *re
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6404,7 +6404,7 @@ static int __init cgroup_memory(char *s)
+ 		if (!strcmp(token, "nokmem"))
+ 			cgroup_memory_nokmem = true;
  	}
- 	os_set_fd_block(req->originating_fd, 0);
- 	mconsole_reply(req, "", 0, 0);
-+	unblock_signals();
+-	return 0;
++	return 1;
  }
+ __setup("cgroup.memory=", cgroup_memory);
  
- static DEFINE_SPINLOCK(mc_devices_lock);
 
 

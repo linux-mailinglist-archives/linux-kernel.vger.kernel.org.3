@@ -2,103 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D6450081D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6FC500820
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240508AbiDNITb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S240491AbiDNIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiDNITa (ORCPT
+        with ESMTP id S233330AbiDNIVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:19:30 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A7F49F0A;
-        Thu, 14 Apr 2022 01:17:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649924196; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=AsbspUXkFkn8IT+0dQO6+nAUIXZBWkX3UudduNXGRNXTpwpnad/24gTpkZXU4e6kWLvaXBOd/lXqB01ovdbEgANQtvnESnkRDfYFuKhg2SSP4d/EP9pz65ddBIJNdyc+dzYuysdpUxSAmO7Eqh2iQltHsZvJqWTJlD6reeyq8NM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649924196; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=DX3FsxaeKDI941g7IHym5WqsNB7za3Lzp+oTtlBrdg0=; 
-        b=VwazXdxxgsDKh5PXsOfE7N4+KzRmOBXQMiVIWkJevXYM+/0pQv23rogmj3atN9ktfwu4KlwVI9aXCshk+2M53vfd+GKuGdiUKGFaveHFX1Ap1R1gyER/F2oJOOs1LQHCJjiU6DNwLWEn5oK3zl4MAy4p97STQwg+4/Y9aUlx/Hw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649924196;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=DX3FsxaeKDI941g7IHym5WqsNB7za3Lzp+oTtlBrdg0=;
-        b=ezOkLB+TYbDZluCEVnRi6RdNfdJBhCMxcsg4a//QBZID7wwzpWbfkbzstNRnWgtG
-        sOk3kAm0FrDmrWAEG996iSmrMTmmlk1OIGMYSpX53Vi7pbnqj6r2Xa7NvFepsC3paGc
-        bikhviBTfHCnxO8C3+s1dvim9mleWqsUql/olEkg=
-Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649924194390779.7996201062704; Thu, 14 Apr 2022 01:16:34 -0700 (PDT)
-Message-ID: <1023e28e-6523-ea3a-7ac7-fe1d08e5e67f@arinc9.com>
-Date:   Thu, 14 Apr 2022 11:16:27 +0300
+        Thu, 14 Apr 2022 04:21:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BAF53E32;
+        Thu, 14 Apr 2022 01:18:54 -0700 (PDT)
+X-UUID: 459a53c71c984665960a7f6183dc996d-20220414
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:e81c5580-aadf-4766-a885-d550ae18b7f9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:e81c5580-aadf-4766-a885-d550ae18b7f9,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:56345d78-0afa-4dca-bdec-ca54c998425a,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 459a53c71c984665960a7f6183dc996d-20220414
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 287361542; Thu, 14 Apr 2022 16:18:48 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 14 Apr 2022 16:18:47 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
+ 2022 16:18:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 16:18:46 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <alice.chao@mediatek.com>
+CC:     <Chaotian.Jing@mediatek.com>, <Chun-hung.Wu@mediatek.com>,
+        <Lin.Gui@mediatek.com>, <Powen.Kao@mediatek.com>,
+        <Qilin.Tan@mediatek.com>, <Yanxu.Wei@mediatek.com>,
+        <cc.chou@mediatek.com>, <jejb@linux.ibm.com>,
+        <jiajie.hao@mediatek.com>, <jonathan.hsu@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <wsd_upstream@mediatek.com>
+Subject: Re: [PATCH v2 1/1] scsi: Fix racing between dev init and dev reset
+Date:   Thu, 14 Apr 2022 16:18:46 +0800
+Message-ID: <20220414081846.31356-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <7ad2e7fc39ce0d2b145f651d530d157c67c04f29.camel@mediatek.com>
+References: <7ad2e7fc39ce0d2b145f651d530d157c67c04f29.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 11/14] dt-bindings: pinctrl: add binding for Ralink MT7620
- pinctrl
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-12-arinc.unal@arinc9.com>
- <41fa58ee-728b-7f0d-eea7-448c59641d85@linaro.org>
- <0dd1da16-232b-d634-3146-bf91e58c9543@arinc9.com>
- <02953ce1-0a43-5918-d139-35afd5f15b5b@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <02953ce1-0a43-5918-d139-35afd5f15b5b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 09:33, Krzysztof Kozlowski wrote:
-> On 14/04/2022 03:52, Arınç ÜNAL wrote:
->>>
->>>> +  is not supported. There is no pinconf support.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: ralink,mt7620-pinctrl
->>>> +
->>>> +patternProperties:
->>>> +  '-pins$':
->>>> +    type: object
->>>> +    patternProperties:
->>>> +      '^(.*-)?pinmux$':
->>>
->>> Why do you have two levels here? pins->pinmux->actual pin configuration?
->>
->> Yes, pins->pinmux->pin-configuration is currently how it's done.
-> 
-> It is currently done? Aren't you bringing here new bindings and new
-> driver support?
+Hi Alice, 
 
-I'm submitting bindings for the existing subdrivers. There's nothing new 
-but refactoring and submitting the missing bindings.
+>Hi Miles,
+>
+>On Wed, 2022-03-09 at 07:23 +0800, Miles Chen wrote:
+>> Hi Alice,
+>> 
+>> Thanks for your patch. I have some questions.
+>> 
+>> > Device reset thread uses kobject_uevent_env() to get kobj.parent
+>> > after scsi_evt_emit(), and it races with device init thread which
+>> > calls device_add() to create kobj.parent before
+>> > kobject_uevent_env().
+>> > 
+>> > Device reset call trace:
+>> > fill_kobj_path
+>> > kobject_get_path
+>> > kobject_uevent_env
+>> > scsi_evt_emit			<- add wait_event()
+>> > scsi_evt_thread
+>> > 
+>> > Device init call trace:
+>> > fill_kobj_path
+>> > kobject_get_path
+>> > kobject_uevent_env
+>> > device_add				<- create kobj.parent
+>> > scsi_target_add
+>> > scsi_sysfs_add_sdev
+>> > scsi_add_lun
+>> > scsi_probe_and_add_lun
+>> 
+>> These are backtraces, and the things above looks like your solution,
+>> not
+>> the problem.
+>> It's better to describe the problem first and solution later:
+>> 
+>> Device init call:                              Device reset call:   
+>> scsi_probe_and_add_lun()                       scsi_evt_thread()
+>>   scsi_add_lun()
+>>     scsi_sysfs_add_sdev()                        scsi_evt_emit()
+>>       scsi_target_add()                            kobject_uevent_env
+>> () 
+>>         device_add()                                 kobject_get_path
+>> () // something wrong?
+>> 	                                               fill_kobj_path()
+>> 	  get_device_parent() // I see a get, not create parent kobj,
+>> could you show me that point?
+>> 	  kobject_uevent()
+>>             kobject_uevent_env()
+>>               kobject_get_path()
+>>                 fill_kobj_path()
+>> 
+>
+>Device init call:	   Device reset call:
+>scsi_probe_and_add_lun()   scsi_evt_thread()
+>  scsi_add_lun()	    scsi_evt_emit()
+>   scsi_sysfs_add_sdev()     kobject_uevent_env() //get kobj.parent
+>    scsi_target_add()	      kobject_get_path() //get wrong
+>kobj.parent     device_add() // add kobj.parent  fill_kobj_path()
+>      kobject_uevent_env()
+>       kobject_get_path()
+>        fill_kobj_path()
+>Above backtrace describes the problem, device reset thread will get
+>wrong kobj.parent when device init thread didn’t add kobj.parent yet.
 
-Cheers.
-Arınç
+Thanks for sharing the error log, I think it is clearer this way:
+
+Device init call:	           Device reset call:
+scsi_probe_and_add_lun()              scsi_evt_thread()
+  scsi_add_lun()	                scsi_evt_emit()
+   scsi_sysfs_add_sdev()                  kobject_uevent_env() //get kobj.parent
+    scsi_target_add()	                    kobject_get_path()
+                                              len = get_kobj_path_length () // len=1 because parent is not create yet     
+    device_add() // add kobj.parent               
+      kobject_uevent_env()                 
+       kobject_get_path()                     path = kzalloc()
+        fill_kobj_path()	              fill_kobj_path() // --length; length -= cur is a negative value
+	                                        memcpy(path + length, kobject_name(parent), cur); // slab OOB!
+
+Now I understood this slab OOB issue, please add the kasan log and the
+analysis to the commit message so the maintainers can see it and help.
+
+>
+>> > 
+>> > These two jobs are scheduled asynchronously, we can't guaranteed
+>> > that
+>> > kobj.parent will be created in device init thread before device
+>> > reset
+>> > thread calls kobj_get_path().
+>> 
+>> What happens if device reset thread calls kobj_get_path() before
+>> kobj.parent's
+>> creation? a crash or something?
+>> 
+>
+>It will cause slab-out-of-bounds in kobject_get_path and kernel panic
+>than crash.
+
+Okay, please add the KASAN slab-out-of-bounds error in the commit message.
+
+Thanks,
+Miles
+>
+>> > 
+>> > To resolve the racing issue between device init thread and device
+>> > reset thread, we use wait_event() in scsi_evt_emit() to wait for
+>> > device_add() to complete the creation of kobj.parent.
+>> > 
+>> > Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+>> 
+>> When we send patch N+1, we have to put the change log between patch
+>> v1 to vN
+>> under a "---", so others can understand the changes between patch N
+>> and N+1.
+>> e.g.,
+>> 
+>> ---
+>> 
+>> Change since v1
+>> - remove Change-Id
+>> 
+>> > ---
+>> >  drivers/scsi/scsi_lib.c  | 1 +
+>> >  drivers/scsi/scsi_scan.c | 1 +
+>> >  2 files changed, 2 insertions(+)
+>> > 
+>> > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+>> > index 0a70aa763a96..abf9a71ed77c 100644
+>> > --- a/drivers/scsi/scsi_lib.c
+>> > +++ b/drivers/scsi/scsi_lib.c
+>> > @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device
+>> > *sdev, struct scsi_event *evt)
+>> >  		break;
+>> >  	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
+>> >  		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
+>> > +		wait_event(sdev->host->host_wait, sdev-
+>> > >sdev_gendev.kobj.parent != NULL);
+>> >  		break;
+>> >  	default:
+>> >  		/* do nothing */
+>> > diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+>> > index f4e6c68ac99e..431f229ac435 100644
+>> > --- a/drivers/scsi/scsi_scan.c
+>> > +++ b/drivers/scsi/scsi_scan.c
+>> > @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct
+>> > Scsi_Host *shost)
+>> >  	} else {
+>> >  		scsi_scan_host_selected(shost, SCAN_WILD_CARD,
+>> > SCAN_WILD_CARD,
+>> >  				SCAN_WILD_CARD, 0);
+>> > +		wake_up(&shost->host_wait);
+>> 
+>> do_scsi_scan_host() is not in the call trace above, could you show
+>> the relationship
+>> of do_scsi_scan_host in the call flow?
+>> 
+>
+>ufshcd_async_scan()
+>scsi_scan_host()
+>do_scsi_scan_host()  << here
+>scsi_scan_host_selected()
+> __scsi_scan_target()
+>scsi_probe_and_add_lun()
+>scsi_sysfs_add_sdev()
+>device_add()
+>kobject_uevent_env()
+>kobject_get_path()
+>fill_kobj_path()
+>
+>After we add wake_up here, we can ensure that device reset thread will
+>get kobject after device init thread finishes adding parent.
+>
+>> thanks,
+>> Miles
+>> 
+>> >  	}
+>> >  }
+>
+>

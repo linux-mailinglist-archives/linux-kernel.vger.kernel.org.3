@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BACE5011F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09C850114F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242826AbiDNOEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S243071AbiDNNrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343642AbiDNN3o (ORCPT
+        with ESMTP id S1343648AbiDNN3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4817AFB37;
-        Thu, 14 Apr 2022 06:25:05 -0700 (PDT)
+        Thu, 14 Apr 2022 09:29:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F969F6D1;
+        Thu, 14 Apr 2022 06:25:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5120E61B18;
-        Thu, 14 Apr 2022 13:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABA1C385A5;
-        Thu, 14 Apr 2022 13:25:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAFD5B82985;
+        Thu, 14 Apr 2022 13:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4855CC385A1;
+        Thu, 14 Apr 2022 13:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942704;
-        bh=y/6QWyHJQWMox/n6yuWOD0Hy6obv+LdOOes8hW9Ekn4=;
+        s=korg; t=1649942707;
+        bh=+xgV+ndEiDs9HMQaiNCFsXJgrETfEDgoKXWrlaoOwXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vZeNGa8FmbXZ8FcHyTj42DhM1BPDoCBbL+hpq5lgfpFxjISCefvkZ0ilb2TufRA78
-         Q01we3nQ4e+5TN+yiREZwH36W2OEsXD+F9lRID0ink1RaOv6pnwRhSpo8pmtXg4flb
-         hmiDtsLN3iAEzwZJLxuu2Xn25EhFNQ/NYkYYypGw=
+        b=EJrhjjF/Tx8SEU0Ufd7YGH05aYb7L0iPa9RfpVFb5hkX3q2XCOebhgn3XnXEK55PC
+         VUHoqUELxhhMTi7XmJTZSWsvLAzrJRQJWJ1x3S5ueYR60J0zB+7gQgUXGFZi+hQqIi
+         3EeB0q5/YSCCdv2dd/Jj5W/HhsdE0PUO4MBOEgyA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.19 230/338] scsi: qla2xxx: Use correct feature type field during RFF_ID processing
-Date:   Thu, 14 Apr 2022 15:12:13 +0200
-Message-Id: <20220414110845.436867440@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 4.19 231/338] KVM: Prevent module exit until all VMs are freed
+Date:   Thu, 14 Apr 2022 15:12:14 +0200
+Message-Id: <20220414110845.464716649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -57,46 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manish Rangankar <mrangankar@marvell.com>
+From: David Matlack <dmatlack@google.com>
 
-commit a7e05f7a1bcbe4ee055479242de46c5c16ab03b1 upstream.
+commit 5f6de5cbebee925a612856fce6f9182bb3eee0db upstream.
 
-During SNS Register FC-4 Features (RFF_ID) the initiator driver was sending
-incorrect type field for NVMe supported device. Use correct feature type
-field.
+Tie the lifetime the KVM module to the lifetime of each VM via
+kvm.users_count. This way anything that grabs a reference to the VM via
+kvm_get_kvm() cannot accidentally outlive the KVM module.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-12-njavali@marvell.com
-Fixes: e374f9f59281 ("scsi: qla2xxx: Migrate switch registration commands away from mailbox interface")
+Prior to this commit, the lifetime of the KVM module was tied to the
+lifetime of /dev/kvm file descriptors, VM file descriptors, and vCPU
+file descriptors by their respective file_operations "owner" field.
+This approach is insufficient because references grabbed via
+kvm_get_kvm() do not prevent closing any of the aforementioned file
+descriptors.
+
+This fixes a long standing theoretical bug in KVM that at least affects
+async page faults. kvm_setup_async_pf() grabs a reference via
+kvm_get_kvm(), and drops it in an asynchronous work callback. Nothing
+prevents the VM file descriptor from being closed and the KVM module
+from being unloaded before this callback runs.
+
+Fixes: af585b921e5d ("KVM: Halt vcpu if page it tries to access is swapped out")
+Fixes: 3d3aab1b973b ("KVM: set owner of cpu and vm file operations")
 Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Suggested-by: Ben Gardon <bgardon@google.com>
+[ Based on a patch from Ben implemented for Google's kernel. ]
+Signed-off-by: David Matlack <dmatlack@google.com>
+Message-Id: <20220303183328.1499189-2-dmatlack@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_gs.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ virt/kvm/kvm_main.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -691,8 +691,7 @@ qla2x00_rff_id(scsi_qla_host_t *vha, u8
- 		return (QLA_SUCCESS);
- 	}
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -112,6 +112,8 @@ EXPORT_SYMBOL_GPL(kvm_debugfs_dir);
+ static int kvm_debugfs_num_entries;
+ static const struct file_operations *stat_fops_per_vm[];
  
--	return qla_async_rffid(vha, &vha->d_id, qlt_rff_id(vha),
--	    FC4_TYPE_FCP_SCSI);
-+	return qla_async_rffid(vha, &vha->d_id, qlt_rff_id(vha), type);
++static struct file_operations kvm_chardev_ops;
++
+ static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
+ 			   unsigned long arg);
+ #ifdef CONFIG_KVM_COMPAT
+@@ -741,6 +743,16 @@ static struct kvm *kvm_create_vm(unsigne
+ 
+ 	preempt_notifier_inc();
+ 
++	/*
++	 * When the fd passed to this ioctl() is opened it pins the module,
++	 * but try_module_get() also prevents getting a reference if the module
++	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
++	 */
++	if (!try_module_get(kvm_chardev_ops.owner)) {
++		r = -ENODEV;
++		goto out_err;
++	}
++
+ 	return kvm;
+ 
+ out_err:
+@@ -817,6 +829,7 @@ static void kvm_destroy_vm(struct kvm *k
+ 	preempt_notifier_dec();
+ 	hardware_disable_all();
+ 	mmdrop(mm);
++	module_put(kvm_chardev_ops.owner);
  }
  
- static int qla_async_rffid(scsi_qla_host_t *vha, port_id_t *d_id,
-@@ -744,7 +743,7 @@ static int qla_async_rffid(scsi_qla_host
- 	ct_req->req.rff_id.port_id[1] = d_id->b.area;
- 	ct_req->req.rff_id.port_id[2] = d_id->b.al_pa;
- 	ct_req->req.rff_id.fc4_feature = fc4feature;
--	ct_req->req.rff_id.fc4_type = fc4type;		/* SCSI - FCP */
-+	ct_req->req.rff_id.fc4_type = fc4type;		/* SCSI-FCP or FC-NVMe */
- 
- 	sp->u.iocb_cmd.u.ctarg.req_size = RFF_ID_REQ_SIZE;
- 	sp->u.iocb_cmd.u.ctarg.rsp_size = RFF_ID_RSP_SIZE;
+ void kvm_get_kvm(struct kvm *kvm)
 
 

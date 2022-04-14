@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70B75012D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F66C50173C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345389AbiDNNxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S1356944AbiDNPZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343619AbiDNN3m (ORCPT
+        with ESMTP id S1347003AbiDNN6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:42 -0400
+        Thu, 14 Apr 2022 09:58:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35851AFB1C;
-        Thu, 14 Apr 2022 06:25:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71550B646E;
+        Thu, 14 Apr 2022 06:48:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C50B760C14;
-        Thu, 14 Apr 2022 13:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2692C385A1;
-        Thu, 14 Apr 2022 13:24:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D6D261D7C;
+        Thu, 14 Apr 2022 13:48:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6968DC385A5;
+        Thu, 14 Apr 2022 13:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942699;
-        bh=DvO4Q6O1F3LvL6SxTGWGFwRMZo0rx/7YfcpZ+33sstM=;
+        s=korg; t=1649944109;
+        bh=fPmpLe+7FvbhcldTdjSftrunihcoe0o5T4QI/mKdpK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v3maDFtUOODx6gnvQ3dunUTy1d5dz2PCteVgzpDijlQs1XbHigV3rWob3Zk6zH0Uz
-         9PhBEK+84yU7Kbff1JVTdmGSzjNdf/qI+UscxRAxxQB1/eUFHmTMw+nYxWmXd8wnux
-         /x2QKqQ3po/vtOL8mCtlCjbHEFT29NhuiDB/4UR8=
+        b=AP2CJA790CDVYZDLfBWIDDd9XO7MU/e9xq6wa0dc4jEHTTxD9wN5c97YBc/toXoQX
+         eXKQ4vUV5RLIwilaAT5SZ31MwrzjZ8KjweKImlDx3pGjnjW5LApglPa5r19BlISa2Y
+         ko1JLOvPVgaY7VMIYrklIiCni8ejE6MB6Xj8jyaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.19 228/338] scsi: qla2xxx: Fix hang due to session stuck
-Date:   Thu, 14 Apr 2022 15:12:11 +0200
-Message-Id: <20220414110845.380562740@linuxfoundation.org>
+        stable@vger.kernel.org, Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.4 347/475] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
+Date:   Thu, 14 Apr 2022 15:12:12 +0200
+Message-Id: <20220414110904.791709704@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Jiaxin Yu <jiaxin.yu@mediatek.com>
 
-commit c02aada06d19a215c8291bd968a99a270e96f734 upstream.
+commit a7663c89f4193dbf717572e46e5a3251940dbdc8 upstream.
 
-User experienced device lost. The log shows Get port data base command was
-queued up, failed, and requeued again. Every time it is requeued, it set
-the FCF_ASYNC_ACTIVE. This prevents any recovery code from occurring
-because driver thinks a recovery is in progress for this session. In
-essence, this session is hung.  The reason it gets into this place is the
-session deletion got in front of this call due to link perturbation.
+Fixes the following build errors when mt6358 is configured as module:
 
-Break the requeue cycle and exit.  The session deletion code will trigger a
-session relogin.
+>> ERROR: modpost: "mt6358_set_mtkaif_protocol"
+>> [sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.ko] undefined!
+>> ERROR: modpost: "mt6358_set_mtkaif_protocol"
+>> [sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.ko] undefined!
 
-Link: https://lore.kernel.org/r/20220310092604.22950-8-njavali@marvell.com
-Fixes: 726b85487067 ("qla2xxx: Add framework for async fabric discovery")
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 6a8d4198ca80 ("ASoC: mediatek: mt6358: add codec driver")
+Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220319120325.11882-1-jiaxin.yu@mediatek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h  |    4 ++++
- drivers/scsi/qla2xxx/qla_init.c |   19 +++++++++++++++++--
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ sound/soc/codecs/mt6358.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4655,4 +4655,8 @@ struct sff_8247_a0 {
- #include "qla_gbl.h"
- #include "qla_dbg.h"
- #include "qla_inline.h"
-+
-+#define IS_SESSION_DELETED(_fcport) (_fcport->disc_state == DSC_DELETE_PEND || \
-+				      _fcport->disc_state == DSC_DELETED)
-+
- #endif
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -891,6 +891,14 @@ int qla24xx_async_gnl(struct scsi_qla_ho
- 	unsigned long flags;
- 	u16 *mb;
+--- a/sound/soc/codecs/mt6358.c
++++ b/sound/soc/codecs/mt6358.c
+@@ -103,6 +103,7 @@ int mt6358_set_mtkaif_protocol(struct sn
+ 	priv->mtkaif_protocol = mtkaif_protocol;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_protocol);
  
-+	if (IS_SESSION_DELETED(fcport)) {
-+		ql_log(ql_log_warn, vha, 0xffff,
-+		       "%s: %8phC is being delete - not sending command.\n",
-+		       __func__, fcport->port_name);
-+		fcport->flags &= ~FCF_ASYNC_ACTIVE;
-+		return rval;
-+	}
-+
- 	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT))
- 		return rval;
+ static void playback_gpio_set(struct mt6358_priv *priv)
+ {
+@@ -269,6 +270,7 @@ int mt6358_mtkaif_calibration_enable(str
+ 			   1 << RG_AUD_PAD_TOP_DAT_MISO_LOOPBACK_SFT);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_enable);
  
-@@ -1121,8 +1129,15 @@ int qla24xx_async_gpdb(struct scsi_qla_h
- 	struct port_database_24xx *pd;
- 	struct qla_hw_data *ha = vha->hw;
+ int mt6358_mtkaif_calibration_disable(struct snd_soc_component *cmpnt)
+ {
+@@ -292,6 +294,7 @@ int mt6358_mtkaif_calibration_disable(st
+ 	capture_gpio_reset(priv);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_disable);
  
--	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT) ||
--	    fcport->loop_id == FC_NO_LOOP_ID) {
-+	if (IS_SESSION_DELETED(fcport)) {
-+		ql_log(ql_log_warn, vha, 0xffff,
-+		       "%s: %8phC is being delete - not sending command.\n",
-+		       __func__, fcport->port_name);
-+		fcport->flags &= ~FCF_ASYNC_ACTIVE;
-+		return rval;
-+	}
-+
-+	if (!vha->flags.online || fcport->flags & FCF_ASYNC_SENT) {
- 		ql_log(ql_log_warn, vha, 0xffff,
- 		    "%s: %8phC - not sending command.\n",
- 		    __func__, fcport->port_name);
+ int mt6358_set_mtkaif_calibration_phase(struct snd_soc_component *cmpnt,
+ 					int phase_1, int phase_2)
+@@ -306,6 +309,7 @@ int mt6358_set_mtkaif_calibration_phase(
+ 			   phase_2 << RG_AUD_PAD_TOP_PHASE_MODE2_SFT);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_calibration_phase);
+ 
+ /* dl pga gain */
+ enum {
 
 

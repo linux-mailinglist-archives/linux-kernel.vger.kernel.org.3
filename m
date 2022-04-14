@@ -2,446 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476E25008C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAED65008C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiDNIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S241135AbiDNIxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241148AbiDNIwo (ORCPT
+        with ESMTP id S241180AbiDNIw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:52:44 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5993EA94;
-        Thu, 14 Apr 2022 01:50:19 -0700 (PDT)
-X-UUID: 66d2ab736fc943f0adeeb52f37531326-20220414
-X-UUID: 66d2ab736fc943f0adeeb52f37531326-20220414
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 690631683; Thu, 14 Apr 2022 16:50:14 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 14 Apr 2022 16:50:13 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 16:50:12 +0800
-Message-ID: <fef6b07a3ef90be11db69cca4eca40428571659d.camel@mediatek.com>
-Subject: Re: [PATCH v5 2/2] phy: mediatek: Add PCIe PHY driver
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Thu, 14 Apr 2022 04:52:57 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10773EA94;
+        Thu, 14 Apr 2022 01:50:29 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3680332021A2;
+        Thu, 14 Apr 2022 04:50:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 14 Apr 2022 04:50:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1649926223; x=1650012623; bh=4Y+8/2uD1Y
+        tYRl+58dKMeVsJagqKJpfyVF7oil0g2YM=; b=SIkFmEG2CQVxGeY3OoI6O16PQc
+        pVwOq1jTuora+mm5Cc4C4rPGWXY7/XnWlNioZOgqdRvIoHSYLaPzn0R38uiQg4aL
+        wGGFfBGntaedbGtAw/waKBCiTUxCe9Mto5bkr+lFY3/XUOiR7mKxXJlh9ju70Mb+
+        m75jiY/V9U26EYxqGASyNudaKa9lUibShk/9Vd+dvI5qyocH9BVmM6YL/eK9CxRQ
+        srJDD/iAl4cq8WkIizOU6oFxvvZr8xwYW79tb2LkI6/b1p0SUEDp6FWUtakGFq1G
+        R/YlVUGLU2i0Suy/6vr+2n+ka/F79eC4IgO8gBwlQ4MqJ5i2AGfyoOFSyttw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1649926223; x=
+        1650012623; bh=4Y+8/2uD1YtYRl+58dKMeVsJagqKJpfyVF7oil0g2YM=; b=e
+        tNZjnTjsC7yx0JTglNtx8nwQkzOrAWUqObC+QkCI7GIYXICPps0bnR6BRJcLh5wF
+        zbFrkqVvUHeAP8lX55sH9RqLf12BFRYjAZU2/1clnyxZwRvqbXxbO/2kQ+05yQak
+        Sq8GqcmrH6jMH4XbpCT6HN9/7WOnpn0NOsHtHNDWPgLYzW6WqEoxvgglnKyAC12H
+        QVefW0vj3AKnwGNWBRC/jUX/GUMfZGy9NxLBwUZ4xGjzQbuJ03K/rLefL7Pst1it
+        lDGj/jphdhnqJr/Z2JfeLQhR3XSj1roxfgbjGRYHJ0T98B0VF60f+FnvjUYj+yH1
+        noD0kWjsOvxTQBGt7dQMg==
+X-ME-Sender: <xms:TeBXYtz_JlfVXijmwS4yt0sOM2r6-86aLydLQjCf3Kg1tLweRWYy8A>
+    <xme:TeBXYtS0QBT_C_yF8lySF6C0I3W4ZEzl18gFun7rDpVmRXkvlPxPxhr_u7CruTvKe
+    9mRtBgMmqSx7BFXiFc>
+X-ME-Received: <xmr:TeBXYnXO00Rrao8VhUuiq8ZCmT_CrkiDUT1pV4Dp5Nvb1umBszlVCLMpIf52eio6FqSixpaHtQNPiYvogeYIzLGjlY3jILfv4ojFfOI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:TeBXYvhxa6jAGwWMpR119D-jocIBvJfm8X9DG9OHHgErt0vXlfQxrw>
+    <xmx:TeBXYvAaCJvbtlFPVc7hickbCnX4bhmhXHSAWDHTQTOj2oUx0pwyvw>
+    <xmx:TeBXYoK0zcBnh4dmjhEugNIGumHwDI9-9_KHgtrhiVhtcbeeDubgAg>
+    <xmx:T-BXYhw4RflmNs4IxO-QU7iGCtafpljCvnVFg6t3Iy9MgSBqXlyVuw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Apr 2022 04:50:20 -0400 (EDT)
+Date:   Thu, 14 Apr 2022 10:50:18 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        =?utf-8?Q?Ond=C5=99ej?= Jirman <x@xff.cz>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liang Chen <cl@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Wei-Shun Chang <weishunc@google.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Thu, 14 Apr 2022 16:50:12 +0800
-In-Reply-To: <YlRkOU/w8X57SAIj@matsya>
-References: <20220326022728.2969-1-jianjun.wang@mediatek.com>
-         <20220326022728.2969-3-jianjun.wang@mediatek.com> <YlRkOU/w8X57SAIj@matsya>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/16] drm/rockchip: Rockchip EBC ("E-Book
+ Controller") display driver
+Message-ID: <20220414085018.ayjvscgdkoen5nw5@houat>
+References: <20220413221916.50995-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3cdzwf66iytxiuuf"
+Content-Disposition: inline
+In-Reply-To: <20220413221916.50995-1-samuel@sholland.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 22:54 +0530, Vinod Koul wrote:
-> On 26-03-22, 10:27, Jianjun Wang wrote:
-> > Add PCIe GEN3 PHY driver support on MediaTek chipsets.
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/phy/mediatek/Kconfig        |  11 ++
-> >  drivers/phy/mediatek/Makefile       |   1 +
-> >  drivers/phy/mediatek/phy-mtk-pcie.c | 272
-> > ++++++++++++++++++++++++++++
-> >  3 files changed, 284 insertions(+)
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> > 
-> > diff --git a/drivers/phy/mediatek/Kconfig
-> > b/drivers/phy/mediatek/Kconfig
-> > index 55f8e6c048ab..387ed1b3f2cc 100644
-> > --- a/drivers/phy/mediatek/Kconfig
-> > +++ b/drivers/phy/mediatek/Kconfig
-> > @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
-> >  	select GENERIC_PHY
-> >  	help
-> >  	  Support MIPI DSI for Mediatek SoCs.
-> > +
-> > +config PHY_MTK_PCIE
-> > +	tristate "MediaTek PCIe-PHY Driver"
-> > +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +	depends on OF
-> > +	select GENERIC_PHY
-> > +	help
-> > +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
-> > +	  This driver create the basic PHY instance and provides
-> > initialize
-> > +	  callback for PCIe GEN3 port, it supports software efuse
-> > +	  initialization.
-> > diff --git a/drivers/phy/mediatek/Makefile
-> > b/drivers/phy/mediatek/Makefile
-> > index ace660fbed3a..788c13147f63 100644
-> > --- a/drivers/phy/mediatek/Makefile
-> > +++ b/drivers/phy/mediatek/Makefile
-> > @@ -6,6 +6,7 @@
-> >  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
-> >  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
-> >  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> > +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
-> >  
-> >  phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
-> >  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
-> > diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c
-> > b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > new file mode 100644
-> > index 000000000000..d288655b6cff
-> > --- /dev/null
-> > +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > @@ -0,0 +1,272 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2022 MediaTek Inc.
-> > + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
-> > + */
-> > +
-> > +#include <linux/bits.h>
-> > +#include <linux/compiler_types.h>
-> 
-> Why do you need this header
 
-I'll remove them in the next version, thanks.
+--3cdzwf66iytxiuuf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > +#include <linux/module.h>
-> > +#include <linux/nvmem-consumer.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +
-> > +#include "phy-mtk-io.h"
-> > +
-> > +#define PEXTP_ANA_GLB_00_REG		0x9000
-> > +#define PEXTP_ANA_LN0_TRX_REG		0xa000
-> > +#define PEXTP_ANA_TX_OFFSET		0x04
-> > +#define PEXTP_ANA_RX_OFFSET		0x3c
-> > +#define PEXTP_ANA_LANE_OFFSET		0x100
-> > +
-> > +/* PEXTP_GLB_00_REG[28:24] Internal Resistor Selection of TX Bias
-> > Current */
-> > +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
-> > +#define EFUSE_GLB_INTR_VAL(x)		((0x1f & (x)) << 24)
-> 
-> There are nice macros in bitfield.h which you can use to set/get
-> value
+On Wed, Apr 13, 2022 at 05:19:00PM -0500, Samuel Holland wrote:
+> This series adds a DRM driver for the electrophoretic display controller
+> found in a few different Rockchip SoCs, specifically the RK3566/RK3568
+> variant[0] used by the PineNote tablet[1].
+>=20
+> This is my first real involvement with the DRM subsystem, so please let
+> me know where I am misunderstanding things.
+>=20
+> This is now the second SoC-integrated EPD controller with a DRM driver
+> submission -- the first one being the i.MX6 EPDC[2]. I want to thank
+> Andreas for sending that series, and for his advice while writing this
+> driver.
+>=20
+> One goal I have with sending this series is to discuss how to support
+> EPDs more generally within the DRM subsystem, so the interfaces with
+> panels and PMICs and waveform LUTs can be controller-independent.
+>=20
+> My understanding is that the i.MX6 EPDC series is at least partly based
+> on the downstream vendor driver. This driver is a clean-sheet design for
+> hardware with different (read: fewer) capabilities, so we took some
+> different design paths, but we ran into many of the same sharp edges.
+>=20
+> Here are some of the areas I would like input on:
+>=20
+> Panel Lifecycle
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Panels use prepare/unprepare callbacks for their power supply. EPDs
+> should only be powered up when the display contents are changed. Should
+> the controller call both drm_panel_(un)prepare during each atomic update
+> when the framebuffer is dirty?
+>=20
+> Similarly, panel enable/disable callbacks are tied to backlight state.
+> For an EPD, it makes sense to have the backlight enabled while the panel
+> is powered down (because the contents are static). Is it acceptable to
+> call drm_panel_{en,dis}able while the panel is not prepared?
+>=20
+> With panel_bridge, the "normal" callback ordering is enforced, and tied
+> to the atomic state, so neither of these is possible.
+>=20
+> As a result, neither the backlight nor the voltage regulators are tied
+> to the panel. The panel's regulators are consumed by the EBC itself.
 
-Thanks for the suggestion, that's really helpful, I'll replace them
-with the macros in bitfield.h.
+At least to manage the power state, that looks fairly similar to what we
+have already to enter / exit from panel self refresh, so maybe we can
+leverage that infrastructure?
 
-> 
-> > +
-> > +/* PEXTP_ANA_LN_RX_REG[3:0] RX impedance selection */
-> > +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
-> > +#define EFUSE_LN_RX_VAL(x)		(0xf & (x))
-> > +
-> > +/* PEXTP_ANA_LN_TX_REG[5:2] TX PMOS impedance selection */
-> > +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
-> > +#define EFUSE_LN_TX_PMOS_VAL(x)		((0xf & (x)) << 2)
-> > +
-> > +/* PEXTP_ANA_LN_TX_REG[11:8] TX NMOS impedance selection */
-> > +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
-> > +#define EFUSE_LN_TX_NMOS_VAL(x)		((0xf & (x)) << 8)
-> > +
-> > +/**
-> > + * struct mtk_pcie_lane_efuse - eFuse data for each lane
-> > + * @tx_pmos: TX PMOS impedance selection data
-> > + * @tx_nmos: TX NMOS impedance selection data
-> > + * @rx_data: RX impedance selection data
-> > + * @lane_efuse_supported: software eFuse data is supported for
-> > this lane
-> > + */
-> > +struct mtk_pcie_lane_efuse {
-> > +	u32 tx_pmos;
-> > +	u32 tx_nmos;
-> > +	u32 rx_data;
-> > +	bool lane_efuse_supported;
-> > +};
-> > +
-> > +/**
-> > + * struct mtk_pcie_phy_data - phy data for each SoC
-> > + * @num_lanes: supported lane numbers
-> > + * @sw_efuse_supported: support software to load eFuse data
-> > + */
-> > +struct mtk_pcie_phy_data {
-> > +	int num_lanes;
-> > +	bool sw_efuse_supported;
-> > +};
-> > +
-> > +/**
-> > + * struct mtk_pcie_phy - PCIe phy driver main structure
-> > + * @dev: pointer to device
-> > + * @phy: pointer to generic phy
-> > + * @sif_base: IO mapped register base address of system interface
-> > + * @data: pointer to SoC dependent data
-> > + * @sw_efuse_en: software eFuse enable status
-> > + * @efuse_glb_intr: internal resistor selection of TX bias current
-> > data
-> > + * @efuse: pointer to eFuse data for each lane
-> > + */
-> > +struct mtk_pcie_phy {
-> > +	struct device *dev;
-> > +	struct phy *phy;
-> > +	void __iomem *sif_base;
-> > +	const struct mtk_pcie_phy_data *data;
-> > +
-> > +	bool sw_efuse_en;
-> > +	u32 efuse_glb_intr;
-> > +	struct mtk_pcie_lane_efuse *efuse;
-> > +};
-> > +
-> > +static void mtk_pcie_efuse_set_lane(struct mtk_pcie_phy *pcie_phy,
-> > +				    unsigned int lane)
-> > +{
-> > +	struct mtk_pcie_lane_efuse *data = &pcie_phy->efuse[lane];
-> > +	void __iomem *addr;
-> > +
-> > +	if (!data->lane_efuse_supported)
-> > +		return;
-> > +
-> > +	addr = pcie_phy->sif_base + PEXTP_ANA_LN0_TRX_REG +
-> > +	       lane * PEXTP_ANA_LANE_OFFSET;
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET,
-> > EFUSE_LN_TX_PMOS_SEL,
-> > +			    EFUSE_LN_TX_PMOS_VAL(data->tx_pmos));
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET,
-> > EFUSE_LN_TX_NMOS_SEL,
-> > +			    EFUSE_LN_TX_NMOS_VAL(data->tx_nmos));
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_RX_OFFSET,
-> > EFUSE_LN_RX_SEL,
-> > +			    EFUSE_LN_RX_VAL(data->rx_data));
-> > +}
-> > +
-> > +/**
-> > + * mtk_pcie_phy_init() - Initialize the phy
-> > + * @phy: the phy to be initialized
-> > + *
-> > + * Initialize the phy by setting the efuse data.
-> > + * The hardware settings will be reset during suspend, it should
-> > be
-> > + * reinitialized when the consumer calls phy_init() again on
-> > resume.
-> > + */
-> > +static int mtk_pcie_phy_init(struct phy *phy)
-> > +{
-> > +	struct mtk_pcie_phy *pcie_phy = phy_get_drvdata(phy);
-> > +	int i;
-> > +
-> > +	if (!pcie_phy->sw_efuse_en)
-> > +		return 0;
-> > +
-> > +	/* Set global data */
-> > +	mtk_phy_update_bits(pcie_phy->sif_base + PEXTP_ANA_GLB_00_REG,
-> > +			    EFUSE_GLB_INTR_SEL,
-> > +			    EFUSE_GLB_INTR_VAL(pcie_phy-
-> > >efuse_glb_intr));
-> > +
-> > +	for (i = 0; i < pcie_phy->data->num_lanes; i++)
-> > +		mtk_pcie_efuse_set_lane(pcie_phy, i);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct phy_ops mtk_pcie_phy_ops = {
-> > +	.init	= mtk_pcie_phy_init,
-> 
-> Only init for this phy? no power up/down either??
+And thus we would have something like enabling the backlight when we
+prepare the panel, but only enable / disable the regulator when we exit
+/ enter PSR mode?
 
-Yes, we only need this init to setting its efuse data.
+Would that make sense?
 
-> 
-> 
-> > +	.owner	= THIS_MODULE,
-> > +};
-> > +
-> > +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy
-> > *pcie_phy,
-> > +					unsigned int lane)
-> > +{
-> > +	struct mtk_pcie_lane_efuse *efuse = &pcie_phy->efuse[lane];
-> > +	struct device *dev = pcie_phy->dev;
-> > +	char efuse_id[16];
-> > +	int ret;
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >tx_pmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >tx_nmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >rx_data);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	if (!(efuse->tx_pmos || efuse->tx_nmos || efuse->rx_data))
-> > +		return dev_err_probe(dev, -EINVAL,
-> > +				     "No eFuse data found for lane%d,
-> > but dts enable it\n",
-> > +				     lane);
-> > +
-> > +	efuse->lane_efuse_supported = true;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
-> > +{
-> > +	struct device *dev = pcie_phy->dev;
-> > +	bool nvmem_enabled;
-> > +	int ret, i;
-> > +
-> > +	/* nvmem data is optional */
-> > +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
-> > +	if (!nvmem_enabled)
-> > +		return 0;
-> > +
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
-> > +					      &pcie_phy-
-> > >efuse_glb_intr);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read
-> > glb_intr\n");
-> > +
-> > +	pcie_phy->sw_efuse_en = true;
-> > +
-> > +	pcie_phy->efuse = devm_kzalloc(dev, pcie_phy->data->num_lanes *
-> > +				       sizeof(*pcie_phy->efuse),
-> > GFP_KERNEL);
-> > +	if (!pcie_phy->efuse)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < pcie_phy->data->num_lanes; i++) {
-> > +		ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct phy_provider *provider;
-> > +	struct mtk_pcie_phy *pcie_phy;
-> > +	int ret;
-> > +
-> > +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
-> > +	if (!pcie_phy)
-> > +		return -ENOMEM;
-> > +
-> > +	pcie_phy->sif_base =
-> > devm_platform_ioremap_resource_byname(pdev, "sif");
-> > +	if (IS_ERR(pcie_phy->sif_base))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
-> > +				     "Failed to map phy-sif base\n");
-> > +
-> > +	pcie_phy->phy = devm_phy_create(dev, dev->of_node,
-> > &mtk_pcie_phy_ops);
-> > +	if (IS_ERR(pcie_phy->phy))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
-> > +				     "Failed to create PCIe phy\n");
-> > +
-> > +	pcie_phy->dev = dev;
-> > +	pcie_phy->data = of_device_get_match_data(dev);
-> > +	if (!pcie_phy->data)
-> > +		return dev_err_probe(dev, -EINVAL, "Failed to get phy
-> > data\n");
-> > +
-> > +	if (pcie_phy->data->sw_efuse_supported) {
-> > +		/*
-> > +		 * Failed to read the efuse data is not a fatal
-> > problem,
-> > +		 * ignore the failure and keep going.
-> > +		 */
-> > +		ret = mtk_pcie_read_efuse(pcie_phy);
-> > +		if (ret == -EPROBE_DEFER)
-> > +			return ret;
-> > +	}
-> > +
-> > +	phy_set_drvdata(pcie_phy->phy, pcie_phy);
-> > +
-> > +	provider = devm_of_phy_provider_register(dev,
-> > of_phy_simple_xlate);
-> > +	if (IS_ERR(provider))
-> > +		return dev_err_probe(dev, PTR_ERR(provider),
-> > +				     "PCIe phy probe failed\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct mtk_pcie_phy_data mt8195_data = {
-> > +	.num_lanes = 2,
-> > +	.sw_efuse_supported = true,
-> > +};
-> > +
-> > +static const struct of_device_id mtk_pcie_phy_of_match[] = {
-> > +	{ .compatible = "mediatek,mt8195-pcie-phy", .data =
-> > &mt8195_data },
-> > +	{ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, mtk_pcie_phy_of_match);
-> > +
-> > +static struct platform_driver mtk_pcie_phy_driver = {
-> > +	.probe	= mtk_pcie_phy_probe,
-> > +	.driver	= {
-> > +		.name = "mtk-pcie-phy",
-> > +		.of_match_table = mtk_pcie_phy_of_match,
-> > +	},
-> > +};
-> > +module_platform_driver(mtk_pcie_phy_driver);
-> > +
-> > +MODULE_DESCRIPTION("MediaTek PCIe PHY driver");
-> > +MODULE_AUTHOR("Jianjun Wang <jianjun.wang@mediatek.com>");
-> > +MODULE_LICENSE("GPL v2");
-> > -- 
-> > 2.18.0
-> 
-> 
+> Panel Timing Parameters
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> EPDs have more timing parameters than LCDs, and there are several
+> different ways of labeling these parameters. See for example the timing
+> diagrams on pp. 2237-2239 of the RK3568 TRM[0], the descriptions in the
+> ED103TC2 panel datasheet[3], and the submitted EPDC bindings[2].
+>=20
+> Both the EPDC and EBC vendor drivers put all of the timing parameters in
+> the controller's OF node. There is no panel device/node.
+>=20
+> I was able to squeeze everything needed for my specific case into a
+> struct drm_display_mode (see patches 5 and 14), but I don't know if this
+> is an acceptable use of those fields, or if will work with other
+> controllers. Is adding more fields to drm_display_mode an option?
+>=20
+> See also the discussion of "dumb" LCD TCONs below.
 
+Reading that datasheet and patch series, it's not clear to me whether
+it's just a set of generic parameters for E-ink display, or if it's some
+hardware specific representation of those timings.
+
+Generally speaking, drm_display_mode is an approximation of what the
+timings are. The exact clock rate for example will be widely different
+between RGB, HDMI or MIPI-DSI (with or without burst). I think that as
+long as you can derive a drm_display_mode from those parameters, and can
+infer those parameters from a drm_display_mode, you can definitely reuse
+it.
+
+> Panel Connector Type / Media Bus Format
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> The EBC supports either an 8-bit or 16-bit wide data bus, where each
+> pair of data lines represents the source driver polarity (positive,
+> negative, or neutral) for a pixel.
+>=20
+> The only effect of the data bus width is the number of pixels that are
+> transferred per clock cycle. It has no impact on the number of possible
+> grayscale levels.
+>=20
+> How does that translate to DRM_MODE_CONNECTOR_* or MEDIA_BUS_FMT_*?
+
+We'll probably want a separate connector mode, but you could add a
+parameter on the OF-graph endpoint to set the media bus format.
+
+> Panel Reflection
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> The ED103TC2 panel scans from right to left. Currently, there is no API
+> or OF property to represent this. I can add something similar to
+> drm_panel_orientation.
+
+Yeah, leveraging DRM_MODE_REFLECT_X into something similar to
+drm_panel_orientation makes sense
+
+> Should this be exposed to userspace? It is acceptable for the kernel
+> driver to flip the image when blitting from the framebuffer?
+
+I'm not sure about whether or not we should expose it to userspace. I'd
+say yes, but I'll leave it to others :)
+
+> CRTC "active" and "enabled" states
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> What do these states mean in the context of an EPD? Currently, the
+> driver ignores "active" and clears the screen to solid white when the
+> CRTC is disabled.
+>=20
+> The vendor drivers can switch to a user-provided image when the CRTC is
+> disabled. Is this something that can/should be supported upstream? If
+> so, how? Would userspace provide the image to the kernel, or just tell
+> the kernel not to clear the screen?
+
+I think the semantics are that whenever the CRTC is disabled, the panel
+is expected to be blank.
+
+Leaving an image on after it's been disabled would have a bunch of
+side-effects we probably don't want. For example, let's assume we have
+that support, an application sets a "disabled image" and quits. Should
+we leave the content on? If so, for how long exactly?
+
+Either way, this is likely to be doable with PSR as well, so I think
+it's a bit out of scope of this series for now.
+
+> VBLANK Events and Asynchronous Commits
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> When should the VBLANK event complete? When the pixels have been blitted
+> to the kernel's shadow buffer? When the first frame of the waveform is
+> sent to the panel? When the last frame is sent to the panel?
+>=20
+> Currently, the driver is taking the first option, letting
+> drm_atomic_helper_fake_vblank() send the VBLANK event without waiting on
+> the refresh thread. This is the only way I was able to get good
+> performance with existing userspace.
+
+I've been having the same kind of discussions in private lately, so I'm
+interested by the answer as well :)
+
+It would be worth looking into the SPI/I2C panels for this, since it's
+basically the same case.
+
+> Waveform Loading
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Waveform files are calibrated for each batch of panels. So while a
+> single waveform file may be "good enough" for all panels of a certain
+> model, the correctly-calibrated file will have better image quality.
+>=20
+> I don't know of a good way to choose the calibrated file. Even the
+> board's compatible string may not be specific enough, if the board is
+> manufactured with multiple batches of panels.
+>=20
+> Maybe the filename should just be the panel compatible, and the user is
+> responsible for putting the right file there? In that case, how should I
+> get the compatible string from the panel_bridge? Traverse the OF graph
+> myself?
+
+It's not really clear to me what panel_bridge has to do with it? I'm
+assuming that file has to be uploaded some way or another to the
+encoder?
+
+If so, yeah, you should just follow through the OF-graph and use the
+panel compatible. We have a similar case already with panel-mipi-dbi
+(even though it's standalone)
+
+> There is also the issue that different controllers need the waveform
+> data in different formats. ".wbf" appears to be the format provided by
+> PVI/eInk, the panel manufacturer. The Rockchip EBC hardware expects a
+> single waveform in a flat array, so the driver has to extract/decompress
+> that from the .wbf file (this is done in patch 1). On the other hand,
+> the i.MX EPDC expects a ".wrf" file containing multiple waveforms[8].
+>=20
+> I propose that the waveform file on disk should always be what was
+> shipped with the panel -- the .wbf file -- and any extracting or
+> reformatting is done in the kernel.
+
+Any kind of parsing in the kernel from a file you have no control over
+always irks me :)
+
+Why and how are those files different in the first place?
+
+> Waveform Selection From Userspace
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> EPDs use different waveforms for different purposes: high-quality
+> grayscale vs. monochrome text vs. dithered monochrome video. How can
+> userspace select which waveform to use? Should this be a plane property?
+>
+> It is also likely that userspace will want to use different waveforms at
+> the same time for different parts of the screen, for example a fast
+> monochrome waveform for the drawing area of a note-taking app, but a
+> grayscale waveform for surrounding UI and window manager.
+>=20
+> I believe the i.MX6 EPDC supports multiple planes, each with their own
+> waveform choice. That seems like a good abstraction,
+
+I agree
+
+> but the EBC only supports one plane in hardware. So using this
+> abstraction with the EBC would require blending pixels and doing
+> waveform lookups in software.
+
+Not really? You'd have a single plane available, with only one waveform
+pick for that plane?
+
+> Blitting/Blending in Software
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> There are multiple layers to this topic (pun slightly intended):
+>  1) Today's userspace does not expect a grayscale framebuffer.
+>     Currently, the driver advertises XRGB8888 and converts to Y4
+>     in software. This seems to match other drivers (e.g. repaper).
+>
+>  2) Ignoring what userspace "wants", the closest existing format is
+>     DRM_FORMAT_R8. Geert sent a series[4] adding DRM_FORMAT_R1 through
+>     DRM_FORMAT_R4 (patch 9), which I believe are the "correct" formats
+>     to use.
+>=20
+>  3) The RK356x SoCs have an "RGA" hardware block that can do the
+>     RGB-to-grayscale conversion, and also RGB-to-dithered-monochrome
+>     which is needed for animation/video. Currently this is exposed with
+>     a V4L2 platform driver. Can this be inserted into the pipeline in a
+>     way that is transparent to userspace? Or must some userspace library
+>     be responsible for setting up the RGA =3D> EBC pipeline?
+
+I'm very interested in this answer as well :)
+
+I think the current consensus is that it's up to userspace to set this
+up though.
+
+>  4) Supporting multiple planes (for multiple concurrent waveforms)
+>     implies blending in software. Is that acceptable?
+>=20
+>  5) Thoughts on SIMD-optimized blitting and waveform lookup functions?
+>=20
+>  5) Currently the driver uses kmalloc() and dma_sync_single_for_device()
+>     for its buffers, because it needs both fast reads and fast writes to
+>     several of them. Maybe cma_alloc() or dma_alloc_from_contiguous()
+>     would be more appropriate, but I don't see any drivers using those
+>     directly.
+
+cma_alloc isn't meant to be used directly by drivers anyway, one of the
+main reason being that CMA might not be available (or desirable) in the
+first place on the platform the code will run.
+
+The most common option would be dma_alloc_coherent. It often means that
+the buffer will be mapped non-cacheable, so it kills the access
+performances. So it completely depends on your access patterns whether
+it makes sense in your driver or not. kmalloc + dma_sync_single or
+dma_map_single is also a valid option.
+
+> EPDs connected to "dumb" LCD TCONs
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This topic is mostly related to my first patch. Some boards exist that
+> hook up an EPD to a normal LCD TCON, not a dedicated EPD controller. For
+> example, there's the reMarkable 2[5] and some PocketBook models[6][7].
+>=20
+> I have some concerns about this:
+>  1) If we put EPD panel timings in panel drivers (e.g. panel-simple),
+>     can the same timings work with LCD TCONs and EPD controllers?
+
+I'll think we'll need a separate panel driver for this anyway
+
+>     For example: one cycle of the 16-bit data bus is "one pixel" to an
+>     LCD controller, but is "8 pixels" to an EPD controller. So there is
+>     a factor-of-8 difference in horizontal resolution depending on your
+>     perspective. Should we have the "number of pixel clock cycles" or
+>     "number of pixels" in .hdisplay/.htotal in the panel timings?
+>=20
+>     Patch 14 adds a panel with "number of pixels" horizontal resolution,
+>     so the correct resolution is reported to userspace, but the existing
+>     eink_vb3300_kca_timing in panel-simple.c appears to use "number of
+>     pixel clocks" for its horizontal resolution. This makes the panel
+>     timing definitions incompatible across controllers.
+>=20
+>  2) Using fbdev/fbcon with an EPD hooked up to an LCD TCON will have
+>     unintended consequences, and possibly damage the panel. Currently,
+>     there is no way to mark the framebuffer as expecting "source driver
+>     polarity waveforms" and not pixel data. Is there a specific
+>     DRM_FORMAT_* we should use for these cases to prevent accidental use
+>     by userspace?
+>=20
+>     Or should we disallow this entirely, and have some wrapper layer to
+>     do the waveform lookups in kernelspace?
+>=20
+>     I like the wrapper layer idea because it allows normal userspace and
+>     fbcon to work. It would not be much new code, especially since this
+>     driver already supports doing the whole pipeline in software. So
+>     that's why I wrote a separate helper library; I hope this code can
+>     be reused.
+
+If exposing the panel as a KMS connector can damage the display, I don't
+think we should expose it at all. Even a property or something won't
+work, because older applications won't know about that property and will
+try to use it anyway.
+
+So whatever the solution is, it can't be "you have to know that this
+device is special, or else...". The default, trivial, case where an
+application just comes up and tries to display something should somewhat
+work (even if it might be a bit absurd, like ignoring non_desktop)
+
+Maxime
+
+--3cdzwf66iytxiuuf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYlfgSgAKCRDj7w1vZxhR
+xdhbAQDVkafK4wDsEuAHd71/DbRRF+PtVnfeho42KWv9fkF4kAD/SpcQgdAiCgmq
+gaYbMgDMtjsJPiJelmJkMJUi5um01Ak=
+=pyuo
+-----END PGP SIGNATURE-----
+
+--3cdzwf66iytxiuuf--

@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E12C5019EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B255019F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238280AbiDNRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S245208AbiDNRXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiDNRWZ (ORCPT
+        with ESMTP id S238700AbiDNRW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:22:25 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F23AA58
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:00 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id 12so5168919pll.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:00 -0700 (PDT)
+        Thu, 14 Apr 2022 13:22:29 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BB93DA5E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:03 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id bo5so5444911pfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KZKxiqiOGP8xT+pzPpG96RNqzRBaJRtyWz+j5RMVT+Y=;
-        b=lymh6lTWr2Sj/q2KNN/sZh1+2+JNVgm9GNF/J1h9xIbILtCqkJ4X5rV0k08Hh+twHd
-         QJmdssHM6pnT12/Lf6tURVpzaBio2EQQV4HtSur0oY4rKUk+qb422YW+5FBBwPoq7Rd7
-         ULezyMYJqhGfudAlhzgoMNN96M9DCtkPjl7zDz3aoxWt6x824Jo8bKJ41ZF7f5sbvLHN
-         qBKBxsJEz1dcltFx0xi7w+2k47IhBftfhOolhGf6NLlXWXSmBcVbjhu9olAs0/mKobli
-         0dMnfWjwZZkF1JoziNLJieWWcwp9FmEbU0+Plpl0zP7OoaMkXuU/oeL5RB8kSy63ajEH
-         QEmw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=FfSoG7Td6Wp+hFUw88AieR0tVnt6wZxfF+2zMZy9eaA=;
+        b=u1dsiSU8Oc8b8MGmKSXynmmw14Fwb78ccQEfVYdGz2ligTny5q/N6pnA6Ebe28h6Qg
+         9rGnEHQNiSaC61xxeIRqzttu6T5MKhxMX6EGXNDv0bHalHqIas60PEfUt06tX9DHEfOH
+         V0wRk2ynFkERT2/lHsbehTn5wPHw1thtrieHyN90V8JxpzH5OVYM+zdlH3OWT9Wt27nt
+         ptAEJxf0UJYKz8qackmb4vXAapzFRg+BMddZw6pyUOxEtELf4A72XfikvVE1zRTnlRkr
+         LfIPUAVJId1kbo7Nrwzic79JTC5bcC8GIxFkxARqw/kkK3YY7mPDEw5RhVBo5f0LH3IC
+         zGyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KZKxiqiOGP8xT+pzPpG96RNqzRBaJRtyWz+j5RMVT+Y=;
-        b=HaSi1pA3F3RvVra6c4YXJNCTlQDYOkP7Bx2nkULgYed5421Vl1P8AvI+e7Ul5t1Q6h
-         8DdWx3ex1bkrbULqnXvvDWHt9e6dWMlxc3MCCs3WjLIs+dyia4Yt5z+JwPH8JAgxTmpi
-         0C/t7JFBwioHKe6SJ+4q5jq7I0/Olli474OL1DQhvEvy7tssEfJ0TLUuOlf5xFx1zmX0
-         ieOXcpGUFn5q8VUE0Vza5IVQRYcvrtgd5undR1gcKekmA292EdgKgt23N0NrWa596hSr
-         XdIXdR/u+T8oal1XhKNnQCthlLcMH9ypTErRkrXpsX+SM41Cja7/qc7TWbSX4Ekgxsa9
-         HygQ==
-X-Gm-Message-State: AOAM533jcY6Hb6+4O4ptxMk9P9t86rqGiSscCEbtioNxe7EFtKxk9d3G
-        VTdCWdsuW5ODOTaiaEwOneCe+g==
-X-Google-Smtp-Source: ABdhPJwi8+ti1WpkD0ucDZjeGnXAnfZ7+/ecI6kI3PJTHAqbr5Kk6Xg8Mx1f9xcHje80M+6NCA/tsQ==
-X-Received: by 2002:a17:90b:384c:b0:1cb:1b44:2939 with SMTP id nl12-20020a17090b384c00b001cb1b442939mr5468344pjb.46.1649956799574;
-        Thu, 14 Apr 2022 10:19:59 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm466362pfu.120.2022.04.14.10.19.49
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=FfSoG7Td6Wp+hFUw88AieR0tVnt6wZxfF+2zMZy9eaA=;
+        b=0eLtX9QOajcZygL4PqLHw83zepDqnJxGIUPX0598n/jC2+A82M19xN6IVXjHtD3Wq8
+         gGY+2nTieZ4FJ013wNey2hg+sYEXvKqzJpQqhNxxy+GcOAd16s4pUs9l+JKmTgCpYFV6
+         ONe54hjqUcoq8fCnse6kTjNWLUPFsAvkUIVyA1Lk5R85P0WmWZZRc7hXzY8pMxb81Jfu
+         aVPzqHpblCD8PDdpKN/PcF/vBOYVbi/nJ5+WDXmY86h4sjocYwNUDP5iBSDE7LdE/Wng
+         +xmJvNkoVSJOoxT68ZiZvBYd4g5MD1SS0M26MD7w48Uv1SugH/ZaQkCYrKDBnvTED22y
+         MTYg==
+X-Gm-Message-State: AOAM5331M61SZ4CA2XoNE4Wp/5MZewB/KoyCICs5wBZzOInm1Nrs4bR/
+        IAojduhwwJ7sU5HSLqMt2wx4Wg==
+X-Google-Smtp-Source: ABdhPJw/SW4QlRCUT88YW6sv8vX3wad3KLpdA5XMS4E4+CURIKOHEWUI9+4tm4ZEYV/Gaq5GfqQoiA==
+X-Received: by 2002:a65:5ac2:0:b0:399:dea:cd1f with SMTP id d2-20020a655ac2000000b003990deacd1fmr3117689pgt.80.1649956802674;
+        Thu, 14 Apr 2022 10:20:02 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id p8-20020aa78608000000b005082c3cbfd2sm421053pfn.218.2022.04.14.10.20.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 10:19:52 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 11:19:47 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
-Subject: Re: [PATCH v2 0/2] remoteproc: core: fix issue for multi-instance
-Message-ID: <20220414171947.GB698343@p14s>
-References: <1648434012-16655-1-git-send-email-shengjiu.wang@nxp.com>
+        Thu, 14 Apr 2022 10:20:02 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 10/15] cpufreq: mediatek: Make sram regulator optional
+In-Reply-To: <be86691b529dd691203fbb5b35f8572e7e9119a8.camel@mediatek.com>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-11-rex-bc.chen@mediatek.com>
+ <7ho81b5n9v.fsf@baylibre.com>
+ <be86691b529dd691203fbb5b35f8572e7e9119a8.camel@mediatek.com>
+Date:   Thu, 14 Apr 2022 10:20:01 -0700
+Message-ID: <7hfsmf37lq.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648434012-16655-1-git-send-email-shengjiu.wang@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 10:20:10AM +0800, Shengjiu Wang wrote:
-> Use the rproc->power reference count to handle the multi-instance
-> case, move the state checking for 'stop' and 'detach' under
-> mutex protection, and remove state checking for 'start'.
-> 
-> Shengjiu Wang (2):
->   remoteproc: core: Remove state checking before calling rproc_boot()
->   remoteproc: core: Move state checking to remoteproc_core
-> 
-> changes in v2:
-> - drop 'remoteproc: core: check rproc->power value before decreasing it'
-> - refine 'remoteproc: core: Remove state checking before changing state'
->   split it to two new patches.
-> 
->  drivers/remoteproc/remoteproc_cdev.c  | 11 -----------
->  drivers/remoteproc/remoteproc_core.c  | 11 +++++++++++
->  drivers/remoteproc/remoteproc_sysfs.c | 11 -----------
->  3 files changed, 11 insertions(+), 22 deletions(-)
->
+Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 
-I have applied this set.
+> On Fri, 2022-04-08 at 13:32 -0700, Kevin Hilman wrote:
+>> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+>> 
+>> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> > 
+>> > For some MediaTek SoCs, like MT8186, it's possible that the sram
+>> > regulator
+>> > is shared between CPU and CCI.
+>> > 
+>> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> 
+>> nit: missing your sign-off.
+>> 
+>> > ---
+>> >  drivers/cpufreq/mediatek-cpufreq.c | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> > 
+>> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+>> > b/drivers/cpufreq/mediatek-cpufreq.c
+>> > index 9e9bce0ff235..8f688d47e64b 100644
+>> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+>> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+>> > @@ -435,7 +435,7 @@ static int mtk_cpu_dvfs_info_init(struct
+>> > mtk_cpu_dvfs_info *info, int cpu)
+>> >  	}
+>> >  
+>> >  	/* Both presence and absence of sram regulator are valid cases.
+>> > */
+>> > -	info->sram_reg = regulator_get_exclusive(cpu_dev, "sram");
+>> > +	info->sram_reg = regulator_get_optional(cpu_dev, "sram");
+>> 
+>> The changelog says that this regulator may be shared with CCI, so I
+>> understand it's no longer exclusive.  But here you make it optional,
+>> which should be explained in the changelog.  If it's not actually
+>> optional, then it should just be normal "get".
+>> 
+>> Kevin
+>
+> Hello Kevin,
+>
+> Since cpufreq and cci devfreq might share the same sram regulator in
+> MediaTek SoC, it is no longer exclusive as you mentioned.
+>
+> The reason to use regulator_get_optional is we hope regulator framework
+> can return error for error handling rather than a dummy handler from
+> regulator_get api.
+>
+> I will add this to commit message in next version.
+
+OK, sounds good.
 
 Thanks,
-Mathieu
 
-> -- 
-> 2.17.1
-> 
+Kevin

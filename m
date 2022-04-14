@@ -2,308 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AF9501EE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26C7501EF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239609AbiDNXKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S1347489AbiDNXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbiDNXKl (ORCPT
+        with ESMTP id S1345759AbiDNXSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:10:41 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE3B1A93
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:08:09 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id j8so5879306pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:08:09 -0700 (PDT)
+        Thu, 14 Apr 2022 19:18:50 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C751AC908
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:16:24 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so10555303pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=GvZRAUI4B8TvnwdtYzuqjiMqNoZJy4HZ3jhXJO2vTlA=;
-        b=QrKZyKd6NBm5yFHKHY7v5DwGjN9+3cH/wf4KjS2w8xJXtD9P0O542w3fQtaV+G08Wy
-         DEjhLOJx7bFtChPat5mTfYZia1dniu7oT9trGOYc5MQBoy1Tu1oWCouSSA+Wik7pTO+9
-         Kn9RQ3iXI9ZHedXoleZWQ0uSZ/f0xvfg57WQflh5C+WpOwi5XkJTH6nzLIo7/cpxZXeR
-         ZuTDwJMTyVdfQ7fhn0n5sQc3C69Ws5Q1fg5pCd+L+HodxljfKn/1/0fUz5yhm4XS2tj7
-         yJPOKA7KFLnncHS9IocunmlTJmjvTIwJdQ79XJwqm6K3Wi3ukooemJPJH4UULLDj3tiB
-         Er7w==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vLhomrpooyVkCPnT/V3GspH1VkT6rkdcQOEP4TxU1jc=;
+        b=Xwr79i/rtcdMWZfT7X4gLtn/vh+8ejYnbNEzZrzwPEZQJl3GxaqMmrDWnIP06UETWf
+         QO6k2kmSdAsNnxYgt5BIdG2EfI3eWsFLzQeSK+jjRh9x9Y4Ioih9qk0/4ccMmDO9ZGTP
+         EkpiuIOmmyUG5xn/9MPYjBUzbjrx0E+jWGo4iZCqvaBK2YXRzbgBSN0AmU/0CHsAwf9+
+         IF01Mv0mvybjqpC+tQ4CafC4sv+hVw5uKhFGwj3DUjqowV5+8pMXD7VHKN6TvZnrX5Vb
+         1PCwm0BXhEAlX8VODN06SyLQVUhJsM3g/UH1w0Vi8Obymk11oeN6R/gTjqo3gv7a6mpE
+         t4bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GvZRAUI4B8TvnwdtYzuqjiMqNoZJy4HZ3jhXJO2vTlA=;
-        b=s4DRlFN4TvESJa6834b/hsfm2gLUnLQytY6OmM6XrPkiJ/xdWIUmPWesDMxwOXKvV0
-         YqL7C9USc5pxt38OYZiqN23U39DokKwRgpOzDHrnReiPkMbHseq54S6G8pVEtVKJlFoC
-         2C3Hj0ETynaXglARHdetWtT4v6gcOtT+aOeYCV9O69+h8YjdHaIyoUYX0CQYkrvRufCR
-         ZJhD9gnCO6PtlHTH+8qm4tR32RLTzVBrA/ylKjTQTGwtcp0FXaBissSor8nB566lb1vb
-         TFE6UCEpdcF4+wathS2y2isOCy/gSqDnogHs/CTNG85n5wl1/Znyps7vr2nlB8gIza/X
-         6pCA==
-X-Gm-Message-State: AOAM5305gBFplbtNj7z30yj1JLOLqVI3d1xye4ATPZ6FiMcM3GF0X9Tf
-        MW/Nzz8YqbxJs+pmNXhmN4yHIQ==
-X-Google-Smtp-Source: ABdhPJzaXynYlh/NdWs6XWES7snVaQ9gPplu3lSmLHXCuzKQo63CK5QP9oOqaVSfWDhaO5EfR1cXmg==
-X-Received: by 2002:a17:90b:4a82:b0:1c7:8a44:e0c9 with SMTP id lp2-20020a17090b4a8200b001c78a44e0c9mr973767pjb.102.1649977688622;
-        Thu, 14 Apr 2022 16:08:08 -0700 (PDT)
-Received: from mahak-Inspiron-7570.iitr.ac.in ([103.37.201.168])
-        by smtp.googlemail.com with ESMTPSA id bm27-20020a656e9b000000b0039e5d327f78sm2874058pgb.44.2022.04.14.16.08.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 16:08:08 -0700 (PDT)
-From:   Mahak Gupta <mahak_g@cs.iitr.ac.in>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Cc:     Mahak Gupta <mahak_g@cs.iitr.ac.in>
-Subject: [PATCH] staging: r8188eu: place constants in right side in a comparison
-Date:   Fri, 15 Apr 2022 04:37:57 +0530
-Message-Id: <20220414230757.19348-1-mahak_g@cs.iitr.ac.in>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vLhomrpooyVkCPnT/V3GspH1VkT6rkdcQOEP4TxU1jc=;
+        b=RFqzaPxSCFJkYLokDcfeUj/ZWCmOYDXHyRxahiwFSioRpi7dsHs74kYss4Dz+n8Vjk
+         5sxI4dNeNWg29MLJ8mNfi7A5WT60AN3rQ8REPgphU1vvqgG3ZqWDhKPSpUqRWEYcETli
+         q/lc4PktCoCe+ca2bVRUJXv/7Nz4iOhZ9Q3n0CmXd0Nz/R8hj+cIAMHPB4uF5cUrWqSp
+         eDT40Da2tiCqBTqkaRqTyhe6VwTTYwTZV+awEsmEWscxsJQnDZCs49NZ49RiZDE//qas
+         eU4GByBToOZOrFzGIT29FZmPrBD74sW7Gi/bTGv/d5/aphbUgU00WWDNSJvhjCImL+CA
+         i/dw==
+X-Gm-Message-State: AOAM530ICYq/3EbesqA6kCW/eZXHERAc0q6IxQAZdKY3r9qIzB8+cMRv
+        1ZmkpCfz9xFBwd4jYYx/SBkDG0oGm+sZUYXfh43ZJw==
+X-Google-Smtp-Source: ABdhPJxbflLVSecIO9jWZq3CT3nUwaSAazyRt2mR5j1dkuDUM61ZcKA4cPzGoWlR/Al2tHHRIW81IvsVP4tAvssYgs8=
+X-Received: by 2002:a17:90b:164f:b0:1c7:8d20:ff6d with SMTP id
+ il15-20020a17090b164f00b001c78d20ff6dmr1006092pjb.64.1649978183669; Thu, 14
+ Apr 2022 16:16:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220325184609.4059963-1-rajatja@google.com> <20220407191715.GA254460@bhelgaas>
+In-Reply-To: <20220407191715.GA254460@bhelgaas>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Thu, 14 Apr 2022 16:15:47 -0700
+Message-ID: <CACK8Z6Fy3L7vijVn4w+6HwRuuTtW5ePrWc04rUc8U8TPT0Re0w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] PCI: ACPI: Support Microsoft's "DmaProperty"
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-reported by checkpatch:
+Hello Bjorn,
 
-Comparisons should place the constant on the right side of the test.
 
-Fix these warnings.
+On Thu, Apr 7, 2022 at 12:17 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> In subject,
+>
+>   PCI/ACPI: ...
+>
+> would be consistent with previous history (at least things coming
+> through the PCI tree :)).
 
-Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
----
- drivers/staging/r8188eu/core/rtw_ieee80211.c |  4 +--
- drivers/staging/r8188eu/core/rtw_ioctl_set.c |  4 +--
- drivers/staging/r8188eu/core/rtw_iol.c       |  4 +--
- drivers/staging/r8188eu/core/rtw_mlme.c      | 12 ++++----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 30 ++++++++++----------
- 5 files changed, 27 insertions(+), 27 deletions(-)
+Will do.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-index bb4c9bc864da..385a9ed8eff7 100644
---- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
-+++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-@@ -1051,7 +1051,7 @@ static int rtw_get_cipher_info(struct wlan_network *pnetwork)
- 	pbuf = rtw_get_wpa_ie(&pnetwork->network.IEs[12], &wpa_ielen, pnetwork->network.IELength - 12);
- 
- 	if (pbuf && (wpa_ielen > 0)) {
--		if (_SUCCESS == rtw_parse_wpa_ie(pbuf, wpa_ielen + 2, &group_cipher, &pairwise_cipher, &is8021x)) {
-+		if (rtw_parse_wpa_ie(pbuf, wpa_ielen + 2, &group_cipher, &pairwise_cipher, &is8021x) == _SUCCESS) {
- 			pnetwork->BcnInfo.pairwise_cipher = pairwise_cipher;
- 			pnetwork->BcnInfo.group_cipher = group_cipher;
- 			pnetwork->BcnInfo.is_8021x = is8021x;
-@@ -1061,7 +1061,7 @@ static int rtw_get_cipher_info(struct wlan_network *pnetwork)
- 		pbuf = rtw_get_wpa2_ie(&pnetwork->network.IEs[12], &wpa_ielen, pnetwork->network.IELength - 12);
- 
- 		if (pbuf && (wpa_ielen > 0)) {
--			if (_SUCCESS == rtw_parse_wpa2_ie(pbuf, wpa_ielen + 2, &group_cipher, &pairwise_cipher, &is8021x)) {
-+			if (rtw_parse_wpa2_ie(pbuf, wpa_ielen + 2, &group_cipher, &pairwise_cipher, &is8021x) == _SUCCESS) {
- 				pnetwork->BcnInfo.pairwise_cipher = pairwise_cipher;
- 				pnetwork->BcnInfo.group_cipher = group_cipher;
- 				pnetwork->BcnInfo.is_8021x = is8021x;
-diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-index 9df6fb122bc5..06da79829622 100644
---- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-+++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-@@ -44,7 +44,7 @@ u8 rtw_do_join(struct adapter *padapter)
- 		    pmlmepriv->to_roaming > 0) {
- 			/*  submit site_survey_cmd */
- 			ret = rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
--			if (_SUCCESS != ret)
-+			if (ret != _SUCCESS)
- 				pmlmepriv->to_join = false;
- 		} else {
- 			pmlmepriv->to_join = false;
-@@ -91,7 +91,7 @@ u8 rtw_do_join(struct adapter *padapter)
- 				if (!pmlmepriv->LinkDetectInfo.bBusyTraffic ||
- 				    pmlmepriv->to_roaming > 0) {
- 					ret = rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
--					if (_SUCCESS != ret)
-+					if (ret != _SUCCESS)
- 						pmlmepriv->to_join = false;
- 				} else {
- 					ret = _FAIL;
-diff --git a/drivers/staging/r8188eu/core/rtw_iol.c b/drivers/staging/r8188eu/core/rtw_iol.c
-index e14e3746efdd..af8e84a41b85 100644
---- a/drivers/staging/r8188eu/core/rtw_iol.c
-+++ b/drivers/staging/r8188eu/core/rtw_iol.c
-@@ -57,10 +57,10 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
- 
- bool rtw_IOL_applied(struct adapter  *adapter)
- {
--	if (1 == adapter->registrypriv.fw_iol)
-+	if (adapter->registrypriv.fw_iol == 1)
- 		return true;
- 
--	if ((2 == adapter->registrypriv.fw_iol) &&
-+	if ((adapter->registrypriv.fw_iol == 2) &&
- 	    (adapter_to_dvobj(adapter)->pusbdev->speed != USB_SPEED_HIGH))
- 		return true;
- 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index fff359d79493..a2ead9dc210b 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -722,7 +722,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
- 			pmlmepriv->to_join = false;
- 			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
--			if (_SUCCESS == s_ret) {
-+			if (s_ret == _SUCCESS) {
- 			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
- 			} else if (s_ret == 2) { /* there is no need to wait for join */
- 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-@@ -730,7 +730,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 			} else {
- 				if (rtw_to_roaming(adapter) != 0) {
- 					if (--pmlmepriv->to_roaming == 0 ||
--					    _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) {
-+					    rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0) != _SUCCESS) {
- 						rtw_set_roaming(adapter, 0);
- 						rtw_free_assoc_resources(adapter, 1);
- 						rtw_indicate_disconnect(adapter);
-@@ -1975,7 +1975,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
- 		issued = (phtpriv->agg_enable_bitmap >> priority) & 0x1;
- 		issued |= (phtpriv->candidate_tid_bitmap >> priority) & 0x1;
- 
--		if (0 == issued) {
-+		if (issued == 0) {
- 			psta->htpriv.candidate_tid_bitmap |= BIT((u8)priority);
- 			rtw_addbareq_cmd(padapter, (u8)priority, pattrib->ra);
- 		}
-@@ -2002,19 +2002,19 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
- 	else
- 		pnetwork = &pmlmepriv->cur_network;
- 
--	if (0 < rtw_to_roaming(padapter)) {
-+	if (rtw_to_roaming(padapter) > 0) {
- 		memcpy(&pmlmepriv->assoc_ssid, &pnetwork->network.Ssid, sizeof(struct ndis_802_11_ssid));
- 
- 		pmlmepriv->assoc_by_bssid = false;
- 
- 		while (1) {
- 			do_join_r = rtw_do_join(padapter);
--			if (_SUCCESS == do_join_r) {
-+			if (do_join_r == _SUCCESS) {
- 				break;
- 			} else {
- 				pmlmepriv->to_roaming--;
- 
--				if (0 < pmlmepriv->to_roaming) {
-+				if (pmlmepriv->to_roaming > 0) {
- 					continue;
- 				} else {
- 					rtw_indicate_disconnect(padapter);
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 26e188264525..207250e52bcf 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -286,11 +286,11 @@ static void init_channel_list(struct adapter *padapter, struct rt_channel_info *
- 				continue;
- 			}
- 
--			if ((0 == padapter->registrypriv.ht_enable) && (8 == o->inc))
-+			if ((padapter->registrypriv.ht_enable == 0) && (o->inc == 8))
- 				continue;
- 
--			if ((0 == (padapter->registrypriv.cbw40_enable & BIT(1))) &&
--			    ((BW40MINUS == o->bw) || (BW40PLUS == o->bw)))
-+			if (((padapter->registrypriv.cbw40_enable & BIT(1)) == 0) &&
-+			    ((o->bw == BW40MINUS) || (o->bw == BW40PLUS)))
- 				continue;
- 
- 			if (!reg) {
-@@ -319,7 +319,7 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
- 
- 	if (padapter->registrypriv.wireless_mode & WIRELESS_11G) {
- 		b2_4GBand = true;
--		if (RT_CHANNEL_DOMAIN_REALTEK_DEFINE == ChannelPlan)
-+		if (ChannelPlan == RT_CHANNEL_DOMAIN_REALTEK_DEFINE)
- 			Index2G = RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE.Index2G;
- 		else
- 			Index2G = RTW_ChannelPlanMap[ChannelPlan].Index2G;
-@@ -329,14 +329,14 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
- 		for (index = 0; index < RTW_ChannelPlan2G[Index2G].Len; index++) {
- 			channel_set[chanset_size].ChannelNum = RTW_ChannelPlan2G[Index2G].Channel[index];
- 
--			if ((RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN == ChannelPlan) ||/* Channel 1~11 is active, and 12~14 is passive */
--			    (RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G == ChannelPlan)) {
-+			if ((ChannelPlan == RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN) ||/* Channel 1~11 is active, and 12~14 is passive */
-+			    (ChannelPlan == RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G)) {
- 				if (channel_set[chanset_size].ChannelNum >= 1 && channel_set[chanset_size].ChannelNum <= 11)
- 					channel_set[chanset_size].ScanType = SCAN_ACTIVE;
- 				else if ((channel_set[chanset_size].ChannelNum  >= 12 && channel_set[chanset_size].ChannelNum  <= 14))
- 					channel_set[chanset_size].ScanType  = SCAN_PASSIVE;
--			} else if (RT_CHANNEL_DOMAIN_WORLD_WIDE_13 == ChannelPlan ||
--				   RT_CHANNEL_DOMAIN_2G_WORLD == Index2G) {/*  channel 12~13, passive scan */
-+			} else if (ChannelPlan == RT_CHANNEL_DOMAIN_WORLD_WIDE_13 ||
-+				   Index2G == RT_CHANNEL_DOMAIN_2G_WORLD) {/*  channel 12~13, passive scan */
- 				if (channel_set[chanset_size].ChannelNum <= 11)
- 					channel_set[chanset_size].ScanType = SCAN_ACTIVE;
- 				else
-@@ -971,7 +971,7 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 			status = _STATS_FAILURE_;
- 	}
- 
--	if (_STATS_SUCCESSFUL_ != status)
-+	if (status != _STATS_SUCCESSFUL_)
- 		goto OnAssocReqFail;
- 
- 	/*  check if the supported rate is ok */
-@@ -1060,7 +1060,7 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 		wpa_ie_len = 0;
- 	}
- 
--	if (_STATS_SUCCESSFUL_ != status)
-+	if (status != _STATS_SUCCESSFUL_)
- 		goto OnAssocReqFail;
- 
- 	pstat->flags &= ~(WLAN_STA_WPS | WLAN_STA_MAYBE_WPS);
-@@ -1255,7 +1255,7 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	spin_unlock_bh(&pstapriv->asoc_list_lock);
- 
- 	/*  now the station is qualified to join our BSS... */
--	if (pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) && (_STATS_SUCCESSFUL_ == status)) {
-+	if (pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) && (status == _STATS_SUCCESSFUL_)) {
- 		/* 1 bss_cap_update & sta_info_update */
- 		bss_cap_update_on_sta_join(padapter, pstat);
- 		sta_info_update(padapter, pstat);
-@@ -1431,7 +1431,7 @@ unsigned int OnDeAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 		    (pmlmeinfo->state & WIFI_FW_ASSOC_STATE)) {
- 			if (reason == WLAN_REASON_CLASS2_FRAME_FROM_NONAUTH_STA) {
- 				ignore_received_deauth = 1;
--			} else if (WLAN_REASON_PREV_AUTH_NOT_VALID == reason) {
-+			} else if (reason == WLAN_REASON_PREV_AUTH_NOT_VALID) {
- 				// TODO: 802.11r
- 				ignore_received_deauth = 1;
- 			}
-@@ -3651,7 +3651,7 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 			pwdinfo->nego_req_info.benable = false;
- 			result = process_p2p_group_negotation_resp(pwdinfo, frame_body, len);
- 			issue_p2p_GO_confirm(pwdinfo->padapter, GetAddr2Ptr(pframe), result);
--			if (P2P_STATUS_SUCCESS == result) {
-+			if (result == P2P_STATUS_SUCCESS) {
- 				if (rtw_p2p_role(pwdinfo) == P2P_ROLE_CLIENT) {
- 					pwdinfo->p2p_info.operation_ch[0] = pwdinfo->peer_operating_ch;
- 					pwdinfo->p2p_info.scan_op_ch_only = 1;
-@@ -3666,7 +3666,7 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 		break;
- 	case P2P_GO_NEGO_CONF:
- 		result = process_p2p_group_negotation_confirm(pwdinfo, frame_body, len);
--		if (P2P_STATUS_SUCCESS == result) {
-+		if (result == P2P_STATUS_SUCCESS) {
- 			if (rtw_p2p_role(pwdinfo) == P2P_ROLE_CLIENT) {
- 				pwdinfo->p2p_info.operation_ch[0] = pwdinfo->peer_operating_ch;
- 				pwdinfo->p2p_info.scan_op_ch_only = 1;
-@@ -7009,7 +7009,7 @@ void linked_status_chk(struct adapter *padapter)
- 			if (pmlmeinfo->FW_sta_info[i].status == 1) {
- 				psta = pmlmeinfo->FW_sta_info[i].psta;
- 
--				if (NULL == psta)
-+				if (psta == NULL)
- 					continue;
- 				if (pmlmeinfo->FW_sta_info[i].rx_pkt == sta_rx_pkts(psta)) {
- 					if (pmlmeinfo->FW_sta_info[i].retry < 3) {
--- 
-2.17.1
+>
+> On Fri, Mar 25, 2022 at 11:46:08AM -0700, Rajat Jain wrote:
+> > The "DmaProperty" is supported and documented by Microsoft here:
+> > https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
+>
+> Here's a more specific link (could probably be referenced below to
+> avoid cluttering the text here):
+>
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
 
+Will do.
+
+>
+> > They use this property for DMA protection:
+> > https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
+> >
+> > Support the "DmaProperty" with the same semantics. This is useful for
+> > internal PCI devices that do not hang off a PCIe rootport, but offer
+> > an attack surface for DMA attacks (e.g. internal network devices).
+>
+> Same semantics as what?
+
+Er, I meant the same semantics as the "DmaProperty". Please also see below.
+
+>
+> The MS description of "ExternalFacingPort" says:
+>
+>   This ACPI object enables the operating system to identify externally
+>   exposed PCIe hierarchies, such as Thunderbolt.
+>
+
+No, my patch doesn't have to do with this one.
+
+> and "DmaProperty" says:
+>
+>   This ACPI object enables the operating system to identify internal
+>   PCIe hierarchies that are easily accessible by users (such as,
+>   Laptop M.2 PCIe slots accessible by way of a latch) and require
+>   protection by the OS Kernel DMA Protection mechanism.
+
+Yes, this is the property that my patch uses. Microsoft has agreed to
+update this documentation (in a sideband thread that I also copied you
+on), with the updated semantics that this property can be used to
+identify any PCI devices that require Kernel DMA protection. i.e. the
+property is not restricted to identify "internal PCIe hierarchies"
+(starting at root port), but to "any PCI device".
+
+>
+> I don't really understand why they called out "laptop M.2 PCIe slots"
+> here.  Is the idea that those are more accessible than a standard
+> internal PCIe slot?  Seems like a pretty small distinction to me.
+>
+> I can understand your example of internal network devices adding an
+> attack surface.  But I don't see how "DmaProperty" helps identify
+> those.  Wouldn't a NIC in a standard internal PCIe slot add the same
+> attack surface?
+
+Yes it would. The attack surface is the same. They probably only
+thought of devices external to the SoC (starting from a root port)
+when designing this property and thus called out internal M.2 PCI
+slots. But nowhave realized that this could be opened to any PCI
+device.
+
+>
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> > v5: * Reorder the patches in the series
+> > v4: * Add the GUID.
+> >     * Update the comment and commitlog.
+> > v3: * Use Microsoft's documented property "DmaProperty"
+> >     * Resctrict to ACPI only
+> >
+> >  drivers/acpi/property.c |  3 +++
+> >  drivers/pci/pci-acpi.c  | 16 ++++++++++++++++
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> > index d0986bda2964..20603cacc28d 100644
+> > --- a/drivers/acpi/property.c
+> > +++ b/drivers/acpi/property.c
+> > @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
+> >       /* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
+> >       GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
+> >                 0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
+> > +     /* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
+> > +     GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
+> > +               0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
+> >  };
+> >
+> >  /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
+> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> > index 1f15ab7eabf8..378e05096c52 100644
+> > --- a/drivers/pci/pci-acpi.c
+> > +++ b/drivers/pci/pci-acpi.c
+> > @@ -1350,12 +1350,28 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+> >               dev->external_facing = 1;
+> >  }
+> >
+> > +static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
+>
+> I try to avoid function names like *_check_*() because they don't give
+> any hint about whether there's a side effect or what direction things
+> are going.  I prefer things that return a value or make sense when
+> used as a predicate.  Maybe something like this?
+>
+>   int pci_dev_has_dma_property(struct pci_dev *dev)
+>
+>   dev->untrusted |= pci_dev_has_dma_property(pci_dev);
+>
+
+OK, will do.
+
+
+> > +{
+> > +     u8 val;
+> > +
+> > +     /*
+> > +      * Property also used by Microsoft Windows for same purpose,
+> > +      * (to implement DMA protection from a device, using the IOMMU).
+> > +      */
+> > +     if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
+>
+> The MS web page says a _DSD with this property must be implemented in
+> the Root Port device scope, but we don't enforce that here.  We *do*
+> enforce it in pci_acpi_set_untrusted().  Shouldn't we do the same
+> here?
+
+No, the whole point of doing this (please refer to the discussion on
+the previous versions of this patch) was that we want to have a
+property that is NOT limited to the root ports only. And we have
+reached an agreement with Microsoft about that.
+
+>
+> We currently look at three properties from the same _DSD:
+>
+>   DmaProperty
+>   ExternalFacingPort
+>   HotPlugSupportInD3
+>
+> For "HotPlugSupportInD3", we check that "value == 1".  For
+> "ExternalFacingPort", we check that it's non-zero.  The MS doc isn't
+> explicit about the values, but shows "1" in the sample ASL.  I think
+> we should handle all three cases the same.
+
+I think we can handle all three cases with "value==1". I will send a
+separate patch for the ExternalFacingPort, and will fixup this patch
+too).
+
+>
+> The first two use device_property_read_u8(); the last uses
+> acpi_dev_get_property().  Again, I think they should all be the same.
+>
+> acpi_dev_get_property() is easier for me to read because there are
+> slightly fewer layers of abstraction between _DSD and
+> acpi_dev_get_property().
+
+I'd prefer that too, and can change it to acpi_dev_get_property.
+
+>
+> But IIUC, device_property_read_u8() works for either ACPI or DT
+> properties, and maybe there is interest in using this for DT systems.
+> None of these appear in any in-tree DTs, but maybe it is important to
+> handle these in DTs?
+>
+> If that's the case, this code would no longer be specific to ACPI and
+> should be moved to somewhere that's compiled even when CONFIG_ACPI
+> isn't set.
+
+I think unifying ACPI and GPIO systems to use the same code / function
+to read the properties might be more work/investigation, because
+reading the properties for ACPI system happens much later than DT
+systems (For acpi systems, it happens in pci_acpi_setup() which is
+called much later). Given that no one wants to use this for DT
+systems, I'd prefer for this to be ACPI specific for now, and then we
+can solve it for DT once someone needs it.
+
+WDYT?
+
+Thanks & Best regards,
+
+Rajat
+
+>
+> > +             return;
+> > +
+> > +     if (val)
+> > +             dev->untrusted = 1;
+> > +}
+> > +
+> >  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+> >  {
+> >       struct pci_dev *pci_dev = to_pci_dev(dev);
+> >
+> >       pci_acpi_optimize_delay(pci_dev, adev->handle);
+> >       pci_acpi_set_external_facing(pci_dev);
+> > +     pci_acpi_check_for_dma_protection(pci_dev);
+> >       pci_acpi_add_edr_notifier(pci_dev);
+> >
+> >       pci_acpi_add_pm_notifier(adev, pci_dev);
+> > --
+> > 2.35.1.1021.g381101b075-goog
+> >

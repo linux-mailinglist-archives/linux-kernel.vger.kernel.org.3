@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBB75016E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC0E501471
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347510AbiDNPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S1344142AbiDNOAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347102AbiDNN62 (ORCPT
+        with ESMTP id S1344417AbiDNNcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2D9B6E63;
-        Thu, 14 Apr 2022 06:48:52 -0700 (PDT)
+        Thu, 14 Apr 2022 09:32:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B8B7F8;
+        Thu, 14 Apr 2022 06:29:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EB3BB828E6;
-        Thu, 14 Apr 2022 13:48:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF692C385A5;
-        Thu, 14 Apr 2022 13:48:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DFE461BA0;
+        Thu, 14 Apr 2022 13:29:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19805C385A5;
+        Thu, 14 Apr 2022 13:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944129;
-        bh=GYkMMH33gop5fdJ0SczhyS7N+fbjH7M69y+vrEGQO+I=;
+        s=korg; t=1649942973;
+        bh=SD6paaIIWTaQQJMxq5bUF6mXW/zdsPSqipSiJWGm7C0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1aBVEXnjDzkdclN/lp9DxCEWzfB0VcYWEnYKasuL2ahCpvCLKRkUOEBhCUsiSuwJq
-         B8dzT70JA++pUZMVBwT07R/DWGNcDb3HULGSOB4Neb5GT3pHod1gDXgZuHVyfIvpoY
-         RE8Lg7BN5KZR2VpdvIcgleis7QWxMK4/3rpgHlYc=
+        b=BSfVpsdxuMk1aC+H+wowL4HyW3KWKt7DoPv99CLfBTQkTuJ9r+d1wseSdZSttHYjJ
+         aC7fK7/rkhzLMDKOiiW+HfEHXKOw/5WB6RyI+/zFZc64AkU73GZZMEX7+Tqcv27F7T
+         Mm77gyCxETyO47tPYZHEesysa9pcj16LYtbXQBM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Qinghua Jin <qhjin.dev@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Jan Kara <jack@suse.cz>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 405/475] netlabel: fix out-of-bounds memory accesses
-Date:   Thu, 14 Apr 2022 15:13:10 +0200
-Message-Id: <20220414110906.399882184@linuxfoundation.org>
+Subject: [PATCH 4.19 288/338] minix: fix bug when opening a file with O_DIRECT
+Date:   Thu, 14 Apr 2022 15:13:11 +0200
+Message-Id: <20220414110847.086788831@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,68 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Yufen <wangyufen@huawei.com>
+From: Qinghua Jin <qhjin.dev@gmail.com>
 
-[ Upstream commit f22881de730ebd472e15bcc2c0d1d46e36a87b9c ]
+[ Upstream commit 9ce3c0d26c42d279b6c378a03cd6a61d828f19ca ]
 
-In calipso_map_cat_ntoh(), in the for loop, if the return value of
-netlbl_bitmap_walk() is equal to (net_clen_bits - 1), when
-netlbl_bitmap_walk() is called next time, out-of-bounds memory accesses
-of bitmap[byte_offset] occurs.
+Testcase:
+1. create a minix file system and mount it
+2. open a file on the file system with O_RDWR|O_CREAT|O_TRUNC|O_DIRECT
+3. open fails with -EINVAL but leaves an empty file behind. All other
+   open() failures don't leave the failed open files behind.
 
-The bug was found during fuzzing. The following is the fuzzing report
- BUG: KASAN: slab-out-of-bounds in netlbl_bitmap_walk+0x3c/0xd0
- Read of size 1 at addr ffffff8107bf6f70 by task err_OH/252
+It is hard to check the direct_IO op before creating the inode.  Just as
+ext4 and btrfs do, this patch will resolve the issue by allowing to
+create the file with O_DIRECT but returning error when writing the file.
 
- CPU: 7 PID: 252 Comm: err_OH Not tainted 5.17.0-rc7+ #17
- Hardware name: linux,dummy-virt (DT)
- Call trace:
-  dump_backtrace+0x21c/0x230
-  show_stack+0x1c/0x60
-  dump_stack_lvl+0x64/0x7c
-  print_address_description.constprop.0+0x70/0x2d0
-  __kasan_report+0x158/0x16c
-  kasan_report+0x74/0x120
-  __asan_load1+0x80/0xa0
-  netlbl_bitmap_walk+0x3c/0xd0
-  calipso_opt_getattr+0x1a8/0x230
-  calipso_sock_getattr+0x218/0x340
-  calipso_sock_getattr+0x44/0x60
-  netlbl_sock_getattr+0x44/0x80
-  selinux_netlbl_socket_setsockopt+0x138/0x170
-  selinux_socket_setsockopt+0x4c/0x60
-  security_socket_setsockopt+0x4c/0x90
-  __sys_setsockopt+0xbc/0x2b0
-  __arm64_sys_setsockopt+0x6c/0x84
-  invoke_syscall+0x64/0x190
-  el0_svc_common.constprop.0+0x88/0x200
-  do_el0_svc+0x88/0xa0
-  el0_svc+0x128/0x1b0
-  el0t_64_sync_handler+0x9c/0x120
-  el0t_64_sync+0x16c/0x170
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Acked-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lkml.kernel.org/r/20220107133626.413379-1-qhjin.dev@gmail.com
+Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+Reported-by: Colin Ian King <colin.king@intel.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlabel/netlabel_kapi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/minix/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/netlabel/netlabel_kapi.c b/net/netlabel/netlabel_kapi.c
-index 5e1239cef000..91b35b7c80d8 100644
---- a/net/netlabel/netlabel_kapi.c
-+++ b/net/netlabel/netlabel_kapi.c
-@@ -885,6 +885,8 @@ int netlbl_bitmap_walk(const unsigned char *bitmap, u32 bitmap_len,
- 	unsigned char bitmask;
- 	unsigned char byte;
+diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+index 03fe8bac36cf..3ce91ad1ee1b 100644
+--- a/fs/minix/inode.c
++++ b/fs/minix/inode.c
+@@ -450,7 +450,8 @@ static const struct address_space_operations minix_aops = {
+ 	.writepage = minix_writepage,
+ 	.write_begin = minix_write_begin,
+ 	.write_end = generic_write_end,
+-	.bmap = minix_bmap
++	.bmap = minix_bmap,
++	.direct_IO = noop_direct_IO
+ };
  
-+	if (offset >= bitmap_len)
-+		return -1;
- 	byte_offset = offset / 8;
- 	byte = bitmap[byte_offset];
- 	bit_spot = offset;
+ static const struct inode_operations minix_symlink_inode_operations = {
 -- 
 2.35.1
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB29C500931
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226E6500920
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241492AbiDNJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S241499AbiDNJCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241436AbiDNJBy (ORCPT
+        with ESMTP id S241471AbiDNJB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:01:54 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B34219
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:18 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so5055016pjk.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:18 -0700 (PDT)
+        Thu, 14 Apr 2022 05:01:57 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8C36E540
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:25 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so8684347pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hsQvWpubllx7PdWg9lbvyVRg4B3WKq0E84Aji7H3XUg=;
-        b=RcI79TDVfUjEI+i7r0zv9DyFEarSCFOyyJ0yAe7QADd7JMamrld0EL4b0MRQQtrJFP
-         yl5lGZBKoYaISvBtIUFjkwkE4uRd4hqa75Q8rX2cOSKVe7/OSGuDyPqfJVYs2ji6ZbGH
-         jwAFBBf00cMN6ViOCeY6jFXivsR0+KSCaodvMFqGNHgQPtoYlW7W7OuOywUtOkIw6o2A
-         4oxeUjuOGCfQ6MpC3ZvHMcRv6IJnmXTXjN5djExNqEzEFYByKGuvntX4KDlBhmv+ZQDE
-         1Ph97XF0XJ3amt/G8ZzZcNMasQKt7vl8pveXq3v2fOc9v7JM1R58uRuyFHh3lu0WYjj7
-         T8Rg==
+        bh=EgrMWHzF8KTmL9m2nlEJVQvsLaOWu876E+Hsc/ZOTns=;
+        b=eVN9EceUKSMr6S3Dx3WSG3+9RqV3tUi12cCXVc+p3TamUxX3IVV/OiGL12wf+uzrtM
+         bLCfrPExxg+uIJ8cAf6E3lS2stPyY2CvbRMzA7f4G6+1ieA41AjTW9T9LCHmAq3CkC9e
+         NeThT2oo9wah/fTkl0y3/ke9NAsRgUCGibv48DPHIvLZtOw/LiYAD1xVDF8Tg+4YAsSd
+         EUTJTAAugQWgdf7WekUhtVCtHeW4bmLZGjmfcw41siVYZgYfguTUhDgYAF/KrEsuuoPm
+         /VPvwPamPNs2ny/K7qrsoS5YM990ITJ+Ng14TwhM3kQAjAs3uRonECxyb8khqi8TqYZB
+         1BNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hsQvWpubllx7PdWg9lbvyVRg4B3WKq0E84Aji7H3XUg=;
-        b=ni1dX/0oWEt+TnrH9nFn9S21ZZckJx3GR3LUwvH8Eaup0VsMDtnEc5nDOS67Uwbdwc
-         Qp5jYDe8KVhrPE8qtlBzlxoh8BIeWn7hKTuafyS2jiOz9GGa+iNqvxw6yr5q9VPXAWwr
-         YKexrOL3ZquJMclhEzqASxE5zqZy8rUy5O2kW/HUiyzk5xtchOOJ4tJsa4K3AsT+DdIf
-         PghQcO018mgw1QESfZi8x2GFAF/GBZYzOa9049/l8lLR3qOd4ILPgfjaP5sFMSW6pPyj
-         OfS7+dRdWGdxUTpmgi0U5aM87nAiHIOHNavmIDXjnByA9I0UVS6lp3PsdD0iFAP5eZ8B
-         SfLQ==
-X-Gm-Message-State: AOAM5326/IDvij4T8/zit21oV5ooiWtE++AOpBBdZDXdm4GSyektOYrU
-        eSCPUOKXQBQQQrAOqnegHOk=
-X-Google-Smtp-Source: ABdhPJz7HfWYTCuY7TqGCZq82ODBwRzEgJAykfwr5rZXPv7yJZnkLjt8584O0Wr3hN6glVAZ5QpD3g==
-X-Received: by 2002:a17:902:aa85:b0:155:ceb9:3710 with SMTP id d5-20020a170902aa8500b00155ceb93710mr12561403plr.59.1649926758443;
-        Thu, 14 Apr 2022 01:59:18 -0700 (PDT)
+        bh=EgrMWHzF8KTmL9m2nlEJVQvsLaOWu876E+Hsc/ZOTns=;
+        b=xA/OLgs11LIVV7QC/DMeo2Dty648ZJy4tASXtgMRdLa/pddJHs/fMeyS5ejEV6waMB
+         OZaCMIlVGOAD4HzTh4K2dMYcm3modJT2FKVYKm0iF9HWYqNDN9eM/en6w4Nr4QNnwo6k
+         ybVbn8WDztr3Y0GvOFvzhgBHc7gzI4594wRIJ+BG0kMb3Ka/SuIOyzjufK9swEPDpWUr
+         w3I3+esLFsYYxsIa+SR5b6hWmFW/zIJuFRGfdSaq8PxtUWJuf3jRnpN/5rX/D7apV3Qs
+         JSUEzo23Kpt1TleFdefHIIjFa+DfwlDKytBZpL+Y0By8WjJ5pDbiKTBRdo1CTg/rDwqH
+         c/OA==
+X-Gm-Message-State: AOAM530X70aRkURtxm5Aaxd9i4i07386ZgBFXMXvCKp7MoF7RX693Pfa
+        zVdPDmoBt3SLvW0bsWPuzPeTjAVpzUs=
+X-Google-Smtp-Source: ABdhPJwZQkFFpM6qRwxrzIAePqZY2pqNaF46syQsAZdIkRUvqJY7Cm8E08BpythhpVh93GkFpAoCag==
+X-Received: by 2002:a17:903:c2:b0:158:5842:2b3a with SMTP id x2-20020a17090300c200b0015858422b3amr20520315plc.126.1649926765109;
+        Thu, 14 Apr 2022 01:59:25 -0700 (PDT)
 Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.59.12
+        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.59.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 01:59:16 -0700 (PDT)
+        Thu, 14 Apr 2022 01:59:23 -0700 (PDT)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Marco Elver <elver@google.com>,
@@ -60,9 +60,9 @@ Cc:     Marco Elver <elver@google.com>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 16/23] mm/slab_common: rename tracepoint
-Date:   Thu, 14 Apr 2022 17:57:20 +0900
-Message-Id: <20220414085727.643099-17-42.hyeyoo@gmail.com>
+Subject: [PATCH v2 17/23] mm/slab_common: implement __kmem_cache_free()
+Date:   Thu, 14 Apr 2022 17:57:21 +0900
+Message-Id: <20220414085727.643099-18-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
 References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
@@ -78,188 +78,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To reduce overhead of printing tracepoint name,
-rename trace_kmem_cache_alloc_node to kmem_cache_alloc.
+To generalize kfree in later patch, implement __kmem_cache_free() that
+takes caller address and make kmem_cache_free() wrapper of it.
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Now that kmem_cache_free() is inline function, we should
+use _THIS_IP_ instead of _RET_IP_ for consistency.
+
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- include/trace/events/kmem.h |  4 ++--
- mm/slab.c                   |  8 ++++----
- mm/slab_common.c            |  6 +++---
- mm/slob.c                   | 22 +++++++++++-----------
- mm/slub.c                   | 16 ++++++++--------
- 5 files changed, 28 insertions(+), 28 deletions(-)
+ include/linux/slab.h | 16 +++++++++++++++-
+ mm/slab.c            | 17 +++++------------
+ mm/slob.c            | 13 +++++++------
+ mm/slub.c            |  9 +++++----
+ 4 files changed, 32 insertions(+), 23 deletions(-)
 
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index ca67ba5fd76a..58edb2e3e5a4 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -9,7 +9,7 @@
- #include <linux/tracepoint.h>
- #include <trace/events/mmflags.h>
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index c8c82087c3f9..0630c37ee630 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -462,7 +462,21 @@ void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru, gfp_t gfp
+ 	return __kmem_cache_alloc_node(s, lru, gfpflags, NUMA_NO_NODE, _THIS_IP_);
+ }
  
--DECLARE_EVENT_CLASS(kmem_alloc_node,
-+DECLARE_EVENT_CLASS(kmem_alloc,
+-void kmem_cache_free(struct kmem_cache *s, void *objp);
++void __kmem_cache_free(struct kmem_cache *s, void *objp, unsigned long caller __maybe_unused);
++
++/**
++ * kmem_cache_free - Deallocate an object
++ * @s: The cache the allocation was from.
++ * @objp: The previously allocated object.
++ *
++ * Free an object which was previously allocated from this
++ * cache.
++ */
++static __always_inline void kmem_cache_free(struct kmem_cache *s, void *objp)
++{
++	__kmem_cache_free(s, objp, _THIS_IP_);
++}
++
  
- 	TP_PROTO(const char *name,
- 		 unsigned long call_site,
-@@ -51,7 +51,7 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
- 		__entry->node)
- );
- 
--DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
-+DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
- 
- 	TP_PROTO(const char *name, unsigned long call_site,
- 		 const void *ptr, size_t bytes_req, size_t bytes_alloc,
+ /*
+  * Bulk allocation and freeing operations. These are accelerated in an
 diff --git a/mm/slab.c b/mm/slab.c
-index b9959a6b5c48..424168b96790 100644
+index 424168b96790..d35873da5572 100644
 --- a/mm/slab.c
 +++ b/mm/slab.c
-@@ -3448,7 +3448,7 @@ void *__kmem_cache_alloc_node(struct kmem_cache *cachep, struct list_lru *lru,
- 	void *ret = slab_alloc_node(cachep, lru, flags, nodeid,
- 				    cachep->object_size, caller);
- 
--	trace_kmem_cache_alloc_node(cachep->name, caller, ret,
-+	trace_kmem_cache_alloc(cachep->name, caller, ret,
- 				    cachep->object_size, cachep->size,
- 				    flags, nodeid);
- 
-@@ -3519,9 +3519,9 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
- 	ret = slab_alloc_node(cachep, NULL, flags, nodeid, size, _RET_IP_);
- 
- 	ret = kasan_kmalloc(cachep, ret, size, flags);
--	trace_kmem_cache_alloc_node(cachep->name, _RET_IP_, ret,
--				    size, cachep->size,
--				    flags, nodeid);
-+	trace_kmem_cache_alloc(cachep->name, _RET_IP_, ret,
-+			       size, cachep->size,
-+			       flags, nodeid);
- 	return ret;
+@@ -3579,30 +3579,23 @@ void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
  }
- EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 3d1569085c54..3cd5d7a47ec7 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -957,8 +957,8 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
- 	ptr = kasan_kmalloc_large(ptr, size, flags);
- 	/* As ptr might get tagged, call kmemleak hook after KASAN. */
- 	kmemleak_alloc(ptr, size, 1, flags);
--	trace_kmem_cache_alloc_node(KMALLOC_LARGE_NAME, _RET_IP_, ptr, size,
--				    PAGE_SIZE << order, flags, node);
-+	trace_kmem_cache_alloc(KMALLOC_LARGE_NAME, _RET_IP_, ptr, size,
-+			       PAGE_SIZE << order, flags, node);
- 	return ptr;
+ #endif
+ 
+-/**
+- * kmem_cache_free - Deallocate an object
+- * @cachep: The cache the allocation was from.
+- * @objp: The previously allocated object.
+- *
+- * Free an object which was previously allocated from this
+- * cache.
+- */
+-void kmem_cache_free(struct kmem_cache *cachep, void *objp)
++void __kmem_cache_free(struct kmem_cache *cachep, void *objp,
++		       unsigned long caller __maybe_unused)
+ {
+ 	unsigned long flags;
+ 	cachep = cache_from_obj(cachep, objp);
+ 	if (!cachep)
+ 		return;
+ 
+-	trace_kmem_cache_free(cachep->name, _RET_IP_, objp);
++	trace_kmem_cache_free(cachep->name, caller, objp);
+ 	local_irq_save(flags);
+ 	debug_check_no_locks_freed(objp, cachep->object_size);
+ 	if (!(cachep->flags & SLAB_DEBUG_OBJECTS))
+ 		debug_check_no_obj_freed(objp, cachep->object_size);
+-	__cache_free(cachep, objp, _RET_IP_);
++	__cache_free(cachep, objp, caller);
+ 	local_irq_restore(flags);
  }
- EXPORT_SYMBOL(kmalloc_large_node);
-@@ -1291,7 +1291,7 @@ size_t ksize(const void *objp)
- EXPORT_SYMBOL(ksize);
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
  
- /* Tracepoints definitions. */
--EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc_node);
-+EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc);
- EXPORT_TRACEPOINT_SYMBOL(kmem_cache_free);
- 
- int should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+ void kmem_cache_free_bulk(struct kmem_cache *orig_s, size_t size, void **p)
+ {
 diff --git a/mm/slob.c b/mm/slob.c
-index b1f291128e94..1bb4c577b908 100644
+index 1bb4c577b908..e893d182d471 100644
 --- a/mm/slob.c
 +++ b/mm/slob.c
-@@ -505,8 +505,8 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 		*m = size;
- 		ret = (void *)m + minalign;
+@@ -631,7 +631,7 @@ void *__kmem_cache_alloc_node(struct kmem_cache *cachep, struct list_lru *lru __
+ }
+ EXPORT_SYMBOL(__kmem_cache_alloc_node);
  
--		trace_kmem_cache_alloc_node(KMALLOC_NAME, caller, ret,
--					    size, size + minalign, gfp, node);
-+		trace_kmem_cache_alloc(KMALLOC_NAME, caller, ret,
-+				       size, size + minalign, gfp, node);
+-static void __kmem_cache_free(void *b, int size)
++static void ____kmem_cache_free(void *b, int size)
+ {
+ 	if (size < PAGE_SIZE)
+ 		slob_free(b, size);
+@@ -644,23 +644,24 @@ static void kmem_rcu_free(struct rcu_head *head)
+ 	struct slob_rcu *slob_rcu = (struct slob_rcu *)head;
+ 	void *b = (void *)slob_rcu - (slob_rcu->size - sizeof(struct slob_rcu));
+ 
+-	__kmem_cache_free(b, slob_rcu->size);
++	____kmem_cache_free(b, slob_rcu->size);
+ }
+ 
+-void kmem_cache_free(struct kmem_cache *c, void *b)
++void __kmem_cache_free(struct kmem_cache *c, void *b,
++		       unsigned long caller __maybe_unused)
+ {
+ 	kmemleak_free_recursive(b, c->flags);
+-	trace_kmem_cache_free(c->name, _RET_IP_, b);
++	trace_kmem_cache_free(c->name, caller, b);
+ 	if (unlikely(c->flags & SLAB_TYPESAFE_BY_RCU)) {
+ 		struct slob_rcu *slob_rcu;
+ 		slob_rcu = b + (c->size - sizeof(struct slob_rcu));
+ 		slob_rcu->size = c->size;
+ 		call_rcu(&slob_rcu->head, kmem_rcu_free);
  	} else {
- 		unsigned int order = get_order(size);
- 
-@@ -514,9 +514,9 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 			gfp |= __GFP_COMP;
- 		ret = slob_new_pages(gfp, order, node);
- 
--		trace_kmem_cache_alloc_node(KMALLOC_LARGE_NAME, caller,
--					    ret, size, PAGE_SIZE << order,
--					    gfp, node);
-+		trace_kmem_cache_alloc(KMALLOC_LARGE_NAME, caller,
-+				       ret, size, PAGE_SIZE << order,
-+				       gfp, node);
+-		__kmem_cache_free(b, c->size);
++		____kmem_cache_free(b, c->size);
  	}
+ }
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
  
- 	kmemleak_alloc(ret, size, 1, gfp);
-@@ -599,14 +599,14 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node,
- 
- 	if (c->size < PAGE_SIZE) {
- 		b = slob_alloc(c->size, flags, c->align, node, 0);
--		trace_kmem_cache_alloc_node(c->name, caller, b, c->object_size,
--					    SLOB_UNITS(c->size) * SLOB_UNIT,
--					    flags, node);
-+		trace_kmem_cache_alloc(c->name, caller, b, c->object_size,
-+				       SLOB_UNITS(c->size) * SLOB_UNIT,
-+				       flags, node);
- 	} else {
- 		b = slob_new_pages(flags, get_order(c->size), node);
--		trace_kmem_cache_alloc_node(c->name, caller, b, c->object_size,
--					    PAGE_SIZE << get_order(c->size),
--					    flags, node);
-+		trace_kmem_cache_alloc(c->name, caller, b, c->object_size,
-+				       PAGE_SIZE << get_order(c->size),
-+				       flags, node);
- 	}
- 
- 	if (b && c->ctor) {
+ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+ {
 diff --git a/mm/slub.c b/mm/slub.c
-index d53e9e22d67e..a088d4fa1062 100644
+index a088d4fa1062..a72a2d08e793 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -3215,8 +3215,8 @@ void *__kmem_cache_alloc_node(struct kmem_cache *s, struct list_lru *lru, gfp_t
- {
- 	void *ret = slab_alloc_node(s, lru, gfpflags, node, caller, s->object_size);
- 
--	trace_kmem_cache_alloc_node(s->name, caller, ret, s->object_size,
--				    s->size, gfpflags, node);
-+	trace_kmem_cache_alloc(s->name, caller, ret, s->object_size,
-+			       s->size, gfpflags, node);
- 
- 	return ret;
+@@ -3466,15 +3466,16 @@ void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
  }
-@@ -3229,8 +3229,8 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
+ #endif
+ 
+-void kmem_cache_free(struct kmem_cache *s, void *x)
++void __kmem_cache_free(struct kmem_cache *s, void *x,
++		       unsigned long caller __maybe_unused)
  {
- 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, size);
- 
--	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret,
--				    size, s->size, gfpflags, node);
-+	trace_kmem_cache_alloc(s->name, _RET_IP_, ret,
-+			       size, s->size, gfpflags, node);
- 
- 	ret = kasan_kmalloc(s, ret, size, gfpflags);
- 	return ret;
-@@ -4352,8 +4352,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
- 
- 	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
- 
--	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret, size,
--				    s->size, flags, node);
-+	trace_kmem_cache_alloc(s->name, _RET_IP_, ret, size,
-+			       s->size, flags, node);
- 
- 	ret = kasan_kmalloc(s, ret, size, flags);
- 
-@@ -4815,8 +4815,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
- 	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
- 
- 	/* Honor the call site pointer we received. */
--	trace_kmem_cache_alloc_node(s->name, caller, ret, size,
--				    s->size, gfpflags, node);
-+	trace_kmem_cache_alloc(s->name, caller, ret, size,
-+			       s->size, gfpflags, node);
- 
- 	return ret;
+ 	s = cache_from_obj(s, x);
+ 	if (!s)
+ 		return;
+-	trace_kmem_cache_free(s->name, _RET_IP_, x);
+-	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
++	trace_kmem_cache_free(s->name, caller, x);
++	slab_free(s, virt_to_slab(x), x, NULL, 1, caller);
  }
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
+ 
+ struct detached_freelist {
+ 	struct slab *slab;
 -- 
 2.32.0
 

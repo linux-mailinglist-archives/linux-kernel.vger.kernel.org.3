@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917BF50152B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECBF50166E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345264AbiDNNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S1355196AbiDNO55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343511AbiDNN3W (ORCPT
+        with ESMTP id S1345981AbiDNNzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBAD1D3;
-        Thu, 14 Apr 2022 06:24:20 -0700 (PDT)
+        Thu, 14 Apr 2022 09:55:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19089393C6;
+        Thu, 14 Apr 2022 06:45:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09FE4B82985;
-        Thu, 14 Apr 2022 13:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69212C385A5;
-        Thu, 14 Apr 2022 13:24:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B996DB82894;
+        Thu, 14 Apr 2022 13:45:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB07C385A5;
+        Thu, 14 Apr 2022 13:45:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942657;
-        bh=tZLkmdGLd3BRCcgyFFRiPY+tkNgl+dRTZ9QJcTbaIMA=;
+        s=korg; t=1649943931;
+        bh=6JbgwPGBkAytrCwlz5dpIlkdy6lluAOgX9UvT+abVOY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oJVzC3+FgIB2grUQyiGTCKGUuGeq/+3h0psesetxjsg6WpsWfMH/4kMitky+mySUW
-         iMohyucoCUxHLbe+QdJy4BCckq/Je+ceDGoqvsCY6zrn0D3y9I+y1SXCu/tmh85l34
-         EKdzxiQKlhSdfnNuFezhLVkv64S8zeaEqOIeBJyo=
+        b=2V0EPN/Rw8Sb5rRXeEhbnRG70SfjlyJ9kC5RQqMUiVJn7/eNVr1SssaTC736jorjR
+         vSJrJxH5FYWP5/UV35S/gFFbOVR9WlZeygheJINa8y82WM2VNrFkFj/L9KBW45hV3A
+         eayfuQnqvUjRwRXtptRkPLz89HExdnpMFMPSDRw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 214/338] ARM: tegra: tamonten: Fix I2C3 pad setting
-Date:   Thu, 14 Apr 2022 15:11:57 +0200
-Message-Id: <20220414110844.985152066@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.4 333/475] ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
+Date:   Thu, 14 Apr 2022 15:11:58 +0200
+Message-Id: <20220414110904.404723886@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Leitner <richard.leitner@skidata.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-[ Upstream commit 0092c25b541a5422d7e71892a13c55ee91abc34b ]
+commit 716b4573026bcbfa7b58ed19fe15554bac66b082 upstream.
 
-This patch fixes the tristate configuration for i2c3 function assigned
-to the dtf pins on the Tamonten Tegra20 SoM.
+whiteout inode should be put when do_tmpfile() failed if inode has been
+initialized. Otherwise we will get following warning during umount:
+  UBIFS error (ubi0:0 pid 1494): ubifs_assert_failed [ubifs]: UBIFS
+  assert failed: c->bi.dd_growth == 0, in fs/ubifs/super.c:1930
+  VFS: Busy inodes after unmount of ubifs. Self-destruct in 5 seconds.
 
-Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Suggested-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/tegra20-tamonten.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/ubifs/dir.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra20-tamonten.dtsi b/arch/arm/boot/dts/tegra20-tamonten.dtsi
-index 394a6b4dc69d..69cb65d86c46 100644
---- a/arch/arm/boot/dts/tegra20-tamonten.dtsi
-+++ b/arch/arm/boot/dts/tegra20-tamonten.dtsi
-@@ -183,8 +183,8 @@
- 			};
- 			conf_ata {
- 				nvidia,pins = "ata", "atb", "atc", "atd", "ate",
--					"cdev1", "cdev2", "dap1", "dtb", "gma",
--					"gmb", "gmc", "gmd", "gme", "gpu7",
-+					"cdev1", "cdev2", "dap1", "dtb", "dtf",
-+					"gma", "gmb", "gmc", "gmd", "gme", "gpu7",
- 					"gpv", "i2cp", "irrx", "irtx", "pta",
- 					"rm", "slxa", "slxk", "spia", "spib",
- 					"uac";
-@@ -203,7 +203,7 @@
- 			};
- 			conf_crtp {
- 				nvidia,pins = "crtp", "dap2", "dap3", "dap4",
--					"dtc", "dte", "dtf", "gpu", "sdio1",
-+					"dtc", "dte", "gpu", "sdio1",
- 					"slxc", "slxd", "spdi", "spdo", "spig",
- 					"uda";
- 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
--- 
-2.34.1
-
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -439,6 +439,8 @@ out_inode:
+ 	make_bad_inode(inode);
+ 	if (!instantiated)
+ 		iput(inode);
++	else if (whiteout)
++		iput(*whiteout);
+ out_budg:
+ 	ubifs_release_budget(c, &req);
+ 	if (!instantiated)
 
 

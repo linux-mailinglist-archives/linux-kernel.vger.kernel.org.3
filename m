@@ -2,113 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99878501AE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D298501AF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344490AbiDNSU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 14:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S240694AbiDNSXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 14:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344434AbiDNSUR (ORCPT
+        with ESMTP id S233542AbiDNSXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 14:20:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4586AEA377
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649960270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HlSZzKp73Fayw7krLRtWU5sPNWnQq78trEkuE6TU4hM=;
-        b=JAVL4NQzXAn0HIfhukVEkTGKao3oBb8d/5eg52Lx1XOOP4jg1NMC2WveamR0ZvN3aMaBkn
-        ksG134Q/es8oLc9WlVkd9bCwir+S7OHDf6kWQFcYfrKnkiX4swxmdm+h31E7OMTy3Lcn6L
-        2OdYGlxAQaYt1Njd5P3S1jO/5la/B9o=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-125-Y8FWSJ6ONuWek7LI6kVInA-1; Thu, 14 Apr 2022 14:17:47 -0400
-X-MC-Unique: Y8FWSJ6ONuWek7LI6kVInA-1
-Received: by mail-qk1-f197.google.com with SMTP id y13-20020a05620a44cd00b0069c35f1ea3eso3847505qkp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 11:17:47 -0700 (PDT)
+        Thu, 14 Apr 2022 14:23:17 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1122AE14;
+        Thu, 14 Apr 2022 11:20:51 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id bj24so820856oib.11;
+        Thu, 14 Apr 2022 11:20:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HlSZzKp73Fayw7krLRtWU5sPNWnQq78trEkuE6TU4hM=;
-        b=8SAGm7lLFC93+h9/+UT0IuxIV9Bal7i1fRYrH6U/fk50SlDB2i8l3xnZT6SkW1jLn2
-         lIDZDBiCXazePfvvct77nT5vpDZyxWyl1csfNJ4Cib+0AirYA2YRRk0TJvoUz+nCSZsO
-         bevr6gB5LDL0mZEDsPQbzE3/P2nbO7IDbeeKcLqtA+JbabVq5aQop0QN/XCXqnxNZGEe
-         XwSgHhaVcliZ5UIJ52m6xqyM1k1ZIWr19AMqcrM/T9qt4yRJC1OvcABbxnhd+cN1yK+u
-         OriQ5ENkwqKcmcdjWW+xI/Mhc39S6zVyD0pkBvmmi9onKsTM+JfRsTfzmh0oeXD64vsy
-         n19w==
-X-Gm-Message-State: AOAM531nBh4kWIjEAQ2JLnhUPZ156zsRjAyuEs7rMmVO0kXqgck1GJeS
-        itaXxpQxGOqiwPUhLA71h1qdw9dvRllnsCWMVhJ9Mi8snVErkGLUp+tjiqOk4meyg3aiAHhin6d
-        Frh/Rw4SfA6w4Bdso8UK9Mz+d
-X-Received: by 2002:a05:620a:3706:b0:69c:41fc:ae9d with SMTP id de6-20020a05620a370600b0069c41fcae9dmr2884116qkb.307.1649960267100;
-        Thu, 14 Apr 2022 11:17:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzbDkwZn4LTf/pzuq9ks/ZEKFR/wwVxem3IAa/T4H3Fr2doVaKqBcWNZSrnxRotfDf19d2/4Q==
-X-Received: by 2002:a05:620a:3706:b0:69c:41fc:ae9d with SMTP id de6-20020a05620a370600b0069c41fcae9dmr2884105qkb.307.1649960266903;
-        Thu, 14 Apr 2022 11:17:46 -0700 (PDT)
-Received: from fedora.redhat.com (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac85845000000b002edfd4b0503sm1701816qth.88.2022.04.14.11.17.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=49UHAT4bvClctyO7SpH/kHuczcmJC7fg1AX1Ne+NSKs=;
+        b=louQMAhSiZ6+bYH5XpZgNy43WUkiJ8G8FeM+H5CjvulKDpV9uBeWI/OICaN8GhXo2O
+         bPhodlbjTgmka9dXNP349xYSNG5zZ4mfhoymHhXmmvEcslM9iOYlmYTnA1DUlFC2cAik
+         GriX0uP6hlox0DVPsS2TGXBboMz7mSQZ9DWGarzWonBBYilwo1rq7Hcn5kmIvuuntiqf
+         osO75NTdOW3jZEkutFQDmyI0pyg1JIyXzVB84Uks4vz7uKVGac/Mtc9AMDQ4nFNY+AZJ
+         Xjjtz6WLDbVu/NNSuzpEsFUkDucn4dmgCJjUAFAaZkugJqDYXPVbLpJl0cHRhBVnbEzR
+         K2eg==
+X-Gm-Message-State: AOAM5321atf2H/2lhpINuONFocpDoeKIwCrrcwEjopjv+ACsR+hbj7Mc
+        8osMmn8jTduCoo0F7RYuoA==
+X-Google-Smtp-Source: ABdhPJwzj6DFzVeRUBf1hovvcj7QNX6k5X5/sLRvxQeN7WjUJKTm7auxmKoXlTJv9NKEkAyhHH6mVg==
+X-Received: by 2002:aca:1817:0:b0:2ec:f542:c96c with SMTP id h23-20020aca1817000000b002ecf542c96cmr2023781oih.36.1649960450795;
+        Thu, 14 Apr 2022 11:20:50 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r19-20020a056830121300b005cdb11a7b85sm301131otp.29.2022.04.14.11.20.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 11:17:46 -0700 (PDT)
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Maxime Ripard <mripard@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Adrien Thierry <athierry@redhat.com>
-Subject: [PATCH v2 5/5] staging: bcm2835-audio: fix mutex definition without comment
-Date:   Thu, 14 Apr 2022 14:16:22 -0400
-Message-Id: <20220414181622.102049-6-athierry@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220414181622.102049-1-athierry@redhat.com>
-References: <20220414181622.102049-1-athierry@redhat.com>
+        Thu, 14 Apr 2022 11:20:50 -0700 (PDT)
+Received: (nullmailer pid 2387691 invoked by uid 1000);
+        Thu, 14 Apr 2022 18:20:49 -0000
+Date:   Thu, 14 Apr 2022 13:20:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kartik <kkartik@nvidia.com>
+Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de, krzk+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, spujar@nvidia.com,
+        akhilrajeev@nvidia.com, rgumasta@nvidia.com, pshete@nvidia.com,
+        vidyas@nvidia.com, mperttunen@nvidia.com, mkumard@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: timer: Add Tegra186 & Tegra234 Timer
+Message-ID: <YlhmAQsZVU92OZ3W@robh.at.kernel.org>
+References: <1649924738-17990-1-git-send-email-kkartik@nvidia.com>
+ <1649924738-17990-2-git-send-email-kkartik@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649924738-17990-2-git-send-email-kkartik@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix issue reported by checkpatch:
+On Thu, Apr 14, 2022 at 01:55:33PM +0530, Kartik wrote:
+> The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
+> timestamp counter. The Tegra234 timer provides sixteen 29-bit timer
+> counters and one 32-bit timestamp counter. Each NV timer selects its
+> timing reference signal from the 1 MHz reference generated by USEC,
+> TSC or either clk_m or OSC. Each TMR can be programmed to generate
+> one-shot, periodic, or watchdog interrupts.
+> 
+> Signed-off-by: Kartik <kkartik@nvidia.com>
 
-CHECK: struct mutex definition without comment
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835.h:64:
+Full name please.
 
-Signed-off-by: Adrien Thierry <athierry@redhat.com>
----
- drivers/staging/vc04_services/bcm2835-audio/bcm2835.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  .../bindings/timer/nvidia,tegra186-timer.yaml | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+> new file mode 100644
+> index 000000000000..7841a68d19f3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+> @@ -0,0 +1,116 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/timer/nvidia,tegra186-timer.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: NVIDIA Tegra186 timer
+> +
+> +maintainers:
+> +  - Thierry Reding <treding@nvidia.com>
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: nvidia,tegra186-timer
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          # Either a single combined interrupt or up to 14 individual interrupts
 
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-index 51066ac8eea5..38b7451d77b2 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-+++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-@@ -61,7 +61,7 @@ struct bcm2835_chip {
- 
- 	unsigned int opened;
- 	unsigned int spdif_status;
--	struct mutex audio_mutex;
-+	struct mutex audio_mutex; /* Serialize chip data access */
- 
- 	struct bcm2835_vchi_ctx *vchi_ctx;
- };
--- 
-2.35.1
+This can be part of 'description'
 
+> +          minItems: 1
+> +          maxItems: 10
+> +          description: >
+> +            A list of 10 interrupts; one per each timer channels 0 through 9.
+
+Is it 10 or 14? I'm confused.
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: nvidia,tegra234-timer
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          # Either a single combined interrupt or up to 16 individual interrupts
+> +          minItems: 1
+> +          maxItems: 16
+> +          description: >
+> +            A list of 16 interrupts; one per each timer channels 0 through 15.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: nvidia,tegra186-timer
+> +        description: >
+> +          The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
+> +          timestamp counter. Each NV timer selects its timing reference signal
+> +          from the 1 MHz reference generated by USEC, TSC or either clk_m or
+> +          OSC. Each TMR can be programmed to generate one-shot, periodic, or
+> +          watchdog interrupts.
+> +      - const: nvidia,tegra234-timer
+> +        description: >
+> +          The Tegra234 timer provides sixteen 29-bit timer counters and one 32-bit
+> +          timestamp counter. Each NV timer selects its timing reference signal
+> +          from the 1 MHz reference generated by USEC, TSC or either clk_m or
+> +          OSC. Each TMR can be programmed to generate one-shot, periodic, or
+> +          watchdog interrupts.
+
+Move all this description to top-level description leaving out the exact 
+number of counters (as the schema defines that).
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    timer@3010000 {
+> +        compatible = "nvidia,tegra186-timer";
+> +        reg = <0x03010000 0x000e0000>;
+> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +        status = "disabled";
+
+Drop status.
+
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    timer@2080000 {
+> +        compatible = "nvidia,tegra234-timer";
+> +        reg = <0x02080000 0x00121000>;
+> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+> +        status = "disabled";
+> +    };
+> -- 
+> 2.17.1
+> 
+> 

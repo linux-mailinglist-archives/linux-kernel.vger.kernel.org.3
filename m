@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A11C501CDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DA3501CDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345799AbiDNUoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S1346619AbiDNUpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiDNUoI (ORCPT
+        with ESMTP id S235877AbiDNUpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:44:08 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E83C4AE;
-        Thu, 14 Apr 2022 13:41:41 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id q129so6665555oif.4;
-        Thu, 14 Apr 2022 13:41:41 -0700 (PDT)
+        Thu, 14 Apr 2022 16:45:38 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D05ED92E;
+        Thu, 14 Apr 2022 13:43:11 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id o16so7498462ljp.3;
+        Thu, 14 Apr 2022 13:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=uVgST8u9bbBwztxgQYBnFBcLDjNOtfBEnZ4UOREspJE=;
+        b=kKhsaayCQtJszovsEStS1c7QPwfsOftEekF0ZmPWIzY0vgw1nNiqtjDDIuhDJiLXEp
+         Iu6VrZJI3xN8cUTNRmTazzOFDJ832oMUh2IVHddkTxSEpbOrEvRT/AV41ldBZ9dvsnwX
+         OZ9J5mmFInjMjT3y3w2iyUAFTj40Adk9UFeBHNVAXrZT8Oi6BZFXk+R6LzyXv9GMDLEH
+         8+CKnbbwkY6Kt+gjoifrvowDgkrUwb8keQiLXOdUx1/uhE40/UeXmhzsB4ve9NWguD18
+         mCXSRmM2L+vqBNtIM+gFHGw8utEcb23zhApfXjhGls7W6p4O+eKewi44HmwFHuAPD80o
+         aHVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kQ16bevC74v8j9hP5RJfq+tF3CIcALFbt9dd1uaIG9E=;
-        b=YXgvlrNFGYGLG+dW08HZ+Cs2iibvqp3tWcN5b5UrqhC6YCANqXNPVVtnfIbsuhryy9
-         HxqZ9XkM8ITFRB0DvKuYGq4yITN9Jka54M+33mqkEssU2E/w7Hew1MQhvpbuDGTWTf1V
-         wprph6WfZkMm5MmxT3zHCjdPppr3aWKuWMbEeQ8GeQKHZZA3E5QCS8zMU1A30ImMagp1
-         UCZKrthXLAkly5dVR/crW6JNAQEuOR3IvV6BFjPiKsvepgbv9CS5iH22u3q3C0SbwBhn
-         PU7hkelie7a2NkvQrxdojbhr5JGz/QrSgPKHxAsayag+BWxOpiaqExouGSWbNtA7kqEl
-         XY5g==
-X-Gm-Message-State: AOAM532vIQBPoSs6L+u8tjZwW8RIyTefqMvXwI1VJKwu1yOcP21Hmt1f
-        IwPiMD3hKaSCLgLCLTm3ng==
-X-Google-Smtp-Source: ABdhPJwC/Cf4MTxpznrthxydqEHpaVveVGXAK2ei0no2VM/vDG7BZn3PRSgiAWYQ1YAehWtlLvX6JQ==
-X-Received: by 2002:a05:6808:1a1c:b0:2fa:6c17:5c07 with SMTP id bk28-20020a0568081a1c00b002fa6c175c07mr210417oib.80.1649968900860;
-        Thu, 14 Apr 2022 13:41:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id lw19-20020a0568708e1300b000e2f7602666sm1038088oab.15.2022.04.14.13.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 13:41:40 -0700 (PDT)
-Received: (nullmailer pid 2666253 invoked by uid 1000);
-        Thu, 14 Apr 2022 20:41:38 -0000
-Date:   Thu, 14 Apr 2022 15:41:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 01/11] timekeeping: add raw clock fallback for
- random_get_entropy()
-Message-ID: <YliHAl0XpQ57FSGy@robh.at.kernel.org>
-References: <20220413115411.21489-1-Jason@zx2c4.com>
- <20220413115411.21489-2-Jason@zx2c4.com>
- <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
- <CAHmME9pn++c0qHzq39YWyXogcKRbn2XK=yA3kFqch0wH7qPcAg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=uVgST8u9bbBwztxgQYBnFBcLDjNOtfBEnZ4UOREspJE=;
+        b=u2T8XIrTUcVC/kqzLfHQy7LJWyokf6oGlLmq+aK8jRw5z8FHPyhz1A2GhnJIHjPqFS
+         XLn6ZetMF44VXMECep4rqVOWRfgnhrnbB5aSAnmzvm22IlnFmSP03ni6SuxlvR/NsSE9
+         MK3w8h0ATKiYE8ACIym1e9PVpNaCnWJNlMQRAQhT6tD6aqbOtc3rPCa+IxxS2BbxZET/
+         hceeTMNqQsZhPqkRF3b0ELA31gFcAmxvjbJ8o6VRyPEAJEAPu/n5kbm7QxzYbY/wYUHT
+         8KwsSfVjLktJO+XCJCFnnkRmosJGhdvH+cPvizZgL9Q7C7orDbAGrx/N973h9r/hoF+g
+         IxEw==
+X-Gm-Message-State: AOAM531etrvUaivg/m52tWNVl4rdSbXzGRP75/kJZx7Rv4PO+j151OQW
+        ZVZ/rW/i99dCTAFNrmEUzlokb+cL0C++huuhjvilby0J
+X-Google-Smtp-Source: ABdhPJzbapp/Rp1rMQf+Le9k86VKc7mROsVRlkrVNhSVI19S1tXJZDzkRn3yQ6zln0IGH4gIr8VYmhlymnSHJyNfG0s=
+X-Received: by 2002:a2e:bf08:0:b0:247:f79c:5794 with SMTP id
+ c8-20020a2ebf08000000b00247f79c5794mr2503013ljr.398.1649968989815; Thu, 14
+ Apr 2022 13:43:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pn++c0qHzq39YWyXogcKRbn2XK=yA3kFqch0wH7qPcAg@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 14 Apr 2022 15:42:58 -0500
+Message-ID: <CAH2r5mvdJYtYrBuQWoqvBH+YadJE5iv3C3Es0HjRRBY5vospyA@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 12:38:49AM +0200, Jason A. Donenfeld wrote:
-> Hi Rob,
-> 
-> On Wed, Apr 13, 2022 at 4:32 PM Rob Herring <robh@kernel.org> wrote:
-> > 'does not have a usable get_cycles(), ...' as clearly some arches have
-> > get_cycles() and yet still need a fallback.
-> >
-> > Why not handle the 'if get_cycles() returns 0 do the fallback' within
-> > a weak random_get_entropy() function? Then more arches don't need any
-> > random_get_entropy() implementation.
-> 
-> No, this doesn't really work. Actually, most archs don't need a
-> random_get_entropy() function, because it exists in asm-generic doing
-> the thing we want. So that's taken care of. But weak functions as you
-> suggested would be quite suboptimal, because on, e.g. x86, what we
-> have now gets inlined into a single rdtsc instruction. Also, the
-> relation between get_cycles() and random_get_entropy() doesn't always
-> hold; some archs may not have a working get_cycles() function but do
-> have a path for a random_get_entropy(). Etc, etc. So I'm pretty sure
-> that this commit is really the most simple and optimal thing to do. I
-> really don't want to go the weak functions route.
+Please pull the following changes since commit
+5a5dcfd1e8789053730908c96639151b4151c4d0:
 
-Is random_get_entropy() a hot path?
+  Merge tag '5.18-rc1-smb3-fixes' of
+git://git.samba.org/sfrench/cifs-2.6 (2022-04-07 19:16:49 -1000)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-rc2-smb3-fixes
+
+for you to fetch changes up to 8b6c58458ee3206dde345fce327a4cb83e69caf9:
+
+  cifs: verify that tcon is valid before dereference in cifs_kill_sb
+(2022-04-14 00:07:36 -0500)
+
+----------------------------------------------------------------
+5 fixes to cifs client, 1 for stable
+- two related to unmount
+- symlink overflow fix
+- minor netfs fix
+- improved tracing for crediting (flow control)
+
+----------------------------------------------------------------
+David Howells (2):
+      cifs: Check the IOCB_DIRECT flag, not O_DIRECT
+      cifs: Split the smb3_add_credits tracepoint
+
+Harshit Mogalapalli (1):
+      cifs: potential buffer overflow in handling symlinks
+
+Ronnie Sahlberg (1):
+      cifs: verify that tcon is valid before dereference in cifs_kill_sb
+
+Shyam Prasad N (1):
+      cifs: release cached dentries only if mount is complete
+
+ fs/cifs/cifsfs.c    | 30 ++++++++++++++++--------------
+ fs/cifs/connect.c   |  2 +-
+ fs/cifs/link.c      |  3 +++
+ fs/cifs/smb2ops.c   |  9 ++++++---
+ fs/cifs/trace.h     |  7 +++++++
+ fs/cifs/transport.c |  4 ++--
+ 6 files changed, 35 insertions(+), 20 deletions(-)
 
 
-It doesn't have to be a weak function, but look at it this way. We have 
-the following possibilities for what random_get_entropy() does:
+--
+Thanks,
 
-- get_cycles()
-- get_cycles() but returns 0 sometimes
-- returns 0
-- something else
-
-You're handling the 3rd case.
-
-For the 2nd case, that's riscv, arm, nios2, and x86. That's not a lot, 
-but is 2 or 3 of the most widely used architectures. Is it really too 
-much to ask to support the 2nd case in the generic code/header?
-
-Rob
+Steve

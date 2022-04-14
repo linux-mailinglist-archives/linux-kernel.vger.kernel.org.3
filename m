@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EE45014AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AED50161D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346375AbiDNN4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S1345794AbiDNOu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244994AbiDNN2X (ORCPT
+        with ESMTP id S1344942AbiDNNo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1341AA8EC7;
-        Thu, 14 Apr 2022 06:21:29 -0700 (PDT)
+        Thu, 14 Apr 2022 09:44:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F920BD0;
+        Thu, 14 Apr 2022 06:40:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A42FE618E3;
-        Thu, 14 Apr 2022 13:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1546C385A5;
-        Thu, 14 Apr 2022 13:21:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4ACCB8296A;
+        Thu, 14 Apr 2022 13:40:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230CCC385A5;
+        Thu, 14 Apr 2022 13:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942488;
-        bh=asKDr/nU5wSM/qT+3cgtkeW02HwaalF7FZleMTvDYhU=;
+        s=korg; t=1649943648;
+        bh=JNSG1rIavWuc32cfnqIlfwykyPVOl3m3sKZGU3GSBw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7irOEGSP2U7+J/J0nTOoL1hCKUWxwUd6IkYe4F8foKUZsA7AOdy04bWGSApLzQf+
-         OShwLdYbRXdquiOvpbzW+49LALlqFtdboTRM+j0RUkZ3x1K9BEBN5uu46M4+sSLCpa
-         zG5XkYehCWOuzlMDSDFwJV11mDuCRsn1L1GCKS7A=
+        b=aYcHsEu91R+sFGkYyAN50XRblrZKlQYP1MKssh1nOjxwoHYt3mmSnE7CmYWvNxwwN
+         kPpNR1EGHsLK0VTtsEPcTKlBTSZFKQPM8Xi80SdQtffuget+UzWROljHblUZI9ufJE
+         ZZYcrNr5xRSvKIXczDitajCFUxXOuhv1yG0iJOj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Dirk Buchwalder <buchwalder@posteo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 113/338] ASoC: msm8916-wcd-digital: Fix missing clk_disable_unprepare() in msm8916_wcd_digital_probe
-Date:   Thu, 14 Apr 2022 15:10:16 +0200
-Message-Id: <20220414110842.125201504@linuxfoundation.org>
+Subject: [PATCH 5.4 232/475] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
+Date:   Thu, 14 Apr 2022 15:10:17 +0200
+Message-Id: <20220414110901.614985022@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dirk Buchwalder <buchwalder@posteo.de>
 
-[ Upstream commit 375a347da4889f64d86e1ab7f4e6702b6e9bf299 ]
+[ Upstream commit b77d8306d84f83d1da68028a68c91da9c867b6f6 ]
 
-Fix the missing clk_disable_unprepare() before return
-from msm8916_wcd_digital_probe in the error handling case.
+Use floor ops on SDCC1 APPS clock in order to round down selected clock
+frequency and avoid overclocking SD/eMMC cards.
 
-Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307084523.28687-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+For example, currently HS200 cards were failling tuning as they were
+actually being clocked at 384MHz instead of 192MHz.
+This caused some boards to disable 1.8V I/O and force the eMMC into the
+standard HS mode (50MHz) and that appeared to work despite the eMMC being
+overclocked to 96Mhz in that case.
+
+There was a previous commit to use floor ops on SDCC clocks, but it looks
+to have only covered SDCC2 clock.
+
+Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
+
+Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220210173100.505128-1-robimarko@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/msm8916-wcd-digital.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
-index 6de2ab6f9706..e6750bda542a 100644
---- a/sound/soc/codecs/msm8916-wcd-digital.c
-+++ b/sound/soc/codecs/msm8916-wcd-digital.c
-@@ -918,7 +918,7 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(priv->mclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable mclk %d\n", ret);
--		return ret;
-+		goto err_clk;
- 	}
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index e01f5f591d1e..de48ba7eba3a 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
  
- 	dev_set_drvdata(dev, priv);
-@@ -926,6 +926,9 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
- 				      msm8916_wcd_digital_dai,
- 				      ARRAY_SIZE(msm8916_wcd_digital_dai));
-+err_clk:
-+	clk_disable_unprepare(priv->ahbclk);
-+	return ret;
- }
- 
- static int msm8916_wcd_digital_remove(struct platform_device *pdev)
 -- 
 2.34.1
 

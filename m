@@ -2,159 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B638C500B46
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD95500B4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiDNKky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S240913AbiDNKnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239757AbiDNKku (ORCPT
+        with ESMTP id S230103AbiDNKnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:40:50 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00125.outbound.protection.outlook.com [40.107.0.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC577C158;
-        Thu, 14 Apr 2022 03:38:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BU/Lnupc2fY274TGHmLpXsCdYVwkgX81POWWq/rK2oDIsqnKPk6ivjrb88TvX2lF5Mvb1pSAIBq4i4ESonZILAc04fg0VBDirKtyeY/rz12vdhUmZmHWb4m9QYj0kEc2rhnyORtKNDfLs5SSONuiCQErVmdmvkpuYaet8YwNpXGknvoY/ikjiajX1HZ9LV90wjcoVwqCbFycF4ldU+2sTVmunTl39xU/Jfj/S7/OtYYZ8EAqhWSNHypJsJ313ni0YpxuKrNo/QF0hnO6A8rW+G5Out8/tR7Tq/imYKZ9gw3gQU1ks2/M+QWXQjimyInmKqJZFw6qZgpUFMS40pyi3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=URY9qEJBjlaKY1MDY7UFOtcnaIWhDAw+33GRXQ3J9p8=;
- b=Yfe3EllXIpqFL/vlp2aA8K/e0cqyHiY4AF3bCuT1N6/WNSv1IXM/k1nqPpF3nd3ICqpJHMMNS+jTcApTYK5OVvHAGCnmRiy/t4Jb3X3H0h0ZykrO+EaEguVgfSye7ti1rlgL5aguVcJHvGeTZRMsBhazUTeq7X+K7oa6dnKd8bL9fZbvNytJdL/cE1T6g7XGHcKtc3Vz/KM3G5KUA3FTkJV3T5SSFgJnFvDfwG+TFKcA3cnJcPsB5XRSrP2n8jNdGkRmiLRmUbkRRQBb4qvhW989Jrgy1e/hYdSaJoIvYg0fE7OBg+POK7uGu+zB/GZpb7RDxEtmMQnOe5MbFlWcSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=URY9qEJBjlaKY1MDY7UFOtcnaIWhDAw+33GRXQ3J9p8=;
- b=WD7mPXsl4ckaQDk3F61TOsSQ2UZZ2kYFVuXMQa3bHknCkz7z9dvHMjunHP5pAl159YUvpGiOi5QRuPT3G6p+3m8dWLvUyTJ1sXo33FLbAQUSgH2N4RW1+umq2JihVfDDarcqISll4tVMfQlsnJETj4PzBhJfeiwcc1QEjy+bUiE=
-Received: from HE1PR0702MB3579.eurprd07.prod.outlook.com (2603:10a6:7:7e::13)
- by AS1PR07MB8567.eurprd07.prod.outlook.com (2603:10a6:20b:483::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.14; Thu, 14 Apr
- 2022 10:38:23 +0000
-Received: from HE1PR0702MB3579.eurprd07.prod.outlook.com
- ([fe80::4c70:1acf:a06e:265c]) by HE1PR0702MB3579.eurprd07.prod.outlook.com
- ([fe80::4c70:1acf:a06e:265c%7]) with mapi id 15.20.5186.006; Thu, 14 Apr 2022
- 10:38:23 +0000
-From:   "Rossler, Jakob (Nokia - DE/Ulm)" <jakob.rossler@nokia.com>
-To:     Avri Altman <Avri.Altman@wdc.com>, Bean Huo <huobean@gmail.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>
-CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "sperson@micron.com" <sperson@micron.com>,
-        Bean Huo <beanhuo@micron.com>
-Subject: RE: [PATCH v1] mmc-utils: Add General command CMD56 read support
-Thread-Topic: [PATCH v1] mmc-utils: Add General command CMD56 read support
-Thread-Index: AQHYS3DkQP8GXcEVL0qBAdO6LQgtcqznSnCAgAMhnoCAABQtAIAEv6Qg
-Date:   Thu, 14 Apr 2022 10:38:23 +0000
-Message-ID: <HE1PR0702MB3579F880543CE671E40725FBF2EF9@HE1PR0702MB3579.eurprd07.prod.outlook.com>
-References: <20220408174832.303915-1-huobean@gmail.com>
-         <DM6PR04MB6575816F943FB2F0D4099CDFFCE89@DM6PR04MB6575.namprd04.prod.outlook.com>
- <9ac83fe9bc33cce4b8691d49bdd155587196a62a.camel@gmail.com>
- <DM6PR04MB65758A57DBA5BE8A33578BE9FCEA9@DM6PR04MB6575.namprd04.prod.outlook.com>
-In-Reply-To: <DM6PR04MB65758A57DBA5BE8A33578BE9FCEA9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5fa04218-0457-43f9-6ae4-08da1e02e6b7
-x-ms-traffictypediagnostic: AS1PR07MB8567:EE_
-x-microsoft-antispam-prvs: <AS1PR07MB8567E7EE4355D5C99543D958F2EF9@AS1PR07MB8567.eurprd07.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bhUuRNTntZKo6E+fmLLj1Ba6SRfxzuHvE0EpCXLaUTFcgNV9Zhjxrq0WJ34YbUsBBfHdPaOLKjnso44TbXMpUpqO8cjCJozxU/2jmj3T8fir7P8rD26hgKgGf8wAmPBOs+eSCb66P+M6v0J0B8fxUgW45V3CC0CAOoePmAd7yviAE959ZCU5AU3H34MrDnhI2iMe6NxOVIBHRHSHth10WsZxjejgK6Or7/pQluxL7ZhrempIgjsXwLSBeXaqUYECpp2G+1r5nbmEBFcbgktf0fkRuTj2MXTATeMKnEytN7oRzdrTCdPy5DqHo/al2021TuivxXq88IVCwJ9i3kfJlr/7BsVTBkBN/SJGTHU4SKxuU1DnG1t0+Z1CkqP3DLLwxcwtzwHl8aRRVnSf5JsTpzLDR4TXjazfnvUVwsRQIPhabnhcXWtNVwGwMbrnDqen94/8CE7uDTVug5+88/Q2hFAftlV3oycux/LeSX3qmaLhF1/elSoqEjO0XMAYMGZKdGRo6ciD0uuHnJ1EpQp+OTQzIBQzoU72NTjkXZVWOFh4j3y6HoqfzlwoUYe+yaC5Bh7Xsg4FR0GyUBx+ixyBBiAIP1RtsGEmiyofrR2EX+6StZWVAU/cmyoLIivBIrSyPJGCzfow0bO5TlYQ5UnV6+vRRR8lTvMF2hJuqkTlRTvTPYyc6lCnNOtyj90PVwGT8SXyhPzlkZKr3DqTsJ/UfA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0702MB3579.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(316002)(66946007)(5660300002)(33656002)(71200400001)(83380400001)(8936002)(7696005)(82960400001)(38070700005)(6506007)(2906002)(66446008)(53546011)(8676002)(66556008)(4326008)(54906003)(38100700002)(110136005)(52536014)(66476007)(122000001)(64756008)(55016003)(76116006)(508600001)(186003)(9686003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WVJKeHYvTFRqZURKOEtXemhWM3NMb0RIUDZVYlJCS0xybGlPZXdJM0JkSWlk?=
- =?utf-8?B?cVBreGd6UWJyOXJYM2RWVzVqY1hPT3FCcEYxYkNJaTdrUWZQYUxUR3htL1hF?=
- =?utf-8?B?SmFwMWV0SHVoRURZYkJqSDZEelRzMVpJd3ptaFpINVNyTTJiQjVCRmcrd0R0?=
- =?utf-8?B?eWhXNVdacG1CYkNQb3M4RlZ6ajh1dkdHRzJYMlBqb2ZTZkdPR0c2QVdkTVhW?=
- =?utf-8?B?YlBiclQyaVhpZ1RqUDNwdFVUYTQwL0FmVldjdG1NU1BwWmVvajR3dzU3ZS9k?=
- =?utf-8?B?WW9sWEczNTlaUUZocG9kV204VmlSU3VnWE1HZ00yZzhRWU52N1lnQnkyVmJu?=
- =?utf-8?B?NzJrTlJ3T05EbWRrUkRmaGR3UDYwcm9CT1JLa041ckRadXRHb0xIUVIzZG1z?=
- =?utf-8?B?RkR6RnJCQmlGNE9UaS9SK25ZaEhFNnVTQWgxQWRUczA2MUhzdmRSYnQ0aWNK?=
- =?utf-8?B?OVhoRi9VZFJEV0JOWU92S044ZUhQZDFFYlQ1aEdCTklRL0NUTkhscnBuZ01F?=
- =?utf-8?B?MFVRNFZmWWNwSmV2YW5abTZCSGdxa0FHUjFkd0oyTFdDUzQzeExuUjhQYTlH?=
- =?utf-8?B?RFg0WDh2V0swbzNUV0dPYWNFaHIrUlRWQlVXN2Y4cTluM3RLdnRKKzVtbndz?=
- =?utf-8?B?Ulk5cHFtTHQyUzBaVFpmYWZiYVVKckVzbE5SWGNacUpyVzNqQW81bnIzTU0w?=
- =?utf-8?B?RitQWEJ1aG1rTjJBbFVFZkNyWGFlV0RWaUVZOWNsSE93VVpnbzFmYnlOZ2J6?=
- =?utf-8?B?Y2hGck5UK1F2QVR5VU1yaVFZY1NFNWdrZW1LaVphQ01xTTRzYXYwT0J2NkVy?=
- =?utf-8?B?TUVUNjBzL0JKeUtEWTBBcVFlNjlqVWIxbVVVaUc0QlpuL0JicTFyM2ZGKy85?=
- =?utf-8?B?eVNrMko1c2hXcHpiYUV1YjFEenpDcmNKcEV4WUFJTlFzalpTOVd3U2o2SHN0?=
- =?utf-8?B?VWMxWGdHNGNRZ2ovclFiUTh0R3JEZ0ZISERTMEc2QjhSUWxiM3h2RXY4TUxy?=
- =?utf-8?B?eTNzci9jYnhDVWdmZnIzUzZUYmE5WXlSM09yc3RJTXg5S1orK0JVbEFIU1FH?=
- =?utf-8?B?ekl6ZHhXQzR2NmZFUlU2VWQwb1JMZUV1KzBWSThwWDRxbGhCeDFHNHc2b1J0?=
- =?utf-8?B?SVJOVnhZSTRFNVZJMWZFcS9vLzJ0WmM4R3NaNkpNUGdsbjVkWWlhSGFRVWdR?=
- =?utf-8?B?ckhqYWlObTR1ZFlzSTVwQUdMYndKT002eWw3QnpOaU5rV2dDWE40bDZoakhu?=
- =?utf-8?B?UTRsaFNhNTdxQkxVU2ovSWVGbGZGR25Mc0xIREpwc2JtUTVBMS9oZFZ4VXJG?=
- =?utf-8?B?dTlpUlIrZ0RuSHVqV212cUxJMjU0RW5MNjNub2hGUkNTWGxlMFF4WElZR1Vk?=
- =?utf-8?B?b09RVEV1NUtibEhrUUNlTWpGTEM2eVl6OE9kWFBHcHNZcVFqZlF3TXoyY3BU?=
- =?utf-8?B?M3Iyd2ZiOTVzeWdINS8rMldLajkrbFYwWVJlT3ZWdjhNRXhPL3BhVlFmeE9F?=
- =?utf-8?B?RnpoZ1RuZUZaVnJ4SldTd3FlMkpRZnMxZkhtMXB0a2Ivc041M0xGWW1odHdW?=
- =?utf-8?B?NkJTc0c2VVovZGJrRW44UWd2MkpaS2FJNFdwOG9JdXBaNmV5MXZ1Skltc3Y2?=
- =?utf-8?B?SGc5ak1yaDdDMG5jK2VBZUFQdlB2a1V4T1Yvbm5OeHRSSHVZYS95MWxoYStB?=
- =?utf-8?B?QUQ1NnFLUEh0dzhNMG5SMllTOEMwOVBUcGUxSUJpTjl2UHFXa1A3VlJpTDRG?=
- =?utf-8?B?R2FTVkNSVzdFR3hrcUhQZncvVnY2b0tDQ0VudUdQTVFEVjFqVW85bWlZVGl5?=
- =?utf-8?B?b29yVGVZdGVlMEhJRUdnc0pwcnQzQ1ZPRTNqMlZKd1MyMk1hOGxMbzVnNlFy?=
- =?utf-8?B?dDI2YVNMcHE2d29rTFFQTWIxSFQwb0dzRVdLQkhRY3RBQ245cUpNajNsK2dE?=
- =?utf-8?B?QmR3UFlmNkFPelk4NFF5K1NaSVNVeTAxUmlDSmtneVNNSVFHMXNxWWN1TDMy?=
- =?utf-8?B?RTEvUnB3V1F1ZmN0b0k1SmZzVFdzRGp3SFM5clJSbFV4TDc5ak1iKzhlOVNB?=
- =?utf-8?B?ckEwekxKT3FNUzFTY2hVQ1IzaEpUeU5VVDM5czduNGxySXRoZ0p1bHBwODZx?=
- =?utf-8?B?anZoZU4xSG1ibnpNdUQ1cW5sTVlSV1g3WlhGdXAxVVk3bE5BbDRkYlNYakJz?=
- =?utf-8?B?T25rTHlxV09mTEdWZmxEZnVKL2pYVDFJTDhWajliSHg2K29tVFZVakZzc0tq?=
- =?utf-8?B?RXdNOStEWTRwL2FDbHN1MDZsR3RDWm9QVDkxSFZseUVhNy9LcUZoSGVnR2l0?=
- =?utf-8?B?OU9tditnSFU4K3R5RlZYaXhUbU9wTWdPalJtai9hdHc0SFNsQ0VjUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 14 Apr 2022 06:43:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716EE6A034
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:40:51 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EA51Yu031087;
+        Thu, 14 Apr 2022 10:40:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=64m+OrFCZGKmJRnkY/yyl2HJ7nOdmDpJCOQGp+hxi2w=;
+ b=DKuzEl+aahuv/xyBUvfbC/dYekXOV0iSrJ16qId1514sj3SJQYhDyNM6ZtYrMy7j7UUU
+ NkhoLfWz9Ds8MA3MWVexYIWazxWKAej+byj7pM/TYGOmpwk4Ur0cV3RJbfFDYcraLBGr
+ h5q63kRjw/1fPmNn0RVWMeHbzDdVqNRDiIDmEER/+bGLacJtCWhdtLFUgzwuI31uOjhJ
+ wWZJbLERQ/O3o95UYLykJmkr9MvhV1SFzfY26Dx5zJdLY2Zf9CaZJD5PhMmXUs0GI29v
+ lJDipH7a8fJORaNXcG4+s2HjxpINUyf/nbjq3LYATbt4DOYv8uCVDhC8ab7IJ3iFNDvD /A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fef9yk9xc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 10:40:40 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23EAK1Z1022382;
+        Thu, 14 Apr 2022 10:40:39 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fef9yk9wu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 10:40:39 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EAY0QQ030435;
+        Thu, 14 Apr 2022 10:40:37 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3fb1s8pp9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 10:40:37 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EAeZnn54264314
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 10:40:35 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F6B2AE045;
+        Thu, 14 Apr 2022 10:40:35 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41C25AE051;
+        Thu, 14 Apr 2022 10:40:31 +0000 (GMT)
+Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.43.11.20])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 14 Apr 2022 10:40:30 +0000 (GMT)
+Date:   Thu, 14 Apr 2022 16:10:24 +0530
+From:   Jagdish Gediya <jvgediya@linux.ibm.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
+        ying.huang@intel.com
+Subject: Re: [PATCH v2 1/5] mm: demotion: Set demotion list differently
+Message-ID: <Ylf6GI1J5cIXagyl@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
+ <20220413092206.73974-2-jvgediya@linux.ibm.com>
+ <20220414100214.00005ad8@Huawei.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0702MB3579.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa04218-0457-43f9-6ae4-08da1e02e6b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 10:38:23.5582
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CsYmk8fjadgHuvPMiZETEjFZkEE9CLjW09AF6FnuhMvrMzhPHirv/zg31RjluoReWapUZfZdBIE/nwaPYQ6hHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR07MB8567
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414100214.00005ad8@Huawei.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OAkipke1Rm2Eb2HKprdqYpk0UagB67YZ
+X-Proofpoint-ORIG-GUID: b1TQBEkbt27GPHmbo6-NAnh3kTTq4cx4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_03,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ mlxlogscore=999 mlxscore=0 malwarescore=0 phishscore=0 spamscore=0
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204140057
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGVzdGVkLWJ5OiBSb3NzbGVyLCBKYWtvYiAoTm9raWEgLSBERS9VbG0pIDxqYWtvYi5yb3NzbGVy
-QG5va2lhLmNvbT4NCg0KQmVzdCByZWdhcmRzDQpKYWtvYg0KDQotLS0tLU9yaWdpbmFsIE1lc3Nh
-Z2UtLS0tLQ0KRnJvbTogQXZyaSBBbHRtYW4gPEF2cmkuQWx0bWFuQHdkYy5jb20+IA0KU2VudDog
-TW9uZGF5LCBBcHJpbCAxMSwgMjAyMiAxMjowNSBQTQ0KVG86IEJlYW4gSHVvIDxodW9iZWFuQGdt
-YWlsLmNvbT47IHVsZi5oYW5zc29uQGxpbmFyby5vcmc7IGFkcmlhbi5odW50ZXJAaW50ZWwuY29t
-DQpDYzogbGludXgtbW1jQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVs
-Lm9yZzsgUm9zc2xlciwgSmFrb2IgKE5va2lhIC0gREUvVWxtKSA8amFrb2Iucm9zc2xlckBub2tp
-YS5jb20+OyBzcGVyc29uQG1pY3Jvbi5jb207IEJlYW4gSHVvIDxiZWFuaHVvQG1pY3Jvbi5jb20+
-DQpTdWJqZWN0OiBSRTogW1BBVENIIHYxXSBtbWMtdXRpbHM6IEFkZCBHZW5lcmFsIGNvbW1hbmQg
-Q01ENTYgcmVhZCBzdXBwb3J0DQoNCj4gT24gU2F0LCAyMDIyLTA0LTA5IGF0IDA5OjAzICswMDAw
-LCBBdnJpIEFsdG1hbiB3cm90ZToNCj4gPiA+ICsgICAgICAgbWVtc2V0KCZpZGF0YSwgMCwgc2l6
-ZW9mKGlkYXRhKSk7DQo+ID4gPiArICAgICAgIGlkYXRhLndyaXRlX2ZsYWcgPSAwOw0KPiA+ID4g
-KyAgICAgICBpZGF0YS5vcGNvZGUgPSBNTUNfR0VOX0NNRDsNCj4gPiA+ICsgICAgICAgaWRhdGEu
-YXJnID0gYXJnOw0KPiA+IFByYWN0aWNhbGx5IGFyZyBpcyBub3QgbmVlZGVkLCBiZWNhdXNlIGJp
-dHNbMS4uMzFdIGFyZSBtZWFuaW5nbGVzcy4NCj4gPiBNYXliZSBqdXN0IHNldDogaWRhdGEuYXJn
-ID0gMTsNCj4gPg0KPiA+IFRoYW5rcywNCj4gPiBBdnJpDQo+IFRoYW5rcyBmb3IgeW91ciByZXZp
-ZXcuDQo+IA0KPiB5b3UgYXJlIHJpZ2h0IGFyZyBpcyBub3QgbmVlZGVkIGFjY29yZGluZyB0byBl
-TU1DIHNwZWMuICBCdXQgYXMgSSANCj4gbWVudGlvbmVkIGluIHRoZSBjb21taXQgbWVzc2FnZSwg
-Zm9yIHRoZSB1bml2ZXJzYWwgdXNlLiB3ZSBuZWVkIGl0IGZvciANCj4gdGhlIHZlbmRvci0gc3Bl
-Y2lmaWMgYXJnLiBJIHdpbGwgY2hhbmdlIGl0IHRoYXQgaXRzIGFyZyB3aWxsIGJlIDEgYnkgDQo+
-IGRlZmF1bHQgaWYgdGhlIHVzZXIgZG9lc24ndCBzcGVjaWZpYyBhcmcuDQpBY2suDQoNClRoYW5r
-cywNCkF2cmkNCg0KPiANCj4gS2luZCByZWdhcmRzLA0KPiBCZWFuDQo+IA0KPiANCg0K
+On Thu, Apr 14, 2022 at 10:02:14AM +0100, Jonathan Cameron wrote:
+> On Wed, 13 Apr 2022 14:52:02 +0530
+> Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+> 
+> > Sharing used_targets between multiple nodes in a single
+> > pass limits some of the opportunities for demotion target
+> > sharing.
+> > 
+> > Don't share the used targets between multiple nodes in a
+> > single pass, instead accumulate all the used targets in
+> > source nodes shared by all pass, and reset 'used_targets'
+> > to source nodes while finding demotion targets for any new
+> > node.
+> > 
+> > This results into some more opportunities to share demotion
+> > targets between multiple source nodes, e.g. with below NUMA
+> > topology, where node 0 & 1 are cpu + dram nodes, node 2 & 3
+> > are equally slower memory only nodes, and node 4 is slowest
+> > memory only node,
+> > 
+> > available: 5 nodes (0-4)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus: 2 3
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus:
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node 3 cpus:
+> > node 3 size: n MB
+> > node 3 free: n MB
+> > node 4 cpus:
+> > node 4 size: n MB
+> > node 4 free: n MB
+> > node distances:
+> > node   0   1   2   3   4
+> >   0:  10  20  40  40  80
+> >   1:  20  10  40  40  80
+> >   2:  40  40  10  40  80
+> >   3:  40  40  40  10  80
+> >   4:  80  80  80  80  10
+> > 
+> > The existing implementation gives below demotion targets,
+> > 
+> > node    demotion_target
+> >  0              3, 2
+> >  1              4
+> >  2              X
+> >  3              X
+> >  4              X
+> > 
+> > With this patch applied, below are the demotion targets,
+> > 
+> > node    demotion_target
+> >  0              3, 2
+> >  1              3, 2
+> 
+> Is there an easy way to make the allocation stateful enough so
+> that when it sees two identical choices, it alternates between
+> them?  Whilst it's going to be workload dependent, my view
+> of 'ideal' for this would be.
+> 
+>    0              3
+>    1              2
+> 
+> Maybe we'll just have to make do with most systems this effects
+> having to have some fun userspace code that does cleverer
+> balancing - possibly using HMAT info rather than just SLIT
+> to give us visibility of interconnect bottlenecks that make
+> some migration paths 'unwise'.
+>   
+> I'm not sure the current HMAT presentation via sysfs gives
+> us enough info though so we'll probably need to extend that.
+> 
+> Jonathan
+
+This patch series also have the support to override the default
+demotion targets found by the kernel, however current implementation
+of this user space interface doesn't support to set per node demotion
+targets, but I am going to modify the user space inetrface according
+to Huang's suggestion which can control exact desired targets for
+specific nodes.
+
+> >  2              4
+> >  3              4
+> >  4              X
+> > 
+> > e.g. with below NUMA topology, where node 0, 1 & 2 are
+> > cpu + dram nodes and node 3 is slow memory node,
+> > 
+> > available: 4 nodes (0-3)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus: 2 3
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus: 4 5
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node 3 cpus:
+> > node 3 size: n MB
+> > node 3 free: n MB
+> > node distances:
+> > node   0   1   2   3
+> >   0:  10  20  20  40
+> >   1:  20  10  20  40
+> >   2:  20  20  10  40
+> >   3:  40  40  40  10
+> > 
+> > The existing implementation gives below demotion targets,
+> > 
+> > node    demotion_target
+> >  0              3
+> >  1              X
+> >  2              X
+> >  3              X
+> > 
+> > With this patch applied, below are the demotion targets,
+> > 
+> > node    demotion_target
+> >  0              3
+> >  1              3
+> >  2              3
+> >  3              X
+> > 
+> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > ---
+> >  mm/migrate.c | 25 ++++++++++++++-----------
+> >  1 file changed, 14 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index de175e2fdba5..516f4e1348c1 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -2383,7 +2383,7 @@ static void __set_migration_target_nodes(void)
+> >  {
+> >  	nodemask_t next_pass	= NODE_MASK_NONE;
+> >  	nodemask_t this_pass	= NODE_MASK_NONE;
+> > -	nodemask_t used_targets = NODE_MASK_NONE;
+> > +	nodemask_t source_nodes = NODE_MASK_NONE;
+> >  	int node, best_distance;
+> >  
+> >  	/*
+> > @@ -2401,20 +2401,23 @@ static void __set_migration_target_nodes(void)
+> >  again:
+> >  	this_pass = next_pass;
+> >  	next_pass = NODE_MASK_NONE;
+> > +
+> >  	/*
+> > -	 * To avoid cycles in the migration "graph", ensure
+> > -	 * that migration sources are not future targets by
+> > -	 * setting them in 'used_targets'.  Do this only
+> > -	 * once per pass so that multiple source nodes can
+> > -	 * share a target node.
+> > -	 *
+> > -	 * 'used_targets' will become unavailable in future
+> > -	 * passes.  This limits some opportunities for
+> > -	 * multiple source nodes to share a destination.
+> > +	 * Accumulate source nodes to avoid the cycle in migration
+> > +	 * list.
+> >  	 */
+> > -	nodes_or(used_targets, used_targets, this_pass);
+> > +	nodes_or(source_nodes, source_nodes, this_pass);
+> >  
+> >  	for_each_node_mask(node, this_pass) {
+> > +		/*
+> > +		 * To avoid cycles in the migration "graph", ensure
+> > +		 * that migration sources are not future targets by
+> > +		 * setting them in 'used_targets'. Reset used_targets
+> > +		 * to source nodes for each node in this pass so that
+> > +		 * multiple source nodes can share a target node.
+> > +		 */
+> > +		nodemask_t used_targets = source_nodes;
+> > +
+> >  		best_distance = -1;
+> >  
+> >  		/*
+> 

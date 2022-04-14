@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EC6500892
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4990C500895
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241050AbiDNIo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S241023AbiDNIox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiDNIoX (ORCPT
+        with ESMTP id S238017AbiDNIou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:44:23 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BBCC3890
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:41:59 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-195-6ePXgX6JODCJZdbal4aiqQ-1; Thu, 14 Apr 2022 09:41:46 +0100
-X-MC-Unique: 6ePXgX6JODCJZdbal4aiqQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 14 Apr 2022 09:41:20 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 14 Apr 2022 09:41:20 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Michael Straube' <straube.linux@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-CC:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: staging: r8188eu: struct rt_firmware_header issues
-Thread-Topic: staging: r8188eu: struct rt_firmware_header issues
-Thread-Index: AQHYT26f1QQqfyXJ/0OBQVPgTDvQ2KzvF5Tg
-Date:   Thu, 14 Apr 2022 08:41:20 +0000
-Message-ID: <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
-References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
- <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
-In-Reply-To: <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 04:44:50 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3E6541E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:42:27 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id bo5so4257600pfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=eJD0zgkQOtvBhg3kkOLY0JJ5fnzikCWkGfIBVnyjkyw=;
+        b=SCIe2hRXByLjvsqBzSZB8ICjWmUkFlhXp81uju/X73gpEf7+GXrqi7qZaRfAvRbmmv
+         CetmkAcq0whO6+BuZ0hVskN5LnbAgMzQyQ9M5bm43arg9HMj1pRUOk0NcPK23mgMMuVH
+         vVkJL1zM47Uak2yYkRL1YAsfWYJAPWoo4xO5vN1Ni8WKsE5p5lTBYMAM1U2H5zZP0f/i
+         U+PoM13iz1cXb0Uxdo/47d/mdTvPebCo7A5WU5/bwNCIQIA2P5WwPKGHq9cVX5Gg/2np
+         H/PVeT0K1EcLLD9qzwRoXG37EOUCXnqmp1ilsYzR9yrUQSBTGjA5G8twgHwRBlH5ruVV
+         k2RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=eJD0zgkQOtvBhg3kkOLY0JJ5fnzikCWkGfIBVnyjkyw=;
+        b=oQle5cMFh4Dn+mqk74+FkFydICxKVBDww420RqMTHSdi/argB2IYel4FLsLfcFvqad
+         O+HLgreVvDnqz5rXCUdOhsKCv0CTJHyecVVy0W27njCkPeOE/Hbud76wwFYpimhABsDi
+         MZIZ/Ze76WWx9MdTvuclH60qasVr/u4sfQE0En/SgMhWhyVlwHd6gS3/76DdWsn2DiIf
+         VlHvZ1uIS462f2iEXe5JLJIfYM3GOX/StGL6uyz5G3bY+bIh8WG4/937WXPMds4Nycwf
+         mCskjCByvtuYJ4nJNzjqFKBEEHBV1RtcZHqNK+rM6WPge2uM+Oe7KCdcEgTJT23sbw3b
+         hTrA==
+X-Gm-Message-State: AOAM533pl973JY08LUlkNfC1bIz3VQOkDV/rwJXcnRQhvD97owt666Q3
+        /78AEMdc9MpgvW+8RE1J1uU=
+X-Google-Smtp-Source: ABdhPJzaVPhzdnr/iDGxWIFtI6vG92JfkSadUCnYnYRQ315Q+PYJtunuyJakOXPgkdCr8swJOmxEXw==
+X-Received: by 2002:a63:e051:0:b0:382:6aff:229a with SMTP id n17-20020a63e051000000b003826aff229amr1413694pgj.493.1649925746625;
+        Thu, 14 Apr 2022 01:42:26 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm4977308pjb.20.2022.04.14.01.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:42:25 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     vaibhav.sr@gmail.com, dan.carpenter@oracle.com,
+        mgreer@animalcreek.com, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v2] greybus: audio_codec: initialize data to silence static checker warnings
+Date:   Thu, 14 Apr 2022 16:42:19 +0800
+Message-Id: <20220414084219.13501-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWljaGFlbCBTdHJhdWJlDQo+IFNlbnQ6IDEzIEFwcmlsIDIwMjIgMjA6NDINCj4gDQo+
-IE9uIDQvMTMvMjIgMTg6MjcsIE1pY2hhZWwgU3RyYXViZSB3cm90ZToNCj4gPiBIaSBhbGwsDQo+
-ID4NCj4gPiBJIHRoaW5rIHRoZSBydF9maXJtd2FyZV9oZHIgc3RydWN0dXJlIGluIHJ0d19mdy5j
-IGhhcyBzb21lIGlzc3Vlcy4NCj4gPg0KPiA+DQo+ID4gc3RydWN0IHJ0X2Zpcm13YXJlX2hkciB7
-DQo+ID4gIMKgwqDCoMKgLyrCoCA4LWJ5dGUgYWxpbm1lbnQgcmVxdWlyZWQgKi8NCg0KUHJvYmFi
-bHkgbmVlZCBhbiBfX2FsaWduZWQoOCkgYXQgdGhlIGJvdHRvbSB0aGVuPw0KDQo+ID4gIMKgwqDC
-oMKgLyrCoCBMT05HIFdPUkQgMCAtLS0tICovDQo+ID4gIMKgwqDCoMKgX19sZTE2wqDCoMKgwqDC
-oMKgwqAgU2lnbmF0dXJlO8KgwqDCoCAvKiA5MkMwOiB0ZXN0IGNoaXA7IDkyQywNCj4gPiAgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIDg4QzA6IHRlc3QgY2hpcDsg
-ODhDMTogTVAgQS1jdXQ7DQo+ID4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgKiA5MkMxOiBNUCBBLWN1dCAqLw0KPiA+ICDCoMKgwqDCoHU4wqDCoMKgwqDCoMKgwqAg
-Q2F0ZWdvcnk7wqDCoMKgIC8qwqAgQVAvTklDIGFuZCBVU0IvUENJICovDQo+ID4gIMKgwqDCoMKg
-dTjCoMKgwqDCoMKgwqDCoCBGdW5jdGlvbjvCoMKgwqAgLyrCoCBSZXNlcnZlZCBmb3IgZGlmZmVy
-ZW50IEZXIGZ1bmN0aW9uDQo+ID4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgKsKgIGluZGNhdGlvbiwgZm9yIGZ1cnRoZXIgdXNlIHdoZW4NCj4gPiAgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqwqAgZHJpdmVyIG5lZWRzIHRvIGRvd25s
-b2FkIGRpZmZlcmVudA0KPiA+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgICrCoCBGVyBmb3IgZGlmZmVyZW50IGNvbmRpdGlvbnMgKi8NCj4gPiAgwqDCoMKgwqBfX2xl
-MTbCoMKgwqDCoMKgwqDCoCBWZXJzaW9uO8KgwqDCoCAvKsKgIEZXIFZlcnNpb24gKi8NCj4gPiAg
-wqDCoMKgwqB1OMKgwqDCoMKgwqDCoMKgIFN1YnZlcnNpb247wqDCoMKgIC8qwqAgRlcgU3VidmVy
-c2lvbiwgZGVmYXVsdCAweDAwICovDQo+ID4gIMKgwqDCoMKgdTE2wqDCoMKgwqDCoMKgwqAgUnN2
-ZDE7DQo+ID4NCj4gPiAgwqDCoMKgwqAvKsKgIExPTkcgV09SRCAxIC0tLS0gKi8NCj4gPiAgwqDC
-oMKgwqB1OMKgwqDCoMKgwqDCoMKgIE1vbnRoO8KgwqDCoCAvKsKgIFJlbGVhc2UgdGltZSBNb250
-aCBmaWVsZCAqLw0KPiA+ICDCoMKgwqDCoHU4wqDCoMKgwqDCoMKgwqAgRGF0ZTvCoMKgwqAgLyrC
-oCBSZWxlYXNlIHRpbWUgRGF0ZSBmaWVsZCAqLw0KPiA+ICDCoMKgwqDCoHU4wqDCoMKgwqDCoMKg
-wqAgSG91cjvCoMKgwqAgLyrCoCBSZWxlYXNlIHRpbWUgSG91ciBmaWVsZCAqLw0KPiA+ICDCoMKg
-wqDCoHU4wqDCoMKgwqDCoMKgwqAgTWludXRlO8KgwqDCoCAvKsKgIFJlbGVhc2UgdGltZSBNaW51
-dGUgZmllbGQgKi8NCj4gPiAgwqDCoMKgwqBfX2xlMTbCoMKgwqDCoMKgwqDCoCBSYW1Db2RlU2l6
-ZTvCoMKgwqAgLyrCoCBUaGUgc2l6ZSBvZiBSQU0gY29kZSAqLw0KPiA+ICDCoMKgwqDCoHU4wqDC
-oMKgwqDCoMKgwqAgRm91bmRyeTsNCj4gPiAgwqDCoMKgwqB1OMKgwqDCoMKgwqDCoMKgIFJzdmQy
-Ow0KPiA+DQo+ID4gIMKgwqDCoMKgLyrCoCBMT05HIFdPUkQgMiAtLS0tICovDQo+ID4gIMKgwqDC
-oMKgX19sZTMywqDCoMKgwqDCoMKgwqAgU3ZuSWR4O8KgwqDCoCAvKsKgIFRoZSBTVk4gZW50cnkg
-aW5kZXggKi8NCj4gPiAgwqDCoMKgwqB1MzLCoMKgwqDCoMKgwqDCoCBSc3ZkMzsNCj4gPg0KPiA+
-ICDCoMKgwqDCoC8qwqAgTE9ORyBXT1JEIDMgLS0tLSAqLw0KPiA+ICDCoMKgwqDCoHUzMsKgwqDC
-oMKgwqDCoMKgIFJzdmQ0Ow0KPiA+ICDCoMKgwqDCoHUzMsKgwqDCoMKgwqDCoMKgIFJzdmQ1Ow0K
-PiA+IH07DQouLi4NCj4gDQo+IE9rLCBJIGZpZ3VyZWQgaXQgb3V0IGJ5IGxvb2tpbmcgYXQgdGhl
-IGhleGR1bXBzIG9mIGZpcm13YXJlIGZpbGVzLiBUaGUNCj4gZmllbGQgUnN2ZDEgc2hvdWxkIGJl
-IHU4IGluc3RlYWQgb2YgdTE2LiBJJ2xsIHByZXBhcmUgYSBwYXRjaCBmb3IgdGhpcy4NCg0KSSdk
-IGFsc28gYWRkIGEgY29tcGlsZS10aW1lIGFzc2VydCBvbiB0aGUgc2l6ZS4NCg0KCURhdmlkDQoN
-Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
-LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
-YWxlcykNCg==
+These three declares are here:
+	struct gbaudio_data_connection *data;
+
+Since all three of these functions check for if the codec->module_list is
+empty at the start of the function so these are not real bugs to bypass
+'if (!data) {'. To avoid static checker warnings like Smatch, initialize
+the data with NULL.
+
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+changes since v1:
+ - not bug, but can avoid warnnings (Dan Carpenter)
+
+v1: https://lore.kernel.org/lkml/20220327060120.4316-1-xiam0nd.tong@gmail.com/
+---
+ drivers/staging/greybus/audio_codec.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
+index b589cf6b1d03..939e05af4dcf 100644
+--- a/drivers/staging/greybus/audio_codec.c
++++ b/drivers/staging/greybus/audio_codec.c
+@@ -397,7 +397,7 @@ static int gbcodec_hw_params(struct snd_pcm_substream *substream,
+ 	u8 sig_bits, channels;
+ 	u32 format, rate;
+ 	struct gbaudio_module_info *module;
+-	struct gbaudio_data_connection *data;
++	struct gbaudio_data_connection *data = NULL;
+ 	struct gb_bundle *bundle;
+ 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
+ 	struct gbaudio_stream_params *params;
+@@ -498,7 +498,7 @@ static int gbcodec_prepare(struct snd_pcm_substream *substream,
+ {
+ 	int ret;
+ 	struct gbaudio_module_info *module;
+-	struct gbaudio_data_connection *data;
++	struct gbaudio_data_connection *data = NULL;
+ 	struct gb_bundle *bundle;
+ 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
+ 	struct gbaudio_stream_params *params;
+@@ -562,7 +562,7 @@ static int gbcodec_prepare(struct snd_pcm_substream *substream,
+ static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
+ {
+ 	int ret;
+-	struct gbaudio_data_connection *data;
++	struct gbaudio_data_connection *data = NULL;
+ 	struct gbaudio_module_info *module;
+ 	struct gb_bundle *bundle;
+ 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
+-- 
+2.17.1
 

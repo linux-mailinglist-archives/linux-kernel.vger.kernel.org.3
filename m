@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1610950170C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78335016D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356454AbiDNPTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S1344619AbiDNPNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347370AbiDNN6r (ORCPT
+        with ESMTP id S1347351AbiDNN6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55279DEDB;
-        Thu, 14 Apr 2022 06:49:28 -0700 (PDT)
+        Thu, 14 Apr 2022 09:58:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFE626AD9;
+        Thu, 14 Apr 2022 06:49:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B89C9CE296C;
-        Thu, 14 Apr 2022 13:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D120FC385A1;
-        Thu, 14 Apr 2022 13:49:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 221BDB82988;
+        Thu, 14 Apr 2022 13:49:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B0BC385A9;
+        Thu, 14 Apr 2022 13:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944165;
-        bh=DnAJjDJEcxkz6DSxm8zqmrUyBTDhveM5gDEWMJNeo94=;
+        s=korg; t=1649944167;
+        bh=oS0gUQkH3zcIiHXRBOZTmba3XwSHQXTt4emSZtFgwhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=duDSroz81vCeS5Nfen8Davrh9Hoc0JaQAcu1nOMtwkcbTxXtQ7rMaTJ3j4tS4rQqE
-         z91gbBNiVJs7RF4jHdQ+N6cy2WhI27ALohDLMG3guRHrmj+Y3VzJcxPIGwWvQ3VSuN
-         YUEkfZF6ZGAWuZNmpLDIQXXtEXD9TOl9VvhLy3h4=
+        b=lTPBf20Rnn2ZMnxuv9XVV8rCBdQU7Za2qV8NFEPEXFhMpSX/WHR3FrAlWFjg8OJyW
+         nGHPdAx+inICny6KI385pWQUnt8ipe5jk/7WbyXk1ZqvE0DcPpq2B86NrrmJN2P+r+
+         yC/grVqtkMKEY4aEFl8iJw1nGbe28Y17ZnQ6zHPA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Amit Shah <amit@kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 417/475] virtio_console: eliminate anonymous module_init & module_exit
-Date:   Thu, 14 Apr 2022 15:13:22 +0200
-Message-Id: <20220414110906.732567975@linuxfoundation.org>
+        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
+        Haimin Zhang <tcs_kernel@tencent.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 418/475] jfs: prevent NULL deref in diFree
+Date:   Thu, 14 Apr 2022 15:13:23 +0200
+Message-Id: <20220414110906.759843958@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -56,74 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Haimin Zhang <tcs_kernel@tencent.com>
 
-[ Upstream commit fefb8a2a941338d871e2d83fbd65fbfa068857bd ]
+[ Upstream commit a53046291020ec41e09181396c1e829287b48d47 ]
 
-Eliminate anonymous module_init() and module_exit(), which can lead to
-confusion or ambiguity when reading System.map, crashes/oops/bugs,
-or an initcall_debug log.
+Add validation check for JFS_IP(ipimap)->i_imap to prevent a NULL deref
+in diFree since diFree uses it without do any validations.
+When function jfs_mount calls diMount to initialize fileset inode
+allocation map, it can fail and JFS_IP(ipimap)->i_imap won't be
+initialized. Then it calls diFreeSpecial to close fileset inode allocation
+map inode and it will flow into jfs_evict_inode. Function jfs_evict_inode
+just validates JFS_SBI(inode->i_sb)->ipimap, then calls diFree. diFree use
+JFS_IP(ipimap)->i_imap directly, then it will cause a NULL deref.
 
-Give each of these init and exit functions unique driver-specific
-names to eliminate the anonymous names.
-
-Example 1: (System.map)
- ffffffff832fc78c t init
- ffffffff832fc79e t init
- ffffffff832fc8f8 t init
-
-Example 2: (initcall_debug log)
- calling  init+0x0/0x12 @ 1
- initcall init+0x0/0x12 returned 0 after 15 usecs
- calling  init+0x0/0x60 @ 1
- initcall init+0x0/0x60 returned 0 after 2 usecs
- calling  init+0x0/0x9a @ 1
- initcall init+0x0/0x9a returned 0 after 74 usecs
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Amit Shah <amit@kernel.org>
-Cc: virtualization@lists.linux-foundation.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20220316192010.19001-3-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: TCS Robot <tcs_robot@tencent.com>
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/virtio_console.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/jfs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
-index 2660a0c5483a..c736adef9d3c 100644
---- a/drivers/char/virtio_console.c
-+++ b/drivers/char/virtio_console.c
-@@ -2241,7 +2241,7 @@ static struct virtio_driver virtio_rproc_serial = {
- 	.remove =	virtcons_remove,
- };
+diff --git a/fs/jfs/inode.c b/fs/jfs/inode.c
+index d862cfc3d3a8..62c4a5450cda 100644
+--- a/fs/jfs/inode.c
++++ b/fs/jfs/inode.c
+@@ -146,12 +146,13 @@ void jfs_evict_inode(struct inode *inode)
+ 		dquot_initialize(inode);
  
--static int __init init(void)
-+static int __init virtio_console_init(void)
- {
- 	int err;
+ 		if (JFS_IP(inode)->fileset == FILESYSTEM_I) {
++			struct inode *ipimap = JFS_SBI(inode->i_sb)->ipimap;
+ 			truncate_inode_pages_final(&inode->i_data);
  
-@@ -2278,7 +2278,7 @@ static int __init init(void)
- 	return err;
- }
+ 			if (test_cflag(COMMIT_Freewmap, inode))
+ 				jfs_free_zero_link(inode);
  
--static void __exit fini(void)
-+static void __exit virtio_console_fini(void)
- {
- 	reclaim_dma_bufs();
+-			if (JFS_SBI(inode->i_sb)->ipimap)
++			if (ipimap && JFS_IP(ipimap)->i_imap)
+ 				diFree(inode);
  
-@@ -2288,8 +2288,8 @@ static void __exit fini(void)
- 	class_destroy(pdrvdata.class);
- 	debugfs_remove_recursive(pdrvdata.debugfs_dir);
- }
--module_init(init);
--module_exit(fini);
-+module_init(virtio_console_init);
-+module_exit(virtio_console_fini);
- 
- MODULE_DESCRIPTION("Virtio console driver");
- MODULE_LICENSE("GPL");
+ 			/*
 -- 
 2.35.1
 

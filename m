@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FB25015CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA47501629
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346441AbiDNOKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S1347205AbiDNOvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245202AbiDNN2j (ORCPT
+        with ESMTP id S1345284AbiDNNpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE5AAAC9E;
-        Thu, 14 Apr 2022 06:21:59 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDBC2DE0;
+        Thu, 14 Apr 2022 06:43:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B55B8B82986;
-        Thu, 14 Apr 2022 13:21:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249E7C385A1;
-        Thu, 14 Apr 2022 13:21:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F9361BA7;
+        Thu, 14 Apr 2022 13:43:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298C6C385A1;
+        Thu, 14 Apr 2022 13:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942516;
-        bh=ZFEcl4bqberCbPKajHiZ82H8yxMZMcuKz3U015bFo00=;
+        s=korg; t=1649943796;
+        bh=gwJ5FR9DtZIsA2hPSe/5+mSIlwSULFPHfwLGfoecJLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZGDZhGBRGuAPLkcPyFQ62j79aToZV0Cgd2M43fL5PYUwVtEfwrCv7IiQL28kvkpv
-         KQj8cev0Lq5Hqy/1W6JFMp2fPL6L4zKS5hcTPK5n703d4z94iawQz4qR6S4q7mNqzT
-         Hd8Bzq+qkTZGf/yzd96WedYSYsAiYfK91w5+gYlI=
+        b=ctv2Ze+d4cGGw3j05FO4ivBIkcI9aQzCQna18pKIpMLwt9xJ6bcS+mFM4dWGQZdVl
+         iD+8OX2QSMqIcX3S+wRvEl+fIpyLmq8wH5qovZNZC3xbEdhp3wbn+AK6NPcYa40uh+
+         O+4Vero8MbNK6zItb57IMqgHXUYpX6GDWcTXE5vU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux-foundation.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 165/338] dma-debug: fix return value of __setup handlers
-Date:   Thu, 14 Apr 2022 15:11:08 +0200
-Message-Id: <20220414110843.597427578@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Brown <matthew.brown.dev@gmail.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 284/475] lib/raid6/test/Makefile: Use $(pound) instead of \# for Make 4.3
+Date:   Thu, 14 Apr 2022 15:11:09 +0200
+Message-Id: <20220414110903.047157780@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,70 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
 
-[ Upstream commit 80e4390981618e290616dbd06ea190d4576f219d ]
+[ Upstream commit 633174a7046ec3b4572bec24ef98e6ee89bce14b ]
 
-When valid kernel command line parameters
-  dma_debug=off dma_debug_entries=100
-are used, they are reported as Unknown parameters and added to init's
-environment strings, polluting it.
+Buidling raid6test on Ubuntu 21.10 (ppc64le) with GNU Make 4.3 shows the
+errors below:
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc5
-    dma_debug=off dma_debug_entries=100", will be passed to user space.
+    $ cd lib/raid6/test/
+    $ make
+    <stdin>:1:1: error: stray ‘\’ in program
+    <stdin>:1:2: error: stray ‘#’ in program
+    <stdin>:1:11: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ \
+        before ‘<’ token
 
-and
+    [...]
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc5
-     dma_debug=off
-     dma_debug_entries=100
+The errors come from the HAS_ALTIVEC test, which fails, and the POWER
+optimized versions are not built. That’s also reason nobody noticed on the
+other architectures.
 
-Return 1 from these __setup handlers to indicate that the command line
-option has been handled.
+GNU Make 4.3 does not remove the backslash anymore. From the 4.3 release
+announcment:
 
-Fixes: 59d3daafa1726 ("dma-debug: add kernel command line parameters")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: iommu@lists.linux-foundation.org
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+> * WARNING: Backward-incompatibility!
+>   Number signs (#) appearing inside a macro reference or function invocation
+>   no longer introduce comments and should not be escaped with backslashes:
+>   thus a call such as:
+>     foo := $(shell echo '#')
+>   is legal.  Previously the number sign needed to be escaped, for example:
+>     foo := $(shell echo '\#')
+>   Now this latter will resolve to "\#".  If you want to write makefiles
+>   portable to both versions, assign the number sign to a variable:
+>     H := \#
+>     foo := $(shell echo '$H')
+>   This was claimed to be fixed in 3.81, but wasn't, for some reason.
+>   To detect this change search for 'nocomment' in the .FEATURES variable.
+
+So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
+files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
+of \# in Makefiles") and define and use a $(pound) variable.
+
+Reference for the change in make:
+https://git.savannah.gnu.org/cgit/make.git/commit/?id=c6966b323811c37acedff05b57
+
+Cc: Matt Brown <matthew.brown.dev@gmail.com>
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/debug.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ lib/raid6/test/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 1c82b0d25498..9c9a5b12f92f 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -1056,7 +1056,7 @@ static __init int dma_debug_cmdline(char *str)
- 		global_disable = true;
- 	}
+diff --git a/lib/raid6/test/Makefile b/lib/raid6/test/Makefile
+index b9e6c3648be1..98b9fd0354dd 100644
+--- a/lib/raid6/test/Makefile
++++ b/lib/raid6/test/Makefile
+@@ -4,6 +4,8 @@
+ # from userspace.
+ #
  
--	return 0;
-+	return 1;
- }
- 
- static __init int dma_debug_entries_cmdline(char *str)
-@@ -1065,7 +1065,7 @@ static __init int dma_debug_entries_cmdline(char *str)
- 		return -EINVAL;
- 	if (!get_option(&str, &nr_prealloc_entries))
- 		nr_prealloc_entries = PREALLOC_DMA_DEBUG_ENTRIES;
--	return 0;
-+	return 1;
- }
- 
- __setup("dma_debug=", dma_debug_cmdline);
++pound := \#
++
+ CC	 = gcc
+ OPTFLAGS = -O2			# Adjust as desired
+ CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
+@@ -47,7 +49,7 @@ else ifeq ($(HAS_NEON),yes)
+         OBJS   += neon.o neon1.o neon2.o neon4.o neon8.o recov_neon.o recov_neon_inner.o
+         CFLAGS += -DCONFIG_KERNEL_MODE_NEON=1
+ else
+-        HAS_ALTIVEC := $(shell printf '\#include <altivec.h>\nvector int a;\n' |\
++        HAS_ALTIVEC := $(shell printf '$(pound)include <altivec.h>\nvector int a;\n' |\
+                          gcc -c -x c - >/dev/null && rm ./-.o && echo yes)
+         ifeq ($(HAS_ALTIVEC),yes)
+                 CFLAGS += -I../../../arch/powerpc/include
 -- 
 2.34.1
 

@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D72F501E1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09DC501E1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346943AbiDNWPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S1346901AbiDNWQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiDNWPH (ORCPT
+        with ESMTP id S230023AbiDNWQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:15:07 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F71BA324
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:12:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id z16so6016957pfh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:12:40 -0700 (PDT)
+        Thu, 14 Apr 2022 18:16:13 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDCFBA323
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:13:46 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id c15so7703220ljr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zYUHvRKfkdjRLFK3/CH/9P1TIGF1Q+ZicVfnGSNZbtQ=;
-        b=h7cJqiwetiGHvy16aJqEPAMdNWjKEKQ11taWEHXHAKIrsZnC/uWk0/kOnmc+xupHaJ
-         L8Z9lHMIwClyOvcEmaljSI1xDVBSA7ia76BJNq9XMku0Odol6O5A+S7sOyntimIB74+c
-         DIZMiL1FWlLPM5s8nKLrfcxzSa2GYsWTYIWLGqg8YBOgUNiTD9XNHiO5K3NeK9LDOmGb
-         HnlWgSpWVRRlni/qdML9hGRk/+2Djq3ADXMmBJHYC9TOPcqQ1I758sFfRqLFD5EI8Bgj
-         Vy/2KLDKz4JCfhnMr0NVyBs3hu2Ti8sYMS1sDQHB9AxwGqculm9pfc5znAWhwvT9lO1O
-         lfNQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IKci9zYLvStXfoOzJWr4xGXyeN+jUndpG64b6kauUp0=;
+        b=qvqe+62r+z/zDHE5VRRaio8IJPC7F3l7Dlayxdrb3SvRIoEubz6Cle36EQUX9fbPX0
+         +Uk2MTpyjYKEOQKsRoqkF0I6kAL3jfNo5MGfXeFMyJvuakCaiWPRq2AErFX811Fn+e9L
+         x4v0nZHKKgisniNqH6PqHnF7caSTYdUF1xCdBfEH2UnqgFvjFwkfX+Rx/kAflE8nyN+j
+         I7anxMwZ90CMLksmayukGJd25+eTmClHgkLjS4SdszIZPDaaAxGau1lUPcSDR5Vtdwo8
+         sm9hruLYGP5JN5K+iqtkIcpcLcxVnz4sjKQyofJgrfZ3oMVP0XjOKWtJ0p11BuhDQIoY
+         lwmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=zYUHvRKfkdjRLFK3/CH/9P1TIGF1Q+ZicVfnGSNZbtQ=;
-        b=Fi2ZAiJ+W79MxFaVJJe+TFdZPJ347ZizulTDStaU4WG6gfRdmCpf0Alys8Lzf+SqMd
-         fTGJdz5PdbMkMTTrrCk23NUPDdRM4Zptus1FcaVSeawOIJ8p/VIOeqAbEbfZPA2LnBey
-         6iNHKJvh9uQrXFgKAK8EpNGgBoWIUaJX0L/PVgnLWrhoG3I9UjGbuRxZjvTGDintSm59
-         6r1fikuweq58bCIwxC4XAq1hvzii1yH7HUmhIlL6BhbgVeGbGCXf3LxbV5Ju7DgES1+I
-         RmVL0c7qwPg+bB+RPysxLwtksgz39kGlpLWFolLMcs7G+tJmU3n1k+SebDZNGxT/pdV6
-         E1QA==
-X-Gm-Message-State: AOAM53215CkpomD7nVwixTYQuAzICm+qqGP3iHVOmw7TWoTvhBpjy4PI
-        kY74suwQ4/jPycs5ZOq8NhrsiQ==
-X-Google-Smtp-Source: ABdhPJwGx3PPjpRY0Ldxvw6pg0jPVeQ0ys7/BEguZcCJsSwvO6Xn84gDULVCHhvdEpMhwNEMjQHltw==
-X-Received: by 2002:a65:638d:0:b0:39d:74ad:ce0b with SMTP id h13-20020a65638d000000b0039d74adce0bmr3990433pgv.103.1649974360010;
-        Thu, 14 Apr 2022 15:12:40 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id v27-20020aa799db000000b00509fbf03c91sm434146pfi.171.2022.04.14.15.12.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 15:12:39 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 15:12:39 -0700 (PDT)
-X-Google-Original-Date: Thu, 14 Apr 2022 15:12:20 PDT (-0700)
-Subject:     Re: [PATCH] PCI: Avoid handing out address 0 to devices
-In-Reply-To: <alpine.DEB.2.21.2204142111010.9383@angie.orcam.me.uk>
-CC:     helgaas@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     macro@orcam.me.uk
-Message-ID: <mhng-f97c506a-b3e9-4a7d-9865-b78955bad4e8@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IKci9zYLvStXfoOzJWr4xGXyeN+jUndpG64b6kauUp0=;
+        b=Mi5/kZkIqqV+YV+lI7xruNpI7k1C08Bb/7sdExBsM5g5w/LxLXxTFhw0j1RAX5ghee
+         OJhIZ0Wangk1+c5T3ihM2aeBKR21d0SDuE2mWBW9XXZyPilxVfTNh8loSNeG0mrjTHCz
+         oa1ZuNCSiDuKOqRy2DIUz211FEOEnGklm1B5I7ECI09kCv+LveFZ5B5SveOrVqy/URhm
+         Gxv3ObViSH/v423il2vgiYVsMyD4slhpJu+xN/tca3WrmALXoYjiIebY+i56jMUg1AiJ
+         7mpkVnEYKzI6oBPF9B1P/xhAYxAVQcty7iJib/2G8L3VEghhbceD5MBScSKlu95UTYG0
+         ef5A==
+X-Gm-Message-State: AOAM530of98YCgmj2YgfxV0ABsi51Vj1pJ6g7g/9NWimpSW0r9Fu8Wrz
+        pyxtEP7mntr2oJff54EYdPOQZZRHpG0NYOGqiUDoE3M/2KORhA==
+X-Google-Smtp-Source: ABdhPJy0w0vwfGz3NPPcdJRgNSnmwG8BK0PTb3S8h9EVIY4Gx4Gpp0ntMuST8iHzvd1KZ/Qvu8mp2UL86xpd0IzsIuk=
+X-Received: by 2002:a2e:8650:0:b0:24b:5309:352f with SMTP id
+ i16-20020a2e8650000000b0024b5309352fmr2697199ljj.472.1649974424908; Thu, 14
+ Apr 2022 15:13:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
+ <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
+In-Reply-To: <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 14 Apr 2022 15:13:32 -0700
+Message-ID: <CAKwvOdmXYa-A76CGitoAFNQz3rab37AJafQVN-=QSRVDA8y1fg@mail.gmail.com>
+Subject: Re: Plumbers conf presentation on -fanalyze?
+To:     David Malcolm <dmalcolm@redhat.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 13:22:42 PDT (-0700), macro@orcam.me.uk wrote:
-> On Thu, 14 Apr 2022, Bjorn Helgaas wrote:
+On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com> wrote:
 >
->> > > > Address 0 is treated specially however in many places, for example in
->> > > > `pci_iomap_range' and `pci_iomap_wc_range' we require that the start
->> > > > address is non-zero, and even if we let such an address through, then
->> > > > individual device drivers could reject a request to handle a device at
->> > > > such an address, such as in `uart_configure_port'.  Consequently given
->> > > > devices configured as shown above only one is actually usable:
->> > >
->> > > pci_iomap_range() tests the resource start, i.e., the CPU address.  I
->> > > guess the implication is that on RISC-V, the CPU-side port address is
->> > > the same as the PCI bus port address?
->> >
->> >  Umm, for all systems I came across except x86, which have native port I/O
->> > access machine instructions, a port I/O resource records PCI bus addresses
->> > of the device rather than its CPU addresses, which encode the location of
->> > an MMIO window the PCI port I/O space is accessed through.
->>
->> My point is only that it is not necessary for the PCI bus address and
->> the struct resource address, i.e., the argument to inb(), to be the
->> same.
+> On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
+> > Hi David,
+> > Jose and I are currently in the planning process to put together a
+> > Kernel+Toolchain microconference track at Linux Plumbers Conference
+> > this year (Sept 12-14) in Dublin, Ireland.
+> >
+> > We had seen
+> > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
+> > particularly the section on The Linux kernel and were wondering if
+> > you'd be interested in presenting more information about -fanalyze to
+> > kernel and toolchain developers there?
 >
->  Sure, but I have yet to see a system where it is the case.
->
->  Also in principle peer PCI buses could have their own port I/O address
-> spaces each mapped via distinct MMIO windows in the CPU address space, but
-> I haven't heard of such a system.  That of course doesn't mean there's no
-> such system in existence.
->
->> I tried to find the RISC-V definition of inb(), but it's obfuscated
->> too much to be easily discoverable.
->
->  AFAICT the RISC-V port uses definitions from include/asm-generic/io.h.
-> Palmer, did I get this right?
+> Thanks!  I'm very much interested, but am not yet sure about travel
+> (both in terms of (a) budget and (b) possible new virus strains).  Is
+> this conference going to be purely in-person, or hybrid virtual/in-
+> person?
 
-I'd argue that asm-generic/io.h uses the definitions from RISC-V, but 
-the result is the same ;).
-
-The general idea is that the IO itself is pretty generic for a handful 
-of ports, they just need to be decorated with some fences (or whatever 
-the ISA calls them) before/after the load/store.  Those are the 
-__io_p{b,a}{r,w}() macros, which are in riscv's io.h.  IIRC they stand 
-for something like Port{Before,After}{Read,Write}.
+I didn't see an answer to that question on
+https://lpc.events/event/16/page/185-faqs.
+cc' James + Stephen who might be able to answer that more precisely
+than I could.
+-- 
+Thanks,
+~Nick Desaulniers

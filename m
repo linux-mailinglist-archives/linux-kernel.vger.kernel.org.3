@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BF350103A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D0501540
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239030AbiDNNef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S1353528AbiDNOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240134AbiDNNZY (ORCPT
+        with ESMTP id S1344959AbiDNNo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:25:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFAC91AC4;
-        Thu, 14 Apr 2022 06:19:45 -0700 (PDT)
+        Thu, 14 Apr 2022 09:44:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6EC5EDE6;
+        Thu, 14 Apr 2022 06:41:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EB49B82982;
-        Thu, 14 Apr 2022 13:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5480C385AA;
-        Thu, 14 Apr 2022 13:19:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D0C7CE29B0;
+        Thu, 14 Apr 2022 13:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB66C385A1;
+        Thu, 14 Apr 2022 13:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942383;
-        bh=/ml5tdhAb3zdSZI2FjZp5xcFQqBak2tGhtErww/empE=;
+        s=korg; t=1649943656;
+        bh=UwNe/J8+u2nBEFGBM5ZWw38obJdIYFjRMil+3o9hFHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ux/8lF8mVDYAaK6tAnNXwA74s8zE9I1dgJCrOQ9FciGRK178Zg2zRfpP98sXZxXqI
-         hBqOvVIyzWkW5h/CVmQZRtohHMkqsxtnMsOHcfdajZQHnqW+oVvKArZODMWx1gvkg9
-         nMO59i33788ZUlVOsrvxAXKr6Yic/1ETDaq+METU=
+        b=p43nlY6mLRDf/keFtsSI/m060uPB3tCNOg3IWlaBEyv19+lr22i7aJ7jCAoFOvrjp
+         xZBDuBg2kApJLg/eRnmQHgDUQvTZHtgb3IN3sHQK+41P4PGBvGL7RoEm+TB3LZoaxZ
+         SDCBg+wA3yDNtrSFlXkUUE41pjEpW++vAi0f6zhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yiru Xu <xyru1999@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 117/338] Bluetooth: hci_serdev: call init_rwsem() before p->open()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 235/475] serial: 8250: Fix race condition in RTS-after-send handling
 Date:   Thu, 14 Apr 2022 15:10:20 +0200
-Message-Id: <20220414110842.237202671@linuxfoundation.org>
+Message-Id: <20220414110901.697013819@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 9d7cbe2b9cf5f650067df4f402fdd799d4bbb4e1 ]
+[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
 
-kvartet reported, that hci_uart_tx_wakeup() uses uninitialized rwsem.
-The problem was in wrong place for percpu_init_rwsem() call.
+Set em485->active_timer = NULL isn't always enough to take out the stop
+timer. While there is a check that it acts in the right state (i.e.
+waiting for RTS-after-send to pass after sending some chars) but the
+following might happen:
 
-hci_uart_proto::open() may register a timer whose callback may call
-hci_uart_tx_wakeup(). There is a chance, that hci_uart_register_device()
-thread won't be fast enough to call percpu_init_rwsem().
+ - CPU1: some chars send, shifter becomes empty, stop tx timer armed
+ - CPU0: more chars send before RTS-after-send expired
+ - CPU0: shifter empty irq, port lock taken
+ - CPU1: tx timer triggers, waits for port lock
+ - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
+   releases lock()
+ - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
+   tear down RTS too early
 
-Fix it my moving percpu_init_rwsem() call before p->open().
+This fix bases on research done by Steffen Trumtrar.
 
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
-...
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:951 [inline]
- register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
- __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
- lock_acquire kernel/locking/lockdep.c:5637 [inline]
- lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
- percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
- hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
- h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
-
-Fixes: d73e17281665 ("Bluetooth: hci_serdev: Init hci_uart proto_lock to avoid oops")
-Reported-by: Yiru Xu <xyru1999@gmail.com>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_serdev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/bluetooth/hci_serdev.c b/drivers/bluetooth/hci_serdev.c
-index 7b3aade431e5..9ebcf0d9e395 100644
---- a/drivers/bluetooth/hci_serdev.c
-+++ b/drivers/bluetooth/hci_serdev.c
-@@ -288,6 +288,8 @@ int hci_uart_register_device(struct hci_uart *hu,
- 	if (err)
- 		return err;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 777ef1a9591c..87567515591e 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1545,6 +1545,18 @@ static inline void start_tx_rs485(struct uart_port *port)
+ 	if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
+ 		serial8250_stop_rx(&up->port);
  
-+	percpu_init_rwsem(&hu->proto_lock);
++	/*
++	 * While serial8250_em485_handle_stop_tx() is a noop if
++	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
++	 * the timer is still armed and triggers only after the current bunch of
++	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
++	 * So cancel the timer. There is still a theoretical race condition if
++	 * the timer is already running and only comes around to check for
++	 * em485->active_timer when &em485->stop_tx_timer is armed again.
++	 */
++	if (em485->active_timer == &em485->stop_tx_timer)
++		hrtimer_try_to_cancel(&em485->stop_tx_timer);
 +
- 	err = p->open(hu);
- 	if (err)
- 		goto err_open;
-@@ -310,7 +312,6 @@ int hci_uart_register_device(struct hci_uart *hu,
+ 	em485->active_timer = NULL;
  
- 	INIT_WORK(&hu->init_ready, hci_uart_init_work);
- 	INIT_WORK(&hu->write_work, hci_uart_write_work);
--	percpu_init_rwsem(&hu->proto_lock);
- 
- 	/* Only when vendor specific setup callback is provided, consider
- 	 * the manufacturer information valid. This avoids filling in the
+ 	mcr = serial8250_in_MCR(up);
 -- 
 2.34.1
 

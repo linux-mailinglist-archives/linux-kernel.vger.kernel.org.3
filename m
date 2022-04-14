@@ -2,162 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E959501827
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862A45017E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350307AbiDNQBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S244709AbiDNPvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358363AbiDNPlj (ORCPT
+        with ESMTP id S1358635AbiDNPmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:41:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E9D9ECC7E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649949838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ymoHjSbTJfTWENDrZAMakMAu3NTQlX8fnQuTkXZ1c+0=;
-        b=NjM4/oM453w+Y3ZL2zQHem4spfK/U+l1r/IXAii8ukpXAHjIgsjwt7B96Ij/U1ddA9WkDw
-        YjMiEpHphTq1kHEwSdLXnoFf1eV6h9fICqLT1tBq97/Lcs9Gqy82FygLLTDhmLCLze0xPU
-        DCVy2ZRxsOosIxqGpm8VDVf0MRSWgY0=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-77-NFF5WRSIMtWYdd1dkAKzXw-1; Thu, 14 Apr 2022 11:23:57 -0400
-X-MC-Unique: NFF5WRSIMtWYdd1dkAKzXw-1
-Received: by mail-qv1-f72.google.com with SMTP id o1-20020a0c9001000000b00440e415a3a2so4621963qvo.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:23:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ymoHjSbTJfTWENDrZAMakMAu3NTQlX8fnQuTkXZ1c+0=;
-        b=vg9gG2Vv+c2fyP3V6WwWAr/+3I9KgEnE34eksK0RRzuqS1QUU4Jhx7cLCLufgjBVUA
-         sNoOxKgtF0xoltE9ZmXQAOEteq1oLCDV4UaK2LuRL3QjaPQHvJvuO316fzB3HIdzMcCx
-         COIlSYF3lV9aq8BVScqXp6+q+PkZaE6WcMYz1D3Yt5SlvM2rlSNjeJEgwtEUY5RyMryB
-         Uz115/m3h12BXfX7bZyenmhIjLd2H6lcKThptKYNtYEgOQIo7f6c6QPff8Jl2cJHItam
-         k+mLwFrxDOpXZurCB7HkmFyLYbn1VTSQ8nvu7106rLBHuADz1BCWSGXh5quatI2ggdmB
-         yznw==
-X-Gm-Message-State: AOAM5313jhigNVLrPfDoKV0fXCl861mJ69abTWTEJkwpIgOKdgYP0sqQ
-        xCBqBw7gjPvpYu4QQK4VtH5rHh9oC27TJFupiTu7RfNVQ1h7MfaatEhsc1TTnbRiBO5u0V96ub8
-        F9FGprlyUHD000gd7oNYKVNtw
-X-Received: by 2002:a05:622a:1793:b0:2e1:ba41:ed2 with SMTP id s19-20020a05622a179300b002e1ba410ed2mr2180116qtk.238.1649949836596;
-        Thu, 14 Apr 2022 08:23:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzs3AjMBWvnaeFFepMGw6xBfV7UrXSMsLV3Nf+VF6QIpa+RPOmd63l8E4yiuw2decacPo8cmQ==
-X-Received: by 2002:a05:622a:1793:b0:2e1:ba41:ed2 with SMTP id s19-20020a05622a179300b002e1ba410ed2mr2180095qtk.238.1649949836406;
-        Thu, 14 Apr 2022 08:23:56 -0700 (PDT)
-Received: from fedora.redhat.com (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id p5-20020a378d05000000b0069beaffd5b3sm1166038qkd.4.2022.04.14.08.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:23:56 -0700 (PDT)
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Maxime Ripard <mripard@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Adrien Thierry <athierry@redhat.com>
-Subject: [PATCH 2/2] staging: bcm2835-audio: clean code style warnings
-Date:   Thu, 14 Apr 2022 11:23:40 -0400
-Message-Id: <20220414152340.68932-3-athierry@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220414152340.68932-1-athierry@redhat.com>
-References: <20220414152340.68932-1-athierry@redhat.com>
+        Thu, 14 Apr 2022 11:42:02 -0400
+Received: from sonic307-55.consmr.mail.gq1.yahoo.com (sonic307-55.consmr.mail.gq1.yahoo.com [98.137.64.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B29C6F2A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1649949882; bh=l7uEf+zHfGuXlKA/7aMuUENHXKPZm3r3B51bsgI8f2Q=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=h+ZC2BvN8pcuEOWtR9p6QOwASKIVW8HY7x+GeFfL0FCDoMREsJoK+zDw/7f0u+vZ4AbUTDubeQ0yPJfna4JdMNkDqmyAnIJBLqoLKT4bv5BBBa7lUjBQYtDH6lRxlatEsLHcUPoCGl76yimjCoz6cnp+w/hu4PsEEZKwV+e7EZ5HosQ5gJBebML5FqlnYq/u1t8aQTe2VoZQCFMPy7w8cWTzqhvxZovuoKD9qwDTkFxH0CP40fUSjbd/CDuFjkKrjVe4bVxup5MOayb3ygXgbBiWb1NY2ZFVsWH3eAJLpJFwuVNJX68/3ZvsME4QHWJSK5gq4i80Gnf335fTyOoITA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649949882; bh=c0PR5MdqQVMbrOS9QgNLeD581KVxI66+yo63nInVZPI=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=fv4lNBYS5pFRa2GLDlY0GtUPYkRBA738m2HwyXxbgv51t0GqjdERVrnXyu8xJEZkE/qP2gLP/R92EpOxF7Xm0CCqU2JHHa3Wk2VRmD1TB+ishh9xY2zHgssMFELAqjfBbLHshg4FGadUcNWN5+8hpbIzEgXwDTWLyF5N18ersnG9DeYBq+ZIIImGrSQ/0GIlhHUnf6oYX+7PkSwXDphOgxtUCIumcpHPq9tWPEr/n3iikz9GGKoeRXCuyUT4mC4iYHkaEPvWdtijVTxLCypbE3iEOUxjUZXs4vBPHfc4v4C+45SwpSEVlDjwUTQtlpkcEYRb53tYvy8B7m9oW1QPaQ==
+X-YMail-OSG: ixi72QsVM1ludGt1a_NOmZsL3Tw7Yf6Hu6LmOJvnhrp_Pg.OBrJkFUPM.k_p9uu
+ t2iM4LjQNAOcKrDdY019Q6RRB2xHaQcrOi8JoyXT1U7klhVvFGTyb8XfjOCLJRj2lNxJ8q2Jjvdh
+ 0RCoA4bNSaEglicQOBF6JijL1UyjdGqANkqNLMF8WTZHT8qAWKHUAdNOWprquOz2aip0gHtlfW.F
+ 0xWCdWi1JNQHgebpbqM2ehQx37fndADEArENjDbErQINW3gwXdV6.BHRZEncyo_O7lFejfXw8nAu
+ 8wZAWTa1WhwWGVdqzti_7lgINmDzf6PAvnC9sVTYakQdynskwkUSBRx28YrAfEvIbC2qH3rntOmP
+ cMa4KJ7f59etRXona43oI.tNprJz9MEd3HMvGgdsO1hRpIwM9ixzjhTUPLbMOSDD0YmFFy5AdaS8
+ rxom2dwujAZ7WldrKaLTDypL.tCaBPvoJx3YmdC6I8yK54rKwVc3Xvv.fjGKmR.TqtD4Tpf3mRh4
+ gU2T7phP0k_mNV3SfwBY5uyKiBVoTYH4tqARM9.T.0HaRuzw3ZrNbvvIiMGmmB0F5WuYcl4pygSJ
+ ccprenv8z5lX7mrLTvVDsUh43Q8aSLrll0t6jqbGf2yip8416VNNKHS2BARuun1b_z4sWmSo8_HS
+ ikDysAr6t5LyyrUiyqsCW5OoXI0d3pBTmuMlFdpWrOOAGBRBLOalciBwHxkbW_YlPZtUTCmsCLNW
+ eRRV5vs9bQYD.H4Wstf5ghG17lJkvCG2X0QgtqfLA737NdbzeIRVD8iFOxlmh_Y_zCZJ_2E4v0B.
+ xXgHnnCbGAxFuiFGr7WnSQCf1ne_hJf6bTaQKrNI3tPbJmjuX6QfhVZyqqeblBvD0asA5iIqP5ft
+ 4JuOcawECMqsLJUgBLWWOBw5YLGGQfAlsdfHWgLmbzvl8gy3rienmPLDZtQa.uFNVb8XpLLEh93J
+ AC3RCdzF9zOHQbZw39ZDQVeavhTMT1q_2UKxZZbmwGH6GNuNlrYwiQcaeOfSHRWDabId2ml4mUQR
+ RFFON__K84I9DPQQx5IyI3YvR46LhJwagtwWYJF_bBUE86W6kf3_f4epIb_wRXj.HIJ29k94FvF_
+ AgloODt10QIMUepFAQjRX8pJcRJBPNVc0I5HgV0bfiFpTNP3DQfM9HhJfoQWUYpfEgtZrnEZ0bYc
+ rXLV0aHPyjqTuJXwxwbBXiuk2uK7K5WbEJxvQ25fmdx0ODo1MCjBLCzMi.Jz9gK7w3toR9_YoELv
+ .jEWGSU78GfBVC8Bl1lII2VporKr09cqrtCuoho8WYVPiWZJEzowjBlETfBgriWEmd9Sy7pI9KEo
+ LyJwYL5dAz5n.JEukZ7FfzBCyf0yohXpY4mw1xighpeSnmeLHeqKQD6Noc.90esAHwxfaWdVzcqw
+ vdv6hCcKB.kYiA6wJvlXwAp2lSfpT4nSR70AdGnHlsVm1GRVdkX2D5Mpr6c3L9wBoa5_oesEpVo6
+ rXgpj7YZ.ptcghQwRXqa2ce4GrWpSFodvnyloFkoB2gWux.LQjoElUboRwNNWNbwYeQmP75CCr99
+ H3ix8fgwAZSoMFoSQJN0vbuWawRblVDxqfZ57_CnNuQWAcWCKnmcYcVVWh7rJpJoM.ZRakDakI3a
+ 7H49tOCA1OUP3GlfxuR28ypdhF5X.x0BCZ4gOUmlePbXGspmb.FoV3hR_3vskdEXg0s1zfF2fP1m
+ DQMb69kxOKu7MEtGDxMBuI3QJG.hSUJmwKEDhDQ8xy4C3v8yeuHXmt3i1dAva01wCdeaoI4o2HNp
+ xraygLZ5eiIfcCiOUjhR6xRbroLClVMtgJuSR_r0abBVIHBBfEVVxDmBWwBxcbx2n0J_eE8haMCL
+ hesR30KTb0GsDF8IZjlQeUWdyMoGZMQ9K5IfXX3_VO_4qA7TnpUayZAQcmEGZw4QDuCDhtPXTbg_
+ Lrq6imWqIqkLOa77ZyccZl_tVndLc3_bVv_Xb.4KcKkmNDl9CuC5aRL0wJ0jBXtf76Wr56I34xaY
+ HoK07z0oV1FVukmEeiqjLtH0Bi9SsF_7BV3B3gK5S3yy2fO2bfRdWdbVOLPL3HWQpSi7nWcv0Wq5
+ yHGlTGNSX5U2AipMpz90gBCIa3mM4TBeNgwChvHra0TO_5rxjsSPZOZKc.iKcizrrnETSFXAqGFd
+ 6e.B5t0ohwE8SO_600iyK5F0AD5RB30OaOuiZFrIoTwDN4o.OY0txDMPjHbSAIjVx7WLNXf45i2K
+ Dpo7wcPaJ5i3RFM7d4zoP3FsWFJKTf7MD9qKCNM86HojINd3evbgu7ZSfJrsRsva82arIk2UmcVD
+ p
+X-Sonic-MF: <alex_y_xu@yahoo.ca>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Thu, 14 Apr 2022 15:24:42 +0000
+Received: by hermes--canary-production-gq1-cc54c7bb9-9gfh6 (VZM Hermes SMTP Server) with ESMTPA ID 70fcc1be1711c5a35768f5595215e0c4;
+          Thu, 14 Apr 2022 15:24:38 +0000 (UTC)
+Date:   Thu, 14 Apr 2022 11:24:35 -0400
+From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: Re: [PATCH] mm/smaps_rollup: return empty file for kthreads instead
+ of ESRCH
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Colascione <dancol@google.com>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220413211357.26938-1-alex_y_xu.ref@yahoo.ca>
+        <20220413211357.26938-1-alex_y_xu@yahoo.ca>
+        <20220413142748.a5796e31e567a6205c850ae7@linux-foundation.org>
+        <1649886492.rqei1nn3vm.none@localhost>
+        <20220413160613.385269bf45a9ebb2f7223ca8@linux-foundation.org>
+        <YleToQbgeRalHTwO@casper.infradead.org>
+        <YlfFaPhNFWNP+1Z7@localhost.localdomain>
+In-Reply-To: <YlfFaPhNFWNP+1Z7@localhost.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1649949601.z8rr7ed5qb.none@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean a few minor code style warnings.
+Excerpts from Alexey Dobriyan's message of April 14, 2022 2:55 am:
+> Returning ESRCH is better so that programs don't waste time reading and
+> closing empty files and instantiating useless inodes.
 
-Reported by checkpatch:
+Yes, except ESRCH is not returned for open, it is returned for read.
 
-CHECK: Lines should not end with a '('
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c:85:
+> Of course it is different if this patch was sent as response to a regress=
+ion.
 
-CHECK: No space is necessary after a cast
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c:240:
+I'm not sure I would classify it as a regression; I don't have an=20
+existing program which broke, it is a new program which happens to use=20
+some functionality which worked with a previous kernel. It is=20
+theoretically possible that some program exists that currently uses=20
+4.14, and will break if upgraded to 4.19+, but it is also possible that=20
+some program exists that currently uses 4.19+ and will break if this=20
+patch is applied.
 
-CHECK: struct mutex definition without comment
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c:14:
-
-CHECK: struct mutex definition without comment
-FILE: drivers/staging/vc04_services/bcm2835-audio/bcm2835.h:64:
-
-Signed-off-by: Adrien Thierry <athierry@redhat.com>
----
- drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c   | 5 ++---
- drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c | 2 +-
- drivers/staging/vc04_services/bcm2835-audio/bcm2835.h       | 2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
-index f2ef1d641e70..68e8d491a7ec 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
-+++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-pcm.c
-@@ -82,8 +82,7 @@ void bcm2835_playback_fifo(struct bcm2835_alsa_stream *alsa_stream,
- }
- 
- /* open callback */
--static int snd_bcm2835_playback_open_generic(
--	struct snd_pcm_substream *substream, int spdif)
-+static int snd_bcm2835_playback_open_generic(struct snd_pcm_substream *substream, int spdif)
- {
- 	struct bcm2835_chip *chip = snd_pcm_substream_chip(substream);
- 	struct snd_pcm_runtime *runtime = substream->runtime;
-@@ -237,7 +236,7 @@ static void snd_bcm2835_pcm_transfer(struct snd_pcm_substream *substream,
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct bcm2835_alsa_stream *alsa_stream = runtime->private_data;
--	void *src = (void *) (substream->runtime->dma_area + rec->sw_data);
-+	void *src = (void *)(substream->runtime->dma_area + rec->sw_data);
- 
- 	bcm2835_audio_write(alsa_stream, bytes, src);
- }
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c
-index d567a2e3f70c..e429b33b4d39 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c
-+++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835-vchiq.c
-@@ -11,7 +11,7 @@ struct bcm2835_audio_instance {
- 	struct device *dev;
- 	unsigned int service_handle;
- 	struct completion msg_avail_comp;
--	struct mutex vchi_mutex;
-+	struct mutex vchi_mutex; /* Serialize vchiq access */
- 	struct bcm2835_alsa_stream *alsa_stream;
- 	int result;
- 	unsigned int max_packet;
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-index 51066ac8eea5..38b7451d77b2 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-+++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
-@@ -61,7 +61,7 @@ struct bcm2835_chip {
- 
- 	unsigned int opened;
- 	unsigned int spdif_status;
--	struct mutex audio_mutex;
-+	struct mutex audio_mutex; /* Serialize chip data access */
- 
- 	struct bcm2835_vchi_ctx *vchi_ctx;
- };
--- 
-2.35.1
-
+Cheers,
+Alex.

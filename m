@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4317C5011C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041B150173B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345348AbiDNNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S1356928AbiDNPZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344055AbiDNNaR (ORCPT
+        with ESMTP id S1347033AbiDNN6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368456447;
-        Thu, 14 Apr 2022 06:27:04 -0700 (PDT)
+        Thu, 14 Apr 2022 09:58:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F6AB6D0D;
+        Thu, 14 Apr 2022 06:48:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C71EE60C14;
-        Thu, 14 Apr 2022 13:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6858C385A1;
-        Thu, 14 Apr 2022 13:27:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7757B82894;
+        Thu, 14 Apr 2022 13:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23212C385A5;
+        Thu, 14 Apr 2022 13:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942823;
-        bh=7pRcVrQJw4iRJS+tLmDYpTzF0lXQoEyEP2vNbA1WmH4=;
+        s=korg; t=1649944112;
+        bh=ZK9bnx/lyZZ9oKvnCjW+4Ll2OOuQv7jyiZ83Vdpi3Bg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KsnvDSidfOcaq2javiJyS3NF7yMhOAmH4sMsC00o+V9IAYwbhgqa5s2kg1qsw6xCr
-         2s0W5JXhXWT/JTfT0srAm6957Tmu6gv1NdLMzx9novL467kZumMaQ+h2I8cKQFt2e1
-         Aob29/pdqs57+K63uKDXn6IFbKCzqj5QgNbDiuQQ=
+        b=FbveaBUe/ZLxe0sxPrTSBp6agJw0KfmnTbtwFeS2gZeTgrjRIpmf0gDVzdSPxfqRv
+         ypia2xduVR++Da7QA5x5dOoWv45VEpB8GSHoTnGlbISthsnFqg0vzsVrMYsYu6gq3p
+         6xli96TH/iYW6nB1XeNjZ1OkLVuHEzTSwlYvFHT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 273/338] PCI: pciehp: Add Qualcomm quirk for Command Completed erratum
+Subject: [PATCH 5.4 391/475] dm ioctl: prevent potential spectre v1 gadget
 Date:   Thu, 14 Apr 2022 15:12:56 +0200
-Message-Id: <20220414110846.657647581@linuxfoundation.org>
+Message-Id: <20220414110906.014386562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+From: Jordy Zomer <jordy@jordyzomer.github.io>
 
-[ Upstream commit 9f72d4757cbe4d1ed669192f6d23817c9e437c4b ]
+[ Upstream commit cd9c88da171a62c4b0f1c70e50c75845969fbc18 ]
 
-The Qualcomm PCI bridge device (Device ID 0x0110) found in chipsets such as
-SM8450 does not set the Command Completed bit unless writes to the Slot
-Command register change "Control" bits.
+It appears like cmd could be a Spectre v1 gadget as it's supplied by a
+user and used as an array index. Prevent the contents of kernel memory
+from being leaked to userspace via speculative execution by using
+array_index_nospec.
 
-This results in timeouts like below:
-
-  pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-
-Add the device to the Command Completed quirk to mark commands "completed"
-immediately unless they change the "Control" bits.
-
-Link: https://lore.kernel.org/r/20220210145003.135907-1-manivannan.sadhasivam@linaro.org
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/hotplug/pciehp_hpc.c | 2 ++
+ drivers/md/dm-ioctl.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-index 0fdde66a49f1..2795445233b3 100644
---- a/drivers/pci/hotplug/pciehp_hpc.c
-+++ b/drivers/pci/hotplug/pciehp_hpc.c
-@@ -971,6 +971,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index 3f15d8dc2b71..7a73f2fa0ad7 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -17,6 +17,7 @@
+ #include <linux/dm-ioctl.h>
+ #include <linux/hdreg.h>
+ #include <linux/compat.h>
++#include <linux/nospec.h>
+ 
+ #include <linux/uaccess.h>
+ 
+@@ -1696,6 +1697,7 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
+ 	if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
+ 		return NULL;
+ 
++	cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
+ 	*ioctl_flags = _ioctls[cmd].flags;
+ 	return _ioctls[cmd].fn;
  }
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
- 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-+DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
-+			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
- 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
 -- 
 2.35.1
 

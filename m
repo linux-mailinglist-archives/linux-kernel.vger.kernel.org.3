@@ -2,142 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE285019EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E12C5019EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245729AbiDNRVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S238280AbiDNRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245318AbiDNRVC (ORCPT
+        with ESMTP id S233186AbiDNRWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:21:02 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B229BC9;
-        Thu, 14 Apr 2022 10:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649956682;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=KshZXEHhcUQEnHixAwZGv5dR1rFkLqEAD5Zz92eTH5M=;
-    b=M6ktt3FArDL5yCIRbKdklWskTNy9KYDspOm4TEZoOjmU/oBkD7CsChI9LSCTGmrTPJ
-    etNdz4Jhm5iVlUU47iuCN2Dx/vxbtmRU0SOZ1apGmdQQ4CxgnU1DHWqB4q9LZnBQeKZ8
-    6bLh3NLbMxMn2iVzqH2BBjpp6SrfBF620MZYzoIGE19lJCp1nYOf88H6umsXLhMBjrSE
-    9S5R6dumEu/Cukn7zI7Jsb0g3OM7J5D17AG0B8dGGtQ9QniMJDVK18oGXQofPxTdAZS1
-    4/J18TdMCkotOD6KR+thF6YF/TEzUxjogSVVMsUJEbfhdHkA32KOwgOsQEsxn8kzIbJC
-    JScg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47uAiI="
-X-RZG-CLASS-ID: mo00
-Received: from mbp-13-nikolaus.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy3EHI1Gaw
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 14 Apr 2022 19:18:01 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <40d34f8b-4ab7-5ced-b533-da1f4b501cdc@wanyeetech.com>
-Date:   Thu, 14 Apr 2022 19:18:00 +0200
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
-        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D0853601-C9FA-45E9-95FA-6E05897DA328@goldelico.com>
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
- <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
- <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
- <76ea346b-0645-97b5-f8fb-5b46b4bcc80b@linaro.org>
- <F6929BAA-D552-4C34-B392-33AEA263F0C9@goldelico.com>
- <40d34f8b-4ab7-5ced-b533-da1f4b501cdc@wanyeetech.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 13:22:25 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F23AA58
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:00 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 12so5168919pll.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KZKxiqiOGP8xT+pzPpG96RNqzRBaJRtyWz+j5RMVT+Y=;
+        b=lymh6lTWr2Sj/q2KNN/sZh1+2+JNVgm9GNF/J1h9xIbILtCqkJ4X5rV0k08Hh+twHd
+         QJmdssHM6pnT12/Lf6tURVpzaBio2EQQV4HtSur0oY4rKUk+qb422YW+5FBBwPoq7Rd7
+         ULezyMYJqhGfudAlhzgoMNN96M9DCtkPjl7zDz3aoxWt6x824Jo8bKJ41ZF7f5sbvLHN
+         qBKBxsJEz1dcltFx0xi7w+2k47IhBftfhOolhGf6NLlXWXSmBcVbjhu9olAs0/mKobli
+         0dMnfWjwZZkF1JoziNLJieWWcwp9FmEbU0+Plpl0zP7OoaMkXuU/oeL5RB8kSy63ajEH
+         QEmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KZKxiqiOGP8xT+pzPpG96RNqzRBaJRtyWz+j5RMVT+Y=;
+        b=HaSi1pA3F3RvVra6c4YXJNCTlQDYOkP7Bx2nkULgYed5421Vl1P8AvI+e7Ul5t1Q6h
+         8DdWx3ex1bkrbULqnXvvDWHt9e6dWMlxc3MCCs3WjLIs+dyia4Yt5z+JwPH8JAgxTmpi
+         0C/t7JFBwioHKe6SJ+4q5jq7I0/Olli474OL1DQhvEvy7tssEfJ0TLUuOlf5xFx1zmX0
+         ieOXcpGUFn5q8VUE0Vza5IVQRYcvrtgd5undR1gcKekmA292EdgKgt23N0NrWa596hSr
+         XdIXdR/u+T8oal1XhKNnQCthlLcMH9ypTErRkrXpsX+SM41Cja7/qc7TWbSX4Ekgxsa9
+         HygQ==
+X-Gm-Message-State: AOAM533jcY6Hb6+4O4ptxMk9P9t86rqGiSscCEbtioNxe7EFtKxk9d3G
+        VTdCWdsuW5ODOTaiaEwOneCe+g==
+X-Google-Smtp-Source: ABdhPJwi8+ti1WpkD0ucDZjeGnXAnfZ7+/ecI6kI3PJTHAqbr5Kk6Xg8Mx1f9xcHje80M+6NCA/tsQ==
+X-Received: by 2002:a17:90b:384c:b0:1cb:1b44:2939 with SMTP id nl12-20020a17090b384c00b001cb1b442939mr5468344pjb.46.1649956799574;
+        Thu, 14 Apr 2022 10:19:59 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm466362pfu.120.2022.04.14.10.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 10:19:52 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 11:19:47 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
+Subject: Re: [PATCH v2 0/2] remoteproc: core: fix issue for multi-instance
+Message-ID: <20220414171947.GB698343@p14s>
+References: <1648434012-16655-1-git-send-email-shengjiu.wang@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1648434012-16655-1-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Mar 28, 2022 at 10:20:10AM +0800, Shengjiu Wang wrote:
+> Use the rproc->power reference count to handle the multi-instance
+> case, move the state checking for 'stop' and 'detach' under
+> mutex protection, and remove state checking for 'start'.
+> 
+> Shengjiu Wang (2):
+>   remoteproc: core: Remove state checking before calling rproc_boot()
+>   remoteproc: core: Move state checking to remoteproc_core
+> 
+> changes in v2:
+> - drop 'remoteproc: core: check rproc->power value before decreasing it'
+> - refine 'remoteproc: core: Remove state checking before changing state'
+>   split it to two new patches.
+> 
+>  drivers/remoteproc/remoteproc_cdev.c  | 11 -----------
+>  drivers/remoteproc/remoteproc_core.c  | 11 +++++++++++
+>  drivers/remoteproc/remoteproc_sysfs.c | 11 -----------
+>  3 files changed, 11 insertions(+), 22 deletions(-)
+>
 
-> Am 14.04.2022 um 19:11 schrieb Zhou Yanjie =
-<zhouyanjie@wanyeetech.com>:
->=20
-> Hi,
->=20
-> On 2022/4/14 =E4=B8=8B=E5=8D=886:00, H. Nikolaus Schaller wrote:
->>=20
->>> Am 14.04.2022 um 09:32 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->>>=20
->>> On 13/04/2022 21:30, H. Nikolaus Schaller wrote:
->>>> So we need "snps,dwc2" to get any driver match and I thought the =
-"ingenic,jz4780-otg" is redundant.
->>>>=20
->>>> But maintainers convinced me to keep it as a dummy compatible in =
-the .dtsi for potential future
->>>> specialization (which does not exist and seems not to be =
-necessary).
->>> Isn't exactly the next patch 2/2 using such specialization?
->>>=20
->>>> Unless I can convince them
->>>> that this is never ever needed. Which is beyond my knowledge and =
-almost everyone.
->>>>=20
->>>> So we can't remove the "snps,dwc2" here.
->>>>=20
->>>> Well, we can with more work elsewhere.
->>>> You have to extend the dwc2_of_match_table to include all ingenic =
-devices.
->>>>=20
->>>> Therefore we now know 3 potential solutions:
->>>> a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
->>>> b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" =
-(your proposal + my suggestion here)
->>>> c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match =
-table in drivers//usb/dwc2/params.c (new proposals)
->>>>=20
->>>> =46rom consistency point of view I think variant b) is the right =
-one. a) was rejected and c) only adds redundant code.
->>> c) was already proposed by Zhou, so if you think the code is not =
-correct
->>> (the params for jz4780) maybe nack it there, so we will know that =
-driver
->>> needs fixes.
->> Ah, ok. Now I see. I was just focussed on this patch and related =
-dtbscheck
->> messages and did not read patch 2/2.
->>=20
->> Yes, looking at both, they are variant c). Sorry that I didn't see it =
-earlier.
->=20
-> It looks like we need a [3/3] to remove "snps,dwc2", which not only =
-solves
-> the dtbscheck complaining problem, but also doesn't affect normal use =
-after
-> removing "snps,dwc2".
+I have applied this set.
 
-Yes, that seems to be the right thing to do.
+Thanks,
+Mathieu
 
-BR and thanks,
-Nikolaus
-
+> -- 
+> 2.17.1
+> 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2E45013AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EE45014AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353505AbiDNOkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S1346375AbiDNN4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344937AbiDNNo4 (ORCPT
+        with ESMTP id S244994AbiDNN2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:44:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A2215805;
-        Thu, 14 Apr 2022 06:40:48 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1341AA8EC7;
+        Thu, 14 Apr 2022 06:21:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 115F2B82968;
-        Thu, 14 Apr 2022 13:40:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDDFC385A5;
-        Thu, 14 Apr 2022 13:40:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A42FE618E3;
+        Thu, 14 Apr 2022 13:21:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1546C385A5;
+        Thu, 14 Apr 2022 13:21:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943645;
-        bh=2Z19NIKR0aVRkjY2E95TB9kgygXj4YWTY2oe3UXaocg=;
+        s=korg; t=1649942488;
+        bh=asKDr/nU5wSM/qT+3cgtkeW02HwaalF7FZleMTvDYhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mzONtApRQ1CLv82mMs5hCilIkEdM3yPoaVWOS94frSOW3pC1wCQ5CBNJph/aFszFs
-         MaFNjTjZQtOTd1OF2I+CGaFYPBLcOv0LkR6ALzuax8gQ683HM1Ja0aTKFgqcBcPdjF
-         IUT31lRNSXU3anbSsHUVslHH8AKT0CWkIbjRyYfE=
+        b=E7irOEGSP2U7+J/J0nTOoL1hCKUWxwUd6IkYe4F8foKUZsA7AOdy04bWGSApLzQf+
+         OShwLdYbRXdquiOvpbzW+49LALlqFtdboTRM+j0RUkZ3x1K9BEBN5uu46M4+sSLCpa
+         zG5XkYehCWOuzlMDSDFwJV11mDuCRsn1L1GCKS7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 231/475] pinctrl: renesas: r8a77470: Reduce size for narrow VIN1 channel
+Subject: [PATCH 4.19 113/338] ASoC: msm8916-wcd-digital: Fix missing clk_disable_unprepare() in msm8916_wcd_digital_probe
 Date:   Thu, 14 Apr 2022 15:10:16 +0200
-Message-Id: <20220414110901.584754664@linuxfoundation.org>
+Message-Id: <20220414110842.125201504@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9e04a0eda84fccab0ac22a33825ad53f47c968c7 ]
+[ Upstream commit 375a347da4889f64d86e1ab7f4e6702b6e9bf299 ]
 
-The second video-in channel on RZ/G1C has only 12 data lanes, but the
-pin control driver uses the vin_data union, which is meant for 24 data
-lanes, thus wasting space.
+Fix the missing clk_disable_unprepare() before return
+from msm8916_wcd_digital_probe in the error handling case.
 
-Fix this by using the vin_data12 union instead.
-
-This reduces kernel size by 96 bytes.
-
-Fixes: 50f3f2d73e3426ba ("pinctrl: sh-pfc: Reduce kernel size for narrow VIN channels")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/52716fa89139f6f92592633edb52804d4c5e18f0.1640269757.git.geert+renesas@glider.be
+Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220307084523.28687-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/sh-pfc/pfc-r8a77470.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/msm8916-wcd-digital.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/sh-pfc/pfc-r8a77470.c b/drivers/pinctrl/sh-pfc/pfc-r8a77470.c
-index b3b116da1bb0..14005725a726 100644
---- a/drivers/pinctrl/sh-pfc/pfc-r8a77470.c
-+++ b/drivers/pinctrl/sh-pfc/pfc-r8a77470.c
-@@ -2121,7 +2121,7 @@ static const unsigned int vin0_clk_mux[] = {
- 	VI0_CLK_MARK,
- };
- /* - VIN1 ------------------------------------------------------------------- */
--static const union vin_data vin1_data_pins = {
-+static const union vin_data12 vin1_data_pins = {
- 	.data12 = {
- 		RCAR_GP_PIN(3,  1), RCAR_GP_PIN(3, 2),
- 		RCAR_GP_PIN(3,  3), RCAR_GP_PIN(3, 4),
-@@ -2131,7 +2131,7 @@ static const union vin_data vin1_data_pins = {
- 		RCAR_GP_PIN(3, 15), RCAR_GP_PIN(3, 16),
- 	},
- };
--static const union vin_data vin1_data_mux = {
-+static const union vin_data12 vin1_data_mux = {
- 	.data12 = {
- 		VI1_DATA0_MARK, VI1_DATA1_MARK,
- 		VI1_DATA2_MARK, VI1_DATA3_MARK,
+diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
+index 6de2ab6f9706..e6750bda542a 100644
+--- a/sound/soc/codecs/msm8916-wcd-digital.c
++++ b/sound/soc/codecs/msm8916-wcd-digital.c
+@@ -918,7 +918,7 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
+ 	ret = clk_prepare_enable(priv->mclk);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to enable mclk %d\n", ret);
+-		return ret;
++		goto err_clk;
+ 	}
+ 
+ 	dev_set_drvdata(dev, priv);
+@@ -926,6 +926,9 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
+ 	return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
+ 				      msm8916_wcd_digital_dai,
+ 				      ARRAY_SIZE(msm8916_wcd_digital_dai));
++err_clk:
++	clk_disable_unprepare(priv->ahbclk);
++	return ret;
+ }
+ 
+ static int msm8916_wcd_digital_remove(struct platform_device *pdev)
 -- 
 2.34.1
 

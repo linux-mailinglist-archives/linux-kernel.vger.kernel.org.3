@@ -2,89 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007DC501800
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A445E5017FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355883AbiDNP7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S1355854AbiDNP71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353453AbiDNPkx (ORCPT
+        with ESMTP id S1354687AbiDNPlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:40:53 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CD2DBD13;
-        Thu, 14 Apr 2022 08:21:01 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e2afb80550so5605891fac.1;
-        Thu, 14 Apr 2022 08:21:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lqRJc6X1Uv0L9nq++wQS5HzuhbVfOhr/gAFMGNc6R2Y=;
-        b=oEFrsuKmNujZGOMK5NNnLW1ECNUQe31gcUw4k1Z/YvFn87ashgyRFusJ1P9K+sZLR3
-         xf5kkg5p1ZPdX/FZ8OtDLbrU6PV7aQCChlqO/efTiLxEa3fJUvwYEUq7T8pieozXfXPx
-         065P7P8mobbWq0LY36EwrKht5SuIR+qvyckAoTuJPBcO3EOYyJYkh1Yrkret0WqvKOCf
-         qET2e+U/I2+wCY/fy1L7SzV2lCYBS+DDAPvCsAYchJ1Wbp5PgvPKkWxRJIqP406ULx9h
-         ZDD9VF+AyiEHYzOBqjGDfXf8Xaq4rvFD2I6vggj29RkI8LUxwyUV8sOZiFzTKbDtRV5S
-         2zBQ==
-X-Gm-Message-State: AOAM531aV4qDGcf2p8/KH7KbO21mx7/nv/bMt9yC1BOxJ2fJrLHiG2Gd
-        ofSpZ1rjijDeog6tbLyPSw==
-X-Google-Smtp-Source: ABdhPJxa75gqRlvYa8FhtXUMqFApngGD186Lmi8++a0QWdKFaMB5fVO1TNjyXAbtou2UEFajQ1tWOw==
-X-Received: by 2002:a05:6870:461d:b0:de:4705:7fe8 with SMTP id z29-20020a056870461d00b000de47057fe8mr1701434oao.221.1649949661055;
-        Thu, 14 Apr 2022 08:21:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bn41-20020a056808232900b003222f6e2ae8sm105922oib.29.2022.04.14.08.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:21:00 -0700 (PDT)
-Received: (nullmailer pid 2077061 invoked by uid 1000);
-        Thu, 14 Apr 2022 15:20:59 -0000
-Date:   Thu, 14 Apr 2022 10:20:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Nishanth Menon <nm@ti.com>, Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [RFC PATCH v2 1/6] dt-bindings: clock: qcom,gcc-sdm845: add
- parent power domain
-Message-ID: <Ylg7292ZqfwS4TUr@robh.at.kernel.org>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-2-krzysztof.kozlowski@linaro.org>
+        Thu, 14 Apr 2022 11:41:06 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B1CDFD5D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+iRSXHQlt9lmhOSBYrvMuVQHw2ElrWncN2mrge5/yQ4=; b=D4UH8lPRYK29ybcCYqOCJLNd3u
+        Q4+bXU/1kTRxIE7w0/mHcMkrSCPJLapr2iCBsE80oGx3aeLmDbXhfKP6Fkzs31vlY0FP+8YSnLnGA
+        psKONhCK8ST+iduJ2Cti5dc3/6xuzu4tUyrIHXDJUf3AQJwRNtqCqg/sZFQdBxJcqgIJGbD60Bxdi
+        oaS0jyseexJ2bmKgeTcR1u426IWL9UnLdxAAKWVNxQBpyvSlDMHvhbL3rxBlCURpBfsccZHjsU40U
+        p/tYya+kBtsh2ywbDnxGs9FU+WwVs7jWaPh4lOoJ1W1BUap47SGA8TWNcD30kSVuVAPp+UnWSnl0A
+        I59pSpRQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nf1HL-0052yG-BV; Thu, 14 Apr 2022 15:21:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 578083002DE;
+        Thu, 14 Apr 2022 17:21:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3B94F2057AAE7; Thu, 14 Apr 2022 17:21:01 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 17:21:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe de Dinechin <dinechin@redhat.com>
+Cc:     trivial@kernel.org, Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [PATCH 1/3] sched/headers: Fix compilation error with GCC 12
+Message-ID: <Ylg73c83AJGwz9UN@hirez.programming.kicks-ass.net>
+References: <20220414150855.2407137-1-dinechin@redhat.com>
+ <20220414150855.2407137-2-dinechin@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411154347.491396-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220414150855.2407137-2-dinechin@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 17:43:42 +0200, Krzysztof Kozlowski wrote:
-> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
-> properly pass performance state from children.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On Thu, Apr 14, 2022 at 05:08:53PM +0200, Christophe de Dinechin wrote:
+> With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0) (GCC), the following
+> errors are reported in sched.h when building after `make defconfig`:
 
-Acked-by: Rob Herring <robh@kernel.org>
+<snip tons of noise>
+
+> Rewrite the definitions of sched_class_highest and for_class_range to
+> avoid this error as follows:
+> 
+> 1/ The sched_class_highest is rewritten to be relative to
+>   __begin_sched_classes, so that GCC sees it as being part of the
+>   __begin_sched_classes array and not a distinct __end_sched_classes
+>   array.
+> 
+> 2/ The for_class_range macro is modified to replace the comparison with
+>   an out-of-bound pointer __begin_sched_classes - 1 with an equivalent,
+>   but in-bounds comparison.
+> 
+> In that specific case, I believe that the GCC analysis is correct and
+> potentially valuable for other arrays, so it makes sense to keep it
+> enabled.
+> 
+> Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
+> Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
+> ---
+>  kernel/sched/sched.h | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 8dccb34eb190..6350fbc7418d 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2193,11 +2193,18 @@ const struct sched_class name##_sched_class \
+>  extern struct sched_class __begin_sched_classes[];
+>  extern struct sched_class __end_sched_classes[];
+>  
+> -#define sched_class_highest (__end_sched_classes - 1)
+> +/*
+> + * sched_class_highests is really __end_sched_classes - 1, but written in a way
+> + * that makes it clear that it is within __begin_sched_classes[] and not outside
+> + * of __end_sched_classes[].
+> + */
+> +#define sched_class_highest (__begin_sched_classes + \
+> +			     (__end_sched_classes - __begin_sched_classes - 1))
+>  #define sched_class_lowest  (__begin_sched_classes - 1)
+>  
+> +/* The + 1 below places the pointers within the range of their array */
+>  #define for_class_range(class, _from, _to) \
+> -	for (class = (_from); class != (_to); class--)
+> +	for (class = (_from); class + 1 != (_to) + 1; class--)
+
+Urgh, so now we get less readable code, just because GCC is being
+stupid?
+
+What's wrong with negative array indexes? memory is memory, stuff works.

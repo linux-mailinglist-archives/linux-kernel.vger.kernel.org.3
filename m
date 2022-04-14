@@ -2,207 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229F15019FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7913D5019FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245598AbiDNR0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S245671AbiDNR1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244561AbiDNR0L (ORCPT
+        with ESMTP id S245627AbiDNR1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:26:11 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690EBC86D;
-        Thu, 14 Apr 2022 10:23:43 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1649957019; bh=K/5Wq1Coy5UPF41OrOzi6vwncUsz5ByKlFemTpBp7mY=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=hHDv4/Ynbqnqn0H/mQ1PdwX3ZHXaSri9w1/fC7gnILTEIs2KrwouTQnFXGDfmVetG
-         q9E/sLo550tFhbSI98Qpj7/kwq4FuU4xgcqhXAx5RukKiTbL3Z0BS/8opuXBG8uiJU
-         BX5rZcrhJOCWRDZchqFZAqlnh9URYk9oFjaqn0A0=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH v2 1/2] dt-bindings: dma: Add Apple ADMAC
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YlhBLJQVYvTGlx4o@robh.at.kernel.org>
-Date:   Thu, 14 Apr 2022 19:23:38 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <85DF53F6-74BA-4D8D-8E8E-DFD67B24DA19@cutebit.org>
-References: <20220411222204.96860-1-povik+lin@cutebit.org>
- <20220411222204.96860-2-povik+lin@cutebit.org>
- <YlhBLJQVYvTGlx4o@robh.at.kernel.org>
-To:     Rob Herring <robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 13:27:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5139D4C6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649957080; x=1681493080;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=0zLW2H67Vu3q710WNvk8HEeL0XmQc0GrU44QmfVgE2g=;
+  b=NEkABJcBC3zwjxy+I18n4bPPp52cupjgYnzehln2HK11r4uTh9j7umeG
+   KfitzxZTRgzWvREheR2HB1qoWXI1HjpQJbqK/3zKCbQkyfuL1kUPAl3P9
+   BnuEJP130uLO3rEREBKHu8MHRJ1r3UKJg68KHI4mafoxlI8wCmJsP2WiY
+   Sa4PancRyMMFSlBLrWR36AEvopMra8VjmqZtULztgzFRbUSrmHC7l4pdo
+   7rJUlinqk1yAUDhNHZpeo2njwh94YpQQLfqWrnIOjoEuug6ufIYDvLiS1
+   Irx/JfeEJ0J8t6lF3QNs5O/mUXMwiBt/eG+mkVi1bNSDyUXT0YLSE3++6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262429728"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="262429728"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:24:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="612409801"
+Received: from msahoo-mobl1.amr.corp.intel.com (HELO [10.212.62.78]) ([10.212.62.78])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 10:24:38 -0700
+Message-ID: <a93e6d3f-e8b9-2fab-1139-a8ba3dc4820b@intel.com>
+Date:   Thu, 14 Apr 2022 10:24:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+References: <20220404103741.809025935@linutronix.de>
+ <20220404104820.713066297@linutronix.de>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [patch 3/3] x86/fpu/xsave: Optimize XSAVEC/S when XGETBV1 is
+ supported
+In-Reply-To: <20220404104820.713066297@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/4/22 05:11, Thomas Gleixner wrote:
+> A typical scenario is an active set of 0x202 (PKRU + SSE) out of the full
+> supported set of 0x2FF. That means XSAVEC/S writes and XRSTOR[S] reads:
 
-> On 14. 4. 2022, at 17:43, Rob Herring <robh@kernel.org> wrote:
->=20
-> On Tue, Apr 12, 2022 at 12:22:03AM +0200, Martin Povi=C5=A1er wrote:
->> Apple's Audio DMA Controller (ADMAC) is used to fetch and store audio
->> samples on SoCs from the "Apple Silicon" family.
->>=20
->> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
->> ---
->>=20
->> After the v1 discussion, I dropped the apple,internal-irq-destination
->> property and instead the index of the usable interrupt is now =
-signified
->> by prepending -1 entries to the interrupts=3D list. This works when I =
-do
->> it like this:
->>=20
->>  interrupt-parent =3D <&aic>;
->>  interrupts =3D <AIC_IRQ 0xffffffff 0>,
->>               <AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
->=20
->=20
-> BTW, just use '-1'. dtc takes negative values (and other expressions).
+It might be worth reminding folks why PKRU is a special snowflake:
 
-Ha! <-1> didn=E2=80=99t work for me but <(-1)> does.
+The default PKRU enforced by the kernel is its most restrictive possible
+value (0xfffffffc).  This means that PKRU defaults to being in its
+non-init state even for tasks which do nothing protection-keys-related.
 
->=20
->>=20
->> I would find it neat to do it like this:
->>=20
->>  interrupts-extended =3D <0xffffffff>,
->>                        <&aic AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
->>=20
->> but unfortunately the kernel doesn't pick up on it:
->>=20
->> [    0.767964] apple-admac 238200000.dma-controller: error -6: IRQ =
-index 0 not found
->> [    0.773943] apple-admac 238200000.dma-controller: error -6: IRQ =
-index 1 not found
->> [    0.780154] apple-admac 238200000.dma-controller: error -6: IRQ =
-index 2 not found
->> [    0.786367] apple-admac 238200000.dma-controller: error -6: IRQ =
-index 3 not found
->> [    0.788592] apple-admac 238200000.dma-controller: error -6: no =
-usable interrupt
->=20
-> We should make this case work. It is less fragile IMO as it doesn't=20
-> depend on the provider's translation of cells.
 
-Then I may send some patch to that end.
+> which is suboptimal. Prefetch works better when the access is linear. But
+> what's worse is that PKRU can be located in a different page which
+> obviously affects dTLB.
 
->>=20
->> .../devicetree/bindings/dma/apple,admac.yaml  | 68 =
-+++++++++++++++++++
->> 1 file changed, 68 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/dma/apple,admac.yaml
->>=20
->> diff --git a/Documentation/devicetree/bindings/dma/apple,admac.yaml =
-b/Documentation/devicetree/bindings/dma/apple,admac.yaml
->> new file mode 100644
->> index 000000000000..bbd5eaf5f709
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/dma/apple,admac.yaml
->> @@ -0,0 +1,68 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/dma/apple,admac.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple Audio DMA Controller (ADMAC)
->> +
->> +description: |
->> +  Apple's Audio DMA Controller (ADMAC) is used to fetch and store =
-audio samples
->> +  on SoCs from the "Apple Silicon" family.
->> +
->> +  The controller has been seen with up to 24 channels. Even-numbered =
-channels
->> +  are TX-only, odd-numbered are RX-only. Individual channels are =
-coupled to
->> +  fixed device endpoints.
->> +
->> +maintainers:
->> +  - Martin Povi=C5=A1er <povik+lin@cutebit.org>
->> +
->> +allOf:
->> +  - $ref: "dma-controller.yaml#"
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,t6000-admac
->> +          - apple,t8103-admac
->> +      - const: apple,admac
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  '#dma-cells':
->> +    const: 1
->> +    description:
->> +      Clients specify single cell with channel number.
->> +
->> +  dma-channels:
->> +    maximum: 24
->> +
->> +  interrupts:
->> +    minItems: 1
->> +    maxItems: 4
->=20
-> I'm now confused why this is variable. Put -1 entries on the end if=20
-> that's why it is variable.
+The numbers don't lie, but I'm still surprised by this.  Was this in a
+VM that isn't backed with large pages?  task_struct.thread.fpu is
+kmem_cache_alloc()'d and is in the direct map, which should be 2M/1G
+pages almost all the time.
 
-That=E2=80=99s why. Fixed length it is then.
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -86,6 +86,8 @@ static unsigned int xstate_flags[XFEATUR
+>  #define XSTATE_FLAG_SUPERVISOR	BIT(0)
+>  #define XSTATE_FLAG_ALIGNED64	BIT(1)
+>  
+> +DEFINE_STATIC_KEY_FALSE(__xsave_use_xgetbv1);
+> +
+>  /*
+>   * Return whether the system supports a given xfeature.
+>   *
+> @@ -1481,7 +1483,7 @@ void xfd_validate_state(struct fpstate *
+>  }
+>  #endif /* CONFIG_X86_DEBUG_FPU */
+>  
+> -static int __init xfd_update_static_branch(void)
+> +static int __init fpu_update_static_branches(void)
+>  {
+>  	/*
+>  	 * If init_fpstate.xfd has bits set then dynamic features are
+> @@ -1489,9 +1491,13 @@ static int __init xfd_update_static_bran
+>  	 */
+>  	if (init_fpstate.xfd)
+>  		static_branch_enable(&__fpu_state_size_dynamic);
+> +
+> +	if (cpu_feature_enabled(X86_FEATURE_XGETBV1) &&
+> +	    cpu_feature_enabled(X86_FEATURE_XCOMPACTED))
+> +		static_branch_enable(&__xsave_use_xgetbv1);
+>  	return 0;
+>  }
+> -arch_initcall(xfd_update_static_branch)
+> +arch_initcall(fpu_update_static_branches)
+>  
+>  void fpstate_free(struct fpu *fpu)
+>  {
+> --- a/arch/x86/kernel/fpu/xstate.h
+> +++ b/arch/x86/kernel/fpu/xstate.h
+> @@ -10,7 +10,12 @@
+>  DECLARE_PER_CPU(u64, xfd_state);
+>  #endif
+>  
+> -static inline bool xsave_use_xgetbv1(void) { return false; }
+> +DECLARE_STATIC_KEY_FALSE(__xsave_use_xgetbv1);
+> +
+> +static __always_inline __pure bool xsave_use_xgetbv1(void)
+> +{
+> +	return static_branch_likely(&__xsave_use_xgetbv1);
+> +}
+>  
+>  static inline void __xstate_init_xcomp_bv(struct xregs_state *xsave, u64 mask)
+>  {
+> @@ -185,13 +190,18 @@ static inline int __xfd_enable_feature(u
+>  static inline void os_xsave(struct fpstate *fpstate)
+>  {
+>  	u64 mask = fpstate->xfeatures;
+> -	u32 lmask = mask;
+> -	u32 hmask = mask >> 32;
+> +	u32 lmask, hmask;
+>  	int err;
+>  
+>  	WARN_ON_FPU(!alternatives_patched);
+>  	xfd_validate_state(fpstate, mask, false);
+>  
+> +	if (xsave_use_xgetbv1())
+> +		mask &= xgetbv(1);
 
->=20
-> This needs some description about there being 1 of 4 outputs being=20
-> connected.
+How about this comment for the masking operation:
 
-OK. Description there will be.
+	/*
+	 * Remove features in their init state from the mask.  This
+	 * makes the XSAVE{S,C} writes less sparse and quicker for
+	 * the CPU.
+	 */
 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - '#dma-cells'
->> +  - dma-channels
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    admac: dma-controller@238200000 {
->> +      compatible =3D "apple,t8103-admac", "apple,admac";
->> +      reg =3D <0x38200000 0x34000>;
->> +      dma-channels =3D <24>;
->> +      interrupt-parent =3D <&aic>;
->> +      interrupts =3D <AIC_IRQ 0xffffffff 0>,
->> +                   <AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
->> +      #dma-cells =3D <1>;
->> +    };
->> --=20
->> 2.33.0
->>=20
->>=20
-
-Martin
+> +	lmask = mask;
+> +	hmask = mask >> 32;
+> +
+>  	XSTATE_XSAVE(&fpstate->regs.xsave, lmask, hmask, err);
+>  
+>  	/* We should never fault when copying to a kernel buffer: */
 

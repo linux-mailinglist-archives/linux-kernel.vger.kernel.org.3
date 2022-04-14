@@ -2,68 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B0F500922
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AE7500951
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241491AbiDNJFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S241171AbiDNJKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241590AbiDNJCk (ORCPT
+        with ESMTP id S241260AbiDNJJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:02:40 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B423422292;
-        Thu, 14 Apr 2022 02:00:13 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:43882.1165221160
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.43 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 97FC1100226;
-        Thu, 14 Apr 2022 17:00:11 +0800 (CST)
-Received: from  ([123.150.8.43])
-        by gateway-153622-dep-749df8664c-cv9r2 with ESMTP id 74a86b6b571a4cd2ac806d568bb29da3 for ast@kernel.org;
-        Thu, 14 Apr 2022 17:00:12 CST
-X-Transaction-ID: 74a86b6b571a4cd2ac806d568bb29da3
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.43
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Song Chen <chensong_2000@189.cn>
-Subject: [RFC PATCH 0/1] sample: bpf: introduce irqlat
-Date:   Thu, 14 Apr 2022 17:07:20 +0800
-Message-Id: <1649927240-18991-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 05:09:57 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358046E353;
+        Thu, 14 Apr 2022 02:07:33 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so8702029pjb.4;
+        Thu, 14 Apr 2022 02:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eJF41dR8CM5e2ZZW3grRLN20zsR7Q9ZeigZpuEaXzjc=;
+        b=PubBcYCaKM0TfK3rk/m2r16WsUX8fa9v1AhUKvdN6Sx81eAbuEmzphFhmpikmLvSGQ
+         P55ZWsJ20a5BdLwO3FPv0wSO6uE1LM3zYzC+spSetN5hv8t1rKcnEyXC4WYdLnBjXkSc
+         WMgvWXJd+YtwCtuXcm/megCYH2TMcv4Y4kQU5DBafqSo2J8MVHvPOYQcevC8gfQqBVWN
+         ELiRpmcpdkmAsRCOASft5VvyaQ5duU8WRpV/vmvCelJ3HEebYTGuhv7pIu/9gutUvpKI
+         z23PR96nsLXLjgtQ0LUftCTRs3ZmdLCGGjdYvhgNxkSM9d9SpLTy3gl2v4+x2KqvpvEr
+         y93w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eJF41dR8CM5e2ZZW3grRLN20zsR7Q9ZeigZpuEaXzjc=;
+        b=tkIZG9WAYJhxIPFuAR1wPbdrG2R9xcKaZaidVYe/TM06lB4S8QB0a9lHQ/VuoXd2Fa
+         LLQeUCyiSSygryesbQYhl6k2Giwlvq78yNL4PgX63kA+MiJjIkbzBBKqxiUjCS3V2xSd
+         6oN5ASsa3fOpXGC8eo4TPwrgboo7UV7oGUhuLivb74lrwdsiN0oteIDs/wEAL6eUPkXW
+         hZJeQwa/6f9j2UCjfqqp5KI6qwjbncA1pqvzQQbBdhbFKnOBZ1bvFG5G6xU/r7612PKG
+         7MaHU2wosUSZaWBJUFFTT/LKHPP4uyUuHpDJ0cBFj1sCBtFtAWzvjd7twX2f/fpuQMLZ
+         c18w==
+X-Gm-Message-State: AOAM531HvGC+Ce3C4Sj29XVWo8UEQ8I4QgpxkDvnx5Zn6cB+tza3QQIP
+        H6Ec15gfjlt4xF8FYqpV/FVxmjickcE=
+X-Google-Smtp-Source: ABdhPJwUezP4/bTL7XIUAOgjBJ7RfzEbgDwelq3f6M1v5m7V18kS9wnJoX334HNzeNQ0xaUxsCd9ng==
+X-Received: by 2002:a17:903:2045:b0:158:c130:31b7 with SMTP id q5-20020a170903204500b00158c13031b7mr560517pla.154.1649927252796;
+        Thu, 14 Apr 2022 02:07:32 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm5368836pjl.39.2022.04.14.02.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 02:07:32 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     nsekhar@ti.com
+Cc:     brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] i2c: i2c-davinci: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Thu, 14 Apr 2022 09:07:27 +0000
+Message-Id: <20220414090727.2542000-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm planning to implement a couple of ebpf tools for preempt rt,
-including irq latency, preempt latency and so on, how does it sound
-to you?
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Song Chen (1):
-  sample: bpf: introduce irqlat
+Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+pm_runtime_put_noidle. This change is just to simplify the code, no
+actual functional changes.
 
- samples/bpf/.gitignore    |   1 +
- samples/bpf/Makefile      |   5 ++
- samples/bpf/irqlat_kern.c |  81 ++++++++++++++++++++++++++++++
- samples/bpf/irqlat_user.c | 100 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 187 insertions(+)
- create mode 100644 samples/bpf/irqlat_kern.c
- create mode 100644 samples/bpf/irqlat_user.c
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/i2c/busses/i2c-davinci.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
+index e9d07323c604..9e09db31a937 100644
+--- a/drivers/i2c/busses/i2c-davinci.c
++++ b/drivers/i2c/busses/i2c-davinci.c
+@@ -539,10 +539,9 @@ i2c_davinci_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 
+ 	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
+ 
+-	ret = pm_runtime_get_sync(dev->dev);
++	ret = pm_runtime_resume_and_get(dev->dev);
+ 	if (ret < 0) {
+ 		dev_err(dev->dev, "Failed to runtime_get device: %d\n", ret);
+-		pm_runtime_put_noidle(dev->dev);
+ 		return ret;
+ 	}
+ 
+@@ -821,10 +820,9 @@ static int davinci_i2c_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(dev->dev);
+ 
+-	r = pm_runtime_get_sync(dev->dev);
++	r = pm_runtime_resume_and_get(dev->dev);
+ 	if (r < 0) {
+ 		dev_err(dev->dev, "failed to runtime_get device: %d\n", r);
+-		pm_runtime_put_noidle(dev->dev);
+ 		return r;
+ 	}
+ 
+@@ -898,11 +896,9 @@ static int davinci_i2c_remove(struct platform_device *pdev)
+ 
+ 	i2c_del_adapter(&dev->adapter);
+ 
+-	ret = pm_runtime_get_sync(&pdev->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
+ 
 -- 
 2.25.1
+
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442A350164C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA01501651
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351313AbiDNOyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S1352577AbiDNOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343530AbiDNNs6 (ORCPT
+        with ESMTP id S245741AbiDNNsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:48:58 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D431BA2052;
-        Thu, 14 Apr 2022 06:43:55 -0700 (PDT)
+        Thu, 14 Apr 2022 09:48:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4600A7CDFD;
+        Thu, 14 Apr 2022 06:43:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D6C92CE2997;
-        Thu, 14 Apr 2022 13:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE441C385AC;
-        Thu, 14 Apr 2022 13:43:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 979AF61D70;
+        Thu, 14 Apr 2022 13:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD147C385A1;
+        Thu, 14 Apr 2022 13:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943832;
-        bh=pFdRCSOxzPhEsyQeL9XSfBzfcCUGhXyUbPzLbsmmzLI=;
+        s=korg; t=1649943835;
+        bh=Xf6RKwKJr0X6eS2HT3oif7GlIDa6DBuZr8xzMrXw190=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcHjzcIK56oaWbco9dzspO855hJOPUCw1YMmJP6x9SJNN4qRulv/gbvXxXl9z7KtX
-         i1bLslleYw6rw2Jc+51QD7k6yZQVJor1/+IcmSX0ROzqhj0RX8B/F2hWTBWZUjJYa+
-         tZM3kBkza4mvacD1cMwoaKBs3odHZ+OPGnh/frzk=
+        b=pK+L5jVydNrIXcA3QllHwFsGqpVuziRoFmV7zzISg4GJitwDjswOn19k7taxF2m83
+         j5uE8OTUgXUXoSgMhjjqF8YM9AiQ+zQBn/X05CH/+ncA3oQbEkmRGqVRRu0N7b6sOj
+         f+9R7pyzFwYYISx+k4g49fblJOmf+jLx9neydOVA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Schleich <rs@noreya.tech>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 296/475] ARM: dts: bcm2837: Add the missing L1/L2 cache information
-Date:   Thu, 14 Apr 2022 15:11:21 +0200
-Message-Id: <20220414110903.379130045@linuxfoundation.org>
+Subject: [PATCH 5.4 297/475] ASoC: madera: Add dependencies on MFD
+Date:   Thu, 14 Apr 2022 15:11:22 +0200
+Message-Id: <20220414110903.406562717@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -56,110 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Schleich <rs@noreya.tech>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit bdf8762da268d2a34abf517c36528413906e9cd5 ]
+[ Upstream commit ec29170c724ca30305fc3a19ba2ee73ecac65509 ]
 
-This patch fixes the kernel warning
-"cacheinfo: Unable to detect cache hierarchy for CPU 0"
-for the bcm2837 on newer kernel versions.
+The Madera CODECs use regmap_irq functions but nothing ensures that
+regmap_irq is built into the kernel. Add dependencies on the ASoC
+symbols for the relevant MFD component. There is no point in building
+the ASoC driver if the MFD doesn't support it and the MFD part contains
+the necessary dependencies to ensure everything is built into the
+kernel.
 
-Signed-off-by: Richard Schleich <rs@noreya.tech>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-[florian: Align and remove comments matching property values]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220203115025.16464-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2837.dtsi | 49 ++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ sound/soc/codecs/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/bcm2837.dtsi b/arch/arm/boot/dts/bcm2837.dtsi
-index beb6c502dadc..bcad098a7fcc 100644
---- a/arch/arm/boot/dts/bcm2837.dtsi
-+++ b/arch/arm/boot/dts/bcm2837.dtsi
-@@ -38,12 +38,26 @@
- 		#size-cells = <0>;
- 		enable-method = "brcm,bcm2836-smp"; // for ARM 32-bit
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 229cc89f8c5a..466dc67799f4 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -586,21 +586,26 @@ config SND_SOC_CS4349
  
-+		/* Source for d/i-cache-line-size and d/i-cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500/e/level-1-memory-system
-+		 * /about-the-l1-memory-system?lang=en
-+		 *
-+		 * Source for d/i-cache-size
-+		 * https://magpi.raspberrypi.com/articles/raspberry-pi-3-specs-benchmarks
-+		 */
- 		cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a53";
- 			reg = <0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000d8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
+ config SND_SOC_CS47L15
+ 	tristate
++	depends on MFD_CS47L15
  
- 		cpu1: cpu@1 {
-@@ -52,6 +66,13 @@
- 			reg = <1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
+ config SND_SOC_CS47L24
+ 	tristate
  
- 		cpu2: cpu@2 {
-@@ -60,6 +81,13 @@
- 			reg = <2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
- 		};
+ config SND_SOC_CS47L35
+ 	tristate
++	depends on MFD_CS47L35
  
- 		cpu3: cpu@3 {
-@@ -68,6 +96,27 @@
- 			reg = <3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000f0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			next-level-cache = <&l2>;
-+		};
-+
-+		/* Source for cache-line-size + cache-sets
-+		 * https://developer.arm.com/documentation/ddi0500
-+		 * /e/level-2-memory-system/about-the-l2-memory-system?lang=en
-+		 * Source for cache-size
-+		 * https://datasheets.raspberrypi.com/cm/cm1-and-cm3-datasheet.pdf
-+		 */
-+		l2: l2-cache0 {
-+			compatible = "cache";
-+			cache-size = <0x80000>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>; // 512KiB(size)/64(line-size)=8192ways/16-way set
-+			cache-level = <2>;
- 		};
- 	};
- };
+ config SND_SOC_CS47L85
+ 	tristate
++	depends on MFD_CS47L85
+ 
+ config SND_SOC_CS47L90
+ 	tristate
++	depends on MFD_CS47L90
+ 
+ config SND_SOC_CS47L92
+ 	tristate
++	depends on MFD_CS47L92
+ 
+ # Cirrus Logic Quad-Channel ADC
+ config SND_SOC_CS53L30
 -- 
 2.34.1
 

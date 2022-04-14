@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8274501494
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBE15015AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbiDNOnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S244791AbiDNNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345017AbiDNNpA (ORCPT
+        with ESMTP id S244416AbiDNN0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CE669711;
-        Thu, 14 Apr 2022 06:41:14 -0700 (PDT)
+        Thu, 14 Apr 2022 09:26:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86D49F3AA;
+        Thu, 14 Apr 2022 06:19:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF91E612E6;
-        Thu, 14 Apr 2022 13:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D64AC385AA;
-        Thu, 14 Apr 2022 13:41:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5781AB82968;
+        Thu, 14 Apr 2022 13:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA77BC385A1;
+        Thu, 14 Apr 2022 13:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943673;
-        bh=HkbiOhd831BGeMdY0KcgxEOZF2cO8s7FQdTk3zAOgdk=;
+        s=korg; t=1649942397;
+        bh=D0Ij6xLb5n4AnWQowEXOPRxZpdjQiNMbmIzlsTRfg6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R+AqqjY9uIFRQYPfr9hEmDhLQE3W+mtJLIRSY7/aadJROgF30gumXfsHZ/lSkPtPY
-         SC7JmccH69dDY2qCDGnGGCahofULalHMEpKuEJfE+2hy+oJvl+Iale6whJmIDfpeX6
-         Ftb5KfjBlERGpKL0q4VJFKhK9cbp3OlHmG4u9cw8=
+        b=0/cOvQhdVNxq9NzZx4RQGtVp32afYcYjoQdWXeWNz6mmgCfSZAJNrjfPBMqT7FYeQ
+         H55dpE0qiMvcoxC/sCAEpX/8co5Hwp11OBW7nipFeTMouhZSngFSMeJqaW61oojP1q
+         pM/NI6AcX134Zlwd0Ve+4Ip/lMC3gMWKq8vLjEc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 240/475] clk: qcom: clk-rcg2: Update logic to calculate D value for RCG
+Subject: [PATCH 4.19 122/338] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
 Date:   Thu, 14 Apr 2022 15:10:25 +0200
-Message-Id: <20220414110901.834216147@linuxfoundation.org>
+Message-Id: <20220414110842.376479310@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-[ Upstream commit 58922910add18583d5273c2edcdb9fd7bf4eca02 ]
+[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
 
-The display pixel clock has a requirement on certain newer platforms to
-support M/N as (2/3) and the final D value calculated results in
-underflow errors.
-As the current implementation does not check for D value is within
-the accepted range for a given M & N value. Update the logic to
-calculate the final D value based on the range.
+The MMIO emulation code for vector instructions is duplicated between
+VSX and VMX. When emulating VMX we should check the VMX copy size
+instead of the VSX one.
 
-Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220227175536.3131-1-tdas@codeaurora.org
+Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-rcg2.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/powerpc/kvm/powerpc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index a88101480e33..d86c9ad3f6e8 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -263,7 +263,7 @@ static int clk_rcg2_determine_floor_rate(struct clk_hw *hw,
- 
- static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index ad5a871a6cbf..dd352842a1c7 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -1479,7 +1479,7 @@ int kvmppc_handle_vmx_load(struct kvm_run *run, struct kvm_vcpu *vcpu,
  {
--	u32 cfg, mask;
-+	u32 cfg, mask, d_val, not2d_val, n_minus_m;
- 	struct clk_hw *hw = &rcg->clkr.hw;
- 	int ret, index = qcom_find_src_index(hw, rcg->parent_map, f->src);
+ 	enum emulation_result emulated = EMULATE_DONE;
  
-@@ -282,8 +282,17 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
- 		if (ret)
- 			return ret;
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
  
-+		/* Calculate 2d value */
-+		d_val = f->n;
-+
-+		n_minus_m = f->n - f->m;
-+		n_minus_m *= 2;
-+
-+		d_val = clamp_t(u32, d_val, f->m, n_minus_m);
-+		not2d_val = ~d_val & mask;
-+
- 		ret = regmap_update_bits(rcg->clkr.regmap,
--				RCG_D_OFFSET(rcg), mask, ~f->n);
-+				RCG_D_OFFSET(rcg), mask, not2d_val);
- 		if (ret)
- 			return ret;
- 	}
+ 	while (vcpu->arch.mmio_vmx_copy_nums) {
+@@ -1576,7 +1576,7 @@ int kvmppc_handle_vmx_store(struct kvm_run *run, struct kvm_vcpu *vcpu,
+ 	unsigned int index = rs & KVM_MMIO_REG_MASK;
+ 	enum emulation_result emulated = EMULATE_DONE;
+ 
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
+ 
+ 	vcpu->arch.io_gpr = rs;
 -- 
 2.34.1
 

@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA5350040D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49842500418
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239608AbiDNCSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S239618AbiDNCUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239597AbiDNCSA (ORCPT
+        with ESMTP id S236064AbiDNCUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:18:00 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8574EF5B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:15:36 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ec0bb4b715so41621147b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EyNYRIHMuAe14NfG42UC6bW7EHisTJTsbzpFwHXAxYE=;
-        b=mhN2PI/XczGH1LPOLgFumsgCAC53Xh7XIpRdSmGoOAazEowtirMA87iL1iYkiU3aLP
-         cDQlWfWJY9yvdJ8uyUwpVeV2MftCXqON0hS8jDMdx/wDYzm4SoWh/H+5kmi36m+C0Goq
-         3F/1eB8fUA5+McWgFcEC4cDafxfLQb8LOUcoMn79zYGvNKputLXdq0pOK9kSOS6p3bY8
-         +hB515ep96878W7/ac+tdn7cIHl0pcjNxHXP/u0JMfRBSxNXpCVOXB/2j6trYedRa0Xs
-         xaXvGTnmNQ/vQvo4o8rUsqJt6KSxYXnfoKCtoq0zmM9j3LfP6tY0kzfF7lSTX3+MEvWb
-         ejjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EyNYRIHMuAe14NfG42UC6bW7EHisTJTsbzpFwHXAxYE=;
-        b=o2fbDSlFoI6lzx9gr8ZK6ynxyKy0U5Ny5KXydc7lF+wdfq0u9mAIs3U4J2TrkhdYe4
-         3IgmUuor5tUWp3Z2nHYlOhAt4+KlUIyhFiCc7fREdgetWs7XVroXBkyyCqiCv0cXVi1s
-         RH4H+HAF4CEbeuN5ho6UdkYuyG6QFRVq5hCh8lV22X6Kto7Wi81zPdFfYwsSEk9Y4Yp3
-         b76qZcRIeK0aEztmrPJbutGhVslNYj0fj/mB5H/3TfWrjKjgS2nTjmFm72+t06qlEXgc
-         is/jLMpaRYt6xJrLv/b88emD3jCQikXRHgT8DBt/ugkvEIhBoNBylqR0kzx/JVX4OJ0/
-         W3dA==
-X-Gm-Message-State: AOAM530uqHBsW8s7D6RN+Qt0nMHmBM3cwGMmmvCwF04QDmtmeq5dkLEo
-        4fGKJXaPljj6uqNXj5CFB4dEjFjQPNHqmh67ANka6A==
-X-Google-Smtp-Source: ABdhPJytuMs6w7MXLCClCeKL1doxBRc/t2dwAzon5XDa8KzHqgx/XOUwsie7YJQEkwJ0S1TNQJLJ6EKZap3pqxTCCjM=
-X-Received: by 2002:a81:753:0:b0:2eb:ebe9:ff4f with SMTP id
- 80-20020a810753000000b002ebebe9ff4fmr325385ywh.255.1649902535724; Wed, 13 Apr
- 2022 19:15:35 -0700 (PDT)
+        Wed, 13 Apr 2022 22:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0D44EDE3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:18:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45B6161CAC
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840E6C385A6;
+        Thu, 14 Apr 2022 02:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649902686;
+        bh=oJQm3BjV7RyxmmQy9mFaQn8UbhEC2En4eXb/DOl2Ca8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uP6iTIWJZsv534gVx6YLc37uQmxuVlUHRtN7e1+t64RElaBaiWBIg9WetZNK+iJT+
+         wtzTvdtIJZea2u2/qeWgACH7caV2DwHBRU+o+ey9x4TDEbkxUnDU6z3ufhenBFZhWn
+         zDHw6WhPLk1Y1fiMHM4g1LVc0DcuWRuCLgRmDBecMGtkYPn+V/VygPjuD6WG/9FmbY
+         LF/F//d2B9YCogDVIo7eG7+NYBr0AviaTlJVd1JSFkjNNo3X8R+y16YFRsgSTCbzDE
+         HKTqMemriN/Hk+IBf9BhICgOL2+VgQqLE4Kp0SjFM6ZCQo1hb6DRDUuQBaJNNBJBzT
+         Yg5N18J+n5gLQ==
+Date:   Wed, 13 Apr 2022 19:18:04 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Wu Yan <wu-yan@tcl.com>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, tang.ding@tcl.com
+Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
+Message-ID: <YleEXOHl1Vhlr3x3@google.com>
+References: <660530eb62e71fb6520d3596704162e5@sslemail.net>
+ <YlcBxSA5qYN4z1ia@google.com>
+ <39c4ded0-09c0-3e38-85cb-5535099b177d@tcl.com>
 MIME-Version: 1.0
-References: <20220414015802.101877-1-wh_bin@126.com>
-In-Reply-To: <20220414015802.101877-1-wh_bin@126.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 13 Apr 2022 19:15:24 -0700
-Message-ID: <CANn89i+_GjNjjwAZU1VXG5OWFna3Vd1a6F-L7oYvNUObowzvuQ@mail.gmail.com>
-Subject: Re: [PATCH] tcp: fix error return code in tcp_xmit_probe_skb
-To:     Hongbin Wang <wh_bin@126.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39c4ded0-09c0-3e38-85cb-5535099b177d@tcl.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:58 PM Hongbin Wang <wh_bin@126.com> wrote:
->
-> When alloc_skb failed, should return ENOMEM
+On 04/14, Wu Yan wrote:
+> On 4/14/22 01:00, Jaegeuk Kim wrote:
+> > On 04/13, Rokudo Yan wrote:
+> > > There is a potential deadlock in gc thread may happen
+> > > under low memory as below:
+> > > 
+> > > gc_thread_func
+> > >   -f2fs_gc
+> > >    -do_garbage_collect
+> > >     -gc_data_segment
+> > >      -move_data_block
+> > >       -set_page_writeback(fio.encrypted_page);
+> > >       -f2fs_submit_page_write
+> > > as f2fs_submit_page_write try to do io merge when possible, so the
+> > > encrypted_page is marked PG_writeback but may not submit to block
+> > > layer immediately, if system enter low memory when gc thread try
+> > > to move next data block, it may do direct reclaim and enter fs layer
+> > > as below:
+> > >     -move_data_block
+> > >      -f2fs_grab_cache_page(index=?, for_write=false)
+> > >       -grab_cache_page
+> > >        -find_or_create_page
+> > >         -pagecache_get_page
+> > >          -__page_cache_alloc --  __GFP_FS is set
+> > >           -alloc_pages_node
+> > >            -__alloc_pages
+> > >             -__alloc_pages_slowpath
+> > >              -__alloc_pages_direct_reclaim
+> > >               -__perform_reclaim
+> > >                -try_to_free_pages
+> > >                 -do_try_to_free_pages
+> > >                  -shrink_zones
+> > >                   -mem_cgroup_soft_limit_reclaim
+> > >                    -mem_cgroup_soft_reclaim
+> > >                     -mem_cgroup_shrink_node
+> > >                      -shrink_node_memcg
+> > >                       -shrink_list
+> > >                        -shrink_inactive_list
+> > >                         -shrink_page_list
+> > >                          -wait_on_page_writeback -- the page is marked
+> > >                         writeback during previous move_data_block call
+> > > 
+> > > the gc thread wait for the encrypted_page writeback complete,
+> > > but as gc thread held sbi->gc_lock, the writeback & sync thread
+> > > may blocked waiting for sbi->gc_lock, so the bio contain the
+> > > encrypted_page may nerver submit to block layer and complete the
+> > > writeback, which cause deadlock. To avoid this deadlock condition,
+> > > we mark the gc thread with PF_MEMALLOC_NOFS flag, then it will nerver
+> > > enter fs layer when try to alloc cache page during move_data_block.
+> > > 
+> > > Signed-off-by: Rokudo Yan <wu-yan@tcl.com>
+> > > ---
+> > >   fs/f2fs/gc.c | 6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> > > index e020804f7b07..cc71f77b98c8 100644
+> > > --- a/fs/f2fs/gc.c
+> > > +++ b/fs/f2fs/gc.c
+> > > @@ -38,6 +38,12 @@ static int gc_thread_func(void *data)
+> > >   	wait_ms = gc_th->min_sleep_time;
+> > > +	/*
+> > > +	 * Make sure that no allocations from gc thread will ever
+> > > +	 * recurse to the fs layer to avoid deadlock as it will
+> > > +	 * hold sbi->gc_lock during garbage collection
+> > > +	 */
+> > > +	memalloc_nofs_save();
+> > 
+> > I think this cannot cover all the f2fs_gc() call cases. Can we just avoid by:
+> > 
+> > --- a/fs/f2fs/gc.c
+> > +++ b/fs/f2fs/gc.c
+> > @@ -1233,7 +1233,7 @@ static int move_data_block(struct inode *inode, block_t bidx,
+> >                                  CURSEG_ALL_DATA_ATGC : CURSEG_COLD_DATA;
+> > 
+> >          /* do not read out */
+> > -       page = f2fs_grab_cache_page(inode->i_mapping, bidx, false);
+> > +       page = f2fs_grab_cache_page(inode->i_mapping, bidx, true);
+> >          if (!page)
+> >                  return -ENOMEM;
+> > 
+> > Thanks,
+> > 
+> > >   	set_freezable();
+> > >   	do {
+> > >   		bool sync_mode, foreground = false;
+> > > -- 
+> > > 2.25.1
+> 
+> Hi, Jaegeuk
+> 
+> I'm not sure if any other case may trigger the issue, but the stack traces I
+> have caught so far are all the same as below:
+> 
+> f2fs_gc-253:12  D 226966.808196 572 302561 150976 0x1200840 0x0 572
+> 237207473347056
+> <ffffff889d88668c> __switch_to+0x134/0x150
+> <ffffff889e764b6c> __schedule+0xd5c/0x1100
+> <ffffff889e76554c> io_schedule+0x90/0xc0
+> <ffffff889d9fb880> wait_on_page_bit+0x194/0x208
+> <ffffff889da167b4> shrink_page_list+0x62c/0xe74
+> <ffffff889da1d354> shrink_inactive_list+0x2c0/0x698
+> <ffffff889da181f4> shrink_node_memcg+0x3dc/0x97c
+> <ffffff889da17d44> mem_cgroup_shrink_node+0x144/0x218
+> <ffffff889da6610c> mem_cgroup_soft_limit_reclaim+0x188/0x47c
+> <ffffff889da17a40> do_try_to_free_pages+0x204/0x3a0
+> <ffffff889da176c8> try_to_free_pages+0x35c/0x4d0
+> <ffffff889da05d60> __alloc_pages_nodemask+0x7a4/0x10d0
+> <ffffff889d9fc82c> pagecache_get_page+0x184/0x2ec
 
+Is this deadlock trying to grab a lock, instead of waiting for writeback?
+Could you share all the backtraces of the tasks?
 
-Can you explain which rule mandates this statement ?
+For writeback above, looking at the code, f2fs_gc uses three mappings, meta,
+node, and data, and meta/node inodes are masking GFP_NOFS in f2fs_iget(),
+while data inode does not. So, the above f2fs_grab_cache_page() in
+move_data_block() is actually calling w/o NOFS.
 
-The only caller that propagates this error has other "return -1;"
-
-The precise value of the error, we do not care, as long it is negative.
-
-To be clear, this error code is not propagated to user space, so this
-patch only adds code churn.
-
-
->
->
-> Signed-off-by: Hongbin Wang <wh_bin@126.com>
-> ---
->  net/ipv4/tcp_output.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index c221f3bce975..b97c85814d9c 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -3996,7 +3996,7 @@ static int tcp_xmit_probe_skb(struct sock *sk, int urgent, int mib)
->         skb = alloc_skb(MAX_TCP_HEADER,
->                         sk_gfp_mask(sk, GFP_ATOMIC | __GFP_NOWARN));
->         if (!skb)
-> -               return -1;
-> +               return -ENOMEM;
->
->         /* Reserve space for headers and set control bits. */
->         skb_reserve(skb, MAX_TCP_HEADER);
-> --
-> 2.25.1
->
+> <ffffff889dbf8860> do_garbage_collect+0xfe0/0x2828
+> <ffffff889dbf7434> f2fs_gc+0x4a0/0x8ec
+> <ffffff889dbf6bf4> gc_thread_func+0x240/0x4d4
+> <ffffff889d8de9b0> kthread+0x17c/0x18c
+> <ffffff889d88567c> ret_from_fork+0x10/0x18
+> 
+> Thanks
+> yanwu

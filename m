@@ -2,300 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26C7501EF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F8A501EF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347489AbiDNXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S1344005AbiDNXSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345759AbiDNXSu (ORCPT
+        with ESMTP id S240552AbiDNXSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:18:50 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C751AC908
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:16:24 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so10555303pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vLhomrpooyVkCPnT/V3GspH1VkT6rkdcQOEP4TxU1jc=;
-        b=Xwr79i/rtcdMWZfT7X4gLtn/vh+8ejYnbNEzZrzwPEZQJl3GxaqMmrDWnIP06UETWf
-         QO6k2kmSdAsNnxYgt5BIdG2EfI3eWsFLzQeSK+jjRh9x9Y4Ioih9qk0/4ccMmDO9ZGTP
-         EkpiuIOmmyUG5xn/9MPYjBUzbjrx0E+jWGo4iZCqvaBK2YXRzbgBSN0AmU/0CHsAwf9+
-         IF01Mv0mvybjqpC+tQ4CafC4sv+hVw5uKhFGwj3DUjqowV5+8pMXD7VHKN6TvZnrX5Vb
-         1PCwm0BXhEAlX8VODN06SyLQVUhJsM3g/UH1w0Vi8Obymk11oeN6R/gTjqo3gv7a6mpE
-         t4bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vLhomrpooyVkCPnT/V3GspH1VkT6rkdcQOEP4TxU1jc=;
-        b=RFqzaPxSCFJkYLokDcfeUj/ZWCmOYDXHyRxahiwFSioRpi7dsHs74kYss4Dz+n8Vjk
-         5sxI4dNeNWg29MLJ8mNfi7A5WT60AN3rQ8REPgphU1vvqgG3ZqWDhKPSpUqRWEYcETli
-         q/lc4PktCoCe+ca2bVRUJXv/7Nz4iOhZ9Q3n0CmXd0Nz/R8hj+cIAMHPB4uF5cUrWqSp
-         eDT40Da2tiCqBTqkaRqTyhe6VwTTYwTZV+awEsmEWscxsJQnDZCs49NZ49RiZDE//qas
-         eU4GByBToOZOrFzGIT29FZmPrBD74sW7Gi/bTGv/d5/aphbUgU00WWDNSJvhjCImL+CA
-         i/dw==
-X-Gm-Message-State: AOAM530ICYq/3EbesqA6kCW/eZXHERAc0q6IxQAZdKY3r9qIzB8+cMRv
-        1ZmkpCfz9xFBwd4jYYx/SBkDG0oGm+sZUYXfh43ZJw==
-X-Google-Smtp-Source: ABdhPJxbflLVSecIO9jWZq3CT3nUwaSAazyRt2mR5j1dkuDUM61ZcKA4cPzGoWlR/Al2tHHRIW81IvsVP4tAvssYgs8=
-X-Received: by 2002:a17:90b:164f:b0:1c7:8d20:ff6d with SMTP id
- il15-20020a17090b164f00b001c78d20ff6dmr1006092pjb.64.1649978183669; Thu, 14
- Apr 2022 16:16:23 -0700 (PDT)
+        Thu, 14 Apr 2022 19:18:49 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACCDAC907;
+        Thu, 14 Apr 2022 16:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=CFuW2Yfm9w5+kjCNJGdTozdGvIwhLZUxIXX3CCrU31k=; b=fw
+        lAINokVw/geP2JhxUmI9Ru88RDoIbh3GzNFWpBnjymIOnkJr6Oh+JipuG1hcV6q+Ka9vUgP2iyc59
+        M8CeeMzMCbY80OrIk+qSqhPmKATuCzhUMZkQRJoPV7uz1izxLmhKwWe718/5gYSqiBzSOlHRAtOyQ
+        Oi4wLHGvsQvDaZw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nf8h9-00Ft3S-Nv; Fri, 15 Apr 2022 01:16:11 +0200
+Date:   Fri, 15 Apr 2022 01:16:11 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 07/12] net: dsa: rzn1-a5psw: add statistics
+ support
+Message-ID: <YlirO7VrfyUH33rV@lunn.ch>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+ <20220414122250.158113-8-clement.leger@bootlin.com>
 MIME-Version: 1.0
-References: <20220325184609.4059963-1-rajatja@google.com> <20220407191715.GA254460@bhelgaas>
-In-Reply-To: <20220407191715.GA254460@bhelgaas>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Thu, 14 Apr 2022 16:15:47 -0700
-Message-ID: <CACK8Z6Fy3L7vijVn4w+6HwRuuTtW5ePrWc04rUc8U8TPT0Re0w@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] PCI: ACPI: Support Microsoft's "DmaProperty"
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414122250.158113-8-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bjorn,
+On Thu, Apr 14, 2022 at 02:22:45PM +0200, Clément Léger wrote:
+> Add per-port statistics. This support requries to add a stat lock since
+> statistics are stored in two 32 bits registers, the hi part one being
+> global and latched when accessing the lo part.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>  drivers/net/dsa/rzn1_a5psw.c | 101 +++++++++++++++++++++++++++++++++++
+>  drivers/net/dsa/rzn1_a5psw.h |   2 +
+>  2 files changed, 103 insertions(+)
+> 
+> diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
+> index 5bee999f7050..7ab7d9054427 100644
+> --- a/drivers/net/dsa/rzn1_a5psw.c
+> +++ b/drivers/net/dsa/rzn1_a5psw.c
+> @@ -16,6 +16,59 @@
+>  
+>  #include "rzn1_a5psw.h"
+>  
+> +struct a5psw_stats {
+> +	u16 offset;
+> +	const char *name;
+> +};
+> +
+> +#define STAT_DESC(_offset, _name) {.offset = _offset, .name = _name}
+> +
+> +static const struct a5psw_stats a5psw_stats[] = {
+> +	STAT_DESC(0x868, "aFrameTransmitted"),
+> +	STAT_DESC(0x86C, "aFrameReceived"),
+> +	STAT_DESC(0x8BC, "etherStatsetherStatsOversizePktsDropEvents"),
+
+> +};
 
 
-On Thu, Apr 7, 2022 at 12:17 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> In subject,
->
->   PCI/ACPI: ...
->
-> would be consistent with previous history (at least things coming
-> through the PCI tree :)).
+> +static void a5psw_get_strings(struct dsa_switch *ds, int port, u32 stringset,
+> +			      uint8_t *data)
+> +{
+> +	unsigned int u;
+> +
+> +	if (stringset != ETH_SS_STATS)
+> +		return;
+> +
+> +	for (u = 0; u < ARRAY_SIZE(a5psw_stats); u++) {
+> +		strncpy(data + u * ETH_GSTRING_LEN, a5psw_stats[u].name,
+> +			ETH_GSTRING_LEN);
+> +	}
 
-Will do.
+The kernel strncpy() is like the user space one. It does not add a
+NULL if the string is longer than ETH_GSTRING_LEN and it needs to
+truncate. So there is a danger here.
 
->
-> On Fri, Mar 25, 2022 at 11:46:08AM -0700, Rajat Jain wrote:
-> > The "DmaProperty" is supported and documented by Microsoft here:
-> > https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
->
-> Here's a more specific link (could probably be referenced below to
-> avoid cluttering the text here):
->
-> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+What you find most drivers do is
 
-Will do.
+struct a5psw_stats {
+	u16 offset;
+	const char name[ETH_GSTRING_LEN];
+};
 
->
-> > They use this property for DMA protection:
-> > https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
-> >
-> > Support the "DmaProperty" with the same semantics. This is useful for
-> > internal PCI devices that do not hang off a PCIe rootport, but offer
-> > an attack surface for DMA attacks (e.g. internal network devices).
->
-> Same semantics as what?
+You should then get a compiler warning/error if you string is ever
+longer than allowed. And use memcpy() rather than strcpy(), which is
+faster anyway. But you do use up a bit more memory.
 
-Er, I meant the same semantics as the "DmaProperty". Please also see below.
+> +static void a5psw_get_ethtool_stats(struct dsa_switch *ds, int port,
+> +				    uint64_t *data)
+> +{
+> +	struct a5psw *a5psw = ds->priv;
+> +	u32 reg_lo, reg_hi;
+> +	unsigned int u;
+> +
+> +	for (u = 0; u < ARRAY_SIZE(a5psw_stats); u++) {
+> +		/* A5PSW_STATS_HIWORD is global and thus, access must be
+> +		 * exclusive
+> +		 */
 
->
-> The MS description of "ExternalFacingPort" says:
->
->   This ACPI object enables the operating system to identify externally
->   exposed PCIe hierarchies, such as Thunderbolt.
->
+Could you explain that a bit more. The RTNL lock will prevent two
+parallel calls to this function.
 
-No, my patch doesn't have to do with this one.
+> +		spin_lock(&a5psw->stats_lock);
+> +		reg_lo = a5psw_reg_readl(a5psw, a5psw_stats[u].offset +
+> +					 A5PSW_PORT_OFFSET(port));
+> +		/* A5PSW_STATS_HIWORD is latched on stat read */
+> +		reg_hi = a5psw_reg_readl(a5psw, A5PSW_STATS_HIWORD);
+> +
+> +		data[u] = ((u64)reg_hi << 32) | reg_lo;
+> +		spin_unlock(&a5psw->stats_lock);
+> +	}
+> +}
 
-> and "DmaProperty" says:
->
->   This ACPI object enables the operating system to identify internal
->   PCIe hierarchies that are easily accessible by users (such as,
->   Laptop M.2 PCIe slots accessible by way of a latch) and require
->   protection by the OS Kernel DMA Protection mechanism.
-
-Yes, this is the property that my patch uses. Microsoft has agreed to
-update this documentation (in a sideband thread that I also copied you
-on), with the updated semantics that this property can be used to
-identify any PCI devices that require Kernel DMA protection. i.e. the
-property is not restricted to identify "internal PCIe hierarchies"
-(starting at root port), but to "any PCI device".
-
->
-> I don't really understand why they called out "laptop M.2 PCIe slots"
-> here.  Is the idea that those are more accessible than a standard
-> internal PCIe slot?  Seems like a pretty small distinction to me.
->
-> I can understand your example of internal network devices adding an
-> attack surface.  But I don't see how "DmaProperty" helps identify
-> those.  Wouldn't a NIC in a standard internal PCIe slot add the same
-> attack surface?
-
-Yes it would. The attack surface is the same. They probably only
-thought of devices external to the SoC (starting from a root port)
-when designing this property and thus called out internal M.2 PCI
-slots. But nowhave realized that this could be opened to any PCI
-device.
-
->
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> > v5: * Reorder the patches in the series
-> > v4: * Add the GUID.
-> >     * Update the comment and commitlog.
-> > v3: * Use Microsoft's documented property "DmaProperty"
-> >     * Resctrict to ACPI only
-> >
-> >  drivers/acpi/property.c |  3 +++
-> >  drivers/pci/pci-acpi.c  | 16 ++++++++++++++++
-> >  2 files changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> > index d0986bda2964..20603cacc28d 100644
-> > --- a/drivers/acpi/property.c
-> > +++ b/drivers/acpi/property.c
-> > @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
-> >       /* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
-> >       GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
-> >                 0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
-> > +     /* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
-> > +     GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
-> > +               0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
-> >  };
-> >
-> >  /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
-> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > index 1f15ab7eabf8..378e05096c52 100644
-> > --- a/drivers/pci/pci-acpi.c
-> > +++ b/drivers/pci/pci-acpi.c
-> > @@ -1350,12 +1350,28 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
-> >               dev->external_facing = 1;
-> >  }
-> >
-> > +static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
->
-> I try to avoid function names like *_check_*() because they don't give
-> any hint about whether there's a side effect or what direction things
-> are going.  I prefer things that return a value or make sense when
-> used as a predicate.  Maybe something like this?
->
->   int pci_dev_has_dma_property(struct pci_dev *dev)
->
->   dev->untrusted |= pci_dev_has_dma_property(pci_dev);
->
-
-OK, will do.
-
-
-> > +{
-> > +     u8 val;
-> > +
-> > +     /*
-> > +      * Property also used by Microsoft Windows for same purpose,
-> > +      * (to implement DMA protection from a device, using the IOMMU).
-> > +      */
-> > +     if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
->
-> The MS web page says a _DSD with this property must be implemented in
-> the Root Port device scope, but we don't enforce that here.  We *do*
-> enforce it in pci_acpi_set_untrusted().  Shouldn't we do the same
-> here?
-
-No, the whole point of doing this (please refer to the discussion on
-the previous versions of this patch) was that we want to have a
-property that is NOT limited to the root ports only. And we have
-reached an agreement with Microsoft about that.
-
->
-> We currently look at three properties from the same _DSD:
->
->   DmaProperty
->   ExternalFacingPort
->   HotPlugSupportInD3
->
-> For "HotPlugSupportInD3", we check that "value == 1".  For
-> "ExternalFacingPort", we check that it's non-zero.  The MS doc isn't
-> explicit about the values, but shows "1" in the sample ASL.  I think
-> we should handle all three cases the same.
-
-I think we can handle all three cases with "value==1". I will send a
-separate patch for the ExternalFacingPort, and will fixup this patch
-too).
-
->
-> The first two use device_property_read_u8(); the last uses
-> acpi_dev_get_property().  Again, I think they should all be the same.
->
-> acpi_dev_get_property() is easier for me to read because there are
-> slightly fewer layers of abstraction between _DSD and
-> acpi_dev_get_property().
-
-I'd prefer that too, and can change it to acpi_dev_get_property.
-
->
-> But IIUC, device_property_read_u8() works for either ACPI or DT
-> properties, and maybe there is interest in using this for DT systems.
-> None of these appear in any in-tree DTs, but maybe it is important to
-> handle these in DTs?
->
-> If that's the case, this code would no longer be specific to ACPI and
-> should be moved to somewhere that's compiled even when CONFIG_ACPI
-> isn't set.
-
-I think unifying ACPI and GPIO systems to use the same code / function
-to read the properties might be more work/investigation, because
-reading the properties for ACPI system happens much later than DT
-systems (For acpi systems, it happens in pci_acpi_setup() which is
-called much later). Given that no one wants to use this for DT
-systems, I'd prefer for this to be ACPI specific for now, and then we
-can solve it for DT once someone needs it.
-
-WDYT?
-
-Thanks & Best regards,
-
-Rajat
-
->
-> > +             return;
-> > +
-> > +     if (val)
-> > +             dev->untrusted = 1;
-> > +}
-> > +
-> >  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
-> >  {
-> >       struct pci_dev *pci_dev = to_pci_dev(dev);
-> >
-> >       pci_acpi_optimize_delay(pci_dev, adev->handle);
-> >       pci_acpi_set_external_facing(pci_dev);
-> > +     pci_acpi_check_for_dma_protection(pci_dev);
-> >       pci_acpi_add_edr_notifier(pci_dev);
-> >
-> >       pci_acpi_add_pm_notifier(adev, pci_dev);
-> > --
-> > 2.35.1.1021.g381101b075-goog
-> >
+  Andrew

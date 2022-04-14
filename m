@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085125016B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DF65011AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbiDNPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S1344864AbiDNNvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346944AbiDNN6I (ORCPT
+        with ESMTP id S1343769AbiDNN34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFA9B53D5;
-        Thu, 14 Apr 2022 06:48:18 -0700 (PDT)
+        Thu, 14 Apr 2022 09:29:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9927F972F4;
+        Thu, 14 Apr 2022 06:25:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8365A61D7C;
-        Thu, 14 Apr 2022 13:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 940F0C385A5;
-        Thu, 14 Apr 2022 13:48:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E12D8B8296A;
+        Thu, 14 Apr 2022 13:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35915C385A1;
+        Thu, 14 Apr 2022 13:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944095;
-        bh=gUdxT1VasgA5XAo/uD+/ZVGLVxk2Cwn+6TvEB2RMvbw=;
+        s=korg; t=1649942721;
+        bh=/BR9E8+sZG/B87Aap9jtscIHcHWuHIUHp1dRjTx76Cg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cJC3iclbGGf/Lji9/QHoLkrotlyGsWYZ2FVwGeehBO3HyTvJBLmaZAeia8fHeFatU
-         vNE/ZuXldxXW0gBe9WkIzX8lT3qEoMpVYufu9aGbS9EKI0HIti8jBzBTA46ww30jmI
-         69LiTI/TfKV6nntE81fio/ZqNGHkq0opM9U1izMU=
+        b=BdLzu+PUmZS9OHLb0DQnkKvI2PtTClkAe1N1VuWfrLMCenmf090v3f5AoOx6Z5bZp
+         6VSaX+qY0n+VlyKke6Qr/2wdvNWujaNq6rahb5gjS4Vv6xLCjoZN+shp1L5fu/Tsmy
+         HH1LEGMSlS7cmByrz+9TW7FgHbCUfTclSDy7xtHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.4 352/475] ASoC: soc-compress: Change the check for codec_dai
-Date:   Thu, 14 Apr 2022 15:12:17 +0200
-Message-Id: <20220414110904.932524310@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 235/338] ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
+Date:   Thu, 14 Apr 2022 15:12:18 +0200
+Message-Id: <20220414110845.576594897@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit ccb4214f7f2a8b75acf493f31128e464ee1a3536 upstream.
+commit 716b4573026bcbfa7b58ed19fe15554bac66b082 upstream.
 
-It should be better to reverse the check on codec_dai
-and returned early in order to be easier to understand.
+whiteout inode should be put when do_tmpfile() failed if inode has been
+initialized. Otherwise we will get following warning during umount:
+  UBIFS error (ubi0:0 pid 1494): ubifs_assert_failed [ubifs]: UBIFS
+  assert failed: c->bi.dd_growth == 0, in fs/ubifs/super.c:1930
+  VFS: Busy inodes after unmount of ubifs. Self-destruct in 5 seconds.
 
-Fixes: de2c6f98817f ("ASoC: soc-compress: prevent the potentially use of null pointer")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220310030041.1556323-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Suggested-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-compress.c |   19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ fs/ubifs/dir.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/soc/soc-compress.c
-+++ b/sound/soc/soc-compress.c
-@@ -871,16 +871,19 @@ int snd_soc_new_compress(struct snd_soc_
- 		return -EINVAL;
- 	}
- 
--	/* check client and interface hw capabilities */
--	if (codec_dai) {
--		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
--		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
--			playback = 1;
--		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
--		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
--			capture = 1;
-+	if (!codec_dai) {
-+		dev_err(rtd->card->dev, "Missing codec\n");
-+		return -EINVAL;
- 	}
- 
-+	/* check client and interface hw capabilities */
-+	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-+	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
-+		playback = 1;
-+	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
-+	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
-+		capture = 1;
-+
- 	/*
- 	 * Compress devices are unidirectional so only one of the directions
- 	 * should be set, check for that (xor)
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -451,6 +451,8 @@ out_inode:
+ 	make_bad_inode(inode);
+ 	if (!instantiated)
+ 		iput(inode);
++	else if (whiteout)
++		iput(*whiteout);
+ out_budg:
+ 	ubifs_release_budget(c, &req);
+ 	if (!instantiated)
 
 

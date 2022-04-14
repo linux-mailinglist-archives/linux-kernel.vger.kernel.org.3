@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B300D50146A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9E0501247
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345499AbiDNOKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S1345034AbiDNNpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343950AbiDNNaJ (ORCPT
+        with ESMTP id S245707AbiDNN3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:09 -0400
+        Thu, 14 Apr 2022 09:29:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B399A1467;
-        Thu, 14 Apr 2022 06:25:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAFAAFADF;
+        Thu, 14 Apr 2022 06:23:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 319FEB82985;
-        Thu, 14 Apr 2022 13:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7198DC385A1;
-        Thu, 14 Apr 2022 13:25:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80AF6B8296A;
+        Thu, 14 Apr 2022 13:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE698C385A1;
+        Thu, 14 Apr 2022 13:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942740;
-        bh=7v2b7LqwcH9H1W2knqnwllIHR99/fdO/DsmYUCfpk2w=;
+        s=korg; t=1649942624;
+        bh=nkCUznEb/nxqNrdjFSYcrmrAOYnmEWFuMdAke85b898=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DvpLn12GVmS5L23HRL/69b/DsJVRI0wMjchEHmRWI5bIL6ooVWF/ELfhnkSF597K3
-         vlf6a2qJe18HKMVAb13rzqNMKbHKNbab3JbAVAwi1xxoUtipCszsPEn5a/9PSZmFXM
-         xOn5ja1uLelH134jpn9+Eg4ER4yLeY4q5dZBNk3U=
+        b=nObHoSvBUjkSeLjoBSgBz5PEJ+4mKUVP1w4mX6DMlMFeC3TE4IQo4P80If7F721Vv
+         rbag/eHpOmkDltpVcjmfMTjwhYBC4Hcyrbq4zCcjJ6S1KlqmhI3qXoymwXhPotu9RV
+         kbq6MUuu7iTHwJXNdmV3CZNIh4xu8TcdI/6+3kY4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 194/338] ACPICA: Avoid walking the ACPI Namespace if it is not there
-Date:   Thu, 14 Apr 2022 15:11:37 +0200
-Message-Id: <20220414110844.417987196@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Brown <matthew.brown.dev@gmail.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 195/338] lib/raid6/test/Makefile: Use $(pound) instead of \# for Make 4.3
+Date:   Thu, 14 Apr 2022 15:11:38 +0200
+Message-Id: <20220414110844.447281431@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -55,42 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit 633174a7046ec3b4572bec24ef98e6ee89bce14b ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+Buidling raid6test on Ubuntu 21.10 (ppc64le) with GNU Make 4.3 shows the
+errors below:
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
+    $ cd lib/raid6/test/
+    $ make
+    <stdin>:1:1: error: stray ‘\’ in program
+    <stdin>:1:2: error: stray ‘#’ in program
+    <stdin>:1:11: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ \
+        before ‘<’ token
 
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
+    [...]
 
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The errors come from the HAS_ALTIVEC test, which fails, and the POWER
+optimized versions are not built. That’s also reason nobody noticed on the
+other architectures.
+
+GNU Make 4.3 does not remove the backslash anymore. From the 4.3 release
+announcment:
+
+> * WARNING: Backward-incompatibility!
+>   Number signs (#) appearing inside a macro reference or function invocation
+>   no longer introduce comments and should not be escaped with backslashes:
+>   thus a call such as:
+>     foo := $(shell echo '#')
+>   is legal.  Previously the number sign needed to be escaped, for example:
+>     foo := $(shell echo '\#')
+>   Now this latter will resolve to "\#".  If you want to write makefiles
+>   portable to both versions, assign the number sign to a variable:
+>     H := \#
+>     foo := $(shell echo '$H')
+>   This was claimed to be fixed in 3.81, but wasn't, for some reason.
+>   To detect this change search for 'nocomment' in the .FEATURES variable.
+
+So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
+files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
+of \# in Makefiles") and define and use a $(pound) variable.
+
+Reference for the change in make:
+https://git.savannah.gnu.org/cgit/make.git/commit/?id=c6966b323811c37acedff05b57
+
+Cc: Matt Brown <matthew.brown.dev@gmail.com>
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/raid6/test/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index e9a061da9bb2..c325789a62bf 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
+diff --git a/lib/raid6/test/Makefile b/lib/raid6/test/Makefile
+index 79777645cac9..e7b54ec8ca70 100644
+--- a/lib/raid6/test/Makefile
++++ b/lib/raid6/test/Makefile
+@@ -4,6 +4,8 @@
+ # from userspace.
+ #
  
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
- 	}
- 
- 	/* Null child means "get first node" */
++pound := \#
++
+ CC	 = gcc
+ OPTFLAGS = -O2			# Adjust as desired
+ CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
+@@ -44,7 +46,7 @@ else ifeq ($(HAS_NEON),yes)
+         OBJS   += neon.o neon1.o neon2.o neon4.o neon8.o recov_neon.o recov_neon_inner.o
+         CFLAGS += -DCONFIG_KERNEL_MODE_NEON=1
+ else
+-        HAS_ALTIVEC := $(shell printf '\#include <altivec.h>\nvector int a;\n' |\
++        HAS_ALTIVEC := $(shell printf '$(pound)include <altivec.h>\nvector int a;\n' |\
+                          gcc -c -x c - >/dev/null && rm ./-.o && echo yes)
+         ifeq ($(HAS_ALTIVEC),yes)
+                 CFLAGS += -I../../../arch/powerpc/include
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A525C50125D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BE0501650
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346139AbiDNNzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S1352211AbiDNOyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245394AbiDNN2z (ORCPT
+        with ESMTP id S1345383AbiDNNuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:55 -0400
+        Thu, 14 Apr 2022 09:50:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0189BBA8;
-        Thu, 14 Apr 2022 06:22:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7CAA56FF;
+        Thu, 14 Apr 2022 06:44:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCA1AB82987;
-        Thu, 14 Apr 2022 13:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C4AC385A9;
-        Thu, 14 Apr 2022 13:22:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1F81B8298B;
+        Thu, 14 Apr 2022 13:44:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A60C385A1;
+        Thu, 14 Apr 2022 13:44:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942561;
-        bh=UVIxEjLwTyhY1EWsi9ZaUq3FIYE6RvmWaAcVq6ha+Is=;
+        s=korg; t=1649943840;
+        bh=+wq173W039LLwt49okhsC1cU/Yg0EMixvemiQqA7vmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqzsjJ3vYdOqgUV/HHuzsvDfi4QPPVMqY7r7blVEs97uiAAXH3DJ/RfmcdBYe7Mrf
-         VP91w7KJ7Sp2ws3HaeYIytJ8YwhFbPClfbQjJ5/7GBtGqPDmrM+LR5Wd3NDd4UOLpf
-         lS3KmMNby2GEkvc5BRT1GN3iTIUdSw8X/a8FUAJQ=
+        b=uS7eJHzwmMysVg3g1aOSLt6dRJ5O7AaC8TW3pg9SSBWHw2YLJettxd2JHKy05nhP9
+         lvMGdbuQw8x/A2NdoBiDRQ1y+VbFl6l67x/kqa51N/g1yhdo/Obnp3ZxuC+cdFfBBe
+         2vdq9GtkQIveSFN9wTybXRH+ytQP2BmflAQdlX2k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Auhagen <sven.auhagen@voleatech.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 180/338] netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
-Date:   Thu, 14 Apr 2022 15:11:23 +0200
-Message-Id: <20220414110844.021152865@linuxfoundation.org>
+Subject: [PATCH 5.4 299/475] video: fbdev: omapfb: panel-dsi-cm: Use sysfs_emit() instead of snprintf()
+Date:   Thu, 14 Apr 2022 15:11:24 +0200
+Message-Id: <20220414110903.461853937@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Jing Yao <yao.jing2@zte.com.cn>
 
-[ Upstream commit f2dd495a8d589371289981d5ed33e6873df94ecc ]
+[ Upstream commit f63658a59c3d439c8ad7b290f8ec270980e0f384 ]
 
-Do not reset IP_CT_TCP_FLAG_BE_LIBERAL flag in out-of-sync scenarios
-coming before the TCP window tracking, otherwise such connections will
-fail in the window check.
+Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
-Update tcp_options() to leave this flag in place and add a new helper
-function to reset the tcp window state.
-
-Based on patch from Sven Auhagen.
-
-Fixes: c4832c7bbc3f ("netfilter: nf_ct_tcp: improve out-of-sync situation in TCP tracking")
-Tested-by: Sven Auhagen <sven.auhagen@voleatech.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_proto_tcp.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
-index 40f8a1252394..66cda5e2d6b9 100644
---- a/net/netfilter/nf_conntrack_proto_tcp.c
-+++ b/net/netfilter/nf_conntrack_proto_tcp.c
-@@ -362,8 +362,8 @@ static void tcp_options(const struct sk_buff *skb,
- 				 length, buff);
- 	BUG_ON(ptr == NULL);
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+index 4b0793abdd84..a2c7c5cb1523 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+@@ -409,7 +409,7 @@ static ssize_t dsicm_num_errors_show(struct device *dev,
+ 	if (r)
+ 		return r;
  
--	state->td_scale =
--	state->flags = 0;
-+	state->td_scale = 0;
-+	state->flags &= IP_CT_TCP_FLAG_BE_LIBERAL;
- 
- 	while (length > 0) {
- 		int opcode=*ptr++;
-@@ -784,6 +784,16 @@ static bool nf_conntrack_tcp_established(const struct nf_conn *ct)
- 	       test_bit(IPS_ASSURED_BIT, &ct->status);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", errors);
++	return sysfs_emit(buf, "%d\n", errors);
  }
  
-+static void nf_ct_tcp_state_reset(struct ip_ct_tcp_state *state)
-+{
-+	state->td_end		= 0;
-+	state->td_maxend	= 0;
-+	state->td_maxwin	= 0;
-+	state->td_maxack	= 0;
-+	state->td_scale		= 0;
-+	state->flags		&= IP_CT_TCP_FLAG_BE_LIBERAL;
-+}
-+
- /* Returns verdict for packet, or -1 for invalid. */
- static int tcp_packet(struct nf_conn *ct,
- 		      const struct sk_buff *skb,
-@@ -882,8 +892,7 @@ static int tcp_packet(struct nf_conn *ct,
- 			ct->proto.tcp.last_flags &= ~IP_CT_EXP_CHALLENGE_ACK;
- 			ct->proto.tcp.seen[ct->proto.tcp.last_dir].flags =
- 				ct->proto.tcp.last_flags;
--			memset(&ct->proto.tcp.seen[dir], 0,
--			       sizeof(struct ip_ct_tcp_state));
-+			nf_ct_tcp_state_reset(&ct->proto.tcp.seen[dir]);
- 			break;
- 		}
- 		ct->proto.tcp.last_index = index;
+ static ssize_t dsicm_hw_revision_show(struct device *dev,
+@@ -439,7 +439,7 @@ static ssize_t dsicm_hw_revision_show(struct device *dev,
+ 	if (r)
+ 		return r;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x\n", id1, id2, id3);
++	return sysfs_emit(buf, "%02x.%02x.%02x\n", id1, id2, id3);
+ }
+ 
+ static ssize_t dsicm_store_ulps(struct device *dev,
+@@ -487,7 +487,7 @@ static ssize_t dsicm_show_ulps(struct device *dev,
+ 	t = ddata->ulps_enabled;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static ssize_t dsicm_store_ulps_timeout(struct device *dev,
+@@ -532,7 +532,7 @@ static ssize_t dsicm_show_ulps_timeout(struct device *dev,
+ 	t = ddata->ulps_timeout;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static DEVICE_ATTR(num_dsi_errors, S_IRUGO, dsicm_num_errors_show, NULL);
 -- 
 2.34.1
 

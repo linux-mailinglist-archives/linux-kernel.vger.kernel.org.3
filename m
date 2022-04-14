@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E5C501BB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FD7501BC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345153AbiDNTWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S1345210AbiDNTWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiDNTWG (ORCPT
+        with ESMTP id S1345131AbiDNTWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:22:06 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24945A1459
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:19:40 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id x33so10809577lfu.1
+        Thu, 14 Apr 2022 15:22:07 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096B7A145C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:19:41 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 15so7239712ljw.8
         for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hBeYUJyh8cohFIBXMw+rp2zvHseFstsvrmjjJq6v1RA=;
-        b=OS9Zyyw11+ahcSbaFBwnet4m/+SqFvTSxBJAra7HuBWht0AJqsov+byDRY2fDcE7Cs
-         ytQj6zRGrqwIncCbAZw9crMvkswQ0zpZovlwDav7PgeiWph9GDH1Vn+lFgWyfq4pf9Q6
-         D2bG8OWhifqZbowaCdO0dbVut/XPPk2sn+J4gDQPfI0IRUkzB49h1qS2s77WM2wj6Hc0
-         XiiWyRzeOYZiYXi7x7A/rRQlZHH+glMqunBBbrU6BwKqFdu1m5oH6E29FDom7ZKFAHyW
-         2ozw4PRAgrtB8ITcoMnvHW1txGeX3p4mnMFmtLnTd+4XkolWYRvNXGTibUY+EzZSgMXW
-         D3vw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=dof6CivR5ktaOrwRlo+Yx4ESbsQ7cxmBJatNzZcwa2k=;
+        b=fxQPwiBYbg+xlj/wY1p5MdYQ66sD8b5fLGqQMckaU3CMT8EL/wfvWZU4SIiD6U9ip6
+         x0PnmD1xHmrsNFIVjQHsdnZPvUxHpmODdoG0gXRG1Z8rSW12jjdRfc1aIsVwhopbfwnB
+         45qwr+ltaiaL4VURctt6I1DyO99ZcxTE6B5dyns0TnRE7PewjAtJfw6eXZ2h61MbtG5G
+         gnoBsZ84YiucFs13V1ifHyFlwHANNo9kDZLqLovrihL3G4p4VvU/pBaprwk/UBUaHLF8
+         Jet2oVaZ2CJOnjtS1rjynU5Y1dbnTih8Gq9+zPwZEHWY78hWw5dqkTkzEh7mHxP/iI+V
+         giOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hBeYUJyh8cohFIBXMw+rp2zvHseFstsvrmjjJq6v1RA=;
-        b=CrRnxZLkgQsX7+isz5LVGNwtpsXbBDmQ6AJPizRUUNRPr7PBCOgQ9etq3eD47jpDaT
-         KH51G34NqItNI9/Y4/0tz/AyM9EI4PQZy6JiOnnpqHXQDQBRR7pTeFZLI9VXhOmc28mU
-         F5uok6T8Jxy4+yK8SxcTrszX13yAJmeT9OU48MgPX7WOYS3r+CGfPxuUk8GNVLcZBqdP
-         FrfEPxtxXKkAkwUUjNcTuAaXtX031ucigCSFksBY3kZYuSDvaqBiYbsUTJuAvuEoUX6e
-         N3v4U0j8eIUvKxDfcKyYcoIsAVCrvSFBATMA7WCk+HREfJuaRJk7VYVy5+f0kmL2h0Yf
-         4FyQ==
-X-Gm-Message-State: AOAM532utX8JtoFziUbuFKGPDHV/NVgHq9b3z3fLv5NRzgLJv0nivCZM
-        mMzS8FXf0DHS3pWKaPS8GX0=
-X-Google-Smtp-Source: ABdhPJyF5XrQhJyJg+R3ILmVTNsDHntbRwzflHI2RtvXh6tjp4CUiSxKClbc5XPs/9iS6Kt3RoSWZQ==
-X-Received: by 2002:ac2:4d18:0:b0:46b:c318:193b with SMTP id r24-20020ac24d18000000b0046bc318193bmr2602821lfi.293.1649963978137;
-        Thu, 14 Apr 2022 12:19:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=dof6CivR5ktaOrwRlo+Yx4ESbsQ7cxmBJatNzZcwa2k=;
+        b=ogAY8JJO1AKB/CpFjDokBe/uJIHoCoe6K1gxxORQnF1odr5rkryflHETZ3YENs/ytl
+         IkI8IeTPdllHUbozAgwyibMR6tq0Dc+3xLUAE5/Ts/IOB5p8nXcf8Gg0ukVnhCUg4XLs
+         WlmvaXmLq11v25/rn9VU3q2bAzvS8jxUyc4GcAtEOhnCnTW9UVg9u124tZ/ncONC1hiT
+         FdWhNkIxLdfzDcXFSuXS/KRpV7uqV5SJwZTumcfo3wuJveAkYjYPwA8DWqvbirG7/ilZ
+         5aPpCT9oxyl1rfNW4FryyoiffTC66mVmhaS20jSrEd2MFrbCIz8A7H6944Bg/JT+vybu
+         qrZg==
+X-Gm-Message-State: AOAM532M0INg3uBcwEfsknq9u6lf5e1NKZ7LzUkV0h26m0m4lhDUeSNs
+        q3hyA94/zEQru1yqdVqJ3HU=
+X-Google-Smtp-Source: ABdhPJx+KdnmdSildpq+aXrS8xmx/k1yM6QEi9zPtQDYyy8myxHzG38Yu1RM9ZZJBp2dsAgRlV7UJQ==
+X-Received: by 2002:a05:651c:512:b0:24d:9ee0:7f11 with SMTP id o18-20020a05651c051200b0024d9ee07f11mr1779012ljp.367.1649963979236;
+        Thu, 14 Apr 2022 12:19:39 -0700 (PDT)
 Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id l3-20020a194943000000b0046b928d2795sm85001lfj.67.2022.04.14.12.19.36
+        by smtp.gmail.com with ESMTPSA id l3-20020a194943000000b0046b928d2795sm85001lfj.67.2022.04.14.12.19.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Apr 2022 12:19:37 -0700 (PDT)
+        Thu, 14 Apr 2022 12:19:38 -0700 (PDT)
 From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>,
-        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
-Subject: [RFC PATCH 0/6] virtio: Solution to restrict memory access under Xen using xen-virtio DMA ops layer
-Date:   Thu, 14 Apr 2022 22:19:27 +0300
-Message-Id: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [RFC PATCH 1/6] xen/grants: support allocating consecutive grants
+Date:   Thu, 14 Apr 2022 22:19:28 +0300
+Message-Id: <1649963973-22879-2-git-send-email-olekstysh@gmail.com>
 X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
+References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,103 +70,389 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+From: Juergen Gross <jgross@suse.com>
 
-Hello all.
+For support of virtio via grant mappings in rare cases larger mappings
+using consecutive grants are needed. Support those by adding a bitmap
+of free grants.
 
-The purpose of this RFC patch series is to add support for restricting memory access under Xen using specific
-grant table based DMA ops layer. Patch series is based on Juergen Gross’ initial work [1] which implies using
-grant references instead of raw guest physical addresses (GPA) for the virtio communications (some kind of
-the software IOMMU).
+As consecutive grants will be needed only in very rare cases (e.g. when
+configuring a virtio device with a multi-page ring), optimize for the
+normal case of non-consecutive allocations.
 
-The high level idea is to create new Xen’s grant table based DMA ops layer for the guest Linux whose main
-purpose is to provide a special 64-bit DMA address which is formed by using the grant reference (for a page
-to be shared with the backend) with offset and setting the highest address bit (this is for the backend to
-be able to distinguish grant ref based DMA address from normal GPA). For this to work we need the ability
-to allocate contiguous (consecutive) grant references for multi-page allocations. And the backend then needs
-to offer VIRTIO_F_ACCESS_PLATFORM and VIRTIO_F_VERSION_1 feature bits (it must support virtio-mmio modern
-transport for 64-bit addresses in the virtqueue).
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ drivers/xen/grant-table.c | 238 +++++++++++++++++++++++++++++++++++++++-------
+ include/xen/grant_table.h |   4 +
+ 2 files changed, 210 insertions(+), 32 deletions(-)
 
-Xen's grant mapping mechanism is the secure and safe solution to share pages between domains which proven
-to work and works for years (in the context of traditional Xen PV drivers for example). So far, the foreign
-mapping is used for the virtio backend to map and access guest memory. With the foreign mapping, the backend
-is able to map arbitrary pages from the guest memory (or even from Dom0 memory). And as the result, the malicious
-backend which runs in a non-trusted domain can take advantage of this. Instead, with the grant mapping
-the backend is only allowed to map pages which were explicitly granted by the guest before and nothing else. 
-According to the discussions in various mainline threads this solution would likely be welcome because it
-perfectly fits in the security model Xen provides. 
-
-What is more, the grant table based solution requires zero changes to the Xen hypervisor itself at least
-with virtio-mmio and DT (in comparison, for example, with "foreign mapping + virtio-iommu" solution which would
-require the whole new complex emulator in hypervisor in addition to new functionality/hypercall to pass IOVA
-from the virtio backend running elsewhere to the hypervisor and translate it to the GPA before mapping into
-P2M or denying the foreign mapping request if no corresponding IOVA-GPA mapping present in the IOMMU page table
-for that particular device). We only need to update toolstack to insert a new "xen,dev-domid" property to
-the virtio-mmio device node when creating a guest device-tree (this is an indicator for the guest to use grants
-and the ID of Xen domain where the corresponding backend resides, it is used as an argument to the grant mapping
-APIs). It worth mentioning that toolstack patch is based on non  upstreamed yet “Virtio support for toolstack
-on Arm” series which is on review now [2].
-
-Please note the following:
-- Patch series only covers Arm and virtio-mmio (device-tree) for now. To enable the restricted memory access
-  feature on Arm the following options should be set:
-  CONFIG_XEN_VIRTIO = y
-  CONFIG_XEN_HVM_VIRTIO_GRANT = y
-- Some callbacks in xen-virtio DMA ops layer (map_sg/unmap_sg, etc) are not implemented yet as they are not
-  needed/used in the first prototype
-
-Patch series is rebased on Linux 5.18-rc2 tag and tested on Renesas Salvator-X board + H3 ES3.0 SoC (Arm64)
-with standalone userspace (non-Qemu) virtio-mmio based virtio-disk backend running in Driver domain and Linux
-guest running on existing virtio-blk driver (frontend). No issues were observed. Guest domain 'reboot/destroy'
-use-cases work properly. I have also tested other use-cases such as assigning several virtio block devices
-or a mix of virtio and Xen PV block devices to the guest. 
-
-1. Xen changes located at (last patch):
-https://github.com/otyshchenko1/xen/commits/libxl_virtio_next
-2. Linux changes located at:
-https://github.com/otyshchenko1/linux/commits/virtio_grant5
-3. virtio-disk changes located at:
-https://github.com/otyshchenko1/virtio-disk/commits/virtio_grant
-
-Any feedback/help would be highly appreciated.
-
-[1] https://www.youtube.com/watch?v=IrlEdaIUDPk
-[2] https://lore.kernel.org/xen-devel/1649442065-8332-1-git-send-email-olekstysh@gmail.com/
-
-Juergen Gross (2):
-  xen/grants: support allocating consecutive grants
-  virtio: add option to restrict memory access under Xen
-
-Oleksandr Tyshchenko (4):
-  dt-bindings: xen: Add xen,dev-domid property description for
-    xen-virtio layer
-  virtio: Various updates to xen-virtio DMA ops layer
-  arm/xen: Introduce xen_setup_dma_ops()
-  arm/xen: Assign xen-virtio DMA ops for virtio devices in Xen guests
-
- .../devicetree/bindings/virtio/xen,dev-domid.yaml  |  39 +++
- arch/arm/include/asm/xen/xen-ops.h                 |   1 +
- arch/arm/mm/dma-mapping.c                          |   5 +-
- arch/arm/xen/enlighten.c                           |  11 +
- arch/arm64/include/asm/xen/xen-ops.h               |   1 +
- arch/arm64/mm/dma-mapping.c                        |   5 +-
- arch/x86/mm/init.c                                 |  15 +
- arch/x86/mm/mem_encrypt.c                          |   5 -
- arch/x86/xen/Kconfig                               |   9 +
- drivers/xen/Kconfig                                |  20 ++
- drivers/xen/Makefile                               |   1 +
- drivers/xen/grant-table.c                          | 238 +++++++++++++--
- drivers/xen/xen-virtio.c                           | 335 +++++++++++++++++++++
- include/xen/arm/xen-ops.h                          |  20 ++
- include/xen/grant_table.h                          |   4 +
- include/xen/xen-ops.h                              |  13 +
- 16 files changed, 679 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/virtio/xen,dev-domid.yaml
- create mode 100644 arch/arm/include/asm/xen/xen-ops.h
- create mode 100644 arch/arm64/include/asm/xen/xen-ops.h
- create mode 100644 drivers/xen/xen-virtio.c
- create mode 100644 include/xen/arm/xen-ops.h
-
+diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+index 8ccccac..1b458c0 100644
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -33,6 +33,7 @@
+ 
+ #define pr_fmt(fmt) "xen:" KBUILD_MODNAME ": " fmt
+ 
++#include <linux/bitmap.h>
+ #include <linux/memblock.h>
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+@@ -72,9 +73,32 @@
+ 
+ static grant_ref_t **gnttab_list;
+ static unsigned int nr_grant_frames;
++
++/*
++ * Handling of free grants:
++ *
++ * Free grants are in a simple list anchored in gnttab_free_head. They are
++ * linked by grant ref, the last element contains GNTTAB_LIST_END. The number
++ * of free entries is stored in gnttab_free_count.
++ * Additionally there is a bitmap of free entries anchored in
++ * gnttab_free_bitmap. This is being used for simplifying allocation of
++ * multiple consecutive grants, which is needed e.g. for support of virtio.
++ * gnttab_last_free is used to add free entries of new frames at the end of
++ * the free list.
++ * gnttab_free_tail_ptr specifies the variable which references the start
++ * of consecutive free grants ending with gnttab_last_free. This pointer is
++ * updated in a rather defensive way, in order to avoid performance hits in
++ * hot paths.
++ * All those variables are protected by gnttab_list_lock.
++ */
+ static int gnttab_free_count;
+-static grant_ref_t gnttab_free_head;
++static unsigned int gnttab_size;
++static grant_ref_t gnttab_free_head = GNTTAB_LIST_END;
++static grant_ref_t gnttab_last_free = GNTTAB_LIST_END;
++static grant_ref_t *gnttab_free_tail_ptr;
++static unsigned long *gnttab_free_bitmap;
+ static DEFINE_SPINLOCK(gnttab_list_lock);
++
+ struct grant_frames xen_auto_xlat_grant_frames;
+ static unsigned int xen_gnttab_version;
+ module_param_named(version, xen_gnttab_version, uint, 0);
+@@ -170,16 +194,111 @@ static int get_free_entries(unsigned count)
+ 
+ 	ref = head = gnttab_free_head;
+ 	gnttab_free_count -= count;
+-	while (count-- > 1)
+-		head = gnttab_entry(head);
++	while (count--) {
++		bitmap_clear(gnttab_free_bitmap, head, 1);
++		if (gnttab_free_tail_ptr == __gnttab_entry(head))
++			gnttab_free_tail_ptr = &gnttab_free_head;
++		if (count)
++			head = gnttab_entry(head);
++	}
+ 	gnttab_free_head = gnttab_entry(head);
+ 	gnttab_entry(head) = GNTTAB_LIST_END;
+ 
++	if (!gnttab_free_count) {
++		gnttab_last_free = GNTTAB_LIST_END;
++		gnttab_free_tail_ptr = NULL;
++	}
++
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ 
+ 	return ref;
+ }
+ 
++static int get_seq_entry_count(void)
++{
++	if (gnttab_last_free == GNTTAB_LIST_END || !gnttab_free_tail_ptr ||
++	    *gnttab_free_tail_ptr == GNTTAB_LIST_END)
++		return 0;
++
++	return gnttab_last_free - *gnttab_free_tail_ptr + 1;
++}
++
++/* Rebuilds the free grant list and tries to find count consecutive entries. */
++static int get_free_seq(unsigned int count)
++{
++	int ret = -ENOSPC;
++	unsigned int from, to;
++	grant_ref_t *last;
++
++	gnttab_free_tail_ptr = &gnttab_free_head;
++	last = &gnttab_free_head;
++
++	for (from = find_first_bit(gnttab_free_bitmap, gnttab_size);
++	     from < gnttab_size;
++	     from = find_next_bit(gnttab_free_bitmap, gnttab_size, to + 1)) {
++		to = find_next_zero_bit(gnttab_free_bitmap, gnttab_size,
++					from + 1);
++		if (ret < 0 && to - from >= count) {
++			ret = from;
++			bitmap_clear(gnttab_free_bitmap, ret, count);
++			from += count;
++			gnttab_free_count -= count;
++			if (from == to)
++				continue;
++		}
++
++		while (from < to) {
++			*last = from;
++			last = __gnttab_entry(from);
++			gnttab_last_free = from;
++			from++;
++		}
++		if (to < gnttab_size)
++			gnttab_free_tail_ptr = __gnttab_entry(to - 1);
++	}
++
++	*last = GNTTAB_LIST_END;
++	if (gnttab_last_free != gnttab_size - 1)
++		gnttab_free_tail_ptr = NULL;
++
++	return ret;
++}
++
++static int get_free_entries_seq(unsigned int count)
++{
++	unsigned long flags;
++	int ret = 0;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++
++	if (gnttab_free_count < count) {
++		ret = gnttab_expand(count - gnttab_free_count);
++		if (ret < 0)
++			goto out;
++	}
++
++	if (get_seq_entry_count() < count) {
++		ret = get_free_seq(count);
++		if (ret >= 0)
++			goto out;
++		ret = gnttab_expand(count - get_seq_entry_count());
++		if (ret < 0)
++			goto out;
++	}
++
++	ret = *gnttab_free_tail_ptr;
++	*gnttab_free_tail_ptr = gnttab_entry(ret + count - 1);
++	gnttab_free_count -= count;
++	if (!gnttab_free_count)
++		gnttab_free_tail_ptr = NULL;
++	bitmap_clear(gnttab_free_bitmap, ret, count);
++
++ out:
++	spin_unlock_irqrestore(&gnttab_list_lock, flags);
++
++	return ret;
++}
++
+ static void do_free_callbacks(void)
+ {
+ 	struct gnttab_free_callback *callback, *next;
+@@ -206,17 +325,48 @@ static inline void check_free_callbacks(void)
+ 		do_free_callbacks();
+ }
+ 
+-static void put_free_entry(grant_ref_t ref)
++static void put_free_entry_locked(grant_ref_t ref)
+ {
+-	unsigned long flags;
+-	spin_lock_irqsave(&gnttab_list_lock, flags);
+ 	gnttab_entry(ref) = gnttab_free_head;
+ 	gnttab_free_head = ref;
++	if (!gnttab_free_count)
++		gnttab_last_free = ref;
++	if (gnttab_free_tail_ptr == &gnttab_free_head)
++		gnttab_free_tail_ptr = __gnttab_entry(ref);
+ 	gnttab_free_count++;
++	bitmap_set(gnttab_free_bitmap, ref, 1);
++}
++
++static void put_free_entry(grant_ref_t ref)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++	put_free_entry_locked(ref);
+ 	check_free_callbacks();
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ }
+ 
++static void gnttab_set_free(unsigned int start, unsigned int n)
++{
++	unsigned int i;
++
++	for (i = start; i < start + n - 1; i++)
++		gnttab_entry(i) = i + 1;
++
++	gnttab_entry(i) = GNTTAB_LIST_END;
++	if (!gnttab_free_count) {
++		gnttab_free_head = start;
++		gnttab_free_tail_ptr = &gnttab_free_head;
++	} else {
++		gnttab_entry(gnttab_last_free) = start;
++	}
++	gnttab_free_count += n;
++	gnttab_last_free = i;
++
++	bitmap_set(gnttab_free_bitmap, start, n);
++}
++
+ /*
+  * Following applies to gnttab_update_entry_v1 and gnttab_update_entry_v2.
+  * Introducing a valid entry into the grant table:
+@@ -448,23 +598,31 @@ void gnttab_free_grant_references(grant_ref_t head)
+ {
+ 	grant_ref_t ref;
+ 	unsigned long flags;
+-	int count = 1;
+-	if (head == GNTTAB_LIST_END)
+-		return;
++
+ 	spin_lock_irqsave(&gnttab_list_lock, flags);
+-	ref = head;
+-	while (gnttab_entry(ref) != GNTTAB_LIST_END) {
+-		ref = gnttab_entry(ref);
+-		count++;
++	while (head != GNTTAB_LIST_END) {
++		ref = gnttab_entry(head);
++		put_free_entry_locked(head);
++		head = ref;
+ 	}
+-	gnttab_entry(ref) = gnttab_free_head;
+-	gnttab_free_head = head;
+-	gnttab_free_count += count;
+ 	check_free_callbacks();
+ 	spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(gnttab_free_grant_references);
+ 
++void gnttab_free_grant_reference_seq(grant_ref_t head, unsigned int count)
++{
++	unsigned long flags;
++	unsigned int i;
++
++	spin_lock_irqsave(&gnttab_list_lock, flags);
++	for (i = count; i > 0; i--)
++		put_free_entry_locked(head + i - 1);
++	check_free_callbacks();
++	spin_unlock_irqrestore(&gnttab_list_lock, flags);
++}
++EXPORT_SYMBOL_GPL(gnttab_free_grant_reference_seq);
++
+ int gnttab_alloc_grant_references(u16 count, grant_ref_t *head)
+ {
+ 	int h = get_free_entries(count);
+@@ -478,6 +636,24 @@ int gnttab_alloc_grant_references(u16 count, grant_ref_t *head)
+ }
+ EXPORT_SYMBOL_GPL(gnttab_alloc_grant_references);
+ 
++int gnttab_alloc_grant_reference_seq(unsigned int count, grant_ref_t *first)
++{
++	int h;
++
++	if (count == 1)
++		h = get_free_entries(1);
++	else
++		h = get_free_entries_seq(count);
++
++	if (h < 0)
++		return -ENOSPC;
++
++	*first = h;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(gnttab_alloc_grant_reference_seq);
++
+ int gnttab_empty_grant_references(const grant_ref_t *private_head)
+ {
+ 	return (*private_head == GNTTAB_LIST_END);
+@@ -570,16 +746,13 @@ static int grow_gnttab_list(unsigned int more_frames)
+ 			goto grow_nomem;
+ 	}
+ 
++	gnttab_set_free(gnttab_size, extra_entries);
+ 
+-	for (i = grefs_per_frame * nr_grant_frames;
+-	     i < grefs_per_frame * new_nr_grant_frames - 1; i++)
+-		gnttab_entry(i) = i + 1;
+-
+-	gnttab_entry(i) = gnttab_free_head;
+-	gnttab_free_head = grefs_per_frame * nr_grant_frames;
+-	gnttab_free_count += extra_entries;
++	if (!gnttab_free_tail_ptr)
++		gnttab_free_tail_ptr = __gnttab_entry(gnttab_size);
+ 
+ 	nr_grant_frames = new_nr_grant_frames;
++	gnttab_size += extra_entries;
+ 
+ 	check_free_callbacks();
+ 
+@@ -1424,7 +1597,6 @@ int gnttab_init(void)
+ 	int i;
+ 	unsigned long max_nr_grant_frames;
+ 	unsigned int max_nr_glist_frames, nr_glist_frames;
+-	unsigned int nr_init_grefs;
+ 	int ret;
+ 
+ 	gnttab_request_version();
+@@ -1452,6 +1624,13 @@ int gnttab_init(void)
+ 		}
+ 	}
+ 
++	i = gnttab_interface->grefs_per_grant_frame * max_nr_grant_frames;
++	gnttab_free_bitmap = bitmap_zalloc(i, GFP_KERNEL);
++	if (!gnttab_free_bitmap) {
++		ret = -ENOMEM;
++		goto ini_nomem;
++	}
++
+ 	ret = arch_gnttab_init(max_nr_grant_frames,
+ 			       nr_status_frames(max_nr_grant_frames));
+ 	if (ret < 0)
+@@ -1462,15 +1641,9 @@ int gnttab_init(void)
+ 		goto ini_nomem;
+ 	}
+ 
+-	nr_init_grefs = nr_grant_frames *
+-			gnttab_interface->grefs_per_grant_frame;
+-
+-	for (i = NR_RESERVED_ENTRIES; i < nr_init_grefs - 1; i++)
+-		gnttab_entry(i) = i + 1;
++	gnttab_size = nr_grant_frames * gnttab_interface->grefs_per_grant_frame;
+ 
+-	gnttab_entry(nr_init_grefs - 1) = GNTTAB_LIST_END;
+-	gnttab_free_count = nr_init_grefs - NR_RESERVED_ENTRIES;
+-	gnttab_free_head  = NR_RESERVED_ENTRIES;
++	gnttab_set_free(NR_RESERVED_ENTRIES, gnttab_size - NR_RESERVED_ENTRIES);
+ 
+ 	printk("Grant table initialized\n");
+ 	return 0;
+@@ -1479,6 +1652,7 @@ int gnttab_init(void)
+ 	for (i--; i >= 0; i--)
+ 		free_page((unsigned long)gnttab_list[i]);
+ 	kfree(gnttab_list);
++	bitmap_free(gnttab_free_bitmap);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(gnttab_init);
+diff --git a/include/xen/grant_table.h b/include/xen/grant_table.h
+index dfd5bf3..d815e1d 100644
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -129,10 +129,14 @@ int gnttab_try_end_foreign_access(grant_ref_t ref);
+  */
+ int gnttab_alloc_grant_references(u16 count, grant_ref_t *pprivate_head);
+ 
++int gnttab_alloc_grant_reference_seq(unsigned int count, grant_ref_t *first);
++
+ void gnttab_free_grant_reference(grant_ref_t ref);
+ 
+ void gnttab_free_grant_references(grant_ref_t head);
+ 
++void gnttab_free_grant_reference_seq(grant_ref_t head, unsigned int count);
++
+ int gnttab_empty_grant_references(const grant_ref_t *pprivate_head);
+ 
+ int gnttab_claim_grant_reference(grant_ref_t *pprivate_head);
 -- 
 2.7.4
 

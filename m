@@ -2,179 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C8150162F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E10501633
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347529AbiDNOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
+        id S1348086AbiDNOwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345318AbiDNNpt (ORCPT
+        with ESMTP id S243491AbiDNNp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:49 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06346B874
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:43:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BwavpmVH2kmZ6WUMXOU8Q2zUNr0KlvjL0ACEgg5eiUyriCUSghE9zjH5Cd4sL5DdzUfSyOlE5bMchnF9KKZp+FAVBpjYuTT7n7AkWIKfIbo6q6MeLCJSlQtSj3R9kLTzSqO/eYGjLY+2aymwc7jcEhyFT6Zku68q2wJUsNDoAfVCPPoziQ9Mugu2+qMssTV7iXlMX/pNecrRidv+o5/PdwKrW0NAbD+Rz8qy7YH0Oo3aJd7xlJjDaN7ce4PevhacOC0/OPGSq2ChGipVGtzuzH7xKgpBHGWIgIUW9ee0w5YHDxYdsHyn7b31immLJG5k3MHFaJ+GAI99EMHQHss3lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wb2CE7f3W6b5Vc35+i0KJ/2Rx+s5Zke0g9Er7Ck2lZY=;
- b=MJZkhHg+Hly9owyzSC/mq+A3fRg1zSEDGykUp4F+HutCAQBYks/jWuDBFEvBX+Kly5y1TGetM6CkJquFh5+DKUHDhZGgwpF8GFebxG/7aus+Gv3koQ6LPpNJ2qa/VOCu2DhIcfNmMG8YS+mt2Rih8eUE3/BmrUubqf+jUHBlWkvYy4OMrUVyZtyOemzr7dvUhfvjYTDeikt++yXUUhLvcp1Ml3mzh93aXOtUDXXO4wQSlP6ILUE2JxhMXbZvOFA8TbVACYTX8Ceg6rP7FErKlktDu3iCyu2qj3W4RG5u6WW6iK03AW9TLi4T7TeQnNmNIKV1u56Hlhgij008ybtHRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wb2CE7f3W6b5Vc35+i0KJ/2Rx+s5Zke0g9Er7Ck2lZY=;
- b=Ssk0vNfCPFR2JS0HS14kPdoViCWyvq5litmoFToQQZ9tJAjW1jXeA3Tlk+M9DMYtoPbayu7AsYAMLddkThgvhsRmw4IN0mNotvcl+1tEYzcdB79lQi0h5ghzWv1ghWD2NYhI3cA9Cy6gidWusofMhi4IlEZXk52bO9amy7qkAF7F2mt8O4v0MYyJpZ6rSILoEe1avLZ8UZ/AxMYD6QVgTuR4ND25Qdwqidp4jwsPI7KUBPmjN18MuHW/JhXIFGrFupcNCB7Oieu7FAykqudT95q2KRxxQBZ6dC42Dg24lCPPfSuQiNk7YPwk+An7zc97XAw6q1NxcrqNwo6y1ArbHg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB3050.namprd12.prod.outlook.com (2603:10b6:5:11a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 13:43:22 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 13:43:22 +0000
-Date:   Thu, 14 Apr 2022 10:43:21 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
-Message-ID: <20220414134321.GD2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
- <20220413154642.GA28095@lst.de>
- <871qy1geko.fsf@intel.com>
- <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
- <20220413232053.GA2120790@nvidia.com>
- <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
- <20220414133427.GB2120790@nvidia.com>
- <87ilrbeqbo.fsf@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilrbeqbo.fsf@intel.com>
-X-ClientProxiedBy: BL1PR13CA0139.namprd13.prod.outlook.com
- (2603:10b6:208:2bb::24) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 14 Apr 2022 09:45:56 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED85FFB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:43:31 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i14-20020a056e020ece00b002ca198245e6so3042630ilk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:43:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:cc;
+        bh=2VrWD7opmJFlL7T6rbv4Z/qjhpNRkx9YT608QCgTBxY=;
+        b=Ax43Z/ijqWk5kOwp2IEHtIYqbwdrsy1PP6uryUGgQ0tbbwwXb4W/MJgx82vODy+jlB
+         nWki3/PVWCAoPM3UiAjcFi+NDOl3lAOsNn5jKaezRmGOkjeAjklqedZoprUi01V4yxBk
+         wtaPE6R7OXphhf2ujs2oUeH8UMY4tZ06xeEV0emc9Kv4E3LGFfIQ+ymjAiFerI8r/fat
+         3IJH8f1AofFShI+wvbD/73hFAiJmmkfN8YsugtINKBtq2wqZyapnS4zVSgyGfuCx/4rM
+         9C5rUHIw6eEAj1AT7m66lBHdRvE2DdqrQTZAz4nO0srjoWXyiK/GSkR/C0MdX16lRYaj
+         1VaA==
+X-Gm-Message-State: AOAM531Yaj9NZQSOblyldWwRGs0t9XjMg77Kk3qur92NpDdjptiAzjTv
+        qhOdLYFMlgxQzgEvTA5A9BqYkxbboODz1JeMsvjtvhZyVLrD
+X-Google-Smtp-Source: ABdhPJzJ0j2GI6IjPYE4GhvLOvIIkMP1+B/Dag4tF8n6BC5RtTyEfK6x/ex5ztjKQ7agboIv4tJcdcFCyqpld4pc3aAI1H4tRzqy
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dfd9d733-49e9-465f-a9f9-08da1e1cbe30
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3050:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB305028F2B9A48DF5A5D5C285C2EF9@DM6PR12MB3050.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y8dR7tk54tnmX/jEyOEa1ndJTowDNtdgaCta5vrzUrzNEccU9x8hkIrxcrRBnl+ONDpWJOL8aFoNg5DM2nPrROFJRlfV6Zx4rVXnUJSnOHjibYv2rnBggkZ7stiYIjegbA177MmhQQsVrKx5fTk4cV5HrqtdAlGS3vcXSgwAx6lrOFf9qIRkBtPkxNj8dQ405kjI4/rSU7fvMcHnA7Cj1761mIIM2tLtV0ipJUD4Y6HFCZLGROgmL4Q93NlJ4aARV0wWsPEldDYpTXycarXYJjT+LvxL8CR5NUzlf1tRhq76sFz1aQEYlmB0V2PL75OHVXZkCy6bTAElnni17+AWFnY7oFayK93QZ2gwwF1DpZAemq3lyIx/uK3jIWG80Ieh0QYOlGrV2Nyo9e5ifNY9/VCxd8WrHLp6FbgwNEV3R+pV8NQFdirg7ZpHb4Ezh2WdSvET/YGJl2YK1zqrn8YyPfgQblW4OFn34aVhrQpp9Maqa8CA3KrOHjwpgaEoroKOmxS2F8AR4V4ijp/acZkUGSfFJ1GXnyRw7Vk1tV5boGfIIUoqINej+su0rjFj/R7ucOmMLa+ey2Ag3yDIQ7779qzvDSUWo+HncieWE2/AIpdhumWOllQuXrDuZ05cSayo3+jqOGqADBn+YmAdTYtcr3uk6HPyB4ZyCiw4C8nhUqhi4TN1eN54cmZV1MS/e5BB7hMX/28IrLln0ypK2GfAael7TlAPRa/l/Paq8YThnkA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(1076003)(4326008)(5660300002)(316002)(66476007)(8676002)(66556008)(38100700002)(2616005)(8936002)(26005)(83380400001)(66946007)(186003)(6512007)(36756003)(7416002)(33656002)(6506007)(6916009)(2906002)(54906003)(508600001)(966005)(86362001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZBbkgbVaCs4iyNHi9UlR5XRVi4QdUjNfVb0DF05w5365kLEo6YEypxvfMMLH?=
- =?us-ascii?Q?dw1FNCTHdUfdQfkkb+zHbbzddrCg9GqdccjOoeb4N36buanXinzKuDpzFkds?=
- =?us-ascii?Q?c9aspx/srsH3Z0EN/dQpaUx9xxGDNU2B8N5zLcdp+chcph0V9CAK2V8ld+Ta?=
- =?us-ascii?Q?wuqgEtUG9BILCNVDImcj7e1SbyFa3q7IFTmntCFB/oCn1psFnU3LLOg2MvGH?=
- =?us-ascii?Q?/hQTiUyurb5pomzDdMsUjES4cbJJx3ZUjnU/I5nPOlNOoa0Dq/2HnQhac6Gi?=
- =?us-ascii?Q?rKhyUpL28nvfeenk/EtQnmVdgEoZvfGS7iEXZcbl2vepdkF94CpGH3lA1LWR?=
- =?us-ascii?Q?v7J9r3OKTMUu3M4AD+B0a8ofemi/WOlIJ/3UsEi+ndbtdn+g3aX0nBllGqaY?=
- =?us-ascii?Q?hc96T8GCG00LR3RXhVxt+XQCH5ybvK6m1GX10ejJGmdXBzFSwzQXnjr3tAtD?=
- =?us-ascii?Q?eXA6pJrop4t4mjAD9hoEzZbb3D+J+YPbbUwjAvv7nldGCL05/yreJkUpEJNw?=
- =?us-ascii?Q?Ap0RhyGD8a122HcWTfbAFnkpDKTJuocBGPdS3kphYubPpr06vIjaL6QgMZcU?=
- =?us-ascii?Q?dPllPr3wyj0i5fMN601XHTx3zp1tiaiWvOiA1m2dMBPUQdVyROx37sj786uI?=
- =?us-ascii?Q?Ub7+GLCM1ZFTEuddSs+ErAWLKXe3qHrTxdXhudqbuedfVWaYFj/clNEDRNJU?=
- =?us-ascii?Q?P81zlWrE+5UA0BrXTmrFknfQ5ynGrPkEOuOu8J9uckDbZ8kWaiXQmMwEbNiF?=
- =?us-ascii?Q?wP2pIbM32m7wC+OQx5W0M0/K4xTIosNwc9lGzB777XCSa5YMosP/svk7HRSA?=
- =?us-ascii?Q?W1Qrakh2fIYdAtltbLUwyFGbKuCuO12/yczIgzxPnTjj0L00LuvwkWtPBKLl?=
- =?us-ascii?Q?uq6d2wy39Xr8jCfCqERLONyWXS49on6kWXnvXHOMZ7m9cgrJRolGH6HNN8i+?=
- =?us-ascii?Q?3NbD2zmG20ni/SLvrAPuSU+509uaTxBewWA8mP2uoYvF8BukEM6rur5Ft7qT?=
- =?us-ascii?Q?+o4W67X5HN66beKUl0zsz+g2g8OMYTh5OyktUN0svT3l9pONw80iY81na052?=
- =?us-ascii?Q?5/dNaHHeZ0JnTnl7YZbRw6t6K/Wh5o3fef0dpenFVj83+rlMxuTrdfiYW2+8?=
- =?us-ascii?Q?TZUdQDnvqj0HBHuajepP7WpkET41kfpghPL+EJRsLNJkuHB9ktTo8cgP/4zE?=
- =?us-ascii?Q?hpYaXetuZiMr5zf843PtUU2OV4VAQGoCaDBBXdW3i8Xkh7y2d2O4GSs3Y9Z6?=
- =?us-ascii?Q?ZYMCnSbeS3dTYwTFgA+FfrQ7yjHqF8VH/BFOCNhrgxFTIZ1NTJsJ3ViY5QuY?=
- =?us-ascii?Q?7odpZWWZRiX17RLfEy6vr27PvCXDHW78/3F2+gGYd26tcyj6mkWsi5IPGhuw?=
- =?us-ascii?Q?Ivpazo7M3/XWrBu8x4RPRN2U6/oV1dTnu9N9XH+YLv2K89mGmdpmQnMQKwLs?=
- =?us-ascii?Q?WnTO8jkIO1WM4VzGuPOKKfc2st85FEvEXV+EC4U80AEF/RSpkxOew0vGw3+k?=
- =?us-ascii?Q?0J7asNeR8/6d2ei/4u57je+9Z34qOgPiGBqFNpUR6gb9MWTfoCL43ynrFa1c?=
- =?us-ascii?Q?75QirQD+tKXn1WIIqWzlw0cCUykg6p5MHMCPmbFidGS14Xf/rvxsvS8jQfDz?=
- =?us-ascii?Q?550l881sEDR10KBOJRSB1klO1MspJ6XG7UIMojQrv6yg0cWeEOUeTsGLGjYy?=
- =?us-ascii?Q?0eja4382zwlhHUQj3m1v3YKNg53dsHkrpCc2UikmuvWlR9aDOPw3A5Kk4XjT?=
- =?us-ascii?Q?QNm3bKr0Bg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfd9d733-49e9-465f-a9f9-08da1e1cbe30
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 13:43:22.6530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I0zEvvzm6w6OiDKoQ1ftMgAYYpKjLgkrCK+ziD8HwZSgMttYlxK4VoYiFoUQaVYP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3050
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:14cb:b0:646:3b7d:6aee with SMTP id
+ b11-20020a05660214cb00b006463b7d6aeemr1254503iow.178.1649943811352; Thu, 14
+ Apr 2022 06:43:31 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 06:43:31 -0700
+In-Reply-To: <20220414110903.185132971@linuxfoundation.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c6715b05dc9d7ab5@google.com>
+Subject: Re: [PATCH 5.4 289/475] ext4: dont BUG if someone dirty pages without
+ asking ext4 first
+From:   syzbot 
+        <syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     gregkh@linuxfoundation.org, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 04:40:11PM +0300, Jani Nikula wrote:
+> From: Theodore Ts'o <tytso@mit.edu>
+>
+> [ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
+>
+> [un]pin_user_pages_remote is dirtying pages without properly warning
+> the file system in advance.  A related race was noted by Jan Kara in
+> 2018[1]; however, more recently instead of it being a very hard-to-hit
+> race, it could be reliably triggered by process_vm_writev(2) which was
+> discovered by Syzbot[2].
+>
+> This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
+> that if some other kernel subsystem dirty pages without properly
+> notifying the file system using page_mkwrite(), ext4 will BUG, while
+> other file systems will not BUG (although data will still be lost).
+>
+> So instead of crashing with a BUG, issue a warning (since there may be
+> potential data loss) and just mark the page as clean to avoid
+> unprivileged denial of service attacks until the problem can be
+> properly fixed.  More discussion and background can be found in the
+> thread starting at [2].
+>
+> [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+> [2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
+>
+> Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
+> Reported-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+> Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  fs/ext4/inode.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index dcbd8ac8d471..0d62f05f8925 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -2161,6 +2161,15 @@ static int ext4_writepage(struct page *page,
+>  	else
+>  		len = PAGE_SIZE;
+>  
+> +	/* Should never happen but for bugs in other kernel subsystems */
+> +	if (!page_has_buffers(page)) {
+> +		ext4_warning_inode(inode,
+> +		   "page %lu does not have buffers attached", page->index);
+> +		ClearPageDirty(page);
+> +		unlock_page(page);
+> +		return 0;
+> +	}
+> +
+>  	page_bufs = page_buffers(page);
+>  	/*
+>  	 * We cannot do block allocation or other extent handling in this
+> @@ -2710,6 +2719,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>  			wait_on_page_writeback(page);
+>  			BUG_ON(PageWriteback(page));
+>  
+> +			/*
+> +			 * Should never happen but for buggy code in
+> +			 * other subsystems that call
+> +			 * set_page_dirty() without properly warning
+> +			 * the file system first.  See [1] for more
+> +			 * information.
+> +			 *
+> +			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+> +			 */
+> +			if (!page_has_buffers(page)) {
+> +				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
+> +				ClearPageDirty(page);
+> +				unlock_page(page);
+> +				continue;
+> +			}
+> +
+>  			if (mpd->map.m_len == 0)
+>  				mpd->first_page = page->index;
+>  			mpd->next_page = page->index + 1;
+> -- 
+> 2.34.1
+>
+>
+>
 
-> >> >> git clone https://github.com/intel/gvt-linux -b for-christoph
-> >> > 
-> >> > There are alot of extra commits on there - is it possible to base this
-> >> > straight on rc1 not on some kind of existing DRM tree?
-> >> > 
-> >> > Why did you choose drm/i915/fbc: Call intel_fbc_activate() directly
-> >> > from frontbuffer flush  as a base?
-> >> > 
-> >> > Jason
-> >> > 
-> >> 
-> >> Hi Jason:
-> >> 
-> >> I updated the branch. You can check if those are what you are expecting. :)
-> >
-> > This is better, except for the first commit:
-> >
-> >  [DON'T PULL] drm/i915/dmc: split out dmc registers to a separate file
-> >  THIS PATCH WILL GO THROUGH DRM-INTEL-NEXT TO UPSTREAM
-> >
-> >  Clean up the massive i915_reg.h a bit with this isolated set of
-> >  registers.
-> >
-> >  v2: Remove stale comment (Lucas)
-> >
-> > Clean the commit message and send that as a proper PR to
-> > drm-intel-next, then everything else is OK.
-> 
-> It's already in drm-intel-next, I guess the problem is basing the branch
-> on something that doesn't have it. I'd probably just base everything
-> cleanly on -rc1, and whoever does the merge between the two will need to
-> account for the missing include in the result. It's just adding one line
-> in the right place.
+I see the command but can't find the corresponding bug.
+The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
+but the HASH does not correspond to any known bug.
+Please double check the address.
 
-That makes sense to me, especially if you can do the merge fixup
-internally in DRM.
-
-So drop the '[DONT PULL]' commit and send a PR to the next DRM tree -
-when that is confirmed send the same PR to vfio,
-
-Thanks,
-Jason

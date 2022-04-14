@@ -2,167 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547A7501765
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27394501766
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346769AbiDNPeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S241197AbiDNPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348298AbiDNOMg (ORCPT
+        with ESMTP id S1348790AbiDNONJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:12:36 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC34214096;
-        Thu, 14 Apr 2022 07:04:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bh17so10244904ejb.8;
-        Thu, 14 Apr 2022 07:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lCC3Pfudq3lc52JAAG1sG7HbUkpkTnk/H8GtNDbWO8Q=;
-        b=JDV8GhcH1zuJn0OOA5UBejxDG49F0Z45Kj3qjuDnZOLw3BeSKpEqyUCjjG41ySlXbg
-         FEnNIudzU1mntcXCjLDBNBT8BKflg+3dpqBlAaleqoEHANJ9daDRUsG+0hsKroKanNn9
-         a7B3NDbIxMlL3YYwChHq8Wi0QE7bmKoQmzJQQn4WTpw8xvcu5f9qrJoMUP0hVujhS1La
-         oU4dxgEbPcHNoSUBtp/w2e/hP9XwkAs51/H3gCbxQcdVcR6z2efMHTrRc27Q40/sjRzm
-         xlRKxL0j5fJhLCnTMldi5q+qjMWbAMDY+34Xv/TVcFb6jzOcJRVmnSRik4t4sUMpGu7J
-         3fJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lCC3Pfudq3lc52JAAG1sG7HbUkpkTnk/H8GtNDbWO8Q=;
-        b=W82b45rpXmRYljZ+faz/GGy9MI2LtFVCcjA48gTvEYiVywQO5hE6ybsIyvuIEMQKdh
-         0C1/1+ibGuGAxHz/zfl186MVrwxfOJv3q7K4zlCAQY6+NSlqCXWiLLqliIMCUeXyP19c
-         2k2NwOa0wSg0b0tBI0p1XdIYXDb9fUIsS9Z59G2/fiNSTRJp2jcbb+SKVqlBMk3omnmF
-         LExjnXN9ZcX4PRXV9kVU/k48Ti39hsJtmjZHnVQQYbJIOI++MbgzSRAWA38+en1cmrp2
-         7O8dyDWMIZ29Mo3H9ES/URpS/aLTw8/91SLHy/dOKEFe5IzBXf8S6XGi9ezN1st2xOeJ
-         IFWQ==
-X-Gm-Message-State: AOAM533l6gphMMR6haQwaDKLEI4hWtCSMMxn/Y1oLX27KkjQGdfZ1we4
-        cMkykQcxluTyHx6LUbAT5EP7OcbFdWLiQvjQeOc=
-X-Google-Smtp-Source: ABdhPJzszOBX2OhJxDlnmeyI7hbBMe+wTy+WsTqeQ46bA+0Zq92wgXNJ34vsRZTe3citZvGtZp6VSUszInRrYxxPFTM=
-X-Received: by 2002:a17:906:b157:b0:6d0:9f3b:a6aa with SMTP id
- bt23-20020a170906b15700b006d09f3ba6aamr2461492ejb.365.1649945062793; Thu, 14
- Apr 2022 07:04:22 -0700 (PDT)
+        Thu, 14 Apr 2022 10:13:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFBFC6F1A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649945107; x=1681481107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jKQm+kUuUqino+2dW5Y03gm+/rXNyu9sTs6oih6VvXk=;
+  b=nY7idIvgrogFc1bP24fWo1R0+CTAfCL+xU6OTTtT7epQcFuwjecSACa7
+   RP6xkrO+eD74SfjrfCBxxxoeqMMxVXoYDTfVOaCDT9YjCkA9sWOYZhYyG
+   psp3ujf2yk8aQOY5D/XQd39GCkJb0jRDhiMgGnhtvGzIfP+kPgkjZW0E5
+   vJrIs8r3aTbw8W64297bxTkpRi0Keb1f1CSWY/oGUbjbWuJW8UImisRzE
+   S2QAoEW8Xh0VrmnVmCa/Z4v3z3h4FN5JfrGSxuFNlURAx9ND5yYy6h2vp
+   B4WVL6x1chtxFyROFyy6fEJ2xDmGrYyhozg8lt5W/+6TyXapN6NwfFSsH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="325840839"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="325840839"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:04:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="624106685"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Apr 2022 07:04:53 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nf05d-000110-BZ;
+        Thu, 14 Apr 2022 14:04:53 +0000
+Date:   Thu, 14 Apr 2022 22:04:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 38/396]
+ fs/xfs/scrub/agheader_repair.c:585:2: error: implicit declaration of
+ function 'xbitmap_walk'
+Message-ID: <202204142115.5hNAAWHG-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220409120901.267526-1-dzm91@hust.edu.cn> <YlQbqnYP/jcYinvz@hovoldconsulting.com>
- <CAD-N9QV=tRxcRH_bD7-3X4sLKYBu4LYDk5tTfUAaX2JDd7nLTg@mail.gmail.com>
-In-Reply-To: <CAD-N9QV=tRxcRH_bD7-3X4sLKYBu4LYDk5tTfUAaX2JDd7nLTg@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 14 Apr 2022 22:03:55 +0800
-Message-ID: <CAD-N9QXs7+AyGRUgJMe9YGBsUe67QK+y+=Q6OCVABQnwWn+1dA@mail.gmail.com>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 9:58 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> On Mon, Apr 11, 2022 at 8:14 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Sat, Apr 09, 2022 at 08:09:00PM +0800, Dongliang Mu wrote:
-> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >
-> > > cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> > > with ctx. However, in the unbind function - cdc_ncm_unbind,
-> > > it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> > > a dangling pointer. The following ioctl operation will trigger
-> > > the UAF in the function cdc_ncm_set_dgram_size.
-> > >
-> > > Fix this by setting dev->data[0] as zero.
-> >
-> > This sounds like a poor band-aid. Please explain how this prevent the
-> > ioctl() from racing with unbind().
->
-> You mean the following thread interlaving?
->
-> ioctl                                unbind
->                                 cdc_ncm_free(ctx);
-> dev->data[0]
->                                  dev->data[0] = 0;
->
-> It seems this will still trigger UAF. Maybe we need to add mutex to
-> prevent this. But I am not sure.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   bd756ef7af68274b79308166ee64949d288be861
+commit: d8273f3634d00732c204ba1c112bf1b9efcc6e4d [38/396] xfs: make AGFL repair function avoid crosslinked blocks
+config: hexagon-buildonly-randconfig-r002-20220413 (https://download.01.org/0day-ci/archive/20220414/202204142115.5hNAAWHG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=d8273f3634d00732c204ba1c112bf1b9efcc6e4d
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout d8273f3634d00732c204ba1c112bf1b9efcc6e4d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-ioctl                                   unbind
-                                  cdc_ncm_free(ctx);
-                                  dev->data[0] = 0;
-dev->data[0]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This will trigger a null pointer dereference if my patch is applied, right?
+Note: the djwong-xfs/vectorized-scrub HEAD bd756ef7af68274b79308166ee64949d288be861 builds fine.
+      It only hurts bisectability.
 
->
-> >
-> > Johan
-> >
-> > > ==================================================================
-> > > BUG: KASAN: use-after-free in cdc_ncm_set_dgram_size+0xc91/0xde0
-> > > Read of size 8 at addr ffff8880755210b0 by task dhcpcd/3174
-> > >
-> > > Call Trace:
-> > >  <TASK>
-> > >  __dump_stack lib/dump_stack.c:88 [inline]
-> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> > >  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
-> > >  print_report mm/kasan/report.c:429 [inline]
-> > >  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
-> > >  cdc_ncm_set_dgram_size+0xc91/0xde0 drivers/net/usb/cdc_ncm.c:608
-> > >  cdc_ncm_change_mtu+0x10c/0x140 drivers/net/usb/cdc_ncm.c:798
-> > >  __dev_set_mtu net/core/dev.c:8519 [inline]
-> > >  dev_set_mtu_ext+0x352/0x5b0 net/core/dev.c:8572
-> > >  dev_set_mtu+0x8e/0x120 net/core/dev.c:8596
-> > >  dev_ifsioc+0xb87/0x1090 net/core/dev_ioctl.c:332
-> > >  dev_ioctl+0x1b9/0xe30 net/core/dev_ioctl.c:586
-> > >  sock_do_ioctl+0x15a/0x230 net/socket.c:1136
-> > >  sock_ioctl+0x2f1/0x640 net/socket.c:1239
-> > >  vfs_ioctl fs/ioctl.c:51 [inline]
-> > >  __do_sys_ioctl fs/ioctl.c:870 [inline]
-> > >  __se_sys_ioctl fs/ioctl.c:856 [inline]
-> > >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > RIP: 0033:0x7f00859e70e7
-> > > RSP: 002b:00007ffedd503dd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > > RAX: ffffffffffffffda RBX: 00007f00858f96c8 RCX: 00007f00859e70e7
-> > > RDX: 00007ffedd513fc8 RSI: 0000000000008922 RDI: 0000000000000018
-> > > RBP: 00007ffedd524178 R08: 00007ffedd513f88 R09: 00007ffedd513f38
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > > R13: 00007ffedd513fc8 R14: 0000000000000028 R15: 0000000000008922
-> > >  </TASK>
-> >
-> > > Reported-by: syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com
-> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > ---
-> > >  drivers/net/usb/cdc_ncm.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> > > index 15f91d691bba..9fc2df9f0b63 100644
-> > > --- a/drivers/net/usb/cdc_ncm.c
-> > > +++ b/drivers/net/usb/cdc_ncm.c
-> > > @@ -1019,6 +1019,7 @@ void cdc_ncm_unbind(struct usbnet *dev, struct usb_interface *intf)
-> > >
-> > >       usb_set_intfdata(intf, NULL);
-> > >       cdc_ncm_free(ctx);
-> > > +     dev->data[0] = 0;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(cdc_ncm_unbind);
+All errors (new ones prefixed by >>):
+
+>> fs/xfs/scrub/agheader_repair.c:585:2: error: implicit declaration of function 'xbitmap_walk' [-Werror,-Wimplicit-function-declaration]
+           xbitmap_walk(agfl_extents, xrep_agfl_check_extent, &ra);
+           ^
+   1 error generated.
+
+
+vim +/xbitmap_walk +585 fs/xfs/scrub/agheader_repair.c
+
+   525	
+   526	/*
+   527	 * Map out all the non-AGFL OWN_AG space in this AG so that we can deduce
+   528	 * which blocks belong to the AGFL.
+   529	 *
+   530	 * Compute the set of old AGFL blocks by subtracting from the list of OWN_AG
+   531	 * blocks the list of blocks owned by all other OWN_AG metadata (bnobt, cntbt,
+   532	 * rmapbt).  These are the old AGFL blocks, so return that list and the number
+   533	 * of blocks we're actually going to put back on the AGFL.
+   534	 */
+   535	STATIC int
+   536	xrep_agfl_collect_blocks(
+   537		struct xfs_scrub	*sc,
+   538		struct xfs_buf		*agf_bp,
+   539		struct xbitmap		*agfl_extents,
+   540		xfs_agblock_t		*flcount)
+   541	{
+   542		struct xrep_agfl	ra;
+   543		struct xfs_mount	*mp = sc->mp;
+   544		struct xfs_btree_cur	*cur;
+   545		int			error;
+   546	
+   547		ra.sc = sc;
+   548		ra.freesp = agfl_extents;
+   549		xbitmap_init(&ra.agmetablocks);
+   550		xbitmap_init(&ra.crossed);
+   551	
+   552		/* Find all space used by the free space btrees & rmapbt. */
+   553		cur = xfs_rmapbt_init_cursor(mp, sc->tp, agf_bp, sc->sa.pag);
+   554		error = xfs_rmap_query_all(cur, xrep_agfl_walk_rmap, &ra);
+   555		xfs_btree_del_cursor(cur, error);
+   556		if (error)
+   557			goto out_bmp;
+   558	
+   559		/* Find all blocks currently being used by the bnobt. */
+   560		cur = xfs_allocbt_init_cursor(mp, sc->tp, agf_bp,
+   561				sc->sa.pag, XFS_BTNUM_BNO);
+   562		error = xbitmap_set_btblocks(&ra.agmetablocks, cur);
+   563		xfs_btree_del_cursor(cur, error);
+   564		if (error)
+   565			goto out_bmp;
+   566	
+   567		/* Find all blocks currently being used by the cntbt. */
+   568		cur = xfs_allocbt_init_cursor(mp, sc->tp, agf_bp,
+   569				sc->sa.pag, XFS_BTNUM_CNT);
+   570		error = xbitmap_set_btblocks(&ra.agmetablocks, cur);
+   571		xfs_btree_del_cursor(cur, error);
+   572		if (error)
+   573			goto out_bmp;
+   574	
+   575		/*
+   576		 * Drop the freesp meta blocks that are in use by btrees.
+   577		 * The remaining blocks /should/ be AGFL blocks.
+   578		 */
+   579		error = xbitmap_disunion(agfl_extents, &ra.agmetablocks);
+   580		if (error)
+   581			goto out_bmp;
+   582	
+   583		/* Strike out the blocks that are cross-linked. */
+   584		ra.rmap_cur = xfs_rmapbt_init_cursor(mp, sc->tp, agf_bp, sc->sa.pag);
+ > 585		xbitmap_walk(agfl_extents, xrep_agfl_check_extent, &ra);
+   586		xfs_btree_del_cursor(ra.rmap_cur, 0);
+   587		error = xbitmap_disunion(agfl_extents, &ra.crossed);
+   588		if (error)
+   589			goto out_bmp;
+   590	
+   591		/*
+   592		 * Calculate the new AGFL size.  If we found more blocks than fit in
+   593		 * the AGFL we'll free them later.
+   594		 */
+   595		*flcount = min_t(uint64_t, xbitmap_hweight(agfl_extents),
+   596				 xfs_agfl_size(mp));
+   597	
+   598	out_bmp:
+   599		xbitmap_destroy(&ra.crossed);
+   600		xbitmap_destroy(&ra.agmetablocks);
+   601		return error;
+   602	}
+   603	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

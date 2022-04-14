@@ -2,102 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB685004BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123C95004BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbiDNDqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 23:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S239732AbiDNDrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 23:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbiDNDqq (ORCPT
+        with ESMTP id S239721AbiDNDrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 23:46:46 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AA1165B5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:44:22 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id f7so1298007uap.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KSfIlz8DUgM+uj4vQg8KHkhawk6SdG9Lz0hRbX4guE8=;
-        b=Lo9h2T+uYh37ucLp1GfRnhXeiRN6mfPNF9PjYgJMep0n+Vs0d9at9bYg0SHIPnEpFs
-         ENEa/w69jIkWNFZgcZELFTsoSWE7ckPvJleEv918kLowAgM3rSrAocuIvXE7oycEwBaf
-         hdIJlxQ3apKJ3QCVQo+DIDfNmWTbyvFUDHa1hT4+8+5sQM7l3F9VgK0cot9G2GWQ/Qch
-         Rnf9YYU9xK0nzU00/rsP8oHczzfxw2ADJ4X08by7WRbDdEgli9Sx1vV+UvnoOtGr/ljk
-         C8z45FSj59harYuUDh0t1tUErMbCk/Pkv8tDo6aYPXNlpyb5jnGEIviF6LUx+XMTnv5Q
-         GOPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KSfIlz8DUgM+uj4vQg8KHkhawk6SdG9Lz0hRbX4guE8=;
-        b=MmtnHIXYqqJumDt5igGJijHKgly3C1ZqQKwsDyO1gI/wnzRky3VxtlVl/+vxTjV617
-         05qP6SDJ1GhMQqDss/ZJeJSaZjzLEzWiqSYIWuDzssFgpPWZpUPTm9CbGaiZK9MXsU+3
-         SL4APi8hK5vfmkg9n6YEpKOisrDgObEKQJJN/A0nQ3B94wlaOf+uThZm6ZBxCe88Rp7c
-         Z9tATJ0XXslo09EnAj7R16c1xfwfr/nsvKoNFaXg7Oq4gVwgxm29hrjy8Q0dQ3Jm7g8a
-         oTqU2xtbhHQSNjOm6VA3Z7FRNEgjEMmvF+N54Z/YopaP/1iFH0t1+sbBoxPRJ/XnDvhJ
-         QqNg==
-X-Gm-Message-State: AOAM532s6BAG6g+BJb3auXuPAD04gf67PMAOPANMBmhrHKKXppWA4RmY
-        NQYOK+fJ4cnY66fyvv2cexgXVwbCdCyPK+5+sBqE5A==
-X-Google-Smtp-Source: ABdhPJxEuB5nkxXLPnUZBpM95D8R0G8f+4XXtwtYRgW1ekNE9qaAsJV2yLUm2n9y3Op2j+ePMyBweJIMfqXcHsG49yg=
-X-Received: by 2002:ab0:2695:0:b0:352:5fc9:4132 with SMTP id
- t21-20020ab02695000000b003525fc94132mr273324uao.29.1649907861646; Wed, 13 Apr
- 2022 20:44:21 -0700 (PDT)
+        Wed, 13 Apr 2022 23:47:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFAE51837C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649907874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F/7nsyfN7H5ACQ+zSWR0K+E/gZY5zUURltEbwSfGD8k=;
+        b=F0F7dfoGJXS+uKhNjKkqz1ggcmunKyIXLwPPGYl4F06UW/32dBY1WgqIUhulRatZ+dWV1j
+        j7KxYvwx80GjWuE2JW7Znf9GE7Sm/ySxkaZix3tzzVE3cNMoHJUJo/HV7hMCdNcB6uufEU
+        Mg9ZdKV4ddtAyyPMZ7zaEbJbhNlE1bE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-465--xuNO6O9NkSDKaMnxP_J_w-1; Wed, 13 Apr 2022 23:44:30 -0400
+X-MC-Unique: -xuNO6O9NkSDKaMnxP_J_w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 54F3F80005D;
+        Thu, 14 Apr 2022 03:44:30 +0000 (UTC)
+Received: from localhost (ovpn-13-186.pek2.redhat.com [10.72.13.186])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9556E57E688;
+        Thu, 14 Apr 2022 03:44:29 +0000 (UTC)
+Date:   Thu, 14 Apr 2022 11:44:25 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        stable@kernel.org, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/4] kexec: clean up arch_kexec_kernel_verify_sig
+Message-ID: <YleYmZAAnF5aOan3@MiWiFi-R3L-srv>
+References: <20220414014344.228523-1-coxu@redhat.com>
+ <20220414014344.228523-2-coxu@redhat.com>
 MIME-Version: 1.0
-References: <20220413040610.06AAAC385A4@smtp.kernel.org> <4ef4aa81-ed32-6c7f-2504-e7462bbaae2d@infradead.org>
-In-Reply-To: <4ef4aa81-ed32-6c7f-2504-e7462bbaae2d@infradead.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 13 Apr 2022 21:43:45 -0600
-Message-ID: <CAOUHufb8yn3PF9gm3ahne2GLs8SCpjjuz_DpS1aH75jeDT_J7A@mail.gmail.com>
-Subject: Re: mmotm 2022-04-12-21-05 uploaded (ARCH_HAS_NONLEAF_PMD_YOUNG)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414014344.228523-2-coxu@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 9:39 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
->
-> On 4/12/22 21:06, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2022-04-12-21-05 has been uploaded to
-> >
-> >    https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > mmotm-readme.txt says
-> >
-> > README for mm-of-the-moment:
-> >
-> > https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> >
-> > You will need quilt to apply these patches to the latest Linus release (5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > https://ozlabs.org/~akpm/mmotm/series
->
-> on i386:
->
-> WARNING: unmet direct dependencies detected for ARCH_HAS_NONLEAF_PMD_YOUNG
->   Depends on [n]: PGTABLE_LEVELS [=2]>2
->   Selected by [y]:
->   - X86 [=y]
+On 04/14/22 at 09:43am, Coiby Xu wrote:
+> Currently there is no arch-specific implementation of
+> arch_kexec_kernel_verify_sig. Even if we want to add an implementation
+> for an architecture in the future, we can simply use "(struct
+> kexec_file_ops*)->verify_sig". So clean it up.
+> 
+> Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+> Cc: stable@kernel.org
 
-Thanks for the heads up. Please try the following fix if it gets in your way.
+It should be not worth noticing stable kernel that a clean up patch need
+be back ported.
 
-https://lore.kernel.org/mm-commits/20220414023214.40C14C385A6@smtp.kernel.org/
+Otherwise this looks good to me,
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  include/linux/kexec.h |  4 ----
+>  kernel/kexec_file.c   | 34 +++++++++++++---------------------
+>  2 files changed, 13 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 58d1b58a971e..413235c6c797 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -202,10 +202,6 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> -#ifdef CONFIG_KEXEC_SIG
+> -int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -				 unsigned long buf_len);
+> -#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b..3720435807eb 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
+>  	return kexec_image_post_load_cleanup_default(image);
+>  }
+>  
+> -#ifdef CONFIG_KEXEC_SIG
+> -static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
+> -					  unsigned long buf_len)
+> -{
+> -	if (!image->fops || !image->fops->verify_sig) {
+> -		pr_debug("kernel loader does not support signature verification.\n");
+> -		return -EKEYREJECTED;
+> -	}
+> -
+> -	return image->fops->verify_sig(buf, buf_len);
+> -}
+> -
+> -int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -					unsigned long buf_len)
+> -{
+> -	return kexec_image_verify_sig_default(image, buf, buf_len);
+> -}
+> -#endif
+> -
+>  /*
+>   * arch_kexec_apply_relocations_add - apply relocations of type RELA
+>   * @pi:		Purgatory to be relocated.
+> @@ -184,13 +165,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +static int kexec_image_verify_sig(struct kimage *image, void *buf,
+> +		unsigned long buf_len)
+> +{
+> +	if (!image->fops || !image->fops->verify_sig) {
+> +		pr_debug("kernel loader does not support signature verification.\n");
+> +		return -EKEYREJECTED;
+> +	}
+> +
+> +	return image->fops->verify_sig(buf, buf_len);
+> +}
+> +
+>  static int
+>  kimage_validate_signature(struct kimage *image)
+>  {
+>  	int ret;
+>  
+> -	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
+> -					   image->kernel_buf_len);
+> +	ret = kexec_image_verify_sig(image, image->kernel_buf,
+> +			image->kernel_buf_len);
+>  	if (ret) {
+>  
+>  		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
+> -- 
+> 2.34.1
+> 
+

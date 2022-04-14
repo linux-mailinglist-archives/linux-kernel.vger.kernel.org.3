@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E325500B1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BDF500B22
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbiDNKcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S242290AbiDNKdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239652AbiDNKcS (ORCPT
+        with ESMTP id S239652AbiDNKdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:32:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B93D3BA5F;
-        Thu, 14 Apr 2022 03:29:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71846139F;
-        Thu, 14 Apr 2022 03:29:53 -0700 (PDT)
-Received: from [10.32.36.25] (e121896.Emea.Arm.com [10.32.36.25])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8A723F5A1;
-        Thu, 14 Apr 2022 03:29:50 -0700 (PDT)
-Message-ID: <9ad30442-41f8-6e17-cb4a-ab102b3ebd69@arm.com>
-Date:   Thu, 14 Apr 2022 11:29:48 +0100
+        Thu, 14 Apr 2022 06:33:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D3BC59A63
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649932239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Vf8insFKsm0H/Xa5O9Bfm1akCLF8f2bCQgFw5dYlces=;
+        b=PeBDsObnsl+9Qj/nqwvPCuBXeeWK7m/RiN7jfK8rarZP+SRsc3G+aaVAQN1ZRGrmBN6J/c
+        QPKjvZc6J5LzslKENtVf5Eb+P3OvB0bb2rrUzZGz/BiCmpnBNv8ATtGADuRM1z0AhMdJ/Q
+        AL4IoUb7rrHd22BkuTFk0D9d6s9vbPY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-hAC-ND9RORqzAfxDFTvCPw-1; Thu, 14 Apr 2022 06:30:35 -0400
+X-MC-Unique: hAC-ND9RORqzAfxDFTvCPw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C1B438009EB;
+        Thu, 14 Apr 2022 10:30:35 +0000 (UTC)
+Received: from thuth.com (dhcp-192-232.str.redhat.com [10.33.192.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E707B434844;
+        Thu, 14 Apr 2022 10:30:33 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: [PATCH] KVM: selftests: Silence compiler warning in the kvm_page_table_test
+Date:   Thu, 14 Apr 2022 12:30:31 +0200
+Message-Id: <20220414103031.565037-1-thuth@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
- event
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220413092317.756022-1-leo.yan@linaro.org>
- <Yld4fzWWY07ksB+5@kernel.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <Yld4fzWWY07ksB+5@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When compiling kvm_page_table_test.c, I get this compiler warning
+with gcc 11.2:
 
+kvm_page_table_test.c: In function 'pre_init_before_test':
+../../../../tools/include/linux/kernel.h:44:24: warning: comparison of
+ distinct pointer types lacks a cast
+   44 |         (void) (&_max1 == &_max2);              \
+      |                        ^~
+kvm_page_table_test.c:281:21: note: in expansion of macro 'max'
+  281 |         alignment = max(0x100000, alignment);
+      |                     ^~~
 
-On 14/04/2022 02:27, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Apr 13, 2022 at 05:23:17PM +0800, Leo Yan escreveu:
->> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
->> is not available") "perf mem report" and "perf report --mem-mode"
->> don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
->> type.
->>
->> The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
->> partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
->> event, this allows the perf data file generated by kernel v5.18-rc1 or
->> later version can be reported properly.
->>
->> On the other hand, perf tool still fails to be backward compatibility
->> for a data file recorded by an older version's perf which contains Arm
->> SPE trace data.  This patch is a workaround in reporting phase, when
->> detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
->> force to set the bit in the sample type and give a warning info.
->>
->> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
->> Signed-off-by: Leo Yan <leo.yan@linaro.org>
->> Tested-by: German Gomez <german.gomez@arm.com>
->> ---
->> v2: Change event name from "arm_spe_" to "arm_spe";
->>     Add German's test tag.
-> 
-> Tentatively applied, would be great to have James' and Ravi's
-> Acked-by/Reviewed-by, which I'll add before pushing this out if provided
-> in time.
-> 
-> - Arnaldo
->  
->>  tools/perf/builtin-report.c | 16 ++++++++++++++++
->>  1 file changed, 16 insertions(+)
->>
->> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
->> index 1ad75c7ba074..acb07a4a9b67 100644
->> --- a/tools/perf/builtin-report.c
->> +++ b/tools/perf/builtin-report.c
->> @@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
->>  	struct perf_session *session = rep->session;
->>  	u64 sample_type = evlist__combined_sample_type(session->evlist);
->>  	bool is_pipe = perf_data__is_pipe(session->data);
->> +	struct evsel *evsel;
->>  
->>  	if (session->itrace_synth_opts->callchain ||
->>  	    session->itrace_synth_opts->add_callchain ||
->> @@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
->>  	}
->>  
->>  	if (sort__mode == SORT_MODE__MEMORY) {
->> +		/*
->> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
->> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
->> +		 * compatibility, set the bit if it's an old perf data file.
->> +		 */
->> +		evlist__for_each_entry(session->evlist, evsel) {
->> +			if (strstr(evsel->name, "arm_spe") &&
->> +				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
->> +				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
->> +					    "for Arm SPE event.\n");
+Fix it by adjusting the type of the absolute value.
 
-Looks ok to me. Personally I would remove the warning, otherwise people are going to start
-thinking that they need to do something about it or something bad has happened.
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But because we've fixed it up there shouldn't really need to be a warning or any action.
+diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+index ba1fdc3dcf4a..2c4a7563a4f8 100644
+--- a/tools/testing/selftests/kvm/kvm_page_table_test.c
++++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+@@ -278,7 +278,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+ 	else
+ 		guest_test_phys_mem = p->phys_offset;
+ #ifdef __s390x__
+-	alignment = max(0x100000, alignment);
++	alignment = max(0x100000UL, alignment);
+ #endif
+ 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
+ 
+-- 
+2.27.0
 
-I don't feel too strongly about this though, so I will leave it up to Leo to make the
-final decision:
-
-Reviewed-by: James Clark <james.clark@arm.com>
-
->> +				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
->> +				sample_type |= PERF_SAMPLE_DATA_SRC;
->> +			}
->> +		}
->> +
->>  		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
->>  			ui__error("Selected --mem-mode but no mem data. "
->>  				  "Did you call perf record without -d?\n");
->> -- 
->> 2.25.1
-> 

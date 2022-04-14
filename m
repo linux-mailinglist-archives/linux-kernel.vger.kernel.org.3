@@ -2,143 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AC15019F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229F15019FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245314AbiDNRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S245598AbiDNR0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245248AbiDNRYq (ORCPT
+        with ESMTP id S244561AbiDNR0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:24:46 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0F2BC866
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso6281627pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=74YOS5V1qHXZZ1fLoG5JxUvAs7/uENmkI5e8dEDxses=;
-        b=iP28I5g0myp4w/7aNYzjc3WyyPOxckjdXhNgkDQjobWLTAXQkU73Qgd0OL6OYIcFiZ
-         7TuqFSQhN5HPnyy4iqyfBSWtpSwySLdgUqwmpPNPnSN+nbp/stQkNNRigCCyyPHN/Amv
-         CP92wNGgq5xuHIV5YjMikUjlIFzM0CXlpzBGE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=74YOS5V1qHXZZ1fLoG5JxUvAs7/uENmkI5e8dEDxses=;
-        b=EzrxYJcaz4hCGPDrb1HgI2Y1ZBhJSExsAQVUAu7pTWgtt1pusKwJZlFzu2FZcODBVI
-         msGF/7SKuYCTWAo1J7XjLXPjywm9NU2SDD6P8/iqQC89b5qKSAEZ068IULWWZWcWQNYu
-         FTDWJearc2Sj0MFDuR584v26+vbD7MiZ+4jW/S8tcfYapYtRWGZcHtbjn6abZIuRk0JZ
-         OD/oecamt7NYAnRG3/SM6eTmIGUAWNZK7CHIkr+9DhH1CKlUPAaA5SOqCrtPvU9y1SCo
-         xtuwJjKcruxCEMYxWyw8JuDInk9FyFdU4Tf2ZjjaOdHIWd/c4vIjUF/knEkAUM2o0SQb
-         i10w==
-X-Gm-Message-State: AOAM531Ymq1GkEdVGRHN9e3ubmDNWyWKzB66VLb5YkuTrscK8JUjjGOQ
-        oIrqzgIXFagHrG3buP8fzm3L4Q==
-X-Google-Smtp-Source: ABdhPJxAprf/p03cPbZ5hRrExWbkfNTc3juXB5tKGk3RtI0L1iw6o5BW7MusfTN8dyZm5rA7k+YW7A==
-X-Received: by 2002:a17:902:e808:b0:156:cbfd:4235 with SMTP id u8-20020a170902e80800b00156cbfd4235mr48710529plg.24.1649956940429;
-        Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h20-20020aa786d4000000b00505dfd42f2fsm503493pfo.22.2022.04.14.10.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 10:22:19 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 10:22:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Li <ashimida@linux.alibaba.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lkdtm: Add CFI_BACKWARD to test ROP mitigations
-Message-ID: <202204141019.CD9152A7@keescook>
-References: <20220413213917.711770-1-keescook@chromium.org>
- <f7a5642f-bfcb-865d-7039-d0b9d62a3360@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f7a5642f-bfcb-865d-7039-d0b9d62a3360@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 13:26:11 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690EBC86D;
+        Thu, 14 Apr 2022 10:23:43 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1649957019; bh=K/5Wq1Coy5UPF41OrOzi6vwncUsz5ByKlFemTpBp7mY=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=hHDv4/Ynbqnqn0H/mQ1PdwX3ZHXaSri9w1/fC7gnILTEIs2KrwouTQnFXGDfmVetG
+         q9E/sLo550tFhbSI98Qpj7/kwq4FuU4xgcqhXAx5RukKiTbL3Z0BS/8opuXBG8uiJU
+         BX5rZcrhJOCWRDZchqFZAqlnh9URYk9oFjaqn0A0=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: dma: Add Apple ADMAC
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <YlhBLJQVYvTGlx4o@robh.at.kernel.org>
+Date:   Thu, 14 Apr 2022 19:23:38 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <85DF53F6-74BA-4D8D-8E8E-DFD67B24DA19@cutebit.org>
+References: <20220411222204.96860-1-povik+lin@cutebit.org>
+ <20220411222204.96860-2-povik+lin@cutebit.org>
+ <YlhBLJQVYvTGlx4o@robh.at.kernel.org>
+To:     Rob Herring <robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 03:19:02AM -0700, Dan Li wrote:
-> Hi, Kees,
-> Thanks for the rewrite. I tested this patch, and it works fine for
-> me except for a few minor comments below :)
-> 
-> On 4/13/22 14:39, Kees Cook wrote:
-> > +/* The ultimate ROP gadget. */
-> > +static noinline __no_ret_protection
-> > +void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
-> > +{
-> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> > +
-> > +	/* Make sure we've found the right place on the stack before writing it. */
-> > +	if(*ret_addr == expected)
-> > +		*ret_addr = (addr);
-> > +	else
-> > +		/* Check architecture, stack layout, or compiler behavior... */
-> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
-> > +			*ret_addr, addr);
-> > +}
-> > +
-> > +static noinline
-> > +void set_return_addr(unsigned long *expected, unsigned long *addr)
-> > +{
-> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> > +
-> > +	/* Make sure we've found the right place on the stack before writing it. */
-> > +	if(*ret_addr == expected)
-> > +		*ret_addr = (addr);
-> 
-> When PAC is enabled, I get a mismatch as follows:
-> 
-> /kselftest_install/lkdtm # ./CFI_BACKWARD.sh
-> [  182.120133] lkdtm: Performing direct entry CFI_BACKWARD
-> [  182.120665] lkdtm: Attempting unchecked stack return address redirection ...
-> [  182.122543] lkdtm: ok: redirected stack return address.
-> [  182.123521] lkdtm: Attempting checked stack return address redirection ...
-> [  182.123964] lkdtm: Eek: return address mismatch! bfff800008fa8014 != ffff800008fa8030
-> [  182.124502] lkdtm: ok: control flow unchanged.
-> CFI_BACKWARD: saw 'call trace:|ok: control flow unchanged': ok
-> 
-> We may need to ignore the pac high bits of return address according
-> to TCR.T1SZ (or simply remove the high 16 bits before comparing).
 
-Oh! Hah, yes, I totally forgot that. Thanks for testing -- getting PAC
-emulation working in QEMU has eluded me. I think untagged_addr() will
-work yes? i.e.:
+> On 14. 4. 2022, at 17:43, Rob Herring <robh@kernel.org> wrote:
+>=20
+> On Tue, Apr 12, 2022 at 12:22:03AM +0200, Martin Povi=C5=A1er wrote:
+>> Apple's Audio DMA Controller (ADMAC) is used to fetch and store audio
+>> samples on SoCs from the "Apple Silicon" family.
+>>=20
+>> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>> ---
+>>=20
+>> After the v1 discussion, I dropped the apple,internal-irq-destination
+>> property and instead the index of the usable interrupt is now =
+signified
+>> by prepending -1 entries to the interrupts=3D list. This works when I =
+do
+>> it like this:
+>>=20
+>>  interrupt-parent =3D <&aic>;
+>>  interrupts =3D <AIC_IRQ 0xffffffff 0>,
+>>               <AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
+>=20
+>=20
+> BTW, just use '-1'. dtc takes negative values (and other expressions).
 
-	if((untagged_addr(*ret_addr) == expected)
+Ha! <-1> didn=E2=80=99t work for me but <(-1)> does.
 
-> 
-> > +	else
-> > +		/* Check architecture, stack layout, or compiler behavior... */
-> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
-> > +			*ret_addr, addr);
-> 
-> According to the context, it might be "expected" here?
-> 
-> 		pr_warn("Eek: return address mismatch! %px != %px\n",
-> 			*ret_addr, expected);
-> 
-> I simply ignored the upper 16 bits, and tested it separately
-> in gcc/llvm 12 with SCS/PAC and all the four cases worked fine for me.
+>=20
+>>=20
+>> I would find it neat to do it like this:
+>>=20
+>>  interrupts-extended =3D <0xffffffff>,
+>>                        <&aic AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
+>>=20
+>> but unfortunately the kernel doesn't pick up on it:
+>>=20
+>> [    0.767964] apple-admac 238200000.dma-controller: error -6: IRQ =
+index 0 not found
+>> [    0.773943] apple-admac 238200000.dma-controller: error -6: IRQ =
+index 1 not found
+>> [    0.780154] apple-admac 238200000.dma-controller: error -6: IRQ =
+index 2 not found
+>> [    0.786367] apple-admac 238200000.dma-controller: error -6: IRQ =
+index 3 not found
+>> [    0.788592] apple-admac 238200000.dma-controller: error -6: no =
+usable interrupt
+>=20
+> We should make this case work. It is less fragile IMO as it doesn't=20
+> depend on the provider's translation of cells.
 
-Great! Do you have the PAC "Oops" text handy so I can include it in the
-commit log as an example of what should be expected?
+Then I may send some patch to that end.
 
-Thanks!
+>>=20
+>> .../devicetree/bindings/dma/apple,admac.yaml  | 68 =
++++++++++++++++++++
+>> 1 file changed, 68 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/dma/apple,admac.yaml
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/dma/apple,admac.yaml =
+b/Documentation/devicetree/bindings/dma/apple,admac.yaml
+>> new file mode 100644
+>> index 000000000000..bbd5eaf5f709
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/dma/apple,admac.yaml
+>> @@ -0,0 +1,68 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/dma/apple,admac.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Apple Audio DMA Controller (ADMAC)
+>> +
+>> +description: |
+>> +  Apple's Audio DMA Controller (ADMAC) is used to fetch and store =
+audio samples
+>> +  on SoCs from the "Apple Silicon" family.
+>> +
+>> +  The controller has been seen with up to 24 channels. Even-numbered =
+channels
+>> +  are TX-only, odd-numbered are RX-only. Individual channels are =
+coupled to
+>> +  fixed device endpoints.
+>> +
+>> +maintainers:
+>> +  - Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>> +
+>> +allOf:
+>> +  - $ref: "dma-controller.yaml#"
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - apple,t6000-admac
+>> +          - apple,t8103-admac
+>> +      - const: apple,admac
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#dma-cells':
+>> +    const: 1
+>> +    description:
+>> +      Clients specify single cell with channel number.
+>> +
+>> +  dma-channels:
+>> +    maximum: 24
+>> +
+>> +  interrupts:
+>> +    minItems: 1
+>> +    maxItems: 4
+>=20
+> I'm now confused why this is variable. Put -1 entries on the end if=20
+> that's why it is variable.
 
--- 
-Kees Cook
+That=E2=80=99s why. Fixed length it is then.
+
+>=20
+> This needs some description about there being 1 of 4 outputs being=20
+> connected.
+
+OK. Description there will be.
+
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - '#dma-cells'
+>> +  - dma-channels
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    admac: dma-controller@238200000 {
+>> +      compatible =3D "apple,t8103-admac", "apple,admac";
+>> +      reg =3D <0x38200000 0x34000>;
+>> +      dma-channels =3D <24>;
+>> +      interrupt-parent =3D <&aic>;
+>> +      interrupts =3D <AIC_IRQ 0xffffffff 0>,
+>> +                   <AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
+>> +      #dma-cells =3D <1>;
+>> +    };
+>> --=20
+>> 2.33.0
+>>=20
+>>=20
+
+Martin
+

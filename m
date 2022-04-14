@@ -2,102 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF44500CB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B09500CAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242963AbiDNMEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        id S240710AbiDNMEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiDNMET (ORCPT
+        with ESMTP id S242936AbiDNMD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:04:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7C97668;
-        Thu, 14 Apr 2022 05:01:55 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 12:01:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649937713;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=irNbvxyJiOJgaVPVNK2gMVgCR2ECZ8V5k+AvUnmmvHA=;
-        b=Oie8G6ousjkqfvc7YbWJtVHE0at7lxDl+bCYiXMpbAv3izBEhPjZkJ+NTzXGg1PReri4tG
-        zDAysPr1rlDVbURS+xLDUUern0xVKXwM6iB/YVncTpge2ahb7O7XqtVYX1b3htQ/A3yR0C
-        OA21yxtGXwuF+frX74ogPAhg9l8w6uyMw4i/jZ+XkHM38dM127KNQ4ckBo6InrW0qJVsMA
-        K9vi4/ePd6MEinYAV+1ktY2MjsJr1joD5heLI0beW/RIEpys7VGdL7CrKMSUGqdz8W1Gkg
-        PzCkzWmDBTCp5f2pCgkbEbMmnekVzQ4LQCQWv7oz1tqqfUJQ40zJGqREh1YbkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649937713;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=irNbvxyJiOJgaVPVNK2gMVgCR2ECZ8V5k+AvUnmmvHA=;
-        b=1mG37d/0qY5EQW4Sj/TytzS1r/szavrXvAsgpfc8qjpTppp4AH5ASnxVD8ye4Zwt3IEP01
-        Vutvkw+V0uaLVdAg==
-From:   "tip-bot2 for Haowen Bai" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] virt: sevguest: Fix bool function returning negative value
-Cc:     Haowen Bai <baihaowen@meizu.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1649930657-10837-1-git-send-email-baihaowen@meizu.com>
-References: <1649930657-10837-1-git-send-email-baihaowen@meizu.com>
+        Thu, 14 Apr 2022 08:03:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2928326DF
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:01:35 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfJ2J1BHPzfYkt;
+        Thu, 14 Apr 2022 20:00:56 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
+ 2022 20:01:33 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm/vmscan: fix comment for current_may_throttle
+Date:   Thu, 14 Apr 2022 20:02:02 +0800
+Message-ID: <20220414120202.30082-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Message-ID: <164993771183.4207.3486210875608345661.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+Since commit 6d6435811c19 ("remove bdi_congested() and wb_congested() and
+related functions"), there is no congested backing device check anymore.
+Correct the comment accordingly.
 
-Commit-ID:     101826e02ac6c829bf4e768295e79ae9c37b4b2a
-Gitweb:        https://git.kernel.org/tip/101826e02ac6c829bf4e768295e79ae9c37b4b2a
-Author:        Haowen Bai <baihaowen@meizu.com>
-AuthorDate:    Thu, 14 Apr 2022 18:04:17 +08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 14 Apr 2022 13:53:35 +02:00
-
-virt: sevguest: Fix bool function returning negative value
-
-The function enc_payload() is wrongly declared bool but returns an
-integer value. Correct it.
-
-  [ bp: Massage commit message. ]
-
-Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/1649930657-10837-1-git-send-email-baihaowen@meizu.com
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- drivers/virt/coco/sevguest/sevguest.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/vmscan.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
-index aaa6134..15f069e 100644
---- a/drivers/virt/coco/sevguest/sevguest.c
-+++ b/drivers/virt/coco/sevguest/sevguest.c
-@@ -276,7 +276,7 @@ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload, 
- 	return dec_payload(snp_dev, resp, payload, resp_hdr->msg_sz + crypto->a_len);
- }
- 
--static bool enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8 type,
-+static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8 type,
- 			void *payload, size_t sz)
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index d4a7d2bd276d..6f96cf1eacb2 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2334,8 +2334,7 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
+ /*
+  * If a kernel thread (such as nfsd for loop-back mounts) services
+  * a backing device by writing to the page cache it sets PF_LOCAL_THROTTLE.
+- * In that case we should only throttle if the backing device it is
+- * writing to is congested.  In other cases it is safe to throttle.
++ * In that case we should not throttle it otherwise it is safe to do so.
+  */
+ static int current_may_throttle(void)
  {
- 	struct snp_guest_msg *req = snp_dev->request;
+-- 
+2.23.0
+

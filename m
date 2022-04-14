@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76651500ACF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3915500AD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241657AbiDNKQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        id S242134AbiDNKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiDNKQz (ORCPT
+        with ESMTP id S242187AbiDNKSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:16:55 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF27529CB3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:14:30 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-89-UrdkE9YjP8-8PEFlhH3dQw-1; Thu, 14 Apr 2022 11:14:27 +0100
-X-MC-Unique: UrdkE9YjP8-8PEFlhH3dQw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 14 Apr 2022 11:14:27 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 14 Apr 2022 11:14:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Michael Straube' <straube.linux@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-CC:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: staging: r8188eu: struct rt_firmware_header issues
-Thread-Topic: staging: r8188eu: struct rt_firmware_header issues
-Thread-Index: AQHYT26f1QQqfyXJ/0OBQVPgTDvQ2KzvF5TggAAH14CAABIl4A==
-Date:   Thu, 14 Apr 2022 10:14:26 +0000
-Message-ID: <74ff67ec85e14e16bb2e9f57a4fccb17@AcuMS.aculab.com>
-References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
- <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
- <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
- <a40a2a1b-a8f1-e720-be92-48858d4f6678@gmail.com>
-In-Reply-To: <a40a2a1b-a8f1-e720-be92-48858d4f6678@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 14 Apr 2022 06:18:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08085468D;
+        Thu, 14 Apr 2022 03:15:42 -0700 (PDT)
+Received: from zn.tnic (p2e55d808.dip0.t-ipconnect.de [46.85.216.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2EF031EC05ED;
+        Thu, 14 Apr 2022 12:15:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649931337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tcvILpawoy/EPkGkLSEhvv0Kdz440+lEpC25Pt/VCcQ=;
+        b=BKlCWqNGE/Ep1cvt/qOcZSftYkpVpT+iOaYR+yPMnEQ2cHucqhZKpKdJv8W07gJQDPVYvY
+        Dr8UoJLd4dHuOT55Ag1YvyTF/N5fAIOfsrgpfRzbWwcDBRa3ipPH5RrN/IQk8hzgpR6BuV
+        4zWAZ+lq9tJFmmI4yxAiLuAR+/7If2o=
+Date:   Thu, 14 Apr 2022 12:15:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Medad Young <medadyoung@gmail.com>, rric@kernel.org,
+        James Morse <james.morse@arm.com>, tony.luck@intel.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH v6 3/3] EDAC: nuvoton: Add NPCM memory controller driver
+Message-ID: <Ylf0Sc7fqv25Ay05@zn.tnic>
+References: <20220322030152.19018-1-ctcchien@nuvoton.com>
+ <20220322030152.19018-4-ctcchien@nuvoton.com>
+ <a06441fc-85cf-9386-e362-4a90e855aa19@molgen.mpg.de>
+ <CAHpyw9fQVbS1Cpv0ULQc2=vK8LsG6n7tgP+J9AboUupDAPT27Q@mail.gmail.com>
+ <YlfeXVSkUC2B4xH2@zn.tnic>
+ <14d07709-07ef-21a8-ad74-0f56447cf6dd@molgen.mpg.de>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <14d07709-07ef-21a8-ad74-0f56447cf6dd@molgen.mpg.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,17 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWljaGFlbCBTdHJhdWJlDQo+IFNlbnQ6IDE0IEFwcmlsIDIwMjIgMTE6MDgNCj4gDQo+
-IE9uIDQvMTQvMjIgMTA6NDEsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBNaWNoYWVs
-IFN0cmF1YmUNCj4gPj4gU2VudDogMTMgQXByaWwgMjAyMiAyMDo0Mg0KPiA+Pg0KPiA+PiBPbiA0
-LzEzLzIyIDE4OjI3LCBNaWNoYWVsIFN0cmF1YmUgd3JvdGU6DQo+ID4+PiBIaSBhbGwsDQo+ID4+
-Pg0KPiA+Pj4gSSB0aGluayB0aGUgcnRfZmlybXdhcmVfaGRyIHN0cnVjdHVyZSBpbiBydHdfZncu
-YyBoYXMgc29tZSBpc3N1ZXMuDQo+ID4+Pg0KPiA+Pj4NCj4gPj4+IHN0cnVjdCBydF9maXJtd2Fy
-ZV9oZHIgew0KPiA+Pj4gICDCoMKgwqDCoC8qwqAgOC1ieXRlIGFsaW5tZW50IHJlcXVpcmVkICov
-DQo+ID4NCj4gPiBQcm9iYWJseSBuZWVkIGFuIF9fYWxpZ25lZCg4KSBhdCB0aGUgYm90dG9tIHRo
-ZW4/DQo+IA0KPiBJIGRvbid0IHNlZSBhbnkgcmVhc29uIHdoeSB0aGlzIGlzIG5lZWRlZC4gRG8g
-SSBtaXNzIHNvbWV0aGluZz8NCg0KRHVubm8sIHRoZSBjb21tZW50IG1pZ2h0IGJlIHdyb25nLg0K
-DQoJZGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQs
-IE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86
-IDEzOTczODYgKFdhbGVzKQ0K
+On Thu, Apr 14, 2022 at 10:56:43AM +0200, Paul Menzel wrote:
+> No idea, why you had to ask this question, while you statement before
+> already made the point.
 
+You've told Medad one thing. I told him the complete opposite. Medad as
+new submitter gets confused. And I don't want patch submitters to get
+confused by review.
+
+So, if you're unsure about a review feedback, don't give it pls.
+
+> Sorry I do not get your point. Would you elaborate on the debug message so
+> it’s more useful?
+
+Just think of the big picture: is my error message useful enough for
+debugging or would I have to go and add more info to it so that I can
+debug an issue?
+
+Example:
+
+There is
+
+	edac_dbg(3, "InterruptStatus : 0x%x\n", intr_status);
+
+now.
+
+Now, how about this?
+
+        edac_dbg(3, "dev: %s, id: %s: IRQ: %d, interrupt status: 0x%x\n",
+                 mci->dev_name, mci->ctl_name, irq, intr_status);
+
+Which one, do you think, is more helpful to a person trying to debug any
+potential issue with the interrupt handler and the ECCs it is supposed
+to issue?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

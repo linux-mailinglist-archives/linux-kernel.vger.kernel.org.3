@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D4D50147D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6C950164D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346122AbiDNNzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S1351517AbiDNOyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245377AbiDNN2x (ORCPT
+        with ESMTP id S1344958AbiDNNtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2A9AC077;
-        Thu, 14 Apr 2022 06:22:39 -0700 (PDT)
+        Thu, 14 Apr 2022 09:49:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34633A27ED;
+        Thu, 14 Apr 2022 06:44:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E27619FD;
-        Thu, 14 Apr 2022 13:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF9DC385A1;
-        Thu, 14 Apr 2022 13:22:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 311E6B82968;
+        Thu, 14 Apr 2022 13:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3B3C385A1;
+        Thu, 14 Apr 2022 13:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942558;
-        bh=4qYlqX1bEJoR3QcQAW1sTb116QDn2HpZAFF9pvsTW6g=;
+        s=korg; t=1649943837;
+        bh=IrqnNTvRac6zDFBz8lPZ519erod6BwbMDCIQfnHanu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eXZ7NaiTVX7nJ5LLQxSpZk0COjvPAl5VQLRcwmk1jTFxhP1ndiIa45mrrf6nJBxQd
-         Iy2VOitNxzNQL7DAzLigkmtjzg4uNMI/ZOdUjd/AvHXtuf6PhpM3TnbF/ZA4kKqlHe
-         H8BxkSly3B/syyx2OL2UifrXyLRXABGkN1xnEM0w=
+        b=bJIuWRzBz2+LzuQelwg1kgjJ4pmtjYLcNOAcJe+jysqSH0YG6yKYMkJ3v6DXKVqJs
+         GoVXMCyr8bWYCtFSUKWscULTnRTgWx5UQl7OM9mozYGypnpEVybfAfpri8Pyjxts0j
+         6iAPq8uNvMjkwMPgXqR8w5AIYzIUcT8NJdO1axLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Subject: [PATCH 4.19 179/338] jfs: fix divide error in dbNextAG
-Date:   Thu, 14 Apr 2022 15:11:22 +0200
-Message-Id: <20220414110843.993017879@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 298/475] ARM: ftrace: avoid redundant loads or clobbering IP
+Date:   Thu, 14 Apr 2022 15:11:23 +0200
+Message-Id: <20220414110903.434160288@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +55,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit 2cc7cc01c15f57d056318c33705647f87dcd4aab ]
+[ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
 
-Syzbot reported divide error in dbNextAG(). The problem was in missing
-validation check for malicious image.
+Tweak the ftrace return paths to avoid redundant loads of SP, as well as
+unnecessary clobbering of IP.
 
-Syzbot crafted an image with bmp->db_numag equal to 0. There wasn't any
-validation checks, but dbNextAG() blindly use bmp->db_numag in divide
-expression
+This also fixes the inconsistency of using MOV to perform a function
+return, which is sub-optimal on recent micro-architectures but more
+importantly, does not perform an interworking return, unlike compiler
+generated function returns in Thumb2 builds.
 
-Fix it by validating bmp->db_numag in dbMount() and return an error if
-image is malicious
+Let's fix this by popping PC from the stack like most ordinary code
+does.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jfs/jfs_dmap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/kernel/entry-ftrace.S | 51 +++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 29 deletions(-)
 
-diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
-index 687b07b9b4f6..f05805a10a50 100644
---- a/fs/jfs/jfs_dmap.c
-+++ b/fs/jfs/jfs_dmap.c
-@@ -161,6 +161,7 @@ static const s8 budtab[256] = {
-  *	0	- success
-  *	-ENOMEM	- insufficient memory
-  *	-EIO	- i/o error
-+ *	-EINVAL - wrong bmap data
-  */
- int dbMount(struct inode *ipbmap)
- {
-@@ -192,6 +193,12 @@ int dbMount(struct inode *ipbmap)
- 	bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
- 	bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
- 	bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
-+	if (!bmp->db_numag) {
-+		release_metapage(mp);
-+		kfree(bmp);
-+		return -EINVAL;
-+	}
-+
- 	bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
- 	bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
- 	bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index f4886fb6e9ba..f33c171e3090 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -22,10 +22,7 @@
+  * mcount can be thought of as a function called in the middle of a subroutine
+  * call.  As such, it needs to be transparent for both the caller and the
+  * callee: the original lr needs to be restored when leaving mcount, and no
+- * registers should be clobbered.  (In the __gnu_mcount_nc implementation, we
+- * clobber the ip register.  This is OK because the ARM calling convention
+- * allows it to be clobbered in subroutines and doesn't use it to hold
+- * parameters.)
++ * registers should be clobbered.
+  *
+  * When using dynamic ftrace, we patch out the mcount call by a "pop {lr}"
+  * instead of the __gnu_mcount_nc call (see arch/arm/kernel/ftrace.c).
+@@ -70,26 +67,25 @@
+ 
+ .macro __ftrace_regs_caller
+ 
+-	sub	sp, sp, #8	@ space for PC and CPSR OLD_R0,
++	str	lr, [sp, #-8]!	@ store LR as PC and make space for CPSR/OLD_R0,
+ 				@ OLD_R0 will overwrite previous LR
+ 
+-	add 	ip, sp, #12	@ move in IP the value of SP as it was
+-				@ before the push {lr} of the mcount mechanism
++	ldr	lr, [sp, #8]    @ get previous LR
+ 
+-	str     lr, [sp, #0]    @ store LR instead of PC
++	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
+ 
+-	ldr     lr, [sp, #8]    @ get previous LR
++	str	lr, [sp, #-4]!	@ store previous LR as LR
+ 
+-	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
++	add 	lr, sp, #16	@ move in LR the value of SP as it was
++				@ before the push {lr} of the mcount mechanism
+ 
+-	stmdb   sp!, {ip, lr}
+-	stmdb   sp!, {r0-r11, lr}
++	push	{r0-r11, ip, lr}
+ 
+ 	@ stack content at this point:
+ 	@ 0  4          48   52       56            60   64    68       72
+-	@ R0 | R1 | ... | LR | SP + 4 | previous LR | LR | PSR | OLD_R0 |
++	@ R0 | R1 | ... | IP | SP + 4 | previous LR | LR | PSR | OLD_R0 |
+ 
+-	mov r3, sp				@ struct pt_regs*
++	mov	r3, sp				@ struct pt_regs*
+ 
+ 	ldr r2, =function_trace_op
+ 	ldr r2, [r2]				@ pointer to the current
+@@ -112,11 +108,9 @@ ftrace_graph_regs_call:
+ #endif
+ 
+ 	@ pop saved regs
+-	ldmia   sp!, {r0-r12}			@ restore r0 through r12
+-	ldr	ip, [sp, #8]			@ restore PC
+-	ldr	lr, [sp, #4]			@ restore LR
+-	ldr	sp, [sp, #0]			@ restore SP
+-	mov	pc, ip				@ return
++	pop	{r0-r11, ip, lr}		@ restore r0 through r12
++	ldr	lr, [sp], #4			@ restore LR
++	ldr	pc, [sp], #12
+ .endm
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+@@ -132,11 +126,9 @@ ftrace_graph_regs_call:
+ 	bl	prepare_ftrace_return
+ 
+ 	@ pop registers saved in ftrace_regs_caller
+-	ldmia   sp!, {r0-r12}			@ restore r0 through r12
+-	ldr	ip, [sp, #8]			@ restore PC
+-	ldr	lr, [sp, #4]			@ restore LR
+-	ldr	sp, [sp, #0]			@ restore SP
+-	mov	pc, ip				@ return
++	pop	{r0-r11, ip, lr}		@ restore r0 through r12
++	ldr	lr, [sp], #4			@ restore LR
++	ldr	pc, [sp], #12
+ 
+ .endm
+ #endif
+@@ -202,16 +194,17 @@ ftrace_graph_call\suffix:
+ .endm
+ 
+ .macro mcount_exit
+-	ldmia	sp!, {r0-r3, ip, lr}
+-	ret	ip
++	ldmia	sp!, {r0-r3}
++	ldr	lr, [sp, #4]
++	ldr	pc, [sp], #8
+ .endm
+ 
+ ENTRY(__gnu_mcount_nc)
+ UNWIND(.fnstart)
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-	mov	ip, lr
+-	ldmia	sp!, {lr}
+-	ret	ip
++	push	{lr}
++	ldr	lr, [sp, #4]
++	ldr	pc, [sp], #8
+ #else
+ 	__mcount
+ #endif
 -- 
 2.34.1
 

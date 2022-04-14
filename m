@@ -2,68 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03711501CBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A11C501CDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346622AbiDNUjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S1345799AbiDNUoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346591AbiDNUjO (ORCPT
+        with ESMTP id S233181AbiDNUoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:39:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519DDEBAEF;
-        Thu, 14 Apr 2022 13:36:49 -0700 (PDT)
-Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id F2EC81F47C45;
-        Thu, 14 Apr 2022 21:36:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649968607;
-        bh=VfaurAVI7LZtAhAcgIpQXDillMyA92sOQIKlcYKX+w4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bIERMUkxsVha2sBJx7p8apAZ+RcVL3xbBogV2XP9xXlxw7Vao/SANm2Y0aUh4VQGh
-         x1eQfNEmKG6bVzf1Hv8Wtn1um3zNg9moE178/DgdiKzPP6u1116FY5uSyWeK6/jQux
-         ylvH8cmoWq5p8k7NDAGeEOjFHbD9naoyPGjorRenFxd6Dfwm1xaM4xdrpSKM14d9yC
-         ME4uVjrAQ5L5Gtcqt6uXBi9crVZBsYDHpOQM9ErucaoWqhijlecSLlHYDBCmV6jTvj
-         nXCCuGwEQxpqz7mSZopDF0v7FVEnfKgMc0H1lafJzpgPEB/LD9L8+VPZAb/i+OzmXA
-         WaaTqFHBpqIXw==
-Message-ID: <cc6744bc-5e31-3492-1cee-c23e5a60f4f7@collabora.com>
-Date:   Thu, 14 Apr 2022 23:36:44 +0300
+        Thu, 14 Apr 2022 16:44:08 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E83C4AE;
+        Thu, 14 Apr 2022 13:41:41 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id q129so6665555oif.4;
+        Thu, 14 Apr 2022 13:41:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kQ16bevC74v8j9hP5RJfq+tF3CIcALFbt9dd1uaIG9E=;
+        b=YXgvlrNFGYGLG+dW08HZ+Cs2iibvqp3tWcN5b5UrqhC6YCANqXNPVVtnfIbsuhryy9
+         HxqZ9XkM8ITFRB0DvKuYGq4yITN9Jka54M+33mqkEssU2E/w7Hew1MQhvpbuDGTWTf1V
+         wprph6WfZkMm5MmxT3zHCjdPppr3aWKuWMbEeQ8GeQKHZZA3E5QCS8zMU1A30ImMagp1
+         UCZKrthXLAkly5dVR/crW6JNAQEuOR3IvV6BFjPiKsvepgbv9CS5iH22u3q3C0SbwBhn
+         PU7hkelie7a2NkvQrxdojbhr5JGz/QrSgPKHxAsayag+BWxOpiaqExouGSWbNtA7kqEl
+         XY5g==
+X-Gm-Message-State: AOAM532vIQBPoSs6L+u8tjZwW8RIyTefqMvXwI1VJKwu1yOcP21Hmt1f
+        IwPiMD3hKaSCLgLCLTm3ng==
+X-Google-Smtp-Source: ABdhPJwC/Cf4MTxpznrthxydqEHpaVveVGXAK2ei0no2VM/vDG7BZn3PRSgiAWYQ1YAehWtlLvX6JQ==
+X-Received: by 2002:a05:6808:1a1c:b0:2fa:6c17:5c07 with SMTP id bk28-20020a0568081a1c00b002fa6c175c07mr210417oib.80.1649968900860;
+        Thu, 14 Apr 2022 13:41:40 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id lw19-20020a0568708e1300b000e2f7602666sm1038088oab.15.2022.04.14.13.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 13:41:40 -0700 (PDT)
+Received: (nullmailer pid 2666253 invoked by uid 1000);
+        Thu, 14 Apr 2022 20:41:38 -0000
+Date:   Thu, 14 Apr 2022 15:41:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 01/11] timekeeping: add raw clock fallback for
+ random_get_entropy()
+Message-ID: <YliHAl0XpQ57FSGy@robh.at.kernel.org>
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-2-Jason@zx2c4.com>
+ <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com>
+ <CAHmME9pn++c0qHzq39YWyXogcKRbn2XK=yA3kFqch0wH7qPcAg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v7 2/4] memory: tegra: Add MC error logging on tegra186
- onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, digetx@gmail.com,
-        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220413094012.13589-1-amhetre@nvidia.com>
- <20220413094012.13589-3-amhetre@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220413094012.13589-3-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9pn++c0qHzq39YWyXogcKRbn2XK=yA3kFqch0wH7qPcAg@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 14, 2022 at 12:38:49AM +0200, Jason A. Donenfeld wrote:
+> Hi Rob,
+> 
+> On Wed, Apr 13, 2022 at 4:32 PM Rob Herring <robh@kernel.org> wrote:
+> > 'does not have a usable get_cycles(), ...' as clearly some arches have
+> > get_cycles() and yet still need a fallback.
+> >
+> > Why not handle the 'if get_cycles() returns 0 do the fallback' within
+> > a weak random_get_entropy() function? Then more arches don't need any
+> > random_get_entropy() implementation.
+> 
+> No, this doesn't really work. Actually, most archs don't need a
+> random_get_entropy() function, because it exists in asm-generic doing
+> the thing we want. So that's taken care of. But weak functions as you
+> suggested would be quite suboptimal, because on, e.g. x86, what we
+> have now gets inlined into a single rdtsc instruction. Also, the
+> relation between get_cycles() and random_get_entropy() doesn't always
+> hold; some archs may not have a working get_cycles() function but do
+> have a path for a random_get_entropy(). Etc, etc. So I'm pretty sure
+> that this commit is really the most simple and optimal thing to do. I
+> really don't want to go the weak functions route.
 
-On 4/13/22 12:40, Ashish Mhetre wrote:
-> +static int global_intstatus_to_channel(const struct tegra_mc *mc, u32 status,
-> +				       unsigned int *mc_channel)
+Is random_get_entropy() a hot path?
 
-Add "mc_" prefix
+
+It doesn't have to be a weak function, but look at it this way. We have 
+the following possibilities for what random_get_entropy() does:
+
+- get_cycles()
+- get_cycles() but returns 0 sometimes
+- returns 0
+- something else
+
+You're handling the 3rd case.
+
+For the 2nd case, that's riscv, arm, nios2, and x86. That's not a lot, 
+but is 2 or 3 of the most widely used architectures. Is it really too 
+much to ask to support the 2nd case in the generic code/header?
+
+Rob

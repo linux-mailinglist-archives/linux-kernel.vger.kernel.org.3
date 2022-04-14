@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10661501608
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19CD5014B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbiDNOrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S245491AbiDNNii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345103AbiDNNpI (ORCPT
+        with ESMTP id S244701AbiDNN2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750E29D4C6;
-        Thu, 14 Apr 2022 06:42:00 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B4EA27E8;
+        Thu, 14 Apr 2022 06:20:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2664BB828F4;
-        Thu, 14 Apr 2022 13:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ACB0C385A5;
-        Thu, 14 Apr 2022 13:41:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E9561670;
+        Thu, 14 Apr 2022 13:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABA0C385A5;
+        Thu, 14 Apr 2022 13:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943717;
-        bh=H3Dt4cJJwR/zpCWMq7h5pmwL4k+5EyFj/mhPC5rRNJU=;
+        s=korg; t=1649942446;
+        bh=iNvgSVgt3pJsi4RUJjwFI3DWHwekNw9Wj2oqLngQwAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0T6GTAJn44Pb9xY9d1D/nldgd3/dzSjwhUtwuBEUqAsT830zdIOtsUutfA0Lwto3J
-         ZWO2EiMB/Q3iTmEBRSm+KMMmedyl77Jw46PyFafCXfGQK4bXgRiMuOTEnfTMklbGrx
-         nxrAIaY8wlx5m7Vn5P+g8lXO4CStxYKKgq/3pfAQ=
+        b=A/xg6L43caJAcSl25NswzvMjYBQkY4DHWgTpv39iW7lm9LwEqS+9tfVoHJwAHDh5Z
+         CSuxd3+wjKd74RDMh6vzAE5jCM9IilgLBE1DiBymYE/6BRbCMP6JJKSydikq7ZOWeL
+         E2p2uBmgWm29eB2mRsnZzEwwiZpt/dvOxQ/MIMi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jingoo Han <jg1.han@samsung.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 255/475] tty: hvc: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:10:40 +0200
-Message-Id: <20220414110902.246799352@linuxfoundation.org>
+Subject: [PATCH 4.19 138/338] powerpc/Makefile: Dont pass -mcpu=powerpc64 when building 32-bit
+Date:   Thu, 14 Apr 2022 15:10:41 +0200
+Message-Id: <20220414110842.834302491@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,47 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit 53819a0d97aace1425bb042829e3446952a9e8a9 ]
+[ Upstream commit 2863dd2db23e0407f6c50b8ba5c0e55abef894f1 ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled or 0 to indicate that it was not handled.
-Add a pr_warn() message if the option value is invalid and then
-always return 1.
+When CONFIG_GENERIC_CPU=y (true for all our defconfigs) we pass
+-mcpu=powerpc64 to the compiler, even when we're building a 32-bit
+kernel.
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 86b40567b917 ("tty: replace strict_strtoul() with kstrtoul()")
-Cc: Jingoo Han <jg1.han@samsung.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Julian Wiedmann <jwi@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308024228.20477-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This happens because we have an ifdef CONFIG_PPC_BOOK3S_64/else block in
+the Makefile that was written before 32-bit supported GENERIC_CPU. Prior
+to that the else block only applied to 64-bit Book3E.
+
+The GCC man page says -mcpu=powerpc64 "[specifies] a pure ... 64-bit big
+endian PowerPC ... architecture machine [type], with an appropriate,
+generic processor model assumed for scheduling purposes."
+
+It's unclear how that interacts with -m32, which we are also passing,
+although obviously -m32 is taking precedence in some sense, as the
+32-bit kernel only contains 32-bit instructions.
+
+This was noticed by inspection, not via any bug reports, but it does
+affect code generation. Comparing before/after code generation, there
+are some changes to instruction scheduling, and the after case (with
+-mcpu=powerpc64 removed) the compiler seems more keen to use r8.
+
+Fix it by making the else case only apply to Book3E 64, which excludes
+32-bit.
+
+Fixes: 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220215112858.304779-1-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/hvc/hvc_iucv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
-index 2af1e5751bd6..796fbff623f6 100644
---- a/drivers/tty/hvc/hvc_iucv.c
-+++ b/drivers/tty/hvc/hvc_iucv.c
-@@ -1470,7 +1470,9 @@ static int __init hvc_iucv_init(void)
-  */
- static	int __init hvc_iucv_config(char *val)
- {
--	 return kstrtoul(val, 10, &hvc_iucv_devices);
-+	if (kstrtoul(val, 10, &hvc_iucv_devices))
-+		pr_warn("hvc_iucv= invalid parameter value '%s'\n", val);
-+	return 1;
- }
- 
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index f51e21ea5349..26654d0c2af7 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -167,7 +167,7 @@ else
+ CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power7,$(call cc-option,-mtune=power5))
+ CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mcpu=power5,-mcpu=power4)
+ endif
+-else
++else ifdef CONFIG_PPC_BOOK3E_64
+ CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=powerpc64
+ endif
  
 -- 
 2.34.1

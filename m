@@ -2,158 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE82501931
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22667501936
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240354AbiDNQy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S239716AbiDNQzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238855AbiDNQyY (ORCPT
+        with ESMTP id S241993AbiDNQys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:54:24 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CEA13E432
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:23:41 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id x10-20020a170902ec8a00b001585af19391so2951845plg.15
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=lkcJCQOlm2DvsqWy2MKlxrSAJLim0ircZ4vwjXzXvbI=;
-        b=hCNy1KMQ7JjgZ4WuXbtrx/T51qoLvLajJzC1K/yHLNkvWw+lwem1UlEPaV8SYkj2Wl
-         ue/t0zAxe1uZM6XPv3QKIZkxQ0XeyRpHYHntGv2shl/x1ICJg1sBwkUjsVYriWi/LJId
-         GRzCydsD7povLWp7OEltVgQlkd1Q5zerPmfNsrVXZPPIzBKp4bdrJveOHaiVy4li0UCn
-         24OMzn3f8dIXFJ0v6SfCZTIBfjN2OxiC0vrue2s4FJDSisbZ5EjNSTgZVQPYuRK3FYoG
-         7C6296YKureshdeoM02PEvVM/mABL8bjzFcY1LHQB87vRlVNfeVsliuE2PyvacRWO1QU
-         +B1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=lkcJCQOlm2DvsqWy2MKlxrSAJLim0ircZ4vwjXzXvbI=;
-        b=KuppDDGp7hTR416PgRcvW4tdvaO66brdPBj4kQcC9u9zrGJtgLpeYeOWHA7UXVjuPv
-         YcMnvYQZeOnW8FDhDC7EXXNU3sOHiLjAr+wwgTDtgsXNEssUx+a8GzwaBuCXkTpS8Vr9
-         Gx10LcZAXdY3GhSHaUpjkRioeb4NWB/i6YhOxjt1omWa7GJq0RYAjbFmMiUoa2TM2eyl
-         WqQUnW4tVzj6rWtjviH312OzkjBOXHp8Efk7l5PIzpCAnxmTarzGkv5HFsq2LHDAaXLA
-         q+WIqOa5L2wrGwq3HgHBik3Oqdwz7F3CaRU41W4ATLLHl7sUJFKB/Q3xp6iirRW0mXzn
-         Omng==
-X-Gm-Message-State: AOAM530TzmSRpzYzz746+s74yidqHYXCOWVeUtI/RxOs4vT+Jq4C/rJ/
-        WEbL6fdpgdgu2QPKaiOyJbOFTJJ3R5U=
-X-Google-Smtp-Source: ABdhPJx0wBN0movEBXl1rplnG+T/dJFn5xqS9a+dvsi2cDVnCxfhNdrOb/0tuqQOtQRGmEEN5zN+Psvj0/zO
-X-Received: from jackyli.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3b51])
- (user=jackyli job=sendgmr) by 2002:a17:90b:3613:b0:1cb:66f4:fcad with SMTP id
- ml19-20020a17090b361300b001cb66f4fcadmr5104050pjb.82.1649953420652; Thu, 14
- Apr 2022 09:23:40 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 16:23:25 +0000
-Message-Id: <20220414162325.1830014-1-jackyli@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH v2] crypto: ccp - Fix the INIT_EX data file open failure
-From:   Jacky Li <jackyli@google.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
-        Peter Gonda <pgonda@google.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jacky Li <jackyli@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 12:54:48 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19461DCAAA;
+        Thu, 14 Apr 2022 09:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wc0zecBG9PRD3cpgt/xufo/bM6yKJdx0qFwKfforMTI=; b=v+po431oSVmhIPMHliuQ5LKFxp
+        RNgGgiGdeoNsm2jcbw5ecs6cEh4G8JXDMzu/LX4V6XF8hcl6iddFIGYPhBY6WVdzHBWswq1x6s2l4
+        oY4jkNMljzszrvkALkBiPzD+mf4CyQNA6NQ/5i/YmzoQDGQ01+vhcdIP32GHnrXS8Ecseb3c5LI24
+        ZDzVJGs3r1HFLUhQ87odSw4fko9zJLSfNtNTpwD5kR8lpuzJCKAiWaNvxkUEcp2JPWr+yZ7Qb7QJc
+        XIGyVCzX7xEuyX3hjfjB+EFpxXwt9UdRYM42ws/yiWHCMIPniDuxxyb7cMmmXbfOvplg9g0gisXEL
+        KAJTSZnQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58264)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nf2G5-0004lu-6D; Thu, 14 Apr 2022 17:23:48 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nf2G2-0004RX-HE; Thu, 14 Apr 2022 17:23:46 +0100
+Date:   Thu, 14 Apr 2022 17:23:46 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 02/12] net: dsa: add Renesas RZ/N1 switch tag
+ driver
+Message-ID: <YlhKkriHziPsWBCV@shell.armlinux.org.uk>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+ <20220414122250.158113-3-clement.leger@bootlin.com>
+ <20220414142242.vsvv3vxexc7i3ukm@skbuf>
+ <20220414163546.3f6c5157@fixe.home>
+ <20220414151146.a2fncklswo6utiyd@skbuf>
+ <20220414181815.5037651e@fixe.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414181815.5037651e@fixe.home>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 2 common cases when INIT_EX data file might not be
-opened successfully and fail the sev initialization:
+On Thu, Apr 14, 2022 at 06:18:15PM +0200, Clément Léger wrote:
+> Le Thu, 14 Apr 2022 18:11:46 +0300,
+> Vladimir Oltean <olteanv@gmail.com> a écrit :
+> 
+> > On Thu, Apr 14, 2022 at 04:35:46PM +0200, Clément Léger wrote:
+> > > > Please keep variable declarations sorted in decreasing order of line
+> > > > length (applies throughout the patch series, I won't repeat this comment).  
+> > > 
+> > > Acked, both PCS and DSA driver are ok with that rule. Missed that one
+> > > though.  
+> > 
+> > Are you sure? Because a5psw_port_stp_state_set() says otherwise.
+> 
+> Weeeeell, ok let's say I missed these two. Would be useful to have such
+> checks in checkpatch.pl.
 
-1. In user namespaces, normal user tasks (e.g. VMM) can change their
-   current->fs->root to point to arbitrary directories. While
-   init_ex_path is provided as a module param related to root file
-   system. Solution: use the root directory of init_task to avoid
-   accessing the wrong file.
+Note that it's a local networking coding-style issue, rather than being
+kernel-wide.
 
-2. Normal user tasks (e.g. VMM) don't have the privilege to access
-   the INIT_EX data file. Solution: open the file as root and
-   restore permissions immediately.
-
-Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-Signed-off-by: Jacky Li <jackyli@google.com>
-Reviewed-by: Peter Gonda <pgonda@google.com>
----
-Changelog since v1:
-- Added Fixes tag and Reviewed-By tag.
-
- drivers/crypto/ccp/sev-dev.c | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 6ab93dfd478a..3aefb177715e 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -23,6 +23,7 @@
- #include <linux/gfp.h>
- #include <linux/cpufeature.h>
- #include <linux/fs.h>
-+#include <linux/fs_struct.h>
- 
- #include <asm/smp.h>
- 
-@@ -170,6 +171,31 @@ static void *sev_fw_alloc(unsigned long len)
- 	return page_address(page);
- }
- 
-+static struct file *open_file_as_root(const char *filename, int flags, umode_t mode)
-+{
-+	struct file *fp;
-+	struct path root;
-+	struct cred *cred;
-+	const struct cred *old_cred;
-+
-+	task_lock(&init_task);
-+	get_fs_root(init_task.fs, &root);
-+	task_unlock(&init_task);
-+
-+	cred = prepare_creds();
-+	if (!cred)
-+		return ERR_PTR(-ENOMEM);
-+	cred->fsuid = GLOBAL_ROOT_UID;
-+	old_cred = override_creds(cred);
-+
-+	fp = file_open_root(&root, filename, flags, mode);
-+	path_put(&root);
-+
-+	revert_creds(old_cred);
-+
-+	return fp;
-+}
-+
- static int sev_read_init_ex_file(void)
- {
- 	struct sev_device *sev = psp_master->sev_data;
-@@ -181,7 +207,7 @@ static int sev_read_init_ex_file(void)
- 	if (!sev_init_ex_buffer)
- 		return -EOPNOTSUPP;
- 
--	fp = filp_open(init_ex_path, O_RDONLY, 0);
-+	fp = open_file_as_root(init_ex_path, O_RDONLY, 0);
- 	if (IS_ERR(fp)) {
- 		int ret = PTR_ERR(fp);
- 
-@@ -217,7 +243,7 @@ static void sev_write_init_ex_file(void)
- 	if (!sev_init_ex_buffer)
- 		return;
- 
--	fp = filp_open(init_ex_path, O_CREAT | O_WRONLY, 0600);
-+	fp = open_file_as_root(init_ex_path, O_CREAT | O_WRONLY, 0600);
- 	if (IS_ERR(fp)) {
- 		dev_err(sev->dev,
- 			"SEV: could not open file for write, error %ld\n",
 -- 
-2.36.0.rc0.470.gd361397f0d-goog
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

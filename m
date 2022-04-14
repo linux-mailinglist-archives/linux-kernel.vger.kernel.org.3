@@ -2,130 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4095008FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0568550090F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241293AbiDNI76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S240665AbiDNJB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241273AbiDNI7n (ORCPT
+        with ESMTP id S241439AbiDNJBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:59:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15B75689B5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:57:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A86CD139F;
-        Thu, 14 Apr 2022 01:57:18 -0700 (PDT)
-Received: from [10.32.36.25] (e121896.Emea.Arm.com [10.32.36.25])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F3203F5A1;
-        Thu, 14 Apr 2022 01:57:17 -0700 (PDT)
-Message-ID: <b3e647de-8efd-4db2-a910-77e37b026ae7@arm.com>
-Date:   Thu, 14 Apr 2022 09:57:15 +0100
+        Thu, 14 Apr 2022 05:01:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA26D38B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:53 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s8so4257618pfk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6hxL75KFeP2qi1GRuhGW4keQJz0+ExPc+GiFqWwmOVw=;
+        b=KXURwW+dd0r1EwDdcia61oDDeDZOkH2JDLvuDit1QPWsQbh8zV5QqtL8HcPxiPPOp1
+         6kgJavCCKYQ50eZESfleZyqDHMC1P8+g/MXDcGxE45Ty9PtJ2wQD//Oq5ySu3YsSiw4O
+         lVWCkof3OXtnMscc9ZirN2sv7RjxChA6QIkKPh68hAI2TZZKP4KHuPANhQJUo5cfdb8K
+         R79jVwVnqhhtn1UQWI7PW1rbEmTkeLFKGsWk3cSmQ+PUDP1N4jlogGHn+a/2TVm59UOc
+         UjmPdALdxv0sZrq//TMSeSaVmonLCInzEK381vKQfmqIQX+M7mHnI40z2tdyY59jGZ0k
+         vmIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6hxL75KFeP2qi1GRuhGW4keQJz0+ExPc+GiFqWwmOVw=;
+        b=POuQX/AtVFa5wZp3a+Z01K9It38AI+aTGE3lrgMimvRQ9NILiStQiRKcTlzaLFPy53
+         nXbIpY6GLE5gkOIK17VJ3/D3ZfJjcFLfIrjRngCrKI2yn8iNHz4uVDgQ2oY2wb+h8Uvf
+         lxVifmz68YNnjgJba8cVED0cNQH3xWrRuypahnwvn97hotIrDDrP51Nm1jGIbsh/t9AU
+         88k1yPCE1FM2Y5UIJNkP8OZ2aKRp01PYRzYk2XpbJGXp1CIa+ut5n8/oGgdqHUssPcxw
+         4e1E3rwLnI6WbypYGE0BdbwlbmIZm1wx3JkUE0v3i2T8UbuxqwZXDfgnREMxHSwC+EgZ
+         sDSA==
+X-Gm-Message-State: AOAM533s+DIQEfqbPQa4meota92eISxoSql0AFTxSHjNwpOz4qo6y+6Y
+        SQ/eSq2TZ0k/o05TEpqxrkc=
+X-Google-Smtp-Source: ABdhPJyXSchgrJoVMijeZDC4c/X4LGGEpbmRQ/w4nF5EeMTTozyFoFqFsK3/RsNvjtnq5YSI+P5HOQ==
+X-Received: by 2002:a63:3d0b:0:b0:37f:ef34:1431 with SMTP id k11-20020a633d0b000000b0037fef341431mr1424935pga.547.1649926733078;
+        Thu, 14 Apr 2022 01:58:53 -0700 (PDT)
+Received: from hyeyoo.. ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.58.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:58:51 -0700 (PDT)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 12/23] mm/slab_common: cleanup kmalloc()
+Date:   Thu, 14 Apr 2022 17:57:16 +0900
+Message-Id: <20220414085727.643099-13-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 00/15] Make ETM register accesses consistent with
- sysreg.h
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        mike.leach@linaro.org, anshuman.khandual@arm.com,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220304171913.2292458-1-james.clark@arm.com>
- <20220323162257.GC3248686@p14s>
- <4ef77445-b58d-a71a-0ddc-70e308ea99c8@arm.com> <20220413170844.GA547134@p14s>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220413170844.GA547134@p14s>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now that kmalloc() and kmalloc_node() do same job, make kmalloc()
+wrapper of kmalloc_node().
 
+Remove kmem_cache_alloc_trace() that is now unused.
 
-On 13/04/2022 18:08, Mathieu Poirier wrote:
-> On Mon, Mar 28, 2022 at 11:41:48AM +0100, James Clark wrote:
->>
->>
->> On 23/03/2022 16:22, Mathieu Poirier wrote:
->>> On Fri, Mar 04, 2022 at 05:18:57PM +0000, James Clark wrote:
->>>> Changes since v2:
->>>>  * Implement Mike's suggestion of not having _SHIFT and using the existing
->>>>    FIELD_GET and FIELD_PREP methods.
->>>>  * Dropped the change to add the new REG_VAL macro because of the above.
->>>>  * FIELD_PREP could be used in some trivial cases, but in some cases the
->>>>    shift is still required but can be calculated with __bf_shf
->>>>  * Improved the commit messages.
->>>>  * The change is still binary equivalent, but requires an extra step 
->>>>    mentioned at the end of this cover letter.
->>>>
->>>> Applies to coresight/next 3619ee28488
->>>> Also available at https://gitlab.arm.com/linux-arm/linux-jc/-/tree/james-cs-register-refactor-v3
->>>>
->>>> To check for binary equivalence follow the same steps in the cover letter
->>>> of v2, but apply the following change to coresight-priv.h. This is because
->>>> the existing version of the macros wrap the expression in a new scope {}
->>>> that flips something in the compiler:
->>>>
->>>>   #undef FIELD_GET
->>>>   #define FIELD_GET(_mask, _reg) (((_reg) & (_mask)) >> __bf_shf(_mask))
->>>>   #undef FIELD_PREP
->>>>   #define FIELD_PREP(_mask, _val) (((_val) << __bf_shf(_mask)) & (_mask))
->>>>
->>>> Thanks
->>>> James
->>>>
->>>> James Clark (15):
->>>>   coresight: etm4x: Cleanup TRCIDR0 register accesses
->>>>   coresight: etm4x: Cleanup TRCIDR2 register accesses
->>>>   coresight: etm4x: Cleanup TRCIDR3 register accesses
->>>>   coresight: etm4x: Cleanup TRCIDR4 register accesses
->>>>   coresight: etm4x: Cleanup TRCIDR5 register accesses
->>>>   coresight: etm4x: Cleanup TRCCONFIGR register accesses
->>>>   coresight: etm4x: Cleanup TRCEVENTCTL1R register accesses
->>>>   coresight: etm4x: Cleanup TRCSTALLCTLR register accesses
->>>>   coresight: etm4x: Cleanup TRCVICTLR register accesses
->>>>   coresight: etm3x: Cleanup ETMTECR1 register accesses
->>>>   coresight: etm4x: Cleanup TRCACATRn register accesses
->>>>   coresight: etm4x: Cleanup TRCSSCCRn and TRCSSCSRn register accesses
->>>>   coresight: etm4x: Cleanup TRCSSPCICRn register accesses
->>>>   coresight: etm4x: Cleanup TRCBBCTLR register accesses
->>>>   coresight: etm4x: Cleanup TRCRSCTLRn register accesses
->>>>
->>>>  .../coresight/coresight-etm3x-core.c          |   2 +-
->>>>  .../coresight/coresight-etm3x-sysfs.c         |   2 +-
->>>>  .../coresight/coresight-etm4x-core.c          | 136 +++++--------
->>>>  .../coresight/coresight-etm4x-sysfs.c         | 180 +++++++++---------
->>>>  drivers/hwtracing/coresight/coresight-etm4x.h | 122 ++++++++++--
->>>>  5 files changed, 244 insertions(+), 198 deletions(-)
->>>
->>> I am done reviewing this set.  I will wait until rc1 or rc2 before moving
->>> forward.  If there are other comments needing a respin then I will wait for the
->>> next revision.  Otherwise I will apply this one after correcting the extra lines
->>> at the end of patch 15.
->>>  
->>
->> Thanks for the review!
->>
-> 
-> I have applied this set.
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ include/linux/slab.h | 93 +++++++++++++++-----------------------------
+ mm/slab.c            | 16 --------
+ mm/slub.c            | 12 ------
+ 3 files changed, 32 insertions(+), 89 deletions(-)
 
-Thanks Mathieu
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index eb457f20f415..ea168f8a248d 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -497,23 +497,10 @@ static __always_inline void kfree_bulk(size_t size, void **p)
+ }
+ 
+ #ifdef CONFIG_TRACING
+-extern void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
+-				   __assume_slab_alignment __alloc_size(3);
+-
+ extern void *kmem_cache_alloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+ 					 int node, size_t size) __assume_slab_alignment
+ 								__alloc_size(4);
+-
+ #else /* CONFIG_TRACING */
+-static __always_inline __alloc_size(3) void *kmem_cache_alloc_trace(struct kmem_cache *s,
+-								    gfp_t flags, size_t size)
+-{
+-	void *ret = kmem_cache_alloc(s, flags);
+-
+-	ret = kasan_kmalloc(s, ret, size, flags);
+-	return ret;
+-}
+-
+ static __always_inline void *kmem_cache_alloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+ 							 int node, size_t size)
+ {
+@@ -532,6 +519,37 @@ static __always_inline void *kmalloc_large(size_t size, gfp_t flags)
+ 	return kmalloc_large_node(size, flags, NUMA_NO_NODE);
+ }
+ 
++#ifndef CONFIG_SLOB
++static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
++{
++	if (__builtin_constant_p(size)) {
++		unsigned int index;
++
++		if (size > KMALLOC_MAX_CACHE_SIZE)
++			return kmalloc_large_node(size, flags, node);
++
++		index = kmalloc_index(size);
++
++		if (!index)
++			return ZERO_SIZE_PTR;
++
++		return kmem_cache_alloc_node_trace(
++				kmalloc_caches[kmalloc_type(flags)][index],
++						flags, node, size);
++	}
++	return __kmalloc_node(size, flags, node);
++}
++#else
++static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
++{
++	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
++		return kmalloc_large_node(size, flags, node);
++
++	return __kmalloc_node(size, flags, node);
++}
++#endif
++
++
+ /**
+  * kmalloc - allocate memory
+  * @size: how many bytes of memory are required.
+@@ -588,55 +606,8 @@ static __always_inline void *kmalloc_large(size_t size, gfp_t flags)
+  */
+ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
+ {
+-	if (__builtin_constant_p(size)) {
+-#ifndef CONFIG_SLOB
+-		unsigned int index;
+-#endif
+-		if (size > KMALLOC_MAX_CACHE_SIZE)
+-			return kmalloc_large(size, flags);
+-#ifndef CONFIG_SLOB
+-		index = kmalloc_index(size);
+-
+-		if (!index)
+-			return ZERO_SIZE_PTR;
+-
+-		return kmem_cache_alloc_trace(
+-				kmalloc_caches[kmalloc_type(flags)][index],
+-				flags, size);
+-#endif
+-	}
+-	return __kmalloc(size, flags);
+-}
+-
+-#ifndef CONFIG_SLOB
+-static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	if (__builtin_constant_p(size)) {
+-		unsigned int index;
+-
+-		if (size > KMALLOC_MAX_CACHE_SIZE)
+-			return kmalloc_large_node(size, flags, node);
+-
+-		index = kmalloc_index(size);
+-
+-		if (!index)
+-			return ZERO_SIZE_PTR;
+-
+-		return kmem_cache_alloc_node_trace(
+-				kmalloc_caches[kmalloc_type(flags)][index],
+-						flags, node, size);
+-	}
+-	return __kmalloc_node(size, flags, node);
+-}
+-#else
+-static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
+-		return kmalloc_large_node(size, flags, node);
+-
+-	return __kmalloc_node(size, flags, node);
++	return kmalloc_node(size, flags, NUMA_NO_NODE);
+ }
+-#endif
+ 
+ /**
+  * kmalloc_array - allocate memory for an array.
+diff --git a/mm/slab.c b/mm/slab.c
+index c5ffe54c207a..b0aaca017f42 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3507,22 +3507,6 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
+ }
+ EXPORT_SYMBOL(kmem_cache_alloc_bulk);
+ 
+-#ifdef CONFIG_TRACING
+-void *
+-kmem_cache_alloc_trace(struct kmem_cache *cachep, gfp_t flags, size_t size)
+-{
+-	void *ret;
+-
+-	ret = slab_alloc(cachep, NULL, flags, size, _RET_IP_);
+-
+-	ret = kasan_kmalloc(cachep, ret, size, flags);
+-	trace_kmalloc(_RET_IP_, ret,
+-		      size, cachep->size, flags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(kmem_cache_alloc_trace);
+-#endif
+-
+ #ifdef CONFIG_TRACING
+ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ 				  gfp_t flags,
+diff --git a/mm/slub.c b/mm/slub.c
+index 2a2be2a8a5d0..892988990da7 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3216,18 +3216,6 @@ static __always_inline void *slab_alloc(struct kmem_cache *s, struct list_lru *l
+ 	return slab_alloc_node(s, lru, gfpflags, NUMA_NO_NODE, addr, orig_size);
+ }
+ 
+-
+-#ifdef CONFIG_TRACING
+-void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
+-{
+-	void *ret = slab_alloc(s, NULL, gfpflags, _RET_IP_, size);
+-	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags);
+-	ret = kasan_kmalloc(s, ret, size, gfpflags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(kmem_cache_alloc_trace);
+-#endif
+-
+ void *__kmem_cache_alloc_node(struct kmem_cache *s, struct list_lru *lru, gfp_t gfpflags,
+ 			      int node, unsigned long caller __maybe_unused)
+ {
+-- 
+2.32.0
 
-> 
->>> Thanks,
->>> Mathieu
->>>
->>>>
->>>> -- 
->>>> 2.28.0
->>>>

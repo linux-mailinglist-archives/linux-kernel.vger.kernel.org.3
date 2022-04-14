@@ -2,319 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ABF500B0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E325500B1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242268AbiDNK3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S242281AbiDNKcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbiDNK3T (ORCPT
+        with ESMTP id S239652AbiDNKcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:29:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2361075E59
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649932014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UHu8ZJVAgbaLDrvw/QoVq58ruVxz5F5ebHCeJtNRZsU=;
-        b=QyzTaER63fsqn5DM8UxGu4/+r2X+OJw8BwVfQPSBrYERtXW0qMeT6+kMK52iQYRjChprgf
-        LvOKu3MMAi98jjPe26Qdu1wMGnZVU906UnHFt+uCTiueobH6F44N3n0ZTUpAWffV+afSLN
-        Me7U/CtIMKdKkBu7XWhP/O/4liAgcm4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-ZjQ15E76NN-b_agaB0Fs7A-1; Thu, 14 Apr 2022 06:26:53 -0400
-X-MC-Unique: ZjQ15E76NN-b_agaB0Fs7A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DDE2800B21;
-        Thu, 14 Apr 2022 10:26:52 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.192.138])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7179FC28119;
-        Thu, 14 Apr 2022 10:26:51 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 5.18-rc3
-Date:   Thu, 14 Apr 2022 12:26:41 +0200
-Message-Id: <20220414102641.19082-1-pabeni@redhat.com>
+        Thu, 14 Apr 2022 06:32:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B93D3BA5F;
+        Thu, 14 Apr 2022 03:29:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71846139F;
+        Thu, 14 Apr 2022 03:29:53 -0700 (PDT)
+Received: from [10.32.36.25] (e121896.Emea.Arm.com [10.32.36.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8A723F5A1;
+        Thu, 14 Apr 2022 03:29:50 -0700 (PDT)
+Message-ID: <9ad30442-41f8-6e17-cb4a-ab102b3ebd69@arm.com>
+Date:   Thu, 14 Apr 2022 11:29:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
+ event
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220413092317.756022-1-leo.yan@linaro.org>
+ <Yld4fzWWY07ksB+5@kernel.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <Yld4fzWWY07ksB+5@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
 
-The following changes since commit 73b193f265096080eac866b9a852627b475384fc:
 
-  Merge tag 'net-5.18-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-04-07 19:01:47 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc3
-
-for you to fetch changes up to 2df3fc4a84e917a422935cc5bae18f43f9955d31:
-
-  net: bcmgenet: Revert "Use stronger register read/writes to assure ordering" (2022-04-14 09:13:07 +0200)
-
-----------------------------------------------------------------
-Networking fixes for 5.18-rc3, including fixes from wireless and
-netfilter.
-
-Current release - regressions:
-
-  - smc: fix af_ops of child socket pointing to released memory
-
-  - wifi: ath9k: fix usage of driver-private space in tx_info
-
-Previous releases - regressions:
-
-  - ipv6: fix panic when forwarding a pkt with no in6 dev
-
-  - sctp: use the correct skb for security_sctp_assoc_request
-
-  - smc: fix NULL pointer dereference in smc_pnet_find_ib()
-
-  - sched: fix initialization order when updating chain 0 head
-
-  - phy: don't defer probe forever if PHY IRQ provider is missing
-
-  - dsa: revert "net: dsa: setup master before ports"
-
-  - dsa: felix: fix tagging protocol changes with multiple CPU ports
-
-  - eth: ice:
-    - fix use-after-free when freeing @rx_cpu_rmap
-    - revert "iavf: fix deadlock occurrence during resetting VF interface"
-
-  - eth: lan966x: stop processing the MAC entry is port is wrong
-
-Previous releases - always broken:
-
-  - sched
-    - flower: fix parsing of ethertype following VLAN header
-    - taprio: check if socket flags are valid
-
-  - nfc: add flush_workqueue to prevent uaf
-
-  - veth: ensure eth header is in skb's linear part
-
-  - eth: stmmac: fix altr_tse_pcs function when using a fixed-link
-
-  - eth: macb: restart tx only if queue pointer is lagging
-
-  - eth: macvlan: fix leaking skb in source mode with nodst option
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Alexander Lobakin (1):
-      ice: arfs: fix use-after-free when freeing @rx_cpu_rmap
-
-Alvin Šipraga (2):
-      net: dsa: realtek: fix Kconfig to assure consistent driver linkage
-      net: dsa: realtek: don't parse compatible string for RTL8366S
-
-Anilkumar Kolli (1):
-      Revert "ath11k: mesh: add support for 256 bitmap in blockack frames in 11ax"
-
-Antoine Tenart (2):
-      netfilter: nf_tables: nft_parse_register can return a negative value
-      tun: annotate access to queue->trans_start
-
-Arun Ramadoss (1):
-      net: phy: LAN87xx: remove genphy_softreset in config_aneg
-
-Ben Greear (1):
-      mac80211: fix ht_capa printout in debugfs
-
-Benedikt Spranger (1):
-      net/sched: taprio: Check if socket flags are valid
-
-Borislav Petkov (2):
-      mt76: Fix undefined behavior due to shift overflowing the constant
-      brcmfmac: sdio: Fix undefined behavior due to shift overflowing the constant
-
-David S. Miller (1):
-      Merge tag 'wireless-2022-04-13' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
-
-Dinh Nguyen (1):
-      net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
-
-Dylan Hung (1):
-      net: ftgmac100: access hardware register after clock ready
-
-Florian Westphal (1):
-      netfilter: nft_socket: make cgroup match work in input too
-
-Gal Pressman (1):
-      bonding: Update layer2 and layer2+3 hash formula documentation
-
-Guillaume Nault (1):
-      veth: Ensure eth header is in skb's linear part
-
-Hongbin Wang (1):
-      vxlan: fix error return code in vxlan_fdb_append
-
-Horatiu Vultur (4):
-      net: lan966x: Update lan966x_ptp_get_nominal_value
-      net: lan966x: Fix IGMP snooping when frames have vlan tag
-      net: lan966x: Fix when a port's upper is changed.
-      net: lan966x: Stop processing the MAC entry is port is wrong.
-
-Jakub Kicinski (5):
-      flow_dissector: fix false-positive __read_overflow2_field() warning
-      Merge branch 'net-smc-fixes-2022-04-08'
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'net-lan966x-lan966x-fixes'
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Jeremy Linton (1):
-      net: bcmgenet: Revert "Use stronger register read/writes to assure ordering"
-
-Johannes Berg (2):
-      MAINTAINERS: claim include/uapi/linux/wireless.h
-      nl80211: correctly check NL80211_ATTR_REG_ALPHA2 size
-
-Kai-Heng Feng (1):
-      net: atlantic: Avoid out-of-bounds indexing
-
-Kalle Valo (1):
-      MAINTAINERS: mark wil6210 as orphan
-
-Karsten Graul (3):
-      net/smc: use memcpy instead of snprintf to avoid out of bounds read
-      net/smc: Fix NULL pointer dereference in smc_pnet_find_ib()
-      net/smc: Fix af_ops of child socket pointing to released memory
-
-Kunihiko Hayashi (2):
-      dt-bindings: net: ave: Clean up clocks, resets, and their names using compatible string
-      dt-bindings: net: ave: Use unevaluatedProperties
-
-Lin Ma (1):
-      nfc: nci: add flush_workqueue to prevent uaf
-
-Lorenzo Bianconi (1):
-      MAINTAINERS: update Lorenzo's email address
-
-Lv Ruyi (1):
-      dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
-
-Marcelo Ricardo Leitner (1):
-      net/sched: fix initialization order when updating chain 0 head
-
-Martin Willi (1):
-      macvlan: Fix leaking skb in source mode with nodst option
-
-Mateusz Palczewski (1):
-      Revert "iavf: Fix deadlock occurrence during resetting VF interface"
-
-Michael Walle (1):
-      net: dsa: felix: suppress -EPROBE_DEFER errors
-
-Nicolas Dichtel (1):
-      ipv6: fix panic when forwarding a pkt with no in6 dev
-
-Petr Machata (1):
-      rtnetlink: Fix handling of disabled L3 stats in RTM_GETSTATS replies
-
-Petr Malat (1):
-      sctp: Initialize daddr on peeled off socket
-
-Rameshkumar Sundaram (1):
-      cfg80211: hold bss_lock while updating nontrans_list
-
-Toke Høiland-Jørgensen (2):
-      ath9k: Properly clear TX status area before reporting to mac80211
-      ath9k: Fix usage of driver-private space in tx_info
-
-Tomas Melin (1):
-      net: macb: Restart tx only if queue pointer is lagging
-
-Vadim Pasternak (1):
-      mlxsw: i2c: Fix initialization error flow
-
-Vlad Buslov (1):
-      net/sched: flower: fix parsing of ethertype following VLAN header
-
-Vladimir Oltean (3):
-      net: mdio: don't defer probe forever if PHY IRQ provider is missing
-      Revert "net: dsa: setup master before ports"
-      net: dsa: felix: fix tagging protocol changes with multiple CPU ports
-
-Xin Long (1):
-      sctp: use the correct skb for security_sctp_assoc_request
-
- .../bindings/net/socionext,uniphier-ave4.yaml      | 57 +++++++++++++++-------
- Documentation/networking/bonding.rst               |  4 +-
- MAINTAINERS                                        |  7 ++-
- drivers/base/dd.c                                  |  1 +
- drivers/net/dsa/ocelot/felix.c                     | 23 +++++++++
- drivers/net/dsa/ocelot/felix_vsc9959.c             |  2 +-
- drivers/net/dsa/realtek/Kconfig                    | 30 ++++++++----
- drivers/net/dsa/realtek/realtek-smi.c              |  5 --
- drivers/net/ethernet/aquantia/atlantic/aq_nic.c    |  8 +--
- drivers/net/ethernet/aquantia/atlantic/aq_vec.c    | 24 ++++-----
- drivers/net/ethernet/broadcom/genet/bcmgenet.c     |  4 +-
- drivers/net/ethernet/cadence/macb_main.c           |  8 +++
- drivers/net/ethernet/faraday/ftgmac100.c           | 10 ++--
- drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c |  8 ++-
- drivers/net/ethernet/intel/iavf/iavf_main.c        |  7 +--
- drivers/net/ethernet/intel/ice/ice_arfs.c          |  9 +---
- drivers/net/ethernet/intel/ice/ice_lib.c           |  5 +-
- drivers/net/ethernet/intel/ice/ice_main.c          | 18 +++----
- drivers/net/ethernet/mellanox/mlxsw/i2c.c          |  1 +
- .../net/ethernet/microchip/lan966x/lan966x_mac.c   |  6 ++-
- .../net/ethernet/microchip/lan966x/lan966x_main.c  |  6 +++
- .../net/ethernet/microchip/lan966x/lan966x_ptp.c   |  8 +--
- .../ethernet/microchip/lan966x/lan966x_switchdev.c |  3 +-
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c |  8 ---
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h |  4 ++
- .../net/ethernet/stmicro/stmmac/dwmac-socfpga.c    | 13 ++---
- drivers/net/macvlan.c                              |  8 ++-
- drivers/net/mdio/fwnode_mdio.c                     |  5 ++
- drivers/net/phy/microchip_t1.c                     |  7 +--
- drivers/net/tun.c                                  |  2 +-
- drivers/net/veth.c                                 |  2 +-
- drivers/net/vxlan/vxlan_core.c                     |  4 +-
- drivers/net/wireless/ath/ath11k/mac.c              | 22 ++++++---
- drivers/net/wireless/ath/ath9k/main.c              |  2 +-
- drivers/net/wireless/ath/ath9k/xmit.c              | 33 ++++++++-----
- .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |  2 +-
- drivers/net/wireless/mediatek/mt76/mt76x2/pci.c    |  2 +-
- include/net/flow_dissector.h                       |  2 +
- net/core/flow_dissector.c                          |  3 +-
- net/core/rtnetlink.c                               |  3 ++
- net/dsa/dsa2.c                                     | 23 ++++-----
- net/ipv6/ip6_output.c                              |  2 +-
- net/mac80211/debugfs_sta.c                         |  2 +-
- net/netfilter/nf_tables_api.c                      |  2 +-
- net/netfilter/nft_socket.c                         |  7 ++-
- net/nfc/nci/core.c                                 |  4 ++
- net/sched/cls_api.c                                |  2 +-
- net/sched/cls_flower.c                             | 18 +++++--
- net/sched/sch_taprio.c                             |  3 +-
- net/sctp/sm_statefuns.c                            |  6 +--
- net/sctp/socket.c                                  |  2 +-
- net/smc/af_smc.c                                   | 14 +++++-
- net/smc/smc_clc.c                                  |  6 ++-
- net/smc/smc_pnet.c                                 |  5 +-
- net/wireless/nl80211.c                             |  3 +-
- net/wireless/scan.c                                |  2 +
- 56 files changed, 292 insertions(+), 185 deletions(-)
-
+On 14/04/2022 02:27, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Apr 13, 2022 at 05:23:17PM +0800, Leo Yan escreveu:
+>> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+>> is not available") "perf mem report" and "perf report --mem-mode"
+>> don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
+>> type.
+>>
+>> The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
+>> partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
+>> event, this allows the perf data file generated by kernel v5.18-rc1 or
+>> later version can be reported properly.
+>>
+>> On the other hand, perf tool still fails to be backward compatibility
+>> for a data file recorded by an older version's perf which contains Arm
+>> SPE trace data.  This patch is a workaround in reporting phase, when
+>> detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
+>> force to set the bit in the sample type and give a warning info.
+>>
+>> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
+>> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+>> Tested-by: German Gomez <german.gomez@arm.com>
+>> ---
+>> v2: Change event name from "arm_spe_" to "arm_spe";
+>>     Add German's test tag.
+> 
+> Tentatively applied, would be great to have James' and Ravi's
+> Acked-by/Reviewed-by, which I'll add before pushing this out if provided
+> in time.
+> 
+> - Arnaldo
+>  
+>>  tools/perf/builtin-report.c | 16 ++++++++++++++++
+>>  1 file changed, 16 insertions(+)
+>>
+>> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+>> index 1ad75c7ba074..acb07a4a9b67 100644
+>> --- a/tools/perf/builtin-report.c
+>> +++ b/tools/perf/builtin-report.c
+>> @@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
+>>  	struct perf_session *session = rep->session;
+>>  	u64 sample_type = evlist__combined_sample_type(session->evlist);
+>>  	bool is_pipe = perf_data__is_pipe(session->data);
+>> +	struct evsel *evsel;
+>>  
+>>  	if (session->itrace_synth_opts->callchain ||
+>>  	    session->itrace_synth_opts->add_callchain ||
+>> @@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
+>>  	}
+>>  
+>>  	if (sort__mode == SORT_MODE__MEMORY) {
+>> +		/*
+>> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
+>> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
+>> +		 * compatibility, set the bit if it's an old perf data file.
+>> +		 */
+>> +		evlist__for_each_entry(session->evlist, evsel) {
+>> +			if (strstr(evsel->name, "arm_spe") &&
+>> +				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
+>> +				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
+>> +					    "for Arm SPE event.\n");
+
+Looks ok to me. Personally I would remove the warning, otherwise people are going to start
+thinking that they need to do something about it or something bad has happened.
+
+But because we've fixed it up there shouldn't really need to be a warning or any action.
+
+I don't feel too strongly about this though, so I will leave it up to Leo to make the
+final decision:
+
+Reviewed-by: James Clark <james.clark@arm.com>
+
+>> +				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
+>> +				sample_type |= PERF_SAMPLE_DATA_SRC;
+>> +			}
+>> +		}
+>> +
+>>  		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
+>>  			ui__error("Selected --mem-mode but no mem data. "
+>>  				  "Did you call perf record without -d?\n");
+>> -- 
+>> 2.25.1
+> 

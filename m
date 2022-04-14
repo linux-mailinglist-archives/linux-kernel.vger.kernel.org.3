@@ -2,223 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB75C5005C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCF95005CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbiDNGMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 02:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S239965AbiDNGO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 02:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbiDNGMD (ORCPT
+        with ESMTP id S235796AbiDNGOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 02:12:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4CACA195
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 23:09:36 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-277-8hWWm93nOMqUDarmxETpHg-1; Thu, 14 Apr 2022 07:09:33 +0100
-X-MC-Unique: 8hWWm93nOMqUDarmxETpHg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 14 Apr 2022 07:09:32 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 14 Apr 2022 07:09:32 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Qais Yousef' <qais.yousef@arm.com>
-CC:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
-        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        Wei Wang <wvw@google.com>
-Subject: RE: Scheduling tasks on idle cpu
-Thread-Topic: Scheduling tasks on idle cpu
-Thread-Index: AdhNfEgLjonPVH3ESQeb3O9OCn/HMQAeBEWAABN1gYAAUbPRgAANeFfQ
-Date:   Thu, 14 Apr 2022 06:09:32 +0000
-Message-ID: <c831736b76c3411baea48a7c3e18cf4d@AcuMS.aculab.com>
-References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
- <20220411233447.rcencjivkhyltyxm@airbuntu>
- <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
- <20220413235121.tzefvdvnwcipzo7p@airbuntu>
-In-Reply-To: <20220413235121.tzefvdvnwcipzo7p@airbuntu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 14 Apr 2022 02:14:24 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36DFE03A;
+        Wed, 13 Apr 2022 23:12:00 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q12so3901720pgj.13;
+        Wed, 13 Apr 2022 23:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=uxc+Rbc4MVtaiGHWJNYpUhBcIKPKccnha2/GwgVCHSE=;
+        b=GCnOkCFb4B2Avx5jAvlZxD59sPiZJxRxt/UE1g1ntuTxx0a27YNGvyRuiUPFTljWWG
+         D7Booa5p8RFOr9zKuXWubJDk00xKF9PuQ4X0mjLc6+xBiXVftVHNyLIs+otrwCljuMkv
+         53bM2txMkcls32CtsHt/4OSq7AMK72ddMFyP8lsuhfC7tT2LpoV30QscbcaP468vc8GV
+         Ol9Hx+YhoOmRrIOwMpX4RtzTFo0hwMhOBOCSeee7PPQKEEWch5PLRHN0kfWCj8cQDy9i
+         TXNebDIawGfbjA9snJjamxb/1AYni57BLqvbBUrTMZfEdIF+D6f81vpz1/OJjWVJGrHl
+         DchA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=uxc+Rbc4MVtaiGHWJNYpUhBcIKPKccnha2/GwgVCHSE=;
+        b=BFKWgSmhxFvMrAUvX2rl0AbehYAWOXQ/xwaN7k4BHHNcBKlRH1kWJ2Dlp0fBVklIp/
+         B+hS0RW2A/purEifexfPs4idfBTKvrrfOosMlcnrDfcJ0sT14jR+p5DcB5Sv2xUvYhCi
+         OFXvACVYJY1B5iq2xTRi2YoJMUUCkMoQEQ2C3TqtRhMMIZnXa0nK8QywYxaKEv4wVup1
+         ehNmGuIxr6j+P8byKXsMXwVToOQQ7vCLx/2GCWP3CTPfKmgKQ9Zitp3nQDDktQbFF4bd
+         kgoU8yfPJmmg/oKpCuhcvU4nMdpufx66VfEfDKrqpIILuzo/4OTfIsntr1siPjY3edxw
+         A9PA==
+X-Gm-Message-State: AOAM530xyxBsLtX8uStLvXzg+lVtR/QSuJCixAgcRQMlPVfs9RoVDq7e
+        A2QP7OuKYf/ZQ7V7sOXpS1Lxai7oD/o=
+X-Google-Smtp-Source: ABdhPJy2iFtPsCIFlrCmJZhjSmLYz3yzJE+3xXvCiLEd6UviGRVevk386TdIxotvSMr9ezLpFha/Vg==
+X-Received: by 2002:a05:6a00:1a49:b0:505:7ab3:e5c7 with SMTP id h9-20020a056a001a4900b005057ab3e5c7mr2396809pfv.62.1649916720273;
+        Wed, 13 Apr 2022 23:12:00 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-5.three.co.id. [116.206.28.5])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004fae885424dsm953485pfx.72.2022.04.13.23.11.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 23:11:59 -0700 (PDT)
+Message-ID: <0bf37720-870a-9dde-d825-92e12633ce38@gmail.com>
+Date:   Thu, 14 Apr 2022 13:11:52 +0700
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH net-next v4] net/ipv6: Introduce accept_unsolicited_na
+ knob to implement router-side changes for RFC9131
+To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com
+References: <20220414025609.578-1-aajith@arista.com>
 Content-Language: en-US
+In-Reply-To: <20220414025609.578-1-aajith@arista.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUWFpcyBZb3VzZWYNCj4gU2VudDogMTQgQXByaWwgMjAyMiAwMDo1MQ0KPiANCj4gT24g
-MDQvMTIvMjIgMDg6MzksIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBRYWlzIFlvdXNl
-Zg0KPiA+ID4gU2VudDogMTIgQXByaWwgMjAyMiAwMDozNQ0KPiA+ID4NCj4gPiA+IE9uIDA0LzEx
-LzIyIDA4OjI2LCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gPiA+IEZyb206IFFhaXMgWW91c2Vm
-DQo+ID4gPiA+ID4gU2VudDogMDkgQXByaWwgMjAyMiAxODowOQ0KPiA+ID4gPiAuLi4NCj4gPiA+
-ID4gPiBSVCBzY2hlZHVsZXIgd2lsbCBwdXNoL3B1bGwgdGFza3MgdG8gZW5zdXJlIHRoZSB0YXNr
-IHdpbGwgZ2V0IHRvIHJ1biBBU0FQIGlmDQo+ID4gPiA+ID4gdGhlcmUncyBhbm90aGVyIGNwdSBh
-dCBsb3dlciBwcmlvcml0eSBpcyBhdmFpbGFibGUNCj4gPiA+ID4NCj4gPiA+ID4gRG9lcyB0aGF0
-IGFjdHVhbGx5IGhhcHBlbj8NCj4gPiA+DQo+ID4gPiBGb3IgUlQgdGFza3MsIHllcy4gVGhleSBz
-aG91bGQgZ2V0IGRpc3RyaWJ1dGVkLg0KPiA+DQo+ID4gT2ssIHRoYXQgaXMgc29tZXRoaW5nIHNs
-aWdodGx5IGRpZmZlcmVudCBmcm9tIHdoYXQgSSdtIHNlZWluZy4NCj4gDQo+IElmIHlvdSBoYXZl
-IG11bHRpcGxlIFNDSEVEX0ZJRk8vU0NIRURfUlIgdGFza3Mgd2l0aCB0aGUgc2FtZSBwcmlvcml0
-eSwgdGhleQ0KPiBkb24ndCBlbmQgdXAgYmVpbmcgZGlzdHJpYnV0ZWQgb24gZGlmZmVyZW50IENQ
-VXM/IEFzc3VtaW5nIG51bWJlciBvZiB0YXNrcyBpcw0KPiBub3QgaGlnaGVyIHRoYW4gbnVtYmVy
-IG9mIENQVXMuDQo+IA0KPiBHZW5lcmFsbHkgaWYgdGhlcmUgYXJlIHR3byBSVCB0YXNrcyBvbiB0
-aGUgc2FtZSBDUFUgYW5kIHRoZXJlJ3MgYW5vdGhlciBDUFUNCj4gdGhhdCBpcyBydW5uaW5nIHNv
-bWV0aGluZyB0aGF0IGlzIGxvd2VyIHByaW9yaXR5IHRoYW4gdGhlc2UgdHdvLCB0aGVuIHRoZSBs
-b3dlcg0KPiBwcmlvcml0eSBvZiB0aGVzZSAyIHRhc2tzIHNob3VsZCBtb3ZlIHRvIHRoYXQgQ1BV
-Lg0KPiANCj4gRWgsIGhvcGUgdGhhdCdzIHJlYWRhYmxlIDotKQ0KDQpUaGF0IGlzIChqdXN0IGFi
-b3V0KSByZWFkYWJsZSwgYW5kIGlzIGhhcHBlbmluZy4NCg0KPiA+ID4gPiBJJ3ZlIHNlZW4gdGhl
-IGZvbGxvd2luZzoNCj4gPiA+ID4gICAzNDUzMyBbMDE3XTogc3lzX2Z1dGV4KHVhZGRyOiAxMDQ5
-MTA0LCBvcDogODUsIHZhbDogMSwgdXRpbWU6IDEsIHVhZGRyMjogMTA0OTEwMCwgdmFsMzoNCj4g
-NDAwMDAwMSkNCj4gPiA+ID4gICAzNDUzMyBbMDE3XTogc2NoZWRfbWlncmF0ZV90YXNrOiBwaWQ9
-MzQ1MTIgcHJpbz0xMjAgb3JpZ19jcHU9MTQgZGVzdF9jcHU9MTcNCj4gPiA+ID4gICAzNDUzMyBb
-MDE3XTogc2NoZWRfd2FrZXVwOiBwaWQ9MzQ1MTIgcHJpbz0xMjAgc3VjY2Vzcz0xIHRhcmdldF9j
-cHU9MDE3DQo+ID4gPg0KPiA+ID4gcHJpbz0xMjAgaXMgYSBDRlMgdGFzaywgbm8/DQo+ID4NCj4g
-PiBDRlMgPSAnbm9ybWFsIHRpbWUtc2xpY2UgcHJvY2Vzc2VzID8gVGhlbiB5ZXMuDQo+IA0KPiBT
-b3JyeSwgeWVzLiBDRlMgPSBTQ0hFRF9OT1JNQUwvU0NIRURfT1RIRVIuDQo+IA0KPiA+DQo+ID4g
-PiA+IGFuZCBwaWQgMzQ1MTIgZG9lc24ndCBnZXQgc2NoZWR1bGVkIHVudGlsIHBpZCAzNDUzMyBm
-aW5hbGx5IHNsZWVwcy4NCj4gPiA+ID4gVGhpcyBpcyBpbiBzcGl0ZSBvZiB0aGVyZSBiZWluZyA1
-IGlkbGUgY3B1Lg0KPiA+ID4gPiBjcHUgMTQgaXMgYnVzeSBydW5uaW5nIGEgUlQgdGhyZWFkLCBi
-dXQgbWlncmF0aW5nIHRvIGNwdSAxNyBzZWVtcyB3cm9uZy4NCj4gPiA+ID4NCj4gPiA+ID4gVGhp
-cyBpcyBvbiBhIFJIRUw3IGtlcm5lbCwgSSd2ZSBub3QgcmVwbGljYXRlZCBpdCBvbiBhbnl0aGlu
-ZyByZWNlbnQuDQo+ID4gPiA+IEJ1dCBJJ3ZlIHZlcnkgbXVjaCBsaWtlIGEgUlQgdGhyZWFkIHRv
-IGJlIGFibGUgdG8gc2NoZWR1bGUgYSBub24tUlQNCj4gPiA+ID4gdGhyZWFkIHRvIHJ1biBvbiBh
-biBpZGxlIGNwdS4NCj4gPiA+DQo+ID4gPiBPaCwgeW91IHdhbnQgQ0ZTIHRvIGF2b2lkIENQVXMg
-dGhhdCBhcmUgcnVubmluZyBSVCB0YXNrcy4NCj4gPiA+DQo+ID4gPiBXZSBoYWQgYSBwcm9wb3Nh
-bCBpbiB0aGUgcGFzdCwgYnV0IGl0IHdhc24ndCBnb29kIGVub3VnaA0KPiA+ID4NCj4gPiA+IAlo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzE1NjcwNDg1MDItNjA2NC0xLWdpdC1zZW5kLWVt
-YWlsLWppbmctdGluZy53dUBtZWRpYXRlay5jb20vDQo+ID4NCj4gPiBUaGF0IHNlZW1zIHRvIGJl
-IHNvbWV0aGluZyBkaWZmZXJlbnQuDQo+ID4gUmVsYXRlZCB0byBzb21ldGhpbmcgZWxzZSBJJ3Zl
-IHNlZW4gd2hlcmUgYSBSVCBwcm9jZXNzIGlzIHNjaGVkdWxlZA0KPiA+IG9uIGl0cyBvbGQgY3B1
-ICh0byBnZXQgdGhlIGhvdCBjYWNoZSkgYnV0IHRoZSBwcm9jZXNzIHJ1bm5pbmcgb24NCj4gPiB0
-aGF0IGNwdSBpcyBsb29waW5nIGluIGtlcm5lbCAtIHNvIHRoZSBSVCBwcm9jZXNzIGRvZXNuJ3Qg
-c3RhcnQuDQo+IA0KPiBJICp0aGluayogeW91J3JlIGhpdHRpbmcgc29mdGlycSBsYXRlbmNpZXMu
-IE1vc3QgbGlrZWx5IGl0J3MgdGhlIG5ldHdvcmsgUlgNCj4gc29mdGlycSBwcm9jZXNzaW5nIHRo
-ZSBwYWNrZXRzLiBJZiB0aGlzIGxhdGVuY3kgaXMgYSBwcm9ibGVtLCB0aGVuIFBSRUVNUFRfUlQN
-Cj4gWzFdIHNob3VsZCBoZWxwIHdpdGggdGhpcy4gRm9yIEFuZHJvaWQgd2UgaGl0IHRoaXMgaXNz
-dWUgYW5kIHRoZXJlJ3MgYSBsb25nDQo+IGxpdmluZyBvdXQgb2YgdHJlZSBwYXRjaCB0aGF0IEkn
-bSB0cnlpbmcgdG8gZmluZCBhbiB1cHN0cmVhbSByZXBsYWNlbWVudCBmb3IuDQoNCkkgc3VzcGVj
-dCB0aGUgY29zdHMgb2YgUFJFRU1QVF9SVCB3b3VsZCBzbG93IHRoaW5ncyBkb3duIHRvbyBtdWNo
-Lg0KVGhpcyB0ZXN0IHN5c3RlbSBoYXMgNDAgY3B1LCAzNSBvZiB0aGVtIGFyZSBSVCBhbmQgcHJv
-Y2Vzc2luZyB0aGUgc2FtZSAnam9icycuDQpJdCBkb2Vzbid0IHJlYWxseSBtYXR0ZXIgaWYgb25l
-IGlzIGRlbGF5ZWQgYnkgdGhlIG5ldHdvcmsgaXJxICsgc29mdGlycSBjb2RlLg0KVGhlIHByb2Js
-ZW1zIGFyaXNlIGlmIHRoZXkgYWxsIHN0b3AuDQpUaGUgJ2pvYicgbGlzdCB3YXMgcHJvdGVjdGVk
-IGJ5IGEgbXV0ZXggLSB1c3VhbGx5IG5vdCB0b28gYmFkLg0KQnV0IGlmIGEgbmV0d29yayBpcnEg
-aW50ZXJydXB0cyB0aGUgY29kZSB3aGlsZSBpdCBob2xkcyB0aGUgbXV0ZXggdGhlbiBhbGwNCnRo
-ZSBSVCB0YXNrcyBzdGFsbCB1bnRpbCB0aGUgc29mdGlycSBjb2RlIGNvbXBsZXRlcy4NCkkndmUg
-cmVwbGFjZWQgdGhlIGxpbmtlZCBsaXN0IHdpdGggYW4gYXJyYXkgYW5kIHVzZWQgYXRvbWljX2lu
-YygpLg0KDQpJIGNhbiBpbWFnaW5lIHRoYXQgYSBQUkVFTVBUX1JUIGtlcm5lbCB3aWxsIGhhdmUg
-dGhlIHNhbWUgcHJvYmxlbQ0KYmVjYXVzZSAoSSB0aGluaykgYWxsIHRoZSBzcGluIGxvY2tzIGdl
-dCByZXBsYWNlZCBieSBzbGVlcCBsb2Nrcy4NCg0KPiANCj4gVGhlcmUncyBhIG5ldyBrbm9iIHRv
-IHJlZHVjZSBob3cgbG9uZyBuZXRkZXYgc3BlbmRzIGluIHRoZSBsb29wLiBNaWdodCBiZSB3b3J0
-aA0KPiBhIHRyeToNCj4gDQo+IAlodHRwczovL2xvcmUua2VybmVsLm9yZy9uZXRkZXYvMTQ5MjYx
-OTgzMC03NTYxLTEtZ2l0LXNlbmQtZW1haWwtdGVkaGVhZHN0ZXJAZ21haWwuY29tLw0KPiANCj4g
-WzFdIGh0dHBzOi8vd2lraS5saW51eGZvdW5kYXRpb24ub3JnL3JlYWx0aW1lL3N0YXJ0DQoNCkkg
-dGhpbmsgdGhlIHBhdGNoIHRoYXQgcnVucyB0aGUgc29mdGlycSBpbiBhIHNlcGFyYXRlIHRocmVh
-ZCBtaWdodCBoZWxwLg0KQnV0IGl0IHByb2JhYmx5IG5lZWRzIGEgdGVzdCB0byBvbmx5IHRvIHRo
-YXQgaWYgaXQgd291bGQgJ3N0YWxsJyBhIFJUIHByb2Nlc3MuDQoNCj4gPiBJJ3ZlIGF2b2lkZWQg
-bW9zdCBvZiB0aGUgcGFpbiB0aGF0IGNhdXNlZCBieSBub3QgdXNpbmcgYSBzaW5nbGUNCj4gPiBj
-dl9icm9hZGNhc3QoKSB0byB3YWtlIHVwIHRoZSAzNCBSVCB0aHJlYWRzIChpbiB0aGlzIGNvbmZp
-ZykuDQo+ID4gKEVhY2gga2VybmVsIHRocmVhZCBzZWVtZWQgdG8gd2FrZSB1cCB0aGUgbmV4dCBv
-bmUsIHNvIHRoZQ0KPiA+IGRlbGF5cyB3ZXJlIGN1bXVsYXRpdmUuKQ0KPiA+IEluc3RlYWQgdGhl
-cmUgaXMgYSBzZXBhcmF0ZSBjdiBmb3IgZWFjaCBSVCB0aHJlYWQuDQo+ID4gSSBhY3R1YWxseSB3
-YW50IHRoZSAnaGVyZCBvZiB3aWxkZWJlZXN0JyA6LSkNCj4gDQo+IEl0IHNlZW1zIHlvdSBoYXZl
-IGEgYmlnIFJUIGFwcCBydW5uaW5nIGluIHVzZXJzcGFjZS4gSSB0aG91Z2h0IGluaXRpYWxseSB5
-b3UncmUNCj4gaGl0dGluZyBpc3N1ZXMgd2l0aCByYW5kb20ga3RocmVhZHMgb3Igc29tZXRoaW5n
-LiBJZiB5b3UgaGF2ZSBjb250cm9sIG92ZXINCj4gdGhlc2UgdGFza3MsIHRoZW4gdGhhdCBzaG91
-bGQgYmUgZWFzaWVyIHRvIGhhbmRsZSAoYXMgeW91IHN1Z2dlc3QgYXQgdGhlIGVuZCkuDQoNCkkn
-dmUgYSBiaWcgYXBwIHdpdGggYSBsb3Qgb2YgUlQgdGhyZWFkcyBkb2luZyBuZXR3b3JrIHNlbmQv
-cmVjZWl2ZS4NCihBbGwgdGhlIHBhY2tldHMgYXMgfjIwMCBieXRlIFVEUCwgNTAvc2VjIG9uIDEw
-MDArIHBvcnQgbnVtYmVycy4pDQpCdXQgdGhlcmUgYXJlIG90aGVyIHRoaW5ncyBnb2luZyBvbiBh
-cyB3ZWxsLg0KDQo+IEknbSBub3Qgc3VyZSBhYm91dCB0aGUgZGVsYXlzIHdoZW4gdXNpbmcgY3Zf
-YnJvYWRjYXN0KCkuIENvdWxkIGl0IGJlIHRoZSB3YXkNCj4gdGhpcyBsaWJyYXJ5IGlzIGltcGxl
-bWVudGVkIGlzIGNhdXNpbmcgdGhlIHByb2JsZW0gcmF0aGVyIHRoYW4gYSBrZXJuZWwNCj4gbGlt
-aXRhdGlvbj8NCg0KSSB3YXMgZGVmaW5pdGVseSBzZWVpbmcgdGhlIHRocmVhZHMgd2FrZSB1cCBv
-bmUgYnkgb25lLg0KRXZlcnkgMTBtcyBvbmUgb2YgdGhlIFJUIHRocmVhZHMgd2FrZXMgdXAgYW5k
-IHRoZW4gd2FrZXMgdXAgYWxsIHRoZSBvdGhlcnMuDQpUaGVyZSB3ZXJlbid0IGFueSAnZXh0cmEn
-IHN5c3RlbSBjYWxscywgb25jZSBvbmUgdGhyZWFkIHdhcyBydW5uaW5nDQppbiBrZXJuZWwgdGhl
-IG5leHQgb25lIGdvdCB3b2tlbiB1cC4NCk1vc3QgKGFuZCBhbHdheXMpIG5vdGljZWFibGUgd2Vy
-ZSB0aGUgZGVsYXlzIGdldHRpbmcgZWFjaCBjcHUgb3V0DQpvZiBpdHMgc2xlZXAgc3RhdGUuDQpC
-dXQgaWYgb25lIG9mIHRoZSByZXF1aXJlZCBjcHUgd2FzIChlZykgcnVubmluZyB0aGUgc29mdGlu
-dCBjb2RlDQpub25lIG9mIHRoZSBsYXR0ZXIgb25lcyB3b3VsZCB3YWtlIHVwLg0KDQo+ID4gPiBU
-aGUgYXBwcm9hY2ggaW4gdGhhdCBwYXRjaCBtb2RpZmllZCBSVCB0byBhdm9pZCBDRlMgYWN0dWFs
-bHkuDQo+ID4NCj4gPiBZZXMgSSB3YW50IHRoZSBDRlMgc2NoZWR1bGVyIHRvIHBpY2sgYW4gaWRs
-ZSBjcHUgaW4gcHJlZmVyZW5jZQ0KPiA+IHRvIGFuIGFjdGl2ZSBSVCBvbmUuDQo+IA0KPiBJIHRo
-aW5rIHRoYXQncyB3aGF0IHNob3VsZCBoYXBwZW4uIEJ1dCBJIHRoaW5rIGl0J3MgcmFjeS4gVmlu
-Y2VudCBrbm93cyB0aGlzDQo+IGNvZGUgYmV0dGVyIHRob3VnaCwgc28gSSdsbCBkZWZlciB0byBo
-aW0uDQo+IA0KPiA+DQo+ID4gPiBDYW4geW91IHZlcmlmeSB3aGV0aGVyIHRoZSBSVCB0YXNrIHdv
-a2UgdXAgYWZ0ZXIgdGFzayAzNDUxMiB3YXMgbWlncmF0ZWQgdG8gQ1BVDQo+ID4gPiAxNz8gTG9v
-a2luZyBhdCB0aGUgZGVmaW5pdGlvbiBvZiBhdmFpbGFibGVfaWRsZV9jcHUoKSB3ZSBzaG91bGQg
-aGF2ZSBhdm9pZGVkDQo+ID4gPiB0aGF0IENQVSBpZiB0aGUgUlQgdGFzayB3YXMgYWxyZWFkeSBy
-dW5uaW5nLiBCb3RoIHdha2luZyB1cCBhdCB0aGUgc2FtZSB0aW1lDQo+ID4gPiB3b3VsZCBleHBs
-YWluIHdoYXQgeW91IHNlZS4gT3RoZXJ3aXNlIEknbSBub3Qgc3VyZSB3aHkgaXQgcGlja2VkIENQ
-VSAxNy4NCj4gPg0KPiA+IEFsbCAzNSBSVCB0YXNrcyBhcmUgcnVubmluZyB3aGVuIHRoZSByZXF1
-ZXN0IHRvIHNjaGVkdWxlIHRhc2sgMzQ1MTIgaXMgbWFkZS4NCj4gPiAoVGhleSB3YWtlIGV2ZXJ5
-IDEwbXMgdG8gcHJvY2VzcyBVRFAvUlRQIGF1ZGlvIHBhY2tldHMuKQ0KPiA+IFRoZSBSVCB0YXNr
-IG9uIGNwdSAxNyBjYXJyaWVkIG9uIHJ1bm5pbmcgdW50aWwgaXQgcmFuIG91dCBvZiB3b3JrIChh
-ZnRlciBhYm91dCAxbXMpLg0KPiA+IFRhc2sgMzQ1MTIgdGhlbiByYW4gb24gY3B1IDE3Lg0KPiA+
-DQo+ID4gSW4gdGhpcyBjYXNlIHRhc2sgMzQ1MTIgYWN0dWFsbHkgZmluaXNoZWQgcXVpdGUgcXVp
-Y2tseS4NCj4gPiAoSXQgaXMgY3JlYXRpbmcgYW5kIGJpbmRpbmcgbW9yZSBVRFAgc29ja2V0cy4p
-DQo+ID4gQnV0IGl0IGxvb2tzIGxpa2UgaWYgaXQgd2VyZSBzdGlsbCBydW5uaW5nIG9uIHRoZSBu
-ZXh0IDEwbXMgJ3RpY2snDQo+ID4gaXQgd291bGQgYmUgcHJlLWVtcHRlZCBieSB0aGUgUlQgdGFz
-ayBhbmQgYmUgaWRsZS4NCj4gPiBOb3QgaWRlYWwgd2hlbiBJJ20gdHJ5aW5nIHRvIHNjaGVkdWxl
-IGEgYmFja2dyb3VuZCBhY3Rpdml0eS4NCj4gPg0KPiA+IEkgZG9uJ3QgdGhpbmsgdGhlIGxvYWQt
-YmFsYW5jZXIgd2lsbCBldmVyIHBpY2sgaXQgdXAuDQo+ID4gQWxsIHRoZSBwcm9jZXNzIHNjaGVk
-dWxpbmcgaXMgaGFwcGVuaW5nIGZhciB0b28gZmFzdC4NCj4gPg0KPiA+IFdoYXQgSSB0aGluayBt
-aWdodCBiZSBoYXBwZW5pbmcgaXMgdGhhdCB0aGUgZnV0ZXgoKSBjb2RlIGlzIHJlcXVlc3RpbmcN
-Cj4gPiB0aGUgd29rZW4gdXAgdGhyZWFkIHJ1biBvbiB0aGUgY3VycmVudCBjcHUuDQo+IA0KPiBI
-bW0uIExvb2tpbmcgYXQga2VybmVsL2Z1dGV4L3dhaXR3YWtlLmM6OmZ1dGV4X3dha2UoKSBpdCBq
-dXN0IGVuZHMgdXAgY2FsbGluZw0KPiB3YWtlX3VwX3Byb2Nlc3MoKS4gU28gdGhhdCBtaWdodCBu
-b3QgYmUgdGhlIGNhc2UuDQo+IA0KPiA+IFRoaXMgY2FuIGJlIGFkdmFudGFnZW91cyBpbiBzb21l
-IGNpcmN1bXN0YW5jZXMgLSB1c3VhbGx5IGlmIHlvdQ0KPiA+IGtub3cgdGhlIGN1cnJlbnQgdGhy
-ZWFkIGlzIGFib3V0IHRvIHNsZWVwLg0KPiA+IChJIHJlbWVtYmVyIGFub3RoZXIgc2NoZWR1bGVy
-IGRvaW5nIHRoYXQsIGJ1dCBJIGNhbid0IHJlbWVtYmVyIHdoeSENCj4gPiBUaGUgb25seSBzZXF1
-ZW5jZSBJIGNhbiB0aGluayBvZiBpcyBhIHNoZWxsIGRvaW5nIGZvcmsrZXhlYyt3YWl0LikNCj4g
-PiBCdXQgaXQgc2VlbXMgbGlrZSBhIGJhZCBpZGVhIHdoZW4gYSBSVCB0aHJlYWQgaXMgd2FraW5n
-IGEgQ0ZTIG9uZS4NCj4gPiAoT3IgYW55IGNhc2Ugd2hlcmUgdGhlIG9uZSBiZWluZyB3b2tlbiBp
-cyBsb3dlciBwcmlvcml0eS4pDQo+ID4NCj4gPiBJIG1pZ2h0IGhhdmUgdG8gcnVuIHRoZSAnYmFj
-a2dyb3VuZCB0YXNrcycgYXQgbG93IFJUIHByaW9yaXR5DQo+ID4ganVzdCB0byBnZXQgdGhlbSBz
-Y2hlZHVsZWQgb24gaWRsZSBjcHUuDQo+IA0KPiBJZiB5b3UgbWFrZSBpdCBhbiBSVCB0YXNrICh3
-aGljaCBJIHRoaW5rIGlzIGEgZ29vZCBpZGVhKSwgdGhlbiB0aGUgUlQgc2NoZWR1bGVyDQo+IHdp
-bGwgaGFuZGxlIGl0IGluIHRoZSBwdXNoL3B1bGwgcmVtYXJrIHRoYXQgc2VlbSB0byBoYXZlIHN0
-YXJ0ZWQgdGhpcw0KPiBkaXNjdXNzaW9uIGFuZCBnZXQgcHVzaGVkL3B1bGxlZCB0byBhbm90aGVy
-IENQVSB0aGF0IGlzIHJ1bm5pbmcgbG93ZXIgcHJpb3JpdHkNCj4gdGFzay4NCg0KVGhlIHByb2Js
-ZW0gaXMgdGhhdCB3aGlsZSBJJ2QgbGlrZSB0aGlzIHRocmVhZCB0byBzdGFydCBpbW1lZGlhdGVs
-eQ0Kd2hhdCBpdCBpcyBkb2luZyBpc24ndCBUSEFUIGltcG9ydGFudC4NClRoZXJlIGFyZSBvdGhl
-ciB0aGluZ3MgdGhhdCBtaWdodCBydW4gb24gdGhlIENGUyBzY2hlZHVsZXIgdGhhdCBhcmUNCm1v
-cmUgaW1wb3J0YW50Lg0KSSBjYW4gbWFrZSBpdCBSVCBmb3IgZXhwZXJpbWVudHMuDQoNCglEYXZp
-ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
-RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
-NiAoV2FsZXMpDQo=
+On 4/14/22 09:56, Arun Ajith S wrote:
+> Add a new neighbour cache entry in STALE state for routers on receiving
+> an unsolicited (gratuitous) neighbour advertisement with
+> target link-layer-address option specified.
+> This is similar to the arp_accept configuration for IPv4.
+> A new sysctl endpoint is created to turn on this behaviour:
+> /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
+> 
 
+Hi,
+
+Building the documentation (htmldocs) with this patch, I got:
+
+/home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2475:
+WARNING: Unexpected indentation.
+/home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2477:
+WARNING: Unexpected indentation.
+/home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2481:
+WARNING: Unexpected indentation.
+/home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2482:
+WARNING: Block quote ends without a blank line; unexpected unindent.
+
+I have applied following fixup.
+
+---- 8> ----
+From 304846b43a9f962f53f3841afabfd597b3b80951 Mon Sep 17 00:00:00 2001
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+Date: Thu, 14 Apr 2022 12:59:46 +0700
+Subject: [PATCH] fixup for "net/ipv6: Introduce accept_unsolicited_na knob to
+ implement router-side changes for RFC9131"
+
+Fix the simple table syntax.
+
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/networking/ip-sysctl.rst | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 9e17efe343a..433f2e4a5fe 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2472,13 +2472,17 @@ accept_unsolicited_na - BOOLEAN
+ 	unsolicited neighbour advertisement with target link-layer address option
+ 	specified. This is as per router-side behavior documented in RFC9131.
+ 	This has lower precedence than drop_unsolicited_na.
++
++	 ====   ======  ======  ==============================================
+ 	 drop   accept  fwding                   behaviour
+ 	 ----   ------  ------  ----------------------------------------------
+ 	    1        X       X  Drop NA packet and don't pass up the stack
+ 	    0        0       X  Pass NA packet up the stack, don't update NC
+ 	    0        1       0  Pass NA packet up the stack, don't update NC
+ 	    0        1       1  Pass NA packet up the stack, and add a STALE
+-	                          NC entry
++	                        NC entry
++	 ====   ======  ======  ==============================================
++
+ 	This will optimize the return path for the initial off-link communication
+ 	that is initiated by a directly connected host, by ensuring that
+ 	the first-hop router which turns on this setting doesn't have to
+
+base-commit: 38e01f46e0e7f88b92ca0b3f52ac6b9909ed413b
+-- 
+An old man doll... just what I always wanted! - Clara
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

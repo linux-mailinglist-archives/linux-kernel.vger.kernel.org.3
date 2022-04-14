@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B0D501F0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC75501F19
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344706AbiDNXdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S1347628AbiDNXdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347728AbiDNXcx (ORCPT
+        with ESMTP id S241019AbiDNXdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:32:53 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18195A76F3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1649979026;
-        bh=TPcqwIRvfuDk2Qwm6BTs6G3vahsLIZFdldODm3sklMk=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=ZxPjQ+F7plFCcKdotqrCwi/s/FNlCDJMV1r0eQdm3t3Rlkgo7v45EfXAocRWrLcGd
-         4XTsJg5e9GuiburSyTtswK0SPWHEBnHkE1IB9HsabtrxOKocBLkEuNi03hKnMhEupb
-         tRwtJVcGaDHcU6hewfTKMD0a72M/xmsWdlqKWiFg=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 57715128A06F;
-        Thu, 14 Apr 2022 19:30:26 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NpbvdN0xVR-D; Thu, 14 Apr 2022 19:30:26 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1649979026;
-        bh=TPcqwIRvfuDk2Qwm6BTs6G3vahsLIZFdldODm3sklMk=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=ZxPjQ+F7plFCcKdotqrCwi/s/FNlCDJMV1r0eQdm3t3Rlkgo7v45EfXAocRWrLcGd
-         4XTsJg5e9GuiburSyTtswK0SPWHEBnHkE1IB9HsabtrxOKocBLkEuNi03hKnMhEupb
-         tRwtJVcGaDHcU6hewfTKMD0a72M/xmsWdlqKWiFg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
+        Thu, 14 Apr 2022 19:33:50 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE48EAAC8D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:31:22 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9B7AA128A06D;
-        Thu, 14 Apr 2022 19:30:25 -0400 (EDT)
-Message-ID: <3119c35ba1fa7247e87d7acb56e85ea99092d0a4.camel@HansenPartnership.com>
-Subject: Re: Plumbers conf presentation on -fanalyze?
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        David Malcolm <dmalcolm@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 Apr 2022 19:30:24 -0400
-In-Reply-To: <CAKwvOdmXYa-A76CGitoAFNQz3rab37AJafQVN-=QSRVDA8y1fg@mail.gmail.com>
-References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
-         <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-         <CAKwvOdmXYa-A76CGitoAFNQz3rab37AJafQVN-=QSRVDA8y1fg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5776C2C0108;
+        Thu, 14 Apr 2022 23:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1649979081;
+        bh=nLGseaeJSdIN7Ydb5DoUDNo/fmfPTnWO349E8fE98jo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NZ+APCVYoaG0wa2UGn1BLxv0AFC4Z5KjmXYmwSAD23r9iFOhtp0xc8p7llwYDfP7P
+         zfEOdgmoiQ8mKZtOScxWbinKc1b369YUOiSxGvlACOkr+PoP0B8SgjvU6g28/4CiXA
+         sURT+bL4HfCY7ZeX4nMV0LlNw0KEEhEeiErLRQU3jF6ipvcoHU/JqI+oBF9pD8a/9n
+         YH4Z9gFXLpu7dpQlnkyE1IrKe/APzeBSPrNlss7LIa8PrCuNqodxmv79xRngEtxcgJ
+         dFIslGm66EJgGmzQIbYHAQxs4kDRGzSNzCrE7m0LBMuolFxkTz4dGulQzX4BBD5lMQ
+         59VyDMNIxaMnQ==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6258aec90000>; Fri, 15 Apr 2022 11:31:21 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 1EDC513EE11;
+        Fri, 15 Apr 2022 11:31:21 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 6E77F2A2679; Fri, 15 Apr 2022 11:31:16 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     linus.walleij@linaro.org, robh+dt@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, robert.marko@sartura.hr
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v4 0/4] arm64: mvebu: Support for Marvell 98DX2530 (and variants)
+Date:   Fri, 15 Apr 2022 11:30:51 +1200
+Message-Id: <20220414233055.586962-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=L59jvNb8 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=z0gMJWrwH1QA:10 a=jGREw9QuPlHGdXEqdN8A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -68,43 +64,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 15:13 -0700, Nick Desaulniers wrote:
-> On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com>
-> wrote:
-> > On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
-> > > Hi David,
-> > > Jose and I are currently in the planning process to put together
-> > > a
-> > > Kernel+Toolchain microconference track at Linux Plumbers
-> > > Conference
-> > > this year (Sept 12-14) in Dublin, Ireland.
-> > > 
-> > > We had seen
-> > > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
-> > > particularly the section on The Linux kernel and were wondering
-> > > if
-> > > you'd be interested in presenting more information about
-> > > -fanalyze to
-> > > kernel and toolchain developers there?
-> > 
-> > Thanks!  I'm very much interested, but am not yet sure about travel
-> > (both in terms of (a) budget and (b) possible new virus
-> > strains).  Is
-> > this conference going to be purely in-person, or hybrid virtual/in-
-> > person?
-> 
-> I didn't see an answer to that question on
-> https://lpc.events/event/16/page/185-faqs.
-> cc' James + Stephen who might be able to answer that more precisely
-> than I could.
+This series adds support for the Marvell 98DX2530 SoC which is the Contro=
+l and
+Management CPU integrated into the AlleyCat5/AlleyCat5X series of Marvell
+switches.
 
-It's going to be hybrid ... I thought we actually managed to announce
-that but forgot to put it on the front page.  However, there is a
-caveat: to minimize the risk of technical issues, we'd very much like
-the content producers (speakers etc) to be in person.  This won't be a
-blanket requirement but we'll be unhappy if you try to have a MC with
-mostly virtual speakers for instance.
+The CPU core is an ARM Cortex-A55 with neon, simd and crypto extensions.
 
-Jaems
+This is fairly similar to the Armada-3700 SoC so most of the required
+peripherals are already supported. This series adds a devicetree and pinc=
+trl
+driver for the SoC and the RD-AC5X-32G16HVG6HLG reference board.
 
+In the v3 series I've dropped out a few patches. The MMC stuff is more
+complicated than just adding a compatible string. The mvneta changes have=
+ gone
+in via net-next.
+
+Chris Packham (4):
+  dt-bindings: pinctrl: mvebu: Document bindings for AC5
+  pinctrl: mvebu: pinctrl driver for 98DX2530 SoC
+  arm64: dts: marvell: Add Armada 98DX2530 SoC and RD-AC5X board
+  arm64: marvell: enable the 98DX2530 pinctrl driver
+
+ .../bindings/pinctrl/marvell,ac5-pinctrl.yaml |  72 +++++
+ arch/arm64/Kconfig.platforms                  |   2 +
+ arch/arm64/boot/dts/marvell/Makefile          |   1 +
+ .../boot/dts/marvell/armada-98dx2530.dtsi     | 302 ++++++++++++++++++
+ arch/arm64/boot/dts/marvell/rd-ac5x.dts       |  82 +++++
+ drivers/pinctrl/mvebu/Kconfig                 |   4 +
+ drivers/pinctrl/mvebu/Makefile                |   1 +
+ drivers/pinctrl/mvebu/pinctrl-ac5.c           | 261 +++++++++++++++
+ 8 files changed, 725 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/marvell,ac5=
+-pinctrl.yaml
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi
+ create mode 100644 arch/arm64/boot/dts/marvell/rd-ac5x.dts
+ create mode 100644 drivers/pinctrl/mvebu/pinctrl-ac5.c
+
+--=20
+2.35.1
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C86501739
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0C5501750
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356884AbiDNPYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S245396AbiDNP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347444AbiDNN6y (ORCPT
+        with ESMTP id S1347493AbiDNN66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF333BFB8;
-        Thu, 14 Apr 2022 06:49:45 -0700 (PDT)
+        Thu, 14 Apr 2022 09:58:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099E3ED04;
+        Thu, 14 Apr 2022 06:49:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F05D6190F;
-        Thu, 14 Apr 2022 13:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE5AC385A9;
-        Thu, 14 Apr 2022 13:49:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C093BB82985;
+        Thu, 14 Apr 2022 13:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFB1C385A1;
+        Thu, 14 Apr 2022 13:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944184;
-        bh=9oFNcS7HJs4dteFnR58k+fmQF3XjZJBJD9RXkCPTpYE=;
+        s=korg; t=1649944187;
+        bh=Q7GgsMVN49DtSYyN+MGemC5bAhnadKnkg1C1UEp3aKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsLgwbfOu4HqGrQgDLCnoma0LC0Eu6lukpDl5ab2I2SYUd3CXNktCygGhOF3BCYkg
-         A5Z3AxbclaSHb687oKYNNZVyWD3E9FZPBnm9dxTlyLySG381cDQL2VzfhDG38E4ETP
-         UXLoi3ZznViBdTYmnzb+nEOD5g/rN93allpgkDrQ=
+        b=x2WfwczdgdRyzbq55GhUxF8RdRKj3KSGaNdbi+Zp93FBUO71nox1q8+2vqbVN3m20
+         ybtZLPJRh4DFBGmTBpOOX3ooqZDM9eqphlDeXbmYUUlIv8bGHlJq7+YZTHO7clA5Gx
+         02bb8B+CWS28zMAc/pbiDXpUpvHJNek44N61cIlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 423/475] KVM: arm64: Check arm64_get_bp_hardening_data() didnt return NULL
-Date:   Thu, 14 Apr 2022 15:13:28 +0200
-Message-Id: <20220414110906.898197156@linuxfoundation.org>
+Subject: [PATCH 5.4 424/475] drm/amdgpu: fix off by one in amdgpu_gfx_kiq_acquire()
+Date:   Thu, 14 Apr 2022 15:13:29 +0200
+Message-Id: <20220414110906.928994649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -55,61 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-Will reports that with CONFIG_EXPERT=y and CONFIG_HARDEN_BRANCH_PREDICTOR=n,
-the kernel dereferences a NULL pointer during boot:
+[ Upstream commit 1647b54ed55d4d48c7199d439f8834626576cbe9 ]
 
-[    2.384444] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[    2.384461] pstate: 20400085 (nzCv daIf +PAN -UAO)
-[    2.384472] pc : cpu_hyp_reinit+0x114/0x30c
-[    2.384476] lr : cpu_hyp_reinit+0x80/0x30c
+This post-op should be a pre-op so that we do not pass -1 as the bit
+number to test_bit().  The current code will loop downwards from 63 to
+-1.  After changing to a pre-op, it loops from 63 to 0.
 
-[    2.384529] Call trace:
-[    2.384533]  cpu_hyp_reinit+0x114/0x30c
-[    2.384537]  _kvm_arch_hardware_enable+0x30/0x54
-[    2.384541]  flush_smp_call_function_queue+0xe4/0x154
-[    2.384544]  generic_smp_call_function_single_interrupt+0x10/0x18
-[    2.384549]  ipi_handler+0x170/0x2b0
-[    2.384555]  handle_percpu_devid_fasteoi_ipi+0x120/0x1cc
-[    2.384560]  __handle_domain_irq+0x9c/0xf4
-[    2.384563]  gic_handle_irq+0x6c/0xe4
-[    2.384566]  el1_irq+0xf0/0x1c0
-[    2.384570]  arch_cpu_idle+0x28/0x44
-[    2.384574]  do_idle+0x100/0x2a8
-[    2.384577]  cpu_startup_entry+0x20/0x24
-[    2.384581]  secondary_start_kernel+0x1b0/0x1cc
-[    2.384589] Code: b9469d08 7100011f 540003ad 52800208 (f9400108)
-[    2.384600] ---[ end trace 266d08dbf96ff143 ]---
-[    2.385171] Kernel panic - not syncing: Fatal exception in interrupt
-
-In this configuration arm64_get_bp_hardening_data() returns NULL.
-Add a check in kvm_get_hyp_vector().
-
-Cc: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/linux-arm-kernel/20220408120041.GB27685@willie-the-truck/
-Fixes: 26129ea2953b ("KVM: arm64: Add templates for BHB mitigation sequences")
-Cc: stable@vger.kernel.org # 5.4.x
-Signed-off-by: James Morse <james.morse@arm.com>
+Fixes: 71c37505e7ea ("drm/amdgpu/gfx: move more common KIQ code to amdgpu_gfx.c")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/kvm_mmu.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
-index 78d110667c0c..ffe0aad96b17 100644
---- a/arch/arm64/include/asm/kvm_mmu.h
-+++ b/arch/arm64/include/asm/kvm_mmu.h
-@@ -479,7 +479,8 @@ static inline void *kvm_get_hyp_vector(void)
- 	int slot = -1;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
+index f9bef3154b99..2659202f2026 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
+@@ -263,7 +263,7 @@ static int amdgpu_gfx_kiq_acquire(struct amdgpu_device *adev,
+ 		    * adev->gfx.mec.num_pipe_per_mec
+ 		    * adev->gfx.mec.num_queue_per_pipe;
  
- 	if ((cpus_have_const_cap(ARM64_HARDEN_BRANCH_PREDICTOR) ||
--	     cpus_have_const_cap(ARM64_SPECTRE_BHB)) && data->template_start) {
-+	     cpus_have_const_cap(ARM64_SPECTRE_BHB)) &&
-+	    data && data->template_start) {
- 		vect = kern_hyp_va(kvm_ksym_ref(__bp_harden_hyp_vecs_start));
- 		slot = data->hyp_vectors_slot;
- 	}
+-	while (queue_bit-- >= 0) {
++	while (--queue_bit >= 0) {
+ 		if (test_bit(queue_bit, adev->gfx.mec.queue_bitmap))
+ 			continue;
+ 
 -- 
 2.35.1
 

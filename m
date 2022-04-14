@@ -2,107 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F7500B3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEA8500B3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242348AbiDNKh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S242370AbiDNKiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242442AbiDNKhu (ORCPT
+        with ESMTP id S242360AbiDNKiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:37:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5208053B74;
-        Thu, 14 Apr 2022 03:35:26 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 10:35:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649932517;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jEdXWOolFMpX310q7AURVkltiWxCj+2BxsZYXt8kQpA=;
-        b=kDxrbrnyHTOG+ioShl/gIQUbaSQSuenZhauiZ2E1eIsz209F3hyPhxk15zOIkMLQIctLHZ
-        Cs7IOXPGmNAtAyrtE6QQ9dqma5EoMVad2dA3j/IPAHly8Z3tQzLRWbu7mw/+YSs4VUji3z
-        Rp3/4S4WjTL2di/CJZL0AFEUCIL3ar3XH7qbuWok8+ECV/a9grSnw3KetTSvnsVCqRxapz
-        Jj4pI25DelSCsHVhuFRS9e1ViNxkMANo8SiyKYEZ484lKBkFlpGxGKcufF2WG/Sgbqf6a9
-        s3tqv47EfHe3vPp2Zfb3SHGPzNY9eAqIV1+ros59qH0BOsR8a38LBq4nf79PHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649932517;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jEdXWOolFMpX310q7AURVkltiWxCj+2BxsZYXt8kQpA=;
-        b=LAChuiDqlV5Qju9t+bTqshWgyMyxm/Pnlw8Ehbf2BRkOE9y7QnaYzySImholarTVkyTD8r
-        6uG/QQrdj9aIECCA==
-From:   "tip-bot2 for Jiapeng Chong" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/process: Fix kernel-doc warning due to a
- changed function name
-Cc:     Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220414062110.60343-1-jiapeng.chong@linux.alibaba.com>
-References: <20220414062110.60343-1-jiapeng.chong@linux.alibaba.com>
-MIME-Version: 1.0
-Message-ID: <164993251625.4207.15885270496028960488.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 14 Apr 2022 06:38:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8BB76296;
+        Thu, 14 Apr 2022 03:35:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CA29DCE2948;
+        Thu, 14 Apr 2022 10:35:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B6EC385A5;
+        Thu, 14 Apr 2022 10:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649932554;
+        bh=5W4ekAUr89UTHNOB4HovZ00A3uTOMwCJgWbJl7Yls7k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XNXPm7DZH7smAccG+P0ruwVfhSikYxeGq3269qBVx91ogUqErfQf/AEOEt+WujIEH
+         1TcPojbQBXBpa4CY80D/qMJ3wubwwWokUUIYKUrK766ZNZNL89DTC6WZBufguesg6X
+         GKdeFJbZBevPnwwtbgT4mpsANMoYPgBMQJeSB4LPONRT3EU+08NVlqkBCaO7rQltBv
+         aXI9llNtHCridM8Viw5jIbfrtYAItgUcBZEbGgB7xM9zAOJPTO2z5HZcRPZ/eXXvRS
+         OdvQ3btZAOo4KEVlZYtbfGd+GuY4OOz6EmxdEQlHTmHg5+A7jObz3nKKHMUsL7Nye3
+         nInqJhlqqwCsw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1newpL-004G2w-Pf; Thu, 14 Apr 2022 11:35:51 +0100
+Date:   Thu, 14 Apr 2022 11:35:51 +0100
+Message-ID: <877d7sar5k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        David Decotigny <ddecotig@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 2/3] genirq: Always limit the affinity to online CPUs
+In-Reply-To: <5dcf8d22-e9b3-f306-4c5f-256707e08fbf@samsung.com>
+References: <20220405185040.206297-1-maz@kernel.org>
+        <20220405185040.206297-3-maz@kernel.org>
+        <CGME20220413145922eucas1p2dc46908354f4d2b48db79978d086a838@eucas1p2.samsung.com>
+        <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
+        <878rs8c2t2.wl-maz@kernel.org>
+        <5dcf8d22-e9b3-f306-4c5f-256707e08fbf@samsung.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: m.szyprowski@samsung.com, linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, tglx@linutronix.de, john.garry@huawei.com, wangxiongfeng2@huawei.com, ddecotig@google.com, krzk@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+Hi Marek,
 
-Commit-ID:     dbb5ab6d2c0a7397d77c9f60fe23844d4fe4e634
-Gitweb:        https://git.kernel.org/tip/dbb5ab6d2c0a7397d77c9f60fe23844d4fe4e634
-Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-AuthorDate:    Thu, 14 Apr 2022 14:21:10 +08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 14 Apr 2022 12:23:06 +02:00
+On Thu, 14 Apr 2022 10:09:31 +0100,
+Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 13.04.2022 19:26, Marc Zyngier wrote:
+> > Hi Marek,
+> >
+> > On Wed, 13 Apr 2022 15:59:21 +0100,
+> > Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+> >> Hi Marc,
+> >>
+> >> On 05.04.2022 20:50, Marc Zyngier wrote:
+> >>> When booting with maxcpus=<small number> (or even loading a driver
+> >>> while most CPUs are offline), it is pretty easy to observe managed
+> >>> affinities containing a mix of online and offline CPUs being passed
+> >>> to the irqchip driver.
+> >>>
+> >>> This means that the irqchip cannot trust the affinity passed down
+> >>> from the core code, which is a bit annoying and requires (at least
+> >>> in theory) all drivers to implement some sort of affinity narrowing.
+> >>>
+> >>> In order to address this, always limit the cpumask to the set of
+> >>> online CPUs.
+> >>>
+> >>> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> >> This patch landed in linux next-20220413 as commit 33de0aa4bae9
+> >> ("genirq: Always limit the affinity to online CPUs"). Unfortunately it
+> >> breaks booting of most ARM 32bit Samsung Exynos based boards.
+> >>
+> >> I don't see anything specific in the log, though. Booting just hangs at
+> >> some point. The only Samsung Exynos boards that boot properly are those
+> >> Exynos4412 based.
+> >>
+> >> I assume that this is related to the Multi Core Timer IRQ configuration
+> >> specific for that SoCs. Exynos4412 uses PPI interrupts, while all other
+> >> Exynos SoCs have separate IRQ lines for each CPU.
+> >>
+> >> Let me know how I can help debugging this issue.
+> > Thanks for the heads up. Can you pick the last working kernel, enable
+> > CONFIG_GENERIC_IRQ_DEBUGFS, and dump the /sys/kernel/debug/irq/irqs/
+> > entries for the timer IRQs?
+> 
+> Exynos4210, Trats board, next-20220411:
 
-x86/process: Fix kernel-doc warning due to a changed function name
+Thanks for all of the debug, super helpful. The issue is that we don't
+handle the 'force' case, which a handful of drivers are using when
+bringing up CPUs (and doing so before the CPUs are marked online).
 
-Fix the following scripts/kernel-doc warning:
+Can you please give the below hack a go?
 
-  arch/x86/kernel/process.c:412: warning: expecting prototype for tss_update_io_bitmap().
-  Prototype was for native_tss_update_io_bitmap() instead.
+Thanks,
 
-  [ bp: Massage. ]
+	M.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220414062110.60343-1-jiapeng.chong@linux.alibaba.com
----
- arch/x86/kernel/process.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b370767..b3d2d41 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -405,7 +405,7 @@ static void tss_copy_io_bitmap(struct tss_struct *tss, struct io_bitmap *iobm)
- }
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index f71ecc100545..f1d5a94c6c9f 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -266,10 +266,16 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
+ 		prog_mask = mask;
+ 	}
  
- /**
-- * tss_update_io_bitmap - Update I/O bitmap before exiting to usermode
-+ * native_tss_update_io_bitmap - Update I/O bitmap before exiting to user mode
-  */
- void native_tss_update_io_bitmap(void)
- {
+-	/* Make sure we only provide online CPUs to the irqchip */
++	/*
++	 * Make sure we only provide online CPUs to the irqchip,
++	 * unless we are being asked to force the affinity (in which
++	 * case we do as we are told).
++	 */
+ 	cpumask_and(&tmp_mask, prog_mask, cpu_online_mask);
+-	if (!cpumask_empty(&tmp_mask))
++	if (!force && !cpumask_empty(&tmp_mask))
+ 		ret = chip->irq_set_affinity(data, &tmp_mask, force);
++	else if (force)
++		ret = chip->irq_set_affinity(data, mask, force);
+ 	else
+ 		ret = -EINVAL;
+ 
+
+-- 
+Without deviation from the norm, progress is not possible.
